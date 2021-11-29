@@ -27,10 +27,7 @@ class buildEntry extends Entry
         if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->build, 'stories:idList,bugs:idList,deleted:bool'));
 
         /* Exception handling. */
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return isset($data->code) and $data->code  == 404 ? $this->send404() : $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $this->sendError(400, 'error');
     }

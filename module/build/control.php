@@ -492,8 +492,8 @@ class build extends control
         $this->config->product->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=story&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
-        $this->config->product->search['params']['module']['values'] = $this->tree->getOptionMenu($build->product, 'story', 0);
+        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getPairsForStory($build->product, $build->branch, 'skipParent');
+        $this->config->product->search['params']['module']['values'] = $this->tree->getOptionMenu($build->product, 'story', 0, $build->branch);
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
 
         if($product->type == 'normal')
@@ -503,9 +503,11 @@ class build extends control
         }
         else
         {
-            $this->config->product->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($build->product, 'noempty');
-            if($build->branch) $branches = array('' => '', $build->branch => $branches[$build->branch]);
+            $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
+            $branches    = array('' => '') + array(BRANCH_MAIN => $this->lang->branch->main);
+            if($build->branch) $branches += array($build->branch => $branchPairs[$build->branch]);
+
+            $this->config->product->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -516,7 +518,7 @@ class build extends control
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $build->product, 'story', $build->stories, $pager);
+            $allStories = $this->story->getExecutionStories($build->execution, $build->product, 0, 't1.`order`_desc', 'byBranch', $build->branch, 'story', $build->stories, $pager);
         }
 
         $this->view->allStories   = $allStories;
@@ -609,8 +611,8 @@ class build extends control
         $this->config->bug->search['actionURL'] = $this->createLink('build', 'view', "buildID=$buildID&type=bug&link=true&param=" . helper::safe64Encode("&browseType=bySearch&queryID=myQueryID"));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($build->product => $build->product));
-        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, $viewType = 'bug', $startModuleID = 0);
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($build->product, $build->branch, 'skipParent');
+        $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, 'bug', 0, $build->branch);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
@@ -624,9 +626,11 @@ class build extends control
         }
         else
         {
-            $this->config->bug->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($build->product, 'noempty');
-            if($build->branch) $branches = array('' => '', $build->branch => $branches[$build->branch]);
+            $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
+            $branches    = array('' => '') + array(BRANCH_MAIN => $this->lang->branch->main);
+            if($build->branch) $branches += array($build->branch => $branchPairs[$build->branch]);
+
+            $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);

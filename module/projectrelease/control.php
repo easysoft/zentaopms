@@ -62,10 +62,11 @@ class projectrelease extends control
      * @param  int    $projectID
      * @param  int    $executionID
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function browse($projectID = 0, $executionID = 0, $type = 'all')
+    public function browse($projectID = 0, $executionID = 0, $type = 'all', $orderBy = 't1.date_desc')
     {
         $this->session->set('releaseList', $this->app->getURI(true), 'project');
         $project   = $this->project->getById($projectID);
@@ -81,7 +82,7 @@ class projectrelease extends control
         $this->view->execution   = $execution;
         $this->view->project     = $project;
         $this->view->products    = $this->loadModel('product')->getProducts($projectID);
-        $this->view->releases    = $this->projectrelease->getList($projectID, $type);
+        $this->view->releases    = $this->projectrelease->getList($projectID, $type, $orderBy);
         $this->view->projectID   = $projectID;
         $this->view->executionID = $executionID;
         $this->view->type        = $type;

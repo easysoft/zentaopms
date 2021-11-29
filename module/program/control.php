@@ -156,10 +156,9 @@ class program extends control
         {
             $programID = $this->program->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID));
 
             $this->loadModel('action')->create('program', $programID, 'opened');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => inlink('browse')));
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -386,7 +385,11 @@ class program extends control
     public function delete($programID, $confirm = 'no')
     {
         $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
-        if($childrenCount) die(js::alert($this->lang->program->hasChildren));
+        if($childrenCount)
+        {
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Cannot delete the program has children'));
+            die(js::alert($this->lang->program->hasChildren));
+        }
 
         $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
         if($productCount) die(js::alert($this->lang->program->hasProduct));

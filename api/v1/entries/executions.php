@@ -32,7 +32,7 @@ class executionsEntry extends entry
             /* Response */
             $data = $this->getData();
             if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
-            if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+            if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
             $executions = $data->data->executionStats;
             $pager      = $data->data->pager;
@@ -84,15 +84,17 @@ class executionsEntry extends entry
         $this->batchSetPost($fields);
 
         $projectID = $this->param('project', $projectID);
-        $this->setPost('project', $projectID);
-        $this->setPost('acl', $this->request('acl', 'private'));
+        $this->setPost('project',   $projectID);
+        $this->setPost('acl',       $this->request('acl', 'private'));
+        $this->setPost('PO',        $this->request('PO', ''));
+        $this->setPost('PM',        $this->request('PM', ''));
+        $this->setPost('QD',        $this->request('QD', ''));
+        $this->setPost('RD',        $this->request('RD', ''));
         $this->setPost('whitelist', $this->request('whitelist', array()));
-        $this->setPost('products', $this->request('products', array()));
-        $this->setPost('plans', $this->request('plans', array()));
+        $this->setPost('products',  $this->request('products', array()));
+        $this->setPost('plans',     $this->request('plans', array()));
 
-        $control = $this->loadController('execution', 'create');
-        $this->requireFields('name,code,begin,end,days');
-
+        $control = $this->loadController('execution', 'create'); $this->requireFields('name,code,begin,end,days');
         $control->create($projectID);
 
         $data = $this->getData();

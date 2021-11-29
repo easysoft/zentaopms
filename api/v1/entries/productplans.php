@@ -33,12 +33,27 @@ class productplansEntry extends entry
             $result = array();
             $plans  = $data->data->plans;
             $pager  = $data->data->pager;
-            foreach($plans as $plan) $result[] = $plan;
+
+            foreach($plans as $plan)
+            {
+                if($plan->parent > 0 and isset($result[$plan->parent]))
+                {
+                    $parentPlan = $result[$plan->parent];
+
+                    if(!isset($parentPlan->children) or !is_array($parentPlan->children)) $parentPlan->children = array();
+                    $parentPlan->children[] = $plan;
+                    $result[$plan->parent]  = $parentPlan;
+                }
+                else
+                {
+                    $result[$plan->id] = $plan;
+                }
+            }
 
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'plans' => array_values($result)));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         return $this->sendError(400, 'error');
     }

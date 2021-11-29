@@ -476,7 +476,11 @@ class doc extends control
         /* Get doc. */
         $docID = (int)$docID;
         $doc   = $this->doc->getById($docID, $version, true);
-        if(!$doc) die(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
+        if(!$doc)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
+        }
 
         /* The global search opens in the document library. */
         if(!isonlybody())
@@ -496,7 +500,7 @@ class doc extends control
             }
 
             $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID");
-            $this->locate($browseLink);
+            if(!(defined('RUN_MODE') && RUN_MODE == 'api')) $this->locate($browseLink);
         }
 
         if($doc->contentType == 'markdown')

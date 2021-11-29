@@ -117,7 +117,12 @@ class router extends baseRouter
                 unset($lang->{$moduleName}->{$section});
 
                 if(isset($nullKey))$lang->{$moduleName}->{$section}[$nullKey] = $nullValue;
-                foreach($fields as $key => $value) $lang->{$moduleName}->{$section}[$key] = $value;
+                foreach($fields as $key => $value)
+                {
+                    if(!isset($lang->{$moduleName})) $lang->{$moduleName} = new stdclass();
+                    if(!isset($lang->{$moduleName}->{$section})) $lang->{$moduleName}->{$section} = array();
+                    $lang->{$moduleName}->{$section}[$key] = $value;
+                }
                 unset($nullKey);
                 unset($nullValue);
             }

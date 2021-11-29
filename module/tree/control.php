@@ -31,16 +31,19 @@ class tree extends control
 
         if($this->app->tab == 'product')
         {
-            $this->product->setMenu($rootID, 0, 0, '', $viewType);
+            $this->product->setMenu($rootID, $branch, 0, '', $viewType);
         }
         else if($this->app->tab == 'qa' and $viewType != 'caselib')
         {
             $products = $this->product->getPairs('noclosed');
-            $this->loadModel('qa')->setMenu($products, $rootID, 0, $viewType);
+            $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
         else if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
+
+            $products = $this->product->getProducts($this->session->project, 'all', '', false);
+            if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
 
         /* According to the type, set the module root and modules. */
@@ -53,9 +56,10 @@ class tree extends control
                 $branches = $this->loadModel('branch')->getPairs($product->id);
                 if($currentModuleID)
                 {
-                    $branchName = $branches[$branch];
+                    $currentModuleBranch = $this->dao->select('branch')->from(TABLE_MODULE)->where('id')->eq($currentModuleID)->fetch('branch');
+                    $branchName = $branches[$currentModuleBranch];
                     unset($branches);
-                    $branches[$branch] = $branchName;
+                    $branches[$currentModuleBranch] = $branchName;
                 }
                 $this->view->branches = $branches;
             }
@@ -229,13 +233,12 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
-        $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
         $this->view->from            = $from;
-        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
+        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType, $branch);
         $this->view->canBeChanged    = isset($canBeChanged) ? $canBeChanged : true;
         $this->display();
     }

@@ -27,12 +27,12 @@ class productEntry extends Entry
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $product = $this->format($data->data->product, 'createdDate:time');
+
+        $this->loadModel('testcase');
+        $product->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
 
         $users = $data->data->users;
         $product->PO        = $this->formatUser($product->PO, $users);
@@ -108,7 +108,7 @@ class productEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $product = $this->product->getByID($productID);
-        $this->send(200, array('product' => $this->format($product, 'createdDate:time')));
+        $this->send(200, $this->format($product, 'createdDate:time'));
     }
 
     /**

@@ -30,7 +30,7 @@ class issueEntry extends Entry
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
         if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->issue, 'createdDate:time,editedDate:time,assignedDate:time'));
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $this->sendError(400, 'error');
     }

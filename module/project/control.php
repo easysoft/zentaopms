@@ -967,6 +967,7 @@ class project extends control
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
+
         $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
         $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
 
@@ -1042,12 +1043,14 @@ class project extends control
     /**
      * Browse builds of a project.
      *
+     * @param  int    $projectID
      * @param  string $type      all|product|bysearch
      * @param  int    $param
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function build($projectID = 0, $type = 'all', $param = 0)
+    public function build($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
     {
         /* Load module and get project. */
         $this->loadModel('build');
@@ -1074,11 +1077,11 @@ class project extends control
 
         if($type == 'bysearch')
         {
-            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param);
+            $builds = $this->build->getProjectBuildsBySearch((int)$projectID, (int)$param, $orderBy);
         }
         else
         {
-            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param);
+            $builds = $this->build->getProjectBuilds((int)$projectID, $type, $param, $orderBy);
         }
 
         /* Set project builds. */

@@ -533,7 +533,8 @@ class productModel extends model
 
         $notNormalProduct   = (isset($currentProduct->type) and $currentProduct->type != 'normal');
         $isTrackMethod      = ($currentModule == 'story' and $currentMethod == 'track');
-        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod;
+        $isTreeBrowseMethod = ($currentModule == 'tree' and $currentMethod == 'browse');
+        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod || $isTreeBrowseMethod;
         if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and ($this->app->tab == 'qa' or $isShowBranchMethod))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -957,10 +958,11 @@ class productModel extends model
      * @param  string    $browseType
      * @param  int       $branch
      * @param  int       $involved
+     * @param  string    $orderBy
      * @access public
      * @return array
      */
-    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0)
+    public function getProjectListByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc')
     {
         $projectList = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -977,6 +979,7 @@ class productModel extends model
             ->fi()
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
+            ->orderBy($orderBy)
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
@@ -997,12 +1000,13 @@ class productModel extends model
      * @param  string    $browseType
      * @param  int       $branch
      * @param  int       $involved
+     * @param  string    $orderBy
      * @access public
      * @return array
      */
-    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0)
+    public function getProjectStatsByProduct($productID, $browseType = 'all', $branch = 0, $involved = 0, $orderBy = 'order_desc')
     {
-        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved);
+        $projects = $this->getProjectListByProduct($productID, $browseType, $branch, $involved, $orderBy);
         if(empty($projects)) return array();
 
         $projectKeys = array_keys($projects);

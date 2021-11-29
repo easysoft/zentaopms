@@ -317,9 +317,8 @@ class testcaseModel extends model
         {
             return $this->dao->select('distinct t1.*, t2.*')->from(TABLE_PROJECTCASE)->alias('t1')
                 ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
-                ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+                ->leftJoin(TABLE_STORY)->alias('t3')->on('t2.story = t3.id')
                 ->where('t1.project')->eq((int)$executionID)
-                ->beginIF($browseType != 'all')->andWhere('t2.status')->eq($browseType)->fi()
                 ->andWhere('t2.deleted')->eq('0')
                 ->andWhere('t3.version > t2.storyVersion')
                 ->andWhere("t3.status")->eq('active')
@@ -466,7 +465,7 @@ class testcaseModel extends model
         /* Cases need confirmed. */
         elseif($browseType == 'needconfirm')
         {
-            $cases = $this->dao->select('t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
+            $cases = $this->dao->select('distinct t1.*, t2.title AS storyTitle')->from(TABLE_CASE)->alias('t1')
                 ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
                 ->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id = t3.case')
                 ->where("t2.status = 'active'")
@@ -1447,10 +1446,11 @@ class testcaseModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  string $actionURL
+     * @param  string $projectID
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID)
     {
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['product']['values'] = $product;
@@ -1474,7 +1474,7 @@ class testcaseModel extends model
         {
             $productInfo = $this->loadModel('product')->getByID($productID);
             $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$productInfo->type]);
-            $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
+            $this->config->testcase->search['params']['branch']['values'] = array('' => '', '0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID) + array('all' => $this->lang->branch->all);
         }
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->config->testcase->search['actionURL'] = $actionURL;

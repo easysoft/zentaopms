@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class testcaseEntry extends entry 
+class testcaseEntry extends entry
 {
     /**
      * GET method.
@@ -25,7 +25,7 @@ class testcaseEntry extends entry
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(!isset($data->case)) $this->sendError(400, 'error');
 
         $case = $data->case;

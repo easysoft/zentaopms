@@ -20,7 +20,7 @@ class projectBugsEntry extends entry
      */
     public function get($projectID = 0)
     {
-        if(!$projectID) $projectID   = $this->param('project', 0);
+        if(empty($projectID)) $projectID = $this->param('project', 0);
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
         $control = $this->loadController('project', 'bug');
@@ -59,7 +59,7 @@ class projectBugsEntry extends entry
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => array_values($result)));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         return $this->sendError(400, 'error');
     }

@@ -72,11 +72,12 @@ foreach(explode(',', $showFields) as $field)
           <?php if($branchProduct):?>
           <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>'>
             <?php $disabled = $products[$story->product]->type == 'normal' ? "disabled='disabled'" : '';?>
+            <?php if($products[$story->product]->type == 'normal') $branches[$story->product] = array();?>
             <?php echo html::select("branches[$storyID]", $branches[$story->product], $story->branch, "class='form-control chosen' onchange='loadBranches($story->product, this.value, $storyID);' $disabled");?>
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", $modules[$story->product][$story->branch], $story->module, "class='form-control chosen'");?>
+            <?php echo html::select("modules[$storyID]", isset($modules[$story->product][$story->branch]) ? $modules[$story->product][$story->branch] : array('0' => '/'), $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control chosen'");?>

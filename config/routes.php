@@ -6,6 +6,7 @@ $routes = array();
 
 $routes['/tokens']   = 'tokens';
 $routes['/langs']    = 'langs';
+$routes['/ping']     = 'ping';
 $routes['/comments'] = 'comments';
 
 $routes['/tabs/:module'] = 'tabs';
@@ -28,8 +29,8 @@ $routes['/products/:id/plans'] = 'productPlans';
 $routes['/productplans/:id']   = 'productPlan';
 
 $routes['/releases']              = 'releases';
-$routes['/product/:id/releases']  = 'releases';
-$routes['/projects/:id/releases'] = 'projectreleases';
+$routes['/products/:id/releases'] = 'releases';
+$routes['/projects/:id/releases'] = 'projectReleases';
 $routes['/releases/:id']          = 'release';
 
 $routes['/stories']                = 'stories';
@@ -46,19 +47,20 @@ $routes['/bugs']                = 'bugs';
 $routes['/bugs/:id']            = 'bug';
 
 $routes['/programs/:id/projects'] = 'projects';
+$routes['/products/:id/projects'] = 'productProjects';
 $routes['/projects']              = 'projects';
 $routes['/projects/:id']          = 'project';
 
-$routes['/projects/:project/executions'] = 'executions';
-$routes['/executions']                   = 'executions';
-$routes['/executions/:id']               = 'execution';
+$routes['/projects/:id/executions'] = 'executions';
+$routes['/executions']              = 'executions';
+$routes['/executions/:id']          = 'execution';
 
-$routes['/executions/:execution/tasks'] = 'tasks';
-$routes['/tasks']                       = 'tasks';
-$routes['/tasks/:id']                   = 'task';
-$routes['/tasks/:id/assignto']          = 'taskAssignTo';
-$routes['/tasks/:id/start']             = 'taskStart';
-$routes['/tasks/:id/finish']            = 'taskFinish';
+$routes['/executions/:id/tasks'] = 'tasks';
+$routes['/tasks']                = 'tasks';
+$routes['/tasks/:id']            = 'task';
+$routes['/tasks/:id/assignto']   = 'taskAssignTo';
+$routes['/tasks/:id/start']      = 'taskStart';
+$routes['/tasks/:id/finish']     = 'taskFinish';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
@@ -69,22 +71,24 @@ $routes['/programs/:id'] = 'program';
 
 $routes['/programs/:id/stakeholders'] = 'stakeholders';
 
-$routes['/products/:productID/issues'] = 'productIssues';
-$routes['/projects/:projectID/issues'] = 'issues';
-$routes['/issues']                     = 'issues';
-$routes['/issues/:issueID']            = 'issue';
+$routes['/products/:id/issues'] = 'productIssues';
+$routes['/projects/:id/issues'] = 'issues';
+$routes['/issues']              = 'issues';
+$routes['/issues/:id']          = 'issue';
 
 $routes['/todos']              = 'todos';
 $routes['/todos/:id']          = 'todo';
 $routes['/todos/:id/finish']   = 'todoFinish';
 $routes['/todos/:id/activate'] = 'todoActivate';
 
-$routes['/projects/:projectID/builds'] = 'builds';
-$routes['/builds']                     = 'builds';
-$routes['/builds/:id']                 = 'build';
+$routes['/projects/:id/builds']   = 'builds';
+$routes['/executions/:id/builds'] = 'executionBuilds';
+$routes['/builds']                = 'builds';
+$routes['/builds/:id']            = 'build';
 
 $routes['/products/:id/testcases']   = 'testcases';
-$routes['/executions/:id/testcases'] = 'executioncases';
+$routes['/projects/:id/testcases']   = 'projectCases';
+$routes['/executions/:id/testcases'] = 'executionCases';
 $routes['/testcases']                = 'testcases';
 $routes['/testcases/:id']            = 'testcase';
 
@@ -95,6 +99,10 @@ $routes['/testtasks/:id']                 = 'testtask';
 $routes['/projects/:projectID/risks'] = 'risks';
 $routes['/risks']                     = 'risks';
 $routes['/risks/:id']                 = 'risk';
+
+$routes['/projects/:id/meetings'] = 'meetings';
+$routes['/meetings']              = 'meetings';
+$routes['/meetings/:id']          = 'meeting';
 
 $routes['/departments']     = 'departments';
 $routes['/departments/:id'] = 'department';

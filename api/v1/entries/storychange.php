@@ -35,12 +35,13 @@ class storyChangeEntry extends Entry
         }
 
         $control = $this->loadController('story', 'change');
-        $this->requireFields('title,spec');
+        $this->requireFields('title,spec,verify');
 
         $control->change($storyID);
-        
+
         $data = $this->getData();
-        if($data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $story = $this->loadModel('story')->getByID($storyID);
 

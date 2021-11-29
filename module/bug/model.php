@@ -1205,7 +1205,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
-        $openedBuilds = $this->post->openedBuild;
+        $openedBuilds = explode(',', $oldBug->openedBuild);
         if($openedBuilds)
         {
             $this->loadModel('build');
@@ -2499,7 +2499,7 @@ class bugModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
-        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('$branch')";
+        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
 
         $allProject = "`project` = 'all'";

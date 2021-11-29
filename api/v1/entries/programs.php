@@ -30,15 +30,15 @@ class programsEntry extends Entry
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $programs     = (array)$data->data->programs;
-        $progressList = (array)$data->data->progressList;
+        $programs     = $data->data->programs;
+        $progressList = $data->data->progressList;
         $users        = $data->data->users;
         $result       = array();
         foreach($programs as $program)
         {
-            if(isset($progressList[$program->id])) $program->progress = $progressList[$program->id];
+            if(isset($progressList->{$program->id})) $program->progress = $progressList->{$program->id};
             $param = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
 
             if($mergeChildren)
@@ -57,9 +57,9 @@ class programsEntry extends Entry
                 $program->labelBudget = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
 
                 if(empty($program->parent)) $result[$program->id] = $program;
-                if(isset($programs[$program->parent]))
+                if(isset($programs->{$program->parent}))
                 {
-                    $parentProgram = $programs[$program->parent];
+                    $parentProgram = $programs->{$program->parent};
                     if(!isset($parentProgram->children)) $parentProgram->children = array();
                     $parentProgram->children[] = $program;
                 }
@@ -73,6 +73,31 @@ class programsEntry extends Entry
     }
 
     /**
+     * POST method.
+     *
+     * @access public
+     * @return void
+     */
+    public function post()
+    {
+        $fields = 'name,PM,budget,budgetUnit,desc,begin,end';
+        $this->batchSetPost($fields);
+        $this->setPost('acl', $this->request('acl', 'open'));
+        $this->setPost('whitelist', $this->request('whitelist', array()));
+
+        $control = $this->loadController('program', 'create');
+        $this->requireFields('name,begin,end');
+
+        $control->create($this->request('parent', 0));
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
+        $program = $this->loadModel('program')->getByID($data->id);
+        $this->send(201, $this->format($program, 'openedDate:time,whitelist:stringList'));
+    }
+
+    /**
      * Get drop menu.
      *
      * @access public
@@ -80,7 +105,6 @@ class programsEntry extends Entry
      */
     public function getDropMenu()
     {
-
         $programs = $this->dao->select('id,name,parent,path,grade,`order`')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('program')

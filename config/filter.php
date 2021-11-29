@@ -207,7 +207,6 @@ $filter->api->edit->get['libID']                    = 'int';
 $filter->api->edit->get['module']                   = 'int';
 $filter->api->edit->get['apiID']                    = 'int';
 
-
 $filter->file->download->cookie[$config->sessionVar] = 'code';
 
 $filter->mail->ztcloud->cookie['ztCloudLicense'] = 'equal::yes';

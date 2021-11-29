@@ -126,6 +126,7 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
+            $branch = 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
         else
@@ -171,7 +172,7 @@ class testcase extends control
         $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
-        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL, $projectID);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
 
@@ -182,7 +183,7 @@ class testcase extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? 0 : $branch);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? '' : $branch);
         }
 
         $product = $this->product->getById($productID);
@@ -197,6 +198,7 @@ class testcase extends control
         $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[]    = $this->lang->testcase->common;
+        $this->view->projectID     = $projectID;
         $this->view->productID     = $productID;
         $this->view->product       = $product;
         $this->view->productName   = $this->products[$productID];
@@ -230,7 +232,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function groupCase($productID = 0, $branch = '', $groupBy = 'story')
+    public function groupCase($productID = 0, $branch = '', $groupBy = 'story', $projectID = 0)
     {
         $groupBy   = empty($groupBy) ? 'story' : $groupBy;
         $productID = $this->product->saveState($productID, $this->products);
@@ -242,7 +244,7 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $products = array('0' => $this->lang->product->all) + $this->product->getProducts($this->session->project, 'all', '', false);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', '', $branch);
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'testcase', 'groupCase', "projectID=$projectID", $branch);
         }
 
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
@@ -269,6 +271,7 @@ class testcase extends control
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
         $this->view->position[]  = html::a($this->createLink('testcase', 'groupTask', "productID=$productID&groupBy=$groupBy"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testcase->common;
+        $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->users       = $this->user->getPairs('noletter');
@@ -1711,7 +1714,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $browseType = strtolower($browseType);
         $queryID    = (int)$queryID;
@@ -1762,7 +1765,7 @@ class testcase extends control
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
-        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches   = array('0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID);
         $this->view->browseType = $browseType;
         $this->view->queryID    = $queryID;
 

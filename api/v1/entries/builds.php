@@ -20,25 +20,23 @@ class buildsEntry extends entry
      */
     public function get($projectID = 0)
     {
-        if(!$projectID) $projectID = $this->param('project', 0);
+        if(empty($projectID)) $projectID = $this->param('project', 0);
+        if(empty($projectID)) return $this->sendError(400, "Need project id.");
 
         $control = $this->loadController('project', 'build');
-        $control->build($projectID, $this->param('type', 'all'), $this->param('param', 0));
+        $control->build($projectID, $this->param('type', 'all'), $this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $result = array();
         foreach($data->data->projectBuilds as $productID => $builds)
         {
-            foreach($builds as $build)
-            {
-                $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
-            }
+            foreach($builds as $build) $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
         }
 
-        return $this->send(200, $result);
+        return $this->send(200, array('total' => count($result), 'builds' => $result));
     }
 
     /**
