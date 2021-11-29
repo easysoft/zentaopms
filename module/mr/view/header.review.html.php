@@ -75,9 +75,9 @@ foreach($reviews as $line => $lineReview)
 
         if(isset($lineReview['comments']))
         {
-            $comments = $lineReview['comments'][$bugID];
-            if(isset($comments))
+            if(isset($lineReview['comments'][$bugID]))
             {
+                $comments = $lineReview['comments'][$bugID];
                 $bugComments = array();
                 foreach ($comments as $commentID => $comment)
                 {
