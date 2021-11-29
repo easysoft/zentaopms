@@ -137,6 +137,7 @@ class execution extends control
         $this->loadModel('task');
         $this->loadModel('datatable');
         $this->loadModel('setting');
+        $this->loadModel('product');
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
@@ -148,7 +149,7 @@ class execution extends control
         /* Get products by execution. */
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        $products    = $this->loadModel('product')->getProductPairsByProject($executionID);
+        $products    = $this->product->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Save the recently five executions visited in the cookie. */
@@ -216,6 +217,12 @@ class execution extends control
             $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         }
 
+        $product = $this->product->getById($productID);
+        if(!empty($product) and $product->type != 'normal')
+        {
+            $lang->datatable->showBranch = sprintf($lang->datatable->showBranch, $lang->product->branchName[$product->type]);
+        }
+
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
         $this->config->execution->search['onMenuBar'] = 'yes';
@@ -245,6 +252,7 @@ class execution extends control
         $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
         $this->view->productID    = $productID;
+        $this->view->product      = $product;
         $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
@@ -671,6 +679,7 @@ class execution extends control
         $this->loadModel('story');
         $this->loadModel('user');
         $this->loadModel('datatable');
+        $this->app->loadLang('datatable');
         $this->app->loadLang('testcase');
 
         $type      = strtolower($type);
@@ -778,13 +787,31 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
-        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
+        if($this->cookie->storyModuleParam)
+        {
+            $modules  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+            $this->view->module = $modules;
+
+            $product = $this->product->getById($modules->root);
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
+        }
+
+        if($this->cookie->storyProductParam)
+        {
+            $product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
+            $this->view->product = $product;
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
+        }
+
         if($this->cookie->storyBranchParam)
         {
             $branchID = $this->cookie->storyBranchParam;
             if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
             $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
+
+            $product = $this->loadModel('product')->getById($productID);
+            $productType = $this->branch->getProductType($branchID);
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[!empty($product) ? $product->type : $productType]);
         }
 
         /* Get execution's product. */

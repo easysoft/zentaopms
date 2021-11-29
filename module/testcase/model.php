@@ -1550,7 +1550,14 @@ class testcaseModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
+                if($this->app->tab == 'project')
+                {
+                    $showBranch = isset($this->config->project->testcase->showBranch) ? $this->config->project->testcase->showBranch : 1;
+                }
+                else
+                {
+                    $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
+                } 
                 if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";
