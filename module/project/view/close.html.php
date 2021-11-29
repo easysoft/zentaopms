@@ -31,7 +31,7 @@
         </tr>
         <?php $this->printExtendFields($project, 'table');?>
         <tr>
-          <th><?php echo $lang->project->realEnd;?></th>
+          <th><?php echo $lang->project->realEndDate;?></th>
           <td>
             <div class='w-150px'>       
               <?php echo html::input('realEnd',(!empty($project->realEnd) && $project->realEnd != '0000-00-00' ? $project->realEnd : date('Y-m-d')), "class='form-control form-date' required");?>
