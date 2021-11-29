@@ -964,6 +964,7 @@ class project extends control
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
+
         $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
         $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
 

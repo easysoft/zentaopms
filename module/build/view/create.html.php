@@ -92,5 +92,7 @@
     </form>
   </div>
 </div>
-<?php js::set('productGroups', $productGroups)?>
+<?php js::set('productGroups', $productGroups);?>
+<?php js::set('executionID', $executionID);?>
+<?php js::set('currentTab', $this->app->tab);?>
 <?php include '../../common/view/footer.html.php';?>
