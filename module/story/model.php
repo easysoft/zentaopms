@@ -3717,7 +3717,14 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+                if($this->app->tab == 'project')
+                {
+                    $showBranch = isset($this->config->projectstory->story->showBranch) ? $this->config->projectstory->story->showBranch : 1;
+                }
+                else
+                {
+                    $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+                }
                 if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
                 if(isset($branches[$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
