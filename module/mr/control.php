@@ -30,8 +30,6 @@ class mr extends control
      */
     public function browse($mode = 'all', $param = 'all', $objectID = 0, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $param  = isset($_GET['param']) ? $this->get->param : "all";
-
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
         $MRList = $this->mr->getList($mode, $param, $orderBy, $pager);
