@@ -435,7 +435,7 @@ class programplanModel extends model
             $datas[] = $plan;
         }
 
-        $planProject = $this->loadModel('project')->getByID($projectID);
+        $project = $this->loadModel('project')->getByID($projectID);
 
         $totalPercent = 0;
         $totalDevType = 0;
@@ -457,14 +457,14 @@ class programplanModel extends model
                 dao::$errors['message'][] = $this->lang->programplan->error->parentDuration;
                 return false;
             }
-            if($plan->begin < $planProject->begin)
+            if($plan->begin < $project->begin)
             {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->errorBegin, $planProject->begin);
+                dao::$errors['message'][] = sprintf($this->lang->programplan->errorBegin, $project->begin);
                 return false;
             }
-            if($plan->end != '0000-00-00' and $plan->end > $planProject->end)
+            if($plan->end != '0000-00-00' and $plan->end > $project->end)
             {
-                dao::$errors['message'][] = sprintf($this->lang->programplan->errorEnd, $planProject->end);
+                dao::$errors['message'][] = sprintf($this->lang->programplan->errorEnd, $project->end);
                 return false;
             }
 
