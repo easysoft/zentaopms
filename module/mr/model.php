@@ -578,6 +578,7 @@ class mrModel extends model
             $diffs   = $singleDiff->diffs;
             foreach ($diffs as $index => $diff)
             {
+                if(empty($commits[$index])) continue;
                 /* Make sure every file with same commitID is unique in $lines. */
                 $shortID = $commits[$index]->short_id;
                 if(in_array($shortID, $commitList)) continue;
