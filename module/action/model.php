@@ -1136,6 +1136,7 @@ class actionModel extends model
         if(strpos($action->objectLabel, '|') !== false)
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
+            a();
 
             /* Fix bug #2961. */
             $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
@@ -1170,6 +1171,7 @@ class actionModel extends model
                     $libObjectID = trim($libObjectID, ',');
                     if(empty($libObjectID) and $type != 'custom') return false;
 
+                    $vars   = substr($vars,0,strpos($vars,'&docID'));
                     $params = sprintf($vars, $type, $libObjectID, $libID);
                 }
                 elseif($action->objectType == 'api')
