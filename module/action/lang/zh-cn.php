@@ -29,6 +29,9 @@ $lang->action->url         = '网址';
 $lang->action->contentType = '内容类型';
 $lang->action->data        = '数据';
 $lang->action->result      = '结果';
+$lang->action->modified    = '修改了';
+$lang->action->old         = '旧值为';
+$lang->action->new         = '新值为';
 
 $lang->action->trash       = '回收站';
 $lang->action->undelete    = '还原';
