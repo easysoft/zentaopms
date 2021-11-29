@@ -14,6 +14,9 @@
 <?php js::set('vars', "keyword=%s&orderBy=id_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID=1")?>
 <?php js::set('gitlabID', $gitlabID)?>
 <div id="mainMenu" class="clearfix">
+  <div class='pull-left'>
+    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+  </div>
   <div id="sidebarHeader">
     <div class="title"><?php echo $this->lang->gitlab->common . ':' . $gitlab->name; ?></div>
   </div>
