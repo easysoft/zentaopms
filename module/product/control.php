@@ -231,8 +231,7 @@ class product extends control
         }
         else
         {
-            $branchID = $browseType == 'bymodule' ? 'all' : $branchID;
-            $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+            $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
