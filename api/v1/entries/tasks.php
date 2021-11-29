@@ -43,7 +43,7 @@ class tasksEntry extends entry
             foreach($tasks as $task)
             {
                 if(isset($task->children)) $task->children = array_values((array)$task->children);
-                $result[] = $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool');
+                $result[] = $this->format($task, 'deadline:date,openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'tasks' => $result));
         }

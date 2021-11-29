@@ -38,8 +38,9 @@ class programEntry extends Entry
         $oldProgram = $this->loadModel('program')->getByID($programID);
 
         /* Set $_POST variables. */
-        $fields = 'name,PM,budget,budgetUnit,desc,begin,end,realBegan,realEnd,ac,whitelist';
+        $fields = 'name,PM,budget,budgetUnit,desc,parent,begin,end,realBegan,realEnd,acl,whitelist';
         $this->batchSetPost($fields, $oldProgram);
+        $this->setPost('parent', $this->request('parent', 0));
 
         $control = $this->loadController('program', 'edit');
         $control->edit($programID);

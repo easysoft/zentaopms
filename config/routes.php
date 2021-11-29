@@ -50,16 +50,16 @@ $routes['/products/:id/projects'] = 'productProjects';
 $routes['/projects']              = 'projects';
 $routes['/projects/:id']          = 'project';
 
-$routes['/projects/:project/executions'] = 'executions';
-$routes['/executions']                   = 'executions';
-$routes['/executions/:id']               = 'execution';
+$routes['/projects/:id/executions'] = 'executions';
+$routes['/executions']              = 'executions';
+$routes['/executions/:id']          = 'execution';
 
-$routes['/executions/:execution/tasks'] = 'tasks';
-$routes['/tasks']                       = 'tasks';
-$routes['/tasks/:id']                   = 'task';
-$routes['/tasks/:id/assignto']          = 'taskAssignTo';
-$routes['/tasks/:id/start']             = 'taskStart';
-$routes['/tasks/:id/finish']            = 'taskFinish';
+$routes['/executions/:id/tasks'] = 'tasks';
+$routes['/tasks']                = 'tasks';
+$routes['/tasks/:id']            = 'task';
+$routes['/tasks/:id/assignto']   = 'taskAssignTo';
+$routes['/tasks/:id/start']      = 'taskStart';
+$routes['/tasks/:id/finish']     = 'taskFinish';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
@@ -73,7 +73,7 @@ $routes['/programs/:id/stakeholders'] = 'stakeholders';
 $routes['/products/:id/issues'] = 'productIssues';
 $routes['/projects/:id/issues'] = 'issues';
 $routes['/issues']              = 'issues';
-$routes['/issues/:issueID']     = 'issue';
+$routes['/issues/:id']          = 'issue';
 
 $routes['/todos']              = 'todos';
 $routes['/todos/:id']          = 'todo';
