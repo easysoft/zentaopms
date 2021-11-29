@@ -82,13 +82,13 @@ class api extends router
 
         $this->httpMethod  = strtolower($_SERVER['REQUEST_METHOD']);
 
-        $fileName   = substr($_SERVER['SCRIPT_FILENAME'], strlen($_SERVER['DOCUMENT_ROOT']));
-        $this->path = substr($_SERVER['REQUEST_URI'], strlen($fileName) + 1);
+        $fileName   = ltrim(substr($_SERVER['SCRIPT_FILENAME'], strlen($_SERVER['DOCUMENT_ROOT'])), '/');
+        $this->path = substr(ltrim($_SERVER['REQUEST_URI'], '/'), strlen($fileName) + 1);
         if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
-        $subPos = $this->path ? strpos($this->path, '/') : 0;
-        $this->version = $subPos ? substr($this->path, 0, $subPos) : '';
-        $this->path    = $subPos ? substr($this->path, $subPos) : '';
+        $subPos = $this->path ? strpos($this->path, '/') : false;
+        $this->version = $subPos !== false ? substr($this->path, 0, $subPos) : '';
+        $this->path    = $subPos !== false ? substr($this->path, $subPos) : '';
 
         $this->loadApiLang();
     }

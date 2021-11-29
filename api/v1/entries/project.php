@@ -28,7 +28,7 @@ class projectEntry extends entry
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $project = $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
 
@@ -114,7 +114,7 @@ class projectEntry extends entry
         $control->edit($projectID);
 
         $data = $this->getData();
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $project = $this->project->getByID($projectID);

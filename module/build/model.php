@@ -160,10 +160,11 @@ class buildModel extends model
      * @param  int        $executionID
      * @param  string     $type      all|product|bysearch
      * @param  int|string $param     productID|buildQuery
+     * @param  string     $orderBy
      * @access public
      * @return array
      */
-    public function getExecutionBuilds($executionID, $type = '', $param = '')
+    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc')
     {
         return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -174,7 +175,7 @@ class buildModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
-            ->orderBy('t1.date DESC, t1.id desc')
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 

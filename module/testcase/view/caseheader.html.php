@@ -143,7 +143,7 @@
 
       $class = common::hasPriv('testcase', 'importFromLib') ? '' : "class=disabled";
       $misc  = common::hasPriv('testcase', 'importFromLib') ? "data-app='{$this->app->tab}'" : "class=disabled";
-      $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch") : '#';
+      $link  = common::hasPriv('testcase', 'importFromLib') ?  $this->createLink('testcase', 'importFromLib', "productID=$productID&branch=$branch&libID=0&orderBy=id_desc&browseType=&queryID=10&recTotal=0&recPerPage=20&pageID=1&projectID=$projectID") : '#';
       echo "<li $class>" . html::a($link, $lang->testcase->importFromLib, '', $misc . "data-app={$this->app->tab}") . "</li>";
       ?>
       </ul>

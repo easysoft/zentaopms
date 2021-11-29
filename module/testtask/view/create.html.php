@@ -60,7 +60,7 @@
             <div id='ownerAndPriBox' class='input-group'>
               <?php echo html::select('owner', $users, '', "class='form-control chosen'");?>
               <span class='input-group-addon fix-border'><?php echo $lang->testtask->pri;?></span>
-              <?php echo html::select('pri', $lang->testtask->priList, 0, "class='form-control chosen'");?>
+              <?php echo html::select('pri', $lang->testtask->priList, 3, "class='form-control chosen'");?>
             </div>
           </td>
         </tr>

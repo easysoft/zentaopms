@@ -15,7 +15,7 @@ function loadBranches(productID)
         oldBranch = productGroups[productID]['branches'];
     }
 
-    executionID = $('#execution').val();
+    executionID = currentTab == 'execution' ? executionID : $('#execution').val();
     $.get(createLink('branch', 'ajaxGetBranches', 'productID=' + productID + '&oldBranch=0&param=active&projectID=' + executionID), function(data)
     {
         if(data)

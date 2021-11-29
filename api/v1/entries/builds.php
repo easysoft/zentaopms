@@ -28,15 +28,12 @@ class buildsEntry extends entry
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $result = array();
         foreach($data->data->projectBuilds as $productID => $builds)
         {
-            foreach($builds as $build)
-            {
-                $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
-            }
+            foreach($builds as $build) $result[] = $this->format($build, 'bugs:idList,stories:idList,deleted:bool');
         }
 
         return $this->send(200, array('total' => count($result), 'builds' => $result));

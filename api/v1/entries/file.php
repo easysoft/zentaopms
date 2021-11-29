@@ -12,6 +12,23 @@
 class fileEntry extends Entry
 {
     /**
+     * GET method.
+     *
+     * @access public
+     * @return void
+     */
+    public function get($fileID)
+    {
+        $control = $this->loadController('file', 'download');
+        $control->download($fileID);
+
+        $data = $this->getData();
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
+        $this->send(200, $data);
+    }
+    /**
      * PUT method.
      *
      * @access public

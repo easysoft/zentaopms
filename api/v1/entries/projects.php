@@ -64,9 +64,7 @@ class projectsEntry extends entry
             return $this->send(200, $data);
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-
-        // TODO There is no handle for 401.
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         return $this->sendError(400, 'error');
     }
 
@@ -99,7 +97,7 @@ class projectsEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,budget:int'));
     }
 
     /**

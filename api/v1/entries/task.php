@@ -26,7 +26,7 @@ class taskEntry extends Entry
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail') return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $task = $data->data->task;
 
@@ -38,6 +38,7 @@ class taskEntry extends Entry
 
         /* Set module title */
         $moduleTitle = '';
+        if(empty($task->module)) $moduleTitle = '/';
         if($task->module)
         {
             $modulePath = $data->data->modulePath;
@@ -84,7 +85,12 @@ class taskEntry extends Entry
                 $user = zget($usersWithAvatar, $account, '');
                 $team->realname = $user ? $user->realname : $account;
                 $team->avatar   = $user ? $user->avatar : '';
-                $team->progress = (empty($team->consumed) and empty($team->left)) ? 0 : round($team->consumed / ($team->consumed + $team->left) * 100, 1);
+                $team->estimate = round($team->estimate, 1);
+                $team->consumed = round($team->consumed, 1);
+                $team->left     = round($team->left, 1);
+
+                $allHours = $team->consumed + $team->left;
+                $team->progress = empty($allHours) ? 0 : round($team->consumed / $allHours * 100, 1);
 
                 $teams[] = $team;
             }

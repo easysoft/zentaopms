@@ -172,7 +172,7 @@ class testcase extends control
         $actionURL = $this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID");
         $this->config->testcase->search['onMenuBar'] = 'yes';
 
-        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->testcase->buildSearchForm($productID, $this->products, $queryID, $actionURL, $projectID);
 
         $showModule = !empty($this->config->datatable->testcaseBrowse->showModule) ? $this->config->datatable->testcaseBrowse->showModule : '';
 
@@ -1713,7 +1713,7 @@ class testcase extends control
      * @access public
      * @return void
      */
-    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function importFromLib($productID, $branch = 0, $libID = 0, $orderBy = 'id_desc', $browseType = '', $queryID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $browseType = strtolower($browseType);
         $queryID    = (int)$queryID;
@@ -1764,7 +1764,7 @@ class testcase extends control
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
-        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches   = array('0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID);
         $this->view->browseType = $browseType;
         $this->view->queryID    = $queryID;
 

@@ -24,7 +24,7 @@ class bugsEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('bug', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'unclosed'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', 'all'), $this->param('status', ''), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
@@ -59,7 +59,7 @@ class bugsEntry extends entry
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => array_values($result)));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         return $this->sendError(400, 'error');
     }

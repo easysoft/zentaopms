@@ -986,10 +986,11 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $type      all|product|bysearch
      * @param  int    $param
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function build($executionID = 0, $type = 'all', $param = 0)
+    public function build($executionID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
     {
         /* Load module and set session. */
         $this->loadModel('testtask');
@@ -1015,7 +1016,7 @@ class execution extends control
         }
         else
         {
-            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param);
+            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param, $orderBy);
         }
 
         /* Set execution builds. */
@@ -2507,7 +2508,7 @@ class execution extends control
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $objectID);
+            $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID);
         }
         else
         {
