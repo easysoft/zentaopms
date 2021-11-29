@@ -1303,13 +1303,13 @@ $lang->tree->methodOrder[30] = 'delete';
 
 /* Report. */
 $lang->resource->report = new stdclass();
-$lang->resource->report->index              = 'index';
-$lang->resource->report->projectDeviation   = 'projectDeviation';
-$lang->resource->report->productSummary     = 'productSummary';
-$lang->resource->report->bugCreate          = 'bugCreate';
-$lang->resource->report->bugAssign          = 'bugAssign';
-$lang->resource->report->workload           = 'workload';
-$lang->resource->report->annualData         = 'annual';
+$lang->resource->report->index            = 'index';
+$lang->resource->report->projectDeviation = 'projectDeviation';
+$lang->resource->report->productSummary   = 'productSummary';
+$lang->resource->report->bugCreate        = 'bugCreate';
+$lang->resource->report->bugAssign        = 'bugAssign';
+$lang->resource->report->workload         = 'workload';
+$lang->resource->report->annualData       = 'annual';
 
 $lang->report->methodOrder[0]  = 'index';
 $lang->report->methodOrder[5]  = 'projectDeviation';
