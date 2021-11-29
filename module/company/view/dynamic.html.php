@@ -53,7 +53,7 @@
         <button type="button" class="btn btn-info btn-icon btn-sm dynamic-btn"><i class="icon icon-caret-down"></i></button>
       </div>
       <ul class="timeline timeline-tag-left <?php if($browseType == 'all') echo 'margin-l-50px';?>">
-        <?php if($orderBy == 'date_asc') $actions = array_reverse($actions);?>
+        <?php if($orderBy == 'date_asc' and $direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
         <li <?php if($action->major) echo "class='active'";?>>
