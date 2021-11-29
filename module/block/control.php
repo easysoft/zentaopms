@@ -590,9 +590,15 @@ class block extends control
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
+        $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($todos as $key => $todo)
         {
-            if($todo->date == '2030-01-01') unset($todos[$key]);
+            if($todo->date == '2030-01-01')
+            {
+                unset($todos[$key]);
+                continue;
+            }
+            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
         }
 
         $this->view->todos = $todos;
@@ -1698,6 +1704,7 @@ class block extends control
             $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
         }
 
+        $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($objectCountList as $objectType => $objectCount)
         {
             if(!isset($hasViewPriv[$objectType])) continue;
@@ -1726,6 +1733,11 @@ class block extends control
                         unset($objects[$key]);
                         continue;
                     }
+                    if($todo->type == 'task' and isset($tasks[$todo->idvalue]))
+                    {
+                        unset($objects[$key]);
+                        continue;
+                    }
 
                     $todo->begin = date::formatTime($todo->begin);
                     $todo->end   = date::formatTime($todo->end);
@@ -1736,6 +1748,8 @@ class block extends control
             {
                 $this->app->loadLang('task');
                 $this->app->loadLang('execution');
+
+                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $limitCount);
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');
