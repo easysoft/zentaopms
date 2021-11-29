@@ -138,6 +138,8 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>升级后历史的{$lang->projectCommon}数据将对应新版本中项目下的执行。</p>
 EOT;
 
-$lang->upgrade->projectNameUnique = "『%s』已经有『%s』这条记录了。请至左侧{$lang->projectCommon}处修改该{$lang->projectCommon}名称。";
+$lang->upgrade->duplicateProject = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
+
+$lang->upgrade->editedName = '调整后名称';
 
 include dirname(__FILE__) . '/version.php';
