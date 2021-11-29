@@ -21,6 +21,7 @@
 #mainMenu #groupName{line-height:33px; float: left}
 .checkbox-right{padding-left:0px !important;}
 
+.thWidth {width: 160px;}
 td.menus {border-right: 0;padding-right: 0;width: 220px !important;}
 td.menus + td {border-left: 0;}
 .menus .checkbox-primary {float: left; width: 220px;}
