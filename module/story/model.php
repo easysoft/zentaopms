@@ -2446,10 +2446,14 @@ class storyModel extends model
             $branches = array();
             foreach($products as $product)
             {
-                foreach($product->branches as $branchID)
+                if($product->type != 'normal')
                 {
-                    if($branch == BRANCH_MAIN and $branchID) continue;
-                    $branches[$branchID] = $branchID;
+                    $branches[BRANCH_MAIN] = BRANCH_MAIN;
+                    foreach($product->branches as $branchID)
+                    {
+                        if($branch == BRANCH_MAIN and $branchID) continue;
+                        $branches[$branchID] = $branchID;
+                    }
                 }
             }
             $branches = join(',', $branches);
