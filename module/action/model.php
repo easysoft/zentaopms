@@ -1136,7 +1136,6 @@ class actionModel extends model
         if(strpos($action->objectLabel, '|') !== false)
         {
             list($objectLabel, $moduleName, $methodName, $vars) = explode('|', $action->objectLabel);
-            a();
 
             /* Fix bug #2961. */
             $isLoginOrLogout = $action->objectType == 'user' and ($action->action == 'login' or $action->action == 'logout');
