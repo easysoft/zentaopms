@@ -614,7 +614,7 @@ class gitlab extends control
         $gitlab = $this->gitlab->getByID($gitlabID);
 
         $this->view->gitlab            = $gitlab;
-        $this->view->keyword           = $keyword;
+        $this->view->keyword           = urldecode(urldecode($keyword));
         $this->view->pager             = $result['pager'];
         $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseProject;
         $this->view->gitlabID          = $gitlabID;
