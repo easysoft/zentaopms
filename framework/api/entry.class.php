@@ -601,6 +601,16 @@ class baseEntry
                 if($val !== '') $idList[] = (int) $val;
             }
             return $idList;
+        case 'stringList':
+            $values = explode(',', $value);
+            if(empty($values)) return array();
+
+            $stringList = array();
+            foreach($values as $val)
+            {
+                if($val !== '') $stringList[] = $val;
+            }
+            return $stringList;
         default:
             return $value;
         }

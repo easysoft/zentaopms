@@ -24,7 +24,7 @@ class bugsEntry extends entry
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
         $control = $this->loadController('bug', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'unclosed'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', 'all'), $this->param('status', ''), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 

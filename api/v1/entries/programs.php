@@ -73,6 +73,31 @@ class programsEntry extends Entry
     }
 
     /**
+     * POST method.
+     *
+     * @access public
+     * @return void
+     */
+    public function post()
+    {
+        $fields = 'name,PM,budget,budgetUnit,desc,begin,end';
+        $this->batchSetPost($fields);
+        $this->setPost('acl', $this->request('acl', 'open'));
+        $this->setPost('whitelist', $this->request('whitelist', array()));
+
+        $control = $this->loadController('program', 'create');
+        $this->requireFields('name,begin,end');
+
+        $control->create($this->request('parent', 0));
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
+        $program = $this->loadModel('program')->getByID($data->id);
+        $this->send(201, $this->format($program, 'openedDate:time,whitelist:stringList'));
+    }
+
+    /**
      * Get drop menu.
      *
      * @access public
@@ -80,7 +105,6 @@ class programsEntry extends Entry
      */
     public function getDropMenu()
     {
-
         $programs = $this->dao->select('id,name,parent,path,grade,`order`')->from(TABLE_PROJECT)
             ->where('deleted')->eq('0')
             ->andWhere('type')->eq('program')
