@@ -606,7 +606,6 @@ class gitlab extends control
      */
     public function browseProject($gitlabID, $keyword = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
@@ -869,6 +868,12 @@ class gitlab extends control
                 ->andWhere('providerID')->eq($repo->gitlab)
                 ->fetchPairs();
 
+            if(empty($repo->acl))
+            {
+                $repo->acl = new stdClass();
+                $repo->acl->users = array();
+            }
+
             $newGitlabMembers = array();
             foreach($accounts as $key => $account)
             {
@@ -958,7 +963,7 @@ class gitlab extends control
         }
 
         $repo           = $this->loadModel('repo')->getRepoByID($repoID);
-        $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
+        $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
 
         /* Get users accesslevel. */
