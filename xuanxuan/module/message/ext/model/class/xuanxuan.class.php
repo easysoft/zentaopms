@@ -7,14 +7,14 @@ class xuanxuanMessage extends messageModel
         if(is_string($messageSetting)) $messageSetting = json_decode($messageSetting, true);
         if(isset($messageSetting['xuanxuan']))
         {
-            $actions = $messageSetting['xuanxuan']['setting'];
-            if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
+            $messageActions = $messageSetting['xuanxuan']['setting'];
+            if(isset($messageActions[$objectType]) and in_array($actionType, $messageActions[$objectType]))
             {
                 $this->loadModel('action');
                 $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
                 $field  = $this->config->action->objectNameFields[$objectType];
                 $title  = $this->app->user->realname . ' ' . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
-                $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
+                $title  = $title . ' ' . "[#{$objectID}::{$object->$field}]";
 
                 $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
@@ -29,7 +29,7 @@ class xuanxuanMessage extends messageModel
                 $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->andWhere('account')->ne($this->app->user->account)->fetchAll('id');
                 $target = array_keys($target);
 
-                if($target) $this->loadModel('im')->messageCreateNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content = '', $contentType = 'text', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
                 if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }
