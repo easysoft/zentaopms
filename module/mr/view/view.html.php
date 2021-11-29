@@ -102,9 +102,9 @@
         <div class='main-actions'>
           <div class="btn-toolbar">
             <?php common::printBack(inlink('browse', '')); ?>
-            <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::a(inlink('accept', "mr=$MR->id"), '<i class="icon icon-flow"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn'"); ?>
+            <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::a(inlink('accept', "mr=$MR->id"), '<i class="icon icon-flow"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn'" . ($MR->approvalStatus == 'approved' ? '' :' disabled')); ?>
             <?php if($rawMR->state == 'opened'): ?>
-              <?php if($rawMR->has_conflicts or $MR->compileStatus != 'success'):?>
+              <?php if($rawMR->has_conflicts or ($MR->compileID !=0 and $MR->compileStatus != 'success')):?>
               <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve&onlybody=yes"), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody' disabled"); ?>
               <?php else:?>
               <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve&onlybody=yes"), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
