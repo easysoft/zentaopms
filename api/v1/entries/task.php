@@ -85,6 +85,9 @@ class taskEntry extends Entry
                 $user = zget($usersWithAvatar, $account, '');
                 $team->realname = $user ? $user->realname : $account;
                 $team->avatar   = $user ? $user->avatar : '';
+                $team->estimate = round($team->estimate, 1);
+                $team->consumed = round($team->consumed, 1);
+                $team->left     = round($team->left, 1);
 
                 $allHours = $team->consumed + $team->left;
                 $team->progress = empty($allHours) ? 0 : round($team->consumed / $allHours * 100, 1);
