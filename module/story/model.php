@@ -1682,9 +1682,17 @@ class storyModel extends model
      */
     public function batchChangeBranch($storyIdList, $branchID, $confirm = '', $plans = array())
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldStories = $this->getByList($storyIdList);
+        $now         = helper::now();
+        $allChanges  = array();
+        $oldStories  = $this->getByList($storyIdList);
+        $story       = current($oldStories);
+        $productID   = $story->product;
+        $mainModules = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('root')->eq($productID)
+            ->andWhere('branch')->eq(0)
+            ->andWhere('type')->eq('story')
+            ->fetchPairs('id');
+
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
@@ -1693,6 +1701,7 @@ class storyModel extends model
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->branch         = $branchID;
+            $story->module         = ($oldStory->branch != $branchID and !in_array($oldStory->module, $mainModules)) ? 0 : $oldStory->module;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             if(!dao::isError())
@@ -1701,12 +1710,13 @@ class storyModel extends model
                 {
                     $planIdList         = '';
                     $conflictPlanIdList = '';
+
                     /* Determine whether there is a conflict between the branch of the story and the linked plan. */
                     if($oldStory->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
                     {
                         foreach($plans[$storyID] as $planID => $plan)
                         {
-                            if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID)
+                            if($plan->branch != $branchID)
                             {
                                 $conflictPlanIdList .= $planID . ',';
                             }
@@ -2474,7 +2484,7 @@ class storyModel extends model
         }
         elseif($branch)
         {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('$branch')";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 

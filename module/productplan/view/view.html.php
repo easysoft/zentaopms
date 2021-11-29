@@ -353,7 +353,7 @@
         </form>
       </div>
       <div id='bugs' class='tab-pane <?php if($type == 'bug') echo 'active';?>'>
-        <?php if(common::hasPriv('productplan', 'linkBug', $plan)):?>
+        <?php if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0):?>
         <div class='actions'>
         <?php echo html::a("javascript:showLink($plan->id, \"bug\")", '<i class="icon-bug"></i> ' . $lang->productplan->linkBug, '', "class='btn btn-primary'");?>
         </div>
