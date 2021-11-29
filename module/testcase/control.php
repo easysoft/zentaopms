@@ -1716,6 +1716,9 @@ class testcase extends control
     {
         $browseType = strtolower($browseType);
         $queryID    = (int)$queryID;
+        $product    = $this->loadModel('product')->getById($productID);
+        $branches   = $this->loadModel('branch')->getPairs($productID, '', $projectID);
+        if($product->type != 'normal') $branches = array('0' => $this->lang->branch->main) + $branches;
 
         if($_POST)
         {
@@ -1756,6 +1759,7 @@ class testcase extends control
 
         $this->view->libraries  = $libraries;
         $this->view->libID      = $libID;
+        $this->view->product    = $product;
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
         $this->view->cases      = $this->loadModel('testsuite')->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
@@ -1763,7 +1767,7 @@ class testcase extends control
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
-        $this->view->branches   = array('0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID);
+        $this->view->branches   = $branches;
         $this->view->browseType = $browseType;
         $this->view->queryID    = $queryID;
 
