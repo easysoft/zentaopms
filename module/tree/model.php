@@ -943,13 +943,13 @@ class treeModel extends model
 
         if($linkObject == 'story')
         {
-            $t1Table = TABLE_PROJECTSTORY;
-            $t2Table = TABLE_STORY;
+            $table1 = TABLE_PROJECTSTORY;
+            $table2 = TABLE_STORY;
         }
         if($linkObject == 'case')
         {
-            $t1Table = TABLE_PROJECTCASE;
-            $t2Table = TABLE_CASE;
+            $table1 = TABLE_PROJECTCASE;
+            $table2 = TABLE_CASE;
         }
 
         if($linkObject)
@@ -957,8 +957,8 @@ class treeModel extends model
             if(strpos(',story,case,', ",$linkObject,") === false) return array();
 
             /* Get object paths of this execution. */
-            $paths = $this->dao->select('DISTINCT t3.' . $field)->from($t1Table)->alias('t1')
-                ->leftJoin($t2Table)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
+            $paths = $this->dao->select('DISTINCT t3.' . $field)->from($table1)->alias('t1')
+                ->leftJoin($table2)->alias('t2')->on('t1.' . $linkObject . ' = t2.id')
                 ->leftJoin(TABLE_MODULE)->alias('t3')->on('t2.module = t3.id')
                 ->where('t1.project')->eq($executionID)
                 ->andWhere('t3.deleted')->eq(0)

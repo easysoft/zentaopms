@@ -154,8 +154,8 @@ if($viewType == 'doc' or $viewType == 'api')
                   <div class="table-row row-module row-module-new">
                     <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$name}'");?></div>
                     <?php if($hasBranch):?>
-                    <?php $branchDisabled = $branch === 'all' ? '' : 'disabled';?>
-                    <div class="table-col col-module"><?php echo html::select("branch[]", $branches, $branch, "class='form-control' $branchDisabled");?></div>
+                    <?php $disabledBranch = $branch === 'all' ? '' : 'disabled';?>
+                    <div class="table-col col-module"><?php echo html::select("branch[]", $branches, $branch, "class='form-control' $disabledBranch");?></div>
                     <?php if($branch !== 'all') echo html::hidden("branch[]", $branch);?>
                     <?php endif;?>
                     <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'");?></div>

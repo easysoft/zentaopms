@@ -2592,7 +2592,7 @@ class storyModel extends model
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
             $branchParam  = $branchID = ($type == 'bybranch' and $param !== '') ? $param : $this->cookie->storyBranchParam;
             $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
-            $modules      = (empty($moduleParam) or strpos(',all,unclosed,bymodule,', ",$type,") === false) ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $modules      = (empty($moduleParam) or strpos(',all,unclosed,bymodule,', ",$type,") === false) ? array() : $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs();
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
             $unclosedStatus = $this->lang->story->statusList;
