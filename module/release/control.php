@@ -430,19 +430,19 @@ class release extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branch   = $this->loadModel('branch')->getById($release->branch);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branch->name);
+            $branchName = $this->loadModel('branch')->getById($release->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branchName);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
 
-        if($browseType == 'bySearch')
+        if($browseType == 'bySearch' or $build->execution == 0)
         {
             $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $build->execution ? $build->execution : '', 'story', $release->stories, $pager);
         }
         else
         {
-            $allStories = $this->story->getExecutionStories($build->execution, 0, 0, 't1.`order`_desc', 'byProduct', $release->product, 'story', $release->stories, $pager);
+            $allStories = $this->story->getExecutionStories($build->execution, $build->product, 0, 't1.`order`_desc', 'byBranch', $release->branch, 'story', $release->stories, $pager);
         }
 
         $this->view->allStories     = $allStories;
@@ -550,8 +550,8 @@ class release extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branch   = $this->loadModel('branch')->getById($release->branch);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branch->name);
+            $branchName = $this->loadModel('branch')->getById($release->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branchName);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);

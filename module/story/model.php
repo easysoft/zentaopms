@@ -2453,12 +2453,11 @@ class storyModel extends model
         $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
-            $branches = array();
-            foreach($products as $product)
+            $branches = array(BRANCH_MAIN => BRANCH_MAIN);
+            if($branch === '')
             {
-                if($product->type != 'normal')
+                foreach($products as $product)
                 {
-                    $branches[BRANCH_MAIN] = BRANCH_MAIN;
                     foreach($product->branches as $branchID)
                     {
                         if($branch == BRANCH_MAIN and $branchID) continue;
@@ -2466,7 +2465,13 @@ class storyModel extends model
                     }
                 }
             }
+            else
+            {
+                $branches[$branch] = $branch;
+            }
             $branches = join(',', $branches);
+
+            if($this->app->moduleName == 'release') $branches = $branch;
             $storyQuery .= " AND `branch`" . helper::dbIN($branches);
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
