@@ -149,7 +149,10 @@ class my extends control
 
         $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
         $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
-        foreach($todos as $key => $todo) if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
+        foreach($todos as $key => $todo)
+        {
+            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
+        }
 
         $pager->recTotal = count($todos);
 
