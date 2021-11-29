@@ -183,6 +183,7 @@ class mr extends control
     public function view($id)
     {
         $MR = $this->mr->getByID($id);
+        if(!$MR) die(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
