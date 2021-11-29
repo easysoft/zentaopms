@@ -60,8 +60,6 @@ class userModel extends model
 
         return $this->dao->select('id,account,realname,avatar,role')->from(TABLE_USER)
             ->where('account')->in($accounts)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq('inside')
             ->fetchAll($keyField);
     }
 
