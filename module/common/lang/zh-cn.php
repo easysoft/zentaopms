@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 
-include (dirname(__FILE__) . '/common.php');
+include(dirname(__FILE__) . '/common.php');
 
 global $config;
 
@@ -34,6 +34,7 @@ $lang->logout         = '退出';
 $lang->login          = '登录';
 $lang->help           = '帮助';
 $lang->aboutZenTao    = '关于禅道';
+$lang->ztWebsite      = '禅道系统网址';
 $lang->profile        = '个人档案';
 $lang->changePassword = '修改密码';
 $lang->unfoldMenu     = '展开导航';
@@ -103,17 +104,19 @@ $lang->customMenu      = '自定义导航';
 $lang->customField     = '自定义表单项';
 $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
+$lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网页端查看或者是通过搜索方式查看。';
 
-$lang->preShortcutKey  = '[快捷键:←]';
-$lang->nextShortcutKey = '[快捷键:→]';
-$lang->backShortcutKey = '[快捷键:Alt+↑]';
+$lang->preShortcutKey    = '[快捷键:←]';
+$lang->nextShortcutKey   = '[快捷键:→]';
+$lang->backShortcutKey   = '[快捷键:Alt+↑]';
+$lang->shortcutOperation = '快捷操作';
 
 $lang->select        = '选择';
 $lang->selectAll     = '全选';
 $lang->selectReverse = '反选';
 $lang->loading       = '稍候...';
 $lang->notFound      = '抱歉，您访问的对象不存在！';
-$lang->notPage       =  '抱歉，您访问的功能正在开发中！';
+$lang->notPage       = '抱歉，您访问的功能正在开发中！';
 $lang->showAll       = '[[全部显示]]';
 $lang->selectedItems = '已选择 <strong>{0}</strong> 项';
 
@@ -223,18 +226,21 @@ $lang->doc->my        = '我的文档';
 $lang->doc->favorite  = '我的收藏';
 $lang->doc->product   = '产品库';
 $lang->doc->project   = '项目库';
+$lang->doc->api       = '接口库';
 $lang->doc->execution = "{$lang->execution->common}库";
 $lang->doc->custom    = '自定义库';
 $lang->doc->wiki      = 'WIKI';
+$lang->doc->apiDoc    = '文档';
+$lang->doc->apiStruct = '数据结构';
 
 $lang->product->list   = $lang->productCommon . '列表';
 $lang->product->kanban = $lang->productCommon . '看板';
 
 $lang->project->report = '报告';
 
-$lang->report->weekly = '周报';
-$lang->report->annual = '年度总结';
-$lang->report->notice = new stdclass();
+$lang->report->weekly       = '周报';
+$lang->report->annual       = '年度总结';
+$lang->report->notice       = new stdclass();
 $lang->report->notice->help = '注：统计报表的数据来源于列表页面的检索结果，生成统计报表前请先在列表页面进行检索。比如列表页面我们检索的是%tab%，那么报表就是基于之前检索的%tab%的结果集进行统计。';
 
 $lang->testcase->case      = '用例';
@@ -304,7 +310,8 @@ $lang->createObjects['program']   = '项目集';
 $lang->createObjects['doc']       = '文档';
 
 /* 语言 */
-$lang->lang = 'Language';
+$lang->lang    = 'Language';
+$lang->setLang = '语言设置';
 
 /* 风格列表。*/
 $lang->theme                = '主题';
@@ -318,7 +325,7 @@ $lang->themes['blackberry'] = '露莓黑';
 $lang->themes['classic']    = '经典蓝';
 
 /* 错误提示信息。*/
-$lang->error = new stdclass();
+$lang->error                  = new stdclass();
 $lang->error->companyNotFound = "您访问的域名 %s 没有对应的公司。";
 $lang->error->length          = array("『%s』长度错误，应当为『%s』", "『%s』长度应当不超过『%s』，且大于『%s』。");
 $lang->error->reg             = "『%s』不符合格式，应当为:『%s』。";
@@ -333,6 +340,8 @@ $lang->error->equal           = "『%s』必须为『%s』。";
 $lang->error->int             = array("『%s』应当是数字。", "『%s』应当介于『%s-%s』之间。");
 $lang->error->float           = "『%s』应当是数字，可以是小数。";
 $lang->error->email           = "『%s』应当为合法的EMAIL。";
+$lang->error->phone           = "『%s』应当为合法的电话号码。";
+$lang->error->mobile          = "『%s』应当为合法的手机号码。";
 $lang->error->URL             = "『%s』应当为合法的URL。";
 $lang->error->date            = "『%s』应当为合法的日期。";
 $lang->error->datetime        = "『%s』应当为合法的日期。";
@@ -348,7 +357,7 @@ $lang->error->tutorialData    = '新手模式下不会插入数据，请退出�
 $lang->error->noCurlExt       = '服务器未安装Curl模块。';
 
 /* 分页信息。*/
-$lang->pager = new stdclass();
+$lang->pager               = new stdclass();
 $lang->pager->noRecord     = "暂时没有记录";
 $lang->pager->digest       = "共 <strong>%s</strong> 条记录，%s <strong>%s/%s</strong> &nbsp; ";
 $lang->pager->recPerPage   = "每页 <strong>%s</strong> 条";
@@ -371,7 +380,7 @@ $lang->pager->pageSize     = '每页 <strong>{recPerPage}</strong> 项';
 $lang->pager->itemsRange   = '第 <strong>{start}</strong> ~ <strong>{end}</strong> 项';
 $lang->pager->pageOfTotal  = '第 <strong>{page}</strong>/<strong>{totalPage}</strong> 页';
 
-$lang->colorPicker = new stdclass();
+$lang->colorPicker           = new stdclass();
 $lang->colorPicker->errorTip = '不是有效的颜色值';
 
 $lang->downNotify     = "下载桌面提醒";
@@ -397,23 +406,24 @@ $lang->pasteImgFail      = "贴图失败，请稍后重试。";
 $lang->pasteImgUploading = "正在上传图片，请稍后...";
 
 /* 时间格式设置。*/
-if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2'))  define('DT_DATETIME2',  'y-m-d H:i');
+if(!defined('DT_DATETIME1'))  define('DT_DATETIME1', 'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2'))  define('DT_DATETIME2', 'y-m-d H:i');
 if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
 if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n月d日 H:i');
-if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
-if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
-if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y年m月d日');
-if(!defined('DT_DATE4'))      define('DT_DATE4',     'n月j日');
-if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
-if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
-if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
-if(!defined('LONG_TIME'))     define('LONG_TIME',    '2059-12-31');
+if(!defined('DT_DATE1'))      define('DT_DATE1', 'Y-m-d');
+if(!defined('DT_DATE2'))      define('DT_DATE2', 'Ymd');
+if(!defined('DT_DATE3'))      define('DT_DATE3', 'Y年m月d日');
+if(!defined('DT_DATE4'))      define('DT_DATE4', 'n月j日');
+if(!defined('DT_DATE5'))      define('DT_DATE5', 'j/n');
+if(!defined('DT_TIME1'))      define('DT_TIME1', 'H:i:s');
+if(!defined('DT_TIME2'))      define('DT_TIME2', 'H:i');
+if(!defined('LONG_TIME'))     define('LONG_TIME', '2059-12-31');
+if(!defined('BRANCH_MAIN'))   define('BRANCH_MAIN', '0');
 
 /* datepicker 时间*/
 $lang->datepicker = new stdclass();
 
-$lang->datepicker->dpText = new stdclass();
+$lang->datepicker->dpText                   = new stdclass();
 $lang->datepicker->dpText->TEXT_OR          = '或 ';
 $lang->datepicker->dpText->TEXT_PREV_YEAR   = '去年';
 $lang->datepicker->dpText->TEXT_PREV_MONTH  = '上月';
@@ -432,4 +442,4 @@ $lang->datepicker->dayNames     = array('星期日', '星期一', '星期二', '
 $lang->datepicker->abbrDayNames = array('日', '一', '二', '三', '四', '五', '六');
 $lang->datepicker->monthNames   = array('一月', '二月', '三月', '四月', '五月', '六月', '七月', '八月', '九月', '十月', '十一月', '十二月');
 
-include (dirname(__FILE__) . '/menu.php');
+include(dirname(__FILE__) . '/menu.php');

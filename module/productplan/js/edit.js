@@ -43,11 +43,14 @@ $('#future').on('change', function()
 {
     if($(this).prop('checked'))
     {
-        $('#begin').val('').attr('disabled', 'disabled');
+        $('#begin').attr('disabled', 'disabled');
         $('#end').val('').parents('tr').hide();
     }
     else
     {
+        var begin = $('#begin').val();
+        if(begin == '') $('#begin').val(today);
+
         $('#begin').removeAttr('disabled');
         $('#end').parents('tr').show();
     }

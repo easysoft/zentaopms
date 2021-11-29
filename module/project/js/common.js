@@ -37,6 +37,8 @@ function computeDaysDelta(date1, date2)
     date2 = convertStringToDate(date2);
     delta = (date2 - date1) / (1000 * 60 * 60 * 24) + 1;
 
+    if(isNaN(delta)) return;
+
     weekEnds = 0;
     for(i = 0; i < delta; i++)
     {
@@ -137,12 +139,12 @@ function loadBranches(product)
     /* When selecting a product, delete a plan that is empty by default. */
     $("#planDefault").remove();
 
-    $('#productsBox select').each(function()
+    $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id'))
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
-            alert(errorSameProducts);
+            bootbox.alert(errorSameProducts);
             $product.val(0);
             $product.trigger("chosen:updated");
             return false;
@@ -166,7 +168,7 @@ function loadBranches(product)
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val()), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active"), function(data)
     {
         if(data)
         {
@@ -186,21 +188,18 @@ function loadPlans(product, branchID)
     var branchID  = typeof(branchID) == 'undefined' ? 0 : branchID;
     var index     = $(product).attr('id').replace('products', '');
 
-    if(productID != 0)
+    if(typeof(planID) == 'undefined') planID = 0;
+    planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + ((config.currentMethod == 'create' || config.currentMethod == 'edit') ? 'unexpired' : '')), function(data)
     {
-        if(typeof(planID) == 'undefined') planID = 0;
-        planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
-        $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + ((config.currentMethod == 'create' || config.currentMethod == 'edit') ? 'unexpired' : '')), function(data)
+        if(data)
         {
-            if(data)
-            {
-                if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-                $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID).chosen();
+            if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
+            $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + ']' + '[' + branchID + ']').attr('id', 'plans' + productID).chosen();
 
-                adjustPlanBoxMargin();
-            }
-        });
-    }
+            adjustPlanBoxMargin();
+        }
+    });
 }
 
 /**

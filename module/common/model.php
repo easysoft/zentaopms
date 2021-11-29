@@ -37,6 +37,123 @@ class commonModel extends model
     }
 
     /**
+     * Set the status of execution, project, and program to doing.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function syncPPEStatus($objectID)
+    {
+        global $app;
+        $thisModule = $app->rawModule;
+
+        if($this->config->systemMode == 'classic')
+        {
+            if($thisModule == 'task') $this->syncExecutionStatus($objectID);
+        }
+
+        if($this->config->systemMode == 'new')
+        {
+            if($thisModule == 'task')
+            {
+                $taskID    = $objectID;
+                $execution = $this->syncExecutionStatus($taskID);
+                $project   = $this->syncProjectStatus($execution);
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'execution')
+            {
+                $executionID = $objectID;
+                $execution   = $this->dao->select('id, project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $project     = $this->syncProjectStatus($execution);
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'project')
+            {
+                $projectID = $objectID;
+                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'program')
+            {
+                $programID = $objectID;
+                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+                $this->syncProgramStatus($program);
+            }
+        }
+    }
+
+   /**
+     * Set the status of the program to which theproject is linked as Ongoing.
+     *
+     * @param  object   $project
+     * @access public
+     * @return void
+     */
+    public function syncProgramStatus($project)
+    {
+        if($project->parent == 0) return;
+
+        $parentPath = str_replace(",{$project->id},", '', $project->path);
+        $parentPath = explode(',', trim($parentPath, ','));
+        $waitList   = $this->dao->select('id')->from(TABLE_PROGRAM)
+            ->where('id')->in($parentPath)
+            ->andWhere('status')->eq('wait')
+            ->orderBy('id_desc')
+            ->fetchPairs();
+
+        $now = helper::now();
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq($now)->where('id')->in($waitList)->exec();
+        foreach($waitList as $programID)
+        {
+            $this->loadModel('action')->create('program', $programID, 'syncprogram');
+        }
+    }
+
+    /**
+     * Set the status of the project to which the execution is linked as Ongoing.
+     *
+     * @param  object  $execution
+     * @access public
+     * @return object  $project
+     */
+    public function syncProjectStatus($execution)
+    {
+        $projectID = $execution->project;
+        $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        if($project->status == 'wait')
+        {
+            $this->dao->update(TABLE_PROJECT)->set('status')->eq('doing')->where('id')->eq($projectID)->exec();
+            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+        }
+        return $project;
+    }
+
+    /**
+     * Set the status of the execution to which the task is linked as Ongoing.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return object $execution
+     */
+    public function syncExecutionStatus($taskID)
+    {
+        $execution = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->eq($taskID)
+            ->fetch();
+
+        if($execution->status == 'wait')
+        {
+            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($execution->id)->exec();
+            $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
+        }
+        return $execution;
+    }
+
+    /**
      * Set the header info.
      *
      * @access public
@@ -361,9 +478,21 @@ class commonModel extends model
         $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
         $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
 
+        /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
-        $productID      = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
-        if(!$productID and $app->user->view->products) $productID = current(explode(',', $app->user->view->products));
+
+        /* Get default product id. */
+        $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
+        $deletedProductIds = array();
+        foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
+
+        $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
+        if(!$productID and $app->user->view->products)
+        {
+            $viewProducts = explode(',', $app->user->view->products);
+            $viewProducts = array_diff($viewProducts, $deletedProductIds);
+            $productID    = current($viewProducts);
+        }
 
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
@@ -391,26 +520,55 @@ class commonModel extends model
                 }
 
                 $showCreateList = true;
-                $isOnlyBody     = $objectType == 'doc';
-                $attr           = $objectType == 'doc' ? "class='iframe' data-width='650px'" : '';
+                $isOnlyBody     = false;
+                $attr           = '';
 
                 $params = '';
-                if($objectType == 'doc')
+                switch($objectType)
                 {
-                    $params       = "objectType=&objectID=0&libID=0";
-                    $createMethod = 'selectLibType';
+                    case 'doc':
+                        $params       = "objectType=&objectID=0&libID=0";
+                        $createMethod = 'selectLibType';
+                        $isOnlyBody   = true;
+                        $attr         = "class='iframe' data-width='650px'";
+                        break;
+                    case 'project':
+                        if(isset($config->maxVersion) and!defined('TUTORIAL'))
+                        {
+                            $params       = "programID=0&copyProjectID=0&extra=from=global";
+                            $createMethod = 'createGuide';
+                            $attr         = 'data-toggle="modal" data-target="#guideDialog"';
+                        }
+                        else
+                        {
+                            $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
+                        }
+
+                        break;
+                    case 'bug':
+                        $params = "productID=$productID&branch=&extras=from=global";
+                        break;
+                    case 'story':
+                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        break;
+                    case 'task':
+                        $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
+                        break;
+                    case 'testcase':
+                        $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
+                        break;
+                    case 'execution':
+                        $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
+                        break;
+                    case 'product':
+                        $params = "programID=&extra=from=global";
+                        break;
+                    case 'program':
+                        $params = "parentProgramID=0&extra=from=global";
+                        break;
                 }
 
-                if($objectType == 'bug')       $params = "productID=$productID&branch=&extras=from=global";
-                if($objectType == 'story')     $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
-                if($objectType == 'task')      $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
-                if($objectType == 'testcase')  $params = "productID=$productID&branch=&moduleID=0&from=&param=0&storyID=0&extras=from=global";
-                if($objectType == 'execution') $params = "projectID=&executionID=0&copyExecutionID=0&planID=0&confirm=no&productID=0&extra=from=global";
-                if($objectType == 'project')   $params = "model=scrum&programID=0&copyProjectID=0&extra=from=global";
-                if($objectType == 'product')   $params = "programID=&extra=from=global";
-                if($objectType == 'program')   $params = "parentProgramID=0&extra=from=global";
-
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $isOnlyBody ? $attr : '') . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $attr) . '</li>';
             }
         }
 
@@ -1707,14 +1865,15 @@ EOD;
         {
             $queryObjects = $this->dao->query($sql);
             $objectList   = array();
+            $key          = 'id';
             while($object = $queryObjects->fetch())
             {
-                $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
+                if(!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) $key = 'case';
                 $id  = $object->$key;
-                $objectList[$id] = $object;
+                $objectList[$id] = $id;
             }
 
-            $this->session->set($objectIdListKey, array('sql' => $sql, 'objectList' => $objectList), $this->app->tab);
+            $this->session->set($objectIdListKey, array('sql' => $sql, 'idkey' => $key, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
 
@@ -1725,12 +1884,12 @@ EOD;
         $preObj = false;
         if(isset($existsObjectList['objectList']))
         {
-            foreach($existsObjectList['objectList'] as $id => $object)
+            foreach($existsObjectList['objectList'] as $id)
             {
                 /* Get next object. */
                 if($preObj === true)
                 {
-                    $preAndNextObject->next = $object;
+                    $preAndNextObject->next = $id;
                     break;
                 }
 
@@ -1740,7 +1899,24 @@ EOD;
                     if($preObj) $preAndNextObject->pre = $preObj;
                     $preObj = true;
                 }
-                if($preObj !== true) $preObj = $object;
+                if($preObj !== true) $preObj = $id;
+            }
+
+            if(empty($queryCondition) or $this->session->$typeOnlyCondition)
+            {
+                if(!empty($preAndNextObject->pre))  $preAndNextObject->pre  = $this->dao->select('*')->from($table)->where('id')->eq($preAndNextObject->pre)->fetch();
+                if(!empty($preAndNextObject->next)) $preAndNextObject->next = $this->dao->select('*')->from($table)->where('id')->eq($preAndNextObject->next)->fetch();
+            }
+            else
+            {
+                $key = $existsObjectList['idkey'];
+                $queryObjects = $this->dao->query($existsObjectList['sql']);
+                while($object = $queryObjects->fetch())
+                {
+                    if(!empty($preAndNextObject->pre)  and is_numeric($preAndNextObject->pre)  and $object->$key == $preAndNextObject->pre)  $preAndNextObject->pre  = $object;
+                    if(!empty($preAndNextObject->next) and is_numeric($preAndNextObject->next) and $object->$key == $preAndNextObject->next) $preAndNextObject->next = $object;
+                    if((empty($preAndNextObject->pre) or is_object($preAndNextObject->pre)) and (empty($preAndNextObject->next) or is_object($preAndNextObject->next))) break;
+                }
             }
         }
 
@@ -2448,15 +2624,24 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array())
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data')
     {
         global $lang, $app;
-        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        if(!extension_loaded('curl'))
+        {
+             if($dataType == 'json') die($this->lang->error->noCurlExt);
+             return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        }
 
         commonModel::$requestErrors = array();
 
         if(!is_array($headers)) $headers = (array)$headers;
         $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+        if($dataType == 'json')
+        {
+            $headers[] = 'Content-Type: application/json;charset=utf-8';
+            if(!empty($data)) $data = json_encode($data);
+        }
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);

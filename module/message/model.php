@@ -49,7 +49,7 @@ class messageModel extends model
         {
             foreach($actions as $action)
             {
-                $objectActions[$objectType][$action] = str_replace($this->lang->webhook->trimWords, '', $this->lang->action->label->$action);
+                $objectActions[$objectType][$action] = $this->lang->message->label->$action;
             }
         }
         return $objectActions;

@@ -1,5 +1,6 @@
 <?php
 $lang->testreport->common       = '測試報告';
+$lang->testreport->id           = '編號';
 $lang->testreport->browse       = '報告列表';
 $lang->testreport->create       = '創建報告';
 $lang->testreport->edit         = '編輯報告';
@@ -83,6 +84,7 @@ $lang->testreport->noTestTask     = "該{$lang->productCommon}下還沒有關聯
 $lang->testreport->noObjectID     = "沒有選定測試單或{$lang->executionCommon}，無法創建測試報告！";
 $lang->testreport->moreProduct    = "只能對同一個{$lang->productCommon}生成測試報告。";
 $lang->testreport->hiddenCase     = "隱藏 %s 個用例";
+$lang->testreport->goalTip        = "該版本所屬{$lang->execution->common}的描述信息";
 
 $lang->testreport->bugSummary = <<<EOD
 共發現<strong>%s</strong>個Bug <a data-toggle='tooltip' class='text-warning' title='{$lang->testreport->foundBugTip}'><i class='icon-help'></i></a>，

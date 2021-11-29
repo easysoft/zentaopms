@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class executionStoriesEntry extends entry 
+class executionStoriesEntry extends entry
 {
     /**
      * GET method.
@@ -20,8 +20,11 @@ class executionStoriesEntry extends entry
      */
     public function get($executionID)
     {
+        if(empty($executionID)) $this->param('execution', 0);
+        if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
+
         $control = $this->loadController('execution', 'story');
-        $control->story($executionID, $this->param('order', ''), $this->param('type', 'all'), 0, $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
+        $control->story($executionID, $this->param('order', 'id_desc'), $this->param('status', 'all'), 0, 0, $this->param('limit', 20), $this->param('page', 1));
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'success')
@@ -33,13 +36,10 @@ class executionStoriesEntry extends entry
             {
                 $result[] = $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time');
             }
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'executionStories' => $result));
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
         }
 
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         return $this->sendError(400, 'error');
     }

@@ -420,13 +420,24 @@ $lang->product->methodOrder[105] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
-$lang->resource->branch->manage = 'manage';
-$lang->resource->branch->sort   = 'sort';
-$lang->resource->branch->delete = 'delete';
+$lang->resource->branch->manage     = 'manage';
+$lang->resource->branch->create     = 'createAction';
+$lang->resource->branch->edit       = 'editAction';
+$lang->resource->branch->close      = 'closeAction';
+$lang->resource->branch->activate   = 'activateAction';
+$lang->resource->branch->sort       = 'sort';
+$lang->resource->branch->delete     = 'delete';
+$lang->resource->branch->batchEdit  = 'batchEdit';
+$lang->resource->branch->setDefault = 'setDefaultAction';
 
 $lang->branch->methodOrder[0]  = 'manage';
-$lang->branch->methodOrder[5]  = 'sort';
-$lang->branch->methodOrder[10] = 'delete';
+$lang->branch->methodOrder[5]  = 'create';
+$lang->branch->methodOrder[10] = 'edit';
+$lang->branch->methodOrder[15] = 'close';
+$lang->branch->methodOrder[20] = 'activate';
+$lang->branch->methodOrder[25] = 'sort';
+$lang->branch->methodOrder[30] = 'delete';
+$lang->branch->methodOrder[35] = 'batchEdit';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -1385,13 +1396,42 @@ $lang->webhook->methodOrder[35] = 'chooseDept';
 
 /* Others. */
 $lang->resource->api = new stdclass();
-$lang->resource->api->getModel    = 'getModel';
-$lang->resource->api->debug       = 'debug';
-$lang->resource->api->sql         = 'sql';
+$lang->resource->api->index         = 'index';
+$lang->resource->api->createLib     = 'createLib';
+$lang->resource->api->editLib       = 'editLib';
+$lang->resource->api->deleteLib     = 'deleteLib';
+$lang->resource->api->createRelease = 'createRelease';
+$lang->resource->api->releases      = 'releases';
+$lang->resource->api->deleteRelease = 'deleteRelease';
+$lang->resource->api->struct        = 'struct';
+$lang->resource->api->createStruct  = 'createStruct';
+$lang->resource->api->editStruct    = 'editStruct';
+$lang->resource->api->deleteStruct  = 'deleteStruct';
+$lang->resource->api->create        = 'create';
+$lang->resource->api->edit          = 'edit';
+$lang->resource->api->delete        = 'delete';
 
-$lang->api->methodOrder[5]  = 'getModel';
-$lang->api->methodOrder[10] = 'debug';
-$lang->api->methodOrder[15] = 'sql';
+$lang->resource->api->getModel     = 'getModel';
+$lang->resource->api->debug        = 'debug';
+$lang->resource->api->sql          = 'sql';
+
+$lang->api->methodOrder[0]  = 'index';
+$lang->api->methodOrder[5]  = 'createLib';
+$lang->api->methodOrder[10] = 'editLib';
+$lang->api->methodOrder[15] = 'deleteLib';
+$lang->api->methodOrder[20] = 'createRelease';
+$lang->api->methodOrder[25] = 'releases';
+$lang->api->methodOrder[30] = 'deleteRelease';
+$lang->api->methodOrder[35] = 'struct';
+$lang->api->methodOrder[40] = 'createStruct';
+$lang->api->methodOrder[45] = 'editStruct';
+$lang->api->methodOrder[50] = 'deleteStruct';
+$lang->api->methodOrder[55] = 'create';
+$lang->api->methodOrder[60] = 'edit';
+$lang->api->methodOrder[65] = 'delete';
+$lang->api->methodOrder[70] = 'getModel';
+$lang->api->methodOrder[75] = 'debug';
+$lang->api->methodOrder[80] = 'sql';
 
 $lang->resource->file = new stdclass();
 $lang->resource->file->download     = 'download';

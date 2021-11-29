@@ -30,6 +30,13 @@ $lang->bug->pri              = '優先順序';
 $lang->bug->type             = 'Bug類型';
 $lang->bug->os               = '操作系統';
 $lang->bug->browser          = '瀏覽器';
+$lang->bug->hardware         = '硬件';
+$lang->bug->result           = '結果';
+$lang->bug->repo             = '所屬版本庫';
+$lang->bug->lines            = '代碼行';
+$lang->bug->v1               = '版本1';
+$lang->bug->v2               = '版本2';
+$lang->bug->repoType         = '版本庫類型';
 $lang->bug->steps            = '重現步驟';
 $lang->bug->status           = 'Bug狀態';
 $lang->bug->statusAB         = '狀態';
@@ -133,6 +140,7 @@ $lang->bug->overdueBugs        = '過期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = "{$lang->SRCommon}變動";
+$lang->bug->allProject         = '所有項目';
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解決Bug數';
@@ -143,12 +151,16 @@ $lang->bug->assignToMeAB   = '指派給我';
 $lang->bug->openedByMeAB   = '由我創建';
 $lang->bug->resolvedByMeAB = '由我解決';
 
-$lang->bug->ditto         = '同上';
-$lang->bug->dittoNotice   = '該bug與上一bug不屬於同一產品！';
-$lang->bug->noAssigned    = '未指派';
-$lang->bug->noBug         = '暫時沒有Bug。';
-$lang->bug->noModule      = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
-$lang->bug->delayWarning  = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->ditto          = '同上';
+$lang->bug->dittoNotice    = '該bug與上一bug不屬於同一產品！';
+$lang->bug->noAssigned     = '未指派';
+$lang->bug->noBug          = '暫時沒有Bug。';
+$lang->bug->noModule       = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->labelConfirmed = '已確認';
+$lang->bug->labelPostponed = '被延期';
+$lang->bug->changed        = '已變動';
+$lang->bug->storyChanged   = '需求變動';
 
 /* 頁面標籤。*/
 $lang->bug->lblAssignedTo = '當前指派';
@@ -184,6 +196,7 @@ $lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉
 $lang->bug->executionAccessDenied = "您無權訪問該Bug所屬的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重現步驟不能為空。";
 $lang->bug->confirmUnlinkBuild    = "更換解決版本將取消與舊版本的關聯，您確定取消該bug與%s的關聯嗎？";
+$lang->bug->noSwitchBranch        = 'Bug%s所屬模組不在當前分支下，將自動忽略。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";

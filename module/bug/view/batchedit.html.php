@@ -51,10 +51,11 @@
             <th class='c-type<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->bug->type;?></th>
             <th class='c-severity<?php echo zget($visibleFields, 'severity', ' hidden') . zget($requiredFields, 'severity', '', ' required');?>'><?php echo $lang->bug->severity;?></th>
             <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden') . zget($requiredFields, 'pri', '', ' required');?>'><?php echo $lang->bug->pri;?></th>
-            <th class="required <?php if(count($visibleFields) >= 10) echo ' c-title';?>"><?php echo $lang->bug->title;?></th>
+            <th class="required <?php if(count($visibleFields) >= 8) echo ' c-title';?>"><?php echo $lang->bug->title;?></th>
             <?php if($branchProduct):?>
-            <th class='c-branch<?php echo zget($visibleFields, 'branch', ' hidden')?>'><?php echo $lang->bug->branch;?></th>
+            <th class='c-branch'><?php echo $lang->bug->branch;?></th>
             <?php endif;?>
+            <th class='c-module<?php echo zget($requiredFields, 'module', '', ' required');?>'> <?php echo $lang->bug->module;?></th>
             <th class='c-plan<?php echo zget($visibleFields, 'productplan', ' hidden') . zget($requiredFields, 'productplan', '', ' required');?>'><?php echo $lang->bug->productplan;?></th>
             <th class='c-assigned<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->bug->assignedTo;?></th>
             <th class='c-date<?php echo zget($visibleFields, 'deadline', ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
@@ -76,16 +77,15 @@
           if(!empty($this->config->user->moreLink)) $this->config->moreLinks["assignedTos[$bugID]"] = $this->config->user->moreLink;
           if(!$productID)
           {
-              $product = $this->product->getByID($bug->product);
+              $product   = $this->product->getByID($bug->product);
+              $plans     = $this->loadModel('productplan')->getPairs($bug->product, $branch);
+              $branches  = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
 
-              $plans = $this->loadModel('productplan')->getPairs($bug->product, $branch);
-              $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
-
-              $branches = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+              $modules[$bug->product][0] = $this->tree->getOptionMenu($bug->product, 'bug');
               if($product->type != 'normal')
               {
                   foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
-                  $branches = array('ditto' => $this->lang->story->ditto) + $branches;
+                  $modules[$bug->product][$bug->branch] = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
               }
           }
           ?>
@@ -109,12 +109,13 @@
               <div>
             </td>
             <?php if($branchProduct):?>
-            <td class='<?php echo zget($visibleFields, 'branch', ' hidden')?>' style='overflow:visible'>
+            <td style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $product->id;?>
               <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$bugID]", $branches, $bug->branch, "class='form-control chosen' $disabled");?>
+              <?php echo html::select("branches[$bugID]", $branches, $bug->branch, "class='form-control chosen' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
             </td>
             <?php endif;?>
+            <td><?php echo html::select("modules[$bugID]", $modules[$bug->product][$bug->branch], $bug->module, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bug->assignedTo, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bug->deadline, "class='form-control form-date'");?></td>

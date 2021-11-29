@@ -26,7 +26,7 @@ foreach($rows as $row)
     echo "  <row>\n";
     foreach($fields as $fieldName => $fieldLabel)
     {
-        $fieldValue = isset($row->$fieldName) ? htmlspecialchars($row->$fieldName) : '';
+        $fieldValue = isset($row->$fieldName) ? htmlSpecialString($row->$fieldName) : '';
         echo "    <$fieldName>$fieldValue</$fieldName>\n";
     }
     echo "  </row>\n";

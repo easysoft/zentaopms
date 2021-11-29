@@ -56,6 +56,7 @@ $lang->todo->pri          = '優先順序';
 $lang->todo->name         = '待辦名稱';
 $lang->todo->status       = '狀態';
 $lang->todo->desc         = '描述';
+$lang->todo->config       = '配置';
 $lang->todo->private      = '私人事務';
 $lang->todo->cycleDay     = '天';
 $lang->todo->cycleWeek    = '周';
@@ -96,12 +97,12 @@ $lang->todo->priList[2] = 2;
 $lang->todo->priList[3] = 3;
 $lang->todo->priList[4] = 4;
 
-$lang->todo->typeList['custom']    = '自定義';
-$lang->todo->typeList['cycle']     = '周期';
-$lang->todo->typeList['bug']       = 'Bug';
-$lang->todo->typeList['task']      = '任務';
-$lang->todo->typeList['story']     = $lang->SRCommon;
-$lang->todo->typeList['testtask']  = '測試單';
+$lang->todo->typeList['custom']   = '自定義';
+$lang->todo->typeList['cycle']    = '周期';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = '任務';
+$lang->todo->typeList['story']    = $lang->SRCommon;
+$lang->todo->typeList['testtask'] = '測試單';
 
 $lang->todo->confirmDelete  = "您確定要刪除這條待辦嗎？";
 $lang->todo->thisIsPrivate  = '這是一條私人事務。:)';
@@ -111,6 +112,7 @@ $lang->todo->lblClickCreate = "點擊添加待辦";
 $lang->todo->noTodo         = '該類型沒有待辦事務';
 $lang->todo->noAssignedTo   = '被指派人不能為空';
 $lang->todo->unfinishedTodo = '待辦ID %s 不是完成狀態，不能關閉。';
+$lang->todo->today          = '今日待辦';
 
 $lang->todo->periods['all']             = '所有';
 $lang->todo->periods['before']          = '未完';

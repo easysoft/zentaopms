@@ -98,8 +98,9 @@ class reportModel extends model
      */
     public function getExecutions($begin = 0, $end = 0)
     {
-        $tasks = $this->dao->select('t1.*,t2.name as executionName')->from(TABLE_TASK)->alias('t1')
+        $tasks = $this->dao->select('t1.*, t2.name as executionName, t3.name as projectName')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project = t3.id')
             ->where('t1.status')->ne('cancel')
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
@@ -122,9 +123,10 @@ class reportModel extends model
                 $executions[$executionID]->consumed = 0;
             }
 
-            $executions[$executionID]->name      = $task->executionName;
-            $executions[$executionID]->estimate += $task->estimate;
-            $executions[$executionID]->consumed += $task->consumed;
+            $executions[$executionID]->projectName = $task->projectName;
+            $executions[$executionID]->name        = $task->executionName;
+            $executions[$executionID]->estimate   += $task->estimate;
+            $executions[$executionID]->consumed   += $task->consumed;
         }
 
         return $executions;
@@ -285,37 +287,43 @@ class reportModel extends model
 
         if($assign == 'noassign')
         {
-            $members = $this->dao->select('t1.account,t2.name,t1.root')->from(TABLE_TEAM)->alias('t1')
+            $members = $this->dao->select('t1.account,t2.name,t1.root,t3.id as project,t3.name as projectname')->from(TABLE_TEAM)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t2.id = t1.root')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
                 ->where('t2.status')->notin('cancel, closed, done, suspended')
                 ->beginIF($dept)->andWhere('t1.account')->in(array_keys($deptUsers))->fi()
                 ->andWhere('t1.type')->eq('execution')
                 ->andWhere("t1.account NOT IN(SELECT `assignedTo` FROM " . TABLE_TASK . " WHERE `execution` = t1.`root` AND `status` NOT IN('cancel, closed, done, pause') AND assignedTo != '' GROUP BY assignedTo)")
                 ->fetchGroup('account', 'name');
 
-            $workload = array();
+	    $workload = array();
             if(!empty($members))
             {
                 foreach($members as $member => $executions)
                 {
+		    $project = array();
                     if(!empty($executions))
                     {
                         foreach($executions as $name => $execution)
                         {
-                            $workload[$member]['task'][$name]['count']       = 0;
-                            $workload[$member]['task'][$name]['manhour']     = 0;
-                            $workload[$member]['task'][$name]['executionID'] = $execution->root;
-                            $workload[$member]['total']['count']             = 0;
-                            $workload[$member]['total']['manhour']           = 0;
+			    $project[$execution->projectname]['projectID'] = $execution->project;
+			    $project[$execution->projectname]['execution'][$name]['executionID'] = $execution->root;
+			    $project[$execution->projectname]['execution'][$name]['count']       = 0;
+			    $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
+
+                            $workload[$member]['total']['count']                                 = 0;
+                            $workload[$member]['total']['manhour']                               = 0;
                         }
                     }
+                    $workload[$member]['task']['project'] = $project;
                 }
             }
             return $workload;
         }
 
-        $stmt = $this->dao->select('t1.*, t2.name as executionName')->from(TABLE_TASK)->alias('t1')
+        $stmt = $this->dao->select('t1.*, t2.name as executionName,t3.name as projectname')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t3.id = t2.project')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.status')->in('wait,pause,doing')
             ->andWhere('t2.deleted')->eq(0)
@@ -369,17 +377,22 @@ class reportModel extends model
         {
             if($user)
             {
+		$project = array();
                 foreach($userTasks as $task)
                 {
                     if(isset($parents[$task->id])) continue;
-                    $workload[$user]['task'][$task->executionName]['count']       = isset($workload[$user]['task'][$task->executionName]['count']) ? $workload[$user]['task'][$task->executionName]['count'] + 1 : 1;
-                    $workload[$user]['task'][$task->executionName]['manhour']     = isset($workload[$user]['task'][$task->executionName]['manhour']) ? $workload[$user]['task'][$task->executionName]['manhour'] + $task->left : $task->left;
-                    $workload[$user]['task'][$task->executionName]['executionID'] = $task->execution;
-                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count'] + 1 : 1;
+
+	            $project[$task->projectname]['projectID'] = isset($project[$task->projectname]['projectID']) ? $project[$task->projectname]['projectID'] : $task->project; 
+	            $project[$task->projectname]['execution'][$task->executionName]['executionID'] = isset($project[$task->projectname]['execution'][$task->executionName]['executionID']) ? $project[$task->projectname]['execution'][$task->executionName]['executionID'] : $task->execution; 
+	            $project[$task->projectname]['execution'][$task->executionName]['count']       = isset($project[$task->projectname]['execution'][$task->executionName]['count'])       ? $project[$task->projectname]['execution'][$task->executionName]['count'] + 1 : 1; 
+	            $project[$task->projectname]['execution'][$task->executionName]['manhour']     = isset($project[$task->projectname]['execution'][$task->executionName]['manhour'])     ? $project[$task->projectname]['execution'][$task->executionName]['manhour'] + $task->left : $task->left; 
+
+                    $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
                     $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
+		$workload[$user]['task']['project'] = $project;
             }
-        }
+	}
         unset($workload['closed']);
         return $workload;
     }
@@ -565,18 +578,39 @@ class reportModel extends model
      */
     public function getUserYearContributions($accounts, $year)
     {
-        $actionGroups = array();
-        foreach($this->config->report->annualData['contributions'] as $objectType => $actions)
+        $stmt = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('LEFT(date, 4)')->eq($year)
+            ->andWhere('objectType')->in(array_keys($this->config->report->annualData['contributions']))
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->orderBy('objectType,objectID,id')
+            ->query();
+
+        $filterActions = array();
+        $objectIdList  = array();
+        while($action = $stmt->fetch())
         {
-            $table = $this->config->objectTables[$objectType];
-            $actionGroups[$objectType] = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin($table)->alias('t2')->on("t1.objectType='$objectType' && t1.objectID=t2.id")
-            ->where('LEFT(t1.date, 4)')->eq($year)
-            ->andWhere('t1.objectType')->eq($objectType)
-            ->andWhere('t1.action')->in(array_keys($actions))
-            ->andWhere('t2.deleted')->eq(0)
-            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
-            ->fetchAll('id');
+            $objectType  = $action->objectType;
+            $objectID    = $action->objectID;
+            $lowerAction = strtolower($action->action);
+            if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
+
+            $objectIdList[$objectType][$objectID] = $objectID;
+            $filterActions[$objectType][$objectID][$action->id] = $action;
+        }
+
+        foreach($objectIdList as $objectType => $idList)
+        {
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($idList)->fetchPairs('id', 'id');
+            foreach($deletedIdList as $id) unset($filterActions[$objectType][$id]);
+        }
+
+        $actionGroups = array();
+        foreach($filterActions as $objectType => $objectActions)
+        {
+            foreach($objectActions as $objectID => $actions)
+            {
+                foreach($actions as $action) $actionGroups[$objectType][$action->id] = $action;
+            }
         }
 
         $contributions = array();
@@ -585,9 +619,7 @@ class reportModel extends model
             foreach($actions as $action)
             {
                 $lowerAction = strtolower($action->action);
-                if(!isset($this->config->report->annualData['contributions'][$objectType][$lowerAction])) continue;
-
-                $actionName = $this->config->report->annualData['contributions'][$objectType][$lowerAction];
+                $actionName  = $this->config->report->annualData['contributions'][$objectType][$lowerAction];
 
                 $type = ($actionName == 'svnCommit' or $actionName == 'gitCommit') ? 'repo' : $objectType;
                 if(!isset($contributions[$type][$actionName])) $contributions[$type][$actionName] = 0;
@@ -986,7 +1018,7 @@ class reportModel extends model
     }
 
     /**
-     * Get status vverview.
+     * Get status overview.
      *
      * @param  string $objectType
      * @param  array  $statusStat
@@ -1015,6 +1047,120 @@ class reportModel extends model
         $overview .= ' &nbsp; ' . $undoneCount;
 
         return $overview;
+    }
+
+    /**
+     * Get project status overview.
+     *
+     * @param  array  $accounts
+     * @access public
+     * @return array
+     */
+    public function getProjectStatusOverview($accounts = array())
+    {
+        $projectStatus = $this->dao->select('t1.id,t1.status')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on("t1.id=t2.root && t2.type='project'")
+            ->where('t1.type')->in($this->config->systemMode == 'classic' ? 'sprint,stage' : 'project')
+            ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
+            ->fetchPairs('id', 'status');
+
+        $statusOverview = array();
+        foreach($projectStatus as $projectID => $status)
+        {
+            if(!isset($statusOverview[$status])) $statusOverview[$status] = 0;
+            $statusOverview[$status] ++;
+        }
+
+        return $statusOverview;
+    }
+
+    /**
+     * Get output data for API.
+     *
+     * @param  array    $accounts
+     * @param  string   $year
+     * @access public
+     * @return array
+     */
+    public function getOutput4API($accounts, $year)
+    {
+        $stmt = $this->dao->select('id,objectType,objectID,action,extra')->from(TABLE_ACTION)
+            ->where('objectType')->in(array_keys($this->config->report->outputData))
+            ->andWhere('LEFT(date, 4)')->eq($year)
+            ->beginIF($accounts)->andWhere('actor')->in($accounts)->fi()
+            ->query();
+
+        $outputData   = array();
+        $actionGroup  = array();
+        $objectIdList = array();
+        while($action = $stmt->fetch())
+        {
+            if($action->objectType == 'release' and $action->action == 'changestatus')
+            {
+                if($action->extra == 'terminate') $action->action = 'stoped';
+                if($action->extra == 'normal')    $action->action = 'activated';
+            }
+            unset($action->extra);
+
+            if(!isset($this->config->report->outputData[$action->objectType][$action->action])) continue;
+
+            if(!isset($outputData[$action->objectType][$action->action])) $outputData[$action->objectType][$action->action] = 0;
+            $objectIdList[$action->objectType][$action->objectID] = $action->objectID;
+            $actionGroup[$action->objectType][$action->id] = $action;
+        }
+
+        foreach($actionGroup as $objectType => $actions)
+        {
+            $deletedIdList = $this->dao->select('id')->from($this->config->objectTables[$objectType])->where('deleted')->eq(1)->andWhere('id')->in($objectIdList[$objectType])->fetchPairs('id', 'id');
+
+            foreach($actions as $action)
+            {
+                if(isset($deletedIdList[$action->objectID])) continue;
+                $outputData[$action->objectType][$action->action] += 1;
+            }
+        }
+
+        $stmt = $this->dao->select('t1.*')->from(TABLE_ACTION)->alias('t1')
+            ->leftJoin(TABLE_BUG)->alias('t2')->on('t1.objectID=t2.id')
+            ->where('t1.objectType')->eq('bug')
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t1.action')->eq('opened')
+            ->andWhere('t2.case')->ne('0')
+            ->beginIF($accounts)->andWhere('t1.actor')->in($accounts)->fi()
+            ->query();
+        while($action = $stmt->fetch())
+        {
+            if(!isset($outputData['case']['createBug'])) $outputData['case']['createBug'] = 0;
+            $outputData['case']['createBug'] += 1;
+        }
+
+        $outputData['case']['run'] = $this->dao->select('count(*) as count')->from(TABLE_TESTRESULT)->alias('t1')
+            ->leftJoin(TABLE_CASE)->alias('t2')->on('t1.case=t2.id')
+            ->where('LEFT(t1.date, 4)')->eq($year)
+            ->andWhere('t2.deleted')->eq(0)
+            ->beginIF($accounts)->andWhere('t1.lastRunner')->in($accounts)->fi()
+            ->fetch('count');
+
+        $processedOutput = array();
+        foreach($this->config->report->outputData as $objectType => $actions)
+        {
+            if(!isset($outputData[$objectType])) continue;
+
+            $objectActions = $outputData[$objectType];
+            $processedOutput[$objectType]['total'] = array_sum($objectActions);
+
+            foreach($actions as $action => $langCode)
+            {
+                if(empty($objectActions[$action])) continue;
+
+                $processedOutput[$objectType]['actions'][$langCode]['code']  = $langCode;
+                $processedOutput[$objectType]['actions'][$langCode]['name']  = $this->lang->report->annualData->actionList[$langCode];
+                $processedOutput[$objectType]['actions'][$langCode]['total'] = $objectActions[$action];
+            }
+        }
+
+        return $processedOutput;
     }
 }
 

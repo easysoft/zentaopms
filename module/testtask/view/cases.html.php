@@ -84,7 +84,7 @@
         <div class='table-actions btn-toolbar'>
           <div class='btn-group dropup'>
             <?php
-            $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID");
+            $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$task->branch");
             $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>

@@ -1,6 +1,12 @@
 $(document).ready(function()
 {
     initChart();
+
+    $('.icon-exclamation-sign').hover(function(){
+        $('#desc').removeClass('hidden');
+    }, function(){
+        $('#desc').addClass('hidden');
+    });
 });
 
 function changeDate(begin, end)

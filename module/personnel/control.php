@@ -243,7 +243,11 @@ class personnel extends control
             $this->dao->update($objectTable)->set('whitelist')->eq($newWhitelist)->where('id')->eq($acl->objectID)->exec();
             $this->dao->delete()->from(TABLE_ACL)->where('id')->eq($id)->exec();
 
-            if($acl->objectType == 'product') $this->personnel->deleteProgramWhitelist($acl->objectID, $acl->account);
+            if($acl->objectType == 'product')
+            {
+                $product = $this->loadModel('product')->getByID($acl->objectID);
+                if($product->program) $this->personnel->deleteProgramWhitelist($product->program, $acl->account);
+            }
             if($acl->objectType == 'sprint')  $this->personnel->deleteProjectWhitelist($acl->objectID, $acl->account);
 
             $this->loadModel('user')->updateUserView($acl->objectID, $acl->objectType, array($acl->account));

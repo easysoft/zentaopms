@@ -33,9 +33,8 @@
             <div class='input-group'>
               <?php echo html::select('product', $products, $build->product, "onchange='loadBranches(this.value);' class='form-control chosen' $disabled required");?>
               <?php
-              if($build->productType != 'normal' and isset($branches[$product->branch]))
+              if($build->productType != 'normal')
               {
-                  if($product->branch) $branches = array($product->branch => $branches[$product->branch]);
                   echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $build->branch, "class='form-control chosen' $disabled");
               }
               ?>
@@ -76,7 +75,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->build->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($build->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($build->desc), "rows='10' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <tr>
           <td colspan="3" class="text-center form-actions">
@@ -90,4 +89,5 @@
 </div>
 <?php js::set('productGroups', $productGroups)?>
 <?php js::set('projectID', $build->project)?>
+<?php js::set('executionID', $build->execution)?>
 <?php include '../../common/view/footer.html.php';?>

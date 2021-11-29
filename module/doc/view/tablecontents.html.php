@@ -27,7 +27,7 @@ if($this->methodName != 'browse')
 }
 if(empty($type)) $type = 'product';
 ?>
-<div class="main-content" >
+<div class="main-content">
   <div class="cell" id="<?php echo $type;?>">
     <div class="detail">
       <li class="detail-title"><?php echo $lang->doc->tableContents;?></li>

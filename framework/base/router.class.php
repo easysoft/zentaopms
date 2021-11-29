@@ -422,7 +422,7 @@ class baseRouter
      * @param string $className 应用类名，如果对router类做了扩展，需要指定类名。When extends router class, you should pass in the child router class name.
      * @static
      * @access public
-     * @return object   the app object
+     * @return static   the app object
      */
     public static function createApp($appName = 'demo', $appRoot = '', $className = '')
     {
@@ -2288,7 +2288,7 @@ class baseRouter
     public function triggerError($message, $file, $line, $exit = false)
     {
         /* 设置错误信息(Set the error info) */
-        $message = htmlspecialchars($message);
+        $message = htmlSpecialString($message);
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
 
         /* Only show error when debug is open. */

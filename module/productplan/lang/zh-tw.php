@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = $lang->SRCommon;
 $lang->productplan->unlinkedStories  = "未關聯{$lang->SRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "創建子計劃";
-$lang->productplan->createExecution  = "創建{$lang->executionCommon}";
+$lang->productplan->createExecution  = "創建{$lang->execution->common}";
 
 $lang->productplan->linkBug          = "關聯Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
@@ -46,6 +46,7 @@ $lang->productplan->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 $lang->productplan->noPlan             = "暫時沒有計劃。";
 $lang->productplan->cannotDeleteParent = "不能刪除父計劃";
 $lang->productplan->selectProjects     = "請選擇所屬項目";
+$lang->productplan->projectNotEmpty    = '所屬項目不能為空。';
 $lang->productplan->nextStep           = "下一步";
 
 $lang->productplan->id         = '編號';
@@ -60,13 +61,14 @@ $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->SRCommon}數";
 $lang->productplan->bugs       = 'Bug數';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = $lang->executionCommon;
+$lang->productplan->execution  = $lang->execution->common;
 $lang->productplan->parent     = "父計劃";
 $lang->productplan->parentAB   = "父";
 $lang->productplan->children   = "子計劃";
 $lang->productplan->childrenAB = "子";
 $lang->productplan->order      = "排序";
 $lang->productplan->deleted    = "已刪除";
+$lang->productplan->mailto     = "抄送給";
 
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '兩星期';
@@ -76,10 +78,12 @@ $lang->productplan->endList[93]  = '三個月';
 $lang->productplan->endList[186] = '半年';
 $lang->productplan->endList[365] = '一年';
 
-$lang->productplan->errorNoTitle = 'ID %s 標題不能為空';
-$lang->productplan->errorNoBegin = 'ID %s 開始時間不能為空';
-$lang->productplan->errorNoEnd   = 'ID %s 結束時間不能為空';
-$lang->productplan->beginGeEnd   = 'ID %s 開始時間不能大於結束時間';
+$lang->productplan->errorNoTitle      = 'ID %s 標題不能為空';
+$lang->productplan->errorNoBegin      = 'ID %s 開始時間不能為空';
+$lang->productplan->errorNoEnd        = 'ID %s 結束時間不能為空';
+$lang->productplan->beginGeEnd        = 'ID %s 開始時間不能大於結束時間';
+$lang->productplan->beginLetterParent = "父計劃的開始日期：%s，開始日期不能小於父計劃的開始日期";
+$lang->productplan->endGreaterParent  = "父計劃的完成日期：%s，完成日期不能大於父計劃的完成日期";
 
 $lang->productplan->featureBar['browse']['all']       = '全部';
 $lang->productplan->featureBar['browse']['unexpired'] = '未過期';

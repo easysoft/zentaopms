@@ -585,3 +585,20 @@ $lang->block->flowchart['project'] = array('项目经理', '创建' . $lang->exe
 if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('项目经理', '创建项目、' . $lang->executionCommon, '维护团队', "关联需求", '分解任务', '跟踪进度');
 $lang->block->flowchart['dev']     = array('研发人员', '领取任务和Bug', '设计实现方案', '更新状态', '完成任务和Bug', '提交代码');
 $lang->block->flowchart['tester']  = array('测试人员', '撰写用例', '执行用例', '提交Bug', '验证Bug', '关闭Bug');
+
+$lang->block->zentaoapp = new stdclass();
+$lang->block->zentaoapp->thisYearInvestment   = '今年投入';
+$lang->block->zentaoapp->sinceTotalInvestment = '从使用至今，总投入';
+$lang->block->zentaoapp->myStory              = '我的需求';
+$lang->block->zentaoapp->allStorySum          = '需求总数';
+$lang->block->zentaoapp->storyCompleteRate    = '需求完成率';
+$lang->block->zentaoapp->latestExecution      = '近期执行';
+$lang->block->zentaoapp->involvedExecution    = '我参与的执行';
+$lang->block->zentaoapp->mangedProduct        = '负责产品';
+$lang->block->zentaoapp->involvedProject      = '参与项目';
+$lang->block->zentaoapp->customIndexCard      = '定制首页卡片';
+$lang->block->zentaoapp->createStory          = '提需求';
+$lang->block->zentaoapp->createEffort         = '记日志';
+$lang->block->zentaoapp->createDoc            = '建文档';
+$lang->block->zentaoapp->createTodo           = '建待办';
+$lang->block->zentaoapp->workbench            = '工作台';

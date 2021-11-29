@@ -165,7 +165,7 @@ class story extends control
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $branchID  = $this->post->branch  ? $this->post->branch  : $branch;
-                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=unclosed&param=0&type=$type&orderBy=id_desc");
+                $response['locate'] = $this->createLink('product', 'browse', "productID=$productID&branch=$branchID&browseType=&param=0&type=$type&orderBy=id_desc");
                 if($this->session->storyList and $this->app->tab != 'product') $response['locate'] = $this->session->storyList;
             }
             else
@@ -183,9 +183,12 @@ class story extends control
         /* Set products, users and module. */
         if($objectID != 0)
         {
-            $products  = $this->product->getProductPairsByProject($objectID);
-            $productID = empty($productID) ? key($products) : $productID;
-            $product   = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
+            $products        = $this->product->getProductPairsByProject($objectID);
+            $productID       = empty($productID) ? key($products) : $productID;
+            $product         = $this->product->getById(($productID and array_key_exists($productID, $products)) ? $productID : key($products));
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
         }
         else
         {
@@ -194,10 +197,11 @@ class story extends control
             foreach($productList as $product) $products[$product->id] = $product->name;
             $product = $this->product->getById($productID ? $productID : key($products));
             if(!isset($products[$product->id])) $products[$product->id] = $product->name;
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
         if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Init vars. */
@@ -224,8 +228,8 @@ class story extends control
             $moduleID   = $story->module;
             $estimate   = $story->estimate;
             $title      = $story->title;
-            $spec       = htmlspecialchars($story->spec);
-            $verify     = htmlspecialchars($story->verify);
+            $spec       = htmlSpecialString($story->spec);
+            $verify     = htmlSpecialString($story->verify);
             $keywords   = $story->keywords;
             $mailto     = $story->mailto;
         }
@@ -313,7 +317,7 @@ class story extends control
         $this->view->color            = $color;
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
-        $this->view->branches         = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID) : array();
+        $this->view->branches         = $branches;
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->objectID         = $objectID;
@@ -435,7 +439,9 @@ class story extends control
         /* Set products and module. */
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+
+        if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
 
         /* Init vars. */
         $planID   = $plan;
@@ -457,10 +463,13 @@ class story extends control
         }
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
-        $plans = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
-        $plans['ditto']      = $this->lang->story->ditto;
-        $priList             = (array)$this->lang->story->priList;
-        $priList['ditto']    = $this->lang->story->ditto;
+
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, true);
+        $plans['ditto'] = $this->lang->story->ditto;
+
+        $priList          = (array)$this->lang->story->priList;
+        $priList['ditto'] = $this->lang->story->ditto;
+
         $sourceList          = (array)$this->lang->story->sourceList;
         $sourceList['ditto'] = $this->lang->story->ditto;
 
@@ -470,6 +479,16 @@ class story extends control
             if($product->type != 'normal') $customFields[$product->type] = $this->lang->product->branchName[$product->type];
             $customFields[$field] = $this->lang->story->$field;
         }
+
+        if($product->type != 'normal')
+        {
+            $this->config->story->custom->batchCreateFields = sprintf($this->config->story->custom->batchCreateFields, $product->type);
+        }
+        else
+        {
+            $this->config->story->custom->batchCreateFields = trim(sprintf($this->config->story->custom->batchCreateFields, ''), ',');
+        }
+
         $showFields = $this->config->story->custom->batchCreateFields;
         if($product->type == 'normal')
         {
@@ -480,6 +499,16 @@ class story extends control
         {
             unset($customFields['plan']);
             $showFields = str_replace('plan', '', $showFields);
+        }
+
+        if($executionID != 0)
+        {
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         $this->view->customFields = $customFields;
@@ -507,7 +536,7 @@ class story extends control
         $this->view->spec             = $spec;
         $this->view->type             = $type;
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches         = $branches;
         /* When the user is product owner or add story in project or not set review, the default is not to review. */
         $this->view->needReview       = ($this->app->user->account == $product->PO || $executionID > 0 || $this->config->story->needReview == 0) ? 0 : 1;
 
@@ -618,6 +647,17 @@ class story extends control
         $reviewedReviewer = array();
         foreach($reviewedBy as $reviewer) $reviewedReviewer[] = zget($users, $reviewer);
 
+        if($this->app->tab == 'project' or $this->app->tab == 'execution')
+        {
+            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
+            $branches        = isset($productBranches[$story->product]) ? $productBranches[$story->product] : array();
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
+        }
+
         $this->story->replaceURLang($story->type);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -626,8 +666,9 @@ class story extends control
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, true);
         $this->view->products         = $myProducts + $othersProducts;
-        $this->view->branches         = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($story->product);
+        $this->view->branches         = $branches;
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->isShowReviewer   = $isShowReviewer;
@@ -699,43 +740,44 @@ class story extends control
         /* Get edited stories. */
         $stories = $this->story->getByList($storyIdList);
 
-        /* The stories of a product. */
-        if($productID)
+        $this->loadModel('branch');
+        if($productID or $executionID)
         {
-            $product = $this->product->getByID($productID);
-            $branchProduct = $product->type == 'normal' ? false : true;
-
-            /* Set modules and productPlans. */
-            $modules      = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch);
-            $modules      = array('ditto' => $this->lang->story->ditto) + $modules;
-            $productPlans = $this->productplan->getPairs($productID, $branch, '', true);
-            $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;
-
-            $this->view->modules      = $modules;
-            $this->view->branches     = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-            $this->view->productPlans = $productPlans;
-            $this->view->position[]   = html::a($this->createLink('product', 'browse', "product=$product->id&branch=$branch"), $product->name);
-            $this->view->title        = $product->name . $this->lang->colon . $this->lang->story->batchEdit;
-        }
-        elseif($executionID)
-        {
-            /* The stories of a execution. */
-            $execution = $this->execution->getByID($executionID);
-
-            $branchProduct  = false;
-            $linkedProducts = $this->execution->getProducts($executionID);
-            foreach($linkedProducts as $linkedProduct)
+            if(!$executionID)
             {
-                if($linkedProduct->type != 'normal')
+                $branches      = $this->branch->getPairs($productID);
+                $product       = $this->product->getByID($productID);
+                $branchProduct = $product->type == 'normal' ? false : true;
+                $modules       = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
+                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
+                $products      = array($productID => $product);
+                $branches      = array($productID => $branches);
+            }
+            else
+            {
+                $modules        = array();
+                $branches       = array();
+                $execution      = $this->execution->getByID($executionID);
+                $branchProduct  = false;
+                $linkedProducts = $this->loadModel('product')->getProducts($executionID);
+                foreach($linkedProducts as $linkedProduct)
                 {
-                    $branchProduct = true;
-                    break;
+                    $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
+                    $branches[$linkedProduct->id] = $branchList;
+                    $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
+                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList));
+                    if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
+
+                    if($linkedProduct->type != 'normal') $branchProduct = true;
                 }
+
+                $products = $linkedProducts;
             }
 
-            $this->view->position[]  = html::a($this->createLink('execution', 'story', "execution=$execution->id"), $execution->name);
-            $this->view->title       = $execution->name . $this->lang->colon . $this->lang->story->batchEdit;
-            $this->view->resetActive = true;
+            $this->view->title       = (isset($product) ? $product->name : $execution->name) . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->branches    = $branches;
+            $this->view->modules     = $modules;
+            $this->view->productName = isset($product) ? $product->name : '';
         }
         else
         {
@@ -746,15 +788,22 @@ class story extends control
             $products = $this->product->getByIdList($productIdList);
             foreach($products as $storyProduct)
             {
-                if($storyProduct->type != 'normal')
-                {
-                    $branchProduct = true;
-                    break;
-                }
+                $branchList   = $this->branch->getPairs($storyProduct->id);
+                $branchIdList = array_keys($branchList) ? array_keys($branchList) : 0;
+                $branches[$storyProduct->id] = $branchList;
+
+                $modules[$storyProduct->id] = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branchIdList);
+                if($storyProduct->type == 'normal') $modules[$storyProduct->id][0] = $modules[$storyProduct->id];
+
+                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, array_keys($branchList));
+                if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
+
+                if($storyProduct->type != 'normal') $branchProduct = true;
             }
 
-            $this->view->position[] = html::a($this->createLink('my', 'story'), $this->lang->my->story);
-            $this->view->title      = $this->lang->story->batchEdit;
+            $this->view->title    = $this->lang->story->batchEdit;
+            $this->view->branches = $branches;
+            $this->view->modules  = $modules;
         }
 
         /* Set ditto option for users. */
@@ -787,12 +836,13 @@ class story extends control
         $this->view->reasonList        = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->reasonList;
         $this->view->stageList         = array('' => '',  'ditto' => $this->lang->story->ditto) + $this->lang->story->stageList;
         $this->view->productID         = $productID;
+        $this->view->products          = $products;
         $this->view->branchProduct     = $branchProduct;
         $this->view->storyIdList       = $storyIdList;
         $this->view->branch            = $branch;
+        $this->view->plans             = array('' => '') + $plans;
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
-        $this->view->productName       = isset($product) ? $product->name : '';
         $this->view->executionID       = $executionID;
         $this->display();
     }
@@ -907,7 +957,7 @@ class story extends control
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
-        if(!$story) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$story) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         $story = $this->story->mergeReviewer($story, true);
 
@@ -1207,7 +1257,7 @@ class story extends control
             {
                 foreach($allChanges as $storyID => $changes)
                 {
-                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlspecialchars($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
+                    $actionID = $this->action->create('story', $storyID, 'Closed', htmlSpecialString($this->post->comments[$storyID]), ucfirst($this->post->closedReasons[$storyID]) . ($this->post->duplicateStoryIDList[$storyID] ? ':' . (int)$this->post->duplicateStoryIDList[$storyID] : ''));
                     $this->action->logHistory($actionID, $changes);
                 }
             }
@@ -1376,14 +1426,55 @@ class story extends control
      * Batch change branch.
      *
      * @param  int    $branchID
+     * @param  string $confirm  yes|no
+     * @param  string $storyIdList
      * @access public
      * @return void
      */
-    public function batchChangeBranch($branchID)
+    public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '')
     {
-        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(!empty($_POST['storyIdList'])) $storyIdList = $_POST['storyIdList'];
+        $storyIdList = !empty($storyIdList) ? $storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
+        if(empty($confirm))
+        {
+            $stories             = $this->story->getByList($storyIdList);
+            $normalStotyIdList   = '';
+            $conflictStoryIdList = '';
+            $conflictStoryArray  = array();
+
+            /* Determine whether there is a conflict between the branch of the story and the linked plan. */
+            foreach($storyIdList as $storyID)
+            {
+                if($stories[$storyID]->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
+                {
+                    foreach($plans[$storyID] as $plan)
+                    {
+                        if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID)
+                        {
+                            $conflictStoryIdList .= '[' . $storyID . ']';
+                            $conflictStoryArray[] = $storyID;
+                            break;
+                        }
+                    }
+                }
+            }
+
+            /* Prompt the user whether to continue to modify the conflicting stories branch. */
+            if($conflictStoryIdList)
+            {
+                $normalStotyIdList = array_diff($storyIdList, $conflictStoryArray);
+                $normalStotyIdList = implode(',', $normalStotyIdList);
+                $storyIdList       = implode(',', $storyIdList);
+                $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList");
+                $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList");
+                die(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
+            }
+        }
+
+        if(is_string($storyIdList)) $storyIdList = array_filter(explode(',', $storyIdList));
         $storyIdList = array_unique($storyIdList);
-        $allChanges  = $this->story->batchChangeBranch($storyIdList, $branchID);
+        $allChanges  = $this->story->batchChangeBranch($storyIdList, $branchID, $confirm, $plans);
         if(dao::isError()) die(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
@@ -1474,7 +1565,7 @@ class story extends control
             if(dao::isError()) die(js::error(dao::getError()));
             foreach($allChanges as $storyID => $changes)
             {
-                $actionID = $this->action->create('story', $storyID, 'Edited');
+                $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
         }
@@ -1485,16 +1576,20 @@ class story extends control
     /**
      * Story track.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  int         $projectID
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
      * @access public
      * @return void
      */
-    public function track($productID, $branch = 0, $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function track($productID, $branch = '', $projectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
         /* Set menu. The projectstory module does not execute. */
         if(!$projectID)
         {
@@ -1592,7 +1687,7 @@ class story extends control
      * @access public
      * @return void
      */
-    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc')
+    public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0)
     {
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
@@ -1603,9 +1698,9 @@ class story extends control
             $this->loadModel('project')->setMenu($this->session->project);
             $this->app->rawModule = 'qa';
             $this->lang->project->menu->qa['subMenu']->testcase['subModule'] = 'story';
-            $products  = $this->project->getProducts($this->session->project, false);
+            $products  = $this->product->getProducts($this->session->project, 'all', '', false);
             $productID = $this->product->saveState($productID, $products);
-            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase');
+            $this->lang->modulePageNav = $this->product->select($products, $productID, 'story', 'zeroCase', "projectID=$projectID", $branchID);
         }
         else
         {
@@ -1626,6 +1721,7 @@ class story extends control
 
         $this->view->stories    = $this->story->getZeroCase($productID, $branchID, $sort);
         $this->view->users      = $this->user->getPairs('noletter');
+        $this->view->projectID  = $projectID;
         $this->view->productID  = $productID;
         $this->view->branchID   = $branchID;
         $this->view->orderBy    = $orderBy;
@@ -1759,15 +1855,20 @@ class story extends control
      * AJAX: get stories of a product in html select.
      *
      * @param  int    $productID
+     * @param  int    $branch
      * @param  int    $moduleID
      * @param  int    $storyID
      * @param  string $onlyOption
      * @param  string $status
      * @param  int    $limit
+     * @param  string $type
+     * @param  bool   $hasParent
+     * @param  int    $executionID
+     * @param  int    $number
      * @access public
      * @return void
      */
-    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1)
+    public function ajaxGetProductStories($productID, $branch = 0, $moduleID = 0, $storyID = 0, $onlyOption = 'false', $status = '', $limit = 0, $type = 'full', $hasParent = 1, $executionID = 0, $number = '')
     {
         if($moduleID)
         {
@@ -1783,10 +1884,17 @@ class story extends control
             $storyStatus = array_keys($storyStatus);
         }
 
-        $stories = $this->story->getProductStoryPairs($productID, $branch ? "0,$branch" : $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        if($executionID)
+        {
+            $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
+        }
+        else
+        {
+            $stories = $this->story->getProductStoryPairs($productID, $branch, $moduleID, $storyStatus, 'id_desc', $limit, $type, 'story', $hasParent);
+        }
 
         $storyID = isset($stories[$storyID]) ? $storyID : 0;
-        $select  = html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
+        $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
         if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));
@@ -1870,7 +1978,7 @@ class story extends control
         $storyInfo['moduleID'] = $story->module;
         $storyInfo['estimate'] = $story->estimate;
         $storyInfo['pri']      = $story->pri;
-        $storyInfo['spec']     = html_entity_decode($story->spec);
+        $storyInfo['spec']     = html_entity_decode($story->spec, ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401, 'UTF-8');
 
         echo json_encode($storyInfo);
     }
@@ -2039,7 +2147,7 @@ class story extends control
             $relatedStories = $this->dao->select('id,title')->from(TABLE_STORY) ->where('id')->in($relatedStoryIdList)->fetchPairs();
             $relatedFiles   = $this->dao->select('id, objectID, pathname, title')->from(TABLE_FILE)->where('objectType')->eq('story')->andWhere('objectID')->in($storyIdList)->andWhere('extra')->ne('editor')->fetchGroup('objectID');
             $relatedSpecs   = $this->dao->select('*')->from(TABLE_STORYSPEC)->where('`story`')->in($storyIdList)->orderBy('version desc')->fetchGroup('story');
-            $relatedBranch  = array('0' => $this->lang->branch->all) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
+            $relatedBranch  = array('0' => $this->lang->branch->main) + $this->dao->select('id, name')->from(TABLE_BRANCH)->where('id')->in($relatedBranchIdList)->fetchPairs();
             $relatedModules = $this->loadModel('tree')->getAllModulePairs();
 
             foreach($stories as $story)
@@ -2159,7 +2267,7 @@ class story extends control
                 $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
                 /* Set child story title. */
-                if($story->parent > 0 && strpos($story->title, htmlentities('>')) !== 0) $story->title = '>' . $story->title;
+                if($story->parent > 0 && strpos($story->title, htmlentities('>'), ENT_COMPAT | ENT_HTML401, 'UTF-8') !== 0) $story->title = '>' . $story->title;
             }
 
             if($executionID)

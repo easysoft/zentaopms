@@ -98,6 +98,7 @@ $lang->story->source         = "來源";
 $lang->story->sourceNote     = '來源備註';
 $lang->story->fromBug        = '來源Bug';
 $lang->story->title          = "{$lang->SRCommon}名稱";
+$lang->story->type           = "需求類型";
 $lang->story->category       = "類型";
 $lang->story->color          = '標題顏色';
 $lang->story->toBug          = '轉Bug';
@@ -255,7 +256,7 @@ $lang->story->lblClose             = "關閉{$lang->SRCommon}";
 $lang->story->lblTBC               = '任務Bug用例';
 
 $lang->story->checkAffection       = '影響範圍';
-$lang->story->affectedProjects     = "影響的{$lang->project->common}或{$lang->execution->common}";
+$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影響的{$lang->project->common}或{$lang->execution->common}" : "影響的{$lang->project->common}";
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
@@ -276,6 +277,7 @@ $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所屬產品
 $lang->story->changeTips            = '該軟件需求關聯的用戶需求有變更，點擊“不變更”忽略此條變更，點擊“變更”來進行該軟件需求的變更。';
 $lang->story->estimateMustBeNumber  = '估算值必須是數字';
 $lang->story->estimateMustBePlus    = '估算值不能是負數';
+$lang->story->confirmChangeBranch  = $lang->SRCommon . '%s已關聯在之前所屬分支的計劃中，調整分支後，' . $lang->SRCommon . '將從之前所屬分支的計劃中移除，請確認是否繼續修改上述' . $lang->SRCommon . '的分支。';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "該{$lang->SRCommon}所屬範圍";

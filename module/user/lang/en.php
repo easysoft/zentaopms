@@ -137,7 +137,7 @@ $lang->user->testTask2Him = 'RequestsAssignedTo%s';
 $lang->user->case2Him     = 'CasesAssignedTo%s';
 $lang->user->caseByHim    = 'CasesCreatedBy%s';
 
-$lang->user->errorDeny    = "Sorry, your access to <b>%s</b> of <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
+$lang->user->errorDeny    = "Sorry, your access to <b>%2\$s</b> of <b>%1\$s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->errorView    = "Sorry, your access view <b>%s</b> is denied. Please contact your Admin to get privileges. Return to home page or login again.";
 $lang->user->loginFailed  = "Login failed. Please check your account and password.";
 $lang->user->lockWarning  = "You can try %s times.";
@@ -186,8 +186,9 @@ $lang->user->personalData['createdIssues']       = 'Issues Created';
 $lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
 $lang->user->personalData['createdDocs']         = 'Docs Created';
 
-$lang->user->keepLogin['on']      = 'Keep Login';
-$lang->user->loginWithDemoUser    = 'Login as Demo User:';
+$lang->user->keepLogin['on']   = 'Keep Login';
+$lang->user->loginWithDemoUser = 'Login as Demo User:';
+$lang->user->scanToLogin       = 'Scan QR Code';
 
 $lang->user->tpl = new stdclass();
 $lang->user->tpl->type    = 'Type';
@@ -206,6 +207,10 @@ $lang->user->placeholder->group     = "Group is related to user privileges.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
 $lang->user->placeholder->verify    = 'Please enter your ZenTao login password to verify..';
 
+$lang->user->placeholder->loginPassword = 'Enter your password';
+$lang->user->placeholder->loginAccount  = 'Enter your account';
+$lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
+
 $lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
 
@@ -219,6 +224,8 @@ $lang->user->error->reserved       = "ID %s，account is reserved.";
 $lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
 $lang->user->error->dangerPassword = "ID %s，passwords cannot be used with [%s] these commonly used if-passwords.";
 
+$lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
+$lang->user->error->verify           = "Wrong account or password.";
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";
@@ -267,14 +274,14 @@ $lang->user->process4DB  = "It is detected that you might use the one-click inst
 $lang->user->mkdirWin = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div> 
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
     </td></tr></table></body></html>
 EOT;
 $lang->user->mkdirLinux = <<<EOT
     <html><head><meta charset='utf-8'></head>
     <body><table align='center' style='width:700px; margin-top:100px; border:1px solid gray; font-size:14px;'><tr><td style='padding:8px'>
-    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>  
+    <div style='margin-bottom:8px;'>不能创建临时目录，请确认目录<strong style='color:#ed980f'>%s</strong>是否存在并有操作权限。</div>
     <div style='margin-bottom:8px;'>命令为：<strong style='color:#ed980f'>chmod o=rwx -R %s</strong>。</div>
     <div>A tmp directory cannot be created. Make sure the directory <strong style='color:#ed980f'>%s</strong> exists and you have the right permission.</div>
     <div style='margin-bottom:8px;'>Commond: <strong style='color:#ed980f'>chmod o=rwx -R %s</strong>.</div>

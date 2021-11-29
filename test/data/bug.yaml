@@ -1,0 +1,124 @@
+title: zt_bug
+desc: Bug表
+version: 1.0
+fields:
+  - field: id
+    range: 1-10000
+  - field: project
+    range: 131{2},0{97}
+  - field: product
+    range: 1{20}
+  - field: branch
+    range: 0
+  - field: module
+    range: 0
+  - field: execution
+    range: 391,0,391,0{97}
+  - field: plan
+    range: 0
+  - field: story
+    range: 0
+  - field: storyVersion
+    range: 0
+  - field: task
+    range: 0
+  - field: toTask
+    range: 0
+  - field: toStory
+    range: 0
+  - field: title
+    fields:
+      - field: title1
+        range: BUG{6},`缺陷!@()[]{}|\+=%^&*$#测试bug名称到底可以有多长！@#￥%&*'":.<>。?/（）;`,bug
+      - field: title2
+        range: 1-10000
+  - field: keywords
+    range: []
+  - field: severity
+    range: 1-4:R
+  - field: pri
+    range: 1-4:R
+  - field: type
+    range: [codeerror,config,install,security,performance,standard,automation,designdefect,others]
+  - field: os
+    range: []{2},[all,ie,ie11,ie10,ie9,ie8,ie7,ie6,chrome,firefox,firefox4,firefox3,firefox2,opera,oprea11,oprea10,opera9,safari,maxthon,uc,other]
+  - field: browser
+    range: []
+  - field: hardware
+    range: []
+  - field: found
+    range: []
+  - field: steps
+    range: ["<p>【步骤】</p><br/><p>【结果】</p><br/><p>【期望】</p><br/>","【步骤】进入成果展示<br/>【结果】乱码<br/>【期望】正常显示<br/>"]
+  - field: status
+    range: active{50},resolved{30},closed{20}
+  - field: subStatus
+    range: []
+  - field: color
+    range: [#3da7f5,#75c941,#2dbdb2,#797ec9,#ffaf38,#ff4e3e]
+  - field: confirmed
+    range: [0,1]:R
+  - field: activatedCount
+    range: 0
+  - field: mailto
+    range: []
+  - field: openedBy
+    range: admin
+  - field: openedDate
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: openedBuild
+    range: 1,0,1,trunk{97}
+  - field: assignedTo
+    range: [admin,dev1,test1]{30},[]{20},[admin,dev1,test1]{20},[]{10},closed{20}
+  - field: assignedDate
+    range: "(-1M)-(+1w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: deadline
+    range: "(+2w):60"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: resolvedBy
+    range: []{50},$assignedTo{30},admin{20}
+  - field: resolution
+    range: []{50},bydesign{5},duplicate{5},external{5},fixed{5},notrepro{2},postponed{3},willnotfix{5},fixed{10},bydesign,external,notrepro,postponed,willnotfix,duplicate{5}
+  - field: resolvedBuild
+    range: []{55},trunk{15},[]{25},trunk{5}
+  - field: resolvedDate
+    range:
+  - field: closedBy
+    range: []{80},admin{20}
+  - field: closedDate
+    range:
+  - field: duplicateBug
+    range: 0{55},1-5,0{40},10-15
+  - field: linkBug
+    range:
+  - field: case
+    range: 0
+  - field: caseVersion
+    range: 0
+  - field: result
+    range: 0
+  - field: repo
+    range: 0
+  - field: entry
+    range:
+  - field: lines
+    range:
+  - field: v1
+    range:
+  - field: v2
+    range:
+  - field: repoType
+    range:
+  - field: testtask
+    range: 0
+  - field: lastEditedBy
+    range:
+  - field: lastEditedDate
+    range:
+  - field: deleted
+    range: 0{40},1{10},0{50}

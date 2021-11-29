@@ -11,7 +11,7 @@ $config->project->editor->activate = array('id' => 'comment', 'tools' => 'simple
 $config->project->editor->view     = array('id' => 'lastComment', 'tools' => 'simpleTools');
 
 $config->project->list = new stdclass();
-$config->project->list->exportFields = 'id,parent,name,linkedProducts,status,begin,end,budget,PM,end,desc';
+$config->project->list->exportFields = 'id,parent,code,name,linkedProducts,status,begin,end,budget,PM,end,desc';
 
 $config->project->create = new stdclass();
 $config->project->edit   = new stdclass();
@@ -27,7 +27,7 @@ $config->project->sortFields->budget = 'budget';
 
 global $lang;
 $config->project->datatable = new stdclass();
-$config->project->datatable->defaultField = array('id', 'name', 'PM', 'status', 'begin', 'end', 'budget', 'teamCount','estimate','consume', 'progress', 'actions');
+$config->project->datatable->defaultField = array('id', 'name', 'code', 'PM', 'status', 'begin', 'end', 'budget', 'teamCount','estimate','consume', 'progress', 'actions');
 
 $config->project->datatable->fieldList['id']['title']    = 'ID';
 $config->project->datatable->fieldList['id']['fixed']    = 'left';
@@ -42,6 +42,14 @@ $config->project->datatable->fieldList['name']['minWidth'] = '180';
 $config->project->datatable->fieldList['name']['required'] = 'yes';
 $config->project->datatable->fieldList['name']['sort']     = 'no';
 $config->project->datatable->fieldList['name']['pri']      = '1';
+
+$config->project->datatable->fieldList['code']['title']    = 'code';
+$config->project->datatable->fieldList['code']['fixed']    = 'left';
+$config->project->datatable->fieldList['code']['width']    = '100';
+$config->project->datatable->fieldList['code']['minWidth'] = '180';
+$config->project->datatable->fieldList['code']['required'] = 'no';
+$config->project->datatable->fieldList['code']['sort']     = 'no';
+$config->project->datatable->fieldList['code']['pri']      = '1'; 
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';

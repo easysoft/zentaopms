@@ -11,19 +11,24 @@
  */
 global $config;
 
-$lang->action->common     = '系統日誌';
-$lang->action->product    = $lang->productCommon;
-$lang->action->project    = '項目';
-$lang->action->execution  = $lang->executionCommon;
-$lang->action->objectType = '對象類型';
-$lang->action->objectID   = '對象ID';
-$lang->action->objectName = '對象名稱';
-$lang->action->actor      = '操作者';
-$lang->action->action     = '動作';
-$lang->action->actionID   = '記錄ID';
-$lang->action->date       = '日期';
-$lang->action->extra      = '附加值';
-$lang->action->system     = '系統';
+$lang->action->common      = '系統日誌';
+$lang->action->id          = '編號';
+$lang->action->product     = $lang->productCommon;
+$lang->action->project     = '項目';
+$lang->action->execution   = $lang->execution->common;
+$lang->action->objectType  = '對象類型';
+$lang->action->objectID    = '對象ID';
+$lang->action->objectName  = '對象名稱';
+$lang->action->actor       = '操作者';
+$lang->action->action      = '動作';
+$lang->action->actionID    = '記錄ID';
+$lang->action->date        = '日期';
+$lang->action->extra       = '附加值';
+$lang->action->system      = '系統';
+$lang->action->url         = '網址';
+$lang->action->contentType = '內容類型';
+$lang->action->data        = '數據';
+$lang->action->result      = '結果';
 
 $lang->action->trash       = '資源回收筒';
 $lang->action->undelete    = '還原';
@@ -92,7 +97,9 @@ $lang->action->objectTypes['testsuite']   = '套件';
 $lang->action->objectTypes['testtask']    = '測試單';
 $lang->action->objectTypes['testreport']  = '報告';
 $lang->action->objectTypes['doc']         = '文檔';
+$lang->action->objectTypes['api']         = '介面';
 $lang->action->objectTypes['doclib']      = '文檔庫';
+$lang->action->objectTypes['apistruct']   = '資料結構';
 $lang->action->objectTypes['todo']        = '待辦';
 $lang->action->objectTypes['risk']        = '風險';
 $lang->action->objectTypes['issue']       = '問題';
@@ -157,6 +164,9 @@ $lang->action->desc->resolved        = '$date, 由 <strong>$actor</strong> 解�
 $lang->action->desc->managed         = '$date, 由 <strong>$actor</strong> 維護。' . "\n";
 $lang->action->desc->estimated       = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 $lang->action->desc->run             = '$date, 由 <strong>$actor</strong> 執行。' . "\n";
+$lang->action->desc->syncprogram     = '$date, 由 <strong>$actor</strong> 啟動(因項目開始而啟動項目集)。' . "\n";
+$lang->action->desc->syncproject     = '$date, 系統判斷由於執行開始，將項目狀態置為進行中。' . "\n";
+$lang->action->desc->syncexecution   = '$date, 系統判斷由於任務開始，將執行狀態置為進行中。' . "\n";
 
 /* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
@@ -272,6 +282,11 @@ $lang->action->label->reviewrejected        = '拒絶';
 $lang->action->label->reviewclarified       = '有待明確';
 $lang->action->label->commitsummary         = '提交培訓總結';
 $lang->action->label->updatetrainee         = '更新培訓人員';
+$lang->action->label->setdefaultbranch      = '設置了預設分支';
+$lang->action->label->syncprogram           = '開始了';
+$lang->action->label->syncproject           = '開始了';
+$lang->action->label->syncexecution         = '開始了';
+$lang->action->label->startProgram          = '（因項目開始而啟動項目集）';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -304,6 +319,12 @@ $lang->action->dynamicAction->product['deleted']   = '刪除' . $lang->productCo
 $lang->action->dynamicAction->product['closed']    = '關閉' . $lang->productCommon;
 $lang->action->dynamicAction->product['undeleted'] = '還原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隱藏' . $lang->productCommon;
+
+$lang->action->dynamicAction->branch['opened']           = '創建分支';
+$lang->action->dynamicAction->branch['edited']           = '編輯分支';
+$lang->action->dynamicAction->branch['closed']           = '關閉分支';
+$lang->action->dynamicAction->branch['activated']        = '激活分支';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = '設置預設分支';
 
 $lang->action->dynamicAction->productplan['opened'] = "創建計劃";
 $lang->action->dynamicAction->productplan['edited'] = "編輯計劃";
@@ -448,6 +469,10 @@ $lang->action->dynamicAction->doc['deleted']   = '刪除文檔';
 $lang->action->dynamicAction->doc['undeleted'] = '還原文檔';
 $lang->action->dynamicAction->doc['hidden']    = '隱藏文檔';
 
+$lang->action->dynamicAction->api['created'] = '創建介面';
+$lang->action->dynamicAction->api['edited']  = '編輯介面';
+$lang->action->dynamicAction->api['deleted'] = '刪除介面';
+
 $lang->action->dynamicAction->user['created']       = '創建用戶';
 $lang->action->dynamicAction->user['edited']        = '編輯用戶';
 $lang->action->dynamicAction->user['deleted']       = '刪除用戶';
@@ -494,6 +519,8 @@ $lang->action->label->risk        = '風險|risk|view|riskID=%s';
 $lang->action->label->issue       = '問題|issue|view|issueID=%s';
 $lang->action->label->design      = '設計|design|view|designID=%s';
 $lang->action->label->stakeholder = '干係人|stakeholder|view|userID=%s';
+$lang->action->label->api         = '介面|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->branch      = '分支|branch|manage|productID=%s&browseType=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

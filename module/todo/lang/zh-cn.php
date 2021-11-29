@@ -97,12 +97,12 @@ $lang->todo->priList[2] = 2;
 $lang->todo->priList[3] = 3;
 $lang->todo->priList[4] = 4;
 
-$lang->todo->typeList['custom']    = '自定义';
-$lang->todo->typeList['cycle']     = '周期';
-$lang->todo->typeList['bug']       = 'Bug';
-$lang->todo->typeList['task']      = '任务';
-$lang->todo->typeList['story']     = $lang->SRCommon;
-$lang->todo->typeList['testtask']  = '测试单';
+$lang->todo->typeList['custom']   = '自定义';
+$lang->todo->typeList['cycle']    = '周期';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = '任务';
+$lang->todo->typeList['story']    = $lang->SRCommon;
+$lang->todo->typeList['testtask'] = '测试单';
 
 $lang->todo->confirmDelete  = "您确定要删除这条待办吗？";
 $lang->todo->thisIsPrivate  = '这是一条私人事务。:)';
@@ -112,6 +112,7 @@ $lang->todo->lblClickCreate = "点击添加待办";
 $lang->todo->noTodo         = '该类型没有待办事务';
 $lang->todo->noAssignedTo   = '被指派人不能为空';
 $lang->todo->unfinishedTodo = '待办ID %s 不是完成状态，不能关闭。';
+$lang->todo->today          = '今日待办';
 
 $lang->todo->periods['all']             = '所有';
 $lang->todo->periods['before']          = '未完';

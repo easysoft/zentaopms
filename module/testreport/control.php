@@ -53,12 +53,12 @@ class testreport extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products  = $this->product->getProducts($objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -479,7 +479,7 @@ class testreport extends control
     {
         $reportID = (int)$reportID;
         $report   = $this->testreport->getById($reportID);
-        if(!$report) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$report) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         $this->session->project = $report->project;
 
         $browseLink = '';

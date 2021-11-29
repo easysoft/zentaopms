@@ -10,6 +10,10 @@
  * @link        http://www.zentao.net
  */
 $lang->search->common        = '搜索';
+$lang->search->id            = '編號';
+$lang->search->editedDate    = '編輯時間';
+$lang->search->key           = '鍵';
+$lang->search->value         = '值';
 $lang->search->reset         = '重置';
 $lang->search->saveQuery     = '保存查詢';
 $lang->search->myQuery       = '我的查詢';

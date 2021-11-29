@@ -172,7 +172,6 @@ class baseHTML
         $selectedItems = ",$selectedItems,";
         foreach($options as $key => $value)
         {
-            $key      = str_replace('item', '', $key);
             $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
             $string  .= "<option value='$key'$selected>$value</option>\n";
         }
@@ -209,7 +208,6 @@ class baseHTML
             $string .= "<optgroup label='$groupName'>\n";
             foreach($options as $key => $value)
             {
-                $key      = str_replace('item', '', $key);
                 $selected = strpos($selectedItems, ",$key,") !== false ? " selected='selected'" : '';
                 $string  .= "<option value='$key'$selected>$value</option>\n";
             }
@@ -280,7 +278,6 @@ class baseHTML
 
         foreach($options as $key => $value)
         {
-            $key     = str_replace('item', '', $key);
             if($isBlock) $string .= "<div class='checkbox'><label>";
             else $string .= "<label class='checkbox-inline'>";
             $string .= "<input type='checkbox' name='{$name}[]' value='$key' ";
@@ -492,9 +489,14 @@ class baseHTML
         global $lang, $app, $config;
         if(empty($label)) $label = $lang->goback;
 
-        $tab           = $_COOKIE['tab'];
-        $referer       = strtolower($_SERVER['HTTP_REFERER']);
-        $refererParts  = parse_url($referer);
+        $gobackLink   = "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
+        $tab          = $_COOKIE['tab'];
+        $referer      = isset($_SERVER['HTTP_REFERER']) ? strtolower($_SERVER['HTTP_REFERER']) : '';
+        $refererParts = parse_url($referer);
+
+        if($config->requestType == 'PATH_INFO' and empty($refererParts)) return $gobackLink;
+        if($config->requestType == 'GET' and !isset($refererParts['query'])) return $gobackLink;
+
         $refererLink   = $config->requestType == 'PATH_INFO' ? $refererParts['path'] : $refererParts['query'];
         $currentModule = $app->getModuleName();
         $currentMethod = $app->getMethodName();

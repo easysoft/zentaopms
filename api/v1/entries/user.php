@@ -28,6 +28,8 @@ class userEntry extends Entry
         $control->profile($userID);
 
         $data = $this->getData();
+        if(!$data) return $this->send404(); // If no user, send 404.
+
         $user = $data->data->user;
         unset($user->password);
 
@@ -50,11 +52,13 @@ class userEntry extends Entry
         unset($profile->password);
 
         $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
+        $info->profile->role  = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
+        $info->profile->admin = strpos($this->app->company->admins, ",{$profile->account},") !== false;
 
         if(!$fields) return $this->send(200, $info);
 
         /* Set other fields. */
-        $fields = explode(',', $fields);
+        $fields = explode(',', strtolower($fields));
 
         $this->loadModel('my');
         foreach($fields as $field)
@@ -62,19 +66,125 @@ class userEntry extends Entry
             switch($field)
             {
                 case 'product':
-                    $info->product = $this->my->getProducts();
+                    $info->product = array('total' => 0, 'products' => array());
+
+                    $products = $this->my->getProducts('ownbyme');
+                    if($products)
+                    {
+                        $info->product['total']    = $products->unclosedCount;
+                        $info->product['products'] = $products->products;
+                    }
+                    break;
+                case 'undoneproduct':
+                    $info->undoneProduct = array('total' => 0, 'products' => array());
+
+                    $products = $this->my->getProducts('undone');
+                    if($products)
+                    {
+                        $info->undoneProduct['total']    = $products->allCount;
+                        $info->undoneProduct['products'] = $products->products;
+                    }
                     break;
                 case 'project':
-                    $info->project = $this->my->getProjects();
+                    $info->project = array('total' => 0, 'projects' => array());
+
+                    $projects = $this->my->getDoingProjects();
+                    if($projects)
+                    {
+                        $info->project['total']    = $projects->doingCount;
+                        $info->project['projects'] = $projects->projects;
+                    }
                     break;
-                case 'doc':
-                    $info->doc = $this->my->getDocs();
+                case 'lastproject':
+                    $info->lastProject = array('total' => 0, 'projects' => array());
+
+                    $control = $this->loadController('project', 'ajaxGetDropMenu');
+                    $control->ajaxGetDropMenu(0, 'project', 'index');
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $myProjects['owner'] = array();
+                        $myProjects['other'] = array();
+                        foreach($data->data->projects as $programID => $programProjects)
+                        {
+                            foreach($programProjects as $project)
+                            {
+                                if($project->status == 'closed') continue;
+
+                                $project = $this->filterFields($project, 'id,model,type,name,code,parent,status,PM');
+                                if($project->PM == $this->app->user->account)
+                                {
+                                    $myProjects['owner'][] = $project;
+                                }
+                                else
+                                {
+                                    $myProjects['other'][] = $project;
+                                }
+                            }
+                        }
+                        $lastProjects = array_merge($myProjects['owner'], $myProjects['other']);
+                        $lastProjects = array_slice($lastProjects, 0, 3);
+
+                        $info->lastProject['total']    = count($lastProjects);
+                        $info->lastProject['projects'] = $lastProjects;
+                    }
+                    break;
+                case 'execution':
+                    $info->execution = array('total' => 0, 'executions' => array());
+                    if(!common::hasPriv('my', 'execution')) break;
+
+                    $control = $this->loadController('my', 'execution');
+                    $control->execution($this->param('type', 'undone'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->execution['total'] = $data->data->pager->recTotal;
+                        $info->execution['executions'] = array_values((array)$data->data->executions);
+                    }
+                    break;
+                case 'lastexecution':
+                    $info->lastExecution = array('total' => 0, 'executions' => array());
+
+                    $control = $this->loadController('execution', 'ajaxGetDropMenu');
+                    $control->ajaxGetDropMenu(0, 'execution', 'browse', '');
+                    $data = $this->getData();
+
+                    $account = $this->app->user->account;
+                    if($data->status == 'success')
+                    {
+                        $myExecutions['owner'] = array();
+                        $myExecutions['other'] = array();
+                        foreach($data->data->executions as $projectID => $projectExecutions)
+                        {
+                            foreach($projectExecutions as $execution)
+                            {
+                                if($execution->status == 'done' or $execution->status == 'closed') continue;
+
+                                if($execution->PM == $account or isset($execution->teams->$account))
+                                {
+                                    $myExecutions['owner'][] = $this->filterFields($execution, 'id,model,type,name,code,parent,status,PM');
+                                }
+                                else
+                                {
+                                    $myExecutions['other'][] = $this->filterFields($execution, 'id,model,type,name,code,parent,status,PM');
+                                }
+                            }
+                        }
+                        $lastExecutions = array_merge($myExecutions['owner'], $myExecutions['other']);
+                        $lastExecutions = array_slice($lastExecutions, 0, 3);
+
+                        $info->lastExecution['total']      = count($lastExecutions);
+                        $info->lastExecution['executions'] = $lastExecutions;
+                    }
                     break;
                 case 'actions':
                     $info->actions = $this->my->getActions();
                     break;
                 case 'task':
-                    $info->task = array('count' => 0, 'recentTask' => array());
+                    $info->task = array('total' => 0, 'tasks' => array());
+                    if(!common::hasPriv('my', 'task')) break;
 
                     $control = $this->loadController('my', 'task');
                     $control->task($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
@@ -82,25 +192,154 @@ class userEntry extends Entry
 
                     if($data->status == 'success')
                     {
-                        $info->task['count']       = $data->data->pager->recTotal;
-                        $info->task['recentTasks'] = $data->data->tasks;
+                        $info->task['total'] = $data->data->pager->recTotal;
+                        $info->task['tasks'] = array_values((array)$data->data->tasks);
                     }
 
                     break;
-                case 'todo':
-                    $info->todo = array('count' => 0, 'recentTodos' => array());
+                case 'bug':
+                    $info->bug = array('total' => 0, 'bugs' => array());
+                    if(!common::hasPriv('my', 'bug')) break;
 
-                    $control = $this->loadController('my', 'todo');
-                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 10), 1);
+                    $control = $this->loadController('my', 'bug');
+                    $control->bug($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
                     $data = $this->getData();
 
                     if($data->status == 'success')
                     {
-                        $info->todo['count']       = $data->data->pager->recTotal;
-                        $info->todo['recentTodos'] = $data->data->todos;
+                        $bugs = array();
+                        foreach($data->data->bugs as $bug)
+                        {
+                            $status = array('code' => $bug->status, 'name' => $this->lang->bug->statusList[$bug->status]);
+                            if($bug->status == 'active' and $bug->confirmed) $status = array('code' => 'confirmed', 'name' => $this->lang->bug->labelConfirmed);
+                            if($bug->resolution == 'postponed') $status = array('code' => 'postponed', 'name' => $this->lang->bug->labelPostponed);
+                            if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
+                            $bug->status = $status;
+
+                            $bugs[$bug->id] = $bug;
+                        }
+
+                        $storyChangeds = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
+                            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
+                            ->where('t1.id')->in(array_keys($bugs))
+                            ->andWhere('t1.story')->ne('0')
+                            ->andWhere('t1.storyVersion != t2.version')
+                            ->fetchPairs('id', 'id');
+                        foreach($storyChangeds as $bugID)
+                        {
+                            $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->changed);
+                            $bugs[$bugID]->status = $status;
+                        }
+
+                        $info->bug['total'] = $data->data->pager->recTotal;
+                        $info->bug['bugs']  = array_values($bugs);
                     }
 
                     break;
+                case 'todo':
+                    $info->todo = array('total' => 0, 'todos' => array());
+                    if(!common::hasPriv('my', 'todo')) break;
+
+                    $control = $this->loadController('my', 'todo');
+                    $control->todo($this->param('date', 'all'), '', 'all', 'date_desc', 0, 0, $this->param('limit', 5), 1);
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $info->todo['total'] = $data->data->pager->recTotal;
+                        $info->todo['todos'] = array_values((array)$data->data->todos);
+                    }
+
+                    break;
+                case 'story':
+                    $info->story = array('total' => 0, 'stories' => array());
+                    if(!common::hasPriv('my', 'story')) break;
+
+                    $control = $this->loadController('my', 'story');
+                    $control->story($this->param('type', 'assignedTo'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 5), $this->param('page', 1));
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $stories = array();
+                        foreach($data->data->stories as $story)
+                        {
+                            $story->status = array('code' => $story->status, 'name' => $this->lang->story->statusList[$story->status]);
+                            $stories[$story->id] = $story;
+                        }
+
+                        $info->story['total']   = $data->data->pager->recTotal;
+                        $info->story['stories'] = array_values($stories);
+                    }
+
+                    break;
+                case 'issue':
+                    $info->issue = array('total' => 0, 'issues' => array());
+                    if(!common::hasPriv('my', 'issue')) break;
+
+                    if(!empty($this->config->maxVersion))
+                    {
+                        $control = $this->loadController('my', 'issue');
+                        $control->issue('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $data = $this->getData();
+
+                        if($data->status == 'success')
+                        {
+                            $info->issue['total']  = $data->data->pager->recTotal;
+                            $info->issue['issues'] = array_values((array)$data->data->issues);
+                        }
+                    }
+                    break;
+                case 'risk':
+                    $info->risk = array('total' => 0, 'risks' => array());
+                    if(!common::hasPriv('my', 'risk')) break;
+
+                    if(!empty($this->config->maxVersion))
+                    {
+                        $control = $this->loadController('my', 'risk');
+                        $control->risk('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $data = $this->getData();
+
+                        if($data->status == 'success')
+                        {
+                            $info->risk['total'] = $data->data->pager->recTotal;
+                            $info->risk['risks'] = array_values((array)$data->data->risks);
+                        }
+                    }
+                    break;
+                case 'meeting':
+                    $info->meeting = array('total' => 0, 'meetings' => array());
+                    if(!common::hasPriv('my', 'myMeeting')) break;
+
+                    if(!empty($this->config->maxVersion))
+                    {
+                        $control = $this->loadController('my', 'myMeeting');
+                        $control->myMeeting('all', 'id_desc', 0, $this->param('limit', 5), 1);
+                        $data = $this->getData();
+
+                        if($data->status == 'success')
+                        {
+                            $info->meeting['total']    = $data->data->pager->recTotal;
+                            $info->meeting['meetings'] = array_values((array)$data->data->meetings);
+                        }
+                    }
+                    break;
+                case 'overview':
+                    $info->overview = $this->my->getOverview();
+                    break;
+                case 'contribute':
+                    $info->contribute = $this->my->getContribute();
+                    break;
+                case 'rights':
+                    $inAdminGroup = $this->dao->select('t1.*')->from(TABLE_USERGROUP)->alias('t1')
+                        ->leftJoin(TABLE_GROUP)->alias('t2')->on('t1.group=t2.id')
+                        ->where('t1.account')->eq($info->profile->account)
+                        ->andWhere('t2.role')->eq('admin')
+                        ->fetch();
+
+                    $info->rights = array();
+                    $info->rights['admin']  = (!empty($inAdminGroup) or $this->app->user->admin);
+                    $info->rights['rights'] = $this->app->user->rights['rights'];
             }
         }
 
@@ -119,8 +358,10 @@ class userEntry extends Entry
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
-        $fields = 'account,dept,realname,email,commiter,gender';
+        $fields = 'dept,realname,email,commiter,gender';
         $this->batchSetPost($fields, $oldUser);
+
+        if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
 
         $this->setPost('password1', $this->request('password', ''));
         $this->setPost('password2', $this->request('password', ''));

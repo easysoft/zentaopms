@@ -216,8 +216,7 @@ class company extends control
 
         /* Get projects' list.*/
         $projects = $this->loadModel('project')->getPairsByProgram(0);
-        $projects = array($this->lang->company->project) + $projects;
-        $this->view->projects = $projects;
+        $this->view->projects = array($this->lang->company->project) + $projects;;
 
         /* Get executions' list.*/
         $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
@@ -255,10 +254,13 @@ class company extends control
         /* Build search form. */
         $executions[0] = '';
         $products[0]   = '';
+        $projects[0]   = '';
         ksort($executions);
         ksort($products);
+        ksort($projects);
         $executions['all'] = $this->lang->execution->allExecutions;
         $products['all']   = $this->lang->product->allProduct;
+        $projects['all']   = $this->lang->project->all;
 
         foreach($this->lang->action->search->label as $action => $name)
         {

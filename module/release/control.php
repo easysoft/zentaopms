@@ -37,17 +37,18 @@ class release extends control
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function browse($productID, $branch = 0, $type = 'all')
+    public function browse($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc')
     {
         $this->commonAction($productID, $branch);
         $this->session->set('releaseList', $this->app->getURI(true), 'product');
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->release->browse;
         $this->view->position[] = $this->lang->release->browse;
-        $this->view->releases   = $this->release->getList($productID, $branch, $type);
+        $this->view->releases   = $this->release->getList($productID, $branch, $type, $orderBy);
         $this->view->type       = $type;
         $this->display();
     }
@@ -55,12 +56,12 @@ class release extends control
     /**
      * Create a release.
      *
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  int        $productID
+     * @param  string|int $branch
      * @access public
      * @return void
      */
-    public function create($productID, $branch = 0)
+    public function create($productID, $branch = 'all')
     {
         if(!empty($_POST))
         {
@@ -160,7 +161,7 @@ class release extends control
     {
         $releaseID = (int)$releaseID;
         $release   = $this->release->getByID($releaseID, true);
-        if(!$release) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$release) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');

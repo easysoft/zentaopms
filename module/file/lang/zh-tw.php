@@ -11,6 +11,10 @@
  */
 $lang->file = new stdclass();
 $lang->file->common        = '附件';
+$lang->file->id            = '編號';
+$lang->file->objectType    = '對象類型';
+$lang->file->objectID      = '對象ID';
+$lang->file->deleted       = '已刪除';
 $lang->file->uploadImages  = '多圖上傳';
 $lang->file->download      = '下載附件';
 $lang->file->uploadDate    = '上傳時間：';

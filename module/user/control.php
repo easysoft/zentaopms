@@ -60,7 +60,7 @@ class user extends control
     {
         $userID = (int)$userID;
         $user   = $this->user->getById($userID, 'id');
-        if(empty($user)) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(empty($user)) die(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
         if($user->deleted == 1) die(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
 
         /* Set thie url to session. */
@@ -362,7 +362,7 @@ class user extends control
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->execution;
         $this->view->position[] = $this->lang->user->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getExecutions($account, 'execution', 'all', $orderBy, $pager);
+        $this->view->executions = $this->user->getObjects($account, 'execution', 'all', $orderBy, $pager);
         $this->view->user       = $user;
         $this->view->orderBy    = $orderBy;
         $this->view->pager      = $pager;
@@ -1253,6 +1253,7 @@ class user extends control
         $limit    = $this->get->limit;
         $index    = 0;
         $newUsers = array();
+        if(empty($search)) return array();
         foreach($users as $account => $realname)
         {
             if($index >= $limit) break;

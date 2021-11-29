@@ -377,7 +377,7 @@ class caselib extends control
     {
         $libID = (int)$libID;
         $lib   = $this->caselib->getById($libID, true);
-        if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();

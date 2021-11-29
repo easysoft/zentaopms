@@ -12,7 +12,7 @@
 $lang->action->common     = 'Nhật ký';
 $lang->action->product    = $lang->productCommon;
 $lang->action->project    = 'Project';
-$lang->action->execution  = $lang->executionCommon;
+$lang->action->execution  = $lang->execution->common;
 $lang->action->objectType = 'Loại đối tượng';
 $lang->action->objectID   = 'ID';
 $lang->action->objectName = 'Tên đối tượng';
@@ -150,6 +150,9 @@ $lang->action->desc->resolved        = '$date, resolved by <strong>$actor</stron
 $lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
 $lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
 $lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
+$lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -265,6 +268,10 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->syncprogram           = 'start';
+$lang->action->label->syncproject           = 'start';
+$lang->action->label->syncexecution         = 'start';
+$lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

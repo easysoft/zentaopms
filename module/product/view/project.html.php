@@ -32,18 +32,20 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
-          <th><?php echo $lang->project->name;?></th>
           <?php if($config->systemMode == 'new'):?>
           <th class='c-program'><?php echo $lang->program->common;?></th>
+          <th><?php echo $lang->project->name;?></th>
+          <?php else:?>
+          <th><?php echo $lang->execution->name;?></th>
           <?php endif;?>
           <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
           <th class='c-date'><?php echo $lang->project->begin;?></th>
           <th class='c-date'><?php echo $lang->project->end;?></th>
           <th class='c-status'><?php echo $lang->project->status;?></th>
           <th class="c-budget text-center"><?php echo $lang->project->budget;?></th>
-          <th class="c-number text-center"><?php echo $lang->project->estimate;?></th>
-          <th class="c-number text-center"><?php echo $lang->project->consume;?></th>
-          <th class='c-progress'><?php echo $lang->project->progress;?></th>
+          <th class="c-number text-right"><?php echo $lang->project->estimate;?></th>
+          <th class="c-number text-right"><?php echo $lang->project->consume;?></th>
+          <th class="c-progress"><?php echo $lang->project->progress;?></th>
         </tr>
       </thead>
       <tbody>
@@ -51,6 +53,9 @@
         <?php foreach($projectStats as $project):?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
+          <?php if($config->systemMode == 'new'):?>
+          <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
+          <?php endif;?>
           <td class='text-left'>
             <?php
             if($config->systemMode == 'new')
@@ -63,9 +68,6 @@
             }
             ?>
           </td>
-          <?php if($config->systemMode == 'new'):?>
-          <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
-          <?php endif;?>
           <td class='padding-right'>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>
@@ -80,9 +82,9 @@
           <?php $budgetTitle   = $project->budget != 0 ? zget($this->lang->project->currencySymbol, $project->budgetUnit) . ' ' . $projectBudget : $this->lang->project->future;?>
           <?php $textStyle = $project->budget != 0 ? 'text-right' : 'text-center';?>
           <td title='<?php echo $budgetTitle;?>' class="text-ellipsis <?php echo $textStyle;?>"><?php echo $budgetTitle;?></td>
-          <td class="text-right padding-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
-          <td class="text-right padding-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
-          <td class='padding-right text-center'>
+          <td class="text-right" title="<?php echo $project->hours->totalEstimate . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalEstimate . $lang->execution->workHourUnit;?></td>
+          <td class="text-right" title="<?php echo $project->hours->totalConsumed . ' ' . $lang->execution->workHour;?>"><?php echo $project->hours->totalConsumed . $lang->execution->workHourUnit;?></td>
+          <td>
             <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo $project->hours->progress;?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
               <div class='progress-info'><?php echo $project->hours->progress;?></div>
             </div>

@@ -69,7 +69,7 @@ class actionModel extends model
 
 
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
-        $actionID = $this->dbh->lastInsertID();
+        $actionID = $this->dao->lastInsertID();
 
         if($this->post->uid) $this->file->updateObjectID($this->post->uid, $objectID, $objectType);
 
@@ -188,7 +188,7 @@ class actionModel extends model
 
             /* Set fields to fetch. */
             $fields = '*';
-            if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
+            if(strpos('story, productplan, case, branch',  $objectType) !== false) $fields = 'product';
             if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
             if(strpos('case, repo', $objectType) !== false) $fields = 'execution';
             if($objectType == 'release') $fields = 'product, build';
@@ -238,6 +238,12 @@ class actionModel extends model
                 $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
                 $record->project   = $testtask->project;
                 $record->execution = $testtask->execution;
+            }
+
+            if($objectType == 'branch' and $objectID == 0)
+            {
+                $record = new stdclass();
+                $record->product = $extra;
             }
 
             if($objectType == 'whitelist' and $extra == 'product') $record->product = $objectID;
@@ -864,8 +870,8 @@ class actionModel extends model
         }
         if($this->session->actionQuery == false) $this->session->set('actionQuery', ' 1 = 1');
 
-        $allProducts   = "`product`   = 'all'";
-        $allProjects   = "`project`   = 'all'";
+        $allProducts   = "`product` = 'all'";
+        $allProjects   = "`project` = 'all'";
         $allExecutions = "`execution` = 'all'";
         $actionQuery   = $this->session->actionQuery;
 
@@ -963,6 +969,11 @@ class actionModel extends model
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
+            if($action->objectType =='program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !==false)
+            {
+                $action->objectName .= $this->lang->action->label->startProgram;
+            }
+
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
@@ -972,7 +983,7 @@ class actionModel extends model
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
-            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $requirements);
+            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
@@ -1059,6 +1070,12 @@ class actionModel extends model
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                 }
+                elseif($objectType == 'branch')
+                {
+                    $this->app->loadLang('branch');
+                    $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
+                    if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
+                }
                 else
                 {
                     $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
@@ -1093,11 +1110,12 @@ class actionModel extends model
      *
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $actionType
      * @param  array  $requirements
      * @access public
      * @return string
      */
-    public function getObjectLabel($objectType, $objectID, $requirements)
+    public function getObjectLabel($objectType, $objectID, $actionType, $requirements)
     {
         $actionObjectLabel = $objectType;
         if(isset($this->lang->action->label->$objectType))
@@ -1168,9 +1186,18 @@ class actionModel extends model
 
                     $libObjectID = $type != 'custom' ? $action->$type : '';
                     $libObjectID = trim($libObjectID, ',');
-                    if(empty($libObjectID)) return false;
+                    if(empty($libObjectID) and $type != 'custom') return false;
 
                     $params = sprintf($vars, $type, $libObjectID, $libID);
+                }
+                elseif($action->objectType == 'api')
+                {
+                    $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
+                    $params = sprintf($vars, $api->lib, $api->module, $api->id);
+                }
+                elseif($action->objectType == 'branch')
+                {
+                    $params = sprintf($vars, trim($action->product, ','));
                 }
                 else
                 {
@@ -1183,7 +1210,14 @@ class actionModel extends model
                     $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
                     $docLib->objectID   = strpos('product,project,execution', $docLib->type) !== false ? $docLib->{$docLib->type} : 0;
                     $appendLib          = $docLib->deleted == '1' ? $action->objectID : 0;
-                    $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    if($docLib->type == 'api')
+                    {
+                        $action->objectLink = helper::createLink('api', 'index', "libID={$action->objectID}");
+                    }
+                    else
+                    {
+                        $action->objectLink = helper::createLink('doc', 'objectLibs', sprintf($vars, $docLib->type, $docLib->objectID, $action->objectID, $appendLib));
+                    }
                 }
                 elseif($action->objectType == 'user')
                 {
@@ -1271,7 +1305,7 @@ class actionModel extends model
             if($history->diff != '')
             {
                 $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff      = ($history->field != 'subversion' and $history->field != 'git') ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = ($history->field != 'subversion' and $history->field != 'git') ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
                 $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
                 $history->diff      = nl2br($history->diff);
                 $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
@@ -1317,17 +1351,11 @@ class actionModel extends model
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
-        /* Revert userView products when undelete project. */
-        if($action->objectType == 'project')
+        $this->loadModel('product');
+        /* Revert userView products when undelete project or execution. */
+        if($action->objectType == 'project' or $action->objectType == 'execution')
         {
-            $products = $this->loadModel('project')->getProducts($project->id, $withBranch = false);
-            if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
-        }
-
-        /* Revert userView products when undelete execution. */
-        if($action->objectType == 'execution')
-        {
-            $products = $this->loadModel('execution')->getProducts($project->id, $withBranch = false);
+            $products = $this->product->getProducts($project->id, 'all', '', false);
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
         }
 
@@ -1551,5 +1579,84 @@ class actionModel extends model
         {
             echo $actionType;
         }
+    }
+
+    /**
+     * Process action for API.
+     *
+     * @param  array  $actions
+     * @param  array  $users
+     * @param  array  $objectLang
+     * @access public
+     * @return array
+     */
+    public function processActionForAPI($actions, $users = array(), $objectLang = array())
+    {
+        $actions = (array)$actions;
+        foreach($actions as $action)
+        {
+            $action->actor = zget($users, $action->actor);
+            if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
+            if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+            ob_start();
+            $this->printAction($action);
+            $action->desc = ob_get_contents();
+            ob_end_clean();
+
+            if($action->history)
+            {
+                foreach($action->history as $i => $history)
+                {
+                    $history->fieldName = zget($objectLang, $history->field);
+                    $action->history[$i] = $history;
+                }
+            }
+        }
+        return array_values($actions);
+    }
+
+    /**
+     * Process dynamic for API.
+     *
+     * @param  array    $dynamics
+     * @access public
+     * @return array
+     */
+    public function processDynamicForAPI($dynamics)
+    {
+        $users = $this->loadModel('user')->getList();
+        $simplifyUsers = array();
+        foreach($users as $user)
+        {
+            $simplifyUser = new stdclass();
+            $simplifyUser->id       = $user->id;
+            $simplifyUser->account  = $user->account;
+            $simplifyUser->realname = $user->realname;
+            $simplifyUser->avatar   = $user->avatar;
+            $simplifyUsers[$user->account] = $simplifyUser;
+        }
+
+        $actions = array();
+        foreach($dynamics as $key => $dynamic)
+        {
+            if($dynamic->objectType == 'user') continue;
+
+            $simplifyUser = zget($simplifyUsers, $dynamic->actor, '');
+            $actor = $simplifyUser;
+            if(empty($simplifyUser))
+            {
+                $actor = new stdclass();
+                $actor->id       = 0;
+                $actor->account  = $dynamic->actor;
+                $actor->realname = $dynamic->actor;
+                $actor->avatar   = '';
+            }
+
+            $dynamic->actor = $actor;
+            $actions[]      = $dynamic;
+        }
+
+        return $actions;
     }
 }

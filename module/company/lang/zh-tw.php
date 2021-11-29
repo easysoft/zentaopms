@@ -18,6 +18,7 @@ $lang->company->browse   = "用戶列表";
 $lang->company->dynamic  = "組織動態";
 $lang->company->orgView  = '組織視圖';
 
+$lang->company->id       = '編號';
 $lang->company->name     = '公司名稱';
 $lang->company->phone    = '聯繫電話';
 $lang->company->fax      = '傳真';
@@ -27,6 +28,7 @@ $lang->company->website  = '官網';
 $lang->company->backyard = '內網';
 $lang->company->guest    = '匿名登錄';
 $lang->company->admins   = '管理員';
+$lang->company->deleted  = '已刪除';
 
 $lang->company->product   = $lang->productCommon;
 $lang->company->project   = '項目';

@@ -342,7 +342,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php if($canBatchChangeBranch and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
-            <?php $withSearch = count($branches) > 8;?>
+            <?php $withSearch = count($branches) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -367,10 +367,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule):?>
+          <?php if($canBatchChangeModule and $branch !== 'all'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
-            <?php $withSearch = count($modules) > 8;?>
+            <?php $withSearch = count($modules) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -398,7 +398,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
-            <?php $withSearch = count($memberPairs) > 10;?>
+            <?php $withSearch = count($memberPairs) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">

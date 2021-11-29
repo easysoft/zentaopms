@@ -20,7 +20,7 @@ class misc extends control
     public function ping()
     {
         if(mt_rand(0, 1) == 1) $this->loadModel('setting')->setSN();
-        die("<html><head><meta http-equiv='refresh' content='600' /></head><body></body></html>");
+        die("<html><head><meta http-equiv=refresh' content='600' /></head><body></body></html>");
     }
 
     /**
@@ -234,6 +234,53 @@ class misc extends control
         $captcha = $this->app->loadClass('captcha');
         $this->session->set($sessionVar, $captcha->getPhrase());
         $captcha->build()->output();
+    }
+
+    /**
+     * Ajax set unfoldID.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $action       add|delete
+     * @access public
+     * @return void
+     */
+    public function ajaxSetUnfoldID($objectID, $objectType, $action = 'add')
+    {
+        $account = $this->app->user->account;
+        if($objectType == 'execution')
+        {
+            $condition   = "owner={$account}&module={$objectType}&section=task&key=unfoldTasks";
+            $settingPath = $account . ".{$objectType}.task.unfoldTasks";
+        }
+        else
+        {
+            $condition   = "owner={$account}&module=product&section=browse&key=unfoldStories";
+            $settingPath = $account . ".{$objectType}.browse.unfoldStories";
+        }
+
+        $this->loadModel('setting');
+        $setting     = $this->setting->createDAO($this->setting->parseItemParam($condition), 'select')->fetch();
+        $newUnfoldID = $this->post->newUnfoldID;
+        if(empty($newUnfoldID)) die();
+
+        $newUnfoldID  = json_decode($newUnfoldID);
+        $unfoldIdList = $setting ? json_decode($setting->value, true) : array();
+        foreach($newUnfoldID as $unfoldID)
+        {
+            unset($unfoldIdList[$objectID][$unfoldID]);
+            if($action == 'add') $unfoldIdList[$objectID][$unfoldID] = $unfoldID;
+        }
+
+        if(empty($setting))
+        {
+            $this->setting->setItem($settingPath, json_encode($unfoldIdList));
+        }
+        else
+        {
+            $this->dao->update(TABLE_CONFIG)->set('value')->eq(json_encode($unfoldIdList))->where('id')->eq($setting->id)->exec();
+        }
+        die('success');
     }
 
     /**

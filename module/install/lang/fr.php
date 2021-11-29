@@ -174,8 +174,10 @@ $lang->install->success  = "Installé !";
 $lang->install->login    = 'Login ZenTao';
 $lang->install->register = "S'enregistrer sur la Communauté ZenTao";
 
-$lang->install->joinZentao = <<<EOT
-<p>Vous avez installé ZenTao %s.<strong class='text-danger'> Supprimez install.php asap</strong>.</p><p>Note : Afin d'obtenir les dernières infos de ZenTao, enregistrz-vous chez ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
+$lang->install->successLabel       = "<p>Vous avez installé ZenTao %s.</p>";
+$lang->install->successNoticeLabel = "<p>Vous avez installé ZenTao %s.<strong class='text-danger'> Supprimez install.php asap</strong>.</p>";
+$lang->install->joinZentao         = <<<EOT
+<p>Note : Afin d'obtenir les dernières infos de ZenTao, enregistrz-vous chez ZenTao(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
 
 $lang->install->product = array('chanzhi', 'zdoo');

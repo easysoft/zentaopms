@@ -541,7 +541,7 @@ class my extends control
 
         /* Get PM id list. */
         $accounts = array();
-        $projects = $this->user->getExecutions($this->app->user->account, 'project', $status, 'id_desc', $pager);
+        $projects = $this->user->getObjects($this->app->user->account, 'project', $status, 'id_desc', $pager);
         foreach($projects as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
@@ -581,7 +581,7 @@ class my extends control
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->execution;
         $this->view->position[] = $this->lang->my->execution;
         $this->view->tabID      = 'project';
-        $this->view->executions = $this->user->getExecutions($this->app->user->account, 'execution', $type, $orderBy, $pager);
+        $this->view->executions = $this->user->getObjects($this->app->user->account, 'execution', $type, $orderBy, $pager);
         $this->view->type       = $type;
         $this->view->pager      = $pager;
         $this->view->mode       = 'execution';

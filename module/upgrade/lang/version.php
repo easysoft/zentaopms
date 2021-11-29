@@ -143,3 +143,7 @@ $lang->upgrade->fromVersions['15_0_3']     = '15.0.3';
 $lang->upgrade->fromVersions['15_2']       = '15.2';
 $lang->upgrade->fromVersions['15_3']       = '15.3';
 $lang->upgrade->fromVersions['15_4']       = '15.4';
+$lang->upgrade->fromVersions['15_5']       = '15.5';
+$lang->upgrade->fromVersions['15_6']       = '15.6';
+$lang->upgrade->fromVersions['15_7']       = '15.7';
+$lang->upgrade->fromVersions['15_7_1']     = '15.7.1';

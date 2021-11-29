@@ -15,7 +15,7 @@ $lang->action->common      = 'Log';
 $lang->action->id          = 'ID';
 $lang->action->product     = $lang->productCommon;
 $lang->action->project     = 'Project';
-$lang->action->execution   = $lang->executionCommon;
+$lang->action->execution   = $lang->execution->common;
 $lang->action->objectType  = 'Object Type';
 $lang->action->objectID    = 'ID';
 $lang->action->objectName  = 'Object Name';
@@ -97,7 +97,9 @@ $lang->action->objectTypes['testsuite']   = 'Suite';
 $lang->action->objectTypes['testtask']    = 'Test Build';
 $lang->action->objectTypes['testreport']  = 'Report';
 $lang->action->objectTypes['doc']         = 'Document';
+$lang->action->objectTypes['api']         = 'Interface';
 $lang->action->objectTypes['doclib']      = 'Document Library';
+$lang->action->objectTypes['apistruct']   = 'API struct';
 $lang->action->objectTypes['todo']        = 'Todo';
 $lang->action->objectTypes['risk']        = 'Risk';
 $lang->action->objectTypes['issue']       = 'Issue';
@@ -162,6 +164,9 @@ $lang->action->desc->resolved        = '$date, resolved by <strong>$actor</stron
 $lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
 $lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
 $lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
+$lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -277,6 +282,11 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->setdefaultbranch      = 'Set default branch';
+$lang->action->label->syncprogram           = 'start';
+$lang->action->label->syncproject           = 'start';
+$lang->action->label->syncexecution         = 'start';
+$lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -309,6 +319,12 @@ $lang->action->dynamicAction->product['deleted']   = 'Delete ' . $lang->productC
 $lang->action->dynamicAction->product['closed']    = 'Close ' . $lang->productCommon;
 $lang->action->dynamicAction->product['undeleted'] = 'Restore ' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = 'Hide ' . $lang->productCommon;
+
+$lang->action->dynamicAction->branch['opened']           = 'Create Branch';
+$lang->action->dynamicAction->branch['edited']           = 'Edit Branch';
+$lang->action->dynamicAction->branch['closed']           = 'Close Branch';
+$lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
 
 $lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
 $lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';
@@ -453,6 +469,10 @@ $lang->action->dynamicAction->doc['deleted']   = 'Delete Document';
 $lang->action->dynamicAction->doc['undeleted'] = 'Restore Document';
 $lang->action->dynamicAction->doc['hidden']    = 'Hide Document';
 
+$lang->action->dynamicAction->api['created'] = 'Create Interface';
+$lang->action->dynamicAction->api['edited']  = 'Edit Interface';
+$lang->action->dynamicAction->api['deleted'] = 'Delete Interface';
+
 $lang->action->dynamicAction->user['created']       = 'Create User';
 $lang->action->dynamicAction->user['edited']        = 'Edit User';
 $lang->action->dynamicAction->user['deleted']       = 'Delete User';
@@ -499,6 +519,8 @@ $lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
 $lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design      = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->api         = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->branch      = 'Branch|branch|manage|prouctID=%s&browseType=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

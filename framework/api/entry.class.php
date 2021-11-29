@@ -486,6 +486,8 @@ class baseEntry
             $type    = $field[1];
             $isArray = false;
 
+            if(!isset($object->$key)) continue;
+
             $pos = strpos($type, ']');
             if($pos !== FALSE)
             {
@@ -520,6 +522,48 @@ class baseEntry
     }
 
     /**
+     * Filter fields.
+     *
+     * @param  object $object
+     * @param  array  $filters
+     * @access public
+     * @return object
+     */
+    public function filterFields($object, $allowable = '')
+    {
+        if(empty($allowable)) return $object;
+        if(is_string($allowable)) $allowable = explode(',', $allowable);
+
+        $filtered = new stdclass();
+        foreach($allowable as $field)
+        {
+            $field = trim($field);
+            if(empty($field)) continue;
+            if(!isset($object->$field)) continue;
+            $filtered->$field = $object->$field;
+        }
+
+        return $filtered;
+    }
+
+    /**
+     * Format user.
+     *
+     * @param  string    $account
+     * @param  array     $users
+     * @access public
+     * @return array
+     */
+    public function formatUser($account, $users)
+    {
+        $user = array();
+        $user['account']  = $account;
+        $user['realname'] = zget($users, $account);
+
+        return $user;
+    }
+
+    /**
      * 类型转换.
      * Typecasting.
      *
@@ -544,7 +588,9 @@ class baseEntry
             if(!$value or $value == '0000-00-00') return null;
             return $value;
         case 'bool':
-            return boolval($value) ? true : false;
+            return !empty($value);
+        case 'int':
+            return (int) $value;
         case 'idList':
             $values = explode(',', $value);
             if(empty($values)) return array();
@@ -555,6 +601,16 @@ class baseEntry
                 if($val !== '') $idList[] = (int) $val;
             }
             return $idList;
+        case 'stringList':
+            $values = explode(',', $value);
+            if(empty($values)) return array();
+
+            $stringList = array();
+            foreach($values as $val)
+            {
+                if($val !== '') $stringList[] = $val;
+            }
+            return $stringList;
         default:
             return $value;
         }
@@ -589,7 +645,7 @@ class baseEntry
     {
         $module = $this->app->getModuleName();
         $method = $this->app->getMethodName();
-        if($module and $method and !commonModel::hasPriv($module, $method))
+        if($module and $method and !$this->loadModel('common')->isOpenMethod($module, $method) and !commonModel::hasPriv($module, $method))
         {
             $this->send(403, array('error' => 'Access not allowed'));
         }

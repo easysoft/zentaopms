@@ -58,13 +58,13 @@ class testtaskModel extends model
     /**
      * Get test tasks of a product.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  array  $scopeAndStatus
-     * @param  int    $beginTime
-     * @param  int    $endTime
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  array       $scopeAndStatus
+     * @param  int         $beginTime
+     * @param  int         $endTime
      * @access public
      * @return array
      */
@@ -86,7 +86,7 @@ class testtaskModel extends model
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
             ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
             ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
-            ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
+            ->beginIF($branch !== 'all')->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->orderBy($orderBy)

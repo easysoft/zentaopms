@@ -45,15 +45,17 @@ class programModel extends model
      * Get program pairs.
      *
      * @param  bool   $isQueryAll
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getPairs($isQueryAll = false)
+    public function getPairs($isQueryAll = false, $orderBy = 'id_desc')
     {
         return $this->dao->select('id, name')->from(TABLE_PROGRAM)
             ->where('type')->eq('program')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin and !$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
+            ->orderBy($orderBy)
             ->fetchPairs();
     }
 
@@ -438,20 +440,28 @@ class programModel extends model
             $path    = $program->path;
         }
 
-        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
+        $projectList = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t3.objectType')->eq('project')->fi()
+            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->cookie->involved or $involved)
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
-            ->orWhere('PM')->eq($this->app->user->account)
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->orWhere('t3.user')->eq($this->app->user->account)
+            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
             ->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
@@ -485,7 +495,7 @@ class programModel extends model
      */
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.objectID')->eq($programID)
             ->andWhere('t1.objectType')->eq('program')
@@ -622,7 +632,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent")
             ->exec();
 
         if(!dao::isError())
@@ -683,6 +693,12 @@ class programModel extends model
 
         if($program->parent)
         {
+            $this->dao->update(TABLE_MODULE)
+                ->set('root')->eq($program->parent)
+                ->where('root')->eq($programID)
+                ->andwhere('type')->eq('line')
+                ->exec();
+
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
             if($parentProgram)
             {
@@ -713,7 +729,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "id!=$programID and deleted='0' and `type`='program'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent")
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();
@@ -1247,9 +1263,13 @@ class programModel extends model
             $hour = (object)$emptyHour;
             foreach($projectTasks as $task)
             {
-                $hour->totalConsumed += $task->consumed;
-                if(isset($executions[$task->execution])) $hour->totalEstimate += $task->estimate;
-                if($task->status != 'cancel' and $task->status != 'closed' and isset($executions[$task->execution])) $hour->totalLeft += $task->left;
+                if(isset($executions[$task->execution]))
+                {
+                    $hour->totalConsumed += $task->consumed;
+                    $hour->totalEstimate += $task->estimate;
+
+                    if(strpos('cancel,closed', $task->status) === false) $hour->totalLeft += $task->left;
+                }
             }
             $hours[$projectID] = $hour;
         }
@@ -1267,11 +1287,11 @@ class programModel extends model
         /* Get the number of left tasks. */
         if($this->cookie->projectType and $this->cookie->projectType == 'bycard')
         {
-            $leftTasks = $this->dao->select('project,count(*) as tasks')->from(TABLE_TASK)
-                ->where('project')->in($projectKeys)
-                ->andWhere('status')->notIn('cancel,closed')
-                ->andWhere('execution')->in(array_keys($executions))
-                ->groupBy('project')
+            $leftTasks = $this->dao->select('t2.parent as project, count(*) as tasks')->from(TABLE_TASK)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
+                ->where('t1.execution')->in(array_keys($executions))
+                ->andWhere('t1.status')->notIn('cancel,closed')
+                ->groupBy('t2.parent')
                 ->fetchAll('project');
         }
 

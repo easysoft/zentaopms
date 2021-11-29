@@ -193,7 +193,7 @@ class bugModel extends model
                 $bug->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
-                $bug->{$extendField->field} = htmlspecialchars($bug->{$extendField->field});
+                $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -202,7 +202,10 @@ class bugModel extends model
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and isset($bug->$field) and empty($bug->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                if($field and empty($bug->$field))
+                {
+                    die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                }
             }
 
             $bugs[$i] = $bug;
@@ -305,15 +308,15 @@ class bugModel extends model
     /**
      * Get bugs.
      *
-     * @param  array  $productIDList
-     * @param  array  $executions
-     * @param  int    $branch
-     * @param  string $browseType
-     * @param  int    $moduleID
-     * @param  int    $queryID
-     * @param  string $sort
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  array       $executions
+     * @param  int|string  $branch
+     * @param  string      $browseType
+     * @param  int         $moduleID
+     * @param  int         $queryID
+     * @param  string      $sort
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -408,7 +411,7 @@ class bugModel extends model
      * Get bugs of a module.
      *
      * @param  int|array       $productIDList
-     * @param  int             $branch
+     * @param  int|string      $branch
      * @param  string|array    $moduleIdList
      * @param  array           $executions
      * @param  string          $orderBy
@@ -421,7 +424,7 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->in($productIDList)
-            ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
@@ -620,7 +623,7 @@ class bugModel extends model
 
         $now = helper::now();
         $bug = fixer::input('post')
-            ->cleanInt('product,module,severity,execution,story,task,branch')
+            ->cleanInt('product,module,severity,project,execution,story,task,branch')
             ->stripTags($this->config->bug->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('product,module,execution,story,task,duplicateBug,branch', 0)
             ->setDefault('openedBuild', '')
@@ -739,6 +742,7 @@ class bugModel extends model
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
                 $bug->branch         = empty($data->branches[$bugID]) ? 0 : $data->branches[$bugID];
+                $bug->module         = $data->modules[$bugID];
                 $bug->assignedTo     = $data->assignedTos[$bugID];
                 $bug->deadline       = $data->deadlines[$bugID];
                 $bug->resolvedBy     = $data->resolvedBys[$bugID];
@@ -767,7 +771,7 @@ class bugModel extends model
                     $bug->{$extendField->field} = $this->post->{$extendField->field}[$bugID];
                     if(is_array($bug->{$extendField->field})) $bug->{$extendField->field} = join(',', $bug->{$extendField->field});
 
-                    $bug->{$extendField->field} = htmlspecialchars($bug->{$extendField->field});
+                    $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
                     if($message) die(js::alert($message));
                 }
@@ -1040,18 +1044,17 @@ class bugModel extends model
      *
      * @param  array  $bugIDList
      * @param  int    $branchID
+     * @param  array  $oldBugs
      * @access public
      * @return array
      */
-    public function batchChangeBranch($bugIDList, $branchID)
+    public function batchChangeBranch($bugIDList, $branchID, $oldBugs)
     {
         $now        = helper::now();
         $allChanges = array();
-        $oldBugs    = $this->getByList($bugIDList);
         foreach($bugIDList as $bugID)
         {
             $oldBug = $oldBugs[$bugID];
-            if($branchID == $oldBug->branch) continue;
 
             $bug = new stdclass();
             $bug->lastEditedBy   = $this->app->user->account;
@@ -1202,7 +1205,7 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
-        $openedBuilds = $this->post->openedBuild;
+        $openedBuilds = explode(',', $oldBug->openedBuild);
         if($openedBuilds)
         {
             $this->loadModel('build');
@@ -1290,6 +1293,8 @@ class bugModel extends model
         $projectID     = $this->lang->navGroup->bug == 'qa' ? 0 : $this->session->project;
         $productParams = ($productID and isset($products[$productID])) ? array($productID => $products[$productID]) : $products;
         $productParams = $productParams + array('all' => $this->lang->bug->allProduct);
+        $projectParams = $this->getProjects($productID);
+        $projectParams = $projectParams + array('all' => $this->lang->bug->allProject);
 
         /* Get all modules. */
         $modules = array();
@@ -1302,12 +1307,13 @@ class bugModel extends model
 
         $this->config->bug->search['actionURL'] = $actionURL;
         $this->config->bug->search['queryID']   = $queryID;
+        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $projectParams;
         $this->config->bug->search['params']['product']['values']       = $productParams;
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairs($productID);
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 0, $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 'all', 'withbranch');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
         {
@@ -1317,7 +1323,7 @@ class bugModel extends model
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $this->config->bug->search['params']['branch']['values']  = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
+            $this->config->bug->search['params']['branch']['values']  = array('' => '', 0 => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, 'noempty') + array('all' => $this->lang->branch->all);
         }
 
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
@@ -1508,6 +1514,8 @@ class bugModel extends model
                 ->beginIF(!empty($productID))->andWhere('product')->eq($productID)->fi()
                 ->beginIF($type == 'unresolved')->andWhere('status')->eq('active')->fi()
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
+                ->beginIF($type == 'assignedtome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($type == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
                 ->orderBy($orderBy)->page($pager)->fetchAll();
@@ -2157,13 +2165,13 @@ class bugModel extends model
     /**
      * Get all bugs.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -2173,7 +2181,7 @@ class bugModel extends model
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
             ->where('t1.product')->in($productIDList)
             ->andWhere('t1.execution')->in(array_keys($executions))
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->andWhere('t1.deleted')->eq(0)
@@ -2187,20 +2195,20 @@ class bugModel extends model
     /**
      * Get bugs of assign to me.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
     public function getByAssigntome($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
     {
         return $this->dao->findByAssignedTo($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
@@ -2211,20 +2219,20 @@ class bugModel extends model
     /**
      * Get bugs of opened by me.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array      $productIDList
+     * @param  int|string $branch
+     * @param  array      $modules
+     * @param  array      $executions
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  int        $projectID
      * @access public
      * @return array
      */
     public function getByOpenedbyme($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
     {
         return $this->dao->findByOpenedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
@@ -2235,20 +2243,20 @@ class bugModel extends model
     /**
      * Get bugs of resolved by me.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
     public function getByResolvedbyme($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
     {
         return $this->dao->findByResolvedBy($this->app->user->account)->from(TABLE_BUG)->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
@@ -2259,13 +2267,13 @@ class bugModel extends model
     /**
      * Get bugs of nobody to do.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -2273,7 +2281,7 @@ class bugModel extends model
     {
 
         return $this->dao->findByAssignedTo('')->from(TABLE_BUG)->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
@@ -2284,13 +2292,13 @@ class bugModel extends model
     /**
      * Get unconfirmed bugs.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return void
      */
@@ -2298,7 +2306,7 @@ class bugModel extends model
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('confirmed')->eq(0)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('product')->in($productIDList)
@@ -2310,14 +2318,14 @@ class bugModel extends model
     /**
      * Get bugs the overdueBugs is active or unclosed.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -2326,7 +2334,7 @@ class bugModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('status')->eq('active')
@@ -2339,14 +2347,14 @@ class bugModel extends model
     /**
      * Get bugs the status is active or unclosed.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $status
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $status
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -2355,7 +2363,7 @@ class bugModel extends model
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF($status == 'unresolved')->andWhere('status')->eq('active')->fi()
@@ -2369,13 +2377,13 @@ class bugModel extends model
     /**
      * Get unclosed bugs for long time.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  array       $modules
+     * @param  array       $executions
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -2384,7 +2392,7 @@ class bugModel extends model
         $lastEditedDate = date(DT_DATE1, time() - $this->config->bug->longlife * 24 * 3600);
         return $this->dao->findByLastEditedDate("<", $lastEditedDate)->from(TABLE_BUG)->andWhere('product')->in($productIDList)
             ->andWhere('execution')->in(array_keys($executions))
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('openedDate')->lt($lastEditedDate)
@@ -2395,20 +2403,20 @@ class bugModel extends model
     /**
      * Get postponed bugs.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array      $productIDList
+     * @param  int|sting  $branch
+     * @param  array      $modules
+     * @param  array      $executions
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  int        $projectID
      * @access public
      * @return array
      */
     public function getByPostponedbugs($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
     {
         return $this->dao->findByResolution('postponed')->from(TABLE_BUG)->andWhere('product')->in($productIDList)
-            ->beginIF($branch)->andWhere('branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->andWhere('execution')->in(array_keys($executions))
@@ -2419,13 +2427,13 @@ class bugModel extends model
     /**
      * Get bugs need confirm.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  array  $modules
-     * @param  array  $executions
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array      $productIDList
+     * @param  int|string $branch
+     * @param  array      $modules
+     * @param  array      $executions
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  int        $projectID
      * @access public
      * @return array
      */
@@ -2435,7 +2443,7 @@ class bugModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->where("t2.status = 'active'")
             ->andWhere('t1.product')->in($productIDList)
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('t1.module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->andWhere('t2.version > t1.storyVersion')
@@ -2449,13 +2457,13 @@ class bugModel extends model
     /**
      * Get bugs by search.
      *
-     * @param  array  $productIDList
-     * @param  int    $branch
-     * @param  int    $queryID
-     * @param  string $orderBy
-     * @param  string $excludeBugs
-     * @param  object $pager
-     * @param  int    $projectID
+     * @param  array       $productIDList
+     * @param  int|string  $branch
+     * @param  int         $queryID
+     * @param  string      $orderBy
+     * @param  string      $excludeBugs
+     * @param  object      $pager
+     * @param  int         $projectID
      * @access public
      * @return array
      */
@@ -2491,8 +2499,17 @@ class bugModel extends model
         }
 
         $allBranch = "`branch` = 'all'";
-        if($branch and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
+        if($branch !== 'all' and strpos($bugQuery, '`branch` =') === false) $bugQuery .= " AND `branch` in('0','$branch')";
         if(strpos($bugQuery, $allBranch) !== false) $bugQuery = str_replace($allBranch, '1', $bugQuery);
+
+        $allProject = "`project` = 'all'";
+        if(strpos($bugQuery, $allProject) !== false)
+        {
+            $projectIDList = $this->getAllProjectIds();
+            if(is_array($projectIDList)) $projectIDList = implode(',', $projectIDList);
+            $bugQuery = str_replace($allProject, '1', $bugQuery);
+            $bugQuery = $bugQuery . ' AND `project` in (' . $projectIDList . ')';
+        }
 
         /* Fix bug #2878. */
         if(strpos($bugQuery, ' `resolvedDate` ') !== false) $bugQuery = str_replace(' `resolvedDate` ', " `resolvedDate` != '0000-00-00 00:00:00' AND `resolvedDate` ", $bugQuery);
@@ -2736,7 +2753,8 @@ class bugModel extends model
                 echo "<span class='$class'>" . zget($this->lang->bug->confirmedList, $bug->confirmed, $bug->confirmed) . "</span> ";
                 break;
             case 'title':
-                if($bug->branch and isset($branches[$bug->branch]))    echo "<span class='label label-outline label-badge'>{$branches[$bug->branch]}</span> ";
+                $showBranch = isset($this->config->bug->browse->showBranch) ? $this->config->bug->browse->showBranch : 1;
+                if(isset($branches[$bug->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$bug->branch]}</span> ";
                 if($bug->module and isset($modulePairs[$bug->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$bug->module]}</span> ";
                 echo $canView ? html::a($bugLink, $bug->title, null, "style='color: $bug->color'") : "<span style='color: $bug->color'>{$bug->title}</span>";
                 break;
@@ -2954,5 +2972,38 @@ class bugModel extends model
         }
 
         return sprintf($this->lang->bug->summary, count($bugs), $unresolved);
+    }
+
+    /**
+     * Get project list.
+     *
+     * @param  int $productID
+     * @access public
+     * @return array
+     */
+    public function getProjects($productID)
+    {
+        return $this->dao->select('t1.id,t1.name')
+            ->from(TABLE_PROJECT)->alias('t1')
+            ->leftjoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id = t2.project')
+            ->where('t1.type')->eq('project')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.product')->eq($productID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Get ID list of all projects.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllProjectIds()
+    {
+        return $this->dao->select('id')
+            ->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
+            ->andWhere('type')->eq('project')
+            ->fetchPairs('id');
     }
 }

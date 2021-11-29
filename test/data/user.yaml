@@ -25,12 +25,12 @@ fields:
     note: "用户名"
     fields:
     - field: account1
-      range: admi,test{100},dev{200},pm{10},po{10},td{2},pd{2},qd{2},top{5},others{10},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+      range: admin,program1User,noprogram1user,product1user,noproduct1user,project1user,noproject1user,test{100},dev{200},pm{10},po{10},td{2},pd{2},qd{2},top{5},others{10},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
     - field: account2
-      range: n,1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
+      range: [],1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
   - field: password
     note: "密码"
-    range: 123456{346}
+    range: 123qwe!@#{346}
     format: md5
   - field: role
     note: "职位"
@@ -43,9 +43,9 @@ fields:
     note: "真实姓名"
     fields:
     - field: realname1
-      range: admi,测试{100},开发{200},项目经理{10},产品经理{10},研发主管{2},产品主管{2},测试主管{2},高层管理{5},其他{10},短用户名,BB,CCC,非常长非常长的用户名怎么这么长?
+      range: admin,测试{100},开发{200},项目经理{10},产品经理{10},研发主管{2},产品主管{2},测试主管{2},高层管理{5},其他{10},短用户名,BB,CCC,非常长非常长的用户名怎么这么长?
     - field: realname2
-      range: n,1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
+      range: [],1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
   - field: nickname
     note: "昵称"
   - field: commiter
@@ -77,7 +77,7 @@ fields:
     - field: email2
       range: 100-999:R
     - field: email3
-      range: [@qq.com,@163.com,@gmail.com] 
+      range: [@qq.com,@163.com,@gmail.com]
   - field: skype
     note: "Skype"
     range: Skype

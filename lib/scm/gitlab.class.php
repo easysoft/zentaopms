@@ -90,10 +90,14 @@ class gitlab
     /**
      * Get files info.
      *
+     * The API path requested is: "GET /projects/:id/repository/files/:file_path".
+     * Known issue of GitLab API: if a '%' in 'file_path', GitLab API will show a error 'file_path should be a valid file path'.
+     *
      * @param  string    $path
      * @param  string    $ref
      * @access public
      * @return array
+     * @doc    https://docs.gitlab.com/ee/api/repository_files.html
      */
     public function files($path, $ref = 'master')
     {
@@ -443,7 +447,7 @@ class gitlab
                             $newLine->type  = $type;
                             $newLine->oldlc = $type != 'new' ? $oldCurrentLine : '';
                             $newLine->newlc = $type != 'old' ? $newCurrentLine : '';
-                            $newLine->line  = htmlspecialchars($line);
+                            $newLine->line  = htmlSpecialString($line);
 
                             if($type != 'new') $oldCurrentLine++;
                             if($type != 'old') $newCurrentLine++;

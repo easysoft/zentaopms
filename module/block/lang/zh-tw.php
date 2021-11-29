@@ -12,6 +12,8 @@
 global $config;
 $lang->block = new stdclass();
 $lang->block->common     = '區塊';
+$lang->block->id         = '編號';
+$lang->block->params     = '參數';
 $lang->block->name       = '區塊名稱';
 $lang->block->style      = '外觀';
 $lang->block->grid       = '位置';
@@ -75,10 +77,6 @@ $lang->block->month               = '月';
 $lang->block->selectProduct       = '選擇產品';
 $lang->block->of                  = '的';
 $lang->block->remain              = '剩餘工時';
-
-$lang->block->params = new stdclass();
-$lang->block->params->name  = '參數名稱';
-$lang->block->params->value = '參數值';
 
 $lang->block->createBlock        = '添加區塊';
 $lang->block->editBlock          = '編輯區塊';
@@ -538,7 +536,7 @@ $lang->block->typeList->testtask['done']    = '已測版本';
 $lang->block->typeList->testtask['all']     = '全部';
 
 $lang->block->modules['project']->moreLinkList = new stdclass();
-$lang->block->modules['project']->moreLinkList->recentproject  = 'project|browse|';
+$lang->block->modules['project']->moreLinkList->recentproject  = $config->systemMode == 'new' ? 'project|browse|' : 'execution|all|';
 $lang->block->modules['project']->moreLinkList->statistic      = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->project        = 'project|browse|';
 $lang->block->modules['project']->moreLinkList->cmmireport     = 'weekly|index|';
@@ -587,3 +585,20 @@ $lang->block->flowchart['project'] = array('項目經理', '創建' . $lang->exe
 if($config->systemMode == 'new') $lang->block->flowchart['project'] = array('項目經理', '創建項目、' . $lang->executionCommon, '維護團隊', "關聯需求", '分解任務', '跟蹤進度');
 $lang->block->flowchart['dev']     = array('研發人員', '領取任務和Bug', '設計實現方案', '更新狀態', '完成任務和Bug', '提交代碼');
 $lang->block->flowchart['tester']  = array('測試人員', '撰寫用例', '執行用例', '提交Bug', '驗證Bug', '關閉Bug');
+
+$lang->block->zentaoapp = new stdclass();
+$lang->block->zentaoapp->thisYearInvestment   = '今年投入';
+$lang->block->zentaoapp->sinceTotalInvestment = '從使用至今，總投入';
+$lang->block->zentaoapp->myStory              = '我的需求';
+$lang->block->zentaoapp->allStorySum          = '需求總數';
+$lang->block->zentaoapp->storyCompleteRate    = '需求完成率';
+$lang->block->zentaoapp->latestExecution      = '近期執行';
+$lang->block->zentaoapp->involvedExecution    = '我參與的執行';
+$lang->block->zentaoapp->mangedProduct        = '負責產品';
+$lang->block->zentaoapp->involvedProject      = '參與項目';
+$lang->block->zentaoapp->customIndexCard      = '定製首頁卡片';
+$lang->block->zentaoapp->createStory          = '提需求';
+$lang->block->zentaoapp->createEffort         = '記日誌';
+$lang->block->zentaoapp->createDoc            = '建文檔';
+$lang->block->zentaoapp->createTodo           = '建待辦';
+$lang->block->zentaoapp->workbench            = '工作台';

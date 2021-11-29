@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class usersEntry extends entry 
+class usersEntry extends entry
 {
     /**
      * GET method.
@@ -19,22 +19,32 @@ class usersEntry extends entry
      */
     public function get()
     {
-        $control = $this->loadController('company', 'browse');
-        $control->browse('inside', 0, $this->param('type', 'bydept'), $this->param('order', 'id_desc'), $this->param('total', 0), $this->param('limit', 20), $this->param('page', 1));
-        $data = $this->getData();
+        if(!common::hasPriv('company', 'browse')) return $this->sendError(400, 'error: no company-browse priv.');
 
-        if(isset($data->status) and $data->status == 'success')
+        $appendFields = $this->param('fileds', '');
+        $type         = $this->param('type', 'bydept');
+        $limit        = (int)$this->param('limit', 20);
+
+        $pager = null;
+        if($limit)
         {
-            $users  = $data->data->users;
-            $pager  = $data->data->pager;
-            $result = array();
-            foreach($users as $user) $result[] = $this->format($user, 'locked:time');
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'users' => $result));
+            $this->app->loadClass('pager', $static = true);
+            $pager = pager::init(0, $limit, $this->param('page', 1));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        $users = $this->loadModel('company')->getUsers($this->param('browse', 'inside'), $type, 0, 0, $this->param('order', 'id_desc'), $pager);
+        $result = array();
+        foreach($users as $user)
+        {
+            $user = $this->filterFields($user, 'id,dept,account,realname,role,pinyin,email,' . $appendFields);
+            $result[] = $this->format($user, 'locked:time');
+        }
 
-        return $this->sendError(400, 'error');
+        $pageID = $pager ? $pager->pageID     : 1;
+        $total  = $pager ? $pager->recTotal   : count($result);
+        $limit  = $pager ? $pager->recPerPage : $total;
+
+        return $this->send(200, array('page' => $pageID, 'total' => $total, 'limit' => $limit, 'users' => $result));
     }
 
     /**
@@ -47,6 +57,8 @@ class usersEntry extends entry
     {
         $fields = 'account,dept,realname,email,commiter,gender';
         $this->batchSetPost($fields);
+
+        if(!in_array($this->request('gendar', 'f'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
 
         $password = $this->request('password', '') ? md5($this->request('password')) : '';
 
@@ -61,7 +73,7 @@ class usersEntry extends entry
         $control->create();
 
         $data = $this->getData();
-        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
         $user = $this->loadModel('user')->getByID($data->id, 'id');

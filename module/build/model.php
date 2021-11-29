@@ -55,10 +55,11 @@ class buildModel extends model
      * @param  int    $projectID
      * @param  string $type
      * @param  int    $param
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0)
+    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
     {
         return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -70,7 +71,7 @@ class buildModel extends model
             ->andWhere('t1.project')->ne(0)
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
-            ->orderBy('t1.date DESC, t1.id desc')
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 
@@ -159,10 +160,11 @@ class buildModel extends model
      * @param  int        $executionID
      * @param  string     $type      all|product|bysearch
      * @param  int|string $param     productID|buildQuery
+     * @param  string     $orderBy
      * @access public
      * @return array
      */
-    public function getExecutionBuilds($executionID, $type = '', $param = '')
+    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc')
     {
         return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -173,7 +175,7 @@ class buildModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
-            ->orderBy('t1.date DESC, t1.id desc')
+            ->orderBy($orderBy)
             ->fetchAll('id');
     }
 
@@ -217,15 +219,15 @@ class buildModel extends model
     /**
      * Get builds of a execution in pairs.
      *
-     * @param  int    $executionID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $params       noempty|notrunk, can be a set of them
-     * @param  string $buildIdList
+     * @param  int        $executionID
+     * @param  int        $productID
+     * @param  string|int $branch
+     * @param  string     $params       noempty|notrunk, can be a set of them
+     * @param  string     $buildIdList
      * @access public
      * @return array
      */
-    public function getExecutionBuildPairs($executionID, $productID, $branch = 0, $params = '', $buildIdList = '')
+    public function getExecutionBuildPairs($executionID, $productID, $branch = 'all', $params = '', $buildIdList = '')
     {
         $sysBuilds      = array();
         $selectedBuilds = array();
@@ -239,7 +241,7 @@ class buildModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.execution')->eq((int)$executionID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
@@ -253,29 +255,21 @@ class buildModel extends model
         }
         if(!$builds) return $sysBuilds + $selectedBuilds;
 
-        /* if the build has been released, replace build name with release name. */
-        $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
-            ->where('build')->in(array_keys($builds))
-            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
-            ->andWhere('deleted')->eq(0)
-            ->fetchPairs();
-        foreach($releases as $buildID => $releaseName) $builds[$buildID] = $releaseName;
-
         return $sysBuilds + $builds + $selectedBuilds;
     }
 
     /**
      * Get builds of a product in pairs.
      *
-     * @param mix    $products int|array
-     * @param int    $branch
-     * @param string $params   noempty|notrunk, can be a set of them
-     * @param bool   $replace
+     * @param mix        $products int|array
+     * @param string|int $branch
+     * @param string     $params   noempty|notrunk, can be a set of them
+     * @param bool       $replace
      *
      * @access public
      * @return array
      */
-    public function getProductBuildPairs($products, $branch = 0, $params = 'noterminate, nodone', $replace = true)
+    public function getProductBuildPairs($products, $branch = 'all', $params = 'noterminate, nodone', $replace = true)
     {
         $sysBuilds = array();
         if(strpos($params, 'noempty') === false) $sysBuilds = array('' => '');
@@ -286,17 +280,19 @@ class buildModel extends model
             ->leftJoin(TABLE_RELEASE)->alias('t3')->on('t1.id = t3.build')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.product')->in($products)
-            ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
         /* Set builds and filter done executions and terminate releases. */
         $builds = array();
+        $this->app->loadLang('branch');
         foreach($productBuilds as $key => $build)
         {
             if(empty($build->releaseID) and (strpos($params, 'nodone') !== false) and ($build->executionStatus === 'done')) continue;
             if((strpos($params, 'noterminate') !== false) and ($build->releaseStatus === 'terminate')) continue;
-            $builds[$key] = ((strpos($params, 'withbranch') !== false and $build->branchName) ? $build->branchName . '/' : '') . $build->name;
+            $branchName = $build->branchName ? $build->branchName : $this->lang->branch->main;
+            $builds[$key] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $build->name;
         }
 
         if(!$builds) return $sysBuilds;
@@ -307,10 +303,14 @@ class buildModel extends model
             $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
                 ->where('build')->in(array_keys($builds))
                 ->andWhere('product')->in($products)
-                ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+                ->beginIF($branch !== 'all')->andWhere('branch')->in("$branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchPairs();
-            foreach($releases as $buildID => $releaseName) $builds[$buildID] = ((strpos($params, 'withbranch') !== false and $productBuilds[$buildID]->branchName) ? $productBuilds[$buildID]->branchName . '/' : '') . $releaseName;
+            foreach($releases as $buildID => $releaseName)
+            {
+                $branchName = $productBuilds[$buildID]->branchName ? $productBuilds[$buildID]->branchName : $this->lang->branch->main;
+                $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
+            }
         }
 
         return $sysBuilds + $builds;
@@ -387,8 +387,8 @@ class buildModel extends model
         $buildID  = (int)$buildID;
         $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
+            ->setIF(!isset($this->post->branch), 'branch', $oldBuild->branch)
             ->setDefault('product', $oldBuild->product)
-            ->setDefault('branch', $oldBuild->branch)
             ->cleanInt('product,branch,execution')
             ->remove('allchecker,resolvedBy,files,labels,uid')
             ->get();

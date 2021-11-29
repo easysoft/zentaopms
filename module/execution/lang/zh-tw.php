@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 /* 欄位列表。*/
-$lang->execution->allExecutions   = '所有' . $lang->executionCommon;
+$lang->execution->allExecutions   = '所有' . $lang->execution->common;
 $lang->execution->allExecutionAB  = "{$lang->execution->common}列表";
 $lang->execution->id              = $lang->executionCommon . '編號';
 $lang->execution->type            = $lang->executionCommon . '類型';
@@ -101,6 +101,12 @@ $lang->execution->copyNoExecution = '沒有可用的' . $lang->executionCommon .
 $lang->execution->noTeam          = '暫時沒有團隊成員';
 $lang->execution->or              = '或';
 $lang->execution->selectProject   = '請選擇項目';
+
+/* Fields of zt_team. */
+$lang->execution->root     = '源ID';
+$lang->execution->estimate = '預計';
+$lang->execution->consumed = '消耗';
+$lang->execution->left     = '剩餘';
 
 if($this->config->systemMode == 'new') $lang->execution->copyTeamTip = "可以選擇複製項目或{$lang->execution->common}團隊的成員";
 if($this->config->systemMode == 'classic') $lang->execution->copyTeamTip = "可以選擇複製{$lang->executionCommon}團隊的成員";
@@ -315,13 +321,14 @@ if($config->systemMode == 'new')     $lang->execution->copyTeamTitle = "選擇�
 /* 交互提示。*/
 $lang->execution->confirmDelete               = "您確定刪除{$lang->executionCommon}[%s]嗎？";
 $lang->execution->confirmUnlinkMember         = "您確定從該{$lang->executionCommon}中移除該用戶嗎？";
-$lang->execution->confirmUnlinkStory          = "移除該{$lang->SRCommon}后，該{$lang->SRCommon}關联的用例将被移除，該{$lang->SRCommon}关联的任務将被取消，請確認。";
+$lang->execution->confirmUnlinkStory          = "移除該{$lang->SRCommon}後，該{$lang->SRCommon}關聯的用例將被移除，該{$lang->SRCommon}關聯的任務將被取消，請確認。";
 $lang->execution->confirmSyncStories          = "修改所屬項目後，執行關聯的{$lang->SRCommon}是否同步到新項目中？";
 $lang->execution->confirmUnlinkExecutionStory = "您確定從該項目中移除該{$lang->SRCommon}嗎？";
 $lang->execution->notAllowedUnlinkStory       = "該{$lang->SRCommon}已經與項目下{$lang->executionCommon}相關聯，請從{$lang->executionCommon}中移除後再操作。";
 $lang->execution->notAllowRemoveProducts      = "該{$lang->productCommon}中的{$lang->SRCommon}已與該{$lang->executionCommon}進行了關聯，請取消關聯後再操作。";
 $lang->execution->errorNoLinkedProducts       = "該{$lang->executionCommon}沒有關聯的{$lang->productCommon}，系統將轉到{$lang->productCommon}關聯頁面";
 $lang->execution->errorSameProducts           = "{$lang->executionCommon}不能關聯多個相同的{$lang->productCommon}。";
+$lang->execution->errorSameBranches           = "{$lang->executionCommon}不能關聯多個相同的分支。";
 $lang->execution->errorBegin                  = "{$lang->executionCommon}的開始時間不能小於所屬項目的開始時間%s。";
 $lang->execution->errorEnd                    = "{$lang->executionCommon}的截止時間不能大於所屬項目的結束時間%s。";
 $lang->execution->accessDenied                = "您無權訪問該{$lang->executionCommon}！";
@@ -339,6 +346,7 @@ $lang->execution->unfinishedExecution         = "該{$lang->executionCommon}下�
 $lang->execution->unfinishedTask              = "[%s]個未完成的任務，";
 $lang->execution->unresolvedBug               = "[%s]個未解決的bug，";
 $lang->execution->projectNotEmpty             = '所屬項目不能為空。';
+$lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已經在當前' . $lang->execution->common . '中轉了任務，請確認是否重複轉任務。';
 
 /* 統計。*/
 $lang->execution->charts = new stdclass();

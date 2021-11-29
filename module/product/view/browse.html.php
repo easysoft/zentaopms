@@ -23,6 +23,7 @@ body {margin-bottom: 25px;}
 <?php js::set('projectID', $projectID);?>
 <?php js::set('branch', $branch);?>
 <?php js::set('rawModule', $this->app->rawModule);?>
+<?php js::set('productType', $this->app->tab == 'product' ? $product->type : '');?>
 <?php
 $unfoldStories = isset($config->product->browse->unfoldStories) ? json_decode($config->product->browse->unfoldStories, true) : array();
 $unfoldStories = zget($unfoldStories, $productID, array());
@@ -46,7 +47,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <div class="title" title="<?php echo $moduleName;?>">
       <?php
       echo $moduleName;
-      if($moduleID)
+      if($moduleID and $moduleID !== 'all')
       {
           $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModule")';
           echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
@@ -64,7 +65,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $product)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=0"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=all"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -132,7 +133,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <?php if($this->app->rawModule != 'projectstory') common::printIcon('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
-      <ul class="dropdown-menu" id='exportActionMenu'>
+      <ul class="dropdown-menu pull-right" id='exportActionMenu'>
         <?php
         $tab   = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
@@ -244,7 +245,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php if($productID) common::printLink('tree', 'browse', "rootID=$productID&view=story", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
+        <?php if($productID) common::printLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID", $lang->tree->manage, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>
@@ -400,10 +401,10 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
                   echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                   echo "<ul class='dropdown-list'>";
-                  foreach($branches as $branchID => $branchName)
+                  foreach($branches as $id => $branchName)
                   {
-                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
-                      echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
+                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id");
+                      echo "<li class='option' data-key='$id'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
                   }
                   echo '</ul>';
                   if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
@@ -436,7 +437,8 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             </ul>
           </div>
 
-          <?php if($canBatchChangeModule):?>
+          <?php $isShowModuleBTN = ($this->app->tab == 'project' and $browseType != 'bybranch') ? false : true;?>
+          <?php if($canBatchChangeModule and $productID and $branchID !== 'all' and $isShowModuleBTN):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 8;?>
@@ -484,9 +486,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 <?php
                 foreach($plans as $planID => $plan)
                 {
-                    $searchKey = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
+                    $position   = stripos($plan, '/');
+                    $planLabel  = $position === false ? $plan : ('<span class="label label-outline label-badge">' . substr($plan, 0, $position) . '</span>' . substr($plan, $position + 1));
+                    $searchKey  = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                    echo html::a('#', $plan, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                    echo html::a('#', $planLabel, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
                 }
                 ?>
               </div>
@@ -658,5 +662,26 @@ $(function()
         }
     });
 });
+
+/**
+ * Set the color of the badge to white.
+ *
+ * @param  object  obj
+ * @param  bool    isShow
+ * @access public
+ * @return void
+ */
+function setBadgeStyle(obj, isShow)
+{
+    var $label = $(obj);
+    if(isShow == true)
+    {
+        $label.find('.label-badge').css({"color":"#fff", "border-color":"#fff"});
+    }
+    else
+    {
+        $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
+    }
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>

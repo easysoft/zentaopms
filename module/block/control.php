@@ -278,6 +278,11 @@ class block extends control
                 {
                     $block->moreLink = $this->createLink('project', 'testtask', "projectID=$projectID");
                 }
+                elseif($moduleName == 'testtask' and $method == 'browse')
+                {
+                    $block->moreLink = $this->createLink('testtask', 'browse', "productID=0&branch=0&type=all,totalStatus");
+                }
+
             }
             elseif($block->block == 'dynamic')
             {
@@ -1754,7 +1759,7 @@ class block extends control
             $meetingCount = isset($params->meetingCount) ? isset($params->meetingCount) : 0;
 
             $meetings = $this->dao->select('*')->from(TABLE_MEETING)
-                ->Where('deleted')->eq('0')
+                ->where('deleted')->eq('0')
                 ->andWhere('(date')->gt($today)
                 ->orWhere('(begin')->gt($now)
                 ->andWhere('date')->eq($today)

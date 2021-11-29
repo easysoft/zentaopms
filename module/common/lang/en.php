@@ -34,6 +34,7 @@ $lang->logout         = 'Logout';
 $lang->login          = 'Login';
 $lang->help           = 'Help';
 $lang->aboutZenTao    = 'About';
+$lang->ztWebsite      = 'ZenTao Address';
 $lang->profile        = 'Profile';
 $lang->changePassword = 'Password';
 $lang->unfoldMenu     = 'Unfold';
@@ -104,9 +105,10 @@ $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
 $lang->tutorialConfirm = 'You are using ZenTao tutorial. Do you want to quit right now？';
 
-$lang->preShortcutKey  = '[Shortcut:←]';
-$lang->nextShortcutKey = '[Shortcut:→]';
-$lang->backShortcutKey = '[Shortcut:Alt+↑]';
+$lang->preShortcutKey    = '[Shortcut:←]';
+$lang->nextShortcutKey   = '[Shortcut:→]';
+$lang->backShortcutKey   = '[Shortcut:Alt+↑]';
+$lang->shortcutOperation = 'Quick Start';
 
 $lang->select        = 'Select';
 $lang->selectAll     = 'Select All';
@@ -223,9 +225,12 @@ $lang->doc->my        = 'My';
 $lang->doc->favorite  = 'Favorite';
 $lang->doc->product   = 'Product';
 $lang->doc->project   = 'Project';
+$lang->doc->api       = 'API';
 $lang->doc->execution = $lang->execution->common;
 $lang->doc->custom    = 'Custom';
 $lang->doc->wiki      = 'WIKI';
+$lang->doc->apiDoc    = 'Doc';
+$lang->doc->apiStruct = 'Struct';
 
 $lang->product->list   = $lang->productCommon . ' List';
 $lang->product->kanban = $lang->productCommon . ' Kanban';
@@ -304,7 +309,8 @@ $lang->createObjects['program']   = 'Program';
 $lang->createObjects['doc']       = 'Doc';
 
 /* Language. */
-$lang->lang = 'Language';
+$lang->lang    = 'Language';
+$lang->setLang = 'Language Setting';
 
 /* Theme style. */
 $lang->theme                = 'Theme';
@@ -333,6 +339,8 @@ $lang->error->equal           = "『%s』has to be『%s』.";
 $lang->error->int             = array("『%s』should be numbers", "『%s』should be 『%s-%s』.");
 $lang->error->float           = "『%s』should have numbers, or decimals.";
 $lang->error->email           = "『%s』should be valid Email.";
+$lang->error->phone           = "『%s』should be valid phone number.";
+$lang->error->mobile          = "『%s』should be valid mobile number.";
 $lang->error->URL             = "『%s』should be url.";
 $lang->error->date            = "『%s』should be valid date.";
 $lang->error->datetime        = "『%s』should be valid date.";
@@ -397,18 +405,19 @@ $lang->pasteImgFail       = "Failed to paste images. Try again later.";
 $lang->pasteImgUploading  = "Uploading...";
 
 /* Time formats settings. */
-if(!defined('DT_DATETIME1')) define('DT_DATETIME1',  'Y-m-d H:i:s');
-if(!defined('DT_DATETIME2')) define('DT_DATETIME2',  'y-m-d H:i');
-if(!defined('DT_MONTHTIME1'))define('DT_MONTHTIME1', 'n/d H:i');
-if(!defined('DT_MONTHTIME2'))define('DT_MONTHTIME2', 'n/d H:i');
-if(!defined('DT_DATE1'))     define('DT_DATE1',     'Y-m-d');
-if(!defined('DT_DATE2'))     define('DT_DATE2',     'Ymd');
-if(!defined('DT_DATE3'))     define('DT_DATE3',     'Y/m/d');
-if(!defined('DT_DATE4'))     define('DT_DATE4',     'M d');
-if(!defined('DT_DATE5'))     define('DT_DATE5',     'j/n');
-if(!defined('DT_TIME1'))     define('DT_TIME1',     'H:i:s');
-if(!defined('DT_TIME2'))     define('DT_TIME2',     'H:i');
-if(!defined('LONG_TIME'))    define('LONG_TIME',    '2059-12-31');
+if(!defined('DT_DATETIME1'))  define('DT_DATETIME1',  'Y-m-d H:i:s');
+if(!defined('DT_DATETIME2'))  define('DT_DATETIME2',  'y-m-d H:i');
+if(!defined('DT_MONTHTIME1')) define('DT_MONTHTIME1', 'n/d H:i');
+if(!defined('DT_MONTHTIME2')) define('DT_MONTHTIME2', 'n/d H:i');
+if(!defined('DT_DATE1'))      define('DT_DATE1',     'Y-m-d');
+if(!defined('DT_DATE2'))      define('DT_DATE2',     'Ymd');
+if(!defined('DT_DATE3'))      define('DT_DATE3',     'Y/m/d');
+if(!defined('DT_DATE4'))      define('DT_DATE4',     'M d');
+if(!defined('DT_DATE5'))      define('DT_DATE5',     'j/n');
+if(!defined('DT_TIME1'))      define('DT_TIME1',     'H:i:s');
+if(!defined('DT_TIME2'))      define('DT_TIME2',     'H:i');
+if(!defined('LONG_TIME'))     define('LONG_TIME',    '2059-12-31');
+if(!defined('BRANCH_MAIN'))   define('BRANCH_MAIN', '0');
 
 /* Datepicker. */
 $lang->datepicker = new stdclass();

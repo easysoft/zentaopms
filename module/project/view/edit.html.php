@@ -15,12 +15,16 @@
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
 <?php js::set('oldParent', $project->parent);?>
 <?php js::set('projectID', $project->id);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('unmodifiableProducts', $unmodifiableProducts)?>
+<?php js::set('unmodifiableBranches', $unmodifiableBranches)?>
+<?php js::set('unmodifiableMainBranches', $unmodifiableMainBranches)?>
 <?php js::set('tip', $lang->project->notAllowRemoveProducts);?>
 <?php js::set('linkedProjectsTip', $lang->project->linkedProjectsTip);?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php $aclList = $project->parent ? $lang->project->subAclList : $lang->project->aclList;?>
 <?php $requiredFields = $config->project->edit->requiredFields;?>
 <div id='mainContent' class='main-content'>
@@ -111,16 +115,24 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
+              <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
+              <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
               <div class='col-sm-4' style="padding-right: 6px;">
-                <?php $hasBranch = $product->type != 'normal' and isset($branchGroups[$product->id]);?>
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
-                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' data-placeholder={$lang->project->errorNoProducts} onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
+                  <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "' data-type='" . $product->type . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $branchID, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\" data-last='" . $branchID . "'");?>
                 </div>
               </div>
-              <?php if(in_array($product->id, $unmodifiableProducts)) echo html::hidden("products[$i]", $product->id);?>
-              <?php $i++;?>
+              <?php
+              if(in_array($product->id, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))
+              {
+                  echo html::hidden("products[$i]", $product->id);
+                  echo html::hidden("branch[$i]", $branchID);
+              }
+              $i++;
+              ?>
+              <?php endforeach;?>
               <?php endforeach;?>
               <div class='col-sm-4 <?php if($projectID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
@@ -137,11 +149,13 @@
             <div class='row'>
               <?php $i = 0;?>
               <?php foreach($linkedProducts as $product):?>
-                <?php $plans = zget($productPlans, $product->id, array(0 => ''));?>
-                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[" . $product->id . "]", $plans, $product->plan, "class='form-control chosen'");?></div>
+                <?php foreach($linkedBranches[$product->id] as $branchID => $branch):?>
+                <?php $plans = isset($productPlans[$product->id][$branchID]) ? $productPlans[$product->id][$branchID] : array();?>
+                <div class="col-sm-4" id="plan<?php echo $i;?>" style="padding-right: 6px;"><?php echo html::select("plans[{$product->id}][{$branchID}]", $plans, $branches[$product->id][$branchID]->plan, "class='form-control chosen'");?></div>
                 <?php $i++;?>
+                <?php endforeach;?>
               <?php endforeach;?>
-              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0]", array(), 0, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="planDefault" style="padding-right: 6px;"><?php echo html::select("plans[0][0]", array(), 0, "class='form-control chosen'");?></div>
             </div>
           </td>
         </tr>

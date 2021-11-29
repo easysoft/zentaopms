@@ -97,12 +97,12 @@ $lang->todo->priList[2] = 'Important';
 $lang->todo->priList[3] = 'Normal';
 $lang->todo->priList[4] = 'Low';
 
-$lang->todo->typeList['custom']    = 'Custom';
-$lang->todo->typeList['cycle']     = 'Recur';
-$lang->todo->typeList['bug']       = 'Bug';
-$lang->todo->typeList['task']      = 'Task';
-$lang->todo->typeList['story']     = 'Story';
-$lang->todo->typeList['testtask']  = 'Testtask';
+$lang->todo->typeList['custom']   = 'Custom';
+$lang->todo->typeList['cycle']    = 'Recur';
+$lang->todo->typeList['bug']      = 'Bug';
+$lang->todo->typeList['task']     = 'Task';
+$lang->todo->typeList['story']    = 'Story';
+$lang->todo->typeList['testtask'] = 'Testtask';
 
 $lang->todo->confirmDelete  = "Do you want to delete this todo?";
 $lang->todo->thisIsPrivate  = 'This is a private todo';
@@ -112,6 +112,7 @@ $lang->todo->lblClickCreate = "Click to Add Todo";
 $lang->todo->noTodo         = 'No todos of this type.';
 $lang->todo->noAssignedTo   = "The AssignedTo should not be empty.";
 $lang->todo->unfinishedTodo = 'The todos of ID %s are not finished, and can not close.';
+$lang->todo->today          = 'Todo Today';
 
 $lang->todo->periods['all']             = 'All Todos';
 $lang->todo->periods['before']          = 'Unfinished';

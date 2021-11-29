@@ -25,6 +25,38 @@ $(function()
 
     var acl = $("[name^='acl']:checked").val();
     setWhite(acl);
+
+    $('#submit').click(function()
+    {
+        var products      = new Array();
+        var existedBranch = false;
+
+        /* Determine whether the products of the same branch are linked. */
+        $("#productsBox select[name^='products']").each(function()
+        {
+            var productID = $(this).val();
+            if(typeof(products[productID]) == 'undefined') products[productID] = new Array();
+            if(multiBranchProducts[productID])
+            {
+                var branchID = $(this).closest('.input-group').find("select[id^=branch]").val();
+                if(products[productID][branchID])
+                {
+                    existedBranch = true;
+                }
+                else
+                {
+                    products[productID][branchID] = branchID;
+                }
+                if(existedBranch) return false;
+            }
+        });
+
+        if(existedBranch)
+        {
+            bootbox.alert(errorSameBranches);
+            return false;
+        }
+    });
 });
 
 /**
@@ -106,12 +138,12 @@ function setAclList(programID)
  */
 function loadBranches(product)
 {
-    $('#productsBox select').each(function()
+    $("#productsBox select[name^='products']").each(function()
     {
         var $product = $(product);
-        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id'))
+        if($product.val() != 0 && $product.val() == $(this).val() && $product.attr('id') != $(this).attr('id') && !multiBranchProducts[$product.val()])
         {
-            alert(errorSameProducts);
+            bootbox.alert(errorSameProducts);
             $product.val(0);
             $product.trigger("chosen:updated");
             return false;
@@ -137,7 +169,7 @@ function loadBranches(product)
     if($inputgroup.find('.chosen-container').size() >= 2) $inputgroup.find('.chosen-container:last').remove();
 
     var index = $inputgroup.find('select:first').attr('id').replace('products' , '');
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val()), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + $(product).val() + "&oldBranch=0&param=active"), function(data)
     {
         if(data)
         {
@@ -174,7 +206,7 @@ function loadPlans(product, branchID)
             if(data)
             {
                 if($("div#plan" + index).size() == 0) $("#plansBox .row").append('<div class="col-sm-4" id="plan' + index + '"></div>');
-                $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + ']').attr('id', 'plans' + productID).chosen();
+                $("div#plan" + index).html(data).find('select').attr('name', 'plans[' + productID + '][' + branchID + ']').attr('id', 'plans' + productID).chosen();
 
                 adjustPlanBoxMargin();
             }

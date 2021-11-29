@@ -10,7 +10,7 @@
  * @link        https://www.zentao.pm
  */
 /* Fields. */
-$lang->execution->allExecutions   = 'Tous les ' . $lang->executionCommon . 's';
+$lang->execution->allExecutions   = 'Tous les ' . $lang->execution->common . 's';
 $lang->execution->allExecutionAB  = 'Execution List';
 $lang->execution->id              = $lang->executionCommon . ' ID';
 $lang->execution->type            = $lang->executionCommon . 'Type';

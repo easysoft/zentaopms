@@ -191,7 +191,7 @@ class gitlabModel extends model
      */
     public function getProjectsByExecution($executionID)
     {
-        $products      = $this->loadModel('execution')->getProducts($executionID, false);
+        $products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         $productIdList = array_keys($products);
 
         return $this->dao->select('AID,BID as gitlabProject')
@@ -386,7 +386,7 @@ class gitlabModel extends model
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
 
-        $url = sprintf($apiRoot, $api);
+        $url = sprintf($host, $api);
         return json_decode(commonModel::http($url, $data, $options));
     }
 
@@ -474,7 +474,7 @@ class gitlabModel extends model
      *
      * @param  int $gitlabID
      * @access public
-     * @return void
+     * @return array
      */
     public function apiGetProjects($gitlabID)
     {
@@ -691,6 +691,7 @@ class gitlabModel extends model
     public function apiUpdateHook($gitlabID, $projectID, $hookID)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         $postData                          = new stdclass;
         $postData->enable_ssl_verification = "false";
@@ -699,8 +700,6 @@ class gitlabModel extends model
         $postData->push_events             = "true";
         $postData->tag_push_events         = "true";
         $postData->note_events             = "true";
-        $postData->url                     = $url;
-        $postData->token                   = $token;
 
         $url = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
         return commonModel::http($url, $postData, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'));
@@ -1015,7 +1014,7 @@ class gitlabModel extends model
         if(!$type or !is_callable(array($this, "webhookParse{$type}"))) return false;
         // fix php 8.0 bug. link: https://www.php.net/manual/zh/function.call-user-func-array.php#125953
         //return call_user_func_array(array($this, "webhookParse{$type}"), array('body' => $body, $gitlabID));
-        return call_user_func_array(array($this, "webhookParse{$type}"), [$body, $gitlabID]);
+        return call_user_func_array(array($this, "webhookParse{$type}"), array($body, $gitlabID));
     }
 
     /**
@@ -1249,9 +1248,9 @@ class gitlabModel extends model
     /**
      * Create webhook for zentao.
      *
-     * @param  int $products
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  array $products
+     * @param  int   $gitlabID
+     * @param  int   $projectID
      * @access public
      * @return bool
      */
@@ -1364,7 +1363,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if($isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';

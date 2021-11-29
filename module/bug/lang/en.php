@@ -140,7 +140,8 @@ $lang->bug->overdueBugs        = 'Overdue';
 $lang->bug->allBugs            = 'All Bugs';
 $lang->bug->byQuery            = 'Search';
 $lang->bug->needConfirm        = 'Story Changed';
-$lang->bug->allProduct         = 'All' . $lang->productCommon . 's';
+$lang->bug->allProject         = 'All Projects';
+$lang->bug->allProduct         = 'All ' . $lang->productCommon . 's';
 $lang->bug->my                 = 'My';
 $lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
@@ -150,12 +151,16 @@ $lang->bug->assignToMeAB   = 'AssignedToMe';
 $lang->bug->openedByMeAB   = 'ReportedByMe';
 $lang->bug->resolvedByMeAB = 'ResolvedByMe';
 
-$lang->bug->ditto        = 'Ditto';
-$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one is!';
-$lang->bug->noAssigned   = 'Unassigned';
-$lang->bug->noBug        = 'No bugs yet.';
-$lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
-$lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->ditto          = 'Ditto';
+$lang->bug->dittoNotice    = 'This bug is not linked to the same product as the last one is!';
+$lang->bug->noAssigned     = 'Unassigned';
+$lang->bug->noBug          = 'No bugs yet.';
+$lang->bug->noModule       = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->labelConfirmed = 'Confirmed';
+$lang->bug->labelPostponed = 'Postponed';
+$lang->bug->changed        = 'Changed';
+$lang->bug->storyChanged   = 'Story Changed';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';
@@ -191,6 +196,7 @@ $lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
 $lang->bug->executionAccessDenied = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
 $lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
+$lang->bug->noSwitchBranch        = 'The linked module of Bug%s is not in the current branch. It will be omitted.';
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";

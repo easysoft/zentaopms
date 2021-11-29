@@ -643,7 +643,7 @@ class repoModel extends model
 
             $commit->repo    = $repoID;
             $commit->commit  = $version;
-            $commit->comment = htmlspecialchars($commit->comment);
+            $commit->comment = htmlSpecialString($commit->comment);
             $this->dao->insert(TABLE_REPOHISTORY)->data($commit)->exec();
             if(!dao::isError())
             {
@@ -695,7 +695,7 @@ class repoModel extends model
         $history->committer = $commit->committer;
         $history->time      = $commit->time;
         $history->commit    = $version;
-        $history->comment   = htmlspecialchars($commit->comment);
+        $history->comment   = htmlSpecialString($commit->comment);
         $this->dao->insert(TABLE_REPOHISTORY)->data($history)->exec();
         if(!dao::isError())
         {
@@ -1441,7 +1441,7 @@ class repoModel extends model
         $action->actor   = $log->author;
         $action->date    = $log->date;
 
-        $action->comment = htmlspecialchars($this->iconvComment($log->msg, $encodings));
+        $action->comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
         $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 
         $this->loadModel('action');

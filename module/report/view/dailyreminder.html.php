@@ -108,7 +108,7 @@
         <td style='padding: 5px; text-align: center; border: 1px solid #e5e5e5;'><?php echo $testTask->id;?></td>
         <td style='padding: 5px; border: 1px solid #e5e5e5;'>
         <?php
-        $link = $this->createLink('testTask', 'view', "testTask=$testTask->id");
+        $link = $this->createLink('testtask', 'view', "testtask=$testTask->id");
         if($config->requestType == 'GET' and strpos($link, 'ztcli') !== false) $link = str_replace($this->server->php_self, $config->webRoot, $link);
         echo html::a($url . $link, $testTask->name);
         ?>

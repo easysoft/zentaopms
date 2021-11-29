@@ -50,7 +50,8 @@ function loadBranch()
 function loadProductBranches(productID)
 {
     $('#branch').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    var param = (typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) ? "productID=" + productID + "&oldBranch=0&param=&projectID=" + objectID : "productID=" + productID;
+    $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
         {
@@ -124,7 +125,8 @@ function setStories()
     productID = $('#product').val();
     branch    = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50');
+    link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=' + executionID);
+    
     $.get(link, function(stories)
     {
         var value = $('#story').val();
@@ -294,7 +296,7 @@ function initSteps(selector)
         var $step = $checkbox.closest('.step');
         var isChecked = $checkbox.is(':checked');
         var suggestType = isChecked ? 'group' : 'item';
-        if(!isChecked && ($step.find('textarea[name^="steps"]').val().length || $step.find('textarea[name^="expects"]').val().length))
+        if(!isChecked)
         {
             var $prevStep = $step.prev('.step:not(.drag-shadow)');
             var suggestChild = $prevStep.length && $prevStep.is('.step-group') && $step.next('.step:not(.drag-shadow)').length;
@@ -341,4 +343,29 @@ function updateStepID()
 {
     var i = 1;
     $('.stepID').each(function(){$(this).html(i ++)});
+}
+
+/**
+ * Set stories.
+ *
+ * @param  int     productID
+ * @param  int     moduleID
+ * @param  int     num
+ * @access public
+ * @return void
+ */
+function loadStories(productID, moduleID, num)
+{
+    var branchIDName = config.currentMethod == 'batchcreate' ? '#branch' : '#branches';
+    var branchID     = $(branchIDName + num).val();
+    var storyLink    = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branchID + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=0&number=' + num);
+    $.get(storyLink, function(stories)
+    {
+        if(!stories) modules = '<select id="story' + num + '" name="story[' + num + ']" class="form-control"></select>';
+        $('#story' + num).replaceWith(stories);
+        $('#story' + num + "_chosen").remove();
+        $('#story' + num).next('.picker').remove();
+        $('#story' + num).attr('name', 'story[' + num + ']');
+        $('#story' + num).chosen();
+    });
 }

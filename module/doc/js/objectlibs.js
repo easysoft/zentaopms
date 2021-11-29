@@ -45,7 +45,7 @@ function deleteFile(fileID)
 function fullScreen()
 {
     var element       = document.getElementById('content');
-    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
@@ -133,7 +133,7 @@ $(function()
 
     $('#content').on('click', '.outline .outline-toggle i.icon-angle-right', function()
     {
-        $('.article-content').width('85%');
+        $('.article-content').css('width', '85%');
         $('.outline').css({'min-width' : '180px', 'border-left' : '2px solid #efefef'});
         $(this).removeClass('icon-angle-right').addClass('icon-angle-left').css('left', '-9px');
         $('.outline-content').show();

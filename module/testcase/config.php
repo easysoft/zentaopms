@@ -29,7 +29,7 @@ $config->testcase->customBatchEditFields   = 'module,story,stage,precondition,st
 
 $config->testcase->custom = new stdclass();
 $config->testcase->custom->createFields      = $config->testcase->customCreateFields;
-$config->testcase->custom->batchCreateFields = 'module,story';
+$config->testcase->custom->batchCreateFields = 'module,story,%s';
 $config->testcase->custom->batchEditFields   = 'branch,module,stage,status,pri,story';
 
 global $lang;

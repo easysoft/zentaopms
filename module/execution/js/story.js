@@ -32,12 +32,41 @@ $(function()
     /* Get checked stories. */
     $('#batchToTaskButton').on('click', function()
     {
-        var storyIdList = '';
+        storyIdList      = '';
+        linedTaskIdList  = '';
+        unlinkTaskIdList = '';
         $("input[name^='storyIdList']:checked").each(function()
         {
+            if(linkedTaskStories[$(this).val()])
+            {
+                linedTaskIdList += '[' + $(this).val() +']';
+            }
+            else
+            {
+                unlinkTaskIdList += $(this).val() + ',';
+            }
             storyIdList += $(this).val() + ',';
-            $('#storyIdList').val(storyIdList);
         });
+    });
+
+    $('#submit').click(function()
+    {
+        if(linedTaskIdList)
+        {
+            confirmStoryToTask = confirmStoryToTask.replace('%s', linedTaskIdList);
+            if(confirm(confirmStoryToTask))
+            {
+                $('#storyIdList').val(storyIdList);
+            }
+            else
+            {
+                $('#storyIdList').val(unlinkTaskIdList);
+            }
+        }
+        else
+        {
+            $('#storyIdList').val(storyIdList);
+        }
     });
 
     $('.sorter-false a').unwrap();

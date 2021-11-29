@@ -115,8 +115,8 @@ $lang->story->stage          = 'Phase';
 $lang->story->stageAB        = 'Phase';
 $lang->story->stagedBy       = 'SetBy';
 $lang->story->mailto         = 'Mailto';
-$lang->story->openedBy       = 'CreatedBy';
-$lang->story->openedDate     = 'CreatedDate';
+$lang->story->openedBy       = 'Created By';
+$lang->story->openedDate     = 'Created Date';
 $lang->story->assignedTo     = 'AssignTo';
 $lang->story->assignedDate   = 'AssignedDate';
 $lang->story->lastEditedBy   = 'EditedBy';
@@ -256,7 +256,7 @@ $lang->story->lblClose    = 'Close';
 $lang->story->lblTBC      = 'Task/Bug/Case';
 
 $lang->story->checkAffection       = 'Influence';
-$lang->story->affectedProjects     = "{$lang->project->common}s/{$lang->execution->common}s";
+$lang->story->affectedProjects     = $config->systemMode == 'new' ? "{$lang->project->common}s/{$lang->execution->common}s" : "{$lang->project->common}s";
 $lang->story->affectedBugs         = 'Bugs';
 $lang->story->affectedCases        = 'Cases';
 
@@ -277,6 +277,7 @@ $lang->story->moveChildrenTips     = "Its Child {$lang->SRCommon} will be moved 
 $lang->story->changeTips           = 'The story associated with the requirements to change, click "Cancel" ignore this change, click "Confirm" to change the story.';
 $lang->story->estimateMustBeNumber = 'Estimate value must be number.';
 $lang->story->estimateMustBePlus   = 'Estimated value cannot be negative';
+$lang->story->confirmChangeBranch  = $lang->SRCommon . ' %s is linked to the plan of its linked branch. If the branch is edited, ' . $lang->SRCommon . ' will be removed from the plan of its linked branch. Do you want to continue edit ' . $lang->SRCommon . '?';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = 'Scope';

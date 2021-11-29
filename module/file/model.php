@@ -154,7 +154,7 @@ class fileModel extends model
                 $title             = isset($_POST[$labelsName][$id]) ? $_POST[$labelsName][$id] : '';
                 $file['extension'] = $this->getExtension($filename);
                 $file['pathname']  = $this->setPathName($id, $file['extension']);
-                $file['title']     = (!empty($title) and $title != $filename) ? htmlspecialchars($title) : $filename;
+                $file['title']     = (!empty($title) and $title != $filename) ? htmlSpecialString($title) : $filename;
                 $file['title']     = $purifier->purify($file['title']);
                 $file['size']      = $size[$id];
                 $file['tmpname']   = $tmp_name[$id];
@@ -169,7 +169,7 @@ class fileModel extends model
             $title             = isset($_POST[$labelsName][0]) ? $_POST[$labelsName][0] : '';
             $file['extension'] = $this->getExtension($name);
             $file['pathname']  = $this->setPathName(0, $file['extension']);
-            $file['title']     = (!empty($title) and $title != $name) ? htmlspecialchars($title) : $name;
+            $file['title']     = (!empty($title) and $title != $name) ? htmlSpecialString($title) : $name;
             $file['title']     = $purifier->purify($file['title']);
             $file['size']      = $size;
             $file['tmpname']   = $tmp_name;
@@ -201,7 +201,7 @@ class fileModel extends model
         $file = array();
         $file['id'] = 0;
         $file['extension'] = $this->getExtension($name);
-        $file['title']     = !empty($_POST['label']) ? htmlspecialchars($_POST['label']) : substr($name, 0, strpos($name, $file['extension']) - 1);
+        $file['title']     = !empty($_POST['label']) ? htmlSpecialString($_POST['label']) : substr($name, 0, strpos($name, $file['extension']) - 1);
         $file['title']     = $purifier->purify($file['title']);
         $file['size']      = $_POST['size'];
         $file['tmpname']   = $tmp_name;
@@ -704,7 +704,7 @@ class fileModel extends model
             $content = $this->pasteImage($data->$editorID, $uid);
             if($content) $data->$editorID = $content;
             $data->$editorID = preg_replace("/ src=\"$readLinkReg\" /", ' src="' . $imgURL . '" ', $data->$editorID);
-            $data->$editorID = preg_replace("/ src=\"" . htmlspecialchars($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
+            $data->$editorID = preg_replace("/ src=\"" . htmlSpecialString($readLinkReg) . "\" /", ' src="' . $imgURL . '" ', $data->$editorID);
 
             preg_match_all('/ src="{([0-9]+)\.\w+}"/', $data->$editorID, $matchs);
             if($matchs[1])
@@ -834,7 +834,7 @@ class fileModel extends model
         $data = new stdclass();
         $data->objectID   = $objectID;
         $data->objectType = $objectType;
-        $data->extra      = 'editor';
+        if(!defined('RUN_MODE') OR RUN_MODE != 'api') $data->extra = 'editor';
         if(isset($_SESSION['album']['used'][$uid]) and $_SESSION['album']['used'][$uid])
         {
             $this->dao->update(TABLE_FILE)->data($data)->where('id')->in($_SESSION['album']['used'][$uid])->exec();

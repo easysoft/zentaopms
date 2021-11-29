@@ -148,11 +148,12 @@
             if(methodLowerCase === 'browse')
             {
                 var viewType = link.params.view || link.params.$2;
-                if(['bug', 'case', 'caselib'].includes(viewType)) return link.params.from === 'project' ? 'project' : 'qa';
+                if(['bug', 'case', 'caselib'].includes(viewType)) return link.params.$5 === 'project' ? 'project' : 'qa';
 
                 if(viewType === 'doc' && (link.params.from === 'product' || link.params.$5 == 'product')) return 'product';
                 if(viewType === 'doc' && (link.params.from === 'project' || link.params.$5 == 'project')) return 'project';
-                if(viewType === 'doc') return 'doc';
+                if(viewType === 'doc')   return 'doc';
+                if(viewType === 'story') return 'product';
             }
             else if(methodLowerCase === 'browsetask')
             {
