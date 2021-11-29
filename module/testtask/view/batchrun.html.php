@@ -28,13 +28,14 @@
           <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
         </tr>
       </thead>
+      <?php $moduleOptionMenu = $productID ? $moduleOptionMenu : array();?>
       <?php foreach($cases as $caseID => $case):?>
       <?php if($case->status == 'wait') continue;?>
       <?php
       if(!$productID)
       {
           echo html::hidden("caseIDList[$case->id]", $caseID);
-          $moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($case->product, $viewType = 'case', $startModuleID = 0);
+          if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getOptionMenu($case->product, 'case', 0, $case->branch);
       }
        ?>
       <tr class='text-center'>

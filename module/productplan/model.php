@@ -171,21 +171,22 @@ class productplanModel extends model
     /**
      * Get plan pairs.
      *
-     * @param  array|int    $product
-     * @param  int          $branch
-     * @param  string       $expired
-     * @param  bool         $skipParent
+     * @param  array|int        $product
+     * @param  int|string|array $branch
+     * @param  string           $expired
+     * @param  bool             $skipParent
      * @access public
      * @return array
      */
     public function getPairs($product = 0, $branch = '', $expired = '', $skipParent = false)
     {
         $date = date('Y-m-d');
-        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName')->from(TABLE_PRODUCTPLAN)->alias('t1')
+        $plans = $this->dao->select('t1.id,t1.title,t1.parent,t1.begin,t1.end,t2.name as branchName,t3.type as productType')->from(TABLE_PRODUCTPLAN)->alias('t1')
             ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t2.id=t1.branch')
+            ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t3.id=t1.product')
             ->where('t1.product')->in($product)
             ->andWhere('t1.deleted')->eq(0)
-            ->beginIF($branch !== '')->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF($expired == 'unexpired')->andWhere('t1.end')->ge($date)->fi()
             ->beginIF($skipParent)->andWhere('t1.parent')->ne(-1)->fi()
             ->orderBy('t1.begin desc')
@@ -201,7 +202,7 @@ class productplanModel extends model
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
-            $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
+            if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
         }
         return array('' => '') + $planPairs;
     }
@@ -211,33 +212,23 @@ class productplanModel extends model
      *
      * @param  array|int    $product
      * @param  int          $branch
-     * @param  bool         $skipParent
+     * @param  string       $param skipParent|withMainPlan|unexpired
      * @access public
      * @return array
      */
-    public function getPairsForStory($product = 0, $branch = 0, $skipParent = false)
+    public function getPairsForStory($product = 0, $branch = '', $param = '')
     {
-        $date = date('Y-m-d');
-        $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
+        $date   = date('Y-m-d');
+        $param  = strtolower($param);
+        $branch = strpos($param, 'withmainplan') !== false ? "0,$branch" : $branch;
+        $plans  = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->in($product)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
-            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
+            ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
-
-        if(!$plans)
-        {
-            $plans = $this->dao->select('id,title,parent,begin,end')->from(TABLE_PRODUCTPLAN)
-                ->where('product')->in($product)
-                ->andWhere('deleted')->eq(0)
-                ->andWhere('end')->lt($date)
-                ->beginIF($branch)->andWhere("branch")->in("0,$branch")->fi()
-                ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
-                ->orderBy('begin desc')
-                ->limit(5)
-                ->fetchAll('id');
-        }
 
         $plans       = $this->reorder4Children($plans);
         $planPairs   = array();
@@ -284,14 +275,19 @@ class productplanModel extends model
      * Get plan group by product id list.
      *
      * @param  string|array $products
+     * @param  string       $param skipParent|unexpired
      * @access public
      * @return array
      */
-    public function getGroupByProduct($products = '')
+    public function getGroupByProduct($products = '', $param = '')
     {
+        $date  = date('Y-m-d');
+        $param = strtolower($param);
         $plans = $this->dao->select('id,title,parent,begin,end,product,branch')->from(TABLE_PRODUCTPLAN)
             ->where('deleted')->eq(0)
             ->beginIF($products)->andWhere('product')->in($products)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
+            ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->orderBy('id_desc')
             ->fetchAll('id');
 
@@ -345,15 +341,17 @@ class productplanModel extends model
      *
      * @param  int    $productID
      * @param  array  $branches
+     * @param  bool   $skipParent
      * @access public
      * @return array
      */
-    public function getBranchPlanPairs($productID, $branches = '')
+    public function getBranchPlanPairs($productID, $branches = '', $skipParent = false)
     {
         $plans = $this->dao->select('branch,id,title,begin,end')->from(TABLE_PRODUCTPLAN)
             ->where('product')->eq($productID)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branches))->andWhere('branch')->in($branches)->fi()
+            ->beginIF($skipParent)->andWhere('parent')->ne(-1)->fi()
             ->fetchAll('id');
 
         $planPairs = array();
@@ -411,7 +409,25 @@ class productplanModel extends model
             $planID = $this->dao->lastInsertID();
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
             $this->loadModel('score')->create('productplan', 'create', $planID);
-            if(!empty($plan->parent)) $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+            if(!empty($plan->parent))
+            {
+                $parentPlan = $this->getByID($plan->parent);
+                if($parentPlan->parent == '0')
+                {
+                    $this->dao->update(TABLE_PRODUCTPLAN)->set('parent')->eq('-1')->where('id')->eq($plan->parent)->andWhere('parent')->eq('0')->exec();
+
+                    /* Transfer stories and bugs linked with the parent plan to the child plan. */
+                    $this->dao->update(TABLE_PLANSTORY)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                    $this->dao->update(TABLE_BUG)->set('plan')->eq($planID)->where('plan')->eq($plan->parent)->exec();
+                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
+                    foreach($stories as $storyID => $story)
+                    {
+                        $storyPlan = trim($story->plan, ',');
+                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$storyPlan,");
+                        $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
+                    }
+                }
+            }
             return $planID;
         }
     }

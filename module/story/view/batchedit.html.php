@@ -72,29 +72,14 @@ foreach(explode(',', $showFields) as $field)
           <?php if($branchProduct):?>
           <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>'>
             <?php $disabled = $products[$story->product]->type == 'normal' ? "disabled='disabled'" : '';?>
+            <?php if($products[$story->product]->type == 'normal') $branches[$story->product] = array();?>
             <?php echo html::select("branches[$storyID]", $branches[$story->product], $story->branch, "class='form-control chosen' onchange='loadBranches($story->product, this.value, $storyID);' $disabled");?>
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", $modules[$story->product][$story->branch], $story->module, "class='form-control chosen'");?>
+            <?php echo html::select("modules[$storyID]", isset($modules[$story->product][$story->branch]) ? $modules[$story->product][$story->branch] : array('0' => '/'), $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
-            <?php
-            if($productID)
-            {
-                $productPlans = array('' => '');
-                if($story->branch != BRANCH_MAIN)
-                {
-                    if(isset($plans[$story->branch])) $productPlans += $plans[$story->branch];
-                    if(isset($plans[0])) $productPlans += $plans[0];
-                }
-                else
-                {
-                    foreach($plans as $branchPlan) $productPlans += $branchPlan;
-                }
-            }
-            ?>
-            <?php if($this->session->currentProductType == 'normal') $productPlans = array('' => '', 'ditto' => $this->lang->story->ditto) + $productPlans;?>
             <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control chosen'");?>
           </td>
           <td title='<?php echo $story->title?>'>

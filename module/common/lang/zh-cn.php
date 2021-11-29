@@ -106,6 +106,9 @@ $lang->lineNumber      = '行号';
 $lang->tutorialConfirm = '检测到你尚未退出新手教程模式，是否现在退出？';
 $lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网页端查看或者是通过搜索方式查看。';
 
+$lang->serviceAgreement = "服务协议";
+$lang->privacyPolicy    = "隐私政策";
+
 $lang->preShortcutKey    = '[快捷键:←]';
 $lang->nextShortcutKey   = '[快捷键:→]';
 $lang->backShortcutKey   = '[快捷键:Alt+↑]';

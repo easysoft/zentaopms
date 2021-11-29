@@ -30,6 +30,8 @@ a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !impo
 #swapper li > a {padding-top: 4px; padding-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
+
+#subHeader .tree ul {display: block;}
 </style>
 <?php
 $productCounts      = array();

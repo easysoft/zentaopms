@@ -65,7 +65,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $product)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=0"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=all"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -394,7 +394,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
-              if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal')
+              if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID)
               {
                   $withSearch = count($branches) > 8;
                   echo "<li class='dropdown-submenu'>";

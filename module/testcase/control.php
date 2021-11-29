@@ -126,6 +126,7 @@ class testcase extends control
         if($this->app->tab == 'project')
         {
             $this->products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
+            $branch = 'all';
             $this->loadModel('project')->setMenu($projectID);
         }
         else
@@ -182,7 +183,7 @@ class testcase extends control
         }
         else
         {
-            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? 0 : $branch);
+            $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? '' : $branch);
         }
 
         $product = $this->product->getById($productID);
@@ -1597,7 +1598,8 @@ class testcase extends control
             $fields['stageValue'] = $this->lang->testcase->lblStageValue;
             if($product->type != 'normal') $fields['branchValue'] = $this->lang->product->branchName[$product->type];
 
-            $branches = $this->loadModel('branch')->getPairs($productID);
+            $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
+            $branches  = $this->loadModel('branch')->getPairs($productID, '' , $projectID);
             foreach($branches as $branchID => $branchName) $branches[$branchID] = $branchName . "(#$branchID)";
 
             $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');

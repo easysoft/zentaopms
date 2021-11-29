@@ -310,7 +310,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, true);
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent');
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
@@ -464,7 +464,7 @@ class story extends control
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, true);
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, 'skipParent');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
@@ -666,7 +666,7 @@ class story extends control
         $this->view->stories          = $stories;
         $this->view->users            = $users;
         $this->view->product          = $product;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, true);
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, 'skipParent');
         $this->view->products         = $myProducts + $othersProducts;
         $this->view->branches         = $branches;
         $this->view->reviewers        = implode(',', $reviewerList);
@@ -749,7 +749,7 @@ class story extends control
                 $product       = $this->product->getByID($productID);
                 $branchProduct = $product->type == 'normal' ? false : true;
                 $modules       = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
-                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID));
+                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
                 $products      = array($productID => $product);
                 $branches      = array($productID => $branches);
             }
@@ -765,7 +765,7 @@ class story extends control
                     $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
                     $branches[$linkedProduct->id] = $branchList;
                     $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
-                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList));
+                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
                     if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
 
                     if($linkedProduct->type != 'normal') $branchProduct = true;
@@ -795,7 +795,7 @@ class story extends control
                 $modules[$storyProduct->id] = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branchIdList);
                 if($storyProduct->type == 'normal') $modules[$storyProduct->id][0] = $modules[$storyProduct->id];
 
-                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, array_keys($branchList));
+                $plans[$storyProduct->id] = $this->productplan->getBranchPlanPairs($storyProduct->id, array_keys($branchList), true);
                 if(empty($plans[$storyProduct->id])) $plans[$storyProduct->id][0] = $plans[$storyProduct->id];
 
                 if($storyProduct->type != 'normal') $branchProduct = true;
@@ -1450,7 +1450,7 @@ class story extends control
                 {
                     foreach($plans[$storyID] as $plan)
                     {
-                        if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID)
+                        if($plan->branch != $branchID)
                         {
                             $conflictStoryIdList .= '[' . $storyID . ']';
                             $conflictStoryArray[] = $storyID;

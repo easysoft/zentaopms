@@ -448,6 +448,8 @@ class project extends control
 
         if($this->app->tab == 'doc') unset($this->lang->doc->menu->project['subMenu']);
 
+        $topProgramID = $this->program->getTopByID($programID);
+
         $this->view->title      = $this->lang->project->create;
         $this->view->position[] = $this->lang->project->create;
 
@@ -460,7 +462,7 @@ class project extends control
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
-        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($programID);
+        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($topProgramID);
         $this->view->model               = $model;
         $this->view->name                = $name;
         $this->view->code                = $code;
@@ -540,7 +542,7 @@ class project extends control
         $linkedProducts  = $this->loadModel('product')->getProducts($projectID);
         $parentProject   = $this->program->getByID($project->parent);
         $branches        = $this->project->getBranchesByProject($projectID);
-        $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts));
+        $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
         $projectStories  = $this->project->getStoriesByProject($projectID);
         $projectBranches = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
@@ -554,7 +556,8 @@ class project extends control
             foreach($branches[$productID] as $branchID => $branch)
             {
                 $linkedBranches[$productID][$branchID] = $branchID;
-                $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if($branch != BRANCH_MAIN) $productPlans[$productID][$branchID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
+                $productPlans[$productID][$branchID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
 
                 if(!empty($projectStories[$productID][$branchID]) or !empty($projectBranches[$productID][$branchID]))
                 {
@@ -964,6 +967,7 @@ class project extends control
     {
         $this->loadModel('product');
         $this->session->set('bugList', $this->app->getURI(true), 'project');
+
         $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
         $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
 
