@@ -56,7 +56,7 @@
         <?php foreach($tasks as $task):?>
         <tr class='text-left'>
           <td><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), sprintf('%03d', $task->id));?></td>
-          <td><span class='label-pri label-pri-<?php echo  zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
+          <td><span class='label-pri label-pri-<?php echo $task->pri;?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri)?></span></td>
           <td class='text-left nobr'><?php echo html::a($this->createLink('execution', 'browse', "executionID=$task->executionID"), $task->executionName);?></td>
           <td class='text-left nobr'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
