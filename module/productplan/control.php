@@ -430,8 +430,8 @@ class productplan extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = $this->loadModel('branch')->getPairs($plan->product);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branches[$plan->branch]);
+            $branch   = $this->loadModel('branch')->getById($plan->branch);
+            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branch->name);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -561,8 +561,8 @@ class productplan extends control
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($plan->product, $plan->branch);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID, $branch = 0, $params = '');
-        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->product->getProjectPairsByProduct($productID, $plan->branch);
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($plan->product, 'bug', 0, $plan->branch);
+        if($this->config->systemMode == 'new') $this->config->bug->search['params']['project']['values'] = $this->product->getProjectPairsByProduct($productID, $plan->branch);
 
         unset($this->config->bug->search['fields']['product']);
         if($this->session->currentProductType == 'normal')
@@ -573,8 +573,8 @@ class productplan extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = $this->loadModel('branch')->getPairs($productID);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branches[$plan->branch]);
+            $branch   = $this->loadModel('branch')->getById($plan->branch);
+            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branch->name);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);

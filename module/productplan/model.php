@@ -171,10 +171,10 @@ class productplanModel extends model
     /**
      * Get plan pairs.
      *
-     * @param  array|int    $product
-     * @param  int          $branch
-     * @param  string       $expired
-     * @param  bool         $skipParent
+     * @param  array|int        $product
+     * @param  int|string|array $branch
+     * @param  string           $expired
+     * @param  bool             $skipParent
      * @access public
      * @return array
      */

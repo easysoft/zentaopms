@@ -1750,7 +1750,7 @@ class executionModel extends model
             $plans = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, true);
             foreach($plans as $plan) $planPairs += $plan;
         }
-        $this->config->product->search['params']['plan']['values'] = $planPairs;
+        $this->config->product->search['params']['plan']['values']   = $planPairs;
         $this->config->product->search['params']['module']['values'] = $modules;
         if($productType == 'normal')
         {

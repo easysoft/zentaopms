@@ -1309,7 +1309,7 @@ class execution extends control
                 ->where('t1.id')->eq($plan->product)
                 ->fetchAll('id');
 
-            $productPlan    = $this->loadModel('productplan')->getPairs($plan->product, $plan->branch, 'unexpired');
+            $productPlan    = $this->loadModel('productplan')->getPairsForStory($plan->product, $plan->branch, 'skipParent|unexpired');
             $linkedBranches = array();
             $linkedBranches[$plan->product][$plan->branch] = $plan->branch;
 
@@ -2485,10 +2485,10 @@ class execution extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Set modules and branches. */
-        $modules     = array();
-        $branchPairs = array(BRANCH_MAIN);
-        $branches    = $this->project->getBranchesByProject($objectID);
-        $productType = 'normal';
+        $modules      = array();
+        $branchIDList = array(BRANCH_MAIN);
+        $branches     = $this->project->getBranchesByProject($objectID);
+        $productType  = 'normal';
         $this->loadModel('tree');
         $this->loadModel('branch');
         foreach($products as $product)
@@ -2503,7 +2503,7 @@ class execution extends control
                 $productType = $product->type;
                 if(isset($branches[$product->id]))
                 {
-                    foreach($branches[$product->id] as $branchID => $branch) $branchPairs[$branchID] = $branchID;
+                    foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
                 }
             }
         }
@@ -2519,7 +2519,7 @@ class execution extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branchPairs, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);

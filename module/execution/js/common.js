@@ -168,6 +168,14 @@ function loadBranches(product)
     });
 }
 
+/**
+ * Load plans by product id.
+ *
+ * @param  int $product
+ * @param  int $branchID
+ * @access public
+ * @return void
+ */
 function loadPlans(product, branchID)
 {
     if($('#plansBox').size() == 0) return false;
@@ -190,6 +198,12 @@ function loadPlans(product, branchID)
     });
 }
 
+/**
+ * Adjust product box margin.
+ *
+ * @access public
+ * @return void
+ */
 function adjustProductBoxMargin()
 {
     var productRows = Math.ceil($('#productsBox > .row > .col-sm-4').length / 3);
@@ -202,6 +216,12 @@ function adjustProductBoxMargin()
     }
 }
 
+/**
+ * Adjust plan box margin.
+ *
+ * @access public
+ * @return void
+ */
 function adjustPlanBoxMargin()
 {
     var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);

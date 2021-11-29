@@ -429,8 +429,8 @@ class release extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = $this->loadModel('branch')->getPairs($release->product);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branches[$release->branch]);
+            $branch   = $this->loadModel('branch')->getById($release->branch);
+            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branch->name);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -549,8 +549,8 @@ class release extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = $this->loadModel('branch')->getPairs($release->product);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branches[$release->branch]);
+            $branch   = $this->loadModel('branch')->getById($release->branch);
+            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $release->branch => $branch->name);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
