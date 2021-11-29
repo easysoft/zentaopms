@@ -169,26 +169,17 @@ class mrModel extends model
      */
     public function update($MRID)
     {
-        if (!empty($_POST['job']))
-        {
-            $repoID        = $this->post->repo;
-            $jobID         = $this->post->job;
-
-            $MR = fixer::input('post')
-                ->setDefault('editedBy', $this->app->user->account)
-                ->setDefault('editedDate', helper::now())
-                ->add('repoID', $repoID)
-                ->add('jobID', $jobID)
-                ->get();
-        }
-        else
-        {
-            $MR = fixer::input('post')
-                ->setDefault('editedBy', $this->app->user->account)
-                ->setDefault('editedDate', helper::now())
-                ->get();
-        }
+        $MR = fixer::input('post')
+            ->setDefault('jobID', 0)
+            ->setDefault('repoID', 0)
+            ->setDefault('needCI', 0)
+            ->setDefault('editedBy', $this->app->user->account)
+            ->setDefault('editedDate', helper::now())
+            ->get();
         $oldMR = $this->getByID($MRID);
+
+        $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         /* Exec Job */
         if(isset($MR->jobID) && $MR->jobID)
