@@ -1717,8 +1717,8 @@ class testcase extends control
         $browseType = strtolower($browseType);
         $queryID    = (int)$queryID;
         $product    = $this->loadModel('product')->getById($productID);
-        $branches   = $this->loadModel('branch')->getPairs($productID, '', $projectID);
-        if($product->type != 'normal') $branches = array('0' => $this->lang->branch->main) + $branches;
+        $branches   = array();
+        if($product->type != 'normal') $branches = array('0' => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($productID, '', $projectID);
 
         if($_POST)
         {
