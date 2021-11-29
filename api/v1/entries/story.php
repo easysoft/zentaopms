@@ -73,9 +73,9 @@ class storyEntry extends Entry
         $story->mailto = $mailto;
 
         $reviewedBy = array();
-        if($story->reviewedBy)
+        if($story->reviewer)
         {
-            foreach(explode(',', $story->reviewedBy) as $account)
+            foreach($story->reviewer as $account)
             {
                 if(empty($account)) continue;
                 $reviewedBy[] = $this->formatUser($account, $data->data->users);
