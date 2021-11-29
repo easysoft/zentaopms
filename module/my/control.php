@@ -148,18 +148,8 @@ class my extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
         $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
-        $tasks  = $this->loadModel('task')->getUserSuspendedTasks($account);
-        foreach($todos as $key => $todo)
-        {
-            foreach($tasks as $task)
-            {
-                if($todo->type == 'task' and $todo->idvalue = $task->id)
-                {
-                    unset($todos[$key]);
-                    break;
-                }
-            }
-        }
+        $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
+        foreach($todos as $key => $todo) if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
 
         $pager->recTotal = count($todos);
 

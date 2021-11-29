@@ -598,14 +598,7 @@ class block extends control
                 unset($todos[$key]);
                 continue;
             }
-            foreach($tasks as $task)
-            {
-                if($todo->type == 'task' and $todo->idvalue == $task->id)
-                {
-                    unset($todos[$key]);
-                    break;
-                }
-            }
+            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
         }
 
         $this->view->todos = $todos;
@@ -1740,13 +1733,10 @@ class block extends control
                         unset($objects[$key]);
                         continue;
                     }
-                    foreach($tasks as $task)
+                    if($todo->type == 'task' and isset($tasks[$todo->idvalue]))
                     {
-                        if($todo->type == 'task' and $todo->idvalue == $task->id)
-                        {
-                            unset($objects[$key]);
-                            break;
-                        }
+                        unset($objects[$key]);
+                        continue;
                     }
 
                     $todo->begin = date::formatTime($todo->begin);
