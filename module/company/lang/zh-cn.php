@@ -37,3 +37,6 @@ $lang->company->user      = '用户';
 
 $lang->company->guestOptions[0] = '不允许';
 $lang->company->guestOptions[1] = '允许';
+
+$lang->company->order['date_desc'] = '倒序排列';
+$lang->company->order['date_asc']  = '正序排列';

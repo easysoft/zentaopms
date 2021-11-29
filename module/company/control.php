@@ -167,10 +167,11 @@ class company extends control
      * @param  int    $productID
      * @param  int    $projectID
      * @param  int    $executionID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $productID = 0, $projectID = 0, $executionID = 0)
+    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $productID = 0, $projectID = 0, $executionID = 0, $orderBy = 'date_desc')
     {
         $this->company->setMenu();
         $this->app->loadLang('user');
@@ -203,7 +204,6 @@ class company extends control
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Append id for secend sort. */
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
         $sort    = $this->loadModel('common')->appendOrder($orderBy);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
