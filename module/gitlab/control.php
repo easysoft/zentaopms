@@ -835,7 +835,7 @@ class gitlab extends control
 
             if($res or is_array($res))
             {
-                die(js::locate($this->createLink('repo', 'maintain'), 'parent'));
+                die(js::alert($this->lang->gitlab->addWebhookSuccess));
             }
             else
             {

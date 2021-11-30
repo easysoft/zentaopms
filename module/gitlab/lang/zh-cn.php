@@ -19,6 +19,7 @@ $lang->gitlab->binded            = '已绑定';
 $lang->gitlab->serverFail        = '连接GitLab服务器异常，请检查GitLab服务器。';
 $lang->gitlab->lastUpdate        = '最后更新';
 $lang->gitlab->confirmAddWebhook = '您确定创建Webhook吗？';
+$lang->gitlab->addWebhookSuccess = 'webhook创建成功';
 $lang->gitlab->failCreateWebhook = 'Webhook创建失败，请查看日志';
 $lang->gitlab->placeholderSearch = '请输入项目名称';
 
