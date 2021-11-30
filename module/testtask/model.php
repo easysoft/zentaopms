@@ -456,7 +456,7 @@ class testtaskModel extends model
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
                 ->page($pager)
