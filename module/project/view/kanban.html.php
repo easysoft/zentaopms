@@ -38,7 +38,7 @@ $kanbanColumns['closedProject']  = array('name' => $lang->project->closedProject
 $userPrivs = array();
 $userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');
-js::set('kanbanColumns',    $kanbanColumns);
+js::set('kanbanColumns',    array_values($kanbanColumns));
 js::set('userPrivs',        $userPrivs);
 js::set('kanbanGroup',      $kanbanGroup);
 js::set('latestExecutions', $latestExecutions);

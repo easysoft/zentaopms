@@ -5,22 +5,16 @@
 #kanbanList .panel-heading {padding: 10px;}
 #kanbanList .panel-body {padding: 0 10px 10px;}
 #kanbanList .kanban {min-height: 120px; overflow: visible;}
-#kanbanList .kanban-item {margin-top: 0; border-radius: 2px;}
+#kanbanList .kanban-item {border-radius: 2px;}
 #kanbanList .kanban-item:hover {border: 1px solid #ccc;}
-#kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
-#kanbanList .kanban-lane-items {padding: 10px; min-height: 38px;}
 #kanbanList .kanban-header,
-#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0; min-height: 60px;}
+#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
 #kanbanList .kanban-lane {margin-top: 2px; min-height: 100px;}
 #kanbanList .kanban-lane.has-sub-lane {background-color: transparent;}
-#kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
+#kanbanList .kanban-lane + .kanban-lane {margin-top: 10px;}
 #kanbanList .kanban-sub-lane + .kanban-sub-lane {margin-top: 2px;}
-#kanbanList .kanban-col + .kanban-col {border-left: 2px solid #fff;}
-#kanbanList .kanban-header-col {height: 72px; padding: 20px 5px;}
-#kanbanList .kanban-header-col > .title {margin: 0; line-height: 32px; height: 32px}
-#kanbanList .kanban-header-col > .title > .text {font-weight: bold; max-width: 200px; max-width: calc(100% - 50px);}
-#kanbanList .kanban-header-col > .title > .icon, #kanbanList .kanban-header-col > .title > .count {top: -11px}
+#kanbanList .kanban-header-col > .title > .text {max-width: 200px; max-width: calc(100% - 50px);}
 #kanbanList .kanban-header + .kanban-lane > .kanban-lane-name {margin-top: 0;}
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
@@ -39,12 +33,10 @@
 .kanban-affixed {padding-top: 72px;}
 .kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
 
-#kanbanList .kanban-header-col[data-type="doingProject"],
-#kanbanList .kanban-header-col[data-type="doingProject"] + .kanban-header-col[data-type="doingExecution"] {padding: 38px 10px 0;}
-#kanbanList .kanban-header-col[data-type="doingProject"]:after {content: attr(data-span-text); display: block; position: absolute; z-index: 10; left: 0; right:  -100%; right: calc(-100% - 2px); top: 0; line-height: 36px; text-align: center; font-weight: bold; border-bottom: 2px solid #fff; background-color: #ededed;}
+
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
 #kanbanList .kanban-item.kanban-item-span,
-#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center; box-shadow: none!important;}
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center; box-shadow: none!important; margin: 0 10px;}
 #kanbanList .kanban-item.kanban-item-span:hover,
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
 #kanbanList .kanban-item.kanban-item-span > .title,
@@ -63,8 +55,8 @@
 #kanbanList .kanban-lane-col[data-type="doingProject"] > .kanban-lane-items {padding: 0; overflow: visible; max-height: none!important;}
 #kanbanList .project-row {position: relative; width: 200%; width: calc(200% + 2px);}
 #kanbanList .project-row + .project-row {border-top: 2px solid #fff;}
-#kanbanList .project-row > .project-col {float: left; width: 50%; padding: 10px;}
-#kanbanList .project-row > .project-col + .project-col {padding: 10px 9px 10px 11px;}
+#kanbanList .project-row > .project-col {float: left; width: 50%;}
+/* #kanbanList .project-row > .project-col + .project-col {padding: 10px 9px 10px 11px;} */
 #kanbanList .project-row > .execution-item {position: absolute!important; left: 100%; top: 0}
 </style>
 <script>
@@ -426,25 +418,15 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     readonly: true,
     maxColHeight: 260,
     itemRender: renderKanbanItem,
-    useFlex: false,
     showCount: true,
     showZeroCount: true,
-    onRenderHeaderCol: function($col, col)
+    onRenderLaneName: function($name, lane, $kanban, columns, kanban)
     {
-        if(col.type === 'doingProject' && window.doingText) $col.attr('data-span-text', window.doingText);
+        var color = kanbanColorList[lane.$index % kanbanColorList.length];
+        $name.css('background-color', color);
     },
     onRenderKanban: function($kanban, kanbanData)
     {
-        $kanban.find('.kanban-lane').each(function(index)
-        {
-            var $lane = $(this);
-            if ($lane.data('lane').color) return;
-
-            var $laneName = $lane.find('.kanban-lane-name');
-            var color = kanbanColorList[index % kanbanColorList.length];
-            $laneName.css('background-color', color);
-        });
-
         /* Update project count and execution count */
         var doingProjectCount   = 0;
         var doingExecutionCount = 0;
