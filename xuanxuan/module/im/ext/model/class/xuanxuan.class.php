@@ -207,9 +207,10 @@ class xuanxuanIm extends imModel
             $messageGroups = array();
             foreach($userMessages as $message)
             {
-                /* group by $message->content->content->objectType, ...content->actionType, ...content->actor */
-                $actionInfo = json_decode($message->content->content);
-                $messageGroups["$actionInfo->objectType-$actionInfo->actionType-$actionInfo->actor"][] = $message;
+                /* group by $message->content->content->objectType, ...content->action, ...content->actor */
+                $contentData = json_decode($message->content);
+                $contentData = json_decode($contentData->content);
+                $messageGroups["$contentData->objectType-$contentData->action-$contentData->actor"][] = $message;
             }
             foreach($messageGroups as $groupKey => $messages)
             {
