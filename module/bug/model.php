@@ -1179,7 +1179,12 @@ class bugModel extends model
      */
     public function activate($bugID)
     {
-        $oldBug = $this->getById($bugID);
+        $bugID      = (int)$bugID;
+        $oldBug     = $this->getById($bugID);
+        $solveBuild = $this->dao->select('id')
+            ->from(TABLE_BUILD)
+            ->where("CONCAT(',', bugs, ',')")->like("%,{$bugID},%")
+            ->fetch('id');
         $now = helper::now();
         $bug = fixer::input('post')
             ->setDefault('assignedTo',     $oldBug->resolvedBy)
@@ -1205,17 +1210,12 @@ class bugModel extends model
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
         $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
 
-        $openedBuilds = explode(',', $oldBug->openedBuild);
-        if($openedBuilds)
+        if($solveBuild)
         {
             $this->loadModel('build');
-            foreach($openedBuilds as $openedBuild)
-            {
-                $build = $this->build->getByID($openedBuild);
-                if(empty($build)) continue;
-                $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
-                $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$openedBuild)->exec();
-            }
+            $build = $this->build->getByID($solveBuild);
+            $build->bugs = trim(str_replace(",$bugID,", ',', ",$build->bugs,"), ',');
+            $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$solveBuild)->exec();
         }
 
         $bug->activatedCount += 1;
