@@ -665,8 +665,11 @@ function setBranchRelated(branchID, productID, num)
 
     if(config.currentMethod == 'batchedit')
     {
-        planID = $('#plans' + num).val();
+        planID   = $('#plans' + num).val();
         planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID=' + num + '&needCreate=false&expired=&param=skipParent');
-        $('#plans' + num).parent('td').load(planLink, function(){$('#plans' + num).chosen();});
+        $('#plans' + num).parent('td').load(planLink, function()
+        {
+            $('#plans' + num).chosen();
+        });
     }
 }
