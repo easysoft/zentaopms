@@ -22,6 +22,14 @@ class xuanxuanMessage extends messageModel
                 $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
                 $url = "xxc:openInApp/zentao-integrated/" . urlencode($url);
 
+                $contentData = new stdclass();
+                $contentData->sender      = (object)array('id' => $this->app->user->id, 'name' => $this->app->user->realname, 'avatar' => '');
+                $contentData->title       = $title;
+                $contentData->subtitle    = '';
+                $contentData->contentType = "zentao-$objectType-$actionType";
+                $contentData->content     = json_encode((object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname));
+                $content = json_encode($contentData);
+
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
@@ -29,7 +37,7 @@ class xuanxuanMessage extends messageModel
                 $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->andWhere('account')->ne($this->app->user->account)->fetchAll('id');
                 $target = array_keys($target);
 
-                if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content = '', $contentType = 'text', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
                 if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }
