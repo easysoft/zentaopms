@@ -710,7 +710,7 @@ class executionModel extends model
             dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
             return false;
         }  
-        if($execution->realBegan > $now)
+        if($execution->realBegan > helper::today())
         {
             dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
             return false;
@@ -789,7 +789,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
-            ->setDefault('realEnd','')
+            ->setDefault('realEnd', '')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -872,7 +872,7 @@ class executionModel extends model
             return false;
         }
 
-        if($execution->realEnd > $now)
+        if($execution->realEnd > helper::today())
         {
             dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
             return false;
@@ -884,7 +884,7 @@ class executionModel extends model
             ->exec();
         
         if(!dao::isError())
-        {         
+        {
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }

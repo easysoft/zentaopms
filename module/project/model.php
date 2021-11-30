@@ -1288,7 +1288,7 @@ class projectModel extends model
             dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
             return false;
         }
-        if($project->realEnd > $now)
+        if($project->realEnd > helper::today())
         {
             dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
             return false;
@@ -1300,7 +1300,7 @@ class projectModel extends model
             ->exec();
 
         if(!dao::isError())
-        {            
+        {
             $this->loadModel('score')->create('project', 'close', $oldProject);
             return common::createChanges($oldProject, $project);
         }
