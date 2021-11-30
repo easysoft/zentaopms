@@ -466,8 +466,64 @@ function findDropColumns($element, $root)
  */
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
-    /* TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器  */
-    console.log('TODO: Post data to server on change card type 将变更卡片类型操作提交到服务器', {card, fromColType, toColType, kanbanID});
+    if(typeof card == 'undefined') return false;
+    var objectID    = card.id;
+    var showIframe  = false;
+
+    if(kanbanID == 'task')
+    {
+        if(toColType == 'developed')
+        {
+            if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
+            {
+                var link   = createLink('task', 'finish', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'pause')
+        {
+            if(fromColType == 'developing' && priv.canPauseTask)
+            {
+                var link = createLink('task', 'pause', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'developing')
+        {
+            if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            {
+                var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+            if(fromColType == 'wait' && priv.canStartTask)
+            {
+                var link = createLink('task', 'start', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'canceled')
+        {
+            if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
+            {
+                var link = createLink('task', 'cancel', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'closed')
+        {
+            if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
+            {
+                var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+    }
+
+    if(showIframe)
+    {
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
+        modalTrigger.show();
+    }
 
     /*
         // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
@@ -771,6 +827,34 @@ $(function()
 
     $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
+
+    /* Ajax update kanban. */
+    setInterval(function()
+    {
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
+        {
+            if(data) 
+            {
+                kanbanGroup = $.parseJSON(data);
+                if(groupBy == 'default')
+                {
+                    var kanbanLane = '';
+                    for(var i in kanbanList)
+                    {
+                        if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+                        if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+                        if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
+
+                        if(browseType == kanbanList[i] || browseType == 'all') updateKanban(kanbanList[i], kanbanLane);
+                    }
+                }
+                else
+                {
+                    updateKanban(browseType, kanbanGroup[groupBy]);
+                }
+            }
+        });
+    }, 10000);
 });
 
 $('#type').change(function()
