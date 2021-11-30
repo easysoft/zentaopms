@@ -591,13 +591,14 @@ class mr extends control
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getProductBuildPairs($productID, $branch                                                         = 0, $params                                                         = '');
 
         unset($this->config->bug->search['fields']['product']);
-        if($this->session->currentProductType == 'normal')
+        if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
             unset($this->config->bug->search['params']['branch']);
         }
         else
         {
+            $this->product->setMenu($productID, $branch);
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
             $branches                                                = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
             $this->config->bug->search['params']['branch']['values'] = $branches;
