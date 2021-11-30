@@ -314,7 +314,7 @@ class mrModel extends model
                 /* Update compile status of current MR object */
                 if(isset($MR->needCI) and $MR->needCI == '1')
                 {
-                    $newMR->compileStatus = empty($MR->compileID) ? 'fail' : $this->loadModel('compile')->getByID($MR->compileID)->status;
+                    $newMR->compileStatus = empty($MR->compileID) ? 'failed' : $this->loadModel('compile')->getByID($MR->compileID)->status;
                 }
 
                 /* Update MR in Zentao database. */
