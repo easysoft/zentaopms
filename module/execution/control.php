@@ -217,12 +217,14 @@ class execution extends control
             $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         }
 
-        $product = $this->product->getById($productID);
+        /* Get product. */
         if(empty($productID))
         {
             $productModule = $this->tree->getById($moduleID);
             if(!empty($productModule) and $productModule->type != 'task') $product = $this->product->getById($productModule->root);
         }
+        if(empty($product)) $product = $this->product->getById($productID);
+
         if(!empty($product) and $product->type != 'normal')
         {
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
