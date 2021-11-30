@@ -821,7 +821,7 @@ class treeModel extends model
 
             /* tree menu. */
             $tree = '';
-            if(empty($branchGroups[$id])) $branchGroups[$id]['0'] = '';
+            $branchGroups[$id][BRANCH_MAIN] = empty($branchGroups[$id]) ? '' : $this->lang->branch->main;
             foreach($branchGroups[$id] as $branch => $branchName)
             {
                 $treeMenu = array();

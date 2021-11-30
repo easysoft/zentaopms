@@ -837,7 +837,7 @@ class execution extends control
         $this->view->orderBy           = $orderBy;
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
-        $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
+        $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, 0, array('treeModel', 'createStoryLink'));
         $this->view->modulePairs       = $modulePairs;
         $this->view->tabID             = 'story';
         $this->view->storyTasks        = $storyTasks;
