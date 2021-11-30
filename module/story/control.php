@@ -310,7 +310,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->moduleID         = $moduleID ? $moduleID : (int)$this->cookie->lastStoryModule;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent');
+        $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($productID, $branch, 'skipParent|unexpired');
         $this->view->planID           = $planID;
         $this->view->source           = $source;
         $this->view->sourceNote       = $sourceNote;
@@ -464,7 +464,7 @@ class story extends control
 
         $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, 'skipParent');
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, 'skipParent|unexpired');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
