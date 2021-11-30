@@ -104,3 +104,5 @@ ADD `feedbackBy` varchar(100) NOT NULL AFTER `version`,
 ADD `notifyEmail` varchar(100) NOT NULL AFTER `feedbackBy`;
 
 ALTER TABLE `zt_product` ADD `reviewer` varchar(255) NOT NULL AFTER `whitelist`;
+
+ALTER TABLE `zt_kanbanlane` ADD `lastEditedTime` datetime NOT NULL AFTER `order`;

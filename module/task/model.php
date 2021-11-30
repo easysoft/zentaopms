@@ -138,6 +138,8 @@ class taskModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
+            $this->loadModel('kanban')->updateLane($executionID, 'task');
+
             if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
             if($this->post->selectTestStory)
             {
@@ -408,7 +410,12 @@ class taskModel extends model
             $mails[$i]->actionID = $actionID;
         }
 
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError()) 
+        {
+            $this->loadModel('score')->create('ajax', 'batchCreate');
+            $this->loadModel('kanban')->updateLane($executionID, 'task');
+        }
+
         if($parentID > 0 && !empty($taskID))
         {
             $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
@@ -1008,6 +1015,7 @@ class taskModel extends model
             if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
+            if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task');
 
             $this->loadModel('action');
             $changed = $task->parent != $oldTask->parent;
@@ -1286,6 +1294,7 @@ class taskModel extends model
 
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
+                if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
             else
@@ -1461,6 +1470,7 @@ class taskModel extends model
             $this->computeBeginAndEnd($oldTask->parent);
         }
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1719,7 +1729,11 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
+        if($task->status == 'done' && !dao::isError()) 
+        {
+            $this->loadModel('score')->create('task', 'finish', $taskID);
+            $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+        }
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1778,6 +1792,8 @@ class taskModel extends model
             if($oldTask->parent > 0) $this->updateParentStatus($taskID);
             if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
             $this->loadModel('score')->create('task', 'close', $taskID);
+            $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+
             return common::createChanges($oldTask, $task);
         }
     }
@@ -1816,6 +1832,7 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1881,6 +1898,7 @@ class taskModel extends model
             $this->computeWorkingHours($taskID);
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

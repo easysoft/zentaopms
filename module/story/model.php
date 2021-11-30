@@ -280,6 +280,7 @@ class storyModel extends model
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                $this->loadModel('kanban')->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
@@ -1816,6 +1817,8 @@ class storyModel extends model
             $tasks[] = $taskID;
             $this->action->create('task', $taskID, 'Opened', '');
         }
+
+        $this->loadModel('kanban')->updateLane($executionID, 'task');
         return $tasks;
     }
 
@@ -3791,7 +3794,7 @@ class storyModel extends model
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
-                    common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
+                    if($this->app->rawModule != 'projectstory') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
                     if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
                 }
                 else

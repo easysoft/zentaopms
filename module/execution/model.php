@@ -700,14 +700,24 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
+     
+        if($execution->realBegan == '')
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
+            return false;
+        }  
+        if($execution->realBegan > helper::today())
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
-
+        
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -779,6 +789,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->setDefault('realEnd', '')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -848,18 +859,30 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
-            ->setDefault('realEnd', helper::today())
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
+        
+        if($execution->realEnd == '')
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
+            return false;
+        }
+
+        if($execution->realEnd > helper::today())
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->where('id')->eq((int)$executionID)
             ->exec();
+        
         if(!dao::isError())
         {
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
