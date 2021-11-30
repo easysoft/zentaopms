@@ -448,12 +448,24 @@ class story extends control
             }
         }
 
-        /* Set products and module. */
+        /* Set branch and module. */
         $product  = $this->product->getById($productID);
         $products = $this->product->getPairs();
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
-
         if($product) $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
+        if($executionID != 0)
+        {
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
+        $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
@@ -477,8 +489,6 @@ class story extends control
             }
             $this->view->titles = $titles;
         }
-
-        $moduleOptionMenu['ditto'] = $this->lang->story->ditto;
 
         $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, 'skipParent|unexpired');
         $plans['ditto'] = $this->lang->story->ditto;
@@ -516,16 +526,6 @@ class story extends control
         {
             unset($customFields['plan']);
             $showFields = str_replace('plan', '', $showFields);
-        }
-
-        if($executionID != 0)
-        {
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($productID, $executionID) : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-        }
-        else
-        {
-            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         $this->view->customFields = $customFields;
@@ -647,6 +647,7 @@ class story extends control
             if($product->status == 'normal' and !($product->PO == $this->app->user->account)) $othersProducts[$product->id] = $product->name;
             if($product->status == 'closed') continue;
         }
+        $products = $myProducts + $othersProducts;
 
         /* Assign. */
         $story   = $this->story->getById($storyID, 0, true);
@@ -668,9 +669,12 @@ class story extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
             $branches        = isset($productBranches[$story->product]) ? $productBranches[$story->product] : array();
+            $products        = $this->product->getProductPairsByProject($objectID);
+
+            $this->view->objectID = $objectID;
         }
         else
         {
@@ -690,7 +694,7 @@ class story extends control
         $this->view->users            = $users;
         $this->view->product          = $product;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, 'skipParent');
-        $this->view->products         = $myProducts + $othersProducts;
+        $this->view->products         = $products;
         $this->view->branches         = $branches;
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;

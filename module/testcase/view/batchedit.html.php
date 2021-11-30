@@ -69,10 +69,10 @@
           <?php
           if(!isset($cases[$caseID])) continue;
           $caseBranch = isset($cases[$caseID]->branch) ? $cases[$caseID]->branch : 0;
-          if((!$productID and !$cases[$caseID]->lib) or $app->tab != 'qa')
+          if(!$productID and !$cases[$caseID]->lib)
           {
               $caseProductID = $cases[$caseID]->product;
-              $product       = isset($product) ? $product : $products[$caseProductID];
+              $product       = $products[$caseProductID];
               $branches      = isset($branches) ? $branches : array('' => '');
               if($product->type != 'normal')
               {
@@ -103,7 +103,7 @@
             <td class='text-left' style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $product->id;?>
               <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$caseID]",  $branches,   $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+              <?php echo html::select("branches[$caseID]", array('' => '') + $branches, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
             <?php $caseProductID = isset($caseProductID) ? $caseProductID : $productID;?>

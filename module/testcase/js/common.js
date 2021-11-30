@@ -22,8 +22,6 @@ var newRowID = 0;
 function loadAll(productID)
 {
     loadProductBranches(productID)
-    loadProductModules(productID);
-    setStories();
 }
 
 /**
@@ -58,6 +56,9 @@ function loadProductBranches(productID)
             $('#product').closest('.input-group').append(data);
             $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '95px');
         }
+
+        loadProductModules(productID);
+        setStories();
     })
 }
 
@@ -81,7 +82,7 @@ function loadModuleRelated()
  */
 function loadProductModules(productID, branch)
 {
-    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(branch) == 'undefined') branch = $('#branch').val();
     if(!branch) branch = 0;
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     $('#moduleIdBox').load(link, function()
@@ -126,7 +127,7 @@ function setStories()
     branch    = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     link = createLink('story', 'ajaxGetProductStories', 'productID=' + productID + '&branch=' + branch + '&moduleID=' + moduleID + '&storyID=0&onlyOption=false&status=noclosed&limit=50&type=full&hasParent=1&executionID=' + executionID);
-    
+
     $.get(link, function(stories)
     {
         var value = $('#story').val();

@@ -371,6 +371,20 @@ class testcase extends control
             $this->qa->setMenu($this->products, $productID, $branch);
         }
 
+        /* Set branch. */
+        $product = $this->product->getById($productID);
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $objectID        = $this->app->tab == 'project' ? $projectID : $executionID;
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
         /* Init vars. */
         $type         = 'feature';
         $stage        = '';
@@ -456,18 +470,6 @@ class testcase extends control
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customCreateFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
 
-        $product = $this->product->getById($productID);
-        if($this->app->tab == 'execution' or $this->app->tab == 'project')
-        {
-            $objectID        = $this->app->tab == 'project' ? $projectID : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
-        }
-        else
-        {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        }
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->createFields;

@@ -287,4 +287,5 @@
   </form>
 </div>
 <?php js::set('storyType', $story->type);?>
+<?php js::set('executionID', isset($objectID) ? $objectID : 0);?>
 <?php include '../../common/view/footer.html.php';?>

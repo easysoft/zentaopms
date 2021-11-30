@@ -33,11 +33,7 @@ function loadProduct(productID)
     }
 
     oldProductID = $('#product').val();
-
     loadProductBranches(productID)
-    loadProductModules(productID);
-    loadProductPlans(productID);
-    loadProductReviewers(productID);
 }
 
 /**
@@ -65,7 +61,7 @@ function loadProductBranches(productID)
 {
     $('#branch').remove();
     $('#branch_chosen').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=&projectID=" + executionID), function(data)
     {
         var $product = $('#product');
         var $inputGroup = $product.closest('.input-group');
@@ -76,6 +72,9 @@ function loadProductBranches(productID)
             $('#branch').css('width', config.currentMethod == 'create' ? '120px' : '65px').chosen();
         }
         $inputGroup.fixInputGroup();
+
+        loadProductModules(productID, $('#branch').val());
+        loadProductPlans(productID, $('#branch').val());
     })
 }
 
@@ -89,7 +88,7 @@ function loadProductBranches(productID)
  */
 function loadProductModules(productID, branch)
 {
-    if(typeof(branch) == 'undefined') branch = 0;
+    if(typeof(branch) == 'undefined') branch = $('#branch').val();
     if(!branch) branch = 0;
     var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
     var $moduleIDBox = $('#moduleIdBox');
