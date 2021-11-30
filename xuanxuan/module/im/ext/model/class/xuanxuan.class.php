@@ -201,7 +201,33 @@ class xuanxuanIm extends imModel
      */
     public function mergeNotifications($notificationData)
     {
-        // TODO: merge notifications.
+        /* notificationData: array($userID1 => array($notification1, $notification2), $userID2 => array($notification3)) */
+        foreach($notificationData as $userID => $userMessages)
+        {
+            $messageGroups = array();
+            foreach($userMessages as $message)
+            {
+                /* group by $message->content->content->objectType, ...content->actionType, ...content->actor */
+                $actionInfo = json_decode($message->content->content);
+                $messageGroups["$actionInfo->objectType-$actionInfo->actionType-$actionInfo->actor"] = $message;
+            }
+            foreach($messageGroups as $groupKey => $messages)
+            {
+                if(count($messages) < 2) continue;
+
+                $notification = current($messages);
+                array_shift($messages);
+                $notification->content = array($notification->content);
+                foreach($messages as $message) $notification->content[] = $message->content;
+                $messageGroups[$groupKey] = array($message);
+            }
+
+            $mergedMessages = array();
+            $userMessageGroups = array_values($messageGroups);
+            foreach($userMessageGroups as $messageGroup) $mergedMessages = array_merge($mergedMessages, $messageGroup);
+            $notificationData[$userID] = $mergedMessages;
+        }
+
         return $notificationData;
     }
 }
