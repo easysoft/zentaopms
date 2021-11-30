@@ -1041,7 +1041,7 @@ class gitlabModel extends model
         $issue->issue->objectID   = $object->id;
 
         /* Parse markdown description to html. */
-        $issue->issue->description = $this->app->loadClass('hyperdown')->makeHtml($issue->issue->description);
+        $issue->issue->description = commonModel::processMarkdown($issue->issue->description);
 
         if(!isset($this->config->gitlab->maps->{$object->type})) return false;
         $issue->object = $this->issueToZentaoObject($issue->issue, $gitlabID, $body->changes);

@@ -691,7 +691,7 @@ class mailModel extends model
         {
             if($object->contentType == 'markdown')
             {
-                $object->content = $this->app->loadClass('hyperdown')->makeHtml($object->content);
+                $object->content = commonModel::processMarkdown($object->content);
                 $object->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $object->content);
                 $object->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $object->content);
                 $object->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $object->content);
