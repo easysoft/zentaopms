@@ -11,10 +11,40 @@ class xuanxuanMessage extends messageModel
             if(isset($actions[$objectType]) and in_array($actionType, $actions[$objectType]))
             {
                 $this->loadModel('action');
-                $object = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                if($objectType == 'task')
+                {
+                    $field = 'obj.*,project.name as projectName,execu.name as execuName';
+                }
+                else if($objectType == 'story')
+                {
+                    $field = 'obj.*,product.name as productName';
+                }
+                else if($objectType == 'bug')
+                {
+                    $field = 'obj.*,project.name as projectName,product.name as productName,execu.name as execuName';
+                }
+                else
+                {
+                    $field = 'task.*';
+                }
+                $object = $this->dao
+                    ->select($field)
+                    ->from($this->config->objectTables[$objectType])->alias('obj')
+                    ->beginIF($objectType == 'task')
+                    ->leftJoin($this->config->objectTables['project'])->alias('project')->on('project.id = obj.project')
+                    ->leftJoin($this->config->objectTables['execution'])->alias('execu')->on('execu.id = obj.execution')
+                    ->fi()
+                    ->beginIF($objectType == 'story')
+                    ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
+                    ->fi()
+                    ->beginIF($objectType == 'bug')
+                    ->leftJoin($this->config->objectTables['project'])->alias('project')->on('project.id = obj.project')
+                    ->leftJoin($this->config->objectTables['execution'])->alias('execu')->on('execu.id = obj.execution')
+                    ->leftJoin($this->config->objectTables['product'])->alias('product')->on('product.id = obj.product')
+                    ->fi()
+                    ->where('obj.id')->eq($objectID)->fetch();
                 $field  = $this->config->action->objectNameFields[$objectType];
-                $title  = $this->app->user->realname . ' ' . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
-                $text   = $title . ' ' . "[#{$objectID}::{$object->$field}]";
+                $text  = sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
 
                 $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
@@ -29,7 +59,46 @@ class xuanxuanMessage extends messageModel
                 $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->andWhere('account')->ne($this->app->user->account)->fetchAll('id');
                 $target = array_keys($target);
 
-                if($target) $this->loadModel('im')->messageCreateNotify($target, $text, '', '', 'text', $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                $subtitle = '';
+                $content                = array();
+                $content['title']       = $text;
+                $content['subtitle']    = $subtitle;
+                $content['url']         = $url;
+                $content['content']     = '';
+                $content['actions']     = array();
+                $content['sender']      = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender);
+
+                $subcontent         = array();
+                $subcontent['id']   = sprintf('%03d', $object->id);
+                $subcontent['name'] = $object->$field;
+
+                if($objectType == 'task')
+                {
+                    $content['contentType'] = 'zentao-task';
+
+                    $subcontent['headTitle'] = $object->projectName;
+                    $subcontent['headSubTitle']   = $object->execuName;
+                }
+                else if($objectType == 'story')
+                {
+                    $content['contentType'] = 'zentao-story';
+
+                    $subcontent['headTitle'] = $object->productName;
+                }
+                else if($objectType == 'bug')
+                {
+                    $content['contentType'] = 'zentao-bug';
+
+                    $subcontent['headTitle'] = empty($object->productName) ? $object->projectName : $object->productName;
+                    $subcontent['headSubTitle']   = $object->execuName;
+                }
+
+                $content['content'] = json_encode(array($subcontent));
+
+                $content = json_encode($content);
+                $contentType = 'object';
+
+                if($target) $this->loadModel('im')->messageCreateNotify($target, $text, $subtitle, $content, $contentType, $url, array(), array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
                 if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }
