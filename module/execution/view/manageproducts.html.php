@@ -38,7 +38,7 @@
                 <?php echo "<input type='checkbox' name='products[$i]' value='$productID' $checked $attr id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>' title='<?php echo $productName;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID][$branchID], $branchID, "class='form-control chosen' disabled='disabled'");?>
+              <?php if(isset($branchGroups[$productID][$branchID])) echo html::select("branch[$i]", $branchGroups[$productID], $branchID, "class='form-control chosen' disabled='disabled'");?>
             </div>
           </div>
           <?php if(!empty($attr)) echo html::hidden("products[$i]", $productID);?>
