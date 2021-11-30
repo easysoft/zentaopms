@@ -812,7 +812,7 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);;
+        return $this->transformActions($actions);
     }
 
     /**
@@ -1214,6 +1214,11 @@ class actionModel extends model
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
+
+        if($action->objectType == 'story' and $action->action == 'import2storylib')
+        {
+            $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        }
 
         return $action;
     }
