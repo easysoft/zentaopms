@@ -137,7 +137,13 @@ js::set('priv',
         'canLinkStoryByPlane' => $canLinkStoryByPlane,
         'canAssignTask'       => common::hasPriv('task', 'assignto'),
         'canAssignStory'      => common::hasPriv('story', 'assignto'),
-        'canAssignBug'        => common::hasPriv('bug', 'assignto')
+        'canAssignBug'        => common::hasPriv('bug', 'assignto'),
+        'canFinishTask'       => common::hasPriv('task', 'finish'),
+        'canPauseTask'        => common::hasPriv('task', 'pause'),
+        'canCancelTask'       => common::hasPriv('task', 'cancel'),
+        'canCloseTask'        => common::hasPriv('task', 'close'),
+        'canActivateTask'     => common::hasPriv('task', 'activate'),
+        'canStartTask'        => common::hasPriv('task', 'start')
     )
 );
 ?>
@@ -152,4 +158,5 @@ js::set('priv',
 <?php js::set('deadlineLang', $lang->task->deadlineAB);?>
 <?php js::set('noAssigned', $lang->task->noAssigned);?>
 <?php js::set('userList', $userList);?>
+<?php js::set('entertime', time());?>
 <?php include '../../common/view/footer.html.php';?>

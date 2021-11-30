@@ -280,6 +280,7 @@ class storyModel extends model
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                $this->loadModel('kanban')->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
@@ -1816,6 +1817,8 @@ class storyModel extends model
             $tasks[] = $taskID;
             $this->action->create('task', $taskID, 'Opened', '');
         }
+
+        $this->loadModel('kanban')->updateLane($executionID, 'task');
         return $tasks;
     }
 

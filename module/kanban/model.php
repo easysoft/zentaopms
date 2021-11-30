@@ -338,6 +338,24 @@ class kanbanModel extends model
     }
 
     /**
+     * Update kanban lane.
+     * 
+     * @param  int    $executionID 
+     * @param  string $laneType 
+     * @access public
+     * @return void
+     */
+    public function updateLane($executionID, $laneType)
+    {
+        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
+            ->where('execution')->eq($executionID)
+            ->andWhere('type')->eq($laneType)              
+            ->fetchAll('id');
+
+        foreach($lanes as $lane) $this->updateCards($lane);
+    }
+
+    /**
      * Update column cards.
      *
      * @param  object $lane
@@ -448,6 +466,8 @@ class kanbanModel extends model
         {
             $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('type')->eq($colType)->exec();
         }
+
+        $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane->id)->exec();
     }
 
     /**
