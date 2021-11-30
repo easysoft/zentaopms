@@ -470,7 +470,7 @@ class projectrelease extends control
         $this->config->product->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
-        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
+        $this->config->product->search['params']['plan']['values']   = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent');
         $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($release->product, 'story', 0, $release->branch);;
         $this->config->product->search['params']['status'] = array('operator' => '=', 'control' => 'select', 'values' => $this->lang->story->statusList);
         if($release->productType == 'normal')
@@ -589,7 +589,7 @@ class projectrelease extends control
         $this->config->bug->search['actionURL'] = $this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
+        $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent');
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, 'bug', 0, $release->branch);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch, 'id_desc', $release->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
