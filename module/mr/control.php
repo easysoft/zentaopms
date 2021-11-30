@@ -511,13 +511,14 @@ class mr extends control
         $this->config->product->search['params']['module']['values']  = $modules;
         $this->config->product->search['params']['status']            = array('operator' => '=', 'control' => 'select', 'values' => $storyStatusList);
 
-        if($this->session->currentProductType == 'normal')
+        if($product->type == 'normal')
         {
             unset($this->config->product->search['fields']['branch']);
             unset($this->config->product->search['params']['branch']);
         }
         else
         {
+            $this->product->setMenu($productID, 0);
             $this->config->product->search['fields']['branch']           = $this->lang->product->branch;
             $branches                                                    = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
             $this->config->product->search['params']['branch']['values'] = $branches;
@@ -598,7 +599,7 @@ class mr extends control
         }
         else
         {
-            $this->product->setMenu($productID, $branch);
+            $this->product->setMenu($productID, 0);
             $this->config->bug->search['fields']['branch']           = $this->lang->product->branch;
             $branches                                                = array('' => '') + $this->loadModel('branch')->getPairs($productID, 'noempty');
             $this->config->bug->search['params']['branch']['values'] = $branches;
