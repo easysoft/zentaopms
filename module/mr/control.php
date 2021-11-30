@@ -586,7 +586,7 @@ class mr extends control
         $this->config->bug->search['style']                             = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $modules;
-        $this->config->bug->search['params']['project']['values']       = $this->product->getExecutionPairsByProduct($productID);
+        $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch                                                         = 0, $params                                                         = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getProductBuildPairs($productID, $branch                                                         = 0, $params                                                         = '');
 
@@ -665,9 +665,10 @@ class mr extends control
         $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'task');
 
         /* Build search form. */
-        $this->config->execution->search['actionURL']                  = $this->createLink('mr', 'link', "$MRID=$MRID&type=task&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
-        $this->config->execution->search['queryID']                    = $queryID;
-        $this->config->execution->search['params']['module']['values'] = $modules;
+        $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'link', "$MRID=$MRID&type=task&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
+        $this->config->execution->search['queryID']                       = $queryID;
+        $this->config->execution->search['params']['module']['values']    = $modules;
+        $this->config->execution->search['params']['execution']['values'] = $this->product->getExecutionPairsByProduct($productID);
         $this->loadModel('search')->setSearchParams($this->config->execution->search);
 
         $MR           = $this->mr->getByID($MRID);
