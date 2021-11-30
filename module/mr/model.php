@@ -753,7 +753,7 @@ class mrModel extends model
         $rawMR = $this->apiCloseMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         $changes = common::createChanges($MR, $rawMR);
         $this->action->logHistory($actionID, $changes);
-        if(isset($rawMR->state) and $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        if(isset($rawMR->state) and $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
         return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
     }
 
