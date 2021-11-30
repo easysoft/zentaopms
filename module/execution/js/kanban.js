@@ -750,7 +750,7 @@ $(function()
         maxColWidth:     240,
         showCount:       true,
         showZeroCount:   true,
-        fluidBoardWidth: true,
+        fluidBoardWidth: false,
         droppable:
         {
             target:       findDropColumns,
@@ -833,7 +833,7 @@ $(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
         {
-            if(data) 
+            if(data)
             {
                 kanbanGroup = $.parseJSON(data);
                 if(groupBy == 'default')

@@ -381,9 +381,7 @@ function affixKanbanHeader($kanbanBoard, affixed)
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
 
-/**
- * Update kanban affix state for all boards in page
- */
+/** Update kanban affix state for all boards in page */
 function updateKanbanAffixState()
 {
     var $boards           = $('.kanban-board');
@@ -409,17 +407,29 @@ function updateKanbanAffixState()
     if($currentAffixedBoard) affixKanbanHeader($currentAffixedBoard, true);
 }
 
+/** Try to update kanban affix state */
+function tryUpdateKanbanAffix()
+{
+    if(window.updateKanbanAffixTimer) $.zui.clearAsap(window.updateKanbanAffixTimer);
+    window.updateKanbanAffixTimer = $.zui.asap(function()
+    {
+        updateKanbanAffixState();
+        window.updateKanbanAffixTimer = null;
+    });
+}
+
 /* Kanban color list for lane name */
 if(!window.kanbanColorList) window.kanbanColorList = ['#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761'];
 
 /* Set default options to kanban component */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
-    readonly: true,
-    maxColHeight: 260,
-    itemRender: renderKanbanItem,
-    showCount: true,
-    showZeroCount: true,
+    readonly:        true,
+    maxColHeight:    260,
+    itemRender:      renderKanbanItem,
+    showCount:       true,
+    showZeroCount:   true,
+    fluidBoardWidth: true,
     onRenderLaneName: function($name, lane, $kanban, columns, kanban)
     {
         var color = kanbanColorList[lane.$index % kanbanColorList.length];
@@ -442,29 +452,13 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     },
     onCreate: function(kanban)
     {
-        kanban.$.on('scroll', updateKanbanAffixState);
-        updateKanbanAffixState();
+        kanban.$.on('scroll', tryUpdateKanbanAffix);
+        tryUpdateKanbanAffix();
     }
 });
 
 $(function()
 {
-    /* Update kanban affix state on window resize or scroll */
-    var updateTimer;
-    var updateCallback = function()
-    {
-        updateKanbanAffixState();
-        updateTimer = null;
-    };
-    $(window.kanbanAffixContainer || window).on('scroll resize', function(e)
-    {
-        if(updateTimer)
-        {
-            if(window.requestAnimationFrame) cancelAnimationFrame(updateTimer);
-            else clearTimeout(updateTimer);
-        }
-        if(window.requestAnimationFrame) updateTimer = requestAnimationFrame(updateCallback);
-        else updateTimer = setTimeout(updateCallback, 50);
-    });
+    $(window.kanbanAffixContainer || window).on('scroll resize', tryUpdateKanbanAffix);
 });
 </script>
