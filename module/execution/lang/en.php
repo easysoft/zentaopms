@@ -31,10 +31,10 @@ $lang->execution->canceledDate     = 'CanceledDate';
 $lang->execution->begin            = 'Begin';
 $lang->execution->end              = 'End';
 $lang->execution->dateRange        = 'Duration';
+$lang->execution->realBeganAB      = 'Actual Begin';
+$lang->execution->realEndAB        = 'Actual End';
 $lang->execution->realBegan        = 'Actual Begin';
-$lang->execution->realBeganDate    = 'Actual Begin';
 $lang->execution->realEnd          = 'Actual End';
-$lang->execution->realEndDate      = 'Actual End';
 $lang->execution->to               = 'To';
 $lang->execution->days             = ' Days';
 $lang->execution->day              = ' Days';
@@ -353,10 +353,10 @@ $lang->execution->unfinishedExecution         = "This {$lang->executionCommon} h
 $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
-$lang->execution->realBeganNotEmpty           = 'Actual begin should not be empty.';
-$lang->execution->realBeganNotFuture          = 'Actual begin should not be a future date.';
-$lang->execution->realEndNotEmpty             = 'Actual end should not be empty.';
-$lang->execution->realEndNotFuture            = 'Actual end should not be a future date.';
+$lang->execution->realBeganNotEmpty           = 'Actual Begin should not be empty.';
+$lang->execution->realBeganNotFuture          = 'Actual Begin should be < = today.';
+$lang->execution->realEndNotEmpty             = 'Actual End should not be empty.';
+$lang->execution->realEndNotFuture            = 'Actual End should be < = today.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

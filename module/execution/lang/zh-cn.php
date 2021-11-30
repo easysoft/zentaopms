@@ -31,10 +31,10 @@ $lang->execution->canceledDate     = '取消日期';
 $lang->execution->begin            = '计划开始';
 $lang->execution->end              = '计划完成';
 $lang->execution->dateRange        = '起始日期';
-$lang->execution->realBegan        = '实际开始';
-$lang->execution->realEnd          = '实际完成';
-$lang->execution->realBeganDate    = '实际开始日期';
-$lang->execution->realEndDate      = '实际完成日期';
+$lang->execution->realBeganAB      = '实际开始';
+$lang->execution->realEndAB        = '实际完成';
+$lang->execution->realBegan        = '实际开始日期';
+$lang->execution->realEnd          = '实际完成日期';
 $lang->execution->to               = '至';
 $lang->execution->days             = '可用工作日';
 $lang->execution->day              = '天';
@@ -354,9 +354,9 @@ $lang->execution->unfinishedTask              = "[%s]个未完成的任务，";
 $lang->execution->unresolvedBug               = "[%s]个未解决的bug，";
 $lang->execution->projectNotEmpty             = '所属项目不能为空。';
 $lang->execution->realBeganNotEmpty           = "实际开始不能为空。";
-$lang->execution->realBeganNotFuture          = "实际开始不能为未来日期。";
+$lang->execution->realBeganNotFuture          = "实际开始不能大于当前日期。";
 $lang->execution->realEndNotEmpty             = "实际完成不能为空。";
-$lang->execution->realEndNotFuture            = "实际完成不能为未来日期。";
+$lang->execution->realEndNotFuture            = "实际完成不能大于当前日期。";
 
 
 /* 统计。*/

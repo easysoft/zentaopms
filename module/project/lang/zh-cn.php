@@ -108,10 +108,10 @@ $lang->project->surplus            = '剩余';
 $lang->project->progress           = '进度';
 $lang->project->dateRange          = '起止日期';
 $lang->project->to                 = '至';
-$lang->project->realEnd            = '实际完成';
-$lang->project->realBegan          = '实际开始';
-$lang->project->realEndDate        = '实际完成日期';
-$lang->project->realBeganDate      = '实际开始日期';
+$lang->project->realBeganAB        = '实际开始';
+$lang->project->realEndAB          = '实际完成';
+$lang->project->realBegan          = '实际开始日期';
+$lang->project->realEnd            = '实际完成日期';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->bycard             = '卡片';
@@ -180,7 +180,7 @@ $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->exe
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
 
 $lang->project->realEndNotEmpty        = "实际完成不能为空。";
-$lang->project->realEndNotFuture       = "实际完成不能为未来日期。";
+$lang->project->realEndNotFuture       = "实际完成不能大于当前日期。";
 
 $lang->project->tenThousand = '万';
 

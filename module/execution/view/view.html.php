@@ -238,13 +238,13 @@
                     <tr>
                       <th><?php echo $lang->execution->begin;?></th>
                       <td><?php echo $execution->begin;?></td>
-                      <th><?php echo $lang->execution->realBegan;?></th>
+                      <th><?php echo $lang->execution->realBeganAB;?></th>
                       <td><?php echo $execution->realBegan == '0000-00-00' ? '' : $execution->realBegan;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->end;?></th>
                       <td><?php echo $execution->end;?></td>
-                      <th><?php echo $lang->execution->realEnd;?></th>
+                      <th><?php echo $lang->execution->realEndAB;?></th>
                       <td><?php echo $execution->realEnd == '0000-00-00' ? '' : $execution->realEnd;?></td>
                     </tr>
                     <tr>

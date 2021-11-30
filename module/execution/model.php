@@ -704,25 +704,21 @@ class executionModel extends model
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
+     
+        if($execution->realBegan == '')
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
+            return false;
+        }  
+        if($execution->realBegan > $now)
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
         
-        if(!dao::isError())
-        {
-            if($execution->realBegan == '')
-            {
-                dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
-                return false;
-            }
-
-            if($execution->realBegan > $now)
-            {
-                dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
-                return false;
-            }
-
-            return common::createChanges($oldExecution, $execution);
-        }
+        if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
     /**
@@ -869,25 +865,26 @@ class executionModel extends model
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
+        
+        if($execution->realEnd == '')
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
+            return false;
+        }
+
+        if($execution->realEnd > $now)
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->where('id')->eq((int)$executionID)
             ->exec();
+        
         if(!dao::isError())
-        {
-            if($execution->realEnd == '')
-            {
-                dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
-                return false;
-            }
-
-            if($execution->realEnd > $now)
-            {
-                dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
-                return false;
-            }
-
+        {         
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
             return common::createChanges($oldExecution, $execution);
         }

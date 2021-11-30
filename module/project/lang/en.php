@@ -108,10 +108,10 @@ $lang->project->surplus            = 'Left';
 $lang->project->progress           = 'Progress';
 $lang->project->dateRange          = 'Duration';
 $lang->project->to                 = ' to ';
-$lang->project->realEnd            = 'Actual End';
+$lang->project->realBeganAB        = 'Actual Begin';
+$lang->project->realEndAB          = 'Actual End';
 $lang->project->realBegan          = 'Actual Begin';
-$lang->project->realEndDate        = 'Actual End';
-$lang->project->realBeganDate      = 'Actual Begin';
+$lang->project->realEnd            = 'Actual End';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -180,7 +180,7 @@ $lang->project->unlinkExecutionMember  = "The user participated in %s executions
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
 
 $lang->project->realEndNotEmpty  = 'Actual End should not be empty.';
-$lang->project->realEndNotFuture = 'Actual End should not be a future date.';
+$lang->project->realEndNotFuture = 'Actual End should be < = today.';
 
 $lang->project->tenThousand = '';
 

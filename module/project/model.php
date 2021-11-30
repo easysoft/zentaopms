@@ -1283,24 +1283,24 @@ class projectModel extends model
             ->remove('comment')
             ->get();
 
+        if($project->realEnd == '')
+        {
+            dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
+            return false;
+        }
+        if($project->realEnd > $now)
+        {
+            dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
+            return false;
+        }
+
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->where('id')->eq((int)$projectID)
             ->exec();
+
         if(!dao::isError())
-        {
-            if($project->realEnd == '')
-            {
-                dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
-                return false;
-            }
-
-            if($project->realEnd > $now)
-            {
-                dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
-                return false;
-            }
-
+        {            
             $this->loadModel('score')->create('project', 'close', $oldProject);
             return common::createChanges($oldProject, $project);
         }
