@@ -290,7 +290,7 @@ class company extends control
         $this->view->userID       = $userID;
         $this->view->param        = $param;
         $this->view->browseType   = $browseType;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType);
+        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
         $this->view->direction    = $direction;
         $this->display();
     }

@@ -1170,7 +1170,6 @@ class actionModel extends model
                     $libObjectID = trim($libObjectID, ',');
                     if(empty($libObjectID) and $type != 'custom') return false;
 
-                    $vars   = substr($vars,0,strpos($vars,'&docID'));
                     $params = sprintf($vars, $type, $libObjectID, $libID);
                 }
                 elseif($action->objectType == 'api')
@@ -1428,7 +1427,7 @@ class actionModel extends model
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next', $type = 'today')
+    public function buildDateGroup($actions, $direction = 'next', $type = 'today', $orderBy = 'date_desc')
     {
         $dateGroup = array();
         foreach($actions as $action)
@@ -1456,7 +1455,20 @@ class actionModel extends model
             }
         }
 
-        if($direction != 'next') $dateGroup = array_reverse($dateGroup);
+        if($this->app->rawModule != 'company' and $direction != 'next')
+        {
+            $dateGroup = array_reverse($dateGroup);
+        }
+        else if($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
+        {
+            $dateGroup = array_reverse($dateGroup);
+            foreach($dateGroup as $key => $dateItem)
+            {
+                $dateGroup[$key] = array_reverse($dateItem);
+            }
+
+        }
+
         return $dateGroup;
     }
 
