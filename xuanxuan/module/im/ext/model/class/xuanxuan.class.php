@@ -209,7 +209,7 @@ class xuanxuanIm extends imModel
             {
                 /* group by $message->content->content->objectType, ...content->actionType, ...content->actor */
                 $actionInfo = json_decode($message->content->content);
-                $messageGroups["$actionInfo->objectType-$actionInfo->actionType-$actionInfo->actor"] = $message;
+                $messageGroups["$actionInfo->objectType-$actionInfo->actionType-$actionInfo->actor"][] = $message;
             }
             foreach($messageGroups as $groupKey => $messages)
             {
