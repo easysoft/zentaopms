@@ -221,7 +221,7 @@ class execution extends control
         if(empty($productID))
         {
             $productModule = $this->tree->getById($moduleID);
-            $product       = $this->product->getById((!empty($productModule) ? $productModule->root : 0));
+            if(!empty($productModule) and $productModule->type != 'task') $product = $this->product->getById($productModule->root);
         }
         if(!empty($product) and $product->type != 'normal')
         {
