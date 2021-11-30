@@ -965,7 +965,7 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->productName      = $this->products[$productID];
-        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch);
+        $this->view->plans            = $this->loadModel('productplan')->getPairs($productID, $bug->branch, '', true);
         $this->view->projects         = array(0 => '') + $this->product->getProjectPairsByProduct($productID, $bug->branch, $bug->project);
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
         $this->view->currentModuleID  = $currentModuleID;
@@ -1036,7 +1036,7 @@ class bug extends control
             $branchProduct = $product->type == 'normal' ? false : true;
 
             /* Set plans. */
-            $plans = $this->loadModel('productplan')->getPairs($productID, $branch);
+            $plans = $this->loadModel('productplan')->getPairs($productID, $branch, '', true);
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set branches and modules. */
