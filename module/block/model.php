@@ -173,7 +173,7 @@ class blockModel extends model
             ->andWhere('t2.status')->ne('suspended')
             ->andWhere('t3.status')->ne('suspended')
             ->andWhere('t2.type')->eq('project')
-            ->andWhere('t3.type')->eq('sprint')
+            ->andWhere('t3.type')->in('sprint,stage')
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t3.deleted')->eq(0)
