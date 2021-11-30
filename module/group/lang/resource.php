@@ -1204,6 +1204,7 @@ $lang->resource->mr->unlink    = 'unlink';
 $lang->resource->mr->approval  = 'approval';
 $lang->resource->mr->close     = 'close';
 $lang->resource->mr->reopen    = 'reopen';
+$lang->resource->mr->addBug    = 'addBug';
 
 $lang->mr->methodOrder[10] = 'create';
 $lang->mr->methodOrder[15] = 'browse';
@@ -1219,7 +1220,8 @@ $lang->mr->methodOrder[70] = 'linkTask';
 $lang->mr->methodOrder[75] = 'unlink';
 $lang->mr->methodOrder[80] = 'approval';
 $lang->mr->methodOrder[85] = 'close';
-$lang->mr->methodOrder[85] = 'reopen';
+$lang->mr->methodOrder[90] = 'reopen';
+$lang->mr->methodOrder[95] = 'addBug';
 
 /* Git. */
 $lang->resource->git = new stdclass();
