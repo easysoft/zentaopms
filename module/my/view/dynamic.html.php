@@ -70,14 +70,7 @@
               }
               else
               {
-                  if($action->objectType == 'story' and $action->action == 'import2storylib')
-                  {
-                      echo html::a(helper::createLink('assetlib', 'storyView', "storyID=$action->objectID"), $action->objectName, '', $tab);
-                  }
-                  else
-                  {
-                      echo html::a($action->objectLink, $action->objectName, '', $tab);
-                  }
+                  echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
               <span class="label label-id"><?php echo $action->objectID;?></span>
