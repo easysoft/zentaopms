@@ -1,4 +1,5 @@
-Alter table zt_mr ADD `approvalStatus` char(30) NOT NULL,
+ALTER table zt_mr ADD `approver` varchar(255) NOT NULL,
+ADD `approvalStatus` char(30) NOT NULL,
 ADD `needApproved` enum('0','1') NOT NULL DEFAULT '0',
 ADD `needCI` enum('0','1') NOT NULL DEFAULT '0',
 ADD `repoID` mediumint(8) unsigned NOT NULL,
