@@ -1424,10 +1424,11 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $orderBy date_desc|date_asc
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next', $type = 'today')
+    public function buildDateGroup($actions, $direction = 'next', $type = 'today', $orderBy = 'date_desc')
     {
         $dateGroup = array();
         foreach($actions as $action)
@@ -1455,7 +1456,17 @@ class actionModel extends model
             }
         }
 
-        if($direction != 'next') $dateGroup = array_reverse($dateGroup);
+        /* Modify date to the corrret order. */
+        if($this->app->rawModule != 'company' and $direction != 'next')
+        {
+            $dateGroup = array_reverse($dateGroup);
+        }
+        elseif($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
+        {
+            $dateGroup = array_reverse($dateGroup);
+            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+        }
+
         return $dateGroup;
     }
 

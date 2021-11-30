@@ -133,7 +133,7 @@ $lang->repo->scmList['Subversion'] = 'SVN';
 
 $lang->repo->gitlabHost    = 'Gitlab Host';
 $lang->repo->gitlabToken   = 'Gitlab Token';
-$lang->repo->gitlabProject = 'Projects';
+$lang->repo->gitlabProject = 'Project';
 
 $lang->repo->placeholder = new stdclass;
 $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
