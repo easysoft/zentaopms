@@ -19,6 +19,7 @@ $lang->gitlab->binded            = 'Binded';
 $lang->gitlab->serverFail        = 'Connect to GitLab server failed, please check the GitLab server.';
 $lang->gitlab->lastUpdate        = 'Last Update';
 $lang->gitlab->confirmAddWebhook = 'Are you sure about creating Webhook？';
+$lang->gitlab->addWebhookSuccess = 'Webhook created successfully';
 $lang->gitlab->failCreateWebhook = 'Failed to create Webhook, please view the log';
 $lang->gitlab->placeholderSearch = 'Project name';
 
@@ -42,6 +43,7 @@ $lang->gitlab->createUser           = 'Create user';
 $lang->gitlab->editUser             = 'Edit user';
 $lang->gitlab->deleteUser           = 'Delete user';
 $lang->gitlab->manageGroupMembers   = 'Manage group member';
+$lang->gitlab->createWebhook        = 'Create Webhook';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "GitLab Name";

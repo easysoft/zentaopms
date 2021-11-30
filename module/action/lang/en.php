@@ -286,6 +286,8 @@ $lang->action->label->updatetrainee         = 'Update Trainee';
 $lang->action->label->createmr              = 'MR Linked';
 $lang->action->label->mergedmr              = 'MR Merged';
 $lang->action->label->reopen                = 'Reopen';
+$lang->action->label->approve               = 'Passed';
+$lang->action->label->reject                = 'Rejected';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
