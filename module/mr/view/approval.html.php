@@ -12,12 +12,13 @@
 ?>
 <?php include '../../common/view/header.html.php'; ?>
 <?php include '../../common/view/kindeditor.html.php'; ?>
+<style>.main-header .label {top: 6px;}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
       <span class='label label-id'><?php echo $MR->id; ?></span>
       <h2>
-        <?php echo isonlybody() ? ("<span title='$MR->title'>" . $MR->title . '</span>') : html::a($this->createLink('mr', 'view', 'MR=' . $MR->id), $MR->title); ?>
+        <?php echo isonlybody() ? ("<span title='$MR->title'>" . $MR->title . ' - ' . zget($lang->mr->approvalResultList, $action) . '</span>') : html::a($this->createLink('mr', 'view', 'MR=' . $MR->id), $MR->title); ?>
         <?php if(!isonlybody()): ?>
           <small><?php echo $lang->arrow . $lang->mr->approval; ?></small>
         <?php endif; ?>
@@ -40,16 +41,6 @@
             <?php echo html::select('assignedTo', $users, $MR->createdBy, "class='form-control chosen'"); ?>
           </td>
           <td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->mr->approvalResult; ?></th>
-          <td>
-            <div class='input-group'>
-              <?php $oldStatus = 'approve'; ?>
-              <?php if(!empty($MR->approvalStatus)) $oldStatus = $MR->approvalStatus == 'rejected' ? 'reject' : 'approve'; ?>
-              <?php echo html::radio('approveResult', $options = $lang->mr->approvalResultList, $checked = $oldStatus); ?>
-            </div>
-          </td>
         </tr>
         <tr>
           <th><?php echo $lang->comment; ?></th>

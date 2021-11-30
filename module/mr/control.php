@@ -370,10 +370,8 @@ class mr extends control
 
         if($_POST)
         {
-            $action  = $this->post->approveResult;
             $comment = $this->post->comment;
-            // $assignedTo = $this->post->assignedTo; /* Message to it. */
-            $result = $this->mr->approve($MR, $action, $comment);
+            $result  = $this->mr->approve($MR, $action, $comment);
             return $this->send($result);
         }
 

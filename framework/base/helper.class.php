@@ -743,10 +743,10 @@ class baseHelper
  * @param  string        $viewType
  * @return string the link string.
  */
-function inLink($methodName = 'index', $vars = '', $viewType = '')
+function inLink($methodName = 'index', $vars = '', $viewType = '', $onlybody = false)
 {
     global $app;
-    return helper::createLink($app->getModuleName(), $methodName, $vars, $viewType);
+    return helper::createLink($app->getModuleName(), $methodName, $vars, $viewType, $onlybody);
 }
 
 /**
