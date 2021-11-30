@@ -62,6 +62,9 @@
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="scrollContent">
+<?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
@@ -181,7 +184,9 @@
       <?php endif;?>
     </div>
     <?php $this->printExtendFields($story, 'div', "position=left&inForm=0&inCell=1");?>
+    <?php if($this->app->getViewType() != 'xhtml'):?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -348,6 +353,16 @@
                   <th><?php echo $lang->story->estimate;?></th>
                   <td title="<?php echo $story->estimate . ' ' . $lang->hourCommon;?>"><?php echo $story->estimate . $config->hourUnit;?></td>
                 </tr>
+                <?php if(in_array($story->source, $config->story->feedbackSource)):?>
+                <tr>
+                  <th><?php echo $lang->story->feedbackBy;?></th>
+                  <td><?php echo $story->feedbackBy;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->notifyEmail;?></th>
+                  <td><?php echo $story->notifyEmail;?></td>
+                </tr>
+                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->keywords;?></th>
                   <td><?php echo $story->keywords;?></td>
@@ -521,6 +536,9 @@
     <?php $this->printExtendFields($story, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+</div>
+<?php endif;?>
 
 <div class="modal fade" id="importToLib">
   <div class="modal-dialog mw-500px">

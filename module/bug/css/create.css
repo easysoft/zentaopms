@@ -46,3 +46,4 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 #osBox {width: 190px;}
 #projectBox .required:after {right: 1px;}
 #branch_chosen {min-width: 90px;}
+#notifyEmailTd .input-group-addon, #deadlineTd .input-group-addon {border-radius: 2px 0px 2px 0px !important;}

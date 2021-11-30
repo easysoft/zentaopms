@@ -37,6 +37,9 @@
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="scrollContent">
+<?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
@@ -65,7 +68,9 @@
       ?>
     </div>
     <?php $this->printExtendFields($bug, 'div', "position=left&inForm=0&inCell=1");?>
-    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
+    <?php if($this->app->getViewType() != 'xhtml'):?>
+    <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
     <?php
     $params        = "bugID=$bug->id";
     $extraParams   = "extras=bugID=$bug->id";
@@ -88,7 +93,7 @@
 
         if($this->app->tab != 'product')
         {
-            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='product'", $lang->bug->toStory);
+            common::printIcon('bug', 'toStory', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", $bug, 'button', $lang->icons['story'], '', '', '', "data-app='" . $this->app->tab . "'", $lang->bug->toStory);
             common::printIcon('bug', 'createCase', $convertParams, $bug, 'button', 'sitemap');
         }
 
@@ -224,6 +229,14 @@
                   </td>
                 </tr>
                 <tr>
+                  <th><?php echo $lang->bug->feedbackBy;?></th>
+                  <td><?php echo $bug->feedbackBy;?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->notifyEmail;?></th>
+                  <td><?php echo $bug->notifyEmail;?></td>
+                </tr>
+                <tr>
                   <th><?php echo $lang->bug->os;?></th>
                   <td><?php echo $lang->bug->osList[$bug->os];?></td>
                 </tr>
@@ -300,7 +313,11 @@
                     if($bug->openedBuild)
                     {
                         $openedBuilds = explode(',', $bug->openedBuild);
-                        foreach($openedBuilds as $openedBuild) isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+                        foreach($openedBuilds as $openedBuild)
+                        {
+                            if(!$openedBuild) continue;
+                            isset($builds[$openedBuild]) ? print($builds[$openedBuild] . '<br />') : print($openedBuild . '<br />');
+                        }
                     }
                     else
                     {
@@ -394,6 +411,9 @@
     <?php $this->printExtendFields($bug, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+</div>
+<?php endif;?>
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>

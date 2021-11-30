@@ -1,0 +1,12 @@
+.main-content{padding: 0;}
+.actions{display: none;}
+#mainMenu{display: none;}
+#main {min-width: unset;}
+.pager-size-menu{display: none;}
+.table-footer{position: fixed; width: 100%; bottom: 0;}
+.tab-btn-container{width: 100%; background-color: #f2f2f2;}
+.tab-btn-container ul{display: flex; justify-content: center;}
+.tab-btn-container ul li{list-style: none;}
+.plan-title{position: absolute; top: 0; left: 0; padding: 8px 15px; font-weight: bolder;}
+.tab-btn-container ul li span{display: none;}
+.tab-btn-container ul li.active span{display: inline-block;}

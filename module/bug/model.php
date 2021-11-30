@@ -85,7 +85,12 @@ class bugModel extends model
         /* Use classic mode to replace required project. */
         if($this->config->systemMode == 'classic' and strpos($this->config->bug->create->requiredFields, 'project') !== false) $this->config->bug->create->requiredFields = str_replace('project', 'execution', $this->config->bug->create->requiredFields);
 
-        $this->dao->insert(TABLE_BUG)->data($bug)->autoCheck()->batchCheck($this->config->bug->create->requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_BUG)->data($bug)
+            ->autoCheck()
+            ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
+            ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
+            ->exec();
+
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
@@ -93,6 +98,8 @@ class bugModel extends model
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
             $this->file->saveUpload('bug', $bugID);
             empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
+
+            if($bug->execution) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
             /* Callback the callable method to process the related data for object that is transfered to bug. */
             if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
@@ -249,6 +256,7 @@ class bugModel extends model
             $bugID = $this->dao->lastInsertID();
 
             $this->executeHooks($bugID);
+            if($bug->execution) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
             /* When the bug is created by uploading the image, add the image to the file of the bug. */
             $this->loadModel('score')->create('bug', 'create', $bugID);
@@ -661,6 +669,7 @@ class bugModel extends model
             ->batchCheck($this->config->bug->edit->requiredFields, 'notempty')
             ->checkIF($bug->resolvedBy, 'resolution',  'notempty')
             ->checkIF($bug->closedBy,   'resolution',  'notempty')
+            ->checkIF($bug->notifyEmail, 'notifyEmail', 'email')
             ->checkIF($bug->resolution == 'duplicate', 'duplicateBug', 'notempty')
             ->checkIF($bug->resolution == 'fixed',     'resolvedBuild','notempty')
             ->where('id')->eq((int)$bugID)
@@ -677,6 +686,8 @@ class bugModel extends model
 
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
+
+            if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
             return common::createChanges($oldBug, $bug);
         }
@@ -917,6 +928,7 @@ class bugModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'confirmBug', $oldBug);
+            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
             return common::createChanges($oldBug, $bug);
         }
     }
@@ -1029,6 +1041,7 @@ class bugModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'resolve', $oldBug);
+            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
 
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
@@ -1089,6 +1102,35 @@ class bugModel extends model
             $bug->lastEditedBy   = $this->app->user->account;
             $bug->lastEditedDate = $now;
             $bug->module         = $moduleID;
+
+            $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+            if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
+        }
+        return $allChanges;
+    }
+
+    /**
+     * Batch change the plan of bug.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $planID
+     * @access public
+     * @return array
+     */
+    public function batchChangePlan($bugIDList, $planID)
+    {
+        $now        = helper::now();
+        $allChanges = array();
+        $oldBugs    = $this->getByList($bugIDList);
+        foreach($bugIDList as $bugID)
+        {
+            $oldBug = $oldBugs[$bugID];
+            if($planID == $oldBug->plan) continue;
+
+            $bug = new stdclass();
+            $bug->lastEditedBy   = $this->app->user->account;
+            $bug->lastEditedDate = $now;
+            $bug->plan           = $planID;
 
             $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(!dao::isError()) $allChanges[$bugID] = common::createChanges($oldBug, $bug);
@@ -1161,6 +1203,7 @@ class bugModel extends model
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
             $this->executeHooks($bugID);
 
+            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
             $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
 
@@ -1218,6 +1261,7 @@ class bugModel extends model
             $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$solveBuild)->exec();
         }
 
+        if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
         $bug->activatedCount += 1;
         return common::createChanges($oldBug, $bug);
     }
@@ -1246,6 +1290,7 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
 
         return common::createChanges($oldBug, $bug);
     }
@@ -1583,7 +1628,9 @@ class bugModel extends model
                 ->beginIF($type == 'noclosed')->andWhere('status')->ne('closed')->fi()
                 ->beginIF($build)->andWhere("CONCAT(',', openedBuild, ',') like '%,$build,%'")->fi()
                 ->beginIF($excludeBugs)->andWhere('id')->notIN($excludeBugs)->fi()
-                ->orderBy($orderBy)->page($pager)->fetchAll();
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
         }
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug');

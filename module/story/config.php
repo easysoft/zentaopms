@@ -5,6 +5,7 @@ $config->story->batchCreate      = 10;
 $config->story->affectedFixedNum = 7;
 $config->story->needReview       = 1;
 $config->story->removeFields     = 'objectTypeList,productList,executionList,execution';
+$config->story->feedbackSource   = array('customer', 'user', 'market', 'service', 'operation', 'support', 'forum');
 
 $config->story->batchClose = new stdclass();
 $config->story->batchClose->columns = 10;
@@ -164,6 +165,16 @@ $config->story->datatable->fieldList['lastEditedDate']['title']    = 'lastEdited
 $config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
 $config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
+
+$config->story->datatable->fieldList['feedbackBy']['title']    = 'feedbackBy';
+$config->story->datatable->fieldList['feedbackBy']['fixed']    = 'no';
+$config->story->datatable->fieldList['feedbackBy']['width']    = '100';
+$config->story->datatable->fieldList['feedbackBy']['required'] = 'no';
+
+$config->story->datatable->fieldList['notifyEmail']['title']    = 'notifyEmail';
+$config->story->datatable->fieldList['notifyEmail']['fixed']    = 'no';
+$config->story->datatable->fieldList['notifyEmail']['width']    = '100';
+$config->story->datatable->fieldList['notifyEmail']['required'] = 'no';
 
 $config->story->datatable->fieldList['mailto']['title']    = 'mailto';
 $config->story->datatable->fieldList['mailto']['fixed']    = 'no';

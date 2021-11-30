@@ -69,7 +69,16 @@
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
-          <?php echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");?>
+          <?php
+          if($execution->type != 'stage')
+          {
+              echo html::select('lifetime', $lang->execution->lifeTimeList, $execution->lifetime, "class='form-control' onchange='showLifeTimeTips()'");
+          }
+          else
+          {
+              echo html::select('attribute', $lang->stage->typeList, $execution->attribute, "class='chosen form-control'");
+          }
+          ?>
           </td>
         </tr>
         <tr>
@@ -109,6 +118,17 @@
             </div>
           </td>
         </tr>
+        <?php if($execution->type == 'stage'):?>
+        <tr>
+          <th><?php echo $lang->stage->percent;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('percent', $execution->percent, "class='form-control'");?>
+              <span class='input-group-addon'>%</span>
+            </div>
+          </td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->execution->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="2">

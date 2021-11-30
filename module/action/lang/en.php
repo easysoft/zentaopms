@@ -369,6 +369,10 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->execu
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
+$lang->action->dynamicAction->kanbancolumn['edited'] = 'Column Settings';
+$lang->action->dynamicAction->kanbanlane['edited']   = 'Swimlane Settings';
+$lang->action->dynamicAction->kanbanlane['moved']    = 'Move Swimlane';
+
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']              = 'Create Task';
@@ -500,27 +504,28 @@ else
 {
     $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
 }
-$lang->action->label->task        = 'Task|task|view|taskID=%s';
-$lang->action->label->build       = 'Build|build|view|buildID=%s';
-$lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
-$lang->action->label->case        = 'Case|testcase|view|caseID=%s';
-$lang->action->label->testtask    = 'Request|testtask|view|caseID=%s';
-$lang->action->label->testsuite   = 'Test Suite|testsuite|view|suiteID=%s';
-$lang->action->label->caselib     = 'Case Library|caselib|view|libID=%s';
-$lang->action->label->todo        = 'Todo|todo|view|todoID=%s';
-$lang->action->label->doclib      = 'Doc Library|doc|objectLibs|type=%s&objectID=%s&libID=%s&docID=&version=&appendLib=%s';
-$lang->action->label->doc         = 'Doc|doc|view|docID=%s';
-$lang->action->label->user        = 'User|user|view|account=%s';
-$lang->action->label->testreport  = 'Report|testreport|view|report=%s';
-$lang->action->label->entry       = 'Application|entry|browse|';
-$lang->action->label->webhook     = 'Webhook|webhook|browse|';
-$lang->action->label->space       = ' ';
-$lang->action->label->risk        = 'Risk|risk|view|riskID=%s';
-$lang->action->label->issue       = 'Issue|issue|view|issueID=%s';
-$lang->action->label->design      = 'Design|design|view|designID=%s';
-$lang->action->label->stakeholder = 'Stakeholder|stakeholder|view|userID=%s';
-$lang->action->label->api         = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->branch      = 'Branch|branch|manage|prouctID=%s&browseType=all';
+$lang->action->label->task         = 'Task|task|view|taskID=%s';
+$lang->action->label->build        = 'Build|build|view|buildID=%s';
+$lang->action->label->bug          = 'Bug|bug|view|bugID=%s';
+$lang->action->label->case         = 'Case|testcase|view|caseID=%s';
+$lang->action->label->testtask     = 'Request|testtask|view|caseID=%s';
+$lang->action->label->testsuite    = 'Test Suite|testsuite|view|suiteID=%s';
+$lang->action->label->caselib      = 'Case Library|caselib|view|libID=%s';
+$lang->action->label->todo         = 'Todo|todo|view|todoID=%s';
+$lang->action->label->doclib       = 'Doc Library|doc|objectLibs|type=%s&objectID=%s&libID=%s';
+$lang->action->label->doc          = 'Doc|doc|view|docID=%s';
+$lang->action->label->user         = 'User|user|view|account=%s';
+$lang->action->label->testreport   = 'Report|testreport|view|report=%s';
+$lang->action->label->entry        = 'Application|entry|browse|';
+$lang->action->label->webhook      = 'Webhook|webhook|browse|';
+$lang->action->label->space        = ' ';
+$lang->action->label->risk         = 'Risk|risk|view|riskID=%s';
+$lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
+$lang->action->label->design       = 'Design|design|view|designID=%s';
+$lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
+$lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->kanbancolumn = 'Kanban column|execution|kanban|execution=%s';
+$lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

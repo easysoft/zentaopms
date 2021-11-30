@@ -515,8 +515,7 @@ class todoModel extends model
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
-            ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
-            ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
+            ->andWhere('assignedTo', true)->eq($account)
             ->orWhere('finishedBy')->eq($account)
             ->markRight(1)
             ->beginIF($begin)->andWhere('date')->ge($begin)->fi()

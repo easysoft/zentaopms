@@ -25,7 +25,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <?php $createTitle = isset($this->config->maxVersion) ? $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '') : $lang->project->create;?>
+      <?php $createTitle = $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '');?>
       <h2><?php echo $createTitle;?></h2>
       <?php if(!commonModel::isTutorialMode()): ?>
       <div class="pull-right btn-toolbar">

@@ -109,8 +109,10 @@ $lang->project->surplus            = '剩余';
 $lang->project->progress           = '进度';
 $lang->project->dateRange          = '起止日期';
 $lang->project->to                 = '至';
-$lang->project->realEnd            = '实际完成日期';
+$lang->project->realBeganAB        = '实际开始';
+$lang->project->realEndAB          = '实际完成';
 $lang->project->realBegan          = '实际开始日期';
+$lang->project->realEnd            = '实际完成日期';
 $lang->project->bygrid             = '看板';
 $lang->project->bylist             = '列表';
 $lang->project->bycard             = '卡片';
@@ -162,7 +164,7 @@ $lang->project->typeList['other'] = '其他项目';
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
 $lang->project->doingExecutions = '进行中的执行';
-$lang->project->closedProjects  = '已关闭的项目';
+$lang->project->closedProjects  = '已关闭的项目(最近2个)';
 $lang->project->noProgram       = '无项目集归属项目';
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
@@ -170,13 +172,16 @@ $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26'
 $lang->project->productNotEmpty        = '请关联产品或创建产品。';
 $lang->project->existProductName       = '产品名称已存在。';
 $lang->project->changeProgram          = '%s > 修改项目集';
-$lang->project->changeProgramTip       = '修改项目集后，该项目关联产品的项目集也会被修改，请确认是否修改。';
+$lang->project->changeProgramTip       = '修改项目集后，该项目关联的产品也会同时修改所属项目集，请确认是否修改。';
 $lang->project->linkedProjectsTip      = '关联的项目如下';
 $lang->project->multiLinkedProductsTip = '该项目关联的如下产品还关联了其他项目，请取消关联后再操作';
 $lang->project->linkStoryByPlanTips    = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此项目中";
 $lang->project->createExecution        = "该项目下没有{$lang->executionCommon}，请先创建{$lang->executionCommon}";
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
+
+$lang->project->realEndNotEmpty        = "实际完成不能为空。";
+$lang->project->realEndNotFuture       = "实际完成不能大于当前日期。";
 
 $lang->project->tenThousand = '万';
 
@@ -289,3 +294,6 @@ $lang->project->beginGreateChild    = "项目集的最小开始日期：%s，项
 $lang->project->endLetterChild      = "项目集的最大完成日期：%s，项目的完成日期不能大于项目集的最大完成日期";
 $lang->project->childLongTime       = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->confirmUnlinkMember = "您确定从该项目中移除该用户吗？";
+
+$lang->project->action = new stdclass();
+$lang->project->action->managed = '$date, 由 <strong>$actor</strong> 维护。$extra' . "\n";

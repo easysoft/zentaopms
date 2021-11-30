@@ -61,14 +61,12 @@ function toggleLine(obj)
     {
         $('form .line-no-exist').removeClass('hidden');
         $('form .line-exist').addClass('hidden');
-        $('#line_chosen').addClass('hidden');
         $line.attr('disabled', 'disabled');
     }
     else
     {
-        $(' #line').removeClass('hidden');
+        $('form .line-exist').removeClass('hidden');
         $('form .line-no-exist').addClass('hidden');
-        $('#line_chosen').removeClass('hidden');
         $line.removeAttr('disabled');
     }
 }

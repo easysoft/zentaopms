@@ -146,6 +146,26 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               </div>
             </td>
           </tr>
+          <tr>
+            <th><nobr><?php echo $lang->bug->feedbackBy;?></nobr></th>
+            <td><?php echo html::input('feedbackBy', '', "class='form-control'");?></td>
+            <td id='notifyEmailTd'>
+              <div class='input-group'>
+                <span class='input-group-addon'><?php echo $lang->bug->notifyEmail?></span>
+                <span><?php echo html::input('notifyEmail', '', "class='form-control'");?></span>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
+            <td>
+              <div class='input-group' id='feedback'>
+              <span class="input-group-addon"><?php echo $lang->bug->feedbackBy?></span>
+              <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+              <span class="input-group-addon"><?php echo $lang->bug->notifyEmail?></span>
+              <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+              </div>
+            </td>
+          </tr>
           <?php endif;?>
           <?php if($showExecution):?>
           <?php $showOS      = strpos(",$showFields,", ',os,')      !== false;?>

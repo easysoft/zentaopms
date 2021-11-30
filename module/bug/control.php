@@ -408,15 +408,7 @@ class bug extends control
 
             if($this->app->tab == 'execution')
             {
-	    	if(!preg_match("/(m=|\/)execution(&f=|-)bug(&|-|\.)?/", $this->session->bugList))
-	        {
-		    $location = $this->session->bugList;
-		}
-		else
-		{
-		    $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
-	            $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
-		}
+                $location = $this->session->bugList ? $this->session->bugList : $this->createLink('execution', 'bug', "executionID={$output['executionID']}");
             }
             elseif($this->app->tab == 'project')
             {
@@ -678,6 +670,9 @@ class bug extends control
             }
 
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
+
+            /* If link from no head then reload. */
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
         }
 
@@ -882,6 +877,7 @@ class bug extends control
                     }
                 }
             }
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
@@ -995,6 +991,11 @@ class bug extends control
      */
     public function batchEdit($productID = 0, $branch = 0)
     {
+        if($this->app->tab == 'product')
+        {
+            $this->product->setMenu($productID);
+        }
+
         if($this->post->titles)
         {
             $allChanges = $this->bug->batchUpdate();
@@ -1245,6 +1246,33 @@ class bug extends control
             $bugIDList = array_unique($bugIDList);
             unset($_POST['bugIDList']);
             $allChanges = $this->bug->batchChangeModule($bugIDList, $moduleID);
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $bugID => $changes)
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('bug', $bugID, 'Edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+        }
+        $this->loadModel('score')->create('ajax', 'batchOther');
+        die(js::locate($this->session->bugList, 'parent'));
+    }
+
+    /**
+     * Batch change the plan of bug.
+     *
+     * @param  int    $planID
+     * @access public
+     * @return void
+     */
+    public function batchChangePlan($planID)
+    {
+        if($this->post->bugIDList)
+        {
+            $bugIDList = $this->post->bugIDList;
+            $bugIDList = array_unique($bugIDList);
+            unset($_POST['bugIDList']);
+            $allChanges = $this->bug->batchChangePlan($bugIDList, $planID);
             if(dao::isError()) die(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {

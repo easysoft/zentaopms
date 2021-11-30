@@ -1,253 +1,886 @@
-$(function()
+function changeView(view)
 {
-    var isFirefox = $.zui.browser.firefox;
-    var adjustBoardsHeight = function()
+    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + view);
+    location.href = link;
+}
+
+/**
+ * Render user avatar
+ * @param {String|{account: string, avatar: string}} user User account or user object
+ * @returns {string}
+ */
+function renderUserAvatar(user, objectType, objectID)
+{
+    var $noPrivAndNoAssigned = $('<div class="avatar has-text avatar-sm avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-account"></i></div>');
+    if(objectType == 'task')
     {
-        var $cBoards = $('.c-boards');
-        var viewHeight = $(window).height() - $('#header').height() - $('#footer').height() - 111;
-        if ($cBoards.length === 1)
+        if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+    }
+    if(objectType == 'story')
+    {
+        if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
+        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    }
+    if(objectType == 'bug')
+    {
+        if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
+        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+    }
+
+    if(!user) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-account"></i></a>');
+
+    if(typeof user === 'string') user = {account: user};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+
+    var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
+    if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
+    if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
+    if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
+
+    return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
+}
+
+/**
+ * Render deadline
+ * @param {String|Date} deadline Deadline
+ * @returns {JQuery}
+ */
+function renderDeadline(deadline)
+{
+    if(deadline == '0000-00-00') return;
+
+    var date = $.zui.createDate(deadline);
+    var now  = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
+
+    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+}
+
+/**
+ * Render story item  提供方法渲染看板中的需求卡片
+ * @param {Object} item  Story item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderStoryItem(item, $item, col)
+{
+    var $title = $item.find('.title');
+    if(!$title.length)
+    {
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
+                .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
+        $title.appendTo($item);
+    }
+    $title.attr('title', item.title).find('.text').text(item.title);
+
+    var $infos = $item.find('.infos');
+    if(!$infos.length)
+    {
+        $infos = $('<div class="infos"></div>').appendTo($item);
+    }
+    $infos.html(
+    [
+        '<span class="info info-id text-muted">#' + item.id + '</span>',
+        '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
+        item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
+    ].join(''));
+    $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length && item.menus.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="story" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
+
+    $item.attr('data-type', 'story').addClass('kanban-item-story');
+
+    return $item;
+}
+
+/**
+ * Render bug item  提供方法渲染看板中的 Bug 卡片
+ * @param {Object} item  Bug item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderBugItem(item, $item, col)
+{
+    var $title = $item.find('.title');
+    if(!$title.length)
+    {
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
+                .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
+        $title.appendTo($item);
+    }
+    $title.attr('title', item.title).find('.text').text(item.title);
+
+    var $infos = $item.find('.infos');
+    if(!$infos.length)
+    {
+        $infos = $('<div class="infos"></div>').appendTo($item);
+    }
+    $infos.html(
+    [
+        '<span class="info info-id text-muted">#' + item.id + '</span>',
+        '<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>',
+        '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
+    ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
+    $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length && item.menus.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="bug" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
+
+    $item.attr('data-type', 'bug').addClass('kanban-item-bug');
+
+    return $item;
+}
+
+/**
+ * Render task item  提供方法渲染看板中的任务卡片
+ * @param {Object} item  Task item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderTaskItem(item, $item, col)
+{
+    var $title = $item.find('.title');
+    if(!$title.length)
+    {
+        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
+                .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
+        $title.appendTo($item);
+    }
+    $title.attr('title', item.name).find('.text').text(item.name);
+
+    var $infos = $item.find('.infos');
+    if(!$infos.length)
+    {
+        $infos = $('<div class="infos"></div>').appendTo($item);
+    }
+    $infos.html(
+    [
+        '<span class="info info-id text-muted">#' + item.id + '</span>',
+        '<span class="info i nfo-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
+        item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
+    ].join(''));
+    if(item.deadline) $infos.append(renderDeadline(item.deadline));
+    $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
+
+    var $actions = $item.find('.actions');
+    if(!$actions.length && item.menus.length)
+    {
+        $actions = $([
+            '<div class="actions">',
+                '<a data-contextmenu="task" data-col="' + col.type + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($item);
+    }
+
+    $item.attr('data-type', 'task').addClass('kanban-item-task');
+
+    return $item;
+}
+
+/* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
+addColumnRenderer('story', renderStoryItem);
+addColumnRenderer('bug',   renderBugItem);
+addColumnRenderer('task',  renderTaskItem);
+
+/**
+ * Render column count 渲染看板列头上的卡片数目
+ * @param {JQuery} $count Kanban count element
+ * @param {number} count  Column cards count
+ * @param {number} col    Column object
+ * @param {Object} kanban Kanban intance
+ */
+function renderColumnCount($count, count, col)
+{
+    var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
+    $count.html(text + '<i class="icon icon-arrow-up"></i>');
+}
+
+/**
+ * Render header column 渲染看板列头部
+ * @param {JQuery} $col    Header column element
+ * @param {Object} col     Header column object
+ * @param {JQuery} $header Header element
+ * @param {Object} kanban  Kanban object
+ */
+function renderHeaderCol($col, col, $header, kanban)
+{
+    if(col.asParent) $col = $col.children('.kanban-header-col');
+    if(!$col.children('.actions').length)
+    {
+        var $actions = $('<div class="actions" />');
+        var printStoryButton =  printTaskButton = printBugButton = false;
+        if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
+        if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
+        if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
+
+        if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
         {
-            var $boardsWrapper = $cBoards.find('.boards-wrapper');
-            $boardsWrapper.css('min-height', viewHeight);
-            if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
-            {
-                $boardsWrapper.find('.boards').css(isFirefox ? 'height' : 'min-height', $boardsWrapper.height() - 1);
-            }
-            return
+            $actions.append([
+                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
+                    '<i class="icon icon-expand-alt"></i>',
+                '</a>'
+            ].join(''));
         }
 
-        $cBoards.each(function()
-        {
-            var $theBoards = $(this);
+        $actions.append([
+            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+            '</a>'
+        ].join(''));
+        $actions.appendTo($col);
+    }
+}
 
-            var $boardsWrapper = $theBoards.find('.boards-wrapper');
-            var minHeight = Math.min($theBoards.prev().find('.board-story').outerHeight() + 4, viewHeight);
-            $boardsWrapper.css({maxHeight: viewHeight, minHeight: minHeight});
-            if($boardsWrapper.height() > $boardsWrapper.find('.boards').height())
+/**
+ * Render lane name 渲染看板泳道名称
+ * @param {JQuery} $name    Name element
+ * @param {Object} lane     Lane object
+ * @param {JQuery} $kanban  $kanban element
+ * @param {Object} columns  Kanban columns
+ * @param {Object} kanban   Kanban object
+ */
+function renderLaneName($name, lane, $kanban, columns, kanban)
+{
+    if(lane.id != 'story' && lane.id != 'task' && lane.id != 'bug') return false;
+    if(!$name.children('.actions').length && (priv.canSetLane || priv.canMoveLane))
+    {
+        $([
+            '<div class="actions" title="' + kanbanLang.moreAction + '">',
+                '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
+                    '<i class="icon icon-ellipsis-v"></i>',
+                '</a>',
+            '</div>'
+        ].join('')).appendTo($name);
+    }
+}
+
+/**
+ * Updata kanban data
+ * 更新看板上的数据
+ * @param {string} kanbanID Kanban id   看板 ID
+ * @param {Object} data     Kanban data 看板数据
+ */
+function updateKanban(kanbanID, data)
+{
+    var $kanban = $('#kanban-' + kanbanID);
+    if(!$kanban.length) return;
+
+    $kanban.data('zui.kanban').render(data);
+}
+
+/**
+ * Create kanban in page
+ * 在界面上创建一个看板界面
+ * @param {string} kanbanID Kanban id      看板 ID
+ * @param {Object} data     Kanban data    看板数据
+ * @param {Object} options  Kanban options 组件初始化数据 看板名称
+ */
+function createKanban(kanbanID, data, options)
+{
+    var $kanban = $('#kanban-' + kanbanID);
+    if($kanban.length) return updateKanban(kanbanID, data);
+
+    $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
+    $kanban.kanban($.extend({data: data}, options));
+}
+
+function fullScreen()
+{
+    var element       = document.getElementById('kanbanContainer');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullScreen;
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanContainer').addClass('scrollbar-hover');
+            $('.actions').hide();
+            $('#kanbanContainer a.iframe').each(function()
             {
-                var $boards = $boardsWrapper.find('.boards');
-                $boards.css({maxHeight: $theBoards.height(), minHeight: minHeight});
-                if ($boards.outerHeight() < minHeight) $boards.css('height', minHeight);
-            }
-        });
-    };
-    adjustBoardsHeight();
-
-    var boardID  = '';
-    var onlybody = config.requestType == 'GET' ? "&onlybody=yes" : "?onlybody=yes";
-    $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-    var $kanban = $('#kanban');
-
-    // Get scrollbar width
-    var getScrollbarWidth = function ()
-    {
-        var outer = document.createElement("div");
-        outer.style.visibility = "hidden";
-        outer.style.width = "100px";
-        outer.style.msOverflowStyle = "scrollbar"; // needed for WinJS apps
-
-        document.body.appendChild(outer);
-
-        var widthNoScroll = outer.offsetWidth;
-        // force scrollbars
-        outer.style.overflow = "scroll";
-
-        // add innerdiv
-        var inner = document.createElement("div");
-        inner.style.width = "100%";
-        outer.appendChild(inner);
-
-        var widthWithScroll = inner.offsetWidth;
-
-        // remove divs
-        outer.parentNode.removeChild(outer);
-
-        return widthNoScroll - widthWithScroll;
-    };
-
-    var scrollbarWidth = getScrollbarWidth();
-    var fixBoardWidth = function()
-    {
-        var $table = $kanban.children('.table:first');
-        var kanbanWidth = $table.width();
-        var $cBoards = $table.find('thead>tr>th.c-board:not(.c-side)');
-        var boardCount = $cBoards.length;
-        var $cSide = $table.find('thead>tr>th.c-board.c-side');
-        var totalWidth = kanbanWidth - scrollbarWidth - 1;
-        if ($cSide.length) totalWidth = totalWidth - ($cSide.outerWidth() + 5);
-        var cBoardWidth = Math.floor(totalWidth/boardCount);
-        $cBoards.not(':last').width(cBoardWidth);
-        if ($cSide.length) $cBoards.first().width(cBoardWidth + (isFirefox ? 0 : 5));
-        $kanban.find('.boards > .board').width(cBoardWidth - (isFirefox ? 21 : 22));
-    };
-    fixBoardWidth();
-
-    var updateUI = function()
-    {
-        fixBoardWidth();
-        adjustBoardsHeight();
-        $kanban.data('zui.table').updateFixUI();
-    };
-
-    $(window).on('resize', updateUI);
-
-    var refresh = function(force)
-    {
-        var selfClose = $.cookie('selfClose');
-        $.cookie('selfClose', 0, {expires:config.cookieLife, path:config.webRoot});
-        if(selfClose == 1 || force)
-        {
-            $kanban.load(location.href + ' #kanban>*', updateUI);
-        }
-    };
-    window.refreshKanban = refresh;
-
-    var kanbanModalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: 800});
-    var dropTo = function(id, from, to, type)
-    {
-        if(statusMap[type][from] && statusMap[type][from][to])
-        {
-            var method = statusMap[type][from][to];
-            var link   = $.createLink(type, method, 'id=' + id + '&subStatus=' + to);
-            if(method == 'ajaxChangeSubStatus')
-            {
-                $.getJSON(link, function(response)
+                if($(this).hasClass('iframe'))
                 {
-                    if(response.result == 'fail' && response.message)
-                    {
-                        bootAlert(response.message);
-                        setTimeout(function(){location.reload();}, 1000);
-                    }
-                });
+                    var href = $(this).attr('href');
+                    $(this).removeClass('iframe');
+                    $(this).attr('href', 'javascript:void(0)');
+                    $(this).attr('href-bak', href);
+                }
+            })
+            $.cookie('isFullScreen', 1);
+        }
+
+        var whenFailEnterFullscreen = function()
+        {
+            exitFullScreen();
+        }
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
             }
             else
             {
-                kanbanModalTrigger.show(
-                {
-                    url: link + onlybody,
-                    shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-                    width: 900,
-                    hidden: refresh
-                });
+                afterEnterFullscreen();
             }
         }
-
-        /* Keep the draged element stay in the new place. */
-        return true;
-    };
-
-    $kanban.droppable(
-    {
-        selector: '.board-item:not(.disabled)',
-        target: function($ele)
+        catch (error)
         {
-            var itemType = $ele.data('type');
-            var $board = $ele.closest('.board');
-            var type = $board.data('type');
-            return $board.siblings('.board').filter(function()
-            {
-                var typeMap = statusMap[itemType];
-                var actionMap = typeMap && typeMap[type];
-                return !!actionMap && actionMap[$(this).data('type')];
-            });
-        },
-        start: function(e)
-        {
-            $kanban.addClass('dragging');
-            e.targets.addClass('can-drop-in');
-            var $item = $(e.element).addClass('dragging');
-            $item.closest('.boards').addClass('dragging');
-        },
-        drag: function(e)
-        {
-            var $item   = $(e.element);
-            var $target = $(e.target);
-            var $holder = $target.find('.board-drag-holder');
-            if (!$holder.length) $holder = $('<div class="board-drag-holder"></div>').appendTo($target);
-            $kanban.find('.c-board.dragging').removeClass('dragging');
-            $kanban.find('.c-board.s-' + $target.data('type')).addClass('dragging');
-            $holder.height($item.outerHeight());
-        },
-        drop: function(e)
-        {
-            var result = dropTo(e.element.data('id'), e.element.closest('.board').data('type'), e.target.data('type'), e.element.data('type'));
-            if(result !== false)
-            {
-                e.element.insertBefore(e.target.find('.board-drag-holder'));
-            }
-        },
-        finish: function()
-        {
-            $kanban.removeClass('dragging').find('.can-drop-in').removeClass('can-drop-in');
-            $kanban.find('.dragging').removeClass('dragging');
+            whenFailEnterFullscreen(error);
         }
-    });
-
-    $kanban.on('click', '.kanbaniframe', function(e)
-    {
-        var $link = $(this);
-        kanbanModalTrigger.show(
-        {
-            url: $link.attr('href'),
-            shown:  function(){$('.modal-iframe').addClass('with-titlebar').data('cancel-reload', true)},
-            hidden: refresh,
-            width: $(this).is('.task-assignedTo,.bug-assignedTo') ? 800 : 1100
-        });
-        return false;
-    });
-
-    fixKanbanSide($kanban);
-});
-
-function fixKanbanSide($kanban)
-{
-    if($kanban.length == 0) return false;
-
-    fixSideInit();
-    $kanban.scroll(fixSide);//Fix kanban side when scrolling.
-
-    var tableWidth, kanbanOffset, fixedSide, $fixedSide;
-    function fixSide()
-    {
-        kanbanOffset = $kanban.offset().left;
-        $fixedSide   = $kanban.parent().find('.fixedSide');
-        if($fixedSide.length <= 0 && kanbanOffset < $kanban.scrollLeft())
-        {
-            var $th = $kanban.find('table thead tr th:first');
-
-            tableWidth = $th.width();
-
-            fixedSide  = "<table class='table table-bordered fixedSide'><thead><tr><th class='c-board c-side has-btn'>" + $th.html()+ '</th></tr></thead><tbody>';
-            $kanban.find('table tbody tr').each(function()
-            {
-                var $td = $(this).find('td:first');
-                fixedSide = fixedSide + "<tr><td class='c-side text-left'>" + $td.html() + '</td></tr>';
-            });
-            fixedSide = fixedSide + '</tbody></table>';
-
-            $kanban.before(fixedSide);
-
-            $('.fixedSide').width(tableWidth);
-            $('.fixedSide').css('top', $kanban.offset());
-
-            /* Reset height. */
-            var index = 1;
-            $('.fixedSide tbody tr').each(function()
-            {
-                var $td = $kanban.find('table tbody tr:nth-child(' + index + ') td:first');
-
-                if($(this).find('td:first div:first').length == 0) $(this).find('td:first').html('<div></div>');
-                $(this).find('td:first div:first').height($td.height());
-
-                index++;
-            })
-        }
-        if($fixedSide.length > 0 && kanbanOffset >= $kanban.scrollLeft()) $fixedSide.remove();
-    }
-    function fixSideInit()
-    {
-        $fixedSide = $kanban.parent().find('.fixedSide');
-        if($fixedSide.length > 0) $fixedSide.remove();
-        fixSide();
     }
 }
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('#kanbanContainer').removeClass('scrollbar-hover');
+    $('.actions').show();
+    $('#kanbanContainer a').each(function()
+    {
+        var hrefBak = $(this).attr('href-bak');
+        if(hrefBak)
+        {
+            $(this).addClass('iframe');
+            $(this).attr('href', hrefBak);
+        }
+    })
+    $.cookie('isFullScreen', 0);
+}
+
+document.addEventListener('fullscreenchange', function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('webkitfullscreenchange', function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('mozfullscreenchange', function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+});
+
+document.addEventListener('msfullscreenChange', function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+});
+
+/* Define drag and drop rules */
+if(!window.kanbanDropRules)
+{
+    window.kanbanDropRules =
+    {
+        story:
+        {
+            blacklog: true,
+            ready: ['blacklog', 'dev-doing'],
+            'dev-doing': ['dev-done'],
+            'dev-done': ['test-doing'],
+            'test-doing': ['test-done'],
+            'test-done': ['accepted'],
+            'accepted': ['published'],
+            'published': false,
+        }
+    }
+}
+
+/*
+ * Find drop columns
+ * @param {JQuery} $element Drag element
+ * @param {JQuery} $root Dnd root element
+ */
+function findDropColumns($element, $root)
+{
+    var $col        = $element.closest('.kanban-col');
+    var col         = $col.data();
+    var kanbanID    = $root.data('id');
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
+
+    if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
+
+    var colRules = kanbanRules[col.type];
+    var lane     = $col.closest('.kanban-lane').data('lane');
+    return $root.find('.kanban-lane-col').filter(function()
+    {
+        if(!colRules) return false;
+        if(colRules === true) return true;
+
+        var $newCol = $(this);
+        var newCol = $newCol.data();
+        if(newCol.id === col.id) return false;
+
+        var $newLane = $newCol.closest('.kanban-lane');
+        var newLane = $newLane.data('lane');
+        var canDropHere = colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
+        if(canDropHere) $newCol.addClass('can-drop-here');
+        return canDropHere;
+    });
+}
+
+/**
+ * Change column type for a card
+ * 变更卡片类型
+ * @param {Object} card        Card object
+ * @param {String} fromColType The column type before change
+ * @param {String} toColType   The column type after change
+ * @param {String} kanbanID    Kanban ID
+ */
+function changeCardColType(card, fromColType, toColType, kanbanID)
+{
+    if(typeof card == 'undefined') return false;
+    var objectID    = card.id;
+    var showIframe  = false;
+
+    if(kanbanID == 'task')
+    {
+        if(toColType == 'developed')
+        {
+            if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
+            {
+                var link   = createLink('task', 'finish', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'pause')
+        {
+            if(fromColType == 'developing' && priv.canPauseTask)
+            {
+                var link = createLink('task', 'pause', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'developing')
+        {
+            if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            {
+                var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+            if(fromColType == 'wait' && priv.canStartTask)
+            {
+                var link = createLink('task', 'start', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'canceled')
+        {
+            if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
+            {
+                var link = createLink('task', 'cancel', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'closed')
+        {
+            if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
+            {
+                var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+    }
+
+    if(showIframe)
+    {
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
+        modalTrigger.show();
+    }
+
+    /*
+        // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
+
+        // 调用 updateKanban 更新看板数据
+        updateKanban(kanbanID, newKanbanData);
+    */
+}
+
+/**
+ * Handle finish drop task
+ * @param {Object} event Event object
+ * @returns {void}
+ */
+function handleFinishDrop(event)
+{
+    var $card = $(event.element); // The drag card
+    var $dragCol = $card.closest('.kanban-lane-col');
+    var $dropCol = $(event.target);
+
+    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
+    var card = $card.data('item');
+    var fromColType = $dragCol.data('type');
+    var toColType = $dropCol.data('type');
+    var kanbanID = $card.closest('.kanban').data('id');
+
+    changeCardColType(card, fromColType, toColType, kanbanID);
+
+    $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
+}
+
+/**
+ * Handle sort cards in column 处理对列卡片进行排序
+ */
+function handleSortColCards()
+{
+    /* TODO: handle sort cards from column contextmenu */
+    return false;
+}
+
+/**
+ * Create column menu  创建列操作菜单
+ * @returns {Object[]}
+ */
+function createColumnMenu(options)
+{
+    var $col     = options.$trigger.closest('.kanban-col');
+    var col      = $col.data('col');
+    var kanbanID = options.kanban;
+
+	var items = [];
+	if(priv.canEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.canSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.canSortCards) items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
+    return items;
+}
+
+/**
+ * Create column create button menu  创建列添加按钮操作菜单
+ * @returns {Object[]}
+ */
+function createColumnCreateMenu(options)
+{
+    var $col  = options.$trigger.closest('.kanban-col');
+    var col   = $col.data('col');
+    var items = [];
+
+    if(col.laneType == 'story')
+    {
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
+    }
+    else if(col.laneType == 'bug')
+    {
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID, '', true), className: 'iframe'});
+    }
+    else
+    {
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe'});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe'});
+    }
+    return items;
+}
+
+/**
+ * Create lane menu  创建泳道操作菜单
+ * @returns {Object[]}
+ */
+function createLaneMenu(options)
+{
+    var $lane            = options.$trigger.closest('.kanban-lane');
+    var $kanban          = $lane.closest('.kanban');
+    var lane             = $lane.data('lane');
+    var kanbanID         = options.kanban;
+    var upTargetKanban   = $kanban.prev('.kanban').length ? $kanban.prev('.kanban').data('id') : '';
+    var downTargetKanban = $kanban.next('.kanban').length ? $kanban.next('.kanban').data('id') : '';
+
+    var items = [];
+    if(priv.canSetLane)  items.push({label: kanbanLang.setLane, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.laneID + '&executionID=' + executionID), className: 'iframe'});
+    if(priv.canMoveLane) items.push(
+        {label: kanbanLang.moveUp, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
+        {label: kanbanLang.moveDown, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}
+    );
+
+    var bounds = options.$trigger[0].getBoundingClientRect();
+    items.$options = {x: bounds.right, y: bounds.top};
+    return items;
+}
+
+/**
+ * Create story menu  创建需求卡片操作菜单
+ * @returns {Object[]}
+ */
+function createStoryMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var story = $card.data('item');
+
+    var items = [];
+    $.each(story.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
+        items.push(item);
+    });
+
+    return items;
+}
+
+/**
+ * Create bug menu  创建 Bug 卡片操作菜单
+ * @returns {Object[]}
+ */
+function createBugMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var bug   = $card.data('item');
+
+    var items = [];
+    $.each(bug.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
+    return items;
+}
+
+ /**
+ * Create task menu  创建任务卡片操作菜单
+ * @returns {Object[]}
+ */
+function createTaskMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var task  = $card.data('item');
+
+    var items = [];
+    $.each(task.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
+    return items;
+}
+
+/** Resize kanban container size */
+function resizeKanbanContainer()
+{
+    var $container = $('#kanbanContainer');
+    var maxHeight = window.innerHeight - 98 - 15;
+    if($.cookie('isFullScreen') == 1) maxHeight = window.innerHeight - 15;
+    $container.children('.panel-body').css('max-height', maxHeight);
+}
+
+/* Define menu creators */
+window.menuCreators =
+{
+    column:       createColumnMenu,
+    columnCreate: createColumnCreateMenu,
+    lane:         createLaneMenu,
+    story:        createStoryMenu,
+    bug:          createBugMenu,
+    task:         createTaskMenu,
+};
+
+/* Set kanban affix container */
+window.kanbanAffixContainer = '#kanbanContainer>.panel-body';
+
+/* Overload kanban default options */
+$.extend($.fn.kanban.Constructor.DEFAULTS,
+{
+    onRender: function()
+    {
+        var maxWidth = 0;
+        $('#kanbans .kanban-board').each(function()
+        {
+            maxWidth = Math.max(maxWidth, $(this).outerWidth());
+        });
+        $('#kanbans').css('min-width', maxWidth);
+    }
+});
+
+/* Example code: */
+$(function()
+{
+    $.cookie('isFullScreen', 0);
+
+    /* Common options 用于初始化看板的通用选项 */　
+    var commonOptions =
+    {
+        maxColHeight:   'auto',
+        minColWidth:     240,
+        maxColWidth:     240,
+        showCount:       true,
+        showZeroCount:   true,
+        fluidBoardWidth: true,
+        droppable:
+        {
+            target:       findDropColumns,
+            finish:       handleFinishDrop,
+            mouseButton: 'left'
+        },
+        onRenderHeaderCol: renderHeaderCol,
+        onRenderLaneName:  renderLaneName,
+        onRenderCount:     renderColumnCount
+    };
+
+    /* Create kanban 创建看板 */
+    if(groupBy == 'default')
+    {
+        var kanbanLane = '';
+        for(var i in kanbanList)
+        {
+            if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+            if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+            if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
+
+            if(browseType == kanbanList[i] || browseType == 'all') createKanban(kanbanList[i], kanbanLane, commonOptions);
+        }
+    }
+    else
+    {
+        /* Create kanban by group. 分泳道创建看板. */
+        createKanban(browseType, kanbanGroup[groupBy], commonOptions);
+    }
+
+    /* Init iframe modals */
+    $(document).on('click', '#kanbans .iframe,.contextmenu-menu .iframe', function(event)
+    {
+        var $link = $(this);
+        if($link.data('zui.modaltrigger')) return;
+        $link.modalTrigger({show: true});
+        event.preventDefault();
+    });
+
+    /* Init contextmenu */
+    $('#kanbans').on('click', '[data-contextmenu]', function(event)
+    {
+        var $trigger    = $(this);
+        var menuType    = $trigger.data('contextmenu');
+
+        var menuCreator = window.menuCreators[menuType];
+        if(!menuCreator) return;
+
+        var options = $.extend({event, $trigger: $trigger}, $trigger.data());
+        var items   = menuCreator(options);
+        if(!items || !items.length) return;
+
+        $.zui.ContextMenu.show(items, items.$options || {event: event});
+    });
+
+    /* Resize kanban container on window resize */
+    resizeKanbanContainer();
+    $(window).on('resize', resizeKanbanContainer);
+
+    /* Hide contextmenu when page scroll */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
+
+    $('#toStoryButton').on('click', function()
+    {
+        var planID = $('#plan').val();
+        if(planID)
+        {
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
+        }
+    })
+
+    $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
+    $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
+
+    /* Ajax update kanban. */
+    setInterval(function()
+    {
+        $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
+        {
+            if(data) 
+            {
+                kanbanGroup = $.parseJSON(data);
+                if(groupBy == 'default')
+                {
+                    var kanbanLane = '';
+                    for(var i in kanbanList)
+                    {
+                        if(kanbanList[i] == 'story') kanbanLane = kanbanGroup.story;
+                        if(kanbanList[i] == 'bug')   kanbanLane = kanbanGroup.bug;
+                        if(kanbanList[i] == 'task')  kanbanLane = kanbanGroup.task;
+
+                        if(browseType == kanbanList[i] || browseType == 'all') updateKanban(kanbanList[i], kanbanLane);
+                    }
+                }
+                else
+                {
+                    updateKanban(browseType, kanbanGroup[groupBy]);
+                }
+            }
+        });
+    }, 10000);
+});
+
+$('#type').change(function()
+{
+    var type = $('#type').val();
+    if(type != 'all')
+    {
+        $('.c-group').show();
+        $.get(createLink('execution', 'ajaxGetGroup', 'type=' + type), function(data)
+        {
+            $('#group_chosen').remove();
+            $('#group').replaceWith(data);
+            $('#group').chosen();
+        })
+    }
+
+    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type);
+    location.href = link;
+});
+
+$('.c-group').change(function()
+{
+    $('.c-group').show();
+
+    var type  = $('#type').val();
+    var group = $('#group').val();
+    var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    location.href = link;
+});

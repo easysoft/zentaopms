@@ -307,7 +307,7 @@ class project extends control
         $this->view->title            = $this->lang->project->kanban;
         $this->view->kanbanGroup      = array_filter($kanbanGroup);
         $this->view->latestExecutions = $latestExecutions;
-        $this->view->programPairs     = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true);
+        $this->view->programPairs     = array(0 => $this->lang->project->noProgram) + $this->loadModel('program')->getPairs(true, 'order_asc');
 
         $this->display();
     }
@@ -848,7 +848,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function execution($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $uri = $this->app->getURI(true);
         $this->app->session->set('executionList', $uri, 'project');
@@ -1186,9 +1186,21 @@ class project extends control
 
             /* Unset not project privs. */
             $project = $this->project->getByID($group->project);
-            foreach($this->lang->resource as $method => $label)
+            foreach($this->lang->resource as $module => $methods)
             {
-                if(!in_array($method, $this->config->programPriv->{$project->model})) unset($this->lang->resource->$method);
+                if(!in_array($module, $this->config->programPriv->{$project->model}))
+                {
+                    unset($this->lang->resource->$module);
+                }
+                else
+                {
+                    if($project->model == 'scrum' and $module == 'projectstory') $this->config->project->removePriv[$module][] = 'track';
+
+                    foreach($methods as $method => $label)
+                    {
+                        if(isset($this->config->project->removePriv[$module]) and in_array($method, $this->config->project->removePriv[$module])) unset($this->lang->resource->$module->$method);
+                    }
+                }
             }
         }
 

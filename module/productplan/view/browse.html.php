@@ -202,5 +202,4 @@
     </div>
   </div>
 </div>
-<?php js::set('projectNotEmpty', $lang->productplan->projectNotEmpty)?>
 <?php include '../../common/view/footer.html.php';?>

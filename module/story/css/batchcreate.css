@@ -1,3 +1,5 @@
+#importLinesModal .modal-dialog {width: 80%;}
+
 #batchCreateForm .c-id {width: 50px; text-align: center; color: #838A9D;}
 #batchCreateForm .c-module,
 #batchCreateForm .c-plan {width: 180px;}

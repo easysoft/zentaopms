@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('example', $example);?>
 <?php js::set('libID', $libID);?>
 <?php
 js::set('typeOptions', $typeOptions);
@@ -69,7 +68,7 @@ js::set('struct_paramsType', $lang->struct->paramsType);
           <tr>
             <th><?php echo $lang->api->module;?></th>
             <td>
-            <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></span>
+            <span id='moduleBox'><?php echo html::select('module', $moduleOptionMenu, '', "class='form-control chosen'");?></span>
             </td>
             <td></td>
           </tr>

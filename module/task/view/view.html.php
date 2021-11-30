@@ -46,6 +46,9 @@
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="scrollContent">
+<?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
@@ -150,7 +153,9 @@
       ?>
     </div>
     <?php $this->printExtendFields($task, 'div', "position=left&inForm=0&inCell=1");?>
+    <?php if($this->app->getViewType() != 'xhtml'):?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -386,6 +391,9 @@
     <?php $this->printExtendFields($task, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+</div>
+<?php endif;?>
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>

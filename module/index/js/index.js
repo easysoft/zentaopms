@@ -121,6 +121,11 @@
         {
             return (link.params.from || link.params.$3) == 'project' ? 'project' : 'execution';
         }
+        if(moduleName === 'issue' || moduleName === 'risk' || moduleName === 'opportunity' || moduleName === 'pssp' || moduleName === 'auditplan' || moduleName === 'meeting' || moduleName === 'nc')
+        {
+            if(link.params.$2 == 'project') return 'project';
+            if(link.params.$2 == 'execution') return 'execution';
+        }
         if(moduleName === 'product')
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
@@ -859,3 +864,4 @@ function getLatestVersion()
     $('#globalSearchInput').click();
     $('#upgradeContent').toggle();
 }
+

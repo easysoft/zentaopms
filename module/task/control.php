@@ -302,8 +302,8 @@ class task extends control
             /* Return task id list when call the API. */
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
 
-            /* Locate the browser. */
-            if(!empty($iframe)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            /* If link from no head then reload. */
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
@@ -410,7 +410,8 @@ class task extends control
                 }
             }
 
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api'))
+            if(isonlybody()) die(js::reload('parent.parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $taskID));
             }
@@ -423,7 +424,10 @@ class task extends control
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
-        if($this->config->systemMode == 'classic') $executionsPair = $this->execution->getPairs();
+        if($this->config->systemMode == 'classic') 
+        {
+            $executionsPair = $this->execution->getPairs();
+        }
         else
         {
             $executionsPair = array();
@@ -1368,7 +1372,12 @@ class task extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $tasks = $this->task->getUserTaskPairs($account, $status);
+        $tasks          = $this->task->getUserTaskPairs($account, $status);
+        $suspendedTasks = $this->task->getUserSuspendedTasks($account);
+        foreach($tasks as $taskid => $task)
+        {
+            if(isset($suspendedTasks[$taskid])) unset($tasks[$taskid]);
+        }
 
         if($id) die(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
         die(html::select('task', $tasks, '', 'class=form-control'));

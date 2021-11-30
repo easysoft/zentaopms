@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Chunsheng Wang<wwccss@gmail.com>
- * @package     execution 
+ * @package     execution
  * @version     $Id: suspend.html.php 935 2013-01-16 07:49:24Z wwccss@gmail.com $
  * @link        http://www.zentao.net
  */
@@ -31,11 +31,19 @@
         </tr>
         <?php $this->printExtendFields($execution, 'table');?>
         <tr>
+          <th><?php echo $lang->execution->realEnd;?></th>
+          <td>
+            <div class='w-150px'>       
+              <?php echo html::input('realEnd',(!empty($execution->realEnd) && $execution->realEnd != '0000-00-00' ? $execution->realEnd : date('Y-m-d')), "class='form-control form-date' required");?>
+            </div>         
+          </td>
+        </tr>        
+        <tr>
           <th class='w-50px'><?php echo $lang->comment;?></th>
           <td><?php echo html::textarea('comment', '', "rows='6' class='form-control kindeditor' hidefocus='true'");?></td>
         </tr>
         <tr>
-          <td class='text-center form-actions' colspan='2'><?php echo html::submitButton() . html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
+          <td class='text-center form-actions' colspan='2'><?php echo html::submitButton($lang->execution->close . $lang->executionCommon) . html::linkButton($lang->goback, $this->session->taskList, 'self', '', 'btn btn-wide'); ?></td>
         </tr>
       </tbody>
     </table>

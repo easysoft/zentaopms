@@ -137,7 +137,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, "class='form-control chosen'");?></td>
+                  <td><?php echo zget($lang->bug->statusList, $bug->status);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
@@ -150,6 +150,14 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->feedbackBy;?></th>
+                  <td><?php echo html::input('feedbackBy', $bug->feedbackBy, "class='form-control'");?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->notifyEmail;?></th>
+                  <td><?php echo html::input('notifyEmail', $bug->notifyEmail, "class='form-control'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>

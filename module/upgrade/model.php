@@ -4425,6 +4425,29 @@ class upgradeModel extends model
             {
                 /* Use historical projects as project upgrades. */
                 $projects = $this->dao->select('id,name,begin,end,status,PM,acl')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->fetchAll('id');
+
+                $projectPairs = $this->dao->select('name,id')->from(TABLE_PROJECT)
+                    ->where('deleted')->eq('0')
+                    ->andWhere('type')->eq('project')
+                    ->andWhere('parent')->eq($programID)
+                    ->fetchPairs();
+
+                $duplicateList = '';
+                foreach($projects as $projectID => $project)
+                {
+                    if(isset($projectPairs[$project->name]))
+                    {
+                        $duplicateList .= "$projectID,";
+                        $duplicateList .= "{$projectPairs[$project->name]},";
+                    }
+                }
+
+                if($duplicateList)
+                {
+                    echo "<script>new parent.$.zui.ModalTrigger({url: parent.$.createLink('upgrade', 'renameObject', 'type=project&duplicateList=$duplicateList', '', 1), type: 'iframe', width:'40%'}).show();</script>";
+                    die;
+                }
+
                 foreach($projectIdList as $projectID)
                 {
                     $data->projectName   = $projects[$projectID]->name;
@@ -4486,7 +4509,7 @@ class upgradeModel extends model
 
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
-            ->check('name', 'unique', "type='project'")
+            ->check('name', 'unique', "type='project' AND deleted=0")
             ->exec();
         if(dao::isError()) return false;
 
