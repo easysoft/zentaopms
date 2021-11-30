@@ -37,7 +37,6 @@ body {margin-bottom: 25px;}
   <?php
   if(!empty($productID))
   {
-      $product    = $this->product->getById($productID);
       $removeLink = $browseType == 'byproduct' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
       $moduleName = $product->name;
       $html       = $moduleName . html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");

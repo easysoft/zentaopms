@@ -217,8 +217,12 @@ class execution extends control
             $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         }
 
-        $productModules = $this->tree->getById($moduleID);
-        $product = $this->product->getById(!empty($productID) ? $productID : (!empty($productModules) ? $productModules->root : 0));
+        $product = $this->product->getById($productID);
+        if(empty($productID))
+        {
+            $productModule = $this->tree->getById($moduleID);
+            $product       = $this->product->getById((!empty($productModule) ? $productModule->root : 0));
+        }
         if(!empty($product) and $product->type != 'normal')
         {
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
@@ -790,10 +794,10 @@ class execution extends control
 
         if($this->cookie->storyModuleParam)
         {
-            $modules  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
-            $this->view->module = $modules;
+            $module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+            $this->view->module = $module;
 
-            $product = $this->product->getById($modules->root);
+            $product = $this->product->getById($module->root);
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
 
