@@ -217,7 +217,8 @@ class execution extends control
             $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         }
 
-        $product = $this->product->getById($productID);
+        $productModules = $this->tree->getById($moduleID);
+        $product = $this->product->getById(!empty($productID) ? $productID : (!empty($productModules) ? $productModules->root : 0));
         if(!empty($product) and $product->type != 'normal')
         {
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
@@ -808,10 +809,6 @@ class execution extends control
             $branchID = $this->cookie->storyBranchParam;
             if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
             $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
-
-            $product = $this->loadModel('product')->getById($productID);
-            $productType = $this->branch->getProductType($branchID);
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[!empty($product) ? $product->type : $productType]);
         }
 
         /* Get execution's product. */
