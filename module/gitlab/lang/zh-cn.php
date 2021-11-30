@@ -43,6 +43,7 @@ $lang->gitlab->createUser           = '添加用户';
 $lang->gitlab->editUser             = '编辑用户';
 $lang->gitlab->deleteUser           = '删除用户';
 $lang->gitlab->manageGroupMembers   = '群组成员管理';
+$lang->gitlab->createWebhook        = '创建Webhook';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "{$lang->gitlab->common}名称";

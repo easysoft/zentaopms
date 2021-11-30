@@ -43,6 +43,7 @@ $lang->gitlab->createUser           = 'Create user';
 $lang->gitlab->editUser             = 'Edit user';
 $lang->gitlab->deleteUser           = 'Delete user';
 $lang->gitlab->manageGroupMembers   = 'Manage group member';
+$lang->gitlab->createWebhook        = 'Create Webhook';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "GitLab Name";

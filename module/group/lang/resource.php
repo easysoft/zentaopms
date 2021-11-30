@@ -1162,6 +1162,7 @@ $lang->resource->gitlab->createUser           = 'createUser';
 $lang->resource->gitlab->editUser             = 'editUser';
 $lang->resource->gitlab->deleteUser           = 'deleteUser';
 $lang->resource->gitlab->webhook              = 'webhook';
+$lang->resource->gitlab->createWebhook        = 'createWebhook';
 $lang->resource->gitlab->manageProjectMembers = 'manageProjectMembers';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
@@ -1185,7 +1186,8 @@ $lang->gitlab->methodOrder[95]  = 'createUser';
 $lang->gitlab->methodOrder[100] = 'editUser';
 $lang->gitlab->methodOrder[105] = 'deleteUser';
 $lang->gitlab->methodOrder[110] = 'webhook';
-$lang->gitlab->methodOrder[115] = 'manageProjectMembers';
+$lang->gitlab->methodOrder[115] = 'createWebhook';
+$lang->gitlab->methodOrder[120] = 'manageProjectMembers';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
