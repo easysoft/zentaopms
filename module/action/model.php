@@ -1461,10 +1461,13 @@ class actionModel extends model
         {
             $dateGroup = array_reverse($dateGroup);
         }
-        elseif($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
+        elseif($this->app->rawModule == 'company')
         {
-            $dateGroup = array_reverse($dateGroup);
-            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+            if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
+            if(($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc'))
+            {
+                foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+            }
         }
 
         return $dateGroup;
