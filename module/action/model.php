@@ -1466,7 +1466,6 @@ class actionModel extends model
             {
                 $dateGroup[$key] = array_reverse($dateItem);
             }
-
         }
 
         return $dateGroup;
