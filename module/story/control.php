@@ -671,7 +671,7 @@ class story extends control
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
-            $branches        = isset($productBranches[$story->product]) ? $productBranches[$story->product] : array();
+            $branches        = isset($productBranches[$story->product]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$story->product] : array();
             $products        = $this->product->getProductPairsByProject($objectID);
 
             $this->view->objectID = $objectID;
@@ -791,7 +791,7 @@ class story extends control
                 foreach($linkedProducts as $linkedProduct)
                 {
                     $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
-                    $branches[$linkedProduct->id] = $branchList;
+                    $branches[$linkedProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $branchList;
                     $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
                     $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
                     if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];

@@ -954,7 +954,7 @@ class bug extends control
         {
             $objectID        = $this->app->tab == 'project' ? $bug->project : $bug->execution;
             $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branches        = isset($productBranches[$productID]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$productID] : array();
         }
         else
         {
