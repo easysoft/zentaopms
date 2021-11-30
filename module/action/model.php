@@ -1424,6 +1424,7 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $orderBy
      * @access public
      * @return array
      */
