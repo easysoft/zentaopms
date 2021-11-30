@@ -115,15 +115,17 @@ $lang->upgrade->programName   = 'Program Name';
 $lang->upgrade->projectName   = 'Project Name';
 
 $lang->upgrade->newProgram         = 'Create';
+$lang->upgrade->editedName         = 'New Name';
 $lang->upgrade->projectEmpty       = 'Project must be not empty.';
 $lang->upgrade->mergeSummary       = "Dear users, there are %s {$lang->productCommon} and %s {$lang->projectCommon} in your system waiting for Migration. By System Calculation, we recommend your migration plan as follows, you can also adjust according to your own situation:";
 $lang->upgrade->mergeByProductLine = "PRODUCTLINE-BASED {$lang->projectCommon}: Consolidate the entire {$lang->productCommon} line and the {$lang->productCommon} and {$lang->projectCommon} below it into one large project.";
 $lang->upgrade->mergeByProduct     = "PRODUCT-BASED {$lang->projectCommon}: You can select multiple {$lang->productCommon} and their lower {$lang->projectCommon} to merge into a large project, or you can select a {$lang->productCommon} to merge its lower {$lang->projectCommon} into a larger project";
 $lang->upgrade->mergeByProject     = "Independent {$lang->projectCommon}: You can select several {$lang->projectCommon} and merge them into one large project, or merge them independently";
-$lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: select which project the {$lang->projectCommon} belongs to.";
+$lang->upgrade->mergeByMoreLink    = "{$lang->projectCommon} that relates multiple {$lang->productCommon}: You can select several {$lang->projectCommon} and merge them into one large project, or merge them independently.";
 $lang->upgrade->mergeRepoTips      = "Merge the selected version library under the selected product.";
 $lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this upgrade. Need create index. Please go [Admin->System->BuildIndex] page to build index.';
 $lang->upgrade->errorEngineInnodb  = 'Your MySQL version is too low to support InnoDB data table engine. Please modify it to MyISAM and try again.';
+$lang->upgrade->duplicateProject   = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
@@ -137,4 +139,5 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>ZenTao will upgrade existing {$lang->projectCommon} as execution.</p>
 <p>After the upgrade, the data of existing {$lang->projectCommon} will be in a Project - Execute of the new version .</p>
 EOT;
+
 include dirname(__FILE__) . '/version.php';

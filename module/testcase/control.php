@@ -1724,7 +1724,7 @@ class testcase extends control
         $branches   = array();
 
         $this->loadModel('branch');
-        if($product->type != 'normal') $branches = array('0' => $this->lang->branch->main) + $this->branch->getPairs($productID, '', $projectID);
+        if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($productID, '', $projectID);
 
         if($_POST)
         {

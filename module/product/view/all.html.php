@@ -36,7 +36,7 @@
       $canOrder     = common::hasPriv('product', 'updateOrder');
       $canBatchEdit = common::hasPriv('product', 'batchEdit');
       ?>
-      <table id="productList" class="table has-sort-head table-fixed table-nested table-form">
+      <table id="productList" class="table has-sort-head table-nested table-fixed">
         <?php $vars = "browseType=$browseType&orderBy=%s";?>
         <thead>
           <tr class="text-center">
@@ -50,25 +50,25 @@
               <?php common::printOrderLink('name', $orderBy, $vars, $lang->product->name);?>
             </th>
             <?php if($this->config->URAndSR):?>
-            <th class="c-story" colspan="4"><?php echo $lang->story->requirement;?></th>
+            <th class='c-requirement' colspan="4"><?php echo $lang->story->requirement;?></th>
             <?php endif;?>
             <th class="c-story" colspan="4"><?php echo $lang->story->story;?></th>
             <th class="c-bug" colspan="3"><?php echo $lang->bug->common;?></th>
             <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <th class="c-release"  rowspan="2"><?php echo $lang->product->release;?></th>
-            <th class='c-actions-2' rowspan="2"><?php echo $lang->actions;?></th>
+            <th class='c-actions' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
             <?php if($this->config->URAndSR):?>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->change;?></th>
-            <th><?php echo $lang->story->completeRate;?></th>
+            <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
             <?php endif;?>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->story->draft;?></th>
             <th><?php echo $lang->story->activate;?></th>
             <th><?php echo $lang->story->change;?></th>
-            <th><?php echo $lang->story->completeRate;?></th>
+            <th><div class='en-wrap-text'><?php echo $lang->story->completeRate;?></div></th>
             <th style="border-left: 1px solid #ddd;"><?php echo $lang->bug->activate;?></th>
             <th><?php echo $lang->close;?></th>
             <th><?php echo $lang->bug->fixedRate;?></th>
@@ -83,9 +83,9 @@
         $trAttrs .= " class='$trClass'";
         ?>
           <?php if(isset($program['programName']) and $config->systemMode == 'new'):?>
-          <tr <?php echo $trAttrs;?>>
+          <tr class="row-program" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
-            <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
+            <td class='c-checkbox'><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
             <td class='text-left table-nest-title' title="<?php echo $program['programName']?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
@@ -127,9 +127,9 @@
               $trAttrs .= " class='$trClass'";
           }
           ?>
-          <tr <?php echo $trAttrs;?>>
+          <tr class="row-line" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
-            <td><div class='checkbox-primary program-checkbox'><label></label></div></td>
+            <td class='c-checkbox'><div class='checkbox-primary program-checkbox'><label></label></div></td>
             <?php endif;?>
             <td class='text-left table-nest-title' title="<?php echo $line['lineName']?>">
               <span class="table-nest-icon icon table-nest-toggle"></span>
@@ -183,9 +183,9 @@
           }
           $trAttrs .= " class='$trClass'";
           ?>
-          <tr class="text-center" <?php echo $trAttrs;?>>
+          <tr class="row-product" <?php echo $trAttrs;?>>
             <?php if($canBatchEdit):?>
-            <td><?php echo $canBatchEdit ? html::checkbox('productIDList', array($product->id => '')) : '';?></td>
+            <td class='c-checkbox'><?php echo html::checkbox('productIDList', array($product->id => ''));?></td>
             <?php endif;?>
             <td class="c-name text-left table-nest-title" title='<?php echo $product->name?>'>
               <?php
@@ -211,7 +211,7 @@
             <td class='c-actions sort-handler'>
               <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
               <?php if($canOrder):?>
-              <i class="icon icon-move"></i>
+              <i class="icon icon-move text-blue"></i>
               <?php endif;?>
             </td>
           </tr>

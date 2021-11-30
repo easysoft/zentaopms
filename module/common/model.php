@@ -847,6 +847,9 @@ class commonModel extends model
                     $linkPart = explode('|', $menu['link']);
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
+
+                    if($currentModule == 'report' and $method == 'annualData') continue; // Skip some pages that do not require permissions.
+
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
@@ -2851,15 +2854,13 @@ EOD;
     {
         if(empty($markdown)) return false;
 
-        $markdown = str_replace('&', '&amp;', $markdown);
-
         global $app;
-        $hyperdown = $app->loadClass('hyperdown');
-        $content   = $hyperdown->makeHtml($markdown);
-
-        $content = htmlspecialchars_decode($content);
-        $content = fixer::stripDataTags($content);
-        return $content;
+        $app->loadClass('parsedown', true);
+        return parsedown::instance()
+            ->setSafeMode(true)
+            ->setBreaksEnabled(true)
+            ->setMarkupEscaped(true)
+            ->text($markdown);
     }
 }
 

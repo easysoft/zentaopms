@@ -33,7 +33,6 @@ function loadProduct(productID)
     }
 
     oldProductID = $('#product').val();
-
     loadProductBranches(productID)
 }
 
@@ -52,7 +51,7 @@ function loadBranch()
 }
 
 /**
- * Load product branches.
+ * Load branches when change product.
  *
  * @param  int   $productID
  * @access public
@@ -80,10 +79,10 @@ function loadProductBranches(productID)
 }
 
 /**
- * Load product modules.
+ * Load modules when change product.
  *
- * @param  int   $productID
- * @param  int   $branch
+ * @param  int    $productID
+ * @param  int    $branch
  * @access public
  * @return void
  */
@@ -102,10 +101,10 @@ function loadProductModules(productID, branch)
 }
 
 /**
- * Load product plans.
+ * Load plans when change product.
  *
- * @param  int   $productID
- * @param  int   $branch
+ * @param  int    $productID
+ * @param  int    $branch
  * @access public
  * @return void
  */
@@ -120,6 +119,30 @@ function loadProductPlans(productID, branch)
     {
         $planIdBox.find('#plan').chosen();
         $planIdBox.fixInputGroup();
+    });
+}
+
+/**
+ * Load reviewers when change product.
+ *
+ * @param  int    $productID
+ * @access public
+ * @return void
+ */
+function loadProductReviewers(productID)
+{
+    var storyID       = <?php echo isset($story->id) ? $story->id : 0;?>;
+    var reviewerLink  = createLink('product', 'ajaxGetReviewers', 'productID=' + productID + '&storyID=' + storyID);
+    var needNotReview = $('#needNotReview').attr('checked');
+    $.get(reviewerLink, function(data)
+    {
+        if(data)
+        {
+            $('#reviewer').replaceWith(data);
+            $('#reviewer_chosen').remove();
+            $('#reviewer').chosen();
+            if(needNotReview == 'checked') $('#reviewer').attr('disabled', 'disabled').trigger('chosen:updated');
+        }
     });
 }
 </script>

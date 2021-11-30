@@ -814,7 +814,7 @@ class treeModel extends model
         foreach($products as $id => $product)
         {
             $extra['productID']   = $id;
-            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id");
+            $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all");
             $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
             if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
@@ -1183,16 +1183,18 @@ class treeModel extends model
     /**
      * Create link of a test case.
      *
-     * @param  object  $module
+     * @param  string $type
+     * @param  object $module
+     * @param  array  $extra
      * @access public
      * @return string
      */
-    public function createCaseLink($type, $module)
+    public function createCaseLink($type, $module, $extra = array())
     {
         $moduleName   = $this->app->tab == 'project' ? 'project'  : 'testcase';
         $methodName   = $this->app->tab == 'project' ? 'testcase' : 'browse';
         $projectParam = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch={$module->branch}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
+        return html::a(helper::createLink($moduleName, $methodName, $projectParam . "root={$module->root}&branch={$extra['branchID']}&type=byModule&param={$module->id}"), $module->name, '_self', "id='module{$module->id}' data-app='{$this->app->tab}' title='{$module->name}'");
     }
 
     /**

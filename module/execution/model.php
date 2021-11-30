@@ -381,6 +381,8 @@ class executionModel extends model
             $creatorExists = false;
             $teamMembers   = array();
 
+            $this->loadModel('kanban')->createLanes($executionID);
+
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
@@ -710,14 +712,24 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
+     
+        if($execution->realBegan == '')
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
+            return false;
+        }  
+        if($execution->realBegan > helper::today())
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
-
+        
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -789,6 +801,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->setDefault('realEnd', '')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -858,18 +871,30 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
-            ->setDefault('realEnd', helper::today())
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
+        
+        if($execution->realEnd == '')
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
+            return false;
+        }
+
+        if($execution->realEnd > helper::today())
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->where('id')->eq((int)$executionID)
             ->exec();
+        
         if(!dao::isError())
         {
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
@@ -1339,6 +1364,10 @@ class executionModel extends model
         elseif($module == 'doc')
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
+        }
+        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
+        {
+            $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
         }
         else
         {
@@ -3187,7 +3216,7 @@ class executionModel extends model
             ->andWhere('t1.parent')->ge(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
 

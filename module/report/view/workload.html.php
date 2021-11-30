@@ -62,7 +62,9 @@
     <div class='cell'>
       <div class='panel'>
         <div class="panel-heading">
-          <div class="panel-title"><?php echo $title;?></div>
+          <div class="panel-title"><?php echo $title;?>
+            <a data-toggle='tooltip' title='<?php echo $lang->report->workloadDesc;?>'><i class='icon-help'></i></a>
+          </div>
           <nav class="panel-actions btn-toolbar"></nav>
         </div>
         <div data-ride='table'>

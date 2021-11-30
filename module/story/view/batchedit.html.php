@@ -148,7 +148,7 @@ foreach(explode(',', $showFields) as $field)
         <tr>
           <td colspan='<?php echo count($visibleFields) + ($branchProduct ? 3 : 2);?>' class='text-center form-actions'>
             <?php echo html::submitButton();?>
-            <?php echo html::backButton();?>
+            <?php echo $this->app->tab == 'product' ? html::a($this->session->storyList, $lang->goback, '', "class='btn btn-back btn-wide'") : html::backButton();?>
           </td>
         </tr>
       </tfoot>

@@ -1,0 +1,3 @@
+.tree .active{font-weight: bold;}
+.with-side .side {position: absolute; width: 130px;}
+.with-side .main {padding-left: 145px; float: left;}

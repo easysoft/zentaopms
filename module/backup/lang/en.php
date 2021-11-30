@@ -8,14 +8,14 @@ $lang->backup->restore     = 'Restore';
 $lang->backup->change      = 'Edit Expiration';
 $lang->backup->changeAB    = 'Edit';
 $lang->backup->rmPHPHeader = 'Remove PHP header';
-$lang->backup->setting     = 'Setting';
+$lang->backup->setting     = 'Settings';
 
-$lang->backup->settingAction = 'Backup Setting';
+$lang->backup->settingAction = 'Backup Settings';
 
 $lang->backup->time     = 'Date';
 $lang->backup->files    = 'Files';
-$lang->backup->allCount = 'All Count';
-$lang->backup->count    = 'Backup Count';
+$lang->backup->allCount = 'All Files';
+$lang->backup->count    = 'Backup Files';
 $lang->backup->size     = 'Size';
 $lang->backup->status   = 'Status';
 

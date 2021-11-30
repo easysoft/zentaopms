@@ -24,7 +24,7 @@ $lang->program->canceledBy   = 'CanceledBy';
 $lang->program->canceledDate = 'CanceledDate';
 $lang->program->team         = 'Team';
 $lang->program->order        = 'Rank';
-$lang->program->days         = 'Available Days';
+$lang->program->days         = 'Days';
 $lang->program->acl          = 'Access Control';
 $lang->program->whitelist    = 'WhiteList';
 $lang->program->deleted      = 'Deleted';
@@ -76,7 +76,7 @@ $lang->program->stakeholderTypeList['inside']  = 'Inside';
 $lang->program->stakeholderTypeList['outside'] = 'Outside';
 
 $lang->program->noProgram          = 'No program.';
-$lang->program->showClosed         = 'Closed programs.';
+$lang->program->showClosed         = 'Closed';
 $lang->program->tips               = 'If a parent item set is selected, products under that parent item set can be associated. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
 $lang->program->confirmBatchUnlink = "Do you want to batch unlink these stakeholders?";
 $lang->program->beginLetterParent  = "Parent begin date: %s, begin date should be >                  = parent begin date.";

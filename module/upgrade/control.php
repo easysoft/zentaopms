@@ -184,7 +184,7 @@ class upgrade extends control
         $title = $this->lang->upgrade->toPMS15Guide;
         if(isset($this->config->maxVersion))
         {
-            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->maxName, $this->lang->upgrade->to15Desc);
+            $this->lang->upgrade->to15Desc = str_replace('15.0', $this->lang->maxName, $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toMAXGuide;
         }
         elseif(isset($this->config->bizVersion))
@@ -341,7 +341,7 @@ class upgrade extends control
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
                 if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
             }
-            elseif($type == 'sprint' or $type == 'noProject')
+            elseif($type == 'sprint' or $type == 'moreLink')
             {
                 $linkedSprints = $this->post->sprints;
 
@@ -349,34 +349,18 @@ class upgrade extends control
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
                 if(dao::isError()) die(js::error(dao::getError()));
 
-                /* Process merged independent projects. */
-                $productIdList = array();
-                if($type == 'noProject')
-                {
-                    $productIdList = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->in($linkedSprints)->fetchPairs();
-                }
                 if($_POST['projectType'] == 'execution')
                 {
                     /* Use historical projects as execution upgrades. */
-                    $this->upgrade->processMergedData($programID, $projectList, $lineID, $productIdList, $linkedSprints);
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
                 }
                 else
                 {
                     /* Use historical projects as project upgrades. */
                     foreach($linkedSprints as $sprint)
                     {
-                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, $productIdList, array($sprint => $sprint));
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
                     }
-                }
-            }
-            elseif($type == 'moreLink')
-            {
-                foreach($this->post->projects as $i => $projectID)
-                {
-                    $sprintID = $this->post->sprints[$i];
-
-                    /* Change program field for product and project. */
-                    $this->upgrade->processMergedData(0, $projectID, 0, array(), array($sprintID));
                 }
             }
 
@@ -514,23 +498,8 @@ class upgrade extends control
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
             foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
 
-            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=noProject"));
+            if(empty($noMergedSprints)) $this->locate($this->createLink('upgrade', 'mergeProgram', "type=moreLink"));
 
-            $this->view->noMergedSprints = $noMergedSprints;
-        }
-
-        /* Get one no merged sprint that link more then two products and no project in the system. */
-        if($type == 'noProject')
-        {
-            $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('type')->eq('project')->fetch();
-            if($project) $this->locate($this->createLink('upgrade', 'mergeProgram', 'type=moreLink'));
-            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq(0)->andWhere('path')->eq('')->orderBy('id_desc')->limit(1)->fetchAll('id');
-
-            $productPrograms = $this->dao->select('t3.id as id, t3.name as name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
-                ->leftJoin(TABLE_PROGRAM)->alias('t3')->on('t2.program=t3.id')
-                ->where('t1.project')->eq(key($noMergedSprints))
-                ->fetchPairs();
             $this->view->noMergedSprints = $noMergedSprints;
         }
 
@@ -571,13 +540,48 @@ class upgrade extends control
         $currentProgramID = $programID ? $programID : key($programs);
 
         $this->view->title       = $this->lang->upgrade->mergeProgram;
-        $this->view->programs    = $type == 'noProject' ? $productPrograms : $programs;
+        $this->view->programs    = $programs;
         $this->view->programID   = $programID;
         $this->view->projects    = array('' => '') + $this->upgrade->getProjectPairsByProgram($currentProgramID);
         $this->view->lines       = $currentProgramID ? array('' => '') + $this->loadModel('product')->getLinePairs($currentProgramID) : array('' => '');
         $this->view->users       = $this->loadModel('user')->getPairs('noclosed|noempty');
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->projectType = $projectType;
+        $this->display();
+    }
+
+    /**
+     * Rename object in upgrade.
+     *
+     * @param  string $type  project|product|execution
+     * @param  string $duplicateList 
+     * @access public
+     * @return void
+     */
+    public function renameObject($type = 'project', $duplicateList = '')
+    {
+        $this->app->loadLang($type);
+        if($_POST)
+        {
+            foreach($this->post->project as $projectID => $projectName)
+            {
+                if(!$projectName) continue;
+                $this->dao->update(TABLE_PROJECT)->set('name')->eq($projectName)->where('id')->eq($projectID)->exec();
+            }
+
+            die(js::closeModal('parent.parent', ''));
+        }
+
+        $objectGroup = array();
+        if($type == 'project' or $type == 'execution')
+        {
+            $objectGroup = $this->dao->select('id,name')->from(TABLE_PROJECT)
+                ->where('id')->in($duplicateList)
+                ->fetchGroup('name');
+        }
+
+        $this->view->type        = $type;
+        $this->view->objectGroup = $objectGroup;
         $this->display();
     }
 

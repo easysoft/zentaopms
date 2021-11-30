@@ -74,10 +74,7 @@ foreach($projects as $programID => $programProjects)
     {
         $selected    = $project->id == $projectID ? 'selected' : '';
         $link        = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
-        $projectName = $project->name;
-
-        /* If this version is maxVersion, add the execution icon before execution name. */
-        if(isset($this->config->maxVersion)) $projectName = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
+        $projectName = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
 
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {

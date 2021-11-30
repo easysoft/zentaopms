@@ -24,15 +24,8 @@ $(function()
     {
         var projectID = $('#project').val();
         var planID    = $('#planID').val();
-        if(!projectID)
-        {
-            alert(projectNotEmpty);
-            return false;
-        }
-        else
-        {
-            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
-        }
+        $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        $('#projects').modal('hide');
     });
 });
 $(document).on('click', 'td.content .more', function(e)

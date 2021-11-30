@@ -438,7 +438,7 @@ class release extends control
 
         if($browseType == 'bySearch' or $build->execution == 0)
         {
-            $allStories = $this->story->getBySearch($release->product, $release->branch, $queryID, 'id', $build->execution ? $build->execution : '', 'story', $release->stories, $pager);
+            $allStories = $this->story->getBySearch($release->product, "0,{$release->branch}", $queryID, 'id', $build->execution ? $build->execution : '', 'story', $release->stories, $pager);
         }
         else
         {
@@ -558,7 +558,7 @@ class release extends control
 
         $allBugs     = array();
         $releaseBugs = $type == 'bug' ? $release->bugs : $release->leftBugs;
-        if($browseType == 'bySearch')
+        if($browseType == 'bySearch' or $build->execution == 0)
         {
             $allBugs = $this->bug->getBySearch($release->product, $release->branch, $queryID, 'id_desc', $releaseBugs, $pager);
         }

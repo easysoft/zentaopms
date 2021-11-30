@@ -166,10 +166,14 @@ class programModel extends model
             ->andWhere('program')->in(array_keys($programs))
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->andWhere('status')->ne('closed')
-            ->fetchGroup('program', 'id');
+            ->orderBy('order_asc')
+            ->fetchGroup('program');
 
         $productPairs = array();
-        foreach($productGroup as $programID => $products) $productPairs = array_merge($productPairs, array_keys($products));
+        foreach($productGroup as $programID => $products) 
+        {
+            foreach($products as $product) $productPairs[$product->id] = $product->id;
+        }
 
         /* Get all plans under products. */
         $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
@@ -184,7 +188,6 @@ class programModel extends model
             ->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->in($productPairs)
-            ->andWhere('t2.status')->eq('doing')
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->fetchGroup('product');
@@ -226,11 +229,11 @@ class programModel extends model
         /* Group data by product. */
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $productID => $product)
+            foreach($products as $product)
             {
-                $product->plans    = zget($plans, $productID, array());
-                $product->releases = zget($releases, $productID, array());
-                $projects          = zget($projectGroup, $productID, array());
+                $product->plans    = zget($plans, $product->id, array());
+                $product->releases = zget($releases, $product->id, array());
+                $projects          = zget($projectGroup, $product->id, array());
                 foreach($projects as $project)
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
@@ -260,11 +263,11 @@ class programModel extends model
 
             if(in_array($programID, $involvedPrograms))
             {
-                $kanbanGroup['my'][$programID] = $programGroup;
+                $kanbanGroup['my'][] = $programGroup;
             }
             else
             {
-                $kanbanGroup['others'][$programID] = $programGroup;
+                $kanbanGroup['others'][] = $programGroup;
             }
         }
 
@@ -909,7 +912,7 @@ class programModel extends model
             ->beginIF(!$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
-            ->orderBy('`order`')
+            ->orderBy('`order` asc')
             ->fetchPairs();
     }
 

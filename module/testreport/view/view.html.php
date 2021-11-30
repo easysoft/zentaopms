@@ -63,13 +63,10 @@
           <th><?php echo $lang->testreport->members?></th>
           <td colspan='2'><?php foreach(explode(',', $report->members) as $member)echo zget($users, $member) . ' &nbsp; ';?></td>
         </tr>
-        <?php if(!empty($execution->desc)):?>
+        <?php if(!empty($execution)):?>
         <tr>
           <th><?php echo $lang->testreport->goal?></th>
-          <td colspan='2'>
-            <?php echo $execution->desc?>
-            <a data-toggle='tooltip' class='text-warning' title='<?php echo $lang->testreport->goalTip;?>'><i class='icon-help'></i></a>
-          </td>
+          <td colspan='2'><?php echo $execution->desc?></td>
         </tr>
         <?php endif;?>
         <tr>

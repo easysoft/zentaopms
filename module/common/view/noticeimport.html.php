@@ -27,7 +27,5 @@ function submitForm(type)
     $('.modal-body #insert').val(type == 'insert' ? 1 : 0);
     $('#importNoticeModal .form-actions .btn').addClass('disabled');
     $("button[data-target='#importNoticeModal']").closest('form').submit();
-
-    setTimeout(function(){$('#importNoticeModal .form-actions .btn').removeClass('disabled');}, 1000);
 }
 </script>

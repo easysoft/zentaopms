@@ -1,0 +1,3 @@
+#featurebar {display:inline-block;}
+#querybox #searchform {border-bottom: 1px solid #ddd; margin-bottom: 20px;}
+#designTable td {white-space:nowrap; text-overflow:ellipsis; overflow: hidden}
