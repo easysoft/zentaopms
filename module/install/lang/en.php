@@ -48,7 +48,10 @@ $lang->install->introductionContent = <<<EOT
   <h4>Dear users, welcome to ZenTao project management system.</h4>
   <p>ZenTao has two managment modes in version 15.0 and up. One is the classic management mode, providing two core features, Product and Project; the other is a new project management mode, with Program and Execution added. The following is an introduction to the new mode:</p>
   <div class='block-content'>
-    <div class='block-details'><p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p></div>
+    <div class='block-details'>
+      <p class='block-title'><i class='icon icon-program'></i><strong>Program</strong></p>
+      <p>Program is used to manage a group of products and projects, and the company executives or PMO can use it for strategic planning.</p>
+    </div>
     <div class='block-details block-right'>
       <p class='block-title'><i class='icon icon-product'></i><strong>Product</strong></p>
       <p>Product is used to subdivide the company's strategy into requirements that can be developed, and the product manager can use it to make release plans.<p>

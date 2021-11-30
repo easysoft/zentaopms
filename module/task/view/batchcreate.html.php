@@ -51,8 +51,6 @@
       }
   }
   $colspan     = count($visibleFields) + 3;
-  $hiddenStory = (isonlybody() and $storyID) ? ' hidden' : '';
-  if($hiddenStory and isset($visibleFields['story'])) $colspan -= 1;
   ?>
   <form method='post' class='load-indicator batch-actions-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">
     <div class="table-responsive">
@@ -62,7 +60,7 @@
             <th class='c-id'><?php echo $lang->idAB;?></th>
             <th class='c-module<?php echo zget($visibleFields, 'module', ' hidden') . zget($requiredFields, 'module', '', ' required');?>'><?php echo $lang->task->module?></th>
             <?php if($execution->type != 'ops'):?>
-            <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required'); echo $hiddenStory;?>'><?php echo $lang->task->story;?></th>
+            <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->task->story;?></th>
             <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->task->name;?></span></th>
             <th class='c-type required'><?php echo $lang->typeAB;?></span></th>
@@ -108,7 +106,7 @@
               <?php echo html::hidden("parent[$i]", $parent);?>
             </td>
             <?php if($execution->type != 'ops'):?>
-            <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
+            <td <?php echo zget($visibleFields, 'story', "class='hidden'");?> style='overflow: visible'>
               <div class='input-group'>
                 <?php echo html::select("story[$i]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated($i)'");?>
                 <span class='input-group-btn'>
@@ -176,7 +174,7 @@
         <?php echo html::select("module[%s]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $execution->id, \"%s\")'")?>
         <?php echo html::hidden("parent[%s]", $parent);?>
       </td>
-      <td <?php echo zget($visibleFields, 'story', "class='hidden'"); echo $hiddenStory;?> style='overflow: visible'>
+      <td <?php echo zget($visibleFields, 'story', "class='hidden'");?> style='overflow: visible'>
         <div class='input-group'>
           <?php echo html::select("story[%s]", $stories, $currentStory, "class='form-control chosen' onchange='setStoryRelated(\"%s\")'");?>
           <span class='input-group-btn'>
@@ -227,6 +225,5 @@
 <?php js::set('mainField', 'name');?>
 <?php js::set('ditto', $lang->task->ditto);?>
 <?php js::set('storyID', $storyID);?>
-<?php js::set('hiddenStory', $hiddenStory);?>
 <?php include '../../common/view/pastetext.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

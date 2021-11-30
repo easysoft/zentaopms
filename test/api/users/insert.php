@@ -16,7 +16,6 @@ $insert = array(
     'account'  => 'sgm',
     'password' => 'qaz19950422',
     'realname' => '孙广明',
-    'gender'   => 'm',
     'email'    => 'sgm0422@163.com',
 );
 $user = $rest->post('/users', $insert, array('token' => $token->token));

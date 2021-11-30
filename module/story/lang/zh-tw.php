@@ -256,7 +256,7 @@ $lang->story->lblClose             = "關閉{$lang->SRCommon}";
 $lang->story->lblTBC               = '任務Bug用例';
 
 $lang->story->checkAffection       = '影響範圍';
-$lang->story->affectedProjects     = "影響的{$lang->project->common}或{$lang->execution->common}";
+$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影響的{$lang->project->common}或{$lang->execution->common}": "影響的{$lang->project->common}";
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
