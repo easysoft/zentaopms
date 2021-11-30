@@ -238,7 +238,6 @@ class product extends control
         }
         else
         {
-            $branchID = $browseType == 'bymodule' ? 'all' : $branchID;
             $branches = $this->loadModel('branch')->getPairs($productID);
             $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
