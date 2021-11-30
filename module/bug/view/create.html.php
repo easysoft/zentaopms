@@ -26,7 +26,6 @@ js::set('isStepsTemplate', $isStepsTemplate);
 js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
-a(inlink('view', "bugid=1"));
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
