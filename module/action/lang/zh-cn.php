@@ -288,6 +288,8 @@ $lang->action->label->mergedmr              = 'MR合并了';
 $lang->action->label->compilepass           = '构建成功';
 $lang->action->label->compilefail           = '构建失败';
 $lang->action->label->reopen                = '重新打开';
+$lang->action->label->approve               = '通过了';
+$lang->action->label->reject                = '拒绝了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
