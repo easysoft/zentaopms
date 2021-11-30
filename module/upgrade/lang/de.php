@@ -139,4 +139,6 @@ EOT;
 
 $lang->upgrade->duplicateProject = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 
+$lang->upgrade->editedName = 'New Name';
+
 include dirname(__FILE__) . '/version.php';

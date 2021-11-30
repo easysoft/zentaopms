@@ -1,13 +1,20 @@
+<?php
+/**
+ * The html template file of renameObject method of upgrade module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Guangming Sun<sunguangming@cnezsoft.com>
+ * @package     upgrade
+ * @version     $Id: renameobject.html.php 4129 2021-11-30 13:07:14Z sunguangming $
+ */
+?>
 <?php include '../../common/view/header.lite.html.php';?>
-<style>
-.group-end {border-bottom: 1px solid #efefef;}
-</style>
+<style>.group-end {border-bottom: 1px solid #efefef;}</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2>
-        <?php if($type == 'project') echo $lang->upgrade->duplicateProject;?>
-      </h2>
+      <h2><?php if($type == 'project') echo $lang->upgrade->duplicateProject;?></h2>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
