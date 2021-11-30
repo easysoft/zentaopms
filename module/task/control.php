@@ -531,7 +531,7 @@ class task extends control
         else
         {
             /* Set my menu. */
-            $this->loadModel('my')->setMenu();
+            $this->loadModel('my');
             $this->lang->my->menu->work['subModule'] = 'task';
 
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
