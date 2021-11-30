@@ -140,4 +140,68 @@ class xuanxuanIm extends imModel
         $extra   = json_encode(array('actorId' => $userID));
         $this->loadModel('action')->create('user', $userID, $actionType, $comment, $extra, $actor);
     }
+
+    public function messageGetNotifyList()
+    {
+        $onlineUsers = $this->loadModel('im')->userGetList('online');
+        if(empty($onlineUsers)) return array();
+        $onlineUsers = array_keys($onlineUsers);
+
+        $messageUserPairsData = $this->dao->select('message,user')->from(TABLE_IM_MESSAGESTATUS)
+                            ->where('status')->eq('waiting')
+                            ->andWhere('user')->in($onlineUsers)
+                            ->fetchAll();
+        if(empty($messageUserPairsData)) return array();
+
+        $messageUserPairs = array();
+        foreach($messageUserPairsData as $data)
+        {
+            if(isset($messageUserPairs[$data->message]))
+            {
+                $messageUserPairs[$data->message][] = $data->user;
+                continue;
+            }
+            $messageUserPairs[$data->message] = array($data->user);
+        }
+        $notifyMessages = $this->im->messageGetList('', array_keys($messageUserPairs), null, '', 'notify', false);
+        if(empty($notifyMessages)) return array();
+
+        $messageIDs = array();
+        foreach($notifyMessages as $message) $messageIDs[] = $message->id;
+        $messageUserPairs = array_intersect_key($messageUserPairs, array_flip($messageIDs));
+
+        $notifications = $this->im->messageFormatNotify($notifyMessages);
+        $data          = array();
+        $messages      = array();
+        foreach($notifications as $message)
+        {
+            foreach($messageUserPairs[$message->id] as $userID)
+            {
+                $messages[$userID][] = $message->id;
+                $data[$userID][]     = $message;
+            }
+        }
+
+        foreach($messages as $userID => $message)
+        {
+            $this->dao->delete()->from(TABLE_IM_MESSAGESTATUS)
+                ->where('message')->in($message)
+                ->andWhere('user')->eq($userID)
+                ->exec();
+        }
+        return $this->mergeNotifications($data);
+    }
+
+    /**
+     * Merge notifications with same actor, objectType, actionType.
+     *
+     * @param  array  $notificationData
+     * @access public
+     * @return void
+     */
+    public function mergeNotifications($notificationData)
+    {
+        // TODO: merge notifications.
+        return $notificationData;
+    }
 }

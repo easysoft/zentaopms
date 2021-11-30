@@ -28,3 +28,8 @@ public function userAddAction($user, $actionType, $result, $comment = '', $commo
 {
     return $this->loadExtension('xuanxuan')->userAddAction($user, $actionType, $result, $comment, $common);
 }
+
+public function messageGetNotifyList()
+{
+    return $this->loadExtension('xuanxuan')->messageGetNotifyList();
+}
