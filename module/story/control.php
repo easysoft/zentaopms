@@ -709,7 +709,7 @@ class story extends control
         }
         else if($this->app->tab == 'my')
         {
-            $this->loadModel('my')->setMenu();
+            $this->loadModel('my');
             if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
             if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
         }
