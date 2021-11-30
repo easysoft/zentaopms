@@ -1179,21 +1179,12 @@ class bugModel extends model
      */
     public function activate($bugID)
     {
-        $bugID  = (int)$bugID;
-        $oldBug = $this->getById($bugID);
-        $builds = $this->dao->select('id,bugs')
-                                  ->from(TABLE_BUILD)
-                                  ->where('bugs')->like("%$bugID%")
-                                  ->fetchPairs('id', 'bugs');
-        foreach($builds as $buildID => $buildBugs)
-        {
-            $bugList = explode(',', $buildBugs);
-            if(in_array($bugID, $bugList))
-            {
-                $solveBuild = $buildID;
-                continue;
-            }
-        }
+        $bugID      = (int)$bugID;
+        $oldBug     = $this->getById($bugID);
+        $solveBuild = $this->dao->select('id')
+            ->from(TABLE_BUILD)
+            ->where("CONCAT(',', bugs, ',')")->like("%,{$bugID},%")
+            ->fetch('id');
         $now = helper::now();
         $bug = fixer::input('post')
             ->setDefault('assignedTo',     $oldBug->resolvedBy)
