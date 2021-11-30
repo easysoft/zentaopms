@@ -375,7 +375,7 @@ class testcase extends control
         $product = $this->product->getById($productID);
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
-            $objectID        = $this->app->tab == 'project' ? $projectID : $executionID;
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
             $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
             $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             $branch          = key($branches);
