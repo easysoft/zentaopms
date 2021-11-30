@@ -1303,18 +1303,20 @@ $lang->tree->methodOrder[30] = 'delete';
 
 /* Report. */
 $lang->resource->report = new stdclass();
-$lang->resource->report->index              = 'index';
-$lang->resource->report->projectDeviation   = 'projectDeviation';
-$lang->resource->report->productSummary     = 'productSummary';
-$lang->resource->report->bugCreate          = 'bugCreate';
-$lang->resource->report->bugAssign          = 'bugAssign';
-$lang->resource->report->workload           = 'workload';
+$lang->resource->report->index            = 'index';
+$lang->resource->report->projectDeviation = 'projectDeviation';
+$lang->resource->report->productSummary   = 'productSummary';
+$lang->resource->report->bugCreate        = 'bugCreate';
+$lang->resource->report->bugAssign        = 'bugAssign';
+$lang->resource->report->workload         = 'workload';
+$lang->resource->report->annualData       = 'annual';
 
 $lang->report->methodOrder[0]  = 'index';
 $lang->report->methodOrder[5]  = 'projectDeviation';
 $lang->report->methodOrder[10] = 'productSummary';
 $lang->report->methodOrder[15] = 'bugCreate';
 $lang->report->methodOrder[20] = 'workload';
+$lang->report->methodOrder[25] = 'annual';
 
 /* Search. */
 $lang->resource->search = new stdclass();

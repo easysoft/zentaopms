@@ -2453,19 +2453,19 @@ class storyModel extends model
         $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
-            $branches = array();
-            foreach($products as $product)
+            $branches = array(BRANCH_MAIN => BRANCH_MAIN);
+            if($branch === '')
             {
-                if($product->type != 'normal')
+                foreach($products as $product)
                 {
-                    $branches[BRANCH_MAIN] = BRANCH_MAIN;
-                    foreach($product->branches as $branchID)
-                    {
-                        if($branch == BRANCH_MAIN and $branchID) continue;
-                        $branches[$branchID] = $branchID;
-                    }
+                    foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
                 }
             }
+            else
+            {
+                $branches[$branch] = $branch;
+            }
+
             $branches = join(',', $branches);
             $storyQuery .= " AND `branch`" . helper::dbIN($branches);
 

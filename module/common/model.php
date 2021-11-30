@@ -320,7 +320,6 @@ class commonModel extends model
             if($module == 'block' and $method == 'main') return true;
             if($module == 'block' and $method == 'delete') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
-            if($module == 'report' and $method == 'annualdata') return true;
         }
         return false;
     }
@@ -2149,8 +2148,6 @@ EOD;
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
-
-        if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
         if(isset($rights[$module][$method]))
         {

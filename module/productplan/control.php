@@ -430,8 +430,8 @@ class productplan extends control
         else
         {
             $this->config->product->search['fields']['branch'] = $this->lang->product->branch;
-            $branch   = $this->loadModel('branch')->getById($plan->branch);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branch->name);
+            $branchName = $this->loadModel('branch')->getById($plan->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branchName);
             $this->config->product->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->product->search);
@@ -573,8 +573,8 @@ class productplan extends control
         else
         {
             $this->config->bug->search['fields']['branch'] = $this->lang->product->branch;
-            $branch   = $this->loadModel('branch')->getById($plan->branch);
-            $branches = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branch->name);
+            $branchName = $this->loadModel('branch')->getById($plan->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $plan->branch => $branchName);
             $this->config->bug->search['params']['branch']['values'] = $branches;
         }
         $this->loadModel('search')->setSearchParams($this->config->bug->search);
