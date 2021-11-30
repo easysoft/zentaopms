@@ -93,6 +93,7 @@ $lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
+$lang->mr->reopenSuccess       = "The merge request was reopened.";
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

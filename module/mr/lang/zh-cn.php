@@ -98,6 +98,7 @@ $lang->mr->apiError->sudo     = "无法以当前用户绑定的GitLab账户进�
 
 $lang->mr->createFailedFromAPI = "创建合并请求失败。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
+$lang->mr->reopenSuccess       = "已重新打开合并请求。";
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
