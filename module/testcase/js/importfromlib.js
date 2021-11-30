@@ -22,6 +22,13 @@ $(function()
     });
 })
 
+/**
+ * Reload.
+ *
+ * @param  int   $libID
+ * @access public
+ * @return void
+ */
 function reload(libID)
 {
     link = createLink('testcase','importFromLib','productID='+ productID + '&branch=' + branch + '&libID='+libID);

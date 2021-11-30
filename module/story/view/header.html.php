@@ -1,6 +1,13 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <script>
+/**
+ * Load product.
+ *
+ * @param  int   $productID
+ * @access public
+ * @return void
+ */
 function loadProduct(productID)
 {
     if(typeof parentStory != 'undefined' && parentStory)
@@ -30,6 +37,12 @@ function loadProduct(productID)
     loadProductBranches(productID)
 }
 
+/**
+ * Load branch.
+ *
+ * @access public
+ * @return void
+ */
 function loadBranch()
 {
     var branch = $('#branch').val();
@@ -38,6 +51,13 @@ function loadBranch()
     loadProductPlans($('#product').val(), branch);
 }
 
+/**
+ * Load product branches.
+ *
+ * @param  int   $productID
+ * @access public
+ * @return void
+ */
 function loadProductBranches(productID)
 {
     $('#branch').remove();
@@ -59,6 +79,14 @@ function loadProductBranches(productID)
     })
 }
 
+/**
+ * Load product modules.
+ *
+ * @param  int   $productID
+ * @param  int   $branch
+ * @access public
+ * @return void
+ */
 function loadProductModules(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = $('#branch').val();
@@ -73,6 +101,14 @@ function loadProductModules(productID, branch)
     });
 }
 
+/**
+ * Load product plans.
+ *
+ * @param  int   $productID
+ * @param  int   $branch
+ * @access public
+ * @return void
+ */
 function loadProductPlans(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = 0;

@@ -650,7 +650,7 @@ class story extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $objectID = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
             $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
             $branches        = isset($productBranches[$story->product]) ? $productBranches[$story->product] : array();
             $products        = $this->product->getProductPairsByProject($objectID);
