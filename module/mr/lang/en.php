@@ -21,6 +21,7 @@ $lang->mr->linkStory = 'Link Stories';
 $lang->mr->linkBug   = 'Link Bugs';
 $lang->mr->linkTask  = 'Link Tasks';
 $lang->mr->unlink    = 'UnLink of stories,bugs,tasks';
+$lang->mr->addBug    = 'Add Review';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
