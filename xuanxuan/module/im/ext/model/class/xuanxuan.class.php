@@ -197,7 +197,7 @@ class xuanxuanIm extends imModel
      *
      * @param  array  $notificationData
      * @access public
-     * @return void
+     * @return array
      */
     public function mergeNotifications($notificationData)
     {
