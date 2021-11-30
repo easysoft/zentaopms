@@ -51,11 +51,34 @@
 </div>
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
+    <?php if($this->app->getViewType() == 'xhtml'):?>
+    <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
+    <div class='tab-btn-container'>
+    <?php endif;?>
     <ul class='nav nav-tabs'>
-      <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
-      <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
-      <li><a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->productplan->view;?></a></li>
+        <li class='<?php if($type == 'story') echo 'active'?>'>
+          <a href='#stories' data-toggle='tab'>
+            <?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <span>(<?php echo $storyPager->recTotal;?>)</span>
+            <?php endif;?>
+          </a>
+        </li>
+        <li class='<?php if($type == 'bug') echo 'active'?>'>
+          <a href='#bugs' data-toggle='tab'>
+            <?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <span>(<?php echo $bugPager->recTotal;?>)</span>
+            <?php endif;?>
+          </a>
+        </li>
+        <li>
+          <a href='#planInfo' data-toggle='tab'><?php echo  html::icon($lang->icons['plan'], 'text-info') . ' ' . $lang->productplan->view;?></a>
+        </li>
     </ul>
+    <?php if($this->app->getViewType() == 'xhtml'):?>
+    </div>
+    <?php endif;?>
     <div class='tab-content'>
       <div id='stories' class='tab-pane <?php if($type == 'story') echo 'active'?>'>
         <?php $canOrder = common::hasPriv('project', 'storySort');?>
@@ -85,8 +108,7 @@
         <?php if(common::hasPriv('productplan', 'linkStory')):?>
         <div class='linkBox cell hidden'></div>
         <?php endif;?>
-
-        <form class='main-table table-story' data-ride='table' method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
+        <form class='main-table table-story' data-ride="<?php echo $this->app->getViewType() == 'xhtml' ? '' : 'table' ?>" method='post' target='hiddenwin' action="<?php echo inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>">
           <table class='table has-sort-head' id='storyList'>
             <?php
             $canBatchUnlink       = common::hasPriv('productPlan', 'batchUnlinkStory');
@@ -104,6 +126,14 @@
             ?>
             <thead>
               <tr class='text-center'>
+                <?php if($this->app->getViewType() == 'xhtml'):?>
+                <th class='c-id text-left'>
+                  <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+                </th>
+                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
+                <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
+                <?php else:?>
                 <th class='c-id text-left'>
                   <?php if($planStories && $canBatchAction):?>
                   <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -124,6 +154,7 @@
                 <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
                 <th class='w-80px'> <?php common::printOrderLink('stage',      $orderBy, $vars, $lang->story->stageAB);?></th>
                 <th class='c-actions-1'> <?php echo $lang->actions?></th>
+                <?php endif;?>
               </tr>
             </thead>
             <tbody class='sortable text-center'>
@@ -136,6 +167,23 @@
               $totalEstimate += $story->estimate;
               ?>
               <tr data-id='<?php echo $story->id;?>'>
+                <?php if($this->app->getViewType() == 'xhtml'):?>
+                <td class='c-id text-left'>
+                <?php printf('%03d', $story->id);?>
+                </td>
+                <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
+                <td class='text-left nobr' title='<?php echo $story->title?>'>
+                  <?php
+                  if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
+                  echo $story->title;
+                  ?>
+                </td>
+                <td>
+                  <span class='status-story status-<?php echo $story->status?>'>
+                    <?php echo $this->processStatus('story', $story);?>
+                  </span>
+                </td>
+                <?php else:?>
                 <td class='c-id text-left'>
                   <?php if($canBatchAction):?>
                   <?php echo html::checkbox('storyIdList', array($story->id => sprintf('%03d', $story->id)));?>
@@ -170,13 +218,14 @@
                   }
                   ?>
                 </td>
+                <?php endif;?>
               </tr>
               <?php endforeach;?>
             </tbody>
           </table>
           <?php if($planStories):?>
           <div class='table-footer'>
-            <?php if($canBatchAction):?>
+            <?php if($canBatchAction and $this->app->getViewType() != 'xhtml'):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class='table-actions btn-toolbar'>
               <?php $actionLink = inlink('batchUnlinkStory', "planID=$plan->id&orderBy=$orderBy");?>
@@ -342,7 +391,9 @@
               </div>
             </div>
             <?php endif;?>
+            <?php if($this->app->getViewType() != 'xhtml'):?>
             <div class='table-statistic'><?php echo $summary;?></div>
+            <?php endif;?>
             <?php
             $this->app->rawParams['type'] = 'story';
             $storyPager->show('right', 'pagerjs');
@@ -370,6 +421,14 @@
             <?php $vars = "planID={$plan->id}&type=bug&orderBy=%s&link=$link&param=$param"; ?>
             <thead>
               <tr class='text-center'>
+                <?php if($this->app->getViewType() == 'xhtml'):?>
+                <th class='c-id text-left'>
+                  <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+                </th>
+                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
+                <?php else:?>
                 <th class='c-id text-left'>
                   <?php if($planBugs && $canBatchUnlink):?>
                   <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -379,16 +438,29 @@
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
                 <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
-                <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
+                <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
                 <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='w-50px'> <?php echo $lang->actions?></th>
+                <?php endif;?>
               </tr>
             </thead>
             <tbody class='text-center'>
               <?php foreach($planBugs as $bug):?>
               <tr>
+                <?php if($this->app->getViewType() == 'xhtml'):?>
+                <td class='c-id text-left'>
+                  <?php printf('%03d', $bug->id);?>
+                </td>
+                <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo $bug->title?></td>
+                <td>
+                  <span class='status-bug status-<?php echo $bug->status?>'>
+                    <?php echo $this->processStatus('bug', $bug);?>
+                  </span>
+                </td>
+                <?php else:?>
                 <td class='c-id text-left'>
                   <?php if($canBatchUnlink):?>
                   <?php echo html::checkbox('bugIDList', array($bug->id => sprintf('%03d', $bug->id)));?>
@@ -414,13 +486,14 @@
                   }
                   ?>
                 </td>
+                <?php endif;?>
               </tr>
               <?php endforeach;?>
             </tbody>
           </table>
           <?php if($planBugs):?>
           <div class='table-footer'>
-            <?php if($canBatchAction):?>
+            <?php if($canBatchAction and $this->app->getViewType() != 'xhtml'):?>
             <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
             <div class="table-actions btn-toolbar">
               <div class='btn-group dropup'>
@@ -460,7 +533,9 @@
               </div>
             </div>
             <?php endif;?>
+            <?php if($this->app->getViewType() != 'xhtml'):?>
             <div class='table-statistic'><?php echo sprintf($lang->productplan->bugSummary, count($planBugs));?></div>
+            <?php endif;?>
             <?php
             $this->app->rawParams['type'] = 'bug';
             $bugPager->show('right', 'pagerjs');

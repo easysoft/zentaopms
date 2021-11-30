@@ -2131,6 +2131,7 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
@@ -2139,6 +2140,7 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
+            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('t2.status')->ne('suspended')->andWhere('t4.status')->ne('suspended')->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -2187,6 +2189,30 @@ class taskModel extends model
         {
             $tasks[$task->id] = $task->execution . ' / ' . $task->name;
         }
+        return $tasks;
+    }
+
+    /**
+     * Get suspended tasks of a user.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getUserSuspendedTasks($account)
+    {
+        $tasks = $this->dao->select('t1.*')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('(t2.status')->eq('suspended')
+            ->orWhere('t3.status')->eq('suspended')
+            ->markRight(1)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('id');
         return $tasks;
     }
 
