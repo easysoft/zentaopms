@@ -2854,15 +2854,13 @@ EOD;
     {
         if(empty($markdown)) return false;
 
-        $markdown = str_replace('&', '&amp;', $markdown);
-
         global $app;
-        $hyperdown = $app->loadClass('hyperdown');
-        $content   = $hyperdown->makeHtml($markdown);
-
-        $content = htmlspecialchars_decode($content);
-        $content = fixer::stripDataTags($content);
-        return $content;
+        $app->loadClass('parsedown', true);
+        return parsedown::instance()
+            ->setSafeMode(true)
+            ->setBreaksEnabled(true)
+            ->setMarkupEscaped(true)
+            ->text($markdown);
     }
 }
 
