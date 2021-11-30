@@ -171,7 +171,7 @@ class blockModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
             ->where('t1.assignedTo')->eq($this->app->user->account)
             ->andWhere('t2.status')->ne('suspended')
-            ->beginIF('t3.Id is not null')->andWhere('t3.status')->ne('suspended')->fi()
+            ->andWhere('t3.status')->ne('suspended')
             ->andWhere('t2.type')->eq('project')
             ->andWhere('t3.type')->in('sprint,stage')
             ->andWhere('t1.deleted')->eq(0)
