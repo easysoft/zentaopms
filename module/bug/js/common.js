@@ -55,12 +55,6 @@ function loadAll(productID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen();
         loadProductBranches(productID)
-        loadProductModules(productID);
-        loadProductProjects(productID);
-        loadProductBuilds(productID);
-        loadProductplans(productID);
-        loadProductStories(productID);
-        //loadTestTasks(productID);
     }
 }
 
@@ -502,6 +496,12 @@ function loadProductBranches(productID)
             $('#branch').css('width', page == 'create' ? '120px' : '65px');
             $('#branch').chosen();
         }
+
+        loadProductModules(productID);
+        loadProductProjects(productID);
+        loadProductBuilds(productID);
+        loadProductplans(productID);
+        loadProductStories(productID);
     })
 }
 
