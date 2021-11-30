@@ -167,7 +167,7 @@ class company extends control
      * @param  int    $productID
      * @param  int    $projectID
      * @param  int    $executionID
-     * @param  string $orderBy
+     * @param  string $orderBy     date_deac|date_asc
      * @access public
      * @return void
      */

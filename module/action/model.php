@@ -1424,7 +1424,7 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
-     * @param  string $orderBy
+     * @param  string $orderBy date_desc|date_asc
      * @access public
      * @return array
      */
@@ -1456,17 +1456,15 @@ class actionModel extends model
             }
         }
 
+        /* Modify date to the corrret order. */
         if($this->app->rawModule != 'company' and $direction != 'next')
         {
             $dateGroup = array_reverse($dateGroup);
         }
-        else if($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
+        elseif($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
         {
             $dateGroup = array_reverse($dateGroup);
-            foreach($dateGroup as $key => $dateItem)
-            {
-                $dateGroup[$key] = array_reverse($dateItem);
-            }
+            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
         }
 
         return $dateGroup;
