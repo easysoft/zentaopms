@@ -24,7 +24,7 @@
         <?php endif; ?>
       </h2>
     </div>
-    <form id='ajaxForm' class='form-ajax' method='post' action='<?php echo $this->createLink('mr', 'approval', "mr=$MR->id")?>'>
+    <form id='ajaxForm' class='form-ajax' method='post' action='<?php echo $this->createLink('mr', 'approval', "mr=$MR->id&action=$action")?>'>
       <table class='table table-form'>
         <?php if($showCompileResult): ?>
           <tr>
