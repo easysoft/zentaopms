@@ -749,7 +749,7 @@ class mrModel extends model
     public function close($MR)
     {
         $this->loadModel('action');
-        $actionID = $this->action->create('mr', $MR->id, 'close');
+        $actionID = $this->action->create('mr', $MR->id, 'closed');
         $rawMR = $this->apiCloseMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         $changes = common::createChanges($MR, $rawMR);
         $this->action->logHistory($actionID, $changes);
