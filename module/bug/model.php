@@ -1602,7 +1602,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getProductLeftBugs($build, $productID, $branch = 0, $linkedBugs = '', $pager = null)
+    public function getProductLeftBugs($build, $productID, $branch = '', $linkedBugs = '', $pager = null)
     {
         $build = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($build)->fetch();
         if(empty($build->execution)) return array();
@@ -1625,7 +1625,7 @@ class bugModel extends model
             ->andWhere("(status = 'active' OR resolvedDate > '{$execution->end}')")
             ->andWhere('openedBuild')->notin($beforeBuilds)
             ->beginIF($linkedBugs)->andWhere('id')->notIN($linkedBugs)->fi()
-            ->beginIF($branch)->andWhere('branch')->in("0,$branch")->fi()
+            ->beginIF($branch !== '')->andWhere('branch')->in("0,$branch")->fi()
             ->page($pager)
             ->fetchAll();
 
