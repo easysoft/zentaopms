@@ -12,6 +12,7 @@ $lang->mr->accept       = "Accept";
 $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
 $lang->mr->viewDiff     = 'View diff';
+$lang->mr->diff         = 'View diff';
 $lang->mr->viewInGitlab = 'View in GitLab';
 $lang->mr->link         = 'Link of stories,bugs,tasks';
 $lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
