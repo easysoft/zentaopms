@@ -708,8 +708,8 @@ class executionModel extends model
      */
     public function start($executionID)
     {
-        $oldExecution   = $this->getById($executionID);
-        $now            = helper::now();
+        $oldExecution = $this->getById($executionID);
+        $now          = helper::now();
 
         $execution = fixer::input('post')
             ->setDefault('status', 'doing')
@@ -861,8 +861,8 @@ class executionModel extends model
      */
     public function close($executionID)
     {
-        $oldExecution   = $this->getById($executionID);
-        $now            = helper::now();
+        $oldExecution = $this->getById($executionID);
+        $now          = helper::now();
         
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
