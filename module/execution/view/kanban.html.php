@@ -21,6 +21,17 @@
     </div>
     <?php endif;?>
   </div>
+  <div class='input-group pull-left not-fix-input-group' id='kanbanScaleControl'>
+    <span class='input-group-btn'>
+      <button class='btn btn-icon' type='button' data-type='-'><i class='icon icon-minuse-solid-circle text-muted'></i></button>
+    </span>
+    <span class='input-group-addon'>
+      <span id='kanbanScaleSize'>1</span><?php echo $lang->execution->kanbanCardsUnit; ?>
+    </span>
+    <span class='input-group-btn'>
+      <button class='btn btn-icon' type='button' data-type='+'><i class='icon icon-plus-solid-circle text-muted'></i></button>
+    </span>
+  </div>
   <div class='btn-toolbar pull-right'>
     <?php
     $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
