@@ -38,9 +38,9 @@
     <ul class='nav nav-tabs'>
       <li class='active'><?php echo html::a('###', $lang->mr->overview);?></li>
       <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-info') . ' ' . $lang->productplan->linkedStories);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-info')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
-      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=task"),  html::icon($lang->icons['todo'], 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
+      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=story"), html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories);?></a></li>
+      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=bug"),   html::icon($lang->icons['bug'], 'text-red')   . ' ' . $lang->productplan->linkedBugs);?></a></li>
+      <li><?php echo html::a(inlink('link', "mr={$MR->id}&type=task"),  html::icon('todo', 'text-info')  . ' ' . $lang->mr->linkedTasks);?></a></li>
     </ul>
     <div class='tab-content main-row'>
       <div class="main-col col-8">
