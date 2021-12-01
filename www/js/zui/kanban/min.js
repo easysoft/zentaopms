@@ -1,5 +1,5 @@
 /*!
- * ZUI: ZUI Kanban View - v1.10.0 - 2021-11-30
+ * ZUI: ZUI Kanban View - v1.10.0 - 2021-12-01
  * http://openzui.com
  * GitHub: https://github.com/easysoft/zui.git 
  * Copyright (c) 2021 cnezsoft.com; Licensed MIT
