@@ -58,9 +58,10 @@ $lang->gitlab->tokenFirst = 'Token不为空时，优先使用Token。';
 $lang->gitlab->tips       = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
 
 $lang->gitlab->placeholder = new stdclass;
-$lang->gitlab->placeholder->name  = '';
-$lang->gitlab->placeholder->url   = "请填写Gitlab Server首页的访问地址，如：https://gitlab.zentao.net。";
-$lang->gitlab->placeholder->token = "请填写具有admin权限账户的access token";
+$lang->gitlab->placeholder->name        = '';
+$lang->gitlab->placeholder->url         = "请填写Gitlab Server首页的访问地址，如：https://gitlab.zentao.net。";
+$lang->gitlab->placeholder->token       = "请填写具有admin权限账户的access token";
+$lang->gitlab->placeholder->projectPath = "项目标识串只能包含字母、数字、“_”、“-”和“.”。不能以“-”开头，以.git或者.atom结尾";
 
 $lang->gitlab->noImportableIssues = "目前没有可供导入的issue。";
 $lang->gitlab->tokenError         = "当前token非管理员权限。";

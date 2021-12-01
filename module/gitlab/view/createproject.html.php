@@ -39,7 +39,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->project->path;?></th>
-            <td class='required'><?php echo html::input('path', '', "class='form-control' placeholder='{$lang->gitlab->project->path}'");?></td>
+            <td class='required'><?php echo html::input('path', '', "class='form-control' placeholder='{$lang->gitlab->placeholder->projectPath}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->project->description;?></th>

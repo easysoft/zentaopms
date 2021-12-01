@@ -58,9 +58,10 @@ $lang->gitlab->tokenFirst = 'When the Token is not empty, the Token will be used
 $lang->gitlab->tips       = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
 
 $lang->gitlab->placeholder = new stdclass;
-$lang->gitlab->placeholder->name  = '';
-$lang->gitlab->placeholder->url   = "Please fill in the access address of the GitLab Server homepage, as: https://gitlab.zentao.net.";
-$lang->gitlab->placeholder->token = "Please fill in the access token of an account with admin privileges.";
+$lang->gitlab->placeholder->name        = '';
+$lang->gitlab->placeholder->url         = "Please fill in the access address of the GitLab Server homepage, as: https://gitlab.zentao.net.";
+$lang->gitlab->placeholder->token       = "Please fill in the access token of an account with admin privileges.";
+$lang->gitlab->placeholder->projectPath = "It should contain only letters, digits, underscore, hyphen and period.  It should not start with hypen, or end with .git or .atom.";
 
 $lang->gitlab->noImportableIssues = "There are currently no issues available for import.";
 $lang->gitlab->tokenError         = "The current token is not admin rights.";
