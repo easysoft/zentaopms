@@ -120,7 +120,10 @@ td.menus + td {border-left: 0;}
           <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
           <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
           <div class='group-item'>
-            <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', '', 'inline');?>
+            <div class='checkbox-primary checkbox-inline'>
+              <input type='checkbox' name='actions[<?php echo $moduleName;?>][]' value='<?php echo $action;?>' <?php if(isset($groupPrivs[$moduleName][$action])) echo "checked='checked'";?>  id='actions[<?php echo $moduleName . "]" . $action;?>'  title='<?php echo $lang->$moduleName->$actionLabel;?>';>
+              <label for='actions[<?php echo $moduleName . "]" . $action;?>' ><?php echo $lang->$moduleName->$actionLabel;?></label>
+            </div>
           </div>
           <?php endforeach;?>
         </td>
