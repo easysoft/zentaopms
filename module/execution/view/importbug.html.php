@@ -17,7 +17,7 @@
 $(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
 var browseType = '<?php echo $browseType;?>';
 </script>
-<style>#importBugForm .bugPri {overflow: visible;}</style>
+<style>#importBugForm .bug-pri {overflow: visible;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php echo html::a(inlink('importBug', "executionID=$executionID"), "<span class='text'>{$lang->execution->importBug}</span>", '', "class='btn btn-link btn-active-text'");?>
@@ -61,7 +61,7 @@ var browseType = '<?php echo $browseType;?>';
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
           <td class='nobr'><?php common::printLink('bug', 'view', "bugID=$bug->id", $bug->title, '', "class='preview'", true, true);?></td>
           <td><span class='status-bug status-<?php echo $bug->status?>'><?php echo $this->processStatus('bug', $bug);?></span></td>
-          <td class='bugPri'><?php echo html::select("pri[$bug->id]", $lang->task->priList, zget($lang->task->priList, $bug->pri ? $bug->pri : 3, 3), "class='form-control chosen'");?></td>
+          <td class='bug-pri'><?php echo html::select("pri[$bug->id]", $lang->task->priList, zget($lang->task->priList, $bug->pri ? $bug->pri : 3, 3), "class='form-control chosen'");?></td>
           <td style='overflow:visible'><?php echo html::select("assignedTo[$bug->id]", $users, zget($users, $bug->assignedTo, '', $bug->assignedTo), "class='form-control chosen'");?></td>
           <td><?php echo html::input("estimate[$bug->id]", '', 'size=4 class="form-control"');?></td>
           <?php $deadline = ($bug->deadline > helper::today() and $bug->deadline > $execution->begin) ? $bug->deadline : '0000-00-00';?>
