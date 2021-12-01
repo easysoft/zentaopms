@@ -1172,15 +1172,20 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
+        $requiredFields = $this->config->project->start->requiredFields;
 
         $project = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
 
-        $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->check($requiredFields, 'notempty')
+            ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
+            ->where('id')->eq((int)$projectID)
+            ->exec();
 
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
@@ -1316,6 +1321,7 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
+        $requiredFields = $this->config->project->close->requiredFields;
 
         $project = fixer::input('post')
             ->setDefault('status', 'closed')
@@ -1326,19 +1332,11 @@ class projectModel extends model
             ->remove('comment')
             ->get();
 
-        if($project->realEnd == '')
-        {
-            dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
-            return false;
-        }
-        if($project->realEnd > helper::today())
-        {
-            dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
-            return false;
-        }
-
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->check($requiredFields, 'notempty')
+            ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
             ->where('id')->eq((int)$projectID)
             ->exec();
 

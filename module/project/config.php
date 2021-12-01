@@ -18,6 +18,12 @@ $config->project->edit   = new stdclass();
 $config->project->create->requiredFields = 'name,code,begin,end';
 $config->project->edit->requiredFields   = 'name,code,begin,end';
 
+$config->project->start   = new stdclass();
+$config->project->start->requiredFields = 'realBegan';
+
+$config->project->close   = new stdclass();
+$config->project->close->requiredFields = 'realEnd';
+
 $config->project->sortFields         = new stdclass();
 $config->project->sortFields->id     = 'id';
 $config->project->sortFields->begin  = 'begin';
