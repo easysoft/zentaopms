@@ -30,7 +30,8 @@ function loadBranches(product, branch, storyID)
     if(typeof(branch) == 'undefined') branch = 0;
     if(!branch) branch = 0;
 
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + storyID);
+    var currentModuleID = $('#modules' + storyID).val();
+    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + product + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=' + storyID + '&needManage=false&extra=&currentModuleID=' + currentModuleID);
     $('#modules' + storyID).parent('td').load(moduleLink, function(){$('#modules' + storyID).chosen();});
 
     planID = $('#plans' + storyID).val();

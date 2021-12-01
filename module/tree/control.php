@@ -443,8 +443,6 @@ class tree extends control
      */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '', $currentModuleID = 0)
     {
-        $currentModule = $this->tree->getById($currentModuleID);
-
         if($viewType == 'task')
         {
             $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra);
@@ -468,8 +466,11 @@ class tree extends control
             {
                 $changeFunc = '';
                 if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
-                $field  = $fieldID ? "modules[$fieldID]" : 'module';
-                $currentModuleID = $currentModule->branch == 0 ? $currentModuleID : 0;
+                $field = $fieldID ? "modules[$fieldID]" : 'module';
+
+                $currentModule   = $this->tree->getById($currentModuleID);
+                $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
+
                 $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
                 if(count($optionMenu) == 1 and $needManage)
                 {
@@ -532,16 +533,20 @@ class tree extends control
      * @param  string $viewType
      * @param  int    $branchID
      * @param  int    $number
+     * @param  int    $currentModuleID
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetModules($productID, $viewType = 'story', $branchID, $number)
+    public function ajaxGetModules($productID, $viewType = 'story', $branchID, $number, $currentModuleID = 0)
     {
+        $currentModule   = $this->tree->getById($currentModuleID);
+        $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
+
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
 
         $moduleName = $viewType == 'bug' ? "modules[$number]" : "module[$number]";
         $modules    = empty($modules) ? array('' => '') : $modules;
-        die(html::select($moduleName, $modules, '', 'class=form-control'));
+        die(html::select($moduleName, $modules, $currentModuleID, 'class=form-control'));
     }
 
     /**
