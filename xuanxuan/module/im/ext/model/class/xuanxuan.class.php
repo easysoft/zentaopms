@@ -207,10 +207,10 @@ class xuanxuanIm extends imModel
             $messageGroups = array();
             foreach($userMessages as $message)
             {
-                /* group by $message->content->content->objectType, ...content->action, ...content->actor */
+                /* group by $message->content->content->objectType, ...content->action, ...content->actor, ...content->parent */
                 $contentData = json_decode($message->content);
                 $contentData = json_decode($contentData->content);
-                $messageGroups["$contentData->objectType-$contentData->action-$contentData->actor"][] = $message;
+                $messageGroups["$contentData->objectType-$contentData->action-$contentData->actor-$contentData->parent"][] = $message;
             }
             foreach($messageGroups as $groupKey => $messages)
             {
@@ -218,9 +218,15 @@ class xuanxuanIm extends imModel
 
                 $notification = current($messages);
                 array_shift($messages);
-                $notification->content = array($notification->content);
-                foreach($messages as $message) $notification->content[] = $message->content;
-                $messageGroups[$groupKey] = array($message);
+                $notificationContent = json_decode($notification->content);
+                $notificationContent->content = array($notificationContent->content);
+                foreach($messages as $message)
+                {
+                    $messageContent = json_decode($message->content);
+                    $notificationContent->content[] = $messageContent->content;
+                }
+                $notification->content = json_encode($notificationContent);
+                $messageGroups[$groupKey] = array($notification);
             }
 
             $mergedMessages = array();
