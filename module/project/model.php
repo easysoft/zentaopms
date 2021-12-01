@@ -1172,7 +1172,6 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID, $type);
         $now        = helper::now();
-        $requiredFields = $this->config->project->start->requiredFields;
 
         $project = fixer::input('post')
             ->setDefault('status', 'doing')
@@ -1182,7 +1181,7 @@ class projectModel extends model
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
-            ->check($requiredFields, 'notempty')
+            ->check($this->config->project->start->requiredFields, 'notempty')
             ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
             ->where('id')->eq((int)$projectID)
             ->exec();
@@ -1321,7 +1320,6 @@ class projectModel extends model
     {
         $oldProject = $this->getById($projectID);
         $now        = helper::now();
-        $requiredFields = $this->config->project->close->requiredFields;
 
         $project = fixer::input('post')
             ->setDefault('status', 'closed')
@@ -1334,7 +1332,7 @@ class projectModel extends model
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
-            ->check($requiredFields, 'notempty')
+            ->check($this->config->project->close->requiredFields, 'notempty')
             ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
             ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
             ->where('id')->eq((int)$projectID)

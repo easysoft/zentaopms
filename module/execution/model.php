@@ -710,7 +710,6 @@ class executionModel extends model
     {
         $oldExecution   = $this->getById($executionID);
         $now            = helper::now();
-        $requiredFields = $this->config->execution->start->requiredFields;
 
         $execution = fixer::input('post')
             ->setDefault('status', 'doing')
@@ -721,7 +720,7 @@ class executionModel extends model
      
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
-            ->check($requiredFields, 'notempty')
+            ->check($this->config->execution->start->requiredFields, 'notempty')
             ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
             ->where('id')->eq((int)$executionID)
             ->exec();
@@ -864,7 +863,6 @@ class executionModel extends model
     {
         $oldExecution   = $this->getById($executionID);
         $now            = helper::now();
-        $requiredFields = $this->config->execution->close->requiredFields; 
         
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
@@ -877,7 +875,7 @@ class executionModel extends model
         
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
-            ->check($requiredFields,'notempty')
+            ->check($this->config->execution->close->requiredFields,'notempty')
             ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
             ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
             ->where('id')->eq((int)$executionID)
