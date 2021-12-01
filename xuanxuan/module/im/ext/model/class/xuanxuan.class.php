@@ -229,6 +229,7 @@ class xuanxuanIm extends imModel
                     $messageInnerContent = json_decode($messageContent->content);
                     $objectGroups[$messageInnerContent->parent][] = $messageInnerContent;
                 }
+                $objectTotal = 0;
                 foreach($objectGroups as $parent => $objectGroup)
                 {
                     $object = current($objectGroup);
@@ -236,8 +237,11 @@ class xuanxuanIm extends imModel
                     $object->url   = $object->parentURL;
 
                     $objectGroups[$parent] = $object;
+                    $objectTotal += $object->count;
                 }
                 $notificationContent->content = json_encode(array_values($objectGroups));
+                /* Hack alert: title count replacement currently assumes that default count is 1. */
+                $notification->title   = substr_replace($notification->title, "$objectTotal", strrpos($notification->title, '1'), 1);
                 $notification->content = json_encode($notificationContent);
                 $messageGroups[$groupKey] = array($notification);
             }
