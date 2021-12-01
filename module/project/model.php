@@ -1174,13 +1174,17 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
 
-        $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->check($this->config->project->start->requiredFields, 'notempty')
+            ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
+            ->where('id')->eq((int)$projectID)
+            ->exec();
 
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
@@ -1326,19 +1330,11 @@ class projectModel extends model
             ->remove('comment')
             ->get();
 
-        if($project->realEnd == '')
-        {
-            dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
-            return false;
-        }
-        if($project->realEnd > helper::today())
-        {
-            dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
-            return false;
-        }
-
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->check($this->config->project->close->requiredFields, 'notempty')
+            ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
             ->where('id')->eq((int)$projectID)
             ->exec();
 

@@ -17,8 +17,12 @@ $app->loadLang('task');
 $config->execution->task   = new stdclass();
 $config->execution->create = new stdclass();
 $config->execution->edit   = new stdclass();
-$config->execution->create->requiredFields = 'name,code,begin,end';
-$config->execution->edit->requiredFields   = 'name,code,begin,end';
+$config->execution->start  = new stdclass();
+$config->execution->close  = new stdclass();
+$config->execution->create->requiredFields  = 'name,code,begin,end';
+$config->execution->edit->requiredFields    = 'name,code,begin,end';
+$config->execution->start->requiredFields   = 'realBegan';
+$config->execution->close->requiredFields   = 'realEnd';
 
 $config->execution->customBatchEditFields = 'days,type,teamname,status,desc,PO,QD,PM,RD';
 

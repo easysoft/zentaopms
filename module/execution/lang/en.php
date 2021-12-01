@@ -355,10 +355,6 @@ $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
-$lang->execution->realBeganNotEmpty           = 'Actual Begin should not be empty.';
-$lang->execution->realBeganNotFuture          = 'Actual Begin should be < = today.';
-$lang->execution->realEndNotEmpty             = 'Actual End should not be empty.';
-$lang->execution->realEndNotFuture            = 'Actual End should be < = today.';
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

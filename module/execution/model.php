@@ -715,20 +715,15 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->remove('comment')->get();
+            ->remove('comment')
+            ->get();
      
-        if($execution->realBegan == '')
-        {
-            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
-            return false;
-        }  
-        if($execution->realBegan > helper::today())
-        {
-            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
-            return false;
-        }
-
-        $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
+        $this->dao->update(TABLE_EXECUTION)->data($execution)
+            ->autoCheck()
+            ->check($this->config->execution->start->requiredFields, 'notempty')
+            ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
+            ->where('id')->eq((int)$executionID)
+            ->exec();
         
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
@@ -868,7 +863,7 @@ class executionModel extends model
     {
         $oldExecution = $this->getById($executionID);
         $now          = helper::now();
-
+        
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
             ->setDefault('closedBy', $this->app->user->account)
@@ -878,20 +873,11 @@ class executionModel extends model
             ->remove('comment')
             ->get();
         
-        if($execution->realEnd == '')
-        {
-            dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
-            return false;
-        }
-
-        if($execution->realEnd > helper::today())
-        {
-            dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
-            return false;
-        }
-
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->check($this->config->execution->close->requiredFields,'notempty')
+            ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
             ->where('id')->eq((int)$executionID)
             ->exec();
         
