@@ -829,12 +829,14 @@ $(function()
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 
     /* Ajax update kanban. */
+    var lastUpdateData;
     setInterval(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
         {
-            if(data)
+            if(data && lastUpdateData !== lastUpdateData)
             {
+                lastUpdateData = data;
                 kanbanGroup = $.parseJSON(data);
                 if(groupBy == 'default')
                 {
