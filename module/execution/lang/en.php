@@ -395,6 +395,7 @@ $lang->execution->bugList       = "Bugs";
 $lang->execution->kanbanHideCols   = 'Closed & Cancelled Columns';
 $lang->execution->kanbanShowOption = 'Unfold';
 $lang->execution->kanbanColsColor  = 'Customize Column Color';
+$lang->execution->kanbanCardsUnit  = 'X';
 
 $lang->execution->kanbanViewList['all']   = 'All';
 $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";

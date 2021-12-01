@@ -3,6 +3,5 @@
 #kanbanList .kanban-header-col {height: 32px!important; padding: 0!important;}
 #kanbanList .kanban-header-col > .title {padding: 0 5px!important;}
 #kanbanList .kanban-col[data-type="project"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
-#kanbanList .kanban-lane-name {width: 5px; margin-right: 15px;}
 #kanbanList .kanban-lane-name > .text {display: none;}
 #kanbanList .kanban-item.link-block > a {cursor: move;}

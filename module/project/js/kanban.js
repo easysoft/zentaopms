@@ -12,10 +12,25 @@ function processKanbanData(key, programGroup)
     var columns = [];
     $.each(kanbanColumns, function(_, column)
     {
+        var colType = column.type;
+        if(colType === 'doingProject')
+        {
+            columns.push(
+            {
+                kanban:   kanbanId,
+                id:       kanbanId + '-doing',
+                type:     'doing',
+                asParent: true,
+                name:     doingText,
+                count:    ''
+            });
+        }
+
         columns.push($.extend({}, column,
         {
-            kanban: kanbanId,
-            id:     kanbanId + '-' + column.type,
+            kanban:     kanbanId,
+            id:         kanbanId + '-' + column.type,
+            parentType: (colType === 'doingProject' || colType === 'doingExecution') ? 'doing' : false,
         }));
     });
     /* Format lanes data */
@@ -68,7 +83,6 @@ function findDropColumns($element, $root)
     var col         = $col.data();
     var lane        = $col.closest('.kanban-lane').data();
     var kanbanID    = $root.data('id');
-    console.log('findDropColumns', {$element, $root, kanbanID, col, lane});
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane[data-id="' + lane.id + '"] .kanban-lane-col:not([data-type="doingExecution"],[data-type="' + col.type + '"])');
@@ -162,6 +176,13 @@ function handleFinishDrop(event)
     changeCardColType(card, fromColType, toColType, kanbanID);
 }
 
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight)
+{
+    if (col.type !== 'doingProject') return colHeight;
+    return colCards.length * 62;
+}
+
 $(function()
 {
     /* Init all kanbans */
@@ -171,8 +192,9 @@ $(function()
         if(!$kanban.length) return;
         $kanban.kanban(
         {
-            data:         processKanbanData(key, programGroup),
-            maxColHeight: 'auto',
+            data:          processKanbanData(key, programGroup),
+            calcColHeight: calcColHeight,
+            virtualize:    true,
             droppable:
             {
                 selector:     '.kanban-item:not(.execution-item)',

@@ -396,6 +396,7 @@ $lang->execution->bugList       = "Bug列表";
 $lang->execution->kanbanHideCols   = '看板隐藏已关闭、已取消列';
 $lang->execution->kanbanShowOption = '显示折叠信息';
 $lang->execution->kanbanColsColor  = '看板列自定义颜色';
+$lang->execution->kanbanCardsUnit  = '个';
 
 $lang->execution->kanbanViewList['all']   = '综合看板';
 $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}看板";
