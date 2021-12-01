@@ -175,6 +175,7 @@ class mrModel extends model
             ->setDefault('needCI', 0)
             ->setDefault('editedBy', $this->app->user->account)
             ->setDefault('editedDate', helper::now())
+            ->setIF($this->post->needCI == 0, 'jobID', 0)
             ->get();
         $oldMR = $this->getByID($MRID);
 

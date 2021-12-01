@@ -147,6 +147,9 @@
                  <?php endif;?>
                  </tbody>
               </table>
+              <?php elseif($MR->needCI):?>
+              <?php $compileUrl = $this->createLink('job', 'view', "jobID={$MR->jobID}");?>
+              <div class='text-center'><?php echo html::a($compileUrl, $lang->compile->statusList[$MR->compileStatus], '_blank');?></div>
               <?php else:?>
               <div class='text-center'><?php echo $lang->mr->noCompileJob;?></div>
               <?php endif;?>
