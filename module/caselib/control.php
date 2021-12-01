@@ -176,6 +176,9 @@ class caselib extends control
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
         $this->session->set('caselibList', $this->app->getURI(true), 'qa');
 
+        /* Display of branch label. */
+        $isShowBranch = $this->loadModel('branch')->isShowBranch(0);
+
         /* Set menu. */
         $libID = $this->caselib->saveLibState($libID, $libraries);
         setcookie('preCaseLibID', $libID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -231,6 +234,7 @@ class caselib extends control
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->param         = $param;
         $this->view->setModule     = true;
+        $this->view->isShowBranch  = $isShowBranch;
 
         $this->display();
     }
