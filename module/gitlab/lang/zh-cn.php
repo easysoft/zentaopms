@@ -94,7 +94,8 @@ $lang->gitlab->project->mergeRequests              = "合并请求";
 $lang->gitlab->project->issues                     = "议题";
 $lang->gitlab->project->tagList                    = "主题";
 $lang->gitlab->project->tagListTips                = "用逗号分隔主题。";
-$lang->gitlab->project->emptyError                 = "项目名称或标识符不能为空";
+$lang->gitlab->project->emptyNameError             = "项目名称不能为空";
+$lang->gitlab->project->emptyPathError             = "项目标识串不能为空";
 $lang->gitlab->project->confirmDelete              = '确认删除该GitLab项目吗？';
 $lang->gitlab->project->notbindedError             = '还没绑定Gitlab用户，无法修改权限！';
 

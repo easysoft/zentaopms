@@ -2029,7 +2029,8 @@ class gitlabModel extends model
     public function createProject($gitlabID)
     {
         $project = fixer::input('post')->get();
-        if(empty($project->name) and empty($project->path)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyError;
+        if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
+        if(empty($project->path)) dao::$errors['path'][] = $this->lang->gitlab->project->emptyPathError;
         if(dao::isError()) return false;
 
         $reponse = $this->apiCreateProject($gitlabID, $project);
@@ -2053,7 +2054,7 @@ class gitlabModel extends model
     public function editProject($gitlabID)
     {
         $project = fixer::input('post')->get();
-        if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyError;
+        if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
         if(dao::isError()) return false;
 
         $reponse = $this->apiUpdateProject($gitlabID, $project);

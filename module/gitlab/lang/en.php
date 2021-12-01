@@ -94,7 +94,8 @@ $lang->gitlab->project->mergeRequests              = "Merge Requests";
 $lang->gitlab->project->issues                     = "Issues";
 $lang->gitlab->project->tagList                    = "Topics";
 $lang->gitlab->project->tagListTips                = "Separate topics with commas.";
-$lang->gitlab->project->emptyError                 = "Project name or slug cannot be empty";
+$lang->gitlab->project->emptyNameError             = "Project name cannot be empty.";
+$lang->gitlab->project->emptyPathError             = "Project slug cannot be empty.";
 $lang->gitlab->project->confirmDelete              = 'Do you want to delete this GitLab project?';
 $lang->gitlab->project->notbindedError             = 'Gitlab user has not been bound, unable to modify permissions!';
 
