@@ -15,6 +15,11 @@
 <?php $browseLink = $app->session->storyList ? $app->session->storyList : $this->createLink('product', 'browse', "productID=$story->product");?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <div id="mainMenu" class="clearfix">
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div class="linkButton" onclick="linkButtonClicked()">
+  <i class="icon icon-import icon-rotate-270"></i>
+</div>
+<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -590,5 +595,13 @@ js::set('unlink', $lang->story->unlink);
 js::set('cancel', $lang->cancel);
 js::set('rawModule', $this->app->rawModule);
 ?>
+<script>
+function linkButtonClicked()
+{
+  $url = window.location.href;
+  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
+  window.open($xxcUrl);
+}
+</script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

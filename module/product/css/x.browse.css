@@ -14,3 +14,4 @@ body {width: 700px; margin-bottom: 0px !important;}
 .table-footer .pager:before {display: none !important;}
 .table-footer .pager {background-color: #fff !important;}
 .table-footer .pager li *{color: #838a9d !important;}
+.linkButton {float: right; padding-right: 10px; line-height: 34px;}

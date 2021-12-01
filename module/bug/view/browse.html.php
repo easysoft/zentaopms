@@ -191,6 +191,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
+  <div class="linkButton" onclick="linkButtonClicked()">
+    <i class="icon icon-import icon-rotate-270"></i>
+  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -483,5 +486,11 @@ $(function(){$('#bugForm').table();})
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
+function linkButtonClicked()
+{
+  $url = window.location.href;
+  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
+  window.open($xxcUrl);
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>

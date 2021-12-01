@@ -12,3 +12,4 @@ body {width: 700px; margin-bottom: 0px !important;}
 .table-footer > .table-actions {display: none;}
 .table-footer{position: fixed; width: 100%; bottom: 0;}
 .c-status {width: 70px;}
+.linkButton {float: right; padding-right: 10px; line-height: 34px;}

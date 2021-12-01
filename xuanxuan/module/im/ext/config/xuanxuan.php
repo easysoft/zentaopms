@@ -15,3 +15,8 @@ $config->im->cards['doc']['view']      = array('width' => '700px', 'height' => '
 $config->im->cards['story']['view']    = array('width' => '700px', 'height' => '500px');
 $config->im->cards['testcase']['view'] = array('width' => '700px', 'height' => '500px');
 $config->im->cards['productplan']['view'] = array('width' => '700px', 'height' => '447px');
+$config->im->cards['execution']['task'] = array('width' => '700px', 'height' => '470px');
+$config->im->cards['execution']['bug'] = array('width' => '700px', 'height' => '467px');
+$config->im->cards['execution']['story'] = array('width' => '700px', 'height' => '467px');
+$config->im->cards['bug']['browse'] = array('width' => '700px', 'height' => '467px');
+$config->im->cards['product']['browse'] = array('width' => '700px', 'height' => '467px');

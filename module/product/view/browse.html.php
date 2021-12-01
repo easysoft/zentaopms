@@ -236,6 +236,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
+  <div class="linkButton" onclick="linkButtonClicked()">
+    <i class="icon icon-import icon-rotate-270"></i>
+  </div>
 </div>
 <?php endif;?>
 <div id="mainContent" class="main-row fade">
@@ -700,5 +703,11 @@ $(function()
         }
     });
 });
+function linkButtonClicked()
+{
+  $url = window.location.href;
+  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
+  $newWindow = window.open($xxcUrl);
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>
