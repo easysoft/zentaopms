@@ -177,7 +177,7 @@ class apiModel extends model
     /**
      * Delete a struct.
      *
-     * @param int $id
+     * @param  int $id
      * @access public
      * @return void
      */
@@ -192,14 +192,29 @@ class apiModel extends model
     /**
      * Update an api doc.
      *
-     * @param int $id
-     * @param object $data
+     * @param  int $apiID
      * @access public
-     * @return void
+     * @return bool|array
      */
-    public function update($id, $data)
+    public function update($apiID)
     {
-        $oldApi = $this->dao->findByID($id)->from(TABLE_API)->fetch();
+        $oldApi = $this->dao->findByID($apiID)->from(TABLE_API)->fetch();
+
+        if(!empty($_POST['editedDate']) and $oldApi->editedDate != $this->post->editedDate)
+        {
+            dao::$errors[] = $this->lang->error->editedByOther;
+            return false;
+        }
+
+        $now     = helper::now();
+        $account = $this->app->user->account;
+        $data    = fixer::input('post')
+            ->remove('type')
+            ->skipSpecial('params,response')
+            ->add('editedBy', $account)
+            ->add('editedDate', $now)
+            ->setDefault('product,module', 0)
+            ->get();
 
         $data->id      = $oldApi->id;
         $data->version = $oldApi->version + 1;
@@ -212,7 +227,7 @@ class apiModel extends model
             ->data($data)
             ->autoCheck()
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
-            ->where('id')->eq($id)
+            ->where('id')->eq($apiID)
             ->exec();
 
         return common::createChanges($oldApi, $data);

@@ -812,7 +812,7 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);;
+        return $this->transformActions($actions);
     }
 
     /**
@@ -1215,6 +1215,11 @@ class actionModel extends model
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
 
+        if($action->objectType == 'story' and $action->action == 'import2storylib')
+        {
+            $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        }
+
         return $action;
     }
 
@@ -1424,10 +1429,11 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $orderBy date_desc|date_asc
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next', $type = 'today')
+    public function buildDateGroup($actions, $direction = 'next', $type = 'today', $orderBy = 'date_desc')
     {
         $dateGroup = array();
         foreach($actions as $action)
@@ -1455,7 +1461,20 @@ class actionModel extends model
             }
         }
 
-        if($direction != 'next') $dateGroup = array_reverse($dateGroup);
+        /* Modify date to the corrret order. */
+        if($this->app->rawModule != 'company' and $direction != 'next')
+        {
+            $dateGroup = array_reverse($dateGroup);
+        }
+        elseif($this->app->rawModule == 'company')
+        {
+            if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
+            if(($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc'))
+            {
+                foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+            }
+        }
+
         return $dateGroup;
     }
 

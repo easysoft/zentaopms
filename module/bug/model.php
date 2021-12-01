@@ -99,6 +99,8 @@ class bugModel extends model
             $this->file->saveUpload('bug', $bugID);
             empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
 
+            if($bug->execution) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
+
             /* Callback the callable method to process the related data for object that is transfered to bug. */
             if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
 
@@ -207,7 +209,10 @@ class bugModel extends model
             foreach(explode(',', $this->config->bug->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and isset($bug->$field) and empty($bug->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                if($field and empty($bug->$field))
+                {
+                    die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                }
             }
 
             $bugs[$i] = $bug;
@@ -251,6 +256,7 @@ class bugModel extends model
             $bugID = $this->dao->lastInsertID();
 
             $this->executeHooks($bugID);
+            if($bug->execution) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
             /* When the bug is created by uploading the image, add the image to the file of the bug. */
             $this->loadModel('score')->create('bug', 'create', $bugID);
@@ -681,6 +687,8 @@ class bugModel extends model
             if(!empty($bug->resolvedBy)) $this->loadModel('score')->create('bug', 'resolve', $bugID);
             $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
 
+            if($bug->execution and $bug->status != $oldBug->status) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
+
             return common::createChanges($oldBug, $bug);
         }
     }
@@ -919,6 +927,7 @@ class bugModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'confirmBug', $oldBug);
+            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
             return common::createChanges($oldBug, $bug);
         }
     }
@@ -1031,6 +1040,7 @@ class bugModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'resolve', $oldBug);
+            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
 
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
@@ -1193,6 +1203,7 @@ class bugModel extends model
             $this->dao->update(TABLE_BUG)->data($bug)->where('id')->eq($bugID)->exec();
             $this->executeHooks($bugID);
 
+            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
             $changes[$bugID] = common::createChanges($oldBug, $bug);
         }
 
@@ -1250,6 +1261,7 @@ class bugModel extends model
             }
         }
 
+        if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
         $bug->activatedCount += 1;
         return common::createChanges($oldBug, $bug);
     }
@@ -1278,6 +1290,7 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
+        if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
 
         return common::createChanges($oldBug, $bug);
     }

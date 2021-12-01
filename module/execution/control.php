@@ -3322,6 +3322,32 @@ class execution extends control
     }
 
     /**
+     * Ajax update kanban.
+     *
+     * @param  int    $executionID
+     * @param  string $enterTime
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '')
+    {
+        $enterTime = date('Y-m-d H:i:s', $enterTime);
+        $lastEditedTime = $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
+
+        if($lastEditedTime > $enterTime)
+        {
+            $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
+            die(json_encode($kanbanGroup));
+        }
+        else
+        {
+            die('');
+        }
+    }
+
+    /**
      * AJAX: Update the execution name.
      *
      * @param  int     $executionID

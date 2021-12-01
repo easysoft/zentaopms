@@ -551,6 +551,41 @@ class upgrade extends control
     }
 
     /**
+     * Rename object in upgrade.
+     *
+     * @param  string $type  project|product|execution
+     * @param  string $duplicateList 
+     * @access public
+     * @return void
+     */
+    public function renameObject($type = 'project', $duplicateList = '')
+    {
+        $this->app->loadLang($type);
+        if($_POST)
+        {
+            foreach($this->post->project as $projectID => $projectName)
+            {
+                if(!$projectName) continue;
+                $this->dao->update(TABLE_PROJECT)->set('name')->eq($projectName)->where('id')->eq($projectID)->exec();
+            }
+
+            die(js::closeModal('parent.parent', ''));
+        }
+
+        $objectGroup = array();
+        if($type == 'project' or $type == 'execution')
+        {
+            $objectGroup = $this->dao->select('id,name')->from(TABLE_PROJECT)
+                ->where('id')->in($duplicateList)
+                ->fetchGroup('name');
+        }
+
+        $this->view->type        = $type;
+        $this->view->objectGroup = $objectGroup;
+        $this->display();
+    }
+
+    /**
      * Merge Repos.
      *
      * @access public

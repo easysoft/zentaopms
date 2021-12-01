@@ -74,6 +74,10 @@
           <?php endforeach;?>
         </tr>
         <?php endforeach;?>
+        <tr>
+          <td><?php echo $lang->message->blockUser;?></td>
+          <td><?php echo html::select('blockUser[]', $users, isset($config->message->blockUser) ? $config->message->blockUser: '', "class='form-control chosen' multiple");?></td>
+        </tr>
       </tbody>
       <tfoot>
         <tr>
