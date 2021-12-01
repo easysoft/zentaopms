@@ -55,7 +55,7 @@ $config->project->datatable->fieldList['code']['width']    = '100';
 $config->project->datatable->fieldList['code']['minWidth'] = '180';
 $config->project->datatable->fieldList['code']['required'] = 'no';
 $config->project->datatable->fieldList['code']['sort']     = 'no';
-$config->project->datatable->fieldList['code']['pri']      = '1'; 
+$config->project->datatable->fieldList['code']['pri']      = '1';
 
 $config->project->datatable->fieldList['PM']['title']    = 'PM';
 $config->project->datatable->fieldList['PM']['fixed']    = 'no';
@@ -125,6 +125,7 @@ $config->project->datatable->fieldList['actions']['width']    = '180';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
-$config->project->removePriv['project'] = array('browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle');
-$config->project->removePriv['bug']     = array('batchChangePlan');
-$config->project->removePriv['doc']     = array('catalog', 'index');
+$config->project->removePriv['project']   = array('browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle');
+$config->project->removePriv['bug']       = array('batchChangePlan');
+$config->project->removePriv['doc']       = array('catalog', 'index');
+$config->project->removePriv['auditplan'] = array('delete');
