@@ -83,7 +83,6 @@ function findDropColumns($element, $root)
     var col         = $col.data();
     var lane        = $col.closest('.kanban-lane').data();
     var kanbanID    = $root.data('id');
-    console.log('findDropColumns', {$element, $root, kanbanID, col, lane});
     var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane[data-id="' + lane.id + '"] .kanban-lane-col:not([data-type="doingExecution"],[data-type="' + col.type + '"])');
