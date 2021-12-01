@@ -886,24 +886,78 @@ class productModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  int    $actionURL
+     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
     {
+        $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
+        $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
+
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs(($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
 
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        /* Get module of all products.*/
-        $module = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
+        /* Get module of all products. */
+        $module = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branch);
+        if($this->app->tab == 'project' and $productID)
+        {
+            $module  = array();
+            $modules = array();
+
+            $branchList = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
+            $modules[$productID] = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
+            foreach($modules as $branchList)
+            {
+                foreach($branchList as $branchID => $moduleList)
+                {
+                    foreach($moduleList as $moduleID => $moduleName) $module[$moduleID] = $moduleName;
+                }
+            }
+        }
         if(!$productID)
         {
-            $module = array();
-            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, $viewType = 'story', $startModuleID = 0);
+            $module  = array();
+            $modules = array();
+
+            if($this->app->tab == 'project')
+            {
+                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
+                foreach($products as $productID => $productName)
+                {
+                    if(isset($branchGroup[$productID]))
+                    {
+                        $branches = array_keys($branchGroup[$productID]);
+                        $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branches);
+                        foreach($modules as $branchID => $moduleList)
+                        {
+                            foreach($moduleList as $moduleID => $moduleName)
+                            {
+                                $modules[$moduleID] = $productName . $moduleName;
+                            }
+                        }
+
+                    }
+                    else
+                    {
+                        //$modules[$productID] = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                    }
+                }
+
+                //foreach($modules as $branchList)
+                //{
+                //    foreach($branchList as $branchID => $moduleList)
+                //    {
+                //        foreach($moduleList as $moduleID => $moduleName) $module[$moduleID] = $moduleName;
+                //    }
+                //}
+            }
+
+            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'story', 0);
         }
         $this->config->product->search['params']['module']['values'] = $module;
 
