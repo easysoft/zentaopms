@@ -20,6 +20,10 @@ class storyEntry extends Entry
      */
     public function get($storyID)
     {
+        $tab = $this->param('tab', 'product');
+        $this->app->tab = $tab;
+        $this->app->session->tab = $tab;
+
         $control = $this->loadController('story', 'view');
         $control->view($storyID);
 
