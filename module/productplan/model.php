@@ -133,6 +133,7 @@ class productplanModel extends model
                 $plan->hour      = array_sum($storyPairs);
                 $plan->project   = zget($planProjects, $plan->id, '');
                 $plan->projectID = $plan->project;
+                $plan->expired   = $plan->end < $date ? true : false;
 
                 /* Sync linked stories. */
                 if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
