@@ -141,7 +141,7 @@
                     <th><?php echo $lang->compile->result;?></th>
                     <td>
                       <?php echo zget($lang->compile->statusList, $compile->status);?> &nbsp;&nbsp;
-                      <?php echo html::a($this->createLink('job', 'view', "jobID=$compileJob->id&compileID=$compile->id&onlybody=yes"), "<i class='icon icon-search'>{$lang->compile->logs}</i>", "", "class='iframe'");?>
+                      <?php echo html::a($this->createLink('job', 'view', "jobID=$compileJob->id&compileID=$compile->id", '', true), "<i class='icon icon-search'>{$lang->compile->logs}</i>", "", "class='iframe'");?>
                     </td>
                   </tr>
                  <?php endif;?>

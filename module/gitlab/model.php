@@ -2168,6 +2168,8 @@ class gitlabModel extends model
         {
             $this->loadModel('action')->create('gitlabuser', $reponse->id, 'edited', '', $reponse->name);
 
+            /* Delete old bind. */
+            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($reponse->id)->andWhere('account')->ne($user->account)->exec();
             /* Bind user. */
             if($user->account && $changeBind)
             {

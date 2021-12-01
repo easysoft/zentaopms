@@ -691,3 +691,5 @@ $lang->action->dynamicAction->task['gitcommited'] = 'Git Commit';
 $lang->action->dynamicAction->bug['repocreated']  = $lang->action->label->repocreated;
 $lang->action->desc->createmr                     = '$extra';
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
+$lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
+$lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
