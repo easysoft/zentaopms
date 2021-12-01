@@ -20,6 +20,10 @@ class docEntry extends entry
      */
     public function get($docID)
     {
+        $tab = $this->param('tab', 'doc');
+        $this->app->tab = $tab;
+        $this->app->session->tab = $tab;
+
         $control = $this->loadController('doc', 'view');
         $control->view($docID);
 
