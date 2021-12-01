@@ -59,6 +59,9 @@ class xuanxuanMessage extends messageModel
                 $target = array_keys($target);
 
                 $subcontent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);
+                $subcontent->name = $object->$field;
+                $subcontent->id = $object->id;
+                $subcontent->count = 1;
                 if($objectType == 'task')
                 {
                     $subcontent->headTitle    = $object->projectName;
@@ -78,7 +81,7 @@ class xuanxuanMessage extends messageModel
                 $contentData->title       = $title;
                 $contentData->subtitle    = '';
                 $contentData->contentType = "zentao-$objectType-$actionType";
-                $contentData->content     = json_encode((object)$subcontent);
+                $contentData->content     = json_encode(array($subcontent));
                 $contentData->actions     = array();
                 $contentData->url         = $url;
                 $content = json_encode($contentData);
