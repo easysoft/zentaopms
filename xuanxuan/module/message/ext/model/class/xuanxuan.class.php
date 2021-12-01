@@ -75,7 +75,6 @@ class xuanxuanMessage extends messageModel
                 }
 
                 $contentData = new stdclass();
-                $contentData->sender      = (object)array('id' => $this->app->user->id, 'name' => $this->app->user->realname, 'avatar' => '');
                 $contentData->title       = $title;
                 $contentData->subtitle    = '';
                 $contentData->contentType = "zentao-$objectType-$actionType";
