@@ -105,7 +105,7 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
             if(strtolower($repo->SCM) == 'gitlab')
             {
-                $gitlab    = $this->loadModel('gitlab')->getByID($repo->gitlab);
+                if(isset($repo->gitlab)) $gitlab = $this->loadModel('gitlab')->getByID($repo->gitlab);
                 if(!empty($gitlab)) $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
                 if(!isset($tokenUser->is_admin) or !$tokenUser->is_admin) continue;
                 $gitlabRepos[$repo->id] = $repo->name;
