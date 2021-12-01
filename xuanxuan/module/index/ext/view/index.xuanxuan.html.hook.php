@@ -35,7 +35,7 @@ $(document).on('showapp', function(e, app)
 #chatNoticeBadge {position: absolute; top: -4px; right: -2px; line-height: 14px; height: 14px; width: 14px; text-align: center; display: block; font-size: 12px; border-radius: 50%; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity;}
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {bottom: 40px!important; z-index: 1010!important;}
-#xx-embed-container .xx-embed-has-animation {transition-property: transform, opacity!important;}
+#xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}
 #xx-embed-container .xx-embed {width: 280px; height: 100%;}
 #xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: 0; pointer-events: none; transform: translateY(100%);}
 </style>
@@ -66,5 +66,16 @@ Xuanxuan.setGlobalOptions(
 var $chatBtn = $('<a href="javascript:void(0)" id="chatBtn" class="btn btn-link"><i class="text-primary icon icon-chat"></i><span class="badge bg-red" id="chatNoticeBadge"></span></a>');
 $chatBtn.insertBefore('#globalSearchDiv').on('click', showXuanClient);
 window.xuan = new Xuanxuan(xuanConfig);
+
+function setXuanClientLarge()
+{
+    xuan._element.style.minWidth = '1000px';
+}
+
+function setXuanClientSmall()
+{
+    xuan._element.style.minWidth = '280px';
+}
+
 </script>
 <?php endif; ?>
