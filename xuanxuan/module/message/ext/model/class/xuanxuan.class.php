@@ -66,22 +66,25 @@ class xuanxuanMessage extends messageModel
                 {
                     $subcontent->headTitle    = $object->projectName;
                     $subcontent->headSubTitle = $object->execuName;
+                    $subcontent->parent       = $object->execution;
                 }
                 elseif($objectType == 'story')
                 {
                     $subcontent->headTitle = $object->productName;
+                    $subcontent->parent    = $object->product;
                 }
                 elseif($objectType == 'bug')
                 {
                     $subcontent->headTitle    = empty($object->productName) ? $object->projectName : $object->productName;
                     $subcontent->headSubTitle = $object->execuName;
+                    $subcontent->parent       = empty($object->product) ? $object->project : $object->product;
                 }
 
                 $contentData = new stdclass();
                 $contentData->title       = $title;
                 $contentData->subtitle    = '';
                 $contentData->contentType = "zentao-$objectType-$actionType";
-                $contentData->content     = json_encode(array($subcontent));
+                $contentData->content     = json_encode($subcontent);
                 $contentData->actions     = array();
                 $contentData->url         = $url;
                 $content = json_encode($contentData);
