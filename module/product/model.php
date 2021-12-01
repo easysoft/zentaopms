@@ -1969,7 +1969,9 @@ class productModel extends model
             }
             elseif(($module == 'testcase' and $method == 'groupCase') or ($module == 'story' and $method == 'zeroCase') and $this->app->tab == 'project')
             {
-                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '')) . "#app=project";
+                parse_str($extra, $output);
+                $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
+                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '') . "&groupBy=&projectID=$projectID");
             }
             else
             {
