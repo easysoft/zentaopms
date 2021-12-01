@@ -443,6 +443,8 @@ class tree extends control
      */
     public function ajaxGetOptionMenu($rootID, $viewType = 'story', $branch = 0, $rootModuleID = 0, $returnType = 'html', $fieldID = '', $needManage = false, $extra = '', $currentModuleID = 0)
     {
+        $currentModule = $this->tree->getById($currentModuleID);
+
         if($viewType == 'task')
         {
             $optionMenu = $this->tree->getTaskOptionMenu($rootID, 0, 0, $extra);
@@ -467,6 +469,7 @@ class tree extends control
                 $changeFunc = '';
                 if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
                 $field  = $fieldID ? "modules[$fieldID]" : 'module';
+                $currentModuleID = $currentModule->branch == 0 ? $currentModuleID : 0;
                 $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
                 if(count($optionMenu) == 1 and $needManage)
                 {
