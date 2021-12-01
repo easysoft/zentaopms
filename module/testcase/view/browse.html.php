@@ -129,7 +129,7 @@ js::set('suiteID',        $suiteID);
             echo html::commonButton($lang->testtask->runCase, $misc);
 
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=$productID&branch=$branch");
-            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink')\"" : "disabled='disabled'";
+            $misc       = $canBatchEdit ? "onclick=\"setFormAction('$actionLink', '', '#caseForm')\"" : "disabled='disabled'";
             echo html::commonButton($lang->edit, $misc);
             ?>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>

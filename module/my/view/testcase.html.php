@@ -77,7 +77,7 @@
               <label></label>
             </div>
             <?php endif;?>
-            <?php echo sprintf('%03d', $case->case); ?>
+            <?php echo sprintf('%03d', $case->id); ?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
           <?php $params = "testcaseID=$caseID&version=$case->version";?>
@@ -117,7 +117,7 @@
         if($canBatchEdit)
         {
             $actionLink = $this->createLink('testcase', 'batchEdit', "productID=0&branch=all");
-            $misc       = "data-form-action='$actionLink'";
+            $misc       = "onclick=\"setFormAction('$actionLink', '', '#myCaseForm')\"";
             echo html::commonButton($lang->edit, $misc);
         }
         if($canBatchRun)
