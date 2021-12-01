@@ -510,4 +510,39 @@ class branchModel extends model
 
         return $branches;
     }
+
+    /**
+     * Display of branch label.
+     *
+     * @param  int $productID
+     * @param  int $moduleID
+     * @param  int $executionID
+     * @access public
+     * @return bool
+     */
+    public function isShowBranch($productID, $moduleID = 0, $executionID = 0)
+    {
+        $this->loadModel('product');
+        if(empty($productID) and empty($moduleID))
+        {
+            $productPairs = $this->product->getProductPairsByProject($executionID);
+            $productID    = count($productPairs) == 1 ? key($productPairs) : 0;
+        }
+        elseif(empty($productID) and !empty($moduleID))
+        {
+            $module    = $this->loadModel('tree')->getById($moduleID);
+            $productID = $module->type != 'task' ? $module->root : 0;
+        }
+
+        $product = $productID ? $this->product->getById($productID) : '';
+
+        if($product and $product->type != 'normal')
+        {
+            $this->app->loadLang('datatable');
+            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
+            return true;
+        }
+
+        return false;
+    }
 }

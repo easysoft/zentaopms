@@ -219,17 +219,10 @@ class execution extends control
         }
 
         /* Get product. */
-        if(empty($productID))
-        {
-            $productModule = $this->tree->getById($moduleID);
-            if(!empty($productModule) and $productModule->type != 'task') $product = $this->product->getById($productModule->root);
-        }
-        if(empty($product)) $product = $this->product->getById($productID);
+        $product = $this->product->getById($productID);
 
-        if(!empty($product) and $product->type != 'normal')
-        {
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
+        /* Display of branch label. */
+        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID, $moduleID, $executionID);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
@@ -268,6 +261,7 @@ class execution extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->isShowBranch = $isShowBranch;
 
         $this->display();
     }
@@ -795,28 +789,17 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        if($this->cookie->storyModuleParam)
-        {
-            $module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
-            $this->view->module = $module;
-
-            $product = $this->product->getById($module->root);
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
-
-        if($this->cookie->storyProductParam)
-        {
-            $product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
-            $this->view->product = $product;
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
-
+        if($this->cookie->storyModuleParam) $this->view->module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
         if($this->cookie->storyBranchParam)
         {
             $branchID = $this->cookie->storyBranchParam;
             if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
             $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
         }
+
+        /* Display of branch label. */
+        $isShowBranch = $this->loadModel('branch')->isShowBranch($this->cookie->storyProductParam, $this->cookie->storyModuleParam, $executionID);
 
         /* Get execution's product. */
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
@@ -848,6 +831,7 @@ class execution extends control
         $this->view->setModule         = true;
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->isShowBranch      = $isShowBranch;
 
         $this->display();
     }
