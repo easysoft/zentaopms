@@ -2064,6 +2064,7 @@ class gitlabModel extends model
             $this->loadModel('action')->create('gitlabproject', $project->id, 'edited', '', $project->name);
             return true;
         }
+
         return $this->apiErrorHandling($reponse);
     }
 
@@ -2250,14 +2251,19 @@ class gitlabModel extends model
         }
         if(!empty($reponse->message))
         {
-            if(is_string($reponse->message)) dao::$errors[] = $reponse->message;
+            if(is_string($reponse->message))
+            {
+                $errorKey = array_search($reponse->message, $this->lang->gitlab->apiError);
+                dao::$errors[] = $errorKey === false ? $reponse->message : zget($this->lang->gitlab->errorLang, $errorKey);
+            }
             else
             {
                 foreach($reponse->message as $field => $fieldErrors)
                 {
                     foreach($fieldErrors as $error)
                     {
-                        if($error) dao::$errors[$field][] = $error;
+                        $errorKey = array_search($error, $this->lang->gitlab->apiError);
+                        if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitlab->errorLang, $errorKey);
                     }
                 }
             }

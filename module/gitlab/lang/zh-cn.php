@@ -76,6 +76,10 @@ $lang->gitlab->accessLevels[30] = 'Developer';
 $lang->gitlab->accessLevels[40] = 'Maintainer';
 $lang->gitlab->accessLevels[50] = 'Owner';
 
+$lang->gitlab->apiError[0] = 'internal is not allowed in a private group.';
+
+$lang->gitlab->errorLang[0] = '私有分组的项目，可见性级别不能设为内部。';
+
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "项目ID";
 $lang->gitlab->project->name                       = "项目名称";
