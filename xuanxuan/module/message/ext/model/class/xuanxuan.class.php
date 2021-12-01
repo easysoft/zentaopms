@@ -67,17 +67,22 @@ class xuanxuanMessage extends messageModel
                     $subcontent->headTitle    = $object->projectName;
                     $subcontent->headSubTitle = $object->execuName;
                     $subcontent->parent       = $object->execution;
+                    $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('execution', 'task', "id=$object->execution", 'html'));
                 }
                 elseif($objectType == 'story')
                 {
                     $subcontent->headTitle = $object->productName;
                     $subcontent->parent    = $object->product;
+                    $subcontent->parentURL = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('product', 'browse', "id=$object->product", 'html'));
+
                 }
                 elseif($objectType == 'bug')
                 {
-                    $subcontent->headTitle    = empty($object->productName) ? $object->projectName : $object->productName;
+                    $parentType = empty($object->productName) ? 'project' : 'product';
+                    $subcontent->headTitle    = $object[$parentType . 'Name'];
                     $subcontent->headSubTitle = $object->execuName;
-                    $subcontent->parent       = empty($object->product) ? $object->project : $object->product;
+                    $subcontent->parent       = $object->$parentType;
+                    $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
                 }
 
                 $contentData = new stdclass();
