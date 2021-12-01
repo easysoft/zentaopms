@@ -21,12 +21,9 @@ function updateAppMenu()
 
 updateAppMenu();
 
-$(function()
+$(document).on('showapp', function(e, app)
 {
-    $(document).on('showapp', function(e, app)
-    {
-        window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
-    });
+    window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
 });
 </script>
 <?php endif; ?>
