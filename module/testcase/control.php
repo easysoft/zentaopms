@@ -978,7 +978,7 @@ class testcase extends control
             $caseIDList = array_keys($cases);
 
             /* The cases of my. */
-            $this->loadModel('my')->setMenu();
+            $this->app->loadLang('my');
             $this->lang->testcase->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'testcase';
 

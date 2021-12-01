@@ -1080,7 +1080,7 @@ class bug extends control
                 }
             }
 
-            $this->loadModel('my')->setMenu();
+            $this->app->loadLang('my');
             $this->lang->task->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'bug';
 
