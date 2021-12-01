@@ -94,7 +94,13 @@ class productplanModel extends model
             $plans      = $this->reorder4Children($plans);
             $planIdList = array_keys($plans);
 
-            $planProjects      = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->andWhere('plan')->in(array_keys($plans))->fetchPairs('plan', 'project');
+            $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($product)
+                ->andWhere('t1.plan')->in(array_keys($plans))
+                ->andWhere('t2.type')->in('sprint,stage')
+                ->fetchPairs('plan', 'project');
+
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
             if($product->type == 'normal')
