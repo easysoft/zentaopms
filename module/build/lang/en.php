@@ -31,6 +31,7 @@ $lang->build->id             = 'ID';
 $lang->build->product        = $lang->productCommon;
 $lang->build->project        = 'Project';
 $lang->build->branch         = 'Platform/Branch';
+$lang->build->branchName     = '%s';
 $lang->build->execution      = $lang->executionCommon;
 $lang->build->name           = 'Name';
 $lang->build->date           = 'Date';
