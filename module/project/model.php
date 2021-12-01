@@ -1186,6 +1186,9 @@ class projectModel extends model
             ->where('id')->eq((int)$projectID)
             ->exec();
 
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
+
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
 
@@ -1337,6 +1340,9 @@ class projectModel extends model
             ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
             ->where('id')->eq((int)$projectID)
             ->exec();
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
 
         if(!dao::isError())
         {
