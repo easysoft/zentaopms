@@ -526,7 +526,7 @@ class branchModel extends model
         if(empty($productID) and empty($moduleID))
         {
             $productPairs = $this->product->getProductPairsByProject($executionID);
-            $productID    = count($productPairs) == 1 ? key($productPairs) : 0;
+            if($this->app->tab != 'project') $productID = count($productPairs) == 1 ? key($productPairs) : 0;
         }
         elseif(empty($productID) and !empty($moduleID))
         {
