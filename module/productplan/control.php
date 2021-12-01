@@ -394,6 +394,7 @@ class productplan extends control
         if(!empty($_POST['stories']))
         {
             $this->productplan->linkStory($planID);
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
@@ -531,6 +532,7 @@ class productplan extends control
         if(!empty($_POST['bugs']))
         {
             $this->productplan->linkBug($planID);
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
