@@ -26,7 +26,7 @@
     </div>
     <form id='ajaxForm' class='form-ajax' method='post' action='<?php echo $this->createLink('mr', 'approval', "mr=$MR->id&action=$action")?>'>
       <table class='table table-form'>
-        <?php if($showCompileResult): ?>
+        <?php if($MR->needCI and $showCompileResult): ?>
           <tr>
             <th class='w-90px'><?php echo $lang->compile->result; ?></th>
             <td class='w-p25-f'>
