@@ -654,4 +654,18 @@ class baseEntry
             $this->send(403, array('error' => 'Access not allowed'));
         }
     }
+
+    /**
+     * Reset open app.
+     *
+     * @param  string  $tab
+     * @access public
+     * @return void
+     */
+    public function resetOpenApp($tab)
+    {
+        $_COOKIE['tab'] = $tab;
+        $this->app->tab = $tab;
+        $this->app->session->tab = $tab;
+    }
 }

@@ -20,9 +20,7 @@ class bugEntry extends entry
      */
     public function get($bugID)
     {
-        $tab = $this->param('tab', 'product');
-        $this->app->tab = $tab;
-        $this->app->session->tab = $tab;
+        $this->resetOpenApp($this->param('tab', 'product'));
 
         $control = $this->loadController('bug', 'view');
         $control->view($bugID);

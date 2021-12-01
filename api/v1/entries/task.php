@@ -20,9 +20,7 @@ class taskEntry extends Entry
      */
     public function get($taskID)
     {
-        $tab = $this->param('tab', 'execution');
-        $this->app->tab = $tab;
-        $this->app->session->tab = $tab;
+        $this->resetOpenApp($this->param('tab', 'execution'));
 
         $control = $this->loadController('task', 'view');
         $control->view($taskID);

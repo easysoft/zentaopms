@@ -23,7 +23,7 @@ class projectCasesEntry extends entry
         if(!$projectID) $projectID   = $this->param('project', 0);
         if(empty($projectID)) return $this->sendError(400, 'Need project id.');
 
-        $this->app->tab = 'project';
+        $this->resetOpenApp('project');
         $this->app->session->set('project', $projectID, $this->app->tab);
 
         $control = $this->loadController('project', 'testcase');
