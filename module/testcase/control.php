@@ -352,39 +352,6 @@ class testcase extends control
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
-        /* Set productID and branch. */
-        $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = $this->cookie->preBranch;
-
-        /* Set menu. */
-        if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
-        if($this->app->tab == 'project')
-        {
-            $this->loadModel('project')->setMenu($this->session->project);
-        }
-        elseif($this->app->tab == 'execution')
-        {
-            $this->execution->setMenu($this->session->execution);
-        }
-        else
-        {
-            $this->qa->setMenu($this->products, $productID, $branch);
-        }
-
-        /* Set branch. */
-        $product = $this->product->getById($productID);
-        if($this->app->tab == 'execution' or $this->app->tab == 'project')
-        {
-            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
-            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            $branch          = key($branches);
-        }
-        else
-        {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        }
-
         /* Init vars. */
         $type         = 'feature';
         $stage        = '';
@@ -421,6 +388,39 @@ class testcase extends control
             $caseTitle = $bug->title;
             $keywords  = $bug->keywords;
             $steps     = $this->testcase->createStepsFromBug($bug->steps);
+        }
+
+        /* Set productID and branch. */
+        $productID = $this->product->saveState($productID, $this->products);
+        if($branch === '') $branch = $this->cookie->preBranch;
+
+        /* Set menu. */
+        if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
+        if($this->app->tab == 'project')
+        {
+            $this->loadModel('project')->setMenu($this->session->project);
+        }
+        elseif($this->app->tab == 'execution')
+        {
+            $this->execution->setMenu($this->session->execution);
+        }
+        else
+        {
+            $this->qa->setMenu($this->products, $productID, $branch);
+        }
+
+        /* Set branch. */
+        $product = $this->product->getById($productID);
+        if($this->app->tab == 'execution' or $this->app->tab == 'project')
+        {
+            $objectID        = $this->app->tab == 'project' ? $this->session->project : $executionID;
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
         }
 
         /* Padding the steps to the default steps count. */
