@@ -69,7 +69,7 @@ class job extends control
                 $errors = dao::getError();
                 if($this->post->engine == 'gitlab' and isset($errors['server']))
                 {
-                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
+                    if(!isset($errors['repo'])) $errors['repo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repoServer);
                     unset($errors['server']);
                     unset($errors['pipeline']);
                 }
@@ -105,8 +105,8 @@ class job extends control
             $repoTypes[$repo->id] = $repo->SCM;
             if(strtolower($repo->SCM) == 'gitlab')
             {
-                $gitlab    = $this->loadModel('gitlab')->getByID($repo->gitlab);
-                $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+                if(isset($repo->gitlab)) $gitlab = $this->loadModel('gitlab')->getByID($repo->gitlab);
+                if(!empty($gitlab)) $tokenUser = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
                 if(!isset($tokenUser->is_admin) or !$tokenUser->is_admin) continue;
                 $gitlabRepos[$repo->id] = $repo->name;
             }
@@ -369,8 +369,49 @@ class job extends control
     public function ajaxGetRefList($repoID)
     {
         $repo = $this->loadModel('repo')->getRepoByID($repoID);
-        if($repo->SCM != 'Gitlab') $this->send(array('result' => 'fail'));
-        $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
+        if($repo->SCM == 'Gitlab') $refList = $this->loadModel('gitlab')->getReferenceOptions($repo->gitlab, $repo->project);
+        if($repo->SCM != 'Gitlab') $refList = $this->repo->getBranches($repo, true);
         $this->send(array('result' => 'success', 'refList' => $refList));
     }
+
+    /**
+     * Ajax get repo list.
+     *
+     * @param  int    $engine
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepoList($engine)
+    {
+        $repoList  = $this->loadModel('repo')->getList($this->projectID);
+        $repoPairs = array(0 => '');
+        foreach($repoList as $repo)
+        {
+            if(empty($repo->synced)) continue;
+            if($engine == 'gitlab')
+            {
+                if(strtolower($repo->SCM) == 'gitlab') $repoPairs[$repo->id] = $repo->name;
+            }
+            else
+            {
+                $repoPairs[$repo->id] = $repo->name;
+            }
+        }
+        echo html::select('repo', $repoPairs, '', "class='form-control chosen'");
+        die();
+    }
+
+    /**
+     * Ajax get an repo type.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRepoType($repoID)
+    {
+        $repo = $this->loadModel('repo')->getRepoByID($repoID);
+        $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
+    }
+
 }

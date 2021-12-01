@@ -15,6 +15,7 @@ test/data/sql/
 .gitkeep
 .bak
 .idea
+.vscode
 .gitignore
 .DS_Store
 vendor/

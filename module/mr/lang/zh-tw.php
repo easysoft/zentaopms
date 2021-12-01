@@ -25,10 +25,37 @@ $lang->mr->commits     = '提交數';
 $lang->mr->changes     = '更改數';
 $lang->mr->gitlabID    = 'GitLab';
 
+$lang->mr->approval = '評審';
+$lang->mr->approve  = '通過';
+$lang->mr->reject   = '拒絕';
+$lang->mr->close    = '關閉';
+$lang->mr->reopen   = '重新打開';
+
+$lang->mr->approvalResult = '評審意見';
+$lang->mr->approvalResultList = array();
+$lang->mr->approvalResultList['approve'] = '通過';
+$lang->mr->approvalResultList['reject']  = '拒絕';
+
+$lang->mr->needApproved = '需要通過評審才能合併';
+$lang->mr->needCI       = '需要通過構建才能合併';
+
+$lang->mr->repeatedOperation = '請勿重複操作';
+
+$lang->mr->approvalStatus     = '審核狀態';
+$lang->mr->approvalStatusList = array();
+$lang->mr->approvalStatusList['notReviewed'] = '未評審';
+$lang->mr->approvalStatusList['approved']    = '通過';
+$lang->mr->approvalStatusList['rejected']    = '拒絕';
+
+$lang->mr->notApproved  = '審核拒絕的';
+$lang->mr->assignedToMe = '指派給我的';
+$lang->mr->createdByMe  = '我創建的';
+
 $lang->mr->statusList = array();
+$lang->mr->statusList['all']    = '所有';
 $lang->mr->statusList['opened'] = '開放中';
-$lang->mr->statusList['closed'] = '已關閉';
 $lang->mr->statusList['merged'] = '已合併';
+$lang->mr->statusList['closed'] = '已關閉';
 
 $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['checking']         = '檢查中';
@@ -59,7 +86,7 @@ $lang->mr->at   = "于";
 $lang->mr->pipeline        = "流水綫";
 $lang->mr->pipelineSuccess = "已通過";
 $lang->mr->pipelineFailed  = "未通過";
-$lang->mr->pipelineCancled = "已取消";
+$lang->mr->pipelineCanceled = "已取消";
 $lang->mr->pipelineUnknown = "未知";
 
 $lang->mr->pipelineStatus = array();
@@ -70,8 +97,6 @@ $lang->mr->pipelineStatus['canceled'] = "已取消";
 $lang->mr->MRHasConflicts = "是否存在衝突";
 $lang->mr->hasConflicts   = "存在衝突或等待提交";
 $lang->mr->hasNoConflict  = "可以合併";
-$lang->mr->mergeByManual  = "此合併請求可以手動合併，請使用以下";
-$lang->mr->commandLine    = "合併命令";
 $lang->mr->acceptMR       = "合併";
 $lang->mr->mergeFailed    = "無法合併，請核對合併請求狀態";
 $lang->mr->mergeSuccess   = "已成功合併";
@@ -91,15 +116,15 @@ $lang->mr->todomessage = "項目中指派給你了";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>在本地檢出、審核和手動合併</div>
 <div class='detail-content'>
-  <p><strong>注意：您在本地合併後此合併請求將變為不可合併狀態，需要刪除此合併請求或者提交新的代碼。</strong></p>
+  <p><blockquote>提示：您在本地合併完成後，該合併請求將自動更新為以合併狀態。</blockquote></p>
   <p>
-    第 1 步. 獲取並查看此合併請求的分支
+    第 1 步. 切換到目標項目所在目錄，獲取並查看此合併請求的分支
     <pre>
     git fetch "%s" %s
     git checkout -b "%s" FETCH_HEAD</pre>
   </p>
   <p>
-    第 2 步. 在本地查看更改
+    第 2 步. 在本地查看更改, 如使用<code>git log</code>等命令
   </p>
   <p>
     第 3 步. 合併分支並解決出現的任何衝突
@@ -114,3 +139,5 @@ $lang->mr->commandDocument = <<< EOD
   </p>
 </div>
 EOD;
+
+$lang->mr->noChanges = "目前在這個合併請求的源分支中沒有變化，請推送新的提交或使用不同的分支。";

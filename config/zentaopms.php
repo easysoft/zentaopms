@@ -230,6 +230,7 @@ define('TABLE_PIPELINE',      '`' . $config->db->prefix . 'pipeline`');
 define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
+define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');

@@ -118,7 +118,7 @@ class gitModel extends model
      */
     public function updateCommit($repo, $commentGroup, $printLog = true)
     {
-        /* Load mudule and print log. */
+        /* Load module and print log. */
         $this->loadModel('repo');
         if($printLog) $this->printLog("begin repo $repo->id");
 
@@ -146,7 +146,7 @@ class gitModel extends model
             }
 
             $version = (int)$lastInDB->commit + 1;
-            $logs    = $this->repo->getUnsyncCommits($repo);
+            $logs    = $this->repo->getUnsyncedCommits($repo);
             $objects = array();
             if(!empty($logs))
             {
@@ -198,7 +198,7 @@ class gitModel extends model
      * Set the repos.
      *
      * @access public
-     * @return bool
+     * @return mixed
      */
     public function setRepos()
     {
@@ -230,9 +230,9 @@ class gitModel extends model
      */
     public function getRepos()
     {
-        $repos     = $this->setRepos();
+        $this->setRepos();
         $repoPairs = array();
-        foreach($repos as $repo) $repoPairs[] = $repo->path;
+        foreach($this->repos as $repo) $repoPairs[] = $repo->path;
 
         return $repoPairs;
     }
@@ -284,7 +284,7 @@ class gitModel extends model
      *
      * @param  object    $repo
      * @access public
-     * @return void
+     * @return mixed
      */
     public function getRepoTags($repo)
     {

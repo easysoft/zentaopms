@@ -156,6 +156,14 @@ class ciModel extends model
 
         $this->dao->update(TABLE_COMPILE)->data($data)->where('id')->eq($compile->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq($now)->set('lastStatus')->eq($pipeline->status)->where('id')->eq($compile->job)->exec();
+
+        /* Send mr message by compile status. */
+        $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($compile->id)->fetch();
+        if($relateMR)
+        {
+            if($data->status == 'success') $this->loadModel('action')->create('mr', $relateMR->id, 'compilePass');
+            if($data->status == 'failed')  $this->loadModel('action')->create('mr', $relateMR->id, 'compileFail');
+        }
     }
 
     /**

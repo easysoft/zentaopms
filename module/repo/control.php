@@ -184,7 +184,7 @@ class repo extends control
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
         $this->view->products    = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->gitlabHosts = array('' => '') + $this->loadModel('gitlab')->getPairs();
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
@@ -1172,4 +1172,5 @@ class repo extends control
         $productPairs = $this->repo->getProductsByRepo($repoID);
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
+
 }

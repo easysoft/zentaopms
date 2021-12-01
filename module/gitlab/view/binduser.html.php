@@ -49,7 +49,7 @@
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
-            <td><?php echo isset($bindedUsers[$gitlabUser->account]) ? $lang->gitlab->binded : ""; ?></td>
+            <td><?php echo isset($bindedUsers[$gitlabUser->zentaoAccount]) ? $lang->gitlab->binded : ""; ?></td>
          </tr>
          <?php endforeach;?>
         </tbody>

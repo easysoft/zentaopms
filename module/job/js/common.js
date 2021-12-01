@@ -64,3 +64,17 @@ function setValueInput(obj)
         $(obj).closest('.input-group').find('select').removeAttr('disabled');
     }
 }
+
+function loadRepoList(engine = '')
+{
+    var link = createLink('job', 'ajaxGetRepoList', 'engine=' + engine);
+    $.get(link, function(data)
+    {
+        if(data)
+        {
+            $('#repo').replaceWith(data)
+            $('#repo_chosen').remove();
+            $('#repo').chosen();
+        }
+    });
+}

@@ -21,16 +21,16 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->name;?></th>
-            <td class='required'><?php echo html::input('name', $gitlab->name, "class='form-control' placeholder='{$lang->gitlab->placeholder->name}'");?></td>
+            <td class='required'><?php echo html::input('name', isset($gitlab->name) ? $gitlab->name : '', "class='form-control' placeholder='{$lang->gitlab->placeholder->name}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->url;?></th>
-            <td class='required'><?php echo html::input('url', $gitlab->url, "class='form-control' placeholder='{$lang->gitlab->placeholder->url}'");?></td>
+            <td class='required'><?php echo html::input('url', isset($gitlab->url) ? $gitlab->url : '', "class='form-control' placeholder='{$lang->gitlab->placeholder->url}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->token;?></th>
-            <td><?php echo html::input('token', $gitlab->token, "class='form-control' placeholder='{$lang->gitlab->placeholder->token}'");?></td>
+            <td><?php echo html::input('token', isset($gitlab->token) ? $gitlab->token : '', "class='form-control' placeholder='{$lang->gitlab->placeholder->token}'");?></td>
           </tr>
           <tr>
             <th></th>

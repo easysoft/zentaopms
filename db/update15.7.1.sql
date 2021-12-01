@@ -143,3 +143,12 @@ ADD `notifyEmail` varchar(100) NOT NULL AFTER `feedbackBy`;
 
 ALTER TABLE `zt_product` ADD `reviewer` varchar(255) NOT NULL AFTER `whitelist`;
 UPDATE `zt_testtask` SET `pri`=3 WHERE `pri`=0;
+
+ALTER table zt_mr ADD `approver` varchar(255) NOT NULL,
+ADD `approvalStatus` char(30) NOT NULL,
+ADD `needApproved` enum('0','1') NOT NULL DEFAULT '0',
+ADD `needCI` enum('0','1') NOT NULL DEFAULT '0',
+ADD `repoID` mediumint(8) unsigned NOT NULL,
+ADD `jobID` mediumint(8) unsigned NOT NULL,
+ADD `compileID` mediumint(8) unsigned NOT NULL,
+ADD `compileStatus` char(30) NOT NULL;
