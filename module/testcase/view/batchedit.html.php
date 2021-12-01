@@ -103,7 +103,7 @@
             <td class='text-left' style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $product->id;?>
               <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$caseID]", array('' => '') + $branches, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+              <?php echo html::select("branches[$caseID]", $branches, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
             <?php $caseProductID = isset($caseProductID) ? $caseProductID : $productID;?>
