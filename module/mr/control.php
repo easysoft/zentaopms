@@ -497,6 +497,10 @@ class mr extends control
         $product = $this->loadModel('product')->getById($productID);
         $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story');
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Build search form. */
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
@@ -531,11 +535,11 @@ class mr extends control
         $linkedStories = $this->mr->getLinkList($MRID, $product->id, 'story');
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), null);
+            $allStories = $this->story->getBySearch($productID, 0, $queryID, 'id', '', 'story', array_keys($linkedStories), $pager);
         }
         else
         {
-            $allStories = $this->story->getProductStories($productID, 0, $moduleID   = '0', $status     = 'draft,active,changed', 'story', 'id_desc', $hasParent  = false, array_keys($linkedStories), null);
+            $allStories = $this->story->getProductStories($productID, 0, $moduleID   = '0', $status     = 'draft,active,changed', 'story', 'id_desc', $hasParent  = false, array_keys($linkedStories), $pager);
         }
 
         $this->view->modules        = $modules;
@@ -547,6 +551,7 @@ class mr extends control
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;
+        $this->view->pager          = $pager;
         $this->display();
     }
 
@@ -581,6 +586,10 @@ class mr extends control
         $product = $this->loadModel('product')->getById($productID);
         $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'bug');
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Build search form. */
         $this->config->bug->search['actionURL']                         = $this->createLink('mr', 'link', "$MRID=$MRID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']                           = $queryID;
@@ -612,11 +621,11 @@ class mr extends control
         $linkedBugs = $this->mr->getLinkList($MRID, $product->id, 'bug');
         if($browseType == 'bySearch')
         {
-            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), null);
+            $allBugs = $this->bug->getBySearch($productID, 0, $queryID, 'id_desc', array_keys($linkedBugs), $pager);
         }
         else
         {
-            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), null);
+            $allBugs = $this->bug->getActiveBugs($productID, 0, '0', array_keys($linkedBugs), $pager);
         }
 
         $this->view->modules     = $modules;
@@ -628,6 +637,7 @@ class mr extends control
         $this->view->browseType  = $browseType;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
         $this->display();
     }
 
@@ -666,6 +676,10 @@ class mr extends control
         $product = $this->loadModel('product')->getById($productID);
         $modules = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'task');
 
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Build search form. */
         $this->config->execution->search['actionURL']                     = $this->createLink('mr', 'link', "$MRID=$MRID&type=task&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->execution->search['queryID']                       = $queryID;
@@ -696,6 +710,20 @@ class mr extends control
             if(in_array($task->id, $linkedTaskIDs)) unset($allTasks[$key]);
         }
 
+        /* Page the records. */
+        $pager->setRecTotal(count($allTasks));
+        $pager->setPageTotal();
+        if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+        $count    = 1;
+        $limitMin = ($pager->pageID - 1) * $pager->recPerPage;
+        $limitMax = $pager->pageID * $pager->recPerPage;
+        foreach($allTasks as $key => $task)
+        {
+            if($count <= $limitMin or $count > $limitMax) unset($allTasks[$key]);
+
+            $count ++;
+        }
+
         $this->view->modules      = $modules;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->allTasks     = $allTasks;
@@ -705,6 +733,7 @@ class mr extends control
         $this->view->browseType   = $browseType;
         $this->view->param        = $param;
         $this->view->orderBy      = $orderBy;
+        $this->view->pager        = $pager;
         $this->display();
     }
 

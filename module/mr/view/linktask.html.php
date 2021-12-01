@@ -66,6 +66,7 @@
         <?php echo html::a(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
 </div>
