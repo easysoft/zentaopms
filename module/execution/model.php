@@ -724,6 +724,9 @@ class executionModel extends model
             ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
             ->where('id')->eq((int)$executionID)
             ->exec();
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
         
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
@@ -880,7 +883,10 @@ class executionModel extends model
             ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
             ->where('id')->eq((int)$executionID)
             ->exec();
-        
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+
         if(!dao::isError())
         {
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
