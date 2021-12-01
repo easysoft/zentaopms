@@ -85,8 +85,18 @@ $(function()
 
    $("#needCI").change(function()
    {
-       if(this.checked == false) $("#jobID").parent().parent().addClass('hidden');
-       if(this.checked == true) $("#jobID").parent().parent().removeClass('hidden');
+       if(this.checked == false)
+       {
+           $("#jobID").prop("disabled", true);
+           $('#jobID').chosen().trigger("chosen:updated");;
+           $("#jobID").parent().parent().addClass('hidden');
+       }
+       if(this.checked == true)
+       {
+           $("#jobID").prop("disabled", false);
+           $('#jobID').chosen().trigger("chosen:updated");;
+           $("#jobID").parent().parent().removeClass('hidden');
+       }
    });
 
 });
