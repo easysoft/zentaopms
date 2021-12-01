@@ -1047,12 +1047,20 @@ class execution extends control
         /* Set execution builds. */
         $executionBuilds = array();
         $productList     = $this->product->getProducts($executionID);
+        $this->app->loadLang('branch');
         if(!empty($builds))
         {
             foreach($builds as $build)
             {
                 /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
+                {
+                    $build->branchName = '';
+                }
+                else
+                {
+                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
+                }
                 $executionBuilds[$build->product][] = $build;
             }
         }
