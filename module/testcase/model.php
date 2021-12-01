@@ -1450,7 +1450,7 @@ class testcaseModel extends model
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $projectID = 0)
     {
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]) + array('all' => $this->lang->testcase->allProduct);
         $this->config->testcase->search['params']['product']['values'] = $product;

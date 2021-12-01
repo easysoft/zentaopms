@@ -17,7 +17,7 @@
 $(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
 var browseType = '<?php echo $browseType;?>';
 </script>
-<style>.bug-pri {overflow: visible;}</style>
+<style>#importBugForm .bug-pri {overflow: visible;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php echo html::a(inlink('importBug', "executionID=$executionID"), "<span class='text'>{$lang->execution->importBug}</span>", '', "class='btn btn-link btn-active-text'");?>

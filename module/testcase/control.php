@@ -1238,7 +1238,10 @@ class testcase extends control
 
         /* Build the search form. */
         $actionURL = $this->createLink('testcase', 'linkCases', "caseID=$caseID&browseType=bySearch&queryID=myQueryID", '', true);
-        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL);
+        $objectID  = 0;
+        if($this->app->tab == 'project') $objectID = $case->project;
+        if($this->app->tab == 'execution') $objectID = $case->execution;
+        $this->testcase->buildSearchForm($case->product, $this->products, $queryID, $actionURL, $objectID);
 
         /* Get cases to link. */
         $cases2Link = $this->testcase->getCases2Link($caseID, $browseType, $queryID);
