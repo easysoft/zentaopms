@@ -103,7 +103,7 @@ function loadProductModules(productID, branch)
     $moduleIDBox.load(moduleLink, function()
     {
         $moduleIDBox.find('#module').chosen();
-        if(typeof(storyModule) == 'string') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
+        if(typeof(storyModule) == 'string' && config.currentMethod != 'edit') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
         $moduleIDBox.fixInputGroup();
     });
 }
