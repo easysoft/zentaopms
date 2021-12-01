@@ -202,13 +202,10 @@ class bug extends control
 
         $showModule  = !empty($this->config->datatable->bugBrowse->showModule) ? $this->config->datatable->bugBrowse->showModule : '';
         $productName = ($productID and isset($this->products[$productID])) ? $this->products[$productID] : $this->lang->product->allProduct;
+        $product     = $this->product->getById($productID);
 
-        $product = $this->product->getById($productID);
-        if($product and $product->type != 'normal')
-        {
-            $this->app->loadLang('datatable');
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
+        /* Display of branch label. */
+        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID);
 
         /* Set view. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
@@ -240,6 +237,7 @@ class bug extends control
         $this->view->setModule       = true;
         $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
+        $this->view->isShowBranch    = $isShowBranch;
 
         $this->display();
     }

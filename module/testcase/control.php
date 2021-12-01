@@ -186,12 +186,10 @@ class testcase extends control
             $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? '' : $branch);
         }
 
+        /* Display of branch label. */
+        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID);
+
         $product = $this->product->getById($productID);
-        if($product and $product->type != 'normal')
-        {
-            $this->app->loadLang('datatable');
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
 
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
@@ -220,6 +218,7 @@ class testcase extends control
         $this->view->suiteID       = $suiteID;
         $this->view->setModule     = true;
         $this->view->modulePairs   = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+        $this->view->isShowBranch  = $isShowBranch;
 
         $this->display();
     }
