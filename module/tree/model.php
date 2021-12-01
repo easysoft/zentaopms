@@ -136,7 +136,7 @@ class treeModel extends model
 
         if($type == 'line') $rootID = 0;
 
-        $branches = array();
+        $branches = array($branch => '');
         if(strpos('story|bug|case', $type) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
@@ -160,7 +160,7 @@ class treeModel extends model
 
             foreach($modules as $module)
             {
-                $branchName = ($product->type != 'normal' and $module->branch == BRANCH_MAIN) ? $this->lang->branch->main : $branch;
+                $branchName = (isset($product) and $product->type != 'normal' and $module->branch === BRANCH_MAIN) ? $this->lang->branch->main : $branch;
                 $this->buildTreeArray($treeMenu, $modules, $module, (empty($branchName)) ? '/' : "/$branchName/");
             }
         }
