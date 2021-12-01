@@ -192,7 +192,9 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
   <div class="linkButton" onclick="linkButtonClicked()">
-    <i class="icon icon-import icon-rotate-270"></i>
+    <span title="查看详情">
+      <i class="icon icon-import icon-rotate-270"></i>
+    </span>
   </div>
 </div>
 <?php endif;?>

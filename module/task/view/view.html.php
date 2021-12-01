@@ -17,7 +17,9 @@
 <div id="mainMenu" class="clearfix">
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div class="linkButton" onclick="linkButtonClicked()">
-  <i class="icon icon-import icon-rotate-270"></i>
+  <span title="查看详情">
+    <i class="icon icon-import icon-rotate-270"></i>
+  </span>
 </div>
 <?php endif;?>
   <div class="btn-toolbar pull-left">

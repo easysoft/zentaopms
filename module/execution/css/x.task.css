@@ -4,8 +4,8 @@
 .checkbox-primary {display: none !important;}
 .dropdown {display: none;}
 #xx-title {background-color: #F2F2F2; padding-left: 15px; line-height: 40px;}
-body {width: 700px; margin-bottom: 0px !important;}
-#main {min-width: 100%;}
+body {margin-bottom: 0px !important;}
+#main {min-width: unset;}
 #main > .container {width: 100% !important;}
 #mainContent > .main-col {margin-top: 0px;}
 .pager > li > .pager-size-menu {display: none;}
@@ -15,3 +15,4 @@ body {width: 700px; margin-bottom: 0px !important;}
 .table-footer .pager {background-color: #fff !important;}
 .table-footer .pager li *{color: #838a9d !important;}
 .linkButton {float: right; padding-right: 10px; line-height: 34px;}
+.main-table a {pointer-events: none; color: unset !important;}
