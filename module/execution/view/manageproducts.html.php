@@ -30,7 +30,7 @@
           <?php foreach($linkedBranches[$productID] as $branchID):?>
           <?php if(($execution->grade == 1 and in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches))) $attr = "disabled='disabled'";?>
           <?php if(($execution->grade == 1 and !(in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)))) $attr = '';?>
-          <?php $title = in_array($productID, $unmodifiableProducts) ? $lang->execution->notAllowRemoveProducts : $productName;?>
+          <?php $title = (in_array($productID, $unmodifiableProducts) and in_array($branchID, $unmodifiableBranches)) ? $lang->execution->notAllowRemoveProducts : $productName;?>
           <?php $checked = 'checked';?>
           <div class='col-sm-4'>
             <div class='product <?php echo $checked . (isset($branchGroups[$productID]) ? ' has-branch' : '')?>'>
