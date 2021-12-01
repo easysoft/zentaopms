@@ -604,10 +604,11 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseProject($gitlabID, $keyword = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browseProject($gitlabID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword'); // Fix bug#16741.
 
         $result = $this->gitlab->apiGetProjectsPager($gitlabID, $keyword, $orderBy, $pager);
 

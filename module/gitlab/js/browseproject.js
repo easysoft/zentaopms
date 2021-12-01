@@ -13,8 +13,5 @@ $(document).ready(function()
 
 function triggerSearch()
 {
-    var keyword = $('#keyword').val();
-    vars = vars.replace('%s', keyword);
-    var link = createLink('gitlab', 'browseProject', 'gitlabID=' + gitlabID + '&' + vars);
-    window.location.href = link;
+    $("#gitlabprojectForm").submit();
 }

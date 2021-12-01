@@ -22,8 +22,10 @@
   </div>
   <div class="btn-toolbar pull-left">
     <div>
+      <form id='gitlabprojectForm' method='post'>
       <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
       <a id="projectSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
+      </form>
     </div>
   </div>
   <div class="btn-toolbar pull-right">
@@ -43,7 +45,7 @@
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='gitlabProjectList' class='table has-sort-head table-fixed'>
-      <?php $vars = "gitlabID={$gitlabID}&keyword={$keyword}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "gitlabID={$gitlabID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->gitlab->id);?></th>
