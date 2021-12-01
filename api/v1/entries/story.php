@@ -105,6 +105,11 @@ class storyEntry extends Entry
 
         $story->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->story);
 
+        $preAndNext = $data->data->preAndNext;
+        $story->preAndNext = array();
+        $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
+
         $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
     }
 

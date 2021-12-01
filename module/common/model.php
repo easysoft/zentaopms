@@ -1845,13 +1845,18 @@ EOD;
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
 
+        $preAndNextObject       = new stdClass();
+        $preAndNextObject->pre  = '';
+        $preAndNextObject->next = '';
+        if(empty($queryCondition)) return $preAndNextObject;
+
         $table   = $this->config->objectTables[$type];
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
-        if(empty($queryCondition) or $this->session->$typeOnlyCondition)
+        if($this->session->$typeOnlyCondition)
         {
             $sql = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->get();
         }
@@ -1878,10 +1883,6 @@ EOD;
             $this->session->set($objectIdListKey, array('sql' => $sql, 'idkey' => $key, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
-
-        $preAndNextObject       = new stdClass();
-        $preAndNextObject->pre  = '';
-        $preAndNextObject->next = '';
 
         $preObj = false;
         if(isset($existsObjectList['objectList']))
