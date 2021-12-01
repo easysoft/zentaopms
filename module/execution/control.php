@@ -1393,8 +1393,10 @@ class execution extends control
             }
         }
 
+        $isStage = false;
         if(!empty($project->model) and $project->model == 'waterfall')
         {
+            $isStage = true;
             $this->lang->execution->type = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->type);
         }
 
@@ -1441,6 +1443,7 @@ class execution extends control
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
+        $this->view->isStage             = $isStage;
         $this->display();
     }
 
