@@ -902,64 +902,43 @@ class productModel extends model
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        /* Get module of all products. */
-        $module = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branch);
-        if($this->app->tab == 'project' and $productID)
+        /* Get modules. */
+        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branch);
+        if($this->app->tab == 'project')
         {
-            $module  = array();
-            $modules = array();
-
-            $branchList = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
-            $modules[$productID] = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-            foreach($modules as $branchList)
+            if($productID)
             {
-                foreach($branchList as $branchID => $moduleList)
-                {
-                    foreach($moduleList as $moduleID => $moduleName) $module[$moduleID] = $moduleName;
-                }
+                $modules          = array();
+                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
+                $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
+                foreach($branchModuleList as $branchID => $branchModules) $modules += $branchModules;
             }
-        }
-        if(!$productID)
-        {
-            $module  = array();
-            $modules = array();
-
-            if($this->app->tab == 'project')
+            else
             {
+                $moduleList  = array();
+                $modules     = array('' => '/');
                 $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
                 foreach($products as $productID => $productName)
                 {
                     if(isset($branchGroup[$productID]))
                     {
-                        $branches = array_keys($branchGroup[$productID]);
-                        $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branches);
-                        foreach($modules as $branchID => $moduleList)
-                        {
-                            foreach($moduleList as $moduleID => $moduleName)
-                            {
-                                $modules[$moduleID] = $productName . $moduleName;
-                            }
-                        }
-
+                        $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
+                        foreach($branchModuleList as $branchID => $branchModules) $moduleList += $branchModules;
                     }
                     else
                     {
-                        //$modules[$productID] = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                        $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                    }
+
+                    foreach($moduleList as $moduleID => $moduleName)
+                    {
+                        if(empty($moduleID)) continue;
+                        $modules[$moduleID] = $productName . $moduleName;
                     }
                 }
-
-                //foreach($modules as $branchList)
-                //{
-                //    foreach($branchList as $branchID => $moduleList)
-                //    {
-                //        foreach($moduleList as $moduleID => $moduleName) $module[$moduleID] = $moduleName;
-                //    }
-                //}
             }
-
-            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, 'story', 0);
         }
-        $this->config->product->search['params']['module']['values'] = $module;
+        $this->config->product->search['params']['module']['values'] = $modules;
 
         $productInfo = $this->getById($productID);
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
