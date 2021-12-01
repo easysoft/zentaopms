@@ -247,6 +247,7 @@ $lang->waterfall->menu->execution   = array('link' => "{$lang->stage->common}|pr
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory,tree', 'exclude' => 'projectstory-track');
 $lang->waterfall->menu->design      = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');
+$lang->waterfall->menu->doc         = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s");
 $lang->waterfall->menu->devops      = array('link' => "{$lang->repo->common}|repo|browse|repoID=0&branchID=&objectID=%s", 'subModule' => 'repo');
 $lang->waterfall->menu->build       = array('link' => "{$lang->build->common}|project|build|project=%s");
 $lang->waterfall->menu->release     = array('link' => "{$lang->release->common}|projectrelease|browse|project=%s", 'subModule' => 'projectrelease');
