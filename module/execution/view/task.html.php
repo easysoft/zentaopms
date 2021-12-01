@@ -178,6 +178,13 @@ body {margin-bottom: 25px;}
     <?php endif;?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo $this->execution->getByID($executionID)->name ?>
+  </strong>
+</div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -236,6 +243,20 @@ body {margin-bottom: 25px;}
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='taskList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
         <thead>
           <tr>
+          <?php if($this->app->getViewType() == 'xhtml'):?>
+          <?php 
+          foreach($customFields as $field)
+          {
+              if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+              {
+                  if($field->show)
+                  {
+                      $this->datatable->printHead($field, $orderBy, $vars, $canBatchAction);
+                      $columns++;
+                  }
+              }
+          }?>
+          <?php else:?>
           <?php
           foreach($customFields as $field)
           {
@@ -246,12 +267,22 @@ body {margin-bottom: 25px;}
               }
           }
           ?>
+          <?php endif;?>
           </tr>
         </thead>
         <tbody>
           <?php foreach($tasks as $task):?>
           <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php 
+            foreach($customFields as $field)
+            {
+                if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+                  $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');
+            }?>
+            <?php else:?>  
             <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+            <?php endif;?>
           </tr>
           <?php if(!empty($task->children)):?>
           <?php $i = 0;?>
@@ -259,7 +290,16 @@ body {margin-bottom: 25px;}
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php 
+            foreach($customFields as $field)
+            {
+                if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+                $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);
+            }?>
+            <?php else:?>  
             <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+            <?php endif;?>
           </tr>
           <?php $i ++;?>
           <?php endforeach;?>

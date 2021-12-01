@@ -137,6 +137,13 @@
   </div>
 </div>
 
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo $this->execution->getByID($execution->id)->name ?>
+  </strong>
+</div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>

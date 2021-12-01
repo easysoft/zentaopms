@@ -29,6 +29,13 @@
     <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo $this->execution->getByID($execution->id)->name ?>
+  </strong>
+</div>
+<?php endif;?>
 <div id="mainContent">
   <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='executionBug'></div>
   <?php if(empty($bugs)):?>
@@ -41,12 +48,24 @@
     </p>
   </div>
   <?php else:?>
+  <?php if($this->app->getViewType() == 'xhtml'):?>
+  <form class='main-table' method='post' id='executionBugForm'>
+  <?php else:?>
   <form class='main-table' method='post' id='executionBugForm' data-ride="table">
+  <?php endif;?>
     <table class='table has-sort-head' id='bugList'>
       <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
       <?php $vars = "executionID={$execution->id}&productID={$productID}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>
+          <?php if($this->app->getViewType() == 'xhtml'):?>
+          <th class='c-id'>
+            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+          </th>
+          <th class='c-pri'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->statusAB);?></th>
+          <?php else:?>
           <th class='c-id'>
             <?php if($canBatchAssignTo):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -64,6 +83,7 @@
           <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <?php
@@ -85,6 +105,17 @@
       $viewLink     = helper::createLink('bug', 'view', "bugID=$bug->id");
       ?>
       <tr>
+        <?php if($this->app->getViewType() == 'xhtml'):?>
+        <?php $status = $this->processStatus('bug', $bug);?>
+        <td class='cell-id'>
+          <?php printf('%03d', $bug->id);?>
+        </td>
+        <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->tab}");?></td>
+        <td class='c-status' title='<?php echo $status;?>'>
+          <span class='status-bug status-<?php echo $bug->status;?>'><?php echo $status;?></span>
+        </td>
+        <?php else:?>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
           <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a($viewLink, sprintf('%03d', $bug->id), '', "data-app={$this->app->tab}");?>
@@ -119,6 +150,7 @@
           }
           ?>
         </td>
+        <?php endif;?>
       </tr>
       <?php endforeach;?>
       </tbody>
