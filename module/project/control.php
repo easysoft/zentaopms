@@ -1073,17 +1073,14 @@ class project extends control
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 
-        if($param)
+        $product = $param ? $this->loadModel('product')->getById($param) : '';
+        if($product and $product->type != 'normal')
         {
-            $product = $this->loadModel('product')->getById($param);
-            if($product and $product->type != 'normal')
-            {
-                $this->loadModel('build');
-                $this->loadModel('branch');
-                $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $projectID);
-                $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
-                $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
-            }
+            $this->loadModel('build');
+            $this->loadModel('branch');
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $projectID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
         }
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
 
