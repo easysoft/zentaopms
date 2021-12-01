@@ -397,7 +397,7 @@ class treeModel extends model
         {
             $branchName = $this->branch->getById($branch);
             $branches   = array($branch => $branchName);
-            $extra      = array('rootID' => $rootID, 'branch' => $branch);
+            $extra      = $userFunc[1] == 'createTestTaskLink' ? $extra : array('rootID' => $rootID, 'branch' => $branch);
         }
 
         $manage  = $userFunc[1] == 'createManageLink' ? true : false;
