@@ -204,6 +204,7 @@ function loadProductModules(productID)
     branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
     if(typeof(moduleID) == 'undefined') moduleID = 0;
+    if(config.currentMethod == 'edit') moduleID = $('#module').val();
     link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=bug&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + moduleID);
     $('#moduleIdBox').load(link, function()
     {
@@ -626,7 +627,8 @@ function notice()
  */
 function setBranchRelated(branchID, productID, num)
 {
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num);
+    var currentModuleID = config.currentMethod == 'batchedit' ? $('#modules' + num).val() : 0;
+    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num + '&currentModuleID=' + currentModuleID);
     $.get(moduleLink, function(modules)
     {
         if(!modules) modules = '<select id="modules' + num + '" name="modules[' + num + ']" class="form-control"></select>';

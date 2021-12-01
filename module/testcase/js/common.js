@@ -84,7 +84,8 @@ function loadProductModules(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = $('#branch').val();
     if(!branch) branch = 0;
-    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    var currentModuleID = config.currentMethod == 'edit' ? $('#module').val() : 0;
+    link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModuleID);
     $('#moduleIdBox').load(link, function()
     {
         var $inputGroup = $(this);
