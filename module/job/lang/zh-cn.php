@@ -44,6 +44,7 @@ $lang->job->editedBy    = '由谁编辑';
 $lang->job->editedDate  = '编辑日期';
 $lang->job->lastTag     = '最后标签';
 $lang->job->deleted     = '已删除';
+$lang->job->repoServer  = '版本库服务器';
 
 $lang->job->lblBasic = '基本信息';
 

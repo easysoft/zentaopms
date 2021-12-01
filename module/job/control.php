@@ -69,7 +69,7 @@ class job extends control
                 $errors = dao::getError();
                 if($this->post->engine == 'gitlab' and isset($errors['server']))
                 {
-                    $errors['gitlabRepo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repo);
+                    if(!isset($errors['repo'])) $errors['repo'][] = sprintf($this->lang->error->notempty, $this->lang->job->repoServer);
                     unset($errors['server']);
                     unset($errors['pipeline']);
                 }

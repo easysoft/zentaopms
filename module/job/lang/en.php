@@ -44,6 +44,7 @@ $lang->job->editedBy    = 'Edited By';
 $lang->job->editedDate  = 'Edited Date';
 $lang->job->lastTag     = 'Last Tag';
 $lang->job->deleted     = 'Deleted';
+$lang->job->repoServer  = 'Repo Server';
 
 $lang->job->lblBasic = 'Basic Info';
 

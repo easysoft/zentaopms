@@ -198,7 +198,6 @@ class jobModel extends model
 
         $this->dao->insert(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
-
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
