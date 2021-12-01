@@ -154,7 +154,9 @@ if($viewType == 'doc' or $viewType == 'api')
                   <div class="table-row row-module row-module-new">
                     <div class="table-col col-module"><?php echo html::input("modules[]", '', "class='form-control' placeholder='{$name}'");?></div>
                     <?php if($hasBranch):?>
-                    <div class="table-col col-module"><?php echo html::select("branch[]", $branches, $branch, 'class="form-control" disabled'); echo html::hidden("branch[]", $branch);?></div>
+                    <?php $disabledBranch = $branch === 'all' ? '' : 'disabled';?>
+                    <div class="table-col col-module"><?php echo html::select("branch[]", $branches, $branch, "class='form-control' $disabledBranch");?></div>
+                    <?php if($branch !== 'all') echo html::hidden("branch[]", $branch);?>
                     <?php endif;?>
                     <div class="table-col col-shorts"><?php echo html::input("shorts[]", '', "class='form-control' placeholder='{$lang->tree->short}'");?></div>
                     <div class="table-col col-actions">
@@ -199,6 +201,7 @@ if($viewType == 'doc' or $viewType == 'api')
   </div>
 </div>
 <?php js::set('tab', $this->app->tab);?>
+<?php js::set('branch', $branch);?>
 <script>
 $(function()
 {
@@ -218,7 +221,7 @@ $(function()
         },
         itemCreator: function($li, item)
         {
-            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>'.format(item.id, item.branch)) + '" data-app="' + tab + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
+            var link = (item.id !== undefined && item.type != 'line') ? ('<a href="' + createLink('tree', 'browse', 'rootID=<?php echo $rootID ?>&viewType=<?php echo $viewType ?>&moduleID={0}&branch={1}&from=<?php echo $from;?>'.format(item.id, branch)) + '" data-app="' + tab + '">' + item.name + '</a>') : ('<span class="tree-toggle">' + item.name + '</span>');
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'bug') $toggle.append('&nbsp; <span class="text-muted">[B]</span>');
             if(item.type === 'case') $toggle.append('&nbsp; <span class="text-muted">[C]</span>');

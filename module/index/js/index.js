@@ -121,6 +121,11 @@
         {
             return (link.params.from || link.params.$3) == 'project' ? 'project' : 'execution';
         }
+        if(moduleName === 'issue' || moduleName === 'risk' || moduleName === 'opportunity' || moduleName === 'pssp' || moduleName === 'auditplan' || moduleName === 'meeting' || moduleName === 'nc')
+        {
+            if(link.params.$2 == 'project') return 'project';
+            if(link.params.$2 == 'execution') return 'execution';
+        }
         if(moduleName === 'product')
         {
             if(methodLowerCase === 'create' && (link.params.programID || link.params.$1)) return 'program';
@@ -148,7 +153,7 @@
             if(methodLowerCase === 'browse')
             {
                 var viewType = link.params.view || link.params.$2;
-                if(['bug', 'case', 'caselib'].includes(viewType)) return link.params.from === 'project' ? 'project' : 'qa';
+                if(['bug', 'case', 'caselib'].includes(viewType)) return link.params.$5 === 'project' ? 'project' : 'qa';
 
                 if(viewType === 'doc' && (link.params.from === 'product' || link.params.$5 == 'product')) return 'product';
                 if(viewType === 'doc' && (link.params.from === 'project' || link.params.$5 == 'project')) return 'project';
@@ -859,3 +864,4 @@ function getLatestVersion()
     $('#globalSearchInput').click();
     $('#upgradeContent').toggle();
 }
+

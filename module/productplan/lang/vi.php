@@ -30,7 +30,7 @@ $lang->productplan->linkedStories    = 'Câu chuyện liên kết';
 $lang->productplan->unlinkedStories  = 'Câu chuyện chưa liên kết';
 $lang->productplan->updateOrder      = 'Sắp xếp';
 $lang->productplan->createChildren   = "Tạo kế hoạch con";
-$lang->productplan->createExecution  = "Create {$lang->execution->common}";
+$lang->productplan->createExecution  = "Create {$lang->executionCommon}";
 
 $lang->productplan->linkBug        = "Liên kết Bug";
 $lang->productplan->unlinkBug      = "Hủy liên kết Bug";
@@ -46,7 +46,6 @@ $lang->productplan->confirmUnlinkBug   = "Bạn có muốn hủy liên kết bug
 $lang->productplan->noPlan             = 'Không có kế hoạch nào';
 $lang->productplan->cannotDeleteParent = 'Không thể xóa kế hoạch mẹ';
 $lang->productplan->selectProjects     = "Please select the project";
-$lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';
@@ -61,7 +60,7 @@ $lang->productplan->future     = 'TBD';
 $lang->productplan->stories    = 'Câu chuyện';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = $lang->execution->common;
+$lang->productplan->execution  = $lang->executionCommon;
 $lang->productplan->parent     = "Kế hoạch mẹ";
 $lang->productplan->parentAB   = "Mẹ";
 $lang->productplan->children   = "Kế hoạch con";
@@ -77,12 +76,10 @@ $lang->productplan->endList[93]   = '3 tháng';
 $lang->productplan->endList[186]  = '6 tháng';
 $lang->productplan->endList[365]  = '1 năm';
 
-$lang->productplan->errorNoTitle      = 'Tiêu đề ID %s không nên trống.';
-$lang->productplan->errorNoBegin      = 'Thời gian bắt đầu ID %s không nên trống.';
-$lang->productplan->errorNoEnd        = 'Thời gian kết thúc ID %s không nên trống.';
-$lang->productplan->beginGeEnd        = 'ID %s thời gian bắt đầu không nên >= thời gian kết thúc.';
-$lang->productplan->beginLetterParent = "Parent begin date: %s, begin date should be >= parent begin date.";
-$lang->productplan->endGreaterParent  = "Parent end date: %s, end date should be <= parent end date.";
+$lang->productplan->errorNoTitle = 'Tiêu đề ID %s không nên trống.';
+$lang->productplan->errorNoBegin = 'Thời gian bắt đầu ID %s không nên trống.';
+$lang->productplan->errorNoEnd   = 'Thời gian kết thúc ID %s không nên trống.';
+$lang->productplan->beginGeEnd   = 'ID %s thời gian bắt đầu không nên >= thời gian kết thúc.';
 
 $lang->productplan->featureBar['browse']['all']       = 'Tất cả';
 $lang->productplan->featureBar['browse']['unexpired'] = 'Chưa quá hạn';

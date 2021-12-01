@@ -66,8 +66,6 @@ class actionModel extends model
         $action->product   = $relation['product'];
         $action->project   = (int)$relation['project'];
         $action->execution = (int)$relation['execution'];
-
-
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
@@ -190,7 +188,7 @@ class actionModel extends model
             $fields = '*';
             if(strpos('story, productplan, case, branch',  $objectType) !== false) $fields = 'product';
             if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
-            if(strpos('case, repo', $objectType) !== false) $fields = 'execution';
+            if(strpos('case, repo, kanbanlane', $objectType) !== false) $fields = 'execution';
             if($objectType == 'release') $fields = 'product, build';
             if($objectType == 'task')    $fields = 'project, execution, story';
 
@@ -199,6 +197,8 @@ class actionModel extends model
             /* Process story, release and task. */
             if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
             if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
+            if($objectType == 'kanbanlane') $record->execution = $this->dao->select($fields)->from(TABLE_KANBANLANE)->where('id')->eq($objectID)->fetch('execution');
+            if($objectType == 'kanbancolumn') $record->execution = $extra;
             if($objectType == 'team')
             {
                 $team   = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
@@ -818,7 +818,7 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);;
+        return $this->transformActions($actions);
     }
 
     /**
@@ -1199,6 +1199,10 @@ class actionModel extends model
                 {
                     $params = sprintf($vars, trim($action->product, ','));
                 }
+                elseif($action->objectType == 'kanbancolumn' or $action->objectType == 'kanbanlane')
+                {
+                    $params = sprintf($vars, $action->extra);
+                }
                 else
                 {
                     $params = sprintf($vars, $action->objectID);
@@ -1232,6 +1236,11 @@ class actionModel extends model
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
+
+        if($action->objectType == 'story' and $action->action == 'import2storylib')
+        {
+            $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        }
 
         return $action;
     }
@@ -1436,10 +1445,11 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $orderBy date_desc|date_asc
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next', $type = 'today')
+    public function buildDateGroup($actions, $direction = 'next', $type = 'today', $orderBy = 'date_desc')
     {
         $dateGroup = array();
         foreach($actions as $action)
@@ -1467,7 +1477,17 @@ class actionModel extends model
             }
         }
 
-        if($direction != 'next') $dateGroup = array_reverse($dateGroup);
+        /* Modify date to the corrret order. */
+        if($this->app->rawModule != 'company' and $direction != 'next')
+        {
+            $dateGroup = array_reverse($dateGroup);
+        }
+        elseif($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
+        {
+            $dateGroup = array_reverse($dateGroup);
+            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+        }
+
         return $dateGroup;
     }
 

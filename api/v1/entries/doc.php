@@ -44,6 +44,11 @@ class docEntry extends entry
             $doc->addedBy    = zget($usersWithAvatar, $doc->addedBy);
         }
 
+        $preAndNext = $data->data->preAndNext;
+        $doc->preAndNext = array();
+        $doc->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $doc->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
+
         $this->send(200, $this->format($doc, 'addedDate:time,assignedDate:date,editedDate:time'));
     }
 

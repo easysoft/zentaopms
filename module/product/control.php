@@ -218,10 +218,17 @@ class product extends control
             $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
         }
 
-        /* Get stories. */
+        /* Get stories and branches. */
         if($this->app->rawModule == 'projectstory')
         {
-            if(!empty($product)) $this->session->set('currentProductType', $product->type);
+            $branches = array();
+            if(!empty($product))
+            {
+                $this->session->set('currentProductType', $product->type);
+                $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($product->id, $projectID) : array();
+                $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
+            }
+
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
             $productPlans    = $this->execution->getPlans($projectProducts);
@@ -231,7 +238,7 @@ class product extends control
         }
         else
         {
-            $branchID = $browseType == 'bymodule' ? 'all' : $branchID;
+            $branches = $this->loadModel('branch')->getPairs($productID);
             $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
         }
 
@@ -301,7 +308,7 @@ class product extends control
         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
-        $this->view->branches        = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches        = $branches;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
         $this->view->storyTasks      = $storyTasks;
@@ -727,6 +734,7 @@ class product extends control
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->groups     = $this->loadModel('group')->getPairs();
         $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->reviewers  = explode(',', $product->reviewer);
 
         $this->display();
     }
@@ -973,65 +981,25 @@ class product extends control
      * @param  int    $planID
      * @param  bool   $needCreate
      * @param  string $expired
-     * @param  string $from
      * @param  string $param
      * @access public
      * @return void
      */
-    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $from = '', $param = '')
+    public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
-        $this->loadModel('productplan');
-        if($from == 'story' and $branch == BRANCH_MAIN)
+        $param      = strtolower($param);
+        $plans      = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
+        $field      = $fieldID ? "plans[$fieldID]" : 'plan';
+        $output     = '';
+        $output    .= html::select($field, $plans, $planID, "class='form-control chosen'");
+        if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {
-            $plans = $this->productplan->getPairs($productID);
-        }
-        elseif($from == 'story' and $branch)
-        {
-            $plans  = $this->productplan->getPairs($productID, 0);
-            $plans += $this->productplan->getPairs($productID, $branch);
-        }
-        else
-        {
-            $plans = $this->productplan->getPairs($productID, $branch, $expired);
-        }
-
-        $field = $fieldID ? "plans[$fieldID]" : 'plan';
-
-        $output = '';
-        if(strpos($param, 'batchEdit') !== false)
-        {
-            $output  = "<div class='table-row'>";
-            $output .= "<div class='table-col'>";
-            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
-            $output .= "</div>";
-            if(count($plans) == 1 and $needCreate)
-            {
-                $output .= "<div class='table-col'>";
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-                $output .= '</div>';
-                $output .= '</div>';
-                $output .= "<div class='table-col'>";
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-                $output .= '</div>';
-                $output .= '</div>';
-            }
-            $output .= "</div>";
-        }
-        else
-        {
-            $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
-            if(count($plans) == 1 and $needCreate)
-            {
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
-                $output .= '</div>';
-                $output .= "<div class='input-group-btn'>";
-                $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
-                $output .= '</div>';
-            }
-
+            $output .= "<div class='input-group-btn'>";
+            $output .= html::a($this->createLink('productplan', 'create', "productID=$productID&branch=$branch", '', true), "<i class='icon icon-plus'></i>", '', "class='btn btn-icon' data-toggle='modal' data-type='iframe' data-width='95%' title='{$this->lang->productplan->create}'");
+            $output .= '</div>';
+            $output .= "<div class='input-group-btn'>";
+            $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
+            $output .= '</div>';
         }
         die($output);
     }
@@ -1051,6 +1019,34 @@ class product extends control
 
         if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
         if(!$productID) die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+    }
+
+    /**
+     * Ajax get reviewers.
+     *
+     * @param  int    $productID
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function ajaxGetReviewers($productID, $storyID = 0)
+    {
+        /* Get product reviewers. */
+        $product          = $this->product->getByID($productID);
+        $productReviewers = $product->reviewer;
+        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+
+        $storyReviewers = '';
+        if($storyID)
+        {
+            $story          = $this->loadModel('story')->getByID($storyID);
+            $storyReviewers = $this->story->getReviewerPairs($story->id, $story->version);
+            $storyReviewers = implode(',', array_keys($storyReviewers));
+        }
+
+        $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
+
+        die(html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple"));
     }
 
     /**
@@ -1221,6 +1217,7 @@ class product extends control
         $kanbanGroup = $this->product->getStats4Kanban();
         extract($kanbanGroup);
 
+        $programPairs  = $this->loadModel('program')->getPairs(true);
         $myProducts    = array();
         $otherProducts = array();
         foreach($productList as $productID => $product)
@@ -1242,7 +1239,7 @@ class product extends control
 
         $this->view->title            = $this->lang->product->kanban;
         $this->view->kanbanList       = $kanbanList;
-        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programList;
+        $this->view->programList      = array(0 => $this->lang->product->emptyProgram) + $programPairs;
         $this->view->productList      = $productList;
         $this->view->planList         = $planList;
         $this->view->projectList      = $projectList;
@@ -1268,8 +1265,6 @@ class product extends control
         if($_POST)
         {
             $this->product->manageLine();
-            if(dao::isError()) die(js::error(dao::getError()));
-
             die(js::reload('parent'));
         }
 

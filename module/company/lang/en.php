@@ -37,3 +37,6 @@ $lang->company->user      = 'User';
 
 $lang->company->guestOptions[0] = 'Deny';
 $lang->company->guestOptions[1] = 'Allow';
+
+$lang->company->order['date_desc'] = 'Descending';
+$lang->company->order['date_asc']  = 'Ascending';

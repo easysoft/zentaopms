@@ -29,6 +29,9 @@ $lang->action->url         = '网址';
 $lang->action->contentType = '内容类型';
 $lang->action->data        = '数据';
 $lang->action->result      = '结果';
+$lang->action->modified    = '修改了';
+$lang->action->old         = '旧值为';
+$lang->action->new         = '新值为';
 
 $lang->action->trash       = '回收站';
 $lang->action->undelete    = '还原';
@@ -369,6 +372,10 @@ $lang->action->dynamicAction->execution['undeleted'] = '还原' . $lang->executi
 $lang->action->dynamicAction->execution['hidden']    = '隐藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '导入任务';
 
+$lang->action->dynamicAction->kanbancolumn['edited'] = '设置看板列';
+$lang->action->dynamicAction->kanbanlane['edited']   = '设置泳道';
+$lang->action->dynamicAction->kanbanlane['moved']    = '移动泳道';
+
 $lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
 $lang->action->dynamicAction->task['opened']              = '创建任务';
@@ -500,27 +507,28 @@ else
 {
     $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
 }
-$lang->action->label->task        = '任务|task|view|taskID=%s';
-$lang->action->label->build       = '版本|build|view|buildID=%s';
-$lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
-$lang->action->label->case        = '用例|testcase|view|caseID=%s';
-$lang->action->label->testtask    = '测试单|testtask|view|caseID=%s';
-$lang->action->label->testsuite   = '测试套件|testsuite|view|suiteID=%s';
-$lang->action->label->caselib     = '用例库|caselib|view|libID=%s';
-$lang->action->label->todo        = '待办|todo|view|todoID=%s';
-$lang->action->label->doclib      = '文档库|doc|tablecontents|type=%s&objectID=%s&libID=%s';
-$lang->action->label->doc         = '文档|doc|view|docID=%s';
-$lang->action->label->user        = '用户|user|view|account=%s';
-$lang->action->label->testreport  = '报告|testreport|view|report=%s';
-$lang->action->label->entry       = '应用|entry|browse|';
-$lang->action->label->webhook     = 'Webhook|webhook|browse|';
-$lang->action->label->space       = ' ';
-$lang->action->label->risk        = '风险|risk|view|riskID=%s';
-$lang->action->label->issue       = '问题|issue|view|issueID=%s';
-$lang->action->label->design      = '设计|design|view|designID=%s';
-$lang->action->label->stakeholder = '干系人|stakeholder|view|userID=%s';
-$lang->action->label->api         = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->branch      = '分支|branch|manage|productID=%s&browseType=all';
+$lang->action->label->task         = '任务|task|view|taskID=%s';
+$lang->action->label->build        = '版本|build|view|buildID=%s';
+$lang->action->label->bug          = 'Bug|bug|view|bugID=%s';
+$lang->action->label->case         = '用例|testcase|view|caseID=%s';
+$lang->action->label->testtask     = '测试单|testtask|view|caseID=%s';
+$lang->action->label->testsuite    = '测试套件|testsuite|view|suiteID=%s';
+$lang->action->label->caselib      = '用例库|caselib|view|libID=%s';
+$lang->action->label->todo         = '待办|todo|view|todoID=%s';
+$lang->action->label->doclib       = '文档库|doc|tablecontents|type=%s&objectID=%s&libID=%s';
+$lang->action->label->doc          = '文档|doc|view|docID=%s';
+$lang->action->label->user         = '用户|user|view|account=%s';
+$lang->action->label->testreport   = '报告|testreport|view|report=%s';
+$lang->action->label->entry        = '应用|entry|browse|';
+$lang->action->label->webhook      = 'Webhook|webhook|browse|';
+$lang->action->label->space        = ' ';
+$lang->action->label->risk         = '风险|risk|view|riskID=%s';
+$lang->action->label->issue        = '问题|issue|view|issueID=%s';
+$lang->action->label->design       = '设计|design|view|designID=%s';
+$lang->action->label->stakeholder  = '干系人|stakeholder|view|userID=%s';
+$lang->action->label->api          = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
+$lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
 
 /* Object type. */
 $lang->action->search = new stdclass();

@@ -162,11 +162,20 @@ function loadBranches(product)
             $inputgroup.addClass('has-branch').append(data);
             $inputgroup.find('select:last').attr('name', 'branch[' + index + ']').attr('id', 'branch' + index).attr('onchange', "loadPlans('#products" + index + "', this.value)").chosen();
         }
-    });
 
-    loadPlans(product);
+        var branchID = $('#branch' + index).val();
+        loadPlans(product, branchID);
+    });
 }
 
+/**
+ * Load plans by product id.
+ *
+ * @param  int $product
+ * @param  int $branchID
+ * @access public
+ * @return void
+ */
 function loadPlans(product, branchID)
 {
     if($('#plansBox').size() == 0) return false;
@@ -177,7 +186,7 @@ function loadPlans(product, branchID)
 
     if(typeof(planID) == 'undefined') planID = 0;
     planID = $("select#plans" + productID).val() != '' ? $("select#plans" + productID).val() : planID;
-    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + ((config.currentMethod == 'create' || config.currentMethod == 'edit') ? 'unexpired' : '')), function(data)
+    $.get(createLink('product', 'ajaxGetPlans', "productID=" + productID + '&branch=0,' + branchID + '&planID=' + planID + '&fieldID&needCreate=&expired=' + (config.currentMethod == 'create' ? 'unexpired' : '') + '&param=skipParent'), function(data)
     {
         if(data)
         {
@@ -189,7 +198,12 @@ function loadPlans(product, branchID)
     });
 }
 
-
+/**
+ * Adjust product box margin.
+ *
+ * @access public
+ * @return void
+ */
 function adjustProductBoxMargin()
 {
     var productRows = Math.ceil($('#productsBox > .row > .col-sm-4').length / 3);
@@ -202,6 +216,12 @@ function adjustProductBoxMargin()
     }
 }
 
+/**
+ * Adjust plan box margin.
+ *
+ * @access public
+ * @return void
+ */
 function adjustPlanBoxMargin()
 {
     var planRows = Math.ceil($('#plansBox > .row > .col-sm-4').length / 3);

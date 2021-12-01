@@ -41,6 +41,9 @@ class tree extends control
         else if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($this->session->project);
+
+            $products = $this->product->getProducts($this->session->project, 'all', '', false);
+            if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
 
         /* According to the type, set the module root and modules. */
@@ -53,9 +56,10 @@ class tree extends control
                 $branches = $this->loadModel('branch')->getPairs($product->id);
                 if($currentModuleID)
                 {
-                    $branchName = $branches[$branch];
+                    $currentModuleBranch = $this->dao->select('branch')->from(TABLE_MODULE)->where('id')->eq($currentModuleID)->fetch('branch');
+                    $branchName = $branches[$currentModuleBranch];
                     unset($branches);
-                    $branches[$branch] = $branchName;
+                    $branches[$currentModuleBranch] = $branchName;
                 }
                 $this->view->branches = $branches;
             }

@@ -207,6 +207,8 @@ class storyModel extends model
             ->setIF($this->post->needNotReview, 'status', 'active')
             ->setIF($this->post->plan > 0, 'stage', 'planned')
             ->setIF($this->post->estimate, 'estimate', (float)$this->post->estimate)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF($executionID > 0, 'stage', 'projected')
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
@@ -233,7 +235,11 @@ class storyModel extends model
 
         $requiredFields = trim($requiredFields, ',');
 
-        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')->autoCheck()->batchCheck($requiredFields, 'notempty')->exec();
+        $this->dao->insert(TABLE_STORY)->data($story, 'spec,verify')
+            ->autoCheck()
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
+            ->batchCheck($requiredFields, 'notempty')
+            ->exec();
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -274,6 +280,7 @@ class storyModel extends model
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+                $this->loadModel('kanban')->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
@@ -402,16 +409,13 @@ class storyModel extends model
     public function batchCreate($productID = 0, $branch = 0, $type = 'story')
     {
         $forceReview = $this->checkForceReview();
-        foreach($_POST['needReview'] as $index => $value)
+        foreach($_POST['title'] as $index => $value)
         {
             if($_POST['title'][$index] and isset($_POST['reviewer'][$index])) $_POST['reviewer'][$index] = array_filter($_POST['reviewer'][$index]);
-            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]))
+            if($_POST['title'][$index] and empty($_POST['reviewer'][$index]) and $forceReview)
             {
-                if($value || $forceReview)
-                {
-                    dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
-                    return false;
-                }
+                dao::$errors[] = $this->lang->story->errorEmptyReviewedBy;
+                return false;
             }
         }
 
@@ -460,7 +464,7 @@ class storyModel extends model
             $story->category   = $stories->category[$i];
             $story->pri        = $stories->pri[$i];
             $story->estimate   = $stories->estimate[$i];
-            $story->status     = ($stories->needReview[$i] == 0 and !$forceReview) ? 'active' : 'draft';
+            $story->status     = (empty($stories->reviewer[$i]) and !$forceReview) ? 'active' : 'draft';
             $story->stage      = ($this->app->tab == 'project' or $this->app->tab == 'execution') ? 'projected' : 'wait';
             $story->keywords   = $stories->keywords[$i];
             $story->sourceNote = $stories->sourceNote[$i];
@@ -747,6 +751,8 @@ class storyModel extends model
             ->setIF($this->post->closedReason != false and $oldStory->closedDate == '', 'closedDate', $now)
             ->setIF($this->post->closedBy     != false or  $this->post->closedReason != false, 'status', 'closed')
             ->setIF($this->post->closedReason != false and $this->post->closedBy     == false, 'closedBy', $this->app->user->account)
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'feedbackBy', '')
+            ->setIF(!in_array($this->post->source, $this->config->story->feedbackSource), 'notifyEmail', '')
             ->setIF(!empty($_POST['plan'][0]) and $oldStory->stage == 'wait', 'stage', 'planned')
             ->stripTags($this->config->story->editor->edit['id'], $this->config->allowedTags)
             ->join('reviewedBy', ',')
@@ -823,6 +829,7 @@ class storyModel extends model
             ->checkIF(isset($story->closedBy), 'closedReason', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'done', 'stage', 'notempty')
             ->checkIF(isset($story->closedReason) and $story->closedReason == 'duplicate',  'duplicateStory', 'notempty')
+            ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->where('id')->eq((int)$storyID)->exec();
 
         if(!dao::isError())
@@ -1682,9 +1689,17 @@ class storyModel extends model
      */
     public function batchChangeBranch($storyIdList, $branchID, $confirm = '', $plans = array())
     {
-        $now        = helper::now();
-        $allChanges = array();
-        $oldStories = $this->getByList($storyIdList);
+        $now         = helper::now();
+        $allChanges  = array();
+        $oldStories  = $this->getByList($storyIdList);
+        $story       = current($oldStories);
+        $productID   = $story->product;
+        $mainModules = $this->dao->select('id')->from(TABLE_MODULE)
+            ->where('root')->eq($productID)
+            ->andWhere('branch')->eq(0)
+            ->andWhere('type')->eq('story')
+            ->fetchPairs('id');
+
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
@@ -1693,6 +1708,7 @@ class storyModel extends model
             $story->lastEditedBy   = $this->app->user->account;
             $story->lastEditedDate = $now;
             $story->branch         = $branchID;
+            $story->module         = ($oldStory->branch != $branchID and !in_array($oldStory->module, $mainModules)) ? 0 : $oldStory->module;
 
             $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq((int)$storyID)->exec();
             if(!dao::isError())
@@ -1701,12 +1717,13 @@ class storyModel extends model
                 {
                     $planIdList         = '';
                     $conflictPlanIdList = '';
+
                     /* Determine whether there is a conflict between the branch of the story and the linked plan. */
                     if($oldStory->branch != $branchID and $branchID != BRANCH_MAIN and isset($plans[$storyID]))
                     {
                         foreach($plans[$storyID] as $planID => $plan)
                         {
-                            if($plan->branch != BRANCH_MAIN and $plan->branch != $branchID)
+                            if($plan->branch != $branchID)
                             {
                                 $conflictPlanIdList .= $planID . ',';
                             }
@@ -1844,6 +1861,8 @@ class storyModel extends model
             $tasks[] = $taskID;
             $this->action->create('task', $taskID, 'Opened', '');
         }
+
+        $this->loadModel('kanban')->updateLane($executionID, 'task');
         return $tasks;
     }
 
@@ -2443,13 +2462,21 @@ class storyModel extends model
         $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
-            $branches = array();
-            foreach($products as $product)
+            $branches = array(BRANCH_MAIN => BRANCH_MAIN);
+            if($branch === '')
             {
-                foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                foreach($products as $product)
+                {
+                    foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                }
             }
+            else
+            {
+                $branches[$branch] = $branch;
+            }
+
             $branches = join(',', $branches);
-            if($branches) $storyQuery .= " AND `branch`" . helper::dbIN($branches);
+            $storyQuery .= " AND `branch`" . helper::dbIN($branches);
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
@@ -2466,7 +2493,7 @@ class storyModel extends model
         }
         elseif($branch)
         {
-            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in('$branch')";
+            if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
         }
         $storyQuery = preg_replace("/`plan` +LIKE +'%([0-9]+)%'/i", "CONCAT(',', `plan`, ',') LIKE '%,$1,%'", $storyQuery);
 
@@ -2590,9 +2617,15 @@ class storyModel extends model
         else
         {
             $productParam = ($type == 'byproduct' and $param) ? $param : $this->cookie->storyProductParam;
-            $branchParam  = $branchID = ($type == 'bybranch' and $param !== '') ? $param : $this->cookie->storyBranchParam;
-            $moduleParam  = ($type == 'bymodule'  and $param) ? $param : $this->cookie->storyModuleParam;
-            $modules      = (empty($moduleParam) or $type != 'bymodule') ? array() : $this->dao->select('*')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs('id', 'id');
+            $branchParam  = ($type == 'bybranch'  and $param !== '') ? $param : $this->cookie->storyBranchParam;
+            $moduleParam  = ($type == 'bymodule'  and $param !== '') ? $param : $this->cookie->storyModuleParam;
+
+            $modules = array();
+            if(!empty($moduleParam) or strpos('allstory,unclosed,bymodule', $type) !== false)
+            {
+                $modules = $this->dao->select('id')->from(TABLE_MODULE)->where('path')->like("%,$moduleParam,%")->andWhere('type')->eq('story')->andWhere('deleted')->eq(0)->fetchPairs();
+            }
+
             if(strpos($branchParam, ',') !== false) list($productParam, $branchParam) = explode(',', $branchParam);
 
             $unclosedStatus = $this->lang->story->statusList;
@@ -2617,7 +2650,7 @@ class storyModel extends model
                 ->beginIF($excludeStories)->andWhere('t2.id')->notIN($excludeStories)->fi()
                 ->beginIF($execution->type == 'project')
                 ->beginIF(!empty($productID))->andWhere('t1.product')->eq($productID)
-                ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->eq($branchParam)->fi()
+                ->beginIF($type == 'bybranch' and $branchParam !== '')->andWhere('t2.branch')->in("0,$branchParam")->fi()
                 ->beginIF(strpos('changed|closed', $type) !== false)->andWhere('t2.status')->eq($type)->fi()
                 ->beginIF($type == 'unclosed')->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->beginIF($type == 'linkedexecution')->andWhere('t2.id')->in($storyIdList)->fi()
@@ -2628,7 +2661,6 @@ class storyModel extends model
                 ->beginIF($this->session->executionStoryBrowseType and strpos('changed|', $this->session->executionStoryBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
                 ->fi()
                 ->beginIF($this->session->storyBrowseType and strpos('changed|', $this->session->storyBrowseType) !== false)->andWhere('t2.status')->in(array_keys($unclosedStatus))->fi()
-                ->beginIF(!empty($branchParam))->andWhere('t2.branch')->eq($branchParam)->fi()
                 ->beginIF($modules)->andWhere('t2.module')->in($modules)->fi()
                 ->andWhere('t2.deleted')->eq(0)
                 ->orderBy($orderBy)
@@ -3426,7 +3458,7 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate') return false;
+        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change') return false;
 
         global $app;
 
@@ -3692,6 +3724,14 @@ class storyModel extends model
                     }
                 }
             }
+            else if($id == 'feedbackBy')
+            {
+                $title = $story->feedbackBy;
+            }
+            else if($id == 'notifyEmail')
+            {
+                $title = $story->notifyEmail;
+            }
             else if($id == 'actions')
             {
                 $class .= ' text-center';
@@ -3717,7 +3757,14 @@ class storyModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+                if($this->app->tab == 'project')
+                {
+                    $showBranch = isset($this->config->projectstory->story->showBranch) ? $this->config->projectstory->story->showBranch : 1;
+                }
+                else
+                {
+                    $showBranch = isset($this->config->product->browse->showBranch) ? $this->config->product->browse->showBranch : 1;
+                }
                 if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
                 if(isset($branches[$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
@@ -3820,6 +3867,12 @@ class storyModel extends model
                 break;
             case 'lastEditedDate':
                 echo substr($story->lastEditedDate, 5, 11);
+                break;
+            case 'feedbackBy':
+                echo $story->feedbackBy;
+                break;
+            case 'notifyEmail':
+                echo $story->notifyEmail;
                 break;
             case 'mailto':
                 $mailto = explode(',', $story->mailto);

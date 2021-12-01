@@ -24,15 +24,8 @@ $(function()
     {
         var projectID = $('#project').val();
         var planID    = $('#planID').val();
-        if(!projectID)
-        {
-            alert(projectNotEmpty);
-            return false;
-        }
-        else
-        {
-            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
-        }
+        $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        $('#projects').modal('hide');
     });
 });
 $(document).on('click', 'td.content .more', function(e)
@@ -58,11 +51,20 @@ $(document).on('click', 'td.content .more', function(e)
  * Get planID
  *
  * @param  object $obj
+ * @param  int    $branch
  * @access public
  * @return void
  */
-function getPlanID(obj)
+function getPlanID(obj, branch)
 {
     var planID = $(obj).attr("data-id");
     $('#planID').val(planID);
+
+    link = createLink('productplan', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch);
+    $.get(link, function(projects)
+    {
+        $('#project').replaceWith(projects);
+        $("#project_chosen").remove();
+        $("#project").chosen();
+    });
 }

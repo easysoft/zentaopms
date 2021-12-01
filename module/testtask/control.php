@@ -551,7 +551,7 @@ class testtask extends control
         $this->view->runs           = $runs;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->assignedToList = $assignedToList;
-        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
+        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, 'case', 0, array('treeModel', 'createTestTaskLink'), $taskID, $task->branch);
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;
@@ -1037,8 +1037,8 @@ class testtask extends control
 
         /* Build the search form. */
         $this->loadModel('testcase');
-        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID]);
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID]);
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
         if($task->productType == 'normal')
@@ -1049,10 +1049,11 @@ class testtask extends control
         else
         {
             $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$task->productType]);
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($task->product, 'noempty');
-            if($task->branch) $branches = array('' => '', $task->branch => $branches[$task->branch]);
+            $branchName = $this->loadModel('branch')->getById($task->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $task->branch => $branchName);
             $this->config->testcase->search['params']['branch']['values'] = $branches;
         }
+
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
@@ -1230,6 +1231,7 @@ class testtask extends control
      */
     public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0)
     {
+        $this->loadModel('tree');
         $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
         if($this->post->results)
         {
@@ -1257,7 +1259,7 @@ class testtask extends control
             {
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
-            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, 'all');
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, 'all');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }

@@ -52,7 +52,17 @@
                   <tr>
                     <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->qa;?></th>
                     <td><strong><?php echo zget($users, $product->QD);?></strong></td>
+                    <?php if(!isset($config->bizVersion)):?>
+                    <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->reviewer;?></th>
+                    <td><strong><?php foreach($reviewers as $reviewer) echo zget($users, $reviewer) . "&nbsp;";?></strong></td>
+                    <?php endif;?>
                   </tr>
+                  <?php if(isset($config->bizVersion)):?>
+                  <tr>
+                    <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->reviewer;?></th>
+                    <td><strong><?php foreach($reviewers as $reviewer) echo zget($users, $reviewer) . "&nbsp;";?></strong></td>
+                  </tr>
+                  <?php endif;?>
                 </tbody>
               </table>
             </div>
@@ -67,7 +77,7 @@
                     <th class="c-code"><?php echo $lang->product->code;?></th>
                     <td><strong><?php echo $product->code;?></strong></td>
                     <?php else:?>
-                    <th class="c-type"><?php echo $lang->product->type;?></th>
+                    <th><?php echo $lang->product->type;?></th>
                     <td><strong><?php echo zget($lang->product->typeList, $product->type);?></strong></td>
                     <?php endif;?>
                     <th class="c-openedBy"><?php echo $lang->story->openedBy?></th>
@@ -75,10 +85,10 @@
                   </tr>
                   <tr>
                     <?php if(!empty($product->code)):?>
-                    <th class="c-type"><?php echo $lang->product->type;?></th>
+                    <th><?php echo $lang->product->type;?></th>
                     <td><strong><?php echo zget($lang->product->typeList, $product->type);?></strong></td>
                     <?php else:?>
-                    <th class="c-prs"><?php echo $lang->productCommon ." ". $lang->product->status;?></th>
+                    <th><?php echo $lang->productCommon . $lang->product->status;?></th>
                     <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
                     <?php endif;?>
                     <th><?php echo $lang->story->openedDate?></th>
@@ -86,7 +96,7 @@
                   </tr>
                   <tr>
                     <?php if(!empty($product->code)):?>
-                    <th class="c-prs"><?php echo $lang->productCommon ." ". $lang->product->status;?></th>
+                    <th class="w-80px"><?php echo $lang->productCommon ." ". $lang->product->status;?></th>
                     <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
                     <?php endif;?>
                     <th class="c-acl"><?php echo $lang->product->acl;?></th>

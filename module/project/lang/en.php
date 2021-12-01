@@ -109,8 +109,10 @@ $lang->project->surplus            = 'Left';
 $lang->project->progress           = 'Progress';
 $lang->project->dateRange          = 'Duration';
 $lang->project->to                 = ' to ';
+$lang->project->realBeganAB        = 'Actual Begin';
+$lang->project->realEndAB          = 'Actual End';
+$lang->project->realBegan          = 'Actual Begin';
 $lang->project->realEnd            = 'Actual End';
-$lang->project->realBegan          = 'Actual Began';
 $lang->project->bygrid             = 'Kanban';
 $lang->project->bylist             = 'List';
 $lang->project->bycard             = 'Card';
@@ -147,7 +149,7 @@ $lang->project->teamSumCount       = '%s people in total';
 $lang->project->longTime           = 'Long-Term Program';
 $lang->project->future             = 'TBD';
 $lang->project->moreProject        = 'More Project';
-$lang->project->days               = 'Available Days';
+$lang->project->days               = 'Days';
 $lang->project->mailto             = 'Mailto';
 $lang->project->etc                = " , etc";
 $lang->project->product            = 'Product';
@@ -162,7 +164,7 @@ $lang->project->typeList['other'] = 'Other Projects';
 $lang->project->waitProjects    = 'Waiting Projects';
 $lang->project->doingProjects   = 'Ongoing Projects';
 $lang->project->doingExecutions = 'Ongoing Executions';
-$lang->project->closedProjects  = 'Closed Projects';
+$lang->project->closedProjects  = 'Closed Projects(The recent two projects)';
 $lang->project->noProgram       = 'Independent Projects';
 
 $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#FFC20E', '#00A78E', '#7FBB00', '#424BAC', '#C0E9FF', '#EC2761');
@@ -170,13 +172,16 @@ $lang->project->laneColorList = array('#32C5FF', '#006AF1', '#9D28B2', '#FF8F26'
 $lang->project->productNotEmpty        = 'Please link products or create products.';
 $lang->project->existProductName       = 'Product name already exists.';
 $lang->project->changeProgram          = '%s > Change project';
-$lang->project->changeProgramTip       = 'Once the program is edited, the product that is linked to this program will be changed. Do you want to edit it?';
+$lang->project->changeProgramTip       = 'After modifying the project set, the products linked with the project will also modify the project set to which it belongs. Please confirm whether to modify it.';
 $lang->project->linkedProjectsTip      = 'Linked projects are as follows';
 $lang->project->multiLinkedProductsTip = 'The following products linked to this project are also linked to other projects, please unlink before proceeding.';
 $lang->project->linkStoryByPlanTips    = "This action will associate all {$lang->SRCommon} under the selected plan to this project";
 $lang->project->createExecution        = "There is no {$lang->executionCommon} under this project, please create {$lang->executionCommon} first";
 $lang->project->unlinkExecutionMember  = "The user participated in %s executions such as %s%s. Do you want to remove the user from those executions as well? (The data related to this user will not be deleted.)";
 $lang->project->unlinkExecutionMembers = "The team members you are removing are also in the execution team of this project. Do you want to remove them from the execution team too?";
+
+$lang->project->realEndNotEmpty  = 'Actual End should not be empty.';
+$lang->project->realEndNotFuture = 'Actual End should be < = today.';
 
 $lang->project->tenThousand = '';
 
@@ -289,3 +294,6 @@ $lang->project->beginGreateChild    = "The minimum start date of the project set
 $lang->project->endLetterChild      = "The maximum finish date for the project set: %s. The completion date of a project cannot be greater than the maximum completion date of the project set.";
 $lang->project->childLongTime       = "There are long-term projects in the child project, and the parent project should also be a long-term project.";
 $lang->project->confirmUnlinkMember = "Do you want to remove this user from project?";
+
+$lang->project->action = new stdclass();
+$lang->project->action->managed = '$date, managed by <strong>$actor</strong>. $extra' . "\n";

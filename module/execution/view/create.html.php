@@ -90,9 +90,31 @@
         </tr>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
-          <td><?php echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control chosen' onchange='showLifeTimeTips()'"); ?></td>
+          <td>
+          <?php
+          if($isStage)
+          {
+              echo html::select('attribute', $lang->stage->typeList, '', "class='form-control chosen'");
+          }
+          else
+          {
+              echo html::select('lifetime', $lang->execution->lifeTimeList, '', "class='form-control' onchange='showLifeTimeTips()'");
+          }
+          ?>
+          </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
+        <?php if($isStage):?>
+        <tr>
+          <th><?php echo $lang->stage->percent;?></th>
+          <td>
+            <div class='input-group'>
+              <?php echo html::input('percent', '', "class='form-control'");?>
+              <span class='input-group-addon'>%</span>
+            </div>
+          </td>
+        </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->execution->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -132,7 +154,7 @@
           <td colspan="3" id="plansBox">
             <div class='row'>
               <?php if(isset($plan) && !empty($plan->begin)):?>
-              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[" . $plan->product . "]", $productPlan, $plan->id, "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0"><?php echo html::select("plans[{$plan->product}][{$plan->branch}]", $productPlan, $plan->id, "class='form-control chosen'");?></div>
               <?php js::set('currentPlanID', $plan->id)?>
               <?php elseif($copyExecutionID):?>
               <?php $i = 0;?>

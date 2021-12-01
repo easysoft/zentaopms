@@ -6,6 +6,7 @@ $routes = array();
 
 $routes['/tokens']   = 'tokens';
 $routes['/langs']    = 'langs';
+$routes['/ping']     = 'ping';
 $routes['/comments'] = 'comments';
 
 $routes['/tabs/:module'] = 'tabs';

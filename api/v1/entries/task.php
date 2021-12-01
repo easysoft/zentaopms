@@ -85,6 +85,9 @@ class taskEntry extends Entry
                 $user = zget($usersWithAvatar, $account, '');
                 $team->realname = $user ? $user->realname : $account;
                 $team->avatar   = $user ? $user->avatar : '';
+                $team->estimate = round($team->estimate, 1);
+                $team->consumed = round($team->consumed, 1);
+                $team->left     = round($team->left, 1);
 
                 $allHours = $team->consumed + $team->left;
                 $team->progress = empty($allHours) ? 0 : round($team->consumed / $allHours * 100, 1);
@@ -95,6 +98,11 @@ class taskEntry extends Entry
         }
 
         $task->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->task);
+
+        $preAndNext = $data->data->preAndNext;
+        $task->preAndNext = array();
+        $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
         $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool'));
     }

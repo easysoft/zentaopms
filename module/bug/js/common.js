@@ -55,12 +55,6 @@ function loadAll(productID)
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen();
         loadProductBranches(productID)
-        loadProductModules(productID);
-        loadProductProjects(productID);
-        loadProductBuilds(productID);
-        loadProductplans(productID);
-        loadProductStories(productID);
-        //loadTestTasks(productID);
     }
 }
 
@@ -502,6 +496,12 @@ function loadProductBranches(productID)
             $('#branch').css('width', page == 'create' ? '120px' : '65px');
             $('#branch').chosen();
         }
+
+        loadProductModules(productID);
+        loadProductProjects(productID);
+        loadProductBuilds(productID);
+        loadProductplans(productID);
+        loadProductStories(productID);
     })
 }
 
@@ -661,5 +661,15 @@ function setBranchRelated(branchID, productID, num)
             $('#executions' + (num + 1)).trigger("chosen:updated");
         }
         setOpenedBuilds(buildLink, num);
+    }
+
+    if(config.currentMethod == 'batchedit')
+    {
+        planID   = $('#plans' + num).val();
+        planLink = createLink('product', 'ajaxGetPlans', 'productID=' + productID + '&branch=' + branchID + '&planID=' + planID + '&fieldID=' + num + '&needCreate=false&expired=&param=skipParent');
+        $('#plans' + num).parent('td').load(planLink, function()
+        {
+            $('#plans' + num).chosen();
+        });
     }
 }

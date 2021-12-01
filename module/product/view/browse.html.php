@@ -65,7 +65,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID"), $lang->product->all)  . "</li>";
         foreach($projectProducts as $product)
         {
-            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=0"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
+            echo "<li>" . html::a($this->createLink('projectstory', 'story', "projectID=$projectID&productID=$product->id&branch=all"), $product->name, '', "title='{$product->name}' class='text-ellipsis'") . "</li>";
         }
         ?>
       </ul>
@@ -133,7 +133,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <?php if($this->app->rawModule != 'projectstory') common::printIcon('story', 'report', "productID=$productID&branchID=$branch&storyType=$storyType&browseType=$browseType&moduleID=$moduleID&chartType=pie", '', 'button', 'bar-chart muted'); ?>
     <div class="btn-group">
       <button class="btn btn-link" data-toggle="dropdown"><i class="icon icon-export muted"></i> <span class="text"><?php echo $lang->export ?></span> <span class="caret"></span></button>
-      <ul class="dropdown-menu pull-right" id='exportActionMenu'>
+      <ul class="dropdown-menu" id='exportActionMenu'>
         <?php
         $tab   = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
@@ -394,7 +394,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
-              if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal')
+              if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID)
               {
                   $withSearch = count($branches) > 8;
                   echo "<li class='dropdown-submenu'>";

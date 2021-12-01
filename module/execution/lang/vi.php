@@ -377,6 +377,11 @@ $lang->execution->kanbanHideCols   = 'Cột Đã đóng & đã hủy';
 $lang->execution->kanbanShowOption = 'Mở ra';
 $lang->execution->kanbanColsColor  = 'Tùy biến màu cột';
 
+$lang->execution->kanbanViewList['all']   = 'All';
+$lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";
+$lang->execution->kanbanViewList['bug']   = 'Bug';
+$lang->execution->kanbanViewList['task']  = 'Task';
+
 $lang->kanbanSetting = new stdclass();
 $lang->kanbanSetting->noticeReset     = 'Bạn có muốn thiết lập lại Kanban?';
 $lang->kanbanSetting->optionList['0'] = 'Ẩn';

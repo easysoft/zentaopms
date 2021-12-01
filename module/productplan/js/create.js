@@ -41,6 +41,7 @@ function computeEndDate(delta)
 
 $('#begin').on('change', function()
 {
+    $("#end").val('');
     $("input:radio[name='delta']").attr("checked",false);
 });
 
@@ -53,13 +54,13 @@ $('#future').on('change', function()
 {
     if($(this).prop('checked'))
     {
-        $('#begin').attr('disabled', 'disabled');
-        $('#end').attr('disabled', 'disabled').parents('tr').hide();
+        $('#begin').val('').attr('disabled', 'disabled');
+        $('#end').val('').parents('tr').hide();
     }
     else
     {
         $('#begin').removeAttr('disabled');
-        $('#end').removeAttr('disabled').parents('tr').show();
+        $('#end').val('').parents('tr').show();
     }
 });
 

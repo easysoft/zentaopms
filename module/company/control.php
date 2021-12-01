@@ -167,10 +167,11 @@ class company extends control
      * @param  int    $productID
      * @param  int    $projectID
      * @param  int    $executionID
+     * @param  string $orderBy     date_deac|date_asc
      * @access public
      * @return void
      */
-    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $productID = 0, $projectID = 0, $executionID = 0)
+    public function dynamic($browseType = 'today', $param = '', $recTotal = 0, $date = '', $direction = 'next', $userID = '', $productID = 0, $projectID = 0, $executionID = 0, $orderBy = 'date_desc')
     {
         $this->company->setMenu();
         $this->app->loadLang('user');
@@ -203,8 +204,8 @@ class company extends control
         $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
 
         /* Append id for secend sort. */
-        $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $order = $direction == 'next' ? 'date_desc' : 'date_asc';
+        $sort  = $this->loadModel('common')->appendOrder($order);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
@@ -289,7 +290,7 @@ class company extends control
         $this->view->userID       = $userID;
         $this->view->param        = $param;
         $this->view->browseType   = $browseType;
-        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType);
+        $this->view->dateGroups   = $this->action->buildDateGroup($actions, $direction, $browseType, $orderBy);
         $this->view->direction    = $direction;
         $this->display();
     }

@@ -40,7 +40,7 @@ $config->bug->list->exportFields = 'id, product, branch, module, project, execut
 
 $config->bug->list->customCreateFields      = 'execution,story,task,pri,severity,os,browser,deadline,mailto,keywords';
 $config->bug->list->customBatchCreateFields = 'execution,steps,type,pri,deadline,severity,os,browser,keywords';
-$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,status,resolvedBy,resolution,os,browser,keywords';
+$config->bug->list->customBatchEditFields   = 'type,severity,pri,productplan,assignedTo,deadline,resolvedBy,resolution,os,browser,keywords';
 
 $config->bug->custom = new stdclass();
 $config->bug->custom->createFields      = $config->bug->list->customCreateFields;

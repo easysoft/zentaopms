@@ -105,47 +105,15 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Residuals';
 
-$lang->block->default['waterfall']['project']['1']['title']  = 'Project Weekly';
-$lang->block->default['waterfall']['project']['1']['block']  = 'waterfallreport';
-$lang->block->default['waterfall']['project']['1']['source'] = 'project';
-$lang->block->default['waterfall']['project']['1']['grid']   = 8;
-
-$lang->block->default['waterfall']['project']['2']['title']  = 'Estimate';
-$lang->block->default['waterfall']['project']['2']['block']  = 'waterfallestimate';
-$lang->block->default['waterfall']['project']['2']['source'] = 'project';
-$lang->block->default['waterfall']['project']['2']['grid']   = 4;
-
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
 
-$lang->block->default['waterfall']['project']['4']['title']  = 'Progress Chart';
-$lang->block->default['waterfall']['project']['4']['block']  = 'waterfallprogress';
-$lang->block->default['waterfall']['project']['4']['grid']   = 4;
-
-$lang->block->default['waterfall']['project']['5']['title']  = 'Project Issue';
-$lang->block->default['waterfall']['project']['5']['block']  = 'waterfallissue';
-$lang->block->default['waterfall']['project']['5']['source'] = 'project';
-$lang->block->default['waterfall']['project']['5']['grid']   = 8;
-
-$lang->block->default['waterfall']['project']['5']['params']['type']    = 'all';
-$lang->block->default['waterfall']['project']['5']['params']['count']   = '15';
-$lang->block->default['waterfall']['project']['5']['params']['orderBy'] = 'id_desc';
-
 $lang->block->default['waterfall']['project']['6']['title']  = 'Dynamic';
 $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
-
-$lang->block->default['waterfall']['project']['7']['title']  = 'Project Risk';
-$lang->block->default['waterfall']['project']['7']['block']  = 'waterfallrisk';
-$lang->block->default['waterfall']['project']['7']['source'] = 'project';
-$lang->block->default['waterfall']['project']['7']['grid']   = 8;
-
-$lang->block->default['waterfall']['project']['7']['params']['type']    = 'all';
-$lang->block->default['waterfall']['project']['7']['params']['count']   = '15';
-$lang->block->default['waterfall']['project']['7']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['scrum']['project']['1']['title'] =  'Project Overview';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';

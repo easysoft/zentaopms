@@ -1,5 +1,5 @@
-<?php $currentModule = $this->moduleName;?>
-<?php $currentMethod = $this->methodName;?>
+<?php $currentModule = $this->app->rawModule;?>
+<?php $currentMethod = $this->app->rawMethod;?>
 <?php $datatableId   = $this->moduleName . ucfirst($this->methodName);?>
 
 <style>
@@ -46,7 +46,6 @@ $(function()
         var allModule  = $('#showModuleModal input[name="showAllModule"]:checked').val();
         var showBranch = $('#showModuleModal input[name="showBranch"]:checked').val();
         if(typeof allModule  === 'undefined') allModule  = false;
-        if(typeof showBranch === 'undefined') showBranch = false;
         $.ajax(
         {
             type: "POST",
@@ -105,7 +104,7 @@ $(function()
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
             </tr>
             <?php endif;?>
-            <?php if(!empty($product) and $product->type != 'normal' and ($this->app->tab == 'product' or $this->app->tab == 'qa')):?>
+            <?php if(!empty($product) and $product->type != 'normal'):?>
             <tr>
               <td><?php echo $lang->datatable->showBranch;?></td>
               <td><?php echo html::radio('showBranch', $lang->datatable->showBranchList, isset($config->$currentModule->$currentMethod->showBranch) ? $config->$currentModule->$currentMethod->showBranch : 1);?></td>

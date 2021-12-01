@@ -84,9 +84,9 @@
                 <?php endif;?>
               </td>
               <td><span class='label-pri label-pri-<?php echo $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo zget($lang->testcase->priList, $case->pri, $case->pri)?></span></td>
-              <td class='text-left' title='<?php echo $modules[$case->module]?>'><?php echo $modules[$case->module];?></td>
+              <td class='text-left caseModule' title='<?php echo $modules[$case->module]?>'><?php echo $modules[$case->module];?></td>
               <td class='c-name' title='<?php echo $case->title;?>'>
-                <?php if($case->branch) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
+                <?php if(!empty($branches)) echo "<span class='label label-info label-badge'>{$branches[$case->branch]}</span>"?>
                 <?php echo html::a($this->createLink('testcase', 'view', "caseID=$case->id&version=$case->caseVersion"), $case->title);?>
               </td>
               <td><?php echo $lang->testcase->typeList[$case->type];?></td>

@@ -230,7 +230,7 @@ class block extends control
         $commonField = 'common';
         if($module == 'project' and $projectID)
         {
-            $project     = $this->loadModel('project')->getByID($this->session->project);
+            $project     = $this->loadModel('project')->getByID($projectID);
             $commonField = $project->model . 'common';
         }
 
@@ -595,9 +595,15 @@ class block extends control
         $this->session->set('storyList',    $uri, 'product');
         $this->session->set('testtaskList', $uri, 'qa');
 
+        $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($todos as $key => $todo)
         {
-            if($todo->date == '2030-01-01') unset($todos[$key]);
+            if($todo->date == '2030-01-01')
+            {
+                unset($todos[$key]);
+                continue;
+            }
+            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
         }
 
         $this->view->todos = $todos;
@@ -886,7 +892,7 @@ class block extends control
         }
 
         $today  = helper::today();
-        if(isset($this->config->maxVersion)) $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
+        $monday = date('Ymd', strtotime($this->loadModel('weekly')->getThisMonday($today)));
         $tasks  = $this->dao->select("project,
             sum(consumed) as totalConsumed,
             sum(if(status != 'cancel' and status != 'closed', `left`, 0)) as totalLeft")
@@ -906,7 +912,7 @@ class block extends control
                 $project->progress   = $project->allStories == 0 ? 0 : round($project->doneStories / $project->allStories, 3) * 100;
                 $project->executions = $this->project->getStats($projectID, 'all', 0, 0, 30, 'id_desc', $pager);
             }
-            elseif($project->model == 'waterfall' and isset($this->config->maxVersion))
+            elseif($project->model == 'waterfall')
             {
                 $begin   = $project->begin;
                 $weeks   = $this->weekly->getWeekPairs($begin);
@@ -1703,6 +1709,7 @@ class block extends control
             $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
         }
 
+        $tasks = $this->loadModel('task')->getUserSuspendedTasks($this->app->user->account);
         foreach($objectCountList as $objectType => $objectCount)
         {
             if(!isset($hasViewPriv[$objectType])) continue;
@@ -1731,6 +1738,11 @@ class block extends control
                         unset($objects[$key]);
                         continue;
                     }
+                    if($todo->type == 'task' and isset($tasks[$todo->idvalue]))
+                    {
+                        unset($objects[$key]);
+                        continue;
+                    }
 
                     $todo->begin = date::formatTime($todo->begin);
                     $todo->end   = date::formatTime($todo->end);
@@ -1741,6 +1753,8 @@ class block extends control
             {
                 $this->app->loadLang('task');
                 $this->app->loadLang('execution');
+
+                $objects = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', $limitCount);
             }
 
             if($objectType == 'bug')   $this->app->loadLang('bug');

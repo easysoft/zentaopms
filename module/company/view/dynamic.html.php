@@ -24,7 +24,7 @@
         $active = 'btn-active-text';
         $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";
     }
-    echo html::a(inlink('dynamic', "browseType=$period&param=&recTotal=0&date=&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID"), $label, '', "class='btn btn-link $active' id='{$period}'")
+    echo html::a(inlink('dynamic', "browseType=$period&param=&recTotal=0&date=&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy"), $label, '', "class='btn btn-link $active' id='{$period}'")
     ?>
     <?php endforeach;?>
     <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $userID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
@@ -33,6 +33,7 @@
     <div class="input-control space c-project"><?php echo html::select('project', $projects, $projectID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php endif;?>
     <div class="input-control space c-execution"><?php echo html::select('execution', $executions, $executionID, 'class="form-control chosen" data-max_drop_width="215"'); ?></div>
+    <div class="input-control space c-order"><?php echo html::select('orderBy', $lang->company->order, $orderBy, 'class="form-control chosen" data-max_drop_width="215"'); ?></div>
     <a class="btn btn-link querybox-toggle" id="bysearchTab"><i class="icon icon-search muted"></i> <?php echo $lang->action->dynamic->search;?></a>
   </div>
 </div>
@@ -52,7 +53,6 @@
         <button type="button" class="btn btn-info btn-icon btn-sm dynamic-btn"><i class="icon icon-caret-down"></i></button>
       </div>
       <ul class="timeline timeline-tag-left <?php if($browseType == 'all') echo 'margin-l-50px';?>">
-        <?php if($direction == 'next') $actions = array_reverse($actions);?>
         <?php foreach($actions as $i => $action):?>
         <?php if(empty($firstAction)) $firstAction = $action;?>
         <li <?php if($action->major) echo "class='active'";?>>
@@ -96,8 +96,8 @@ $firstDate = date('Y-m-d', strtotime($firstAction->originalDate) + 24 * 3600);
 $lastDate  = substr($action->originalDate, 0, 10);
 $hasPre    = $this->action->hasPreOrNext($firstDate, 'pre');
 $hasNext   = $this->action->hasPreOrNext($lastDate, 'next');
-$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . '&direction=pre') : 'javascript:;';
-$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . '&direction=next') : 'javascript:;';
+$preLink   = $hasPre ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($firstDate) . "&direction=pre&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
+$nextLink  = $hasNext ? inlink('dynamic', "browseType=$browseType&param=$param&recTotal={$pager->recTotal}&date=" . strtotime($lastDate) . "&direction=next&userID=$userID&productID=$productID&projectID=$projectID&executionID=$executionID&orderBy=$orderBy") : 'javascript:;';
 ?>
 <?php if($hasPre or $hasNext):?>
 <div id="mainActions" class='main-actions'>

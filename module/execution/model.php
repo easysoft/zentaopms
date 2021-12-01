@@ -381,6 +381,8 @@ class executionModel extends model
             $creatorExists = false;
             $teamMembers   = array();
 
+            $this->loadModel('kanban')->createLanes($executionID);
+
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
             $this->file->updateObjectID($this->post->uid, $executionID, 'execution');
@@ -710,14 +712,24 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
+     
+        if($execution->realBegan == '')
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
+            return false;
+        }  
+        if($execution->realBegan > helper::today())
+        {
+            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
-
+        
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -789,6 +801,7 @@ class executionModel extends model
         $now          = helper::now();
 
         $execution = fixer::input('post')
+            ->setDefault('realEnd', '')
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
@@ -858,18 +871,30 @@ class executionModel extends model
 
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
-            ->setDefault('realEnd', helper::today())
             ->setDefault('closedBy', $this->app->user->account)
             ->setDefault('closedDate', $now)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
+        
+        if($execution->realEnd == '')
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
+            return false;
+        }
+
+        if($execution->realEnd > helper::today())
+        {
+            dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
+            return false;
+        }
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->where('id')->eq((int)$executionID)
             ->exec();
+        
         if(!dao::isError())
         {
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
@@ -1340,6 +1365,10 @@ class executionModel extends model
         {
             $link = helper::createLink('doc', $method, "type=execution&objectID=%s&from=execution");
         }
+        elseif(in_array($module, array('issue', 'risk', 'opportunity', 'pssp', 'auditplan', 'nc', 'meeting')))
+        {
+            $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");
@@ -1711,7 +1740,8 @@ class executionModel extends model
      */
     public function buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, $type = 'executionStory', $objectID = 0)
     {
-        $branchPairs  = array();
+        $this->app->loadLang('branch');
+        $branchPairs  = array(BRANCH_MAIN => $this->lang->branch->main);
         $productType  = 'normal';
         $productNum   = count($products);
         $productPairs = array(0 => '');
@@ -1727,17 +1757,8 @@ class executionModel extends model
                     foreach($branches[$product->id] as $branchID => $branch)
                     {
                         if(!isset($branchGroups[$product->id][$branchID])) continue;
-                        $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
+                        if($branchID != BRANCH_MAIN) $branchPairs[$branchID] = ((count($products) > 1) ? $product->name . '/' : '') . $branchGroups[$product->id][$branchID];
                     }
-                }
-                else
-                {
-                    $productBranches = isset($branchGroups[$product->id]) ? $branchGroups[$product->id] : array(0);
-                    if(count($products) > 1)
-                    {
-                        foreach($productBranches as $branchID => $branchName) $productBranches[$branchID] = $product->name . '/' . $branchName;
-                    }
-                    $branchPairs += $productBranches;
                 }
             }
         }
@@ -1752,7 +1773,16 @@ class executionModel extends model
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['params']['product']['values'] = $productPairs + array('all' => $this->lang->product->allProductsOfProject);
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getForProducts($products);
+
+        $this->loadModel('productplan');
+        $plans     = array();
+        $planPairs = array('' => '');
+        foreach($products as $productID => $product)
+        {
+            $plans = $this->productplan->getBranchPlanPairs($productID, array(BRANCH_MAIN) + $product->branches, true);
+            foreach($plans as $plan) $planPairs += $plan;
+        }
+        $this->config->product->search['params']['plan']['values']   = $planPairs;
         $this->config->product->search['params']['module']['values'] = $modules;
         if($productType == 'normal')
         {
@@ -3186,7 +3216,7 @@ class executionModel extends model
             ->andWhere('t1.parent')->ge(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
 
@@ -3657,14 +3687,15 @@ class executionModel extends model
      * Get plans by $productID.
      *
      * @param int|array $productID
-     *
+     * @param string    $param withMainPlan|skipParent
      * @return mixed
      */
-    public function getPlans($products)
+    public function getPlans($products, $param = '')
     {
         $this->loadModel('productplan');
 
-        $branchIDList = array();
+        $param        = strtolower($param);
+        $branchIDList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
         foreach($products as $product)
         {
             foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
@@ -3674,6 +3705,7 @@ class executionModel extends model
             ->where('product')->in(array_keys($products))
             ->andWhere('deleted')->eq(0)
             ->andWhere('branch')->in($branchIDList)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 

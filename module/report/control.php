@@ -115,7 +115,7 @@ class report extends control
         $this->view->end        = $end;
         $this->view->bugs       = $this->report->getBugs($begin, $end, $product, $execution);
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed|nodeleted');
-        $this->view->executions = array('' => '') + $this->loadModel('execution')->getPairs();
+        $this->view->executions = array('' => '') + $this->report->getProjectExecutions();
         $this->view->products   = array('' => '') + $this->loadModel('product')->getPairs();
         $this->view->execution  = $execution;
         $this->view->product    = $product;

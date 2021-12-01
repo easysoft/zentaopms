@@ -32,11 +32,9 @@
       <thead>
         <tr>
           <th class='c-id'><?php echo $lang->idAB;?></th>
+          <th><?php echo $lang->project->name;?></th>
           <?php if($config->systemMode == 'new'):?>
           <th class='c-program'><?php echo $lang->program->common;?></th>
-          <th><?php echo $lang->project->name;?></th>
-          <?php else:?>
-          <th><?php echo $lang->execution->name;?></th>
           <?php endif;?>
           <th class='c-user text-left'><?php echo $lang->project->PM;?></th>
           <th class='c-date'><?php echo $lang->project->begin;?></th>
@@ -53,9 +51,6 @@
         <?php foreach($projectStats as $project):?>
         <tr>
           <td><?php printf('%03d', $project->id);?></td>
-          <?php if($config->systemMode == 'new'):?>
-          <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
-          <?php endif;?>
           <td class='text-left'>
             <?php
             if($config->systemMode == 'new')
@@ -68,6 +63,9 @@
             }
             ?>
           </td>
+          <?php if($config->systemMode == 'new'):?>
+          <td title='<?php echo $project->programName;?>' class='text-ellipsis'><?php echo $project->programName;?></td>
+          <?php endif;?>
           <td class='padding-right'>
             <?php $userID = isset($PMList[$project->PM]) ? $PMList[$project->PM]->id : ''?>
             <?php if(!empty($project->PM)) echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), zget($users, $project->PM), '', "data-toggle='modal' data-type='iframe' data-width='800'");?>

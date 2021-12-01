@@ -320,7 +320,6 @@ class commonModel extends model
             if($module == 'block' and $method == 'main') return true;
             if($module == 'block' and $method == 'delete') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
-            if($module == 'report' and $method == 'annualdata') return true;
         }
         return false;
     }
@@ -848,6 +847,9 @@ class commonModel extends model
                     $linkPart = explode('|', $menu['link']);
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
+
+                    if($currentModule == 'report' and $method == 'annualData') continue; // Skip some pages that do not require permissions.
+
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
@@ -1843,13 +1845,18 @@ EOD;
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
 
+        $preAndNextObject       = new stdClass();
+        $preAndNextObject->pre  = '';
+        $preAndNextObject->next = '';
+        if(empty($queryCondition)) return $preAndNextObject;
+
         $table   = $this->config->objectTables[$type];
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
-        if(empty($queryCondition) or $this->session->$typeOnlyCondition)
+        if($this->session->$typeOnlyCondition)
         {
             $sql = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->get();
         }
@@ -1876,10 +1883,6 @@ EOD;
             $this->session->set($objectIdListKey, array('sql' => $sql, 'idkey' => $key, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
-
-        $preAndNextObject       = new stdClass();
-        $preAndNextObject->pre  = '';
-        $preAndNextObject->next = '';
 
         $preObj = false;
         if(isset($existsObjectList['objectList']))
@@ -2149,8 +2152,6 @@ EOD;
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
-
-        if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
 
         if(isset($rights[$module][$method]))
         {
@@ -2854,15 +2855,13 @@ EOD;
     {
         if(empty($markdown)) return false;
 
-        $markdown = str_replace('&', '&amp;', $markdown);
-
         global $app;
-        $hyperdown = $app->loadClass('hyperdown');
-        $content   = $hyperdown->makeHtml($markdown);
-
-        $content = htmlspecialchars_decode($content);
-        $content = fixer::stripDataTags($content);
-        return $content;
+        $app->loadClass('parsedown', true);
+        return parsedown::instance()
+            ->setSafeMode(true)
+            ->setBreaksEnabled(true)
+            ->setMarkupEscaped(true)
+            ->text($markdown);
     }
 }
 
