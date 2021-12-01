@@ -36,35 +36,51 @@ $(document).on('showapp', function(e, app)
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {bottom: 40px!important; z-index: 1010!important;}
 #xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}
-#xx-embed-container .xx-embed {width: 280px; height: 100%;}
-#xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: 0; pointer-events: none; transform: translateY(100%);}
+#xx-embed-container .xx-embed {width: 280px; height: 100%; transition-property: transform, opacity!important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
+#xx-embed-container .xx-embed.xx-embed-hidden,
+#xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
+#xx-embed-container .xx-embed-body {min-height: initial!important;}
+#xx-embed-container .xx-embed.has-chat-view {width: 900px!important;}
 </style>
 <?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
-<?php js::import($jsRoot . 'md5.js'); ?>
 <?php js::set('xuanConfig', $xuanConfig); ?>
 <script>
-function showXuanClient()
+/* Toggle xuan client popover */
+function toggleXuanClient()
 {
     if(!window.xuan.shown) window.xuan.show();
     else window.xuan.toggleCollapse();
 }
 
+/* Handle chat notice change */
 function handleXuanNoticeChange(notice)
 {
     $('#chatNoticeBadge').toggleClass('show', !!notice.count).text(notice.count);
 }
 
+/* Handle client route change */
+function handleXuanRouteChange(route)
+{
+    var hasShowChatView = route.indexOf('/chats/') === 0 && route.length > 7;
+    $('#' + window.xuan.id).toggleClass('has-chat-view', hasShowChatView);
+}
+
+/* Set client global options*/
 Xuanxuan.setGlobalOptions(
 {
-    position:   'right',
-    width:      280,
-    preload:    true,
-    showHeader: false,
-    onNotice:   handleXuanNoticeChange
+    position:      'right',
+    width:         280,
+    preload:       true,
+    showHeader:    false,
+    onNotice:      handleXuanNoticeChange,
+    onRouteChange: handleXuanRouteChange
 });
 
-var $chatBtn = $('<a href="javascript:void(0)" id="chatBtn" class="btn btn-link"><i class="text-primary icon icon-chat"></i><span class="badge bg-red" id="chatNoticeBadge"></span></a>');
-$chatBtn.insertBefore('#globalSearchDiv').on('click', showXuanClient);
+/* Create chat button */
+var $chatBtn = $('<a href="javascript:void(0)" id="chatBtn" class="btn btn-link"><i class="text-primary icon icon-chat-solid"></i><span class="badge bg-red" id="chatNoticeBadge"></span></a>');
+$chatBtn.insertBefore('#globalSearchDiv').on('click', toggleXuanClient);
+
+/* Create client instance */
 window.xuan = new Xuanxuan(xuanConfig);
 
 function setXuanClientLarge()
@@ -77,5 +93,11 @@ function setXuanClientSmall()
     xuan._element.style.minWidth = '280px';
 }
 
+/* Hide xuan popover on click page */
+$(document).on('click', function(e)
+{
+    if(!window.xuan.shown || $(e.target).closest('#xx-embed-container,#chatBtn').length) return;
+    window.xuan.hide();
+});
 </script>
 <?php endif; ?>
