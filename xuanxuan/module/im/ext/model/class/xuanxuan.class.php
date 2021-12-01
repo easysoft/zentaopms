@@ -219,12 +219,13 @@ class xuanxuanIm extends imModel
                 $notification = current($messages);
                 array_shift($messages);
                 $notificationContent = json_decode($notification->content);
-                $notificationContent->content = array($notificationContent->content);
+                $notificationContent->content = array(json_decode($notificationContent->content));
                 foreach($messages as $message)
                 {
                     $messageContent = json_decode($message->content);
-                    $notificationContent->content[] = $messageContent->content;
+                    $notificationContent->content[] = json_decode($messageContent->content);
                 }
+                $notificationContent->content = json_encode($notificationContent->content);
                 $notification->content = json_encode($notificationContent);
                 $messageGroups[$groupKey] = array($notification);
             }
