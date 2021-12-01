@@ -1602,9 +1602,15 @@ class testcase extends control
 
             $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
             $branches  = $this->loadModel('branch')->getPairs($productID, '' , $projectID);
-            foreach($branches as $branchID => $branchName) $branches[$branchID] = $branchName . "(#$branchID)";
+            $modules   = array();
 
-            $modules = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+            $this->loadModel('tree');
+            foreach($branches as $branchID => $branchName)
+            {
+                $branches[$branchID] = $branchName . "(#$branchID)";
+                $modules += $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+            }
+
             $rows    = array();
             $num     = (int)$this->post->num;
             for($i = 0; $i < $num; $i++)
