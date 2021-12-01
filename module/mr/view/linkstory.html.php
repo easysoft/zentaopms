@@ -79,6 +79,7 @@
         <?php echo html::a(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), $lang->goback, '', "class='btn'");?>
       </div>
       <div class='table-statistic'></div>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
 </div>
