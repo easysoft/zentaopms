@@ -355,12 +355,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最�
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = '项目周报';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = '估算';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = "项目计划";
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = '到目前为止项目进展趋势图';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = '项目问题';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = '项目风险';
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = '最新动态';
 
 $lang->block->modules['product'] = new stdclass();

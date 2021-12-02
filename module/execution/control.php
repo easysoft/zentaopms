@@ -1402,13 +1402,6 @@ class execution extends control
             }
         }
 
-        $isStage = false;
-        if(!empty($project->model) and $project->model == 'waterfall')
-        {
-            $isStage = true;
-            $this->lang->execution->type = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->type);
-        }
-
         $this->loadModel('user');
         $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
