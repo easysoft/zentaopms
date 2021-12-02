@@ -29,9 +29,18 @@ class tree extends control
     {
         $this->loadModel('product');
 
+        if(strpos($viewType, 'doc') !== false) $lib = $this->loadModel('doc')->getLibById($rootID);
+
         if($this->app->tab == 'product')
         {
-            $this->product->setMenu($this->session->product, $branch, 0, '', $viewType);
+            if($from == 'product' and strpos($viewType, 'doc') !== false)
+            {
+                $this->product->setMenu($lib->product, $branch, 0, '', $viewType);
+            }
+            else
+            {
+                $this->product->setMenu($rootID, $branch, 0, '', $viewType);
+            }
         }
         else if($this->app->tab == 'qa' and $viewType != 'caselib')
         {
@@ -71,9 +80,7 @@ class tree extends control
         elseif(strpos($viewType, 'doc') !== false)
         {
             /* The viewType is doc. */
-            $this->loadModel('doc');
             $viewType         = 'doc';
-            $lib              = $this->doc->getLibById($rootID);
             $this->view->root = $lib;
         }
         elseif(strpos($viewType, 'api') !== false)
