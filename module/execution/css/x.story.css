@@ -22,6 +22,7 @@ body {margin-bottom: 0px !important;}
 .table-footer .pager li *{color: #838a9d !important;}
 .linkButton {float: right; padding-right: 10px; line-height: 34px;}
 .main-table a {pointer-events: none; color: unset !important;}
+.pager a {pointer-events: unset;}
 .table-responsive {margin-bottom: unset;}
 ::-webkit-scrollbar {width: 10px; height: 10px;}
 ::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
