@@ -893,7 +893,7 @@ class gitlab extends control
             /* Get the updated data. */
             foreach($gitlabCurrentMembers as $gitlabCurrentMember)
             {
-                $memberID = $gitlabCurrentMember->id;
+                $memberID = isset($gitlabCurrentMember->id) ? $gitlabCurrentMember->id : 0;
                 if(!isset($newGitlabMembers[$memberID])) continue;
                 if($newGitlabMembers[$memberID]->access_level != $gitlabCurrentMember->access_level or $newGitlabMembers[$memberID]->expires_at != $gitlabCurrentMember->expires_at)
                 {
@@ -977,7 +977,7 @@ class gitlab extends control
             ->fetchPairs();
         foreach($projectMembers as $projectMember)
         {
-            if(isset($bindedUsers[$projectMember->id]))
+            if(isset($projectMember->id) and isset($bindedUsers[$projectMember->id]))
             {
                 $account                  = $bindedUsers[$projectMember->id];
                 $userAccessData[$account] = $projectMember;
