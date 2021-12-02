@@ -1724,6 +1724,7 @@ class story extends control
      */
     public function zeroCase($productID = 0, $branchID = 0, $orderBy = 'id_desc', $projectID = 0)
     {
+        $orderBy = empty($orderBy) ? 'id_desc' : $orderBy;
         $this->session->set('storyList', $this->app->getURI(true) . '#app=' . $this->app->tab, 'product');
         $this->session->set('caseList', $this->app->getURI(true), $this->app->tab);
 

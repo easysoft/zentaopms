@@ -1783,13 +1783,12 @@ class repoModel extends model
     public function processGitlab($repo)
     {
         $gitlab = $this->loadModel('gitlab')->getByID($repo->client); // The $repo->client is gitlabID.
-        if(!$gitlab) return $repo;
 
-        $repo->gitlab   = $gitlab->id;
-        $repo->project  = $repo->path; // The projectID in gitlab.
-        $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path);
-        $repo->client   = $gitlab->url;
-        $repo->password = $gitlab->token;
+        $repo->gitlab   = $gitlab ? $gitlab->id : 0;
+        $repo->project  = $gitlab ? $repo->path : ''; // The projectID in gitlab.
+        $repo->path     = $gitlab ? sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $repo->path) : '';
+        $repo->client   = $gitlab ? $gitlab->url : '';
+        $repo->password = $gitlab ? $gitlab->token : '';
         return $repo;
     }
 

@@ -2491,7 +2491,7 @@ class storyModel extends model
         {
             $storyQuery = str_replace($allBranch, '1', $storyQuery);
         }
-        elseif($branch)
+        elseif($branch !== 'all')
         {
             if($branch and strpos($storyQuery, '`branch` =') === false) $storyQuery .= " AND `branch` in($branch)";
         }

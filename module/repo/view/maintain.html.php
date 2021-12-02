@@ -53,10 +53,13 @@
           <td class='text-left c-actions'>
             <?php
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
-            echo html::a($this->createLink('gitlab', 'createWebhook', "repoID=$repo->id"), '<i class="icon-change"></i>', 'hiddenwin', "title='{$lang->repo->addWebHook}'");
-            if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');
-            if(strtolower($repo->SCM) == "gitlab") common::printIcon('gitlab', 'manageProjectMembers', "repo={$repo->id}", '', 'list', 'team');
-            if(common::hasPriv('repo', 'delete')) echo html::a($this->createLink('repo', 'delete', "repoID=$repo->id&objectID=$objectID"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->repo->delete}' class='btn'");
+            if(strtolower($repo->SCM) == "gitlab")
+            {
+                common::printIcon('gitlab', 'createWebhook', "repoID=$repo->id", '', 'list', 'change', 'hiddenwin');
+                common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');
+                common::printIcon('gitlab', 'manageProjectMembers', "repo={$repo->id}", '', 'list', 'team');
+            }
+            common::printIcon('repo', 'delete', "repoID=$repo->id&objectID=$objectID", '', 'list', 'trash', 'hiddenwin');
             ?>
           </td>
         </tr>

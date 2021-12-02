@@ -29,7 +29,7 @@ class tree extends control
     {
         $this->loadModel('product');
 
-        if($this->app->tab == 'product')
+        if($this->app->tab == 'product' and strpos($viewType, 'doc') === false)
         {
             $this->product->setMenu($rootID, $branch, 0, '', $viewType);
         }
@@ -38,7 +38,7 @@ class tree extends control
             $products = $this->product->getPairs('noclosed');
             $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
-        else if($this->app->tab == 'project')
+        else if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
         {
             $this->loadModel('project')->setMenu($this->session->project);
 
@@ -166,7 +166,6 @@ class tree extends control
 
                 $products = $this->product->getPairs();
                 $this->product->saveState($productID, $products);
-                $this->product->setMenu($productID, $branch);
             }
             elseif($from == 'project')
             {

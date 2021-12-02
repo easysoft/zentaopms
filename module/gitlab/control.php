@@ -727,8 +727,8 @@ class gitlab extends control
         $projectID     = $repo->project;
 
         $gitlab = $this->gitlab->getByID($gitlabID);
-        $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-        if(!isset($user->is_admin) or !$user->is_admin) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+        if($gitlab) $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
+        if(empty($user->is_admin)) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
 
         if($_POST)
