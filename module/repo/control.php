@@ -169,7 +169,8 @@ class repo extends control
 
         if(strtolower($repo->SCM) == 'gitlab')
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab);
+            $gitlabID = isset($repo->gitlab) ? $repo->gitlab : 0;
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
             $options  = array();
             foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
 
