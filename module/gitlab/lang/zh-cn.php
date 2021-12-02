@@ -84,7 +84,7 @@ $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'
 
 $lang->gitlab->errorLang[0] = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1] = '私有分组的项目，可见性级别不能设为公开。';
-$lang->gitlab->errorLang[2] = '太短（最少8个字符）';
+$lang->gitlab->errorLang[2] = '密码太短（最少8个字符）';
 $lang->gitlab->errorLang[3] = "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。";
 
 $lang->gitlab->project = new stdclass;
