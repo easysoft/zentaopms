@@ -81,7 +81,6 @@ $lang->mr->sourceBranch  = 'Source branch';
 $lang->mr->targetProject = 'Target project';
 $lang->mr->targetBranch  = 'Target branch';
 
-$lang->mr->usersTips         = 'Tip: If you cannot choose the assignee, please go to the GitLab page to bind the user first.';
 $lang->mr->notFound          = "Merge Request does not exist!";
 $lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
