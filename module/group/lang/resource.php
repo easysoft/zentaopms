@@ -360,6 +360,7 @@ if($config->systemMode == 'new')
     $lang->resource->projectrelease->unlinkBug        = 'unlinkBug';
     $lang->resource->projectrelease->batchUnlinkBug   = 'batchUnlinkBug';
     $lang->resource->projectrelease->changeStatus     = 'changeStatus';
+    $lang->resource->projectrelease->notify           = 'notify';
 
     $lang->projectrelease->methodOrder[5]  = 'browse';
     $lang->projectrelease->methodOrder[10] = 'create';
@@ -374,6 +375,7 @@ if($config->systemMode == 'new')
     $lang->projectrelease->methodOrder[60] = 'unlinkBug';
     $lang->projectrelease->methodOrder[65] = 'batchUnlinkBug';
     $lang->projectrelease->methodOrder[70] = 'changeStatus';
+    $lang->projectrelease->methodOrder[75] = 'notify';
 
     /* Stage. */
     $lang->resource->stage = new stdclass();
@@ -599,6 +601,7 @@ $lang->resource->release->linkBug          = 'linkBug';
 $lang->resource->release->unlinkBug        = 'unlinkBug';
 $lang->resource->release->batchUnlinkBug   = 'batchUnlinkBug';
 $lang->resource->release->changeStatus     = 'changeStatus';
+$lang->resource->release->notify           = 'notify';
 
 $lang->release->methodOrder[5]  = 'browse';
 $lang->release->methodOrder[10] = 'create';
@@ -613,6 +616,7 @@ $lang->release->methodOrder[55] = 'linkBug';
 $lang->release->methodOrder[60] = 'unlinkBug';
 $lang->release->methodOrder[65] = 'batchUnlinkBug';
 $lang->release->methodOrder[70] = 'changeStatus';
+$lang->release->methodOrder[75] = 'notify';
 
 /* Kanban */
 $lang->resource->kanban = new stdclass();

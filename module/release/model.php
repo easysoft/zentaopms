@@ -129,7 +129,6 @@ class releaseModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid')
@@ -228,9 +227,7 @@ class releaseModel extends model
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
-            ->setIF(!$this->post->notify, 'notify', '')
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
@@ -479,6 +476,70 @@ class releaseModel extends model
     }
 
     /**
+     * Judge btn is clickable or not. 
+     * 
+     * @param  int    $release 
+     * @param  string $action 
+     * @static
+     * @access public
+     * @return bool 
+     */
+    public static function isClickable($release, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'notify') return $release->bugs or $release->stories;
+        return true;
+    }
+
+    /**
+     * Send mail to release related users.
+     * 
+     * @param  int    $releaseID
+     * @access public
+     * @return void
+     */
+    public function sendmail($releaseID)
+    {
+        if(empty($releaseID)) return;
+        $this->app->loadConfig('mail');
+
+        /* Load module and get vars. */
+        $users   = $this->loadModel('user')->getPairs('noletter');
+        $release = $this->getByID($releaseID);
+        $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getById($release->product)->name;
+        $subject = 'Release #' . $release->id . ' ' . $release->name . $suffix;
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', 'release');
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        if(strpos(",{$release->notify},", ',FB,') !== false) $this->sendMail2Feedback($release, $subject);
+
+        /* Get the sender. */
+        $sendUsers = $this->getToAndCcList($release);
+        if(!$sendUsers) return;
+
+        list($toList, $ccList) = $sendUsers;
+
+        /* Send it. */
+        $this->loadModel('mail')->send($toList, $subject, $mailContent, $ccList);
+    }
+
+    /**
      * Get toList and ccList.
      *
      * @param  object    $release
@@ -531,71 +592,58 @@ class releaseModel extends model
      */
     public function sendMail2Feedback($release, $subject)
     {
-        $stories = $bugs = array();
+        if(!$release->stories && !$release->bugs) return;
 
-        $buildObjects   = $this->dao->select('stories,bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
-        $releaseObjects = $this->dao->select('stories,bugs')->from(TABLE_RELEASE)->where('id')->eq($release->id)->fetch();
+        $stories = explode(',', trim($release->stories, ','));
+        $bugs    = explode(',', trim($release->bugs, ','));
 
-        $stories = explode(',', trim($buildObjects->stories, ',')) + explode(',', trim($releaseObjects->stories, ','));
-        $bugs    = explode(',', trim($buildObjects->bugs, ','))    + explode(',', trim($releaseObjects->bugs, ','));
+        $storyNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+            ->where('id')->in($stories)
+            ->andWhere('notifyEmail')->ne('')
+            ->fetchGroup('notifyEmail', 'id');
 
-        if(!empty($stories))
+        $bugNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+            ->where('id')->in($bugs)
+            ->andWhere('notifyEmail')->ne('')
+            ->fetchGroup('notifyEmail', 'id');
+
+        $toList     = array();
+        $emails     = array();
+        $storyNames = array();
+        $bugNames   = array();
+        foreach($storyNotifyList as $notifyEmail => $storyList)
         {
-            $storyNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
-                ->where('id')->in($stories)
-                ->andWhere('notifyEmail')->ne('')
-                ->fetchGroup('notifyEmail', 'id');
+            $email = new stdClass();
+            $email->account  = $notifyEmail;
+            $email->email    = $notifyEmail;
+            $email->realname = '';
 
-            $bugNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
-                ->where('id')->in($bugs)
-                ->andWhere('notifyEmail')->ne('')
-                ->fetchGroup('notifyEmail', 'id');
+            $emails[$notifyEmail] = $email;
+            $toList[$notifyEmail] = $notifyEmail;
 
-            $toList     = array();
-            $emails     = array();
-            $storyNames = array();
-            $bugNames   = array();
-            foreach($storyNotifyList as $storyList)
-            {
-                $email = new stdClass();
-                foreach($storyList as $story)
-                {
-                    $storyNames[] = $story->title;
+            foreach($storyList as $story) $storyNames[] = $story->title;
+        }
+        foreach($bugNotifyList as $notifyEmail => $bugList)
+        {
+            $email = new stdClass();
+            $email->account  = $notifyEmail;
+            $email->email    = $notifyEmail;
+            $email->realname = '';
 
-                    if(isset($email->account)) continue;
-                    $email->account  = $story->notifyEmail;
-                    $email->email    = $story->notifyEmail;
-                    $email->realname = '';
-                    $emails[$story->notifyEmail] = $email;
-                    $toList[$story->notifyEmail] = $story->notifyEmail;
-                }
-            }
-            foreach($bugNotifyList as $bugList)
-            {
-                $email = new stdClass();
-                foreach($bugList as $bug)
-                {
-                    $bugNames[] = $bug->title;
+            $emails[$notifyEmail] = $email;
+            $toList[$notifyEmail] = $notifyEmail;
 
-                    if(isset($email->account)) continue;
-                    $email->account  = $bug->notifyEmail;
-                    $email->email    = $bug->notifyEmail;
-                    $email->realname = '';
-                    $emails[$bug->notifyEmail] = $email;
-                    $toList[$bug->notifyEmail] = $bug->notifyEmail;
-                }
-            }
-
-            if(!empty($toList))
-            {
-                $storyNames = implode(',', $storyNames);
-                $bugNames   = implode(',', $bugNames);
-                $mailContent = sprintf($this->lang->release->mailContent, $release->name);
-                if($storyNames) $mailContent .= sprintf($this->lang->release->storyList, $storyNames);
-                if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
-                $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
-            }
+            foreach($bugList as $bug) $bugNames[] = $bug->title;
         }
 
+        if(!empty($toList))
+        {
+            $storyNames  = implode(',', $storyNames);
+            $bugNames    = implode(',', $bugNames);
+            $mailContent = sprintf($this->lang->release->mailContent, $release->name);
+            if($storyNames) $mailContent .= sprintf($this->lang->release->storyList, $storyNames);
+            if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
+            $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
+        }
     }
 }

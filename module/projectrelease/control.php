@@ -278,6 +278,34 @@ class projectrelease extends control
     }
 
     /**
+     * Notify for release.
+     * 
+     * @param  int    $releaseID 
+     * @access public
+     * @return void
+     */
+    public function notify($releaseID)
+    {
+        if($_POST)
+        {
+            if(isset($_POST['notify']))
+            {
+                $notify = implode(',', $this->post->notify); 
+                $this->dao->update(TABLE_RELEASE)->set('notify')->eq($notify)->where('id')->eq($releaseID)->exec();
+
+                $this->release->sendmail($releaseID);
+            }
+
+            $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+    
+        $this->view->release = $this->release->getById($releaseID);
+        $this->view->actions = $this->loadModel('action')->getList('release', $releaseID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->display();
+    }
+
+    /**
      * Delete a release.
      *
      * @param  int    $releaseID

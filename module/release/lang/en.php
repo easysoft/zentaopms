@@ -57,6 +57,7 @@ $lang->release->export        = 'Export as HTML';
 $lang->release->yesterday     = 'Released Yesterday';
 $lang->release->all           = 'All';
 $lang->release->notify        = 'Notify';
+$lang->release->notifyUsers   = 'Notify Users';
 $lang->release->mailto        = 'Mailto';
 $lang->release->mailContent   = '<p>Dear users,</p><p style="margin-left: 30px;">The following requirements and bugs you feedback have been released in the %s. Please contact your account manager to check the latest version.</p>';
 $lang->release->storyList     = '<p style="margin-left: 30px;">Story List：%s。</p>';
