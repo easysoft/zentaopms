@@ -876,6 +876,8 @@ class executionModel extends model
             ->remove('comment')
             ->get();
         
+        $this->lang->error->ge = $this->lang->execution->ge;
+
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->check($this->config->execution->close->requiredFields,'notempty')
