@@ -1433,7 +1433,7 @@ class testtaskModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if(isset($run->branch)) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
+                if(isset($run->branch)) echo "<span class='label label-badge label-outline'>{$branches[$run->branch]}</span>";
                 if($canView)
                 {
                     if($fromCaseID)
