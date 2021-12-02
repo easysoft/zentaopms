@@ -309,7 +309,7 @@ class product extends control
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
         $this->view->branches        = $branches;
-        $this->view->showBranch    = $showBranch;
+        $this->view->showBranch      = $showBranch;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
         $this->view->storyTasks      = $storyTasks;

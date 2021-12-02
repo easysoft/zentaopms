@@ -261,7 +261,7 @@ class execution extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->showBranch = $showBranch;
+        $this->view->showBranch   = $showBranch;
 
         $this->display();
     }
@@ -831,7 +831,7 @@ class execution extends control
         $this->view->setModule         = true;
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->showBranch      = $showBranch;
+        $this->view->showBranch        = $showBranch;
 
         $this->display();
     }

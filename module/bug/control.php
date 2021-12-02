@@ -237,7 +237,7 @@ class bug extends control
         $this->view->setModule       = true;
         $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->showBranch    = $showBranch;
+        $this->view->showBranch      = $showBranch;
 
         $this->display();
     }

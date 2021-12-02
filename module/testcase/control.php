@@ -218,7 +218,7 @@ class testcase extends control
         $this->view->suiteID       = $suiteID;
         $this->view->setModule     = true;
         $this->view->modulePairs   = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
-        $this->view->showBranch  = $showBranch;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }

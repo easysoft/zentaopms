@@ -234,7 +234,7 @@ class caselib extends control
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->param         = $param;
         $this->view->setModule     = true;
-        $this->view->showBranch  = $showBranch;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }
