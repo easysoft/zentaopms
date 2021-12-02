@@ -885,26 +885,63 @@ class productModel extends model
      * @param  array  $products
      * @param  int    $queryID
      * @param  int    $actionURL
+     * @param  int    $branch
      * @access public
      * @return void
      */
-    public function buildSearchForm($productID, $products, $queryID, $actionURL)
+    public function buildSearchForm($productID, $products, $queryID, $actionURL, $branch = 0)
     {
+        $productIdList = ($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID;
+        $branchParam   = ($this->app->tab == 'project' and empty($productID)) ? '' : $branch;
+
         $this->config->product->search['actionURL'] = $actionURL;
         $this->config->product->search['queryID']   = $queryID;
-        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs(($this->app->tab == 'project' and empty($productID)) ? array_keys($products) : $productID);
+        $this->config->product->search['params']['plan']['values'] = $this->loadModel('productplan')->getPairs($productIdList, $branchParam);
 
         $product = ($this->app->tab == 'project' and empty($productID)) ? $products : array($productID => $products[$productID]);
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
-        /* Get module of all products.*/
-        $module = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'story', $startModuleID = 0);
-        if(!$productID)
+        /* Get modules. */
+        $this->loadModel('tree');
+        if($this->app->tab == 'project')
         {
-            $module = array();
-            foreach($products as $id => $product) $module += $this->loadModel('tree')->getOptionMenu($id, $viewType = 'story', $startModuleID = 0);
+            if($productID)
+            {
+                $modules          = array();
+                $branchList       = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
+                $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
+                foreach($branchModuleList as $branchID => $branchModules) $modules += $branchModules;
+            }
+            else
+            {
+                $moduleList  = array();
+                $modules     = array('' => '/');
+                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
+                foreach($products as $productID => $productName)
+                {
+                    if(isset($branchGroup[$productID]))
+                    {
+                        $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchGroup[$productID]));
+                        foreach($branchModuleList as $branchID => $branchModules) $moduleList += $branchModules;
+                    }
+                    else
+                    {
+                        $moduleList = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+                    }
+
+                    foreach($moduleList as $moduleID => $moduleName)
+                    {
+                        if(empty($moduleID)) continue;
+                        $modules[$moduleID] = $productName . $moduleName;
+                    }
+                }
+            }
         }
-        $this->config->product->search['params']['module']['values'] = $module;
+        else
+        {
+            $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
+        }
+        $this->config->product->search['params']['module']['values'] = $modules;
 
         $productInfo = $this->getById($productID);
         if(!$productID or $productInfo->type == 'normal' or $this->app->tab == 'assetlib')
@@ -1935,7 +1972,9 @@ class productModel extends model
             }
             elseif(($module == 'testcase' and $method == 'groupCase') or ($module == 'story' and $method == 'zeroCase') and $this->app->tab == 'project')
             {
-                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '')) . "#app=project";
+                parse_str($extra, $output);
+                $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
+                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : '') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
             else
             {
