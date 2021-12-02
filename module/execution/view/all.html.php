@@ -61,6 +61,10 @@
           <th class='c-left text-right hours'><?php echo $lang->execution->totalLeft;?></th>
           <th class='c-progress'><?php echo $lang->execution->progress;?></th>
           <th class='c-burn'><?php echo $lang->execution->burn;?></th>
+          <?php
+          $extendFields = $this->execution->getFlowExtendFields();
+          foreach($extendFields as $extendField) echo "<th rowspan='2'>{$extendField->name}</th>";
+          ?>
         </tr>
       </thead>
       <tbody class='sortable' id='executionTableList'>
@@ -102,6 +106,7 @@
             </div>
           </td>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
+          <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $execution) . "</td>";?>
         </tr>
         <?php if(!empty($execution->children)):?>
          <?php $i = 0;?>
@@ -140,6 +145,7 @@
                </div>
              </td>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
+             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $child) . "</td>";?>
            </tr>
            <?php $i ++;?>
            <?php endforeach;?>
