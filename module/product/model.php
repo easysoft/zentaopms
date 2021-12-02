@@ -530,11 +530,13 @@ class productModel extends model
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
-        $notNormalProduct   = (isset($currentProduct->type) and $currentProduct->type != 'normal');
-        $isTrackMethod      = ($currentModule == 'story' and $currentMethod == 'track');
-        $isTreeBrowseMethod = ($currentModule == 'tree' and $currentMethod == 'browse');
-        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod || $isTreeBrowseMethod;
-        if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and ($this->app->tab == 'qa' or $isShowBranchMethod))
+        $notNormalProduct       = (isset($currentProduct->type) and $currentProduct->type != 'normal');
+        $isTrackMethod          = ($currentModule == 'story' and $currentMethod == 'track');
+        $isTreeBrowseMethod     = ($currentModule == 'tree' and $currentMethod == 'browse');
+        $isTesttaskCreateMethod = ($currentModule == 'testtask' and $currentMethod == 'create');
+        $isTesttaskEditMethod   = ($currentModule == 'testtask' and $currentMethod == 'edit');
+        $isShowBranchMethod     = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod || $isTreeBrowseMethod;
+        if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and (($this->app->tab == 'qa' and !$isTesttaskCreateMethod and !$isTesttaskEditMethod) or $isShowBranchMethod))
         {
             $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
             $branches     = $this->loadModel('branch')->getPairs($productID, 'all');
