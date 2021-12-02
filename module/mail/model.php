@@ -750,11 +750,6 @@ class mailModel extends model
             $sendUsers = $this->{$objectType}->getToAndCcList($object);
         }
 
-        if($objectType == 'release' and strpos(",{$object->notify},", ',FB,') !== false)
-        {
-            $this->release->sendMail2Feedback($object, $subject);
-        }
-
         if(!$sendUsers) return;
         list($toList, $ccList) = $sendUsers;
 

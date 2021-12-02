@@ -57,6 +57,7 @@ $lang->release->export        = 'Xuất ra HTML';
 $lang->release->yesterday     = 'Phát hành hôm qua';
 $lang->release->all           = 'Tất cả';
 $lang->release->notify        = 'Notify';
+$lang->release->notifyUsers   = 'Notify Users';
 $lang->release->mailto        = 'Mailto';
 
 $lang->release->filePath = 'Tải về : ';

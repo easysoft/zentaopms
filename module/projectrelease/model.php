@@ -130,7 +130,6 @@ class projectreleaseModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->setIF($productID, 'product', $productID)
             ->setIF($branch, 'branch', $branch)
@@ -226,7 +225,6 @@ class projectreleaseModel extends model
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
@@ -323,5 +321,22 @@ class projectreleaseModel extends model
 
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
+    }
+
+    /**
+     * Judge btn is clickable or not. 
+     * 
+     * @param  int    $release 
+     * @param  int    $action 
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function isClickable($release, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'notify') return $release->bugs or $release->stories;
+        return true;
     }
 }

@@ -57,6 +57,7 @@ $lang->release->export        = 'Export HTML';
 $lang->release->yesterday     = 'Versionné Hier';
 $lang->release->all           = 'Tout';
 $lang->release->notify        = 'Notify';
+$lang->release->notifyUsers   = 'Notify Users';
 $lang->release->mailto        = 'Mailto';
 
 $lang->release->filePath = 'Télecharger : ';

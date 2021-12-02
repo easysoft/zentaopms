@@ -54,7 +54,7 @@
         $extendFields = $this->release->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
         ?>
-        <th class='c-actions-5 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
     <tbody>
@@ -91,6 +91,7 @@
                   echo html::a($this->createLink('release', 'changeStatus', "releaseID=$release->id&status=$changedStatus"), '<i class="icon-' . ($release->status == 'normal' ? 'pause' : 'play') . '"></i> ', 'hiddenwin', "class='btn' title='{$lang->release->changeStatusList[$changedStatus]}'");
               }
               common::printIcon('release', 'edit',   "release=$release->id", $release, 'list');
+              common::printIcon('release', 'notify',   "release=$release->id", $release, 'list', 'bullhorn', '', 'iframe', true);
               if(common::hasPriv('release', 'delete', $release))
               {
                   $deleteURL = $this->createLink('release', 'delete', "releaseID=$release->id&confirm=yes");

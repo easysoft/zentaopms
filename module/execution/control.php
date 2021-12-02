@@ -1439,6 +1439,7 @@ class execution extends control
         $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
+        $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->display();
     }
 
