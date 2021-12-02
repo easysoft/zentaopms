@@ -94,6 +94,11 @@ function setXuanClientSmall()
     xuan._element.style.minWidth = '280px';
 }
 
+function closeXuanClient()
+{
+    xuan.toggleCollapse();
+}
+
 /* Hide xuan popover on click page */
 $(document).on('click', function(e)
 {
