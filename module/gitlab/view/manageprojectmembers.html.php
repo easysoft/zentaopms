@@ -15,6 +15,8 @@
           <th><?php echo $lang->gitlab->group->memberAccessLevel;?></th>
           <th class='c-date'><?php echo $lang->gitlab->group->memberExpiresAt;?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -52,7 +54,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='6' class='text-center form-actions'>
+          <td colspan='4' class='text-center form-actions'>
             <?php
               echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');
               echo html::commonButton($lang->save, 'onclick="saveMembers()" id="saveBtn"', 'btn btn-wide btn-primary');
