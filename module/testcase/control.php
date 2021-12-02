@@ -886,6 +886,7 @@ class testcase extends control
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $type
+     * @param  string $tab
      * @access public
      * @return void
      */
