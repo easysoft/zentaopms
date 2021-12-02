@@ -381,6 +381,42 @@ class build extends control
     }
 
     /**
+     * AJAX: get builds of a project in html select.
+     *
+     * @param  int        $projectID
+     * @param  string     $varName      the name of the select object to create
+     * @param  string     $build        build to selected
+     * @param  string|int $branch
+     * @param  int        $index        the index of batch create bug.
+     * @param  bool       $needCreate   if need to append the link of create build
+     * @param  string     $type         get all builds or some builds belong to normal releases and executions are not done.
+     * @access public
+     * @return string
+     */
+    public function ajaxGetProjectBuilds($projectID, $productID, $varName, $build = '', $branch = 'all', $index = 0, $needCreate = false, $type = 'normal')
+    {
+        $isJsonView = $this->app->getViewType() == 'json';
+        if($varName == 'openedBuild')
+        {
+            if(empty($projectID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+
+            $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params, $build);
+            if($isJsonView)  die(json_encode($builds));
+            die(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
+        }
+        if($varName == 'resolvedBuild')
+        {
+            if(empty($projectID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+
+            $params = ($type == 'all') ? '' : 'noterminate, nodone';
+            $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params, $build);
+            if($isJsonView)  die(json_encode($builds));
+            die(html::select($varName, $builds, $build, "class='form-control'"));
+        }
+    }
+
+    /**
      * AJAX: get builds of an execution in html select.
      *
      * @param  int        $executionID
