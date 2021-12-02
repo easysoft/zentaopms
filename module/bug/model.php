@@ -570,7 +570,7 @@ class bugModel extends model
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('id desc')
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
