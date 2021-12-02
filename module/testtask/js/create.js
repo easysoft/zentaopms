@@ -23,7 +23,7 @@ function loadProductRelated()
  */
 function loadExecutions(productID)
 {
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID);
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=');
     $.get(link, function(data)
     {
         if(!data) data = '<select id="execution" name="execution" class="form-control"></select>';

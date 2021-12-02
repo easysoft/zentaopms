@@ -26,3 +26,4 @@ $lang->projectrelease->unlinkStory      = "移除{$lang->SRCommon}";
 $lang->projectrelease->unlinkBug        = '移除Bug';
 $lang->projectrelease->export           = '导出HTML';
 $lang->projectrelease->browseAction     = "发布列表";
+$lang->projectrelease->notify           = "通知";

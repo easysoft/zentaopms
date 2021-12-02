@@ -9,7 +9,7 @@
 </div>
 <div id='mainContent' class='main-content'>
   <form class='main-form form-ajax' method='post' id='teamForm'>
-    <table class='table table-form'>
+    <table class='table-form'>
       <thead>
         <tr class='text-center'>
           <th><?php echo $lang->gitlab->group->memberName;?></th>
@@ -51,7 +51,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='6' class='text-center form-actions'>
+          <td colspan='4' class='text-center form-actions'>
             <?php
               echo html::submitButton('', '', 'hidden btn btn-wide btn-primary');
               echo html::commonButton($lang->save, 'onclick="saveMembers()" id="saveBtn"', 'btn btn-wide btn-primary');
