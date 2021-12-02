@@ -613,12 +613,14 @@ class build extends control
         $this->config->bug->search['style']     = 'simple';
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($build->product, $build->branch, 'skipParent');
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($build->product, 'bug', 0, $build->branch);
-        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, 0, 'id_desc', $this->session->project);
+        $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($build->product, $build->branch, 'id_desc', $this->session->project);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->build->getProductBuildPairs($build->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
 
         unset($this->config->bug->search['fields']['product']);
         unset($this->config->bug->search['params']['product']);
+        unset($this->config->bug->search['fields']['project']);
+        unset($this->config->bug->search['params']['project']);
         if($product->type == 'normal')
         {
             unset($this->config->bug->search['fields']['branch']);
@@ -626,9 +628,8 @@ class build extends control
         }
         else
         {
-            $branchPairs = $this->loadModel('branch')->getPairs($build->product, 'noempty');
-            $branches    = array('' => '') + array(BRANCH_MAIN => $this->lang->branch->main);
-            if($build->branch) $branches += array($build->branch => $branchPairs[$build->branch]);
+            $branchName = $this->loadModel('branch')->getById($build->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $build->branch => $branchName);
 
             $this->config->bug->search['fields']['branch']           = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
             $this->config->bug->search['params']['branch']['values'] = $branches;
