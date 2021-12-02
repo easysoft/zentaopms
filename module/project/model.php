@@ -1839,7 +1839,7 @@ class projectModel extends model
         else
         {
             $executions = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
-                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution=t2.id')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($productID)
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()

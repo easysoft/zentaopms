@@ -3051,6 +3051,7 @@ class execution extends control
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
+        $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
 
         $from = $this->app->tab;
@@ -3059,6 +3060,7 @@ class execution extends control
         {
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->saveState($projectID, $projects);
+            $this->view->project = $this->loadModel('project')->getByID($projectID);
             $this->project->setMenu($projectID);
         }
 
@@ -3085,6 +3087,7 @@ class execution extends control
         $this->view->position[] = $this->lang->execution->allExecutions;
 
         $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
         $this->view->projects       = array('') + $this->project->getPairsByProgram();

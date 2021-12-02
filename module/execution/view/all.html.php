@@ -13,6 +13,21 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if($from == 'project'):?>
+    <div class='btn-group'>
+      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->all;?>
+      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+          echo "<li>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy"), $lang->product->allProduct) . "</li>";
+          foreach($productList as $key => $product)
+          {
+            echo "<li>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $product) . "</li>";
+          }
+        ?>
+      </ul>
+    </div>
+    <?php endif;?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
@@ -24,6 +39,9 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
+     <?php if(common::hasPriv('programplan', 'create') && isset($project) and $project->model == 'waterfall'):?>
+     <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
+    <?php endif;?>
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary create-execution-btn' data-app='$from'");?>
   </div>
 </div>
@@ -53,14 +71,24 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
+
+          <?php if(isset($project) and $project->model == 'waterfall'):?>
+          <th class='w-120px'><?php common::printOrderLink('percent',   $orderBy, $vars, $lang->programplan->percent);?></th>
+          <th class='w-80px'><?php common::printOrderLink('attribute', $orderBy, $vars, $lang->programplan->attribute);?></th>
+          <th class='w-90px'><?php common::printOrderLink('begin',     $orderBy, $vars, $lang->execution->begin);?></th>
+          <th class='w-90px'><?php common::printOrderLink('end',       $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='w-100px'><?php common::printOrderLink('realBegan', $orderBy, $vars, $lang->execution->realBegan);?></th>
+          <th class='w-90px'><?php common::printOrderLink('realEnd',   $orderBy, $vars, $lang->execution->realEnd);?></th>
+          <?php endif;?>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
-          <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
           <th class='c-estimate text-right hours'><?php echo $lang->execution->totalEstimate;?></th>
           <th class='c-consumed text-right hours'><?php echo $lang->execution->totalConsumed;?></th>
           <th class='c-left text-right hours'><?php echo $lang->execution->totalLeft;?></th>
           <th class='c-progress'><?php echo $lang->execution->progress;?></th>
+          <?php if(isset($project) and $project->model == 'scrum'):?>
           <th class='c-burn'><?php echo $lang->execution->burn;?></th>
+          <?php endif;?>
           <?php
           $extendFields = $this->execution->getFlowExtendFields();
           foreach($extendFields as $extendField) echo "<th rowspan='2'>{$extendField->name}</th>";
@@ -91,8 +119,15 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <td><?php echo zget($users, $execution->PM);?></td>
+          <?php if(isset($project) and $execution->type == 'stage'):?>
+          <td><?php echo $execution->percent;?></td>
+          <td><?php echo zget($lang->stage->typeList, $execution->attribute, '');?></td>
+          <td><?php echo $execution->begin;?></td>
           <td><?php echo $execution->end;?></td>
+          <td><?php echo $execution->realBegan;?></td>
+          <td><?php echo $execution->realEnd;?></td>
+          <?php endif;?>
+          <td><?php echo zget($users, $execution->PM);?></td>
           <?php $executionStatus = $this->processStatus('execution', $execution);?>
           <td class='c-status text-center' title='<?php echo $executionStatus;?>'>
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
@@ -144,7 +179,9 @@
                  <div class='progress-info'><?php echo round($child->hours->progress);?></div>
                </div>
              </td>
+             <?php if(isset($project) and $project->model == 'scrum'):?>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
+             <?php endif;?>
              <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $child) . "</td>";?>
            </tr>
            <?php $i ++;?>
