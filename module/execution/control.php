@@ -761,13 +761,22 @@ class execution extends control
         $users = $this->user->getPairs('noletter');
 
         /* Build the search form. */
-        $modules = array();
+        $modules          = array();
+        $productModules   = array();
         $executionModules = $this->loadModel('tree')->getTaskTreeModules($executionID, true);
-        $products = $this->product->getProducts($executionID);
-        foreach($products as $product)
+        $products         = $this->product->getProducts($executionID);
+        if($productID)
         {
-            $productModules = $this->tree->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName)
+            $product = $products[$productID];
+            $productModules = $this->tree->getOptionMenu($productID, 'story', 0, $product->branches);
+        }
+        else
+        {
+            foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
+        }
+        foreach($productModules as $branchID => $moduleList)
+        {
+            foreach($moduleList as $moduleID => $moduleName)
             {
                 if($moduleID and !isset($executionModules[$moduleID])) continue;
                 $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
