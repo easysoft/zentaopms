@@ -29,25 +29,16 @@ class tree extends control
     {
         $this->loadModel('product');
 
-        if(strpos($viewType, 'doc') !== false) $lib = $this->loadModel('doc')->getLibById($rootID);
-
-        if($this->app->tab == 'product')
+        if($this->app->tab == 'product' and strpos($viewType, 'doc') === false)
         {
-            if($from == 'product' and strpos($viewType, 'doc') !== false)
-            {
-                $this->product->setMenu($lib->product, $branch, 0, '', $viewType);
-            }
-            else
-            {
-                $this->product->setMenu($rootID, $branch, 0, '', $viewType);
-            }
+            $this->product->setMenu($rootID, $branch, 0, '', $viewType);
         }
         else if($this->app->tab == 'qa' and $viewType != 'caselib')
         {
             $products = $this->product->getPairs('noclosed');
             $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
-        else if($this->app->tab == 'project')
+        else if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
         {
             $this->loadModel('project')->setMenu($this->session->project);
 
@@ -80,7 +71,9 @@ class tree extends control
         elseif(strpos($viewType, 'doc') !== false)
         {
             /* The viewType is doc. */
+            $this->loadModel('doc');
             $viewType         = 'doc';
+            $lib              = $this->doc->getLibById($rootID);
             $this->view->root = $lib;
         }
         elseif(strpos($viewType, 'api') !== false)
@@ -173,7 +166,6 @@ class tree extends control
 
                 $products = $this->product->getPairs();
                 $this->product->saveState($productID, $products);
-                $this->product->setMenu($productID, $branch);
             }
             elseif($from == 'project')
             {
