@@ -247,9 +247,10 @@ class mrModel extends model
                 if($optionType == 'userPairs')
                 {
                     $gitlabUserID = '';
-                    if(isset(($rawMR->$field)[0]))
+                    if(isset($rawMR->$field))
                     {
-                        $gitlabUserID = ($rawMR->$field)[0]->$options;
+                        $values = $rawMR->$field;
+                        if(isset($values[0])) $gitlabUserID = $values[0]->$options;
                     }
                     $value = zget($gitlabUsers, $gitlabUserID, '');
                 }
@@ -298,9 +299,10 @@ class mrModel extends model
                     if($optionType == 'userPairs')
                     {
                         $gitlabUserID = '';
-                        if(isset(($rawMR->$field)[0]))
+                        if(isset($rawMR->$field))
                         {
-                            $gitlabUserID = ($rawMR->$field)[0]->$options;
+                            $values = $rawMR->$field;
+                            if(isset($values[0])) $gitlabUserID = $values[0]->$options;
                         }
                         $value = zget($gitlabUsers, $gitlabUserID, '');
                     }
