@@ -1866,7 +1866,6 @@ class repoModel extends model
             ->limit(1)
             ->fetch();
         $version  = empty($latestInDB) ? 1 : $latestInDB->commit + 1;
-        $logs     = array();
         $revision = $version == 1 ? 'HEAD' : ($repo->SCM == 'Git' ? $latestInDB->commit : $latestInDB->revision);
 
         $logs        = $this->scm->getCommits('since' . $revision, $this->config->repo->batchNum, $branchID);
