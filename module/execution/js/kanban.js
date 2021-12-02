@@ -921,7 +921,7 @@ $(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
         {
-            if(data && lastUpdateData !== lastUpdateData)
+            if(data && lastUpdateData !== data)
             {
                 lastUpdateData = data;
                 kanbanGroup = $.parseJSON(data);

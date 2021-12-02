@@ -208,7 +208,7 @@ class mr extends control
         $this->view->compile    = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
 
-        $this->view->title   = $this->lang->mr->view;
+        $this->view->title   = $this->lang->mr->overview;
         $this->view->MR      = $MR;
         $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;
@@ -400,7 +400,10 @@ class mr extends control
     public function close($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        return $this->send($this->mr->close($MR));
+        $result = $this->mr->close($MR);
+
+        if($result['result'] == 'fali') return $this->send($result);
+        die(js::locate($result['locate'], 'parent'));
     }
 
     /**

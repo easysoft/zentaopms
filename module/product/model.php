@@ -530,20 +530,26 @@ class productModel extends model
         $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $output .= "</div></div>";
 
-        $notNormalProduct   = (isset($currentProduct->type) and $currentProduct->type != 'normal');
-        $isTrackMethod      = ($currentModule == 'story' and $currentMethod == 'track');
-        $isTreeBrowseMethod = ($currentModule == 'tree' and $currentMethod == 'browse');
-        $isShowBranchMethod = (strpos($this->config->product->showBranchMethod, $currentMethod) !== false and $currentModule == 'product') || $isTrackMethod || $isTreeBrowseMethod;
-        if($notNormalProduct and strpos(',testsuite,testreport,', ',' . $currentModule . ',') === false and ($this->app->tab == 'qa' or $isShowBranchMethod))
+        $notNormalProduct = (isset($currentProduct->type) and $currentProduct->type != 'normal');
+        if($notNormalProduct)
         {
-            $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
-            $branches     = $this->loadModel('branch')->getPairs($productID, 'all');
-            $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
-            $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
+            $isShowBranch = false;
+            if($currentModule == 'story' and $currentMethod == 'track') $isShowBranch = true;
+            if($currentModule == 'tree' and $currentMethod == 'browse') $isShowBranch = true;
+            if($currentModule == 'product' and strpos($this->config->product->showBranchMethod, $currentMethod) !== false) $isShowBranch = true;
+            if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
+            if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,', ",$currentMethod,") === false) $isShowBranch = true;
+            if($isShowBranch)
+            {
+                $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
+                $branches     = $this->loadModel('branch')->getPairs($productID, 'all');
+                $branchName   = isset($branches[$branch]) ? $branches[$branch] : $branches[0];
+                $dropMenuLink = helper::createLink('branch', 'ajaxGetDropMenu', "objectID=$productID&branch=$branch&module=$currentModule&method=$currentMethod&extra=$extra");
 
-            $output .= "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
-            $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
-            $output .= "</div></div>";
+                $output .= "<div class='btn-group header-btn'><button id='currentBranch' data-toggle='dropdown' type='button' class='btn'><span class='text'>{$branchName}</span> <span class='caret' style='margin-bottom: -1px'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
+                $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+                $output .= "</div></div>";
+            }
         }
 
         return $output;
@@ -1234,7 +1240,7 @@ class productModel extends model
                 $executionPairs = $executionPairs + $execution->children;
                 continue;
             }
-           if($this->config->systemMode == 'new') $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
+           if($this->config->systemMode == 'new' and isset($projectPairs[$execution->project])) $executionPairs[$execution->id] = $projectPairs[$execution->project] . '/' . $execution->name;
            if($this->config->systemMode == 'classic') $executionPairs[$execution->id] = $execution->name;
         }
 
