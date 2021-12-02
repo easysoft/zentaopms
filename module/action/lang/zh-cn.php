@@ -540,6 +540,7 @@ $lang->action->label->stakeholder  = '干系人|stakeholder|view|userID=%s';
 $lang->action->label->api          = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
+$lang->action->label->mr           = '合并请求|mr|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
