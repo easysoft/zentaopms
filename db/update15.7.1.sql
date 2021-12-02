@@ -116,6 +116,17 @@ CREATE TABLE IF NOT EXISTS `zt_holiday` (
   KEY `name` (`name`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+-- DROP TABLE IF EXISTS `zt_mrapproval`;
+CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `mrID` mediumint(8) unsigned NOT NULL,
+  `account` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `action` char(30) NOT NULL,
+  `comment` text NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`editedBy`,`editedDate`,`deleted`) VALUES
 ('需求','10','request','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('设计','10','design','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),

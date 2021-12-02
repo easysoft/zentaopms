@@ -400,7 +400,10 @@ class mr extends control
     public function close($MRID)
     {
         $MR = $this->mr->getByID($MRID);
-        return $this->send($this->mr->close($MR));
+        $result = $this->mr->close($MR);
+
+        if($result['result'] == 'fali') return $this->send($result);
+        die(js::locate($result['locate'], 'parent'));
     }
 
     /**
