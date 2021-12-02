@@ -546,8 +546,14 @@ class gitlab
             $committedDate = $this->getCommittedDate($version);
             if(!$committedDate) return array('commits' => array(), 'files' => array());
 
-            if($since) $params['since'] = $committedDate;
-            else $params['until'] = $committedDate;
+            if(!empty($since))
+            {
+                $params['since'] = $committedDate;
+            }
+            else
+            {
+                $params['until'] = $committedDate;
+            }
         }
 
         $list = $this->fetch($api, $params);
