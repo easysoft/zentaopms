@@ -903,7 +903,7 @@ class productModel extends model
         $this->config->product->search['params']['product']['values'] = $product + array('all' => $this->lang->product->allProduct);
 
         /* Get modules. */
-        $modules = $this->loadModel('tree')->getOptionMenu($productID, 'story', 0, $branch);
+        $this->loadModel('tree');
         if($this->app->tab == 'project')
         {
             if($productID)
@@ -937,6 +937,10 @@ class productModel extends model
                     }
                 }
             }
+        }
+        else
+        {
+            $modules = $this->tree->getOptionMenu($productID, 'story', 0, $branch);
         }
         $this->config->product->search['params']['module']['values'] = $modules;
 
