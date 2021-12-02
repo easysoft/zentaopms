@@ -76,6 +76,7 @@ $lang->whitelist      = '访问白名单';
 $lang->globalSetting  = '全局设置';
 $lang->waterfallModel = '瀑布模型';
 $lang->all            = '所有';
+$lang->viewDetails    = '查看详情';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢复默认';

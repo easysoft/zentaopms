@@ -184,7 +184,7 @@ body {margin-bottom: 25px;}
   <?php echo $this->execution->getByID($executionID)->name ?>
   </strong>
   <div class="linkButton" onclick="linkButtonClicked()">
-    <span title="查看详情">
+    <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
   </div>
@@ -249,7 +249,7 @@ body {margin-bottom: 25px;}
         <thead>
           <tr>
           <?php if($this->app->getViewType() == 'xhtml'):?>
-          <?php 
+          <?php
           foreach($customFields as $field)
           {
               if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
@@ -279,13 +279,13 @@ body {margin-bottom: 25px;}
           <?php foreach($tasks as $task):?>
           <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php 
+            <?php
             foreach($customFields as $field)
             {
                 if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
                   $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');
             }?>
-            <?php else:?>  
+            <?php else:?>
             <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
             <?php endif;?>
           </tr>
@@ -296,13 +296,13 @@ body {margin-bottom: 25px;}
           <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php 
+            <?php
             foreach($customFields as $field)
             {
                 if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
                 $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);
             }?>
-            <?php else:?>  
+            <?php else:?>
             <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
             <?php endif;?>
           </tr>
