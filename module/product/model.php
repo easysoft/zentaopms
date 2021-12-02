@@ -1971,7 +1971,7 @@ class productModel extends model
             {
                 parse_str($extra, $output);
                 $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
-                $link = helper::createLink($module, $method, "productID=%s" . ($branch ? "&branch=%s" : '') . "&groupBy=&projectID=$projectID");
+                $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : '') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
             else
             {
