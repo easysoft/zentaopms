@@ -364,7 +364,7 @@ class my extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
         $bugs = $this->bug->checkDelayedBugs($bugs);
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'myBug');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
