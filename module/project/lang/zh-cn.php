@@ -270,6 +270,7 @@ $lang->project->parentBeginEnd         = "父项目起止时间：%s ~ %s";
 $lang->project->childLongTime          = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->readjustTime           = '重新调整项目起止时间';
 $lang->project->notAllowRemoveProducts = "该产品中的需求与项目进行了关联或者项目下的{$lang->execution->common}关联了该产品，请取消关联后再操作。";
+$lang->project->ge                     = "『%s』应当不小于实际开始时间『%s』。";
 
 $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';

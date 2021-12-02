@@ -1333,6 +1333,8 @@ class projectModel extends model
             ->remove('comment')
             ->get();
 
+        $this->lang->error->ge = $this->lang->project->ge;
+
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
             ->check($this->config->project->close->requiredFields, 'notempty')

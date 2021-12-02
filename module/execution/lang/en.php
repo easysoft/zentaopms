@@ -28,8 +28,8 @@ $lang->execution->closedBy         = 'ClosedBy';
 $lang->execution->closedDate       = 'ClosedDate';
 $lang->execution->canceledBy       = 'CanceledBy';
 $lang->execution->canceledDate     = 'CanceledDate';
-$lang->execution->begin            = 'Begin';
-$lang->execution->end              = 'End';
+$lang->execution->begin            = 'Planned Begin';
+$lang->execution->end              = 'Planned End';
 $lang->execution->dateRange        = 'Duration';
 $lang->execution->realBeganAB      = 'Actual Begin';
 $lang->execution->realEndAB        = 'Actual End';
@@ -355,6 +355,7 @@ $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
+$lang->execution->ge                          = "『%s』should be >= actual begin『%s』.";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();

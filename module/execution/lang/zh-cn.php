@@ -356,6 +356,7 @@ $lang->execution->unfinishedTask              = "[%s]个未完成的任务，";
 $lang->execution->unresolvedBug               = "[%s]个未解决的bug，";
 $lang->execution->projectNotEmpty             = '所属项目不能为空。';
 $lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已经在当前' . $lang->execution->common . '中转了任务，请确认是否重复转任务。';
+$lang->execution->ge                          = "『%s』应当不小于实际开始时间『%s』。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();

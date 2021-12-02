@@ -71,8 +71,8 @@ $lang->project->category           = 'Category';
 $lang->project->desc               = 'Description';
 $lang->project->code               = 'Code';
 $lang->project->copy               = 'Copy';
-$lang->project->begin              = 'Begin';
-$lang->project->end                = 'End';
+$lang->project->begin              = 'Planned Begin';
+$lang->project->end                = 'Planned End';
 $lang->project->status             = 'Status';
 $lang->project->subStatus          = 'Sub Status';
 $lang->project->type               = 'Type';
@@ -273,6 +273,7 @@ $lang->project->parentBeginEnd         = "Parent begin&end date: %s ~ %s";
 $lang->project->childLongTime          = "If a child as long-term projects, the parent should be long-term too.";
 $lang->project->readjustTime           = 'Change the project begin&end date.';
 $lang->project->notAllowRemoveProducts = "Stories of this product are linked to projects or {$lang->execution->common} of this project is linked to this product. Please unlink it and try again.";
+$lang->project->ge                     = "『%s』should be >= actual begin『%s』.";
 
 $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = 'Base-level project only';
