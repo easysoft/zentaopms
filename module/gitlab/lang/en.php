@@ -78,8 +78,10 @@ $lang->gitlab->accessLevels[40] = 'Maintainer';
 $lang->gitlab->accessLevels[50] = 'Owner';
 
 $lang->gitlab->apiError[0] = 'internal is not allowed in a private group.';
+$lang->gitlab->apiError[1] = 'public is not allowed in a private group.';
 
 $lang->gitlab->errorLang[0] = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
+$lang->gitlab->errorLang[1] = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "Project ID";
