@@ -81,7 +81,8 @@ $(function()
           </td>
           <td><?php echo html::input("title[$key]", htmlSpecialString($case->title, ENT_QUOTES), "class='form-control'")?></td>
           <td style='overflow:visible'>
-            <?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
+            <?php $caseModules = (isset($case->branch) and $case->branch != 0) ? $modules[BRANCH_MAIN] + $modules[$case->branch] : $modules;?>
+            <?php echo html::select("module[$key]", $caseModules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
           </td>
           <td style='overflow:visible'>
           <?php $storyID = isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : '');?>

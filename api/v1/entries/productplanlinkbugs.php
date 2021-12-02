@@ -1,6 +1,6 @@
 <?php
 /**
- * The productplanlinkstory entry point of ZenTaoPMS.
+ * The productplanlinkbugs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class productplanLinkStoryEntry extends entry
+class productplanLinkBugsEntry extends entry
 {
     /**
      * POST method.
@@ -20,11 +20,11 @@ class productplanLinkStoryEntry extends entry
      */
     public function post($planID)
     {
-        $fields = 'stories';
+        $fields = 'bugs';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('productplan', 'linkStory');
-        $control->linkStory($planID);
+        $control = $this->loadController('productplan', 'linkBug');
+        $control->linkBug($planID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'success')

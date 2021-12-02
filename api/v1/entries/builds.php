@@ -59,7 +59,7 @@ class buildsEntry extends entry
         $control = $this->loadController('build', 'create');
         $this->requireFields('execution,product,name,builder,date');
 
-        $control->create(0,0,$projectID);
+        $control->create(0, 0, $projectID);
 
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);

@@ -24,13 +24,13 @@ $routes['/products/:id']          = 'product';
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
 
-$routes['/productplans']                 = 'productPlans';
-$routes['/products/:id/plans']           = 'productPlans';
-$routes['/productplans/:id']             = 'productPlan';
-$routes['/productplans/:id/linkstory']   = 'productPlanLinkStory';
-$routes['/productplans/:id/unlinkstory'] = 'productPlanUnlinkStory';
-$routes['/productplans/:id/linkbug']     = 'productPlanLinkBug';
-$routes['/productplans/:id/unlinkbug']   = 'productPlanUnlinkBug';
+$routes['/productplans']                   = 'productPlans';
+$routes['/products/:id/plans']             = 'productPlans';
+$routes['/productplans/:id']               = 'productPlan';
+$routes['/productplans/:id/linkstories']   = 'productPlanLinkStories';
+$routes['/productplans/:id/unlinkstories'] = 'productPlanUnlinkStories';
+$routes['/productplans/:id/linkbugs']      = 'productPlanLinkBugs';
+$routes['/productplans/:id/unlinkbugs']    = 'productPlanUnlinkBugs';
 
 $routes['/releases']              = 'releases';
 $routes['/products/:id/releases'] = 'releases';
