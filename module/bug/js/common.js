@@ -403,14 +403,14 @@ function loadExecutionStories(executionID)
  */
 function loadProjectBuilds(projectID)
 {
-    branch = $('#branch').val();
+    var branch = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    productID = $('#product').val();
-    oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
+    var productID      = $('#product').val();
+    var oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
 
     if(page == 'create')
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch);
+        var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch);
         $.get(link, function(data)
         {
             if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
@@ -423,11 +423,11 @@ function loadProjectBuilds(projectID)
     }
     else
     {
-        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+        var link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
         $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
 
-        oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
-        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
+        var oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
+        var link             = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
         $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
     }
 }
