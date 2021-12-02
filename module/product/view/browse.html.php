@@ -237,7 +237,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
   <div class="linkButton" onclick="linkButtonClicked()">
-    <span title="查看详情">
+    <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
   </div>
@@ -307,7 +307,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         <thead>
           <tr>
           <?php if($this->app->getViewType() == 'xhtml'):?>
-          <?php 
+          <?php
           foreach($setting as $key => $value)
           {
               if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
@@ -342,7 +342,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php $story->from = $from;?>
             <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php 
+            <?php
             foreach($setting as $key => $value)
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
@@ -360,7 +360,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php 
+            <?php
             foreach($setting as $key => $value)
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')

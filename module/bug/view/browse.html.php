@@ -192,7 +192,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
   <div class="linkButton" onclick="linkButtonClicked()">
-    <span title="查看详情">
+    <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
   </div>
@@ -263,7 +263,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
         <thead>
           <tr>
           <?php if($this->app->getViewType() == 'xhtml'):?>
-          <?php 
+          <?php
           foreach($setting as $value)
           {
               if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
@@ -296,7 +296,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php foreach($bugs as $bug):?>
           <tr data-id='<?php echo $bug->id?>'>
             <?php if($this->app->getViewType() == 'xhtml'):?>
-            <?php 
+            <?php
               foreach($setting as $value)
               {
                   if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status'){

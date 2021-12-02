@@ -143,7 +143,7 @@
   <?php echo $this->execution->getByID($execution->id)->name ?>
   </strong>
   <div class="linkButton" onclick="linkButtonClicked()">
-    <span title="查看详情">
+    <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
   </div>
