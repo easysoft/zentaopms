@@ -327,10 +327,10 @@ class projectreleaseModel extends model
      * Judge btn is clickable or not. 
      * 
      * @param  int    $release 
-     * @param  int    $action 
+     * @param  string $action 
      * @static
      * @access public
-     * @return void
+     * @return bool 
      */
     public static function isClickable($release, $action)
     {

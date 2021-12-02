@@ -479,10 +479,10 @@ class releaseModel extends model
      * Judge btn is clickable or not. 
      * 
      * @param  int    $release 
-     * @param  int    $action 
+     * @param  string $action 
      * @static
      * @access public
-     * @return void
+     * @return bool 
      */
     public static function isClickable($release, $action)
     {
@@ -505,7 +505,6 @@ class releaseModel extends model
         $this->app->loadConfig('mail');
 
         /* Load module and get vars. */
-        $this->loadModel('action');
         $users   = $this->loadModel('user')->getPairs('noletter');
         $release = $this->getByID($releaseID);
         $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getById($release->product)->name;
