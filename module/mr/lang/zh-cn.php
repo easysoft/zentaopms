@@ -63,8 +63,8 @@ $lang->mr->approvalStatusList['approved']    = '已通过';
 $lang->mr->approvalStatusList['rejected']    = '已拒绝';
 
 $lang->mr->notApproved  = '审核拒绝的';
-$lang->mr->assignedToMe = '指派给我的';
-$lang->mr->createdByMe  = '我创建的';
+$lang->mr->assignedToMe = '指派给我';
+$lang->mr->createdByMe  = '由我创建';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['all']    = '所有';
