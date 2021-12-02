@@ -128,12 +128,12 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
 
-$lang->repo->gitlabHost    = 'Gitlab Host';
-$lang->repo->gitlabToken   = 'Gitlab Token';
+$lang->repo->gitlabHost    = 'GitLab Host';
+$lang->repo->gitlabToken   = 'GitLab Token';
 $lang->repo->gitlabProject = 'Project';
 
 $lang->repo->placeholder = new stdclass;

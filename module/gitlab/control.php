@@ -967,6 +967,7 @@ class gitlab extends control
         $repo           = $this->loadModel('repo')->getRepoByID($repoID);
         $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');
         $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);
+        if(!is_array($projectMembers)) $projectMembers = array();
 
         /* Get users accesslevel. */
         $userAccessData = array();
@@ -975,6 +976,7 @@ class gitlab extends control
             ->where('providerType')->eq('gitlab')
             ->andWhere('providerID')->eq($repo->gitlab)
             ->fetchPairs();
+
         foreach($projectMembers as $projectMember)
         {
             if(isset($projectMember->id) and isset($bindedUsers[$projectMember->id]))

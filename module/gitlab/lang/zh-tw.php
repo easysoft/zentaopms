@@ -38,7 +38,7 @@ $lang->gitlab->tips       = '使用密碼時，請在GitLab全局安全設置中
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name  = '';
-$lang->gitlab->placeholder->url   = "請填寫Gitlab Server首頁的訪問地址，如：https://gitlab.zentao.net。";
+$lang->gitlab->placeholder->url   = "請填寫GitLab Server首頁的訪問地址，如：https://gitlab.zentao.net。";
 $lang->gitlab->placeholder->token = "請填寫具有admin權限賬戶的access token";
 
 $lang->gitlab->noImportableIssues = "目前沒有可供導入的issue。";

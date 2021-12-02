@@ -561,6 +561,8 @@ class gitlab
         $commits = array();
         foreach($list as $commit)
         {
+            if(!is_object($commit)) continue;
+
             $log = new stdclass;
             $log->committer = $commit->committer_name;
             $log->revision  = $commit->id;
