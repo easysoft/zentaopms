@@ -385,7 +385,8 @@ class doc extends control
 
             $link = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
             $doc  = $this->doc->getById($docID);
-            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter')
+
+            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
                 $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
             }

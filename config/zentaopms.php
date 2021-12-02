@@ -230,6 +230,7 @@ define('TABLE_PIPELINE',      '`' . $config->db->prefix . 'pipeline`');
 define('TABLE_JOB',           '`' . $config->db->prefix . 'job`');
 define('TABLE_COMPILE',       '`' . $config->db->prefix . 'compile`');
 define('TABLE_MR',            '`' . $config->db->prefix . 'mr`');
+define('TABLE_MRAPPROVAL',    '`' . $config->db->prefix . 'mrapproval`');
 
 define('TABLE_REPO',         '`' . $config->db->prefix . 'repo`');
 define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
@@ -284,4 +285,4 @@ $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 /* Program privs.*/
 $config->programPriv = new stdclass();
 $config->programPriv->scrum     = array('projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'caselib', 'doc', 'repo', 'meeting', 'stakeholder');
-$config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp'));
+$config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));

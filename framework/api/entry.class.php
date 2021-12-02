@@ -576,43 +576,47 @@ class baseEntry
     {
         switch($type)
         {
-        case 'time':
-            $timeFormat = $this->param('timeFormat', 'utc');
-            if($timeFormat == 'utc')
-            {
-                if(!$value or $value == '0000-00-00 00:00:00') return null;
-                return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
-            }
-            return $value;
-        case 'date':
-            if(!$value or $value == '0000-00-00') return null;
-            return $value;
-        case 'bool':
-            return !empty($value);
-        case 'int':
-            return (int) $value;
-        case 'idList':
-            $values = explode(',', $value);
-            if(empty($values)) return array();
+            case 'time':
+                $timeFormat = $this->param('timeFormat', 'utc');
+                if($timeFormat == 'utc')
+                {
+                    if(!$value or $value == '0000-00-00 00:00:00') return null;
+                    return gmdate("Y-m-d\TH:i:s\Z", strtotime($value));
+                }
+                return $value;
+            case 'date':
+                if(!$value or $value == '0000-00-00') return null;
+                return $value;
+            case 'bool':
+                return !empty($value);
+            case 'int':
+                return (int) $value;
+            case 'idList':
+                $values = explode(',', $value);
+                if(empty($values)) return array();
 
-            $idList = array();
-            foreach($values as $val)
-            {
-                if($val !== '') $idList[] = (int) $val;
-            }
-            return $idList;
-        case 'stringList':
-            $values = explode(',', $value);
-            if(empty($values)) return array();
+                $idList = array();
+                foreach($values as $val)
+                {
+                    if($val !== '') $idList[] = (int) $val;
+                }
+                return $idList;
+            case 'stringList':
+                $values = explode(',', $value);
+                if(empty($values)) return array();
 
-            $stringList = array();
-            foreach($values as $val)
-            {
-                if($val !== '') $stringList[] = $val;
-            }
-            return $stringList;
-        default:
-            return $value;
+                $stringList = array();
+                foreach($values as $val)
+                {
+                    if($val !== '') $stringList[] = $val;
+                }
+                return $stringList;
+            case 'array':
+                $array = array();
+                if(!empty($value)) foreach($value as $v) $array[] = $v;
+                return $array;
+            default:
+                return $value;
         }
     }
 
@@ -649,5 +653,19 @@ class baseEntry
         {
             $this->send(403, array('error' => 'Access not allowed'));
         }
+    }
+
+    /**
+     * Reset open app.
+     *
+     * @param  string  $tab
+     * @access public
+     * @return void
+     */
+    public function resetOpenApp($tab)
+    {
+        $_COOKIE['tab'] = $tab;
+        $this->app->tab = $tab;
+        $this->app->session->tab = $tab;
     }
 }

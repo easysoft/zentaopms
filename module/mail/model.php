@@ -730,7 +730,7 @@ class mailModel extends model
             chdir($modulePath . 'ext/view');
         }
         ob_start();
-        include $viewFile;
+        if($objectType != 'mr') include $viewFile;
         foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
@@ -754,7 +754,30 @@ class mailModel extends model
         list($toList, $ccList) = $sendUsers;
 
         /* Send it. */
-        $this->send($toList, $subject, $mailContent, $ccList);
+        if($objectType == 'mr')
+        {
+            $MRLink = common::getSysURL() . helper::createLink('mr', 'view', "id={$object->id}");
+            if($action->action == 'compilepass')
+            {
+                $mailContent = sprintf($this->lang->mr->toCreatedMessage, $MRLink, $title);
+                $this->send($toList, $subject, $mailContent);
+
+                $mailContent = sprintf($this->lang->mr->toReviewerMessage, $MRLink, $title);
+                $this->send($ccList, $subject, $mailContent);
+
+                /* Create a todo item for this MR. */
+                $this->loadModel('mr')->apiCreateMRTodo($object->gitlabID, $object->targetProject, $object->mriid);
+            }
+            elseif($action->action == 'compilefail')
+            {
+                $mailContent = sprintf($this->lang->mr->failMessage, $MRLink, $title);
+                $this->send($toList, $subject, $mailContent, $ccList);
+            }
+        }
+        else
+        {
+            $this->send($toList, $subject, $mailContent, $ccList);
+        }
         if($this->isError()) error_log(join("\n", $this->getError()));
     }
 

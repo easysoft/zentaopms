@@ -157,8 +157,8 @@ $(function()
 
     $('#kanban').kanban(
     {
-        data:         processKanbanData(),
-        // noLaneName:   true,
+        data:          processKanbanData(),
+        laneNameWidth: 5,
         droppable:
         {
             selector:     '.kanban-item:not(.kanban-item-span)',
@@ -166,5 +166,6 @@ $(function()
             finish:       handleFinishDrop,
             mouseButton: 'left'
         },
+        virtualize: true
     });
 });

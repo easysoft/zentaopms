@@ -21,6 +21,17 @@
     </div>
     <?php endif;?>
   </div>
+  <div class='input-group pull-left not-fix-input-group' id='kanbanScaleControl'>
+    <span class='input-group-btn'>
+      <button class='btn btn-icon' type='button' data-type='-'><i class='icon icon-minuse-solid-circle text-muted'></i></button>
+    </span>
+    <span class='input-group-addon'>
+      <span id='kanbanScaleSize'>1</span><?php echo $lang->execution->kanbanCardsUnit; ?>
+    </span>
+    <span class='input-group-btn'>
+      <button class='btn btn-icon' type='button' data-type='+'><i class='icon icon-plus-solid-circle text-muted'></i></button>
+    </span>
+  </div>
   <div class='btn-toolbar pull-right'>
     <?php
     $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
@@ -52,7 +63,7 @@
     if(common::hasPriv('execution', 'printKanban')) echo '<li>' .html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
     echo '<li>' .html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->execution->fullScreen, '', "class='btn btn-link' title='{$lang->execution->fullScreen}' data-width='500'") . '</li>';
     echo '</ul></div>';
-?>
+    ?>
     <?php
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;

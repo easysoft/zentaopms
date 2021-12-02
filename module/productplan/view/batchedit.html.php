@@ -26,6 +26,10 @@
           <th class='c-full-date'><?php echo $lang->productplan->begin?></th>
           <th class='c-full-date'><?php echo $lang->productplan->end?></th>
           <th class='c-future'><?php echo $lang->productplan->future?></th>
+          <?php
+          $extendFields = $this->productplan->getFlowExtendFields();
+          foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
+          ?>
         </tr>
       </thead>
       <tbody>
@@ -40,6 +44,7 @@
           <td><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date $hiddenInput'");echo html::input("begin$plan->id", '', "class='form-control $showInput' disabled='disabled'");?></td>
           <td><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date $hiddenInput'");echo html::input("end$plan->id", '', "class='form-control $showInput' disabled='disabled'");?></td>
           <td><div class='checkbox-primary'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future<?php echo $plan->id; ?>' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
+          <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $plan, $extendField->field . "[{$plan->id}]") . "</td>";?>
         </tr>
         <?php endforeach;?>
       </tbody>

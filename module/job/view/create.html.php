@@ -42,14 +42,10 @@
               <span id="gitlabServerTR"><?php echo $lang->job->engineTips->success;?></span>
             </td>
           </tr>
-          <tr class='commonRepo'>
+          <tr>
             <th><?php echo $lang->job->repo; ?></th>
-            <td><?php echo html::select('repo', $repoPairs, '', "class='form-control'"); ?></td>
-          </tr>
-          <tr class='gitlabRepo hide'>
-            <th><?php echo $lang->job->repo; ?></th>
-            <td> <?php echo html::select('gitlabRepo', $gitlabRepos, '', "class='chosen form-control'");?> </td>
-            <td> <?php echo html::select('reference', array(), '', "class='chosen form-control'");?> </td>
+            <td><?php echo html::select('repo', $repoPairs, '', "class='form-control chosen'"); ?></td>
+            <td class='reference hide'><?php echo html::select('reference', array(), '', "class='chosen form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->job->product; ?></th>

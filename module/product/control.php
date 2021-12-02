@@ -211,16 +211,16 @@ class product extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Display of branch label. */
+        $showBranch = $this->loadModel('branch')->showBranch($productID);
+
         $product = $this->product->getById($productID);
-        if($product and $product->type != 'normal')
-        {
-            $this->app->loadLang('datatable');
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
 
         /* Get stories and branches. */
         if($this->app->rawModule == 'projectstory')
         {
+            $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
+
             $branches = array();
             if(!empty($product))
             {
@@ -279,7 +279,7 @@ class product extends control
         $actionURL = $this->createLink($rawModule, $rawMethod, $params . "productID=$productID&branch=$branch&browseType=bySearch&queryID=myQueryID&storyType=$storyType");
 
         $this->config->product->search['onMenuBar'] = 'yes';
-        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL);
+        $this->product->buildSearchForm($productID, $this->products, $queryID, $actionURL, $branch);
 
         $showModule = !empty($this->config->datatable->productBrowse->showModule) ? $this->config->datatable->productBrowse->showModule : '';
 
@@ -309,6 +309,7 @@ class product extends control
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
         $this->view->branches        = $branches;
+        $this->view->showBranch      = $showBranch;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
         $this->view->storyTasks      = $storyTasks;

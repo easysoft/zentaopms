@@ -56,6 +56,10 @@
             <th class="c-bug" colspan="3"><?php echo $lang->bug->common;?></th>
             <th class="c-plan"  rowspan="2"><?php echo $lang->product->plan;?></th>
             <th class="c-release"  rowspan="2"><?php echo $lang->product->release;?></th>
+            <?php
+            $extendFields = $this->product->getFlowExtendFields();
+            foreach($extendFields as $extendField) echo "<th rowspan='2'>{$extendField->name}</th>";
+            ?>
             <th class='c-actions' rowspan="2"><?php echo $lang->actions;?></th>
           </tr>
           <tr class="text-center">
@@ -106,6 +110,7 @@
             <td><?php echo ($program['unResolvedBugs'] + $program['fixedBugs']) == 0 ? 0 : round($program['fixedBugs'] / ($program['unResolvedBugs'] + $program['fixedBugs']), 3) * 100;?>%</td>
             <td><?php echo $program['plans'];?></td>
             <td><?php echo $program['releases'];?></td>
+            <?php foreach($extendFields as $extendField) echo "<td></td>";?>
             <td></td>
           </tr>
           <?php unset($program['programName']);?>
@@ -150,6 +155,7 @@
             <td><?php echo ($line['unResolvedBugs'] + $line['fixedBugs']) == 0 ? 0 : round($line['fixedBugs'] / ($line['unResolvedBugs'] + $line['fixedBugs']), 3) * 100;?>%</td>
             <td><?php echo $line['plans'];?></td>
             <td><?php echo $line['releases'];?></td>
+            <?php foreach($extendFields as $extendField) echo "<td></td>";?>
             <td></td>
           </tr>
           <?php unset($line['lineName']);?>
@@ -208,6 +214,7 @@
             <td><?php echo ($product->unResolved + $product->fixedBugs) == 0 ? 0 : round($product->fixedBugs / ($product->unResolved + $product->fixedBugs), 3) * 100;?>%</td>
             <td><?php echo $product->plans;?></td>
             <td><?php echo $product->releases;?></td>
+            <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $product) . "</td>";?>
             <td class='c-actions sort-handler'>
               <?php common::printIcon('product', 'edit', "product=$product->id", $product, 'list', 'edit');?>
               <?php if($canOrder):?>

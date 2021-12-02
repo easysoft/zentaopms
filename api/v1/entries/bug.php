@@ -20,6 +20,8 @@ class bugEntry extends entry
      */
     public function get($bugID)
     {
+        $this->resetOpenApp($this->param('tab', 'product'));
+
         $control = $this->loadController('bug', 'view');
         $control->view($bugID);
 
@@ -90,6 +92,11 @@ class bugEntry extends entry
         }
 
         $bug->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->bug);
+
+        $preAndNext = $data->data->preAndNext;
+        $bug->preAndNext = array();
+        $bug->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $bug->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
         $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
     }

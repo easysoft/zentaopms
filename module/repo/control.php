@@ -169,7 +169,8 @@ class repo extends control
 
         if(strtolower($repo->SCM) == 'gitlab')
         {
-            $projects = $this->loadModel('gitlab')->apiGetProjects($repo->gitlab);
+            $gitlabID = isset($repo->gitlab) ? $repo->gitlab : 0;
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
             $options  = array();
             foreach($projects as $project) $options[$project->id] = $project->name_with_namespace;
 
@@ -184,7 +185,7 @@ class repo extends control
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
         $this->view->products    = $objectID ? $this->loadModel('product')->getProductPairsByProject($objectID) : $this->loadModel('product')->getPairs();
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->gitlabHosts = array('' => '') + $this->loadModel('gitlab')->getPairs();
 
         $this->view->position[] = html::a(inlink('maintain'), $this->lang->repo->common);
         $this->view->position[] = $this->lang->repo->edit;
@@ -401,6 +402,8 @@ class repo extends control
         /* Cache infos. */
         if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
         {
+            $this->repo->syncCommit($repoID, $branchID);
+
             /* Get cache infos. */
             $infos = $this->scm->ls($path, $revision);
 
@@ -1172,4 +1175,5 @@ class repo extends control
         $productPairs = $this->repo->getProductsByRepo($repoID);
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
+
 }

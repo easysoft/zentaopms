@@ -20,6 +20,8 @@ class docEntry extends entry
      */
     public function get($docID)
     {
+        $this->resetOpenApp($this->param('tab', 'doc'));
+
         $control = $this->loadController('doc', 'view');
         $control->view($docID);
 
@@ -43,6 +45,11 @@ class docEntry extends entry
             $usersWithAvatar = $this->loadModel('user')->getListByAccounts(array($doc->addedBy), 'account');
             $doc->addedBy    = zget($usersWithAvatar, $doc->addedBy);
         }
+
+        $preAndNext = $data->data->preAndNext;
+        $doc->preAndNext = array();
+        $doc->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $doc->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
         $this->send(200, $this->format($doc, 'addedDate:time,assignedDate:date,editedDate:time'));
     }

@@ -20,6 +20,8 @@ class taskEntry extends Entry
      */
     public function get($taskID)
     {
+        $this->resetOpenApp($this->param('tab', 'execution'));
+
         $control = $this->loadController('task', 'view');
         $control->view($taskID);
 
@@ -98,6 +100,11 @@ class taskEntry extends Entry
         }
 
         $task->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->task);
+
+        $preAndNext = $data->data->preAndNext;
+        $task->preAndNext = array();
+        $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
         $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool'));
     }

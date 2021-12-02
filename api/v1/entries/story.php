@@ -20,6 +20,8 @@ class storyEntry extends Entry
      */
     public function get($storyID)
     {
+        $this->resetOpenApp($this->param('tab', 'product'));
+
         $control = $this->loadController('story', 'view');
         $control->view($storyID);
 
@@ -104,6 +106,11 @@ class storyEntry extends Entry
         foreach($data->data->relations as $relation) $story->requirements[] = $this->filterFields($relation, 'id,title');
 
         $story->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->story);
+
+        $preAndNext = $data->data->preAndNext;
+        $story->preAndNext = array();
+        $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
         $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
     }

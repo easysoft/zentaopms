@@ -356,10 +356,7 @@ $lang->execution->unfinishedTask              = "[%s]个未完成的任务，";
 $lang->execution->unresolvedBug               = "[%s]个未解决的bug，";
 $lang->execution->projectNotEmpty             = '所属项目不能为空。';
 $lang->execution->confirmStoryToTask          = '%s' . $lang->SRCommon . '已经在当前' . $lang->execution->common . '中转了任务，请确认是否重复转任务。';
-$lang->execution->realBeganNotEmpty           = "实际开始不能为空。";
-$lang->execution->realBeganNotFuture          = "实际开始不能大于当前日期。";
-$lang->execution->realEndNotEmpty             = "实际完成不能为空。";
-$lang->execution->realEndNotFuture            = "实际完成不能大于当前日期。";
+$lang->execution->ge                          = "『%s』应当不小于实际开始时间『%s』。";
 
 /* 统计。*/
 $lang->execution->charts = new stdclass();
@@ -400,6 +397,7 @@ $lang->execution->bugList       = "Bug列表";
 $lang->execution->kanbanHideCols   = '看板隐藏已关闭、已取消列';
 $lang->execution->kanbanShowOption = '显示折叠信息';
 $lang->execution->kanbanColsColor  = '看板列自定义颜色';
+$lang->execution->kanbanCardsUnit  = '个';
 
 $lang->execution->kanbanViewList['all']   = '综合看板';
 $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}看板";

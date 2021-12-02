@@ -23,6 +23,7 @@ $lang->repo->encrypt         = 'Encrypt';
 $lang->repo->repo            = 'Repository';
 $lang->repo->parent          = 'Parent File';
 $lang->repo->branch          = 'Branch';
+$lang->repo->addWebHook      = 'Add Webhook';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';

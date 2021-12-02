@@ -18,7 +18,7 @@
 $scope  = $this->session->testTaskVersionScope;
 $status = $this->session->testTaskVersionStatus;
 ?>
-<?php js::set('status', $status);?>
+<?php js::set('status', strtolower($status));?>
 <style>
 #action-divider{display: inline-block; line-height: 0px; border-right: 2px solid #ddd}
 </style>
@@ -35,6 +35,7 @@ $status = $this->session->testTaskVersionStatus;
       </ul>
     </div>
     <?php foreach($lang->testtask->featureBar['browse'] as $key => $label):?>
+    <?php $key = strtolower($key);?>
     <?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&type=$scope,$key"), "<span class='text'>$label</span>", '', "id='{$key}Tab' class='btn btn-link'");?>
     <?php endforeach;?>
     <?php $condition = "productID=$productID&branch=$branch&type=$scope,$status&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}&pageID=1"?>

@@ -78,10 +78,11 @@ foreach($products as $programID => $programProducts)
         $selected    = $product->id == $productID ? 'selected' : '';
         $productName = $product->line ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
+        $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
         {
-            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
+            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' " . $locateTab) . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProduct';
 

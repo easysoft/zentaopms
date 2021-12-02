@@ -17,8 +17,12 @@ $app->loadLang('task');
 $config->execution->task   = new stdclass();
 $config->execution->create = new stdclass();
 $config->execution->edit   = new stdclass();
-$config->execution->create->requiredFields = 'name,code,begin,end';
-$config->execution->edit->requiredFields   = 'name,code,begin,end';
+$config->execution->start  = new stdclass();
+$config->execution->close  = new stdclass();
+$config->execution->create->requiredFields  = 'name,code,begin,end';
+$config->execution->edit->requiredFields    = 'name,code,begin,end';
+$config->execution->start->requiredFields   = 'realBegan';
+$config->execution->close->requiredFields   = 'realEnd';
 
 $config->execution->customBatchEditFields = 'days,type,teamname,status,desc,PO,QD,PM,RD';
 
@@ -44,7 +48,7 @@ $config->execution->search['fields']['desc']           = $lang->task->desc;
 $config->execution->search['fields']['assignedTo']     = $lang->task->assignedTo;
 $config->execution->search['fields']['pri']            = $lang->task->pri;
 
-$config->execution->search['fields']['execution']        = $lang->task->execution;
+$config->execution->search['fields']['execution']      = $lang->task->execution;
 $config->execution->search['fields']['module']         = $lang->task->module;
 $config->execution->search['fields']['estimate']       = $lang->task->estimate;
 $config->execution->search['fields']['left']           = $lang->task->left;
@@ -78,13 +82,13 @@ $config->execution->search['params']['desc']           = array('operator' => 'in
 $config->execution->search['params']['assignedTo']     = array('operator' => '=',       'control' => 'select', 'values' => 'users');
 $config->execution->search['params']['pri']            = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->priList);
 
-$config->execution->search['params']['execution']        = array('operator' => '=',       'control' => 'select', 'values' => '');
+$config->execution->search['params']['execution']      = array('operator' => '=',       'control' => 'select', 'values' => '');
 $config->execution->search['params']['module']         = array('operator' => 'belong',  'control' => 'select', 'values' => '');
 $config->execution->search['params']['estimate']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->execution->search['params']['left']           = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->execution->search['params']['consumed']       = array('operator' => '=',       'control' => 'input',  'values' => '');
 $config->execution->search['params']['type']           = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->typeList);
-$config->execution->search['params']['fromBug']        = array('operator' => '=',       'control' => 'input', 'values' => $lang->task->typeList);
+$config->execution->search['params']['fromBug']        = array('operator' => '=',       'control' => 'input',  'values' => $lang->task->typeList);
 $config->execution->search['params']['closedReason']   = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->reasonList);
 
 $config->execution->search['params']['openedBy']       = array('operator' => '=',       'control' => 'select', 'values' => 'users');

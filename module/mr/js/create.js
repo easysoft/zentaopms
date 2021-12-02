@@ -35,8 +35,16 @@ $(function()
             $('#targetProject').html('').append(response);
             $('#targetProject').chosen().trigger("chosen:updated");;
         });
+
+        repoUrl = createLink('mr', 'ajaxGetRepoList', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        $.get(repoUrl, function(response)
+        {
+            $('#repoID').html('').append(response);
+            $('#repoID').chosen().trigger("chosen:updated");;
+        });
     });
 
+    /*
     $('#targetProject').change(function()
     {
         targetProject = $(this).val();
@@ -51,6 +59,44 @@ $(function()
             reviewer.chosen().trigger("chosen:updated");;
         });
     });
+    */
 
+    $('#repoID').change(function()
+    {
+        repoID = $(this).val();
+        jobUrl = createLink('mr', 'ajaxGetJobList', "repoID=" + repoID);
+        $.get(jobUrl, function(response)
+        {
+            $('#jobID').html('').append(response);
+            $('#jobID').chosen().trigger("chosen:updated");;
+        });
+    });
+
+    $('#jobID').change(function()
+    {
+        jobID  = $(this).val();
+        compileUrl = createLink('mr', 'ajaxGetCompileList', "job=" + jobID);
+        $.get(compileUrl, function(response)
+        {
+            $('#compile').html('').append(response);
+            $('#compile').chosen().trigger("chosen:updated");;
+        });
+    });
+
+   $("#needCI").change(function()
+   {
+       if(this.checked == false)
+       {
+           $("#jobID").prop("disabled", true);
+           $('#jobID').chosen().trigger("chosen:updated");;
+           $("#jobID").parent().parent().addClass('hidden');
+       }
+       if(this.checked == true)
+       {
+           $("#jobID").prop("disabled", false);
+           $('#jobID').chosen().trigger("chosen:updated");;
+           $("#jobID").parent().parent().removeClass('hidden');
+       }
+   });
 
 });

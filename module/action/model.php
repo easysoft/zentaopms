@@ -641,7 +641,7 @@ class actionModel extends model
     /**
      * Print actions of an object.
      *
-     * @param  array    $action
+     * @param  object    $action
      * @param  string   $desc
      * @access public
      * @return void
@@ -945,9 +945,9 @@ class actionModel extends model
     /**
      * Transform the actions for display.
      *
-     * @param  int    $actions
+     * @param  array    $actions
      * @access public
-     * @return void
+     * @return object
      */
     public function transformActions($actions)
     {
@@ -987,6 +987,9 @@ class actionModel extends model
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
+
+            /* Get gitlab objectname. */
+            if(substr($objectType, 0,6) == 'gitlab') $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             if(!$this->setObjectLink($action, $deptUsers))
@@ -1482,12 +1485,14 @@ class actionModel extends model
         {
             $dateGroup = array_reverse($dateGroup);
         }
-        elseif($this->app->rawModule == 'company' and (($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc')))
+        elseif($this->app->rawModule == 'company')
         {
-            $dateGroup = array_reverse($dateGroup);
-            foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+            if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
+            if(($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc'))
+            {
+                foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+            }
         }
-
         return $dateGroup;
     }
 
@@ -1565,7 +1570,7 @@ class actionModel extends model
     /**
      * Print actions of an object for API(JIHU).
      *
-     * @param  array    $action
+     * @param  object    $action
      * @access public
      * @return void
      */

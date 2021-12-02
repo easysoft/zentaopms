@@ -30,3 +30,4 @@ $lang->compile->statusList['building']    = '构建中';
 $lang->compile->statusList['create_fail'] = '创建失败';
 $lang->compile->statusList['timeout']     = '执行超时';
 $lang->compile->statusList['canceled']    = '已取消';
+$lang->compile->statusList['failed']      = '构建失败';

@@ -219,17 +219,10 @@ class execution extends control
         }
 
         /* Get product. */
-        if(empty($productID))
-        {
-            $productModule = $this->tree->getById($moduleID);
-            if(!empty($productModule) and $productModule->type != 'task') $product = $this->product->getById($productModule->root);
-        }
-        if(empty($product)) $product = $this->product->getById($productID);
+        $product = $this->product->getById($productID);
 
-        if(!empty($product) and $product->type != 'normal')
-        {
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
+        /* Display of branch label. */
+        $showBranch = $this->loadModel('branch')->showBranch($productID, $moduleID, $executionID);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
@@ -268,6 +261,7 @@ class execution extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->showBranch   = $showBranch;
 
         $this->display();
     }
@@ -609,7 +603,7 @@ class execution extends control
                 if($this->session->importBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
             }
             $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all execution.
-            $bugs = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
+            $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
         }
 
        /* Build the search form. */
@@ -662,8 +656,8 @@ class execution extends control
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->users          = $users;
-        $this->view->execution        = $this->execution->getByID($executionID);
-        $this->view->executionID      = $executionID;
+        $this->view->execution      = $this->execution->getByID($executionID);
+        $this->view->executionID    = $executionID;
         $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
         $this->display();
     }
@@ -761,13 +755,22 @@ class execution extends control
         $users = $this->user->getPairs('noletter');
 
         /* Build the search form. */
-        $modules = array();
+        $modules          = array();
+        $productModules   = array();
         $executionModules = $this->loadModel('tree')->getTaskTreeModules($executionID, true);
-        $products = $this->product->getProducts($executionID);
-        foreach($products as $product)
+        $products         = $this->product->getProducts($executionID);
+        if($productID)
         {
-            $productModules = $this->tree->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName)
+            $product = $products[$productID];
+            $productModules = $this->tree->getOptionMenu($productID, 'story', 0, $product->branches);
+        }
+        else
+        {
+            foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
+        }
+        foreach($productModules as $branchID => $moduleList)
+        {
+            foreach($moduleList as $moduleID => $moduleName)
             {
                 if($moduleID and !isset($executionModules[$moduleID])) continue;
                 $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
@@ -795,28 +798,17 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        if($this->cookie->storyModuleParam)
-        {
-            $module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
-            $this->view->module = $module;
-
-            $product = $this->product->getById($module->root);
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
-
-        if($this->cookie->storyProductParam)
-        {
-            $product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
-            $this->view->product = $product;
-            $this->lang->datatable->showBranch = sprintf($this->lang->datatable->showBranch, $this->lang->product->branchName[$product->type]);
-        }
-
+        if($this->cookie->storyModuleParam) $this->view->module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
         if($this->cookie->storyBranchParam)
         {
             $branchID = $this->cookie->storyBranchParam;
             if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
             $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
         }
+
+        /* Display of branch label. */
+        $showBranch = $this->loadModel('branch')->showBranch($this->cookie->storyProductParam, $this->cookie->storyModuleParam, $executionID);
 
         /* Get execution's product. */
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
@@ -848,6 +840,7 @@ class execution extends control
         $this->view->setModule         = true;
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->showBranch        = $showBranch;
 
         $this->display();
     }
@@ -1038,6 +1031,16 @@ class execution extends control
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'build', "executionID=$executionID&type=bysearch&queryID=myQueryID");
+
+        $product = $param ? $this->loadModel('product')->getById($param) : '';
+        if($product and $product->type != 'normal')
+        {
+            $this->loadModel('build');
+            $this->loadModel('branch');
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $executionID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
+        }
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'execution');
 
         /* Get builds. */
@@ -1053,12 +1056,20 @@ class execution extends control
         /* Set execution builds. */
         $executionBuilds = array();
         $productList     = $this->product->getProducts($executionID);
+        $this->app->loadLang('branch');
         if(!empty($builds))
         {
             foreach($builds as $build)
             {
                 /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
+                {
+                    $build->branchName = '';
+                }
+                else
+                {
+                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
+                }
                 $executionBuilds[$build->product][] = $build;
             }
         }
@@ -1391,8 +1402,10 @@ class execution extends control
             }
         }
 
+        $isStage = false;
         if(!empty($project->model) and $project->model == 'waterfall')
         {
+            $isStage = true;
             $this->lang->execution->type = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->type);
         }
 

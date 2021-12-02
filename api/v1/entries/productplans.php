@@ -57,4 +57,34 @@ class productplansEntry extends entry
 
         return $this->sendError(400, 'error');
     }
+
+    /**
+     * POST method.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function post($productID = 0)
+    {
+        if(!$productID) $productID = $this->param('product', 0);
+        if(!$productID) return $this->sendError(400, 'No product id.');
+
+        $fields = 'branch,begin,end,title,desc';
+        $this->batchSetPost($fields);
+
+        $control = $this->loadController('productplan', 'create');
+        $control->create($productID, $this->param('branch', 0), $this->param('parent', 0));
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'success')
+        {
+            $plan = $this->loadModel('productplan')->getByID($data->id);
+            $plan->stories = array();
+            $plan->bugs    = array();
+            return $this->send(200, $plan);
+        }
+
+        $this->sendError(400, array('message' => isset($data->message) ? $data->message : 'error'));
+    }
 }

@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('rawMethod', $this->app->rawMethod);?>
 <script>
 /**
  * Load product.
@@ -90,12 +91,19 @@ function loadProductModules(productID, branch)
 {
     if(typeof(branch) == 'undefined') branch = $('#branch').val();
     if(!branch) branch = 0;
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+
+    var currentModule = 0;
+    if(rawMethod == 'edit')
+    {
+        currentModule = $('#module').val();
+    }
+
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModule);
     var $moduleIDBox = $('#moduleIdBox');
     $moduleIDBox.load(moduleLink, function()
     {
         $moduleIDBox.find('#module').chosen();
-        if(typeof(storyModule) == 'string') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
+        if(typeof(storyModule) == 'string' && config.currentMethod != 'edit') $moduleIDBox.prepend("<span class='input-group-addon'>" + storyModule + "</span>");
         $moduleIDBox.fixInputGroup();
     });
 }

@@ -1,0 +1,12 @@
+#legendStories ul li, #legendBugs ul li, #legendTasks ul li {padding: 10px 0 0 12px; line-height: 20px;}
+.side-col .cell {padding: 0px;}
+.table-content tbody tr th{padding-left: 0; font-weight: 400; color: #838a9d; text-align: right; vertical-align: middle; border:none;}
+.table-content tbody tr td{border:none;}
+.table-content thead tr th{text-align: left; vertical-align: middle; border:none;}
+.detail-content{margin-top:0;}
+.main-row .cell {
+    border: 1px solid #efefef;
+    -webkit-box-shadow: 0 1px 1px rgba(0,0,0,.05),0 2px 6px 0 rgba(0,0,0,.045);
+    box-shadow: 0 1px 1px rgba(0,0,0,.05),0 2px 6px 0 rgba(0,0,0,.045)
+}
+.side-col{padding-top:5px;}

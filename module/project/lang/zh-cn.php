@@ -180,9 +180,6 @@ $lang->project->createExecution        = "该项目下没有{$lang->executionCom
 $lang->project->unlinkExecutionMember  = "该用户参与了%s%s%s个{$lang->execution->common}，是否同时将其移除？（该用户所产生的数据不会受影响。）";
 $lang->project->unlinkExecutionMembers = "移除的团队成员还参与了项目下的执行，是否同步从执行团队中移除？";
 
-$lang->project->realEndNotEmpty        = "实际完成不能为空。";
-$lang->project->realEndNotFuture       = "实际完成不能大于当前日期。";
-
 $lang->project->tenThousand = '万';
 
 $lang->project->unitList['CNY'] = '人民币';
@@ -273,6 +270,7 @@ $lang->project->parentBeginEnd         = "父项目起止时间：%s ~ %s";
 $lang->project->childLongTime          = "子项目中有长期项目，父项目也应该是长期项目";
 $lang->project->readjustTime           = '重新调整项目起止时间';
 $lang->project->notAllowRemoveProducts = "该产品中的需求与项目进行了关联或者项目下的{$lang->execution->common}关联了该产品，请取消关联后再操作。";
+$lang->project->ge                     = "『%s』应当不小于实际开始时间『%s』。";
 
 $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';

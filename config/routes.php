@@ -24,9 +24,13 @@ $routes['/products/:id']          = 'product';
 $routes['/productlines']     = 'productLines';
 $routes['/productlines/:id'] = 'productLine';
 
-$routes['/productplans']       = 'productPlans';
-$routes['/products/:id/plans'] = 'productPlans';
-$routes['/productplans/:id']   = 'productPlan';
+$routes['/productplans']                 = 'productPlans';
+$routes['/products/:id/plans']           = 'productPlans';
+$routes['/productplans/:id']             = 'productPlan';
+$routes['/productplans/:id/linkstory']   = 'productPlanLinkStory';
+$routes['/productplans/:id/unlinkstory'] = 'productPlanUnlinkStory';
+$routes['/productplans/:id/linkbug']     = 'productPlanLinkBug';
+$routes['/productplans/:id/unlinkbug']   = 'productPlanUnlinkBug';
 
 $routes['/releases']              = 'releases';
 $routes['/products/:id/releases'] = 'releases';
@@ -118,5 +122,7 @@ $routes['/z/folders']           = 'zfolders';
 $routes['/z/folders/:id']       = 'zfolder';
 $routes['/z/files/:id']         = 'zfile';
 $routes['/z/files/:id/content'] = 'zfileContent';
+
+$routes['/gitlab/webhook'] = 'gitlabWebhook';
 
 $config->routes = $routes;

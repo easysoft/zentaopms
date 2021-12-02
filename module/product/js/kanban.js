@@ -10,12 +10,28 @@ function processKanbanData(key, programsData)
 
     /* Generate columns */
     var columns = [];
+    var hasDoingProject = false;
     $.each(kanbanColumns, function(_, column)
     {
+        var colType = column.type;
+        if(colType === 'doingProject')
+        {
+            hasDoingProject = true;
+            columns.push(
+            {
+                kanban:   kanbanId,
+                id:       kanbanId + '-doing',
+                type:     'doing',
+                asParent: true,
+                name:     doingText,
+                count:    ''
+            });
+        }
         columns.push($.extend({}, column,
         {
-            kanban: kanbanId,
-            id:     kanbanId + '-' + column.type,
+            kanban:     kanbanId,
+            id:         kanbanId + '-' + colType,
+            parentType: (hasDoingProject && (colType === 'doingProject' || colType === 'doingExecution')) ? 'doing' : false,
         }));
     });
 
@@ -45,7 +61,7 @@ function processKanbanData(key, programsData)
             }
 
             /* doing projects */
-            if(kanbanColumns.doingProject)
+            if(hasDoingProject)
             {
                 items.doingProject = [];
                 var productProjects = projectProduct[productID];
@@ -69,6 +85,7 @@ function processKanbanData(key, programsData)
                 /* doing execution */
                 items.doingExecution = [];
                 var productExecutions = classicExecution[productID];
+                console.log('productExecutions', productID, productExecutions);
                 if(productExecutions)
                 {
                     $.each(productExecutions, function(_, execution)
@@ -106,6 +123,12 @@ function processKanbanData(key, programsData)
     return {id: kanbanId, columns: columns, lanes: lanes};
 }
 
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight)
+{
+    if (col.type !== 'doingProject') return colHeight;
+    return colCards.length * 62;
+}
 
 $(function()
 {
@@ -115,6 +138,6 @@ $(function()
         var $kanban = $('#kanban-' + key);
         if(!$kanban.length) return;
         var data = processKanbanData(key, programsData);
-        $kanban.kanban({data: data, noLaneName: isClassicMode});
+        $kanban.kanban({data: data, noLaneName: isClassicMode, calcColHeight: calcColHeight});
     });
 });

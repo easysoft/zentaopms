@@ -29,7 +29,11 @@ class productplanEntry extends Entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $plan = $this->format($data->data->plan, 'begin:date,end:date,deleted:bool');
+        $plan = $data->data->plan;
+        $plan->stories = $data->data->planStories;
+        $plan->bugs    = $data->data->planBugs;
+
+        $plan = $this->format($plan, 'begin:date,end:date,deleted:bool,stories:array,bugs:array');
 
         return $this->send(200, $plan);
     }

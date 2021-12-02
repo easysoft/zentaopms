@@ -28,8 +28,8 @@ $lang->execution->closedBy         = 'ClosedBy';
 $lang->execution->closedDate       = 'ClosedDate';
 $lang->execution->canceledBy       = 'CanceledBy';
 $lang->execution->canceledDate     = 'CanceledDate';
-$lang->execution->begin            = 'Begin';
-$lang->execution->end              = 'End';
+$lang->execution->begin            = 'Planned Begin';
+$lang->execution->end              = 'Planned End';
 $lang->execution->dateRange        = 'Duration';
 $lang->execution->realBeganAB      = 'Actual Begin';
 $lang->execution->realEndAB        = 'Actual End';
@@ -355,10 +355,7 @@ $lang->execution->unfinishedTask              = "[%s] unfinished tasks. ";
 $lang->execution->unresolvedBug               = "[%s] unresolved bugs. ";
 $lang->execution->projectNotEmpty             = 'Project cannot be empty.';
 $lang->execution->confirmStoryToTask          = $lang->SRCommon . '%s are converted to tasks in the current. Do you want to convert them anyways?';
-$lang->execution->realBeganNotEmpty           = 'Actual Begin should not be empty.';
-$lang->execution->realBeganNotFuture          = 'Actual Begin should be < = today.';
-$lang->execution->realEndNotEmpty             = 'Actual End should not be empty.';
-$lang->execution->realEndNotFuture            = 'Actual End should be < = today.';
+$lang->execution->ge                          = "『%s』should be >= actual begin『%s』.";
 
 /* Statistics. */
 $lang->execution->charts = new stdclass();
@@ -399,6 +396,7 @@ $lang->execution->bugList       = "Bugs";
 $lang->execution->kanbanHideCols   = 'Closed & Cancelled Columns';
 $lang->execution->kanbanShowOption = 'Unfold';
 $lang->execution->kanbanColsColor  = 'Customize Column Color';
+$lang->execution->kanbanCardsUnit  = 'X';
 
 $lang->execution->kanbanViewList['all']   = 'All';
 $lang->execution->kanbanViewList['story'] = "{$lang->SRCommon}";

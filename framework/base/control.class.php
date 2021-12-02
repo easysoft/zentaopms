@@ -928,6 +928,14 @@ class baseControl
         {
             if(!empty($data['message']))
             {
+                if(is_string($data['message']))
+                {
+                    echo js::alert($data['message']);
+                    $locate = isset($data['locate']) ? $data['locate'] : (isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '');
+                    if (!empty($locate)) die(js::locate($locate));
+                    die(isset($data['message']) ? $data['message'] : 'fail');
+                }
+
                 $message = json_decode(json_encode((array)$data['message']));
                 foreach((array)$message as $item => $errors) $message->$item = implode(',', $errors);
                 die(js::alert(strip_tags(implode('\n', (array)$message))));

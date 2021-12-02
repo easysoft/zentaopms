@@ -608,6 +608,7 @@ class executionModel extends model
             }
         }
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->executionIDList as $executionID)
         {
             $executionName = $data->names[$executionID];
@@ -643,6 +644,16 @@ class executionModel extends model
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
                 $codeList[$executionCode] = $executionCode;
+            }
+
+            foreach($extendFields as $extendField)
+            {
+                $executions[$executionID]->{$extendField->field} = $this->post->{$extendField->field}[$executionID];
+                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = join(',', $executions[$executionID]->{$extendField->field});
+
+                $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
+                if($message) die(js::alert($message));
             }
         }
         if(dao::isError()) die(js::error(dao::getError()));
@@ -715,21 +726,19 @@ class executionModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
-            ->remove('comment')->get();
-     
-        if($execution->realBegan == '')
-        {
-            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotEmpty;
-            return false;
-        }  
-        if($execution->realBegan > helper::today())
-        {
-            dao::$errors['realBegan'] = $this->lang->execution->realBeganNotFuture; 
-            return false;
-        }
+            ->remove('comment')
+            ->get();
 
-        $this->dao->update(TABLE_EXECUTION)->data($execution)->autoCheck()->where('id')->eq((int)$executionID)->exec();
-        
+        $this->dao->update(TABLE_EXECUTION)->data($execution)
+            ->autoCheck()
+            ->check($this->config->execution->start->requiredFields, 'notempty')
+            ->checkIF($execution->realBegan != '', 'realBegan', 'le', helper::today())
+            ->where('id')->eq((int)$executionID)
+            ->exec();
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
+
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -877,24 +886,20 @@ class executionModel extends model
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
-        
-        if($execution->realEnd == '')
-        {
-            dao::$errors['realEnd'] = $this->lang->execution->realEndNotEmpty;
-            return false;
-        }
 
-        if($execution->realEnd > helper::today())
-        {
-            dao::$errors['realEnd'] = $this->lang->execution->realEndNotFuture;
-            return false;
-        }
+        $this->lang->error->ge = $this->lang->execution->ge;
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
+            ->check($this->config->execution->close->requiredFields,'notempty')
+            ->checkIF($execution->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($execution->realEnd != '', 'realEnd', 'ge', $oldExecution->realBegan)
             ->where('id')->eq((int)$executionID)
             ->exec();
-        
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
+
         if(!dao::isError())
         {
             $this->loadModel('score')->create('execution', 'close', $oldExecution);
@@ -2957,7 +2962,7 @@ class executionModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**

@@ -151,6 +151,7 @@ $filter->search->index            = new stdclass();
 $filter->gitlab->webhook          = new stdclass();
 $filter->gitlab->importissue      = new stdclass();
 $filter->mr->diff                 = new stdclass();
+$filter->mr->browse               = new stdclass();
 $filter->ci->checkCompileStatus   = new stdclass();
 $filter->execution->export        = new stdclass();
 $filter->tree->browse             = new stdclass();
@@ -388,6 +389,9 @@ $filter->gitlab->importissue->get['project'] = 'int';
 $filter->gitlab->importissue->get['repo']    = 'int';
 
 $filter->mr->diff->cookie['arrange'] = 'reg::word';
+
+$filter->mr->browse->get['mode']  = 'string';
+$filter->mr->browse->get['param'] = 'string';
 
 $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';
 

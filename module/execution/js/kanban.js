@@ -9,9 +9,10 @@ function changeView(view)
  * @param {String|{account: string, avatar: string}} user User account or user object
  * @returns {string}
  */
-function renderUserAvatar(user, objectType, objectID)
+function renderUserAvatar(user, objectType, objectID, size)
 {
-    var $noPrivAndNoAssigned = $('<div class="avatar has-text avatar-sm avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-account"></i></div>');
+    var avatarSizeClass = 'avatar-' + (size || 'sm');
+    var $noPrivAndNoAssigned = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
     if(objectType == 'task')
     {
         if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
@@ -28,17 +29,17 @@ function renderUserAvatar(user, objectType, objectID)
         var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
     }
 
-    if(!user) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-account"></i></a>');
+    if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
 
-    var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
+    var $noPrivAvatar = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" />').avatar({user: user});
     if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
+    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
@@ -71,43 +72,56 @@ function renderDeadline(deadline)
  */
 function renderStoryItem(item, $item, col)
 {
-    var $title = $item.find('.title');
-    if(!$title.length)
-    {
-        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-lightbulb text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
-        $title.appendTo($item);
-    }
-    $title.attr('title', item.title).find('.text').text(item.title);
+    var scaleSize = window.kanbanScaleSize;
+    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
-    var $infos = $item.find('.infos');
-    if(!$infos.length)
+    if(scaleSize <= 3)
     {
-        $infos = $('<div class="infos"></div>').appendTo($item);
-    }
-    $infos.html(
-    [
-        '<span class="info info-id text-muted">#' + item.id + '</span>',
-        '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
-        item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
-    ].join(''));
-    $infos.append(renderUserAvatar(item.assignedTo, 'story', item.id));
-
-    var $actions = $item.find('.actions');
-    if(!$actions.length && item.menus.length)
-    {
-        $actions = $([
-            '<div class="actions">',
-                '<a data-contextmenu="story" data-col="' + col.type + '">',
-                    '<i class="icon icon-ellipsis-v"></i>',
-                '</a>',
-            '</div>'
-        ].join('')).appendTo($item);
+        var $title = $item.find('.title');
+        if(!$title.length)
+        {
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
+            $title.appendTo($item);
+        }
+        $title.attr('title', item.title).find('.text').text(item.title);
     }
 
-    $item.attr('data-type', 'story').addClass('kanban-item-story');
+    if(scaleSize <= 2)
+    {
+        var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
+        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id);
+        var $infos = $item.find('.infos');
+        if(!$infos.length) $infos = $('<div class="infos"></div>');
+        $infos.html([idHtml, priHtml, hoursHtml].join(''));
 
-    return $item;
+        $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
+        if(scaleSize <= 1) $infos.appendTo($item);
+        else $infos.prependTo($item.find('.title'));
+    }
+    else if(scaleSize === 4)
+    {
+        $item.html(renderUserAvatar(item.assignedTo, 'story', item.id, 'md'));
+    }
+
+    if(scaleSize <= 1)
+    {
+        var $actions = $item.find('.actions');
+        if(!$actions.length && item.menus.length)
+        {
+            $actions = $([
+                '<div class="actions">',
+                    '<a data-contextmenu="story" data-col="' + col.type + '">',
+                        '<i class="icon icon-ellipsis-v"></i>',
+                    '</a>',
+                '</div>'
+            ].join('')).appendTo($item);
+        }
+    }
+
+    return $item.attr('data-type', 'story').addClass('kanban-item-story');
 }
 
 /**
@@ -119,44 +133,58 @@ function renderStoryItem(item, $item, col)
  */
 function renderBugItem(item, $item, col)
 {
-    var $title = $item.find('.title');
-    if(!$title.length)
-    {
-        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-bug text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
-        $title.appendTo($item);
-    }
-    $title.attr('title', item.title).find('.text').text(item.title);
+    var scaleSize = window.kanbanScaleSize;
+    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
-    var $infos = $item.find('.infos');
-    if(!$infos.length)
+    if(scaleSize <= 3)
     {
-        $infos = $('<div class="infos"></div>').appendTo($item);
-    }
-    $infos.html(
-    [
-        '<span class="info info-id text-muted">#' + item.id + '</span>',
-        '<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>',
-        '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
-    ].join(''));
-    if(item.deadline) $infos.append(renderDeadline(item.deadline));
-    $infos.append(renderUserAvatar(item.assignedTo, 'bug', item.id));
-
-    var $actions = $item.find('.actions');
-    if(!$actions.length && item.menus.length)
-    {
-        $actions = $([
-            '<div class="actions">',
-                '<a data-contextmenu="bug" data-col="' + col.type + '">',
-                    '<i class="icon icon-ellipsis-v"></i>',
-                '</a>',
-            '</div>'
-        ].join('')).appendTo($item);
+        var $title = $item.find('.title');
+        if(!$title.length)
+        {
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-bug text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true));
+            $title.appendTo($item);
+        }
+        $title.attr('title', item.title).find('.text').text(item.title);
     }
 
-    $item.attr('data-type', 'bug').addClass('kanban-item-bug');
+    if(scaleSize <= 2)
+    {
+        var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
+        var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
+        var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id);
 
-    return $item;
+        var $infos = $item.find('.infos');
+        if(!$infos.length) $infos = $('<div class="infos"></div>');
+        $infos.html([idHtml, severityHtml, priHtml].join(''));
+        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
+        $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
+
+        if(scaleSize <= 1) $infos.appendTo($item);
+        else $infos.prependTo($item.find('.title'));
+    }
+    else if(scaleSize === 4)
+    {
+        $item.html(renderUserAvatar(item.assignedTo, 'bug', item.id, 'md'));
+    }
+
+    if(scaleSize <= 1)
+    {
+        var $actions = $item.find('.actions');
+        if(!$actions.length && item.menus.length)
+        {
+            $actions = $([
+                '<div class="actions">',
+                    '<a data-contextmenu="bug" data-col="' + col.type + '">',
+                        '<i class="icon icon-ellipsis-v"></i>',
+                    '</a>',
+                '</div>'
+            ].join('')).appendTo($item);
+        }
+    }
+
+    return $item.attr('data-type', 'bug').addClass('kanban-item-bug');
 }
 
 /**
@@ -168,39 +196,55 @@ function renderBugItem(item, $item, col)
  */
 function renderTaskItem(item, $item, col)
 {
-    var $title = $item.find('.title');
-    if(!$title.length)
-    {
-        $title = $('<a class="title iframe" data-width="95%"><i class="icon icon-checked text-muted"></i> <span class="text"></span></a>')
-                .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
-        $title.appendTo($item);
-    }
-    $title.attr('title', item.name).find('.text').text(item.name);
+    var scaleSize = window.kanbanScaleSize;
+    if(+$item.attr('data-scale-size') !== scaleSize)  $item.empty().attr('data-scale-size', scaleSize);
 
-    var $infos = $item.find('.infos');
-    if(!$infos.length)
+    if(scaleSize <= 3)
     {
-        $infos = $('<div class="infos"></div>').appendTo($item);
+        var $title = $item.find('.title');
+        if(!$title.length)
+        {
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true));
+            $title.appendTo($item);
+        }
+        $title.attr('title', item.name).find('.text').text(item.name);
     }
-    $infos.html(
-    [
-        '<span class="info info-id text-muted">#' + item.id + '</span>',
-        '<span class="info i nfo-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>',
-        item.estimate ? '<span class="info info-estimate text-muted">' + item.estimate + 'h</span>' : '',
-    ].join(''));
-    if(item.deadline) $infos.append(renderDeadline(item.deadline));
-    $infos.append(renderUserAvatar(item.assignedTo, 'task', item.id));
 
-    var $actions = $item.find('.actions');
-    if(!$actions.length && item.menus.length)
+    if(scaleSize <= 2)
     {
-        $actions = $([
-            '<div class="actions">',
-                '<a data-contextmenu="task" data-col="' + col.type + '">',
-                    '<i class="icon icon-ellipsis-v"></i>',
-                '</a>',
-            '</div>'
-        ].join('')).appendTo($item);
+        var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
+        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id);
+
+        var $infos = $item.find('.infos');
+        if(!$infos.length) $infos = $('<div class="infos"></div>');
+        $infos.html([idHtml, priHtml, hoursHtml].join(''));
+        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
+        $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
+
+        if(scaleSize <= 1) $infos.appendTo($item);
+        else $infos.prependTo($item.find('.title'));
+    }
+    else if(scaleSize === 4)
+    {
+        $item.html(renderUserAvatar(item.assignedTo, 'task', item.id, 'md'));
+    }
+
+    if(scaleSize <= 1)
+    {
+        var $actions = $item.find('.actions');
+        if(!$actions.length && item.menus.length)
+        {
+            $actions = $([
+                '<div class="actions">',
+                    '<a data-contextmenu="task" data-col="' + col.type + '">',
+                        '<i class="icon icon-ellipsis-v"></i>',
+                    '</a>',
+                '</div>'
+            ].join('')).appendTo($item);
+        }
     }
 
     $item.attr('data-type', 'task').addClass('kanban-item-task');
@@ -737,20 +781,57 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
     }
 });
 
+/** Get card height */
+function getCardHeight()
+{
+    return [59, 59, 62, 62, 47][window.kanbanScaleSize];
+}
+
+/** Change kanban scale size */
+function changeKanbanScaleSize(newScaleSize)
+{
+    var newScaleSize = Math.max(1, Math.min(4, newScaleSize));
+    if(newScaleSize === window.kanbanScaleSize) return;
+
+    window.kanbanScaleSize = newScaleSize;
+    $.zui.store.set('executionKanbanScaleSize', newScaleSize);
+    $('#kanbanScaleSize').text(newScaleSize);
+    $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', newScaleSize >= 4 ? 'disabled' : null);
+    $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', newScaleSize <= 1 ? 'disabled' : null);
+
+    $('#kanbans').children('.kanban').each(function()
+    {
+        var kanban = $(this).data('zui.kanban');
+        if(!kanban) return;
+        kanban.setOptions({cardsPerRow: newScaleSize, cardHeight: getCardHeight()});
+    });
+
+    return newScaleSize;
+}
+
 /* Example code: */
 $(function()
 {
     $.cookie('isFullScreen', 0);
 
+    window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
+    $('#kanbanScaleSize').text(window.kanbanScaleSize);
+    $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
+    $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', window.kanbanScaleSize <= 1 ? 'disabled' : null);
+
     /* Common options 用于初始化看板的通用选项 */　
     var commonOptions =
     {
-        maxColHeight:   'auto',
-        minColWidth:     240,
-        maxColWidth:     240,
-        showCount:       true,
-        showZeroCount:   true,
-        fluidBoardWidth: true,
+        maxColHeight:         'auto',
+        minColWidth:          240,
+        maxColWidth:          240,
+        cardHeight:           getCardHeight(),
+        showCount:            true,
+        showZeroCount:        true,
+        fluidBoardWidth:      false,
+        cardsPerRow:          window.kanbanScaleSize,
+        virtualize:           true,
+        virtualRenderOptions: {container: '#kanbanContainer>.panel-body'},
         droppable:
         {
             target:       findDropColumns,
@@ -806,6 +887,12 @@ $(function()
         $.zui.ContextMenu.show(items, items.$options || {event: event});
     });
 
+    /* Make kanbanScaleControl works */
+    $('#kanbanScaleControl').on('click', '.btn', function()
+    {
+        changeKanbanScaleSize(window.kanbanScaleSize + ($(this).data('type') === '+' ? 1 : -1));
+    });
+
     /* Resize kanban container on window resize */
     resizeKanbanContainer();
     $(window).on('resize', resizeKanbanContainer);
@@ -823,18 +910,20 @@ $(function()
         {
             location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
         }
-    })
+    });
 
     $('#type_chosen .chosen-single span').prepend('<i class="icon-kanban"></i>');
     $('#group_chosen .chosen-single span').prepend(kanbanLang.laneGroup + ': ');
 
     /* Ajax update kanban. */
+    var lastUpdateData;
     setInterval(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
         {
-            if(data) 
+            if(data && lastUpdateData !== lastUpdateData)
             {
+                lastUpdateData = data;
                 kanbanGroup = $.parseJSON(data);
                 if(groupBy == 'default')
                 {

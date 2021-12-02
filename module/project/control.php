@@ -1073,6 +1073,15 @@ class project extends control
         $this->config->build->search['fields']['execution'] = $this->project->lang->executionCommon;
         $this->config->build->search['params']['execution'] = array('operator' => '=', 'control' => 'select', 'values' => array('' => '') + $executions);
 
+        $product = $param ? $this->loadModel('product')->getById($param) : '';
+        if($product and $product->type != 'normal')
+        {
+            $this->loadModel('build');
+            $this->loadModel('branch');
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $projectID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
+        }
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'project');
 
         if($type == 'bysearch')
@@ -1785,7 +1794,7 @@ class project extends control
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal');
+        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
 
         $this->display();
     }

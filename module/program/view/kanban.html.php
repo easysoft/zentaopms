@@ -43,7 +43,7 @@ $userPrivs['productplan'] = common::hasPriv('productplan', 'view');
 $userPrivs['project']     = common::hasPriv('project', 'index');
 $userPrivs['execution']   = common::hasPriv('execution', 'task');
 $userPrivs['release']     = common::hasPriv('release', 'view');
-js::set('kanbanColumns', $kanbanColumns);
+js::set('kanbanColumns', array_values($kanbanColumns));
 js::set('userPrivs',     $userPrivs);
 js::set('kanbanGroup',   $kanbanGroup);
 js::set('doingText',     $lang->program->statusList['doing']);

@@ -14,6 +14,10 @@
         <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->project->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->project->end);?></th>
         <th class='c-progress'><?php echo $lang->project->progress;?></th>
+        <?php
+        $extendFields = $this->program->getFlowExtendFields();
+        foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
+        ?>
         <th class='text-center c-actions-6'><?php echo $lang->actions;?></th>
       </tr>
     </thead>
@@ -79,6 +83,7 @@
           </div>
           <?php endif;?>
         </td>
+        <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $program) . "</td>";?>
         <td class='c-actions'>
           <?php if($program->type == 'program'):?>
           <?php if($program->status == 'wait' || $program->status == 'suspended') common::printIcon('program', 'start', "programID=$program->id", $program, 'list', 'play', '', 'iframe', true, '', $this->lang->program->start);?>

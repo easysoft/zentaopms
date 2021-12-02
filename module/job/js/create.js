@@ -1,13 +1,10 @@
 $(document).ready(function()
 {
-    $('#gitlabRepo').change(function()
-    {
-        $('#repo').val($(this).val()).change();
-    })
-
-    $('#repo').change(function()
+    $(document).on('change', '#repo', function()
     {
         var repoID = $(this).val();
+        if(repoID <= 0) return;
+
         var link = createLink('repo', 'ajaxLoadProducts', 'repoID=' + repoID);
         $.get(link, function(data)
         {
@@ -19,33 +16,54 @@ $(document).ready(function()
             }
         });
 
-        var type = 'Git';
-        if(typeof(repoTypes[repoID]) != 'undefined') type = repoTypes[repoID];
-
-        $('.svn-fields').addClass('hidden');
-        if(type == 'Subversion' && $('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
-
-        $('#repoType').val(type);
-        $('#triggerType option[value=tag]').html(type == 'Subversion' ? dirChange : buildTag).trigger('chosen:updated');
-        if(type == 'Subversion')
+        /* Add new way get repo type. */
+        var link = createLink('job', 'ajaxGetRepoType', 'repoID=' + repoID);
+        $.getJSON(link, function(data)
         {
-            $('#svnDirBox .input-group').empty();
-            $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
-            $.getJSON(createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
+            if(data.result == 'success')
             {
-                html = "<select id='svnDir' name='svnDir[]' class='form-control'>";
-                for(path in tags)
+                if(data.type.indexOf('git') != -1)
                 {
-                    var encodePath = tags[path];
-                    html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + path + "</option>";
+                    $('.reference').show();
+                    $('.svn-fields').addClass('hidden');
+                    $('#reference option').remove();
+
+                    $.getJSON(createLink('job', 'ajaxGetRefList', "repoID=" + repoID), function(response)
+                    {
+                        if(response.result == 'success')
+                        {
+                            $.each(response.refList, function(reference, name)
+                            {
+                                $('#reference').append("<option value='" + reference + "'>" + name + "</option>");
+                            });
+                        }
+                        $('#reference').trigger('chosen:updated');
+                    });
                 }
-                html += '</select>';
-                $('#svnDirBox .loading').remove();
-                $('#svnDirBox .input-group').append(html);
-                $('#svnDirBox #svnDir').chosen();
-            })
-        }
-    })
+                else
+                {
+                    if($('#triggerType').val() == 'tag') $('.svn-fields').removeClass('hidden');
+
+                    $('#svnDirBox .input-group').empty();
+                    $('#svnDirBox .input-group').append("<div class='load-indicator loading'></div>");
+                    $.getJSON(createLink('repo', 'ajaxGetSVNDirs', 'repoID=' + repoID), function(tags)
+                    {
+                        html = "<select id='svnDir' name='svnDir[]' class='form-control'>";
+                        for(path in tags)
+                        {
+                            var encodePath = tags[path];
+                            html += "<option value='" + path + "' data-encodePath='" + encodePath + "'>" + path + "</option>";
+                        }
+                        html += '</select>';
+                        $('#svnDirBox .loading').remove();
+                        $('#svnDirBox .input-group').append(html);
+                        $('#svnDirBox #svnDir').chosen();
+                    })
+                }
+                $('#triggerggerType option[value=tag]').html(data.type == 'gitlab' ? buildTag : dirChange).trigger('chosen:updated');
+            }
+        });
+    });
 
     $(document).on('change', '[name^=svnDir]', function()
     {
@@ -61,7 +79,8 @@ $(document).ready(function()
         {
             html    = '';
             length  = $('#svnDirBox .input-group [name^=svnDir]').length;
-            length += 1;
+            length++;
+
             if(tags.length != 0)
             {
                 html = "<select id='svnDir" + length + "' name='svnDir[]' class='form-control'>";
@@ -75,6 +94,7 @@ $(document).ready(function()
                 }
                 html += '</select>';
             }
+
             $('#svnDirBox .loading').remove();
             $('#svnDirBox .input-group').append(html);
             $('#svnDirBox #svnDir' + length).chosen();
@@ -124,15 +144,19 @@ $(document).ready(function()
     var scheduleOption = "<option value='schedule'>" + $('#triggerType').find('[value=schedule]').text() + "</option>";
     $('#engine').change(function()
     {
-        $('#jenkinsServerTR').toggle($('#engine').val() == 'jenkins');
-        $('#gitlabServerTR').toggle($('#engine').val() == 'gitlab');
+        var engine = $(this).val();
+        $('.reference').hide();
+        loadRepoList(engine);
+        $('#jenkinsServerTR').toggle(engine == 'jenkins');
+        $('#gitlabServerTR').toggle(engine == 'gitlab');
 
-        if($(this).val() == 'gitlab')
+        if(engine == 'gitlab')
         {
             $('tr.gitlabRepo').show();
             $('tr.commonRepo').hide();
         }
-        else if($('#triggerType').find('[value=schedule]').size() == 0 )
+        //else if($('#triggerType').find('[value=schedule]').size() == 0)
+        else
         {
             $('tr.gitlabRepo').hide();
             $('tr.commonRepo').show();
@@ -140,26 +164,6 @@ $(document).ready(function()
     });
 
     $('#engine').change();
-    $('#gitlabRepo').change(function()
-    {
-        $('#reference option').remove();
-
-        var repoID  = $(this).val();
-        if(repoID > 0)
-        {
-            $.getJSON(createLink('job', 'ajaxGetRefList', "repoID=" + repoID), function(response)
-            {
-                if(response.result == 'success')
-                {
-                    $.each(response.refList, function(reference, name)
-                    {
-                        $('#reference').append("<option value='" + reference + "'>" + name + "</option>");
-                    });
-                }
-                $('#reference').trigger('chosen:updated');
-            });
-        }
-    });
 
     $('#triggerType').change();
 });

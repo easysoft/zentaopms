@@ -1096,6 +1096,7 @@ class projectModel extends model
         $oldProjects = $this->getByIdList($this->post->projectIdList);
         $nameList    = array();
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->projectIdList as $projectID)
         {
             $projectID   = (int)$projectID;
@@ -1126,7 +1127,18 @@ class projectModel extends model
 
                 }
             }
+
+            foreach($extendFields as $extendField)
+            {
+                $projects[$projectID]->{$extendField->field} = $this->post->{$extendField->field}[$projectID];
+                if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = join(',', $projects[$projectID]->{$extendField->field});
+
+                $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $projects[$projectID]->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         foreach($projects as $projectID => $project)
         {
@@ -1174,13 +1186,20 @@ class projectModel extends model
         $now        = helper::now();
 
         $project = fixer::input('post')
-            ->add('realBegan', helper::today())
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')->get();
 
-        $this->dao->update(TABLE_PROJECT)->data($project)->autoCheck()->where('id')->eq((int)$projectID)->exec();
+        $this->dao->update(TABLE_PROJECT)->data($project)
+            ->autoCheck()
+            ->check($this->config->project->start->requiredFields, 'notempty')
+            ->checkIF($project->realBegan != '', 'realBegan', 'le', helper::today())
+            ->where('id')->eq((int)$projectID)
+            ->exec();
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
 
         if(!dao::isError()) return common::createChanges($oldProject, $project);
     }
@@ -1326,21 +1345,18 @@ class projectModel extends model
             ->remove('comment')
             ->get();
 
-        if($project->realEnd == '')
-        {
-            dao::$errors['realEnd'] = $this->lang->project->realEndNotEmpty;
-            return false;
-        }
-        if($project->realEnd > helper::today())
-        {
-            dao::$errors['realEnd'] = $this->lang->project->realEndNotFuture; 
-            return false;
-        }
+        $this->lang->error->ge = $this->lang->project->ge;
 
         $this->dao->update(TABLE_PROJECT)->data($project)
             ->autoCheck()
+            ->check($this->config->project->close->requiredFields, 'notempty')
+            ->checkIF($project->realEnd != '', 'realEnd', 'le', helper::today())
+            ->checkIF($project->realEnd != '', 'realEnd', 'ge', $oldProject->realBegan)
             ->where('id')->eq((int)$projectID)
             ->exec();
+
+        /* When it has multiple errors, only the first one is prompted */
+        if(dao::isError() and count(dao::$errors['realEnd']) > 1) dao::$errors['realEnd'] = dao::$errors['realEnd'][0];
 
         if(!dao::isError())
         {
@@ -1493,13 +1509,13 @@ class projectModel extends model
             $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
-            
+
             if($id == 'code')
             {
-                $class .= ' c-name'; 
+                $class .= ' c-name';
                 $title  = "title={$project->code}";
-            }   
-            
+            }
+
             if($id == 'name')
             {
                 $class .= ' text-left';

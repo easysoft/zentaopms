@@ -396,6 +396,7 @@ class productplan extends control
         if(!empty($_POST['stories']))
         {
             $this->productplan->linkStory($planID);
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             die(js::locate(inlink('view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
@@ -418,7 +419,7 @@ class productplan extends control
         $this->config->product->search['queryID']   = $queryID;
         $this->config->product->search['style']     = 'simple';
         $this->config->product->search['params']['product']['values'] = $products + array('all' => $this->lang->product->allProductsOfProject);
-        $this->config->product->search['params']['plan']['values'] = $this->productplan->getPairsForStory($plan->product, $plan->branch, 'skipParent');
+        $this->config->product->search['params']['plan']['values'] = $this->productplan->getPairsForStory($plan->product, $plan->branch, 'skipParent|withMainPlan');
         $this->config->product->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, $plan->branch);
         $storyStatusList = $this->lang->story->statusList;
         unset($storyStatusList['closed']);
@@ -533,6 +534,7 @@ class productplan extends control
         if(!empty($_POST['bugs']))
         {
             $this->productplan->linkBug($planID);
+            if($this->viewType == 'json') return $this->send(array('result' => 'success'));
             die(js::locate(inlink('view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
@@ -558,7 +560,7 @@ class productplan extends control
         $this->config->bug->search['actionURL'] = $this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy&link=true&param=" . helper::safe64Encode('&browseType=bySearch&queryID=myQueryID'));
         $this->config->bug->search['queryID']   = $queryID;
         $this->config->bug->search['style']     = 'simple';
-        $this->config->bug->search['params']['plan']['values']          = $this->productplan->getPairsForStory($productID, $plan->branch, 'skipParent');
+        $this->config->bug->search['params']['plan']['values']          = $this->productplan->getPairsForStory($productID, $plan->branch, 'skipParent|withMainPlan');
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($plan->product, $plan->branch);
         $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->build->getProductBuildPairs($productID, $branch = 0, $params = '');

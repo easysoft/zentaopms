@@ -12,10 +12,25 @@ function processKanbanData(key, programsData)
     var columns = [];
     $.each(kanbanColumns, function(_, column)
     {
+        var colType = column.type;
+        if(colType === 'doingProject')
+        {
+            columns.push(
+            {
+                kanban:   kanbanId,
+                id:       kanbanId + '-doing',
+                type:     'doing',
+                asParent: true,
+                name:     doingText,
+                count:    ''
+            });
+        }
+
         columns.push($.extend({}, column,
         {
-            kanban: kanbanId,
-            id:     kanbanId + '-' + column.type,
+            kanban:     kanbanId,
+            id:         kanbanId + '-' + column.type,
+            parentType: (colType === 'doingProject' || colType === 'doingExecution') ? 'doing' : false,
         }));
     });
 
@@ -107,6 +122,6 @@ $(function()
     {
         var $kanban = $('#kanban-' + key);
         if(!$kanban.length) return;
-        $kanban.kanban({data: processKanbanData(key, programsData)});
+        $kanban.kanban({data: processKanbanData(key, programsData), virtualize: true});
     });
 });

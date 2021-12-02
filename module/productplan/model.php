@@ -94,7 +94,13 @@ class productplanModel extends model
             $plans      = $this->reorder4Children($plans);
             $planIdList = array_keys($plans);
 
-            $planProjects      = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('product')->eq($product)->andWhere('plan')->in(array_keys($plans))->fetchPairs('plan', 'project');
+            $planProjects = $this->dao->select('t1.*,t2.type')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                ->where('t1.product')->eq($product)
+                ->andWhere('t1.plan')->in(array_keys($plans))
+                ->andWhere('t2.type')->in('sprint,stage')
+                ->fetchPairs('plan', 'project');
+
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');
             $product = $this->loadModel('product')->getById($product);
             if($product->type == 'normal')
@@ -127,6 +133,7 @@ class productplanModel extends model
                 $plan->hour      = array_sum($storyPairs);
                 $plan->project   = zget($planProjects, $plan->id, '');
                 $plan->projectID = $plan->project;
+                $plan->expired   = $plan->end < $date ? true : false;
 
                 /* Sync linked stories. */
                 if(!isset($storyCountInTable[$plan->id]) or $storyCountInTable[$plan->id] != $plan->stories)
@@ -478,6 +485,7 @@ class productplanModel extends model
         $purifier = new HTMLPurifier($config);
 
         $plans = array();
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->id as $planID)
         {
             $plan = new stdclass();
@@ -490,6 +498,16 @@ class productplanModel extends model
             if(empty($plan->begin))die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
             if(empty($plan->end))  die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
             if($plan->begin > $plan->end) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+
+            foreach($extendFields as $extendField)
+            {
+                $plan->{$extendField->field} = $this->post->{$extendField->field}[$planID];
+                if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = join(',', $plan->{$extendField->field});
+
+                $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $plan->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
 
             $plans[$planID] = $plan;
         }
