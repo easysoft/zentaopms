@@ -44,7 +44,7 @@ else
 }
 $kanbanColumns['normalRelease']   = array('name' => $lang->product->normalRelease, 'type' => 'normalRelease');
 $userPrivs = array();
-$userPrivs['product']      = common::hasPriv('product', 'browse');
+$userPrivs['product']     = common::hasPriv('product', 'browse');
 $userPrivs['productplan'] = common::hasPriv('productplan', 'view');
 $userPrivs['project']     = common::hasPriv('project', 'index');
 $userPrivs['execution']   = common::hasPriv('execution', 'task');
