@@ -1,7 +1,7 @@
 .main-content{padding: 0;}
 .actions{display: none;}
 #mainMenu{display: none;}
-#main {min-width: unset;}
+#main {min-width: unset; height:407px; overflow-y: overlay;}
 .pager-size-menu{display: none;}
 .table-footer{position: fixed; width: 100%; bottom: 0;}
 .tab-btn-container{width: 100%; background-color: #f2f2f2;}
@@ -10,3 +10,5 @@
 .plan-title{position: absolute; top: 0; left: 0; padding: 8px 15px; font-weight: bolder;}
 .tab-btn-container ul li span{display: none;}
 .tab-btn-container ul li.active span{display: inline-block;}
+::-webkit-scrollbar {width: 10px; height: 10px;}
+::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
