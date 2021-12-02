@@ -205,7 +205,7 @@ class bug extends control
         $product     = $this->product->getById($productID);
 
         /* Display of branch label. */
-        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID);
+        $showBranch = $this->loadModel('branch')->showBranch($productID);
 
         /* Set view. */
         $this->view->title           = $productName . $this->lang->colon . $this->lang->bug->common;
@@ -237,7 +237,7 @@ class bug extends control
         $this->view->setModule       = true;
         $this->view->isProjectBug    = ($productID and !$this->projectID) ? false : true;
         $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'bug', $showModule) : array();
-        $this->view->isShowBranch    = $isShowBranch;
+        $this->view->showBranch    = $showBranch;
 
         $this->display();
     }

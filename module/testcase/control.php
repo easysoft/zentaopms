@@ -187,7 +187,7 @@ class testcase extends control
         }
 
         /* Display of branch label. */
-        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID);
+        $showBranch = $this->loadModel('branch')->showBranch($productID);
 
         $product = $this->product->getById($productID);
 
@@ -218,7 +218,7 @@ class testcase extends control
         $this->view->suiteID       = $suiteID;
         $this->view->setModule     = true;
         $this->view->modulePairs   = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
-        $this->view->isShowBranch  = $isShowBranch;
+        $this->view->showBranch  = $showBranch;
 
         $this->display();
     }

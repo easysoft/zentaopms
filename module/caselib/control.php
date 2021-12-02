@@ -177,7 +177,7 @@ class caselib extends control
         $this->session->set('caselibList', $this->app->getURI(true), 'qa');
 
         /* Display of branch label. */
-        $isShowBranch = $this->loadModel('branch')->isShowBranch(0);
+        $showBranch = $this->loadModel('branch')->showBranch(0);
 
         /* Set menu. */
         $libID = $this->caselib->saveLibState($libID, $libraries);
@@ -234,7 +234,7 @@ class caselib extends control
         $this->view->moduleName    = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->param         = $param;
         $this->view->setModule     = true;
-        $this->view->isShowBranch  = $isShowBranch;
+        $this->view->showBranch  = $showBranch;
 
         $this->display();
     }

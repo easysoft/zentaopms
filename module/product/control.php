@@ -212,14 +212,14 @@ class product extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Display of branch label. */
-        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID);
+        $showBranch = $this->loadModel('branch')->showBranch($productID);
 
         $product = $this->product->getById($productID);
 
         /* Get stories and branches. */
         if($this->app->rawModule == 'projectstory')
         {
-            $isShowBranch = $this->loadModel('branch')->isShowBranch($productID, 0, $projectID);
+            $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 
             $branches = array();
             if(!empty($product))
@@ -309,7 +309,7 @@ class product extends control
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
         $this->view->branches        = $branches;
-        $this->view->isShowBranch    = $isShowBranch;
+        $this->view->showBranch    = $showBranch;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
         $this->view->storyTasks      = $storyTasks;

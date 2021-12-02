@@ -3007,11 +3007,12 @@ class taskModel extends model
      * @param array  $modulePairs
      * @param string $mode
      * @param bool   $child
+     * @param bool   $showBranch
      *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $isShowBranch = false)
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false)
     {
         $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
         $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
@@ -3070,9 +3071,9 @@ class taskModel extends model
                 echo "</span>";
                 break;
             case 'name':
-                if($isShowBranch) $isShowBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
+                if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
                 if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
-                if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $isShowBranch) echo "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
+                if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $showBranch) echo "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 if($task->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
                 if(!empty($task->team)) echo '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
