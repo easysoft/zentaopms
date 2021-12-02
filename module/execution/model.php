@@ -608,6 +608,7 @@ class executionModel extends model
             }
         }
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->executionIDList as $executionID)
         {
             $executionName = $data->names[$executionID];
@@ -643,6 +644,16 @@ class executionModel extends model
                 /* Check unique code for edited executions. */
                 if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
                 $codeList[$executionCode] = $executionCode;
+            }
+
+            foreach($extendFields as $extendField)
+            {
+                $executions[$executionID]->{$extendField->field} = $this->post->{$extendField->field}[$executionID];
+                if(is_array($executions[$executionID]->{$extendField->field})) $executions[$executionID]->{$extendField->field} = join(',', $executions[$executionID]->{$extendField->field});
+
+                $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
+                if($message) die(js::alert($message));
             }
         }
         if(dao::isError()) die(js::error(dao::getError()));
@@ -717,7 +728,7 @@ class executionModel extends model
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
-     
+
         $this->dao->update(TABLE_EXECUTION)->data($execution)
             ->autoCheck()
             ->check($this->config->execution->start->requiredFields, 'notempty')
@@ -727,7 +738,7 @@ class executionModel extends model
 
         /* When it has multiple errors, only the first one is prompted */
         if(dao::isError() and count(dao::$errors['realBegan']) > 1) dao::$errors['realBegan'] = dao::$errors['realBegan'][0];
-        
+
         if(!dao::isError()) return common::createChanges($oldExecution, $execution);
     }
 
@@ -866,7 +877,7 @@ class executionModel extends model
     {
         $oldExecution = $this->getById($executionID);
         $now          = helper::now();
-        
+
         $execution = fixer::input('post')
             ->setDefault('status', 'closed')
             ->setDefault('closedBy', $this->app->user->account)
@@ -875,7 +886,7 @@ class executionModel extends model
             ->setDefault('lastEditedDate', $now)
             ->remove('comment')
             ->get();
-        
+
         $this->lang->error->ge = $this->lang->execution->ge;
 
         $this->dao->update(TABLE_EXECUTION)->data($execution)

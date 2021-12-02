@@ -700,6 +700,7 @@ class productModel extends model
         $oldProducts = $this->getByIdList($this->post->productIDList);
         $nameList    = array();
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->productIDList as $productID)
         {
             $productName = $data->names[$productID];
@@ -716,6 +717,16 @@ class productModel extends model
             $products[$productID]->status  = $data->statuses[$productID];
             $products[$productID]->desc    = strip_tags($this->post->descs[$productID], $this->config->allowedTags);
             $products[$productID]->acl     = $data->acls[$productID];
+
+            foreach($extendFields as $extendField)
+            {
+                $products[$productID]->{$extendField->field} = $this->post->{$extendField->field}[$productID];
+                if(is_array($products[$productID]->{$extendField->field})) $products[$productID]->{$extendField->field} = join(',', $products[$productID]->{$extendField->field});
+
+                $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $products[$productID]->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
         }
         if(dao::isError()) die(js::error(dao::getError()));
 

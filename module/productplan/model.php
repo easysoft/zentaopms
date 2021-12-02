@@ -485,6 +485,7 @@ class productplanModel extends model
         $purifier = new HTMLPurifier($config);
 
         $plans = array();
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->id as $planID)
         {
             $plan = new stdclass();
@@ -497,6 +498,16 @@ class productplanModel extends model
             if(empty($plan->begin))die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
             if(empty($plan->end))  die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
             if($plan->begin > $plan->end) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+
+            foreach($extendFields as $extendField)
+            {
+                $plan->{$extendField->field} = $this->post->{$extendField->field}[$planID];
+                if(is_array($plan->{$extendField->field})) $plan->{$extendField->field} = join(',', $plan->{$extendField->field});
+
+                $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $plan->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
 
             $plans[$planID] = $plan;
         }

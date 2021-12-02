@@ -1096,6 +1096,7 @@ class projectModel extends model
         $oldProjects = $this->getByIdList($this->post->projectIdList);
         $nameList    = array();
 
+        $extendFields = $this->getFlowExtendFields();
         foreach($data->projectIdList as $projectID)
         {
             $projectID   = (int)$projectID;
@@ -1126,7 +1127,18 @@ class projectModel extends model
 
                 }
             }
+
+            foreach($extendFields as $extendField)
+            {
+                $projects[$projectID]->{$extendField->field} = $this->post->{$extendField->field}[$projectID];
+                if(is_array($projects[$projectID]->{$extendField->field})) $projects[$projectID]->{$extendField->field} = join(',', $projects[$projectID]->{$extendField->field});
+
+                $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
+                $message = $this->checkFlowRule($extendField, $projects[$projectID]->{$extendField->field});
+                if($message) die(js::alert($message));
+            }
         }
+        if(dao::isError()) die(js::error(dao::getError()));
 
         foreach($projects as $projectID => $project)
         {
@@ -1497,13 +1509,13 @@ class projectModel extends model
             $class = "c-$id" . (in_array($id, array('budget', 'teamCount', 'estimate', 'consume')) ? ' c-number' : '');
 
             if($id == 'id') $class .= ' cell-id';
-            
+
             if($id == 'code')
             {
-                $class .= ' c-name'; 
+                $class .= ' c-name';
                 $title  = "title={$project->code}";
-            }   
-            
+            }
+
             if($id == 'name')
             {
                 $class .= ' text-left';
