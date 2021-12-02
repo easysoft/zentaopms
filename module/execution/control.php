@@ -603,7 +603,7 @@ class execution extends control
                 if($this->session->importBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
             }
             $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all execution.
-            $bugs = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
+            $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
         }
 
        /* Build the search form. */
@@ -656,8 +656,8 @@ class execution extends control
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->users          = $users;
-        $this->view->execution        = $this->execution->getByID($executionID);
-        $this->view->executionID      = $executionID;
+        $this->view->execution      = $this->execution->getByID($executionID);
+        $this->view->executionID    = $executionID;
         $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
         $this->display();
     }

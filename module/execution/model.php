@@ -2962,7 +2962,7 @@ class executionModel extends model
             ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
-            ->fetchAll();
+            ->fetchAll('id');
     }
 
     /**
