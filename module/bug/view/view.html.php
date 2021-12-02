@@ -14,6 +14,8 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
+<?php echo("<script>console.log('".json_encode($_SERVER["QUERY_STRING"])."');</script>");?>
+<?php if(strpos($_SERVER["QUERY_STRING"], 'displayNotice=card') === false):?>
 <div id="mainMenu" class="clearfix">
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div class="linkButton" onclick="linkButtonClicked()">
@@ -46,6 +48,7 @@
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="scrollContent">
+<?php endif;?>
 <?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">

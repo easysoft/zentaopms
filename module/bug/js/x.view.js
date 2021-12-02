@@ -30,8 +30,12 @@ $(function()
 
     if(xuanAction != "<div class='xuancard-actions fixed'>")
     {
-        xuanAction += '</div>';
-        $('body').append(xuanAction);
+        var params = window.location.search;
+        if(params.indexOf('displayNotice=card') == -1)
+        {
+            xuanAction += '</div>';
+            $('body').append(xuanAction);
+        }
     }
     else
     {

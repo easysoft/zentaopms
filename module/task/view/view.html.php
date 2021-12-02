@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<?php if(strpos($_SERVER["QUERY_STRING"], 'displayNotice=card') === false):?>
 <div id="mainMenu" class="clearfix">
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div class="linkButton" onclick="linkButtonClicked()">
@@ -55,6 +56,7 @@
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="scrollContent">
+<?php endif;?>
 <?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
