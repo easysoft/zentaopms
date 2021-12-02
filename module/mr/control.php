@@ -402,8 +402,7 @@ class mr extends control
         $MR = $this->mr->getByID($MRID);
         $result = $this->mr->close($MR);
 
-        if($result['result'] == 'fali') return $this->send($result);
-        die(js::locate($result['locate'], 'parent'));
+        return $this->send($result);
     }
 
     /**

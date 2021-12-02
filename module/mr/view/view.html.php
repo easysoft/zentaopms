@@ -111,7 +111,7 @@
               <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve", '', true), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
               <?php endif;?>
               <?php echo html::a(inlink('approval', "mr=$MR->id&action=reject", '', true), '<i class="icon icon-bug"></i> ' . $lang->mr->reject, '', "id='mergeButton' class='btn iframe showinonlybody'" . ($MR->approvalStatus == 'rejected' ? 'disabled' : '')); ?>
-              <?php common::printIcon('mr', 'close', "mr=$MR->id", $MR, 'button', 'off', 'hiddenwin');?>
+              <?php echo html::a(inlink('close', "mr=$MR->id"), '<i class="icon icon-off"></i> ' . $lang->mr->close, '', "class='btn mergeButton'"); ?>
               <?php echo html::a(inlink('edit', "mr=$MR->id"), '<i class="icon icon-edit"></i> ' . str_replace($lang->mr->common, '', $lang->mr->edit), '', "id='mergeButton' class='btn'"); ?>
             <?php endif;?>
             <?php if($rawMR->state == 'closed') echo html::a(inlink('reopen', "mr=$MR->id"), '<i class="icon icon-restart"></i> ' . $lang->mr->reopen, '', "id='mergeButton' class='btn'"); ?>
