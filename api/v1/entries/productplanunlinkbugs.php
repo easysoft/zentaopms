@@ -1,6 +1,6 @@
 <?php
 /**
- * The productplanunlinkbug entry point of ZenTaoPMS.
+ * The productplanunlinkbugs entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class productplanUnlinkBugEntry extends entry
+class productplanUnlinkBugsEntry extends entry
 {
     /**
      * POST method.
