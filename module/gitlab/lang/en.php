@@ -79,9 +79,13 @@ $lang->gitlab->accessLevels[50] = 'Owner';
 
 $lang->gitlab->apiError[0] = 'internal is not allowed in a private group.';
 $lang->gitlab->apiError[1] = 'public is not allowed in a private group.';
+$lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
+$lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 
 $lang->gitlab->errorLang[0] = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1] = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
+$lang->gitlab->errorLang[2] = 'Is too short (minimum is 8 characters)';
+$lang->gitlab->errorLang[3] = 'It should contain only letters, digits, underscore, hyphen and period.  It should not start with hypen, or end with .git or .atom.';
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "Project ID";
