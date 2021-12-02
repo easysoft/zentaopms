@@ -59,7 +59,7 @@ class xuanxuanMessage extends messageModel
 
                 $subcontent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);
                 $subcontent->name = $object->$field;
-                $subcontent->id = $object->id;
+                $subcontent->id = sprintf('%03d', $object->id);
                 $subcontent->count = 1;
                 if($objectType == 'task')
                 {
