@@ -19,7 +19,8 @@
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block a {padding: 10px; display: block;}
-#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: clip;}
+#kanbanList .kanban-card {display: grid;}
+#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 #kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-card.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px}
 #kanbanList .kanban-card.has-left-border {border-left: 2px solid #838a9d;}
@@ -42,7 +43,7 @@
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card > .title {white-space: normal; line-height: 1;}
 
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: block; white-space: nowrap; text-overflow: clip; overflow: hidden;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
 #kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: block; height: 38px;}
 #kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: inline-block;}
