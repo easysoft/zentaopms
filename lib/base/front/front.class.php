@@ -491,7 +491,7 @@ class baseHTML
 
         $gobackLink   = "<a href='javascript:history.go(-1)' class='btn btn-back $class' $misc>{$label}</a>";
         $tab          = $_COOKIE['tab'];
-        $referer      = isset($_SERVER['HTTP_REFERER']) ? strtolower($_SERVER['HTTP_REFERER']) : '';
+        $referer      = isset($_SERVER['HTTP_REFERER']) ? $_SERVER['HTTP_REFERER'] : '';
         $refererParts = parse_url($referer);
 
         if($config->requestType == 'PATH_INFO' and empty($refererParts)) return $gobackLink;
@@ -504,7 +504,7 @@ class baseHTML
         $gobackLink    = isset($gobackList[$tab]) ? $gobackList[$tab] : '';
 
         /* If the link of the referer is not the link of the current page or the link of the index,  the cookie and gobackLink will be updated. */
-        if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", $refererLink))
+        if(!preg_match("/(m=|\/)(index|search|$currentModule)(&f=|-)(index|buildquery|$currentMethod)(&|-|\.)?/", strtolower($refererLink)))
         {
             $gobackList[$tab] = $referer;
             $gobackLink       = $referer;
