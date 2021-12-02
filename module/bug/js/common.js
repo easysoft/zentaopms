@@ -278,6 +278,7 @@ function loadProductExecutions(productID, projectID = 0)
         if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).addClass('required');
     });
+    loadProjectBuilds(projectID);
 }
 
 /**
@@ -391,6 +392,44 @@ function loadExecutionStories(executionID)
     if(typeof(oldStoryID) == 'undefined') oldStoryID = 0;
     link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=' + $('#product').val() + '&branch=' + branch + '&moduleID=0&storyID=' + oldStoryID);
     $('#storyIdBox').load(link, function(){$('#story').chosen();});
+}
+
+/**
+ * Load builds of a project.
+ *
+ * @param  int      $projectID
+ * @access public
+ * @return void
+ */
+function loadProjectBuilds(projectID)
+{
+    branch = $('#branch').val();
+    if(typeof(branch) == 'undefined') branch = 0;
+    productID = $('#product').val();
+    oldOpenedBuild = $('#openedBuild').val() ? $('#openedBuild').val() : 0;
+
+    if(page == 'create')
+    {
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + "&branch=" + branch);
+        $.get(link, function(data)
+        {
+            if(!data) data = '<select id="openedBuild" name="openedBuild" class="form-control" multiple=multiple></select>';
+            $('#openedBuild').replaceWith(data);
+            $('#openedBuild').val(oldOpenedBuild);
+            $('#openedBuild_chosen').remove();
+            $('#openedBuild').next('.picker').remove();
+            $("#openedBuild").chosen();
+        })
+    }
+    else
+    {
+        link = createLink('build', 'ajaxGetProjectBuilds', 'projectID=' + projectID + '&productID=' + productID + '&varName=openedBuild&build=' + oldOpenedBuild + '&branch=' + branch);
+        $('#openedBuildBox').load(link, function(){$(this).find('select').val(oldOpenedBuild).chosen()});
+
+        oldResolvedBuild = $('#resolvedBuild').val() ? $('#resolvedBuild').val() : 0;
+        link = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + '&varName=resolvedBuild&build=' + oldResolvedBuild + '&branch=' + branch);
+        $('#resolvedBuildBox').load(link, function(){$(this).find('select').val(oldResolvedBuild).chosen()});
+    }
 }
 
 /**

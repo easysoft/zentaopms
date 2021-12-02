@@ -883,6 +883,7 @@ class bug extends control
         $bug             = $this->bug->getById($bugID);
         $productID       = $bug->product;
         $executionID     = $bug->execution;
+        $projectID       = $bug->project;
         $currentModuleID = $bug->module;
         $this->bug->checkBugExecutionPriv($bug);
 
@@ -927,6 +928,10 @@ class bug extends control
         if($executionID)
         {
             $openedBuilds = $this->build->getExecutionBuildPairs($executionID, $productID, $bug->branch, 'noempty,noterminate,nodone');
+        }
+        elseif($projectID)
+        {
+            $openedBuilds = $this->build->getProjectBuildPairs($projectID, $productID, $bug->branch, 'noempty,noterminate,nodone');
         }
         else
         {
