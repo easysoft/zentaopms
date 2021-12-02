@@ -651,6 +651,7 @@ class gitlab
         while(true)
         {
             $results = $this->fetch($api, $params);
+            $params->page ++;
             $allResults = $allResults + $results;
             if(count($results) < 100) break;
         }
