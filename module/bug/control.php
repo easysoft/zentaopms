@@ -1403,7 +1403,7 @@ class bug extends control
                     die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                 }
             }
-            if(isonlybody()) die(js::closeModal('parent.parent'));
+            if(isonlybody()) die(js::reload('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 die(array('status' => 'success', 'data' => $bugID));
