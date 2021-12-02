@@ -49,7 +49,6 @@ class xuanxuanMessage extends messageModel
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
                 unset($_GET['onlybody']);
                 $url = $server . helper::createLink($objectType, 'view', "id=$objectID", 'html');
-                $url = "xxc:openInApp/zentao-integrated/" . urlencode($url);
 
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
@@ -68,13 +67,14 @@ class xuanxuanMessage extends messageModel
                     $subcontent->headSubTitle = $object->execuName;
                     $subcontent->parent       = $object->execution;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('execution', 'task', "id=$object->execution", 'html'));
+                    $subcontent->cardURL      = $url;
                 }
                 elseif($objectType == 'story')
                 {
                     $subcontent->headTitle = $object->productName;
                     $subcontent->parent    = $object->product;
                     $subcontent->parentURL = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('product', 'browse', "id=$object->product", 'html'));
-
+                    $subcontent->cardURL   = $url;
                 }
                 elseif($objectType == 'bug')
                 {
@@ -83,6 +83,7 @@ class xuanxuanMessage extends messageModel
                     $subcontent->headSubTitle = $object->execuName;
                     $subcontent->parent       = $object->$parentType;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
+                    $subcontent->cardURL      = $url;
                 }
 
                 $contentData = new stdclass();
@@ -91,7 +92,7 @@ class xuanxuanMessage extends messageModel
                 $contentData->contentType = "zentao-$objectType-$actionType";
                 $contentData->content     = json_encode($subcontent);
                 $contentData->actions     = array();
-                $contentData->url         = $url;
+                $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
                 $content = json_encode($contentData);
 
                 if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
