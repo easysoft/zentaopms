@@ -403,7 +403,7 @@ class build extends control
             $params = ($type == 'all') ? 'noempty' : 'noempty, noterminate, nodone';
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params, $build);
             if($isJsonView)  die(json_encode($builds));
-            if(!$isJsonView) die(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
+            die(html::select($varName . '[]', $builds , '', 'size=4 class=form-control multiple'));
         }
         if($varName == 'resolvedBuild')
         {
@@ -412,7 +412,7 @@ class build extends control
             $params = ($type == 'all') ? '' : 'noterminate, nodone';
             $builds = $this->build->getProjectBuildPairs($projectID, $productID, $branch, $params, $build);
             if($isJsonView)  die(json_encode($builds));
-            if(!$isJsonView) die(html::select($varName, $builds, $build, "class='form-control'"));
+            die(html::select($varName, $builds, $build, "class='form-control'"));
         }
     }
 
