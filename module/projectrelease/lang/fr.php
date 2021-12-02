@@ -26,3 +26,4 @@ $lang->projectrelease->unlinkStory      = "Unlink {$lang->SRCommon}";
 $lang->projectrelease->unlinkBug        = 'Unlink Bug';
 $lang->projectrelease->export           = 'Export HTML';
 $lang->projectrelease->browseAction     = "Release List";
+$lang->projectrelease->notify           = 'notify';

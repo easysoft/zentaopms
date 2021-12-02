@@ -920,6 +920,7 @@ class programplanModel extends model
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.project')->eq($executionID)
             ->andWhere('t2.grade')->eq(1)
+            ->andWhere('t2.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->orderBy('t2.id desc')
             ->fetchPairs();
