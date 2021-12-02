@@ -355,13 +355,8 @@ $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = 'Dyna
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = 'Project Weekly';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = 'Estimate';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = 'Plan Gantt Chart';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = 'Progress Chart';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = 'Project Issue';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = 'Project Risk';
-$lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = 'Dynamics';
+$lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt = 'Plan Gantt Chart';
+$lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
 $lang->block->modules['product'] = new stdclass();
 $lang->block->modules['product']->availableBlocks = new stdclass();

@@ -535,6 +535,7 @@ $lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
 $lang->action->label->kanbancolumn = 'Kanban column|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
+$lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

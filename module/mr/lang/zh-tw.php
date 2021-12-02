@@ -6,7 +6,6 @@ $lang->mr->browse       = "瀏覽{$lang->mr->common}";
 $lang->mr->list         = $lang->mr->browse;
 $lang->mr->edit         = "編輯{$lang->mr->common}";
 $lang->mr->delete       = "刪除{$lang->mr->common}";
-$lang->mr->view         = "{$lang->mr->common}詳情";
 $lang->mr->accept       = "合併請求";
 $lang->mr->source       = '源項目分支';
 $lang->mr->target       = '目標項目分支';

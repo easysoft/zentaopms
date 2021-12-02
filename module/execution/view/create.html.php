@@ -36,7 +36,7 @@
 <?php js::set('errorSameProducts', $lang->execution->errorSameProducts);?>
 <?php js::set('errorSameBranches', $lang->execution->errorSameBranches);?>
 <?php js::set('productID', empty($productID) ? 0 : $productID);?>
-<?php js::set('isStage', false);?>
+<?php js::set('isStage', $isStage);?>
 <?php js::set('copyExecutionID', $copyExecutionID);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <?php js::set('projectCommon', $lang->project->common);?>
