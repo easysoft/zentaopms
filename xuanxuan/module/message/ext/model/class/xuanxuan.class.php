@@ -79,7 +79,8 @@ class xuanxuanMessage extends messageModel
                 elseif($objectType == 'bug')
                 {
                     $parentType = empty($object->productName) ? 'project' : 'product';
-                    $subcontent->headTitle    = $object[$parentType . 'Name'];
+                    $parentNameKey = $parentType . 'Name';
+                    $subcontent->headTitle    = $object->$parentNameKey;
                     $subcontent->headSubTitle = $object->execuName;
                     $subcontent->parent       = $object->$parentType;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));

@@ -36,11 +36,10 @@ $(document).on('showapp', function(e, app)
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {bottom: 40px!important; z-index: 1010!important;}
 #xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}
-#xx-embed-container .xx-embed {width: 280px; height: 100%; transition-property: transform, opacity!important; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
+#xx-embed-container .xx-embed {width: 280px; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
 #xx-embed-container .xx-embed.xx-embed-hidden,
 #xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
-#xx-embed-container .xx-embed.has-chat-view {width: 900px!important;}
 </style>
 <?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
 <?php js::set('xuanConfig', $xuanConfig); ?>
@@ -93,6 +92,11 @@ function setXuanClientLarge()
 function setXuanClientSmall()
 {
     xuan._element.style.minWidth = '280px';
+}
+
+function closeXuanClient()
+{
+    xuan.toggleCollapse();
 }
 
 /* Hide xuan popover on click page */
