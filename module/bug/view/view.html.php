@@ -123,7 +123,6 @@
             <table class="table table-data">
               <tbody>
                 <tr valign='middle'>
-
                   <th class='thWidth'><?php echo $lang->bug->product;?></th>
                   <td><?php if(!common::printLink('product', 'view', "productID=$bug->product", $product->name, '', "data-app='product'")) echo $product->name;?></td>
                 </tr>
