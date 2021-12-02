@@ -7,7 +7,6 @@ $lang->mr->browse       = "Browse";
 $lang->mr->list         = "List";
 $lang->mr->edit         = "Edit";
 $lang->mr->delete       = "Delete";
-$lang->mr->view         = "View";
 $lang->mr->accept       = "Accept";
 $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
