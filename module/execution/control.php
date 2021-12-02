@@ -222,7 +222,7 @@ class execution extends control
         $product = $this->product->getById($productID);
 
         /* Display of branch label. */
-        $isShowBranch = $this->loadModel('branch')->isShowBranch($productID, $moduleID, $executionID);
+        $showBranch = $this->loadModel('branch')->showBranch($productID, $moduleID, $executionID);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
@@ -261,7 +261,7 @@ class execution extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->isShowBranch = $isShowBranch;
+        $this->view->showBranch   = $showBranch;
 
         $this->display();
     }
@@ -799,7 +799,7 @@ class execution extends control
         }
 
         /* Display of branch label. */
-        $isShowBranch = $this->loadModel('branch')->isShowBranch($this->cookie->storyProductParam, $this->cookie->storyModuleParam, $executionID);
+        $showBranch = $this->loadModel('branch')->showBranch($this->cookie->storyProductParam, $this->cookie->storyModuleParam, $executionID);
 
         /* Get execution's product. */
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
@@ -831,7 +831,7 @@ class execution extends control
         $this->view->setModule         = true;
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
-        $this->view->isShowBranch      = $isShowBranch;
+        $this->view->showBranch        = $showBranch;
 
         $this->display();
     }
