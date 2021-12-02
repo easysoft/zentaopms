@@ -7,7 +7,7 @@ $lang->gitlab->create            = 'Create GitLab';
 $lang->gitlab->edit              = 'Edit GitLab';
 $lang->gitlab->view              = 'View GitLab';
 $lang->gitlab->bindUser          = 'Bind User';
-$lang->gitlab->webhook           = 'webhook';
+$lang->gitlab->webhook           = 'Webhook';
 $lang->gitlab->bindProduct       = 'Import Product';
 $lang->gitlab->importIssue       = 'Import Issue';
 $lang->gitlab->delete            = 'Delete GitLab';
@@ -84,7 +84,7 @@ $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'
 
 $lang->gitlab->errorLang[0] = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1] = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
-$lang->gitlab->errorLang[2] = 'Is too short (minimum is 8 characters)';
+$lang->gitlab->errorLang[2] = 'Password is too short (minimum is 8 characters)';
 $lang->gitlab->errorLang[3] = 'It should contain only letters, digits, underscore, hyphen and period.  It should not start with hypen, or end with .git or .atom.';
 
 $lang->gitlab->project = new stdclass;
