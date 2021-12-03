@@ -231,10 +231,13 @@ class testcaseModel extends model
      */
     public function getModuleCases($productID, $branch = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $browseType = '', $auto = 'no')
     {
-        return $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
-            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
-            ->where('t1.product')->eq((int)$productID)
-            ->beginIF($this->app->tab == 'project')->andWhere('t1.project')->eq($this->session->project)->fi()
+        $stmt = $this->dao->select('t1.*, t2.title as storyTitle')->from(TABLE_CASE)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id');
+
+        if($this->app->tab == 'project') $stmt = $stmt->leftJoin(TABLE_PROJECTCASE)->alias('t3')->on('t1.id=t3.case');
+
+        return $stmt ->where('t1.product')->eq((int)$productID)
+            ->beginIF($this->app->tab == 'project')->andWhere('t3.project')->eq($this->session->project)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t1.module')->in($moduleIdList)->fi()
             ->beginIF($browseType == 'wait')->andWhere('t1.status')->eq($browseType)->fi()

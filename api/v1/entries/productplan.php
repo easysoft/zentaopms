@@ -59,8 +59,19 @@ class productplanEntry extends Entry
         $data = $this->getData();
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
-        $plan = $this->productplan->getByID($planID);
-        $this->sendSuccess(200, $this->format($plan, 'begin:date,end:date'));
+        /* Get plan info. */
+        $control = $this->loadController('productplan', 'view');
+        $control->view($planID);
+
+        $data = $this->getData();
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
+        $plan = $data->data->plan;
+        $plan->stories = $data->data->planStories;
+        $plan->bugs    = $data->data->planBugs;
+
+        $this->send(200, $this->format($plan, 'begin:date,end:date,deleted:bool,stories:array,bugs:array'));
     }
 
     /**

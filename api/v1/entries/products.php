@@ -79,7 +79,7 @@ class productsEntry extends entry
                     }
                 }
 
-                $result[] = $this->format($product, 'createdDate:time');
+                $result[] = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
             }
 
             $data = array();
@@ -113,11 +113,11 @@ class productsEntry extends entry
         $control->create($this->request('program', 0));
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         /* Response */
         $product = $this->loadModel('product')->getByID($data->id);
-        $product = $this->format($product, 'createdDate:time,whitelist:[]string');
+        $product = $this->format($product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user');
 
         $this->send(200, $product);
     }

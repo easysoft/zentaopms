@@ -29,17 +29,11 @@ class productEntry extends Entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $product = $this->format($data->data->product, 'createdDate:time');
+        $product = $this->format($data->data->product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user,feedback:user');
 
         $this->loadModel('testcase');
         $product->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
 
-        $users = $data->data->users;
-        $product->PO        = $this->formatUser($product->PO, $users);
-        $product->QD        = $this->formatUser($product->QD, $users);
-        $product->RD        = $this->formatUser($product->RD, $users);
-        $product->createdBy = $this->formatUser($product->createdBy, $users);
-        if(isset($product->feedback)) $product->feedback = $this->formatUser($product->feedback, $users);
         if(!$fields) return $this->send(200, $product);
 
         /* Set other fields. */

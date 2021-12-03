@@ -705,4 +705,29 @@ class apiModel extends model
             'addedDate'    => helper::now(),
         );
     }
+
+    /**
+     * Get Type list.
+     *
+     * @param  int   $libID
+     * @access public
+     * @return void
+     */
+    public function getTypeList($libID)
+    {
+        $typeList = array();
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $typeList[$key] = $item;
+        }
+
+        /* Get all struct by libID. */
+        $structs = $this->getStructListByLibID($libID);
+        foreach($structs as $struct)
+        {
+            $typeList[$struct->id] = $struct->name;
+        }
+
+        return $typeList;
+    }
 }

@@ -23,7 +23,7 @@ class programEntry extends Entry
         $program = $this->loadModel('program')->getByID($programID);
         if(!$program) return $this->send404();
 
-        $this->send(200, $this->format($program, 'openedDate:time,realBegan:date,realEnd:date,deleted:bool'));
+        $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
 
     /**
@@ -47,7 +47,7 @@ class programEntry extends Entry
 
         $this->getData();
         $program = $this->program->getByID($programID);
-        $this->send(200, $this->format($program, 'openedDate:time'));
+        $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
 
     /**

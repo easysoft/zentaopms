@@ -41,19 +41,12 @@ class programsEntry extends Entry
         foreach($programs as $program)
         {
             if(isset($progressList->{$program->id})) $program->progress = $progressList->{$program->id};
-            $param = $this->format($program, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
+            $program = $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList');
 
             if($mergeChildren)
             {
                 unset($program->desc);
-                $program->openedBy   = zget($users, $program->openedBy);
-                $program->closedBy   = zget($users, $program->closedBy);
-                $program->canceledBy = zget($users, $program->canceledBy);
-                $program->PO         = zget($users, $program->PO);
-                $program->PM         = zget($users, $program->PM);
-                $program->QD         = zget($users, $program->QD);
-                $program->RD         = zget($users, $program->RD);
-                $program->end        = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
+                $program->end = $program->end == LONG_TIME ? $this->lang->program->longTime : $program->end;
 
                 $programBudget = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? round((float)$program->budget / 10000, 2) . $this->lang->project->tenThousand : round((float)$program->budget, 2);
                 $program->labelBudget = $program->budget != 0 ? zget($this->lang->project->currencySymbol, $program->budgetUnit) . ' ' . $programBudget : $this->lang->project->future;
@@ -96,7 +89,7 @@ class programsEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $program = $this->loadModel('program')->getByID($data->id);
-        $this->send(201, $this->format($program, 'openedDate:time,whitelist:stringList'));
+        $this->send(201, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
     }
 
     /**

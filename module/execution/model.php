@@ -1374,6 +1374,10 @@ class executionModel extends model
         {
             $link = helper::createLink($module, 'browse', "executionID=%s&from=execution");
         }
+        elseif($module == 'testreport' and $method == 'create')
+        {
+            $link = helper::createLink('execution', 'testtask', "executionID=%s");
+        }
         else
         {
             $link = helper::createLink($module, $method, "executionID=%s");
