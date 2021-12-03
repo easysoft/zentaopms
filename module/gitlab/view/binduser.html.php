@@ -37,11 +37,11 @@
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
             <td></td>
-         </tr>
-         <?php endforeach;?>
-         <?php foreach($gitlabUsers as $gitlabUser):?>
-         <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
-         <tr>
+          </tr>
+          <?php endforeach;?>
+          <?php foreach($gitlabUsers as $gitlabUser):?>
+          <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
+          <tr>
             <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td>
               <strong><?php echo $gitlabUser->realname;?></strong>
@@ -58,8 +58,8 @@
               <?php endif;?>
               <?php endif;?>
             </td>
-         </tr>
-         <?php endforeach;?>
+          </tr>
+          <?php endforeach;?>
         </tbody>
         <tfoot>
           <tr>
