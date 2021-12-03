@@ -72,7 +72,7 @@
             <th><?php echo $lang->gitlab->user->avatar;?></th>
             <td>
               <div id="avatarUpload" class="text-center">
-                <?php echo html::avatar(array('avatar'=>' ', 'account'=>''), 50); ?>
+                <?php echo html::avatar(array('avatar'=>$defaultTheme . 'images/repo/avatar.jpeg', 'account'=>''), 50); ?>
                 <input type="file" name="avatar" id="files" class="form-control hidden">
                 <?php echo html::a('javascript:void(0);', '<i class="icon icon-pencil icon-2x"></i>', '', "class='btn-avatar' id='avatarUploadBtn' data-toggle='tooltip' data-container='body' data-placement='bottom' title='{$lang->gitlab->user->avatar}'");?>
               </div>
