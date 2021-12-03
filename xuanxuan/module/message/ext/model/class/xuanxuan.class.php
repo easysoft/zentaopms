@@ -94,6 +94,7 @@ class xuanxuanMessage extends messageModel
                 $contentData->title       = $title;
                 $contentData->subtitle    = '';
                 $contentData->contentType = "zentao-$objectType-$actionType";
+                $contentData->parentType  = $subcontent->parentType;
                 $contentData->content     = json_encode($subcontent);
                 $contentData->actions     = array();
                 $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
