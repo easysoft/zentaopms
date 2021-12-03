@@ -856,6 +856,11 @@ class project extends control
         echo $this->fetch('execution', 'all', "status=$status&projectID=$projectID&orderBy=$orderBy&productID=$productID&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
 
+    public function batchCreate($projectID = 0, $productID = 0, $planID = 0)
+    {
+        echo $this->fetch('programplan', 'create', "projectID=$projectID&productID=$productID&planID=$planID");
+    }
+
     /**
      * Project qa dashboard.
      *
