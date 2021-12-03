@@ -292,6 +292,7 @@ class mailModel extends model
             }
 
             /* Remove deleted users. */
+            $this->app->loadConfig('message');
             $users      = $this->loadModel('user')->getPairs('nodeleted|all');
             $blockUsers = isset($this->config->message->blockUser) ? explode(',', $this->config->message->blockUser) : array();
             foreach($toList as $key => $to) if(!isset($users[trim($to)]) or in_array(trim($to), $blockUsers)) unset($toList[$key]);
