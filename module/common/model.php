@@ -848,7 +848,9 @@ class commonModel extends model
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
 
-                    if($currentModule == 'report' and $method == 'annualData') continue; // Skip some pages that do not require permissions.
+                    /* Skip some pages that do not require permissions.*/
+                    if($currentModule == 'report' and $method == 'annualData') continue; 
+                    if($currentModule == 'my' and $currentMethod == 'team') continue;
 
                     if(common::hasPriv($currentModule, $method))
                     {
@@ -2161,7 +2163,7 @@ EOD;
             $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
-            if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;
+            if(($menu == 'my' && $method != 'team')or $menu == 'index' or $module == 'tree') return true;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
             if($module == 'action' and $method == 'comment') return true;
