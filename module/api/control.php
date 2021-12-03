@@ -53,10 +53,11 @@ class api extends control
                 $libID     = $api->lib;
                 $api->desc = htmlspecialchars_decode($api->desc);
 
-                $this->view->api     = $api;
-                $this->view->apiID   = $apiID;
-                $this->view->version = $version;
-                $this->view->actions = $apiID ? $this->action->getList('api', $apiID) : array();
+                $this->view->api      = $api;
+                $this->view->apiID    = $apiID;
+                $this->view->version  = $version;
+                $this->view->typeList = $this->api->getTypeList($api->lib);
+                $this->view->actions  = $apiID ? $this->action->getList('api', $apiID) : array();
             }
         }
         else
@@ -64,7 +65,8 @@ class api extends control
             /* Get module api list. */
             $apiList = $this->api->getListByModuleId($libID, $moduleID, $release);
 
-            $this->view->apiList = $apiList;
+            $this->view->apiList  = $apiList;
+            $this->view->typeList = $this->api->getTypeList($api->lib);
         }
 
         $this->setMenu($libID);
@@ -435,12 +437,7 @@ class api extends control
 
         $this->setMenu($api->lib);
 
-        $options = array();
-        foreach($this->lang->api->paramsTypeOptions as $key => $item)
-        {
-            $options[] = array('label' => $item, 'value' => $key);
-        }
-        $this->view->typeOptions      = $options;
+        $this->getTypeOptions($api->lib);
         $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
         $this->view->user             = $this->app->user->account;
         $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
@@ -835,7 +832,7 @@ EOT;
     /**
      * Get options of type.
      *
-     * @param  string $keyField
+     * @param  int   $libID
      * @access public
      * @return void
      */
@@ -855,5 +852,4 @@ EOT;
         }
         $this->view->typeOptions = $options;
     }
-
 }

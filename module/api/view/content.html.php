@@ -89,30 +89,24 @@
           </table>
           <?php endif;?>
           <?php
-          function parseTree($data, $level = 0)
+          function parseTree($data, $typeList, $level = 0)
           {
-            $str   = '<tr>';
-            $field = '';
-            for($i = 0; $i < $level; $i++)
-            {
-              $field .= '&nbsp;&nbsp;∟&nbsp;&nbsp;';
-            }
-            $field   .= $data['field'];
-            $str     .= '<td>' . $field . '</td>';
-            $str     .= '<td>' . $data['paramsType'] . '</td>';
-            $require = $data['required'] ? '是' : '否';
-            $str     .= '<td>' . $require . '</td>';
-            $str     .= '<td>' . $data['desc'] . '</td>';
-            $str     .= '</tr>';
-            if(isset($data['children']) && count($data['children']) > 0)
-            {
-              $level++;
-              foreach($data['children'] as $item)
+              $str   = '<tr>';
+              $field = '';
+              for($i = 0; $i < $level; $i++) $field .= '&nbsp;&nbsp;'. ($i == $level-1 ? '∟' : '&nbsp;') . '&nbsp;&nbsp;';
+              $field   .= $data['field'];
+              $str     .= '<td>' . $field . '</td>';
+              $str     .= '<td>' . zget($typeList, $data['paramsType'], '') . '</td>';
+              $require = $data['required'] ? '是' : '否';
+              $str     .= '<td>' . $require . '</td>';
+              $str     .= '<td>' . $data['desc'] . '</td>';
+              $str     .= '</tr>';
+              if(isset($data['children']) && count($data['children']) > 0)
               {
-                $str .= parseTree($item, $level);
+                  $level++;
+                  foreach($data['children'] as $item) $str .= parseTree($item, $typeList, $level);
               }
-            }
-            return $str;
+              return $str;
           }
           ?>
           <?php if($api->params['params']):?>
@@ -126,9 +120,7 @@
               <th><?php echo $lang->api->req->desc;?></th>
             </tr>
             </thead>
-            <tbody>
-              <?php foreach($api->params['params'] as $item) echo parseTree($item);?>
-            </tbody>
+            <tbody><?php foreach($api->params['params'] as $item) echo parseTree($item, $typeList);?></tbody>
           </table>
           <?php endif;?>
           <?php if($api->paramsExample):?>
@@ -147,7 +139,7 @@
             </tr>
             </thead>
             <tbody>
-              <?php foreach($api->response as $item) echo parseTree($item);?>
+              <?php foreach($api->response as $item) echo parseTree($item, $typeList);?>
             </tbody>
           </table>
           <?php endif;?>
