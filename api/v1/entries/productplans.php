@@ -46,7 +46,7 @@ class productplansEntry extends entry
                 }
                 else
                 {
-                    $result[$plan->id] = $plan;
+                    $result[$plan->id] = $this->format($plan, 'begin:date,end:date,deleted:bool,project:int');
                 }
             }
 
@@ -72,6 +72,9 @@ class productplansEntry extends entry
 
         $fields = 'branch,begin,end,title,desc';
         $this->batchSetPost($fields);
+        $this->setPost('product', $productID);
+        $this->setPost('parent', $this->request('parent', 0));
+        $this->setPost('branch', $this->request('branch', 0));
 
         $control = $this->loadController('productplan', 'create');
         $control->create($productID, $this->param('branch', 0), $this->param('parent', 0));
@@ -82,7 +85,7 @@ class productplansEntry extends entry
             $plan = $this->loadModel('productplan')->getByID($data->id);
             $plan->stories = array();
             $plan->bugs    = array();
-            return $this->send(200, $plan);
+            return $this->send(200, $this->format($plan, 'begin:date,end:date,deleted:bool,project:int'));
         }
 
         $this->sendError(400, array('message' => isset($data->message) ? $data->message : 'error'));
