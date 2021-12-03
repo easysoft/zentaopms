@@ -14,7 +14,7 @@ class userEntry extends Entry
     /**
      * GET method.
      *
-     * @param  int    $userID
+     * @param  int|string $userID
      * @access public
      * @return void
      */
@@ -22,6 +22,13 @@ class userEntry extends Entry
     {
         /* Get my info defaultly. */
         if(!$userID) return $this->getInfo($this->param('fields', ''));
+
+        if(!is_numeric($userID))
+        {
+            $user = $this->loadModel('user')->getById($userID, 'account');
+            if(!$user) return $this->send404();
+            $userID = $user->id;
+        }
 
         /* Get user by id. */
         $control = $this->loadController('user', 'profile');
@@ -349,17 +356,25 @@ class userEntry extends Entry
     /**
      * PUT method.
      *
-     * @param  int    $userID
+     * @param  int|string $userID
      * @access public
      * @return void
      */
     public function put($userID)
     {
+        if(!is_numeric($userID))
+        {
+            $user = $this->loadModel('user')->getById($userID, 'account');
+            if(!$user) return $this->send404();
+            $userID = $user->id;
+        }
+
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
         $fields = 'dept,realname,email,commiter,gender';
         $this->batchSetPost($fields, $oldUser);
+        $this->setPost('account', $oldUser->account);
 
         if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
 
@@ -380,12 +395,19 @@ class userEntry extends Entry
     /**
      * DELETE method.
      *
-     * @param  int    $userID
+     * @param  int|string $userID
      * @access public
      * @return void
      */
     public function delete($userID)
     {
+        if(!is_numeric($userID))
+        {
+            $user = $this->loadModel('user')->getById($userID, 'account');
+            if(!$user) return $this->send404();
+            $userID = $user->id;
+        }
+
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'delete');

@@ -159,13 +159,13 @@ $(function()
     {
         data:          processKanbanData(),
         laneNameWidth: 5,
+        virtualize:    true,
         droppable:
         {
             selector:     '.kanban-item:not(.kanban-item-span)',
             target:       findDropColumns,
             finish:       handleFinishDrop,
             mouseButton: 'left'
-        },
-        virtualize: true
+        }
     });
 });

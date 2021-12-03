@@ -291,8 +291,9 @@ $lang->action->label->syncprogram           = 'start';
 $lang->action->label->syncproject           = 'start';
 $lang->action->label->syncexecution         = 'start';
 $lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
-$lang->action->label->createmr              = 'MR Linked';
-$lang->action->label->mergedmr              = 'MR Merged';
+$lang->action->label->createmr              = 'Merge Request Linked';
+$lang->action->label->deletemr              = 'Merge Request Unlinked';
+$lang->action->label->mergedmr              = 'Merge Request Merged';
 $lang->action->label->reopen                = 'Reopen';
 $lang->action->label->approve               = 'Passed';
 $lang->action->label->reject                = 'Rejected';
@@ -535,6 +536,7 @@ $lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
 $lang->action->label->kanbancolumn = 'Kanban column|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
+$lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

@@ -115,6 +115,13 @@ function processKanbanData(key, programsData)
     return {id: kanbanId, columns: columns, lanes: lanes};
 }
 
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight)
+{
+    if (col.type !== 'doingProject') return colHeight;
+    return colCards.length * 62;
+}
+
 $(function()
 {
     /* Init all kanbans */
@@ -122,6 +129,11 @@ $(function()
     {
         var $kanban = $('#kanban-' + key);
         if(!$kanban.length) return;
-        $kanban.kanban({data: processKanbanData(key, programsData), virtualize: true});
+        $kanban.kanban(
+        {
+            data:          processKanbanData(key, programsData),
+            virtualize:    true,
+            calcColHeight: calcColHeight
+        });
     });
 });

@@ -705,7 +705,7 @@ class mrModel extends model
     public function approve($MR, $action = 'approve', $comment = '')
     {
         $this->loadModel('action');
-        $actionID = $this->action->create('mrapproval', $MR->id, $action);
+        $actionID = $this->action->create('mr', $MR->id, $action);
 
         $oldMR = $MR;
         if(isset($MR->status) and $MR->status == 'opened')
@@ -1080,7 +1080,9 @@ class mrModel extends model
      */
     public function unlink($MRID, $productID, $type, $linkID)
     {
-        return $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
+        $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
+
+        $this->loadModel('action')->create($type, $linkID, 'deletemr');
     }
 
     /**

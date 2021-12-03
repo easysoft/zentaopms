@@ -559,6 +559,7 @@ class gitlab
         $list = $this->fetch($api, $params);
 
         $commits = array();
+        $files   = array();
         foreach($list as $commit)
         {
             if(!is_object($commit)) continue;

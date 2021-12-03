@@ -32,7 +32,7 @@ class releasesEntry extends entry
         {
             $result   = array();
             $releases = $data->data->releases;
-            foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date');
+            foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date,mailto:userList');
 
             return $this->send(200, array('total' => count($result), 'releases' => $result));
         }

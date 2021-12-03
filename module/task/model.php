@@ -409,7 +409,7 @@ class taskModel extends model
             $mails[$i]->actionID = $actionID;
         }
 
-        if(!dao::isError()) 
+        if(!dao::isError())
         {
             $this->loadModel('score')->create('ajax', 'batchCreate');
             $this->loadModel('kanban')->updateLane($executionID, 'task');
@@ -1728,7 +1728,7 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        if($task->status == 'done' && !dao::isError()) 
+        if($task->status == 'done' && !dao::isError())
         {
             $this->loadModel('score')->create('task', 'finish', $taskID);
             $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
@@ -2164,7 +2164,7 @@ class taskModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
         if(!empty($taskTeam))

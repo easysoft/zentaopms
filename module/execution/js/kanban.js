@@ -880,7 +880,7 @@ $(function()
         var menuCreator = window.menuCreators[menuType];
         if(!menuCreator) return;
 
-        var options = $.extend({event, $trigger: $trigger}, $trigger.data());
+        var options = $.extend({event: event, $trigger: $trigger}, $trigger.data());
         var items   = menuCreator(options);
         if(!items || !items.length) return;
 
@@ -921,7 +921,7 @@ $(function()
     {
         $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy), function(data)
         {
-            if(data && lastUpdateData !== lastUpdateData)
+            if(data && lastUpdateData !== data)
             {
                 lastUpdateData = data;
                 kanbanGroup = $.parseJSON(data);

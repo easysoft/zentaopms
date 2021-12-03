@@ -615,6 +615,21 @@ class baseEntry
                 $array = array();
                 if(!empty($value)) foreach($value as $v) $array[] = $v;
                 return $array;
+            case 'user':
+                if(empty($value)) return null;
+                if(empty($this->users)) $this->users = $this->dao->select('id,account,avatar,realname')->from(TABLE_USER)->fetchAll('account');
+                return zget($this->users, $value, null);
+            case 'userList':
+                $values = explode(',', $value);
+                if(empty($values)) return array();
+
+                $userList = array();
+                foreach($values as $val)
+                {
+                    $val = $this->cast($val, 'user');
+                    if($val) $userList[] = $val;
+                }
+                return $userList;
             default:
                 return $value;
         }

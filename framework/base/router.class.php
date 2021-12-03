@@ -2118,6 +2118,7 @@ class baseRouter
         $view->methodVar   = $this->config->methodVar;
         $view->viewVar     = $this->config->viewVar;
         $view->sessionVar  = $this->config->sessionVar;
+        $view->systemMode  = $this->config->systemMode;
 
         $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
