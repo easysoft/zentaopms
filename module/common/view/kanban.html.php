@@ -40,7 +40,7 @@
 #kanbanList .kanban-card.kanban-card-span:hover,
 #kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card:hover {box-shadow: none;}
 #kanbanList .kanban-card.kanban-card-span > .title,
-#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card > .title {white-space: normal; line-height: 1;}
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card > .title {white-space: nowrap; line-height: 1;}
 
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center;}
 #kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
