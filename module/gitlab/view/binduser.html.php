@@ -51,13 +51,11 @@
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
             <td>
               <?php if(isset($bindedUsers[$gitlabUser->zentaoAccount])):?>
-                <?php if(!empty(zget($userPairs, $gitlabUser->zentaoAccount, ''))):?>
-                  <?php echo $lang->gitlab->binded;?>
-                <?php else:?>
-                  <?php echo '<span class="text-red">' . $lang->gitlab->bindedError . '</span>';?>
-                <?php endif;?>
+              <?php if(!empty(zget($userPairs, $gitlabUser->zentaoAccount, ''))):?>
+              <?php echo $lang->gitlab->binded;?>
               <?php else:?>
-                <?php echo '';?>
+              <?php echo '<span class="text-red">' . $lang->gitlab->bindedError . '</span>';?>
+              <?php endif;?>
               <?php endif;?>
             </td>
          </tr>
