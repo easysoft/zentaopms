@@ -880,7 +880,7 @@ $(function()
         var menuCreator = window.menuCreators[menuType];
         if(!menuCreator) return;
 
-        var options = $.extend({event, $trigger: $trigger}, $trigger.data());
+        var options = $.extend({event: event, $trigger: $trigger}, $trigger.data());
         var items   = menuCreator(options);
         if(!items || !items.length) return;
 
