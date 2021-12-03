@@ -57,6 +57,7 @@ class programplanModel extends model
         $plans = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.type')->eq('stage')
+            ->andWhere('t1.product')->eq($productID)
             ->beginIF($browseType == 'all')->andWhere('t2.project')->eq($executionID)->fi()
             ->beginIF($browseType == 'parent')->andWhere('t2.parent')->eq($executionID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()

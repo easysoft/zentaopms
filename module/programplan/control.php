@@ -130,7 +130,9 @@ class programplan extends control
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
+        $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->project     = $project;
+        $this->view->productID   = $productID;
         $this->view->stages      = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
         $this->view->programPlan = $this->project->getById($planID, 'stage');
         $this->view->plans       = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');

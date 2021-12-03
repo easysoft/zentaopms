@@ -3056,11 +3056,13 @@ class execution extends control
 
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
         if($from == 'project')
         {
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->saveState($projectID, $projects);
-            $this->view->project = $this->loadModel('project')->getByID($projectID);
+            $project = $this->loadModel('project')->getByID($projectID);
+            $this->view->project = $project;
             $this->project->setMenu($projectID);
         }
 
@@ -3096,7 +3098,7 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
-
+        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->display();
     }
 
