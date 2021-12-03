@@ -103,7 +103,7 @@ body {margin-bottom: 25px;}
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
-  <?php if(!helper::inOnlyBodyMode()): ?>
+  <?php if(!isonlybody()): ?>
   <div class="btn-toolbar pull-right">
     <?php
     if(!isset($browseType)) $browseType = '';
@@ -366,7 +366,7 @@ body {margin-bottom: 25px;}
   </div>
 </div>
 <?php js::set('replaceID', 'taskList')?>
-<?php if(helper::inOnlyBodyMode()) js::set('modalWidthReset', 1200) ?>
+<?php if(isonlybody()) js::set('modalWidthReset', 1200) ?>
 <script>
 $(function()
 {
