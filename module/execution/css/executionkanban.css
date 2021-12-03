@@ -5,3 +5,4 @@
 #kanbanList .kanban-col[data-type="project"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
 #kanbanList .kanban-lane-name > .text {display: none;}
 #kanbanList .kanban-item.link-block > a {cursor: move;}
+#kanbanList .kanban-lane + .kanban-lane {margin-top: 2px!important;}

@@ -1027,7 +1027,7 @@ class productModel extends model
             ->orWhere('t2.PM')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');

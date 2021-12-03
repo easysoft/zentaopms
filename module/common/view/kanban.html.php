@@ -22,7 +22,7 @@
 #kanbanList .kanban-card {display: grid;}
 #kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 #kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
-#kanbanList .kanban-card.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px}
+#kanbanList .kanban-card.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px; width: 24px; height: 24px;}
 #kanbanList .kanban-card.has-left-border {border-left: 2px solid #838a9d;}
 #kanbanList .kanban-card.has-left-border.border-left-green {border-left-color: #0bd986;}
 #kanbanList .kanban-card.has-left-border.border-left-red {border-left-color: #ff5d5d;}
