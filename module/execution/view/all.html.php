@@ -73,12 +73,12 @@
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
 
           <?php if(isset($project) and $project->model == 'waterfall'):?>
-          <th class='c-percent'><?php common::printOrderLink('percent',   $orderBy, $vars, $lang->programplan->percent);?></th>
+          <th class='c-percent'><?php common::printOrderLink('percent', $orderBy, $vars, $lang->programplan->percent);?></th>
           <th class='c-attribute'><?php common::printOrderLink('attribute', $orderBy, $vars, $lang->programplan->attribute);?></th>
-          <th class='c-begin'><?php common::printOrderLink('begin',     $orderBy, $vars, $lang->execution->begin);?></th>
-          <th class='c-end'><?php common::printOrderLink('end',       $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
+          <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='c-realBegan'><?php common::printOrderLink('realBegan', $orderBy, $vars, $lang->execution->realBegan);?></th>
-          <th class='c-realEnd'><?php common::printOrderLink('realEnd',   $orderBy, $vars, $lang->execution->realEnd);?></th>
+          <th class='c-realEnd'><?php common::printOrderLink('realEnd', $orderBy, $vars, $lang->execution->realEnd);?></th>
           <?php endif;?>
           <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
