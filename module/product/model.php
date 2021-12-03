@@ -1987,9 +1987,11 @@ class productModel extends model
                 $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
                 $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : '') . "&groupBy=&projectID=$projectID") . "#app=project";
             }
-            elseif($module == 'testreport' and $method == 'create')
+            elseif($module == 'testreport' and ($method == 'create' or $method == 'edit'))
             {
-                $link = helper::createLink($module, $method, "objectID=&objectType=testtask&extra=%s");
+                $vars   = $method == 'edit' ? "objectID=%s" : "objectID=&objectType=testtask&extra=%s";
+                $method = $method == 'edit' ? 'browse' : $method;
+                $link   = helper::createLink($module, $method, $vars);
             }
             else
             {

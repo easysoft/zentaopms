@@ -114,10 +114,10 @@ class treeModel extends model
     /**
      * Create an option menu in html.
      *
-     * @param  int    $rootID
-     * @param  string $type
-     * @param  int    $startModule
-     * @param  int    $branch
+     * @param  int       $rootID
+     * @param  string    $type
+     * @param  int       $startModule
+     * @param  int|array $branch
      * @access public
      * @return string
      */
