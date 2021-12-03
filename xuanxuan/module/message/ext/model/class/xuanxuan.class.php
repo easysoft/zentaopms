@@ -65,23 +65,26 @@ class xuanxuanMessage extends messageModel
                 {
                     $subcontent->headTitle    = $object->projectName;
                     $subcontent->headSubTitle = $object->execuName;
+                    $subcontent->parentType   = 'execution';
                     $subcontent->parent       = $object->execution;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('execution', 'task', "id=$object->execution", 'html'));
                     $subcontent->cardURL      = $url;
                 }
                 elseif($objectType == 'story')
                 {
-                    $subcontent->headTitle = $object->productName;
-                    $subcontent->parent    = $object->product;
-                    $subcontent->parentURL = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('product', 'browse', "id=$object->product", 'html'));
-                    $subcontent->cardURL   = $url;
+                    $subcontent->headTitle  = $object->productName;
+                    $subcontent->parentType = 'product';
+                    $subcontent->parent     = $object->product;
+                    $subcontent->parentURL  = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('product', 'browse', "id=$object->product", 'html'));
+                    $subcontent->cardURL    = $url;
                 }
                 elseif($objectType == 'bug')
                 {
-                    $parentType = empty($object->productName) ? 'project' : 'product';
+                    $parentType = empty($object->execuName) ? 'product' : 'project';
                     $parentNameKey = $parentType . 'Name';
                     $subcontent->headTitle    = $object->$parentNameKey;
                     $subcontent->headSubTitle = $object->execuName;
+                    $subcontent->parentType   = $parentType;
                     $subcontent->parent       = $object->$parentType;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
                     $subcontent->cardURL      = $url;
