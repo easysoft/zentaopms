@@ -189,7 +189,7 @@ class testreport extends control
             $taskPairs         = array();
             $scopeAndStatus[0] = 'local';
             $scopeAndStatus[1] = 'totalStatus';
-            $tasks = $this->testtask->getProductTasks($productID, $task->branch, 'id_desc', null, $scopeAndStatus);
+            $tasks = $this->testtask->getProductTasks($productID, empty($objectID) ? 0 : $task->branch, 'id_desc', null, $scopeAndStatus);
             foreach($tasks as $testTask)
             {
                 if($testTask->build == 'trunk') continue;
