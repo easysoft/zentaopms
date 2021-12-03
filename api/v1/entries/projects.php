@@ -26,6 +26,8 @@ class projectsEntry extends entry
 
         $_COOKIE['involved'] = $this->param('involved', 0);
 
+        $this->config->systemMode = 'new';
+
         if($programID)
         {
             $control = $this->loadController('program', 'project');
