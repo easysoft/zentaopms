@@ -22,7 +22,7 @@
           <tr>
             <th colspan='2'><?php echo $lang->gitlab->gitlabAccount;?></th>
             <th><?php echo $lang->gitlab->zentaoAccount;?></th>
-            <th><?php echo $lang->gitlab->bindingStatus;?></th>
+            <th class='w-150px'><?php echo $lang->gitlab->bindingStatus;?></th>
           </tr>
         </thead>
         <tbody>
@@ -49,7 +49,17 @@
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
-            <td><?php echo isset($bindedUsers[$gitlabUser->zentaoAccount]) ? $lang->gitlab->binded : ""; ?></td>
+            <td>
+              <?php if(isset($bindedUsers[$gitlabUser->zentaoAccount])):?>
+                <?php if(!empty(zget($userPairs, $gitlabUser->zentaoAccount, ''))):?>
+                  <?php echo $lang->gitlab->binded;?>
+                <?php else:?>
+                  <?php echo '<span class="text-red">' . $lang->gitlab->bindedError . '</span>';?>
+                <?php endif;?>
+              <?php else:?>
+                <?php echo '';?>
+              <?php endif;?>
+            </td>
          </tr>
          <?php endforeach;?>
         </tbody>
