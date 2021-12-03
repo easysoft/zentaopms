@@ -16,6 +16,7 @@ $lang->gitlab->gitlabAccount     = 'GitLab用户';
 $lang->gitlab->zentaoAccount     = '禅道用户';
 $lang->gitlab->bindingStatus     = '绑定状态';
 $lang->gitlab->binded            = '已绑定';
+$lang->gitlab->bindedError       = '绑定的用户已删除或者已修改，请重新绑定';
 $lang->gitlab->serverFail        = '连接GitLab服务器异常，请检查GitLab服务器。';
 $lang->gitlab->lastUpdate        = '最后更新';
 $lang->gitlab->confirmAddWebhook = '您确定创建Webhook吗？';
