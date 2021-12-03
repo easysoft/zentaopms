@@ -28,8 +28,6 @@ class myIndex extends index
             $xuanConfig->account          = $this->app->user->account;
             $xuanConfig->authKey          = $token->token;
             $xuanConfig->debug            = $this->config->debug;
-            $xuanConfig->serverTime       = (int)(microtime(true) * 1000);
-            $xuanConfig->serverNowTime    = (int)round(time() / $tokenAuthWindow);
 
             $this->view->xuanConfig = $xuanConfig;
         }
