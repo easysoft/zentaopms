@@ -71,7 +71,6 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
-
           <?php if(isset($project) and $project->model == 'waterfall'):?>
           <th class='c-percent'><?php common::printOrderLink('percent', $orderBy, $vars, $lang->programplan->percent);?></th>
           <th class='c-attribute'><?php common::printOrderLink('attribute', $orderBy, $vars, $lang->programplan->attribute);?></th>
@@ -140,7 +139,9 @@
               <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
             </div>
           </td>
+          <?php if(isset($project) and $project->model == 'scrum'):?>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
+          <?php endif;?>
           <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $execution) . "</td>";?>
         </tr>
         <?php if(!empty($execution->children)):?>
