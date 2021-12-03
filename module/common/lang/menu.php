@@ -270,6 +270,9 @@ $lang->waterfall->menuOrder[80] = 'dynamic';
 
 $lang->waterfall->menu->doc['subMenu'] = new stdclass();
 
+$lang->waterfall->menu->programplan['subMenu'] = new stdclass();
+$lang->waterfall->menu->programplan['subMenu']->lists = array('link' => "{$lang->stage->list}|programplan|browse|projectID=%s&productID=0&type=lists", 'alias' => 'create');
+
 $lang->waterfall->menu->qa['subMenu'] = new stdclass();
 $lang->waterfall->menu->qa['subMenu']->bug      = array('link' => "{$lang->bug->common}|project|bug|projectID=%s", 'subModule' => 'bug');
 $lang->waterfall->menu->qa['subMenu']->testcase = array('link' => "{$lang->testcase->shortCommon}|project|testcase|projectID=%s", 'subModule' => 'testsuite,testcase,caselib,tree');
