@@ -15,6 +15,8 @@
           <th><?php echo $lang->gitlab->group->memberAccessLevel;?></th>
           <th class='c-date'><?php echo $lang->gitlab->group->memberExpiresAt;?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
