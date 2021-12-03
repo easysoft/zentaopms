@@ -341,7 +341,7 @@ class upgrade extends control
                 /* When upgrading historical data as a project, handle products that are not linked with the project. */
                 if(!empty($singleProducts)) $this->upgrade->computeProductAcl($singleProducts, $programID);
             }
-            elseif($type == 'sprint' or $type == 'moreLink')
+            elseif($type == 'sprint')
             {
                 $linkedSprints = $this->post->sprints;
 
@@ -360,6 +360,43 @@ class upgrade extends control
                     foreach($linkedSprints as $sprint)
                     {
                         $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+                    }
+                }
+            }
+            elseif($type == 'moreLink')
+            {
+                $linkedSprints = $this->post->sprints;
+
+                /* Create Program. */
+                list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
+                if(dao::isError()) die(js::error(dao::getError()));
+
+                if($_POST['projectType'] == 'execution')
+                {
+                    /* Use historical projects as execution upgrades. */
+                    $this->upgrade->processMergedData($programID, $projectList, $lineID, array(), $linkedSprints);
+                }
+                else
+                {
+                    /* Use historical projects as project upgrades. */
+                    foreach($linkedSprints as $sprint)
+                    {
+                        $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
+                    }
+
+                    /* If is more-link sprints, and as project upgrade, set old relation into new project. */
+                    $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)
+                        ->where('project')->in($linkedSprints)
+                        ->fetchAll();
+                    foreach($projectProducts as $projectProduct)
+                    {    
+                        $data = new stdclass();
+                        $data->project = $projectList[$projectProduct->project];
+                        $data->product = $projectProduct->product;
+                        $data->plan    = $projectProduct->plan;
+                        $data->branch  = $projectProduct->branch; 
+
+                        $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                     }
                 }
             }
