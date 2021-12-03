@@ -63,8 +63,8 @@ $lang->mr->approvalStatusList['approved']    = '已通过';
 $lang->mr->approvalStatusList['rejected']    = '已拒绝';
 
 $lang->mr->notApproved  = '审核拒绝的';
-$lang->mr->assignedToMe = '指派给我的';
-$lang->mr->createdByMe  = '我创建的';
+$lang->mr->assignedToMe = '指派给我';
+$lang->mr->createdByMe  = '由我创建';
 
 $lang->mr->statusList = array();
 $lang->mr->statusList['all']    = '所有';
@@ -86,7 +86,6 @@ $lang->mr->targetBranch      = '目标分支';
 $lang->mr->noCompileJob      = '没有构建任务';
 $lang->mr->compileUnexecuted = '还未执行';
 
-$lang->mr->usersTips         = '提示：如果无法选择指派人，请先前往GitLab页面绑定用户。';
 $lang->mr->notFound          = "此{$lang->mr->common}不存在。";
 $lang->mr->toCreatedMessage  = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行通过。";
 $lang->mr->toReviewerMessage = "有一个合并请求：<a href='%s'>%s</a> 待审核。";

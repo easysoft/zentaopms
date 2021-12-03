@@ -45,10 +45,13 @@ function loadProduct(productID)
  */
 function loadBranch()
 {
-    var branch = $('#branch').val();
+    var branch    = $('#branch').val();
+    var productID = $('#product').val();
     if(typeof(branch) == 'undefined') branch = 0;
-    loadProductModules($('#product').val(), branch);
-    loadProductPlans($('#product').val(), branch);
+    if(typeof(productID) == 'undefined' && config.currentMethod == 'edit') productID = oldProductID;
+
+    loadProductModules(productID, branch);
+    loadProductPlans(productID, branch);
 }
 
 /**

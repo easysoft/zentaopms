@@ -161,6 +161,7 @@ class productModel extends model
 
         if($this->cookie->preProductID != $this->session->product)
         {
+            $this->cookie->set('preBranch', 0);
             setcookie('preBranch', 0, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         }
         return $this->session->product;
@@ -1026,7 +1027,7 @@ class productModel extends model
             ->orWhere('t2.PM')->eq($this->app->user->account)
             ->markRight(1)
             ->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($branch !== '' and $branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');

@@ -32,7 +32,7 @@
 #kanbanContainer {margin: 0;}
 #kanbanContainer > .panel-body {overflow: auto;}
 #kanbans .kanban {min-height: initial;}
-#kanbans .kanban-lane {min-height: 150px;}
+#kanbans .kanban-lane {min-height: 150px; margin-top: 2px;}
 #kanbans .kanban-affixed > .kanban-header {top: 100px;}
 #kanbans .kanban-card[data-scale-size="4"] {padding: 8px;}
 #kanbans .kanban-card[data-scale-size="3"] {padding: 3px 4px;}

@@ -1778,7 +1778,7 @@ class testcase extends control
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
         $this->view->cases      = $this->loadModel('testsuite')->getNotImportedCases($productID, $libID, $orderBy, $pager, $browseType, $queryID);
-        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $this->view->modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : (int)$branch);
         $this->view->libModules = $this->tree->getOptionMenu($libID, 'caselib');
         $this->view->pager      = $pager;
         $this->view->orderBy    = $orderBy;
@@ -1839,7 +1839,8 @@ class testcase extends control
 
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
-        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $branch);
+        $branches   = $this->loadModel('branch')->getPairs($productID);
+        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty(array_keys($branches)) ? 0 : array_keys($branches));
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
@@ -2020,7 +2021,7 @@ class testcase extends control
         $this->view->caseData   = $caseData;
         $this->view->stepData   = $stepData;
         $this->view->productID  = $productID;
-        $this->view->branches   = $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches   = $branches;
         $this->view->isEndPage  = $pagerID >= $allPager;
         $this->view->allCount   = $allCount;
         $this->view->allPager   = $allPager;

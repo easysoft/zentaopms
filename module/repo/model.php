@@ -1854,6 +1854,7 @@ class repoModel extends model
     public function syncCommit($repoID, $branchID)
     {
         $repo = $this->getRepoByID($repoID);
+        $this->scm = $this->app->loadClass('scm');
         $this->scm->setEngine($repo);
 
         $latestInDB = $this->dao->select('DISTINCT t1.*')->from(TABLE_REPOHISTORY)->alias('t1')

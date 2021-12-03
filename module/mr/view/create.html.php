@@ -73,10 +73,6 @@
             <td><?php echo html::select('assignee', $users, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
-            <th></th>
-            <td><?php echo $lang->mr->usersTips;?></td>
-          </tr>
-          <tr>
             <td colspan='2' class='text-center form-actions'>
               <?php echo html::submitButton();?>
               <?php if(!isonlybody()) echo html::a(inlink('browse', ""), $lang->goback, '', 'class="btn btn-wide"');?>
