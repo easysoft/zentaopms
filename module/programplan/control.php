@@ -125,14 +125,15 @@ class programplan extends control
 
         $this->app->loadLang('stage');
         $project = $this->loadModel('project')->getById($projectID);
+        $productList = $this->loadModel('product')->getProductPairsByProject($projectID);
 
         $this->view->title      = $this->lang->programplan->create . $this->lang->colon . $project->name;
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
-        $this->view->productList = $this->loadModel('product')->getProductPairsByProject($projectID);
+        $this->view->productList = $productList;
         $this->view->project     = $project;
-        $this->view->productID   = $productID;
+        $this->view->productID   = $productID ? $productID : key($productList);
         $this->view->stages      = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
         $this->view->programPlan = $this->project->getById($planID, 'stage');
         $this->view->plans       = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');

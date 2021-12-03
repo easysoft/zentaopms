@@ -60,6 +60,7 @@ class bugModel extends model
             ->setDefault('openedDate', $now)
             ->setDefault('project,execution,story,task', 0)
             ->setDefault('openedBuild', '')
+            ->setDefault('notifyEmail', '')
             ->setDefault('deadline', '0000-00-00')
             ->setIF($this->config->systemMode == 'new' && $this->lang->navGroup->bug != 'qa', 'project', $this->session->project)
             ->setIF(strpos($this->config->bug->create->requiredFields, 'deadline') !== false, 'deadline', $this->post->deadline)
