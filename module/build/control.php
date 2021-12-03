@@ -44,6 +44,7 @@ class build extends control
         }
 
         /* Set menu. */
+        $executions = array();
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($projectID);
@@ -64,7 +65,7 @@ class build extends control
             $executions = $this->execution->getPairs($execution->project);
         }
 
-        $executionList = $this->execution->getByIdList(array_keys($executions));
+        $executionList = empty($executions) ? array() : $this->execution->getByIdList(array_keys($executions));
         foreach($executionList as $execution)
         {
             if($execution->lifetime == 'ops') unset($executions[$execution->id]);
