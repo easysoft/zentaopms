@@ -36,6 +36,9 @@ class configEntry extends baseEntry
             case 'timezone':
                 $config['value'] = $this->config->timezone;
                 break;
+            case 'systemMode':
+                $config['value'] = $this->config->systemMode;
+                break;
             default:
                 $this->sendError(400, 'No configuration.');
                 return;
