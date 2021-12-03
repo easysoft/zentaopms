@@ -383,21 +383,21 @@ class upgrade extends control
                     {
                         $this->upgrade->processMergedData($programID, $projectList[$sprint], $lineID, array(), array($sprint => $sprint));
                     }
+                }
 
-                    /* If is more-link sprints, and as project upgrade, set old relation into new project. */
-                    $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)
-                        ->where('project')->in($linkedSprints)
-                        ->fetchAll();
-                    foreach($projectProducts as $projectProduct)
-                    {    
-                        $data = new stdclass();
-                        $data->project = $projectList[$projectProduct->project];
-                        $data->product = $projectProduct->product;
-                        $data->plan    = $projectProduct->plan;
-                        $data->branch  = $projectProduct->branch; 
+                /* If is more-link sprints, and as project upgrade, set old relation into new project. */
+                $projectProducts = $this->dao->select('product,project,branch,plan')->from(TABLE_PROJECTPRODUCT)
+                    ->where('project')->in($linkedSprints)
+                    ->fetchAll();
+                foreach($projectProducts as $projectProduct)
+                {
+                    $data = new stdclass();
+                    $data->project = $projectList[$projectProduct->project];
+                    $data->product = $projectProduct->product;
+                    $data->plan    = $projectProduct->plan;
+                    $data->branch  = $projectProduct->branch; 
 
-                        $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
-                    }
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
             }
 

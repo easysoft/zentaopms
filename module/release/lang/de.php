@@ -76,7 +76,8 @@ $lang->release->changeStatusList['normal']    = 'Aktiviert';
 $lang->release->changeStatusList['terminate'] = 'Terminiert';
 
 $lang->release->action = new stdclass();
-$lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
+$lang->release->action->changestatus = array('main' => '$date, $extra by  <strong>$actor</strong>', 'extra' => 'changeStatusList');
+$lang->release->action->notified     = array('main' => '$date, <strong>$actor</strong> send notify.');
 
 $lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
 $lang->release->notifyList['QD'] = 'QA Manager';
