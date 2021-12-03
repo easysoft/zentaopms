@@ -1,6 +1,6 @@
 $(document).ready(function()
   {
-    $('#mergeButton').click(function()
+    $('#mergeButton,.mergeButton').click(function()
       {
         link = $(this).attr('href');
         $.getJSON(link, function(response)
