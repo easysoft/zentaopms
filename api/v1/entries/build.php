@@ -24,7 +24,7 @@ class buildEntry extends Entry
         $control->view($buildID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->build, 'stories:idList,bugs:idList,deleted:bool'));
+        if(isset($data->status) and $data->status == 'success') return $this->send(200, $this->format($data->data->build, 'builder:user,stories:idList,bugs:idList,deleted:bool'));
 
         /* Exception handling. */
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
@@ -55,7 +55,7 @@ class buildEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $build = $this->build->getByID($buildID);
-        $this->send(200, $build);
+        $this->send(200, $this->format($build, 'builder:user,stories:idList,bugs:idList,deleted:bool'));
     }
 
     /**

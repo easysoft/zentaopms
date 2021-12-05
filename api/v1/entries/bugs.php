@@ -41,7 +41,7 @@ class bugsEntry extends entry
                 if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
                 $bug->status = $status;
 
-                $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
+                $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool');
             }
 
             $storyChangeds = $this->dao->select('t1.id')->from(TABLE_BUG)->alias('t1')
@@ -81,6 +81,7 @@ class bugsEntry extends entry
         $this->batchSetPost($fields);
 
         $this->setPost('product', $productID);
+        $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
         $control = $this->loadController('bug', 'create');
         $this->requireFields('title,pri,severity,type,openedBuild');
@@ -93,6 +94,6 @@ class bugsEntry extends entry
 
         $bug = $this->loadModel('bug')->getByID($data->id);
 
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time'));
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 }

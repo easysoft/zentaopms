@@ -49,27 +49,6 @@ class bugEntry extends entry
         }
         $bug->moduleTitle = $moduleTitle;
 
-        if($bug->openedBy)     $bug->openedBy     = $this->formatUser($bug->openedBy,     $data->data->users);
-        if($bug->resolvedBy)   $bug->resolvedBy   = $this->formatUser($bug->resolvedBy,   $data->data->users);
-        if($bug->closedBy)     $bug->closedBy     = $this->formatUser($bug->closedBy,     $data->data->users);
-        if($bug->lastEditedBy) $bug->lastEditedBy = $this->formatUser($bug->lastEditedBy, $data->data->users);
-        if($bug->assignedTo)
-        {
-            $usersWithAvatar = $this->loadModel('user')->getListByAccounts(array($bug->assignedTo), 'account');
-            $bug->assignedTo = zget($usersWithAvatar, $bug->assignedTo);
-        }
-
-        $mailto = array();
-        if($bug->mailto)
-        {
-            foreach(explode(',', $bug->mailto) as $account)
-            {
-                if(empty($account)) continue;
-                $mailto[] = $this->formatUser($account, $data->data->users);
-            }
-        }
-        $bug->mailto = $mailto;
-
         $openedBuilds = array();
         foreach(explode(',', $bug->openedBuild) as $buildID)
         {
@@ -98,7 +77,7 @@ class bugEntry extends entry
         $bug->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $bug->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**
@@ -115,6 +94,7 @@ class bugEntry extends entry
         /* Set $_POST variables. */
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,closedBy,resolution,product,plan,task';
         $this->batchSetPost($fields, $oldBug);
+        $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
         $control = $this->loadController('bug', 'edit');
         $control->edit($bugID);
@@ -125,7 +105,7 @@ class bugEntry extends entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
 
         $bug = $this->bug->getByID($bugID);
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**

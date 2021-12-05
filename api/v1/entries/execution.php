@@ -29,19 +29,7 @@ class executionEntry extends Entry
         if(!$data or !isset($data->status)) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $execution = $this->format($data->data->execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
-
-        $accounts = array();
-        $accounts[$execution->PO] = $execution->PO;
-        $accounts[$execution->PM] = $execution->PM;
-        $accounts[$execution->QD] = $execution->QD;
-        $accounts[$execution->RD] = $execution->RD;
-        $users = $this->loadModel('user')->getListByAccounts($accounts, 'account');
-
-        $execution->PO = zget($users, $execution->PO, '');
-        $execution->PM = zget($users, $execution->PM, '');
-        $execution->QD = zget($users, $execution->QD, '');
-        $execution->RD = zget($users, $execution->RD, '');
+        $execution = $this->format($data->data->execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
 
         $execution->progress    = ($execution->totalConsumed + $execution->totalLeft) ? round($execution->totalConsumed / ($execution->totalConsumed + $execution->totalLeft) * 100, 1) : 0;
         $execution->teamMembers = array_values((array)$data->data->teamMembers);
@@ -123,7 +111,7 @@ class executionEntry extends Entry
         $oldExecution = $this->loadModel('execution')->getByID($executionID);
 
         /* Set $_POST variables. */
-        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl';
+        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl,status';
         $this->batchSetPost($fields, $oldExecution);
 
         $this->setPost('whitelist', $this->request('whitelist', explode(',', $oldExecution->whitelist)));
@@ -136,7 +124,7 @@ class executionEntry extends Entry
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $execution = $this->execution->getByID($executionID);
-        $this->send(200, $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        $this->send(200, $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool'));
     }
 
     /**

@@ -58,7 +58,7 @@ class executionsEntry extends entry
             foreach($execution->hours as $field => $value) $execution->$field = $value;
 
             $execution = $this->filterFields($execution, 'id,name,project,code,type,parent,begin,end,status,openedBy,openedDate,delay,progress,' . $appendFields);
-            $result[]  = $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
+            $result[]  = $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool');
         }
 
         $data = array();
@@ -102,7 +102,7 @@ class executionsEntry extends entry
 
         $execution = $this->loadModel('execution')->getByID($data->id);
 
-        $this->send(201, $this->format($execution, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        $this->send(201, $this->format($execution, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,PM:user,PO:user,RD:user,QD:user,whitelist:userList,begin:date,end:date,realBegan:date,realEnd:date,deleted:bool'));
     }
 
     /**

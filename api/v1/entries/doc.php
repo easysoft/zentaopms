@@ -38,20 +38,12 @@ class docEntry extends entry
         /* Set lib name */
         $doc->libName = $data->data->lib->name;
 
-        /* Format user for api. */
-        if($doc->editedBy) $doc->editedBy = $this->formatUser($doc->editedBy, $data->data->users);
-        if($doc->addedBy)
-        {
-            $usersWithAvatar = $this->loadModel('user')->getListByAccounts(array($doc->addedBy), 'account');
-            $doc->addedBy    = zget($usersWithAvatar, $doc->addedBy);
-        }
-
         $preAndNext = $data->data->preAndNext;
         $doc->preAndNext = array();
         $doc->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $doc->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $this->send(200, $this->format($doc, 'addedDate:time,assignedDate:date,editedDate:time'));
+        $this->send(200, $this->format($doc, 'addedBy:user,addedDate:time,assignedTo:user,assignedDate:date,editedBy:user,editedDate:time,mailto:userList'));
     }
 
     /**

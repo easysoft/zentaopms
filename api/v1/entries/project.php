@@ -30,7 +30,7 @@ class projectEntry extends entry
         if(!$data or !isset($data->status)) return $this->sendError(400, 'error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $project = $this->format($data->data->project, 'begin:date,end:date,realBegan:date,realEnd:date,openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,deleted:bool');
+        $project = $this->format($data->data->project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool');
 
         $this->loadModel('testcase');
         $project->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
@@ -118,7 +118,7 @@ class projectEntry extends entry
         if(!isset($data->result)) return $this->sendError(400, 'error');
 
         $project = $this->project->getByID($projectID);
-        $this->send(200, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time'));
+        $this->send(200, $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool'));
     }
 
     /**

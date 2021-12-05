@@ -50,8 +50,7 @@ class projectsEntry extends entry
             {
                 foreach($project->hours as $field => $value) $project->$field = $value;
 
-                $project  = $this->filterFields($project, 'id,name,code,model,type,budget,budgetUnit,parent,begin,end,status,openedBy,openedDate,PM,delay,progress,' . $appendFields);
-                $result[] = $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time');
+                $result[] = $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool');
             }
 
             $data = array();
@@ -99,7 +98,7 @@ class projectsEntry extends entry
 
         $project = $this->loadModel('project')->getByID($data->id);
 
-        $this->send(201, $this->format($project, 'openedDate:time,lastEditedDate:time,closedDate:time,canceledDate:time,budget:int'));
+        $this->send(201, $this->format($project, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,realBegan:date,realEnd:date,PM:user,whitelist:userList,deleted:bool'));
     }
 
     /**

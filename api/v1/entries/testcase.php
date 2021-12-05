@@ -31,7 +31,47 @@ class testcaseEntry extends entry
         $case = $data->case;
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values(get_object_vars($case->steps)) : array();
 
-        $this->send(200, $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool'));
+        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
+    }
+
+    /**
+     * PUT method.
+     *
+     * @param  int    $caseID
+     * @access public
+     * @return void
+     */
+    public function put($caseID)
+    {
+        $oldCase = $this->loadModel('testcase')->getByID($caseID);
+
+        /* Set $_POST variables. */
+        $fields = 'title,pri,story,type,stage,product,module,branch,precondition';
+        $this->batchSetPost($fields, $oldCase);
+
+        /* Set steps and expects. */
+        if(isset($this->requestBody->steps))
+        {
+            $steps    = array();
+            $expects  = array();
+            $stepType = array();
+            foreach($this->requestBody->steps as $step)
+            {
+                $steps[]    = $step->desc;
+                $expects[]  = $step->expect;
+                $stepType[] = 'item';
+            }
+            $this->setPost('steps',    $steps);
+            $this->setPost('expects',  $expects);
+            $this->setPost('stepType', $stepType);
+        }
+
+        $control = $this->loadController('testcase', 'edit');
+        $control->edit($caseID);
+
+        $this->getData();
+        $case = $this->testcase->getByID($caseID);
+        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,steps:array,deleted:bool'));
     }
 
     /**

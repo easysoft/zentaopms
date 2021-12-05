@@ -53,38 +53,6 @@ class storyEntry extends Entry
         }
         $story->moduleTitle = $moduleTitle;
 
-        /* Format user for api. */
-        if($story->assignedTo)   $story->assignedTo   = $this->formatUser($story->assignedTo, $data->data->users);
-        if($story->closedBy)     $story->closedBy     = $this->formatUser($story->closedBy, $data->data->users);
-        if($story->lastEditedBy) $story->lastEditedBy = $this->formatUser($story->lastEditedBy, $data->data->users);
-        if($story->openedBy)
-        {
-            $usersWithAvatar = $this->loadModel('user')->getListByAccounts(array($story->openedBy), 'account');
-            $story->openedBy = zget($usersWithAvatar, $story->openedBy);
-        }
-
-        $mailto = array();
-        if($story->mailto)
-        {
-            foreach(explode(',', $story->mailto) as $account)
-            {
-                if(empty($account)) continue;
-                $mailto[] = $this->formatUser($account, $data->data->users);
-            }
-        }
-        $story->mailto = $mailto;
-
-        $reviewedBy = array();
-        if($story->reviewer)
-        {
-            foreach($story->reviewer as $account)
-            {
-                if(empty($account)) continue;
-                $reviewedBy[] = $this->formatUser($account, $data->data->users);
-            }
-        }
-        $story->reviewedBy = $reviewedBy;
-
         $storyTasks = array();
         foreach($story->tasks as $executionTasks)
         {
@@ -112,7 +80,7 @@ class storyEntry extends Entry
         $story->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $story->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
+        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -136,7 +104,7 @@ class storyEntry extends Entry
 
         $this->getData();
         $story = $this->story->getByID($storyID);
-        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool'));
+        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**

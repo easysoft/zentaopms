@@ -52,24 +52,6 @@ class taskEntry extends Entry
         }
         $task->moduleTitle = $moduleTitle;
 
-        /* Format user for api. */
-        if($task->openedBy)     $task->openedBy     = $this->formatUser($task->openedBy, $data->data->users);
-        if($task->finishedBy)   $task->finishedBy   = $this->formatUser($task->finishedBy, $data->data->users);
-        if($task->canceledBy)   $task->canceledBy   = $this->formatUser($task->canceledBy, $data->data->users);
-        if($task->closedBy)     $task->closedBy     = $this->formatUser($task->closedBy, $data->data->users);
-        if($task->lastEditedBy) $task->lastEditedBy = $this->formatUser($task->lastEditedBy, $data->data->users);
-
-        $mailto = array();
-        if($task->mailto)
-        {
-            foreach(explode(',', $task->mailto) as $account)
-            {
-                if(empty($account)) continue;
-                $mailto[] = $this->formatUser($account, $data->data->users);
-            }
-        }
-        $task->mailto = $mailto;
-
         $queryAccounts = array();
         if($task->assignedTo) $queryAccounts[$task->assignedTo] = $task->assignedTo;
         if(!empty($task->team))
@@ -78,7 +60,6 @@ class taskEntry extends Entry
         }
         $usersWithAvatar = $this->loadModel('user')->getListByAccounts($queryAccounts, 'account');
 
-        $task->assignedTo = zget($usersWithAvatar, $task->assignedTo, '');
         if(!empty($task->team))
         {
             $teams = array();
@@ -106,7 +87,7 @@ class taskEntry extends Entry
         $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
         $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
 
-        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool'));
+        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -129,7 +110,7 @@ class taskEntry extends Entry
 
         $this->getData();
         $task = $this->task->getByID($taskID);
-        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
+        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**

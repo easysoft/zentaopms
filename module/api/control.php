@@ -66,7 +66,7 @@ class api extends control
             $apiList = $this->api->getListByModuleId($libID, $moduleID, $release);
 
             $this->view->apiList  = $apiList;
-            $this->view->typeList = $this->api->getTypeList($api->lib);
+            $this->view->typeList = $this->api->getTypeList($libID);
         }
 
         $this->setMenu($libID);

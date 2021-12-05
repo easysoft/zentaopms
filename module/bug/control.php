@@ -373,6 +373,7 @@ class bug extends control
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->bug->common);
                 $response['locate']  = $this->createLink('bug', 'view', "bugID=$bugID");
+                $response['id']      = $bugResult['id'];
                 return $this->send($response);
             }
 

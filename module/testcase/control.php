@@ -784,7 +784,14 @@ class testcase extends control
 
             $this->executeHooks($caseID);
 
-            die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
+            {
+                return $this->send(array('status' => 'success', 'data' => $caseID));
+            }
+            else
+            {
+                die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+            }
         }
 
         $case = $this->testcase->getById($caseID);

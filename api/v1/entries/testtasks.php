@@ -35,7 +35,7 @@ class testtasksEntry extends entry
         $result = array();
         foreach($data->data->tasks as $testtask)
         {
-            $result[] = $this->format($testtask, 'realFinishedDate:time');
+            $result[] = $this->format($testtask, 'begin:date,end:date,mailto:userList,owner:user,realFinishedDate:time');
         }
 
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'testtasks' => $result));

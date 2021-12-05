@@ -36,7 +36,7 @@ class testcasesEntry extends entry
             foreach($cases as $case)
             {
                 $case->status = array('code' => $case->status, 'name' => $this->lang->testcase->statusList[$case->status]);
-                $result[] = $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool');
+                $result[] = $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool');
             }
 
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'testcases' => $result));
@@ -92,6 +92,6 @@ class testcasesEntry extends entry
         $case = $this->loadModel('testcase')->getByID($data->id);
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values($case->steps) : array();
 
-        $this->send(200, $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool'));
+        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool'));
     }
 }

@@ -36,7 +36,7 @@ class storiesEntry extends entry
         foreach($stories as $story)
         {
             if(isset($story->children)) $story->children = array_values((array)$story->children);
-            $result[] = $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool');
+            $result[] = $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList');
         }
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'stories' => $result));
     }
@@ -72,7 +72,6 @@ class storiesEntry extends entry
         if(isset($data->result) and !isset($data->id)) return $this->sendError(400, $data->message);
 
         $story = $this->loadModel('story')->getByID($data->id);
-
-        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time,deleted:bool'));
+        $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }
 }
