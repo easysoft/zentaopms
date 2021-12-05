@@ -1847,7 +1847,7 @@ class testcase extends control
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $branches   = $this->loadModel('branch')->getPairs($productID);
-        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty(array_keys($branches)) ? 0 : array_keys($branches));
+        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? 0 : array_keys($branches));
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);

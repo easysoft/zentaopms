@@ -114,15 +114,16 @@ class treeModel extends model
     /**
      * Create an option menu in html.
      *
-     * @param  int    $rootID
-     * @param  string $type
-     * @param  int    $startModule
-     * @param  int    $branch
+     * @param  int       $rootID
+     * @param  string    $type
+     * @param  int       $startModule
+     * @param  int|array $branch
      * @access public
      * @return string
      */
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0)
     {
+        if(empty($branch)) $branch = 0;
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getModulePairs();
 
         /* If type of $branch is array, get modules of these branches. */

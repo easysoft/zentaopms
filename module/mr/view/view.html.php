@@ -103,18 +103,18 @@
           <div class="btn-toolbar">
             <?php common::printBack(inlink('browse', '')); ?>
             <?php $acceptDisabled = ($MR->approvalStatus != 'approved' or ($MR->compileID !=0 and $MR->compileStatus != 'success')) ? ' disabled' : ''; ?>
-            <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) echo html::a(inlink('accept', "mr=$MR->id"), '<i class="icon icon-flow"></i> ' . $lang->mr->acceptMR, '', "id='mergeButton' class='btn' $acceptDisabled"); ?>
+            <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) common::printIcon('mr', 'accept', "mr=$MR->id", $MR, 'button', 'flow', 'hiddenwin', 'mergeButton btn', false, $acceptDisabled, $lang->mr->acceptMR);?>
             <?php if($rawMR->state == 'opened'): ?>
               <?php if($rawMR->has_conflicts or ($MR->compileID !=0 and $MR->compileStatus != 'success') or $MR->approvalStatus == 'approved'):?>
-              <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve", '', true), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody' disabled"); ?>
+              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
               <?php else:?>
-              <?php echo html::a(inlink('approval', "mr=$MR->id&action=approve", '', true), '<i class="icon icon-ok"></i> ' . $lang->mr->approve, '', "id='mergeButton' class='btn iframe showinonlybody'"); ?>
+              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
               <?php endif;?>
-              <?php echo html::a(inlink('approval', "mr=$MR->id&action=reject", '', true), '<i class="icon icon-bug"></i> ' . $lang->mr->reject, '', "id='mergeButton' class='btn iframe showinonlybody'" . ($MR->approvalStatus == 'rejected' ? 'disabled' : '')); ?>
-              <?php common::printIcon('mr', 'close', "mr=$MR->id", $MR, 'button', 'off', 'hiddenwin');?>
-              <?php echo html::a(inlink('edit', "mr=$MR->id"), '<i class="icon icon-edit"></i> ' . str_replace($lang->mr->common, '', $lang->mr->edit), '', "id='mergeButton' class='btn'"); ?>
+              <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=reject", $MR, 'button', 'bug', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, ($MR->approvalStatus == 'rejected' ? 'disabled' : ''), $lang->mr->reject);?>
+              <?php common::printIcon('mr', 'close', "mr=$MR->id", $MR, 'button', 'off', 'hiddenwin', 'mergeButton');?>
+              <?php common::printIcon('mr', 'edit', "mr=$MR->id", $MR, 'button', 'edit');?>
             <?php endif;?>
-            <?php if($rawMR->state == 'closed') echo html::a(inlink('reopen', "mr=$MR->id"), '<i class="icon icon-restart"></i> ' . $lang->mr->reopen, '', "id='mergeButton' class='btn'"); ?>
+            <?php if($rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
             <?php common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
           </div>
         </div>
