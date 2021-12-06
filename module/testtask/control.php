@@ -1365,7 +1365,7 @@ class testtask extends control
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
         $this->loadModel('action');
-        foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $taskID);
+        foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $this->post->assignedTo);
         die(js::locate($this->session->caseList, 'parent'));
     }
 
