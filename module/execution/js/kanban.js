@@ -99,6 +99,7 @@ function renderStoryItem(item, $item, col)
 
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
         if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
         else $infos.prependTo($item.find('.title'));
     }
     else if(scaleSize === 4)
@@ -162,6 +163,7 @@ function renderBugItem(item, $item, col)
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
         else $infos.prependTo($item.find('.title'));
     }
     else if(scaleSize === 4)
@@ -225,6 +227,7 @@ function renderTaskItem(item, $item, col)
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
         else $infos.prependTo($item.find('.title'));
     }
     else if(scaleSize === 4)
