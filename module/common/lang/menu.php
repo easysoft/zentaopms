@@ -242,8 +242,7 @@ $lang->scrum->menu->settings['subMenu']->group       = array('link' => "{$lang->
 /* Waterfall menu. */
 $lang->waterfall->menu = new stdclass();
 $lang->waterfall->menu->index       = array('link' => "$lang->dashboard|project|index|project=%s");
-$lang->waterfall->menu->programplan = array('link' => "{$lang->productplan->shortCommon}|programplan|browse|project=%s&productID=0&type=lists", 'subModule' => 'programplan');
-$lang->waterfall->menu->execution   = array('link' => "{$lang->stage->common}|project|execution|status=all&projectID=%s");
+$lang->waterfall->menu->execution   = array('link' => "{$lang->stage->common}|project|execution|status=all&projectID=%s", 'subModule' => 'programplan');
 $lang->waterfall->menu->story       = array('link' => "$lang->SRCommon|projectstory|story|project=%s", 'subModule' => 'projectstory,tree', 'exclude' => 'projectstory-track');
 $lang->waterfall->menu->design      = array('link' => "{$lang->design->common}|design|browse|project=%s");
 $lang->waterfall->menu->qa          = array('link' => "{$lang->qa->common}|project|bug|projectID=%s", 'subModule' => 'testcase,testtask,bug', 'alias' => 'bug,testtask,testcase');

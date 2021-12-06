@@ -22,6 +22,18 @@
       echo "<span class='text'>{$title}</span>";
       ?>
     </span>
+    <div class='btn-group'>
+      <?php $viewName = $productID != 0 ? zget($productList,$productID) : current($productList);?>
+      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+          foreach($productList as $key => $product)
+          {
+            echo "<li>" . html::a($this->createLink('programplan', 'create', "projectID=$project->id&productID=$key"), $product) . "</li>";
+          }
+        ?>
+      </ul>
+    </div>
   </div>
 </div>
 <?php $hideAttribute = $planID == 0 ? '' : ' hidden'?>
