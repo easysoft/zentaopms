@@ -53,6 +53,8 @@ $lang->programplan->hideCriticalPath = '隐藏关键路径';
 $lang->programplan->showCriticalPath = '显示关键路径';
 $lang->programplan->errorBegin       = '阶段的开始时间不能小于所属项目的开始时间%s';
 $lang->programplan->errorEnd         = '阶段的结束时间不能大于所属项目的结束时间%s';
+$lang->programplan->emptyBegin       = '『计划开始』应当为合法的日期';
+$lang->programplan->emptyEnd         = '『计划完成』应当为合法的日期';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';
