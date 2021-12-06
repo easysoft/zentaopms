@@ -81,6 +81,15 @@ function processKanbanData(key, programGroup)
     return {id: kanbanId, columns: columns, lanes: lanes};
 }
 
+/** Define kanban d-n-d rules */
+var projectDropRules =
+{
+    waitProject:   ['doingProject', 'closedProject'],
+    doingProject:  ['closedProject'],
+    closedProject: ['doingProject'],
+};
+window.kanbanDropRules = {my: projectDropRules, other: projectDropRules};
+
 /*
  * Find drop columns
  * @param {JQuery} $element Drag element
