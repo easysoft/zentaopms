@@ -175,7 +175,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID");
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
         }
         else
         {
@@ -1394,7 +1394,7 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', '', '', 0, '', false);
 
             /* Replace language. */
             $project = $this->project->getByID($this->session->project);

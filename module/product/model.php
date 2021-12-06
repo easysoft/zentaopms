@@ -539,7 +539,7 @@ class productModel extends model
             if($currentModule == 'tree' and $currentMethod == 'browse') $isShowBranch = true;
             if($currentModule == 'product' and strpos($this->config->product->showBranchMethod, $currentMethod) !== false) $isShowBranch = true;
             if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
-            if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,', ",$currentMethod,") === false) $isShowBranch = true;
+            if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,', ",$currentMethod,") === false) $isShowBranch = true;
             if($isShowBranch)
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -1978,7 +1978,19 @@ class productModel extends model
             elseif($module == 'testtask')
             {
                 $extra = $method != 'browse' ? '' : "&extra=$extra";
-                $link  = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . $extra);
+                if(strtolower($method) == 'browseunits')
+                {
+                    $methodName = 'browseUnits';
+                    $param      = '&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1';
+                    $param     .= $this->app->tab == 'project' ? "&projectID={$this->session->project}" : '';
+                }
+                else
+                {
+                    $methodName = 'browse';
+                    $param      = ($branch ? "&branch=%s" : '&branch=0') . $extra;
+                }
+
+                $link = helper::createLink($module, $methodName, "productID=%s" . $param);
             }
             elseif($module == 'bug' && $method == 'view')
             {
