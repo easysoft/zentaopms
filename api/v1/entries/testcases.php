@@ -35,7 +35,7 @@ class testcasesEntry extends entry
             $result = array();
             foreach($cases as $case)
             {
-                $case->status = array('code' => $case->status, 'name' => $this->lang->testcase->statusList[$case->status]);
+                $case->statusName = $this->lang->testcase->statusList[$case->status];
                 $result[] = $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool');
             }
 
