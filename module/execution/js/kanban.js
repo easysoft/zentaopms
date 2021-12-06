@@ -64,7 +64,7 @@ function renderDeadline(deadline)
 }
 
 /**
- * Render story item  提供方法渲染看板中的需求卡片
+ * Render story item
  * @param {Object} item  Story item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -99,6 +99,7 @@ function renderStoryItem(item, $item, col)
 
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
         if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
         else $infos.prependTo($item.find('.title'));
     }
     else if(scaleSize === 4)
@@ -125,7 +126,7 @@ function renderStoryItem(item, $item, col)
 }
 
 /**
- * Render bug item  提供方法渲染看板中的 Bug 卡片
+ * Render bug item
  * @param {Object} item  Bug item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -162,6 +163,7 @@ function renderBugItem(item, $item, col)
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
         else $infos.prependTo($item.find('.title'));
     }
     else if(scaleSize === 4)
@@ -188,7 +190,7 @@ function renderBugItem(item, $item, col)
 }
 
 /**
- * Render task item  提供方法渲染看板中的任务卡片
+ * Render task item
  * @param {Object} item  Task item object
  * @param {JQuery} $item Kanban item element
  * @param {Object} col   Column object
@@ -225,6 +227,7 @@ function renderTaskItem(item, $item, col)
         $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
 
         if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
         else $infos.prependTo($item.find('.title'));
     }
     else if(scaleSize === 4)
@@ -252,13 +255,13 @@ function renderTaskItem(item, $item, col)
     return $item;
 }
 
-/* Add column renderer/  添加特定列类型或列条目类型渲染方法 */
+/* Add column renderer */
 addColumnRenderer('story', renderStoryItem);
 addColumnRenderer('bug',   renderBugItem);
 addColumnRenderer('task',  renderTaskItem);
 
 /**
- * Render column count 渲染看板列头上的卡片数目
+ * Render column count
  * @param {JQuery} $count Kanban count element
  * @param {number} count  Column cards count
  * @param {number} col    Column object
@@ -271,7 +274,7 @@ function renderColumnCount($count, count, col)
 }
 
 /**
- * Render header column 渲染看板列头部
+ * Render header column
  * @param {JQuery} $col    Header column element
  * @param {Object} col     Header column object
  * @param {JQuery} $header Header element
@@ -307,7 +310,7 @@ function renderHeaderCol($col, col, $header, kanban)
 }
 
 /**
- * Render lane name 渲染看板泳道名称
+ * Render lane name
  * @param {JQuery} $name    Name element
  * @param {Object} lane     Lane object
  * @param {JQuery} $kanban  $kanban element
@@ -331,9 +334,8 @@ function renderLaneName($name, lane, $kanban, columns, kanban)
 
 /**
  * Updata kanban data
- * 更新看板上的数据
- * @param {string} kanbanID Kanban id   看板 ID
- * @param {Object} data     Kanban data 看板数据
+ * @param {string} kanbanID Kanban id
+ * @param {Object} data     Kanban data
  */
 function updateKanban(kanbanID, data)
 {
@@ -345,10 +347,9 @@ function updateKanban(kanbanID, data)
 
 /**
  * Create kanban in page
- * 在界面上创建一个看板界面
- * @param {string} kanbanID Kanban id      看板 ID
- * @param {Object} data     Kanban data    看板数据
- * @param {Object} options  Kanban options 组件初始化数据 看板名称
+ * @param {string} kanbanID Kanban id
+ * @param {Object} data     Kanban data
+ * @param {Object} options  Kanban options
  */
 function createKanban(kanbanID, data, options)
 {
@@ -502,7 +503,6 @@ function findDropColumns($element, $root)
 
 /**
  * Change column type for a card
- * 变更卡片类型
  * @param {Object} card        Card object
  * @param {String} fromColType The column type before change
  * @param {String} toColType   The column type after change
@@ -568,13 +568,6 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
         modalTrigger.show();
     }
-
-    /*
-        // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
-
-        // 调用 updateKanban 更新看板数据
-        updateKanban(kanbanID, newKanbanData);
-    */
 }
 
 /**
@@ -588,7 +581,7 @@ function handleFinishDrop(event)
     var $dragCol = $card.closest('.kanban-lane-col');
     var $dropCol = $(event.target);
 
-    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
+    /* Get d-n-d(drag and drop) infos */
     var card = $card.data('item');
     var fromColType = $dragCol.data('type');
     var toColType = $dropCol.data('type');
@@ -599,9 +592,7 @@ function handleFinishDrop(event)
     $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
 
-/**
- * Handle sort cards in column 处理对列卡片进行排序
- */
+/** Handle sort cards in column */
 function handleSortColCards()
 {
     /* TODO: handle sort cards from column contextmenu */
@@ -609,7 +600,7 @@ function handleSortColCards()
 }
 
 /**
- * Create column menu  创建列操作菜单
+ * Create column menu
  * @returns {Object[]}
  */
 function createColumnMenu(options)
@@ -626,7 +617,7 @@ function createColumnMenu(options)
 }
 
 /**
- * Create column create button menu  创建列添加按钮操作菜单
+ * Create column create button menu
  * @returns {Object[]}
  */
 function createColumnCreateMenu(options)
@@ -656,7 +647,7 @@ function createColumnCreateMenu(options)
 }
 
 /**
- * Create lane menu  创建泳道操作菜单
+ * Create lane menu
  * @returns {Object[]}
  */
 function createLaneMenu(options)
@@ -681,7 +672,7 @@ function createLaneMenu(options)
 }
 
 /**
- * Create story menu  创建需求卡片操作菜单
+ * Create story menu
  * @returns {Object[]}
  */
 function createStoryMenu(options)
@@ -703,7 +694,7 @@ function createStoryMenu(options)
 }
 
 /**
- * Create bug menu  创建 Bug 卡片操作菜单
+ * Create bug menu
  * @returns {Object[]}
  */
 function createBugMenu(options)
@@ -724,7 +715,7 @@ function createBugMenu(options)
 }
 
  /**
- * Create task menu  创建任务卡片操作菜单
+ * Create task menu
  * @returns {Object[]}
  */
 function createTaskMenu(options)
@@ -819,7 +810,7 @@ $(function()
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
     $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', window.kanbanScaleSize <= 1 ? 'disabled' : null);
 
-    /* Common options 用于初始化看板的通用选项 */　
+    /* Common options */　
     var commonOptions =
     {
         maxColHeight:         'auto',
@@ -843,7 +834,7 @@ $(function()
         onRenderCount:     renderColumnCount
     };
 
-    /* Create kanban 创建看板 */
+    /* Create kanban */
     if(groupBy == 'default')
     {
         var kanbanLane = '';
@@ -858,7 +849,7 @@ $(function()
     }
     else
     {
-        /* Create kanban by group. 分泳道创建看板. */
+        /* Create kanban by group. */
         createKanban(browseType, kanbanGroup[groupBy], commonOptions);
     }
 
