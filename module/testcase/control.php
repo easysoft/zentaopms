@@ -1853,10 +1853,15 @@ class testcase extends control
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $branches   = $this->loadModel('branch')->getPairs($productID);
-        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? 0 : array_keys($branches));
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
+
+        $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
+        foreach($branchModules as $branchID => $moduleList)
+        {
+            foreach($moduleList as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+        }
 
         if(!empty($maxImport) and file_exists($tmpFile))
         {
