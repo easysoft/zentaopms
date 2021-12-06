@@ -1,7 +1,7 @@
 .main-content{padding: 0;}
 .actions{display: none;}
 #mainMenu{display: none;}
-#main {min-width: unset; height:407px; overflow-y: overlay;}
+#main {min-width: unset; height: calc(100% - 40px);}
 .pager-size-menu{display: none;}
 .table-footer{position: fixed; width: 100%; bottom: 0;}
 .tab-btn-container{width: 100%; background-color: #f2f2f2;}
@@ -13,3 +13,7 @@
 ::-webkit-scrollbar {width: 10px; height: 10px;}
 ::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
 .linkButton {position: absolute; top: 0px; right: 10px; line-height: 36px;}
+html, body, .container, .main-content, .tabs, .tab-pane, .main-table {height: 100%;}
+.tab-content {max-height: calc(100% - 36px); overflow: hidden}
+.tab-content:hover {overflow: overlay}
+.main-table > table {max-height: 100%;}
