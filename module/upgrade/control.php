@@ -392,7 +392,7 @@ class upgrade extends control
                 foreach($projectProducts as $projectProduct)
                 {
                     $data = new stdclass();
-                    $data->project = $projectList[$projectProduct->project];
+                    $data->project = $_POST['projectType'] == 'execution' ? $projectList : $projectList[$projectProduct->project];
                     $data->product = $projectProduct->product;
                     $data->plan    = $projectProduct->plan;
                     $data->branch  = $projectProduct->branch; 
