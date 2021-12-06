@@ -60,7 +60,7 @@ function handleXuanNoticeChange(notice)
 /* Handle client route change */
 function handleXuanRouteChange(route)
 {
-    var hasShowChatView = route.indexOf('/chats/') === 0 && route.length > 7;
+    var hasShowChatView = route.indexOf('/chats/') === 0 && route.length > '/chats/'.length;
     $('#' + window.xuan.id).toggleClass('has-chat-view', hasShowChatView);
 }
 
