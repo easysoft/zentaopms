@@ -1365,6 +1365,12 @@ class testcase extends control
      */
     public function export($productID, $orderBy, $taskID = 0, $browseType = '')
     {
+        if(strpos($orderBy, 'case') !== false)
+        {
+            list($field, $sort) = explode('_', $orderBy);
+            $orderBy = '`' . $field . '`_' . $sort;
+        }
+
         $product = $this->loadModel('product')->getById($productID);
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
         if($_POST)
