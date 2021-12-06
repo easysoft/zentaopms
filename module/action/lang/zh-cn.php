@@ -349,6 +349,7 @@ $lang->action->dynamicAction->release['opened']       = '创建发布';
 $lang->action->dynamicAction->release['edited']       = '编辑发布';
 $lang->action->dynamicAction->release['changestatus'] = '修改发布状态';
 $lang->action->dynamicAction->release['undeleted']    = '还原发布';
+$lang->action->dynamicAction->release['notified']     = '通知发布';
 $lang->action->dynamicAction->release['hidden']       = '隐藏发布';
 
 $lang->action->dynamicAction->story['opened']                = "创建{$lang->SRCommon}";
