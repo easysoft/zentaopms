@@ -25,6 +25,7 @@ $lang->task->delayed             = 'Delayed';
 $lang->task->view                = "Task Detail";
 $lang->task->logEfforts          = "Effort";
 $lang->task->record              = "Estimates";
+$lang->task->teamConsumed        = "Tean Consumed";
 $lang->task->start               = "Start";
 $lang->task->startAction         = "Start Task";
 $lang->task->restart             = "Continue";
@@ -197,6 +198,7 @@ $lang->task->legendBasic  = 'Basic Info';
 $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Task Life';
 $lang->task->legendDesc   = 'Task Description';
+$lang->task->legendDetail = 'Task Detail';
 
 $lang->task->confirmDelete          = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate  = "Do you want to delete it?";

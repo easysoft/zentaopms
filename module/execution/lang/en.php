@@ -103,6 +103,7 @@ $lang->execution->copyNoExecution  = 'There are no ' . $lang->executionCommon . 
 $lang->execution->noTeam           = 'No team members at the moment';
 $lang->execution->or               = ' or ';
 $lang->execution->selectProject    = 'Please select project';
+$lang->execution->unfoldClosed     = 'Unfold Closed';
 $lang->execution->editName         = 'Edit Name';
 $lang->execution->setWIP           = 'WIP Settings';
 $lang->execution->sortColumn       = 'Kanban Card Sorting';

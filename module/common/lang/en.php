@@ -108,6 +108,10 @@ $lang->customMenu      = 'Custom Menu';
 $lang->customField     = 'Custom Field';
 $lang->lineNumber      = 'Line No.';
 $lang->tutorialConfirm = 'You are using ZenTao tutorial. Do you want to quit right now？';
+$lang->levelExceeded   = 'The level has exceeded the display range. For more information, please go to the web page or view it through search.';
+
+$lang->serviceAgreement = "Service Agreement";
+$lang->privacyPolicy    = "Privacy Policy";
 
 $lang->preShortcutKey    = '[Shortcut:←]';
 $lang->nextShortcutKey   = '[Shortcut:→]';

@@ -250,6 +250,7 @@ $lang->story->legendChildStories   = 'Child Stories';
 $lang->story->legendSpec           = 'Description';
 $lang->story->legendVerify         = 'Acceptance';
 $lang->story->legendMisc           = 'Misc.';
+$lang->story->legendInformation    = 'Story Information';
 
 $lang->story->lblChange   = 'Change';
 $lang->story->lblReview   = 'Review';

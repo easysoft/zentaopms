@@ -51,8 +51,8 @@ $lang->programplan->exporting        = 'Exporting';
 $lang->programplan->exportFail       = 'Failed';
 $lang->programplan->hideCriticalPath = 'Hide Critical Path';
 $lang->programplan->showCriticalPath = 'Show Critical Path';
-$lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";
 $lang->programplan->errorBegin       = "Project begin date: %s, begin date should be >= project begin date.";
+$lang->programplan->errorEnd         = "Project end date: %s, end date should be <= project end date.";
 
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';

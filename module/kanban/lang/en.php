@@ -21,15 +21,15 @@ $lang->kanban->group->task['default']    = "Default";
 $lang->kanban->group->task['pri']        = "Task Priority";
 $lang->kanban->group->task['type']       = "Task Type";
 $lang->kanban->group->task['module']     = "Task Module";
-$lang->kanban->group->task['story']      = "Story";
 $lang->kanban->group->task['assignedTo'] = "Assigned To";
+$lang->kanban->group->task['story']      = "Story";
 
 $lang->kanban->group->bug = array();
 $lang->kanban->group->bug['default']    = "Default";
 $lang->kanban->group->bug['pri']        = "Bug Priority";
-$lang->kanban->group->bug['type']       = "Bug Type";
-$lang->kanban->group->bug['module']     = "Bug Module";
 $lang->kanban->group->bug['severity']   = "Bug Severity";
+$lang->kanban->group->bug['module']     = "Bug Module";
+$lang->kanban->group->bug['type']       = "Bug Type";
 $lang->kanban->group->bug['assignedTo'] = "Assigned To";
 
 $lang->kanban->WIP                = 'WIP';
