@@ -39,7 +39,8 @@ class executionBugsEntry extends entry
                 if($bug->status == 'active' and $bug->confirmed) $status = array('code' => 'confirmed', 'name' => $this->lang->bug->labelConfirmed);
                 if($bug->resolution == 'postponed') $status = array('code' => 'postponed', 'name' => $this->lang->bug->labelPostponed);
                 if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
-                $bug->status = $status;
+                $bug->status     = $status['code'];
+                $bug->statusName = $status['name'];
 
                 $result[$bug->id] = $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool');
             }
@@ -53,7 +54,8 @@ class executionBugsEntry extends entry
             foreach($storyChangeds as $bugID)
             {
                 $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->changed);
-                $result[$bugID]->status = $status;
+                $result[$bugID]->status     = $status['code'];
+                $result[$bugID]->statusName = $status['name'];
             }
 
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'bugs' => array_values($result)));

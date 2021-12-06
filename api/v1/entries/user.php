@@ -221,7 +221,8 @@ class userEntry extends Entry
                             if($bug->status == 'active' and $bug->confirmed) $status = array('code' => 'confirmed', 'name' => $this->lang->bug->labelConfirmed);
                             if($bug->resolution == 'postponed') $status = array('code' => 'postponed', 'name' => $this->lang->bug->labelPostponed);
                             if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
-                            $bug->status = $status;
+                            $bug->status     = $status['code'];
+                            $bug->statusName = $status['name'];
 
                             $bugs[$bug->id] = $bug;
                         }
@@ -235,7 +236,8 @@ class userEntry extends Entry
                         foreach($storyChangeds as $bugID)
                         {
                             $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->changed);
-                            $bugs[$bugID]->status = $status;
+                            $bugs[$bugID]->status     = $status['code'];
+                            $bugs[$bugID]->statusName = $status['name'];
                         }
 
                         $info->bug['total'] = $data->data->pager->recTotal;
@@ -271,7 +273,7 @@ class userEntry extends Entry
                         $stories = array();
                         foreach($data->data->stories as $story)
                         {
-                            $story->status = array('code' => $story->status, 'name' => $this->lang->story->statusList[$story->status]);
+                            $story->statusName = $this->lang->story->statusList[$story->status];
                             $stories[$story->id] = $story;
                         }
 
