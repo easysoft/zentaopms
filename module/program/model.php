@@ -449,7 +449,6 @@ class programModel extends model
             ->where('t1.deleted')->eq('0')
             ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
-            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t3.objectType')->eq('project')->fi()
             ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t1.status')->eq($browseType)->fi()
             ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
             ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
