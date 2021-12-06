@@ -489,7 +489,7 @@ class programplanModel extends model
             }
 
             if(helper::isZeroDate($plan->begin)) $plan->begin = '';
-            if(helper::isZeroDate($plan->end)) $plan->end   = '';
+            if(helper::isZeroDate($plan->end))   $plan->end   = '';
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
                 $field = trim($field);
