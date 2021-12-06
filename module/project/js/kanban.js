@@ -154,13 +154,6 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
         modalTrigger.show();
     }
-
-    /*
-        // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
-
-        // 调用 updateKanban 更新看板数据
-        updateKanban(kanbanID, newKanbanData);
-    */
 }
 
 /**
@@ -170,7 +163,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
  */
 function handleFinishDrop(event)
 {
-    var $card    = $(event.element); // The drag card
+    var $card    = $(event.element).closest('.kanban-item'); // The drag card
     var $dragCol = $card.closest('.kanban-lane-col');
     var $dropCol = $(event.target);
 
@@ -179,8 +172,6 @@ function handleFinishDrop(event)
     var fromColType = $dragCol.data('type');
     var toColType   = $dropCol.data('type');
     var kanbanID    = $card.closest('.kanban').data('id');
-
-    if(fromColType == 'doingProject') card = $card.parent().parent().data('item');
 
     changeCardColType(card, fromColType, toColType, kanbanID);
 }
@@ -206,7 +197,7 @@ $(function()
             virtualize:    true,
             droppable:
             {
-                selector:     '.kanban-item:not(.execution-item)',
+                selector:     '.kanban-card:not(.execution-item)',
                 target:       findDropColumns,
                 finish:       handleFinishDrop,
                 mouseButton: 'left'
