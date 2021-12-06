@@ -600,7 +600,7 @@
               </table>
             </div>
           </div>
-          <?php include '../../common/view/action.html.php';?>
+          <?php if($this->app->getViewType() != 'xhtml') include '../../common/view/action.html.php';?>
         </div>
       </div>
     </div>
