@@ -4509,7 +4509,7 @@ class upgradeModel extends model
 
         $this->dao->insert(TABLE_PROJECT)->data($project)
             ->batchcheck('name', 'notempty')
-            ->check('name', 'unique', "type='project' AND deleted=0")
+            ->check('name', 'unique', "type='project' AND deleted='0'")
             ->exec();
         if(dao::isError()) return false;
 

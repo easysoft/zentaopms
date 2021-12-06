@@ -238,6 +238,7 @@ class release extends control
                 $this->dao->update(TABLE_RELEASE)->set('notify')->eq($notify)->where('id')->eq($releaseID)->exec();
 
                 $this->release->sendmail($releaseID);
+                $this->loadModel('action')->create('release', $releaseID, 'notified');
             }
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
