@@ -131,7 +131,7 @@ class testcase extends control
         }
         else
         {
-            $this->qa->setMenu($this->products, $productID, $branch);
+            $this->qa->setMenu($this->products, $productID, $branch, $browseType);
         }
 
         $uri = $this->app->getURI(true);
