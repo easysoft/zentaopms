@@ -238,6 +238,7 @@ $lang->action->label->delayed               = 'delayed ';
 $lang->action->label->suspended             = 'suspended ';
 $lang->action->label->login                 = 'Login';
 $lang->action->label->logout                = "Logout";
+$lang->action->label->notified              = "Notified";
 $lang->action->label->deleteestimate        = "deleted ";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
@@ -312,6 +313,7 @@ $lang->action->dynamicAction->release['opened']       = 'Create Release';
 $lang->action->dynamicAction->release['edited']       = 'Edit Release';
 $lang->action->dynamicAction->release['changestatus'] = 'Change Release Status';
 $lang->action->dynamicAction->release['undeleted']    = 'Restore Release';
+$lang->action->dynamicAction->release['notified']     = 'Notify Release';
 $lang->action->dynamicAction->release['hidden']       = 'Hide Release';
 
 $lang->action->dynamicAction->story['opened']                = 'Create Story';

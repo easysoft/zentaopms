@@ -969,7 +969,9 @@ class project extends control
         $this->session->set('bugList', $this->app->getURI(true), 'project');
 
         $products = array('0' => $this->lang->product->all) + $this->product->getProducts($projectID, 'all', '', false);
-        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', '', $branch, 0, '', false);
+
+        $extra = "$projectID|$browseType";
+        $this->lang->modulePageNav = $this->product->select($products, $productID, 'project', 'testcase', $extra, $branch, 0, '', false);
 
         echo $this->fetch('testcase', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=$orderBy&recTotal=$orderBy&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }

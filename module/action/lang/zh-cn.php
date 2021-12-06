@@ -259,6 +259,7 @@ $lang->action->label->delayed               = '延期';
 $lang->action->label->suspended             = '挂起';
 $lang->action->label->login                 = '登录系统';
 $lang->action->label->logout                = "退出登录";
+$lang->action->label->notified              = "通知了";
 $lang->action->label->deleteestimate        = "删除了工时";
 $lang->action->label->linked2build          = "关联了";
 $lang->action->label->linked2bug            = "关联了";
@@ -348,6 +349,7 @@ $lang->action->dynamicAction->release['opened']       = '创建发布';
 $lang->action->dynamicAction->release['edited']       = '编辑发布';
 $lang->action->dynamicAction->release['changestatus'] = '修改发布状态';
 $lang->action->dynamicAction->release['undeleted']    = '还原发布';
+$lang->action->dynamicAction->release['notified']     = '通知发布';
 $lang->action->dynamicAction->release['hidden']       = '隐藏发布';
 
 $lang->action->dynamicAction->story['opened']                = "创建{$lang->SRCommon}";

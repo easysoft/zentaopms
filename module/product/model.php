@@ -75,10 +75,10 @@ class productModel extends model
      */
     public function select($products, $productID, $currentModule, $currentMethod, $extra = '', $branch = '', $module = 0, $moduleType = '', $withBranch = true)
     {
-        $isBrowseBug = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
+        $isQaModule = (strpos(',project,execution,', ",{$this->app->tab},") !== false and strpos(',bug,testcase,testtask,ajaxselectstory,', ",{$this->app->rawMethod},") !== false and isset($products[0])) ? true : false;
 
         $this->app->loadLang('product');
-        if(!$isBrowseBug and !$productID)
+        if(!$isQaModule and !$productID)
         {
             unset($this->lang->product->menu->settings['subMenu']->branch);
             return;
@@ -88,10 +88,13 @@ class productModel extends model
         setcookie("lastProduct", $productID, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
         if($productID) $currentProduct = $this->getById($productID);
 
-        if($isBrowseBug and $this->app->tab == 'project')   $extra = $this->session->project;
-        if($isBrowseBug and $this->app->tab == 'execution') $extra = $this->session->execution;
+        if($isQaModule and $this->app->tab == 'project')
+        {
+            if($this->app->tab == 'project')   $extra = $currentMethod == 'testcase' ? $extra : $this->session->project;
+            if($this->app->tab == 'execution') $extra = $this->session->execution;
+        }
 
-        if($isBrowseBug and !$productID)
+        if($isQaModule and !$productID)
         {
             $currentProduct = new stdclass();
             $currentProduct->name = $products[$productID];
@@ -102,7 +105,7 @@ class productModel extends model
         $output = '';
         if(!empty($products))
         {
-            $dropMenuLink = helper::createLink($isBrowseBug ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
+            $dropMenuLink = helper::createLink($isQaModule ? 'bug' : 'product', 'ajaxGetDropMenu', "objectID=$productID&module=$currentModule&method=$currentMethod&extra=$extra");
             $output  = "<div class='btn-group angle-btn'><div class='btn-group'><button data-toggle='dropdown' type='button' class='btn btn-limit' id='currentItem' title='{$currentProduct->name}'><span class='text'>{$currentProduct->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$dropMenuLink'>";
             $output .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
             $output .= "</div></div>";
@@ -539,7 +542,7 @@ class productModel extends model
             if($currentModule == 'tree' and $currentMethod == 'browse') $isShowBranch = true;
             if($currentModule == 'product' and strpos($this->config->product->showBranchMethod, $currentMethod) !== false) $isShowBranch = true;
             if($this->app->tab == 'qa' and strpos(',testsuite,testreport,testtask,', ",$currentModule,") === false) $isShowBranch = true;
-            if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,', ",$currentMethod,") === false) $isShowBranch = true;
+            if($this->app->tab == 'qa' and $currentModule == 'testtask' and strpos(',create,edit,browseunits,importunitresult,unitcases,', ",$currentMethod,") === false) $isShowBranch = true;
             if($isShowBranch)
             {
                 $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$currentProduct->type]);
@@ -1978,7 +1981,19 @@ class productModel extends model
             elseif($module == 'testtask')
             {
                 $extra = $method != 'browse' ? '' : "&extra=$extra";
-                $link  = helper::createLink($module, 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=0') . $extra);
+                if(strtolower($method) == 'browseunits')
+                {
+                    $methodName = 'browseUnits';
+                    $param      = '&browseType=newest&orderBy=id_desc&recTotal=0&recPerPage=0&pageID=1';
+                    $param     .= $this->app->tab == 'project' ? "&projectID={$this->session->project}" : '';
+                }
+                else
+                {
+                    $methodName = 'browse';
+                    $param      = ($branch ? "&branch=%s" : '&branch=0') . $extra;
+                }
+
+                $link = helper::createLink($module, $methodName, "productID=%s" . $param);
             }
             elseif($module == 'bug' && $method == 'view')
             {
@@ -1993,6 +2008,10 @@ class productModel extends model
                 parse_str($extra, $output);
                 $projectID = isset($output['projectID']) ? $output['projectID'] : 0;
                 $link      = helper::createLink($module, $method, "productID=%s&branch=" . ($branch ? "%s" : '') . "&groupBy=&projectID=$projectID") . "#app=project";
+            }
+            elseif($module == 'testcase' and $method == 'browse')
+            {
+                $link = helper::createLink('testcase', 'browse', "productID=%s" . ($branch ? "&branch=%s" : '&branch=all') . "&browseType=$extra");
             }
             elseif($module == 'testreport' and ($method == 'create' or $method == 'edit'))
             {
@@ -2026,6 +2045,11 @@ class productModel extends model
         elseif($module == 'design')
         {
             return helper::createLink('design', 'browse', "productID=%s");
+        }
+        elseif($module == 'project' and $method == 'testcase')
+        {
+            $params = explode('|', $extra);
+            return helper::createLink('project', 'testcase', "projectID={$params[0]}&productID=%s&branch=all&browseType={$params[1]}");
         }
         elseif($module == 'project' or $module == 'execution')
         {

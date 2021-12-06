@@ -238,6 +238,7 @@ $lang->action->label->delayed               = 'delayed ';
 $lang->action->label->suspended             = 'suspended ';
 $lang->action->label->login                 = 'login';
 $lang->action->label->logout                = "logout";
+$lang->action->label->notified              = "Notified";
 $lang->action->label->deleteestimate        = "deleted ";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
@@ -312,6 +313,7 @@ $lang->action->dynamicAction->release['opened']       = 'Tạo phát hành';
 $lang->action->dynamicAction->release['edited']       = 'Sửa phát hành';
 $lang->action->dynamicAction->release['changestatus'] = 'Thay đổi Tình trạng Phát hành';
 $lang->action->dynamicAction->release['undeleted']    = 'Khôi phục phát hành';
+$lang->action->dynamicAction->release['notified']     = 'Notify release';
 $lang->action->dynamicAction->release['hidden']       = 'Ẩn phát hành';
 
 $lang->action->dynamicAction->story['opened']                = 'Tạo câu chuyện';

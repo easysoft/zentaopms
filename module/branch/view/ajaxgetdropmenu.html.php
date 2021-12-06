@@ -13,11 +13,11 @@ foreach($branches as $branchID => $branch)
 
     if($branchID == 'all' or empty($branchID) or $statusList[$branchID] == 'active')
     {
-        $activeBranchesHtml .= html::a($linkHtml, $branch, '', "class='$selected' data-key='{$branchesPinyin[$branch]}'");
+        $activeBranchesHtml .= html::a($linkHtml, $branch, '', "class='$selected' data-key='{$branchesPinyin[$branch]}' data-app='{$this->app->tab}'");
     }
     else
     {
-        $closedBranchesHtml .= html::a($linkHtml, $branch, '', "class='$selected' data-key='{$branchesPinyin[$branch]}'");
+        $closedBranchesHtml .= html::a($linkHtml, $branch, '', "class='$selected' data-key='{$branchesPinyin[$branch]}' data-app='{$this->app->tab}'");
     }
 }
 ?>

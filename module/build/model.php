@@ -78,15 +78,15 @@ class buildModel extends model
     /**
      * Get builds of a project in pairs.
      *
-     * @param  int    $projectID
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $params       noempty|notrunk, can be a set of them
-     * @param  int    $buildID
+     * @param  int        $projectID
+     * @param  int        $productID
+     * @param  int|string $branch
+     * @param  string     $params       noempty|notrunk|nodone|noterminate, can be a set of them
+     * @param  int        $buildID
      * @access public
      * @return array
      */
-    public function getProjectBuildPairs($projectID, $productID, $branch = 0, $params = '', $buildID = 0)
+    public function getProjectBuildPairs($projectID, $productID, $branch = 'all', $params = '', $buildID = 0)
     {
         $sysBuilds      = array();
         $selectedBuilds = array();
@@ -100,7 +100,7 @@ class buildModel extends model
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
-            ->beginIF($branch)->andWhere('t1.branch')->in("0,$branch")->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy('t1.date desc, t1.id desc')->fetchAll('id');
 
