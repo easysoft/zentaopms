@@ -235,13 +235,11 @@ if($config->systemMode == 'new')
 
     /* Program plan. */
     $lang->resource->programplan = new stdclass();
-    $lang->resource->programplan->browse = 'browse';
     $lang->resource->programplan->create = 'create';
     $lang->resource->programplan->edit   = 'edit';
 
-    $lang->programplan->methodOrder[5]  = 'browse';
-    $lang->programplan->methodOrder[10] = 'create';
-    $lang->programplan->methodOrder[15] = 'edit';
+    $lang->programplan->methodOrder[0] = 'create';
+    $lang->programplan->methodOrder[5] = 'edit';
 
     /* Project. */
     $lang->resource->project = new stdclass();
