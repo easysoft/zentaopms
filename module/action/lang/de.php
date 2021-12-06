@@ -9,18 +9,29 @@
  * @version     $Id: de.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->action->common     = 'Log';
-$lang->action->product    = $lang->productCommon;
-$lang->action->project    = 'Project';
-$lang->action->execution  = $lang->execution->common;
-$lang->action->objectType = 'Object Type';
-$lang->action->objectID   = 'ID';
-$lang->action->objectName = 'Objekt Name';
-$lang->action->actor      = 'Handler';
-$lang->action->action     = 'Aktion';
-$lang->action->actionID   = 'Aktion ID';
-$lang->action->date       = 'Datum';
-$lang->action->extra      = 'Wertschöpfung';
+global $config;
+
+$lang->action->common      = 'Log';
+$lang->action->id          = 'ID';
+$lang->action->product     = $lang->productCommon;
+$lang->action->project     = 'Project';
+$lang->action->execution   = $lang->execution->common;
+$lang->action->objectType  = 'Object Type';
+$lang->action->objectID    = 'ID';
+$lang->action->objectName  = 'Objekt Name';
+$lang->action->actor       = 'Handler';
+$lang->action->action      = 'Aktion';
+$lang->action->actionID    = 'Aktion ID';
+$lang->action->date        = 'Datum';
+$lang->action->extra       = 'Wertschöpfung';
+$lang->action->system      = 'System';
+$lang->action->url         = 'URL';
+$lang->action->contentType = 'Content Type';
+$lang->action->data        = 'Data';
+$lang->action->result      = 'Result';
+$lang->action->modified    = 'Modified';
+$lang->action->old         = 'Old';
+$lang->action->new         = 'New';
 
 $lang->action->trash       = 'Aufräumen';
 $lang->action->undelete    = 'Wiederherstellen';

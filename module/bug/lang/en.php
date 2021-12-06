@@ -186,6 +186,7 @@ $lang->bug->legendComment               = 'Note';
 $lang->bug->legendLife                  = 'Bug Life';
 $lang->bug->legendMisc                  = 'Misc.';
 $lang->bug->legendRelated               = 'Related Info';
+$lang->bug->legendThisWeekCreated       = 'This Week Created';
 
 /* Button. */
 $lang->bug->buttonConfirm = 'Confirm';
@@ -280,6 +281,7 @@ $lang->bug->statusList['active']   = 'Active';
 $lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
+$lang->bug->confirmedList[''] = '';
 $lang->bug->confirmedList[1] = 'Yes';
 $lang->bug->confirmedList[0] = 'No';
 

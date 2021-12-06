@@ -55,6 +55,7 @@ $lang->product->project     = $lang->executionCommon . ' List';
 $lang->product->build       = 'Build List';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
+$lang->product->progress    = "Progress";
 
 $lang->product->currentExecution      = "Current Execution";
 $lang->product->activeStories         = 'Active [S]';
@@ -77,6 +78,7 @@ $lang->product->assignToNullBugs      = 'Unassigned [B]';
 $lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 $lang->product->closedBugs            = 'Closed Bug';
 $lang->product->bugFixedRate          = 'Bug Repair rate';
+$lang->product->unfoldClosed          = 'Unfold Closed';
 
 $lang->product->confirmDelete        = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct       = "No {$lang->productCommon} is created yet!";
