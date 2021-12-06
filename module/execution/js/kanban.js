@@ -80,11 +80,11 @@ function renderStoryItem(item, $item, col)
         var $title = $item.find('.title');
         if(!$title.length)
         {
-            $title = $('<a class="title">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>');
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
             $title.appendTo($item);
         }
-        $title.attr('title', item.title).find('.text').html('<a class="iframe" data-width="95%">' + item.title + '</a>');
-        $title.find('.text > a').attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true));
+        $title.attr('title', item.title).find('.text').text(item.title);
     }
 
     if(scaleSize <= 2)
