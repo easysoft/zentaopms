@@ -447,14 +447,24 @@ class programplanModel extends model
                 dao::$errors['message'][] = $this->lang->programplan->error->percentNumber;
                 return false;
             }
-            if($plan->begin == '0000-00-00' or !validater::checkDate($plan->begin))
+            if($plan->begin == '0000-00-00')
             {
                 dao::$errors['message'][] = $this->lang->programplan->emptyBegin;
                 return false;
             }
-            if($plan->end == '0000-00-00' or !validater::checkDate($plan->end))
+            if(!validater::checkDate($plan->begin))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->checkBegin;
+                return false;
+            }
+            if($plan->end == '0000-00-00')
             {
                 dao::$errors['message'][] = $this->lang->programplan->emptyEnd;
+                return false;
+            }
+            if(!validater::checkDate($plan->end))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->checkEnd;
                 return false;
             }
             if($plan->end != '0000-00-00' and $plan->end < $plan->begin)
