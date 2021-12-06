@@ -19,7 +19,7 @@ function loadLibModules(libID)
  */
 function initSteps(selector)
 {
-    /* Fix task #4832. Auto adjust textarea height. */
+    /* Auto adjust textarea height. */
     $('textarea.autosize').each(function()
     {
         $.autoResizeTextarea(this);
@@ -36,7 +36,7 @@ function initSteps(selector)
         {
             $step = $stepTemplate.clone();
             if($row) $row.after($step);
-            else $steps.append($step);
+            if(!$row) $steps.append($step);
             $step.addClass('step-new');
             if(type) $step.find('.step-type').val(type);
         }
@@ -163,15 +163,15 @@ function initSteps(selector)
         refreshSteps();
     }).on('change', '.step-group-toggle', function()
     {
-        var $checkbox = $(this);
-        var $step = $checkbox.closest('.step');
-        var isChecked = $checkbox.is(':checked');
+        var $checkbox   = $(this);
+        var $step       = $checkbox.closest('.step');
+        var isChecked   = $checkbox.is(':checked');
         var suggestType = isChecked ? 'group' : 'item';
         if(!isChecked)
         {
-            var $prevStep = $step.prev('.step:not(.drag-shadow)');
+            var $prevStep    = $step.prev('.step:not(.drag-shadow)');
             var suggestChild = $prevStep.length && $prevStep.is('.step-group') && $step.next('.step:not(.drag-shadow)').length;
-            suggestType = suggestChild ? 'item' : 'step';
+            suggestType      = suggestChild ? 'item' : 'step';
         }
         $step.find('.step-type').val(suggestType);
 
