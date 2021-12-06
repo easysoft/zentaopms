@@ -9,14 +9,22 @@ function processKanbanData(key, programsData)
     var kanbanId = key;
 
     /* Generate columns */
-    var columns = [];
+    var columns         = [];
     var hasDoingProject = false;
+    var executionsCol;
     $.each(kanbanColumns, function(_, column)
     {
         var colType = column.type;
+        if(colType === 'doingProject') hasDoingProject = true;
+        column = $.extend({}, column,
+        {
+            kanban:     kanbanId,
+            id:         kanbanId + '-' + colType,
+            parentType: (hasDoingProject && (colType === 'doingProject' || colType === 'doingExecution')) ? 'doing' : false,
+        });
+
         if(colType === 'doingProject')
         {
-            hasDoingProject = true;
             columns.push(
             {
                 kanban:   kanbanId,
@@ -27,12 +35,12 @@ function processKanbanData(key, programsData)
                 count:    ''
             });
         }
-        columns.push($.extend({}, column,
+        else if(colType === 'doingExecution')
         {
-            kanban:     kanbanId,
-            id:         kanbanId + '-' + colType,
-            parentType: (hasDoingProject && (colType === 'doingProject' || colType === 'doingExecution')) ? 'doing' : false,
-        }));
+            executionsCol = column;
+            executionsCol.count = 0;
+        }
+        columns.push(column);
     });
 
     /* Format lanes data */
@@ -76,6 +84,8 @@ function processKanbanData(key, programsData)
 
                         var execution = latestExecutions[projectID];
                         if(!execution || !execution.id) return;
+
+                        executionsCol.count++;
                         projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                     });
                 }
