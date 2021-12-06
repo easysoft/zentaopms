@@ -10,9 +10,17 @@ function processKanbanData(key, programsData)
 
     /* Generate columns */
     var columns = [];
+    var executionsCol;
     $.each(kanbanColumns, function(_, column)
     {
         var colType = column.type;
+        column = $.extend({}, column,
+        {
+            kanban:     kanbanId,
+            id:         kanbanId + '-' + column.type,
+            parentType: (colType === 'doingProject' || colType === 'doingExecution') ? 'doing' : false,
+        });
+
         if(colType === 'doingProject')
         {
             columns.push(
@@ -25,13 +33,12 @@ function processKanbanData(key, programsData)
                 count:    ''
             });
         }
-
-        columns.push($.extend({}, column,
+        else if(colType === 'doingExecution')
         {
-            kanban:     kanbanId,
-            id:         kanbanId + '-' + column.type,
-            parentType: (colType === 'doingProject' || colType === 'doingExecution') ? 'doing' : false,
-        }));
+            executionsCol = column;
+            executionsCol.count = 0;
+        }
+        columns.push(column);
     });
 
     /* Format lanes data */
@@ -87,6 +94,8 @@ function processKanbanData(key, programsData)
 
                     var execution = project.execution;
                     if(!execution || !execution.id) return;
+
+                    executionsCol.count++;
                     projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                 });
             }

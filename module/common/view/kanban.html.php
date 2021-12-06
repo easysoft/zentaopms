@@ -436,21 +436,6 @@ $.extend($.fn.kanban.Constructor.DEFAULTS,
         var color = kanbanColorList[lane.$index % kanbanColorList.length];
         $name.css('background-color', color);
     },
-    onRenderKanban: function($kanban, kanbanData)
-    {
-        /* Update project count and execution count */
-        var doingProjectCount   = 0;
-        var doingExecutionCount = 0;
-        var $doingProjectItems = $kanban.find('.kanban-lane-col[data-type="doingProject"] > .kanban-lane-items');
-        if($doingProjectItems.length)
-        {
-            doingProjectCount = $doingProjectItems.find('.project-item').length;
-            doingExecutionCount = $doingProjectItems.find('.execution-item').length;
-        }
-
-        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
-        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
-    },
     onCreate: function(kanban)
     {
         kanban.$.on('scroll', tryUpdateKanbanAffix);
