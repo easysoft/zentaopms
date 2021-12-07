@@ -5,6 +5,7 @@ ALTER TABLE `zt_branch` ADD `createdDate` date NOT NULL AFTER `desc`;
 ALTER TABLE `zt_branch` ADD `closedDate` date NOT NULL AFTER `createdDate`;
 ALTER TABLE `zt_projectstory` ADD `branch` mediumint(8) NOT NULL AFTER `product`;
 ALTER TABLE `zt_projectproduct` ADD PRIMARY KEY `project_product_branch` (`project`, `product`, `branch`), DROP INDEX `PRIMARY`;
+ALTER TABLE `zt_apistruct` CHANGE COLUMN `editEdBy` `editedBy` varchar(30) NOT NULL DEFAULT 0;
 
 -- DROP TABLE IF EXISTS `zt_kanbanlane`;
 CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
