@@ -19,64 +19,70 @@ function loadLibModules(libID)
  */
 function initSteps(selector)
 {
+    /* Auto adjust textarea height. */
+    $('textarea.autosize').each(function()
+    {
+        $.autoResizeTextarea(this);
+    });
+
     var $steps = $(selector || '#steps');
     var $stepTemplate = $('#stepTemplate').detach().removeClass('template').attr('id', null);
-    var initSortableCallTask = null;
     var groupNameText = $steps.data('groupName');
-    var insertStepRow = function($row, count, type)
+    var insertStepRow = function($row, count, type, notFocus)
     {
         if(count === undefined) count = 1;
+        var $step;
         for(var i = 0; i < count; ++i)
         {
-            var $step = $stepTemplate.clone();
+            $step = $stepTemplate.clone();
             if($row) $row.after($step);
-            else $steps.append($step);
+            if(!$row) $steps.append($step);
             $step.addClass('step-new');
-            setTimeout(function(){$step.find('.step-steps').focus();}, 10);
+            if(type) $step.find('.step-type').val(type);
         }
+        if(!notFocus && $step) setTimeout(function(){$step.find('.step-steps').focus();}, 10);
     };
     var updateStepType = function($step, type)
     {
         var targetIsGroup = type =='group';
-        $step.attr('data-type', type).find('.step-steps').toggleClass('autosize', !targetIsGroup).attr('placeholder', targetIsGroup ? groupNameText : null).focus();
-
-        var displayType = (type =='item' && $step.hasClass('step-step')) ? 'step' : type;
-
-        var activeTypeText = $step.find('.step-type-menu > a').removeClass('active').filter('[data-value="' + displayType + '"]').addClass('active').text();
-        $step.find('.step-type-current > span').text(activeTypeText);
+        $step.attr('data-type', type).find('.step-steps').addClass('autosize').attr('placeholder', targetIsGroup ? groupNameText : null);
     };
-    var refreshSteps = function()
+    var getStepsElements = function()
+    {
+        return $steps.children('.step:not(.drag-shadow)');
+    };
+    var refreshSteps = function(skipAutoAddStep)
     {
         var parentId = 1, childId = 0;
-        $steps.children('.step:not(.drag-shadow)').each(function(idx)
+        getStepsElements().each(function(idx)
         {
-            var $step = $(this);
+            var $step = $(this).attr('data-index', idx + 1);
             var type = $step.find('.step-type').val();
             var stepID;
             if(type == 'group')
             {
-                $step.removeClass('step-item step-step').addClass('step-group');
+                $step.removeClass('step-item').removeClass('step-step').addClass('step-group');
                 stepID = parentId++;
                 $step.find('.step-id').text(stepID);
                 childId = 1;
             }
             else if(type == 'step')
             {
-                $step.removeClass('step-item step-group').addClass('step-step');
+                $step.removeClass('step-item').removeClass('step-group').addClass('step-step');
                 stepID = parentId++;
                 $step.find('.step-id').text(stepID);
                 childId = 0;
             }
-            else
+            else // step type is not set
             {
-                if(childId) // as child
+                if(childId) // type as child
                 {
                     stepID = (parentId - 1) + '.' + (childId++);
-                    $step.removeClass('step-step step-group').addClass('step-item').find('.step-item-id').text(stepID);
+                    $step.removeClass('step-step').removeClass('step-group').addClass('step-item').find('.step-item-id').text(stepID);
                 }
-                else
+                else // type as step
                 {
-                    $step.removeClass('step-item step-group').addClass('step-step');
+                    $step.removeClass('step-item').removeClass('step-group').addClass('step-step');
                     stepID = parentId++;
                     $step.find('.step-id').text(stepID);
                 }
@@ -87,6 +93,25 @@ function initSteps(selector)
 
             updateStepType($step, type);
         });
+
+        /* Auto insert step to group without any steps */
+        if(!skipAutoAddStep)
+        {
+            var needRefresh = false;
+            getStepsElements().each(function(idx)
+            {
+                var $step = $(this).attr('data-index', idx + 1);
+                if($step.attr('data-type') !== 'group') return;
+                var $nextStep = $step.next('.step:not(.drag-shadow)');
+                if(!$nextStep.length || $nextStep.attr('data-type') !== 'item')
+                {
+                    insertStepRow($step, 1, 'item', true);
+                    needRefresh = true;
+                }
+            });
+
+            if(needRefresh) refreshSteps(true);
+        }
     };
     var initSortable = function()
     {
@@ -110,7 +135,7 @@ function initSteps(selector)
         {
             if(!isMouseDown) return;
             var $targetStep = $(this);
-            $steps.children('.step').each(function(idx)
+            getStepsElements().each(function(idx)
             {
                 $(this).data('order', idx);
             });
@@ -133,14 +158,47 @@ function initSteps(selector)
         refreshSteps();
     }).on('click', '.btn-step-delete', function()
     {
-        if($('tbody#steps tr.step').size() == 1) return false;
+        if($steps.children('.step').length == 1) return;
         $(this).closest('.step').remove();
         refreshSteps();
-    }).on('click', '.step-type-menu a', function()
+    }).on('change', '.step-group-toggle', function()
     {
-        var $a = $(this);
-        $a.closest('.step').find('.step-type').val($a.data('value'));
+        var $checkbox   = $(this);
+        var $step       = $checkbox.closest('.step');
+        var isChecked   = $checkbox.is(':checked');
+        var suggestType = isChecked ? 'group' : 'item';
+        if(!isChecked)
+        {
+            var $prevStep    = $step.prev('.step:not(.drag-shadow)');
+            var suggestChild = $prevStep.length && $prevStep.is('.step-group') && $step.next('.step:not(.drag-shadow)').length;
+            suggestType      = suggestChild ? 'item' : 'step';
+        }
+        $step.find('.step-type').val(suggestType);
+
+        /* Auto insert step to group without any steps */
+        if(suggestType === 'group')
+        {
+            var $nextStep = $step.next('.step:not(.drag-shadow)');
+            if(!$nextStep.length || $nextStep.find('.step-type').val() !== 'item')
+            {
+                insertStepRow($step, 1, 'item', true);
+            }
+        }
+
         refreshSteps();
+    }).on('change', '.form-control', function()
+    {
+        var $control = $(this);
+        if($control.val())
+        {
+            var $step = $control.closest('.step');
+            if($step.data('index') === getStepsElements().length)
+            {
+                insertStepRow($step, 1, 'step', true);
+                if($step.is('.step-item,.step-group')) insertStepRow($step, 1, 'item', true);
+                refreshSteps();
+            }
+        }
     });
     initSortable();
     refreshSteps();

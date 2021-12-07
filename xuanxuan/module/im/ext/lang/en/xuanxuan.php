@@ -7,6 +7,11 @@ $lang->im->xxdServer        = 'ZenTao Server';
 $lang->im->downloadXXD      = 'Download XXD';
 $lang->im->zentaoIntegrate  = 'ZenTao Integrated';
 $lang->im->zentaoClient     = 'ZenTao Desktop is added!';
+$lang->im->getChatUsers     = 'Get Chat Users';
+$lang->im->getChatGroups    = 'Get Chat Groups';
+$lang->im->notifyMSG        = 'Notification';
+$lang->im->sendNotification = 'Push message to notification Center';
+$lang->im->sendChatMessage  = 'Push messages to the discussion group';
 
 $lang->im->createBug   = 'Create Bug';
 $lang->im->createDoc   = 'Create Doc';

@@ -653,7 +653,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `name` varchar(255) NOT NULL DEFAULT '',
   `color` char(30) NOT NULL,
   `order` smallint(6) NOT NULL DEFAULT '0',
-  `lastEditedDate` datetime NOT NULL,
+  `lastEditedTime` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

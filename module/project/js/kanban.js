@@ -10,9 +10,17 @@ function processKanbanData(key, programGroup)
 
     /* Generate columns */
     var columns = [];
+    var executionsCol;
     $.each(kanbanColumns, function(_, column)
     {
         var colType = column.type;
+        column = $.extend({}, column,
+        {
+            kanban:     kanbanId,
+            id:         kanbanId + '-' + column.type,
+            parentType: (colType === 'doingProject' || colType === 'doingExecution') ? 'doing' : false,
+        });
+
         if(colType === 'doingProject')
         {
             columns.push(
@@ -25,13 +33,13 @@ function processKanbanData(key, programGroup)
                 count:    ''
             });
         }
-
-        columns.push($.extend({}, column,
+        else if(colType === 'doingExecution')
         {
-            kanban:     kanbanId,
-            id:         kanbanId + '-' + column.type,
-            parentType: (colType === 'doingProject' || colType === 'doingExecution') ? 'doing' : false,
-        }));
+            executionsCol = column;
+            executionsCol.count = 0;
+        }
+
+        columns.push(column);
     });
     /* Format lanes data */
     var lanes = [];
@@ -58,6 +66,7 @@ function processKanbanData(key, programGroup)
                         var execution = latestExecutions[projectID];
                         if(execution && execution.id)
                         {
+                            executionsCol.count++;
                             projectItem.execution = $.extend({}, execution, {id: 'execution-' + execution.id, _id: execution.id});
                         }
                     }
@@ -71,6 +80,15 @@ function processKanbanData(key, programGroup)
 
     return {id: kanbanId, columns: columns, lanes: lanes};
 }
+
+/** Define kanban d-n-d rules */
+var projectDropRules =
+{
+    waitProject:   ['doingProject', 'closedProject'],
+    doingProject:  ['closedProject'],
+    closedProject: ['doingProject'],
+};
+window.kanbanDropRules = {my: projectDropRules, other: projectDropRules};
 
 /*
  * Find drop columns
@@ -145,13 +163,6 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
         modalTrigger.show();
     }
-
-    /*
-        // TODO: The server must return a updated kanban data  服务器返回更新后的看板数据
-
-        // 调用 updateKanban 更新看板数据
-        updateKanban(kanbanID, newKanbanData);
-    */
 }
 
 /**
@@ -161,7 +172,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
  */
 function handleFinishDrop(event)
 {
-    var $card    = $(event.element); // The drag card
+    var $card    = $(event.element).closest('.kanban-item'); // The drag card
     var $dragCol = $card.closest('.kanban-lane-col');
     var $dropCol = $(event.target);
 
@@ -170,8 +181,6 @@ function handleFinishDrop(event)
     var fromColType = $dragCol.data('type');
     var toColType   = $dropCol.data('type');
     var kanbanID    = $card.closest('.kanban').data('id');
-
-    if(fromColType == 'doingProject') card = $card.parent().parent().data('item');
 
     changeCardColType(card, fromColType, toColType, kanbanID);
 }
@@ -197,7 +206,7 @@ $(function()
             virtualize:    true,
             droppable:
             {
-                selector:     '.kanban-item:not(.execution-item)',
+                selector:     '.kanban-card:not(.execution-item)',
                 target:       findDropColumns,
                 finish:       handleFinishDrop,
                 mouseButton: 'left'

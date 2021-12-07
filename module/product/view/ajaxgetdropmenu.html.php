@@ -82,7 +82,7 @@ foreach($products as $programID => $programProducts)
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
         {
-            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' " . $locateTab) . '</li>';
+            $myProductsHtml .= '<li>' . html::a($linkHtml, $productName, '', "class='$selected productName' title='{$productName}' data-key='" . zget($productsPinYin, $product->name, '') . "' data-app='$app->tab'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProduct';
 

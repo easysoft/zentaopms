@@ -250,6 +250,7 @@ class testreport extends control
 
             $execution     = $this->execution->getById($executionID);
             $tasks         = $this->testtask->getExecutionTasks($executionID);
+            $task          = $objectID ? $this->testtask->getById($objectID) : key($tasks);
             $owners        = array();
             $buildIdList   = array();
             $productIdList = array();
@@ -287,8 +288,8 @@ class testreport extends control
             $builds  = $this->build->getByList($buildIdList);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($execution->id);;
 
-            $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $execution->begin;
-            $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $execution->end;
+            $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
+            $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
             $owner = current($owners);
             $bugs  = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
 

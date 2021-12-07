@@ -277,7 +277,7 @@ class design extends control
      */
     public function linkCommit($designID = 0, $repoID = 0, $begin = '', $end = '', $recTotal = 0, $recPerPage = 50, $pageID = 1)
     {
-        $design = $this->design->getById($designID);
+        $design    = $this->design->getById($designID);
         $productID = $this->commonAction($design->project, $design->product, $designID);
 
         /* Get project and date. */
@@ -330,9 +330,10 @@ class design extends control
         $this->view->designID   = $designID;
         $this->view->begin      = $begin;
         $this->view->end        = $end;
-        $this->view->design     = $this->design->getByID($designID);
+        $this->view->design     = $design;
         $this->view->pager      = $pager;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->type       = $design->type;
 
         $this->display();
     }

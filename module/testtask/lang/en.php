@@ -37,9 +37,11 @@ $lang->testtask->next             = 'Next';
 $lang->testtask->start            = "Start";
 $lang->testtask->close            = "Close";
 $lang->testtask->wait             = "Waiting";
+$lang->testtask->waitAB           = "Waiting";
 $lang->testtask->block            = "Block";
 $lang->testtask->activate         = "Activate";
 $lang->testtask->testing          = "Testing";
+$lang->testtask->testingAB        = "Testing";
 $lang->testtask->blocked          = "Blocked";
 $lang->testtask->done             = "Tested";
 $lang->testtask->totalStatus      = "All";
@@ -116,10 +118,9 @@ $lang->testtask->statusList['doing']   = 'Doing';
 $lang->testtask->statusList['done']    = 'Closed';
 $lang->testtask->statusList['blocked'] = 'Blocked';
 
-$lang->testtask->priList[0] = '';
-$lang->testtask->priList[3] = '3';
 $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
+$lang->testtask->priList[3] = '3';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = 'Unlinked Case';

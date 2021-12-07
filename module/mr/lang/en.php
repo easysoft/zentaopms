@@ -37,6 +37,9 @@ $lang->mr->gitlabID    = 'GitLab';
 $lang->mr->repoID      = 'Repo';
 $lang->mr->jobID       = 'Compile job';
 
+$lang->mr->canMerge  = "Can merge";
+$lang->mr->cantMerge = "不可合并";
+
 $lang->mr->approval = 'Approval';
 $lang->mr->approve  = 'Approve';
 $lang->mr->reject   = 'Reject';
@@ -74,12 +77,14 @@ $lang->mr->mergeStatusList['checking']         = 'checking';
 $lang->mr->mergeStatusList['can_be_merged']    = 'can be merged';
 $lang->mr->mergeStatusList['cannot_be_merged'] = 'cannot be merged';
 
-$lang->mr->description   = 'Description';
-$lang->mr->confirmDelete = 'Are you sure to delete this merge request?';
-$lang->mr->sourceProject = 'Source project';
-$lang->mr->sourceBranch  = 'Source branch';
-$lang->mr->targetProject = 'Target project';
-$lang->mr->targetBranch  = 'Target branch';
+$lang->mr->description       = 'Description';
+$lang->mr->confirmDelete     = 'Are you sure to delete this merge request?';
+$lang->mr->sourceProject     = 'Source project';
+$lang->mr->sourceBranch      = 'Source branch';
+$lang->mr->targetProject     = 'Target project';
+$lang->mr->targetBranch      = 'Target branch';
+$lang->mr->noCompileJob      = 'No Compile Job';
+$lang->mr->compileUnexecuted = 'Compile Unexecuted';
 
 $lang->mr->notFound          = "Merge Request does not exist!";
 $lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";

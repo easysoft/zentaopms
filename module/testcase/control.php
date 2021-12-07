@@ -131,7 +131,7 @@ class testcase extends control
         }
         else
         {
-            $this->qa->setMenu($this->products, $productID, $branch);
+            $this->qa->setMenu($this->products, $productID, $branch, $browseType);
         }
 
         $uri = $this->app->getURI(true);
@@ -1365,6 +1365,12 @@ class testcase extends control
      */
     public function export($productID, $orderBy, $taskID = 0, $browseType = '')
     {
+        if(strpos($orderBy, 'case') !== false)
+        {
+            list($field, $sort) = explode('_', $orderBy);
+            $orderBy = '`' . $field . '`_' . $sort;
+        }
+
         $product = $this->loadModel('product')->getById($productID);
         if($product->type != 'normal') $this->lang->testcase->branch = $this->lang->product->branchName[$product->type];
         if($_POST)
@@ -1847,10 +1853,15 @@ class testcase extends control
         $caseLang   = $this->lang->testcase;
         $caseConfig = $this->config->testcase;
         $branches   = $this->loadModel('branch')->getPairs($productID);
-        $modules    = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? 0 : array_keys($branches));
         $stories    = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
         $fields     = $this->testcase->getImportFields($productID);
         $fields     = array_flip($fields);
+
+        $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
+        foreach($branchModules as $branchID => $moduleList)
+        {
+            foreach($moduleList as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+        }
 
         if(!empty($maxImport) and file_exists($tmpFile))
         {

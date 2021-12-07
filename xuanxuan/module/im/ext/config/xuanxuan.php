@@ -14,4 +14,3 @@ $config->im->cards['task']['view']     = array('width' => '700px', 'height' => '
 $config->im->cards['doc']['view']      = array('width' => '700px', 'height' => '500px');
 $config->im->cards['story']['view']    = array('width' => '700px', 'height' => '500px');
 $config->im->cards['testcase']['view'] = array('width' => '700px', 'height' => '500px');
-$config->im->cards['productplan']['view'] = array('width' => '700px', 'height' => '447px');
