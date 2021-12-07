@@ -43,6 +43,7 @@ $(document).on('showapp', function(e, app)
 </style>
 <?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
 <?php js::set('xuanConfig', $xuanConfig); ?>
+<?php js::set('lang', $this->app->getClientLang()); ?>
 <script>
 /* Toggle xuan client popover */
 function toggleXuanClient()
@@ -72,7 +73,8 @@ Xuanxuan.setGlobalOptions(
     preload:       true,
     showHeader:    false,
     onNotice:      handleXuanNoticeChange,
-    onRouteChange: handleXuanRouteChange
+    onRouteChange: handleXuanRouteChange,
+    lang:          lang
 });
 
 $(function() {
