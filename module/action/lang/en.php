@@ -121,7 +121,6 @@ $lang->action->objectTypes['mr']            = 'Merge Request';
 $lang->action->objectTypes['gitlabproject'] = 'GitLab Project';
 $lang->action->objectTypes['gitlabuser']    = 'GitLab User';
 $lang->action->objectTypes['gitlabgroup']   = 'GitLab Group';
-$lang->action->objectTypes['gitlabbranch']  = 'GitLab Branch';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
