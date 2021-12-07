@@ -2805,6 +2805,7 @@ class bugModel extends model
                 if(isset($branches[$bug->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$bug->branch]}</span> ";
                 if($bug->module and isset($modulePairs[$bug->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$bug->module]}</span> ";
                 echo $canView ? html::a($bugLink, $bug->title, null, "style='color: $bug->color'") : "<span style='color: $bug->color'>{$bug->title}</span>";
+                if($bug->case) echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion"), "[BUG#$bug->case]", '', "class='bug' title='$bug->case'");
                 break;
             case 'branch':
                 echo zget($branches, $bug->branch, '');
