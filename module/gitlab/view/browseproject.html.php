@@ -67,6 +67,7 @@
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
+            common::printLink('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-treemap'></i> ", '', "title={$lang->gitlab->browseBranch} class='btn btn-primary'");
             common::printLink('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->project->edit} class='btn btn-primary'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteProject}' class='btn'");
             ?>

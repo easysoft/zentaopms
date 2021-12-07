@@ -30,6 +30,7 @@ $lang->gitlab->gitlabProject        = "GitLab Project";
 $lang->gitlab->browseProject        = "GitLab Project List";
 $lang->gitlab->browseUser           = "User List";
 $lang->gitlab->browseGroup          = "Group List";
+$lang->gitlab->browseBranch         = "Branch List";
 $lang->gitlab->gitlabIssue          = "GitLab Issue";
 $lang->gitlab->zentaoProduct        = 'Zentao Product';
 $lang->gitlab->objectType           = 'Type'; // task, bug, story
@@ -44,6 +45,7 @@ $lang->gitlab->deleteGroup          = 'Delete group';
 $lang->gitlab->createUser           = 'Create user';
 $lang->gitlab->editUser             = 'Edit user';
 $lang->gitlab->deleteUser           = 'Delete user';
+$lang->gitlab->createBranch         = 'Add branch';
 $lang->gitlab->manageGroupMembers   = 'Manage group member';
 $lang->gitlab->createWebhook        = 'Create Webhook';
 
@@ -60,6 +62,10 @@ $lang->gitlab->tokenFirst    = 'When the Token is not empty, the Token will be u
 $lang->gitlab->tips          = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
 $lang->gitlab->emptyError    = "cannot be empty";
 $lang->gitlab->createSuccess = "Create success";
+
+$lang->gitlab->branchName              = 'Branch Name';
+$lang->gitlab->branchLastCommitter     = 'Last Committer';
+$lang->gitlab->branchLastCommittedDate = 'Last Committed Date';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';

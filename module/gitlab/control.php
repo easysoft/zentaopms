@@ -713,6 +713,52 @@ class gitlab extends control
     }
 
     /**
+     * Browse gitlab branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseBranch($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $branchList = array();
+        $result = $this->gitlab->apiGetBranches($gitlabID, $projectID);
+        foreach($result as $gitlabBranch)
+        {
+            $branch = new stdClass();
+            $branch->name              = $gitlabBranch->name;
+            $branch->lastCommitter     = $gitlabBranch->commit->committer_name;
+            $branch->lastCommittedDate = date('Y-m-d H:i:s', strtotime($gitlabBranch->commit->committed_date));
+
+            $branchList[] = $branch;
+        }
+
+        /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        array_multisort(array_column($branchList, $order), $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($branchList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $branchList = array_chunk($branchList, $pager->recPerPage);
+
+        $this->view->gitlab            = $this->gitlab->getByID($gitlabID);
+        $this->view->pager             = $pager;
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseBranch;
+        $this->view->gitlabID          = $gitlabID;
+        $this->view->projectID         = $projectID;
+        $this->view->gitlabBranchList  = empty($branchList) ? $branchList: $branchList[$pageID - 1];
+        $this->view->orderBy           = $orderBy;
+        $this->display();
+    }
+
+    /**
      * Creat a gitlab branch.
      *
      * @param  int     $gitlabID
