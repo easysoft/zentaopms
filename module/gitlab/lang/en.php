@@ -37,6 +37,7 @@ $lang->gitlab->manageProjectMembers = 'Manage project member';
 $lang->gitlab->createProject        = 'Create GitLab project';
 $lang->gitlab->editProject          = 'Eidt GitLab project';
 $lang->gitlab->deleteProject        = 'Delete GitLab project';
+$lang->gitlab->createBranch         = 'Create Branch';
 $lang->gitlab->createGroup          = 'Create group';
 $lang->gitlab->editGroup            = 'Edit group';
 $lang->gitlab->deleteGroup          = 'Delete group';
@@ -53,10 +54,12 @@ $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
 $lang->gitlab->private        = 'MD5 Verify';
 
-$lang->gitlab->lblCreate  = 'Create GitLab Server';
-$lang->gitlab->desc       = 'Description';
-$lang->gitlab->tokenFirst = 'When the Token is not empty, the Token will be used first';
-$lang->gitlab->tips       = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
+$lang->gitlab->lblCreate     = 'Create GitLab Server';
+$lang->gitlab->desc          = 'Description';
+$lang->gitlab->tokenFirst    = 'When the Token is not empty, the Token will be used first';
+$lang->gitlab->tips          = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
+$lang->gitlab->emptyError    = "cannot be empty";
+$lang->gitlab->createSuccess = "Create success";
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
@@ -82,11 +85,13 @@ $lang->gitlab->apiError[0] = 'internal is not allowed in a private group.';
 $lang->gitlab->apiError[1] = 'public is not allowed in a private group.';
 $lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
 $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->gitlab->apiError[4] = 'Branch already exists';
 
 $lang->gitlab->errorLang[0] = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1] = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[2] = 'Password is too short (minimum is 8 characters)';
 $lang->gitlab->errorLang[3] = 'It should contain only letters, digits, underscore, hyphen and period.  It should not start with hypen, or end with .git or .atom.';
+$lang->gitlab->errorLang[4] = 'Branch already exists.';
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "Project ID";
@@ -171,3 +176,8 @@ $lang->gitlab->group->memberName                              = 'Account';
 $lang->gitlab->group->memberAccessLevel                       = 'Access Level';
 $lang->gitlab->group->memberExpiresAt                         = 'Expiration time';
 $lang->gitlab->group->repeatError                             = "Group members cannot be added repeatedly";
+
+$lang->gitlab->branch = new stdclass();
+$lang->gitlab->branch->name   = 'Branch Name';
+$lang->gitlab->branch->from   = 'Create from';
+$lang->gitlab->branch->create = 'Create';
