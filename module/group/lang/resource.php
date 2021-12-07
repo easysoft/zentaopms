@@ -1297,6 +1297,7 @@ $lang->resource->gitlab->browseUser           = 'browseUser';
 $lang->resource->gitlab->createUser           = 'createUser';
 $lang->resource->gitlab->editUser             = 'editUser';
 $lang->resource->gitlab->deleteUser           = 'deleteUser';
+$lang->resource->gitlab->createBranch         = 'createBranch';
 $lang->resource->gitlab->webhook              = 'webhook';
 $lang->resource->gitlab->createWebhook        = 'createWebhook';
 $lang->resource->gitlab->manageProjectMembers = 'manageProjectMembers';
