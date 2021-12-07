@@ -31,7 +31,7 @@ $(function()
     if(xuanAction != "<div class='xuancard-actions fixed'>")
     {
         var params = window.location.search;
-        if(params.indexOf('displayNotice=card') == -1)
+        if(params.indexOf('isNotice=1') == -1)
         {
             xuanAction += '</div>';
             $('body').append(xuanAction);

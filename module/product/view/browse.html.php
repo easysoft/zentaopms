@@ -236,7 +236,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
-  <div class="linkButton" onclick="linkButtonClicked()">
+  <div class="linkButton" onclick="handleLinkButtonClick()">
     <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
@@ -346,7 +346,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             foreach($setting as $key => $value)
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+                {
                   $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
+                }
             }?>
             <?php else:?>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
@@ -364,7 +366,9 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             foreach($setting as $key => $value)
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
-                $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
+                {
+                  $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
+                }
             }?>
             <?php else:?>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
@@ -705,11 +709,10 @@ $(function()
         }
     });
 });
-function linkButtonClicked()
+function handleLinkButtonClick()
 {
-  $url = window.location.href;
-  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
-  $newWindow = window.open($xxcUrl);
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

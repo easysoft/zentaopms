@@ -183,7 +183,7 @@ body {margin-bottom: 25px;}
   <strong>
   <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
   </strong>
-  <div class="linkButton" onclick="linkButtonClicked()">
+  <div class="linkButton" onclick="handleLinkButtonClick()">
     <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
@@ -283,7 +283,9 @@ body {margin-bottom: 25px;}
             foreach($customFields as $field)
             {
                 if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+                {
                   $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');
+                }
             }?>
             <?php else:?>
             <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
@@ -479,11 +481,10 @@ $(function()
         }
     })
 });
-function linkButtonClicked()
+function handleLinkButtonClick()
 {
-  $url = window.location.href;
-  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
-  window.open($xxcUrl);
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

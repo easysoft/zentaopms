@@ -54,7 +54,7 @@
     <?php if($this->app->getViewType() == 'xhtml'):?>
     <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>    
     <?php if($this->app->getViewType() == 'xhtml'):?>
-    <div class="linkButton" onclick="linkButtonClicked()">
+    <div class="linkButton" onclick="handleLinkButtonClick()">
       <span title="<?php echo $lang->viewDetails;?>">
         <i class="icon icon-import icon-rotate-270"></i>
       </span>
@@ -612,11 +612,10 @@
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('type', $type)?>
 <script>
-function linkButtonClicked()
+function handleLinkButtonClick()
 {
-  $url = window.location.href;
-  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
-  window.open($xxcUrl);
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

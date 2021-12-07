@@ -142,7 +142,7 @@
   <strong>
   <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
   </strong>
-  <div class="linkButton" onclick="linkButtonClicked()">
+  <div class="linkButton" onclick="handleLinkButtonClick()">
     <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
@@ -479,11 +479,10 @@ $(function()
         }
     });
 });
-function linkButtonClicked()
+function handleLinkButtonClick()
 {
-  $url = window.location.href;
-  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
-  window.open($xxcUrl);
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php if(commonModel::isTutorialMode()): ?>

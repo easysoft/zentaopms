@@ -191,7 +191,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <strong>
   <?php echo $this->product->getByID($productID)->name ?>
   </strong>
-  <div class="linkButton" onclick="linkButtonClicked()">
+  <div class="linkButton" onclick="handleLinkButtonClick()">
     <span title="<?php echo $lang->viewDetails;?>">
       <i class="icon icon-import icon-rotate-270"></i>
     </span>
@@ -299,7 +299,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             <?php
               foreach($setting as $value)
               {
-                  if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status'){
+                  if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+                  {
                     $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');
                   }
               }?>
@@ -488,11 +489,10 @@ $(function(){$('#bugForm').table();})
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
-function linkButtonClicked()
+function handleLinkButtonClick()
 {
-  $url = window.location.href;
-  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
-  window.open($xxcUrl);
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

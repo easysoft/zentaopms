@@ -14,10 +14,10 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
-<?php if(strpos($_SERVER["QUERY_STRING"], 'displayNotice=card') === false):?>
+<?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
 <?php if($this->app->getViewType() == 'xhtml'):?>
-<div class="linkButton" onclick="linkButtonClicked()">
+<div class="linkButton" onclick="handleLinkButtonClick()">
   <span title="<?php echo $lang->viewDetails;?>">
     <i class="icon icon-import icon-rotate-270"></i>
   </span>
@@ -408,11 +408,10 @@
   <?php common::printPreAndNext($preAndNext);?>
 </div>
 <script>
-function linkButtonClicked()
+function handleLinkButtonClick()
 {
-  $url = window.location.href;
-  $xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent($url.replace(/.display=card/, ''));
-  window.open($xxcUrl);
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
