@@ -447,7 +447,27 @@ class programplanModel extends model
                 dao::$errors['message'][] = $this->lang->programplan->error->percentNumber;
                 return false;
             }
-            if($plan->end != '0000-00-00' and $plan->end < $plan->begin)
+            if(helper::isZeroDate($plan->begin))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->emptyBegin;
+                return false;
+            }
+            if(!validater::checkDate($plan->begin))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->checkBegin;
+                return false;
+            }
+            if(helper::isZeroDate($plan->end))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->emptyEnd;
+                return false;
+            }
+            if(!validater::checkDate($plan->end))
+            {
+                dao::$errors['message'][] = $this->lang->programplan->checkEnd;
+                return false;
+            }
+            if(!helper::isZeroDate($plan->end) and $plan->end < $plan->begin)
             {
                 dao::$errors['message'][] = $this->lang->programplan->error->planFinishSmall;
                 return false;
@@ -462,14 +482,14 @@ class programplanModel extends model
                 dao::$errors['message'][] = sprintf($this->lang->programplan->errorBegin, $project->begin);
                 return false;
             }
-            if($plan->end != '0000-00-00' and $plan->end > $project->end)
+            if(!helper::isZeroDate($plan->end) and $plan->end > $project->end)
             {
                 dao::$errors['message'][] = sprintf($this->lang->programplan->errorEnd, $project->end);
                 return false;
             }
 
-            if($plan->begin == '0000-00-00') $plan->begin = '';
-            if($plan->end   == '0000-00-00') $plan->end   = '';
+            if(helper::isZeroDate($plan->begin)) $plan->begin = '';
+            if(helper::isZeroDate($plan->end))   $plan->end   = '';
             foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
             {
                 $field = trim($field);

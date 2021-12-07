@@ -15,7 +15,10 @@
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
-      <h2><?php echo $lang->programplan->edit;?></h2>
+      <h2>
+        <span class='prefix label-id'><strong><?php echo $plan->id;?></strong></span>
+        <?php echo "<span title={$plan->name}>{$plan->name}</span>";?>
+      </h2>
     </div>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">
@@ -81,7 +84,7 @@
           </tr>
           <?php endif;?>
           <tr>
-            <td colspan='4' class='form-actions text-center'><?php echo html::submitButton() . html::backButton()?></td>
+            <td colspan='3' class='form-actions text-center'><?php echo html::submitButton() . html::backButton()?></td>
           </tr>
         </tbody>
       </table>

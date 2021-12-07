@@ -21,3 +21,4 @@ td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
 .c-estimate, .c-consumed, .c-left {width: 70px;}
 .c-progress, .c-burn {width: 60px;}
 .c-realBegan, .c-end, .c-begin, .c-realEnd{width: 100px;}
+.c-action {text-align: center;}
