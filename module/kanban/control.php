@@ -12,6 +12,17 @@
 class kanban extends control
 {
     /**
+     * Kanban space.
+     *
+     * @access public
+     * @return void
+     */
+    public function space()
+    {
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID
