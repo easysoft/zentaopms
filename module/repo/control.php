@@ -357,7 +357,6 @@ class repo extends control
 
         session_start();
         $this->session->set('revisionList', $this->app->getURI(true));
-        $this->session->set('gitlabBranchList', $this->app->getURI(true));
         session_write_close();
 
         /* Get repo and synchronous commit. */
