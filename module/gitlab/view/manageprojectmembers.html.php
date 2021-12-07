@@ -12,9 +12,11 @@
       <thead>
         <tr class='text-center'>
           <th><?php echo $lang->gitlab->group->memberName;?></th>
-          <th class='c-levels'><?php echo $lang->gitlab->group->memberAccessLevel;?></th>
+          <th><?php echo $lang->gitlab->group->memberAccessLevel;?></th>
           <th class='c-date'><?php echo $lang->gitlab->group->memberExpiresAt;?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
+          <th></th>
+          <th></th>
         </tr>
       </thead>
       <tbody>
@@ -23,7 +25,7 @@
         <?php foreach($repo->acl->users as $user):?>
         <tr>
           <td><?php echo html::input("names[$i]", $users[$user], "class='form-control' readonly");?></td>
-          <td><?php echo html::select("levels[$i]", array(''=>'') + $this->lang->gitlab->accessLevels, isset($userAccessData[$user]) ? $userAccessData[$user]->access_level : '', "class='form-control levels chosen'");?></td>
+          <td><?php echo html::select("levels[$i]", array(''=>'') + $this->lang->gitlab->accessLevels, isset($userAccessData[$user]) ? $userAccessData[$user]->access_level : '', "class='form-control chosen'");?></td>
           <td>
             <?php echo html::input("expires[$i]", isset($userAccessData[$user]) ? $userAccessData[$user]->expires_at : '', "class='form-control form-date'");?>
             <?php echo html::hidden("accounts[$i]", $user);?>
@@ -40,7 +42,7 @@
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
           <td><?php echo html::select("accounts[$i]", array(''=>'') +$users, '', "class='form-control chosen'");?></td>
-          <td><?php echo html::select("levels[$i]", array(''=>'') + $this->lang->gitlab->accessLevels, '', "class='form-control levels chosen'");?></td>
+          <td><?php echo html::select("levels[$i]", array(''=>'') + $this->lang->gitlab->accessLevels, '', "class='form-control chosen'");?></td>
           <td><?php echo html::input("expires[$i]", '', "class='form-control form-date'");?></td>
           <td class='c-actions text-center'>
             <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
@@ -71,7 +73,7 @@
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
       <td><?php echo html::select("accounts[]", array(''=>'') +$users, '', "class='form-control'");?></td>
-      <td><?php echo html::select("levels[]", array(''=>'') + $this->lang->gitlab->accessLevels, '', "class='form-control levels'");?></td>
+      <td><?php echo html::select("levels[]", array(''=>'') + $this->lang->gitlab->accessLevels, '', "class='form-control'");?></td>
       <td><?php echo html::input("expires[$i]", '', "class='form-control form-date'");?></td>
       <td class='c-actions text-center'>
         <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
