@@ -26,7 +26,7 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&executionID=$execution->id", "<i class='icon icon-export muted'> </i> " . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$defaultProduct&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent">
@@ -36,7 +36,7 @@
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('bug', 'create')):?>
-      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='execution'");?>
+      <?php echo html::a($this->createLink('bug', 'create', "productID=$defaultProduct&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='execution'");?>
       <?php endif;?>
     </p>
   </div>
