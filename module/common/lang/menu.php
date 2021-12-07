@@ -48,7 +48,7 @@ else
 }
 $lang->mainNav->qa     = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops = "{$lang->navIcons['devops']} DevOps|repo|browse|";
-$lang->mainNav->kanban = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|zone|";
+$lang->mainNav->kanban = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc    = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->report = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
 $lang->mainNav->system = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";

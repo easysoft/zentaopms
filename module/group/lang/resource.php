@@ -618,14 +618,14 @@ $lang->release->methodOrder[75] = 'notify';
 
 /* Kanban */
 $lang->resource->kanban = new stdclass();
-$lang->resource->kanban->zone      = 'zone';
+$lang->resource->kanban->space     = 'space';
 $lang->resource->kanban->setLane   = 'setLane';
 $lang->resource->kanban->setColumn = 'setColumn';
 $lang->resource->kanban->setWIP    = 'setWIP';
 $lang->resource->kanban->laneMove  = 'laneMove';
 $lang->resource->kanban->cardsSort = 'cardsSort';
 
-$lang->kanban->methodOrder[5]  = 'zone';
+$lang->kanban->methodOrder[5]  = 'space';
 $lang->kanban->methodOrder[10] = 'setLane';
 $lang->kanban->methodOrder[15] = 'setColumn';
 $lang->kanban->methodOrder[20] = 'setWIP';

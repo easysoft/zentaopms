@@ -1,5 +1,5 @@
 <?php
-$lang->kanban->zone = 'Kanban Zone';
+$lang->kanban->space = 'Kanban Space';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";

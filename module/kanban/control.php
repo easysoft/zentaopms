@@ -12,12 +12,12 @@
 class kanban extends control
 {
     /**
-     * Kanban zone.
+     * Kanban space.
      *
      * @access public
      * @return void
      */
-    public function zone()
+    public function space()
     {
         $this->display();
     }

@@ -1,5 +1,5 @@
 <?php
-$lang->kanban->zone = '看板空间';
+$lang->kanban->space = '看板空间';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
