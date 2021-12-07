@@ -177,6 +177,8 @@ CREATE TABLE `zt_bug` (
   `confirmed` tinyint(1) NOT NULL DEFAULT 0,
   `activatedCount` smallint(6) NOT NULL,
   `activatedDate` datetime NOT NULL,
+  `feedbackBy` varchar(100) NOT NULL,
+  `notifyEmail` varchar(100) NOT NULL,
   `mailto` text DEFAULT NULL,
   `openedBy` varchar(30) NOT NULL DEFAULT '',
   `openedDate` datetime NOT NULL,
@@ -379,6 +381,37 @@ CREATE TABLE `zt_dept` (
   KEY `parent` (`parent`),
   KEY `path` (`path`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_design` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` varchar(255) NOT NULL,
+  `product` varchar(255) NOT NULL,
+  `commit` text NOT NULL,
+  `commitedBy` varchar(30) NOT NULL,
+  `execution` mediumint(8) unsigned NOT NULL DEFAULT '0',
+  `name` varchar(255) NOT NULL,
+  `status` varchar(30) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `assignedTo` varchar(30) NOT NULL,
+  `assignedBy` varchar(30) NOT NULL,
+  `assignedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  `story` char(30) NOT NULL,
+  `desc` text NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `type` char(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_designspec` (
+  `design` mediumint(8) NOT NULL,
+  `version` smallint(6) NOT NULL,
+  `name` varchar(255) NOT NULL,
+  `desc` text NOT NULL,
+  `files` varchar(255) NOT NULL,
+  UNIQUE KEY `design` (`design`,`version`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `project` mediumint(8) unsigned NOT NULL,
@@ -545,6 +578,18 @@ CREATE TABLE `zt_history` (
   PRIMARY KEY (`id`),
   KEY `action` (`action`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_holiday` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(30) NOT NULL DEFAULT '',
+  `type` enum('holiday', 'working') NOT NULL DEFAULT 'holiday',
+  `desc` text NOT NULL,
+  `year` char(4) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `year` (`year`),
+  KEY `name` (`name`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_job` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(50) NOT NULL,
@@ -568,6 +613,32 @@ CREATE TABLE `zt_job` (
   `lastStatus` varchar(255) DEFAULT NULL,
   `lastTag` varchar(255) DEFAULT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `lane` mediumint(8) NOT NULL DEFAULT '0',
+  `parent` mediumint(8) NOT NULL DEFAULT '0',
+  `type` char(30) NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `color` char(30) NOT NULL,
+  `limit` smallint(6) NOT NULL DEFAULT '-1',
+  `order` mediumint(8) NOT NULL DEFAULT '0',
+  `cards` text NULL,
+  `deleted` enum('0','1') NOT NULL default '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `execution` mediumint(8) NOT NULL DEFAULT '0',
+  `type` char(30) NOT NULL,
+  `groupby` char(30) NOT NULL,
+  `extra` char(30) NOT NULL,
+  `name` varchar(255) NOT NULL DEFAULT '',
+  `color` char(30) NOT NULL,
+  `order` smallint(6) NOT NULL DEFAULT '0',
+  `lastEditedTime` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_lang` (
@@ -633,6 +704,23 @@ CREATE TABLE `zt_mr` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   `status` char(30) NOT NULL,
   `mergeStatus` char(30) NOT NULL,
+  `approver` varchar(255) NOT NULL,
+  `approvalStatus` char(30) NOT NULL,
+  `needApproved` enum('0','1') NOT NULL DEFAULT '0',
+  `needCI` enum('0','1') NOT NULL DEFAULT '0',
+  `repoID` mediumint(8) unsigned NOT NULL,
+  `jobID` mediumint(8) unsigned NOT NULL,
+  `compileID` mediumint(8) unsigned NOT NULL,
+  `compileStatus` char(30) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_mrapproval` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `mrID` mediumint(8) unsigned NOT NULL,
+  `account` varchar(255) NOT NULL,
+  `date` datetime NOT NULL,
+  `action` char(30) NOT NULL,
+  `comment` text NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_notify` (
@@ -699,6 +787,7 @@ CREATE TABLE `zt_product` (
   `RD` varchar(30) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
+  `reviewer` varchar(255) NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `createdVersion` varchar(20) NOT NULL,
@@ -941,6 +1030,18 @@ CREATE TABLE `zt_searchindex` (
   FULLTEXT KEY `content` (`content`),
   FULLTEXT KEY `title` (`title`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_stage` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
+  `percent` varchar(255) NOT NULL,
+  `type` varchar(255) NOT NULL,
+  `createdBy` varchar(30) NOT NULL,
+  `createdDate` datetime NOT NULL,
+  `editedBy` varchar(30) NOT NULL,
+  `editedDate` datetime NOT NULL,
+  `deleted` enum('0','1') NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 CREATE TABLE `zt_stakeholder` (
   `id` mediumint(8) NOT NULL AUTO_INCREMENT,
   `objectID` mediumint(8) NOT NULL,
@@ -994,6 +1095,8 @@ CREATE TABLE `zt_story` (
   `linkStories` varchar(255) NOT NULL,
   `duplicateStory` mediumint(8) unsigned NOT NULL,
   `version` smallint(6) NOT NULL DEFAULT 1,
+  `feedbackBy` varchar(100) NOT NULL,
+  `notifyEmail` varchar(100) NOT NULL,
   `URChanged` enum('0','1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
@@ -1359,4 +1462,19 @@ CREATE TABLE `zt_webhook` (
   `editedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+CREATE TABLE IF NOT EXISTS `zt_weeklyreport`(
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `project` mediumint(8) unsigned NOT NULL,
+  `weekStart` date NOT NULL,
+  `pv` float(9,2) NOT NULL,
+  `ev` float(9,2) NOT NULL,
+  `ac` float(9,2) NOT NULL,
+  `sv` float(9,2) NOT NULL,
+  `cv` float(9,2) NOT NULL,
+  `staff` smallint(5) unsigned NOT NULL,
+  `progress` varchar(255) NOT NULL,
+  `workload` varchar(255) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `week` (`project`,`weekStart`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
