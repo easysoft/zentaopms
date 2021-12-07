@@ -105,47 +105,15 @@ $lang->block->spent           = '已花費';
 $lang->block->budget          = '預算';
 $lang->block->left            = '剩餘';
 
-$lang->block->default['waterfall']['project']['1']['title']  = '項目周報';
-$lang->block->default['waterfall']['project']['1']['block']  = 'waterfallreport';
-$lang->block->default['waterfall']['project']['1']['source'] = 'project';
-$lang->block->default['waterfall']['project']['1']['grid']   = 8;
-
-$lang->block->default['waterfall']['project']['2']['title']  = '估算';
-$lang->block->default['waterfall']['project']['2']['block']  = 'waterfallestimate';
-$lang->block->default['waterfall']['project']['2']['source'] = 'project';
-$lang->block->default['waterfall']['project']['2']['grid']   = 4;
-
 $lang->block->default['waterfall']['project']['3']['title']  = "項目計劃";
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
 
-$lang->block->default['waterfall']['project']['4']['title']  = '到目前為止項目進展趨勢圖';
-$lang->block->default['waterfall']['project']['4']['block']  = 'waterfallprogress';
-$lang->block->default['waterfall']['project']['4']['grid']   = 4;
-
-$lang->block->default['waterfall']['project']['5']['title']  = '項目問題';
-$lang->block->default['waterfall']['project']['5']['block']  = 'waterfallissue';
-$lang->block->default['waterfall']['project']['5']['source'] = 'project';
-$lang->block->default['waterfall']['project']['5']['grid']   = 8;
-
-$lang->block->default['waterfall']['project']['5']['params']['type']    = 'all';
-$lang->block->default['waterfall']['project']['5']['params']['count']   = '15';
-$lang->block->default['waterfall']['project']['5']['params']['orderBy'] = 'id_desc';
-
 $lang->block->default['waterfall']['project']['6']['title']  = '最新動態';
 $lang->block->default['waterfall']['project']['6']['block']  = 'projectdynamic';
 $lang->block->default['waterfall']['project']['6']['grid']   = 4;
 $lang->block->default['waterfall']['project']['6']['source'] = 'project';
-
-$lang->block->default['waterfall']['project']['7']['title']  = '項目風險';
-$lang->block->default['waterfall']['project']['7']['block']  = 'waterfallrisk';
-$lang->block->default['waterfall']['project']['7']['source'] = 'project';
-$lang->block->default['waterfall']['project']['7']['grid']   = 8;
-
-$lang->block->default['waterfall']['project']['7']['params']['type']    = 'all';
-$lang->block->default['waterfall']['project']['7']['params']['count']   = '15';
-$lang->block->default['waterfall']['project']['7']['params']['orderBy'] = 'id_desc';
 
 $lang->block->default['scrum']['project']['1']['title'] =  '項目概況';
 $lang->block->default['scrum']['project']['1']['block'] = 'scrumoverview';
@@ -387,12 +355,7 @@ $lang->block->modules['scrum']['index']->availableBlocks->projectdynamic = '最�
 
 $lang->block->modules['waterfall']['index'] = new stdclass();
 $lang->block->modules['waterfall']['index']->availableBlocks = new stdclass();
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallreport   = '項目周報';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallestimate = '估算';
 $lang->block->modules['waterfall']['index']->availableBlocks->waterfallgantt    = "項目計劃";
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallprogress = '到目前為止項目進展趨勢圖';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallissue    = '項目問題';
-$lang->block->modules['waterfall']['index']->availableBlocks->waterfallrisk     = '項目風險';
 $lang->block->modules['waterfall']['index']->availableBlocks->projectdynamic    = '最新動態';
 
 $lang->block->modules['product'] = new stdclass();

@@ -115,15 +115,17 @@ $lang->upgrade->programName   = '項目集名稱';
 $lang->upgrade->projectName   = '項目名稱';
 
 $lang->upgrade->newProgram         = '新建';
+$lang->upgrade->editedName         = '調整後名稱';
 $lang->upgrade->projectEmpty       = '所屬項目不能為空！';
 $lang->upgrade->mergeSummary       = "尊敬的用戶，您的系統中共有%s個{$lang->productCommon}，%s個{$lang->projectCommon}等待遷移。";
 $lang->upgrade->mergeByProductLine = "以{$lang->productCommon}綫組織的{$lang->productCommon}和{$lang->projectCommon}：將整個{$lang->productCommon}綫及其下面的{$lang->productCommon}和{$lang->projectCommon}歸併到一個項目集和項目中，也可以分開歸併。";
 $lang->upgrade->mergeByProduct     = "以{$lang->productCommon}組織的{$lang->projectCommon}：可以選擇多個{$lang->productCommon}及其下面的{$lang->projectCommon}歸併到一個項目集和項目中，也可以選擇某一個{$lang->productCommon}將其下面所屬的{$lang->projectCommon}歸併到項目集和項目中。";
 $lang->upgrade->mergeByProject     = "獨立的{$lang->projectCommon}：可以選擇若干{$lang->projectCommon}歸併到一個項目中，也可以獨立歸併。";
-$lang->upgrade->mergeByMoreLink    = "關聯多個{$lang->productCommon}的{$lang->projectCommon}：選擇這個{$lang->projectCommon}歸屬於哪一個項目。";
+$lang->upgrade->mergeByMoreLink    = "關聯多個{$lang->productCommon}的{$lang->projectCommon}：選擇一個或多個{$lang->projectCommon}歸併到一個項目集和項目中。";
 $lang->upgrade->mergeRepoTips      = "將選中的版本庫歸併到所選產品下。";
 $lang->upgrade->needBuild4Add      = '本次升級需要創建索引。請到 [後台->系統->重建索引] 頁面，重新創建索引。';
 $lang->upgrade->errorEngineInnodb  = '您當前的資料庫不支持使用InnoDB數據表引擎，請修改為MyISAM後重試。';
+$lang->upgrade->duplicateProject   = "同一個項目集內項目名稱不能重複，請調整重名的項目名稱";
 
 $lang->upgrade->projectType['project']   = "把歷史的{$lang->projectCommon}作為項目升級";
 $lang->upgrade->projectType['execution'] = "把歷史的{$lang->projectCommon}作為執行升級";
@@ -137,4 +139,5 @@ $lang->upgrade->createExecutionTip = <<<EOT
 <p>系統會把歷史的{$lang->projectCommon}作為執行進行升級。</p>
 <p>升級後歷史的{$lang->projectCommon}數據將對應新版本中項目下的執行。</p>
 EOT;
+
 include dirname(__FILE__) . '/version.php';

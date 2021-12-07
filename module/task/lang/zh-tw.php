@@ -25,6 +25,7 @@ $lang->task->delayed             = '延期';
 $lang->task->view                = "查看任務";
 $lang->task->logEfforts          = "記錄工時";
 $lang->task->record              = "工時";
+$lang->task->teamConsumed        = "團隊工時";
 $lang->task->start               = "開始";
 $lang->task->startAction         = "開始任務";
 $lang->task->restart             = "繼續";
@@ -197,6 +198,7 @@ $lang->task->legendBasic  = '基本信息';
 $lang->task->legendEffort = '工時信息';
 $lang->task->legendLife   = '任務的一生';
 $lang->task->legendDesc   = '任務描述';
+$lang->task->legendDetail = '任務詳情';
 
 $lang->task->confirmDelete          = "您確定要刪除這個任務嗎？";
 $lang->task->confirmDeleteEstimate  = "您確定要刪除這個記錄嗎？";

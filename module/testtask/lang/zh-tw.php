@@ -37,9 +37,11 @@ $lang->testtask->next             = '下一個';
 $lang->testtask->start            = "開始";
 $lang->testtask->close            = "關閉";
 $lang->testtask->wait             = "待測測試單";
+$lang->testtask->waitAB           = "待測試";
 $lang->testtask->block            = "阻塞";
 $lang->testtask->activate         = "激活";
 $lang->testtask->testing          = "測試中測試單";
+$lang->testtask->testingAB        = "測試中";
 $lang->testtask->blocked          = "被阻塞測試單";
 $lang->testtask->done             = "已測測試單";
 $lang->testtask->totalStatus      = "全部";
@@ -116,10 +118,9 @@ $lang->testtask->statusList['doing']   = '進行中';
 $lang->testtask->statusList['done']    = '已關閉';
 $lang->testtask->statusList['blocked'] = '被阻塞';
 
-$lang->testtask->priList[0] = '';
-$lang->testtask->priList[3] = '3';
 $lang->testtask->priList[1] = '1';
 $lang->testtask->priList[2] = '2';
+$lang->testtask->priList[3] = '3';
 $lang->testtask->priList[4] = '4';
 
 $lang->testtask->unlinkedCases = '未關聯';

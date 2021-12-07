@@ -53,6 +53,8 @@ $lang->design->submit       = '提交評審';
 $lang->design->assignTo     = '指派';
 $lang->design->revision     = '查看關聯代碼';
 
+$lang->design->browseAction = '設計列表';
+
 /* 欄位取值. */
 $lang->design->typeList         = array();
 $lang->design->typeList['']     = '';
