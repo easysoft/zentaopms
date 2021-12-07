@@ -26,6 +26,9 @@
       <?php if($bug->deleted):?>
       <span class='label label-danger'><?php echo $lang->bug->deleted;?></span>
       <?php endif; ?>
+      <?php if($bug->case != 0):?>
+      <small><?php echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></small>
+      <?php endif;?>
     </div>
   </div>
   <?php if(!isonlybody()):?>
@@ -165,6 +168,10 @@
                   ob_end_clean();
                   ?>
                   <td title='<?php echo $moduleTitle?>'><?php echo $printModule?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->fromCase;?></th>
+                  <td><?php echo html::a(helper::createLink('testcase', 'view', "caseID=$bug->case&version=$bug->caseVersion", '', true), "<i class='icon icon-sitemap'></i> {$lang->bug->fromCase}$lang->colon$bug->case", '', isonlybody() ? '' : "data-toggle='modal' data-type='iframe' data-width='80%'");?></td>
                 </tr>
                 <tr valign='middle'>
                   <th><?php echo $lang->bug->productplan;?></th>
