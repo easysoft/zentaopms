@@ -1,4 +1,6 @@
 <?php
+$lang->kanban->zone = 'Kanban Zone';
+
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
 $lang->kanban->type['story'] = "Story KanBan";

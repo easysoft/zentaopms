@@ -178,6 +178,7 @@ $lang->design->ADS        = '接口设计';
 $lang->stage->common      = '阶段';
 $lang->stage->list        = '阶段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
+$lang->kanban->common     = '看板';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';

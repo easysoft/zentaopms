@@ -7,6 +7,7 @@ $lang->navIcons['project']   = "<i class='icon icon-project'></i>";
 $lang->navIcons['execution'] = "<i class='icon icon-run'></i>";
 $lang->navIcons['qa']        = "<i class='icon icon-test'></i>";
 $lang->navIcons['devops']    = "<i class='icon icon-devops'></i>";
+$lang->navIcons['kanban']    = "<i class='icon icon-kanban'></i>";
 $lang->navIcons['doc']       = "<i class='icon icon-doc'></i>";
 $lang->navIcons['report']    = "<i class='icon icon-statistic'></i>";
 $lang->navIcons['system']    = "<i class='icon icon-group'></i>";
@@ -47,12 +48,13 @@ else
 }
 $lang->mainNav->qa     = "{$lang->navIcons['qa']} {$lang->qa->common}|qa|index|";
 $lang->mainNav->devops = "{$lang->navIcons['devops']} DevOps|repo|browse|";
+$lang->mainNav->kanban = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|zone|";
 $lang->mainNav->doc    = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
 $lang->mainNav->report = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
 $lang->mainNav->system = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin  = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
-$lang->dividerMenu           = ',doc,oa,admin,';
+$lang->dividerMenu           = ',kanban,oa,admin,';
 $lang->mainNav->menuOrder[5] = 'my';
 if($config->systemMode == 'new') $lang->mainNav->menuOrder[10] = 'program';
 $lang->mainNav->menuOrder[15] = 'product';
@@ -60,10 +62,11 @@ if($config->systemMode == 'new') $lang->mainNav->menuOrder[20] = 'project';
 $lang->mainNav->menuOrder[21] = 'execution';
 $lang->mainNav->menuOrder[23] = 'qa';
 $lang->mainNav->menuOrder[25] = 'devops';
-$lang->mainNav->menuOrder[30] = 'doc';
-$lang->mainNav->menuOrder[35] = 'report';
-$lang->mainNav->menuOrder[40] = 'system';
-$lang->mainNav->menuOrder[55] = 'admin';
+$lang->mainNav->menuOrder[30] = 'kanban';
+$lang->mainNav->menuOrder[35] = 'doc';
+$lang->mainNav->menuOrder[40] = 'report';
+$lang->mainNav->menuOrder[45] = 'system';
+$lang->mainNav->menuOrder[65] = 'admin';
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
@@ -394,6 +397,10 @@ $lang->devops->menuOrder[20] = 'gitlab';
 $lang->devops->menuOrder[25] = 'jenkins';
 $lang->devops->menuOrder[30] = 'maintain';
 $lang->devops->menuOrder[35] = 'rules';
+
+/* Kanban menu. */
+$lang->kanban->menu = new stdclass();
+
 /* Doc menu. */
 $lang->doc->menu            = new stdclass();
 $lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
@@ -576,13 +583,14 @@ $lang->navGroup->build          = 'project';
 $lang->navGroup->measrecord     = 'project';
 $lang->navGroup->milestone      = 'project';
 
-$lang->navGroup->kanban       = 'execution';
 $lang->navGroup->execution    = 'execution';
 $lang->navGroup->task         = 'execution';
 $lang->navGroup->build        = 'execution';
 $lang->navGroup->team         = 'execution';
-$lang->navGroup->kanbancolumn = 'execution';
-$lang->navGroup->kanbanlane   = 'execution';
+
+$lang->navGroup->kanban       = 'kanban';
+$lang->navGroup->kanbancolumn = 'kanban';
+$lang->navGroup->kanbanlane   = 'kanban';
 
 $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';

@@ -12,6 +12,17 @@
 class kanban extends control
 {
     /**
+     * Kanban zone.
+     *
+     * @access public
+     * @return void
+     */
+    public function zone()
+    {
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID
