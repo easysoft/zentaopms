@@ -48,6 +48,8 @@ $lang->bug->confirmed        = '是否確認';
 $lang->bug->confirmedAB      = '確認';
 $lang->bug->toTask           = '轉任務';
 $lang->bug->toStory          = "轉{$lang->SRCommon}";
+$lang->bug->feedbackBy       = '反饋者';
+$lang->bug->notifyEmail      = '通知郵箱';
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
 $lang->bug->openedByAB       = '創建者';
@@ -99,6 +101,7 @@ $lang->bug->edit               = '編輯Bug';
 $lang->bug->batchEdit          = '批量編輯';
 $lang->bug->batchChangeModule  = '批量修改模組';
 $lang->bug->batchChangeBranch  = '批量修改分支';
+$lang->bug->batchChangePlan    = '批量修改計劃';
 $lang->bug->batchClose         = '批量關閉';
 $lang->bug->assignTo           = '指派';
 $lang->bug->assignAction       = '指派Bug';
@@ -183,6 +186,7 @@ $lang->bug->legendComment               = '備註';
 $lang->bug->legendLife                  = 'Bug的一生';
 $lang->bug->legendMisc                  = '其他相關';
 $lang->bug->legendRelated               = '其他信息';
+$lang->bug->legendThisWeekCreated       = '本週新增';
 
 /* 功能按鈕。*/
 $lang->bug->buttonConfirm = '確認';
@@ -277,8 +281,9 @@ $lang->bug->statusList['active']   = '激活';
 $lang->bug->statusList['resolved'] = '已解決';
 $lang->bug->statusList['closed']   = '已關閉';
 
-$lang->bug->confirmedList[1] = '是';
-$lang->bug->confirmedList[0] = '否';
+$lang->bug->confirmedList[''] = '';
+$lang->bug->confirmedList[1]  = '是';
+$lang->bug->confirmedList[0]  = '否';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';

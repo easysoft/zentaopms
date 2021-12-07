@@ -58,7 +58,6 @@ $lang->programplan->emptyEnd         = '『End』should not be blank';
 $lang->programplan->checkBegin       = '『Begin』should be valid date';
 $lang->programplan->checkEnd         = '『End』should be valid date';
 
-
 $lang->programplan->milestoneList[1] = 'Yes';
 $lang->programplan->milestoneList[0] = 'No';
 

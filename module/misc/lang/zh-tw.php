@@ -94,7 +94,7 @@ $lang->misc->feature->downloadFile   = '下載新版本功能介紹文檔';
 $lang->misc->feature->tutorialDesc   = "<p>禪道15系列新增了多項功能，您可以通過“<strong>新手引導教程</strong>”快速瞭解禪道的基本使用方法。</p><p>通過滑鼠經過 [<span style='color: #0c60e1'>頭像-新手引導</span>]，點擊新手引導，即可進入新手引導教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禪道15系列上線了全新的“青春藍”主題，頁面呈現更加美觀，體驗更加友好。</p><p>通過滑鼠經過 [<span style='color: #0c60e1'>頭像-主題-青春藍</span>]，點擊青春藍，即可設置成功。</p>";
 
-$lang->misc->releaseDate['15.8']        = '2021-11-19';
+$lang->misc->releaseDate['16.0.beta1']  = '2021-12-06';
 $lang->misc->releaseDate['15.7.1']      = '2021-11-02';
 $lang->misc->releaseDate['15.7']        = '2021-10-18';
 $lang->misc->releaseDate['15.6']        = '2021-10-12';
@@ -163,14 +163,14 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
-$lang->misc->feature->all['15.8'][]   = array('title' => '完善分支管理和細節。修復Bug。', 'desc' => '');
-$lang->misc->feature->all['15.7.1'][] = array('title' => '修復Bug。', 'desc' => '');
-$lang->misc->feature->all['15.7'][]   = array('title' => '新增介面庫。修復Bug。', 'desc' => '');
-$lang->misc->feature->all['15.6'][]   = array('title' => '修復Bug。', 'desc' => '');
-$lang->misc->feature->all['15.5'][]   = array('title' => '增加項目集/產品/項目看板視圖、全局添加功能、新手引導。 修復Bug。', 'desc' => '');
-$lang->misc->feature->all['15.4'][]   = array('title' => '修復Bug', 'desc' => '');
-$lang->misc->feature->all['15.3'][]   = array('title' => '實現界面風格改動和文檔優化，修復Bug', 'desc' => '');
-$lang->misc->feature->all['15.2'][]   = array('title' => '優化新版本升級流程，增加執行看板。', 'desc' => '');
+$lang->misc->feature->all['16.0.beta1'][] = array('title' => '新增瀑布模型項目，新增任務看板，完善分支管理和細節，修復Bug。', 'desc' => '');
+$lang->misc->feature->all['15.7.1'][]     = array('title' => '修復Bug。', 'desc' => '');
+$lang->misc->feature->all['15.7'][]       = array('title' => '新增介面庫。修復Bug。', 'desc' => '');
+$lang->misc->feature->all['15.6'][]       = array('title' => '修復Bug。', 'desc' => '');
+$lang->misc->feature->all['15.5'][]       = array('title' => '增加項目集/產品/項目看板視圖、全局添加功能、新手引導。 修復Bug。', 'desc' => '');
+$lang->misc->feature->all['15.4'][]       = array('title' => '修復Bug', 'desc' => '');
+$lang->misc->feature->all['15.3'][]       = array('title' => '實現界面風格改動和文檔優化，修復Bug', 'desc' => '');
+$lang->misc->feature->all['15.2'][]       = array('title' => '優化新版本升級流程，增加執行看板。', 'desc' => '');
 
 $lang->misc->feature->all['15.0.3'][]      = array('title' => '修復Bug', 'desc' => '');
 $lang->misc->feature->all['15.0.2'][]      = array('title' => '修復Bug', 'desc' => '');

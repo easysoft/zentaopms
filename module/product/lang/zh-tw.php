@@ -55,6 +55,7 @@ $lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->moreProduct = "更多產品";
 $lang->product->projectInfo = "所有與此產品關聯的項目";
+$lang->product->progress    = "產品完成度";
 
 $lang->product->currentExecution      = "當前執行";
 $lang->product->activeStories         = "激活{$lang->SRCommon}";
@@ -77,6 +78,7 @@ $lang->product->assignToNullBugs      = '未指派Bug';
 $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->closedBugs            = '關閉Bug';
 $lang->product->bugFixedRate          = 'Bug修復率';
+$lang->product->unfoldClosed          = '展開已關閉';
 
 $lang->product->confirmDelete        = " 您確定刪除該{$lang->productCommon}嗎？";
 $lang->product->errorNoProduct       = "還沒有創建{$lang->productCommon}！";
@@ -85,7 +87,6 @@ $lang->product->programChangeTip     = "如下項目只關聯了該{$lang->produ
 $lang->product->notChangeProgramTip  = "該{$lang->productCommon}的{$lang->SRCommon}已經關聯到如下項目，請取消關聯後再操作";
 $lang->product->confirmChangeProgram = "如下項目既關聯了該{$lang->productCommon}又關聯了其他{$lang->productCommon}，請確認是否繼續關聯該{$lang->productCommon}，勾選後將取消與其他{$lang->productCommon}的關聯關係，同時轉移至新項目集下。";
 $lang->product->changeProgramError   = "該{$lang->productCommon}的{$lang->SRCommon}已經關聯到項目，請取消關聯後再操作";
-$lang->product->programEmpty         = '項目集不能為空';
 
 $lang->product->id             = '編號';
 $lang->product->program        = "所屬項目集";
@@ -106,6 +107,7 @@ $lang->product->QD             = '測試負責人';
 $lang->product->RD             = '發佈負責人';
 $lang->product->feedback       = '反饋負責人';
 $lang->product->acl            = '訪問控制';
+$lang->product->reviewer       = '評審人';
 $lang->product->whitelist      = '白名單';
 $lang->product->branch         = '所屬%s';
 $lang->product->qa             = '測試';

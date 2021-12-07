@@ -9,13 +9,13 @@
  * @version     $Id: zh-tw.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->programplan->common        = '項目計劃';
+$lang->programplan->common        = '項目階段';
 $lang->programplan->browse        = '瀏覽階段計劃';
 $lang->programplan->gantt         = '甘特圖';
 $lang->programplan->list          = '階段列表';
 $lang->programplan->create        = '設置階段';
 $lang->programplan->edit          = '編輯';
-$lang->programplan->delete        = '刪除';
+$lang->programplan->delete        = '刪除階段';
 $lang->programplan->createSubPlan = '創建二級階段';
 
 $lang->programplan->parent           = '父階段';
@@ -43,7 +43,7 @@ $lang->programplan->openedBy         = '由誰創建';
 $lang->programplan->openedDate       = '創建日期';
 $lang->programplan->editedBy         = '由誰編輯';
 $lang->programplan->editedDate       = '編輯日期';
-$lang->programplan->duration         = '計劃工期';
+$lang->programplan->duration         = '工期';
 $lang->programplan->version          = '版本號';
 $lang->programplan->full             = '全屏';
 $lang->programplan->today            = '今天';
@@ -51,6 +51,12 @@ $lang->programplan->exporting        = '導出';
 $lang->programplan->exportFail       = '導出失敗';
 $lang->programplan->hideCriticalPath = '隱藏關鍵路徑';
 $lang->programplan->showCriticalPath = '顯示關鍵路徑';
+$lang->programplan->errorBegin       = '階段的開始時間不能小於所屬項目的開始時間%s';
+$lang->programplan->errorEnd         = '階段的結束時間不能大於所屬項目的結束時間%s';
+$lang->programplan->emptyBegin       = '『計劃開始』日期不能為空';
+$lang->programplan->emptyEnd         = '『計劃完成』日期不能為空';
+$lang->programplan->checkBegin       = '『計劃開始』應當為合法的日期';
+$lang->programplan->checkEnd         = '『計劃完成』應當為合法的日期';
 
 $lang->programplan->milestoneList[1] = '是';
 $lang->programplan->milestoneList[0] = '否';
@@ -71,3 +77,4 @@ $lang->programplan->error->planFinishSmall = '"計劃完成時間"必須大於"�
 $lang->programplan->error->percentOver     = '工作量占比累計不應當超過100%';
 $lang->programplan->error->createdTask     = '已分解任務,不可添加子階段';
 $lang->programplan->error->parentWorkload  = '子階段的工作量之和不能大於父階段的工作量:%s';
+$lang->programplan->error->parentDuration  = '子階段計劃開始、計劃完成不能超過父階段';
