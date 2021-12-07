@@ -6,7 +6,7 @@
  *
  * Based on concepts from SimplePie_File, RequestCore and WP_Http.
  *
- * @package Requests
+ * @package requests
  */
 
 include 'loader.php';
@@ -23,7 +23,8 @@ $classLoader->register();
  *
  * @package Requests
  */
-class requests {
+class requests
+{
 	/**
 	 * POST method
 	 *

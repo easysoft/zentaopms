@@ -852,4 +852,15 @@ EOT;
         }
         $this->view->typeOptions = $options;
     }
+
+    /**
+     * Create demo library.
+     *
+     * @access public
+     * @return void
+     */
+    public function createDemo()
+    {
+        $this->api->createDemoData();
+    }
 }
