@@ -30,6 +30,7 @@ $lang->gitlab->gitlabProject        = "{$lang->gitlab->common}项目";
 $lang->gitlab->browseProject        = "{$lang->gitlab->common}项目列表";
 $lang->gitlab->browseUser           = "用户列表";
 $lang->gitlab->browseGroup          = "群组列表";
+$lang->gitlab->browseBranch         = "分支列表";
 $lang->gitlab->gitlabIssue          = "{$lang->gitlab->common} issue";
 $lang->gitlab->zentaoProduct        = '禅道产品';
 $lang->gitlab->objectType           = '类型'; // task, bug, story
@@ -43,6 +44,7 @@ $lang->gitlab->deleteGroup          = '删除群组';
 $lang->gitlab->createUser           = '添加用户';
 $lang->gitlab->editUser             = '编辑用户';
 $lang->gitlab->deleteUser           = '删除用户';
+$lang->gitlab->createBranch         = '添加分支';
 $lang->gitlab->manageGroupMembers   = '群组成员管理';
 $lang->gitlab->createWebhook        = '创建Webhook';
 
@@ -57,6 +59,10 @@ $lang->gitlab->lblCreate  = '添加GitLab服务器';
 $lang->gitlab->desc       = '描述';
 $lang->gitlab->tokenFirst = 'Token不为空时，优先使用Token。';
 $lang->gitlab->tips       = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
+
+$lang->gitlab->branchName              = '分支名';
+$lang->gitlab->branchLastCommitter     = '最后提交';
+$lang->gitlab->branchLastCommittedDate = '最后修改时间';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
