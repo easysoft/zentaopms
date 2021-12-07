@@ -189,7 +189,13 @@ class doc extends control
         if(!empty($_POST))
         {
             $changes = $this->doc->updateLib($libID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+
             if($changes)
             {
                 $actionID = $this->action->create('docLib', $libID, 'edited');
