@@ -625,6 +625,9 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $this->app->user->account, $orderBy, $pager);
+
+        $this->view->projectList   = $this->loadModel('project')->getPairsByProgram(0);
+
         $this->display();
     }
 
@@ -655,6 +658,9 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->mode       = 'risk';
+
+        $this->view->projectList   = $this->loadModel('project')->getPairsByProgram(0);
+
         $this->display();
     }
 
