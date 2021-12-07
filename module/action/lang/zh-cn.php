@@ -121,7 +121,6 @@ $lang->action->objectTypes['mr']            = '合并请求';
 $lang->action->objectTypes['gitlabproject'] = 'GitLab项目';
 $lang->action->objectTypes['gitlabuser']    = 'GitLab用户';
 $lang->action->objectTypes['gitlabgroup']   = 'GitLab群组';
-$lang->action->objectTypes['gitlabbranch']  = 'GitLab分支';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();

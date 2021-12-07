@@ -897,24 +897,6 @@ class gitlabModel extends model
     }
 
     /**
-     * Create a gitab user by api.
-     *
-     * @param  int      $gitlabID
-     * @param  int      $projectID
-     * @param  object   $branch
-     * @access public
-     * @return object
-     */
-    public function apiCreateBranch($gitlabID, $projectID, $branch)
-    {
-        if(empty($branch->branch) or empty($branch->ref)) return false;
-
-        $apiRoot = $this->getApiRoot($gitlabID);
-        $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/branches");
-        return json_decode(commonModel::http($url, $branch));
-    }
-
-    /**
      * Get single project by API.
      *
      * @param  int $gitlabID
@@ -2248,33 +2230,6 @@ class gitlabModel extends model
         if(!empty($reponse->id))
         {
             $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'edited', '', $reponse->name);
-            return true;
-        }
-
-        return $this->apiErrorHandling($reponse);
-    }
-
-    /**
-     * Create a gitlab branch.
-     *
-     * @param  int $gitlabID
-     * @param  int $projectID
-     * @access public
-     * @return bool
-     */
-    public function createBranch($gitlabID, $projectID)
-    {
-        $branch = fixer::input('post')->get();
-
-        if(empty($branch->branch)) dao::$errors['branch'][] = $this->lang->gitlab->branch->name . $this->lang->gitlab->emptyError;
-        if(empty($branch->ref))    dao::$errors['ref'][]    = $this->lang->gitlab->branch->from . $this->lang->gitlab->emptyError;
-        if(dao::isError()) return false;
-
-        $reponse = $this->apiCreateBranch($gitlabID, $projectID, $branch);
-
-        if(!empty($reponse->name))
-        {
-            $this->loadModel('action')->create('gitlabbranch', 0, 'created', '', $reponse->name);
             return true;
         }
 
