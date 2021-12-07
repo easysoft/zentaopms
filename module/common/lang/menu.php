@@ -588,9 +588,7 @@ $lang->navGroup->task         = 'execution';
 $lang->navGroup->build        = 'execution';
 $lang->navGroup->team         = 'execution';
 
-$lang->navGroup->kanban       = 'kanban';
-$lang->navGroup->kanbancolumn = 'kanban';
-$lang->navGroup->kanbanlane   = 'kanban';
+$lang->navGroup->kanban = 'kanban';
 
 $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';
