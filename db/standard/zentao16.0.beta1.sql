@@ -100,7 +100,7 @@ CREATE TABLE `zt_apistruct`
     `attribute`  text NULL,
     `addedBy`    varchar(30)  NOT NULL DEFAULT 0,
     `addedDate`  datetime     NOT NULL,
-    `editEdBy`   varchar(30)  NOT NULL DEFAULT 0,
+    `editedBy`   varchar(30)  NOT NULL DEFAULT 0,
     `editedDate` datetime     NOT NULL,
     `deleted`    enum ('0', '1') NOT NULL DEFAULT '0',
     primary key (`id`)
