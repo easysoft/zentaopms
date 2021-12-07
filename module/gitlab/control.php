@@ -759,6 +759,39 @@ class gitlab extends control
     }
 
     /**
+     * Creat a gitlab branch.
+     *
+     * @param  int     $gitlabID
+     * @param  int     $projectID
+     * @access public
+     * @return void
+     */
+    public function createBranch($gitlabID, $projectID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->createBranch($gitlabID, $projectID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $locate = $this->session->gitlabBranchList ? $this->session->gitlabBranchList : inlink('browseBranch', "gitlibID=$gitlabID&projectID=$projectID");
+            return $this->send(array('result' => 'success', 'message' => $this->lang->gitlab->createSuccess, 'locate' => $locate));
+        }
+
+        /* Get branches by api. */
+        $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);
+        if(!is_array($branches)) $branches= array();
+
+        $branchPairs = array();
+        foreach($branches as $branch) $branchPairs[$branch->name] = $branch->name;
+
+        $this->view->title       = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->createBranch;
+        $this->view->gitlabID    = $gitlabID;
+        $this->view->projectID   = $projectID;
+        $this->view->branchPairs = $branchPairs;
+        $this->display();
+    }
+
+    /**
      * Import gitlab issue to zentaopms.
      *
      * @param  int    $repoID

@@ -38,6 +38,7 @@ $lang->gitlab->manageProjectMembers = '项目成员管理';
 $lang->gitlab->createProject        = '添加GitLab项目';
 $lang->gitlab->editProject          = '编辑GitLab项目';
 $lang->gitlab->deleteProject        = '删除GitLab项目';
+$lang->gitlab->createBranch         = '添加分支';
 $lang->gitlab->createGroup          = '添加群组';
 $lang->gitlab->editGroup            = '编辑群组';
 $lang->gitlab->deleteGroup          = '删除群组';
@@ -55,10 +56,12 @@ $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
 $lang->gitlab->private        = 'MD5验证';
 
-$lang->gitlab->lblCreate  = '添加GitLab服务器';
-$lang->gitlab->desc       = '描述';
-$lang->gitlab->tokenFirst = 'Token不为空时，优先使用Token。';
-$lang->gitlab->tips       = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
+$lang->gitlab->lblCreate     = '添加GitLab服务器';
+$lang->gitlab->desc          = '描述';
+$lang->gitlab->tokenFirst    = 'Token不为空时，优先使用Token。';
+$lang->gitlab->tips          = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
+$lang->gitlab->emptyError    = "不能为空";
+$lang->gitlab->createSuccess = "创建成功";
 
 $lang->gitlab->branchName              = '分支名';
 $lang->gitlab->branchLastCommitter     = '最后提交';
@@ -88,11 +91,13 @@ $lang->gitlab->apiError[0] = 'internal is not allowed in a private group.';
 $lang->gitlab->apiError[1] = 'public is not allowed in a private group.';
 $lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
 $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
+$lang->gitlab->apiError[4] = 'Branch already exists';
 
 $lang->gitlab->errorLang[0] = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1] = '私有分组的项目，可见性级别不能设为公开。';
 $lang->gitlab->errorLang[2] = '密码太短（最少8个字符）';
 $lang->gitlab->errorLang[3] = "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。";
+$lang->gitlab->errorLang[4] = '分支名已存在。';
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "项目ID";
@@ -177,3 +182,8 @@ $lang->gitlab->group->memberName                              = '账号';
 $lang->gitlab->group->memberAccessLevel                       = '角色权限';
 $lang->gitlab->group->memberExpiresAt                         = '过期时间';
 $lang->gitlab->group->repeatError                             = "群组成员不能重复添加";
+
+$lang->gitlab->branch = new stdclass();
+$lang->gitlab->branch->name   = '分支名';
+$lang->gitlab->branch->from   = '创建自';
+$lang->gitlab->branch->create = '创建';
