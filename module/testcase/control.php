@@ -548,10 +548,6 @@ class testcase extends control
         $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
 
-        /* Set module option menu. */
-        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
         /* Set custom. */
         $product = $this->product->getById($productID);
         foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field)
@@ -588,6 +584,11 @@ class testcase extends control
         {
             $branches = $this->loadModel('branch')->getPairs($productID, 'active');
         }
+
+        /* Set module option menu. */
+        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
+        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
+
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
