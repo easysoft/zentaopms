@@ -18,7 +18,7 @@
     <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('gitlab', 'createBranch')) common::printLink('gitlab', 'createBranch', "gitlabID=$gitlabID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('gitlab', 'createBranch')) common::printLink('gitlab', 'createBranch', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabBranchList)):?>
@@ -37,9 +37,9 @@
       <?php $vars = "gitlabID={$gitlabID}&projectID={$projectID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
-          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branchName);?></th>
-          <th class='text-left'><?php echo $lang->gitlab->branchLastCommitter;?></th>
-          <th class='text-left'><?php common::printOrderLink('lastCommittedDate', $orderBy, $vars, $lang->gitlab->branchLastCommittedDate);?></th>
+          <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branch->name);?></th>
+          <th class='text-left'><?php echo $lang->gitlab->branch->lastCommitter;?></th>
+          <th class='text-left'><?php common::printOrderLink('lastCommittedDate', $orderBy, $vars, $lang->gitlab->branch->lastCommittedDate);?></th>
           <th class='c-actions-4'><?php echo $lang->actions;?></th>
         </tr>
       </thead>

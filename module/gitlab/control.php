@@ -726,6 +726,8 @@ class gitlab extends control
      */
     public function browseBranch($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $this->session->set('gitlabBranchList', $this->app->getURI(true));
+
         $branchList = array();
         $result = $this->gitlab->apiGetBranches($gitlabID, $projectID);
         foreach($result as $gitlabBranch)
