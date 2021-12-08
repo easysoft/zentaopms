@@ -201,13 +201,19 @@ class doc extends control
                 $actionID = $this->action->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $docLib     = $this->doc->getLibById($libID);
+            $docLib   = $this->doc->getLibById($libID);
+            $objectID = 0;
+            if(strpos('product,project,execution', $docLib->type) !== false)
+            {
+                $libType  = $docLib->type;
+                $objectID = $docLib->$libType;
+            }
             $hasLibPriv = $this->doc->checkPrivLib($docLib) ? 1 : 0;
 
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow($hasLibPriv, $libID)";
+            $response['callback']   = "redirectParentWindow($hasLibPriv, $libID, $objectID)";
             return $this->send($response);
         }
 
