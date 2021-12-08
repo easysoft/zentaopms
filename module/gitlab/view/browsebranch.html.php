@@ -15,7 +15,7 @@
 <?php js::set('gitlabID', $gitlabID)?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+    <?php echo html::linkButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, $this->createLink('gitlab', 'browseProject', "gitlabID=$gitlabID"), 'self', '','btn btn-secondary');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('gitlab', 'createBranch')) common::printLink('gitlab', 'createBranch', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
@@ -26,7 +26,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
     <?php if(empty($keyword) and common::hasPriv('gitlab', 'createBranch')):?>
-    <?php echo html::a($this->createLink('gitlab', 'createBranch', "gitlabID=$gitlabID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-info'");?>
+    <?php echo html::a($this->createLink('gitlab', 'createBranch', "gitlabID=$gitlabID&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
@@ -40,7 +40,6 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->branch->name);?></th>
           <th class='text-left'><?php echo $lang->gitlab->branch->lastCommitter;?></th>
           <th class='text-left'><?php common::printOrderLink('lastCommittedDate', $orderBy, $vars, $lang->gitlab->branch->lastCommittedDate);?></th>
-          <th class='c-actions-4'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -49,8 +48,6 @@
           <td class='text-c-name' title='<?php echo $gitlabBranch->name;?>'><?php echo $gitlabBranch->name;?></td>
           <td class='text'><?php echo $gitlabBranch->lastCommitter;?></td>
           <td class='text'><?php echo $gitlabBranch->lastCommittedDate?></td>
-          <td class='c-actions text-left'>
-          </td>
         </tr>
         <?php endforeach;?>
       </tbody>
