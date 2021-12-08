@@ -2562,6 +2562,7 @@ EOT;
             if($this->app->tab == 'doc') $this->app->rawMethod = $type;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
+
             if(empty($object)) die(js::locate(helper::createLink($type, 'create')));
         }
 
