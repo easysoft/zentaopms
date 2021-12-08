@@ -35,6 +35,29 @@ class kanban extends control
     }
 
     /**
+     * Create a space.
+     *
+     * @access public
+     * @return void
+     */
+    public function createSpace()
+    {
+        if(!empty($_POST))
+        {
+            $spaceID = $this->kanban->createSpace();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
+            die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+        }
+
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID

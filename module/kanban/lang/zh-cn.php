@@ -1,7 +1,21 @@
 <?php
 $lang->kanban->space       = '看板空间';
-$lang->kanban->create      = '添加看板';
-$lang->kanban->createSpace = '添加空间';
+$lang->kanban->create      = '创建看板';
+$lang->kanban->createSpace = '创建空间';
+
+/* Field. */
+$lang->kanban->spaceName = '空间名称';
+$lang->kanban->spaceDesc = '空间描述';
+$lang->kanban->owner     = '负责人';
+$lang->kanban->team      = '团队';
+$lang->kanban->acl       = '访问控制';
+
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->name  = '空间名称';
+$lang->kanbanspace->owner = '负责人';
+
+$lang->kanban->spaceAclList['open']    = '公开（有看板空间视图权限即可访问）';
+$lang->kanban->spaceAclList['private'] = '私有（只有看板空间负责人、团队成员可访问）';
 
 $lang->kanban->featureBar['all']    = '所有';
 $lang->kanban->featureBar['my']     = '我的空间';

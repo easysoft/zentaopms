@@ -140,6 +140,37 @@ class kanbanModel extends model
     }
 
     /**
+     * Create a space.
+     *
+     * @access public
+     * @return int
+     */
+    public function createSpace()
+    {
+        $space = fixer::input('post')
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
+            ->add('team', $this->post->mailto)
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,mailto,contactListMenu')
+            ->get();
+
+        $this->dao->insert(TABLE_KANBANSPACE)->data($space)
+                ->autoCheck()
+                ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
+                ->exec();
+
+        if(!dao::isError())
+        {
+            $spaceID    = $this->dao->lastInsertID();
+            $spaceFiles = array();
+
+            return $spaceID;
+        }
+    }
+
+    /**
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID

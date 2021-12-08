@@ -3,6 +3,21 @@ $lang->kanban->space       = 'Kanban Space';
 $lang->kanban->create      = 'Create Kanban';
 $lang->kanban->createSpace = 'Create Space';
 
+/* Field. */
+$lang->kanban->spaceName = 'Space Name';
+$lang->kanban->spaceDesc = 'Space Description';
+$lang->kanban->owner     = 'Owner';
+$lang->kanban->team      = 'Team';
+$lang->kanban->acl       = 'ACL';
+
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->name  = 'Name';
+$lang->kanbanspace->owner = 'Owner';
+
+$lang->kanban->spaceAclList[] = array();
+$lang->kanban->spaceAclList['open']    = 'Open (Accessible with kanban view permissions)';
+$lang->kanban->spaceAclList['private'] = 'Private (For the kanban owner and team members only)';
+
 $lang->kanban->featureBar['all']    = 'All';
 $lang->kanban->featureBar['my']     = 'My';
 $lang->kanban->featureBar['other']  = 'Other';
