@@ -721,7 +721,7 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 list($extra, $reason) = explode(',', $extra);
                 $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
