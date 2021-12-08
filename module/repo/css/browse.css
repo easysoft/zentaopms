@@ -1,4 +1,5 @@
 #mainMenu > .btn-toolbar {height: 35px; line-height: 35px;}
+#mainMenu > .pull-right {padding-right: 1%;}
 #sidebar>.sidebar-toggle>.icon {right: -2px; left: auto;}
 .main-row {width: 99%;}
 .btn-toolbar > .last-sync-time {display: inline-block; float: left; margin-right: 10px;}
