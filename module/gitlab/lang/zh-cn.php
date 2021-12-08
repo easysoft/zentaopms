@@ -156,6 +156,7 @@ $lang->gitlab->group->visibility                              = "可见性级别
 $lang->gitlab->group->visibilityList['private']               = "私有(群组及其项目只能由成员查看)";
 $lang->gitlab->group->visibilityList['internal']              = "内部(除外部用户外，任何登录用户均可查看该组和任何内部项目)";
 $lang->gitlab->group->visibilityList['public']                = "公开(群组和任何公共项目可以在没有任何身份验证的情况下查看)";
+$lang->gitlab->group->permission                              = '许可';
 $lang->gitlab->group->requestAccessEnabledTip                 = "允许用户请求访问(如果可见性是公开或内部的)";
 $lang->gitlab->group->lfsEnabled                              = '大文件存储';
 $lang->gitlab->group->lfsEnabledTip                           = "允许该组内的项目使用 Git LFS(可以在每个项目中覆盖此设置)";
