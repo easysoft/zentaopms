@@ -725,9 +725,12 @@ CREATE TABLE `zt_kanbancard` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE `zt_kanbangroup` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `region` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
+  `column` mediumint(8) unsigned NOT NULL,
+  `lane` mediumint(8) unsigned NOT NULL,
+  KEY `region`(`region`),
+  KEY `column`(`column`),
+  KEY `lane`(`lane`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbanorder`;
 CREATE TABLE `zt_kanbanorder` (
@@ -745,7 +748,6 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `execution` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
-  `group`  mediumint(8) unsigned NOT NULL,
   `groupby` char(30) NOT NULL,
   `extra` char(30) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
