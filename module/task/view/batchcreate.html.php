@@ -91,18 +91,17 @@
               $currentStory = $storyID;
               $type         = '';
               $member       = '';
-              $module       = $story ? $story->module : $moduleID;
           }
           else
           {
-              $currentStory = $type = $member = $module = 'ditto';
+              $currentStory = $type = $member = $moduleID = 'ditto';
           }
           ?>
           <?php $pri = 3;?>
           <tr>
             <td class='text-center'><?php echo $i + 1;?></td>
             <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
-              <?php echo html::select("module[$i]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $execution->id, $i)'")?>
+              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id, $i)'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>
             </td>
             <?php if($execution->type != 'ops'):?>
@@ -171,7 +170,7 @@
     <tr>
       <td class='text-center'>%s</td>
       <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
-        <?php echo html::select("module[%s]", $modules, $module, "class='form-control chosen' onchange='setStories(this.value, $execution->id, \"%s\")'")?>
+        <?php echo html::select("module[%s]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id, \"%s\")'")?>
         <?php echo html::hidden("parent[%s]", $parent);?>
       </td>
       <td <?php echo zget($visibleFields, 'story', "class='hidden'");?> style='overflow: visible'>
