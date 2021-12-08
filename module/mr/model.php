@@ -134,7 +134,10 @@ class mrModel extends model
         if(isset($rawMR->message) and !isset($rawMR->iid))
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $rawMR->message[0]));
+
+            $errorKey     = array_search($rawMR->message[0], $this->lang->mr->apiErrorMap);
+            $errorMessage = zget($this->lang->mr->errorLang, $errorKey);
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
         }
 
         /* Create MR failed. */
