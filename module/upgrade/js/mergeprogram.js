@@ -648,7 +648,7 @@ function toggleProgram(obj)
         $programs.attr('disabled', 'disabled');
         $('.programStatus').show();
         $('#programStatus').val('wait');
-        $('#programStatus').removeAttr('disabled').trigger("chosen:updated");
+        $('#programStatus').trigger("chosen:updated");
 
         $('form #newProject0').prop('checked', true);
         $('form #newLine0').prop('checked', true);
@@ -660,7 +660,6 @@ function toggleProgram(obj)
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
         $('.programStatus').hide();
-        $('#programStatus').attr('disabled', 'disabled');
 
         if(!$('#newProgram0').prop('disabled'))
         {

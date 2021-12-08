@@ -4369,6 +4369,12 @@ class upgradeModel extends model
             $this->loadModel('action')->create('program', $programID, 'openedbysystem');
             if($data->programStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'closedbysystem');
         }
+        else
+        {
+            $programID = $data->programID ? $data->programID : $data->programs;
+            $this->dao->update(TABLE_PROGRAM)->set('status')->eq($data->programStatus)->where('id')->eq($programID)->exec();
+            if($data->programStatus == 'closed') $this->loadModel('action')->create('program', $programID, 'openedbysystem');
+        }
 
         if(isset($data->newLine))
         {
