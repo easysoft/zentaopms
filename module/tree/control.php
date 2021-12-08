@@ -170,8 +170,6 @@ class tree extends control
             elseif($from == 'project')
             {
                 $this->lang->navGroup->tree  = 'project';
-                $this->lang->tree->menu      = $this->lang->project->menu;
-                $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
 
                 /* The project parameter needs to be present when the tree module belongs to the project grouping. */
                 if($this->session->docList && $this->session->project && strpos($this->session->docList, 'project') === false) $this->session->set('docList', $this->session->docList . '?project=' . $this->session->project, 'project');
