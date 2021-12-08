@@ -15,7 +15,7 @@ CREATE TABLE `zt_kanbanspace` (
   `closedBy` char(30) NOT NULL,
   `closedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanban`;
@@ -37,7 +37,7 @@ CREATE TABLE `zt_kanban` (
   `closedBy` char(30) NOT NULL,
   `closedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanbanregion`;
@@ -51,7 +51,7 @@ CREATE TABLE `zt_kanbanregion` (
   `lastEditedBy` char(30) NOT NULL,
   `lastEditedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanbancard`;
@@ -79,14 +79,14 @@ CREATE TABLE `zt_kanbancard` (
   `assignedBy` char(30) NOT NULL,
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE `zt_kanbangroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `region` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanbanorder`;
@@ -97,7 +97,7 @@ CREATE TABLE `zt_kanbanorder` (
   `type` varchar(20) NOT NULL,
   `account` varchar(30) NOT NULL,
   `order` int NOT NULL,
-  PRIMARY KEY (`id`),
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_kanbanlane` ADD COLUMN `region` mediumint(8) unsigned NOT NULL AFTER `type`;
