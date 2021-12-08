@@ -38,7 +38,6 @@ $lang->gitlab->manageProjectMembers = '项目成员管理';
 $lang->gitlab->createProject        = '添加GitLab项目';
 $lang->gitlab->editProject          = '编辑GitLab项目';
 $lang->gitlab->deleteProject        = '删除GitLab项目';
-$lang->gitlab->createBranch         = '添加分支';
 $lang->gitlab->createGroup          = '添加群组';
 $lang->gitlab->editGroup            = '编辑群组';
 $lang->gitlab->deleteGroup          = '删除群组';
@@ -62,10 +61,6 @@ $lang->gitlab->tokenFirst    = 'Token不为空时，优先使用Token。';
 $lang->gitlab->tips          = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
 $lang->gitlab->emptyError    = "不能为空";
 $lang->gitlab->createSuccess = "创建成功";
-
-$lang->gitlab->branchName              = '分支名';
-$lang->gitlab->branchLastCommitter     = '最后提交';
-$lang->gitlab->branchLastCommittedDate = '最后修改时间';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
@@ -184,6 +179,8 @@ $lang->gitlab->group->memberExpiresAt                         = '过期时间';
 $lang->gitlab->group->repeatError                             = "群组成员不能重复添加";
 
 $lang->gitlab->branch = new stdclass();
-$lang->gitlab->branch->name   = '分支名';
-$lang->gitlab->branch->from   = '创建自';
-$lang->gitlab->branch->create = '创建';
+$lang->gitlab->branch->name              = '分支名';
+$lang->gitlab->branch->from              = '创建自';
+$lang->gitlab->branch->create            = '创建';
+$lang->gitlab->branch->lastCommitter     = '最后提交';
+$lang->gitlab->branch->lastCommittedDate = '最后修改时间';
