@@ -724,7 +724,7 @@ class gitlab extends control
      * @access public
      * @return void
      */
-    public function browseBranch($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function browseBranch($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->session->set('gitlabBranchList', $this->app->getURI(true));
 
@@ -742,7 +742,12 @@ class gitlab extends control
 
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
-        array_multisort(array_column($branchList, $order), $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
+        $orderList = array();
+        foreach($branchList as $branch)
+        {
+            $orderList[] = $branch->$order;
+        }
+        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $branchList);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
