@@ -37,6 +37,7 @@ $lang->product->indexAction   = "所有{$lang->productCommon}仪表盘";
 $lang->product->closeAction   = "关闭{$lang->productCommon}";
 $lang->product->orderAction   = "{$lang->productCommon}排序";
 $lang->product->exportAction  = "导出{$lang->productCommon}";
+$lang->product->link2Project  = "关联项目";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

@@ -85,6 +85,8 @@ $lang->productplan->errorNoEnd        = 'ID %s 结束时间不能为空';
 $lang->productplan->beginGeEnd        = 'ID %s 开始时间不能大于结束时间';
 $lang->productplan->beginLetterParent = "父计划的开始日期：%s，开始日期不能小于父计划的开始日期";
 $lang->productplan->endGreaterParent  = "父计划的完成日期：%s，完成日期不能大于父计划的完成日期";
+$lang->productplan->noLinkedProject   = "当前产品还未关联项目，请进入产品的项目列表关联或创建一个项目";
+$lang->productplan->enterProjectList  = "进入产品的项目列表";
 
 $lang->productplan->featureBar['browse']['all']       = '全部';
 $lang->productplan->featureBar['browse']['unexpired'] = '未过期';

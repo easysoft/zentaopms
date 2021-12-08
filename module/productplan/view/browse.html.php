@@ -14,6 +14,8 @@
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('noLinkedProject', $lang->productplan->noLinkedProject);?>
+<?php js::set('enterProjectList', $lang->productplan->enterProjectList);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>

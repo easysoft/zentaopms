@@ -66,5 +66,17 @@ function getPlanID(obj, branch)
         $('#project').replaceWith(projects);
         $("#project_chosen").remove();
         $("#project").chosen();
+
+        var projectList = $("#project").val();
+        if(!projectList)
+        {
+            $("#project").attr('disabled', true);
+            $("#project").trigger('chosen:updated');
+            $("#project").closest('td').append("<span style='color: red'>" + noLinkedProject + "</span>");
+
+            var locateLink   = createLink('product', 'project', 'status=all&productID=' + productID);
+            var locateButton = "<a href=" + locateLink + " class='btn btn-primary' data-app='product'>" + enterProjectList + "</a>";
+            $(".btn-primary").replaceWith(locateButton);
+        };
     });
 }

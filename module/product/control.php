@@ -80,7 +80,7 @@ class product extends control
     public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc')
     {
         $this->app->loadLang('execution');
-        $this->app->loadLang('project');
+        $this->loadModel('project');
 
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -97,14 +97,19 @@ class product extends control
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
+        $product = $this->product->getByID($productID);
+
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->position[]   = $this->products[$productID];
         $this->view->position[]   = $this->lang->product->project;
         $this->view->projectStats = $projectStats;
         $this->view->PMList       = $PMList;
         $this->view->productID    = $productID;
+        $this->view->product      = $product;
+        $this->view->projects     = $this->project->getPairsByProgram($product->program);
         $this->view->status       = $status;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchID     = $branch;
         $this->display();
     }
 
