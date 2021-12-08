@@ -1676,12 +1676,13 @@ class executionModel extends model
      *
      * @param  array  $products
      * @param  int    $projectID
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getBranchByProduct($products, $projectID = 0)
+    public function getBranchByProduct($products, $projectID = 0, $param = 'noclosed')
     {
-        $branchGroups = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+        $branchGroups = $this->loadModel('branch')->getByProducts($products, $param);
 
         if($projectID)
         {

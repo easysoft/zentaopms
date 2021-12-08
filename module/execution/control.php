@@ -2431,6 +2431,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'all');
 
         $this->display();
     }

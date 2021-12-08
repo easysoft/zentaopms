@@ -1797,6 +1797,7 @@ class project extends control
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
         $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal|noclosed');
+        $this->view->allBranches              = $this->branch->getByProducts(array_keys($allProducts), 'ignoreNormal');
 
         $this->display();
     }
