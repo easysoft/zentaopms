@@ -283,30 +283,27 @@ function renderColumnCount($count, count, col)
 function renderHeaderCol($col, col, $header, kanban)
 {
     if(col.asParent) $col = $col.children('.kanban-header-col');
-    if(!$col.children('.actions').length)
+    var $actions = $('<div class="actions" />');
+    var printStoryButton =  printTaskButton = printBugButton = false;
+    if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
+    if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
+    if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
+
+    if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
     {
-        var $actions = $('<div class="actions" />');
-        var printStoryButton =  printTaskButton = printBugButton = false;
-        if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
-        if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
-        if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
-
-        if((col.type === 'backlog' && printStoryButton) || (col.type === 'wait' && printTaskButton) || (col.type == 'unconfirmed' && printBugButton))
-        {
-            $actions.append([
-                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
-                    '<i class="icon icon-expand-alt"></i>',
-                '</a>'
-            ].join(''));
-        }
-
         $actions.append([
-            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
-                '<i class="icon icon-ellipsis-v"></i>',
-            '</a>'
+                '<a data-contextmenu="columnCreate" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '" class="text-primary">',
+                '<i class="icon icon-expand-alt"></i>',
+                '</a>'
         ].join(''));
-        $actions.appendTo($col);
     }
+
+    $actions.append([
+            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+            '<i class="icon icon-ellipsis-v"></i>',
+            '</a>'
+    ].join(''));
+    $actions.appendTo($col);
 }
 
 /**
@@ -612,7 +609,7 @@ function createColumnMenu(options)
 	var items = [];
 	if(priv.canEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
 	if(priv.canSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
-	if(priv.canSortCards) items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
+	//if(priv.canSortCards) items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
     return items;
 }
 
