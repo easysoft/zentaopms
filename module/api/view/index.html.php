@@ -42,7 +42,9 @@
       </div>
       <?php if(!$moduleTree):?>
       <hr class="space">
+      <?php if(!$isRelease):?>
       <div class="text-center text-muted tips"><?php echo $lang->api->noModule;?></div>
+      <?php endif;?>
       <?php endif;?>
       <?php echo $moduleTree;?>
     </div>
@@ -71,7 +73,7 @@
     </div>
   </div>
   <?php else:?>
-  <div class="cell">
+  <div class="cell main-col" data-min-width="400">
     <div class="detail">
       <ul class="list-group">
         <?php foreach($apiList as $api):?>

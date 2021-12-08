@@ -32,7 +32,7 @@ $lang->productplan->linkedStories    = 'Linked Stories';
 $lang->productplan->unlinkedStories  = 'Unlinked Stories';
 $lang->productplan->updateOrder      = 'Order';
 $lang->productplan->createChildren   = "Create Child Plans";
-$lang->productplan->createExecution  = "Create {$lang->executionCommon}";
+$lang->productplan->createExecution  = "Create {$lang->execution->common}";
 
 $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";
@@ -48,6 +48,7 @@ $lang->productplan->confirmUnlinkBug   = "Do you want to unlink this bug?";
 $lang->productplan->noPlan             = 'No plans yet. ';
 $lang->productplan->cannotDeleteParent = 'Cannot delete parent plan';
 $lang->productplan->selectProjects     = "Please select the project";
+$lang->productplan->projectNotEmpty    = 'Project cannot be empty.';
 $lang->productplan->nextStep           = "Next step";
 
 $lang->productplan->id         = 'ID';
@@ -62,7 +63,7 @@ $lang->productplan->future     = 'TBD';
 $lang->productplan->stories    = 'Story';
 $lang->productplan->bugs       = 'Bug';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = $lang->executionCommon;
+$lang->productplan->execution  = $lang->execution->common;
 $lang->productplan->parent     = "Parent Plan";
 $lang->productplan->parentAB   = "Parent";
 $lang->productplan->children   = "Child Plan";

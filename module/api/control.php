@@ -69,7 +69,7 @@ class api extends control
             $this->view->typeList = $this->api->getTypeList($libID);
         }
 
-        $this->setMenu($libID);
+        $this->setMenu($libID, $moduleID);
 
         $this->view->isRelease  = $release > 0;
         $this->view->release    = $release;
@@ -462,6 +462,7 @@ class api extends control
         {
             $now    = helper::now();
             $params = fixer::input('post')
+                ->trim('title,path')
                 ->remove('type')
                 ->skipSpecial('params,response')
                 ->add('addedBy', $this->app->user->account)
@@ -601,10 +602,11 @@ class api extends control
      * Set doc menu by method name.
      *
      * @param  int $libID
+     * @param  int $moduleID
      * @access public
      * @return void
      */
-    private function setMenu($libID = 0)
+    private function setMenu($libID = 0, $moduleID = 0)
     {
         common::setMenuVars('doc', $libID);
 
@@ -629,7 +631,7 @@ class api extends control
                 if(common::hasPriv('api', 'create'))
                 {
                     $menu .= "<li>";
-                    $menu .= html::a(helper::createLink('api', 'create', "libID=$libID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
+                    $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
                     $menu .= "</li>";
                 }
 

@@ -96,7 +96,7 @@
             }
             else 
             {
-                echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");
+                echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color'");
             }
             ?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
@@ -104,7 +104,7 @@
           <?php if($config->systemMode == 'new'):?>
           <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'index', "projectID=$task->project"), $task->projectName);?></td>
           <?php endif;?>
-          <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '', "data-group='execution'");?></td>
+          <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <?php endif;?>
@@ -171,7 +171,7 @@
             <?php if($config->systemMode == 'new'):?>
             <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$child->project"), $child->projectName);?></td>
             <?php endif;?>
-            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '', "data-group='execution'");?></td>
+            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?></td>
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
             <?php endif;?>
@@ -208,8 +208,8 @@
                       common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
 
                       common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', 'data-group="execution"', '', $child->project);
-                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, 'data-group="execution"', $this->lang->task->children, $child->project);
+                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', '', '', $child->project);
+                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children, $child->project);
                   }
               }
               ?>
