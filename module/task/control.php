@@ -312,10 +312,18 @@ class task extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
+        $story = $this->story->getByID($storyID);
+        if($story and empty($moduleID))
+        {
+            $moduleID = $story->module;
+            $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short');
+        }
+        else
+        {
+            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', 0, 'short');
+        }
 
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, 0, 'short');
-        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-
+        $members       = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
@@ -333,7 +341,7 @@ class task extends control
         $this->view->modules      = $modules;
         $this->view->parent       = $taskID;
         $this->view->storyID      = $storyID;
-        $this->view->story        = $this->story->getByID($storyID);
+        $this->view->story        = $story;
         $this->view->storyTasks   = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
         $this->view->members      = $members;
         $this->view->moduleID     = $moduleID;

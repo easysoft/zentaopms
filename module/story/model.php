@@ -2706,12 +2706,11 @@ class storyModel extends model
             ->where('t1.project')->eq((int)$executionID)
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($productID)->andWhere('t2.product')->eq((int)$productID)->fi()
-            ->beginIF($branch != 'all')->andWhere('t2.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t2.branch')->eq($branch)->fi()
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
             ->fetchAll();
-
         return empty($stories) ? array() : $this->formatStories($stories, $type);
     }
 
