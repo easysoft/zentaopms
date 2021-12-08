@@ -1266,6 +1266,7 @@ class product extends control
         if($_POST)
         {
             $this->product->manageLine();
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::reload('parent'));
         }
 

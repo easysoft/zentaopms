@@ -209,20 +209,17 @@ class apiModel extends model
         $now     = helper::now();
         $account = $this->app->user->account;
         $data    = fixer::input('post')
-            ->remove('type')
             ->skipSpecial('params,response')
             ->add('editedBy', $account)
             ->add('editedDate', $now)
+            ->add('version', $oldApi->version)
             ->setDefault('product,module', 0)
+            ->remove('type')
             ->get();
 
-        $data->id      = $oldApi->id;
-        $data->version = $oldApi->version + 1;
-        $apiSpec       = $this->getApiSpecByData($data);
+        $changes = common::createChanges($oldApi, $data);
+        if(!empty($changes)) $data->version = $oldApi->version + 1;
 
-        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
-
-        unset($data->id);
         $this->dao->update(TABLE_API)
             ->data($data)
             ->autoCheck()
@@ -230,7 +227,11 @@ class apiModel extends model
             ->where('id')->eq($apiID)
             ->exec();
 
-        return common::createChanges($oldApi, $data);
+        $data->id = $apiID;
+        $apiSpec  = $this->getApiSpecByData($data);
+        $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
+
+        return $changes;
     }
 
     /**

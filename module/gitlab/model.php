@@ -411,7 +411,7 @@ class gitlabModel extends model
         if(is_numeric($host)) $host = $this->getApiRoot($host);
         if(strpos($host, 'http://') !== 0 and strpos($host, 'https://') !== 0) return false;
 
-        $url = sprintf($apiRoot, $api);
+        $url = sprintf($host, $api);
         return json_decode(commonModel::http($url, $data, $options));
     }
 
@@ -635,7 +635,7 @@ class gitlabModel extends model
      *
      * @param  int $gitlabID
      * @access public
-     * @return void
+     * @return array 
      */
     public function apiGetProjects($gitlabID)
     {
@@ -1715,9 +1715,9 @@ class gitlabModel extends model
     /**
      * Create webhook for zentao.
      *
-     * @param  int $products
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  array $products
+     * @param  int   $gitlabID
+     * @param  int   $projectID
      * @access public
      * @return bool
      */
@@ -1830,7 +1830,7 @@ class gitlabModel extends model
             if($value) $issue->$field = $value;
         }
 
-        if($isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
+        if(isset($issue->assignee_id) and $issue->assignee_id == 'closed') unset($issue->assignee_id);
 
         /* issue->state is null when creating it, we should put status_event when updating it. */
         if(isset($issue->state) and $issue->state == 'closed') $issue->state_event = 'close';

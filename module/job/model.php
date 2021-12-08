@@ -378,7 +378,7 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $lastTag = $this->getLastTagByRepo($repo);
+            $lastTag = $this->getLastTagByRepo($repo, $job);
             if($lastTag)
             {
                 $build->tag   = $lastTag;
@@ -444,7 +444,7 @@ class jobModel extends model
     /**
      * Exec gitlab pipeline.
      *
-     * @param  int    $job
+     * @param  object $job
      * @access public
      * @return void
      */
@@ -486,11 +486,12 @@ class jobModel extends model
     /**
      * Get last tag of one repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
+     * @param  object $job
      * @access public
      * @return void
      */
-    public function getLastTagByRepo($repo)
+    public function getLastTagByRepo($repo, $job)
     {
         if($repo->SCM == 'Subversion')
         {

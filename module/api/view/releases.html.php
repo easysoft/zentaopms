@@ -41,7 +41,7 @@
             <td><?php echo zget($users, $release->addedBy, '');?></td>
             <td class="c-date"><?php echo $release->addedDate;?></td>
             <td class='c-actions'>
-              <?php echo html::a($this->createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->delete}' class='btn'");?>
+              <?php if(common::hasPriv('api', 'deleteRelease')) echo html::a($this->createLink('api', 'deleteRelease', "libID=$libID&id=$release->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->api->deleteRelease}' class='btn'");?>
             </td>
           </tr>
           <?php endforeach;?>
