@@ -116,14 +116,14 @@ class projectrelease extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "releaseID=$releaseID")));
         }
 
+        $this->project->setMenu($projectID);
+        $this->commonAction($projectID);
+
         /* Get the builds that can select. */
-        $builds         = $this->build->getProjectBuildPairs($projectID, 0, 0, 'notrunk|withbranch');
+        $builds         = $this->build->getProjectBuildPairs($projectID, key($this->products), 0, 'notrunk|withbranch');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
-
-        $this->project->setMenu($projectID);
-        $this->commonAction($projectID);
 
         $this->view->title       = $this->view->project->name . $this->lang->colon . $this->lang->release->create;
         $this->view->position[]  = $this->lang->release->create;

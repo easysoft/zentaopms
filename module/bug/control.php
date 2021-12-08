@@ -925,7 +925,7 @@ class bug extends control
 
         /* Assign. */
         $product   = $this->loadModel('product')->getByID($productID);
-        $allBuilds = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 0, 'noempty');
+        $allBuilds = $this->loadModel('build')->getProductBuildPairs($productID, 'all', 'noempty');
         if($executionID)
         {
             $openedBuilds = $this->build->getExecutionBuildPairs($executionID, $productID, $bug->branch, 'noempty,noterminate,nodone');
