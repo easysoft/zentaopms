@@ -100,6 +100,10 @@ $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->reopenSuccess       = "已重新打开合并请求。";
 $lang->mr->closeSuccess        = "已关闭合并请求。";
 
+$lang->mr->apiErrorMap[0] = "You can't use same project/branch for source and target";
+
+$lang->mr->errorLang[0] = '源项目分支不能和目标项目分支一样';
+
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
 $lang->mr->at   = "于";
