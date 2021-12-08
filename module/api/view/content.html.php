@@ -1,4 +1,4 @@
-<div class="main-col" data-min-width="400">
+<div class="main-col" data-min-width="500">
   <div id="mainContent" class="main-row in">
     <div class="main-col col-8">
       <div class="cell" id="content">
