@@ -80,7 +80,7 @@ class designModel extends model
             $design->name        = $name;
             $design->product     = $productID;
             $design->project     = $projectID;
-            $design->desc        = $data->desc[$i];
+            $design->desc        = nl2br($data->desc[$i]);
             $design->createdBy   = $this->app->user->account;
             $design->createdDate = helper::now();
 
