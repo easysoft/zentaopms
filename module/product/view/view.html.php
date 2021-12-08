@@ -73,32 +73,20 @@
               <table class="table table-data data-basic">
                 <tbody>
                   <tr>
-                    <?php if(!empty($product->code)):?>
                     <th class="c-code"><?php echo $lang->product->code;?></th>
                     <td><strong><?php echo $product->code;?></strong></td>
-                    <?php else:?>
-                    <th><?php echo $lang->product->type;?></th>
-                    <td><strong><?php echo zget($lang->product->typeList, $product->type);?></strong></td>
-                    <?php endif;?>
                     <th class="c-openedBy"><?php echo $lang->story->openedBy?></th>
                     <td colspan="2"><strong><?php echo zget($users, $product->createdBy);?></strong></td>
                   </tr>
                   <tr>
-                    <?php if(!empty($product->code)):?>
                     <th><?php echo $lang->product->type;?></th>
                     <td><strong><?php echo zget($lang->product->typeList, $product->type);?></strong></td>
-                    <?php else:?>
-                    <th><?php echo $lang->productCommon . $lang->product->status;?></th>
-                    <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
-                    <?php endif;?>
                     <th><?php echo $lang->story->openedDate?></th>
                     <td colspan="2"><strong><?php echo formatTime($product->createdDate, DT_DATE1);?></strong></td>
                   </tr>
                   <tr>
-                    <?php if(!empty($product->code)):?>
-                    <th class="w-80px"><?php echo $lang->productCommon ." ". $lang->product->status;?></th>
+                    <th class="c-type"><?php echo $lang->productCommon . $lang->product->status;?></th>
                     <td class="<?php echo $product->status;?>"><strong><?php echo zget($lang->product->statusList, $product->status);?></strong></td>
-                    <?php endif;?>
                     <th class="c-acl"><?php echo $lang->product->acl;?></th>
                     <td <?php echo empty($product->code) ? "colspan='4'" : "colspan='2'";?>><strong><?php echo $lang->product->aclList[$product->acl];?></strong></td>
                   </tr>
