@@ -145,9 +145,10 @@ class commonModel extends model
             ->where('t2.id')->eq($taskID)
             ->fetch();
 
+        $today = helper::today();
         if($execution->status == 'wait')
         {
-            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->where('id')->eq($execution->id)->exec();
+            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
             $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
         }
         return $execution;
@@ -849,7 +850,7 @@ class commonModel extends model
                     $method = $linkPart[2];
 
                     /* Skip some pages that do not require permissions.*/
-                    if($currentModule == 'report' and $method == 'annualData') continue; 
+                    if($currentModule == 'report' and $method == 'annualData') continue;
                     if($currentModule == 'my' and $currentMethod == 'team') continue;
 
                     if(common::hasPriv($currentModule, $method))
