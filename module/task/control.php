@@ -313,7 +313,7 @@ class task extends control
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
         $story = $this->story->getByID($storyID);
-        if($story and empty($moduleID))
+        if($story)
         {
             $moduleID = $story->module;
             $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short');
