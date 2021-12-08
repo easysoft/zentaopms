@@ -189,6 +189,7 @@ class programModel extends model
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->in($productPairs)
             ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.status')->in('wait,doing')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->fetchGroup('product');
 
