@@ -2556,10 +2556,13 @@ class executionModel extends model
 
         $objectPairs = $this->dao->select('id,name')->from(TABLE_PROJECT)
             ->where('deleted')->eq(0)
+            ->andWhere('id')->eq($projectID)
+            ->fetchPairs();
+        $objectPairs += $this->dao->select('id,name')->from(TABLE_PROJECT)
+            ->where('deleted')->eq(0)
             ->andWhere('(project')->eq($projectID)
-            ->orWhere('id')->eq($projectID)
             ->markRight(1)
-            ->orderBy('project_asc')
+            ->orderBy('openedDate_desc')
             ->fetchPairs();
 
         return $objectPairs;
