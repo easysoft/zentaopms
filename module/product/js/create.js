@@ -1,6 +1,6 @@
 $(function()
 {
-    if(programID || systemMode) $('#line_chosen').addClass('hidden');
+    if(programID || systemMode == 'classic') $('#line_chosen').addClass('hidden');
     $('#lineName').css('border-left-color', '');
 })
 /**
