@@ -156,6 +156,7 @@ $lang->gitlab->group->visibility                              = "Visibility leve
 $lang->gitlab->group->visibilityList['private']               = "Private(The group and its projects can only be viewed by members)";
 $lang->gitlab->group->visibilityList['internal']              = "Internal(The group and any internal projects can be viewed by any logged in user except external users)";
 $lang->gitlab->group->visibilityList['public']                = "Public(The group and any public projects can be viewed without any authentication.)";
+$lang->gitlab->group->permission                              = 'Permission';
 $lang->gitlab->group->requestAccessEnabledTip                 = "Allow users to request access (if visibility is public or internal)";
 $lang->gitlab->group->lfsEnabled                              = 'Large File Storage';
 $lang->gitlab->group->lfsEnabledTip                           = "Allow projects within this group to use Git LFS(This setting can be overridden in each project)";
