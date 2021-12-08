@@ -14,11 +14,23 @@ class kanban extends control
     /**
      * Kanban space.
      *
+     * @param  string $browseType all|my|other|closed
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function space()
+    public function space($browseType = 'my', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->kanban->common;
+        $this->view->browseType = $browseType;
+        $this->view->pager      = $pager;
+
         $this->display();
     }
 

@@ -1,5 +1,12 @@
 <?php
-$lang->kanban->space = '看板空间';
+$lang->kanban->space       = '看板空间';
+$lang->kanban->create      = '添加看板';
+$lang->kanban->createSpace = '添加空间';
+
+$lang->kanban->featureBar['all']    = '所有';
+$lang->kanban->featureBar['my']     = '我的空间';
+$lang->kanban->featureBar['other']  = '其他空间';
+$lang->kanban->featureBar['closed'] = '已关闭';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";

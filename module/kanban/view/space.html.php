@@ -11,4 +11,18 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<div id="mainMenu" class="clearfix table-row">
+  <div class="btn-toolBar pull-left">
+    <?php foreach($lang->kanban->featureBar as $key => $label):?>
+    <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a(inlink('space', "browseType=$key"), $label, '', "class='btn btn-link $active'");?>
+    <?php endforeach;?>
+  </div>
+  <div class="btn-toolbar pull-right">
+    <?php common::printLink('kanban', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', 'class="btn btn-secondary iframe"', '', true);?>
+    <?php common::printLink('kanban', 'createSpace', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->createSpace, '', 'class="btn btn-primary iframe"', '', true);?>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,5 +1,12 @@
 <?php
-$lang->kanban->space = 'Kanban Space';
+$lang->kanban->space       = 'Kanban Space';
+$lang->kanban->create      = 'Create Kanban';
+$lang->kanban->createSpace = 'Create Space';
+
+$lang->kanban->featureBar['all']    = 'All';
+$lang->kanban->featureBar['my']     = 'My';
+$lang->kanban->featureBar['other']  = 'Other';
+$lang->kanban->featureBar['closed'] = 'Closed';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
