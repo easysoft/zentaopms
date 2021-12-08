@@ -87,9 +87,7 @@ CREATE TABLE `zt_kanbangroup` (
   `region` mediumint(8) unsigned NOT NULL,
   `column` mediumint(8) unsigned NOT NULL,
   `lane` mediumint(8) unsigned NOT NULL,
-  KEY `region`(`region`),
-  KEY `column`(`column`),
-  KEY `lane`(`lane`)
+  PRIMARY KEY  (`column`, `lane`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanbanorder`;
