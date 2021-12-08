@@ -12,8 +12,8 @@
     <table class='table-form'>
       <thead>
         <tr class='text-center'>
-          <th><?php echo $lang->gitlab->group->memberName;?></th>
-          <th><?php echo $lang->gitlab->group->memberAccessLevel;?></th>
+          <th class='c-names'><?php echo $lang->gitlab->group->memberName;?></th>
+          <th class='c-levels'><?php echo $lang->gitlab->group->memberAccessLevel;?></th>
           <th class='c-date'><?php echo $lang->gitlab->group->memberExpiresAt;?></th>
           <th class="c-actions"><?php echo $lang->actions;?></th>
         </tr>
