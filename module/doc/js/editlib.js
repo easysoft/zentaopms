@@ -8,11 +8,12 @@ $(function()
  *
  * @param  int    hasLibPriv
  * @param  int    libID
+ * @param  int    objectID
  * @access public
  * @return void
  */
-function redirectParentWindow(hasLibPriv, libID)
+function redirectParentWindow(hasLibPriv, libID, objectID)
 {
-    var link = hasLibPriv ? createLink('doc', 'tableContents', 'type=' + libType + '&objectID=0&libID=' + libID) : createLink('doc', 'tableContents', 'type=' + libType);
+    var link = hasLibPriv ? createLink('doc', 'tableContents', 'type=' + libType + '&objectID=' + objectID + '&libID=' + libID) : createLink('doc', 'tableContents', 'type=' + libType);
     parent.location.href = link;
 }
