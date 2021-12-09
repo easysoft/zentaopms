@@ -943,7 +943,7 @@ class productModel extends model
             {
                 $moduleList  = array();
                 $modules     = array('' => '/');
-                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
+                $branchGroup = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, '');
                 foreach($products as $productID => $productName)
                 {
                     if(isset($branchGroup[$productID]))
