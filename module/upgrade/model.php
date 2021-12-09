@@ -734,6 +734,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.7.1'));
             $this->updateObjectBranch();
             $this->updateProjectStories();
+            $this->updateProjectLinkedBranch();
             $this->appendExec('15_7_1');
         }
 
@@ -5412,6 +5413,44 @@ class upgradeModel extends model
         foreach($storyPairs as $storyID => $branch)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($branch)->where('story')->eq($storyID)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Update project linked branch.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateProjectLinkedBranch()
+    {
+        $multiBranchProducts = $this->dao->select('t2.product, t2.id')->from(TABLE_PRODUCT)->alias('t1')
+            ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t1.id = t2.product')
+            ->where('t1.type')->ne('normal')
+            ->fetchGroup('product', 'id');
+
+        $linkedBranchProjects = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)
+            ->where('branch')->eq(0)
+            ->andWhere('product')->in(array_keys($multiBranchProducts))
+            ->fetchGroup('project', 'product');
+
+        foreach($linkedBranchProjects as $projectID => $products)
+        {
+            foreach($products as $productID => $productInfo)
+            {
+                if(!isset($multiBranchProducts[$productID])) continue;
+
+                foreach($multiBranchProducts[$productID] as $branchID => $branchInfo)
+                {
+                    $data = new stdClass();
+                    $data->project = $projectID;
+                    $data->product = $productID;
+                    $data->branch  = $branchID;
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
         }
 
         return true;
