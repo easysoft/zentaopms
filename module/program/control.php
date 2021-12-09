@@ -497,6 +497,8 @@ class program extends control
             die(js::locate($this->createLink('program', 'stakeholder', "programID=$programID"), 'parent'));
         }
 
+        $this->program->setMenu($programID);
+
         $this->loadModel('user');
         $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
 
