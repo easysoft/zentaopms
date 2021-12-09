@@ -87,6 +87,8 @@
         /* Handling special situations */
         var moduleName      = link.moduleName;
         var methodName      = link.methodName;
+        if (moduleName === 'index' && methodName === 'index') return 'my';
+
         var methodLowerCase = methodName.toLowerCase();
         if(moduleName === 'doc')
         {
@@ -863,4 +865,3 @@ function getLatestVersion()
     $('#globalSearchInput').click();
     $('#upgradeContent').toggle();
 }
-
