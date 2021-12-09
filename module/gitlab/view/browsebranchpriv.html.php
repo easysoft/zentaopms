@@ -16,7 +16,7 @@
     <?php echo html::a($this->createLink('gitlab', 'browseProject', "gitlabID=$gitlabID"), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
   <div id="sidebarHeader">
-    <div class="title"><?php echo $project->name_with_namespace; ?></div>
+    <div class="title" title="<?php echo $project->name_with_namespace; ?>"><?php echo $project->name_with_namespace; ?></div>
   </div>
   <div class="btn-toolbar pull-left">
     <div>
