@@ -340,32 +340,114 @@ class kanbanModel extends model
     }
 
     /**
-     * Create a space.
+     * Get spaces.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpaces($browseType)
+    {
+        $account = $this->app->user->account;
+        $spaces  = $this->dao->select('*')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        $spaces = $this->getCanViewObjects('space', $spaces);
+
+        return $spaces;
+    }
+
+    /**
+     * Get space pairs.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpacePairs($browseType = 'all')
+    {
+        $spaces     = $this->getSpaces($browseType);
+        $spacePairs = $this->getCanViewObjects('space', $spaces, 'pairs');
+
+        return $spacePairs;
+    }
+
+    /**
+     * Get can view objects.
+     *
+     * @param  string $objectType space|kanban
+     * @param  array  $objects
+     * @param  string $returnType object|pairs
+     * @access public
+     * @return array
+     */
+    public function getCanViewObjects($objectType, $objects, $returnType = 'object')
+    {
+        if($this->app->user->admin and $returnType == 'object') return $objects;
+
+        $account     = $this->app->user->account;
+        $objectPairs = array();
+        foreach($objects as $objectID => $object)
+        {
+            if(($this->app->user->admin or $object->acl == 'open') and $returnType == 'pairs')
+            {
+                $objectPairs[$objectID] = $object->name;
+            }
+            elseif($object->acl == 'private')
+            {
+                $aclUsers = $object->owner . $object->team . $object->whitelist;
+                if(strpos(",$aclUsers,", ",$account,") === false)
+                {
+                    unset($objects[$objectID]);
+                }
+                elseif($returnType == 'pairs')
+                {
+                    $objectPairs[$objectID] = $object->name;
+                }
+            }
+        }
+
+        if($returnType == 'pairs') return $objectPairs;
+        return $objects;
+    }
+
+    /**
+     * Create a kanban.
      *
      * @access public
      * @return int
      */
-    public function createSpace()
+    public function create()
     {
-        $space = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
+        $account = $this->app->user->account;
+        $kanban  = fixer::input('post')
+            ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
             ->remove('uid,contactListMenu')
             ->get();
 
-        $this->dao->insert(TABLE_KANBANSPACE)->data($space)
+        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
+
+        $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
-            ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
+            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
             ->exec();
 
         if(!dao::isError())
         {
-            $spaceID = $this->dao->lastInsertID();
-            $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
+            $kanbanID = $this->dao->lastInsertID();
 
-            return $spaceID;
+            $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
+            $this->initKanban($kanbanID);
+
+            return $kanbanID;
         }
     }
 
@@ -395,6 +477,39 @@ class kanbanModel extends model
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+    /**
+     * Create a space.
+     *
+     * @access public
+     * @return int
+     */
+    public function createSpace()
+    {
+        $account = $this->app->user->account;
+        $space   = fixer::input('post')
+            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
+
+        $this->dao->insert(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $spaceID = $this->dao->lastInsertID();
+            $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
+
+            return $spaceID;
+        }
     }
 
     /**

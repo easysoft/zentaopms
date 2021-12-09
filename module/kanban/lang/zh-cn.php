@@ -1,6 +1,5 @@
 <?php
 /* Actions. */
-$lang->kanban->space        = '看板空间';
 $lang->kanban->create       = '创建看板';
 $lang->kanban->createSpace  = '创建空间';
 $lang->kanban->editSpace    = '设置空间';
@@ -26,6 +25,18 @@ $lang->kanban->createCard   = '创建卡片';
 $lang->kanban->editCard     = '编辑卡片';
 $lang->kanban->viewCard     = '查看卡片';
 $lang->kanban->sortCard     = '卡片排序';
+$lang->kanban->setting      = '设置';
+
+/* Fields. */
+$lang->kanban->space = '所属空间';
+$lang->kanban->name  = '看板名称';
+$lang->kanban->owner = '负责人';
+$lang->kanban->team  = '团队';
+$lang->kanban->desc  = '空间描述';
+$lang->kanban->acl   = '访问控制';
+
+$lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
+$lang->kanban->aclList['private'] = '私有（看板团队成员、空间负责人、白名单可访问）';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
@@ -87,6 +98,8 @@ $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
 $lang->kanban->error->parentLimitNote = '父列的在制品数量不能小于子列在制品数量之和';
 $lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量';
 
+$lang->kanban->defaultColumn = array('未开始', '进行中', '已完成', '已关闭');
+
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
 $this->lang->kanban->laneTypeList['bug']   = 'Bug';
@@ -126,21 +139,22 @@ $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
 
 $lang->kanbanspace = new stdclass();
-$lang->kanbanspace->name  = '空间名称';
-$lang->kanbanspace->owner = '负责人';
-$lang->kanbanspace->team  = '团队';
-$lang->kanbanspace->desc  = '空间描述';
-$lang->kanbanspace->acl   = '访问控制';
+$lang->kanbanspace->common = '看板空间';
+$lang->kanbanspace->name   = '空间名称';
+$lang->kanbanspace->owner  = '负责人';
+$lang->kanbanspace->team   = '团队';
+$lang->kanbanspace->desc   = '空间描述';
+$lang->kanbanspace->acl    = '访问控制';
+
+$lang->kanbanspace->empty = '暂时没有空间';
 
 $lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
-$lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员可访问）';
+$lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员、白名单可访问）';
 
 $lang->kanbanspace->featureBar['all']    = '所有';
 $lang->kanbanspace->featureBar['my']     = '我的空间';
 $lang->kanbanspace->featureBar['other']  = '其他空间';
 $lang->kanbanspace->featureBar['closed'] = '已关闭';
-
-$lang->kanban->defaultColumn = array('未开始', '进行中', '已完成', '已关闭');
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;
