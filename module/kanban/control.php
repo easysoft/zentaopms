@@ -85,6 +85,22 @@ class kanban extends control
     }
 
     /**
+     * View a kanban.
+     * 
+     * @param  int    $kanbanID 
+     * @access public
+     * @return void
+     */
+    public function view($kanbanID)
+    {
+        $kanban = $this->kanban->getByID($kanbanID);
+
+        $this->view->regions = $this->kanban->getKanbanData($kanbanID);
+        $this->view->kanban  = $kanban;
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID
