@@ -69,7 +69,7 @@
         </div>
         <?php foreach($diffs as $diffFile):?>
         <div class='repoCode'>
-          <table class='table diff' id='diff'>
+          <table class='table diff' id='diff' data-entry='<?php echo base64_encode($diffFile->fileName);?>'>
             <caption><?php echo $diffFile->fileName;?></caption>
             <?php if(empty($diffFile->contents)) continue;?>
             <?php foreach($diffFile->contents as $content):?>
