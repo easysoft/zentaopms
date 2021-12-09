@@ -2289,13 +2289,12 @@ class gitlabModel extends model
     }
 
     /**
-     * Get branch priv of one project.
+     * Get protect branches of one project.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  string $keyword
      * @param  string $orderBy
-     * @param  object $pager
      * @access public
      * @return array
      */
@@ -2321,7 +2320,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Get single branch priv by API.
+     * Get single protct branch by API.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -2336,7 +2335,7 @@ class gitlabModel extends model
     }
 
     /**
-     * Create gitlab branch priv.
+     * Create gitlab potect branch.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -2382,11 +2381,11 @@ class gitlabModel extends model
     }
 
     /**
-     * Delete a gitab branch priv by api.
+     * Delete a gitab protect branch by api.
      *
-     * @param  int $gitlabID
-     * @param  int $groupID
-     * @param  int $memberID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
      * @access public
      * @return object
      */

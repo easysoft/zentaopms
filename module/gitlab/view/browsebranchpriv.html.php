@@ -1,10 +1,10 @@
 <?php
 /**
- * The browse view file of gitlab branch priv of ZenTaoPMS.
+ * The browse view file of gitlab protext branch of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Gang Liu <liugang@cnezsoft.com>
+ * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     gitlab
  * @version     $Id$
  * @link        http://www.zentao.net
@@ -21,8 +21,8 @@
   <div class="btn-toolbar pull-left">
     <div>
       <form id='branchPrivForm' method='post'>
-      <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->branch->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
-      <a id="branchSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
+        <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->gitlab->branch->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
+        <a id="branchSearch" class="btn btn-primary"><?php echo $lang->gitlab->search?></a>
       </form>
     </div>
   </div>

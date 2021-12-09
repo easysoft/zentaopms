@@ -10,7 +10,7 @@ $(document).ready(function()
     })
 
 });
-
+// Trigger filtering function.
 function triggerSearch()
 {
     $("#branchPrivForm").submit();

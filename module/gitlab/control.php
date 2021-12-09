@@ -713,10 +713,11 @@ class gitlab extends control
     }
 
     /**
-     * Browse gitlab branch priv.
+     * Browse gitlab protect branch.
      *
      * @param  int    $gitlabID
-     * @param  string $keyword
+     * @param  int    $projectID
+     * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
@@ -735,7 +736,7 @@ class gitlab extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branches, $pager->recPerPage);
 
-        $this->view->keyword    = urldecode(urldecode($keyword));
+        $this->view->keyword    = $keyword;
         $this->view->pager      = $pager;
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseBranchPriv;
         $this->view->levelLang  = $this->lang->gitlab->branch->branchCreationLevelList;
@@ -748,7 +749,7 @@ class gitlab extends control
     }
 
     /**
-     * Set a gitlab branch protect.
+     * Set a gitlab protect branch.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -766,10 +767,11 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseBranchPriv', "gitlabID=$gitlabID&projectID=$projectID")));
         }
 
+        // Initialize data, and the operation authority is the maintainers by default.
         $branchPriv = new stdClass();
         $branchPriv->name               = '';
-        $branchPriv->merge_access_level = 40;
-        $branchPriv->push_access_level  = 40;
+        $branchPriv->mergeAccessLevel = 40;
+        $branchPriv->pushAccessLevel  = 40;
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $title  = $this->lang->gitlab->createBranchPriv;
@@ -778,8 +780,8 @@ class gitlab extends control
         {
             $title      = $this->lang->gitlab->editBranchPriv;
             $branchPriv = $this->gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);
-            $branchPriv->merge_access_level = $this->gitlab->checkAccessLevel($branchPriv->merge_access_levels);
-            $branchPriv->push_access_level  = $this->gitlab->checkAccessLevel($branchPriv->push_access_levels);
+            $branchPriv->mergeAccessLevel = $this->gitlab->checkAccessLevel($branchPriv->merge_access_levels);
+            $branchPriv->pushAccessLevel  = $this->gitlab->checkAccessLevel($branchPriv->push_access_levels);
         }
 
         $gitlabBranches  = $this->gitlab->apiGetBranches($gitlabID, $projectID);
@@ -787,7 +789,8 @@ class gitlab extends control
         $protectNames    = array_keys($protectBranches);
 
         $branches = array();
-        foreach($gitlabBranches as $oneBranch) {
+        foreach($gitlabBranches as $oneBranch)
+        {
             if(!in_array($oneBranch->name, $protectNames) || $oneBranch->name == $branch) $branches[$oneBranch->name] = $oneBranch->name;
         }
 
@@ -817,10 +820,12 @@ class gitlab extends control
     }
 
     /**
-     * Delete a gitlab branch priv.
+     * Delete a gitlab protect branch.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
+     * @param  string $branch
+     * @param  string $confirm
      * @access public
      * @return void
      */

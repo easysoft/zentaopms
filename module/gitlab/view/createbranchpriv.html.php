@@ -1,10 +1,10 @@
 <?php
 /**
- * The create view file of gitlab module of ZenTaoPMS.
+ * The create view file of protext branch of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Gang Liu <liugang@cnezsoft.com>
+ * @author      Yanyi Cao <caoyanyi@easycorp.ltd>
  * @package     gitlab
  * @version     $Id$
  * @link        http://www.zentao.net
@@ -26,11 +26,11 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->branch->mergeAllowed;?></th>
-            <td><?php echo html::select('merge_access_level', $lang->gitlab->branch->branchCreationLevelList, $branchPriv->merge_access_level, "class='form-control'");?></td>
+            <td><?php echo html::select('merge_access_level', $lang->gitlab->branch->branchCreationLevelList, $branchPriv->mergeAccessLevel, "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->branch->pushAllowed;?></th>
-            <td><?php echo html::select('push_access_level', $lang->gitlab->branch->branchCreationLevelList, $branchPriv->push_access_level, "class='form-control'");?></td>
+            <td><?php echo html::select('push_access_level', $lang->gitlab->branch->branchCreationLevelList, $branchPriv->pushAccessLevel, "class='form-control'");?></td>
           </tr>
           <tr>
             <th></th>
