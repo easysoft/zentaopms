@@ -1,0 +1,26 @@
+title: zt_pipeline
+author: Zeng gang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: type
+    range: gitlab
+  - field: name
+    range: gitlab服务器
+  - field: url
+    range: [http://192.168.1.161:51080]
+  - field: account
+    range: []
+  - field: password
+    range: []
+  - field: token
+    range: x88fZokrp5hShia2jyBN
+  - field: private
+    range: 08bcc98f75d7d40053dc80722bdc117b
+  - field: createdBy
+    range: admin
+  - field: createdDate
+    range: [2021-12-09 11:23:35]
+  - field: deleted
+    range: 0
