@@ -528,6 +528,77 @@ class kanbanModel extends model
     }
 
     /**
+     * Get spaces.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpaces($browseType)
+    {
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('*')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get space pairs.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpacePairs($browseType = 'all')
+    {
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
+    }
+
+    /**
+     * Get can view objects.
+     *
+     * @param  string $objectType space|kanban
+     * @access public
+     * @return array
+     */
+    public function getCanViewObjects($objectType)
+    {
+        $table   = $this->config->objectTables[$objectType];
+        $objects = $this->dao->select('*')->from($table)->fetchAll('id');
+
+        if($this->app->user->admin) return $objects;
+
+        $account = $this->app->user->account;
+        foreach($objects as $objectID => $object)
+        {
+            if($object->acl == 'private')
+            {
+                $aclUsers = $object->owner . $object->team . $object->whitelist;
+                if(strpos(",$aclUsers,", ",$account,") === false) unset($objects[$objectID]);
+            }
+        }
+
+        return array_keys($objects);
+    }
+
+    /**
      * Create a space.
      *
      * @access public
@@ -535,13 +606,16 @@ class kanbanModel extends model
      */
     public function createSpace()
     {
-        $space = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
+        $account = $this->app->user->account;
+        $space   = fixer::input('post')
+            ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
             ->remove('uid,contactListMenu')
             ->get();
+
+        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 
         $this->dao->insert(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
@@ -583,6 +657,41 @@ class kanbanModel extends model
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+    /**
+     * Create a kanban.
+     *
+     * @access public
+     * @return int
+     */
+    public function create()
+    {
+        $account = $this->app->user->account;
+        $kanban  = fixer::input('post')
+            ->setDefault('createdBy', $account)
+            ->setDefault('createdDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
+
+        $this->dao->insert(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $kanbanID = $this->dao->lastInsertID();
+
+            $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
+            $this->initKanban($kanbanID);
+
+            return $kanbanID;
+        }
     }
 
     /**

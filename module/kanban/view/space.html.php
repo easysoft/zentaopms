@@ -25,4 +25,33 @@
     <?php common::printLink('kanban', 'createSpace', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->createSpace, '', 'class="btn btn-primary iframe"', '', true);?>
   </div>
 </div>
+<div id='mainContent'>
+  <?php if(empty($spaces)):?>
+  <div class="table-empty-tip">
+    <p><span class="text-muted"><?php echo $lang->kanbanspace->empty;?></span></p>
+  </div>
+  <?php else:?>
+  <?php foreach($spaces as $space):?>
+  <div class='row cell' id='spaces'>
+    <div class='space'>
+      <div class='spaceTitle pull-left'>
+        <h4>
+          <?php echo $space->name;?>
+          <?php echo isset($space->kanbans) ? count($space->kanbans) : '';?>
+        </h4>
+      </div>
+      <div class='spaceActions pull-right'>
+        <?php common::printLink('kanban', 'create', "spaceID={$space->id}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe'", '', true);?>
+        <?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe'", '', true);?>
+        <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
+        <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
+      </div>
+    </div>
+  </div>
+  <?php endforeach;?>
+  <?php endif;?>
+</div>
+<div id='spacesFooter' class='table-footer'>
+  <?php $pager->show('right', 'pagerjs');?>
+</div>
 <?php include '../../common/view/footer.html.php';?>

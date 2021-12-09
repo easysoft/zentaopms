@@ -23,11 +23,16 @@ class kanban extends control
      */
     public function space($browseType = 'my', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $spaces = $this->kanban->getSpaces($browseType);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $recTotal = count($spaces);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $spaces   = array_chunk($spaces, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->kanban->common;
+        $this->view->title      = $this->lang->kanbanspace->common;
+        $this->view->spaces     = empty($spaces) ? $spaces : $spaces[$pageID - 1];
         $this->view->browseType = $browseType;
         $this->view->pager      = $pager;
 
@@ -85,6 +90,31 @@ class kanban extends control
     }
 
     /**
+     * Create a kanban.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function create($spaceID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $kanbanID = $this->kanban->create();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanban', $kanbanID, 'created');
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->spaceID    = $spaceID;
+        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        
+        $this->display();
+    }
+
      * Close a kanban.
      *
      * @param  int    $kanbanID
