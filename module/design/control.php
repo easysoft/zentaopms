@@ -76,8 +76,11 @@ class design extends control
         $this->design->buildSearchForm($queryID, $actionURL);
 
         /* Print top and right actions. */
-        $this->lang->TRActions  = '<div class="btn-group dropdown">';
-        $this->lang->TRActions .= html::a($this->createLink('review', 'create', "projectID=$projectID"), "<i class='icon-plus'></i> {$this->lang->design->createReview}", '', "class='btn btn-secondary' style='margin-right:5px'");
+        $this->lang->TRActions  = '<div class="btn-toolbar pull-right">';
+        $this->lang->TRActions .= '<div class="btn-group">';
+        $this->lang->TRActions .= html::a($this->createLink('review', 'create', "projectID=$projectID"), "<i class='icon-plus'></i> {$this->lang->design->createReview}", '', "class='btn btn-secondary'");
+        $this->lang->TRActions .= '</div>';
+        $this->lang->TRActions .= '<div class="btn-group dropdown">';
         $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
         $this->lang->TRActions .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span>";
         $this->lang->TRActions .= '</button>';
@@ -87,6 +90,7 @@ class design extends control
         if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'batchCreate', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->batchCreate, '', "class='btn btn-link'") . '</li>';
 
         $this->lang->TRActions .= '</ul>';
+        $this->lang->TRActions .= '</div>';
         $this->lang->TRActions .= '</div>';
 
         /* Init pager and get designs. */
