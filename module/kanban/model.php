@@ -207,7 +207,7 @@ class kanbanModel extends model
     function close($kanbanID)
     {
         $kanbanID  = (int)$kanbanID;
-        $oldKanban = $this->getById($kanbanID);
+        $oldKanban = $this->getByID($kanbanID);
         $now       = helper::now();
         $kanban    = fixer::input('post')
             ->setDefault('status', 'closed')
@@ -220,7 +220,6 @@ class kanbanModel extends model
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
-            ->check($this->config->kanban->close->requiredFields,'notempty')
             ->where('id')->eq($kanbanID)
             ->exec();
 

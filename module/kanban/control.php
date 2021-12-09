@@ -107,7 +107,7 @@ class kanban extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->kanban  = $this->kanban->getById($kanbanID);
+        $this->view->kanban  = $this->kanban->getByID($kanbanID);
         $this->view->actions = $this->action->getList('kanban', $kanbanID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
 
