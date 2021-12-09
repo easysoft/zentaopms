@@ -111,7 +111,35 @@ class kanban extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->spaceID    = $spaceID;
         $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
-        
+
+        $this->display();
+    }
+
+    /**
+     * Edit a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function edit($kanbanID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->update($kanbanID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->kanban     = $this->kanban->getByID($kanbanID);
+
         $this->display();
     }
 
@@ -147,8 +175,8 @@ class kanban extends control
 
      /**
      * View a kanban.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
      * @return void
      */
@@ -158,7 +186,7 @@ class kanban extends control
 
         $this->view->regions = $this->kanban->getKanbanData($kanbanID);
         $this->view->kanban  = $kanban;
-        
+
         $this->display();
     }
 
