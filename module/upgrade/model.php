@@ -5426,23 +5426,27 @@ class upgradeModel extends model
      */
     public function updateProjectLinkedBranch()
     {
-        $multiBranchProducts = $this->dao->select('t2.product, t2.id')->from(TABLE_PRODUCT)->alias('t1')
-            ->leftJoin(TABLE_BRANCH)->alias('t2')->on('t1.id = t2.product')
-            ->where('t1.type')->ne('normal')
-            ->fetchGroup('product', 'id');
+        $projectProducts = $this->dao->select('t1.project,t1.story,t2.branch,t2.product')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t2.branch')->ne(0)
+            ->fetchGroup('project');
 
-        $linkedBranchProjects = $this->dao->select('project, product')->from(TABLE_PROJECTPRODUCT)
-            ->where('branch')->eq(0)
-            ->andWhere('product')->in(array_keys($multiBranchProducts))
-            ->fetchGroup('project', 'product');
-
-        foreach($linkedBranchProjects as $projectID => $products)
+        $projectBranches = array();
+        foreach($projectProducts as $projectID => $stories)
         {
-            foreach($products as $productID => $productInfo)
+            foreach($stories as $story)
             {
-                if(!isset($multiBranchProducts[$productID])) continue;
+                if(!isset($projectBranches[$projectID])) $projectBranches[$projectID] = array();
+                if(!isset($projectBranches[$projectID][$story->product])) $projectBranches[$projectID][$story->product] = array();
+                $projectBranches[$projectID][$story->product][$story->branch] = $story->branch;
+            }
+        }
 
-                foreach($multiBranchProducts[$productID] as $branchID => $branchInfo)
+        foreach($projectBranches as $projectID => $products)
+        {
+            foreach($products as $productID => $branches)
+            {
+                foreach($branches as $branchID)
                 {
                     $data = new stdClass();
                     $data->project = $projectID;
