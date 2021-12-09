@@ -115,6 +115,7 @@ class kanban extends control
         $this->display();
     }
 
+    /*
      * Close a kanban.
      *
      * @param  int    $kanbanID
