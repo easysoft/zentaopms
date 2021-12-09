@@ -799,6 +799,138 @@ class gitlab extends control
     }
 
     /**
+     * Browse gitlab protect branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseBranchPriv($gitlabID, $projectID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $keyword  = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+        $branches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, $keyword, $orderBy);
+        $project  = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($branches);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $branchList = array_chunk($branches, $pager->recPerPage);
+
+        $this->view->keyword    = $keyword;
+        $this->view->pager      = $pager;
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseBranchPriv;
+        $this->view->levelLang  = $this->lang->gitlab->branch->branchCreationLevelList;
+        $this->view->gitlabID   = $gitlabID;
+        $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
+        $this->view->orderBy    = $orderBy;
+        $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
+        $this->display();
+    }
+
+    /**
+     * Set a gitlab protect branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function createBranchPriv($gitlabID, $projectID, $branch = '')
+    {
+        if($_POST)
+        {
+            $this->gitlab->createBranchPriv($gitlabID, $projectID, $branch);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseBranchPriv', "gitlabID=$gitlabID&projectID=$projectID")));
+        }
+
+        $branchPriv = new stdClass();
+        $branchPriv->name               = '';
+        $branchPriv->mergeAccessLevel = 40; // Initialize data, and the operation authority is the maintainers by default.
+        $branchPriv->pushAccessLevel  = 40; // Initialize data, and the operation authority is the maintainers by default.
+
+        $gitlab = $this->gitlab->getByID($gitlabID);
+        $title  = $this->lang->gitlab->createBranchPriv;
+
+        if($branch)
+        {
+            $title      = $this->lang->gitlab->editBranchPriv;
+            $branchPriv = $this->gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);
+            $branchPriv->mergeAccessLevel = $this->gitlab->checkAccessLevel($branchPriv->merge_access_levels);
+            $branchPriv->pushAccessLevel  = $this->gitlab->checkAccessLevel($branchPriv->push_access_levels);
+        }
+
+        $gitlabBranches  = $this->gitlab->apiGetBranches($gitlabID, $projectID);
+        $protectBranches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, '', 'name_asc');
+        $protectNames    = array_keys($protectBranches);
+
+        $branches = array();
+        foreach($gitlabBranches as $oneBranch)
+        {
+            if(!in_array($oneBranch->name, $protectNames) || $oneBranch->name == $branch) $branches[$oneBranch->name] = $oneBranch->name;
+        }
+
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $title;
+        $this->view->pageTitle  = $title;
+        $this->view->gitlab     = $gitlab;
+        $this->view->gitlabID   = $gitlabID;
+        $this->view->branch     = $branch;
+        $this->view->projectID  = $projectID;
+        $this->view->branches   = $branches;
+        $this->view->branchPriv = $branchPriv;
+        $this->display();
+    }
+
+    /**
+     * Edit a gitlab branch protect.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function editBranchPriv($gitlabID, $projectID, $branch)
+    {
+        echo $this->fetch('gitlab', 'createBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch");
+    }
+
+    /**
+     * Delete a gitlab protect branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteBranchPriv($gitlabID, $projectID, $branch, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
+
+        $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
+
+        /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        {
+            $this->loadModel('action')->create('gitlabbranchPriv', $branch, 'deleted', '', $branch);
+            die(js::reload('parent'));
+        }
+
+        die(js::alert($reponse->message));
+    }
+
+    /**
      * Import gitlab issue to zentaopms.
      *
      * @param  int    $repoID
