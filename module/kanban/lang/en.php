@@ -35,8 +35,8 @@ $lang->kanban->team  = 'Team';
 $lang->kanban->desc  = 'Description';
 $lang->kanban->acl   = 'ACL';
 
-$lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
-$lang->kanban->aclList['private'] = '私有（看板团队成员、可访问）';
+$lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
+$lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -149,7 +149,7 @@ $lang->kanbanspace->acl    = 'ACL';
 $lang->kanbanspace->empty = 'No Space';
 
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
-$lang->kanbanspace->aclList['private'] = 'Private (For the kanban owner team and whitelist members only)';
+$lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
 $lang->kanbanspace->featureBar['all']    = 'All';
 $lang->kanbanspace->featureBar['my']     = 'My';

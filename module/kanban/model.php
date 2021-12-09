@@ -357,9 +357,7 @@ class kanbanModel extends model
             ->orderBy('id_desc')
             ->fetchAll('id');
 
-        $spaces = $this->getCanViewObjects('space', $spaces);
-
-        return $spaces;
+        return $this->getCanViewObjects('space', $spaces);
     }
 
     /**
@@ -371,10 +369,8 @@ class kanbanModel extends model
      */
     public function getSpacePairs($browseType = 'all')
     {
-        $spaces     = $this->getSpaces($browseType);
-        $spacePairs = $this->getCanViewObjects('space', $spaces, 'pairs');
-
-        return $spacePairs;
+        $spaces = $this->getSpaces($browseType);
+        return $this->getCanViewObjects('space', $spaces, 'pairs');
     }
 
     /**
@@ -417,37 +413,35 @@ class kanbanModel extends model
     }
 
     /**
-     * Create a kanban.
+     * Create a space.
      *
      * @access public
      * @return int
      */
-    public function create()
+    public function createSpace()
     {
         $account = $this->app->user->account;
-        $kanban  = fixer::input('post')
-            ->setDefault('createdBy', $account)
+        $space   = fixer::input('post')
+            ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
             ->remove('uid,contactListMenu')
             ->get();
 
-        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
+        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 
-        $this->dao->insert(TABLE_KANBAN)->data($kanban)
+        $this->dao->insert(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
-            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
             ->exec();
 
         if(!dao::isError())
         {
-            $kanbanID = $this->dao->lastInsertID();
+            $spaceID = $this->dao->lastInsertID();
+            $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
 
-            $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
-            $this->initKanban($kanbanID);
-
-            return $kanbanID;
+            return $spaceID;
         }
     }
 
@@ -480,35 +474,37 @@ class kanbanModel extends model
     }
 
     /**
-     * Create a space.
+     * Create a kanban.
      *
      * @access public
      * @return int
      */
-    public function createSpace()
+    public function create()
     {
         $account = $this->app->user->account;
-        $space   = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
+        $kanban  = fixer::input('post')
+            ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
             ->remove('uid,contactListMenu')
             ->get();
 
-        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
+        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
 
-        $this->dao->insert(TABLE_KANBANSPACE)->data($space)
+        $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
-            ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
+            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
             ->exec();
 
         if(!dao::isError())
         {
-            $spaceID = $this->dao->lastInsertID();
-            $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
+            $kanbanID = $this->dao->lastInsertID();
 
-            return $spaceID;
+            $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
+            $this->initKanban($kanbanID);
+
+            return $kanbanID;
         }
     }
 
