@@ -200,7 +200,7 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
+        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false);
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         /* Assign. */
