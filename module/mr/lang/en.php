@@ -21,11 +21,11 @@ $lang->mr->linkStory = 'Link Stories';
 $lang->mr->linkBug   = 'Link Bugs';
 $lang->mr->linkTask  = 'Link Tasks';
 $lang->mr->unlink    = 'UnLink of stories,Bugs,tasks';
-$lang->mr->addBug    = 'Add Review';
+$lang->mr->addReview = 'Add Review';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
-$lang->mr->title        = 'Name';
+$lang->mr->title       = 'Name';
 $lang->mr->status      = 'Status';
 $lang->mr->author      = 'Author';
 $lang->mr->assignee    = 'Assignee';
@@ -46,7 +46,12 @@ $lang->mr->reject   = 'Reject';
 $lang->mr->close    = 'Close';
 $lang->mr->reopen   = 'Reopen';
 
-$lang->mr->approvalResult = 'Approval result';
+$lang->mr->reviewType     = 'Review Type';
+$lang->mr->reviewTypeList = array();
+$lang->mr->reviewTypeList['bug']  = 'Bug';
+$lang->mr->reviewTypeList['task'] = 'Task';
+
+$lang->mr->approvalResult     = 'Approval result';
 $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';

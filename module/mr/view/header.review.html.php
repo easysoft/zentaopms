@@ -61,19 +61,19 @@ foreach($reviews as $line => $lineReview)
     {
         foreach($objects as $objectID => $object)
         {
-            $lineReview                               = array();
-            $lineReview['id']                         = $objectID;
-            $lineReview['line']                       = $line;
-            $lineReview['title']                      = $objectType == 'bug' ? $object->title : $object->name;
-            $lineReview['content']                    = $objectType == 'bug' ? $object->steps : $object->desc;
-            $lineReview['realname']                   = $object->realname;
-            $lineReview['openedDate']                 = substr($object->openedDate, 5, 11);
-            $lineReview['lines']                      = $object->lines;
-            $lineReview['objectType']                 = $objectType;
-            $lineReview['entry']                      = $object->entry;
-            $lineReview['edit']                       = common::hasPriv($objectType, 'edit');
-            $lineReview['delete']                     = common::hasPriv($objectType, 'delete');
-            $lineReview['view']                       = common::hasPriv($objectType, 'view');
+            $lineReview               = array();
+            $lineReview['id']         = $objectID;
+            $lineReview['line']       = $line;
+            $lineReview['title']      = $objectType == 'bug' ? $object->title : $object->name;
+            $lineReview['content']    = $objectType == 'bug' ? $object->steps : $object->desc;
+            $lineReview['realname']   = $object->realname;
+            $lineReview['openedDate'] = substr($object->openedDate, 5, 11);
+            $lineReview['lines']      = $object->lines;
+            $lineReview['objectType'] = $objectType;
+            $lineReview['entry']      = $object->entry;
+            $lineReview['edit']       = common::hasPriv($objectType, 'edit');
+            $lineReview['delete']     = common::hasPriv($objectType, 'delete');
+            $lineReview['view']       = common::hasPriv($objectType, 'view');
             $lineReviews[$line][] = $lineReview;
         }
     }

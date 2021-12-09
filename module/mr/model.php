@@ -906,7 +906,7 @@ class mrModel extends model
             ->remove('begin,end,uid,reviewType,taskExecution,taskModule,taskAssignedTo')
             ->get();
 
-        $data->steps  = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
+        $data->steps = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
         if($data->assignedTo) $data->assignedDate = $now;
         unset($data->commentText);
 

@@ -46,12 +46,12 @@ $lang->mr->reject   = '拒绝';
 $lang->mr->close    = '关闭';
 $lang->mr->reopen   = '重新打开';
 
-$lang->mr->reviewType = '评审类型';
+$lang->mr->reviewType     = '评审类型';
 $lang->mr->reviewTypeList = array();
 $lang->mr->reviewTypeList['bug']  = 'Bug';
 $lang->mr->reviewTypeList['task'] = '任务';
 
-$lang->mr->approvalResult = '评审意见';
+$lang->mr->approvalResult     = '评审意见';
 $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通过';
 $lang->mr->approvalResultList['reject']  = '拒绝';

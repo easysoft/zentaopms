@@ -5,6 +5,13 @@ $(document).ready(function()
     $(".label-exchange").click(function(){ $('#exchange').submit();});
 });
 
+/**
+ * Change encoding.
+ *
+ * @param  string $encoding
+ * @access public
+ * @return void
+ */
 function changeEncoding(encoding)
 {
     $('#encoding').val(encoding);
@@ -14,11 +21,8 @@ function changeEncoding(encoding)
 $(document).ready(function()
 {
     var $diffCode = $('.diff');
-    var hidePreview;
-    var $reviewsPreview = $('#reviewsPreview');
-    var $reviewsPreviewMenu = $('#reviewsPreview').children('.dropdown-menu');
-    var $rows = $diffCode.find('tr');
-    var rowTip = $('#rowTip').html();
+    var $rows     = $diffCode.find('tr');
+    var rowTip    = $('#rowTip').html();
     var lastLine;
     $rows.each(function()
     {
@@ -48,10 +52,10 @@ $(document).ready(function()
         $(this).removeClass("over");
     });
 
-    var isInline = $.cookie('arrange') == 'inline';
+    var isInline       = $.cookie('arrange') == 'inline';
     var $reviewFormRow = $('<tr class="action-row"><th></th>' + (isInline ? '<th></th><td class="action-cell"></td>' : '<td colspan="3" class="action-cell"></td>') + '</tr>');
-    var $reviewForm = $('#reviewForm');
-    var $reviewPanel = $('#reviewPanel');
+    var $reviewForm    = $('#reviewForm');
+    var $reviewPanel   = $('#reviewPanel');
     $reviewFormRow.find('td').append($reviewForm.removeClass('hide'));
 
     var highlight = function($e)
@@ -62,7 +66,6 @@ $(document).ready(function()
 
     var createReview = function(review, line, show)
     {
-        var commentCount, j;
         var $review = $reviewPanel.clone().removeClass('hide').attr('id', review.objectType + '-' + review.id);
         $review.find('.realname').text(review.realname);
         $review.find('.openedDate').text(review.openedDate);
@@ -174,7 +177,7 @@ $(document).ready(function()
 
         if(confirm(confirmDelete))
         {
-            var link  = createLink($review.data('objectType'), 'delete', 'id=' + $review.data('id') + '&confirm=yes');
+            var link = createLink($review.data('objectType'), 'delete', 'id=' + $review.data('id') + '&confirm=yes');
             $.get(link, function(data)
             {
                 var $commentRow = $review.closest('.comment-row');
@@ -283,30 +286,30 @@ $(document).ready(function()
         $('.highlight').removeClass('highlight');
     });
 
+    /**
+     * Anchor
+     *
+     * @access public
+     * @return void
+     */
     function anchor()
     {
-        var hash  = window.location.hash;
-        if(hash)
+        var hash = window.location.hash;
+        if(!hash) return false;
+
+        var line = hash.substr(1).replace('L', '');
+        var $row = $('.diff tr[data-line="' + line +'"]').first();
+        if($row.length) return false;
+
+        var anchor = $row.offset().top;
+        $('body,html').animate({scrollTop:anchor - 50}, 500);
+
+        $row.addClass('highlight');
+        if($row.hasClass('commented'))
         {
-            var line = hash.substr(1).replace('L', '');
-            var $row = $('.diff tr[data-line="' + line +'"]').first();
-            if($row.length)
-            {
-                var anchor = $row.offset().top;
-
-                $('body,html').animate({scrollTop:anchor - 50}, 500);
-
-                $row.addClass('highlight');
-                if($row.hasClass('commented'))
-                {
-                    toggleComment($row, true);
-                    var $commentRow = $row.next('tr');
-                    if($commentRow.hasClass('comment-row'))
-                    {
-                        $commentRow.addClass('highlight');
-                    }
-                }
-            }
+            toggleComment($row, true);
+            var $commentRow = $row.next('tr');
+            if($commentRow.hasClass('comment-row')) $commentRow.addClass('highlight');
         }
     }
 });
