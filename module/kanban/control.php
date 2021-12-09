@@ -14,11 +14,73 @@ class kanban extends control
     /**
      * Kanban space.
      *
+     * @param  string $browseType all|my|other|closed
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function space()
+    public function space($browseType = 'my', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->title      = $this->lang->kanban->common;
+        $this->view->browseType = $browseType;
+        $this->view->pager      = $pager;
+
+        $this->display();
+    }
+
+    /**
+     * Create a space.
+     *
+     * @access public
+     * @return void
+     */
+    public function createSpace()
+    {
+        if(!empty($_POST))
+        {
+            $spaceID = $this->kanban->createSpace();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
+            die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+        }
+
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+
+        $this->display();
+    }
+
+    /**
+     * Edit a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function editSpace($spaceID)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->updateSpace($spaceID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+        }
+
+        $this->view->space = $this->kanban->getSpaceById($spaceID);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+
         $this->display();
     }
 
@@ -187,5 +249,24 @@ class kanban extends control
         }
 
         die(js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent'));
+    }
+
+    /**
+     * Ajax get contact users.
+     *
+     * @param  int    $contactListID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetContactUsers($contactListID)
+    {
+        $this->loadModel('user');
+        $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+
+        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+
+        if(!$contactListID) return print(html::select('team[]', $users, '', "class='form-control chosen' multiple"));
+
+        return print(html::select('team[]', $users, $list->userList, "class='form-control chosen' multiple"));
     }
 }

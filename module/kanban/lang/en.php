@@ -1,5 +1,31 @@
 <?php
-$lang->kanban->space = 'Kanban Space';
+/* Actions. */
+$lang->kanban->space        = 'Kanban Space';
+$lang->kanban->create       = 'Create Kanban';
+$lang->kanban->createSpace  = 'Create Space';
+$lang->kanban->editSpace    = 'Edit Space';
+$lang->kanban->closeSpace   = 'Close Space';
+$lang->kanban->deleteSpace  = 'Delete Space';
+$lang->kanban->sortSpace    = 'Sort Space';
+$lang->kanban->edit         = 'Edit Kanban';
+$lang->kanban->view         = 'View Kanban';
+$lang->kanban->close        = 'Close Kanban';
+$lang->kanban->delete       = 'Delete Kanban';
+$lang->kanban->createRegion = 'Create Region';
+$lang->kanban->editRegion   = 'Edit Region';
+$lang->kanban->sortRegion   = 'Sort Region';
+$lang->kanban->deleteRegion = 'Delete Region';
+$lang->kanban->createLane   = 'Create Lane';
+$lang->kanban->editLane     = 'Edit Lane';
+$lang->kanban->sortLane     = 'Sort Lane';
+$lang->kanban->createColumn = 'Create Column';
+$lang->kanban->editColumn   = 'Edit Column';
+$lang->kanban->sortColumn   = 'Sort Column';
+$lang->kanban->deleteColumn = 'Delete Column';
+$lang->kanban->createCard   = 'Create Card';
+$lang->kanban->editCard     = 'Edit Card';
+$lang->kanban->viewCard     = 'View Card';
+$lang->kanban->sortCard     = 'Sort Card';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -98,6 +124,21 @@ $lang->kanban->taskColumn['developed']  = 'Developed';
 $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
+
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->name  = 'Name';
+$lang->kanbanspace->owner = 'Owner';
+$lang->kanbanspace->team  = 'Team';
+$lang->kanbanspace->desc  = 'Description';
+$lang->kanbanspace->acl   = 'ACL';
+
+$lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
+$lang->kanbanspace->aclList['private'] = 'Private (For the kanban owner and team members only)';
+
+$lang->kanbanspace->featureBar['all']    = 'All';
+$lang->kanbanspace->featureBar['my']     = 'My';
+$lang->kanbanspace->featureBar['other']  = 'Other';
+$lang->kanbanspace->featureBar['closed'] = 'Closed';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;

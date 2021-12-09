@@ -237,6 +237,7 @@ define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',    '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',   '`' . $config->db->prefix . 'repobranch`');
+define('TABLE_KANBANSPACE',  '`' . $config->db->prefix . 'kanbanspace`');
 define('TABLE_KANBANLANE',   '`' . $config->db->prefix . 'kanbanlane`');
 define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
@@ -277,6 +278,7 @@ $config->objectTables['job']          = TABLE_JOB;
 $config->objectTables['team']         = TABLE_TEAM;
 $config->objectTables['pipeline']     = TABLE_PIPELINE;
 $config->objectTables['mr']           = TABLE_MR;
+$config->objectTables['kanbanspace']  = TABLE_KANBANSPACE;
 $config->objectTables['kanbancolumn'] = TABLE_KANBANCOLUMN;
 $config->objectTables['kanbanlane']   = TABLE_KANBANLANE;
 

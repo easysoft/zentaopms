@@ -1,5 +1,31 @@
 <?php
-$lang->kanban->space = '看板空间';
+/* Actions. */
+$lang->kanban->space        = '看板空间';
+$lang->kanban->create       = '创建看板';
+$lang->kanban->createSpace  = '创建空间';
+$lang->kanban->editSpace    = '设置空间';
+$lang->kanban->closeSpace   = '关闭空间';
+$lang->kanban->deleteSpace  = '删除空间';
+$lang->kanban->sortSpace    = '空间排序';
+$lang->kanban->edit         = '编辑看板';
+$lang->kanban->view         = '查看看板';
+$lang->kanban->close        = '关闭看板';
+$lang->kanban->delete       = '删除看板';
+$lang->kanban->createRegion = '创建区域';
+$lang->kanban->editRegion   = '编辑区域';
+$lang->kanban->sortRegion   = '区域排序';
+$lang->kanban->deleteRegion = '删除区域';
+$lang->kanban->createLane   = '创建泳道';
+$lang->kanban->editLane     = '删除泳道';
+$lang->kanban->sortLane     = '泳道排序';
+$lang->kanban->createColumn = '创建看板列';
+$lang->kanban->editColumn   = '编辑看板列';
+$lang->kanban->sortColumn   = '看板列排序';
+$lang->kanban->deleteColumn = '删除看板列';
+$lang->kanban->createCard   = '创建卡片';
+$lang->kanban->editCard     = '编辑卡片';
+$lang->kanban->viewCard     = '查看卡片';
+$lang->kanban->sortCard     = '卡片排序';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
@@ -98,6 +124,21 @@ $lang->kanban->taskColumn['developed']  = '研发完毕';
 $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
+
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->name  = '空间名称';
+$lang->kanbanspace->owner = '负责人';
+$lang->kanbanspace->team  = '团队';
+$lang->kanbanspace->desc  = '空间描述';
+$lang->kanbanspace->acl   = '访问控制';
+
+$lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
+$lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员可访问）';
+
+$lang->kanbanspace->featureBar['all']    = '所有';
+$lang->kanbanspace->featureBar['my']     = '我的空间';
+$lang->kanbanspace->featureBar['other']  = '其他空间';
+$lang->kanbanspace->featureBar['closed'] = '已关闭';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;
