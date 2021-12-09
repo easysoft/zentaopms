@@ -21,7 +21,7 @@ $lang->mr->linkStory = '关联需求';
 $lang->mr->linkBug   = '关联Bug';
 $lang->mr->linkTask  = '关联任务';
 $lang->mr->unlink    = '取消关联需求、Bug、任务';
-$lang->mr->addBug    = '添加评审';
+$lang->mr->addReview = '添加评审';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";
@@ -46,7 +46,12 @@ $lang->mr->reject   = '拒绝';
 $lang->mr->close    = '关闭';
 $lang->mr->reopen   = '重新打开';
 
-$lang->mr->approvalResult = '评审意见';
+$lang->mr->reviewType     = '评审类型';
+$lang->mr->reviewTypeList = array();
+$lang->mr->reviewTypeList['bug']  = 'Bug';
+$lang->mr->reviewTypeList['task'] = '任务';
+
+$lang->mr->approvalResult     = '评审意见';
 $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通过';
 $lang->mr->approvalResultList['reject']  = '拒绝';

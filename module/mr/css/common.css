@@ -88,8 +88,8 @@ h3 {font-size: 16px;}
 
 /* repo action form */
 .repoCode .comment-list, .repoCode .comment-actions {max-width: 900px;}
-.repoCode .bugFormContainer {border: 1px solid #bbb; margin: 0 0 0 15px; padding: 10px 20px 10px 10px; max-width: 880px; background: #fff;}
-.repoCode .bugFormContainer th {width: 70px;}
+.repoCode .reviewFormContainer {border: 1px solid #bbb; margin: 0 0 0 15px; padding: 10px 20px 10px 10px; max-width: 880px; background: #fff;}
+.repoCode .reviewFormContainer th {width: 70px;}
 
 .repoCode .action-row {display: none;}
 .repoCode .with-action-row .action-row {display: table-row;}
@@ -106,26 +106,26 @@ h3 {font-size: 16px;}
 .repoCode .comment-cell .panel-body {padding: 6px 10px;}
 .repoCode .comment-cell .panel-actions.pull-right {margin-right: 0; margin-top: 0;}
 .repoCode .comment-cell .editing .panel-body, .repoCode .comment-cell .commentContainer.show-form .panel-body {display: none;}
-.repoCode .comment-cell .bug-edit-form,  {padding: 10px; display: none;}
-.repoCode .comment-cell .editing .bug-edit-form, .repoCode .comment-cell .commentContainer.show-form .comment-edit-form {display: block;}
+.repoCode .comment-cell .review-edit-form,  {padding: 10px; display: none;}
+.repoCode .comment-cell .editing .review-edit-form, .repoCode .comment-cell .commentContainer.show-form .comment-edit-form {display: block;}
 
 .repoCode .comment {border: 1px solid #e5e5e5; background: #fafafa; padding: 5px 10px; margin-bottom: 10px;}
 .repoCode .comment .comment-edit-form {margin-top: 10px;}
-.repoCode .panel-bug .steps {background: #f1f1f1; padding: 5px 10px;}
-.repoCode .panel-bug .bug-edit-form {margin-bottom: 10px;}
-.repoCode .panel-bug .panel-body {display: none;}
-.repoCode .panel-bug .panel-heading {cursor: pointer;}
-.repoCode .panel-bug.show .panel-body {display: block;}
-.repoCode .panel-bug.show .icon-chevron-sign-down:before {content: '\e711';}
-.repoCode .panel-bug.show-edit-form .bug-edit-form,
-.repoCode .panel-bug.show-form .commentForm,
+.repoCode .panel-review .steps {background: #f1f1f1; padding: 5px 10px;}
+.repoCode .panel-review .review-edit-form {margin-bottom: 10px;}
+.repoCode .panel-review .panel-body {display: none;}
+.repoCode .panel-review .panel-heading {cursor: pointer;}
+.repoCode .panel-review.show .panel-body {display: block;}
+.repoCode .panel-review.show .icon-chevron-sign-down:before {content: '\e711';}
+.repoCode .panel-review.show-edit-form .review-edit-form,
+.repoCode .panel-review.show-form .commentForm,
 .repoCode .comment.show-form .comment-edit-form {display: block;}
-.repoCode .panel-bug .bug-edit-form,
-.repoCode .panel-bug.show-form .addComment,
-.repoCode .panel-bug .commentForm,
+.repoCode .panel-review .review-edit-form,
+.repoCode .panel-review.show-form .addComment,
+.repoCode .panel-review .commentForm,
 .repoCode .comment .comment-edit-form,
-.repoCode .panel-bug.show-edit-form .panel-body .title,
-.repoCode .panel-bug.show-edit-form .bug-date,
+.repoCode .panel-review.show-edit-form .panel-body .title,
+.repoCode .panel-review.show-edit-form .bug-date,
 .repoCode .comment.show-form .comment-content, .repoCode .comment.show-form .comment-date {display: none;}
 
 .repoCode .text-content {white-space: normal; white-space: pre-line;}
@@ -154,8 +154,8 @@ h3 {font-size: 16px;}
 .repoCode #diff tr.commented .row-tip {right: 0;}
 .repoCode #diff tr.commented .icon-chat-dot {left: 0;}
 
-.repoCode .panel, .bugFormContainer {transition: border 0.4s;}
-.repoCode .panel.highlight, #bugForm.highlight .bugFormContainer {border-color: #e48600;}
+.repoCode .panel, .reviewFormContainer {transition: border 0.4s;}
+.repoCode .panel.highlight, #reviewForm.highlight .reviewFormContainer {border-color: #e48600;}
 
 #bugsPreview {white-space: normal;}
 #bugsPreview .dropdown-menu {top: -100%; left: 30%; padding-top: 0; min-width: 300px; max-width: 500px;}
@@ -166,7 +166,7 @@ h3 {font-size: 16px;}
 .icon-comments {position: relative; left: -50px;}
 
 /* bug form */
-#bugForm, #bugForm table {margin: 0; padding: 0;}
+#reviewForm, #reviewForm table {margin: 0; padding: 0;}
 
 .panel .table + .panel-footer {border-top: 0; background: #fff;}
 
