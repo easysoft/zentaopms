@@ -714,8 +714,6 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
-        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
-
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
