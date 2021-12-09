@@ -82,6 +82,8 @@ $lang->kanban->cardsSort          = '卡片排序';
 $lang->kanban->moreAction         = '更多操作';
 $lang->kanban->noGroup            = '无';
 $lang->kanban->limitExceeded      = '超出在制品限制';
+$lang->kanban->fullScreen         = '全屏';
+$lang->kanban->setting            = '设置';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
