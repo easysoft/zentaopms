@@ -199,7 +199,6 @@ class kanbanModel extends model
         if(!dao::isError()) return common::createChanges($oldSpace, $space);
     }
 
-
     /**
      * Add execution Kanban lanes and columns.
      *
