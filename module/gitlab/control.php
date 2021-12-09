@@ -727,6 +727,7 @@ class gitlab extends control
     {
         $keyword  = fixer::input('post')->setDefault('keyword', '')->get('keyword');
         $branches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, $keyword, $orderBy);
+        $project  = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
@@ -740,6 +741,7 @@ class gitlab extends control
         $this->view->levelLang  = $this->lang->gitlab->branch->branchCreationLevelList;
         $this->view->gitlabID   = $gitlabID;
         $this->view->projectID  = $projectID;
+        $this->view->project    = $project;
         $this->view->orderBy    = $orderBy;
         $this->view->branchList = empty($branchList) ? $branchList: $branchList[$pageID - 1];
         $this->display();

@@ -15,6 +15,9 @@
   <div class='pull-left'>
     <?php echo html::a($this->createLink('gitlab', 'browseProject', "gitlabID=$gitlabID"), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
+  <div id="sidebarHeader">
+    <div class="title"><?php echo $project->name_with_namespace; ?></div>
+  </div>
   <div class="btn-toolbar pull-left">
     <div>
       <form id='branchPrivForm' method='post'>
@@ -51,8 +54,8 @@
       </thead>
       <tbody>
         <?php foreach ($branchList as $id => $branch): ?>
-        <?php $branch->merge_access_level = count($branch->merge_access_levels) > 1 ? 40 : $branch->merge_access_levels[0]->access_level; ?>
-        <?php $branch->push_access_level  = count($branch->push_access_levels) > 1 ? 40 : $branch->push_access_levels[0]->access_level; ?>
+        <?php $branch->merge_access_level = $this->gitlab->checkAccessLevel($branch->merge_access_levels); ?>
+        <?php $branch->push_access_level  = $this->gitlab->checkAccessLevel($branch->push_access_levels); ?>
         <tr class='text'>
           <td class='text-c-name' title='<?php echo $branch->name;?>'><?php echo $branch->name;?></td>
           <td class-'text' title="<?php echo $levelLang[$branch->merge_access_level];?>"><?php echo $levelLang[$branch->merge_access_level];?></td>

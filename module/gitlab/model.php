@@ -2311,7 +2311,7 @@ class gitlabModel extends model
         $newBranches = array();
         foreach($branches as $branch)
         {
-            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[$branch->$order[0]] = $branch;
+            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[$branch->{$order[0]}] = $branch;
         }
 
         if($order[1] == 'asc')  ksort($newBranches);
