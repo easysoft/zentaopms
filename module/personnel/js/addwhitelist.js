@@ -60,7 +60,7 @@ function showItem(val)
         var select = this;
         $(this).children('option').each(function()
         {
-            if($(this).html().indexOf(val) != -1)
+            if($(this).html() == val)
             {
                 $(this).css('display', '');
             }
@@ -79,7 +79,7 @@ function hideItem(select, val)
 {
     $(select).children('option').each(function()
     {
-        if($(this).html().indexOf(val) != -1)
+        if($(this).html() == val)
         {
             $(this).css("display", "none");
         }
