@@ -767,11 +767,10 @@ class gitlab extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseBranchPriv', "gitlabID=$gitlabID&projectID=$projectID")));
         }
 
-        // Initialize data, and the operation authority is the maintainers by default.
         $branchPriv = new stdClass();
         $branchPriv->name               = '';
-        $branchPriv->mergeAccessLevel = 40;
-        $branchPriv->pushAccessLevel  = 40;
+        $branchPriv->mergeAccessLevel = 40; // Initialize data, and the operation authority is the maintainers by default.
+        $branchPriv->pushAccessLevel  = 40; // Initialize data, and the operation authority is the maintainers by default.
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $title  = $this->lang->gitlab->createBranchPriv;
