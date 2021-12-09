@@ -734,6 +734,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('15.7.1'));
             $this->updateObjectBranch();
             $this->updateProjectStories();
+            $this->updateProjectLinkedBranch();
             $this->appendExec('15_7_1');
         }
 
@@ -5412,6 +5413,48 @@ class upgradeModel extends model
         foreach($storyPairs as $storyID => $branch)
         {
             $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($branch)->where('story')->eq($storyID)->exec();
+        }
+
+        return true;
+    }
+
+    /**
+     * Update project linked branch.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateProjectLinkedBranch()
+    {
+        $projectProducts = $this->dao->select('t1.project,t1.story,t2.branch,t2.product')->from(TABLE_PROJECTSTORY)->alias('t1')
+            ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+            ->where('t2.branch')->ne(0)
+            ->fetchGroup('project');
+
+        $projectBranches = array();
+        foreach($projectProducts as $projectID => $stories)
+        {
+            foreach($stories as $story)
+            {
+                if(!isset($projectBranches[$projectID])) $projectBranches[$projectID] = array();
+                if(!isset($projectBranches[$projectID][$story->product])) $projectBranches[$projectID][$story->product] = array();
+                $projectBranches[$projectID][$story->product][$story->branch] = $story->branch;
+            }
+        }
+
+        foreach($projectBranches as $projectID => $products)
+        {
+            foreach($products as $productID => $branches)
+            {
+                foreach($branches as $branchID)
+                {
+                    $data = new stdClass();
+                    $data->project = $projectID;
+                    $data->product = $productID;
+                    $data->branch  = $branchID;
+                    $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
+                }
+            }
         }
 
         return true;
