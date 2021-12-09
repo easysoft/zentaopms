@@ -348,15 +348,15 @@ class kanbanModel extends model
      */
     public function getSpaces($browseType)
     {
-        $account    = $this->app->user->account;
-        $viewSpaces = $this->getCanViewObjects('kanbanspace');
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
 
         return $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
             ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in(array_keys($viewSpaces))->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchAll('id');
     }
@@ -370,15 +370,15 @@ class kanbanModel extends model
      */
     public function getSpacePairs($browseType = 'all')
     {
-        $account    = $this->app->user->account;
-        $viewSpaces = $this->getCanViewObjects('kanbanspace');
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
 
         return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
             ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in(array_keys($viewSpaces))->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
     }
@@ -407,7 +407,7 @@ class kanbanModel extends model
             }
         }
 
-        return $objects;
+        return array_keys($objects);
     }
 
     /**
