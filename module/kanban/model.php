@@ -171,6 +171,36 @@ class kanbanModel extends model
     }
 
     /**
+     * Update a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function updateSpace($spaceID)
+    {
+        $spaceID  = (int)$spaceID;
+        $oldSpace = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
+        $space    = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->add('team', $this->post->mailto)
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,mailto,contactListMenu')
+            ->get();
+
+        $this->dao->update(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
+            ->where('id')->eq($spaceID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+
+    /**
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID
@@ -370,9 +400,9 @@ class kanbanModel extends model
 
     /**
      * Update kanban lane.
-     * 
-     * @param  int    $executionID 
-     * @param  string $laneType 
+     *
+     * @param  int    $executionID
+     * @param  string $laneType
      * @access public
      * @return void
      */
@@ -380,7 +410,7 @@ class kanbanModel extends model
     {
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
-            ->andWhere('type')->eq($laneType)              
+            ->andWhere('type')->eq($laneType)
             ->fetchAll('id');
 
         foreach($lanes as $lane) $this->updateCards($lane);
@@ -770,6 +800,18 @@ class kanbanModel extends model
         }
 
         if($noExtra) $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($noExtra)->exec();
+    }
+
+    /**
+     * Get space by id.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaceById($spaceID)
+    {
+        return $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
     }
 
     /**

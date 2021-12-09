@@ -1,9 +1,33 @@
 <?php
-$lang->kanban->space       = '看板空间';
-$lang->kanban->create      = '创建看板';
-$lang->kanban->createSpace = '创建空间';
+/* Actions. */
+$lang->kanban->space        = '看板空间';
+$lang->kanban->create       = '创建看板';
+$lang->kanban->createSpace  = '创建空间';
+$lang->kanban->editSpace    = '设置空间';
+$lang->kanban->closeSpace   = '关闭空间';
+$lang->kanban->deleteSpace  = '删除空间';
+$lang->kanban->sortSpace    = '空间排序';
+$lang->kanban->edit         = '编辑看板';
+$lang->kanban->view         = '查看看板';
+$lang->kanban->close        = '关闭看板';
+$lang->kanban->delete       = '删除看板';
+$lang->kanban->createRegion = '创建区域';
+$lang->kanban->editRegion   = '编辑区域';
+$lang->kanban->sortRegion   = '区域排序';
+$lang->kanban->deleteRegion = '删除区域';
+$lang->kanban->createLane   = '创建泳道';
+$lang->kanban->editLane     = '删除泳道';
+$lang->kanban->sortLane     = '泳道排序';
+$lang->kanban->createColumn = '创建看板列';
+$lang->kanban->editColumn   = '编辑看板列';
+$lang->kanban->sortColumn   = '看板列排序';
+$lang->kanban->deleteColumn = '删除看板列';
+$lang->kanban->createCard   = '创建卡片';
+$lang->kanban->editCard     = '编辑卡片';
+$lang->kanban->viewCard     = '查看卡片';
+$lang->kanban->sortCard     = '卡片排序';
 
-/* Field. */
+/* Fields. */
 $lang->kanban->spaceName = '空间名称';
 $lang->kanban->spaceDesc = '空间描述';
 $lang->kanban->owner     = '负责人';

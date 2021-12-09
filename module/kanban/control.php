@@ -58,6 +58,33 @@ class kanban extends control
     }
 
     /**
+     * Edit a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function editSpace($spaceID)
+    {
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->updateSpace($spaceID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+        }
+
+        $this->view->space = $this->kanban->getSpaceById($spaceID);
+        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID

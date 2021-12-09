@@ -1,9 +1,34 @@
 <?php
-$lang->kanban->space       = 'Kanban Space';
-$lang->kanban->create      = 'Create Kanban';
-$lang->kanban->createSpace = 'Create Space';
+/* Actions. */
+$lang->kanban->space        = 'Kanban Space';
+$lang->kanban->create       = 'Create Kanban';
+$lang->kanban->createSpace  = 'Create Space';
+$lang->kanban->editSpace    = 'Edit Space';
+$lang->kanban->closeSpace   = 'Close Space';
+$lang->kanban->deleteSpace  = 'Delete Space';
+$lang->kanban->sortSpace    = 'Sort Space';
+$lang->kanban->edit         = 'Edit Kanban';
+$lang->kanban->view         = 'View Kanban';
+$lang->kanban->close        = 'Close Kanban';
+$lang->kanban->delete       = 'Delete Kanban';
+$lang->kanban->createRegion = 'Create Region';
+$lang->kanban->editRegion   = 'Edit Region';
+$lang->kanban->sortRegion   = 'Sort Region';
+$lang->kanban->deleteRegion = 'Delete Region';
+$lang->kanban->createLane   = 'Create Lane';
+$lang->kanban->editLane     = 'Edit Lane';
+$lang->kanban->sortLane     = 'Sort Lane';
+$lang->kanban->createColumn = 'Create Column';
+$lang->kanban->editColumn   = 'Edit Column';
+$lang->kanban->sortColumn   = 'Sort Column';
+$lang->kanban->deleteColumn = 'Delete Column';
+$lang->kanban->createCard   = 'Create Card';
+$lang->kanban->editCard     = 'Edit Card';
+$lang->kanban->viewCard     = 'View Card';
+$lang->kanban->sortCard     = 'Sort Card';
 
-/* Field. */
+
+/* Fields. */
 $lang->kanban->spaceName = 'Space Name';
 $lang->kanban->spaceDesc = 'Space Description';
 $lang->kanban->owner     = 'Owner';
@@ -14,7 +39,6 @@ $lang->kanbanspace = new stdclass();
 $lang->kanbanspace->name  = 'Name';
 $lang->kanbanspace->owner = 'Owner';
 
-$lang->kanban->spaceAclList[] = array();
 $lang->kanban->spaceAclList['open']    = 'Open (Accessible with kanban view permissions)';
 $lang->kanban->spaceAclList['private'] = 'Private (For the kanban owner and team members only)';
 
