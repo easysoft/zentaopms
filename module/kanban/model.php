@@ -722,7 +722,7 @@ class kanbanModel extends model
             ->where('id')->eq($kanbanID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
     }
 
     /**

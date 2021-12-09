@@ -71,13 +71,14 @@ class kanban extends control
      */
     public function editSpace($spaceID)
     {
+        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->kanban->updateSpace($spaceID);
 
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
+            $actionID = $this->action->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent.parent'));
@@ -124,13 +125,14 @@ class kanban extends control
      */
     public function edit($kanbanID = 0)
     {
+        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->kanban->update($kanbanID);
 
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $this->loadModel('action')->create('kanban', $kanbanID, 'edited');
+            $actionID = $this->action->create('kanban', $kanbanID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent.parent'));

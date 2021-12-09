@@ -1,3 +1,7 @@
+$(function()
+{
+    if(typeof acl != 'undefined' && acl != null) setWhite(acl);
+});
 /**
  * Set white list.
  *
