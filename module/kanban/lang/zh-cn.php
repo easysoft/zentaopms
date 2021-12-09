@@ -81,6 +81,7 @@ $lang->kanban->laneGroup          = '泳道分组';
 $lang->kanban->cardsSort          = '卡片排序';
 $lang->kanban->moreAction         = '更多操作';
 $lang->kanban->noGroup            = '无';
+$lang->kanban->limitExceeded      = '超出在制品限制';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
@@ -148,8 +149,11 @@ $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name    = $lang->kanban->laneName;
+$lang->kanbanlane->common  = '泳道';
 $lang->kanbanlane->default = '默认泳道';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '看板区域';
 $lang->kanbanregion->default = '默认区域';
+
+$lang->kanbancard = new stdclass();
