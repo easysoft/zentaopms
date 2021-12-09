@@ -32,7 +32,7 @@
         <td colspan='2'>
           <div class="input-group">
             <?php echo html::select('team[]', $users, $space->team, "class='form-control chosen' multiple");?>
-            <?php echo $this->fetch('kanban', 'ajaxGetTeams');?>
+            <?php echo $this->fetch('my', 'buildContactLists');?>
           </div>
         </td>
       </tr>

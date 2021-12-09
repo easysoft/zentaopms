@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id="mainMenu" class="clearfix table-row">
   <div class="btn-toolBar pull-left">
-    <?php foreach($lang->kanban->featureBar as $key => $label):?>
+    <?php foreach($lang->kanbanspace->featureBar as $key => $label):?>
     <?php $active = $browseType == $key ? 'btn-active-text' : '';?>
     <?php $label = "<span class='text'>$label</span>";?>
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>

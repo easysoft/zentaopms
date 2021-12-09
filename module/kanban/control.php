@@ -250,4 +250,23 @@ class kanban extends control
 
         die(js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent'));
     }
+
+    /**
+     * Ajax get contact users.
+     *
+     * @param  int    $contactListID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetContactUsers($contactListID)
+    {
+        $this->loadModel('user');
+        $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
+
+        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
+
+        if(!$contactListID) return print(html::select('team[]', $users, '', "class='form-control chosen' multiple"));
+
+        return print(html::select('team[]', $users, $list->userList, "class='form-control chosen' multiple"));
+    }
 }

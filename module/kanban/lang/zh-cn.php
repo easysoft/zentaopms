@@ -27,25 +27,6 @@ $lang->kanban->editCard     = '编辑卡片';
 $lang->kanban->viewCard     = '查看卡片';
 $lang->kanban->sortCard     = '卡片排序';
 
-/* Fields. */
-$lang->kanban->spaceName = '空间名称';
-$lang->kanban->spaceDesc = '空间描述';
-$lang->kanban->owner     = '负责人';
-$lang->kanban->team      = '团队';
-$lang->kanban->acl       = '访问控制';
-
-$lang->kanbanspace = new stdclass();
-$lang->kanbanspace->name  = '空间名称';
-$lang->kanbanspace->owner = '负责人';
-
-$lang->kanban->spaceAclList['open']    = '公开（有看板空间视图权限即可访问）';
-$lang->kanban->spaceAclList['private'] = '私有（只有看板空间负责人、团队成员可访问）';
-
-$lang->kanban->featureBar['all']    = '所有';
-$lang->kanban->featureBar['my']     = '我的空间';
-$lang->kanban->featureBar['other']  = '其他空间';
-$lang->kanban->featureBar['closed'] = '已关闭';
-
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
 $lang->kanban->type['story'] = "{$lang->SRCommon}看板";
@@ -143,6 +124,21 @@ $lang->kanban->taskColumn['developed']  = '研发完毕';
 $lang->kanban->taskColumn['pause']      = '已暂停';
 $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
+
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->name  = '空间名称';
+$lang->kanbanspace->owner = '负责人';
+$lang->kanbanspace->team  = '团队';
+$lang->kanbanspace->desc  = '空间描述';
+$lang->kanbanspace->acl   = '访问控制';
+
+$lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
+$lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员可访问）';
+
+$lang->kanbanspace->featureBar['all']    = '所有';
+$lang->kanbanspace->featureBar['my']     = '我的空间';
+$lang->kanbanspace->featureBar['other']  = '其他空间';
+$lang->kanbanspace->featureBar['closed'] = '已关闭';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;

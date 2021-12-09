@@ -150,21 +150,20 @@ class kanbanModel extends model
         $space = fixer::input('post')
             ->setDefault('createdBy', $this->app->user->account)
             ->setDefault('createdDate', helper::now())
-            ->add('team', $this->post->mailto)
             ->join('whitelist', ',')
             ->join('team', ',')
-            ->remove('uid,mailto,contactListMenu')
+            ->remove('uid,contactListMenu')
             ->get();
 
         $this->dao->insert(TABLE_KANBANSPACE)->data($space)
-                ->autoCheck()
-                ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
-                ->exec();
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
+            ->exec();
 
         if(!dao::isError())
         {
-            $spaceID    = $this->dao->lastInsertID();
-            $spaceFiles = array();
+            $spaceID = $this->dao->lastInsertID();
+            $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
 
             return $spaceID;
         }
@@ -184,10 +183,9 @@ class kanbanModel extends model
         $space    = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
-            ->add('team', $this->post->mailto)
             ->join('whitelist', ',')
             ->join('team', ',')
-            ->remove('uid,mailto,contactListMenu')
+            ->remove('uid,contactListMenu')
             ->get();
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)

@@ -27,26 +27,6 @@ $lang->kanban->editCard     = 'Edit Card';
 $lang->kanban->viewCard     = 'View Card';
 $lang->kanban->sortCard     = 'Sort Card';
 
-
-/* Fields. */
-$lang->kanban->spaceName = 'Space Name';
-$lang->kanban->spaceDesc = 'Space Description';
-$lang->kanban->owner     = 'Owner';
-$lang->kanban->team      = 'Team';
-$lang->kanban->acl       = 'ACL';
-
-$lang->kanbanspace = new stdclass();
-$lang->kanbanspace->name  = 'Name';
-$lang->kanbanspace->owner = 'Owner';
-
-$lang->kanban->spaceAclList['open']    = 'Open (Accessible with kanban view permissions)';
-$lang->kanban->spaceAclList['private'] = 'Private (For the kanban owner and team members only)';
-
-$lang->kanban->featureBar['all']    = 'All';
-$lang->kanban->featureBar['my']     = 'My';
-$lang->kanban->featureBar['other']  = 'Other';
-$lang->kanban->featureBar['closed'] = 'Closed';
-
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
 $lang->kanban->type['story'] = "Story KanBan";
@@ -144,6 +124,21 @@ $lang->kanban->taskColumn['developed']  = 'Developed';
 $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
+
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->name  = 'Name';
+$lang->kanbanspace->owner = 'Owner';
+$lang->kanbanspace->team  = 'Team';
+$lang->kanbanspace->desc  = 'Description';
+$lang->kanbanspace->acl   = 'ACL';
+
+$lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
+$lang->kanbanspace->aclList['private'] = 'Private (For the kanban owner and team members only)';
+
+$lang->kanbanspace->featureBar['all']    = 'All';
+$lang->kanbanspace->featureBar['my']     = 'My';
+$lang->kanbanspace->featureBar['other']  = 'Other';
+$lang->kanbanspace->featureBar['closed'] = 'Closed';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;
