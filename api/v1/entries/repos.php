@@ -14,7 +14,6 @@ class reposEntry extends entry
     /**
      * GET method.
      *
-     * @param  int    $productID
      * @access public
      * @return void
      */
@@ -32,7 +31,7 @@ class reposEntry extends entry
             $repos  = $data->data->repoList;
             foreach($repos as $repo) $result[] = $this->format($repo, 'deleted:bool,lastSync:datetime,synced:bool,product:idList');
 
-            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'releases' => $result));
+            return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'repos' => $result));
         }
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
