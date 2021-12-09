@@ -948,7 +948,6 @@ class gitlab extends control
         if($gitlab) $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(empty($user->is_admin)) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
-
         if($_POST)
         {
             $executionList  = $this->post->executionList;
@@ -979,6 +978,8 @@ class gitlab extends control
 
                     if($objectID)
                     {
+                        $this->loadModel('action')->create($objectType, $objectID, 'ImportFromGitlab', '', $issueID);
+
                         $object->id = $objectID;
                         $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
                     }
