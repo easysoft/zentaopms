@@ -14,7 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->kanban->create;?></h2>
+    <h2><?php echo $lang->kanban->edit;?></h2>
   </div>
   <form class='form-indicator main-form' method='post' target='hiddenwin' id='dataform'>
     <table class='table table-form'>
