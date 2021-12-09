@@ -15,8 +15,8 @@ class kanbanModel extends model
 {
     /**
      * Init a kanban.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @param  string $type default|new
      * @access public
      * @return void
@@ -41,11 +41,11 @@ class kanbanModel extends model
 
     /**
      * Create a kanban group.
-     * 
-     * @param  int    $kanbanID 
-     * @param  int    $regionID 
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
      * @access public
-     * @return int 
+     * @return int
      */
     public function createGroup($kanbanID, $regionID)
     {
@@ -73,10 +73,10 @@ class kanbanModel extends model
 
     /**
      * Create a default kanban region.
-     * 
-     * @param  object $kanban 
+     *
+     * @param  object $kanban
      * @access public
-     * @return int 
+     * @return int
      */
     public function createDefaultRegion($kanban)
     {
@@ -92,11 +92,11 @@ class kanbanModel extends model
 
     /**
      * Create a new region.
-     * 
-     * @param  object $kanban 
-     * @param  object $region 
+     *
+     * @param  object $kanban
+     * @param  object $region
      * @access public
-     * @return int 
+     * @return int
      */
     public function createRegion($kanban, $region = null)
     {
@@ -104,7 +104,7 @@ class kanbanModel extends model
         $order   = 1;
 
         if(!$region)
-        {    
+        {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANORDER)
                 ->where('objectType')->eq('region')
                 ->andWhere('parentID')->eq($kanban->id)
@@ -137,12 +137,12 @@ class kanbanModel extends model
 
     /**
      * Create default lane.
-     * 
-     * @param  object $kanban 
+     *
+     * @param  object $kanban
      * @param  int    $regionID
      * @param  int    $groupID
      * @access public
-     * @return int 
+     * @return int
      */
     public function createDefaultLane($kanban, $regionID, $groupID)
     {
@@ -162,8 +162,8 @@ class kanbanModel extends model
 
     /**
      * Create default kanban columns.
-     * 
-     * @param  object $kanban 
+     *
+     * @param  object $kanban
      * @param  int    $regionID
      * @param  int    $groupID
      * @access public
@@ -192,13 +192,13 @@ class kanbanModel extends model
 
     /**
      * Save kanban object order.
-     * 
-     * @param  int    $parentID 
-     * @param  string $parentType 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $account 
-     * @param  int    $order 
+     *
+     * @param  int    $parentID
+     * @param  string $parentType
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $account
+     * @param  int    $order
      * @access public
      * @return void
      */
@@ -217,11 +217,11 @@ class kanbanModel extends model
     }
 
     /**
-     * Get kanban by id. 
-     * 
-     * @param  int    $kanbanID 
+     * Get kanban by id.
+     *
+     * @param  int    $kanbanID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getByID($kanbanID)
     {
@@ -230,8 +230,8 @@ class kanbanModel extends model
 
     /**
      * Get kanban data.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
      * @return void
      */
@@ -281,13 +281,13 @@ class kanbanModel extends model
 
     /**
      * Get ordered region pairs.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
-     * @return array 
+     * @return array
      */
     public function getRegionPairs($kanbanID)
-    {    
+    {
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('deleted')->eq('0')
@@ -297,10 +297,10 @@ class kanbanModel extends model
 
     /**
      * Get kanban group by regions.
-     * 
-     * @param  array $regions 
+     *
+     * @param  array $regions
      * @access public
-     * @return array 
+     * @return array
      */
     public function getGroupGroupByRegions($regions)
     {
@@ -312,10 +312,10 @@ class kanbanModel extends model
 
     /**
      * Get lane group by regions.
-     * 
-     * @param  array $regions 
+     *
+     * @param  array $regions
      * @access public
-     * @return array 
+     * @return array
      */
     public function getLaneGroupByRegions($regions)
     {
@@ -342,11 +342,11 @@ class kanbanModel extends model
     }
 
     /**
-     * Get column group by regions. 
-     * 
-     * @param  array $regions 
+     * Get column group by regions.
+     *
+     * @param  array $regions
      * @access public
-     * @return array 
+     * @return array
      */
     public function getColumnGroupByRegions($regions)
     {
@@ -386,7 +386,7 @@ class kanbanModel extends model
                 $columnData[$group][] = $parentColumn;
                 foreach($columnGroup[$group] as $column)
                 {
-                    if($column->parent == $parentColumn->id) 
+                    if($column->parent == $parentColumn->id)
                     {
                         $parentColumn->asParent = true;
 
@@ -720,6 +720,35 @@ class kanbanModel extends model
 
             return $kanbanID;
         }
+    }
+
+    /**
+     * Update a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    public function update($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $account   = $this->app->user->account;
+        $oldKanban = $this->getByID($kanbanID);
+        $kanban    = fixer::input('post')
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
     }
 
     /**

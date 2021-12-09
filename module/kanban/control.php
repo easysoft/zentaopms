@@ -71,13 +71,14 @@ class kanban extends control
      */
     public function editSpace($spaceID)
     {
+        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->kanban->updateSpace($spaceID);
 
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
+            $actionID = $this->action->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent.parent'));
@@ -111,7 +112,36 @@ class kanban extends control
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->spaceID    = $spaceID;
         $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
-        
+
+        $this->display();
+    }
+
+    /**
+     * Edit a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function edit($kanbanID = 0)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->update($kanbanID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanban', $kanbanID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->kanban     = $this->kanban->getByID($kanbanID);
+
         $this->display();
     }
 
@@ -147,8 +177,8 @@ class kanban extends control
 
      /**
      * View a kanban.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
      * @return void
      */
@@ -160,7 +190,7 @@ class kanban extends control
         $this->view->title   = $this->lang->kanban->view;
         $this->view->regions = $this->kanban->getKanbanData($kanbanID);
         $this->view->kanban  = $kanban;
-        
+
         $this->display();
     }
 
