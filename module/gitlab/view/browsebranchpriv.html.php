@@ -24,7 +24,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('gitlab', 'setBranchPriv')) common::printLink('gitlab', 'setBranchPriv', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->branch->createBranchPriv, '', "class='btn btn-primary'");?>
+    <?php if(common::hasPriv('gitlab', 'createBranchPriv')) common::printLink('gitlab', 'createBranchPriv', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranchPriv, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($branchList)):?>
@@ -32,7 +32,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
     <?php if(empty($keyword) and common::hasPriv('gitlab', 'createProject')):?>
-    <?php echo html::a($this->createLink('gitlab', 'setBranchPriv', "gitlabID=$gitlabID&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->branch->createBranchPriv, '', "class='btn btn-info'");?>
+    <?php echo html::a($this->createLink('gitlab', 'createBranchPriv', "gitlabID=$gitlabID&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranchPriv, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
@@ -59,7 +59,7 @@
           <td class='text' title="<?php echo $levelLang[$branch->push_access_level];?>"><?php echo $levelLang[$branch->push_access_level];?></td>
           <td class='c-actions text-left'>
             <?php
-            if(common::hasPriv('gitlab', 'setBranchPriv')) common::printLink('gitlab', 'setBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch->name", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->branch->editBranchPriv} class='btn btn-primary'");
+            if(common::hasPriv('gitlab', 'editBranchPriv')) common::printLink('gitlab', 'editBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch->name", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->editBranchPriv} class='btn btn-primary'");
             if(common::hasPriv('gitlab', 'deleteBranchPriv')) echo html::a($this->createLink('gitlab', 'deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch->name"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteBranchPriv}' class='btn'");
             ?>
           </td>

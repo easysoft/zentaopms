@@ -746,14 +746,15 @@ class gitlab extends control
     }
 
     /**
-     * Set a gitlab branch priv.
+     * Set a gitlab branch protect.
      *
-     * @param  int     $gitlabID
-     * @param  int     $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
      * @access public
      * @return void
      */
-    public function setBranchPriv($gitlabID, $projectID, $branch = '')
+    public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
         if($_POST)
         {
@@ -769,11 +770,11 @@ class gitlab extends control
         $branchPriv->push_access_level  = 40;
 
         $gitlab = $this->gitlab->getByID($gitlabID);
-        $title  = $this->lang->gitlab->branch->createBranchPriv;
+        $title  = $this->lang->gitlab->createBranchPriv;
 
         if($branch)
         {
-            $title      = $this->lang->gitlab->branch->editBranchPriv;
+            $title      = $this->lang->gitlab->editBranchPriv;
             $branchPriv = $this->gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);
             $branchPriv->merge_access_level = $this->gitlab->checkAccessLevel($branchPriv->merge_access_levels);
             $branchPriv->push_access_level  = $this->gitlab->checkAccessLevel($branchPriv->push_access_levels);
@@ -797,6 +798,20 @@ class gitlab extends control
         $this->view->branches   = $branches; 
         $this->view->branchPriv = $branchPriv; 
         $this->display();
+    }
+
+    /**
+     * Edit a gitlab branch protect.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return void
+     */
+    public function editBranchPriv($gitlabID, $projectID, $branch)
+    {
+        echo $this->fetch('gitlab', 'createBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch");
     }
 
     /**
