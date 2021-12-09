@@ -7,16 +7,19 @@ $config->kanban->setlane       = new stdclass();
 $config->kanban->setlaneColumn = new stdclass();
 $config->kanban->createspace   = new stdclass();
 $config->kanban->editspace     = new stdclass();
+$config->kanban->close         = new stdclass();
 
 $config->kanban->setwip->requiredFields        = 'limit';
 $config->kanban->setlane->requiredFields       = 'name,type';
 $config->kanban->setlaneColumn->requiredFields = 'name';
 $config->kanban->createspace->requiredFields   = 'name,owner';
 $config->kanban->editspace->requiredFields     = 'name,owner';
+$config->kanban->close->requiredFields         = 'comment';
 
 $config->kanban->editor = new stdclass();
 $config->kanban->editor->createspace = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->editspace   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->close       = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->kanban->default = new stdclass();
 $config->kanban->default->story  = new stdclass();

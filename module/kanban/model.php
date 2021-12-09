@@ -179,7 +179,7 @@ class kanbanModel extends model
     public function updateSpace($spaceID)
     {
         $spaceID  = (int)$spaceID;
-        $oldSpace = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
+        $oldSpace = $this->getSpaceById($spaceID);
         $space    = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -195,6 +195,36 @@ class kanbanModel extends model
             ->exec();
 
         if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+    /**
+     * Close a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    function close($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $oldKanban = $this->getById($kanbanID);
+        $now       = helper::now();
+        $kanban    = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->check($this->config->kanban->close->requiredFields,'notempty')
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
     }
 
     /**
