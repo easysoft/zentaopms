@@ -90,4 +90,5 @@
 <?php js::set('productGroups', $productGroups)?>
 <?php js::set('projectID', $build->project)?>
 <?php js::set('executionID', $build->execution)?>
+<?php js::set('currentTab', $this->app->tab);?>
 <?php include '../../common/view/footer.html.php';?>
