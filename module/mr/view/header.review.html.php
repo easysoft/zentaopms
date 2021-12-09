@@ -1,6 +1,6 @@
 <?php
 /* get last review info in this file. */
-$lastReview  = $this->mr->getLastReviewInfo($repo->id);
+$lastReview = $this->mr->getLastReviewInfo($repo->id);
 
 /* Get product pairs. */
 if(isset($repo->product) and $repo->product)
@@ -14,7 +14,7 @@ else
 
 /* get product by cookie or last review in this file. */
 $repoProduct   = isset($_COOKIE['repoPairs'][$repoID]) ? $_COOKIE['repoPairs'][$repoID] : '';
-$repoProduct   = $lastReview->bug && isset($lastReview->bug->product) ? $lastReview->bug->product : $repoProduct;
+$repoProduct   = (isset($lastReview->bug) && isset($lastReview->bug->product)) ? $lastReview->bug->product : $repoProduct;
 $repoProduct   = isset($products[$repoProduct]) ? $repoProduct : key($products);
 $bugRepoModule = (isset($lastReview->bug) && $lastReview->bug->product == $repoProduct) ? $lastReview->bug->module : '';
 $executions    = $this->mr->getExecutionPairs($repoProduct);
@@ -25,10 +25,11 @@ $executions    = array('' => '') + $executions;
 
 $taskExecutions = $executions;
 if(empty($repo->product)) $taskExecutions = array('' => '') + $this->loadModel('execution')->getPairs();
-$repoExecution = $lastReview->task && isset($lastReview->task->execution) ? $lastReview->task->execution : $this->session->execution;
-$repoExecution = isset($taskExecutions[$repoExecution]) ? $repoExecution : key($taskExecutions);
-$taskModules   = array('' => '');
-$taskMembers   = array('' => '');
+$repoExecution  = (isset($lastReview->task) && isset($lastReview->task->execution)) ? $lastReview->task->execution : $this->session->execution;
+$repoExecution  = isset($taskExecutions[$repoExecution]) ? $repoExecution : key($taskExecutions);
+$taskModules    = array('' => '');
+$taskRepoModule = 0;
+$taskMembers    = array('' => '');
 if($repoExecution)
 {
     $taskModules    = $this->loadModel('tree')->getTaskOptionMenu($repoExecution, 0, 0, 'allModule');
