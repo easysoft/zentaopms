@@ -422,7 +422,7 @@ class kanbanModel extends model
     {
         $account = $this->app->user->account;
         $space   = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
+            ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
