@@ -896,7 +896,7 @@ class mrModel extends model
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('openedBuild', 'trunk')
-            ->add('type', 'codeimprovement')
+            ->add('type', 'codeerror')
             ->add('repo', $repoID)
             ->add('mr', $mr)
             ->add('lines', $this->post->begin . ',' . $this->post->end)
