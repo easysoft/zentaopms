@@ -1018,7 +1018,7 @@ class mrModel extends model
             $taskInfo['edit']       = common::hasPriv('task', 'edit');
             $taskInfo['view']       = common::hasPriv('task', 'view');
             $taskInfo['delete']     = common::hasPriv('task', 'delete');
-            $taskInfo['lines']      = $data->lines;
+            $taskInfo['lines']      = $task->lines;
             $taskInfo['line']       = $this->post->begin;
             $taskInfo['content']    = $task->desc;
             $taskInfo['title']      = $data->title;
