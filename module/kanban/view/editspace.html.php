@@ -1,4 +1,3 @@
-
 <?php
 /**
  * The editspace file of kanban module of ZenTaoPMS.
@@ -15,38 +14,38 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><?php echo $lang->kanban->createSpace;?></h2>
+    <h2><?php echo $lang->kanban->editSpace;?></h2>
   </div>
   <form class='form-indicator main-form' method='post' target='hiddenwin' id='dataform'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->kanban->spaceName;?></th>
+        <th><?php echo $lang->kanbanspace->name;?></th>
         <td><?php echo html::input('name', $space->name, "class='form-control'");?></td>
         <td></td>
       </tr>
       <tr>
-        <th><?php echo $lang->kanban->owner;?></th>
+        <th><?php echo $lang->kanbanspace->owner;?></th>
         <td><?php echo html::select('owner', $users, $space->owner, "class='form-control chosen'");?></td>
       </tr>
       <tr>
-        <th><?php echo $lang->kanban->team;?></th>
+        <th><?php echo $lang->kanbanspace->team;?></th>
         <td colspan='2'>
           <div class="input-group">
-            <?php echo html::select('mailto[]', $users, $space->team, "class='form-control chosen' multiple");?>
-            <?php echo $this->fetch('my', 'buildContactLists');?>
+            <?php echo html::select('team[]', $users, $space->team, "class='form-control chosen' multiple");?>
+            <?php echo $this->fetch('kanban', 'ajaxGetTeams');?>
           </div>
         </td>
       </tr>
       <tr>
-        <th><?php echo $lang->kanban->spaceDesc;?></th>
+        <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
           <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=space&link=desc');?>
           <?php echo html::textarea('desc', $space->desc, "rows='10' class='form-control'");?>
         </td>
       </tr>
       <tr>
-        <th><?php echo $lang->kanban->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanban->spaceAclList, $space->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+        <th><?php echo $lang->kanbanspace->acl;?></th>
+        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanbanspace->aclList, $space->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
       </tr>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
