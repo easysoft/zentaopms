@@ -36,7 +36,7 @@ $lang->kanban->desc  = '空间描述';
 $lang->kanban->acl   = '访问控制';
 
 $lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
-$lang->kanban->aclList['private'] = '私有（看板团队成员、空间负责人、白名单可访问）';
+$lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";

@@ -348,16 +348,17 @@ class kanbanModel extends model
      */
     public function getSpaces($browseType)
     {
-        $account = $this->app->user->account;
-        $spaces  = $this->dao->select('*')->from(TABLE_KANBANSPACE)
+        $account    = $this->app->user->account;
+        $viewSpaces = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
             ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in(array_keys($viewSpaces))->fi()
             ->orderBy('id_desc')
             ->fetchAll('id');
-
-        return $this->getCanViewObjects('space', $spaces);
     }
 
     /**
@@ -369,46 +370,43 @@ class kanbanModel extends model
      */
     public function getSpacePairs($browseType = 'all')
     {
-        $spaces = $this->getSpaces($browseType);
-        return $this->getCanViewObjects('space', $spaces, 'pairs');
+        $account    = $this->app->user->account;
+        $viewSpaces = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in(array_keys($viewSpaces))->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
     }
 
     /**
      * Get can view objects.
      *
      * @param  string $objectType space|kanban
-     * @param  array  $objects
-     * @param  string $returnType object|pairs
      * @access public
      * @return array
      */
-    public function getCanViewObjects($objectType, $objects, $returnType = 'object')
+    public function getCanViewObjects($objectType)
     {
-        if($this->app->user->admin and $returnType == 'object') return $objects;
+        $table   = $this->config->objectTables[$objectType];
+        $objects = $this->dao->select('*')->from($table)->fetchAll('id');
 
-        $account     = $this->app->user->account;
-        $objectPairs = array();
+        if($this->app->user->admin) return $objects;
+
+        $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if(($this->app->user->admin or $object->acl == 'open') and $returnType == 'pairs')
-            {
-                $objectPairs[$objectID] = $object->name;
-            }
-            elseif($object->acl == 'private')
+            if($object->acl == 'private')
             {
                 $aclUsers = $object->owner . $object->team . $object->whitelist;
-                if(strpos(",$aclUsers,", ",$account,") === false)
-                {
-                    unset($objects[$objectID]);
-                }
-                elseif($returnType == 'pairs')
-                {
-                    $objectPairs[$objectID] = $object->name;
-                }
+                if(strpos(",$aclUsers,", ",$account,") === false) unset($objects[$objectID]);
             }
         }
 
-        if($returnType == 'pairs') return $objectPairs;
         return $objects;
     }
 
