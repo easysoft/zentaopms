@@ -19,9 +19,11 @@ $typeInfo = $type == 'file' ? '&type=file' : '';
 <?php include '../../common/view/header.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if(!isonlybody()):?>
     <?php $browseLink = $app->session->revisionList != false ? $app->session->revisionList : $this->repo->createLink('browse', "repoID={$repoID}&branchID=" . base64_encode($branchID) . "&objectID=$objectID{$preDir}");?>
     <?php echo html::a($browseLink, "<i class='icon icon-back'></i> " . $lang->goback, '', "class='btn btn-link'");?>
     <div class="divider"></div>
+    <?php endif;?>
     <div class="page-title">
       <?php echo $lang->repo->revisionA . ' ' . ($repo->SCM == 'Subversion' ? $revision : $this->repo->getGitRevisionName($revision, $log->commit));?>
     </div>
