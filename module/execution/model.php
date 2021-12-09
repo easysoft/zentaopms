@@ -381,7 +381,7 @@ class executionModel extends model
             $creatorExists = false;
             $teamMembers   = array();
 
-            $this->loadModel('kanban')->createLanes($executionID);
+            $this->loadModel('kanban')->createExecutionLane($executionID);
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
@@ -1676,12 +1676,13 @@ class executionModel extends model
      *
      * @param  array  $products
      * @param  int    $projectID
+     * @param  string $param
      * @access public
      * @return array
      */
-    public function getBranchByProduct($products, $projectID = 0)
+    public function getBranchByProduct($products, $projectID = 0, $param = 'noclosed')
     {
-        $branchGroups = $this->loadModel('branch')->getByProducts($products, 'noclosed');
+        $branchGroups = $this->loadModel('branch')->getByProducts($products, $param);
 
         if($projectID)
         {

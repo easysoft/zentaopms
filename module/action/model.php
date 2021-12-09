@@ -721,7 +721,7 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 list($extra, $reason) = explode(',', $extra);
                 $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
@@ -882,31 +882,19 @@ class actionModel extends model
         }
 
         /* If the sql not include 'product', add check purview for product. */
-        if(strpos($actionQuery, $allProducts) === false)
-        {
-            if(!in_array($productID, array_keys($products))) return array();
-        }
-        else
+        if(strpos($actionQuery, $allProducts) !== false)
         {
             $actionQuery = str_replace($allProducts, '1', $actionQuery);
         }
 
         /* If the sql not include 'project', add check purview for project. */
-        if(strpos($actionQuery, $allProjects) === false)
-        {
-            $actionQuery = $actionQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
-        }
-        else
+        if(strpos($actionQuery, $allProjects) !== false)
         {
             $actionQuery = str_replace($allProjects, '1', $actionQuery);
         }
 
         /* If the sql not include 'execution', add check purview for execution. */
-        if(strpos($actionQuery, $allExecutions) === false)
-        {
-            $actionQuery = $actionQuery . ' AND `execution`' . helper::dbIN(array_keys($executions));
-        }
-        else
+        if(strpos($actionQuery, $allExecutions) !== false)
         {
             $actionQuery = str_replace($allExecutions, '1', $actionQuery);
         }

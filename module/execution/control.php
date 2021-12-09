@@ -893,7 +893,7 @@ class execution extends control
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', '', $branchID, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branchID, 0, '', false);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -921,20 +921,21 @@ class execution extends control
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->bugs        = $bugs;
-        $this->view->tabID       = 'bug';
-        $this->view->build       = $this->loadModel('build')->getById($build);
-        $this->view->buildID     = $this->view->build ? $this->view->build->id : 0;
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->users       = $users;
-        $this->view->productID   = $productID;
-        $this->view->branchID    = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
-        $this->view->memberPairs = $memberPairs;
-        $this->view->type        = $type;
-        $this->view->param       = $param;
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->bugs           = $bugs;
+        $this->view->tabID          = 'bug';
+        $this->view->build          = $this->loadModel('build')->getById($build);
+        $this->view->buildID        = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->users          = $users;
+        $this->view->productID      = $productID;
+        $this->view->branchID       = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->memberPairs    = $memberPairs;
+        $this->view->type           = $type;
+        $this->view->param          = $param;
+        $this->view->defaultProduct = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
 
         $this->display();
     }
@@ -1967,7 +1968,7 @@ class execution extends control
         $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createLanes($executionID, $browseType, $groupBy);
+            $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 
@@ -2430,6 +2431,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'all');
 
         $this->display();
     }

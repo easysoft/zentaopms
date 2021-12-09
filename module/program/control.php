@@ -513,7 +513,7 @@ class program extends control
         $this->view->dept               = $dept;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->program->getStakeholders($programID, 't1.id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholdersByList($parentIdList);
+        $this->view->parentStakeholders = $this->program->getStakeholdersByPrograms($parentIdList);
 
         $this->display();
     }

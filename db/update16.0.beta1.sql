@@ -84,22 +84,25 @@ CREATE TABLE `zt_kanbancard` (
 
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE `zt_kanbangroup` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
-  `column` mediumint(8) unsigned NOT NULL,
-  `lane` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY  (`column`, `lane`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 -- DROP TABLE IF EXISTS `zt_kanbanorder`;
 CREATE TABLE `zt_kanbanorder` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `parent` mediumint(8) unsigned NOT NULL,
+  `parentID` mediumint(8) unsigned NOT NULL,
   `parentType` varchar(20) NOT NULL,
-  `type` varchar(20) NOT NULL,
+  `objectID` mediumint(8) unsigned NOT NULL,
+  `objectType` varchar(20) NOT NULL,
   `account` varchar(30) NOT NULL,
   `order` int NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 ALTER TABLE `zt_kanbanlane` ADD COLUMN `region` mediumint(8) unsigned NOT NULL AFTER `type`;
+ALTER TABLE `zt_kanbanlane` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;
 ALTER TABLE `zt_kanbancolumn` ADD COLUMN `region` mediumint(8) unsigned NOT NULL AFTER `type`;
+ALTER TABLE `zt_kanbancolumn` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;

@@ -548,10 +548,6 @@ class testcase extends control
         $storyPairs  = $this->loadModel('story')->getProductStoryPairs($productID, $branch === 'all' ? 0 : $branch);
         $storyPairs += $storyID ? array($storyID => $story->id . ':' . $story->title) : array('');
 
-        /* Set module option menu. */
-        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
-        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
-
         /* Set custom. */
         $product = $this->product->getById($productID);
         foreach(explode(',', $this->config->testcase->customBatchCreateFields) as $field)
@@ -588,6 +584,11 @@ class testcase extends control
         {
             $branches = $this->loadModel('branch')->getPairs($productID, 'active');
         }
+
+        /* Set module option menu. */
+        $moduleOptionMenu          = $this->tree->getOptionMenu($productID, 'case', 0, $branch === 'all' ? 0 : $branch);
+        $moduleOptionMenu['ditto'] = $this->lang->testcase->ditto;
+
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -1860,7 +1861,7 @@ class testcase extends control
         $branchModules = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, empty($branches) ? array(0) : array_keys($branches));
         foreach($branchModules as $branchID => $moduleList)
         {
-            foreach($moduleList as $moduleID => $moduleName) $modules[$moduleID] = $moduleName;
+            foreach($moduleList as $moduleID => $moduleName) $modules[$branchID][$moduleID] = $moduleName;
         }
 
         if(!empty($maxImport) and file_exists($tmpFile))
@@ -2048,6 +2049,7 @@ class testcase extends control
         $this->view->product    = $this->products[$productID];
         $this->view->maxImport  = $maxImport;
         $this->view->dataInsert = $insert;
+
         $this->display();
     }
 

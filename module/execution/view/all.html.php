@@ -139,10 +139,10 @@
           <?php if($isStage):?>
           <td><?php echo $execution->percent . '%';?></td>
           <td><?php echo zget($lang->stage->typeList, $execution->attribute, '');?></td>
-          <td><?php echo $execution->begin;?></td>
-          <td><?php echo $execution->end;?></td>
-          <td><?php echo $execution->realBegan;?></td>
-          <td><?php echo $execution->realEnd;?></td>
+          <td><?php echo helper::isZeroDate($execution->begin)     ? '' : $execution->begin;?></td>
+          <td><?php echo helper::isZeroDate($execution->end)       ? '' : $execution->end;?></td>
+          <td><?php echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;?></td>
+          <td><?php echo helper::isZeroDate($execution->realEnd)   ? '' : $execution->realEnd;?></td>
           <td class="c-actions text-center c-actions">
             <?php
                 common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
@@ -213,10 +213,10 @@
              <?php if($isStage):?>
              <td><?php echo $child->percent . '%';?></td>
              <td><?php echo zget($lang->stage->typeList, $child->attribute, '');?></td>
-             <td><?php echo $child->begin;?></td>
-             <td><?php echo $child->end;?></td>
-             <td><?php echo $child->realBegan;?></td>
-             <td><?php echo $child->realEnd;?></td>
+             <td><?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?></td>
+             <td><?php echo helper::isZeroDate($child->end)       ? '' : $child->end;?></td>
+             <td><?php echo helper::isZeroDate($child->realBegan) ? '' : $child->realBegan;?></td>
+             <td><?php echo helper::isZeroDate($child->realEnd)   ? '' : $child->realEnd;?></td>
              <td class="c-actions text-center c-actions">
                 <?php
                   common::printIcon('execution', 'start', "executionID={$child->id}", $child, 'list', '', '', 'iframe', true);

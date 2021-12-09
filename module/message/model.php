@@ -47,10 +47,7 @@ class messageModel extends model
         $objectActions = array();
         foreach($this->config->message->objectTypes as $objectType => $actions)
         {
-            foreach($actions as $action)
-            {
-                $objectActions[$objectType][$action] = str_replace($this->lang->webhook->trimWords, '', $this->lang->action->label->$action);
-            }
+            foreach($actions as $action) $objectActions[$objectType][$action] = $this->lang->message->label->$action;
         }
         return $objectActions;
     }

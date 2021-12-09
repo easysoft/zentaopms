@@ -8,6 +8,7 @@ $(document).on('click', '.task-toggle', function(e)
     e.stopPropagation();
     e.preventDefault();
 });
+
 $(function()
 {
     $('#productplanList tbody tr').each(function()
@@ -24,10 +25,19 @@ $(function()
     {
         var projectID = $('#project').val();
         var planID    = $('#planID').val();
-        $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        if(!projectID)
+        {
+            alert(projectNotEmpty);
+            return false;
+        }
+        else
+        {
+            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        }
         $('#projects').modal('hide');
     });
 });
+
 $(document).on('click', 'td.content .more', function(e)
 {
     var $toggle = $(this);

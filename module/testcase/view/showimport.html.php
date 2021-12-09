@@ -75,13 +75,13 @@ $(function()
                 echo "<sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
             }
             echo html::hidden("product[$key]", $productID);
-            if(!empty($branches)) echo html::hidden("branch[$key]", (isset($case->branch) and $case->branch !== '') ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch));
+            if(!empty($branches)) echo html::hidden("branch[$key]", !empty($case->branch) ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch));
             echo html::hidden("keywords[$key]", isset($case->keywords) ? $case->keywords : "");
             ?>
           </td>
           <td><?php echo html::input("title[$key]", htmlSpecialString($case->title, ENT_QUOTES), "class='form-control'")?></td>
           <td style='overflow:visible'>
-            <?php $caseModules = (isset($case->branch) and $case->branch != 0) ? $modules[BRANCH_MAIN] + $modules[$case->branch] : $modules;?>
+            <?php $caseModules = (isset($case->branch) and $case->branch != 0) ? $modules[BRANCH_MAIN] + $modules[$case->branch] : $modules[BRANCH_MAIN];?>
             <?php echo html::select("module[$key]", $caseModules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
           </td>
           <td style='overflow:visible'>

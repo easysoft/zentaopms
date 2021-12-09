@@ -60,6 +60,7 @@ class testsuiteModel extends model
     public function create($productID)
     {
         $suite = fixer::input('post')
+            ->trim('name')
             ->stripTags($this->config->testsuite->editor->create['id'], $this->config->allowedTags)
             ->setIF($this->config->systemMode == 'new' and $this->lang->navGroup->testsuite != 'qa', 'project', $this->session->project)
             ->add('product', (int)$productID)

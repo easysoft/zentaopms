@@ -14,6 +14,7 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
+<?php js::set('today', helper::today());?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

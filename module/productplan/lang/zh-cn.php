@@ -32,7 +32,7 @@ $lang->productplan->linkedStories    = $lang->SRCommon;
 $lang->productplan->unlinkedStories  = "未关联{$lang->SRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "创建子计划";
-$lang->productplan->createExecution  = "创建{$lang->executionCommon}";
+$lang->productplan->createExecution  = "创建{$lang->execution->common}";
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";
@@ -48,6 +48,7 @@ $lang->productplan->confirmUnlinkBug   = "您确认移除该Bug吗？";
 $lang->productplan->noPlan             = "暂时没有计划。";
 $lang->productplan->cannotDeleteParent = "不能删除父计划";
 $lang->productplan->selectProjects     = "请选择所属项目";
+$lang->productplan->projectNotEmpty    = '所属项目不能为空。';
 $lang->productplan->nextStep           = "下一步";
 
 $lang->productplan->id         = '编号';
@@ -62,7 +63,7 @@ $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->SRCommon}数";
 $lang->productplan->bugs       = 'Bug数';
 $lang->productplan->hour       = $lang->hourCommon;
-$lang->productplan->execution  = $lang->executionCommon;
+$lang->productplan->execution  = $lang->execution->common;
 $lang->productplan->parent     = "父计划";
 $lang->productplan->parentAB   = "父";
 $lang->productplan->children   = "子计划";

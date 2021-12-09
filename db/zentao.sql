@@ -102,7 +102,7 @@ CREATE TABLE `zt_apistruct` (
   `attribute` text NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
   `addedDate` datetime NOT NULL,
-  `editEdBy` varchar(30) NOT NULL DEFAULT 0,
+  `editedBy` varchar(30) NOT NULL DEFAULT 0,
   `editedDate` datetime NOT NULL,
   `deleted` enum ('0', '1') NOT NULL DEFAULT '0',
   primary key (`id`)
@@ -725,17 +725,18 @@ CREATE TABLE `zt_kanbancard` (
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE `zt_kanbangroup` (
+  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
-  `column` mediumint(8) unsigned NOT NULL,
-  `lane` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY  (`column`, `lane`)
+  PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbanorder`;
 CREATE TABLE `zt_kanbanorder` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `parent` mediumint(8) unsigned NOT NULL,
+  `parentID` mediumint(8) unsigned NOT NULL,
   `parentType` varchar(20) NOT NULL,
-  `type` varchar(20) NOT NULL,
+  `objectID` mediumint(8) NOT NULL,
+  `objectType` varchar(20) NOT NULL,
   `account` varchar(30) NOT NULL,
   `order` int NOT NULL,
   PRIMARY KEY (`id`)
@@ -746,6 +747,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
   `execution` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
+  `group` mediumint(8) unsigned NOT NULL,
   `groupby` char(30) NOT NULL,
   `extra` char(30) NOT NULL,
   `name` varchar(255) NOT NULL DEFAULT '',
@@ -759,6 +761,7 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `lane` mediumint(8) NOT NULL DEFAULT '0',
+  `group` mediumint(8) NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,

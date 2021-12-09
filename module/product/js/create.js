@@ -1,6 +1,6 @@
 $(function()
 {
-    if(programID) $('#line_chosen').addClass('hidden');
+    if(programID || systemMode == 'classic') $('#line_chosen').addClass('hidden');
     $('#lineName').css('border-left-color', '');
 })
 /**
@@ -61,12 +61,14 @@ function toggleLine(obj)
     {
         $('form .line-no-exist').removeClass('hidden');
         $('form .line-exist').addClass('hidden');
+        $('#line_chosen').addClass('hidden');
         $line.attr('disabled', 'disabled');
     }
     else
     {
-        $('form .line-exist').removeClass('hidden');
+        $('#line').removeClass('hidden');
         $('form .line-no-exist').addClass('hidden');
+        $('#line_chosen').removeClass('hidden');
         $line.removeAttr('disabled');
     }
 }
