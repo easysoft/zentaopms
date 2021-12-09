@@ -2349,6 +2349,7 @@ class gitlabModel extends model
         $url      = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches");
         $branches = json_decode(commonModel::http($url));
 
+        if(!is_array($branches)) return $branches;
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
