@@ -49,7 +49,7 @@ class kanban extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
-            die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
@@ -75,12 +75,59 @@ class kanban extends control
             $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+            die(js::reload('parent.parent'));
         }
 
         $this->view->space = $this->kanban->getSpaceById($spaceID);
         $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
 
+        $this->display();
+    }
+
+    /**
+     * Close a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function close($kanbanID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->close($kanbanID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanban', $kanbanID, 'closed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->kanban  = $this->kanban->getByID($kanbanID);
+        $this->view->actions = $this->action->getList('kanban', $kanbanID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+     /**
+     * View a kanban.
+     * 
+     * @param  int    $kanbanID 
+     * @access public
+     * @return void
+     */
+    public function view($kanbanID)
+    {
+        $kanban = $this->kanban->getByID($kanbanID);
+
+        $this->view->regions = $this->kanban->getKanbanData($kanbanID);
+        $this->view->kanban  = $kanban;
+        
         $this->display();
     }
 

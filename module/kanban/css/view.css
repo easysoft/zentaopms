@@ -1,0 +1,81 @@
+body {background-color: #fff}
+
+#mainNavbar + #mainContent {background-color: #fff;}
+#mainNavbar + #mainContent.scrollbar-hover {margin-top: 0px; overflow: scroll;}
+#TRAction .icon {padding: 0px 6px; font-size: 14px}
+#searchbox {display: none;}
+
+.has-error .form-control {border-color: #ff4268!important;}
+.has-error .form-control:focus {box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 6px #f5b2a5!important;}
+.has-error .form-control::placeholder {color: #ff4268!important;}
+
+.label.text-red {color: #ff4268;}
+
+.dropdown-menu > li {padding: 0 10px;}
+.dropdown-menu > li > a > .icon {position: relative; left: -5px;}
+
+.region {border: 1px solid #dcdcdc; margin-bottom: 20px;}
+.region .region-header {padding: 10px;}
+.region .region-header span {font-size: 14px; color: #999EAB}
+.region .region-header label {color: #999; background: transparent; border: 1px solid #ddd; margin-left: 10px; margin-right: 10px}
+.region .region-header .action {float: right}
+.region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
+.region.sort .region-header {cursor: move;}
+
+.region .kanban {padding: 0px 10px 10px 10px; min-height: unset;}
+.region .kanban .form-actions {margin: 0;}
+.region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
+
+.region .kanban-board {overflow-x: auto; min-width: 100%!important;}
+.region .kanban-board + .kanban-board {margin-top: 20px;}
+.region .kanban-board > .kanban-header > .kanban-group-header {padding: 8px 2px; width: 20px;}
+.region .kanban-board > .kanban-header > .kanban-group-header:hover {cursor: move;}
+.region .kanban-board.sort > .kanban-header {padding-left: 0;}
+
+.region .kanban-header {border-bottom: none!important; min-width: max-content; min-width: -moz-max-content;}
+.region .kanban-header-col > .title {margin: 0}
+.region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial;}
+.region .kanban-header-col > .title > .text-grey {opacity: .5; font-weight: bold; color: #8b91a2;}
+.region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
+.region .kanban-header-col > .title > .error {color: #333333; padding-left: 5px}
+
+.region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px}
+.region .kanban-lane {min-width: max-content; min-width: -moz-max-content}
+
+.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 100px;}
+.region .kanban-lane > .kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
+.region .kanban-lane > .kanban-lane-name > .actions > a {display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; opacity: .7; color: #fff;}
+.region .kanban-lane > .kanban-lane-name > .actions > a:hover {background-color: rgba(0,0,0,.2); opacity: 1;}
+.region .kanban-lane > .kanban-lane-name:hover > .actions {opacity: 1;}
+.region .kanban-lane.sort > .kanban-lane-name {cursor: move;}
+
+.region .kanban-lane-col {max-height: unset !important; overflow: auto!important; position: relative;}
+.region .kanban-lane-col.drop-to {outline: 3px solid rgba(255, 190, 57, 0.5)!important; background-color: rgba(255, 190, 57, .1);}
+.region .kanban-lane-col.can-drop-here {outline: none; background-color: rgba(61, 198, 253, .075);}
+.region .kanban-lane-col.has-scrollbar {padding-bottom: 50px;}
+.region .kanban-lane-col.has-scrollbar > .kanban-lane-actions {position: absolute; background-color: inherit; bottom: 0; left: 0; right: 0;}
+
+.region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
+
+.region .kanban-item {position: relative}
+.region .kanban-item > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+.region .kanban-item > .title:hover {color: #2272eb}
+.region .kanban-item > .info {margin-top: 5px; position: relative;}
+.region .kanban-item > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
+.region .kanban-item > .info > .time {margin-left: 10px; font-size: 12px}
+.region .kanban-item > .info > .user {position: absolute; right: 0; top: 0}
+.region .kanban-item > .actions {position: absolute; top: 0px; right: 4px; opacity: 0;}
+.region .kanban-item > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.region .kanban-item > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+.region .kanban-item:hover > .actions {opacity: 1;}
+.region .kanban-item.has-color .title,
+.region .kanban-item.has-color .actions .icon-more-v,
+.region .kanban-item.has-color .info > .label-pri,
+.region .kanban-item.has-color .info > .label-light {color: #FFFFFF;}
+.region .kanban-item.has-color .info > .label-pri {border-color: #FFFFFF;}
+.region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
+
+.kanban-col[data-type=ADD] {display: none;}
+.kanban-col[data-type=EMPTY] {display: none;}
+.kanban-item:hover .title {padding-right: 10px;}
+.gray .actions {display:none;}

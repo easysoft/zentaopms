@@ -20,6 +20,7 @@ $config->kanban->editspace->requiredFields     = 'name,owner';
 $config->kanban->editor = new stdclass();
 $config->kanban->editor->createspace = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->editspace   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->close       = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->kanban->default = new stdclass();
 $config->kanban->default->story  = new stdclass();
