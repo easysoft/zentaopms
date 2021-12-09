@@ -30,7 +30,7 @@ class reposEntry extends entry
             $result = array();
             $pager  = $data->data->pager;
             $repos  = $data->data->repoList;
-            foreach($repos as $repo) $result[] = $this->format($repo, 'deleted:bool,lastSync:datetime,synced:bool');
+            foreach($repos as $repo) $result[] = $this->format($repo, 'deleted:bool,lastSync:datetime,synced:bool,product:idList');
 
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'releases' => $result));
         }
