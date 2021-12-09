@@ -63,9 +63,11 @@ function loadBranch()
  */
 function loadProductBranches(productID)
 {
+    var param = '';
+    if(page == 'create') param = 'active';
     $('#branch').remove();
     $('#branch_chosen').remove();
-    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=&projectID=" + executionID), function(data)
+    $.get(createLink('branch', 'ajaxGetBranches', "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + executionID), function(data)
     {
         var $product = $('#product');
         var $inputGroup = $product.closest('.input-group');

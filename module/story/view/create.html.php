@@ -15,6 +15,7 @@
 #product_chosen {border-right:1px solid #dcdcdc;}
 #branch_chosen>a {border-left:0px;}
 </style>
+<?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
