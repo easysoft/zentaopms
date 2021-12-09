@@ -20,7 +20,7 @@ function loadMore(type)
  */
 function fullScreen()
 {
-    var element       = document.getElementById('mainContent');
+    var element       = document.getElementById('kanban');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
     if(requestMethod)
     {
