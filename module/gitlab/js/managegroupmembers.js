@@ -44,3 +44,18 @@ function deleteItem(obj)
     if($('#teamForm .table tbody').children().length < 2) return false;
     $(obj).closest('tr').remove();
 }
+
+$(document).on('change', '[id^="levels"]', function()
+{
+    $next = $(this).closest('td').next()
+    if($(this).val() == '50')
+    {
+        $next.prepend('<input type="text" value="" class="form-control disabled" disabled autocomplete="off" />');
+        $next.find('[id^="expires"]').addClass('hidden');
+    }
+    else
+    {
+        $next.find('[id^="expires"]').removeClass('hidden');
+        $next.find('input.disabled').remove();
+    }
+})
