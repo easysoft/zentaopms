@@ -1248,6 +1248,9 @@ $lang->resource->gitlab->deleteUser           = 'deleteUser';
 $lang->resource->gitlab->webhook              = 'webhook';
 $lang->resource->gitlab->createWebhook        = 'createWebhook';
 $lang->resource->gitlab->manageProjectMembers = 'manageProjectMembers';
+$lang->resource->gitlab->browseBranchPriv     = 'browseBranchPriv';
+$lang->resource->gitlab->setBranchPriv        = 'setBranchPriv';
+$lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';

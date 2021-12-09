@@ -2287,4 +2287,135 @@ class gitlabModel extends model
             ->andWhere('path')->in($projectIDs)
             ->fetchPairs('path', 'product');
     }
+
+    /**
+     * Get branch priv of one project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $keyword
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function apiGetBranchPrivs($gitlabID, $projectID, $keyword = '', $orderBy = 'id_desc')
+    {
+        $keyword  = urlencode($keyword);
+        $url      = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches");
+        $branches = json_decode(commonModel::http($url));
+
+        /* Parse order string. */
+        $order = explode('_', $orderBy);
+
+        $newBranches = array();
+        foreach($branches as $branch)
+        {
+            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[$branch->$order[0]] = $branch;
+        }
+
+        if($order[1] == 'asc')  ksort($newBranches);
+        if($order[1] == 'desc') krsort($newBranches);
+
+        return $newBranches;
+    }
+
+    /**
+     * Get single branch priv by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
+    {
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Create gitlab branch priv.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return bool
+     */
+    public function createBranchPriv($gitlabID, $projectID, $branch = '')
+    {
+        $priv = fixer::input('post')->get();
+        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
+        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
+        if(empty($branch) && !empty($singleBranch->id)) dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
+        if(dao::isError()) return false;
+        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch); 
+
+        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv); 
+
+        if(!empty($response->id))
+        {
+            $action = empty($branch) ? 'created' : 'edited';
+            $this->loadModel('action')->create('gitlabbranchpriv', $response->id, $action, '', $response->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Create a gitab protect branch by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $priv
+     * @access public
+     * @return object
+     */
+    public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
+    {
+        if(empty($priv->name)) return false;
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
+        return json_decode(commonModel::http($url, $priv));
+    }
+
+    /**
+     * Delete a gitab branch priv by api.
+     *
+     * @param  int $gitlabID
+     * @param  int $groupID
+     * @param  int $memberID
+     * @access public
+     * @return object
+     */
+    public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Check access level.
+     *
+     * @param  array $accessLevels
+     * @access public
+     * @return int
+     */
+    public function checkAccessLevel($accessLevels)
+    {
+        $noAccess         = 0;
+        $developerAccess  = 30;
+        $maintainerAccess = 40;
+        if(is_array($accessLevels))
+        {
+            $levels = array();
+            foreach($accessLevels as $level) $levels[] = (int)$level->access_level;
+            if(in_array($noAccess, $levels)) return $noAccess;
+            if(in_array($developerAccess, $levels)) return $developerAccess;
+        }
+        return $maintainerAccess;
+    }
 }

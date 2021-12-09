@@ -15,7 +15,7 @@
 <?php js::set('gitlabID', $gitlabID)?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-left'>
-    <?php echo html::backButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', 'btn btn-secondary');?>
+    <?php echo html::a($this->createLink('gitlab', 'browse'), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
   </div>
   <div id="sidebarHeader">
     <div class="title"><?php echo $this->lang->gitlab->common . ':' . $gitlab->name; ?></div>
@@ -67,6 +67,7 @@
           <td class='text' title='<?php echo substr($gitlabProject->last_activity_at, 0, 10);?>'><?php echo substr($gitlabProject->last_activity_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
+            common::printLink('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-lock'></i> ", '', "title={$lang->gitlab->branch->accessLevel} class='btn btn-primary'");
             common::printLink('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->project->edit} class='btn btn-primary'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteProject}' class='btn'");
             ?>
