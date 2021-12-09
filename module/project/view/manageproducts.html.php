@@ -58,12 +58,13 @@
           <div class='col-sm-4'>
             <div class='product<?php echo isset($branchGroups[$productID]) ? ' has-branch' : ''?>'>
               <div class="checkbox-primary" title='<?php echo $productName;?>'>
-                <?php echo "<input type='checkbox' name='products[$productID]' value='$productID' id='products{$productID}'>";?>
+                <?php echo "<input type='checkbox' name='products[$i]' value='$productID' id='products{$productID}'>";?>
                 <label class='text-ellipsis checkbox-inline' for='<?php echo 'products' . $productID;?>'><?php echo $productName;?></label>
               </div>
-              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$productID]", $branchGroups[$productID], '', "class='form-control chosen'");?>
+              <?php if(isset($branchGroups[$productID])) echo html::select("branch[$i]", $branchGroups[$productID], '', "class='form-control chosen'");?>
             </div>
           </div>
+          <?php $i++;?>
           <?php endforeach;?>
         </div>
       </div>
