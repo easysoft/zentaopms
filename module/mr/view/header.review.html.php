@@ -14,9 +14,9 @@ else
 
 /* get product by cookie or last review in this file. */
 $repoProduct   = isset($_COOKIE['repoPairs'][$repoID]) ? $_COOKIE['repoPairs'][$repoID] : '';
-$repoProduct   = (isset($lastReview->bug) && isset($lastReview->bug->product)) ? $lastReview->bug->product : $repoProduct;
+$repoProduct   = (!empty($lastReview->bug) && isset($lastReview->bug->product)) ? $lastReview->bug->product : $repoProduct;
 $repoProduct   = isset($products[$repoProduct]) ? $repoProduct : key($products);
-$bugRepoModule = (isset($lastReview->bug) && $lastReview->bug->product == $repoProduct) ? $lastReview->bug->module : '';
+$bugRepoModule = (!empty($lastReview->bug) && $lastReview->bug->product == $repoProduct) ? $lastReview->bug->module : '';
 $executions    = $this->mr->getExecutionPairs($repoProduct);
 $modules       = $this->loadModel('tree')->getOptionMenu($repoProduct, $viewType = 'bug', $startModuleID = 0);
 $users         = $this->loadModel('user')->getPairs('devfirst|nodeleted|noclosed');
@@ -25,7 +25,7 @@ $executions    = array('' => '') + $executions;
 
 $taskExecutions = $executions;
 if(empty($repo->product)) $taskExecutions = array('' => '') + $this->loadModel('execution')->getPairs();
-$repoExecution  = (isset($lastReview->task) && isset($lastReview->task->execution)) ? $lastReview->task->execution : $this->session->execution;
+$repoExecution  = (!empty($lastReview->task) && isset($lastReview->task->execution)) ? $lastReview->task->execution : $this->session->execution;
 $repoExecution  = isset($taskExecutions[$repoExecution]) ? $repoExecution : key($taskExecutions);
 $taskModules    = array('' => '');
 $taskRepoModule = 0;
@@ -33,7 +33,7 @@ $taskMembers    = array('' => '');
 if($repoExecution)
 {
     $taskModules    = $this->loadModel('tree')->getTaskOptionMenu($repoExecution, 0, 0, 'allModule');
-    $taskRepoModule = (isset($lastReview->task) && $lastReview->task->execution == $repoExecution) ? $lastReview->task->module : '';
+    $taskRepoModule = (!empty($lastReview->task) && $lastReview->task->execution == $repoExecution) ? $lastReview->task->module : '';
     $taskMembers    = $this->loadModel('user')->getTeamMemberPairs($repoExecution, 'execution', 'nodeleted');
 }
 
