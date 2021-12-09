@@ -19,8 +19,8 @@
       <?php echo html::a($this->createLink('project', 'craetestakeholder', "projectID={$projectID}"), "<span class='text'> {$lang->project->createStakeholder}</span>");?>
     </span>
     <div class='input-group space w-200px'>
-      <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
-      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
+      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
     </div>
     <?php if($project->parent):?>
     <?php echo html::a($this->createLink('project', 'createStakeholder', "projectID=$projectID&dept=&parent=$path"), $lang->project->importStakeholder, '', 'class="btn btn-primary"');?>
