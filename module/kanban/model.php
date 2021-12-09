@@ -228,6 +228,13 @@ class kanbanModel extends model
         return $this->dao->findByID($kanbanID)->from(TABLE_KANBAN)->fetch();
     }
 
+    /**
+     * Get kanban data.
+     * 
+     * @param  int    $kanbanID 
+     * @access public
+     * @return void
+     */
     public function getKanbanData($kanbanID)
     {
         $kanbanData  = array();
@@ -277,7 +284,7 @@ class kanbanModel extends model
      * 
      * @param  int    $kanbanID 
      * @access public
-     * @return void
+     * @return array 
      */
     public function getRegionPairs($kanbanID)
     {    
@@ -352,12 +359,14 @@ class kanbanModel extends model
 
         $actions = array('createColumn', 'copyColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn');
 
+        /* Group by parent. */
         $parentColumnGroup = array();
         foreach($columnGroup as $group => $columns)
         {
             foreach($columns as $column)
             {
                 $column->actions = array();
+                /* Judge column action priv. */
                 foreach($actions as $action)
                 {
                     if($this->isClickable($column, $action)) $column->actions[] = $action;

@@ -1,14 +1,5 @@
-<?php
-include '../../common/view/header.html.php';
-include '../../common/view/kanban.html.php';
-?>
-
-<style>
-.kanban-col[data-type=ADD] {display: none;}
-.kanban-col[data-type=EMPTY] {display: none;}
-.kanban-item:hover .title {padding-right: 10px;}
-.gray .actions {display:none;}
-</style>
+<?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kanban.html.php';?>
 
 <?php
 $laneCount = 0;
@@ -31,24 +22,24 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
 ?>
 
 <div id="kanban">
-<?php foreach($regions as $region):?>
-<div class="region <?php if($canSortRegion) echo 'sort';?>" data-id="<?php echo $region->id;?>">
-  <div class="region-header dropdown">
-    <span class="strong"><?php echo $region->name;?></span>
-    <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
-    <i class="icon icon-double-angle-up"></i>
-    <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
-    <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-more-v"></i></button>
-    <ul class="dropdown-menu pull-right">
-      <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}"), $this->lang->kanban->editRegion, "data-toggle='modal'") . '</li>';?>
-      <?php if($canCreateLane) echo '<li>' . html::a(inlink('createLane', "kanbanID={$project->id}&regionID={$region->id}"), $this->lang->kanban->createLane, "data-toggle='modal'") . '</li>';?>
-      <?php if($canDeleteRegion) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), $this->lang->kanban->deleteRegion, "class='confirmer' data-confirmTitle='{$lang->kanbanregion->confirmDelete}' data-confirmDetail='{$lang->kanbanregion->confirmDeleteDetail}'") . '</li>';?>
-    </ul>
-    <?php endif;?>
+  <?php foreach($regions as $region):?>
+  <div class="region <?php if($canSortRegion) echo 'sort';?>" data-id="<?php echo $region->id;?>">
+    <div class="region-header dropdown">
+      <span class="strong"><?php echo $region->name;?></span>
+      <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
+      <i class="icon icon-double-angle-up"></i>
+      <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
+      <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-more-v"></i></button>
+      <ul class="dropdown-menu pull-right">
+        <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}"), $this->lang->kanban->editRegion, "data-toggle='modal'") . '</li>';?>
+        <?php if($canCreateLane) echo '<li>' . html::a(inlink('createLane', "kanbanID={$project->id}&regionID={$region->id}"), $this->lang->kanban->createLane, "data-toggle='modal'") . '</li>';?>
+        <?php if($canDeleteRegion) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), $this->lang->kanban->deleteRegion, "class='confirmer' data-confirmTitle='{$lang->kanbanregion->confirmDelete}' data-confirmDetail='{$lang->kanbanregion->confirmDeleteDetail}'") . '</li>';?>
+      </ul>
+      <?php endif;?>
+    </div>
+    <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
   </div>
-  <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
-</div>
-<?php endforeach;?>
+  <?php endforeach;?>
 </div>
 <div id='moreTasks'></div>
 <div id='moreColumns'></div>

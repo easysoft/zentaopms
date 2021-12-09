@@ -74,3 +74,8 @@ body {background-color: #fff}
 .region .kanban-item.has-color .info > .label-light {color: #FFFFFF;}
 .region .kanban-item.has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
+
+.kanban-col[data-type=ADD] {display: none;}
+.kanban-col[data-type=EMPTY] {display: none;}
+.kanban-item:hover .title {padding-right: 10px;}
+.gray .actions {display:none;}
