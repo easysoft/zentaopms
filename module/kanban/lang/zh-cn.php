@@ -140,9 +140,16 @@ $lang->kanbanspace->featureBar['my']     = '我的空间';
 $lang->kanbanspace->featureBar['other']  = '其他空间';
 $lang->kanbanspace->featureBar['closed'] = '已关闭';
 
+$lang->kanban->defaultColumn = array('未开始', '进行中', '已完成', '已关闭');
+
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name = $lang->kanban->laneName;
+$lang->kanbanlane->name    = $lang->kanban->laneName;
+$lang->kanbanlane->default = '默认泳道';
+
+$lang->kanbanregion = new stdclass();
+$lang->kanbanregion->name    = '看板区域';
+$lang->kanbanregion->default = '默认区域';

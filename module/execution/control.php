@@ -1968,7 +1968,7 @@ class execution extends control
         $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createLanes($executionID, $browseType, $groupBy);
+            $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 

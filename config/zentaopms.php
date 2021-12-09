@@ -240,6 +240,7 @@ define('TABLE_REPOBRANCH',   '`' . $config->db->prefix . 'repobranch`');
 define('TABLE_KANBANSPACE',  '`' . $config->db->prefix . 'kanbanspace`');
 define('TABLE_KANBANLANE',   '`' . $config->db->prefix . 'kanbanlane`');
 define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
+define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
 if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 
@@ -281,6 +282,7 @@ $config->objectTables['mr']           = TABLE_MR;
 $config->objectTables['kanbanspace']  = TABLE_KANBANSPACE;
 $config->objectTables['kanbancolumn'] = TABLE_KANBANCOLUMN;
 $config->objectTables['kanbanlane']   = TABLE_KANBANLANE;
+$config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 

@@ -14,6 +14,206 @@
 class kanbanModel extends model
 {
     /**
+     * Init a kanban.
+     * 
+     * @param  int    $kanbanID 
+     * @param  string $type default|new
+     * @access public
+     * @return void
+     */
+    public function initKanban($kanbanID, $type = 'default')
+    {
+        $kanban = $this->getByID($kanbanID);
+
+        $function = $from == 'default' ? 'createDefaultRegion' : 'createRegion';
+        $this->$function($kanban);
+        if(dao::isError()) return false;
+
+        $groupID = $this->createGroup($kanban->id, $kanban->region);
+        if(dao::isError()) return false;
+
+        $this->createDefaultLane($kanban, $groupID);
+        if(dao::isError()) return false;
+
+        $this->createDefaultColumns($kanban, $groupID);
+        if(dao::isError()) return false;
+    }
+
+    /**
+     * Create a kanban group.
+     * 
+     * @param  int    $kanbanID 
+     * @param  int    $regionID 
+     * @access public
+     * @return int 
+     */
+    public function createGroup($kanbanID, $regionID)
+    {
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANORDER)
+            ->where('type')->eq('group')
+            ->andWhere('parent')->eq($regionID)
+            ->andWhere('parentType')->eq('region')
+            ->andWhere('account')->eq('')
+            ->fetch('maxOrder');
+
+        $order = $maxOrder ? $maxOrder + 1 : 1;
+
+        $group = new stdclass();
+        $group->kanban = $kanbanID;
+        $group->region = $regionID;
+
+        $this->dao->insert(TABLE_KANBANGROUP)->data($group)->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        $groupID = $this->dao->lastInsertID();
+        $this->saveOrder($regionID, 'region', $groupID, 'group', '', $order);
+
+        return $groupID;
+    }
+
+    /**
+     * Create a default kanban region.
+     * 
+     * @param  object $kanban 
+     * @access public
+     * @return int 
+     */
+    public function createDefaultRegion($kanban)
+    {
+        $region = new stdclass();
+        $region->name           = $this->lang->kanbanregion->default;
+        $region->kanban         = $kanban->id;
+        $region->space          = $kanban->space;
+        $region->createdBy      = $this->app->user->account;
+        $region->createdDate    = helper::today();
+
+        $this->dao->insert(TABLE_KANBANREGION)->data($region)->exec();
+        return $this->createRegion($kanban, $region);
+    }
+
+    /**
+     * Create a new region.
+     * 
+     * @param  object $kanban 
+     * @param  object $region 
+     * @access public
+     * @return int 
+     */
+    public function createRegion($kanban, $region = null)
+    {
+        $account = $this->app->user->account;
+        $order   = 1;
+
+        if(!$region)
+        {    
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANORDER)
+                ->where('type')->eq('region')
+                ->andWhere('parent')->eq($kanban->id)
+                ->andWhere('parentType')->eq('kanban')
+                ->andWhere('account')->eq('')
+                ->fetch('maxOrder');
+
+            $order = $maxOrder + 1;
+
+            $region = fixer::input('post')
+                ->add('kanban', $kanban->id)
+                ->add('space', $kanban->space)
+                ->add('createdBy', $account)
+                ->add('createdDate', helper::today())
+                ->get();
+        }
+
+        $this->dao->insert(TABLE_KANBANREGION)->data($region)
+            ->batchCheck($this->config->kanban->require->createregion, 'notempty')
+            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0'")
+            ->autoCheck()
+            ->exec();
+
+        $regionID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('kanbanRegion', $regionID, 'Created');
+        $this->saveOrder($kanban->id, 'kanban', $regionID, 'region', $account, $order);
+
+        return $regionID;
+    }
+
+    /**
+     * Create default lane.
+     * 
+     * @param  object $kanban 
+     * @access public
+     * @return int 
+     */
+    public function createDefaultLane($kanban)
+    {
+        $lane = new stdclass();
+        $lane->name           = $this->lang->kanbanlane->default;
+        $lane->region         = $kanban->region;
+        $lane->type           = 'common';
+        $lane->lastEditedTime = helper::now();
+
+        $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+        $laneID = $this->dao->lastInsertId();
+
+        $this->saveOrder($kanban->region, 'region', $laneID, 'lane', '', 1);
+        return $laneID;
+    }
+
+    /**
+     * Create default kanban columns.
+     * 
+     * @param  int    $kanban 
+     * @param  int    $laneID 
+     * @access public
+     * @return void
+     */
+    public function createDefaultColumns($kanban, $laneID)
+    {
+        foreach($this->lang->kanban->defaultColumn as $columnName)
+        {
+            $column = new stdclass();
+            $column->region = $kanban->region;
+            $column->name   = $columnName;
+            $column->lane   = $laneID;
+
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($column)->exec();
+            $columnID = $this->dao->lastInsertId();
+
+            $kanbanGroup = new stdclass();
+            $kanbanGroup->region = $kanban->region;
+            $kanbanGroup->column = $columnID;
+            $kanbanGroup->lane   = $laneID;
+
+            $this->dao->insert(TABLE_KANBANGROUP)->data($kanbanGroup)->exec();
+        }
+    }
+
+    /**
+     * Save kanban object order.
+     * 
+     * @param  int    $parentID 
+     * @param  string $parentType 
+     * @param  int    $objectID 
+     * @param  string $objectType 
+     * @param  string $account 
+     * @param  int    $order 
+     * @access public
+     * @return void
+     */
+    public function saveOrder($parentID, $parentType, $objectID, $objectType, $account, $order)
+    {
+        $kanbanOrder = new stdclass();
+        $kanbanOrder->parentID   = $parent;
+        $kanbanOrder->parentType = $parentType;
+        $kanbanOrder->objectID   = $objectID;
+        $kanbanOrder->objectType = $objectType;
+        $kanbanOrder->account    = $account;
+        $kanbanOrder->order      = $order;
+
+        $this->dao->insert(TABLE_KANBANORDER)->data($kanbanOrder)->exec();
+        return !dao::isError();
+    }
+
+    /**
      * Get Kanban by execution id.
      *
      * @param  int    $executionID
@@ -206,7 +406,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createLanes($executionID, $type = 'all', $groupBy = 'default')
+    public function createExecutionLane($executionID, $type = 'all', $groupBy = 'default')
     {
         if($groupBy == 'default' or $type == 'all')
         {
@@ -217,7 +417,7 @@ class kanbanModel extends model
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
                 $laneID = $this->dao->lastInsertId();
-                $this->createColumns($laneID, $type, $executionID);
+                $this->createExecutionColumns($laneID, $type, $executionID);
             }
         }
         else
@@ -266,7 +466,7 @@ class kanbanModel extends model
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
                 $laneID = $this->dao->lastInsertId();
-                $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
+                $this->createExecutionColumns($laneID, $type, $executionID, $groupBy, $groupKey);
             }
         }
     }
@@ -282,7 +482,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createColumns($laneID, $type, $executionID, $groupBy = '', $groupValue = '')
+    public function createExecutionColumns($laneID, $type, $executionID, $groupBy = '', $groupValue = '')
     {
         $objects = array();
 
@@ -615,7 +815,7 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
-            $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
+            $this->createExecutionColumns($laneID, $type, $executionID, $groupBy, $groupKey);
         }
 
         $this->resetLaneOrder($executionID, $type, $groupBy);
