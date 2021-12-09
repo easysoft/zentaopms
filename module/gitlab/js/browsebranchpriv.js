@@ -10,7 +10,13 @@ $(document).ready(function()
     })
 
 });
-// Trigger filtering function.
+
+/**
+ * Trigger filtering function. 
+ * 
+ * @access public
+ * @return void
+ */
 function triggerSearch()
 {
     $("#branchPrivForm").submit();
