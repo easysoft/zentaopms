@@ -80,7 +80,7 @@ class product extends control
     public function project($status = 'all', $productID = 0, $branch = '', $involved = 0, $orderBy = 'order_desc')
     {
         $this->app->loadLang('execution');
-        $this->app->loadLang('project');
+        $this->loadModel('project');
 
         $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
@@ -90,10 +90,13 @@ class product extends control
         /* Get PM id list. */
         $accounts     = array();
         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy);
+        $product      = $this->product->getByID($productID);
+        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
 
         foreach($projectStats as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
+            unset($projects[$project->id]);
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
 
@@ -103,8 +106,11 @@ class product extends control
         $this->view->projectStats = $projectStats;
         $this->view->PMList       = $PMList;
         $this->view->productID    = $productID;
+        $this->view->product      = $product;
+        $this->view->projects     = $projects;
         $this->view->status       = $status;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->branchID     = $branch;
         $this->display();
     }
 

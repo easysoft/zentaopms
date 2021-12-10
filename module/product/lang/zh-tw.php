@@ -33,10 +33,11 @@ $lang->product->changeProgram   = "{$lang->productCommon}調整所屬項目集�
 $lang->product->addWhitelist    = '添加白名單';
 $lang->product->unbindWhitelist = '移除白名單';
 
-$lang->product->indexAction   = "所有{$lang->productCommon}儀表盤";
-$lang->product->closeAction   = "關閉{$lang->productCommon}";
-$lang->product->orderAction   = "{$lang->productCommon}排序";
-$lang->product->exportAction  = "導出{$lang->productCommon}";
+$lang->product->indexAction  = "所有{$lang->productCommon}儀表盤";
+$lang->product->closeAction  = "關閉{$lang->productCommon}";
+$lang->product->orderAction  = "{$lang->productCommon}排序";
+$lang->product->exportAction = "導出{$lang->productCommon}";
+$lang->product->link2Project = "關聯項目";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';

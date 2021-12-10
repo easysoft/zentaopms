@@ -14,6 +14,8 @@
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('noLinkedProject', $lang->productplan->noLinkedProject);?>
+<?php js::set('enterProjectList', $lang->productplan->enterProjectList);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -190,6 +192,10 @@
           <tr>
             <th><?php echo $lang->productplan->project?></th>
             <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr class='tips hidden'>
+            <th></th>
+            <td><span class='text-red'><?php echo $lang->productplan->noLinkedProject;?></span></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center'>

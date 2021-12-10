@@ -18,6 +18,12 @@
     <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
     <div class="tip"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->product->projectInfo;?>></icon></div>
   </div>
+  <?php if($config->systemMode == 'new'):?>
+  <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('project', 'manageProducts')) echo html::a('#link2Project', '<i class="icon-link"></i> ' . $lang->product->link2Project, '', "data-toggle='modal' class='btn btn-secondary'");?>
+    <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$product->program", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
+  </div>
+  <?php endif;?>
 </div>
 <div id="mainContent">
   <?php if(empty($projectStats)):?>
@@ -97,4 +103,29 @@
   <?php endif;?>
 </div>
 <script>$('[data-toggle="popover"]').popover();</script>
+<div class="modal fade" id="link2Project">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><?php echo $lang->product->link2Project;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->product->link2Project?></th>
+            <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
+            <td colspan='2' class='text-center'>
+              <?php echo html::hidden('product', $productID);?>
+              <?php echo html::hidden('branch', $branchID);?>
+              <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-default btn-wide');?>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>

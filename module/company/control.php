@@ -216,7 +216,7 @@ class company extends control
         $this->view->products = $products;
 
         /* Get projects' list.*/
-        $projects = $this->loadModel('project')->getPairsByProgram(0);
+        $projects = $this->loadModel('project')->getPairsByProgram();
         $this->view->projects = array($this->lang->company->project) + $projects;;
 
         /* Get executions' list.*/

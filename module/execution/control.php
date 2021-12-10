@@ -2026,7 +2026,7 @@ class execution extends control
     public function executionKanban()
     {
         $this->loadModel('project');
-        $projects   = $this->project->getPairsByProgram(0, 'noclosed');
+        $projects   = $this->project->getPairsByProgram('', 'noclosed');
         $executions = $this->project->getStats(0, 'all', 0, 0, 30, 'id_desc');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)

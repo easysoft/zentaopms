@@ -374,7 +374,7 @@ class productplan extends control
     public function ajaxGetProjects($productID, $branch = 0)
     {
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch);
-        die(html::select('project', $projects, '', "class='form-control chosen'"));
+        die(html::select('project', $projects, key($projects), "class='form-control chosen'"));
     }
 
     /**

@@ -142,7 +142,7 @@ class group extends control
 
         $this->view->group      = $group;
         $this->view->programs   = $this->loadModel('program')->getPairs(true, 'order_desc');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0, 'all', true, 'order_desc');
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram('', 'all', true, 'order_desc');
         $this->view->executions = $this->loadModel('execution')->getPairs(0, 'all', 'all');
         $this->view->products   = $this->loadModel('product')->getPairs();
 
