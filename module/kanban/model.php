@@ -152,6 +152,7 @@ class kanbanModel extends model
         $lane->region         = $regionID;
         $lane->type           = 'common';
         $lane->lastEditedTime = helper::now();
+        $lane->color          = '#7ec5ff';
 
         $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
         $laneID = $this->dao->lastInsertId();
@@ -180,6 +181,7 @@ class kanbanModel extends model
             $column->name   = $columnName;
             $column->type   = $index;
             $column->limit  = -1;
+            $column->color  = '#333';
 
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($column)->exec();
 
