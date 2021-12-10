@@ -2460,7 +2460,11 @@ class gitlabModel extends model
         if(is_array($accessLevels))
         {
             $levels = array();
-            foreach($accessLevels as $level) $levels[] = (int)$level->access_level;
+            foreach($accessLevels as $level) 
+            {
+                if(is_array($level)) $level = json_encode($level);
+                $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
+            }
             if(in_array($noAccess, $levels)) return $noAccess;
             if(in_array($developerAccess, $levels)) return $developerAccess;
         }
