@@ -50,7 +50,8 @@ function loadProductBranches(productID)
     var param = '';
     if(page == 'create') param = 'active';
     $('#branch').remove();
-    var param = (typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) ? "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + objectID : "productID=" + productID + "&oldBranch=0&param=" + param;
+    var param = "productID=" + productID + "&oldBranch=0&param=" + param;
+    param += (typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) ? "&projectID=" + objectID : "";
     $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
