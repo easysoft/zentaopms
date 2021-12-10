@@ -8,8 +8,8 @@ title=测试 mrModel::getReview();
 cid=1
 pid=1
 
-使用空的repoID, MRID, revision >> return null
-使用正确的repoID, MRID >> return normal
+使用空的repoID, MRID, revision         >> return null
+使用正确的repoID, MRID                 >> return normal
 使用正确的repoID, MRID, 错误的revision >> return null
 
 */
@@ -24,7 +24,7 @@ $result = $mrModel->getReview($repoID, $MRID, $revision);
 if(empty($result)) $result = 'return null';
 r($result) && p() && e('return null'); //使用空的repoID, MRID, revision
 
-$MR = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
+$MR     = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
 $repoID = $MR->repoID;
 $MRID   = $MR->id;
 $result = $mrModel->getReview($repoID, $MRID, $revision);
@@ -36,6 +36,6 @@ if(!empty($result))
 r($result) && p() && e('return normal'); //使用正确的repoID, MRID
 
 $revision = '123qwe';
-$result = $mrModel->getReview($repoID, $MRID, $revision);
+$result   = $mrModel->getReview($repoID, $MRID, $revision);
 if(empty($result)) $result = 'return null';
 r($result) && p() && e('return null'); //使用正确的repoID, MRID, 错误的revision

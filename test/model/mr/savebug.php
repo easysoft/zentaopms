@@ -8,15 +8,14 @@ title=测试 mrModel::saveBug();
 cid=1
 pid=1
 
-使用空的repoID, MRID >> return false
-使用正确的repoID, MRID。空的title。 >> return false
+使用空的repoID, MRID                   >> return false
+使用正确的repoID, MRID。空的title。    >> return false
 使用正确的repoID, MRID。POST数据正确。 >> Test Bug Review
 
 */
 
 $mrModel = $tester->loadModel('mr');
 
-$MR = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
 $_POST = array();
 $_POST['title']       = 'Test Bug Review';
 $_POST['commentText'] = 'Test Bug Review';
@@ -35,6 +34,7 @@ if($result['result'] == 'fail' and isset($result['message']['mr']) and isset($re
 r($result) && p() && e('return false'); //使用空的repoID, MRID
 
 $_POST['title'] = '';
+$MR     = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
 $result = $mrModel->saveBug($MR->repoID, $MR->id, $v1, $v2);
 if($result['result'] == 'fail' and isset($result['message']['title'])) $result = 'return false';
 r($result) && p() && e('return false'); //使用正确的repoID, MRID。空的title。

@@ -16,7 +16,6 @@ pid=1
 
 $mrModel = $tester->loadModel('mr');
 
-$MR = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
 $_POST = array();
 $_POST['title']          = 'Test Task Review';
 $_POST['commentText']    = 'Test Task Review';
@@ -36,6 +35,7 @@ if($result['result'] == 'fail' and isset($result['message']['mr']) and isset($re
 r($result) && p() && e('return false'); //使用空的repoID, MRID
 
 $_POST['title'] = '';
+$MR     = $tester->dao->select('*')->from(TABLE_MR)->orderBy('id_desc')->limit(1)->fetch();
 $result = $mrModel->saveTask($MR->repoID, $MR->id, $v1, $v2);
 if($result['result'] == 'fail' and isset($result['message']['name'])) $result = 'return false';
 r($result) && p() && e('return false'); //使用正确的repoID, MRID。空的title。
