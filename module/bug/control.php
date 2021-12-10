@@ -803,9 +803,9 @@ class bug extends control
         }
 
         /* Get product info. */
-        $productID   = $bug->product;
-        $product     = $this->loadModel('product')->getByID($productID);
-        $branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
+        $productID = $bug->product;
+        $product   = $this->loadModel('product')->getByID($productID);
+        $branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($bug->product);
 
         $this->executeHooks($bugID);
 
