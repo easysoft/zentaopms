@@ -764,7 +764,8 @@ class kanbanModel extends model
 
         return $laneID;
     }
-
+   
+    /*
      * Create a kanban.
      *
      * @access public
