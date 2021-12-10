@@ -47,15 +47,19 @@ function deleteItem(obj)
 
 $(document).on('change', '[id^="levels"]', function()
 {
+    $tr   = $(this).closest('tr');
     $next = $(this).closest('td').next()
-    if($(this).val() == '50')
+    var ownerLevel = 50;
+    if($(this).val() == ownerLevel)
     {
         $next.prepend('<input type="text" value="" class="form-control disabled" disabled autocomplete="off" />');
         $next.find('[id^="expires"]').addClass('hidden');
+        $tr.find('a[onclick^="deleteItem"]').addClass('disabled');
     }
     else
     {
         $next.find('[id^="expires"]').removeClass('hidden');
         $next.find('input.disabled').remove();
+        $tr.find('a[onclick^="deleteItem"]').removeClass('disabled');
     }
 })
