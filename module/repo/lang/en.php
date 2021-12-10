@@ -146,6 +146,7 @@ $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
 $lang->repo->notice->delete         = 'Do you want to delete this repo?';
 $lang->repo->notice->successDelete  = 'Repository is removed.';
 $lang->repo->notice->commentContent = 'Comment';
+$lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
 $lang->repo->notice->deleteBug      = 'Do you want to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Do you want to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';

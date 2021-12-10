@@ -552,7 +552,7 @@ class mrModel extends model
     public function getDiffs($MR, $encoding = '')
     {
         $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        $gitlab = $this->gitlab->getByID($MR->gitlabID);
+        $gitlab       = $this->gitlab->getByID($MR->gitlabID);
 
         $this->loadModel('repo');
         $repo = new stdclass;
@@ -570,7 +570,7 @@ class mrModel extends model
         foreach ($diffVersions as $diffVersion)
         {
             $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
-            if ($singleDiff->state == 'empty') continue;
+            if($singleDiff->state == 'empty') continue;
             $commits = $singleDiff->commits;
             $diffs   = $singleDiff->diffs;
             foreach ($diffs as $index => $diff)
@@ -586,9 +586,10 @@ class mrModel extends model
                 $lines[] = sprintf("--a/%s", $diff->old_path);
                 $lines[] = sprintf("--b/%s", $diff->new_path);
                 $diffLines = explode("\n", $diff->diff);
-                foreach ($diffLines as $diffLine) $lines[] = $diffLine;
+                foreach($diffLines as $diffLine) $lines[] = $diffLine;
             }
         }
+
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
         $diff = $scm->engine->parseDiff($lines);
@@ -785,45 +786,46 @@ class mrModel extends model
      * Get review.
      *
      * @param  int    $repoID
-     * @param  string $entry
+     * @param  int    $MRID
      * @param  string $revision
      * @access public
      * @return array
      */
-    public function getReview($repoID, $entry, $revision)
+    public function getReview($repoID, $MRID, $revision = '')
     {
         $reviews = array();
         $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.openedBy = t2.account')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
             ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.entry')->eq($entry)
-            ->andWhere('t1.v2')->eq($revision)
+            ->andWhere('t1.mr')->eq($MRID)
+            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
-        $comments = $this->dao->select('t1.*, t2.realname')->from(TABLE_ACTION)->alias('t1')
-            ->leftJoin(TABLE_USER)->alias('t2')
-            ->on('t1.actor = t2.account')
-            ->where('t1.objectType')->eq('bug')
-            ->andWhere('t1.objectID')->in(array_keys($bugs))
-            ->andWhere('t1.action')->eq('commented')
-            ->fetchGroup('objectID', 'id');
         foreach($bugs as $bug)
         {
             if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
             if(common::hasPriv('bug', 'delete')) $bug->delete = true;
+            if(common::hasPriv('bug', 'view'))   $bug->view   = true;
             $lines = explode(',', trim($bug->lines, ','));
             $line  = $lines[0];
-            $reviews[$line]['bugs'][$bug->id] = $bug;
+            $reviews[$line]['bug'][$bug->id] = $bug;
+        }
 
-            if(isset($comments[$bug->id]))
-            {
-                foreach($comments[$bug->id] as $key => $comment)
-                {
-                    if($comment->actor == $this->app->user->account) $comment->edit = true;
-                }
-                $reviews[$line]['comments'] = $comments;
-            }
+        $tasks = $this->dao->select('t1.*, t2.realname')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
+            ->where('t1.repo')->eq($repoID)
+            ->andWhere('t1.mr')->eq($MRID)
+            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+        foreach($tasks as $task)
+        {
+            if(common::hasPriv('task', 'edit'))   $task->edit   = true;
+            if(common::hasPriv('task', 'delete')) $task->delete = true;
+            if(common::hasPriv('task', 'view'))   $task->view   = true;
+            $lines = explode(',', trim($task->lines, ','));
+            $line  = $lines[0];
+            $reviews[$line]['task'][$task->id] = $task;
         }
 
         return $reviews;
@@ -881,43 +883,154 @@ class mrModel extends model
      * Save bug.
      *
      * @param  int    $repoID
-     * @param  string $file
+     * @param  int    $mr
      * @param  int    $v1
      * @param  int    $v2
      * @access public
      * @return array
      */
-    public function saveBug($repoID, $file, $v1, $v2)
+    public function saveBug($repoID, $mr, $v1, $v2)
     {
         $now  = helper::now();
         $data = fixer::input('post')
-            ->add('severity', 3)
+            ->stripTags('commentText', $this->config->allowedTags)
+            ->add('pri', 2)
+            ->add('severity', 2)
             ->add('openedBy', $this->app->user->account)
             ->add('openedDate', $now)
             ->add('openedBuild', 'trunk')
-            ->add('assignedDate', $now)
-            ->add('type', 'codeimprovement')
+            ->add('type', 'codeerror')
             ->add('repo', $repoID)
-            ->add('entry', $file)
+            ->add('mr', $mr)
             ->add('lines', $this->post->begin . ',' . $this->post->end)
             ->add('v1', $v1)
             ->add('v2', $v2)
-            ->remove('commentText,begin,end,uid')
+            ->cleanInt('module,execution,mr,repo')
+            ->remove('begin,end,uid,reviewType,taskExecution,taskModule,taskAssignedTo')
             ->get();
 
-        $data->steps = $this->loadModel('file')->pasteImage($this->post->commentText, $this->post->uid);
-        $this->dao->insert(TABLE_BUG)->data($data)->exec();
+        $data->steps = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
+        if($data->assignedTo) $data->assignedDate = $now;
+        unset($data->commentText);
+
+        $this->loadModel('bug');
+        foreach(explode(',', $this->config->bug->create->requiredFields) as $requiredField)
+        {
+            $requiredField = trim($requiredField);
+            if(empty($requiredField)) continue;
+            if(!isset($data->$requiredField)) continue;
+            if(empty($data->$requiredField))
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
+                dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $this->dao->insert(TABLE_BUG)->data($data)->autocheck()->exec();
 
         if(!dao::isError())
         {
             $bugID = $this->dao->lastInsertID();
-            $this->file->updateObjectID($this->post->uid, $bugID, 'bug');
+            $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
             setcookie("repoPairs[$repoID]", $data->product);
 
-            return array('result' => 'success', 'id' => $bugID, 'realname' => $this->app->user->realname, 'openedDate' => substr($now, 5, 11), 'edit' => true, 'delete' => true, 'lines' => $data->lines, 'line' => $this->post->begin, 'steps' => $data->steps, 'title' => $data->title);
+            $bugInfo = array();
+            $bugInfo['result']     = 'success';
+            $bugInfo['id']         = $bugID;
+            $bugInfo['realname']   = $this->app->user->realname;
+            $bugInfo['openedDate'] = substr($now, 5, 11);
+            $bugInfo['edit']       = common::hasPriv('bug', 'edit');
+            $bugInfo['view']       = common::hasPriv('bug', 'view');
+            $bugInfo['delete']     = common::hasPriv('bug', 'delete');
+            $bugInfo['lines']      = $data->lines;
+            $bugInfo['line']       = $this->post->begin;
+            $bugInfo['content']    = $data->steps;
+            $bugInfo['title']      = $data->title;
+            $bugInfo['objectType'] = 'bug';
+            $bugInfo['entry']      = $data->entry;
+            return $bugInfo;
         }
 
-        return array('result' => 'fail', 'message' => join("\n", dao::getError()));
+        return array('result' => 'fail', 'message' => dao::getError());
+    }
+
+    /**
+     * Save task.
+     *
+     * @param  int    $repoID
+     * @param  int    $mr
+     * @param  int    $v1
+     * @param  int    $v2
+     * @access public
+     * @return array
+     */
+    public function saveTask($repoID, $mr, $v1, $v2)
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')->stripTags('commentText', $this->config->allowedTags)->get();
+
+        $task = new stdclass();
+        $task->execution  = (int)$data->taskExecution;
+        $task->project    = (int)$this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('project');
+        $task->module     = (int)$data->taskModule;
+        $task->name       = $data->title;
+        $task->type       = 'devel';
+        $task->pri        = '2';
+        $task->status     = 'wait';
+        $task->version    = '1';
+        $task->openedBy   = $this->app->user->account;
+        $task->assignedTo = $data->taskAssignedTo;
+        $task->repo       = (int)$repoID;
+        $task->mr         = (int)$mr;
+        $task->lines      = $this->post->begin . ',' . $this->post->end;
+        $task->entry      = $data->entry;
+        $task->v1         = $v1;
+        $task->v2         = $v2;
+        $task->desc       = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
+        if($task->assignedTo) $task->assignedDate = $now;
+
+        $this->loadModel('task');
+        foreach(explode(',', $this->config->task->create->requiredFields) as $requiredField)
+        {
+            $requiredField = trim($requiredField);
+            if(empty($requiredField)) continue;
+            if(!isset($task->$requiredField)) continue;
+            if(empty($task->$requiredField))
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->task->$requiredField)) $fieldName = $this->lang->task->$requiredField;
+                dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $this->dao->insert(TABLE_TASK)->data($task)->autocheck()->exec();
+
+        if(!dao::isError())
+        {
+            $taskID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
+
+            $taskInfo = array();
+            $taskInfo['result']     = 'success';
+            $taskInfo['id']         = $taskID;
+            $taskInfo['realname']   = $this->app->user->realname;
+            $taskInfo['openedDate'] = substr($now, 5, 11);
+            $taskInfo['edit']       = common::hasPriv('task', 'edit');
+            $taskInfo['view']       = common::hasPriv('task', 'view');
+            $taskInfo['delete']     = common::hasPriv('task', 'delete');
+            $taskInfo['lines']      = $task->lines;
+            $taskInfo['line']       = $this->post->begin;
+            $taskInfo['content']    = $task->desc;
+            $taskInfo['title']      = $data->title;
+            $taskInfo['objectType'] = 'task';
+            $taskInfo['entry']      = $task->entry;
+            return $taskInfo;
+        }
+
+        return array('result' => 'fail', 'message' => dao::getError());
     }
 
     /**
@@ -963,13 +1076,17 @@ class mrModel extends model
     /**
      * Get last review info.
      *
-     * @param  string $entry
+     * @param  int    $repoID
      * @access public
      * @return object
      */
-    public function getLastReviewInfo($entry)
+    public function getLastReviewInfo($repoID)
     {
-        return $this->dao->select('*')->from(TABLE_BUG)->where('entry')->eq($entry)->orderby('id_desc')->fetch();
+        $lastReview = new stdclass();
+        $lastReview->bug  = $this->dao->select('*')->from(TABLE_BUG)->where('repo')->eq($repoID)->orderby('id_desc')->fetch();
+        $lastReview->task = $this->dao->select('*')->from(TABLE_TASK)->where('repo')->eq($repoID)->orderby('id_desc')->fetch();
+
+        return $lastReview;
     }
 
     /**

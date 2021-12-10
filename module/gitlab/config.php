@@ -8,6 +8,9 @@ $config->gitlab->edit->requiredFields = 'name,url,token';
 $config->gitlab->createbranch = new stdclass;
 $config->gitlab->createbranch->requiredFields = 'branch,ref';
 
+$config->gitlab->createbranchpriv = new stdclass;
+$config->gitlab->createbranchpriv->requiredFields = 'name';
+
 $config->gitlab->labelPattern = new stdclass;
 $config->gitlab->labelPattern->task  = '/^zentao_task\/\d+$/';
 $config->gitlab->labelPattern->bug   = '/^zentao_bug\/\d+$/';
