@@ -2376,6 +2376,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
     {
+        if(empty($gitlabID)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
         return json_decode(commonModel::http($url));
     }
