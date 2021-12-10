@@ -52,6 +52,9 @@ $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
 
+$lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
+$lang->kanban->createColumnOnRight = '在右侧添加看板列';
+
 $lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
@@ -192,6 +195,7 @@ $lang->kanbanspace->featureBar['closed'] = '已关闭';
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
+$lang->kanbancolumn->color = '看板列颜色';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name       = $lang->kanban->laneName;

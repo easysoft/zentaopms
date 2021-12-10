@@ -29,11 +29,11 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
       <i class="icon icon-double-angle-up"></i>
       <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
-      <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-more-v"></i></button>
+      <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
       <ul class="dropdown-menu pull-right">
-        <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}"), $this->lang->kanban->editRegion, "data-toggle='modal'") . '</li>';?>
-        <?php if($canCreateLane) echo '<li>' . html::a(inlink('createLane', "kanbanID={$project->id}&regionID={$region->id}"), $this->lang->kanban->createLane, "data-toggle='modal'") . '</li>';?>
-        <?php if($canDeleteRegion) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), $this->lang->kanban->deleteRegion, "class='confirmer' data-confirmTitle='{$lang->kanbanregion->confirmDelete}' data-confirmDetail='{$lang->kanbanregion->confirmDeleteDetail}'") . '</li>';?>
+        <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), $this->lang->kanban->editRegion, '', 'class="iframe"') . '</li>';?>
+        <?php if($canCreateLane) echo '<li>' . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$region->id}", '', 1), $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
+        <?php if($canDeleteRegion) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
       </ul>
       <?php endif;?>
     </div>

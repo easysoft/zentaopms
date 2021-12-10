@@ -218,6 +218,33 @@ class kanban extends control
         $this->display();
     }
 
+    /**
+     * Create a column for a kanban.
+     *
+     * @param  int    $columnID
+     * @param  string $position left|right
+     * @access public
+     * @return void
+     */
+    public function createColumn($columnID, $position = 'left')
+    {
+        $column = $this->kanban->getColumnByID($columnID);
+
+        if($_POST)
+        {   
+            $order    = $position == 'left' ? $column->order : $column->order + 1;
+            $columnID = $this->kanban->createColumn($column->region, null, $order);
+            $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent', 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $column->region));
+        }   
+
+        $this->view->title    = $this->lang->kanban->createColumn;
+        $this->view->column   = $column;
+        $this->view->position = $position;
+        $this->display();
+    }
 
     /**
      * Set WIP.
