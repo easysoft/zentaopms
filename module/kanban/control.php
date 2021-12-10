@@ -110,7 +110,7 @@ class kanban extends control
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->spaceID    = $spaceID;
-        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs();
 
         $this->display();
     }
@@ -138,7 +138,7 @@ class kanban extends control
         }
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs();
         $this->view->kanban     = $this->kanban->getByID($kanbanID);
 
         $this->display();

@@ -542,6 +542,7 @@ $lang->action->label->design       = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder  = '干系人|stakeholder|view|userID=%s';
 $lang->action->label->api          = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
 $lang->action->label->kanbanspace  = '看板空间|kanban|space|browseType=all';
+$lang->action->label->kanbanregion = '看板区域|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = '看板|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
