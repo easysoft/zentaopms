@@ -2349,6 +2349,7 @@ class gitlabModel extends model
         $url      = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches");
         $branches = json_decode(commonModel::http($url));
 
+        if(!is_array($branches)) return $branches;
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
@@ -2375,6 +2376,7 @@ class gitlabModel extends model
      */
     public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
     {
+        if(empty($gitlabID)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
         return json_decode(commonModel::http($url));
     }
@@ -2420,6 +2422,7 @@ class gitlabModel extends model
      */
     public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
     {
+        if(empty($gitlabID)) return false;
         if(empty($priv->name)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
         return json_decode(commonModel::http($url, $priv));
@@ -2436,6 +2439,7 @@ class gitlabModel extends model
      */
     public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
     {
+        if(empty($gitlabID)) return false;
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
@@ -2456,7 +2460,11 @@ class gitlabModel extends model
         if(is_array($accessLevels))
         {
             $levels = array();
-            foreach($accessLevels as $level) $levels[] = (int)$level->access_level;
+            foreach($accessLevels as $level) 
+            {
+                if(is_array($level)) $level = (object)$level;
+                $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
+            }
             if(in_array($noAccess, $levels)) return $noAccess;
             if(in_array($developerAccess, $levels)) return $developerAccess;
         }
