@@ -19,18 +19,24 @@
         </tr>
       </thead>
       <tbody>
+        <?php $ownerLevel = 50;?>
         <?php $i = 0;?>
         <?php foreach($currentMembers as $member):?>
         <tr>
           <td><?php echo html::input("names[$i]", $member->name, "class='form-control' readonly");?></td>
           <td><?php echo html::select("levels[$i]", array(''=>'') + $this->lang->gitlab->accessLevels, $member->access_level, "class='form-control chosen'");?></td>
           <td>
+            <?php if($member->access_level == $ownerLevel):?>
+            <input type="text" value="" class="form-control disabled" disabled autocomplete="off" />
+            <?php echo html::input("expires[$i]", $member->expires_at, "class='form-control form-date hidden'");?>
+            <?php else:?>
             <?php echo html::input("expires[$i]", $member->expires_at, "class='form-control form-date'");?>
+            <?php endif;?>
             <?php echo html::hidden("ids[$i]", $member->id);?>
           </td>
           <td class='c-actions text-center'>
             <?php echo html::a('javascript:;', "<i class='icon-plus'></i>", '', "onclick='addItem(this)' class='btn btn-link'");?>
-            <?php echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "onclick='deleteItem(this)' class='btn btn-link'");?>
+            <?php echo html::a('javascript:;', "<i class='icon icon-close'></i>", '', "onclick='deleteItem(this)' class='btn btn-link" . ($member->access_level == $ownerLevel ? ' disabled' : '') . "'");?>
           </td>
         </tr>
         <?php $i ++;?>

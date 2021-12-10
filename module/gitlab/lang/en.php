@@ -63,7 +63,7 @@ $lang->gitlab->lblCreate     = 'Create GitLab Server';
 $lang->gitlab->desc          = 'Description';
 $lang->gitlab->tokenFirst    = 'When the Token is not empty, the Token will be used first';
 $lang->gitlab->tips          = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
-$lang->gitlab->emptyError    = "cannot be empty";
+$lang->gitlab->emptyError    = " cannot be empty";
 $lang->gitlab->createSuccess = "Create success";
 
 $lang->gitlab->placeholder = new stdclass;
@@ -91,12 +91,14 @@ $lang->gitlab->apiError[1] = 'public is not allowed in a private group.';
 $lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
 $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 $lang->gitlab->apiError[4] = 'Branch already exists';
+$lang->gitlab->apiError[5] = 'Failed to save group {:path=>["has already been taken"]}';
 
 $lang->gitlab->errorLang[0] = 'You cannot set Internal as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[1] = 'You cannot set Public as its Visibility Level, if it is private in GitLab.';
 $lang->gitlab->errorLang[2] = 'Password is too short (minimum is 8 characters)';
 $lang->gitlab->errorLang[3] = 'It should contain only letters, digits, underscore, hyphen and period.  It should not start with hypen, or end with .git or .atom.';
 $lang->gitlab->errorLang[4] = 'Branch already exists.';
+$lang->gitlab->errorLang[5] = 'Failed to save group, path has already been taken.';
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "Project ID";
@@ -184,7 +186,7 @@ $lang->gitlab->group->memberExpiresAt                         = 'Expiration time
 $lang->gitlab->group->repeatError                             = "Group members cannot be added repeatedly";
 
 $lang->gitlab->branch = new stdclass();
-$lang->gitlab->branch->name                        = 'Branch Name';
+$lang->gitlab->branch->name                        = 'Branch name';
 $lang->gitlab->branch->from                        = 'Create from';
 $lang->gitlab->branch->create                      = 'Create';
 $lang->gitlab->branch->lastCommitter               = 'Last Committer';

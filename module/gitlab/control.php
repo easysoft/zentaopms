@@ -948,7 +948,6 @@ class gitlab extends control
         if($gitlab) $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(empty($user->is_admin)) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
-
         if($_POST)
         {
             $executionList  = $this->post->executionList;
@@ -958,38 +957,40 @@ class gitlab extends control
             $failedIssues = array();
             foreach($executionList as $issueID => $executionID)
             {
-                if($executionID)
+                if(empty($executionID) and $productList[$issueID] != 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
+            }
+
+            foreach($executionList as $issueID => $executionID)
+            {
+                if(empty($executionID)) continue;
+
+                $objectType = $objectTypeList[$issueID];
+
+                $issue             = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
+                $issue->objectType = $objectType;
+                $issue->objectID   = 0; // Meet the required parameters for issueToZentaoObject.
+                if(isset($issue->assignee)) $issue->assignee_id = $issue->assignee->id;
+                $issue->updated_by_id = $issue->author->id; // Here can be replaced by current zentao user.
+
+                $object            = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
+                $object->product   = $productList[$issueID];
+                $object->execution = $executionID;
+                $clonedObject      = clone $object;
+
+                if($objectType == 'task')  $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($clonedObject, $executionID);
+                if($objectType == 'bug')   $objectID = $this->loadModel('bug')->createBugFromGitlabIssue($clonedObject, $executionID);
+                if($objectType == 'story') $objectID = $this->loadModel('story')->createStoryFromGitlabIssue($clonedObject, $executionID);
+
+                if($objectID)
                 {
-                    $objectType = $objectTypeList[$issueID];
+                    $this->loadModel('action')->create($objectType, $objectID, 'ImportFromGitlab', '', $issueID);
 
-                    $issue             = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);
-                    $issue->objectType = $objectType;
-                    $issue->objectID   = 0; // Meet the required parameters for issueToZentaoObject.
-                    if(isset($issue->assignee)) $issue->assignee_id = $issue->assignee->id;
-                    $issue->updated_by_id = $issue->author->id; // Here can be replaced by current zentao user.
-
-                    $object            = $this->gitlab->issueToZentaoObject($issue, $gitlabID);
-                    $object->product   = $productList[$issueID];
-                    $object->execution = $executionID;
-                    $clonedObject      = clone $object;
-
-                    if($objectType == 'task')  $objectID = $this->loadModel('task')->createTaskFromGitlabIssue($clonedObject, $executionID);
-                    if($objectType == 'bug')   $objectID = $this->loadModel('bug')->createBugFromGitlabIssue($clonedObject, $executionID);
-                    if($objectType == 'story') $objectID = $this->loadModel('story')->createStoryFromGitlabIssue($clonedObject, $executionID);
-
-                    if($objectID)
-                    {
-                        $object->id = $objectID;
-                        $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
-                    }
-                    else
-                    {
-                        $failedIssues[] = $issue->iid;
-                    }
+                    $object->id = $objectID;
+                    $this->gitlab->saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object);
                 }
                 else
                 {
-                    if($productList[$issueID] != 0) return $this->send(array('result' => 'fail', 'message' => $this->lang->gitlab->importIssueError, 'locate' => $this->server->http_referer));
+                    $failedIssues[] = $issue->iid;
                 }
             }
 

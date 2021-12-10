@@ -300,7 +300,7 @@ class mr extends control
      * @access public
      * @return void
      */
-    public function diff($MRID, $encoding= '')
+    public function diff($MRID, $encoding = '')
     {
         $this->app->loadLang('productplan');
         $this->app->loadLang('bug');
@@ -316,7 +316,7 @@ class mr extends control
         $this->view->rawMR = $rawMR;
         if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
-        $diffs   = $this->mr->getDiffs($MR, $encoding = '');
+        $diffs   = $this->mr->getDiffs($MR, $encoding);
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';
 
         if($this->server->request_method == 'POST')
@@ -455,7 +455,6 @@ class mr extends control
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->stories      = $stories;
-        $this->view->summary      = $this->loadModel('product')->summary($stories);
         $this->view->bugs         = $bugs;
         $this->view->tasks        = $tasks;
         $this->view->product      = $product;
@@ -782,49 +781,37 @@ class mr extends control
     }
 
     /**
-     * Add a Bug for this review.
+     * Add a review for this review.
      *
      * @param  int    $repoID
-     * @param  string $file
+     * @param  int    $mr
      * @param  int    $v1
      * @param  int    $v2
      * @access public
      * @return void
      */
-    public function addBug($repoID, $file, $v1, $v2)
+    public function addReview($repoID, $mr, $v1, $v2)
     {
         /* Handle the exception that when $repoID is empty. */
         if($repoID == "0") $this->send(array());
 
         $this->loadModel('repo');
-        if($this->get->repoPath) $file = $this->get->repoPath;
         if(!empty($_POST))
         {
-            $result = $this->mr->saveBug($repoID, $file, $v1, $v2);
-            if(dao::isError()) die(json_encode($result));
+            if($this->post->reviewType == 'bug')  $result = $this->mr->saveBug($repoID, $mr, $v1, $v2);
+            if($this->post->reviewType == 'task') $result = $this->mr->saveTask($repoID, $mr, $v1, $v2);
+            if($result['result'] == 'fail') die(json_encode($result));
 
-            $bugID    = $result['id'];
+            $objectID = $result['id'];
             $repo     = $this->repo->getRepoById($repoID);
             /* Handle the exception that when $repo is empty. */
-            if(empty($repo)) $this->send(array());
+            if(empty($repo) or empty($result)) $this->send(json_encode(array()));
 
-            $entry    = isset($repo->name) ? $repo->name . '/' . $this->repo->decodePath($file) : '';
-            $location = sprintf($this->lang->repo->reviewLocation, $entry, $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2, $this->post->begin, $this->post->end);
-            if(empty($v1))
-            {
-                $revision = $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2;
-                $link = $this->repo->createLink('view', "repoID=$repoID&objectID=0&entry={$file}&revision=$v2&showBug=true") . '#L' . $this->post->begin;
-            }
-            else
-            {
-                $revision  = $repo->SCM != 'Subversion' ? substr($v1, 0, 10) : $v1;
-                $revision .= ' : ';
-                $revision .= $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2;
-                $link = $this->repo->createLink('diff', "repoID=$repoID&objectID=0&entry={$file}&oldRevision=$v1&newRevision=$v2&showBug=true") . '#L' . $this->post->begin;
-            }
+            $location = sprintf($this->lang->repo->reviewLocation, $this->post->entry ? base64_decode($this->post->entry) : '', $repo->SCM != 'Subversion' ? substr($v2, 0, 10) : $v2, $this->post->begin, $this->post->end);
+            $link     = $this->createLink('mr', 'diff', "mr=$mr") . '#L' . $this->post->begin;
 
-            $actionID = $this->loadModel('action')->create('bug', $bugID, 'repoCreated', '', html::a($link, $location));
-            $this->loadModel('mail')->sendmail($bugID, $actionID);
+            $actionID = $this->loadModel('action')->create($this->post->reviewType, $objectID, 'repoCreated', '', html::a($link, $location));
+            $this->loadModel('mail')->sendmail($objectID, $actionID);
 
             echo json_encode($result);
         }
