@@ -112,7 +112,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
     if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
     var $actions = $column.children('.actions');
     $actions.attr('title', lang.more);
-    $actions.html('<button class="btn btn-link action" data-contextmenu="column" data-column="' + column.id + '" data-kanban="' + kanban.id + '"><i class="icon icon-more-v"></i></button>');
+    $actions.html('<button class="btn btn-link action" data-contextmenu="column" data-column="' + column.id + '" data-kanban="' + kanban.id + '"><i class="icon icon-ellipsis-v"></i></button>');
 }
 
 /**
@@ -150,8 +150,8 @@ function renderCount($count, count, column)
 
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
-    var canEdit = lane.actions.includes('editLane');
-    var canSort = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
+    var canEdit   = lane.actions.includes('editLane');
+    var canSort   = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
     var canDelete = lane.actions.includes('deleteLane');
 
     $lane.parent().toggleClass('sort', canSort);
@@ -161,7 +161,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
         $([
           '<div class="actions" title="' + lang.more + '">',
           '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
-          '<i class="icon icon-more-v"></i>',
+          '<i class="icon icon-ellipsis-v"></i>',
           '</a>',
           '</div>'
         ].join('')).appendTo($lane);
@@ -193,7 +193,7 @@ function renderKanbanItem(item, $item)
         [
             '<div class="actions" title="' + lang.more + '">',
               '<button class="btn btn-link action" data-contextmenu="task" data-id="' + item.id + '" data-status="' + item.status + '">',
-                '<i class="icon icon-more-v"></i>',
+                '<i class="icon icon-ellipsis-v"></i>',
               '</button>',
             '</div>'
         ].join('')).appendTo($item);
@@ -578,8 +578,8 @@ function createLaneMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('editLane')) items.push({label: kanbanLang.editLane, icon: '', url: createLink('kanban', 'editLane', 'lane=' + lane.id), attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: '', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), className: 'confirmer', attrs: {'data-confirmTitle': kanbanlaneLang.confirmDelete, 'data-confirmDetail': kanbanlaneLang.confirmDeleteDetail}});
+    if(privs.includes('editLane')) items.push({label: kanbanLang.editLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), className: 'confirmer', attrs: {'data-confirmTitle': kanbanlaneLang.confirmDelete, 'data-confirmDetail': kanbanlaneLang.confirmDeleteDetail}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
