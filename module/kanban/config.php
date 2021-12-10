@@ -5,6 +5,7 @@ $config->kanban = new stdclass();
 $config->kanban->require = new stdclass();
 $config->kanban->require->createregion = 'name';
 $config->kanban->require->createlane   = 'name';
+$config->kanban->require->createcolumn = 'name';
 
 $config->kanban->setwip        = new stdclass();
 $config->kanban->setlane       = new stdclass();

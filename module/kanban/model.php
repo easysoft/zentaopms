@@ -180,16 +180,102 @@ class kanbanModel extends model
             $column->group  = $groupID;
             $column->name   = $columnName;
             $column->type   = $index;
+            $column->order  = $index;
             $column->limit  = -1;
             $column->color  = '#333';
 
-            $this->dao->insert(TABLE_KANBANCOLUMN)->data($column)->exec();
-
-            $this->saveOrder($regionID, 'region', $this->dao->lastInsertID(), 'column', '', $index);
+            $this->createColumn($regionID, $column);
             $index ++;
+            //$this->saveOrder($regionID, 'region', $this->dao->lastInsertID(), 'column', '', $index);
         }
 
         return !dao::isError();
+    }
+
+    /**
+     * Create a column.
+     *
+     * @param  int    $regionID
+     * @param  object $column
+     * @param  int    $order
+     * @access public
+     * @return int
+     */
+    public function createColumn($regionID, $column = null, $order = 0)
+    {
+        if(empty($column))
+        {
+            $column = fixer::input('post')
+                ->add('region', $regionID)
+                ->setIF($order, 'order', $order)
+                ->setDefault('color', '#272E33')
+                ->get();
+            if(!$order)
+            {
+                $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)
+                    ->where('`group`')->eq($column->group)
+                    ->fetch('maxOrder');
+                $column->order = $maxOrder + 1;
+            }
+        }
+
+        if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
+        if(dao::isError()) return false;
+
+        $limit = (int)$column->limit;
+        if(!empty($column->parent))
+        {
+            /* Create a child column. */
+            $parentColumn = $this->getColumnByID($column->parent);
+            if($parentColumn->limit)
+            {
+                /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
+                if(!$limit || $limit > $parentColumn->limit)
+                {
+                    dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
+                    return false;
+                }
+
+                $childColumns = $this->getColumnsByParent($column->parent);
+                foreach($childColumns as $childColumn)
+                {
+                    $limit += (int)$childColumn->limit;
+                    if($limit > $parentColumn->limit)
+                    { 
+                        /* The total WIP of the child columns is greater than the WIP of the parent column. */
+                        dao::$errors['limit'][] = $this->lang->kanban->error->childLimitNote;
+                        return false;
+                    }
+                }
+            }
+        }
+
+        $column->limit = (int)$column->limit;
+
+        if($order)
+        {
+            /* It means copy a column or insert a column before or after a column. */
+            $this->dao->update(TABLE_KANBANCOLUMN)
+                ->set('`order` = `order` + 1')
+                ->where('`group`')->eq($column->group)
+                ->andWhere('`order`')->ge($order)
+                ->exec();
+        }
+
+        $this->dao->insert(TABLE_KANBANCOLUMN)->data($column, 'noLimit,position,copyItems')
+            ->batchCheck($this->config->kanban->require->createcolumn, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $columnID = $this->dao->lastInsertID();
+
+        $maxType = $this->dao->select('type')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->orderBy('type_desc')->limit(1)->fetch('type');
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq($maxType + 1)->where('id')->eq($columnID)->exec();
+
+        $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
+
+        return $columnID;
     }
 
     /**
@@ -602,9 +688,17 @@ class kanbanModel extends model
         {
             if($object->acl == 'private')
             {
-                $aclUsers = $object->owner . $object->team . $object->whitelist;
-                if($objectType == 'kanban') $aclUsers .= ',' . $spaceOwnerPairs[$object->space];
-                if(strpos(",$aclUsers,", ",$account,") === false) unset($objects[$objectID]);
+                $remove = true;
+                if($object->owner == $account) $remove = false;
+                if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
+                if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
+                if($objectType == 'kanban') 
+                {
+                    $parentOwner = isset($spaceOwnerPairs[$object->space]) ? $spaceOwnerPairs[$object->space] : '';
+                    if(strpos(",$parentOwner,", ",$account,") !== false) $remove = false;
+                }
+
+                if($remove) unset($objects[$objectID]);
             }
         }
 
@@ -1517,7 +1611,7 @@ class kanbanModel extends model
      * @access public
      * @return object
      */
-    public function getColumnById($columnID)
+    public function getColumnByID($columnID)
     {
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
             ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
@@ -1547,6 +1641,24 @@ class kanbanModel extends model
             ->fetch();
     }
 
+    /**
+     * Get child columns by parent id.
+     *
+     * @param  int    $parentID
+     * @param  string $archived
+     * @param  string $deleted
+     * @access public
+     * @return array
+     */
+    public function getColumnsByParent($parentID, $archived = '0', $deleted = '0')
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
+            ->where('parent')->eq($parentID)
+            ->andWhere('archived')->eq($archived)
+            ->andWhere('deleted')->eq($deleted)
+            ->orderBy('order')
+            ->fetchAll('id');
+    }
 
     /**
      * Get lane by id.
