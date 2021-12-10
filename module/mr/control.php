@@ -455,7 +455,6 @@ class mr extends control
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($product->id, 'story');
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->stories      = $stories;
-        $this->view->summary      = $this->loadModel('product')->summary($stories);
         $this->view->bugs         = $bugs;
         $this->view->tasks        = $tasks;
         $this->view->product      = $product;
