@@ -152,6 +152,7 @@ class kanbanModel extends model
         $lane->region         = $regionID;
         $lane->type           = 'common';
         $lane->lastEditedTime = helper::now();
+        $lane->color          = '#7ec5ff';
 
         $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
         $laneID = $this->dao->lastInsertId();
@@ -180,6 +181,7 @@ class kanbanModel extends model
             $column->name   = $columnName;
             $column->type   = $index;
             $column->limit  = -1;
+            $column->color  = '#333';
 
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($column)->exec();
 
@@ -688,6 +690,72 @@ class kanbanModel extends model
     }
 
     /**
+     * Get lane pairs by region id.
+     *
+     * @param  array  $regionID
+     * @access public
+     * @return array
+     */
+    public function getLanePairsByRegion($regionID)
+    {
+        return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
+            ->where('deleted')->eq('0')
+            ->andWhere('region')->eq($regionID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Create a lane.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  object $lane
+     * @access public
+     * @return int
+     */
+    public function createLane($kanbanID, $regionID, $lane = null)
+    {
+        if(empty($lane))
+        {
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
+                ->where('region')->eq($regionID)
+                ->fetch('maxOrder');
+            $lane = fixer::input('post')
+                ->add('region', $regionID)
+                ->add('order', $maxOrder + 1)
+                ->add('lastEditedTime', helper::today())
+                ->add('type', 'common')
+                ->setDefault('color', '#3DC6FD')
+                ->get();
+
+            $mode = zget($lane, 'mode', '');
+            if($mode == 'sameAsOther')
+            {
+                $otherLane = zget($lane, 'otherLane', 0);
+                if($otherLane) $lane->group = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($otherLane)->fetch('group');
+            }
+            elseif($mode == 'independent')
+            {
+                $groupID = $this->createGroup($kanbanID, $regionID);
+                $this->createDefaultColumns($kanban, $regionID, $groupID);
+
+                $lane->group = $groupID;
+            }
+        }
+
+        $this->dao->insert(TABLE_KANBANLANE)->data($lane, $skip = 'mode,otherLane')
+            ->batchCheck($this->config->kanban->require->createlane, 'notempty')
+            ->autoCheck()
+            ->checkIF(!empty($lane->name), 'name', 'unique', "`type`='common'")
+            ->exec();
+        if(dao::isError()) return false;
+
+        $laneID = $this->dao->lastInsertID();
+        $this->loadModel('action')->create('kanbanLane', $laneID, 'Created');
+
+        return $laneID;
+    }
+
      * Create a kanban.
      *
      * @access public

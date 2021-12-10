@@ -100,6 +100,9 @@ $lang->kanban->laneGroup          = 'Lane Group';
 $lang->kanban->cardsSort          = 'Cards Sortting';
 $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
+$lang->kanban->limitExceeded      = 'Limit Exceeded';
+$lang->kanban->fullScreen         = 'Full Screen';
+$lang->kanban->setting            = 'Setting';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
@@ -177,9 +180,22 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
+$lang->kanbanlane->name       = $lang->kanban->laneName;
+$lang->kanbanlane->common     = 'Lane';
+$lang->kanbanlane->default    = 'Default Lane';
+$lang->kanbanlane->column     = 'Lane Kanban column';
+$lang->kanbanlane->otherlane  = 'Select the lane that shares the Kanban column';
+$lang->kanbanlane->color      = 'Lane color';
+
+$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
+$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
+
 $lang->kanbanlane->name    = $lang->kanban->laneName;
+$lang->kanbanlane->common  = 'Lane';
 $lang->kanbanlane->default = 'Default Lane';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Kanban Region';
 $lang->kanbanregion->default = 'Default Region';
+
+$lang->kanbancard = new stdclass();
