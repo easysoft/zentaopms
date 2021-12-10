@@ -32,6 +32,7 @@ $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
 $lang->kanban->copyColumn          = 'Copy Column';
 $lang->kanban->archiveColumn       = 'Archive Column';
+$lang->kanban->spaceCommon         = 'Kanban Space';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';

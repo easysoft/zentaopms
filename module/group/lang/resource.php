@@ -618,7 +618,7 @@ $lang->release->methodOrder[75] = 'notify';
 
 /* Kanban */
 $lang->resource->kanban = new stdclass();
-$lang->resource->kanban->space        = 'space';
+$lang->resource->kanban->space        = 'spaceCommon';
 $lang->resource->kanban->createSpace  = 'createSpace';
 $lang->resource->kanban->editSpace    = 'editSpace';
 $lang->resource->kanban->closeSpace   = 'closeSpace';
