@@ -61,12 +61,6 @@
                     <th class="w-100px"><?php echo $lang->mr->status;?></th>
                     <td><?php echo zget($lang->mr->statusList, $MR->status);?></td>
                   </tr>
-                  <?php if(isset($rawMR->head_pipeline->status)): ?>
-                  <tr>
-                    <th><?php echo "{$lang->mr->pipeline}{$lang->mr->status}";?></th>
-                    <td><?php echo zget($lang->mr->pipelineStatus, $rawMR->head_pipeline->status, $lang->mr->pipelineUnknown); ?></td>
-                  </tr>
-                  <?php endif; ?>
                   <tr>
                     <th><?php echo $lang->mr->mergeStatus; ?></th>
                     <?php if(empty($rawMR->changes_count)):?>
