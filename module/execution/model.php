@@ -2560,7 +2560,7 @@ class executionModel extends model
             ->andWhere('(project')->eq($projectID)
             ->orWhere('id')->eq($projectID)
             ->markRight(1)
-            ->orderBy('project_asc')
+            ->orderBy('type_asc,openedDate_desc')
             ->fetchPairs();
 
         return $objectPairs;
