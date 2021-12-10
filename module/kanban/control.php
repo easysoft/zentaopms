@@ -184,6 +184,9 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
+        $space  = $this->kanban->getSpaceByID($kanban->space);
+
+        $this->kanban->setSwitcher($kanban);
         $this->kanban->setHeaderActions($kanban);
 
         $this->view->title   = $this->lang->kanban->view;
@@ -221,10 +224,11 @@ class kanban extends control
      *
      * @param  int    $columnID
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function setWIP($columnID, $executionID = 0)
+    public function setWIP($columnID, $executionID = 0, $from = 'kanban')
     {
         if($_POST)
         {
@@ -240,12 +244,12 @@ class kanban extends control
         $column = $this->kanban->getColumnById($columnID);
         if(!$column) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
 
-        $status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $title  = isset($column->parentName) ? $column->parentName . '/' . $column->name : $column->name;
 
         $this->view->title  = $title . $this->lang->colon . $this->lang->kanban->setWIP . '(' . $this->lang->kanban->WIP . ')';
         $this->view->column = $column;
-        $this->view->status = $status;
+
+        if($from != 'kanban') $this->view->status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $this->display();
     }
 
@@ -254,10 +258,11 @@ class kanban extends control
      *
      * @param  int    $laneID
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function setLane($laneID, $executionID = 0)
+    public function setLane($laneID, $executionID = 0, $from = 'kanban')
     {
         if($_POST)
         {
@@ -283,10 +288,11 @@ class kanban extends control
      *
      * @param  int $columnID
      * @param  int $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function setColumn($columnID, $executionID = 0)
+    public function setColumn($columnID, $executionID = 0, $from = 'kanban')
     {
         $column = $this->kanban->getColumnById($columnID);
 
@@ -294,7 +300,7 @@ class kanban extends control
         {
             /* Check lane column name is unique. */
             $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
-            if($exist and $exist->id != $columnID)
+            if($exist and $exist->id != $columnID and $from != 'kanban')
             {
                 return $this->sendError($this->lang->kanban->noColumnUniqueName);
             }
@@ -400,5 +406,29 @@ class kanban extends control
         if(!$contactListID) return print(html::select('team[]', $users, '', "class='form-control chosen' multiple"));
 
         return print(html::select('team[]', $users, $list->userList, "class='form-control chosen' multiple"));
+    }
+
+    /**
+     * Ajax get kanban menu.
+     *
+     * @param  int    $kanbanID
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function ajaxGetKanbanMenu($kanbanID, $moduleName, $methodName)
+    {
+        $kanbanIdList = $this->kanban->getCanViewObjects();
+        $this->view->kanbanList = $this->dao->select('*')->from(TABLE_KANBAN)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($kanbanIdList)
+            ->fetchGroup('space');
+
+        $this->view->kanbanID   = $kanbanID;
+        $this->view->spaceList  = $this->kanban->getSpacePairs('all');
+        $this->view->module     = $moduleName;
+        $this->view->method     = $methodName;
+        $this->display();
     }
 }
