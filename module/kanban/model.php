@@ -531,22 +531,31 @@ class kanbanModel extends model
      * Get spaces.
      *
      * @param  string $browseType all|my|other|closed
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getSpaces($browseType)
+    public function getSpaces($browseType, $pager)
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
-
-        return $this->dao->select('*')->from(TABLE_KANBANSPACE)
+        $spaces      = $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
             ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
+            ->page($pager)
             ->fetchAll('id');
+
+        $kanbanGroup = $this->getGroupBySpaces(array_keys($spaces));
+        foreach($spaces as $spaceID => $space)
+        {
+            if(isset($kanbanGroup[$spaceID])) $space->kanbans = $kanbanGroup[$spaceID];
+        }
+
+        return $spaces;
     }
 
     /**
@@ -1335,6 +1344,21 @@ class kanbanModel extends model
     public function getSpaceById($spaceID)
     {
         return $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
+    }
+
+    /**
+     * Get kanban group by space id list.
+     *
+     * @param  int    $spaceIdList
+     * @access public
+     * @return array
+     */
+    public function getGroupBySpaces($spaceIdList)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('space')->in($spaceIdList)
+            ->fetchGroup('space', 'id');
     }
 
     /**

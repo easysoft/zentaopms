@@ -28,15 +28,22 @@ $lang->kanban->sortCard     = '卡片排序';
 $lang->kanban->setting      = '设置';
 
 /* Fields. */
-$lang->kanban->space = '所属空间';
-$lang->kanban->name  = '看板名称';
-$lang->kanban->owner = '负责人';
-$lang->kanban->team  = '团队';
-$lang->kanban->desc  = '空间描述';
-$lang->kanban->acl   = '访问控制';
+$lang->kanban->space  = '所属空间';
+$lang->kanban->name   = '看板名称';
+$lang->kanban->owner  = '负责人';
+$lang->kanban->team   = '团队';
+$lang->kanban->desc   = '看板描述';
+$lang->kanban->acl    = '访问控制';
+$lang->kanban->closed = '已关闭';
+
+$lang->kanban->empty        = '暂时没有看板';
+$lang->kanban->teamSumCount = '共%s人';
 
 $lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
+
+$lang->kanban->aclGroup['open']    = '公开';
+$lang->kanban->aclGroup['private'] = '私有';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";

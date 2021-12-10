@@ -28,12 +28,16 @@ $lang->kanban->sortCard     = 'Sort Card';
 $lang->kanban->setting      = 'Setting';
 
 /* Fields. */
-$lang->kanban->space = 'Space';
-$lang->kanban->name  = 'Name';
-$lang->kanban->owner = 'Owner';
-$lang->kanban->team  = 'Team';
-$lang->kanban->desc  = 'Description';
-$lang->kanban->acl   = 'ACL';
+$lang->kanban->space  = 'Space';
+$lang->kanban->name   = 'Name';
+$lang->kanban->owner  = 'Owner';
+$lang->kanban->team   = 'Team';
+$lang->kanban->desc   = 'Description';
+$lang->kanban->acl    = 'ACL';
+$lang->kanban->closed = 'Closed';
+
+$lang->kanban->empty        = 'No Kanban';
+$lang->kanban->teamSumCount = '%s people in total';
 
 $lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';

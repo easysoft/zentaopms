@@ -23,18 +23,17 @@ class kanban extends control
      */
     public function space($browseType = 'my', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $spaces = $this->kanban->getSpaces($browseType);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $recTotal = count($spaces);
-        $pager    = new pager($recTotal, $recPerPage, $pageID);
-        $spaces   = array_chunk($spaces, $pager->recPerPage);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->title      = $this->lang->kanbanspace->common;
-        $this->view->spaces     = empty($spaces) ? $spaces : $spaces[$pageID - 1];
-        $this->view->browseType = $browseType;
-        $this->view->pager      = $pager;
+        $this->view->title       = $this->lang->kanbanspace->common;
+        $this->view->spaces      = $this->kanban->getSpaces($browseType, $pager);
+        $this->view->browseType  = $browseType;
+        $this->view->pager       = $pager;
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->usersAvatar = $this->user->getAvatarPairs();
 
         $this->display();
     }
