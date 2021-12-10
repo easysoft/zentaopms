@@ -25,6 +25,7 @@
           <td><?php echo html::input("names[$i]", $member->name, "class='form-control' readonly");?></td>
           <td><?php echo html::select("levels[$i]", array(''=>'') + $this->lang->gitlab->accessLevels, $member->access_level, "class='form-control chosen'");?></td>
           <td>
+            <?php /* 50 represents the owner role. */ ?>
             <?php if($member->access_level == '50'):?>
             <input type="text" value="" class="form-control disabled" disabled autocomplete="off" />
             <?php echo html::input("expires[$i]", $member->expires_at, "class='form-control form-date hidden'");?>

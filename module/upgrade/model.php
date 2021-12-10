@@ -735,6 +735,10 @@ class upgradeModel extends model
             $this->updateObjectBranch();
             $this->updateProjectStories();
             $this->appendExec('15_7_1');
+        case '16_0_beta1':
+            $this->saveLogs('Execute 16_0_beta1');
+            $this->adjustPriv16_0_beta1();
+            $this->appendExec('16_0_beta1');
         }
 
         $this->deletePatch();
@@ -5402,6 +5406,26 @@ class upgradeModel extends model
             $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($branch)->where('story')->eq($storyID)->exec();
         }
 
+        return true;
+    }
+
+    /**
+     * Adjust priv 16_0_beta1.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPriv16_0_beta1()
+    {
+        $groups = $this->dao->select('`group`')->from(TABLE_GROUPPRIV)->where('module')->eq('mr')->andWhere('method')->eq('addBug')->fetchPairs('group', 'group');
+        foreach($groups as $groupID)
+        {
+            $groupPriv = new stdclass();
+            $groupPriv->group  = $groupID;
+            $groupPriv->module = 'mr';
+            $groupPriv->method = 'addReview';
+            $this->dao->replace(TABLE_GROUPPRIV)->data($groupPriv)->exec();
+        }
         return true;
     }
 }

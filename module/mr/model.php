@@ -573,7 +573,7 @@ class mrModel extends model
             if($singleDiff->state == 'empty') continue;
             $commits = $singleDiff->commits;
             $diffs   = $singleDiff->diffs;
-            foreach ($diffs as $index => $diff)
+            foreach($diffs as $index => $diff)
             {
                 if(empty($commits[$index])) continue;
                 /* Make sure every file with same commitID is unique in $lines. */
@@ -793,11 +793,13 @@ class mrModel extends model
      */
     public function getReview($repoID, $MRID, $revision = '')
     {
+        if(empty($repoID) OR empty($MRID)) return array();
+
         $reviews = array();
         $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.mr')->eq($MRID)
+            ->where('t1.repo')->eq((int)$repoID)
+            ->andWhere('t1.mr')->eq((int)$MRID)
             ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
@@ -813,8 +815,8 @@ class mrModel extends model
 
         $tasks = $this->dao->select('t1.*, t2.realname')->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
-            ->where('t1.repo')->eq($repoID)
-            ->andWhere('t1.mr')->eq($MRID)
+            ->where('t1.repo')->eq((int)$repoID)
+            ->andWhere('t1.mr')->eq((int)$MRID)
             ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->fetchAll('id');
@@ -914,7 +916,7 @@ class mrModel extends model
         unset($data->commentText);
 
         $this->loadModel('bug');
-        foreach(explode(',', $this->config->bug->create->requiredFields) as $requiredField)
+        foreach(explode(',', $this->config->bug->create->requiredFields . ',repo,mr') as $requiredField)
         {
             $requiredField = trim($requiredField);
             if(empty($requiredField)) continue;
@@ -923,7 +925,7 @@ class mrModel extends model
             {
                 $fieldName = $requiredField;
                 if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
-                dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
+                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
             }
         }
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -992,7 +994,7 @@ class mrModel extends model
         if($task->assignedTo) $task->assignedDate = $now;
 
         $this->loadModel('task');
-        foreach(explode(',', $this->config->task->create->requiredFields) as $requiredField)
+        foreach(explode(',', $this->config->task->create->requiredFields . ',repo,mr') as $requiredField)
         {
             $requiredField = trim($requiredField);
             if(empty($requiredField)) continue;
@@ -1001,7 +1003,7 @@ class mrModel extends model
             {
                 $fieldName = $requiredField;
                 if(isset($this->lang->task->$requiredField)) $fieldName = $this->lang->task->$requiredField;
-                dao::$errors[] = sprintf($this->lang->error->notempty, $fieldName);
+                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
             }
         }
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -1082,10 +1084,11 @@ class mrModel extends model
      */
     public function getLastReviewInfo($repoID)
     {
-        $lastReview = new stdclass();
-        $lastReview->bug  = $this->dao->select('*')->from(TABLE_BUG)->where('repo')->eq($repoID)->orderby('id_desc')->fetch();
-        $lastReview->task = $this->dao->select('*')->from(TABLE_TASK)->where('repo')->eq($repoID)->orderby('id_desc')->fetch();
+        if(empty($repoID)) return null;
 
+        $lastReview = new stdclass();
+        $lastReview->bug  = $this->dao->select('*')->from(TABLE_BUG)->where('repo')->eq((int)$repoID)->orderby('id_desc')->fetch();
+        $lastReview->task = $this->dao->select('*')->from(TABLE_TASK)->where('repo')->eq((int)$repoID)->orderby('id_desc')->fetch();
         return $lastReview;
     }
 
