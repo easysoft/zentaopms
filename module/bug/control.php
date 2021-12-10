@@ -966,7 +966,7 @@ class bug extends control
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
             $objectID        = $this->app->tab == 'project' ? $bug->project : $bug->execution;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID) : array();
+            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'all') : array();
             $branches        = isset($productBranches[$productID]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$productID] : array();
         }
         else

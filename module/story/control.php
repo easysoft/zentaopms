@@ -670,7 +670,7 @@ class story extends control
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID) : array();
+            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID, 'all') : array();
             $branches        = isset($productBranches[$story->product]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$story->product] : array();
             $products        = $this->product->getProductPairsByProject($objectID);
 
@@ -678,7 +678,7 @@ class story extends control
         }
         else
         {
-            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id, 'active') : array();
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id) : array();
         }
 
         /* Get product reviewers. */

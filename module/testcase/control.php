@@ -856,7 +856,7 @@ class testcase extends control
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
             {
                 $objectID        = $this->app->tab == 'project' ? $case->project : $case->execution;
-                $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID) : array();
+                $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'all') : array();
                 $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             }
             else
@@ -1008,7 +1008,7 @@ class testcase extends control
 
             if($this->app->tab == 'project')
             {
-                $productBranches = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project);
+                $productBranches = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, 'all');
             }
             else
             {
