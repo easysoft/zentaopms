@@ -4,6 +4,7 @@ $config->kanban = new stdclass();
 
 $config->kanban->require = new stdclass();
 $config->kanban->require->createregion = 'name';
+$config->kanban->require->createlane   = 'name';
 
 $config->kanban->setwip        = new stdclass();
 $config->kanban->setlane       = new stdclass();
@@ -83,4 +84,5 @@ $config->kanban->taskColumnStatusList['pause']      = 'pause';
 $config->kanban->taskColumnStatusList['canceled']   = 'cancel';
 $config->kanban->taskColumnStatusList['closed']     = 'closed';
 
-$config->kanban->laneColorList = array('#7ec5ff', '#333', '#2b529c', '#e48600', '#d2323d', '#229f24', '#777', '#d2691e', '#008b8b', '#2e8b57', '#4169e1', '#4b0082', '#fa8072', '#ba55d3', '#2e8b57', '#6b8e23');
+$config->kanban->laneColorList   = array('#7ec5ff', '#333', '#2b529c', '#e48600', '#d2323d', '#229f24', '#777', '#d2691e', '#008b8b', '#2e8b57', '#4169e1', '#4b0082', '#fa8072', '#ba55d3', '#2e8b57', '#6b8e23');
+$config->kanban->columnColorList = array('#333', '#2b519c', '#e48610', '#d2313d', '#2a9f23', '#777', '#d2691e', '#2e8b8b', '#2f8b58', '#4168e0', '#4b0082', '#f58072', '#ba55d3', '#6a8e22');

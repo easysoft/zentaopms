@@ -20,7 +20,7 @@ function loadMore(type)
  */
 function fullScreen()
 {
-    var element       = document.getElementById('mainContent');
+    var element       = document.getElementById('kanban');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
     if(requestMethod)
     {
@@ -624,15 +624,15 @@ function createColumnMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('setWIP')) items.push({label: kanbanLang.WIP, icon: '', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('editColumn')) items.push({label: kanbanLang.editColumn, icon: '', url: createLink('kanban', 'editColumn', 'columnID=' + column.id), attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setWIP')) items.push({label: kanbanLang.WIP, icon: '', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('editColumn')) items.push({label: kanbanLang.editColumn, icon: '', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
-        items.push({label: kanbanLang.createColumnOnLeft, icon: '', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=left'), attrs: {'data-toggle': 'modal'}});
-        items.push({label: kanbanLang.createColumnOnRight, icon: '', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), attrs: {'data-toggle': 'modal'}});
+        items.push({label: kanbanLang.createColumnOnLeft, icon: '', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=left'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+        items.push({label: kanbanLang.createColumnOnRight, icon: '', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     }
-    if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: '', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: '', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id), attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: '', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: '', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('archiveColumn')) items.push({label: kanbanLang.archiveColumn, icon: '', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmArchive, 'data-confirmDetail': kanbancolumnLang.confirmArchiveDetail, 'data-confirmButton': lang.archive, 'data-confirming': lang.archiving}});
     if(privs.includes('deleteColumn')) items.push({label: kanbanLang.deleteColumn, icon: '', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail}});
 

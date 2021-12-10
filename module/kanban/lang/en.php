@@ -28,16 +28,24 @@ $lang->kanban->sortCard     = 'Sort Card';
 $lang->kanban->setting      = 'Setting';
 
 /* Fields. */
-$lang->kanban->space  = 'Space';
-$lang->kanban->name   = 'Name';
-$lang->kanban->owner  = 'Owner';
-$lang->kanban->team   = 'Team';
-$lang->kanban->desc   = 'Description';
-$lang->kanban->acl    = 'ACL';
-$lang->kanban->closed = 'Closed';
+$lang->kanban->space          = 'Space';
+$lang->kanban->name           = 'Name';
+$lang->kanban->owner          = 'Owner';
+$lang->kanban->team           = 'Team';
+$lang->kanban->desc           = 'Description';
+$lang->kanban->acl            = 'ACL';
+$lang->kanban->whitelist      = 'White List';
+$lang->kanban->status         = 'Status';
+$lang->kanban->createdBy      = 'Created By';
+$lang->kanban->createdDate    = 'Created Date';
+$lang->kanban->lastEditedBy   = 'Edited By';
+$lang->kanban->lastEditedDate = 'Edited Date';
+$lang->kanban->closed         = 'Closed';
+$lang->kanban->closedBy       = 'Closed By';
+$lang->kanban->closedDate     = 'Closed Date';
+$lang->kanban->empty          = 'No Kanban';
+$lang->kanban->teamSumCount   = '%s people in total';
 
-$lang->kanban->empty        = 'No Kanban';
-$lang->kanban->teamSumCount = '%s people in total';
 
 $lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
@@ -99,6 +107,9 @@ $lang->kanban->laneGroup          = 'Lane Group';
 $lang->kanban->cardsSort          = 'Cards Sortting';
 $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
+$lang->kanban->limitExceeded      = 'Limit Exceeded';
+$lang->kanban->fullScreen         = 'Full Screen';
+$lang->kanban->setting            = 'Setting';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
@@ -146,12 +157,20 @@ $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
 
 $lang->kanbanspace = new stdclass();
-$lang->kanbanspace->common = 'Kanban Space';
-$lang->kanbanspace->name   = 'Name';
-$lang->kanbanspace->owner  = 'Owner';
-$lang->kanbanspace->team   = 'Team';
-$lang->kanbanspace->desc   = 'Description';
-$lang->kanbanspace->acl    = 'ACL';
+$lang->kanbanspace->common         = 'Kanban Space';
+$lang->kanbanspace->name           = 'Name';
+$lang->kanbanspace->owner          = 'Owner';
+$lang->kanbanspace->team           = 'Team';
+$lang->kanbanspace->desc           = 'Description';
+$lang->kanbanspace->acl            = 'ACL';
+$lang->kanbanspace->whitelist      = 'White List';
+$lang->kanbanspace->status         = 'Status';
+$lang->kanbanspace->createdBy      = 'Created By';
+$lang->kanbanspace->createdDate    = 'Created Date';
+$lang->kanbanspace->lastEditedBy   = 'Edited By';
+$lang->kanbanspace->lastEditedDate = 'Edited Date';
+$lang->kanbanspace->closedBy       = 'Closed By';
+$lang->kanbanspace->closedDate     = 'Closed Date';
 
 $lang->kanbanspace->empty = 'No Space';
 
@@ -168,9 +187,22 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
+$lang->kanbanlane->name       = $lang->kanban->laneName;
+$lang->kanbanlane->common     = 'Lane';
+$lang->kanbanlane->default    = 'Default Lane';
+$lang->kanbanlane->column     = 'Lane Kanban column';
+$lang->kanbanlane->otherlane  = 'Select the lane that shares the Kanban column';
+$lang->kanbanlane->color      = 'Lane color';
+
+$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
+$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
+
 $lang->kanbanlane->name    = $lang->kanban->laneName;
+$lang->kanbanlane->common  = 'Lane';
 $lang->kanbanlane->default = 'Default Lane';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Kanban Region';
 $lang->kanbanregion->default = 'Default Region';
+
+$lang->kanbancard = new stdclass();

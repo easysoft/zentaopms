@@ -28,16 +28,23 @@ $lang->kanban->sortCard     = '卡片排序';
 $lang->kanban->setting      = '设置';
 
 /* Fields. */
-$lang->kanban->space  = '所属空间';
-$lang->kanban->name   = '看板名称';
-$lang->kanban->owner  = '负责人';
-$lang->kanban->team   = '团队';
-$lang->kanban->desc   = '看板描述';
-$lang->kanban->acl    = '访问控制';
-$lang->kanban->closed = '已关闭';
-
-$lang->kanban->empty        = '暂时没有看板';
-$lang->kanban->teamSumCount = '共%s人';
+$lang->kanban->space          = '所属空间';
+$lang->kanban->name           = '看板名称';
+$lang->kanban->owner          = '负责人';
+$lang->kanban->team           = '团队';
+$lang->kanban->desc           = '空间描述';
+$lang->kanban->acl            = '访问控制';
+$lang->kanban->whitelist      = '白名单';
+$lang->kanban->status         = '状态';
+$lang->kanban->createdBy      = '由谁创建';
+$lang->kanban->createdDate    = '创建日期';
+$lang->kanban->lastEditedBy   = '最后修改';
+$lang->kanban->lastEditedDate = '最后修改日期';
+$lang->kanban->closedBy       = '由谁关闭';
+$lang->kanban->closedDate     = '关闭日期';
+$lang->kanban->closed         = '已关闭';
+$lang->kanban->empty          = '暂时没有看板';
+$lang->kanban->teamSumCount   = '共%s人';
 
 $lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
@@ -100,6 +107,8 @@ $lang->kanban->cardsSort          = '卡片排序';
 $lang->kanban->moreAction         = '更多操作';
 $lang->kanban->noGroup            = '无';
 $lang->kanban->limitExceeded      = '超出在制品限制';
+$lang->kanban->fullScreen         = '全屏';
+$lang->kanban->setting            = '设置';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
@@ -147,12 +156,20 @@ $lang->kanban->taskColumn['canceled']   = '已取消';
 $lang->kanban->taskColumn['closed']     = '已关闭';
 
 $lang->kanbanspace = new stdclass();
-$lang->kanbanspace->common = '看板空间';
-$lang->kanbanspace->name   = '空间名称';
-$lang->kanbanspace->owner  = '负责人';
-$lang->kanbanspace->team   = '团队';
-$lang->kanbanspace->desc   = '空间描述';
-$lang->kanbanspace->acl    = '访问控制';
+$lang->kanbanspace->common         = '看板空间';
+$lang->kanbanspace->name           = '空间名称';
+$lang->kanbanspace->owner          = '负责人';
+$lang->kanbanspace->team           = '团队';
+$lang->kanbanspace->desc           = '空间描述';
+$lang->kanbanspace->acl            = '访问控制';
+$lang->kanbanspace->whitelist      = '白名单';
+$lang->kanbanspace->status         = '状态';
+$lang->kanbanspace->createdBy      = '由谁创建';
+$lang->kanbanspace->createdDate    = '创建日期';
+$lang->kanbanspace->lastEditedBy   = '最后修改';
+$lang->kanbanspace->lastEditedDate = '最后修改日期';
+$lang->kanbanspace->closedBy       = '由谁关闭';
+$lang->kanbanspace->closedDate     = '关闭日期';
 
 $lang->kanbanspace->empty = '暂时没有空间';
 
@@ -169,9 +186,15 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name    = $lang->kanban->laneName;
-$lang->kanbanlane->common  = '泳道';
-$lang->kanbanlane->default = '默认泳道';
+$lang->kanbanlane->name       = $lang->kanban->laneName;
+$lang->kanbanlane->common     = '泳道';
+$lang->kanbanlane->default    = '默认泳道';
+$lang->kanbanlane->column     = '泳道看板列';
+$lang->kanbanlane->otherlane  = '选择共享看板列的泳道';
+$lang->kanbanlane->color      = '泳道颜色';
+
+$lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
+$lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '看板区域';
