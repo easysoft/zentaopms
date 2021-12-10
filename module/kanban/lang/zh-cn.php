@@ -109,6 +109,8 @@ $lang->kanban->noGroup            = '无';
 $lang->kanban->limitExceeded      = '超出在制品限制';
 $lang->kanban->fullScreen         = '全屏';
 $lang->kanban->setting            = '设置';
+$lang->kanban->my                 = '我的看板';
+$lang->kanban->other              = '其他';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';

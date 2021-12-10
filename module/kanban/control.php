@@ -184,6 +184,9 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
+        $space  = $this->kanban->getSpaceByID($kanban->space);
+
+        $this->kanban->setSwitcher($kanban);
         $this->kanban->setHeaderActions($kanban);
 
         $this->view->title   = $this->lang->kanban->view;
@@ -403,5 +406,29 @@ class kanban extends control
         if(!$contactListID) return print(html::select('team[]', $users, '', "class='form-control chosen' multiple"));
 
         return print(html::select('team[]', $users, $list->userList, "class='form-control chosen' multiple"));
+    }
+
+    /**
+     * Ajax get kanban menu.
+     *
+     * @param  int    $kanbanID
+     * @param  string $moduleName
+     * @param  string $methodName
+     * @access public
+     * @return void
+     */
+    public function ajaxGetKanbanMenu($kanbanID, $moduleName, $methodName)
+    {
+        $kanbanIdList = $this->kanban->getCanViewObjects();
+        $this->view->kanbanList = $this->dao->select('*')->from(TABLE_KANBAN)
+            ->where('deleted')->eq('0')
+            ->andWhere('id')->in($kanbanIdList)
+            ->fetchGroup('space');
+
+        $this->view->kanbanID   = $kanbanID;
+        $this->view->spaceList  = $this->kanban->getSpacePairs('all');
+        $this->view->module     = $moduleName;
+        $this->view->method     = $methodName;
+        $this->display();
     }
 }
