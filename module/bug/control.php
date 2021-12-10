@@ -811,7 +811,6 @@ class bug extends control
         $this->view->modulePath  = $this->tree->getParents($bug->module);
         $this->view->bugModule   = empty($bug->module) ? '' : $this->tree->getById($bug->module);
         $this->view->bug         = $bug;
-        $this->view->case        = $this->loadModel('testcase')->getById($bug->case);
         $this->view->from        = $from;
         $this->view->branchName  = $product->type == 'normal' ? '' : zget($branches, $bug->branch, '');
         $this->view->users       = $this->user->getPairs('noletter');
