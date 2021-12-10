@@ -2422,6 +2422,7 @@ class gitlabModel extends model
      */
     public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
     {
+        if(empty($gitlabID)) return false;
         if(empty($priv->name)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
         return json_decode(commonModel::http($url, $priv));
@@ -2438,6 +2439,7 @@ class gitlabModel extends model
      */
     public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
     {
+        if(empty($gitlabID)) return false;
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));

@@ -9,9 +9,9 @@ cid=1
 pid=1
 
 使用空的gitlabID、projectID、保护分支获取保护分支             >> return false
-使用正确的gitlabID、保护分支信息，错误的projectID创建保护分支 >> 404 Project Not Found
+使用正确的gitlabID、保护分支信息，错误的projectID获取保护分支 >> 404 Project Not Found
 使用正确的gitlabID,projectID，保护分支获取保护分支            >> master 
-使用错误的保护分支信息创建保护分支                            >> 404 Not found 
+使用错误的保护分支信息获取保护分支                            >> 404 Not found 
 
 */
 
@@ -34,6 +34,6 @@ $projectID = 1565;
 $result    = $gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);
 r($result) && p('name') && e('master');  //通过gitlabID,projectID,分支名称正确获取保护分支
 
-$branch   = 'masters';
+$branch = 'masters';
 $result = $gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);
-r($result) && p('message') && e('404 Not found'); //使用错误的保护分支信息创建保护分支
+r($result) && p('message') && e('404 Not found'); //使用错误的保护分支信息获取保护分支
