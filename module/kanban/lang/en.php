@@ -17,6 +17,7 @@ $lang->kanban->deleteRegion        = 'Delete Region';
 $lang->kanban->createLane          = 'Create Lane';
 $lang->kanban->editLane            = 'Edit Lane';
 $lang->kanban->sortLane            = 'Sort Lane';
+$lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
 $lang->kanban->editColumn          = 'Edit Column';
 $lang->kanban->sortColumn          = 'Sort Column';

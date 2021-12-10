@@ -21,7 +21,7 @@
     </div>
     <form method='post' class="load-indicator main-form form-ajax" target='hiddenwin' onsubmit='return setWIPLimit();'>
       <table align='center' class='table table-form'>
-        <?php if($column->parent != -1 and isset($status)):?>
+        <?php if($column->parent != -1 and $from !='kanban'):?>
         <tr>
           <th><?php echo $lang->kanban->WIPStatus;?></th>
           <td colspan='2'>
