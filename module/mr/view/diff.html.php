@@ -59,7 +59,7 @@
                   <?php echo html::commonButton(zget($lang->repo->encodingList, $encoding, $lang->repo->encodingList['utf_8']) . "<span class='caret'></span>", "data-toggle='dropdown'", 'btn dropdown-toggle btn-sm')?>
                   <ul class='dropdown-menu' role='menu'>
                     <?php foreach($lang->repo->encodingList as $key => $val):?>
-                    <?php echo '<li' . ($key == $encoding ? " class='active'" : '') . '>';?>
+                    <li <?php echo $key == $encoding ? "class='active'" : '';?>>
                       <?php echo html::a('javascript:changeEncoding("'. $key . '")', $val)?>
                     </li>
                     <?php endforeach;?>
