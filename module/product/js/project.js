@@ -9,14 +9,34 @@ $(function()
 
     $('#saveButton').on('click', function()
     {
-        var projectID = $('#project').val();
-        var productID = $('#product').val();
-        var branchID  = $('#branch').val();
+        var selectProjectID  = $('#project').val();
+        var currentProductID = $('#product').val();
+        var currentBranchID  = $('#branch').val();
 
-        $.post(createLink('project', 'manageProducts', 'projectID=' + projectID), {'products[]' : [productID], 'branch[]' : [branchID]});
+        $.get(createLink('project', 'ajaxGetLinkedProductsWithBranch', 'projectID=' + selectProjectID), function(product)
+        {
+            var products = [];
+            var branches = [];
 
-        $('#link2Project').modal('hide');
-        window.location.reload();
+            var linkedProducts = JSON.parse(product);
+            for(var productID in linkedProducts)
+            {
+                for(var branchID in linkedProducts[productID])
+                {
+                    products.push(productID);
+                    branches.push(branchID);
+                }
+            }
+
+            products.push(currentProductID);
+            branches.push(currentBranchID);
+
+            $.post(createLink('project', 'manageProducts', 'projectID=' + selectProjectID), {'products' : products, 'branch' : branches}, function()
+            {
+                $('#link2Project').modal('hide');
+                window.location.reload();
+            });
+        });
     });
 });
 

@@ -424,7 +424,7 @@ class task extends control
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
-        if($this->config->systemMode == 'classic') 
+        if($this->config->systemMode == 'classic')
         {
             $executionsPair = $this->execution->getPairs();
         }
@@ -432,7 +432,7 @@ class task extends control
         {
             $executionsPair = array();
             $executions     = $this->execution->getByProject(0, 'all', 0);
-            $projects       = $this->project->getPairsByProgram(0, 'noclosed');
+            $projects       = $this->project->getPairsByProgram('', 'noclosed');
             foreach($executions as $executionId => $execution)
             {
                 $executionsPair[$executionId] = (isset($projects[$execution->project]) ? $projects[$execution->project] . ' / ' : '') . $execution->name;

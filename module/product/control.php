@@ -90,14 +90,15 @@ class product extends control
         /* Get PM id list. */
         $accounts     = array();
         $projectStats = $this->product->getProjectStatsByProduct($productID, $status, $branch, $involved, $orderBy);
+        $product      = $this->product->getByID($productID);
+        $projects     = $this->project->getPairsByProgram($product->program, 'all', false, 'order_asc');
 
         foreach($projectStats as $project)
         {
             if(!empty($project->PM) and !in_array($project->PM, $accounts)) $accounts[] = $project->PM;
+            unset($projects[$project->id]);
         }
         $PMList = $this->user->getListByAccounts($accounts, 'account');
-
-        $product = $this->product->getByID($productID);
 
         $this->view->title        = $this->products[$productID] . $this->lang->colon . $this->lang->product->project;
         $this->view->position[]   = $this->products[$productID];
@@ -106,7 +107,7 @@ class product extends control
         $this->view->PMList       = $PMList;
         $this->view->productID    = $productID;
         $this->view->product      = $product;
-        $this->view->projects     = $this->project->getPairsByProgram($product->program);
+        $this->view->projects     = $projects;
         $this->view->status       = $status;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchID     = $branch;

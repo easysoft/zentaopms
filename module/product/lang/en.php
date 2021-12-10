@@ -33,10 +33,11 @@ $lang->product->changeProgram   = "{$lang->productCommon} confirmation of the sc
 $lang->product->addWhitelist    = 'Add Whitelist';
 $lang->product->unbindWhitelist = 'Unbind Whitelist';
 
-$lang->product->indexAction   = "All {$lang->productCommon}";
-$lang->product->closeAction   = "Close {$lang->productCommon}";
-$lang->product->orderAction   = "Sort {$lang->productCommon}";
-$lang->product->exportAction  = "Export {$lang->productCommon}";
+$lang->product->indexAction  = "All {$lang->productCommon}";
+$lang->product->closeAction  = "Close {$lang->productCommon}";
+$lang->product->orderAction  = "Sort {$lang->productCommon}";
+$lang->product->exportAction = "Export {$lang->productCommon}";
+$lang->product->link2Project = "Link Project";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';

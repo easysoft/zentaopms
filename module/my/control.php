@@ -720,7 +720,7 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->ncs        = $this->my->getNcList($browseType, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->mode       = 'nc';
         $this->display();
     }
