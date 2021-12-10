@@ -26,3 +26,17 @@ function setWIPLimit()
 
     $('#limit').val(count);
 }
+/**
+ * When Wipcount value change.
+ *
+ * @param  int    $value
+ * @access public
+ * @return void
+ */
+function wipValueChange(value)
+{
+    if(value == '')
+        $('#submit').addClass('disabled');
+    else
+        $('#submit').removeClass('disabled');
+}

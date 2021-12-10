@@ -218,12 +218,11 @@ class kanban extends control
         $column = $this->kanban->getColumnById($columnID);
         if(!$column) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
 
-        $status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $title  = isset($column->parentName) ? $column->parentName . '/' . $column->name : $column->name;
 
         $this->view->title  = $title . $this->lang->colon . $this->lang->kanban->setWIP . '(' . $this->lang->kanban->WIP . ')';
         $this->view->column = $column;
-        $this->view->status = $status;
+        if($this->app->tab != 'kanban') $this->view->status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $this->display();
     }
 
@@ -272,7 +271,7 @@ class kanban extends control
         {
             /* Check lane column name is unique. */
             $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
-            if($exist and $exist->id != $columnID)
+            if($exist and $exist->id != $columnID and $this->app->tab != 'kanban')
             {
                 return $this->sendError($this->lang->kanban->noColumnUniqueName);
             }
