@@ -72,7 +72,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
     foreach($spaceKanbans as $index => $kanban)
     {
         $selected   = $kanban->id == $kanbanID ? 'selected' : '';
-        $link       = helper::createLink('kanban', 'index', "kanbanID=%s", '', '', $kanban->id);
+        $link       = helper::createLink('kanban', 'view', "kanbanID=%s", '', '', $kanban->id);
         $kanbanName = '<i class="icon icon-kanban"></i> ' . $kanban->name;
 
         if($kanban->status != 'closed' and $kanban->owner == $this->app->user->account)

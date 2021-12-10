@@ -585,7 +585,7 @@ class kanbanModel extends model
     /**
      * Get can view objects.
      *
-     * @param  string $objectType space|kanban
+     * @param  string $objectType kanbanspace|kanban
      * @access public
      * @return array
      */
@@ -593,9 +593,9 @@ class kanbanModel extends model
     {
         $table           = $this->config->objectTables[$objectType];
         $objects         = $this->dao->select('*')->from($table)->fetchAll('id');
-        $spaceOwnerPairs = $this->dao->select('id,owner')->from(TABLE_SPACE)->fetchPairs();
+        $spaceOwnerPairs = $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchPairs();
 
-        if($this->app->user->admin) return $objects;
+        if($this->app->user->admin) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
