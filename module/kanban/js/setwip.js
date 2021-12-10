@@ -30,7 +30,7 @@ function setWIPLimit()
 /**
  * When WIPCount value change.
  *
- * @param  int    $value
+ * @param  int    value
  * @access public
  * @return void
  */

@@ -199,10 +199,11 @@ class kanban extends control
      *
      * @param  int    $columnID
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function setWIP($columnID, $executionID = 0)
+    public function setWIP($columnID, $executionID = 0, $from = 'kanban')
     {
         if($_POST)
         {
@@ -222,7 +223,8 @@ class kanban extends control
 
         $this->view->title  = $title . $this->lang->colon . $this->lang->kanban->setWIP . '(' . $this->lang->kanban->WIP . ')';
         $this->view->column = $column;
-        if($this->app->tab != 'kanban') $this->view->status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
+
+        if($from != 'kanban') $this->view->status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $this->display();
     }
 
@@ -231,10 +233,11 @@ class kanban extends control
      *
      * @param  int    $laneID
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function setLane($laneID, $executionID = 0)
+    public function setLane($laneID, $executionID = 0, $from = 'kanban')
     {
         if($_POST)
         {
@@ -260,10 +263,11 @@ class kanban extends control
      *
      * @param  int $columnID
      * @param  int $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function setColumn($columnID, $executionID = 0)
+    public function setColumn($columnID, $executionID = 0, $from = 'kanban')
     {
         $column = $this->kanban->getColumnById($columnID);
 
@@ -271,7 +275,7 @@ class kanban extends control
         {
             /* Check lane column name is unique. */
             $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
-            if($exist and $exist->id != $columnID and $this->app->tab != 'kanban')
+            if($exist and $exist->id != $columnID and $from != 'kanban')
             {
                 return $this->sendError($this->lang->kanban->noColumnUniqueName);
             }
