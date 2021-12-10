@@ -276,8 +276,7 @@ class kanbanModel extends model
 
         $columnID = $this->dao->lastInsertID();
 
-        $maxType = $this->dao->select('type')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->orderBy('type_desc')->limit(1)->fetch('type');
-        $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq($maxType + 1)->where('id')->eq($columnID)->exec();
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('type = `order`')->where('`group`')->eq($column->group)->exec();
 
         return $columnID;
     }
