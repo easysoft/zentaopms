@@ -404,34 +404,6 @@ class kanbanModel extends model
     }
 
     /**
-     * Set kanban headerActions.
-     *
-     * @param  object $kanban
-     * @access public
-     * @return void
-     */
-    public function setHeaderActions($kanban)
-    {
-        $actions  = '';
-        $actions .= "<div class='btn-group'>";
-        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
-        $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
-        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
-        if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
-
-        $kanbanActions  = '';
-        if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link'") . '</li>';
-        if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
-        if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
-        if($kanbanActions) $actions .= "<div class='divider'></div>" . $kanbanActions;
-
-        $actions .= "</ul>";
-        $actions .= "</div>";
-
-        $this->lang->headerActions = $actions;
-    }
-
-    /**
      * Get Kanban by execution id.
      *
      * @param  int    $executionID
@@ -1422,6 +1394,57 @@ class kanbanModel extends model
             ->exec();
 
         return dao::isError();
+    }
+
+    /**
+     * Set kanban headerActions.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return void
+     */
+    public function setHeaderActions($kanban)
+    {
+        $actions  = '';
+        $actions .= "<div class='btn-group'>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
+        $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
+        if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+
+        $kanbanActions  = '';
+        if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link'") . '</li>';
+        if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
+        if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
+        if($kanbanActions) $actions .= "<div class='divider'></div>" . $kanbanActions;
+
+        $actions .= "</ul>";
+        $actions .= "</div>";
+
+        $this->lang->headerActions = $actions;
+    }
+
+    /**
+     * Set switcher menu.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return void
+     */
+    public function setSwitcher($kanban)
+    {
+        $currentModule = $this->app->getModuleName();
+        $currentMethod = $this->app->getMethodName();
+
+        $currentKanbanName = $kanban->name;
+
+        $kanbanLink = helper::createLink('kanban', 'ajaxGetKanbanMenu', "objectID=$kanban->id&module=$currentModule&method=$currentMethod");
+
+        $switcher  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentKanbanName}'><span class='text'>{$currentKanbanName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$kanbanLink'>";
+        $switcher .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $switcher .= "</div></div>";
+
+        $this->lang->switcherMenu = $switcher;
     }
 
     /**
