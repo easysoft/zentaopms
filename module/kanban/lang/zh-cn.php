@@ -148,9 +148,15 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name    = $lang->kanban->laneName;
-$lang->kanbanlane->common  = '泳道';
-$lang->kanbanlane->default = '默认泳道';
+$lang->kanbanlane->name       = $lang->kanban->laneName;
+$lang->kanbanlane->common     = '泳道';
+$lang->kanbanlane->default    = '默认泳道';
+$lang->kanbanlane->column     = '泳道看板列';
+$lang->kanbanlane->otherlane  = '选择共享看板列的泳道';
+$lang->kanbanlane->color      = '泳道颜色';
+
+$lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
+$lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '看板区域';

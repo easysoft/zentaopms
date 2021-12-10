@@ -132,6 +132,29 @@ class kanban extends control
     }
 
     /**
+     * Create a lane for a kanban.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function createLane($kanbanID, $regionID)
+    {
+        if(!empty($_POST))
+        {
+            $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $regionID));
+        }
+
+        $this->view->lanes      = $this->kanban->getLanePairsByRegion($regionID);
+        $this->display();
+    }
+
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID

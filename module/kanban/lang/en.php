@@ -145,4 +145,14 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name = $lang->kanban->laneName;
+$lang->kanbanlane->name       = $lang->kanban->laneName;
+$lang->kanbanlane->common     = 'Lane';
+$lang->kanbanlane->default    = 'Default Lane';
+$lang->kanbanlane->column     = 'Lane Kanban column';
+$lang->kanbanlane->otherlane  = 'Select the lane that shares the Kanban column';
+$lang->kanbanlane->color      = 'Lane color';
+
+$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
+$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
+
+
