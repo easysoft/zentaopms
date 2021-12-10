@@ -801,7 +801,7 @@ class mr extends control
         {
             if($this->post->reviewType == 'bug')  $result = $this->mr->saveBug($repoID, $mr, $v1, $v2);
             if($this->post->reviewType == 'task') $result = $this->mr->saveTask($repoID, $mr, $v1, $v2);
-            if(dao::isError()) die(json_encode($result));
+            if($result['result'] == 'fail') die(json_encode($result));
 
             $objectID = $result['id'];
             $repo     = $this->repo->getRepoById($repoID);

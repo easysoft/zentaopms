@@ -44,13 +44,13 @@ $this->loadModel('repo');
 
 $taskModuleSelect    = html::select('taskModule', $taskModules, $taskRepoModule, 'class="form-control chosen"');
 $taskUserSelect      = html::select('taskAssignedTo', $taskMembers, '', 'class="form-control chosen"');
-$taskExecutionSelect = html::select('taskExecution', $taskExecutions, $repoExecution, 'class="form-control chosen"');
+$taskExecutionSelect = html::select('taskExecution', $taskExecutions, $repoExecution, 'class="form-control chosen" onchange="changeExecution(this)"');
 
 $reviewUrl       = $this->createLink('mr', 'addReview', "repoID=$repoID&mr={$MR->id}&v1=$v1&v2=");
 $productSelect   = html::select('product', $products, $repoProduct, 'class="product form-control chosen" onchange="changeProduct(this)"');
 $branches        = $this->loadModel('branch')->getPairs($repoProduct);
 $moduleSelect    = html::select('module', $modules, $bugRepoModule, 'class="form-control chosen"');
-$executionSelect = html::select('execution', $executions, '', 'class="form-control chosen" onchange="changeExecution(this)"');
+$executionSelect = html::select('execution', $executions, '', 'class="form-control chosen"');
 $typeSelect      = html::select('repoType', $lang->repo->typeList, '', 'class="form-control chosen"');
 $userSelect      = html::select('assignedTo', $users, '', 'class="form-control chosen assignedTo"');
 
@@ -96,12 +96,14 @@ js::set('revision', '');
   <div class="reviewFormContainer">
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->mr->reviewType;?></th>
-        <td><?php echo html::select('reviewType', $lang->mr->reviewTypeList, 'bug', "class='form-control' onchange=changeReviewType(this)")?></td>
+        <th class='w-100px'><?php echo $lang->mr->reviewType;?></th>
+        <td class='w-p45'><?php echo html::select('reviewType', $lang->mr->reviewTypeList, 'bug', "class='form-control' onchange=changeReviewType(this)")?></td>
+        <th class='w-100px'></th>
+        <td class='w-p45'></td>
       </tr>
       <tr>
         <th><?php echo $lang->repo->product?></th>
-        <td class='w-p45'>
+        <td>
           <div class='input-group'>
           <?php echo $productSelect?>
           <?php if($branches) echo html::select('branch', $branches, '', "class='form-control' style='width:95px'");?>
@@ -161,7 +163,7 @@ js::set('revision', '');
 </form>
 <?php else:?>
 <form id='reviewForm' class='reviewForm hide'>
-<?php printf($lang->user->errorDeny, $lang->repo->common, $lang->repo->addReview);?>
+<?php printf($lang->user->errorDeny, $lang->mr->common, $lang->mr->addReview);?>
 </form>
 <?php endif;?>
 
