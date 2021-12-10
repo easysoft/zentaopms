@@ -29,7 +29,7 @@ class kanban extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->title       = $this->lang->kanbanspace->common;
-        $this->view->spaces      = $this->kanban->getSpaces($browseType, $pager);
+        $this->view->spaceList   = $this->kanban->getSpaceList($browseType, $pager);
         $this->view->browseType  = $browseType;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');

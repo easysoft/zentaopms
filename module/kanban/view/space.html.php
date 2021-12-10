@@ -26,13 +26,13 @@
   </div>
 </div>
 <div id='mainContent'>
-  <?php if(empty($spaces)):?>
+  <?php if(empty($spaceList)):?>
   <div class="table-empty-tip">
     <p><span class="text-muted"><?php echo $lang->kanbanspace->empty;?></span></p>
   </div>
   <?php else:?>
-  <?php foreach($spaces as $space):?>
-  <div class='row cell' id='spaces'>
+  <?php foreach($spaceList as $space):?>
+  <div class='row cell' id='spaceList'>
     <div class='space'>
       <div class='row menu'>
         <div class='spaceTitle pull-left'>
@@ -118,8 +118,8 @@
   <?php endforeach;?>
   <?php endif;?>
 </div>
-<?php if(!empty($spaces)):?>
-<div id='spacesFooter' class='table-footer'>
+<?php if(!empty($spaceList)):?>
+<div id='spaceListFooter' class='table-footer'>
   <?php $pager->show('right', 'pagerjs');?>
 </div>
 <?php endif?>

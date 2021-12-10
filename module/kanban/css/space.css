@@ -1,9 +1,9 @@
-#spaces {margin: 0 0; margin-bottom: 15px;}
-#spaces .spaceTitle {margin-bottom: 15px;}
-#spaces .spaceTitle > div {display: inline-block;}
-#spaces .spaceTitle .icon-zone {color: #838a9d; margin-top:100px;}
-#spaces .spaceActions {margin-top: 10px;}
-#spaces .spaceActions > a{margin-left: 10px;}
+#spaceList {margin: 0 0; margin-bottom: 15px;}
+#spaceList .spaceTitle {margin-bottom: 15px;}
+#spaceList .spaceTitle > div {display: inline-block;}
+#spaceList .spaceTitle .icon-zone {color: #838a9d; margin-top:100px;}
+#spaceList .spaceActions {margin-top: 10px;}
+#spaceList .spaceActions > a{margin-left: 10px;}
 .space .menu {margin-left: 5px; margin-right:5px;}
 .space .table-empty-tip {padding: 40px 10px;}
 
