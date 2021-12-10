@@ -209,6 +209,7 @@ class kanbanModel extends model
                 ->add('region', $regionID)
                 ->setIF($order, 'order', $order)
                 ->setDefault('color', '#272E33')
+                ->remove('WIPCount,noLimit')
                 ->get();
             if(!$order)
             {
@@ -220,9 +221,16 @@ class kanbanModel extends model
         }
 
         if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
+        if(!preg_match("/^-?\d+$/", $column->limit))
+        {    
+            dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+            return false;
+        }    
         if(dao::isError()) return false;
 
-        $limit = (int)$column->limit;
+        $column->limit = (int)$column->limit;
+
+        $limit = $column->limit;
         if(!empty($column->parent))
         {
             /* Create a child column. */
@@ -250,8 +258,6 @@ class kanbanModel extends model
             }
         }
 
-        $column->limit = (int)$column->limit;
-
         if($order)
         {
             /* It means copy a column or insert a column before or after a column. */
@@ -272,8 +278,6 @@ class kanbanModel extends model
 
         $maxType = $this->dao->select('type')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->orderBy('type_desc')->limit(1)->fetch('type');
         $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq($maxType + 1)->where('id')->eq($columnID)->exec();
-
-        $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
 
         return $columnID;
     }
@@ -679,7 +683,7 @@ class kanbanModel extends model
     {
         $table           = $this->config->objectTables[$objectType];
         $objects         = $this->dao->select('*')->from($table)->fetchAll('id');
-        $spaceOwnerPairs = $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchPairs();
+        $spaceOwnerPairs = $objectType == 'kanban' ? $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchPairs() : array();
 
         if($this->app->user->admin) return array_keys($objects);
 

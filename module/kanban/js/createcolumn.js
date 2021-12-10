@@ -1,27 +1,24 @@
-$(document).ready(function()
+$(function()
 {
-    $.setAjaxForm('#createColumnForm');
-
     initColorPicker();
-    
-    $(document).on('click', '#noLimit', function()
-    {
-        if($(this).prop('checked'))
-        {
-            $(this).parents('td').find('input[name^=limit]').val('');
-            $(this).parents('td').find('input[name^=limit]').attr('readonly', true);
-        }
+    $('#noLimit').click(function()
+    {   
+        if($(this).attr('checked') == 'checked')
+        {   
+            $('#WIPCount').val('');
+            $('#WIPCount').attr('disabled', true);
+        }   
         else
-        {
-            $(this).parents('td').find('input[name^=limit]').removeAttr('readonly');
-        }
-    });
-});
+        {   
+            $('#WIPCount').removeAttr('disabled');
+        }   
+    })  
+})
 
 function setWIPLimit()
 {
     var count = $('#WIPCount').val();
-    if($('#noLimit').attr('checked') == 'checked') count = -1;;
+    if($('#noLimit').attr('checked') == 'checked') count = -1;
 
     $('#limit').val(count);
 }

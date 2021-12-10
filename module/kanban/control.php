@@ -232,8 +232,9 @@ class kanban extends control
 
         if($_POST)
         {   
-            $order = $position == 'left' ? $column->order : $column->order + 1;
-            $this->kanban->createColumn($column->region, null, $order);
+            $order    = $position == 'left' ? $column->order : $column->order + 1;
+            $columnID = $this->kanban->createColumn($column->region, null, $order);
+            $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent', 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $column->region));
