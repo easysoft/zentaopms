@@ -26,7 +26,7 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
-
+<a id='ganttDownload' download='gantt-export-<?php echo $projectID;?>.png'></a>
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
 <form class="main-form form-ajax">
   <div class="example">
