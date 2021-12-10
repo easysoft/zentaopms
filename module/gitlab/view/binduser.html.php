@@ -21,7 +21,7 @@
         <thead>
           <tr>
             <th colspan='2'><?php echo $lang->gitlab->gitlabAccount;?></th>
-            <th><?php echo $lang->gitlab->zentaoAccount;?></th>
+            <th class='w-150px'><?php echo $lang->gitlab->zentaoAccount;?></th>
             <th class='w-150px'><?php echo $lang->gitlab->bindingStatus;?></th>
           </tr>
         </thead>
@@ -51,7 +51,8 @@
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
             <td>
               <?php if(isset($bindedUsers[$gitlabUser->zentaoAccount])):?>
-              <?php if(!empty(zget($userPairs, $gitlabUser->zentaoAccount, ''))):?>
+              <?php $zentaoAccount = zget($userPairs, $gitlabUser->zentaoAccount, '');?>
+              <?php if(!empty($zentaoAccount)):?>
               <?php echo $lang->gitlab->binded;?>
               <?php else:?>
               <?php echo '<span class="text-red">' . $lang->gitlab->bindedError . '</span>';?>

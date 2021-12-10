@@ -2050,15 +2050,15 @@ class gitlabModel extends model
         if(empty($project->path)) dao::$errors['path'][] = $this->lang->gitlab->project->emptyPathError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiCreateProject($gitlabID, $project);
+        $response = $this->apiCreateProject($gitlabID, $project);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabproject', $reponse->id, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabproject', $response->id, 'created', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2074,15 +2074,15 @@ class gitlabModel extends model
         if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiUpdateProject($gitlabID, $project);
+        $response = $this->apiUpdateProject($gitlabID, $project);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
             $this->loadModel('action')->create('gitlabproject', $project->id, 'edited', '', $project->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2119,11 +2119,11 @@ class gitlabModel extends model
             }
         }
 
-        $reponse = $this->apiCreateUser($gitlabID, $user);
+        $response = $this->apiCreateUser($gitlabID, $user);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabuser', $reponse->id, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabuser', $response->id, 'created', '', $response->name);
 
             /* Bind user. */
             if($user->account)
@@ -2132,13 +2132,13 @@ class gitlabModel extends model
                 $userBind->providerID   = $gitlabID;
                 $userBind->providerType = 'gitlab';
                 $userBind->account      = $user->account;
-                $userBind->openID       = $reponse->id;
+                $userBind->openID       = $response->id;
                 $this->dao->insert(TABLE_OAUTH)->data($userBind)->exec();
             }
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2179,14 +2179,14 @@ class gitlabModel extends model
             }
         }
 
-        $reponse = $this->apiUpdateUser($gitlabID, $user);
+        $response = $this->apiUpdateUser($gitlabID, $user);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabuser', $reponse->id, 'edited', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabuser', $response->id, 'edited', '', $response->name);
 
             /* Delete old bind. */
-            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($reponse->id)->andWhere('account')->ne($user->account)->exec();
+            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($response->id)->andWhere('account')->ne($user->account)->exec();
             /* Bind user. */
             if($user->account && $changeBind)
             {
@@ -2194,13 +2194,13 @@ class gitlabModel extends model
                 $userBind->providerID   = $gitlabID;
                 $userBind->providerType = 'gitlab';
                 $userBind->account      = $user->account;
-                $userBind->openID       = $reponse->id;
+                $userBind->openID       = $response->id;
                 $this->dao->replace(TABLE_OAUTH)->data($userBind)->exec();
             }
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2218,15 +2218,15 @@ class gitlabModel extends model
         if(empty($group->path)) dao::$errors['path'][] = $this->lang->gitlab->group->path . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiCreateGroup($gitlabID, $group);
+        $response = $this->apiCreateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabgroup', $response->id, 'created', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2243,15 +2243,15 @@ class gitlabModel extends model
         if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiUpdateGroup($gitlabID, $group);
+        $response = $this->apiUpdateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'edited', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabgroup', $response->id, 'edited', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2270,41 +2270,41 @@ class gitlabModel extends model
         if(empty($branch->ref))    dao::$errors['ref'][]    = $this->lang->gitlab->branch->from . $this->lang->gitlab->emptyError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiCreateBranch($gitlabID, $projectID, $branch);
+        $response = $this->apiCreateBranch($gitlabID, $projectID, $branch);
 
-        if(!empty($reponse->name))
+        if(!empty($response->name))
         {
-            $this->loadModel('action')->create('gitlabbranch', 0, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabbranch', 0, 'created', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
      * Api error handling.
      *
-     * @param  object $reponse
+     * @param  object $response
      * @access public
      * @return bool
      */
-    public function apiErrorHandling($reponse)
+    public function apiErrorHandling($response)
     {
-        if(!empty($reponse->error))
+        if(!empty($response->error))
         {
-            dao::$errors[] = $reponse->error;
+            dao::$errors[] = $response->error;
             return false;
         }
-        if(!empty($reponse->message))
+        if(!empty($response->message))
         {
-            if(is_string($reponse->message))
+            if(is_string($response->message))
             {
-                $errorKey = array_search($reponse->message, $this->lang->gitlab->apiError);
-                dao::$errors[] = $errorKey === false ? $reponse->message : zget($this->lang->gitlab->errorLang, $errorKey);
+                $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
+                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
             }
             else
             {
-                foreach($reponse->message as $field => $fieldErrors)
+                foreach($response->message as $field => $fieldErrors)
                 {
                     foreach($fieldErrors as $error)
                     {
@@ -2315,7 +2315,7 @@ class gitlabModel extends model
             }
         }
 
-        if(!$reponse) dao::$errors[] = false;
+        if(!$response) dao::$errors[] = false;
         return false;
     }
 
@@ -2395,9 +2395,9 @@ class gitlabModel extends model
         $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
         if(empty($branch) && !empty($singleBranch->id)) dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
         if(dao::isError()) return false;
-        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch); 
+        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
 
-        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv); 
+        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
 
         if(!empty($response->id))
         {
