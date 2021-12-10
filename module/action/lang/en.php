@@ -357,6 +357,7 @@ $lang->action->dynamicAction->release['notified']     = 'Notify Release';
 $lang->action->dynamicAction->release['hidden']       = 'Hide Release';
 
 $lang->action->dynamicAction->story['opened']                = 'Create Story';
+$lang->action->dynamicAction->story['importfromgitlab']      = "Issue associate create story";
 $lang->action->dynamicAction->story['edited']                = 'Edit Story';
 $lang->action->dynamicAction->story['activated']             = 'Activate Story';
 $lang->action->dynamicAction->story['reviewed']              = 'Review Story';
@@ -397,6 +398,7 @@ $lang->action->dynamicAction->kanbanlane['moved']    = 'Move Swimlane';
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
 $lang->action->dynamicAction->task['opened']              = 'Create Task';
+$lang->action->dynamicAction->task['importfromgitlab']    = "Issue associate create task";
 $lang->action->dynamicAction->task['edited']              = 'Edit Task';
 $lang->action->dynamicAction->task['commented']           = 'Task Comment';
 $lang->action->dynamicAction->task['assigned']            = 'Assign Task';
@@ -430,6 +432,7 @@ $lang->action->dynamicAction->build['edited']  = 'Edit Build';
 $lang->action->dynamicAction->build['deleted'] = 'Delete Build';
 
 $lang->action->dynamicAction->bug['opened']              = 'Report Bug';
+$lang->action->dynamicAction->bug['importfromgitlab']    = "Issue associate create bug";
 $lang->action->dynamicAction->bug['edited']              = 'Edit Bug';
 $lang->action->dynamicAction->bug['activated']           = 'Activate Bug';
 $lang->action->dynamicAction->bug['assigned']            = 'Assign Bug';

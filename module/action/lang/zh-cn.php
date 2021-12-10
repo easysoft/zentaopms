@@ -357,6 +357,7 @@ $lang->action->dynamicAction->release['notified']     = '通知发布';
 $lang->action->dynamicAction->release['hidden']       = '隐藏发布';
 
 $lang->action->dynamicAction->story['opened']                = "创建{$lang->SRCommon}";
+$lang->action->dynamicAction->story['importfromgitlab']      = "从Gitlab关联创建{$lang->SRCommon}";
 $lang->action->dynamicAction->story['edited']                = "编辑{$lang->SRCommon}";
 $lang->action->dynamicAction->story['activated']             = "激活{$lang->SRCommon}";
 $lang->action->dynamicAction->story['reviewed']              = "评审{$lang->SRCommon}";
@@ -397,6 +398,7 @@ $lang->action->dynamicAction->kanbanlane['moved']    = '移动泳道';
 $lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
 $lang->action->dynamicAction->task['opened']              = '创建任务';
+$lang->action->dynamicAction->task['importfromgitlab']    = "从Gitlab关联创建任务";
 $lang->action->dynamicAction->task['edited']              = '编辑任务';
 $lang->action->dynamicAction->task['commented']           = '备注任务';
 $lang->action->dynamicAction->task['assigned']            = '指派任务';
@@ -430,6 +432,7 @@ $lang->action->dynamicAction->build['edited']  = '编辑版本';
 $lang->action->dynamicAction->build['deleted'] = '删除版本';
 
 $lang->action->dynamicAction->bug['opened']              = '创建Bug';
+$lang->action->dynamicAction->bug['importfromgitlab']    = "从Gitlab关联创建Bug";
 $lang->action->dynamicAction->bug['edited']              = '编辑Bug';
 $lang->action->dynamicAction->bug['activated']           = '激活Bug';
 $lang->action->dynamicAction->bug['assigned']            = '指派Bug';
