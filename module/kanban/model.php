@@ -589,10 +589,11 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCanViewObjects($objectType)
+    public function getCanViewObjects($objectType = 'kanban')
     {
-        $table   = $this->config->objectTables[$objectType];
-        $objects = $this->dao->select('*')->from($table)->fetchAll('id');
+        $table           = $this->config->objectTables[$objectType];
+        $objects         = $this->dao->select('*')->from($table)->fetchAll('id');
+        $spaceOwnerPairs = $this->dao->select('id,owner')->from(TABLE_SPACE)->fetchPairs();
 
         if($this->app->user->admin) return $objects;
 
@@ -602,6 +603,7 @@ class kanbanModel extends model
             if($object->acl == 'private')
             {
                 $aclUsers = $object->owner . $object->team . $object->whitelist;
+                if($objectType == 'kanban') $aclUsers .= ',' . $spaceOwnerPairs[$object->space];
                 if(strpos(",$aclUsers,", ",$account,") === false) unset($objects[$objectID]);
             }
         }
@@ -1436,11 +1438,9 @@ class kanbanModel extends model
         $currentModule = $this->app->getModuleName();
         $currentMethod = $this->app->getMethodName();
 
-        $currentKanbanName = $kanban->name;
-
         $kanbanLink = helper::createLink('kanban', 'ajaxGetKanbanMenu', "objectID=$kanban->id&module=$currentModule&method=$currentMethod");
 
-        $switcher  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$currentKanbanName}'><span class='text'>{$currentKanbanName}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$kanbanLink'>";
+        $switcher  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$kanban->name}'><span class='text'>{$kanban->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$kanbanLink'>";
         $switcher .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
         $switcher .= "</div></div>";
 

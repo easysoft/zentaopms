@@ -53,14 +53,14 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
 }
 $kanbansPinYin = common::convert2Pinyin($kanbanNames);
 
-$myKanbansHtml     = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noSpace">';
-$normalKanbansHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noSpace">';
-$closedKanbansHtml = $config->systemMode == 'new' ? '<ul class="tree tree-angles" data-ride="tree">' : '<ul class="noSpace">';
+$myKanbansHtml     = '<ul class="tree tree-angles" data-ride="tree">';
+$normalKanbansHtml = '<ul class="tree tree-angles" data-ride="tree">';
+$closedKanbansHtml = '<ul class="tree tree-angles" data-ride="tree">';
 
 foreach($kanbanList as $spaceID => $spaceKanbans)
 {
     /* Add the space name before kanban. */
-    if(isset($spaceList[$spaceID]) and $config->systemMode == 'new')
+    if(isset($spaceList[$spaceID]))
     {
         $spaceName = zget($spaceList, $spaceID);
 
@@ -75,7 +75,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
         $link       = helper::createLink('kanban', 'index', "kanbanID=%s", '', '', $kanban->id);
         $kanbanName = '<i class="icon icon-kanban"></i> ' . $kanban->name;
 
-        if($kanban->status != 'done' and $kanban->status != 'closed' and $kanban->owner == $this->app->user->account)
+        if($kanban->status != 'closed' and $kanban->owner == $this->app->user->account)
         {
             $myKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='{$kanban->name}' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
 
@@ -83,7 +83,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
 
             $myKanbans ++;
         }
-        else if($kanban->status != 'done' and $kanban->status != 'closed' and !($kanban->owner == $this->app->user->account))
+        else if($kanban->status != 'closed' and !($kanban->owner == $this->app->user->account))
         {
             $normalKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='{$kanban->name}' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
 
@@ -91,7 +91,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
 
             $others ++;
         }
-        else if($kanban->status == 'done' or $kanban->status == 'closed')
+        else if($kanban->status == 'closed')
         {
             $closedKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='$kanbanName' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
 
