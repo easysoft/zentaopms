@@ -83,7 +83,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
 
             $myKanbans ++;
         }
-        else if($kanban->status != 'closed' and !($kanban->owner == $this->app->user->account))
+        elseif($kanban->status != 'closed' and !($kanban->owner == $this->app->user->account))
         {
             $normalKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='{$kanban->name}' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
 
@@ -91,7 +91,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
 
             $others ++;
         }
-        else if($kanban->status == 'closed')
+        elseif($kanban->status == 'closed')
         {
             $closedKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='$kanbanName' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
 
