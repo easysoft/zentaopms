@@ -149,7 +149,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $regionID));
         }
 
-        $this->view->lanes      = $this->kanban->getLanePairsByRegion($regionID);
+        $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
         $this->display();
     }
 
