@@ -63,13 +63,9 @@
                 <?php endif;?>
                 <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
               </div>
-              <div class='kanban-actions'>
-                <div class='dropdown'>
-                </div>
-              </div>
             </div>
             <div class='panel-body'>
-              <div class='kanban-desc'><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>
+              <div class='kanban-desc' title="<?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?>"><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>
               <div class='kanban-footer'>
               <?php $count     = 0;?>
               <?php $teamPairs = array_filter(explode(',', $kanban->team));?>
@@ -87,19 +83,19 @@
                     }
                     $count ++;
                     ?>
-                    <a href='<?php echo helper::createLink('kanban', 'view', "kanbanID=$kanbanID");?>' title="<?php echo $users[$member];?>">
+                    <div title="<?php echo $users[$member];?>">
                       <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member)); ?>
-                    </a>
+                    </div>
                     <?php endforeach;?>
                     <?php if($teamCount > 3):?>
                     <?php echo '<span>…</span>';?>
-                    <a href='<?php echo helper::createLink('kanban', 'view', "kanbanID=$kanbanID");?>' title="<?php echo $users[$member];?>">
+                    <div title="<?php echo $users[$member];?>">
                       <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($teamPairs)], 'account' => $member)); ?>
-                    </a>
+                    </div>
                     <?php endif;?>
                   </div>
                   <?php endif;?>
-                  <div class='kanban-members-total pull-left'><?php echo html::a(helper::createLink('kanban', 'view', "kanbanID=$kanbanID"), sprintf($lang->kanban->teamSumCount, $teamCount));?></div>
+                  <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
                 </div>
                 <div class='kanbanAcl'>
                   <?php $icon = $kanban->acl == 'open' ? 'unlock' : 'lock';?>

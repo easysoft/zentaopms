@@ -1,4 +1,4 @@
-/* Make cards clickable */
+/* Make cards clickable. */
 var $spaces = $('.kanbans');
 $spaces.on('click', '.panel', function(e)
 {

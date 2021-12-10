@@ -42,6 +42,9 @@ $lang->kanban->teamSumCount = '%s people in total';
 $lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
+$lang->kanban->aclGroup['open']    = 'Open';
+$lang->kanban->aclGroup['private'] = 'Private';
+
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
 $lang->kanban->type['story'] = "Story KanBan";
