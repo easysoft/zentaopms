@@ -529,7 +529,7 @@ function loadProductBranches(productID, param)
     $('#branch_chosen').remove();
     $('#branch').next('.picker').remove();
 
-    var param = (typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) ? "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + objectID : "productID=" + productID;
+    var param = (typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) ? "productID=" + productID + "&oldBranch=0&param=" + param + "&projectID=" + objectID : "productID=" + productID + "&oldBranch=0&param=" + param;
     $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
         if(data)
