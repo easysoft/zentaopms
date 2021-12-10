@@ -1233,6 +1233,12 @@ class actionModel extends model
             $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
         }
 
+        if($action->objectType == 'kanbanregion')
+        {
+            $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($action->objectID)->fetch('kanban');
+            $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
+        }
+
         return $action;
     }
 

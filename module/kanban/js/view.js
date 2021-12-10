@@ -150,18 +150,18 @@ function renderCount($count, count, column)
 
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
-    var canEdit = lane.actions.includes('editLane');
-    var canSort = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
+    var canSet    = lane.actions.includes('setLane');
+    var canSort   = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
     var canDelete = lane.actions.includes('deleteLane');
 
     $lane.parent().toggleClass('sort', canSort);
 
-    if(!$lane.children('.actions').length && (canEdit || canDelete))
+    if(!$lane.children('.actions').length && (canSet || canDelete))
     {
         $([
           '<div class="actions" title="' + lang.more + '">',
           '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
-          '<i class="icon icon-more-v"></i>',
+          '<i class="icon icon-ellipsis-v"></i>',
           '</a>',
           '</div>'
         ].join('')).appendTo($lane);
@@ -193,7 +193,7 @@ function renderKanbanItem(item, $item)
         [
             '<div class="actions" title="' + lang.more + '">',
               '<button class="btn btn-link action" data-contextmenu="task" data-id="' + item.id + '" data-status="' + item.status + '">',
-                '<i class="icon icon-more-v"></i>',
+                '<i class="icon icon-ellipsis-v"></i>',
               '</button>',
             '</div>'
         ].join('')).appendTo($item);
@@ -578,8 +578,8 @@ function createLaneMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('editLane')) items.push({label: kanbanLang.editLane, icon: '', url: createLink('kanban', 'editLane', 'lane=' + lane.id), attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: '', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), className: 'confirmer', attrs: {'data-confirmTitle': kanbanlaneLang.confirmDelete, 'data-confirmDetail': kanbanlaneLang.confirmDeleteDetail}});
+    if(privs.includes('setLane')) items.push({label: kanbanLang.editLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), className: 'confirmer', attrs: {'data-confirmTitle': kanbanlaneLang.confirmDelete, 'data-confirmDetail': kanbanlaneLang.confirmDeleteDetail}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -627,6 +627,7 @@ function createColumnMenu(options)
     if(privs.includes('editColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
     if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: '', url: createLink('kanban', 'setColumn', 'columnID=' + column.id + '&executionID=0&from=kanban', '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
         items.push({label: kanbanLang.createColumnOnLeft, icon: 'col-add-left', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=left'), className: 'iframe', attrs: {'data-toggle': 'modal'}});

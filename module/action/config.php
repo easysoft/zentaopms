@@ -36,6 +36,7 @@ $config->action->objectNameFields['mr']           = 'title';
 $config->action->objectNameFields['kanbancolumn'] = 'name';
 $config->action->objectNameFields['kanbanlane']   = 'name';
 $config->action->objectNameFields['kanbanspace']  = 'name';
+$config->action->objectNameFields['kanbanregion'] = 'name';
 $config->action->objectNameFields['kanban']       = 'name';
 
 $config->action->commonImgSize = 870;

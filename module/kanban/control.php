@@ -110,7 +110,7 @@ class kanban extends control
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->spaceID    = $spaceID;
-        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs();
 
         $this->display();
     }
@@ -138,7 +138,7 @@ class kanban extends control
         }
 
         $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
-        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs();
         $this->view->kanban     = $this->kanban->getByID($kanbanID);
 
         $this->display();
@@ -251,7 +251,7 @@ class kanban extends control
      *
      * @param  int    $columnID
      * @param  int    $executionID
-     * @param  string $from
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
@@ -275,6 +275,7 @@ class kanban extends control
 
         $this->view->title  = $title . $this->lang->colon . $this->lang->kanban->setWIP . '(' . $this->lang->kanban->WIP . ')';
         $this->view->column = $column;
+        $this->view->from   = $from;
 
         if($from != 'kanban') $this->view->status = zget($this->config->kanban->{$column->laneType . 'ColumnStatusList'}, $column->type);
         $this->display();
@@ -285,7 +286,7 @@ class kanban extends control
      *
      * @param  int    $laneID
      * @param  int    $executionID
-     * @param  string $from
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
@@ -304,8 +305,9 @@ class kanban extends control
         $lane = $this->kanban->getLaneById($laneID);
         if(!$lane) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
 
-        $this->view->title = zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
+        $this->view->title = $from == 'kanban' ? $this->lang->edit . '“' . $lane->name . '”' . $this->lang->kanbanlane->common : zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
         $this->view->lane  = $lane;
+        $this->view->from  = $from;
 
         $this->display();
     }
@@ -315,7 +317,7 @@ class kanban extends control
      *
      * @param  int $columnID
      * @param  int $executionID
-     * @param  string $from
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
