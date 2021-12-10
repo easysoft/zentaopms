@@ -199,7 +199,7 @@ class task extends control
             $moduleID     = $this->tree->getStoryModule($task->module);
             $moduleIdList = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, $moduleIdList, 'full', 'unclosed');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleIdList, 'full', 'unclosed');
 
         /* Get block id of assinge to me. */
         $blockID = 0;

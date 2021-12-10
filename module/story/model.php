@@ -1826,15 +1826,16 @@ class storyModel extends model
             if(strpos('draft,closed', $story->status) !== false) continue;
 
             $task = new stdclass();
-            $task->execution  = $executionID;
-            $task->project    = $projectID;
-            $task->name       = $story->title;
-            $task->story      = $story->id;
-            $task->type       = $data->type;
-            $task->estimate   = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
-            $task->left       = $task->estimate;
-            $task->openedBy   = $this->app->user->account;
-            $task->openedDate = $now;
+            $task->execution    = $executionID;
+            $task->project      = $projectID;
+            $task->name         = $story->title;
+            $task->story        = $story->id;
+            $task->type         = $data->type;
+            $task->estimate     = isset($data->hourPointValue) ? ($story->estimate * $data->hourPointValue) : $story->estimate;
+            $task->left         = $task->estimate;
+            $task->openedBy     = $this->app->user->account;
+            $task->openedDate   = $now;
+            $task->storyVersion = $story->version;
 
             if(isset($data->fields))
             {
