@@ -42,9 +42,15 @@ $lang->kanban->lastEditedBy   = '最后修改';
 $lang->kanban->lastEditedDate = '最后修改日期';
 $lang->kanban->closedBy       = '由谁关闭';
 $lang->kanban->closedDate     = '关闭日期';
+$lang->kanban->closed         = '已关闭';
+$lang->kanban->empty          = '暂时没有看板';
+$lang->kanban->teamSumCount   = '共%s人';
 
 $lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
+
+$lang->kanban->aclGroup['open']    = '公开';
+$lang->kanban->aclGroup['private'] = '私有';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";

@@ -40,11 +40,18 @@ $lang->kanban->createdBy      = 'Created By';
 $lang->kanban->createdDate    = 'Created Date';
 $lang->kanban->lastEditedBy   = 'Edited By';
 $lang->kanban->lastEditedDate = 'Edited Date';
+$lang->kanban->closed         = 'Closed';
 $lang->kanban->closedBy       = 'Closed By';
 $lang->kanban->closedDate     = 'Closed Date';
+$lang->kanban->empty          = 'No Kanban';
+$lang->kanban->teamSumCount   = '%s people in total';
+
 
 $lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
+
+$lang->kanban->aclGroup['open']    = 'Open';
+$lang->kanban->aclGroup['private'] = 'Private';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
