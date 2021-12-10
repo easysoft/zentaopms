@@ -32,6 +32,7 @@ $lang->kanban->createColumnOnLeft  = '左侧新增看板列';
 $lang->kanban->createColumnOnRight = '右侧新增看板列';
 $lang->kanban->copyColumn          = '复制看板列';
 $lang->kanban->archiveColumn       = '归档看板列';
+$lang->kanban->spaceCommon         = '看板空间';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
