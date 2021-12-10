@@ -224,7 +224,7 @@ class kanban extends control
      *
      * @param  int    $columnID
      * @param  int    $executionID
-     * @param  string $from
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
@@ -259,7 +259,7 @@ class kanban extends control
      *
      * @param  int    $laneID
      * @param  int    $executionID
-     * @param  string $from
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
@@ -290,7 +290,7 @@ class kanban extends control
      *
      * @param  int $columnID
      * @param  int $executionID
-     * @param  string $from
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
