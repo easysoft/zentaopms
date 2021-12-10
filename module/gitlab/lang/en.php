@@ -63,7 +63,7 @@ $lang->gitlab->lblCreate     = 'Create GitLab Server';
 $lang->gitlab->desc          = 'Description';
 $lang->gitlab->tokenFirst    = 'When the Token is not empty, the Token will be used first';
 $lang->gitlab->tips          = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
-$lang->gitlab->emptyError    = "cannot be empty";
+$lang->gitlab->emptyError    = " cannot be empty";
 $lang->gitlab->createSuccess = "Create success";
 
 $lang->gitlab->placeholder = new stdclass;
@@ -186,7 +186,7 @@ $lang->gitlab->group->memberExpiresAt                         = 'Expiration time
 $lang->gitlab->group->repeatError                             = "Group members cannot be added repeatedly";
 
 $lang->gitlab->branch = new stdclass();
-$lang->gitlab->branch->name                        = 'Branch Name';
+$lang->gitlab->branch->name                        = 'Branch name';
 $lang->gitlab->branch->from                        = 'Create from';
 $lang->gitlab->branch->create                      = 'Create';
 $lang->gitlab->branch->lastCommitter               = 'Last Committer';
