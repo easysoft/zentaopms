@@ -1,6 +1,5 @@
 <?php
 /* Actions. */
-$lang->kanban->space        = 'Kanban Space';
 $lang->kanban->create       = 'Create Kanban';
 $lang->kanban->createSpace  = 'Create Space';
 $lang->kanban->editSpace    = 'Edit Space';
@@ -26,6 +25,26 @@ $lang->kanban->createCard   = 'Create Card';
 $lang->kanban->editCard     = 'Edit Card';
 $lang->kanban->viewCard     = 'View Card';
 $lang->kanban->sortCard     = 'Sort Card';
+$lang->kanban->setting      = 'Setting';
+
+/* Fields. */
+$lang->kanban->space          = 'Space';
+$lang->kanban->name           = 'Name';
+$lang->kanban->owner          = 'Owner';
+$lang->kanban->team           = 'Team';
+$lang->kanban->desc           = 'Description';
+$lang->kanban->acl            = 'ACL';
+$lang->kanban->whitelist      = 'White List';
+$lang->kanban->status         = 'Status';
+$lang->kanban->createdBy      = 'Created By';
+$lang->kanban->createdDate    = 'Created Date';
+$lang->kanban->lastEditedBy   = 'Edited By';
+$lang->kanban->lastEditedDate = 'Edited Date';
+$lang->kanban->closedBy       = 'Closed By';
+$lang->kanban->closedDate     = 'Closed Date';
+
+$lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
+$lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -81,11 +100,16 @@ $lang->kanban->laneGroup          = 'Lane Group';
 $lang->kanban->cardsSort          = 'Cards Sortting';
 $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
+$lang->kanban->limitExceeded      = 'Limit Exceeded';
+$lang->kanban->fullScreen         = 'Full Screen';
+$lang->kanban->setting            = 'Setting';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
 $lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
 $lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
+
+$lang->kanban->defaultColumn = array('wait', 'doing', 'done', 'close');
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
@@ -126,14 +150,25 @@ $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
 
 $lang->kanbanspace = new stdclass();
-$lang->kanbanspace->name  = 'Name';
-$lang->kanbanspace->owner = 'Owner';
-$lang->kanbanspace->team  = 'Team';
-$lang->kanbanspace->desc  = 'Description';
-$lang->kanbanspace->acl   = 'ACL';
+$lang->kanbanspace->common         = 'Kanban Space';
+$lang->kanbanspace->name           = 'Name';
+$lang->kanbanspace->owner          = 'Owner';
+$lang->kanbanspace->team           = 'Team';
+$lang->kanbanspace->desc           = 'Description';
+$lang->kanbanspace->acl            = 'ACL';
+$lang->kanbanspace->whitelist      = 'White List';
+$lang->kanbanspace->status         = 'Status';
+$lang->kanbanspace->createdBy      = 'Created By';
+$lang->kanbanspace->createdDate    = 'Created Date';
+$lang->kanbanspace->lastEditedBy   = 'Edited By';
+$lang->kanbanspace->lastEditedDate = 'Edited Date';
+$lang->kanbanspace->closedBy       = 'Closed By';
+$lang->kanbanspace->closedDate     = 'Closed Date';
+
+$lang->kanbanspace->empty = 'No Space';
 
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
-$lang->kanbanspace->aclList['private'] = 'Private (For the kanban owner and team members only)';
+$lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
 $lang->kanbanspace->featureBar['all']    = 'All';
 $lang->kanbanspace->featureBar['my']     = 'My';
@@ -155,4 +190,12 @@ $lang->kanbanlane->color      = 'Lane color';
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
 
+$lang->kanbanlane->name    = $lang->kanban->laneName;
+$lang->kanbanlane->common  = 'Lane';
+$lang->kanbanlane->default = 'Default Lane';
 
+$lang->kanbanregion = new stdclass();
+$lang->kanbanregion->name    = 'Kanban Region';
+$lang->kanbanregion->default = 'Default Region';
+
+$lang->kanbancard = new stdclass();

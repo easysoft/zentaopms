@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('acl', $space->acl);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->editSpace;?></h2>
@@ -39,7 +40,7 @@
       <tr>
         <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
-          <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=space&link=desc');?>
+          <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=kanbanSpace&link=desc');?>
           <?php echo html::textarea('desc', $space->desc, "rows='10' class='form-control'");?>
         </td>
       </tr>

@@ -15,8 +15,8 @@ class kanbanModel extends model
 {
     /**
      * Init a kanban.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @param  string $type default|new
      * @access public
      * @return void
@@ -41,11 +41,11 @@ class kanbanModel extends model
 
     /**
      * Create a kanban group.
-     * 
-     * @param  int    $kanbanID 
-     * @param  int    $regionID 
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
      * @access public
-     * @return int 
+     * @return int
      */
     public function createGroup($kanbanID, $regionID)
     {
@@ -73,10 +73,10 @@ class kanbanModel extends model
 
     /**
      * Create a default kanban region.
-     * 
-     * @param  object $kanban 
+     *
+     * @param  object $kanban
      * @access public
-     * @return int 
+     * @return int
      */
     public function createDefaultRegion($kanban)
     {
@@ -92,11 +92,11 @@ class kanbanModel extends model
 
     /**
      * Create a new region.
-     * 
-     * @param  object $kanban 
-     * @param  object $region 
+     *
+     * @param  object $kanban
+     * @param  object $region
      * @access public
-     * @return int 
+     * @return int
      */
     public function createRegion($kanban, $region = null)
     {
@@ -104,7 +104,7 @@ class kanbanModel extends model
         $order   = 1;
 
         if(!$region)
-        {    
+        {
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANORDER)
                 ->where('objectType')->eq('region')
                 ->andWhere('parentID')->eq($kanban->id)
@@ -137,12 +137,12 @@ class kanbanModel extends model
 
     /**
      * Create default lane.
-     * 
-     * @param  object $kanban 
+     *
+     * @param  object $kanban
      * @param  int    $regionID
      * @param  int    $groupID
      * @access public
-     * @return int 
+     * @return int
      */
     public function createDefaultLane($kanban, $regionID, $groupID)
     {
@@ -152,6 +152,7 @@ class kanbanModel extends model
         $lane->region         = $regionID;
         $lane->type           = 'common';
         $lane->lastEditedTime = helper::now();
+        $lane->color          = '#7ec5ff';
 
         $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
         $laneID = $this->dao->lastInsertId();
@@ -162,8 +163,8 @@ class kanbanModel extends model
 
     /**
      * Create default kanban columns.
-     * 
-     * @param  object $kanban 
+     *
+     * @param  object $kanban
      * @param  int    $regionID
      * @param  int    $groupID
      * @access public
@@ -180,6 +181,7 @@ class kanbanModel extends model
             $column->name   = $columnName;
             $column->type   = $index;
             $column->limit  = -1;
+            $column->color  = '#333';
 
             $this->dao->insert(TABLE_KANBANCOLUMN)->data($column)->exec();
 
@@ -192,13 +194,13 @@ class kanbanModel extends model
 
     /**
      * Save kanban object order.
-     * 
-     * @param  int    $parentID 
-     * @param  string $parentType 
-     * @param  int    $objectID 
-     * @param  string $objectType 
-     * @param  string $account 
-     * @param  int    $order 
+     *
+     * @param  int    $parentID
+     * @param  string $parentType
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @param  string $account
+     * @param  int    $order
      * @access public
      * @return void
      */
@@ -217,11 +219,11 @@ class kanbanModel extends model
     }
 
     /**
-     * Get kanban by id. 
-     * 
-     * @param  int    $kanbanID 
+     * Get kanban by id.
+     *
+     * @param  int    $kanbanID
      * @access public
-     * @return object 
+     * @return object
      */
     public function getByID($kanbanID)
     {
@@ -230,8 +232,8 @@ class kanbanModel extends model
 
     /**
      * Get kanban data.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
      * @return void
      */
@@ -281,13 +283,13 @@ class kanbanModel extends model
 
     /**
      * Get ordered region pairs.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
-     * @return array 
+     * @return array
      */
     public function getRegionPairs($kanbanID)
-    {    
+    {
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('deleted')->eq('0')
@@ -297,10 +299,10 @@ class kanbanModel extends model
 
     /**
      * Get kanban group by regions.
-     * 
-     * @param  array $regions 
+     *
+     * @param  array $regions
      * @access public
-     * @return array 
+     * @return array
      */
     public function getGroupGroupByRegions($regions)
     {
@@ -312,10 +314,10 @@ class kanbanModel extends model
 
     /**
      * Get lane group by regions.
-     * 
-     * @param  array $regions 
+     *
+     * @param  array $regions
      * @access public
-     * @return array 
+     * @return array
      */
     public function getLaneGroupByRegions($regions)
     {
@@ -342,11 +344,11 @@ class kanbanModel extends model
     }
 
     /**
-     * Get column group by regions. 
-     * 
-     * @param  array $regions 
+     * Get column group by regions.
+     *
+     * @param  array $regions
      * @access public
-     * @return array 
+     * @return array
      */
     public function getColumnGroupByRegions($regions)
     {
@@ -386,7 +388,7 @@ class kanbanModel extends model
                 $columnData[$group][] = $parentColumn;
                 foreach($columnGroup[$group] as $column)
                 {
-                    if($column->parent == $parentColumn->id) 
+                    if($column->parent == $parentColumn->id)
                     {
                         $parentColumn->asParent = true;
 
@@ -399,6 +401,34 @@ class kanbanModel extends model
         }
 
         return $columnData;
+    }
+
+    /**
+     * Set kanban headerActions.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return void
+     */
+    public function setHeaderActions($kanban)
+    {
+        $actions  = '';
+        $actions .= "<div class='btn-group'>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
+        $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
+        if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+
+        $kanbanActions  = '';
+        if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link'") . '</li>';
+        if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
+        if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
+        if($kanbanActions) $actions .= "<div class='divider'></div>" . $kanbanActions;
+
+        $actions .= "</ul>";
+        $actions .= "</div>";
+
+        $this->lang->headerActions = $actions;
     }
 
     /**
@@ -528,6 +558,77 @@ class kanbanModel extends model
     }
 
     /**
+     * Get spaces.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpaces($browseType)
+    {
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('*')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get space pairs.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpacePairs($browseType = 'all')
+    {
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
+    }
+
+    /**
+     * Get can view objects.
+     *
+     * @param  string $objectType space|kanban
+     * @access public
+     * @return array
+     */
+    public function getCanViewObjects($objectType)
+    {
+        $table   = $this->config->objectTables[$objectType];
+        $objects = $this->dao->select('*')->from($table)->fetchAll('id');
+
+        if($this->app->user->admin) return $objects;
+
+        $account = $this->app->user->account;
+        foreach($objects as $objectID => $object)
+        {
+            if($object->acl == 'private')
+            {
+                $aclUsers = $object->owner . $object->team . $object->whitelist;
+                if(strpos(",$aclUsers,", ",$account,") === false) unset($objects[$objectID]);
+            }
+        }
+
+        return array_keys($objects);
+    }
+
+    /**
      * Create a space.
      *
      * @access public
@@ -535,13 +636,16 @@ class kanbanModel extends model
      */
     public function createSpace()
     {
-        $space = fixer::input('post')
-            ->setDefault('createdBy', $this->app->user->account)
+        $account = $this->app->user->account;
+        $space   = fixer::input('post')
+            ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
             ->remove('uid,contactListMenu')
             ->get();
+
+        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 
         $this->dao->insert(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
@@ -600,7 +704,6 @@ class kanbanModel extends model
             ->fetchPairs();
     }
 
-
     /**
      * Create a lane.
      *
@@ -653,6 +756,68 @@ class kanbanModel extends model
         return $laneID;
     }
 
+     * Create a kanban.
+     *
+     * @access public
+     * @return int
+     */
+    public function create()
+    {
+        $account = $this->app->user->account;
+        $kanban  = fixer::input('post')
+            ->setDefault('createdBy', $account)
+            ->setDefault('createdDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
+
+        $this->dao->insert(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $kanbanID = $this->dao->lastInsertID();
+
+            $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
+            $this->initKanban($kanbanID);
+
+            return $kanbanID;
+        }
+    }
+
+    /**
+     * Update a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    public function update($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $account   = $this->app->user->account;
+        $oldKanban = $this->getByID($kanbanID);
+        $kanban    = fixer::input('post')
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
+    }
 
     /**
      * Close a kanban.

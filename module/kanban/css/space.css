@@ -1,0 +1,5 @@
+#spaces {margin: 0 0; margin-bottom: 15px;}
+#spaces .spaceTitle {margin-bottom: 15px;}
+#spaces .spaceActions {margin-top: 10px;}
+#spaces .spaceActions > a{margin-left: 10px;}
+.table-footer .pager>li.disabled>a.pager-item {bottom: -3px;}

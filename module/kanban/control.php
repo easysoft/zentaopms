@@ -23,11 +23,16 @@ class kanban extends control
      */
     public function space($browseType = 'my', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $spaces = $this->kanban->getSpaces($browseType);
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
+        $recTotal = count($spaces);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $spaces   = array_chunk($spaces, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->kanban->common;
+        $this->view->title      = $this->lang->kanbanspace->common;
+        $this->view->spaces     = empty($spaces) ? $spaces : $spaces[$pageID - 1];
         $this->view->browseType = $browseType;
         $this->view->pager      = $pager;
 
@@ -66,13 +71,14 @@ class kanban extends control
      */
     public function editSpace($spaceID)
     {
+        $this->loadModel('action');
         if(!empty($_POST))
         {
             $changes = $this->kanban->updateSpace($spaceID);
 
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('kanbanSpace', $spaceID, 'edited');
+            $actionID = $this->action->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent.parent'));
@@ -85,6 +91,61 @@ class kanban extends control
     }
 
     /**
+     * Create a kanban.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function create($spaceID = 0)
+    {
+        if(!empty($_POST))
+        {
+            $kanbanID = $this->kanban->create();
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanban', $kanbanID, 'created');
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->spaceID    = $spaceID;
+        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+
+        $this->display();
+    }
+
+    /**
+     * Edit a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function edit($kanbanID = 0)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->update($kanbanID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanban', $kanbanID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->spacePairs = array('' => '') + $this->kanban->getSpacePairs();
+        $this->view->kanban     = $this->kanban->getByID($kanbanID);
+
+        $this->display();
+    }
+
+    /*
      * Close a kanban.
      *
      * @param  int    $kanbanID
@@ -116,18 +177,20 @@ class kanban extends control
 
      /**
      * View a kanban.
-     * 
-     * @param  int    $kanbanID 
+     *
+     * @param  int    $kanbanID
      * @access public
      * @return void
      */
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
+        $this->kanban->setHeaderActions($kanban);
 
+        $this->view->title   = $this->lang->kanban->view;
         $this->view->regions = $this->kanban->getKanbanData($kanbanID);
         $this->view->kanban  = $kanban;
-        
+
         $this->display();
     }
 
