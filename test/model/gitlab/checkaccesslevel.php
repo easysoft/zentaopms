@@ -46,6 +46,6 @@ $accessLevelArray = array(
     array(
         'access_level' => 0,
         'access_level_description' => 'No one'
-    ),
+    )
 );
 r($gitlab->checkAccessLevel($accessLevelArray)) && p() && e(0); //使用包含禁止权限信息的二维数组查询
