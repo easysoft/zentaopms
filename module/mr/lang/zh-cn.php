@@ -95,6 +95,7 @@ $lang->mr->notFound          = "此{$lang->mr->common}不存在。";
 $lang->mr->toCreatedMessage  = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行通过。";
 $lang->mr->toReviewerMessage = "有一个合并请求：<a href='%s'>%s</a> 待审核。";
 $lang->mr->failMessage       = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行失败，查看执行结果。";
+$lang->mr->storySummary      = "本页共 <strong>%s</strong> 个" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原因：%s";

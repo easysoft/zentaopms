@@ -95,6 +95,7 @@ $lang->mr->notFound          = "Merge Request does not exist!";
 $lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
 $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
+$lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";
