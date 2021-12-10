@@ -624,8 +624,8 @@ function createColumnMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('setWIP')) items.push({label: kanbanLang.WIP, icon: '', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('editColumn')) items.push({label: kanbanLang.editColumn, icon: '', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: '', url: createLink('kanban', 'setWIP', 'columnID=' + column.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '500px'}});
+    if(privs.includes('editColumn')) items.push({label: kanbanLang.editColumn, icon: '', url: createLink('kanban', 'setColumn', 'columnID=' + column.id + '&executionID=0&from=kanban', '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('createColumn'))
     {
         items.push({label: kanbanLang.createColumnOnLeft, icon: '', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=left'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
