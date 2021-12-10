@@ -582,6 +582,7 @@ class testcaseModel extends model
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t3.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.status')->ne('done')
             ->beginIF($auto != 'skip' and $auto != 'unit')->andWhere('t2.auto')->ne('unit')->fi()
             ->beginIF($auto == 'unit')->andWhere('t2.auto')->eq('unit')->fi()
             ->orderBy($orderBy)->page($pager)->fetchAll('id');
