@@ -215,13 +215,13 @@ class project extends control
     }
 
     /**
-     * Ajax get linked products with branch.
+     * AJAX: Get linked products with branch.
      *
-     * @param  int  $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function ajaxGetLinkedProductsWithBranch($projectID)
+    public function ajaxGetLinkedProducts($projectID)
     {
         $productsWithBranch = array();
         $linkedProducts     = $this->project->getBranchesByProject($projectID);
@@ -230,7 +230,7 @@ class project extends control
             foreach($branches as $branchID => $branchInfo) $productsWithBranch[$productID][$branchID] = $branchID;
         }
 
-        die(json_encode($productsWithBranch));
+        echo json_encode($productsWithBranch);
     }
 
     /**

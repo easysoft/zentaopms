@@ -13,7 +13,7 @@ $(function()
         var currentProductID = $('#product').val();
         var currentBranchID  = $('#branch').val();
 
-        $.get(createLink('project', 'ajaxGetLinkedProductsWithBranch', 'projectID=' + selectProjectID), function(product)
+        $.get(createLink('project', 'ajaxGetLinkedProducts', 'projectID=' + selectProjectID), function(product)
         {
             var products = [];
             var branches = [];
