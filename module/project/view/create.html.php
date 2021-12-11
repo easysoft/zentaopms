@@ -21,6 +21,8 @@
 <?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
+<?php js::set('selectedProductID', $productID);?>
+<?php js::set('selectedBranchID', $branchID);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>

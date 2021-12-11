@@ -271,8 +271,7 @@ class branch extends control
             }
         }
 
-        if($oldBranch) $branches = array($oldBranch => $branches[$oldBranch]);
-        die(html::select('branch', $branches, '', "class='form-control' onchange='loadBranch(this)'"));
+        die(html::select('branch', $branches, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
     }
 
     /**
