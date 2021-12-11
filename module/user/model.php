@@ -99,8 +99,8 @@ class userModel extends model
 
         $users = $this->dao->select($fields)->from(TABLE_USER)
             ->where('1')
-            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
+            ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
