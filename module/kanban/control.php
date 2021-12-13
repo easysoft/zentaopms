@@ -209,9 +209,11 @@ class kanban extends control
         if(!empty($_POST))
         {
             $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) die(js::error(dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $regionID));
+            $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
+            die(js::reload('parent.parent'));
+
         }
 
         $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);

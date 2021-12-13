@@ -32,11 +32,7 @@
           </td>
         </tr>
         <tr>
-          <th></th>
-          <td class='form-actions'>
-            <?php echo html::submitButton();?>
-            <?php echo html::backButton($lang->cancel);?>
-          </td>
+          <td class='text-center form-actions' colspan='2'><?php echo html::submitButton();?></td>
         </tr>
       </tbody>
     </table>

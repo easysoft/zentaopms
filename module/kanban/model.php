@@ -826,7 +826,6 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBANLANE)->data($lane, $skip = 'mode,otherLane')
             ->batchCheck($this->config->kanban->require->createlane, 'notempty')
             ->autoCheck()
-            ->checkIF(!empty($lane->name), 'name', 'unique', "`type`='common'")
             ->exec();
         if(dao::isError()) return false;
 
@@ -835,7 +834,7 @@ class kanbanModel extends model
 
         return $laneID;
     }
-
+    
     /*
      * Create a kanban.
      *
