@@ -485,7 +485,8 @@ class personnelModel extends model
                 ->orWhere('id')->in($this->app->user->view->sprints)
                 ->markRight(1)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('type')
+                ->orderBy('type_asc,openedDate_desc')
+                ->limit('9')
                 ->fetchPairs();
             foreach($objects as $id => &$object)
             {
