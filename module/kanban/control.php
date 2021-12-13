@@ -248,6 +248,22 @@ class kanban extends control
     }
 
     /**
+     * Create a card.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function createCard($kanbanID, $regionID, $groupID, $laneID, $columnID)
+    {
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID

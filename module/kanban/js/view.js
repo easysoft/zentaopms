@@ -108,11 +108,18 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
     }
 
+    var regionID = $column.closest('.kanban').data('id');
+    var groupID  = $column.closest('.kanban-board').data('id');
+    var laneID   = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
+    var columnID = $column.closest('.kanban-col').data('id');
+    var cardUrl  = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+
     /* Render more menu. */
     if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
     var $actions = $column.children('.actions');
-    $actions.attr('title', lang.more);
-    $actions.html('<button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '" data-kanban="' + kanban.id + '"><i class="icon icon-ellipsis-v"></i></button>');
+    var addItemBtn = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+    var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
+    $actions.html(addItemBtn + moreAction);
 }
 
 /**
@@ -363,7 +370,7 @@ function openAddTaskForm($element)
     var laneID   = $element.closest('.kanban-lane').data('id');
     var columnID = $element.closest('.kanban-col').data('id');
     var status   = $element.closest('.kanban-col').data('type');
-    var modalUrl = createLink('sys.task', 'create', 'kanbanID=' + kanbanID + '&from=kanban&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID + '&status=' + status);
+    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
     $.zui.modalTrigger.show(
     {
         url: modalUrl,

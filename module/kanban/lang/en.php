@@ -214,3 +214,6 @@ $lang->kanbanregion->name    = 'Kanban Region';
 $lang->kanbanregion->default = 'Default Region';
 
 $lang->kanbancard = new stdclass();
+$lang->kanbancard->create = 'Create Card';
+
+$lang->kanbancard->name   = 'Card Name';
