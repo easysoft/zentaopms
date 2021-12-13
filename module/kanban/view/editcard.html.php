@@ -47,9 +47,8 @@
             <div class='detail-title'><?php echo $lang->kanbancard->legendBasicInfo;?></div>
               <table class="table table-form">
                 <tr>
-                  <?php unset($users['closed']);?>
                   <th><?php echo $lang->kanbancard->assignedTo;?></th>
-                  <td><?php echo html::select('assignedTo', $users, $card->assignedTo, "class='form-control chosen' multiple");?></td>
+                  <td><?php echo html::select('assignedTo', $allUsers, $card->assignedTo, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->begin;?></th>

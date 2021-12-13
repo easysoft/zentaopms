@@ -285,9 +285,10 @@ class kanban extends control
             die(js::reload('parent.parent'));
         }
 
-        $this->view->card    = $this->kanban->getCardByID($cardID);
-        $this->view->actions = $this->action->getList('kanbancard', $cardID);
-        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+        $this->view->card     = $this->kanban->getCardByID($cardID);
+        $this->view->actions  = $this->action->getList('kanbancard', $cardID);
+        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->allUsers = $this->loadModel('user')->getPairs();
 
         $this->display();
     }

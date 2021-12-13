@@ -1466,7 +1466,7 @@ class kanbanModel extends model
 
         $this->dao->update(TABLE_KANBANCARD)->data($card)
             ->autoCheck()
-			->checkIF($card->estimate != '', 'estimate', 'float')
+            ->checkIF($card->estimate != '', 'estimate', 'float')
             ->batchcheck($this->config->kanban->editcard->requiredFields, 'notempty')
             ->where('id')->eq($cardID)
             ->exec();
