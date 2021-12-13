@@ -793,7 +793,7 @@ class mrModel extends model
      */
     public function getReview($repoID, $MRID, $revision = '')
     {
-        if(empty($repoID) OR empty($MRID)) return array();
+        if(empty($repoID) or empty($MRID)) return array();
 
         $reviews = array();
         $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')

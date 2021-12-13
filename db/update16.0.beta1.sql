@@ -5,3 +5,5 @@ ALTER TABLE `zt_task` ADD `v1` varchar(40) NOT NULL AFTER `lines`;
 ALTER TABLE `zt_task` ADD `v2` varchar(40) NOT NULL AFTER `v1`;
 ALTER TABLE `zt_task` ADD `mr` mediumint(8) unsigned NOT NULL AFTER `repo`;
 ALTER TABLE `zt_bug` ADD `mr` mediumint(8) unsigned NOT NULL AFTER `repo`;
+
+UPDATE `zt_grouppriv` SET `method`='addReview' where `module`='mr' and `method`='addBug';
