@@ -216,4 +216,6 @@ $lang->kanbanregion->default = '默认区域';
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create = '创建卡片';
 
-$lang->kanbancard->name   = '卡片名称';
+$lang->kanbancard->name            = '卡片名称';
+$lang->kanbancard->legendBasicInfo = '基本信息';
+$lang->kanbancard->legendLifeTime  = '卡片的一生';

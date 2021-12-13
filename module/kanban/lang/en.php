@@ -216,4 +216,6 @@ $lang->kanbanregion->default = 'Default Region';
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create = 'Create Card';
 
-$lang->kanbancard->name   = 'Card Name';
+$lang->kanbancard->name            = 'Card Name';
+$lang->kanbancard->legendBasicInfo = 'Basic Info';
+$lang->kanbancard->legendLifeTime  = 'Card Life';

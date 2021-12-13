@@ -264,6 +264,35 @@ class kanban extends control
     }
 
     /**
+     * Edit a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return void
+     */
+    public function editCard($cardID)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->updateCard($cardID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanbanCard', $cardID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->card    = $this->kanban->getCardByID($cardID);
+        $this->view->actions = $this->action->getList('kanbancard', $cardID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID
