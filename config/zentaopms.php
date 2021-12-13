@@ -290,6 +290,7 @@ $config->objectTables['kanbancolumn'] = TABLE_KANBANCOLUMN;
 $config->objectTables['kanbanlane']   = TABLE_KANBANLANE;
 $config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
 $config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
+$config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 

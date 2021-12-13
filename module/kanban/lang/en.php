@@ -216,7 +216,9 @@ $lang->kanbanregion->default = 'Default Region';
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create = 'Create Card';
 
-$lang->kanbancard->name           = 'Card Name';
+$lang->kanbancard->name            = 'Card Name';
+$lang->kanbancard->legendBasicInfo = 'Basic Info';
+$lang->kanbancard->legendLifeTime  = 'Card Life';
 $lang->kanbancard->space          = 'Space';
 $lang->kanbancard->lane           = 'Lane';
 $lang->kanbancard->column         = 'Column';
@@ -241,3 +243,4 @@ $lang->kanbancard->priList[4] = 4;
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
 $lang->kanbancard->error->endSmall    = '"End Date" cannot be less than "Begin Date"';
+>>>>>>> module/kanban/lang/en.php

@@ -53,7 +53,10 @@
         <td><?php echo html::select('whitelist[]', $users, $space->whitelist, 'class="form-control chosen" multiple');?></td>
       </tr>
       <tr>
-        <td colspan='3' class='text-center form-actions'><?php echo html::submitButton();?></td>
+        <td colspan='3' class='text-center form-actions'>
+          <?php echo html::submitButton();?>
+          <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>
+        </td>
       </tr>
     </table>
   </form>

@@ -376,7 +376,10 @@ class kanbanModel extends model
      */
     public function getByID($kanbanID)
     {
-        return $this->dao->findByID($kanbanID)->from(TABLE_KANBAN)->fetch();
+        $kanban = $this->dao->findByID($kanbanID)->from(TABLE_KANBAN)->fetch();
+        $kanban = $this->loadModel('file')->replaceImgURL($kanban, 'desc');
+
+        return $kanban;
     }
 
     /**
@@ -787,6 +790,8 @@ class kanbanModel extends model
 
         if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 
+         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->createspace['id'], $this->post->uid);
+
         $this->dao->insert(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
             ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
@@ -796,6 +801,8 @@ class kanbanModel extends model
         {
             $spaceID = $this->dao->lastInsertID();
             $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
+            $this->file->saveUpload('kanbanspace', $spaceID);
+            $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
 
             return $spaceID;
         }
@@ -820,13 +827,20 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
+        $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
+
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
             ->autoCheck()
             ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
             ->where('id')->eq($spaceID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+        if(!dao::isError())
+        {
+            $this->file->saveUpload('kanbanspace', $spaceID);
+            $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+            return common::createChanges($oldSpace, $space);
+        }
     }
 
     /**
@@ -912,6 +926,8 @@ class kanbanModel extends model
 
         if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
 
+         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
+
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
@@ -923,6 +939,8 @@ class kanbanModel extends model
 
             $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
             $this->initKanban($kanbanID);
+            $this->file->saveUpload('kanban', $kanbanID);
+            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
             return $kanbanID;
         }
@@ -948,13 +966,21 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
+         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
+
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
             ->where('id')->eq($kanbanID)
             ->exec();
 
-        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
+        if(!dao::isError())
+        {
+            $this->file->saveUpload('kanban', $kanbanID);
+            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+            return common::createChanges($oldKanban, $kanban);
+        }
     }
 
     /**
@@ -1463,6 +1489,58 @@ class kanbanModel extends model
     }
 
     /**
+     * Update a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function updateCard($cardID)
+    {
+        if($this->post->estimate < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+            return false;
+        }
+
+        if($this->post->begin > $this->post->end)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+            return false;
+        }
+
+        $cardID  = (int)$cardID;
+        $oldCard = $this->getCardById($cardID);
+
+        $now  = helper::now();
+        $card = fixer::input('post')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('createdDate', $now)
+            ->setDefault('estimate', $oldCard->estimate)
+            ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->remove('uid')
+            ->get();
+
+        $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->editcard['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_KANBANCARD)->data($card)
+            ->autoCheck()
+            ->checkIF($card->estimate != '', 'estimate', 'float')
+            ->batchcheck($this->config->kanban->editcard->requiredFields, 'notempty')
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->saveUpload('kanbancard', $cardID);
+            $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+
+            return common::createChanges($oldCard, $card);
+        }
+    }
+
+    /**
      * Set WIP limit.
      *
      * @param  int    $columnID
@@ -1646,7 +1724,9 @@ class kanbanModel extends model
      */
     public function getSpaceById($spaceID)
     {
-        return $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
+        $space = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
+        $space = $this->loadModel('file')->replaceImgURL($space, 'desc');
+        return $space;
     }
 
     /**
@@ -1777,6 +1857,21 @@ class kanbanModel extends model
         }
 
         return $groupList;
+    }
+
+    /**
+     * Get card by id.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return object
+     */
+    public function getCardByID($cardID)
+    {
+        $card = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        $card = $this->loadModel('file')->replaceImgURL($card, 'desc');
+
+        return $card;
     }
 
     /**
