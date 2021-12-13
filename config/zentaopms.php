@@ -244,6 +244,7 @@ define('TABLE_KANBANLANE',   '`' . $config->db->prefix . 'kanbanlane`');
 define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
 define('TABLE_KANBANGROUP',  '`' . $config->db->prefix . 'kanbangroup`');
+define('TABLE_KANBANCARD',   '`' . $config->db->prefix . 'kanbancard`');
 if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 

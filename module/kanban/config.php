@@ -14,6 +14,7 @@ $config->kanban->create        = new stdclass();
 $config->kanban->edit          = new stdclass();
 $config->kanban->createspace   = new stdclass();
 $config->kanban->editspace     = new stdclass();
+$config->kanban->createcard    = new stdclass();
 
 $config->kanban->editcard      = new stdclass();
 
@@ -24,6 +25,7 @@ $config->kanban->create->requiredFields        = 'space,name';
 $config->kanban->edit->requiredFields          = 'space,name';
 $config->kanban->createspace->requiredFields   = 'name,owner';
 $config->kanban->editspace->requiredFields     = 'name,owner';
+$config->kanban->createcard->requiredFields    = 'name';
 
 $config->kanban->editcard->requiredFields = 'name';
 
@@ -32,6 +34,7 @@ $config->kanban->editor->create      = array('id' => 'desc', 'tools' => 'simpleT
 $config->kanban->editor->edit        = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->createspace = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->editspace   = array('id' => 'desc', 'tools' => 'simpleTools');
+$config->kanban->editor->createcard  = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->close       = array('id' => 'comment', 'tools' => 'simpleTools');
 
 $config->kanban->editor->editcard    = array('id' => 'desc', 'tools' => 'simpleTools');
