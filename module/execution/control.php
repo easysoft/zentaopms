@@ -621,7 +621,24 @@ class execution extends control
         $this->config->bug->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
-        $this->config->bug->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($executionID, $viewType = 'bug', $startModuleID = 0);
+
+        $this->loadModel('tree');
+        $bugModules = array();
+        foreach($products as $productID => $productName)
+        {
+            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0);
+            foreach($productModules as $moduleID => $moduleName)
+            {
+                if(empty($moduleID))
+                {
+                    $bugModules[$moduleID] = $moduleName;
+                    continue;
+                }
+                $bugModules[$moduleID] = $productName . $moduleName;
+            }
+        }
+        $this->config->bug->search['params']['module']['values'] = $bugModules;
+
         unset($this->config->bug->search['fields']['resolvedBy']);
         unset($this->config->bug->search['fields']['closedBy']);
         unset($this->config->bug->search['fields']['status']);
