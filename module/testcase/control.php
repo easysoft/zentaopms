@@ -756,10 +756,12 @@ class testcase extends control
      * Edit a case.
      *
      * @param  int   $caseID
+     * @param  bool  $comment
+     * @param  int   $executionID
      * @access public
      * @return void
      */
-    public function edit($caseID, $comment = false)
+    public function edit($caseID, $comment = false, $executionID = 0)
     {
         $this->loadModel('story');
 
@@ -834,10 +836,17 @@ class testcase extends control
             $position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
 
             /* Set menu. */
-            if($this->app->tab == 'project' or $this->app->tab == 'execution') $this->loadModel('execution');
-            if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($case->project);
-            if($this->app->tab == 'execution') $this->execution->setMenu($case->execution);
-            if($this->app->tab == 'qa')        $this->testcase->setMenu($this->products, $productID, $case->branch);
+            if($this->app->tab == 'project' or $this->app->tab == 'execution')
+            {
+                $this->loadModel('execution');
+                if($this->app->tab == 'project') $this->loadModel('project')->setMenu($case->project);
+                if($this->app->tab == 'execution')
+                {
+                    if(!$executionID) $executionID = $case->execution;
+                    $this->execution->setMenu($executionID);
+                }
+            }
+            if($this->app->tab == 'qa') $this->testcase->setMenu($this->products, $productID, $case->branch);
 
             $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $case->branch);
             if($case->lib and $case->fromCaseID)
@@ -855,7 +864,7 @@ class testcase extends control
             $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
             {
-                $objectID        = $this->app->tab == 'project' ? $case->project : $case->execution;
+                $objectID        = $this->app->tab == 'project' ? $case->project : $executionID;
                 $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'all') : array();
                 $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
             }
