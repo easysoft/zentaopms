@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -19,8 +20,43 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
+          <th><?php echo $lang->kanbancard->estimate;?></th>
+          <td>
+            <div class='required required-wrapper'></div>
+            <div class="input-group">
+              <input type="text" name="estimate" id="estimate" value="" class="form-control" autocomplete="off">
+              <span class="input-group-addon">h</span>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->assignedTo;?></th>
+          <td>
+            <div class='required required-wrapper'></div>
+            <?php echo html::select('assignedTo', $users, $app->user->account, "class='form-control chosen'");?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
+          <td colspan='2'>
+            <div class='required required-wrapper'></div>
+            <div class='input-group'>
+              <?php echo html::input('begin', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->begin}'");?>
+              <span class='input-group-addon fix-border'>~</span>
+              <?php echo html::input('end', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->end}'");?>
+            </div>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo $lang->kanbancard->name;?></th>
-          <td><?php echo html::input('name', '', "class='form-control'");?></td><td></td>
+          <td colspan='2'>
+            <div class='required required-wrapper'></div>
+            <?php echo html::input('name', '', "class='form-control'");?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->desc;?></th>
+          <td colspan='3'><?php echo html::textarea('desc', '', "class='form-control'");?></td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

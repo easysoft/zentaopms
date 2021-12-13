@@ -57,6 +57,9 @@ CREATE TABLE `zt_kanbanregion` (
 -- DROP TABLE IF EXISTS `zt_kanbancard`;
 CREATE TABLE `zt_kanbancard` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
+  `kanban` mediumint(8) unsigned NOT NULL,
+  `region` mediumint(8) unsigned NOT NULL,
+  `group` mediumint(8) unsigned NOT NULL,
   `lane` mediumint(8) unsigned NOT NULL,
   `column` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,

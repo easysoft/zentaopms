@@ -282,6 +282,60 @@ class kanbanModel extends model
     }
 
     /**
+     * Create a kanban card.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $laneID
+     * @param  int $columnID
+     * @access public
+     * @return void
+     */
+    public function createCard($kanbanID, $regionID, $groupID, $laneID, $columnID)
+    {
+        if($this->post->estimate < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+            return false;
+        }
+
+        if($this->post->begin > $this->post->end) 
+        {    
+            dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+            return false;
+        }
+
+        $now  = helper::now();
+        $card = fixer::input('post')
+            ->add('kanban', $kanbanID)
+            ->add('region', $regionID)
+            ->add('group', $groupID)
+            ->add('lane', $laneID)
+            ->add('column', $columnID)
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', $now)
+            ->add('assignedDate', $now)
+            ->setDefault('estimate', 0)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->remove('uid')
+            ->get();
+
+        $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
+
+        $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
+            ->checkIF($card->estimate != '', 'estimate', 'float')
+            ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
+            ->exec();
+        $cardID = $this->dao->lastInsertID();
+        $this->loadModel('file')->saveUpload('kanbancard', $cardID);
+        $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+
+        return $cardID;
+    }
+
+
+    /**
      * Save kanban object order.
      *
      * @param  int    $parentID
