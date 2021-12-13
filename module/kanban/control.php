@@ -209,9 +209,10 @@ class kanban extends control
         if(!empty($_POST))
         {
             $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $regionID));
+            $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
+            if(dao::isError()) die(js::error(dao::getError()));
+            
+            die(js::reload('parent.parent'));
         }
 
         $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
@@ -235,9 +236,9 @@ class kanban extends control
             $order    = $position == 'left' ? $column->order : $column->order + 1;
             $columnID = $this->kanban->createColumn($column->region, null, $order);
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) die(js::error(dao::getError()));
 
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent', 'callback' => 'closeModalAndUpdateKanban', 'callback_params' => $column->region));
+            die(js::reload('parent.parent'));
         }   
 
         $this->view->title    = $this->lang->kanban->createColumn;

@@ -32,10 +32,9 @@
           </td>
         </tr>
         <tr>
-          <th></th>
-          <td class='form-actions'>
-            <?php echo html::submitButton();?>
-            <?php echo html::backButton($lang->cancel);?>
+          <td class='text-center form-actions' colspan='2'>
+          <?php echo html::submitButton();?>
+          <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>                             
           </td>
         </tr>
       </tbody>
