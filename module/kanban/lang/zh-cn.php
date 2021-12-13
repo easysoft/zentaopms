@@ -244,4 +244,3 @@ $lang->kanbancard->priList[4] = 4;
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = '预计不能为负数!';
 $lang->kanbancard->error->endSmall    = '"截止日期"不能小于"预计开始"!';
->>>>>>> module/kanban/lang/zh-cn.php
