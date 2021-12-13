@@ -42,16 +42,16 @@
         <?php foreach ($gitlabList as $id => $gitlab): ?>
         <tr class='text' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
           <td class='text-center'><?php echo $id;?></td>
-          <td class='text-c-name' title='<?php echo $gitlab->name;?>'><a class="iframe" data-width="90%" href="<?php echo $this->createLink('gitlab', 'view', "id=$id", '', true); ?>"><?php echo $gitlab->name;?></a></td>
+          <td class='text-c-name' title='<?php echo $gitlab->name;?>'><a class="iframe" href="<?php echo $this->createLink('gitlab', 'view', "id=$id", '', true); ?>"><?php echo $gitlab->name;?></a></td>
           <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
           <td class='c-actions text-left'>
             <?php
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
-            common::printLink('gitlab', 'browseProject', "gitlabID=$id", "<i class='icon icon-list-box'></i> ", '',"title={$lang->gitlab->browseProject} class='btn btn-primary'");
-            common::printLink('gitlab', 'browseGroup', "gitlabID=$id", "<i class='icon icon-groups'></i> ", '', "title={$lang->gitlab->browseGroup}  class='btn btn-primary'");
-            common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title={$lang->gitlab->edit} class='btn btn-primary'");
-            common::printLink('gitlab', 'browseUser', "gitlabID=$id", "<i class='icon icon-persons'></i> ", '', "title={$lang->gitlab->browseUser}  class='btn {$disabled}' ,'disabled'");
-            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title={$lang->gitlab->bindUser}  class='btn {$disabled}' ,'disabled'");
+            common::printLink('gitlab', 'browseProject', "gitlabID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->gitlab->browseProject}' class='btn btn-primary'");
+            common::printLink('gitlab', 'browseGroup', "gitlabID=$id", "<i class='icon icon-groups'></i> ", '', "title='{$lang->gitlab->browseGroup}'  class='btn btn-primary'");
+            common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title='{$lang->gitlab->edit}' class='btn btn-primary'");
+            common::printLink('gitlab', 'browseUser', "gitlabID=$id", "<i class='icon icon-person'></i> ", '', "title='{$lang->gitlab->browseUser}'  class='btn {$disabled}' ,'disabled'");
+            common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title='{$lang->gitlab->bindUser}'  class='btn {$disabled}' ,'disabled'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'delete', "gitlabID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->delete}' class='btn'");
             ?>
           </td>

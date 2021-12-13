@@ -43,7 +43,7 @@
             <td colspan='2'><?php echo nl2br(html::radio('visibility', $lang->gitlab->group->visibilityList, 'private', "", 'block'));?></td>
           </tr>
           <tr>
-            <th></th>
+            <th><?php echo $lang->gitlab->group->permission;?></th>
             <td>
               <div class="checkbox-primary">
                 <input type="checkbox" name='request_access_enabled' id="requestAccessEnabled" value='1' checked /><label for="external" class="no-margin"><?php echo $lang->gitlab->group->requestAccessEnabledTip; ?></label>
@@ -56,7 +56,7 @@
               <div class="checkbox-primary">
                 <input type="checkbox" name='lfs_enabled' id="lfsEnabled" value='1' checked /><label for="external" class="no-margin"><?php echo $lang->gitlab->group->lfsEnabledTip; ?></label>
               </div>
-            </td> 
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->group->projectCreationLevel;?></th>

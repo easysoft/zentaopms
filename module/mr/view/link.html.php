@@ -129,7 +129,7 @@
           </table>
           <?php if($stories):?>
           <div class='table-footer'>
-            <div class='table-statistic'><?php echo $summary;?></div>
+            <div class='table-statistic'><?php echo sprintf($lang->mr->storySummary, count($stories));?></div>
             <?php
             $this->app->rawParams['type'] = 'story';
             $storyPager->show('right', 'pagerjs');

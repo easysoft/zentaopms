@@ -21,7 +21,7 @@ $lang->mr->linkStory = '关联需求';
 $lang->mr->linkBug   = '关联Bug';
 $lang->mr->linkTask  = '关联任务';
 $lang->mr->unlink    = '取消关联需求、Bug、任务';
-$lang->mr->addBug    = '添加评审';
+$lang->mr->addReview = '添加评审';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";
@@ -46,7 +46,12 @@ $lang->mr->reject   = '拒绝';
 $lang->mr->close    = '关闭';
 $lang->mr->reopen   = '重新打开';
 
-$lang->mr->approvalResult = '评审意见';
+$lang->mr->reviewType     = '评审类型';
+$lang->mr->reviewTypeList = array();
+$lang->mr->reviewTypeList['bug']  = 'Bug';
+$lang->mr->reviewTypeList['task'] = '任务';
+
+$lang->mr->approvalResult     = '评审意见';
 $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通过';
 $lang->mr->approvalResultList['reject']  = '拒绝';
@@ -90,6 +95,7 @@ $lang->mr->notFound          = "此{$lang->mr->common}不存在。";
 $lang->mr->toCreatedMessage  = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行通过。";
 $lang->mr->toReviewerMessage = "有一个合并请求：<a href='%s'>%s</a> 待审核。";
 $lang->mr->failMessage       = "您提交的合并请求：<a href='%s'>%s</a> 构建任务执行失败，查看执行结果。";
+$lang->mr->storySummary      = "本页共 <strong>%s</strong> 个" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原因：%s";
@@ -99,6 +105,10 @@ $lang->mr->createFailedFromAPI = "创建合并请求失败。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->reopenSuccess       = "已重新打开合并请求。";
 $lang->mr->closeSuccess        = "已关闭合并请求。";
+
+$lang->mr->apiErrorMap[0] = "You can't use same project/branch for source and target";
+
+$lang->mr->errorLang[0] = '源项目分支与目标项目分支不能相同';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";

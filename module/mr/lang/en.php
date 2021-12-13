@@ -21,11 +21,11 @@ $lang->mr->linkStory = 'Link Stories';
 $lang->mr->linkBug   = 'Link Bugs';
 $lang->mr->linkTask  = 'Link Tasks';
 $lang->mr->unlink    = 'UnLink of stories,Bugs,tasks';
-$lang->mr->addBug    = 'Add Review';
+$lang->mr->addReview = 'Add Review';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
-$lang->mr->title        = 'Name';
+$lang->mr->title       = 'Name';
 $lang->mr->status      = 'Status';
 $lang->mr->author      = 'Author';
 $lang->mr->assignee    = 'Assignee';
@@ -46,7 +46,12 @@ $lang->mr->reject   = 'Reject';
 $lang->mr->close    = 'Close';
 $lang->mr->reopen   = 'Reopen';
 
-$lang->mr->approvalResult = 'Approval result';
+$lang->mr->reviewType     = 'Review Type';
+$lang->mr->reviewTypeList = array();
+$lang->mr->reviewTypeList['bug']  = 'Bug';
+$lang->mr->reviewTypeList['task'] = 'Task';
+
+$lang->mr->approvalResult     = 'Approval result';
 $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';
@@ -90,6 +95,7 @@ $lang->mr->notFound          = "Merge Request does not exist!";
 $lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";
 $lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
 $lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
+$lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";
@@ -99,6 +105,10 @@ $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
+
+$lang->mr->apiErrorMap[0] = "You can't use same project/branch for source and target";
+
+$lang->mr->errorLang[0] = 'The source project branch cannot be the same as the target project branch';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

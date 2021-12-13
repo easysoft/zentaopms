@@ -20,9 +20,9 @@
       <form id='gitlabForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->gitlab->project->name;?></th>
+            <th class='w-150px'><?php echo $lang->gitlab->project->name;?></th>
             <td class='required'><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->gitlab->project->name}'");?></td>
-            <td class="tips-git"></td>
+            <td class="tips-git w-p20"></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->project->url;?></th>

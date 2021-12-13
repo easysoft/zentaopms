@@ -146,6 +146,7 @@ $lang->repo->notice->syncedCount    = '已经同步记录条数';
 $lang->repo->notice->delete         = '是否要删除该版本库？';
 $lang->repo->notice->successDelete  = '已经成功删除版本库。';
 $lang->repo->notice->commentContent = '输入回复内容';
+$lang->repo->notice->deleteReview   = '确认删除该评审？';
 $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';
 $lang->repo->notice->lastSyncTime   = '最后更新于：';

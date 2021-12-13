@@ -55,9 +55,9 @@
             common::printIcon('repo', 'edit', "repoID=$repo->id&objectID=$objectID", '', 'list', 'edit');
             if(strtolower($repo->SCM) == "gitlab")
             {
+                common::printIcon('gitlab', 'manageProjectMembers', "repo={$repo->id}", '', 'list', 'team');
                 common::printIcon('gitlab', 'createWebhook', "repoID=$repo->id", '', 'list', 'change', 'hiddenwin');
                 common::printIcon('gitlab', 'importIssue', "repo={$repo->id}", '', 'list', 'link');
-                common::printIcon('gitlab', 'manageProjectMembers', "repo={$repo->id}", '', 'list', 'team');
             }
             common::printIcon('repo', 'delete', "repoID=$repo->id&objectID=$objectID", '', 'list', 'trash', 'hiddenwin');
             ?>

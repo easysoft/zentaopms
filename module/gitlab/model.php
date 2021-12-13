@@ -620,7 +620,7 @@ class gitlabModel extends model
         $order = explode('_', $orderBy);
 
         $keyword = urlencode($keyword);
-        $result  = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}");
+        $result  = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
@@ -894,6 +894,24 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/users/{$userID}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Create a gitab user by api.
+     *
+     * @param  int      $gitlabID
+     * @param  int      $projectID
+     * @param  object   $branch
+     * @access public
+     * @return object
+     */
+    public function apiCreateBranch($gitlabID, $projectID, $branch)
+    {
+        if(empty($branch->branch) or empty($branch->ref)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/branches");
+        return json_decode(commonModel::http($url, $branch));
     }
 
     /**
@@ -2032,15 +2050,15 @@ class gitlabModel extends model
         if(empty($project->path)) dao::$errors['path'][] = $this->lang->gitlab->project->emptyPathError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiCreateProject($gitlabID, $project);
+        $response = $this->apiCreateProject($gitlabID, $project);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabproject', $reponse->id, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabproject', $response->id, 'created', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2056,15 +2074,15 @@ class gitlabModel extends model
         if(empty($project->name)) dao::$errors['name'][] = $this->lang->gitlab->project->emptyNameError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiUpdateProject($gitlabID, $project);
+        $response = $this->apiUpdateProject($gitlabID, $project);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
             $this->loadModel('action')->create('gitlabproject', $project->id, 'edited', '', $project->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2101,11 +2119,11 @@ class gitlabModel extends model
             }
         }
 
-        $reponse = $this->apiCreateUser($gitlabID, $user);
+        $response = $this->apiCreateUser($gitlabID, $user);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabuser', $reponse->id, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabuser', $response->id, 'created', '', $response->name);
 
             /* Bind user. */
             if($user->account)
@@ -2114,13 +2132,13 @@ class gitlabModel extends model
                 $userBind->providerID   = $gitlabID;
                 $userBind->providerType = 'gitlab';
                 $userBind->account      = $user->account;
-                $userBind->openID       = $reponse->id;
+                $userBind->openID       = $response->id;
                 $this->dao->insert(TABLE_OAUTH)->data($userBind)->exec();
             }
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2161,14 +2179,14 @@ class gitlabModel extends model
             }
         }
 
-        $reponse = $this->apiUpdateUser($gitlabID, $user);
+        $response = $this->apiUpdateUser($gitlabID, $user);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabuser', $reponse->id, 'edited', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabuser', $response->id, 'edited', '', $response->name);
 
             /* Delete old bind. */
-            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($reponse->id)->andWhere('account')->ne($user->account)->exec();
+            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($response->id)->andWhere('account')->ne($user->account)->exec();
             /* Bind user. */
             if($user->account && $changeBind)
             {
@@ -2176,13 +2194,13 @@ class gitlabModel extends model
                 $userBind->providerID   = $gitlabID;
                 $userBind->providerType = 'gitlab';
                 $userBind->account      = $user->account;
-                $userBind->openID       = $reponse->id;
+                $userBind->openID       = $response->id;
                 $this->dao->replace(TABLE_OAUTH)->data($userBind)->exec();
             }
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2200,15 +2218,15 @@ class gitlabModel extends model
         if(empty($group->path)) dao::$errors['path'][] = $this->lang->gitlab->group->path . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiCreateGroup($gitlabID, $group);
+        $response = $this->apiCreateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'created', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabgroup', $response->id, 'created', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
     }
 
     /**
@@ -2225,41 +2243,68 @@ class gitlabModel extends model
         if(empty($group->name)) dao::$errors['name'][] = $this->lang->gitlab->group->name . $this->lang->gitlab->group->emptyError;
         if(dao::isError()) return false;
 
-        $reponse = $this->apiUpdateGroup($gitlabID, $group);
+        $response = $this->apiUpdateGroup($gitlabID, $group);
 
-        if(!empty($reponse->id))
+        if(!empty($response->id))
         {
-            $this->loadModel('action')->create('gitlabgroup', $reponse->id, 'edited', '', $reponse->name);
+            $this->loadModel('action')->create('gitlabgroup', $response->id, 'edited', '', $response->name);
             return true;
         }
 
-        return $this->apiErrorHandling($reponse);
+        return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Create a gitlab branch.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @access public
+     * @return bool
+     */
+    public function createBranch($gitlabID, $projectID)
+    {
+        $branch = fixer::input('post')->get();
+
+        if(empty($branch->branch)) dao::$errors['branch'][] = $this->lang->gitlab->branch->name . $this->lang->gitlab->emptyError;
+        if(empty($branch->ref))    dao::$errors['ref'][]    = $this->lang->gitlab->branch->from . $this->lang->gitlab->emptyError;
+        if(dao::isError()) return false;
+
+        $response = $this->apiCreateBranch($gitlabID, $projectID, $branch);
+
+        if(!empty($response->name))
+        {
+            $this->loadModel('action')->create('gitlabbranch', 0, 'created', '', $response->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
     }
 
     /**
      * Api error handling.
      *
-     * @param  object $reponse
+     * @param  object $response
      * @access public
      * @return bool
      */
-    public function apiErrorHandling($reponse)
+    public function apiErrorHandling($response)
     {
-        if(!empty($reponse->error))
+        if(!empty($response->error))
         {
-            dao::$errors[] = $reponse->error;
+            dao::$errors[] = $response->error;
             return false;
         }
-        if(!empty($reponse->message))
+        if(!empty($response->message))
         {
-            if(is_string($reponse->message))
+            if(is_string($response->message))
             {
-                $errorKey = array_search($reponse->message, $this->lang->gitlab->apiError);
-                dao::$errors[] = $errorKey === false ? $reponse->message : zget($this->lang->gitlab->errorLang, $errorKey);
+                $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
+                dao::$errors[] = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
             }
             else
             {
-                foreach($reponse->message as $field => $fieldErrors)
+                foreach($response->message as $field => $fieldErrors)
                 {
                     foreach($fieldErrors as $error)
                     {
@@ -2270,7 +2315,7 @@ class gitlabModel extends model
             }
         }
 
-        if(!$reponse) dao::$errors[] = false;
+        if(!$response) dao::$errors[] = false;
         return false;
     }
 
@@ -2286,5 +2331,143 @@ class gitlabModel extends model
             ->andWhere('SCM')->eq('Gitlab')
             ->andWhere('path')->in($projectIDs)
             ->fetchPairs('path', 'product');
+    }
+
+    /**
+     * Get protect branches of one project.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $keyword
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function apiGetBranchPrivs($gitlabID, $projectID, $keyword = '', $orderBy = 'id_desc')
+    {
+        $keyword  = urlencode($keyword);
+        $url      = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches");
+        $branches = json_decode(commonModel::http($url));
+
+        if(!is_array($branches)) return $branches;
+        /* Parse order string. */
+        $order = explode('_', $orderBy);
+
+        $newBranches = array();
+        foreach($branches as $branch)
+        {
+            if(empty($keyword) || stristr($branch->name, $keyword)) $newBranches[$branch->{$order[0]}] = $branch;
+        }
+
+        if($order[1] == 'asc')  ksort($newBranches);
+        if($order[1] == 'desc') krsort($newBranches);
+
+        return $newBranches;
+    }
+
+    /**
+     * Get single protct branch by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
+    {
+        if(empty($gitlabID)) return false;
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Create gitlab potect branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return bool
+     */
+    public function createBranchPriv($gitlabID, $projectID, $branch = '')
+    {
+        $priv = fixer::input('post')->get();
+        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
+        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
+        if(empty($branch) && !empty($singleBranch->id)) dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
+        if(dao::isError()) return false;
+        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
+
+        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
+
+        if(!empty($response->id))
+        {
+            $action = empty($branch) ? 'created' : 'edited';
+            $this->loadModel('action')->create('gitlabbranchpriv', $response->id, $action, '', $response->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Create a gitab protect branch by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $priv
+     * @access public
+     * @return object
+     */
+    public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
+    {
+        if(empty($gitlabID)) return false;
+        if(empty($priv->name)) return false;
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
+        return json_decode(commonModel::http($url, $priv));
+    }
+
+    /**
+     * Delete a gitab protect branch by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $branch
+     * @access public
+     * @return object
+     */
+    public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
+    {
+        if(empty($gitlabID)) return false;
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Check access level.
+     *
+     * @param  array $accessLevels
+     * @access public
+     * @return int
+     */
+    public function checkAccessLevel($accessLevels)
+    {
+        $noAccess         = 0;
+        $developerAccess  = 30;
+        $maintainerAccess = 40;
+        if(is_array($accessLevels))
+        {
+            $levels = array();
+            foreach($accessLevels as $level) 
+            {
+                if(is_array($level)) $level = (object)$level;
+                $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
+            }
+            if(in_array($noAccess, $levels)) return $noAccess;
+            if(in_array($developerAccess, $levels)) return $developerAccess;
+        }
+        return $maintainerAccess;
     }
 }

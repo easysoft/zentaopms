@@ -29,3 +29,7 @@ $builder->projectProduct = array('rows' => 21,  'data' => array('projectproduct'
 
 $builder->case = array('rows' => 10000, 'data' => array('case'));
 $builder->bug  = array('rows' => 100, 'data' => array('bug'));
+
+$builder->pipeline = array('rows' => 1, 'data' => array('pipeline'));
+$builder->repo     = array('rows' => 1, 'data' => array('repo'));
+$builder->mr       = array('rows' => 1, 'data' => array('mr'));

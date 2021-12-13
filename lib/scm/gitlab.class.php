@@ -220,7 +220,10 @@ class gitlab
         $count = $count == 0 ? '' : "-n $count";
 
         $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
-        foreach($list as $commit) $commit->diffs = $this->getFilesByCommit($commit->id);
+        foreach($list as $commit)
+        {
+            if(isset($commit->id)) $commit->diffs = $this->getFilesByCommit($commit->id);
+        }
 
         return $this->parseLog($list);
     }
@@ -656,6 +659,7 @@ class gitlab
         {
             $results = $this->fetch($api, $params);
             $params->page ++;
+            if(!is_array($results)) $results = array();
             $allResults = $allResults + $results;
             if(count($results) < 100) break;
         }
@@ -751,6 +755,7 @@ class gitlab
         $i          = 0;
         foreach($logs as $commit)
         {
+            if(!isset($commit->id)) continue;
             $parsedLog = new stdclass();
             $parsedLog->revision  = $commit->id;
             $parsedLog->committer = $commit->committer_name;
