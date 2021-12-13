@@ -1272,10 +1272,9 @@ class projectModel extends model
             ->setDefault('status', 'doing')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setIF($oldProject->realBegan == '0000-00-00', 'realBegan', helper::today())
             ->remove('comment,readjustTime,readjustTask')
             ->get();
-
-        if($oldProject->realBegan == '0000-00-00') $project->realBegan = helper::today();
 
         if(!$this->post->readjustTime)
         {
