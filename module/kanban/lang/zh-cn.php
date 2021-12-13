@@ -231,6 +231,7 @@ $lang->kanbancard->createdBy      = '由谁创建';
 $lang->kanbancard->createdDate    = '由谁创建';
 $lang->kanbancard->lastEditedBy   = '由谁编辑';
 $lang->kanbancard->lastEditedDate = '最后编辑时间';
+$lang->kanbancard->lblHour        = 'h';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

@@ -22,24 +22,21 @@
         <tr>
           <th><?php echo $lang->kanbancard->estimate;?></th>
           <td>
-            <div class='required required-wrapper'></div>
             <div class="input-group">
               <input type="text" name="estimate" id="estimate" value="" class="form-control" autocomplete="off">
-              <span class="input-group-addon">h</span>
+              <span class="input-group-addon"><?php echo $lang->kanbancard->lblHour;?></span>
             </div>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->kanbancard->assignedTo;?></th>
           <td>
-            <div class='required required-wrapper'></div>
             <?php echo html::select('assignedTo', $users, $app->user->account, "class='form-control chosen'");?>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
           <td colspan='2'>
-            <div class='required required-wrapper'></div>
             <div class='input-group'>
               <?php echo html::input('begin', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->begin}'");?>
               <span class='input-group-addon fix-border'>~</span>

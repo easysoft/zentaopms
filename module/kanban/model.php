@@ -327,11 +327,17 @@ class kanbanModel extends model
             ->checkIF($card->estimate != '', 'estimate', 'float')
             ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
             ->exec();
-        $cardID = $this->dao->lastInsertID();
-        $this->loadModel('file')->saveUpload('kanbancard', $cardID);
-        $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
 
-        return $cardID;
+        if(!dao::isError())
+        {
+            $cardID = $this->dao->lastInsertID();
+            $this->file->saveUpload('kanbancard', $cardID);
+            $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+
+            return $cardID;
+        }
+
+        return false;
     }
 
 

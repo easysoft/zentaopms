@@ -231,6 +231,7 @@ $lang->kanbancard->createdBy      = 'Created By';
 $lang->kanbancard->createdDate    = 'Created Date';
 $lang->kanbancard->lastEditedBy   = 'Last Edited By';
 $lang->kanbancard->lastEditedDate = 'Last Edited Date';
+$lang->kanbancard->lblHour        = 'h';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

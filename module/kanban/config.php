@@ -23,7 +23,7 @@ $config->kanban->create->requiredFields        = 'space,name';
 $config->kanban->edit->requiredFields          = 'space,name';
 $config->kanban->createspace->requiredFields   = 'name,owner';
 $config->kanban->editspace->requiredFields     = 'name,owner';
-$config->kanban->createcard->requiredFields    = 'name,assignedTo,estimate,begin,end';
+$config->kanban->createcard->requiredFields    = 'name';
 
 $config->kanban->editor = new stdclass();
 $config->kanban->editor->create      = array('id' => 'desc', 'tools' => 'simpleTools');
