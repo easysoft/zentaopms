@@ -214,3 +214,6 @@ $lang->kanbanregion->name    = '看板区域';
 $lang->kanbanregion->default = '默认区域';
 
 $lang->kanbancard = new stdclass();
+$lang->kanbancard->create = '创建卡片';
+
+$lang->kanbancard->name   = '卡片名称';
