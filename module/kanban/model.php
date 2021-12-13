@@ -803,7 +803,7 @@ class kanbanModel extends model
             $lane = fixer::input('post')
                 ->add('region', $regionID)
                 ->add('order', $maxOrder + 1)
-                ->add('lastEditedTime', helper::today())
+                ->add('lastEditedTime', helper::now())
                 ->add('type', 'common')
                 ->setDefault('color', '#3DC6FD')
                 ->get();
@@ -830,8 +830,6 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        $this->loadModel('action')->create('kanbanLane', $laneID, 'Created');
-
         return $laneID;
     }
     
