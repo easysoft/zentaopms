@@ -106,9 +106,11 @@ $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
 
-$lang->mr->apiErrorMap[0] = "You can't use same project/branch for source and target";
+$lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
+$lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 
-$lang->mr->errorLang[0] = 'The source project branch cannot be the same as the target project branch';
+$lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
+$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: !%u';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";
