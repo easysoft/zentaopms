@@ -13,15 +13,19 @@ class project extends control
     /**
      * Project create guide.
      *
-     * @param  int    $projectID
+     * @param  int    $programID
      * @param  string $from
+     * @param  int    $productID
+     * @param  int    $branchID
      * @access public
      * @return void
      */
-    public function createGuide($projectID = 0, $from = 'project')
+    public function createGuide($programID = 0, $from = 'project', $productID = 0, $branchID = 0)
     {
         $this->view->from      = $from;
-        $this->view->projectID = $projectID;
+        $this->view->programID = $programID;
+        $this->view->productID = $productID;
+        $this->view->branchID  = $branchID;
         $this->display();
     }
 
@@ -481,6 +485,8 @@ class project extends control
         $this->view->productPlans        = array('0' => '') + $productPlans;
         $this->view->branchGroups        = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
         $this->view->programID           = $programID;
+        $this->view->productID           = isset($output['productID']) ? $output['productID'] : 0;
+        $this->view->branchID            = isset($output['branchID']) ? $output['branchID'] : 0;
         $this->view->multiBranchProducts = $this->product->getMultiBranchPairs($topProgramID);
         $this->view->model               = $model;
         $this->view->name                = $name;
