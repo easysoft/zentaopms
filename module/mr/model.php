@@ -912,6 +912,7 @@ class mrModel extends model
             ->get();
 
         $data->steps = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
+        if($data->execution) $data->project = (int)$this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($data->execution)->fetch('project');
         if($data->assignedTo) $data->assignedDate = $now;
         unset($data->commentText);
 
