@@ -216,4 +216,28 @@ $lang->kanbanregion->default = 'Default Region';
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create = 'Create Card';
 
-$lang->kanbancard->name   = 'Card Name';
+$lang->kanbancard->name           = 'Card Name';
+$lang->kanbancard->space          = 'Space';
+$lang->kanbancard->lane           = 'Lane';
+$lang->kanbancard->column         = 'Column';
+$lang->kanbancard->assignedTo     = 'Assignee';
+$lang->kanbancard->beginAndEnd    = 'Begin And End';
+$lang->kanbancard->begin          = 'Begin';
+$lang->kanbancard->end            = 'End';
+$lang->kanbancard->pri            = 'Priority';
+$lang->kanbancard->desc           = 'Description';
+$lang->kanbancard->estimate       = 'Estimate';
+$lang->kanbancard->createdBy      = 'Created By';
+$lang->kanbancard->createdDate    = 'Created Date';
+$lang->kanbancard->lastEditedBy   = 'Last Edited By';
+$lang->kanbancard->lastEditedDate = 'Last Edited Date';
+$lang->kanbancard->lblHour        = 'h';
+
+$lang->kanbancard->priList[1] = 1;
+$lang->kanbancard->priList[2] = 2;
+$lang->kanbancard->priList[3] = 3;
+$lang->kanbancard->priList[4] = 4;
+
+$lang->kanbancard->error = new stdClass();
+$lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
+$lang->kanbancard->error->endSmall    = '"End Date" cannot be less than "Begin Date"';
