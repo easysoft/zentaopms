@@ -106,3 +106,4 @@ ALTER TABLE `zt_kanbanlane` ADD COLUMN `region` mediumint(8) unsigned NOT NULL A
 ALTER TABLE `zt_kanbanlane` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;
 ALTER TABLE `zt_kanbancolumn` ADD COLUMN `region` mediumint(8) unsigned NOT NULL AFTER `type`;
 ALTER TABLE `zt_kanbancolumn` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;
+ALTER TABLE `zt_project` ADD COLUMN `suspendedDate` date NOT NULL AFTER `canceledDate`;

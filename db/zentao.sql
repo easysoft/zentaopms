@@ -996,6 +996,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `closedDate` datetime NOT NULL,
   `canceledBy` varchar(30) NOT NULL DEFAULT '',
   `canceledDate` datetime NOT NULL,
+  `suspendedDate` date NOT NULL,
   `PO` varchar(30) NOT NULL DEFAULT '',
   `PM` varchar(30) NOT NULL DEFAULT '',
   `QD` varchar(30) NOT NULL DEFAULT '',

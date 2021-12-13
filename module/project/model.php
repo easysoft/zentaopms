@@ -1245,6 +1245,7 @@ class projectModel extends model
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
+            ->setDefault('suspendedDate', $now)
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_PROJECT)->data($project)
@@ -1274,6 +1275,8 @@ class projectModel extends model
             ->setDefault('lastEditedDate', $now)
             ->remove('comment,readjustTime,readjustTask')
             ->get();
+
+        if($oldProject->realBegan == '0000-00-00') $project->realBegan = helper::today();
 
         if(!$this->post->readjustTime)
         {
