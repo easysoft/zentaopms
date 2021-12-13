@@ -135,8 +135,20 @@ class mrModel extends model
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-            $errorKey     = array_search($rawMR->message[0], $this->lang->mr->apiErrorMap);
-            $errorMessage = zget($this->lang->mr->errorLang, $errorKey);
+            foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+            {
+                if(strpos($errorMsg, '/') === 0)
+                {
+                    $result = preg_match($errorMsg, $rawMR->message[0], $matches);
+                    if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+                }
+                else
+                {
+                    if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
+                }
+
+                if(isset($errorMessage)) break;
+            }
             return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
         }
 
