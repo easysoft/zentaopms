@@ -22,26 +22,26 @@ class weeklyModel extends model
     public function getPageNav($project, $date)
     {
         $date  = date('Ymd', strtotime($this->getThisMonday($date)));
-        if($project->status == 'wait')
+        switch($project->status)
         {
+        case 'wait':
             $begin = helper::now();
             $end = $begin;
-        }
-        if($project->status == 'doing')
-        {
+            break;
+        case 'doing':
             $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $date;
             $end = $date;
-        }
-        if($project->status == 'suspended')
-        {
+            break;
+        case 'suspended':
             $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->suspendedDate;
             $end = $project->suspendedDate;
-        }
-        if($project->status == 'closed')
-        {
+            break;
+        case 'closed':
             $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->realEnd;
             $end = $project->realEnd;
+            break;
         }
+
         $weeks = $this->getWeekPairs($begin, $end);
         $current = zget($weeks, $date, current($weeks));
         $selectHtml  = "<div class='btn-group angle-btn'>";

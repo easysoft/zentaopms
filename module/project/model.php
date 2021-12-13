@@ -1240,12 +1240,11 @@ class projectModel extends model
     public function suspend($projectID)
     {
         $oldProject = $this->getById($projectID);
-        $now        = helper::now();
         $project = fixer::input('post')
             ->setDefault('status', 'suspended')
             ->setDefault('lastEditedBy', $this->app->user->account)
-            ->setDefault('lastEditedDate', $now)
-            ->setDefault('suspendedDate', $now)
+            ->setDefault('lastEditedDate', helper::now())
+            ->setDefault('suspendedDate', helper::today())
             ->remove('comment')->get();
 
         $this->dao->update(TABLE_PROJECT)->data($project)
