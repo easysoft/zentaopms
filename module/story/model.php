@@ -170,10 +170,10 @@ class storyModel extends model
     public function getRequierements($productID)
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
-           ->where('deleted')->eq(0)
-           ->andWhere('status')->notIN('draft,closed')
            ->andWhere('product')->eq($productID)
            ->andWhere('type')->eq('requirement')
+           ->andWhere('status')->notIN('draft,closed')
+           ->where('deleted')->eq(0)
            ->fetchPairs();
     }
 
@@ -2028,11 +2028,11 @@ class storyModel extends model
         /* Search related tasks. */
         $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('story')->eq($storyID)
             ->andWhere('type')->in('devel,test')
+            ->andWhere('story')->eq($storyID)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('cancel')
             ->andWhere('closedReason')->ne('cancel')
-            ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
         /* No tasks, then the stage is projected. */
@@ -2222,8 +2222,8 @@ class storyModel extends model
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2255,8 +2255,8 @@ class storyModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$hasParent)->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
@@ -2380,8 +2380,8 @@ class storyModel extends model
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName)) return array();
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
-            ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
             ->beginIF($branch != 'all')->andWhere("branch")->eq($branch)->fi()
             ->beginIF($modules)->andWhere("module")->in($modules)->fi()
             ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
@@ -2789,9 +2789,9 @@ class storyModel extends model
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
             ->andWhere('stage')->eq('wait')
-            ->andWhere('plan')->in('0,')
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
+            ->andWhere('plan')->in('0,')
             ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
         return array(0 => '') + $stories ;
@@ -3506,10 +3506,10 @@ class storyModel extends model
         if($type == 'requirement')
         {
             $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
-              ->where('AID')->in(array_keys($stories))
-              ->andWhere('AType')->eq('requirement')
+              ->where('AType')->eq('requirement')
               ->andWhere('BType')->eq('story')
               ->andWhere('relation')->eq('subdivideinto')
+              ->andWhere('AID')->in(array_keys($stories))
               ->fetchAll();
 
             $group = array();
