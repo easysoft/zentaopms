@@ -2561,6 +2561,7 @@ class executionModel extends model
             ->orWhere('id')->eq($projectID)
             ->markRight(1)
             ->orderBy('type_asc,openedDate_desc')
+            ->limit('9')
             ->fetchPairs();
 
         return $objectPairs;
