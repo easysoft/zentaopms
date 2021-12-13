@@ -233,6 +233,12 @@ class actionModel extends model
                 $record->execution = (int)$extra;
             }
 
+            if($objectType == 'story' and $actionType == 'importfromgitlab')
+            {
+                $record->execution = $record->project;
+                $record->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($record->execution)->fetch('project');
+            }
+
             if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false) and (int)$extra)
             {
                 $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
