@@ -386,9 +386,22 @@ $lang->action->dynamicAction->execution['undeleted'] = '还原' . $lang->executi
 $lang->action->dynamicAction->execution['hidden']    = '隐藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '导入任务';
 
+$lang->action->dynamicAction->kanban['create'] = '创建看板';
+$lang->action->dynamicAction->kanban['edited'] = '设置看板';
+
+$lang->action->dynamicAction->kanbanspace['create'] = '创建看板空间';
+$lang->action->dynamicAction->kanbanspace['edited'] = '设置看板空间';
+$lang->action->dynamicAction->kanbanspace['closed'] = '关闭看板空间';
+
+$lang->action->dynamicAction->kanbancolumn['create'] = '创建看板列';
 $lang->action->dynamicAction->kanbancolumn['edited'] = '设置看板列';
+
+$lang->action->dynamicAction->kanbanlane['created']  = '创建泳道';
 $lang->action->dynamicAction->kanbanlane['edited']   = '设置泳道';
 $lang->action->dynamicAction->kanbanlane['moved']    = '移动泳道';
+
+$lang->action->dynamicAction->kanbancard['create'] = '创建看板卡片';
+$lang->action->dynamicAction->kanbancard['edited'] = '编辑看板卡片';
 
 $lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
@@ -546,6 +559,7 @@ $lang->action->label->kanbanregion = '看板区域|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = '看板|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
+$lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = '合并请求|mr|view|id=%s';
 
 /* Object type. */

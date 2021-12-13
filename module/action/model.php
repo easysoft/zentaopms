@@ -1233,9 +1233,22 @@ class actionModel extends model
             $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
         }
 
-        if($action->objectType == 'kanbanregion')
+        if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
         {
-            $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($action->objectID)->fetch('kanban');
+            $table    = $this->config->objectTables[$action->objectType];
+            $kanbanID = $this->dao->select('kanban')->from($table)->where('id')->eq($action->objectID)->fetch('kanban');
+
+            $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
+        }
+
+        if(strpos(',kanbanlane,kanbancolumn,', ",{$action->objectType},") !== false and empty($action->extra))
+        {
+            $table    = $this->config->objectTables[$action->objectType];
+            $kanbanID = $this->dao->select('t2.kanban')->from($table)->alias('t1')
+                ->leftJoin(TABLE_KANBANREGION)->alias('t2')->on('t1.region=t2.id')
+                ->where('t1.id')->eq($action->objectID)
+                ->fetch('kanban');
+
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
         }
 
