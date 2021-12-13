@@ -626,7 +626,8 @@ class execution extends control
         $bugModules = array();
         foreach($products as $productID => $productName)
         {
-            foreach($this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0) as $moduleID => $moduleName)
+            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0);
+            foreach($productModules as $moduleID => $moduleName)
             {
                 if(empty($moduleID))
                 {
