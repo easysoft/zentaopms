@@ -209,9 +209,9 @@ class kanban extends control
         if(!empty($_POST))
         {
             $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
-            $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
             if(dao::isError()) die(js::error(dao::getError()));
             
+            $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
             die(js::reload('parent.parent'));
         }
 
@@ -235,9 +235,9 @@ class kanban extends control
         {   
             $order    = $position == 'left' ? $column->order : $column->order + 1;
             $columnID = $this->kanban->createColumn($column->region, null, $order);
-            $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
             if(dao::isError()) die(js::error(dao::getError()));
 
+            $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
             die(js::reload('parent.parent'));
         }   
 
