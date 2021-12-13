@@ -34,7 +34,7 @@
 <div class="table-empty-tip">
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
-    <?php if(empty($keyword) and common::hasPriv('gitlab', 'createProject')):?>
+    <?php if(empty($keyword) and common::hasPriv('gitlab', 'createBranchPriv')):?>
     <?php echo html::a($this->createLink('gitlab', 'createBranchPriv', "gitlabID=$gitlabID&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->createBranchPriv, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
