@@ -253,7 +253,7 @@ class testtask extends control
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 'all', 'notrunk', true);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
 
         $testreports = $this->testtask->getTestReportPairsByBuild($build);
 
@@ -767,7 +767,7 @@ class testtask extends control
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $executionID = $task->execution;
-        $builds      = empty($productID) ? array() : $this->loadModel('build')->getExecutionBuildPairs($executionID, $productID, 'all', 'noempty,notrunk');
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
         $testreports = $this->testtask->getTestReportPairsByBuild($task->build);
 
         $this->view->task         = $task;
@@ -1344,7 +1344,7 @@ class testtask extends control
         $this->view->case    = $case;
         $this->view->runID   = $runID;
         $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($case->product, $branch = 0, $params = '');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $branch = 0, $params = '');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());
@@ -1414,7 +1414,7 @@ class testtask extends control
 
         $projectID  = $this->app->tab == 'qa' ? 0 : $this->session->project;
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 0, 'notrunk');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);

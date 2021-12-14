@@ -599,8 +599,8 @@ class mr extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getForProducts(array($productID => $productID));
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->product->getExecutionPairsByProduct($productID);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 'all', $params = '');
-        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getProductBuildPairs($productID, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
+        $this->config->bug->search['params']['resolvedBuild']['values'] = $this->loadModel('build')->getBuildPairs($productID, $branch = 'all', $params = '');
 
         unset($this->config->bug->search['fields']['product']);
         if($product->type == 'normal')

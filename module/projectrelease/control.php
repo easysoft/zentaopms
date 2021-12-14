@@ -120,7 +120,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getProjectBuildPairs($projectID, key($this->products), 0, 'notrunk|withbranch');
+        $builds         = $this->build->getBuildPairs(key($this->products), 0, 'notrunk,withbranch', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);
@@ -171,7 +171,7 @@ class projectrelease extends control
         $build = $this->build->getById($release->build);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getProjectBuildPairs($release->project, $release->product, $release->branch, 'notrunk|withbranch');
+        $builds         = $this->build->getBuildPairs($release->product, $release->branch, 'notrunk|withbranch', $release->project, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($release->project);
         foreach($releasedBuilds as $releasedBuild)
         {
@@ -620,7 +620,7 @@ class projectrelease extends control
         $this->config->bug->search['params']['plan']['values']          = $this->loadModel('productplan')->getPairsForStory($release->product, $release->branch, 'skipParent|withMainPlan');
         $this->config->bug->search['params']['module']['values']        = $this->loadModel('tree')->getOptionMenu($release->product, 'bug', 0, $release->branch);
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($release->product, $release->branch, 'id_desc', $release->project);
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($release->product, $branch = 0, $params = '');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($release->product, $branch = 0, $params = '');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($release->productType == 'normal')
         {
