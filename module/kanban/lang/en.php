@@ -235,6 +235,7 @@ $lang->kanbancard->createdDate    = 'Created Date';
 $lang->kanbancard->lastEditedBy   = 'Last Edited By';
 $lang->kanbancard->lastEditedDate = 'Last Edited Date';
 $lang->kanbancard->lblHour        = 'h';
+$lang->kanbancard->noAssigned     = 'No Assigned';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;
@@ -244,4 +245,3 @@ $lang->kanbancard->priList[4] = 4;
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
 $lang->kanbancard->error->endSmall    = '"End Date" cannot be less than "Begin Date"';
->>>>>>> module/kanban/lang/en.php
