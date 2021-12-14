@@ -32,7 +32,7 @@ $taskRepoModule = 0;
 $taskMembers    = array('' => '');
 if($repoExecution)
 {
-    $taskModules    = $this->loadModel('tree')->getTaskOptionMenu($repoExecution, 0, 0, 'allModule');
+    $taskModules    = $this->loadModel('tree')->getTaskOptionMenu($repoExecution, 0, 0, '');
     $taskRepoModule = (!empty($lastReview->task) && $lastReview->task->execution == $repoExecution) ? $lastReview->task->module : '';
     $taskMembers    = $this->loadModel('user')->getTeamMemberPairs($repoExecution, 'execution', 'nodeleted');
 }
@@ -120,10 +120,9 @@ js::set('revision', '');
         </td>
         <th><?php echo $lang->repo->type?></th>
         <td><?php echo $typeSelect?></td>
+        <th class='taskModuleBox hide'><?php echo $lang->repo->module?></th>
+        <td class='taskModuleBox hide'><?php echo $taskModuleSelect?></td>
       </tr>
-      <tr class='taskModuleBox hide'>
-        <th><?php echo $lang->repo->module?></th>
-        <td><?php echo $taskModuleSelect?></td>
       <tr>
         <th><?php echo $lang->repo->assign?></th>
         <td>
@@ -239,7 +238,7 @@ function changeExecution(select)
     var executionID = $(select).val();
 
     moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'execution=' + executionID + '&viewtype=task&branch=0&rootModuleID=0&returnType=html');
-    $('.taskModuleBox').find('td:first').load(moduleLink, '', function(){$('.taskModuleBox #module').attr('id', 'taskModule').attr('name', 'taskModule').chosen();});
+    $('td.taskModuleBox').load(moduleLink, '', function(){$('.taskModuleBox #module').attr('id', 'taskModule').attr('name', 'taskModule').chosen();});
 
     assignLink = createLink('execution', 'ajaxGetMembers', 'executionID=' + executionID);
     $('.taskAssignedToBox').load(assignLink, '', function(){$('.taskAssignedToBox #assignedTo').attr('id', 'taskAssignedTo').attr('name', 'taskAssignedTo').chosen();});
