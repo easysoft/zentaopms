@@ -10,7 +10,7 @@
     <table class='table table-form'>
       <tbody>
         <tr>
-          <th class="w-150px"><?php echo $lang->kanbanlane->name;?></th>
+          <th><?php echo $lang->kanbanlane->name;?></th>
           <td>
             <div class='required required-wrapper'></div>
             <?php echo html::input('name', '', "class='form-control'");?>
