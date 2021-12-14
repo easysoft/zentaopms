@@ -201,15 +201,14 @@ function renderKanbanItem(item, $item)
             .appendTo($item);
     }
     $title.text(item.name);
-    $title.attr('href', createLink('kanban', 'viewcard', 'taskID=' + item.id));
+    $title.attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id));
 
-    var $more = $item.children('.actions');
-    if(!$more.length)
+    if(item.actions.length)
     {
         $(
         [
-            '<div class="actions" title="' + lang.more + '">',
-              '<button class="btn btn-link action" data-contextmenu="task" data-id="' + item.id + '">',
+            '<div class="actions" title="' + kanbanLang.more + '">',
+              '<button class="btn btn-link action" data-contextmenu="card" data-id="' + item.id + '">',
                 '<i class="icon icon-ellipsis-v"></i>',
               '</button>',
             '</div>'
@@ -226,7 +225,7 @@ function renderKanbanItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
-    $item.data('task', item);
+    $item.data('card', item);
 
     $info.children('.pri')
         .attr('class', 'pri label-pri label-pri-' + item.pri)
@@ -613,31 +612,19 @@ function createLaneMenu(options)
     return items;
 }
 
-function createTaskMenu(options)
+function createCardMenu(options)
 {
-    var task = options.$trigger.closest('.kanban-item').data('task');
-    var privs = task.actions;
+    var card  = options.$trigger.closest('.kanban-item').data('item');
+    var privs = card.actions;
     if(!privs.length) return [];
 
-    var actions = {
-        'edit': {'label': taskLang.edit, 'icon': '', 'url': createLink('task', 'edit', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal', 'data-width': '1125px'}},
-        'move': {'label': taskLang.move, 'icon': '', 'url': createLink('task', 'move', "taskID=" + task.id + "&groupID=" + task.kanbanGroup), 'attrs': {'data-toggle': 'modal', 'data-width': 400}},
-        'copy': {'label': taskLang.copy, 'icon': '', 'url': createLink('task', 'copy', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal', 'data-width': '1000px'}},
-        'start': {'label': taskLang.start, 'icon': '', 'url': createLink('task', 'start', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal'}},
-        'finish': {'label': taskLang.finish, 'icon': '', 'url': createLink('task', 'finish', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal'}},
-        'activate': {'label': taskLang.activate, 'icon': '', 'url': createLink('task', 'activate', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal'}},
-        'cancel': {'label': taskLang.cancel, 'icon': '', 'url': createLink('task', 'cancel', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal'}},
-        'close': {'label': taskLang.close, 'icon': '', 'url': createLink('task', 'close', "taskID=" + task.id + "&from=kanban"), 'attrs': {'data-toggle': 'modal'}},
-        'archive': {'label': taskLang.archive, 'icon': '', 'url': createLink('task', 'archive', "taskID=" + task.id + "&from=kanban"), 'attrs': {'class': 'confirmer', 'data-confirmTitle': taskLang.confirmArchive, 'data-confirmDetail': taskLang.confirmArchiveDetail, 'data-confirmButton': taskLang.archive, 'data-confirming': taskLang.archiving}},
-        'delete': {'label': taskLang.delete, 'icon': '', 'url': createLink('task', 'delete', "taskID=" + task.id + '&from=kanban'), 'attrs': {'class': 'confirmer', 'data-confirmTitle': taskLang.confirmDelete, 'data-confirmDetail': taskLang.confirmDeleteDetail}},
-        'setColor':  {'label': taskLang.setColor, 'icon': '', 'url': createLink('task', 'setColor', "taskID=" + task.id), 'attrs': {'data-toggle': 'modal', 'data-width': 400}},
-    };
-
     var items = [];
-    $.each(actions, function(actionKey, actionItem)
-    {
-        if(privs.includes(actionKey)) items.push({label: actionItem.label, icon: '', url: actionItem.url, attrs: actionItem.attrs});
-    });
+    if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(privs.includes('archiveCard')) items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail}});
+    if(privs.includes('moveCard')) items.push({label: kanbanLang.moveCard, icon: 'move', url: createLink('kanban', 'moveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setCardColor')) items.push({label: kanbanLang.cardColor, icon: 'color', url: createLink('kanban', 'setCardColor', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -672,7 +659,7 @@ function createColumnMenu(options)
 /* Define menu creators */
 window.menuCreators =
 {
-    task: createTaskMenu,
+    card: createCardMenu,
     lane: createLaneMenu,
     column: createColumnMenu
 };
