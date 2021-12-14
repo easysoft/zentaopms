@@ -180,10 +180,10 @@ class buildModel extends model
      * @param int|array  $products
      * @param string|int $branch
      * @param string     $params   noempty|notrunk|noterminate|withbranch, can be a set of them
-     * @param string|int $build
      * @param string|int $objectID
      * @param string     $objectType
-     *
+     * @param int|array  $buildIdList
+     * @param bool       $replace
      * @access public
      * @return array
      */
