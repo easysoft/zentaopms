@@ -646,7 +646,7 @@ $lang->resource->kanban->createCard   = 'createCard';
 $lang->resource->kanban->editCard     = 'editCard';
 $lang->resource->kanban->viewCard     = 'viewCard';
 $lang->resource->kanban->sortCard     = 'sortCard';
-$lang->resource->kanban->archivedCard = 'archivedCard';
+$lang->resource->kanban->archiveCard  = 'archiveCard';
 $lang->resource->kanban->laneMove     = 'laneMove';
 $lang->resource->kanban->cardsSort    = 'cardsSort';
 

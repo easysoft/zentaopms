@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <div class='main-header'>
@@ -30,6 +31,7 @@
       </div>
     </div>
     <div class='cell'>
+      <?php $actionFormLink = $this->createLink('action', 'comment', "objectType=kanbancard&objectID=$card->id");?>
       <?php include '../../common/view/action.html.php';?>
     </div>
     <div class='main-actions'>
@@ -37,11 +39,11 @@
         <?php if(!$card->deleted):?>
         <?php
         common::printLink('kanban', 'assigntocard', "cardID=$card->id", "<i class='icon icon-hand-right'></i><span class='text'>{$lang->kanbancard->assign}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->assign}'", true, true);
-        common::printLink('kanban', 'archivecard',  "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archiv}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->archiv}'", true, true);
+        common::printLink('kanban', 'archivecard',  "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archive}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->archive}'", true, true);
 
         echo "<div class='divider'></div>";
 
-        common::printLink('kanban', 'editcard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->edit}'",  true, true);
+        common::printLink('kanban', 'editcard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link iframe' data-width='80%' title='{$lang->kanbancard->edit}'",  true, true);
         common::printLink('kanban', 'copycard',   "cardID=$card->id", '<i class="icon icon-copy"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'",  true, true);
         common::printLink('kanban', 'deletecard', "cardID=$card->id", '<i class="icon icon-trash"></i>', '', "class='btn btn-link iframe' title='{$lang->kanbancard->delete}'",true, true);
         ?>
