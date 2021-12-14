@@ -149,7 +149,7 @@ $(document).ready(function()
         else
         {
             $diffCode.addClass('with-action-row');
-            var line = $row.data('line');
+            var line = $row.attr('data-line');
             if(!$row.hasClass('with-action-row'))
             {
                 $rows.removeClass('with-action-row')
