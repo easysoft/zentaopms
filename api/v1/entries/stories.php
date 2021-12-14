@@ -58,7 +58,8 @@ class storiesEntry extends entry
         $this->batchSetPost($fields);
 
         /* If reviewer is not post, set needNotReview. */
-        if(empty($this->request('reviewer'))) $this->setPost('needNotReview', 1);
+        $reviewer = $this->request('reviewer');
+        if(empty($reviewer)) $this->setPost('needNotReview', 1);
         $this->setPost('product', $productID);
         $this->setPost('type', $this->param('type', 'story'));
 
