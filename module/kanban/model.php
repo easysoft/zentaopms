@@ -397,7 +397,7 @@ class kanbanModel extends model
         $groupGroup  = $this->getGroupGroupByRegions(array_keys($regions));
         $laneGroup   = $this->getLaneGroupByRegions(array_keys($regions));
         $columnGroup = $this->getColumnGroupByRegions(array_keys($regions));
-        //$taskGroup   = $this->getTaskGroupByProject($kanbanID);
+        $cardGroup   = $this->getCardGroupByKanban($kanbanID);
 
         foreach($regions as $regionID => $regionName)
         {
@@ -412,7 +412,7 @@ class kanbanModel extends model
                 $lanes = zget($laneGroup, $group->id, array());
                 if(!$lanes) continue;
 
-                foreach($lanes as $lane) $lane->items = isset($taskGroup[$lane->id]) ? $taskGroup[$lane->id] : array();
+                foreach($lanes as $lane) $lane->items = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
 
                 $group->columns = zget($columnGroup, $group->id, array());
                 $group->lanes   = $lanes;
@@ -553,6 +553,36 @@ class kanbanModel extends model
         }
 
         return $columnData;
+    }
+
+    /**
+     * Get card group by kanban id.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    public function getCardGroupByKanban($kanbanID)
+    {
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->eq($kanbanID)
+            //->orderBy('`order` asc')
+            ->fetchAll('id');
+
+        $actions = array('editcard', 'movecard', 'copycard', 'startcard', 'finishcard', 'activatecard', 'cancelcard', 'closecard', 'archivecard', 'deletecard', 'setcardcolor');
+        foreach($cards as $card)
+        {
+            $card->actions = array();
+            foreach($actions as $action)
+            {
+                if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+            }
+
+            $cardGroup[$card->lane]['column' . $card->column][] = $card;
+        }
+
+        return $cardGroup;
     }
 
     /**
@@ -1639,10 +1669,12 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
+        $showSetting = common::hasPriv('kanban', 'edit') || common::hasPriv('kanban', 'createRegion') || common::hasPriv('kanban', 'close') || common::hasPriv('kanban', 'delete');
+
         $actions  = '';
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
-        $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+        if($showSetting) $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
         $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
         if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
 

@@ -38,9 +38,9 @@
           <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::input('begin', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->begin}'");?>
+              <?php echo html::input('begin', '', "class='form-control form-date' placeholder='{$lang->kanbancard->begin}'");?>
               <span class='input-group-addon fix-border'>~</span>
-              <?php echo html::input('end', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->end}'");?>
+              <?php echo html::input('end', '', "class='form-control form-date' placeholder='{$lang->kanbancard->end}'");?>
             </div>
           </td>
         </tr>
@@ -48,7 +48,18 @@
           <th><?php echo $lang->kanbancard->name;?></th>
           <td colspan='2'>
             <div class='required required-wrapper'></div>
-            <?php echo html::input('name', '', "class='form-control'");?>
+            <div class='input-group title-group'>
+              <?php echo html::input('name', '', "class='form-control'");?>
+              <span class="input-group-addon fix-border br-0"><?php echo $lang->kanbancard->pri;?></span>
+              <div class="input-group-btn pri-selector" data-type="pri">
+                <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
+                  <span class="pri-text"><span class="label-pri label-pri-3" title="3">3</span></span> &nbsp;<span class="caret"></span>
+                </button>
+                <div class='dropdown-menu pull-right'>
+                <?php echo html::select('pri', $lang->kanbancard->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
+                </div>
+              </div>
+            </div>
           </td>
         </tr>
         <tr>
@@ -65,4 +76,13 @@
     </form>
   </div>
 </div>
+<script>
+$('#pri').on('change', function()
+{
+    var $select = $(this);
+    var $selector = $select.closest('.pri-selector');
+    var value = $select.val();
+    $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
+});
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>
