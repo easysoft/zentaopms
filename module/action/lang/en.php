@@ -386,9 +386,22 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->execu
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
+$lang->action->dynamicAction->kanban['create'] = 'Create Kanban';
+$lang->action->dynamicAction->kanban['edited'] = 'Kanban Settings';
+
+$lang->action->dynamicAction->kanbanspace['create'] = 'Create Space';
+$lang->action->dynamicAction->kanbanspace['edited'] = 'Space Settings';
+$lang->action->dynamicAction->kanbanspace['closed'] = 'Close Kanban';
+
+$lang->action->dynamicAction->kanbancolumn['create'] = 'Create Column';
 $lang->action->dynamicAction->kanbancolumn['edited'] = 'Column Settings';
+
+$lang->action->dynamicAction->kanbanlane['created']  = 'Create Swimlane';
 $lang->action->dynamicAction->kanbanlane['edited']   = 'Swimlane Settings';
 $lang->action->dynamicAction->kanbanlane['moved']    = 'Move Swimlane';
+
+$lang->action->dynamicAction->kanbancard['create'] = 'Create Card';
+$lang->action->dynamicAction->kanbancard['edited'] = 'Edit card';
 
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
@@ -546,6 +559,7 @@ $lang->action->label->kanbanregion = 'Kanban Region|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
+$lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 
 /* Object type. */

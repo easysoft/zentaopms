@@ -56,6 +56,8 @@ $lang->kanban->teamSumCount   = '共%s人';
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 
+$lang->kanban->accessDenied = '您无权访问该看板';
+
 $lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
@@ -219,7 +221,6 @@ $lang->kanbancard->create = '创建卡片';
 $lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->legendBasicInfo = '基本信息';
 $lang->kanbancard->legendLifeTime  = '卡片的一生';
-$lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->space           = '所属空间';
 $lang->kanbancard->lane            = '所属泳道';
 $lang->kanbancard->column          = '所属看板列';
@@ -244,4 +245,3 @@ $lang->kanbancard->priList[4] = 4;
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = '预计不能为负数!';
 $lang->kanbancard->error->endSmall    = '"截止日期"不能小于"预计开始"!';
->>>>>>> module/kanban/lang/zh-cn.php
