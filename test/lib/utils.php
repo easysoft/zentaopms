@@ -113,26 +113,29 @@ function zdRun()
         {
             /* Build zendata. */
             $configData = array('fields' => array());
-            foreach($info['data'] as $fileKey => $fileName)
+            if(!empty($info['data']))
             {
-                if($fileKey == 0) continue; // Skip default file.
-
-                $data = Spyc::YAMLLoad($configRoot . $fileName . '.yaml');
-                foreach($data['fields'] as $field)
+                foreach($info['data'] as $fileKey => $fileName)
                 {
-                    $fieldName  = $field['field'];
-                    $fieldExist = false;
-                    foreach($configData['fields'] as $key => $configField)
-                    {
-                        if($configField['field'] == $fieldName)
-                        {
-                            $configData['fields'][$key] = $field;
-                            $fieldExist = true;
-                            break;
-                        }
-                    }
+                    if($fileKey == 0) continue; // Skip default file.
 
-                    if(!$fieldExist) $configData['fields'][] = $field;
+                    $data = Spyc::YAMLLoad($configRoot . $fileName . '.yaml');
+                    foreach($data['fields'] as $field)
+                    {
+                        $fieldName  = $field['field'];
+                        $fieldExist = false;
+                        foreach($configData['fields'] as $key => $configField)
+                        {
+                            if($configField['field'] == $fieldName)
+                            {
+                                $configData['fields'][$key] = $field;
+                                $fieldExist = true;
+                                break;
+                            }
+                        }
+
+                        if(!$fieldExist) $configData['fields'][] = $field;
+                    }
                 }
             }
 

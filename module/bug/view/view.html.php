@@ -14,7 +14,15 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
 <?php $browseLink = $app->session->bugList ? $app->session->bugList : inlink('browse', "productID=$bug->product");?>
+<?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div class="linkButton" onclick="handleLinkButtonClick()">
+  <span title="<?php echo $lang->viewDetails;?>">
+    <i class="icon icon-import icon-rotate-270"></i>
+  </span>
+</div>
+<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -42,6 +50,7 @@
 </div>
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="scrollContent">
+<?php endif;?>
 <?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
@@ -425,5 +434,12 @@
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<script>
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
+</script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

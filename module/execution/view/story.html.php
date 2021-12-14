@@ -139,6 +139,18 @@
   </div>
 </div>
 
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
+  </strong>
+  <div class="linkButton" onclick="handleLinkButtonClick()">
+    <span title="<?php echo $lang->viewDetails;?>">
+      <i class="icon icon-import icon-rotate-270"></i>
+    </span>
+  </div>
+</div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class='side-col' id='sidebar'>
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -470,6 +482,11 @@ $(function()
         }
     });
 });
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
 </script>
 <?php if(commonModel::isTutorialMode()): ?>
 <style>

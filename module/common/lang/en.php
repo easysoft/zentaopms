@@ -77,6 +77,7 @@ $lang->whitelist      = 'Access whitelist';
 $lang->globalSetting  = 'Global Setting';
 $lang->waterfallModel = 'Waterfall';
 $lang->all            = 'All';
+$lang->viewDetails    = 'View Details';
 
 $lang->actions         = 'Action';
 $lang->restore         = 'Reset';

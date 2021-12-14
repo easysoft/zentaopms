@@ -215,6 +215,7 @@ class product extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Display of branch label. */

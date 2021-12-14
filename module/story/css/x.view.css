@@ -1,17 +1,19 @@
-#mainMenu .pull-left>a {display: none;}
-#mainMenu .pull-left .divider {display: none;}
-#mainMenu .pull-right {display: none;}
-#mainContent .col-4 {display: none;}
+body * {font-size: 13px !important; line-height: 1.42857143; color: rgb(51, 51, 51);}
 #main {margin-bottom: 40px; min-width: unset;}
-.main-actions {display: none;}
+#mainMenu {position: fixed; width: 100%; z-index: 999;}
+#mainMenu .pull-left>a, #mainMenu .pull-left .divider, #mainMenu .pull-right, #mainContent .col-4, .main-actions {display: none;}
+#scrollContent {margin-top: 35px; height: calc(100% - 70px); display: block; overflow: hidden;}
+#scrollContent:hover {overflow: overlay;}
+html, body, #main, .container { height: 100%;}
+.btn span {line-height: 16px; vertical-align: middle;}
 .col-8>.cell {min-height: 300px;}
 .modal-dialog {width: 90%;}
-#mainMenu {position: fixed; width: 100%; z-index: 999;}
-#scrollContent {margin-top: 35px; height: calc(100% - 70px); display: block; overflow: hidden;}
-#scrollContent:hover{overflow: overlay;}
-html, body, #main, .container { height: 100%;}
-body * {font-size: 13px !important; line-height: 1.42857143; color: rgb(51, 51, 51);}
+.page-title {width: 100%;}
 .page-title > .label-id {min-width: 25px; line-height: 13px;}
+.page-title > .text {display: inline-block; width: calc(100% - 90px); text-overflow: ellipsis; white-space: nowrap; overflow: hidden; line-height: 13px;}
+.linkButton {float: right; padding-right: 10px; cursor: pointer;}
+.linkButton i {font-size: 17px !important;}
+.linkButton span {line-height: 34px; display: block;}
+.btn-toolbar {width: calc(100% - 30px);}
 ::-webkit-scrollbar {width: 10px; height: 10px;}
 ::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
-.btn span{line-height: 16px; vertical-align: middle;}

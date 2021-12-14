@@ -232,6 +232,18 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo $this->product->getByID($productID)->name ?>
+  </strong>
+  <div class="linkButton" onclick="handleLinkButtonClick()">
+    <span title="<?php echo $lang->viewDetails;?>">
+      <i class="icon icon-import icon-rotate-270"></i>
+    </span>
+  </div>
+</div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -295,6 +307,22 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='storyList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
         <thead>
           <tr>
+          <?php if($this->app->getViewType() == 'xhtml'):?>
+          <?php
+          foreach($setting as $key => $value)
+          {
+              if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+              {
+                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
+
+                  if($value->show)
+                  {
+                      $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
+                      $columns ++;
+                  }
+              }
+          }?>
+          <?php else:?>
           <?php
           foreach($setting as $key => $value)
           {
@@ -307,13 +335,25 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               }
           }
           ?>
+          <?php endif;?>
           </tr>
         </thead>
         <tbody>
           <?php foreach($stories as $story):?>
           <tr data-id='<?php echo $story->id?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0);?>'>
             <?php $story->from = $from;?>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php
+            foreach($setting as $key => $value)
+            {
+                if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+                {
+                  $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
+                }
+            }?>
+            <?php else:?>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+            <?php endif;?>
           </tr>
           <?php if(!empty($story->children)):?>
           <?php $i = 0;?>
@@ -322,7 +362,18 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($story->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $story->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>'>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php
+            foreach($setting as $key => $value)
+            {
+                if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+                {
+                  $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
+                }
+            }?>
+            <?php else:?>
             <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
+            <?php endif;?>
           </tr>
           <?php $i ++;?>
           <?php endforeach;?>
@@ -682,6 +733,12 @@ function setBadgeStyle(obj, isShow)
     {
         $label.find('.label-badge').css({"color":"#838a9d", "border-color":"#838a9d"});
     }
+}
+
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
 }
 </script>
 <?php include '../../common/view/footer.html.php';?>

@@ -1,0 +1,20 @@
+body {margin-bottom: 0px !important;}
+#main {min-width: unset; overflow-y: overlay;}
+#main > .container {width: 100% !important;}
+#mainContent > .main-col {margin-top: 0px;}
+#mainMenu, #sidebar, .dropdown, .c-sort, .c-category, .c-user, .c-estimate, .c-stage, .c-count, .c-actions-7, .c-actions, .table-footer > .table-statistic, .table-footer > .table-actions, .pager > li > .pager-size-menu {display: none;}
+#storyList > thead > tr > .c-status, #storyList > thead > tr > .c-pri, #storyList > tbody > tr > .c-status, #storyList > tbody > tr > .c-pri {display: table-cell !important;}
+.checkbox-primary, .table-footer .pager:before {display: none !important;}
+#xx-title {background-color: #F2F2F2; padding-left: 15px; line-height: 40px;}
+.main-col .table-responsive {height: 420px; margin-bottom: 0px;}
+.main-table a {pointer-events: none;}
+.table-footer {position: fixed !important; width: 100% !important; bottom: 0; z-index: -10 !important; background:none !important;}
+.table-footer .pager {background-color: #fff !important;}
+.table-footer .pager li *{color: #838a9d !important;}
+.table-responsive {margin-bottom: unset;}
+.pager a {pointer-events: unset;}
+.linkButton {float: right; padding-right: 10px; cursor: pointer;}
+.linkButton i {font-size: 17px !important;}
+.linkButton span {line-height: 40px; display: block;}
+::-webkit-scrollbar {width: 10px; height: 10px;}
+::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}

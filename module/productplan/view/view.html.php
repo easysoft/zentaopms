@@ -52,7 +52,14 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <?php if($this->app->getViewType() == 'xhtml'):?>
-    <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
+    <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>    
+    <?php if($this->app->getViewType() == 'xhtml'):?>
+    <div class="linkButton" onclick="handleLinkButtonClick()">
+      <span title="<?php echo $lang->viewDetails;?>">
+        <i class="icon icon-import icon-rotate-270"></i>
+      </span>
+    </div>
+    <?php endif;?>
     <div class='tab-btn-container'>
     <?php endif;?>
     <ul class='nav nav-tabs'>
@@ -593,7 +600,7 @@
               </table>
             </div>
           </div>
-          <?php include '../../common/view/action.html.php';?>
+          <?php if($this->app->getViewType() != 'xhtml') include '../../common/view/action.html.php';?>
         </div>
       </div>
     </div>
@@ -604,4 +611,11 @@
 <?php js::set('planID', $plan->id)?>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('type', $type)?>
+<script>
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

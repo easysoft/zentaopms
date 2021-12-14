@@ -8,5 +8,5 @@ body{padding:0px; margin: 0px;background-color: #fff;}
 #mainContent .cell{box-shadow:none; -webkit-box-shadow: none;}
 
 .xuanxuan-card{padding-bottom:55px;}
-.xuancard-actions{width: 100%;text-align: center; height: 34px;}
-.xuancard-actions.fixed{position: fixed; background: #fff; border-top: 1px solid #ddd; bottom: 0; margin-bottom: 0; z-index: 999;}
+.xuancard-actions{width: 100%;text-align: center; height: 35px; padding: 1px;}
+.xuancard-actions.fixed{position: fixed; background: #fff; border-top: 1px solid #eee; bottom: 0; margin-bottom: 0; z-index: 999;}

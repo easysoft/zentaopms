@@ -1,0 +1,19 @@
+body {margin-bottom: 0px !important;}
+td .story-toggle {pointer-events: auto !important;}
+#mainMenu, #sidebar, .table-footer > .table-actions, .dropdown, .table-footer>.table-statistic, .pager > li > .pager-size-menu {display: none;}
+#main {min-width: unset; overflow-y: overlay;}
+#main > .container {width: 100% !important;}
+#mainContent > .main-col {margin-top: 0px;}
+#xx-title {background-color: #F2F2F2; padding-left: 15px; line-height: 40px;}
+.main-table a {pointer-events: none;}
+.checkbox-primary, .table-footer .pager:before {display: none !important;}
+.table-footer {position: fixed !important; width: 100% !important; bottom: 0; z-index: -10 !important; background:none !important;}
+.table-footer .pager {background-color: #fff !important;}
+.table-footer .pager li * {color: #838a9d !important;}
+.table-responsive {margin-bottom: unset;}
+.pager a {pointer-events: unset;}
+.linkButton {float: right; padding-right: 10px; cursor: pointer;}
+.linkButton i {font-size: 17px !important;}
+.linkButton span {line-height: 40px; display: block;}
+::-webkit-scrollbar {width: 10px; height: 10px;}
+::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
