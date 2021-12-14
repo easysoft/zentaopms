@@ -511,7 +511,7 @@ class kanbanModel extends model
             ->orderBy('order')
             ->fetchGroup('group', 'id');
 
-        $actions = array('createColumn', 'copyColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn');
+        $actions = array('createColumn', 'copyColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
