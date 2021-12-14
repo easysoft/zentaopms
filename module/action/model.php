@@ -287,8 +287,8 @@ class actionModel extends model
                     $record['execution'] = zget($result, 'execution', 0);
             }
 
-            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record->project = (int)$extra ;
-            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record->execution = (int)$extra;
+            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record['project'] = (int)$extra ;
+            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record['execution'] = (int)$extra;
 
             if($record)
             {
