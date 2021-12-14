@@ -12,33 +12,6 @@ function loadMore(type)
     });
 }
 
-function renderUserAvatar(assignedTo, cardID)
-{
-    if(assignedTo.length == 0) return $('<a class="avatar has-text avatar-sm avatar-circle iframe" title="' + kanbancardLang.noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');;
-
-    var avatarHtml = '';
-    var link = createLink('kanban', 'assignCard', 'id=' + cardID, '', true);
-    var assignedTo = assignedTo.split(',');
-    for(var index = 0; index < assignedTo.length; index ++)
-    {
-        var user = assignedTo[index];
-
-        if(typeof user === 'string') user = {account: user};
-        if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
-
-        var $noPrivAvatar = $('<div class="avatar has-text avatar-sm avatar-circle" />').avatar({user: user});
-        if(!priv.canAssignCard)
-        {
-            avatarHtml += $noPrivAvatar;
-            return true;
-        }
-
-        avatarHtml += $('<a class="avatar has-text avatar-sm avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
-    }
-
-    return avatarHtml;
-}
-
 /**
  * Display the kanban in full screen.
  *
