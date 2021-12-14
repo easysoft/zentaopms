@@ -149,7 +149,7 @@ class mrModel extends model
 
                 if(isset($errorMessage)) break;
             }
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]));
         }
 
         /* Create MR failed. */
