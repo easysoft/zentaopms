@@ -2434,8 +2434,8 @@ class userModel extends model
         if($teams === '' and $stakeholders === '')
         {
             list($productTeams, $productStakeholders) = $this->getProductMembers(array($product->id => $product));
-            $teams = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
-            $teams = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
+            $teams        = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
+            $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
         }
 
         if($whiteList === '')
