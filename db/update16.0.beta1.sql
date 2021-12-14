@@ -66,8 +66,8 @@ CREATE TABLE `zt_kanbancard` (
   `pri` mediumint(8) unsigned NOT NULL,
   `assignedTo` text NOT NULL,
   `desc` text NOT NULL,
-  `begin` datetime NOT NULL,
-  `end` datetime NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
   `estimate` float unsigned NOT NULL,
   `color` char(7) NOT NULL,
   `acl` char(30) NOT NULL DEFAULT 'open',
@@ -109,3 +109,4 @@ ALTER TABLE `zt_kanbanlane` ADD COLUMN `region` mediumint(8) unsigned NOT NULL A
 ALTER TABLE `zt_kanbanlane` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;
 ALTER TABLE `zt_kanbancolumn` ADD COLUMN `region` mediumint(8) unsigned NOT NULL AFTER `type`;
 ALTER TABLE `zt_kanbancolumn` ADD COLUMN `group` mediumint(8) unsigned NOT NULL AFTER `region`;
+ALTER TABLE `zt_project` ADD COLUMN `suspendedDate` date NOT NULL AFTER `canceledDate`;

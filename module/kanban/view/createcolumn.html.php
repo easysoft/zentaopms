@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
+<?php js::set('colorList',$config->kanban->laneColorList);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

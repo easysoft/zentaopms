@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('colorList',$config->kanban->laneColorList);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
@@ -8,9 +9,9 @@
   </div>
   <form class='load-indicator main-form' method='post' target='hiddenwin'>
     <table class='table table-form'>
-      <tbody> 
+      <tbody>
         <tr>
-          <th class="w-140px"><?php echo $lang->kanbanlane->name;?></th>
+          <th><?php echo $lang->kanbanlane->name;?></th>
           <td>
             <div class='required required-wrapper'></div>
             <?php echo html::input('name', '', "class='form-control'");?>
@@ -28,13 +29,13 @@
           <th><?php echo $lang->kanbanlane->color;?></th>
           <td>
             <div id='color-picker'></div>
-            <?php echo html::input('color', '#3DC6FD', "class='hidden'");?>
+            <?php echo html::input('color', '#7EC5FF', "class='hidden'");?>
           </td>
         </tr>
         <tr>
           <td class='text-center form-actions' colspan='2'>
           <?php echo html::submitButton();?>
-          <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>                             
+          <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>
           </td>
         </tr>
       </tbody>

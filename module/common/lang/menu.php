@@ -588,7 +588,12 @@ $lang->navGroup->task         = 'execution';
 $lang->navGroup->build        = 'execution';
 $lang->navGroup->team         = 'execution';
 
-$lang->navGroup->kanban = 'kanban';
+$lang->navGroup->kanbanspace  = 'kanban';
+$lang->navGroup->kanban       = 'kanban';
+$lang->navGroup->kanbanregion = 'kanban';
+$lang->navGroup->kanbanlane   = 'kanban';
+$lang->navGroup->kanbancolumn = 'kanban';
+$lang->navGroup->kanbancard   = 'kanban';
 
 $lang->navGroup->doc    = 'doc';
 $lang->navGroup->doclib = 'doc';

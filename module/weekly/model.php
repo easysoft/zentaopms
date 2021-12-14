@@ -22,9 +22,28 @@ class weeklyModel extends model
     public function getPageNav($project, $date)
     {
         $date  = date('Ymd', strtotime($this->getThisMonday($date)));
-        $begin = $project->begin;
-        $weeks = $this->getWeekPairs($begin);
-        $current = zget($weeks, $date, '');
+        switch($project->status)
+        {
+        case 'wait':
+            $begin = helper::now();
+            $end = $begin;
+            break;
+        case 'doing':
+            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $date;
+            $end = $date;
+            break;
+        case 'suspended':
+            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->suspendedDate;
+            $end = $project->suspendedDate;
+            break;
+        case 'closed':
+            $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->realEnd;
+            $end = $project->realEnd;
+            break;
+        }
+
+        $weeks = $this->getWeekPairs($begin, $end);
+        $current = zget($weeks, $date, current($weeks));
         $selectHtml  = "<div class='btn-group angle-btn'>";
         $selectHtml .= html::a('###', $this->lang->weekly->common . $this->lang->colon . $project->name, '', "class='btn'");
         $selectHtml .= '</div>';
@@ -49,9 +68,9 @@ class weeklyModel extends model
      * @access public
      * @return array
      */
-    public function getWeekPairs($begin)
+    public function getWeekPairs($begin, $end = '')
     {
-        $sn = $this->getWeekSN($begin, date('Y-m-d'));
+        $sn = $end != '' ? $this->getWeekSN($begin, $end) : $this->getWeekSN($begin, date('Y-m-d'));
         $weeks = array();
         for($i = 0; $i <= $sn; $i++)
         {
