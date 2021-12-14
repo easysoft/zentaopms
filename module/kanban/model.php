@@ -1659,9 +1659,9 @@ class kanbanModel extends model
             {
                 $actions .= common::hasPriv('kanban', 'createRegion') ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
             }
+            $actions .= "</ul>";
         }
 
-        $actions .= "</ul>";
         $actions .= "</div>";
 
         $this->lang->headerActions = $actions;
