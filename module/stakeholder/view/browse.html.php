@@ -32,7 +32,7 @@
           <th class='c-id'>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th><?php echo $lang->stakeholder->name;?></th>
+          <th class="c-name"><?php echo $lang->stakeholder->name;?></th>
           <th class="c-type"><?php echo $lang->stakeholder->common . $lang->stakeholder->type;?></th>
           <th class="c-phone"><?php echo $lang->stakeholder->phone;?></th>
           <th class="c-qq"><?php echo $lang->stakeholder->qq;?></th>
