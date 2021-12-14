@@ -1202,11 +1202,11 @@ class executionModel extends model
     public function getIdList($projectID, $status = 'all')
     {
         return $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq('0')
+            ->where('type')->in('sprint,stage')
+            ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->andWhere('type')->in('sprint,stage')
             ->fetchPairs('id', 'id');
     }
 
@@ -1228,12 +1228,12 @@ class executionModel extends model
         $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('deleted')->eq('0')
+            ->where('type')->in('stage,sprint')
+            ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
             ->beginIF($status != 'all' and $status != 'undone')->andWhere('status')->in($status)->fi()
-            ->andWhere('type')->in('stage,sprint')
             ->orderBy($orderBy)
             ->beginIF($limit)->limit($limit)->fi()
             ->fetchAll('id');
@@ -2702,7 +2702,7 @@ class executionModel extends model
         $burns = array();
 
         $executions = $this->dao->select('id, code')->from(TABLE_EXECUTION)
-            ->where("end")->ge($today)
+            ->where('end')->ge($today)
             ->andWhere('type')->ne('ops')
             ->andWhere('status')->notin('done,closed,suspended')
             ->fetchPairs();
@@ -2716,7 +2716,7 @@ class executionModel extends model
             ->andWhere('status')->ne('cancel')
             ->groupBy('execution')
             ->fetchAll('execution');
-        $closedLefts = $this->dao->select("execution, sum(`left`) AS `left`")->from(TABLE_TASK)
+        $closedLefts = $this->dao->select('execution, sum(`left`) AS `left`')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
             ->andWhere('deleted')->eq('0')
             ->andWhere('parent')->ge('0')
@@ -2773,7 +2773,7 @@ class executionModel extends model
     public function fixFirst($executionID)
     {
         $execution  = $this->getById($executionID);
-        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('task')->eq(0)->andWhere('date')->eq($execution->begin)->fetch();
+        $burn     = $this->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($execution->begin)->andWhere('task')->eq(0)->fetch();
         $withLeft = $this->post->withLeft ? $this->post->withLeft : 0;
 
         $data = fixer::input('post')
@@ -3079,7 +3079,7 @@ class executionModel extends model
      */
     public function getTotalEstimate($executionID)
     {
-        $estimate = $this->dao->select('SUM(estimate) as estimate')->from(TABLE_TASK)->where('deleted')->eq('0')->andWhere('execution')->eq($executionID)->fetch('estimate');
+        $estimate = $this->dao->select('SUM(estimate) as estimate')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetch('estimate');
         return round($estimate);
     }
 
