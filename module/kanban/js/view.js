@@ -92,7 +92,9 @@ document.addEventListener('msfullscreenChange', function (e)
 function renderHeaderCol($column, column, $header, kanbanData)
 {
     /* Render group header. */
-    var privs = kanbanData.actions;
+    var privs       = kanbanData.actions;
+    var columnPrivs = kanbanData.columns[0].actions;
+
     if(privs.includes('sortGroup'))
     {
         var groups = regions[column.region].groups;
@@ -108,18 +110,30 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
     }
 
-    var regionID = $column.closest('.kanban').data('id');
-    var groupID  = $column.closest('.kanban-board').data('id');
-    var laneID   = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
-    var columnID = $column.closest('.kanban-col').data('id');
-    var cardUrl  = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+    var regionID     = $column.closest('.kanban').data('id');
+    var groupID      = $column.closest('.kanban-board').data('id');
+    var laneID       = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
+    var columnID     = $column.closest('.kanban-col').data('id');
+    var printMoreBtn = (columnPrivs.includes('editColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('createColumn') || columnPrivs.includes('copyColumn') || columnPrivs.includes('archiveColumn') || columnPrivs.includes('deleteColumn') || columnPrivs.includes('splitColumn'));
 
     /* Render more menu. */
-    if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
-    var $actions = $column.children('.actions');
-    var addItemBtn = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
-    var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
-    $actions.html(addItemBtn + moreAction);
+    if(columnPrivs.includes('createCard') || printMoreBtn)
+    {
+        var addItemBtn = '';
+        var moreAction = '';
+
+        if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
+        var $actions = $column.children('.actions');
+
+        if(columnPrivs.includes('createCard'))
+        {
+            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+            addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+        }
+
+        var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
+        $actions.html(addItemBtn + moreAction);
+    }
 }
 
 /**

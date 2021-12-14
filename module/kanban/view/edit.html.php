@@ -58,7 +58,6 @@
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>
-          <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>
         </td>
       </tr>
     </table>
