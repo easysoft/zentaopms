@@ -220,7 +220,7 @@ class kanban extends control
         {
             $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
             if(dao::isError()) die(js::error(dao::getError()));
-            
+
             $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
             die(js::reload('parent.parent'));
         }
@@ -242,14 +242,14 @@ class kanban extends control
         $column = $this->kanban->getColumnByID($columnID);
 
         if($_POST)
-        {   
+        {
             $order    = $position == 'left' ? $column->order : $column->order + 1;
             $columnID = $this->kanban->createColumn($column->region, null, $order);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
             die(js::reload('parent.parent'));
-        }   
+        }
 
         $this->view->title    = $this->lang->kanban->createColumn;
         $this->view->column   = $column;
@@ -309,6 +309,31 @@ class kanban extends control
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
         $this->view->users    = $this->loadModel('user')->getPairs('noletter');
         $this->view->allUsers = $this->loadModel('user')->getPairs();
+
+        $this->display();
+    }
+
+    /**
+     * View a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return void
+     */
+    public function viewCard($cardID)
+    {
+        $this->loadModel('action');
+
+        $card   = $this->kanban->getCardByID($cardID);
+        $kanban = $this->kanban->getByID($card->kanban);
+        $space  = $this->kanban->getSpaceById($kanban->space);
+
+        $this->view->card        = $card;
+        $this->view->actions     = $this->action->getList('kanbancard', $cardID);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->space       = $space;
+        $this->view->kanban      = $kanban;
+        $this->view->usersAvatar = $this->user->getAvatarPairs();
 
         $this->display();
     }
