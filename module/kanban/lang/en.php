@@ -35,23 +35,27 @@ $lang->kanban->archiveColumn       = 'Archive Column';
 $lang->kanban->spaceCommon         = 'Kanban Space';
 
 /* Fields. */
-$lang->kanban->space          = 'Space';
-$lang->kanban->name           = 'Name';
-$lang->kanban->owner          = 'Owner';
-$lang->kanban->team           = 'Team';
-$lang->kanban->desc           = 'Description';
-$lang->kanban->acl            = 'ACL';
-$lang->kanban->whitelist      = 'White List';
-$lang->kanban->status         = 'Status';
-$lang->kanban->createdBy      = 'Created By';
-$lang->kanban->createdDate    = 'Created Date';
-$lang->kanban->lastEditedBy   = 'Edited By';
-$lang->kanban->lastEditedDate = 'Edited Date';
-$lang->kanban->closed         = 'Closed';
-$lang->kanban->closedBy       = 'Closed By';
-$lang->kanban->closedDate     = 'Closed Date';
-$lang->kanban->empty          = 'No Kanban';
-$lang->kanban->teamSumCount   = '%s people in total';
+$lang->kanban->space               = 'Space';
+$lang->kanban->name                = 'Name';
+$lang->kanban->owner               = 'Owner';
+$lang->kanban->team                = 'Team';
+$lang->kanban->desc                = 'Description';
+$lang->kanban->acl                 = 'ACL';
+$lang->kanban->whitelist           = 'White List';
+$lang->kanban->status              = 'Status';
+$lang->kanban->createdBy           = 'Created By';
+$lang->kanban->createdDate         = 'Created Date';
+$lang->kanban->lastEditedBy        = 'Edited By';
+$lang->kanban->lastEditedDate      = 'Edited Date';
+$lang->kanban->closed              = 'Closed';
+$lang->kanban->closedBy            = 'Closed By';
+$lang->kanban->closedDate          = 'Closed Date';
+$lang->kanban->empty               = 'No Kanban';
+$lang->kanban->teamSumCount        = '%s people in total';
+$lang->kanban->createColumnOnLeft  = 'Create Column On Left';
+$lang->kanban->createColumnOnRight = 'Create Column On Right';
+
+$lang->kanban->accessDenied = "You have no access to the kanban.";
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
@@ -193,6 +197,7 @@ $lang->kanbanspace->featureBar['closed'] = 'Closed';
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
+$lang->kanbancolumn->color = 'Column Color';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name       = $lang->kanban->laneName;
@@ -204,10 +209,6 @@ $lang->kanbanlane->color      = 'Lane color';
 
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
-
-$lang->kanbanlane->name    = $lang->kanban->laneName;
-$lang->kanbanlane->common  = 'Lane';
-$lang->kanbanlane->default = 'Default Lane';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Kanban Region';

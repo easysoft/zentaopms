@@ -184,7 +184,17 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
-        $space  = $this->kanban->getSpaceByID($kanban->space);
+
+        if(!$kanban)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('kanban', 'space')));
+        }
+
+        $kanbanIdList = $this->kanban->getCanViewObjects();
+        if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) die(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
+
+        $space = $this->kanban->getSpaceByID($kanban->space);
 
         $this->kanban->setSwitcher($kanban);
         $this->kanban->setHeaderActions($kanban);
