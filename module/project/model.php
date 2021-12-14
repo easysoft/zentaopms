@@ -1602,7 +1602,7 @@ class projectModel extends model
                     echo $project->hours->totalLeft     . $this->lang->execution->workHourUnit;
                     break;
                 case 'progress':
-                    echo "<div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='{$project->hours->progress}' data-width='24' data-height='24' data-back-color='#e8edf3'><div class='progress-info'>{$project->hours->progress}</div></div>";
+                    echo html::ring($project->hours->progress);
                     break;
                 case 'actions':
                     $moduleName = $this->config->systemMode == 'classic' ? "execution" : "project";

@@ -22,7 +22,8 @@
 #kanbanList .kanban-card {display: grid;}
 #kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 #kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
-#kanbanList .kanban-card.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px; width: 24px; height: 24px;}
+#kanbanList .kanban-card.has-progress > .progress-pie,
+#kanbanList .kanban-card.has-progress > .ring {position: absolute; right: 7px; top: 7px; width: 24px; height: 24px;}
 #kanbanList .kanban-card.has-left-border {border-left: 2px solid #838a9d;}
 #kanbanList .kanban-card.has-left-border.border-left-green {border-left-color: #0bd986;}
 #kanbanList .kanban-card.has-left-border.border-left-red {border-left-color: #ff5d5d;}
@@ -180,14 +181,14 @@ function renderProjectItem(item, $item)
 
     if(item.status === 'doing')
     {
-        var progress = item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress || 0) : 0;
-        var $progress = $item.find('.progress-pie');
+        var $progress = $item.find('.ring');
         if(!$progress.length)
         {
-            $progress = $('<div class="progress-pie" data-doughnut-size="90" data-color="#3CB371" data-width="24" data-height="24" data-back-color="#e8edf3"><div class="progress-info"></div></div>').appendTo($item);
+            $progress = $('<div class="ring"><span></span></div>').appendTo($item);
         }
-        $progress.find('.progress-info').text(progress);
-        $progress.attr('data-value', progress).progressPie();
+        var progress = Math.max(0, Math.min(100, Math.round(item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress || 0) : 0)));
+        $progress.find('span').text(progress);
+        $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
         $item.addClass('has-progress');
     }
     return $item.addClass('has-left-border')
@@ -236,13 +237,15 @@ function renderExecutionItem(item, $item)
     }
     if(progress !== undefined)
     {
-        var $progress   = $item.find('.progress-pie');
+        var $progress = $item.find('.ring');
         if(!$progress.length)
         {
-            $progress = $('<div class="progress-pie" data-doughnut-size="90" data-color="#3CB371" data-width="24" data-height="24" data-back-color="#e8edf3"><div class="progress-info"></div></div>').appendTo($item);
+            $progress = $('<div class="ring"><span></span></div>').appendTo($item);
         }
-        $progress.find('.progress-info').text(progress);
-        $progress.attr('data-value', progress).progressPie();
+        progress = Math.max(0, Math.min(100, Math.round(progress)));
+        $progress.find('span').text(progress);
+        $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
+        $item.addClass('has-progress');
     }
     var isDelay = item.end && isEarlierThanToday(item.end);
     return $item.addClass('has-progress has-left-border')

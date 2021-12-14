@@ -132,9 +132,7 @@
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
           <td class="c-progress">
-            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-              <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
-            </div>
+            <?php echo html::ring($execution->hours->progress); ?>
           </td>
           <?php if($isStage):?>
           <td><?php echo $execution->percent . '%';?></td>
@@ -206,9 +204,7 @@
                <span class="status-execution status-<?php echo $child->status?>"><?php echo $executionStatus;?></span>
              </td>
              <td class="c-progress">
-               <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($child->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                 <div class='progress-info'><?php echo round($child->hours->progress);?></div>
-               </div>
+               <?php echo html::ring($child->hours->progress); ?>
              </td>
              <?php if($isStage):?>
              <td><?php echo $child->percent . '%';?></td>

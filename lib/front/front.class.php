@@ -315,6 +315,21 @@ class html extends baseHTML
     {
         return html::avatar($user, 'lg', $className, $attrib, $tag);
     }
+
+    /**
+     * Create a progress ring.
+     *
+     * @param  int    progress  Progress value, 0 ~ 100
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function ring($progress)
+    {
+        $progressVal = max(0, min(100, round($progress)));
+        $ringPosition = ceil($progressVal / 2) * 24;
+        return "<div class='ring' style='background-position-x: -{$ringPosition}px'><span>{$progressVal}</span></div>";
+    }
 }
 
 /**
