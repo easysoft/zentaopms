@@ -1,5 +1,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?phpjs::set('colorList',$config->kanban->laneColorList);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
@@ -28,7 +29,7 @@
           <th><?php echo $lang->kanbanlane->color;?></th>
           <td>
             <div id='color-picker'></div>
-            <?php echo html::input('color', '#3DC6FD', "class='hidden'");?>
+            <?php echo html::input('color', '#7EC5FF', "class='hidden'");?>
           </td>
         </tr>
         <tr>

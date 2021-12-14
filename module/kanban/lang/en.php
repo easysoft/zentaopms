@@ -116,6 +116,7 @@ $lang->kanban->moveDown           = 'Swimlane Down';
 $lang->kanban->laneMove           = 'Swimlane Sorting';
 $lang->kanban->laneGroup          = 'Lane Group';
 $lang->kanban->cardsSort          = 'Cards Sortting';
+$lang->kanban->more               = 'More';
 $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
 $lang->kanban->limitExceeded      = 'Limit Exceeded';
