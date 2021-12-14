@@ -1359,7 +1359,7 @@ class bugModel extends model
         $this->config->bug->search['params']['module']['values']        = $modules;
         $this->config->bug->search['params']['execution']['values']     = $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $this->config->bug->search['params']['severity']['values']      = array(0 => '') + $this->lang->bug->severityList; //Fix bug #939.
-        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getProductBuildPairs($productID, 'all', 'withbranch');
+        $this->config->bug->search['params']['openedBuild']['values']   = $this->loadModel('build')->getBuildPairs($productID, 'all', 'withbranch');
         $this->config->bug->search['params']['resolvedBuild']['values'] = $this->config->bug->search['params']['openedBuild']['values'];
         if($this->session->currentProductType == 'normal')
         {
@@ -1386,7 +1386,7 @@ class bugModel extends model
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
-        $builds = $this->loadModel('build')->getProductBuildPairs(array_unique($productIdList), 0, $params = '');
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 0, $params = '');
 
         /* Process the openedBuild and resolvedBuild fields. */
         foreach($bugs as $key => $bug)
@@ -1921,7 +1921,7 @@ class bugModel extends model
         $products = $this->session->product;
         preg_match('/`product` IN \((?P<productIdList>.+)\)/', $this->reportCondition(), $matchs);
         if(!empty($matchs) and isset($matchs['productIdList'])) $products = str_replace('\'', '', $matchs['productIdList']);
-        $builds = $this->loadModel('build')->getProductBuildPairs($products, $branch = 0, $params = '');
+        $builds = $this->loadModel('build')->getBuildPairs($products, $branch = 0, $params = '');
 
         /* Deal with the situation that a bug maybe associate more than one openedBuild. */
         foreach($datas as $buildIDList => $data)

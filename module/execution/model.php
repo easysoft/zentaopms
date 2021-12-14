@@ -3120,7 +3120,7 @@ class executionModel extends model
         foreach($products as $product)
         {
             $productModules = $this->loadModel('tree')->getOptionMenu($product->id);
-            $productBuilds  = $this->loadModel('build')->getProductBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
+            $productBuilds  = $this->loadModel('build')->getBuildPairs($product->id, 'all', $params = 'noempty|notrunk|withbranch');
             foreach($productModules as $moduleID => $moduleName)
             {
                 $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
