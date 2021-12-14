@@ -8,7 +8,7 @@ title=测试 mrModel::create();
 cid=0
 pid=0
 
-使用空的repoID, gitlabID数据                                              >> return no empty
+使用空的repoID, gitlabID数据                                              >> 『GitLab』不能为空。
 使用正确的repoID, gitlabID。POST数据正确 或者错误原因为已存在一样的mr请求 >> success
 使用源分支和目标分支一样的数据mr请求                                      >> 通过API创建合并请求失败，失败原因：源项目分支与目标项目分支不能相同
 
@@ -21,8 +21,7 @@ $_POST = array();
 $_POST['gitlabID'] = 0;
 $_POST['repoID']   = 0;
 $result = $mrModel->create();
-if($result['message']['gitlabID'][0] == '『GitLab』不能为空。') $result = 'return no empty';
-r($result) && p() && e('return no empty'); //使用空的repoID, gitlabID。创建mr。
+r($result) && p('message[gitlabID]:0') && e('『GitLab』不能为空。'); //使用空的repoID, gitlabID。创建mr。
 
 $_POST['gitlabID']      = 1;
 $_POST['sourceProject'] = 42;
