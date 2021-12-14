@@ -166,7 +166,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
     if(!$lane.children('.actions').length && (canSet || canDelete))
     {
         $([
-          '<div class="actions" title="' + lang.more + '">',
+          '<div class="actions" title="' + kanbanLang.more + '">',
           '<a data-contextmenu="lane" data-lane="' + lane.id + '" data-kanban="' + kanban.id + '">',
           '<i class="icon icon-ellipsis-v"></i>',
           '</a>',

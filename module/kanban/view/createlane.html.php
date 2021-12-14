@@ -28,7 +28,7 @@
           <th><?php echo $lang->kanbanlane->color;?></th>
           <td>
             <div id='color-picker'></div>
-            <?php echo html::input('color', '#3DC6FD', "class='hidden'");?>
+            <?php echo html::input('color', '#7EC5FF', "class='hidden'");?>
           </td>
         </tr>
         <tr>

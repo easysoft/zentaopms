@@ -42,9 +42,9 @@ function setMailto(field, value)
  */
 function initColorPicker()
 {
-    var colorList = ['#272E33', '#3DC6FD', '#2B529C', '#E48600', '#D2323D', '#229F24', '#777777', '#D2691E', '#008B8B', '#2E8B57', '#4169E1', '#4B0082', '#FA8072', '#BA55D3', '#6B8E23'];
+    var colorList = ['#7ec5ff', '#333', '#2B529C', '#E48600', '#D2323D', '#229F24', '#777777', '#D2691E', '#008B8B', '#2E8B57', '#4169E1', '#4B0082', '#FA8072', '#BA55D3', '#6B8E23'];
 
-    var selectedColor = $('input[name=color]').val();
+    var selectedColor = $().val();
     if(selectedColor && $.inArray(selectedColor.toUpperCase(), colorList) == -1) colorList.unshift(selectedColor);
     colorList.forEach(function(color, index)
     {
