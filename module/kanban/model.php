@@ -1519,6 +1519,7 @@ class kanbanModel extends model
             ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->join('assignedTo', ',')
             ->remove('uid')
             ->get();
 

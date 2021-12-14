@@ -17,7 +17,7 @@
   <div class='main-header'>
     <h2><?php echo $lang->kanban->editSpace;?></h2>
   </div>
-  <form class='form-indicator main-form' method='post' target='hiddenwin' id='dataform'>
+  <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->name;?></th>

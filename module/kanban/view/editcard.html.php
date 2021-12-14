@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <div id="mainContent" class="main-content fade">
-  <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
+  <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <div class='main-header'>
       <h2><?php echo $lang->kanbancard->edit;?></h2>
     </div>
@@ -48,7 +48,7 @@
               <table class="table table-form">
                 <tr>
                   <th><?php echo $lang->kanbancard->assignedTo;?></th>
-                  <td><?php echo html::select('assignedTo', $allUsers, $card->assignedTo, "class='form-control chosen' multiple");?></td>
+                  <td><?php echo html::select('assignedTo[]', $allUsers, $card->assignedTo, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->begin;?></th>
