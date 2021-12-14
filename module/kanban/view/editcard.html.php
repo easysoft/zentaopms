@@ -52,11 +52,11 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->begin;?></th>
-                  <td><?php echo html::input('begin', helper::isZeroDate($card->begin) ? '' : $card->begin, "class='form-control form-datetime'");?></td>
+                  <td><?php echo html::input('begin', helper::isZeroDate($card->begin) ? '' : $card->begin, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->end;?></th>
-                  <td><?php echo html::input('end', helper::isZeroDate($card->end) ? '' : $card->end, "class='form-control form-datetime'");?></td>
+                  <td><?php echo html::input('end', helper::isZeroDate($card->end) ? '' : $card->end, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->pri;?></th>
