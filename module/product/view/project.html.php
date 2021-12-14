@@ -18,7 +18,7 @@
     <?php echo html::checkbox('involved', array('1' => $lang->project->mine), '', $this->cookie->involved ? 'checked=checked' : '');?>
     <div class="tip"><icon class='icon icon-help' data-toggle='popover' data-trigger='focus hover' data-placement='right' data-tip-class='text-muted popover-sm' data-content=<?php echo $lang->product->projectInfo;?>></icon></div>
   </div>
-  <?php if($config->systemMode == 'new'):?>
+  <?php if($config->systemMode == 'new' and $branchStatus != 'closed'):?>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('project', 'manageProducts')) echo html::a('#link2Project', '<i class="icon-link"></i> ' . $lang->product->link2Project, '', "data-toggle='modal' class='btn btn-secondary'");?>
     <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=$product->program&from=project&productID=$productID&branchID=$branchID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-primary" data-toggle="modal" data-target="#guideDialog"');?>
