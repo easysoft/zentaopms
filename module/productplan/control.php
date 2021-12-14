@@ -224,7 +224,7 @@ class productplan extends control
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
         $this->commonAction($productID, $branch);
-        $product     = $this->loadModel('product')->getById($productID);
+        $product     = $this->product->getById($productID);
         $productName = empty($product) ? '' : $product->name;
 
         $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;

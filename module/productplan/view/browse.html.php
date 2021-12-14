@@ -139,7 +139,7 @@
               if($product->type != 'normal')
               {
                   $branchStatus = $this->branch->getByID($plan->branch, 0, 'status');
-                  $disabled     = $branchStatus == 'closed' ? 'disabled' : '';
+                  if($branchStatus == 'closed') $disabled = 'disabled';
               }
 
               if($config->systemMode == 'new')
