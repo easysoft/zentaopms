@@ -38,9 +38,9 @@
           <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::input('begin', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->begin}'");?>
+              <?php echo html::input('begin', '', "class='form-control form-date form-date' placeholder='{$lang->kanbancard->begin}'");?>
               <span class='input-group-addon fix-border'>~</span>
-              <?php echo html::input('end', '', "class='form-control form-date form-datetime' placeholder='{$lang->kanbancard->end}'");?>
+              <?php echo html::input('end', '', "class='form-control form-date form-date' placeholder='{$lang->kanbancard->end}'");?>
             </div>
           </td>
         </tr>

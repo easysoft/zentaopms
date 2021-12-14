@@ -50,13 +50,13 @@ class kanban extends control
         {
             $spaceID = $this->kanban->createSpace();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanSpace', $spaceID, 'created');
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->display();
     }
@@ -75,16 +75,16 @@ class kanban extends control
         {
             $changes = $this->kanban->updateSpace($spaceID);
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanbanSpace', $spaceID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->view->space = $this->kanban->getSpaceById($spaceID);
-        $this->view->users = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users = $this->loadModel('user')->getPairs('noclosed');
 
         $this->display();
     }
@@ -102,13 +102,13 @@ class kanban extends control
         {
             $kanbanID = $this->kanban->create();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanban', $kanbanID, 'created');
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
         $this->view->spaceID    = $spaceID;
         $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs();
 
@@ -129,15 +129,15 @@ class kanban extends control
         {
             $changes = $this->kanban->update($kanbanID);
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanban', $kanbanID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
         $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs();
         $this->view->kanban     = $this->kanban->getByID($kanbanID);
 
@@ -297,17 +297,17 @@ class kanban extends control
         {
             $changes = $this->kanban->updateCard($cardID);
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $actionID = $this->action->create('kanbanCard', $cardID, 'edited');
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->view->card     = $this->kanban->getCardByID($cardID);
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
         $this->view->allUsers = $this->loadModel('user')->getPairs();
 
         $this->display();
