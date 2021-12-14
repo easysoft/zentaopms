@@ -25,6 +25,7 @@ $lang->kanban->deleteColumn        = '删除看板列';
 $lang->kanban->createCard          = '创建卡片';
 $lang->kanban->editCard            = '编辑卡片';
 $lang->kanban->viewCard            = '查看卡片';
+$lang->kanban->archivedCard        = '归档卡片';
 $lang->kanban->sortCard            = '卡片排序';
 $lang->kanban->setting             = '设置';
 $lang->kanban->splitColumn         = '新增子看板列';
@@ -214,13 +215,17 @@ $lang->kanbanregion->name    = '看板区域';
 $lang->kanbanregion->default = '默认区域';
 
 $lang->kanbancard = new stdclass();
-$lang->kanbancard->create = '创建卡片';
+$lang->kanbancard->create   = '创建卡片';
+$lang->kanbancard->edit     = '编辑卡片';
+$lang->kanbancard->view     = '查看卡片';
+$lang->kanbancard->archived = '归档';
+$lang->kanbancard->assigned = '指派';
 
 $lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->legendBasicInfo = '基本信息';
 $lang->kanbancard->legendLifeTime  = '卡片的一生';
-$lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->space           = '所属空间';
+$lang->kanbancard->kanban          = '所属看板';
 $lang->kanbancard->lane            = '所属泳道';
 $lang->kanbancard->column          = '所属看板列';
 $lang->kanbancard->assignedTo      = '指派给';
@@ -234,6 +239,8 @@ $lang->kanbancard->createdBy       = '由谁创建';
 $lang->kanbancard->createdDate     = '由谁创建';
 $lang->kanbancard->lastEditedBy    = '由谁编辑';
 $lang->kanbancard->lastEditedDate  = '最后编辑时间';
+$lang->kanbancard->archivedBy      = '由谁归档';
+$lang->kanbancard->archivedDate    = '归档时间';
 $lang->kanbancard->lblHour         = 'h';
 
 $lang->kanbancard->priList[1] = 1;
@@ -244,4 +251,3 @@ $lang->kanbancard->priList[4] = 4;
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = '预计不能为负数!';
 $lang->kanbancard->error->endSmall    = '"截止日期"不能小于"预计开始"!';
->>>>>>> module/kanban/lang/zh-cn.php
