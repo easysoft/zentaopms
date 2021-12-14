@@ -39,7 +39,7 @@ body {background-color: #fff}
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 5px}
 
-.region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px}
+.region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 .region .kanban-lane {min-width: max-content; min-width: -moz-max-content}
 
 .region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 100px;}
@@ -74,6 +74,18 @@ body {background-color: #fff}
 .region .kanban-item.has-color .info > .label-light {color: #FFFFFF;}
 .region .kanban-item.has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
+
+.kanban + .kanban {margin-top: 15px}
+.kanban-card {height: 60px !important}
+.kanban-card > .title {display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.kanban-card > .info {position: relative; margin-top: 5px}
+.kanban-card > .info > .info + .info {margin-left: 8px}
+.kanban-card > .info > .pri {min-width: 16px; line-height: 14px; height: 16px; padding: 0}
+.kanban-card > .info > .user {position: absolute; right: 0; top: 0}
+.kanban-card > .actions {position: absolute; top: 4px; right: 4px; opacity: 0;} 
+.kanban-card:hover > .actions {opacity: 1;} 
+.kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}

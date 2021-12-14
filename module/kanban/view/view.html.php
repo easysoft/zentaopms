@@ -9,11 +9,16 @@ js::set('regions', $regions);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
-js::set('taskLang', $lang->kanbancard);
+js::set('kanbancardLang', $lang->kanbancard);
 js::set('kanbanID', $kanban->id);
-//js::set('members', $members);
 js::set('laneCount', $laneCount);
 js::set('today', helper::today());
+js::set('userList', $userList);
+
+js::set('priv',
+    array(
+        'canAssignCard' => common::hasPriv('kanban', 'assigncard'),
+    ));
 
 $canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion   = commonModel::hasPriv('kanban', 'editRegion');
@@ -23,7 +28,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
 
 <div id="kanban">
   <?php foreach($regions as $region):?>
-  <div class="region <?php if($canSortRegion) echo 'sort';?>" data-id="<?php echo $region->id;?>">
+  <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
     <div class="region-header dropdown">
       <span class="strong"><?php echo $region->name;?></span>
       <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>

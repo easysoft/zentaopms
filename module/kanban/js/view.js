@@ -194,10 +194,6 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
  */
 function renderKanbanItem(item, $item)
 {
-    if(item.status == 'done')
-    {
-        $item.addClass('gray');
-    }
     var $title = $item.children('.title');
     if(!$title.length)
     {
@@ -205,7 +201,7 @@ function renderKanbanItem(item, $item)
             .appendTo($item);
     }
     $title.text(item.name);
-    $title.attr('href', createLink('sys.task', 'view', 'taskID=' + item.id + '&from=kanban'));
+    $title.attr('href', createLink('kanban', 'viewcard', 'taskID=' + item.id));
 
     var $more = $item.children('.actions');
     if(!$more.length)
@@ -213,7 +209,7 @@ function renderKanbanItem(item, $item)
         $(
         [
             '<div class="actions" title="' + lang.more + '">',
-              '<button class="btn btn-link action" data-contextmenu="task" data-id="' + item.id + '" data-status="' + item.status + '">',
+              '<button class="btn btn-link action" data-contextmenu="task" data-id="' + item.id + '">',
                 '<i class="icon icon-ellipsis-v"></i>',
               '</button>',
             '</div>'
@@ -237,13 +233,13 @@ function renderKanbanItem(item, $item)
         .text(item.pri);
 
     var $time = $info.children('.time');
-    if(item.deadline && item.deadline !== '0000-00-00')
+    if(item.end && item.end !== '0000-00-00')
     {
-        var deadline = $.zui.createDate(item.deadline);
+        var end      = $.zui.createDate(item.end);
         var today    = $.zui.createDate(today);
-        var isExpired = deadline.getTime() < today.getTime();
-        var dateFormat = (today.getFullYear() === deadline.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbanLang.deadline;
-        $time.text($.zui.formatDate(deadline, dateFormat))
+        var isExpired = end.getTime() < today.getTime();
+        var dateFormat = (today.getFullYear() === end.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.end;
+        $time.text($.zui.formatDate(end, dateFormat))
             .toggleClass('text-red', isExpired)
             .show();
     }
@@ -255,27 +251,37 @@ function renderKanbanItem(item, $item)
     var $user = $info.children('.user');
     if(item.assignedTo)
     {
-        var member = members[item.assignedTo] || {account: item.assignedTo};
-        var canAssign = item.status !== 'closed' && item.status !== 'cancel';
-        var $avatar = $(
-            canAssign ? '<a class="avatar avatar-sm avatar-user" data-toggle="modal"></a>'
-                : '<div class="avatar avatar-sm avatar-user"></div>'
-            ).attr('data-name', member.realname || member.account)
-            .attr('data-id', member.id || member.account);
-        if(member.avatar)
+        var assignedTo = item.assignedTo.split(',');
+        if(assignedTo.length != 0)
         {
-            $avatar.append('<img src="' + member.avatar + '" />');
-        }
-        $avatar.renderAvatar();
-        if(canAssign)
-        {
-            $avatar.attr('href', createLink('sys.task', 'assignto', 'taskID=' + item.id + '&fromKanban=1'));
-        }
+            for(var index = 0; index < assignedTo.length; index ++)
+            {
+                var user = assignedTo[index];
 
-        $user.empty()
-            .append($avatar)
-            .attr('title', member.realname || member.account)
-            .show();
+                if(typeof user === 'string') user = {account: user};
+                if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+
+                var $avatar = $(
+                        priv.canAssignCard ? '<a class="avatar avatar-sm avatar-user avatar-circle iframe"></a>'
+                        : '<div class="avatar avatar-sm avatar-user"></div>'
+                        ).attr('data-name', user.realname || user.account)
+                    .attr('data-id', user.id || user.account);
+                if(user.avatar)
+                {   
+                    $avatar.append('<img src="' + user.avatar + '" />');
+                }   
+
+                if(priv.canAssignCard)
+                {   
+                    $avatar.attr('href', createLink('kanban', 'assignCard', 'id=' + item.id, '', 1));
+                } 
+
+                $user.empty()
+                    .append($avatar)
+                    .attr('title', user.realname || user.account)
+                    .show();
+            }
+        }
     }
     else
     {
@@ -402,7 +408,7 @@ function resetLaneHeight()
     if(laneCount < 2)
     {
         var windowHeight = $(window).height();
-        var marginTop    = $('#mainContent').css('margin-top');
+        var marginTop    = $('#main').css('margin-top');
         var headerHeight = $('.kanban > .kanban-board:first > .kanban-header').outerHeight();
         var actionHeight = $('.kanban > .kanban-board:first > .kanban-lane > .kanban-col:first > .kanban-lane-actions').outerHeight();
 
@@ -444,7 +450,7 @@ function findDropColumns($element, $root)
 {
     var $task  = $element;
     var task   = $task.data('task');
-    var status = task.status;
+    //var status = task.status;
     var $col   = $task.closest('.kanban-col');
     var col    = $col.data();
     var lane   = $col.closest('.kanban-lane').data('lane');

@@ -199,9 +199,18 @@ class kanban extends control
         $this->kanban->setSwitcher($kanban);
         $this->kanban->setHeaderActions($kanban);
 
-        $this->view->title   = $this->lang->kanban->view;
-        $this->view->regions = $this->kanban->getKanbanData($kanbanID);
-        $this->view->kanban  = $kanban;
+        $userList    = array();
+        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!$avatar) continue;
+            $userList[$account]['avatar'] = $avatar;
+        }
+
+        $this->view->title    = $this->lang->kanban->view;
+        $this->view->regions  = $this->kanban->getKanbanData($kanbanID);
+        $this->view->userList = $userList;
+        $this->view->kanban   = $kanban;
 
         $this->display();
     }
@@ -245,11 +254,11 @@ class kanban extends control
         {
             $order    = $position == 'left' ? $column->order : $column->order + 1;
             $columnID = $this->kanban->createColumn($column->region, null, $order);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) $this->send(array('message' => $this->lang->fail, 'result' => 'fail'));
 
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
-            die(js::reload('parent.parent'));
-        }
+            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
+        }   
 
         $this->view->title    = $this->lang->kanban->createColumn;
         $this->view->column   = $column;

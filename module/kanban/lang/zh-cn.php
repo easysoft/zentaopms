@@ -247,6 +247,7 @@ $lang->kanbancard->lastEditedDate  = '最后编辑时间';
 $lang->kanbancard->archivedBy      = '由谁归档';
 $lang->kanbancard->archivedDate    = '归档时间';
 $lang->kanbancard->lblHour         = 'h';
+$lang->kanbancard->noAssigned      = '未指派';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

@@ -172,20 +172,19 @@ class kanbanModel extends model
      */
     public function createDefaultColumns($kanban, $regionID, $groupID)
     {
-        $index = 1;
+        $order = 1;
         foreach($this->lang->kanban->defaultColumn as $columnName)
         {
             $column = new stdclass();
             $column->region = $regionID;
             $column->group  = $groupID;
             $column->name   = $columnName;
-            $column->type   = $index;
-            $column->order  = $index;
+            $column->order  = $order;
             $column->limit  = -1;
             $column->color  = '#333';
 
             $this->createColumn($regionID, $column);
-            $index ++;
+            $order ++;
             //$this->saveOrder($regionID, 'region', $this->dao->lastInsertID(), 'column', '', $index);
         }
 
@@ -276,7 +275,7 @@ class kanbanModel extends model
 
         $columnID = $this->dao->lastInsertID();
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->set('type = `order`')->where('`group`')->eq($column->group)->exec();
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
         return $columnID;
     }
