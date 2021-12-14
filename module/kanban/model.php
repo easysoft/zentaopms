@@ -734,7 +734,8 @@ class kanbanModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $kanbanGroup = $this->getGroupBySpaceList(array_keys($spaceList));
+        $kanbanIdList = $this->getCanViewObjects();
+        $kanbanGroup  = $this->getGroupBySpaceList(array_keys($spaceList), $kanbanIdList);
         foreach($spaceList as $spaceID => $space)
         {
             if(isset($kanbanGroup[$spaceID])) $space->kanbans = $kanbanGroup[$spaceID];
@@ -857,6 +858,8 @@ class kanbanModel extends model
             ->join('team', ',')
             ->remove('uid,contactListMenu')
             ->get();
+
+        $space->whitelist = $space->acl == 'open' ? '' : $space->whitelist;
 
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
@@ -997,7 +1000,9 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
-         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
+        $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+
+        $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
 
         $this->dao->update(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -1771,15 +1776,17 @@ class kanbanModel extends model
     /**
      * Get kanban group by space id list.
      *
-     * @param  int    $spaceIdList
+     * @param  array|string $spaceIdList
+     * @param  array|string $kanbanIdList
      * @access public
      * @return array
      */
-    public function getGroupBySpaceList($spaceIdList)
+    public function getGroupBySpaceList($spaceIdList, $kanbanIdList = '')
     {
         return $this->dao->select('*')->from(TABLE_KANBAN)
             ->where('deleted')->eq(0)
             ->andWhere('space')->in($spaceIdList)
+            ->beginIF($kanbanIdList)->andWhere('id')->in($kanbanIdList)->fi()
             ->fetchGroup('space', 'id');
     }
 

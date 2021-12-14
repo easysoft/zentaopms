@@ -197,11 +197,11 @@ function renderKanbanItem(item, $item)
     var $title = $item.children('.title');
     if(!$title.length)
     {
-        $title = $('<a class="title" data-toggle="modal" data-width="80%"></a>')
+        $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>')
             .appendTo($item);
     }
     $title.text(item.name);
-    $title.attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id));
+    $title.attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
 
     if(item.actions.length)
     {
