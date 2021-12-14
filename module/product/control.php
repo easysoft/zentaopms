@@ -111,6 +111,7 @@ class product extends control
         $this->view->status       = $status;
         $this->view->users        = $this->loadModel('user')->getPairs('noletter');
         $this->view->branchID     = $branch;
+        $this->view->branchStatus = $this->loadModel('branch')->getByID($branch, 0, 'status');
         $this->display();
     }
 

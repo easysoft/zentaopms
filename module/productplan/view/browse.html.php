@@ -133,14 +133,16 @@
           $attr = $plan->expired ? "disabled='disabled'" : '';
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
+              $branchStatus  = $this->branch->getByID($plan->branch, 0, 'status');
+              $disabled      = $branchStatus == 'closed' ? 'disabled' : '';
               $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
               if($config->systemMode == 'new')
               {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn' title='{$lang->productplan->createExecution}' $attr");
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
               }
               else
               {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->productplan->createExecution}' $attr");
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
               }
           }
           if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");

@@ -84,7 +84,7 @@ function getPlanID(obj, branch)
             $("#project").trigger('chosen:updated');
             $(".tips").removeClass('hidden');
 
-            var locateLink   = createLink('product', 'project', 'status=all&productID=' + productID);
+            var locateLink   = createLink('product', 'project', 'status=all&productID=' + productID + '&branch=' + branch);
             var locateButton = "<a href=" + locateLink + " class='btn btn-primary' data-app='product'>" + enterProjectList + "</a>";
             $("#projects .btn-primary").replaceWith(locateButton);
         }
