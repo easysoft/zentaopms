@@ -238,7 +238,7 @@ function renderKanbanItem(item, $item)
         var end      = $.zui.createDate(item.end);
         var today    = $.zui.createDate(today);
         var isExpired = end.getTime() < today.getTime();
-        var dateFormat = (today.getFullYear() === end.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.end;
+        var dateFormat = (today.getFullYear() === end.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
         $time.text($.zui.formatDate(end, dateFormat))
             .toggleClass('text-red', isExpired)
             .show();

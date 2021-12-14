@@ -244,6 +244,7 @@ $lang->kanbancard->lastEditedBy   = 'Last Edited By';
 $lang->kanbancard->lastEditedDate = 'Last Edited Date';
 $lang->kanbancard->lblHour        = 'h';
 $lang->kanbancard->noAssigned     = 'No Assigned';
+$lang->kanbancard->deadlineAB     = 'DL';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

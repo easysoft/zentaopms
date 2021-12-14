@@ -43,11 +43,13 @@
         </tr>
         <tr>
           <th><?php echo $lang->kanbancolumn->color;?></th>
-          <td><div id='color-picker'></div></td>
+          <td>
+            <div id='color-picker'></div>
+            <?php echo html::input('color', '#7ec5ff', "class='hidden'");?>
+          </td>
         </tr>
         <tr>
           <td colspan='2' class='form-actions text-center'>
-            <?php echo html::hidden('color', '#272E33');?>
             <?php echo html::hidden('group', $column->group);?>
             <?php echo html::hidden('parent', $column->parent);?>
             <?php echo html::submitButton();?>
