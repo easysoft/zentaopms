@@ -53,10 +53,10 @@
   </div>
   <div class='side-col col-4'>
     <div class='cell'>
-      <div class='detail'>
-        <div class='main-header'>
-          <?php echo $lang->kanbancard->legendBasicInfo;?>
-        </div>
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='' data-toggle='tab'><?php echo $lang->kanbancard->legendBasicInfo;?></a></li>
+        </ul>
         <table class="table table-data">
           <tr>
             <th><?php echo $lang->kanbancard->assignedTo;?></th>
@@ -101,10 +101,10 @@
       </div>
     </div>
     <div class='cell'>
-      <div class='detail'>
-        <div class='main-header'>
-          <?php echo $lang->kanbancard->legendLifeTime;?>
-        </div>
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='' data-toggle='tab'><?php echo $lang->kanbancard->legendLifeTime;?></a></li>
+        </ul>
         <table class="table table-data">
           <tr>
             <th><?php echo $lang->kanbancard->createdBy;?></th>
