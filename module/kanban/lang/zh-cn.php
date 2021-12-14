@@ -215,11 +215,13 @@ $lang->kanbanregion->name    = '看板区域';
 $lang->kanbanregion->default = '默认区域';
 
 $lang->kanbancard = new stdclass();
-$lang->kanbancard->create   = '创建卡片';
-$lang->kanbancard->edit     = '编辑卡片';
-$lang->kanbancard->view     = '查看卡片';
-$lang->kanbancard->archived = '归档';
-$lang->kanbancard->assigned = '指派';
+$lang->kanbancard->crea   = '创建卡片';
+$lang->kanbancard->edit   = '编辑卡片';
+$lang->kanbancard->view   = '查看卡片';
+$lang->kanbancard->archiv = '归档';
+$lang->kanbancard->assign = '指派';
+$lang->kanbancard->copy   = '复制';
+$lang->kanbancard->delete = '删除';
 
 $lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->legendBasicInfo = '基本信息';

@@ -215,11 +215,13 @@ $lang->kanbanregion->name    = 'Kanban Region';
 $lang->kanbanregion->default = 'Default Region';
 
 $lang->kanbancard = new stdclass();
-$lang->kanbancard->create   = 'Create Card';
-$lang->kanbancard->edit     = 'Edit Card';
-$lang->kanbancard->view     = 'View Card';
-$lang->kanbancard->archived = 'Archive';
-$lang->kanbancard->assigned = 'Assign';
+$lang->kanbancard->create = 'Create Card';
+$lang->kanbancard->edit   = 'Edit Card';
+$lang->kanbancard->view   = 'View Card';
+$lang->kanbancard->archiv = 'Archive';
+$lang->kanbancard->assign = 'Assign';
+$lang->kanbancard->copy   = 'Copy';
+$lang->kanbancard->delete = 'Delete';
 
 $lang->kanbancard->name            = 'Card Name';
 $lang->kanbancard->legendBasicInfo = 'Basic Info';

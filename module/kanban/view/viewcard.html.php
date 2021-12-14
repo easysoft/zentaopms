@@ -36,14 +36,14 @@
       <div class="btn-toolbar">
         <?php if(!$card->deleted):?>
         <?php
-        common::printIcon('', '', "", '', 'button', 'hand-right', '', 'iframe', true, '', $lang->kanbancard->assigned);
-        common::printIcon('', '', "", '', 'button', 'ban-circle', '', 'iframe', true, '', $lang->kanbancard->archived);
+        common::printLink('kanban', 'assigntocard', "cardID=$card->id", "<i class='icon icon-hand-right'></i><span class='text'>{$lang->kanbancard->assign}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->assign}'", true, true);
+        common::printLink('kanban', 'archivecard',  "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archiv}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->archiv}'", true, true);
 
         echo "<div class='divider'></div>";
 
-        common::printIcon('kanban', 'editcard', "cardID=$card->id", '', 'button', 'edit', '', 'iframe', true, '', ' ');
-        common::printIcon('kanban', '', "", '', 'button', 'copy');
-        common::printIcon('kanban', '', "", '', 'button', 'trash', 'hiddenwin');
+        common::printLink('kanban', 'editcard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->edit}'",  true, true);
+        common::printLink('kanban', 'copycard',   "cardID=$card->id", '<i class="icon icon-copy"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'",  true, true);
+        common::printLink('kanban', 'deletecard', "cardID=$card->id", '<i class="icon icon-trash"></i>', '', "class='btn btn-link iframe' title='{$lang->kanbancard->delete}'",true, true);
         ?>
         <?php endif;?>
       </div>

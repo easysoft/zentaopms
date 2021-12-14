@@ -315,7 +315,7 @@ class kanban extends control
         $this->loadModel('action');
 
         $card   = $this->kanban->getCardByID($cardID);
-        $kanban = $this->kanban->getById($card->kanban);
+        $kanban = $this->kanban->getByID($card->kanban);
         $space  = $this->kanban->getSpaceById($kanban->space);
 
         $this->view->card        = $card;
