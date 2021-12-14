@@ -240,7 +240,7 @@ class buildModel extends model
                 ->fetchPairs();
             foreach($releases as $buildID => $releaseName)
             {
-                $branchName = $productBuilds[$buildID]->branchName ? $productBuilds[$buildID]->branchName : $this->lang->branch->main;
+                $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
                 $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
             }
         } 
