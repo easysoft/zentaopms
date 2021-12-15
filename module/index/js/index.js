@@ -125,8 +125,8 @@
         }
         if(moduleName === 'issue' || moduleName === 'risk' || moduleName === 'opportunity' || moduleName === 'pssp' || moduleName === 'auditplan' || moduleName === 'meeting' || moduleName === 'nc')
         {
-            if(link.params.$2 == 'project') return 'project';
-            if(link.params.$2 == 'execution') return 'execution';
+            if(link.params.$2 == 'project' || link.params.from == 'project') return 'project';
+            if(link.params.$2 == 'execution' || link.params.from == 'execution') return 'execution';
         }
         if(moduleName === 'product')
         {
