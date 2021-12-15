@@ -20,35 +20,10 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanbancard->estimate;?></th>
-          <td>
-            <div class="input-group">
-              <input type="text" name="estimate" id="estimate" value="" class="form-control" autocomplete="off">
-              <span class="input-group-addon"><?php echo $lang->kanbancard->lblHour;?></span>
-            </div>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->kanbancard->assignedTo;?></th>
-          <td>
-            <?php echo html::select('assignedTo', $users, $app->user->account, "class='form-control chosen'");?>
-          </td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
-          <td colspan='2'>
-            <div class='input-group'>
-              <?php echo html::input('begin', '', "class='form-control form-date' placeholder='{$lang->kanbancard->begin}'");?>
-              <span class='input-group-addon fix-border'>~</span>
-              <?php echo html::input('end', '', "class='form-control form-date' placeholder='{$lang->kanbancard->end}'");?>
-            </div>
-          </td>
-        </tr>
-        <tr>
           <th><?php echo $lang->kanbancard->name;?></th>
-          <td colspan='2' id='nameBox'>
+          <td colspan='2'>
             <div class='input-group title-group'>
-              <?php echo html::input('name', '', "class='form-control'");?>
+              <?php echo html::input('name', '', "class='form-control required'");?>
               <span class="input-group-addon fix-border br-0"><?php echo $lang->kanbancard->pri;?></span>
               <div class="input-group-btn pri-selector" data-type="pri">
                 <button type="button" class="btn dropdown-toggle br-0" data-toggle="dropdown">
@@ -58,6 +33,28 @@
                 <?php echo html::select('pri', $lang->kanbancard->priList, 3, "class='form-control' data-provide='labelSelector' data-label-class='label-pri'");?>
                 </div>
               </div>
+              <div class='table-col w-120px'>
+                <div class="input-group">
+                  <span class="input-group-addon fix-border br-0"><?php echo $lang->kanbancard->estimate;?></span>
+                  <input type="text" name="estimate" id="estimate" class="form-control" autocomplete="off" placeholder=<?php echo $lang->kanbancard->lblHour;?>>
+                </div>
+              </div>
+            </div>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->assignedTo;?></th>
+          <td colspan='2'>
+            <?php echo html::select('assignedTo', $users, $app->user->account, "class='form-control chosen' multiple");?>
+          </td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
+          <td colspan='2'>
+            <div class='input-group'>
+              <?php echo html::input('begin', '', "class='form-control form-date' placeholder='{$lang->kanbancard->begin}'");?>
+              <span class='input-group-addon fix-border'>~</span>
+              <?php echo html::input('end', '', "class='form-control form-date' placeholder='{$lang->kanbancard->end}'");?>
             </div>
           </td>
         </tr>

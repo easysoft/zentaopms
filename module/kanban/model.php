@@ -320,6 +320,7 @@ class kanbanModel extends model
             ->add('assignedDate', $now)
             ->trim('name')
             ->setDefault('estimate', 0)
+            ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->remove('uid')
             ->get();

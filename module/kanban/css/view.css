@@ -58,15 +58,16 @@ body {background-color: #fff}
 .region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
 
 .region .kanban-item {position: relative}
-.region .kanban-item > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
-.region .kanban-item > .title:hover {color: #2272eb}
-.region .kanban-item > .info {margin-top: 5px; position: relative;}
-.region .kanban-item > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
-.region .kanban-item > .info > .time {margin-left: 10px; font-size: 12px}
-.region .kanban-item > .info > .user {position: absolute; right: 0; top: 0}
-.region .kanban-item > .actions {position: absolute; top: 0px; right: 4px; opacity: 0;}
-.region .kanban-item > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
-.region .kanban-item > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+.region .kanban-item > .kanban-card > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
+.region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
+.region .kanban-item > .kanban-card > .info {margin-top: 5px; position: relative;}
+.region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
+.region .kanban-item > .kanban-card > .info > .estimate{margin-left: 10px; color: #999}
+.region .kanban-item > .kanban-card > .info > .time {margin-left: 10px; font-size: 12px; background: rgb(242, 242, 242)}
+.region .kanban-item > .kanban-card > .info > .user {position: absolute; right: 0; top: 0}
+.region .kanban-item > .kanban-card > .actions {position: absolute; top: 0px; right: 4px; opacity: 0;}
+.region .kanban-item > .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.region .kanban-item > .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 .region .kanban-item:hover > .actions {opacity: 1;}
 .region .kanban-item.has-color .title,
 .region .kanban-item.has-color .actions .icon-more-v,

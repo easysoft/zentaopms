@@ -23,7 +23,7 @@ $(function()
 function setWIPLimit()
 {
     var count = $('#WIPCount').val();
-    if($('#noLimit').attr('checked') == 'checked') count = -1;;
+    if($('#noLimit').attr('checked') == 'checked') count = -1;
 
     $('#limit').val(count);
 }

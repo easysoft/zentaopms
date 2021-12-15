@@ -12,7 +12,6 @@ js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('kanbanID', $kanban->id);
 js::set('laneCount', $laneCount);
-js::set('today', helper::today());
 js::set('userList', $userList);
 
 js::set('priv',
