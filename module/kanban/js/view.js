@@ -229,8 +229,7 @@ function renderKanbanItem(item, $item)
 
     $item.data('card', item);
 
-    $info.children('.estimate')
-        .text(item.estimate + kanbancardLang.lblHour);
+    $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
 
     $info.children('.pri')
         .attr('class', 'pri label-pri label-pri-' + item.pri)
@@ -602,6 +601,13 @@ function processMinusBtn()
     }
 }
 
+/**
+ * Create lane menu.
+ * 
+ * @param  object $options 
+ * @access public
+ * @return void
+ */
 function createLaneMenu(options)
 {
     var lane = options.$trigger.closest('.kanban-lane').data('lane');
@@ -617,6 +623,13 @@ function createLaneMenu(options)
     return items;
 }
 
+/**
+ * Create card menu;
+ * 
+ * @param  object $options 
+ * @access public
+ * @return void
+ */
 function createCardMenu(options)
 {
     var card  = options.$trigger.closest('.kanban-item').data('item');
