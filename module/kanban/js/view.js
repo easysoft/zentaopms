@@ -26,7 +26,7 @@ function fullScreen()
     {
         var afterEnterFullscreen = function()
         {
-            $('#mainContent').addClass('scrollbar-hover');
+            $('#kanban').css('background', '#fff');
             $.cookie('isFullScreen', 1);
         };
 
@@ -200,6 +200,7 @@ function renderKanbanItem(item, $item)
         $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>')
             .appendTo($item);
     }
+    $title.attr('title',item.name);
     $title.text(item.name);
     $title.attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
 
@@ -220,12 +221,16 @@ function renderKanbanItem(item, $item)
     [
         '<div class="info">',
             '<span class="pri"></span>',
+            '<span class="estimate"></span>',
             '<span class="time label label-light"></span>',
             '<div class="user"></div>',
         '</div>'
     ].join('')).appendTo($item);
 
     $item.data('card', item);
+
+    $info.children('.estimate')
+        .text(item.estimate + kanbancardLang.lblHour);
 
     $info.children('.pri')
         .attr('class', 'pri label-pri label-pri-' + item.pri)
@@ -235,7 +240,7 @@ function renderKanbanItem(item, $item)
     if(item.end && item.end !== '0000-00-00')
     {
         var end      = $.zui.createDate(item.end);
-        var today    = $.zui.createDate(today);
+        var today    = new Date();
         var isExpired = end.getTime() < today.getTime();
         var dateFormat = (today.getFullYear() === end.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
         $time.text($.zui.formatDate(end, dateFormat))
