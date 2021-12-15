@@ -267,7 +267,7 @@ function renderKanbanItem(item, $item)
 
                 var $avatar = $(
                         priv.canAssignCard ? '<a class="avatar avatar-sm avatar-user avatar-circle iframe"></a>'
-                        : '<div class="avatar avatar-sm avatar-user"></div>'
+                        : '<div class="avatar avatar-sm avatar-user avatar-circle"></div>'
                         ).attr('data-name', user.realname || user.account)
                     .attr('data-id', user.id || user.account);
                 if(user.avatar)
