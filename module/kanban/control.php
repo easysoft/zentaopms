@@ -377,6 +377,27 @@ class kanban extends control
         $this->display();
     }
 
+	/**
+	 * Delete a card.
+	 *
+	 * @param  int    $cardID
+	 * @param  string $confirm no|yes
+	 * @access public
+	 * @return void
+	 */
+    public function deleteCard($cardID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+            die(js::reload('parent'));
+        }
+    }
+
     /**
      * Set WIP.
      *

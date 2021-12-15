@@ -625,11 +625,11 @@ function createLaneMenu(options)
 }
 
 /**
- * Create card menu;
- * 
- * @param  object $options 
+ * Create card menu.
+ *
+ * @param  objects $options
  * @access public
- * @return void
+ * @return array
  */
 function createCardMenu(options)
 {
@@ -641,7 +641,7 @@ function createCardMenu(options)
     if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(privs.includes('archiveCard')) items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail}});
+    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail, 'target': 'hiddenwin'}});
     if(privs.includes('moveCard')) items.push({label: kanbanLang.moveCard, icon: 'move', url: createLink('kanban', 'moveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setCardColor')) items.push({label: kanbanLang.cardColor, icon: 'color', url: createLink('kanban', 'setCardColor', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
 

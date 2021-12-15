@@ -61,7 +61,8 @@ $lang->kanban->teamSumCount   = '%s people in total';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
 
-$lang->kanban->accessDenied = "You have no access to the kanban.";
+$lang->kanban->accessDenied  = "You have no access to the kanban.";
+$lang->kanban->confirmDelete = 'Do you want to delelte this?';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
