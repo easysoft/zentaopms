@@ -24,7 +24,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6' class='w-p98'");?></td>
+          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6'");?></td>
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>

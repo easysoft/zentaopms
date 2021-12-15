@@ -627,7 +627,7 @@ function createLaneMenu(options)
 /**
  * Create card menu.
  *
- * @param  objects $options
+ * @param  object $options
  * @access public
  * @return array
  */
