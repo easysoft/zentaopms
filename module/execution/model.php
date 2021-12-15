@@ -3707,9 +3707,10 @@ class executionModel extends model
 
         $param        = strtolower($param);
         $branchIDList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
-        foreach($products as $product)
+        $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        foreach($branchGroups as $branches)
         {
-            foreach($product->branches as $branchID) $branchIDList[$branchID] = $branchID;
+            foreach($branches as $branchID => $branchName) $branchIDList[$branchID] = $branchID;
         }
 
         $plans = $this->dao->select('id,title,product,parent,begin,end')->from(TABLE_PRODUCTPLAN)
