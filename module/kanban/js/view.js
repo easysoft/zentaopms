@@ -194,16 +194,18 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
  */
 function renderKanbanItem(item, $item)
 {
-    var $title = $item.children('.title');
+    var $title       = $item.children('.title');
+    var privs        = item.actions;
+    var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
     if(!$title.length)
     {
-        $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>')
-            .appendTo($item);
+        if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
+        if(!privs.includes('viewCard')) $title = $('<p></p>').appendTo($item);
     }
-    $title.text(item.name);
-    $title.attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
 
-    if(item.actions.length)
+    $title.text(item.name);
+
+    if(printMoreBtn)
     {
         $(
         [
