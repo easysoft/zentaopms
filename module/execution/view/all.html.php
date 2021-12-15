@@ -76,6 +76,9 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
+          <?php if($config->systemMode == 'new'):?>
+          <th class='c-begin'><?php common::printOrderLink('name', $orderBy, $vars, $lang->execution->project);?></th></th>
+          <?php endif;?>
           <th class='c-pm'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
           <th class='c-progress'><?php echo $lang->execution->progress;?></th>
@@ -126,6 +129,11 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
+          <?php if($config->systemMode == 'new'):?>
+          <td class='c-begin' title='<?php echo $execution->parentName;?>'>
+             <span class="status-execution status-<?php echo $execution->parentName?>"><?php echo $execution->parentName;?></span>
+          </td>
+          <?php endif;?>
           <td><?php echo zget($users, $execution->PM);?></td>
           <?php $executionStatus = $this->processStatus('execution', $execution);?>
           <td class='c-status text-center' title='<?php echo $executionStatus;?>'>

@@ -1851,6 +1851,17 @@ class projectModel extends model
                 ->fetchAll('id');
         }
 
+        $parentIDList = array();
+        foreach($executions as $execution) if($execution->parent) array_push($parentIDList, $execution->parent);
+        $parentNameList = $this->dao->select('id, name')->from(TABLE_EXECUTION)
+            ->where('id')->in($parentIDList)
+            ->fetchPairs('id', 'name');
+        foreach($executions as $execution)
+        {
+            $execution->parentName = '';
+            if(isset($parentNameList[$execution->parent])) $execution->parentName = $parentNameList[$execution->parent];
+        }
+
         $hours     = $this->computerProgress($executions);
         $emptyHour = array('totalEstimate' => 0, 'totalConsumed' => 0, 'totalLeft' => 0, 'progress' => 0);
 
