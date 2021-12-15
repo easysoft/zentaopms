@@ -207,13 +207,17 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 $lang->kanbancolumn->color = '看板列颜色';
 
+$lang->kanbancolumn->confirmDelete = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
+
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name       = $lang->kanban->laneName;
-$lang->kanbanlane->common     = '泳道';
-$lang->kanbanlane->default    = '默认泳道';
-$lang->kanbanlane->column     = '泳道看板列';
-$lang->kanbanlane->otherlane  = '选择共享看板列的泳道';
-$lang->kanbanlane->color      = '泳道颜色';
+$lang->kanbanlane->name      = $lang->kanban->laneName;
+$lang->kanbanlane->common    = '泳道';
+$lang->kanbanlane->default   = '默认泳道';
+$lang->kanbanlane->column    = '泳道看板列';
+$lang->kanbanlane->otherlane = '选择共享看板列的泳道';
+$lang->kanbanlane->color     = '泳道颜色';
+
+$lang->kanbanlane->confirmDelete = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
 
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
@@ -254,6 +258,8 @@ $lang->kanbancard->archivedDate    = '归档时间';
 $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = '未指派';
 $lang->kanbancard->deadlineAB      = '截止';
+
+$lang->kanbancard->confirmDelete = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;
