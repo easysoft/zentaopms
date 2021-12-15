@@ -220,15 +220,15 @@ class kanbanModel extends model
                     ->fetch('maxOrder');
                 $column->order = $maxOrder + 1;
             }
-        }
 
-        if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
-        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
-        {
-            dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
-            return false;
+            if(!$column->limit && empty($_POST['noLimit'])) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
+            if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+                return false;
+            }
+            if(dao::isError()) return false;
         }
-        if(dao::isError()) return false;
 
         $column->limit = (int)$column->limit;
 
