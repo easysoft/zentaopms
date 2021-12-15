@@ -7,7 +7,7 @@
       <?php echo $lang->kanban->createLane;?>
     </h2>
   </div>
-  <form class='load-indicator main-form' method='post' target='hiddenwin'>
+  <form class='load-indicator main-form form-ajax' method='post' enctype='multipart/form-data'>
     <table class='table table-form'>
       <tbody>
         <tr>
@@ -29,7 +29,7 @@
           <th><?php echo $lang->kanbanlane->color;?></th>
           <td>
             <div id='color-picker'></div>
-            <?php echo html::input('color', '#7EC5FF', "class='hidden'");?>
+            <?php echo html::input('color', '#7ec5ff', "class='hidden'");?>
           </td>
         </tr>
         <tr>
