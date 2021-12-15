@@ -221,10 +221,10 @@ class kanbanModel extends model
 
         if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
         if(!preg_match("/^-?\d+$/", $column->limit))
-        {    
+        {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
-        }    
+        }
         if(dao::isError()) return false;
 
         $column->limit = (int)$column->limit;
@@ -248,7 +248,7 @@ class kanbanModel extends model
                 {
                     $limit += (int)$childColumn->limit;
                     if($limit > $parentColumn->limit)
-                    { 
+                    {
                         /* The total WIP of the child columns is greater than the WIP of the parent column. */
                         dao::$errors['limit'][] = $this->lang->kanban->error->childLimitNote;
                         return false;
@@ -299,8 +299,8 @@ class kanbanModel extends model
             return false;
         }
 
-        if($this->post->begin > $this->post->end) 
-        {    
+        if($this->post->begin > $this->post->end)
+        {
             dao::$errors[] = $this->lang->kanbancard->error->endSmall;
             return false;
         }
@@ -788,7 +788,7 @@ class kanbanModel extends model
                 if($object->owner == $account) $remove = false;
                 if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
                 if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
-                if($objectType == 'kanban') 
+                if($objectType == 'kanban')
                 {
                     $parentOwner = isset($spaceOwnerPairs[$object->space]) ? $spaceOwnerPairs[$object->space] : '';
                     if(strpos(",$parentOwner,", ",$account,") !== false) $remove = false;
@@ -936,7 +936,7 @@ class kanbanModel extends model
         $laneID = $this->dao->lastInsertID();
         return $laneID;
     }
-    
+
     /*
      * Create a kanban.
      *
@@ -1582,7 +1582,7 @@ class kanbanModel extends model
     {
         $oldColumn = $this->getColumnById($columnID);
         $column    = fixer::input('post')->remove('WIPCount,noLimit')->get();
-        if(!preg_match("/^-?\d+$/", $column->limit))
+        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit < 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
