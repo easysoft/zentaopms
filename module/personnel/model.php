@@ -486,7 +486,7 @@ class personnelModel extends model
                 ->markRight(1)
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('type_asc,openedDate_desc')
-                ->limit('9')
+                ->limit('10')
                 ->fetchPairs();
             foreach($objects as $id => &$object)
             {
