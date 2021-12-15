@@ -62,7 +62,7 @@ $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
 
 $lang->kanban->accessDenied  = "You have no access to the kanban.";
-$lang->kanban->confirmDelete = 'Do you want to delelte this?';
+$lang->kanban->confirmDelete = 'Do you want to delete this?';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
@@ -207,13 +207,17 @@ $lang->kanbancolumn->name  = $lang->kanban->columnName;
 $lang->kanbancolumn->limit = $lang->kanban->WIPCount;
 $lang->kanbancolumn->color = 'Column Color';
 
+$lang->kanbancolumn->confirmDelete = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
+
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name       = $lang->kanban->laneName;
-$lang->kanbanlane->common     = 'Lane';
-$lang->kanbanlane->default    = 'Default Lane';
-$lang->kanbanlane->column     = 'Lane Kanban Column';
-$lang->kanbanlane->otherlane  = 'Select Existed Lane';
-$lang->kanbanlane->color      = 'Lane Color';
+$lang->kanbanlane->name      = $lang->kanban->laneName;
+$lang->kanbanlane->common    = 'Lane';
+$lang->kanbanlane->default   = 'Default Lane';
+$lang->kanbanlane->column    = 'Lane Kanban Column';
+$lang->kanbanlane->otherlane = 'Select Existed Lane';
+$lang->kanbanlane->color     = 'Lane Color';
+
+$lang->kanbanlane->confirmDelete = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
 
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
@@ -254,6 +258,8 @@ $lang->kanbancard->archivedDate    = 'Archived Date';
 $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = 'No Assigned';
 $lang->kanbancard->deadlineAB      = 'DL';
+
+$lang->kanbancard->confirmDelete = 'Do you want to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

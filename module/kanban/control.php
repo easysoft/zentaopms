@@ -330,7 +330,7 @@ class kanban extends control
         $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
         $this->display();
     }
-    
+
     /**
      * Delete a lane.
      *
@@ -343,7 +343,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+            die(js::confirm($this->lang->kanbanlane->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
         }
         else
         {
@@ -392,7 +392,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
+            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
         }
         else
         {
@@ -494,7 +494,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
+            die(js::confirm($this->lang->kanbancard->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
         }
         else
         {
