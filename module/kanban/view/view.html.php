@@ -37,7 +37,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <ul class="dropdown-menu pull-right">
         <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), $this->lang->kanban->editRegion, '', 'class="iframe"') . '</li>';?>
         <?php if($canCreateLane) echo '<li>' . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$region->id}", '', 1), $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
-        <?php if($canDeleteRegion) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
+        <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
       </ul>
       <?php endif;?>
     </div>
