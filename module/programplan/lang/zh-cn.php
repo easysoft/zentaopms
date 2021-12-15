@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->programplan->common        = '项目阶段';
-$lang->programplan->browse        = '浏览阶段计划';
+$lang->programplan->browse        = '浏览甘特图';
 $lang->programplan->gantt         = '甘特图';
 $lang->programplan->list          = '阶段列表';
 $lang->programplan->create        = '设置阶段';

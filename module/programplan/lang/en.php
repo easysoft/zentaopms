@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->programplan->common        = 'Program Plan';
-$lang->programplan->browse        = 'Program Plan';
+$lang->programplan->browse        = 'Gantt Chart';
 $lang->programplan->gantt         = 'Gantt Chart';
 $lang->programplan->list          = 'Stage List';
 $lang->programplan->create        = 'Create';
