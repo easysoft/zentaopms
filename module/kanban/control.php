@@ -228,10 +228,10 @@ class kanban extends control
         if(!empty($_POST))
         {
             $laneID = $this->kanban->createLane($kanbanID, $regionID, $lane = null);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbanLane', $laneID, 'created');
-            die(js::reload('parent.parent'));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
@@ -254,11 +254,11 @@ class kanban extends control
         {
             $order    = $position == 'left' ? $column->order : $column->order + 1;
             $columnID = $this->kanban->createColumn($column->region, null, $order);
-            if(dao::isError()) $this->send(array('message' => $this->lang->fail, 'result' => 'fail'));
+            if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
             $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
-        }   
+        }
 
         $this->view->title    = $this->lang->kanban->createColumn;
         $this->view->column   = $column;
@@ -447,7 +447,6 @@ class kanban extends control
         }
 
         $this->view->column = $column;
-        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 

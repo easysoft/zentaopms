@@ -31,7 +31,7 @@
         <th><?php echo $lang->kanbanspace->team;?></th>
         <td colspan='2'>
           <div class="input-group">
-            <?php echo html::select('team[]', $users, '', "class='form-control chosen' multiple");?>
+            <?php echo html::select('team[]', $users, '', "class='form-control chosen' multiple data-drop_direction='down'");?>
             <?php echo $this->fetch('my', 'buildContactLists');?>
           </div>
         </td>

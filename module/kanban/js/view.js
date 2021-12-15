@@ -194,17 +194,18 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
  */
 function renderKanbanItem(item, $item)
 {
-    var $title = $item.children('.title');
+    var $title       = $item.children('.title');
+    var privs        = item.actions;
+    var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
     if(!$title.length)
     {
-        $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>')
-            .appendTo($item);
+        if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
+        if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
     }
-    $title.attr('title',item.name);
-    $title.text(item.name);
-    $title.attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
 
-    if(item.actions.length)
+    $title.text(item.name).attr('title', item.name);
+
+    if(printMoreBtn)
     {
         $(
         [
@@ -615,7 +616,7 @@ function createLaneMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('setLane')) items.push({label: kanbanLang.editLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setLane')) items.push({label: kanbanLang.editLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
     if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), className: 'confirmer', attrs: {'data-confirmTitle': kanbanlaneLang.confirmDelete, 'data-confirmDetail': kanbanlaneLang.confirmDeleteDetail}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();

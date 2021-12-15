@@ -119,6 +119,7 @@ class kanbanModel extends model
                 ->add('space', $kanban->space)
                 ->add('createdBy', $account)
                 ->add('createdDate', helper::today())
+                ->trim('name')
                 ->get();
         }
 
@@ -207,9 +208,11 @@ class kanbanModel extends model
             $column = fixer::input('post')
                 ->add('region', $regionID)
                 ->setIF($order, 'order', $order)
-                ->setDefault('color', '#272E33')
+                ->setDefault('color', '#333')
+                ->trim('name')
                 ->remove('WIPCount,noLimit')
                 ->get();
+
             if(!$order)
             {
                 $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)
@@ -220,7 +223,7 @@ class kanbanModel extends model
         }
 
         if(!$column->limit && empty($column->noLimit)) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
-        if(!preg_match("/^-?\d+$/", $column->limit))
+        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
@@ -315,6 +318,7 @@ class kanbanModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
+            ->trim('name')
             ->setDefault('estimate', 0)
             ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
@@ -570,7 +574,7 @@ class kanbanModel extends model
             //->orderBy('`order` asc')
             ->fetchAll('id');
 
-        $actions = array('editCard', 'archiveCard', 'copyCard', 'deleteCard', 'moveCard', 'setCardColor');
+        $actions = array('editCard', 'archiveCard', 'copyCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
         $cardGroup = array();
         foreach($cards as $card)
         {
@@ -817,6 +821,7 @@ class kanbanModel extends model
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
+            ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -856,6 +861,7 @@ class kanbanModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
+            ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -913,7 +919,8 @@ class kanbanModel extends model
                 ->add('order', $maxOrder + 1)
                 ->add('lastEditedTime', helper::now())
                 ->add('type', 'common')
-                ->setDefault('color', '#3DC6FD')
+                ->trim('name')
+                ->setDefault('color', '#7ec5ff')
                 ->get();
 
             $mode = zget($lane, 'mode', '');
@@ -955,6 +962,7 @@ class kanbanModel extends model
             ->setDefault('createdDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
+            ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -997,6 +1005,7 @@ class kanbanModel extends model
             ->setDefault('lastEditedDate', helper::now())
             ->join('whitelist', ',')
             ->join('team', ',')
+            ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
 
@@ -1482,7 +1491,7 @@ class kanbanModel extends model
      */
     public function updateLaneColumn($columnID, $column)
     {
-        $data = fixer::input('post')->get();
+        $data = fixer::input('post')->trim('name')->get();
 
         $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
             ->autoCheck()
@@ -1552,6 +1561,7 @@ class kanbanModel extends model
         $card = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
             ->add('createdDate', $now)
+            ->trim('name')
             ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
@@ -1588,7 +1598,7 @@ class kanbanModel extends model
     {
         $oldColumn = $this->getColumnById($columnID);
         $column    = fixer::input('post')->remove('WIPCount,noLimit')->get();
-        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit < 0))
+        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
@@ -1656,7 +1666,7 @@ class kanbanModel extends model
      */
     public function setLane($laneID)
     {
-        $lane = fixer::input('post')->get();
+        $lane = fixer::input('post')->trim('name')->get();
 
         $this->dao->update(TABLE_KANBANLANE)->data($lane)
             ->autoCheck()
