@@ -962,6 +962,7 @@ class kanbanModel extends model
             elseif($mode == 'independent')
             {
                 $groupID = $this->createGroup($kanbanID, $regionID);
+                $kanban  = $this->getByID($kanbanID);
                 $this->createDefaultColumns($kanban, $regionID, $groupID);
 
                 $lane->group = $groupID;
