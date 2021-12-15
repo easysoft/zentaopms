@@ -15,7 +15,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <?php echo "<span title='$title'>" . $title . '</span>';?>
+        <?php echo $lang->kanban->setLane;?>
       </h2>
     </div>
     <form class="load-indicator main-form form-ajax" method='post' target='hiddenwin'>
