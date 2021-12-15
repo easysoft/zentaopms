@@ -208,7 +208,7 @@ class kanbanModel extends model
             $column = fixer::input('post')
                 ->add('region', $regionID)
                 ->setIF($order, 'order', $order)
-                ->setDefault('color', '#272E33')
+                ->setDefault('color', '#333')
                 ->trim('name')
                 ->remove('WIPCount,noLimit')
                 ->get();
