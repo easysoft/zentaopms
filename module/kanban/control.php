@@ -330,6 +330,27 @@ class kanban extends control
         $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
         $this->display();
     }
+    
+    /**
+     * Delete a lane.
+     *
+     * @param  int    $laneID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function deleteLane($laneID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->delete(TABLE_KANBANLANE, $laneID);
+            die(js::reload('parent'));
+        }
+    }
 
     /**
      * Create a column for a kanban.
@@ -357,6 +378,27 @@ class kanban extends control
         $this->view->column   = $column;
         $this->view->position = $position;
         $this->display();
+    }
+
+    /**
+     * Delete a column.
+     *
+     * @param  int    $columnID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function deleteColumn($columnID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->delete(TABLE_KANBANCOLUMN, $columnID);
+            die(js::reload('parent'));
+        }
     }
 
     /**
