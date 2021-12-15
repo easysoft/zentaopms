@@ -223,7 +223,7 @@ $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板�
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
 $lang->kanbanregion = new stdclass();
-$lang->kanbanregion->name    = '看板区域';
+$lang->kanbanregion->name    = '区域名称';
 $lang->kanbanregion->default = '默认区域';
 
 $lang->kanbancard = new stdclass();

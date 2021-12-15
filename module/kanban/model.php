@@ -438,6 +438,18 @@ class kanbanModel extends model
     }
 
     /**
+     * Get region by id.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return array
+     */
+    public function getRegionById($regionID)
+    {
+        return $this->dao->findById($regionID)->from(TABLE_KANBANREGION)->fetch();
+    }
+
+    /**
      * Get ordered region pairs.
      *
      * @param  int    $kanbanID
@@ -1284,6 +1296,34 @@ class kanbanModel extends model
                 if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
             }
         }
+    }
+
+    /**
+     * Update a region.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return array
+     */
+    public function updateRegion($regionID)
+    {
+        $region    = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->trim('name')
+            ->get();
+        $oldRegion = $this->getRegionById($regionID);
+
+        $this->dao->update(TABLE_KANBANREGION)->data($region)
+            ->autoCheck()
+            ->batchcheck($this->config->kanban->editregion->requiredFields, 'notempty')
+            ->where('id')->eq($regionID)
+            ->exec();
+
+        if(dao::isError()) return;
+
+        $changes = common::createChanges($oldRegion, $region);
+        return $changes;
     }
 
     /**

@@ -288,6 +288,33 @@ class kanban extends control
     }
 
     /**
+     * Edit a region
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function editRegion($regionID = 0)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->updateRegion($regionID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->action->create('kanbanregion', $regionID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->region  = $this->kanban->getRegionByID($regionID);
+
+        $this->display();
+    }
+
+    /**
      * Delete a region
      *
      * @param  int    $regionID

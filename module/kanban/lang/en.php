@@ -223,7 +223,7 @@ $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as othe
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
 
 $lang->kanbanregion = new stdclass();
-$lang->kanbanregion->name    = 'Kanban Region';
+$lang->kanbanregion->name    = 'Region Name';
 $lang->kanbanregion->default = 'Default Region';
 
 $lang->kanbancard = new stdclass();
