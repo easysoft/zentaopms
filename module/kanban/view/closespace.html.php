@@ -1,12 +1,12 @@
 <?php
 /**
- * The close file of kanban module of ZenTaoPMS.
+ * The closespace file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Mengyi Liu <liumengyi@easycorp.ltd>
+ * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
- * @version     $Id: close.html.php 935 2021-12-09 10:49:24Z $
+ * @version     $Id: closespace.html.php 935 2021-12-15 11:22:24Z $
  * @link        https://www.zentao.net
  */
 ?>
@@ -16,8 +16,8 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <span class='label label-id'><?php echo $kanban->id;?></span>
-        <?php echo "<span title='$kanban->name'>" . $kanban->name . '</span>';?>
+        <span class='label label-id'><?php echo $space->id;?></span>
+        <?php echo "<span title='$space->name'>" . $space->name . '</span>';?>
       </div>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
@@ -28,7 +28,7 @@
         </tr>
         <tr>
           <td colspan='3' class='text-center form-actions'>
-            <?php echo html::submitButton($lang->kanban->close);?>
+            <?php echo html::submitButton($lang->kanban->closeSpace);?>
           </td>
         </tr>
       </table>

@@ -89,6 +89,36 @@ class kanban extends control
         $this->display();
     }
 
+    /*
+     * Close a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return void
+     */
+    public function closeSpace($spaceID)
+    {
+        $this->loadModel('action');
+
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->closeSpace($spaceID);
+
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->action->create('kanbanSpace', $spaceID, 'closed', $this->post->comment);
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent.parent'));
+        }
+
+        $this->view->space   = $this->kanban->getSpaceById($spaceID);
+        $this->view->actions = $this->action->getList('kanbanSpace', $spaceID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noletter');
+
+        $this->display();
+    }
+
     /**
      * Create a kanban.
      *
@@ -345,6 +375,27 @@ class kanban extends control
         $this->view->usersAvatar = $this->user->getAvatarPairs();
 
         $this->display();
+    }
+
+	/**
+	 * Delete a card.
+	 *
+	 * @param  int    $cardID
+	 * @param  string $confirm no|yes
+	 * @access public
+	 * @return void
+	 */
+    public function deleteCard($cardID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+            die(js::reload('parent'));
+        }
     }
 
     /**

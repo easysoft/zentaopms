@@ -884,6 +884,36 @@ class kanbanModel extends model
     }
 
     /**
+     * Close a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    function closeSpace($spaceID)
+    {
+        $spaceID  = (int)$spaceID;
+        $oldSpace = $this->getSpaceById($spaceID);
+        $now      = helper::now();
+        $account  = $this->app->user->account;
+        $space    = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->where('id')->eq($spaceID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+    /**
      * Get lane pairs by region id.
      *
      * @param  array  $regionID

@@ -39,6 +39,9 @@
           <div><i class='icon-zone'></i></div>
           <div>
             <h4>
+              <?php if($space->status == 'closed'):?>
+              <span class="label label-closed"><?php echo $lang->kanban->closed;?></span>
+              <?php endif;?>
               <?php echo $space->name;?>
               <?php echo isset($space->kanbans) ? count($space->kanbans) : '';?>
             </h4>
