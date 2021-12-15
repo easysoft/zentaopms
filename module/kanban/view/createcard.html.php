@@ -46,8 +46,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->kanbancard->name;?></th>
-          <td colspan='2'>
-            <div class='required required-wrapper'></div>
+          <td colspan='2' id='nameBox'>
             <div class='input-group title-group'>
               <?php echo html::input('name', '', "class='form-control'");?>
               <span class="input-group-addon fix-border br-0"><?php echo $lang->kanbancard->pri;?></span>
