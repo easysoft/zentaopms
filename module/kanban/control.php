@@ -269,13 +269,13 @@ class kanban extends control
     }
     
     /**
-	 * Delete a lane.
-	 *
-	 * @param  int    $laneID
-	 * @param  string $confirm no|yes
-	 * @access public
-	 * @return void
-	 */
+     * Delete a lane.
+     *
+     * @param  int    $laneID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
     public function deleteLane($laneID, $confirm = 'no')
     {
         if($confirm == 'no')
@@ -318,13 +318,13 @@ class kanban extends control
     }
 
     /**
-	 * Delete a column.
-	 *
-	 * @param  int    $columnID
-	 * @param  string $confirm no|yes
-	 * @access public
-	 * @return void
-	 */
+     * Delete a column.
+     *
+     * @param  int    $columnID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
     public function deleteColumn($columnID, $confirm = 'no')
     {
         if($confirm == 'no')
