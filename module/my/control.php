@@ -719,12 +719,16 @@ class my extends control
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
-        $pager = pager::init($recTotal, $recPerPage, $pageID);
+        $pager  = pager::init($recTotal, $recPerPage, $pageID);
+        $ncList = $this->my->getNcList($browseType, $orderBy, $pager);
+
+        foreach($ncList as $nc) $ncIdList[] = $nc->id;
+        $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
         $this->view->position[] = $this->lang->my->nc;
         $this->view->browseType = $browseType;
-        $this->view->ncs        = $this->my->getNcList($browseType, $orderBy, $pager);
+        $this->view->ncs        = $ncList;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
         $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
         $this->view->pager      = $pager;
