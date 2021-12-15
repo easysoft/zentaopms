@@ -22,6 +22,8 @@ $lang->branch->batchEdit        = 'Batch Edit';
 $lang->branch->defaultBranch    = 'Default Branch';
 $lang->branch->setDefault       = 'Set Default';
 $lang->branch->setDefaultAction = 'Set Default';
+$lang->branch->mergeTo          = 'Merge branch to';
+$lang->branch->mergeBranch      = 'Merge branch';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = 'Product';
@@ -42,6 +44,8 @@ $lang->branch->nameNotEmpty      = 'Name must not be empty！';
 $lang->branch->confirmClose      = 'Do you want to close this @branch@？';
 $lang->branch->confirmActivate   = 'Do you want to activate this @branch@？';
 $lang->branch->existName         = '@branch@ name already exists.';
+$lang->branch->mergeTips         = '(Trunk does not support being merged. After the branch is merged, the corresponding releases, plans, modules, requirements, bugs, and cases under the branch will be merged into the new branch)';
+$lang->branch->targetBranchTips  = 'Note: You can merge it into an existing branch, merge it into the trunk, or create a new branch.';
 
 $lang->branch->noData     = 'No branches.';
 $lang->branch->mainBranch = 'The default main %s of the product.';

@@ -37,13 +37,14 @@ class branch extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branchList, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->branch->manage;
-        $this->view->branchList = empty($branchList) ? $branchList : $branchList[$pageID - 1];
-        $this->view->productID  = $productID;
-        $this->view->browseType = $browseType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->product    = $this->product->getById($productID);
+        $this->view->title       = $this->lang->branch->manage;
+        $this->view->branchList  = empty($branchList) ? $branchList : $branchList[$pageID - 1];
+        $this->view->productID   = $productID;
+        $this->view->browseType  = $browseType;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getById($productID);
+        $this->view->branchPairs = $this->branch->getPairs($productID);
 
         $this->display();
     }
@@ -298,5 +299,19 @@ class branch extends control
         $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
 
         die(js::reload('parent'));
+    }
+
+    /**
+     * Merge multiple branches into one branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function mergeBranch($productID)
+    {
+        $this->loadModel('product')->setMenu($productID);
+
+        $this->display();
     }
 }

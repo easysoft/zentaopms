@@ -44,4 +44,23 @@ $(function()
     {
         $(this).find('.setDefault').addClass('hidden');
     })
+
+    $('#newBranch').change(function()
+    {
+        if($(this).prop('checked'))
+        {
+            $('#targetBranches').attr('disabled', true).trigger('chosen:updated');
+
+            var newBranchName = '<tr><th>' + branchLang.name + "</th><td><input type='text' name='name' id='name' class='form-control' /></td></tr>";
+            var newBranchDesc = '<tr><th>' + branchLang.desc + "</th><td><input type='text' name='desc' id='desc' class='form-control' /></td></tr>";
+            $(this).closest('tr').after(newBranchName + newBranchDesc);
+        }
+        else
+        {
+            $('#targetBranches').attr('disabled', false).trigger('chosen:updated');
+
+            $('#name').closest('tr').remove();
+            $('#desc').closest('tr').remove();
+        }
+    })
 });

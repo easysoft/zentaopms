@@ -13,6 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('orderBy', $orderBy)?>
+<?php js::set('branchLang', $lang->branch);?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
 <?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
@@ -124,6 +125,7 @@
         <?php
         $batchEditLink = $this->createLink('branch', 'batchEdit', "productID=$productID");
         echo html::submitButton($lang->edit, "data-form-action='$batchEditLink'", 'btn');
+        echo html::a('#mergeBranch', $lang->branch->merge, '', "data-toggle='modal' class='btn'");
         ?>
       </div>
       <?php endif;?>
@@ -132,5 +134,47 @@
     </div>
   </form>
   <?php endif;?>
+</div>
+
+<div class="modal fade" id="mergeBranch">
+  <div class="modal-dialog mw-700px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <span class="modal-title"><?php echo $lang->branch->mergeBranch;?></span>
+        <small> <?php echo $lang->branch->mergeTips;?></small>
+      </div>
+      <div class="modal-body">
+        <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+          <table class='table table-form'>
+            <tr>
+              <th class='thWidth'><?php echo $lang->branch->mergeTo;?></th>
+              <td>
+                <div class="input-group">
+                  <?php echo html::select('targetBranches', $branchPairs, '', "class='form-control chosen'");?>
+                  <span class='input-group-addon'>
+                    <div class="checkbox-primary">
+                      <input type="checkbox" name="newBranch" value="" id="newBranch"/>
+                      <label for="newBranch"><?php echo $lang->branch->createAction;?></label>
+                    </div>
+                  </span>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="3"><span><?php echo $lang->branch->targetBranchTips;?></span></td>
+            </tr>
+            <tr>
+              <td colspan='3' class='text-center form-actions'>
+                <?php echo html::submitButton();?>
+                <?php echo html::linkButton($lang->goback, $this->createLink('branch', 'manage', "productID=$productID"), 'self', '', 'btn btn-wide');?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

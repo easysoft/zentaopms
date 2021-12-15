@@ -7,3 +7,5 @@ a.setDefault {padding-left: 8px !important}
 td.flex {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
 td.flex .label-primary {min-width: 40px;}
 td.flex .setDefault {min-width: 120px;}
+
+#mergeBranch .form-actions {padding-top: 20px;}
