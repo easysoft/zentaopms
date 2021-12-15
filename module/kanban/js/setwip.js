@@ -4,6 +4,7 @@ $(function()
     {
         if($(this).attr('checked') == 'checked')
         {
+            $('#WIPCount').val('');
             $('#WIPCount').attr('disabled', true);
         }
         else
