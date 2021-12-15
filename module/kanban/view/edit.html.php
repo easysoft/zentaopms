@@ -33,7 +33,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->kanban->team;?></th>
-        <td colspan='2'>
+        <td colspan='2' id='teamBox'>
           <div class="input-group">
             <?php echo html::select('team[]', $users, $kanban->team, "class='form-control chosen' multiple");?>
             <?php echo $this->fetch('my', 'buildContactLists');?>

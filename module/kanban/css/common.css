@@ -2,3 +2,4 @@
 .color-picker-item > .icon {color: #fff; display: none}
 .checked > .icon {display: inline-block;}
 
+#teamBox .chosen-container .chosen-results {max-height: 180px;}
