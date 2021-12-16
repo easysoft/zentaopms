@@ -319,6 +319,7 @@ class kanban extends control
         $this->display();
     }
 
+    /*
      * Edit a region
      *
      * @param  int    $regionID
