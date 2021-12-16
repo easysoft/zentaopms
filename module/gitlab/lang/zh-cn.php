@@ -51,6 +51,7 @@ $lang->gitlab->browseBranchPriv     = '分支保护管理';
 $lang->gitlab->createBranchPriv     = '创建分支保护';
 $lang->gitlab->editBranchPriv       = '编辑分支保护';
 $lang->gitlab->deleteBranchPriv     = '删除分支保护';
+$lang->gitlab->createTag            = '创建标签';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "{$lang->gitlab->common}名称";
@@ -202,3 +203,11 @@ $lang->gitlab->branch->branchCreationLevelList[30] = "开发者 + 维护者";
 $lang->gitlab->branch->branchCreationLevelList[0]  = "禁止";
 $lang->gitlab->branch->emptyPrivNameError          = "分支不能为空";
 $lang->gitlab->branch->issetPrivNameError          = "已存在该保护分支";
+
+$lang->gitlab->tag = new stdclass();
+$lang->gitlab->tag->name           = '标签名';
+$lang->gitlab->tag->ref            = '创建自';
+$lang->gitlab->tag->message        = '信息';
+$lang->gitlab->tag->emptyNameError = "标签名不能为空";
+$lang->gitlab->tag->emptyRefError  = "创建自不能为空";
+$lang->gitlab->tag->issetNameError = "已存在该标签";
