@@ -647,6 +647,7 @@ $lang->resource->kanban->editCard     = 'editCard';
 $lang->resource->kanban->viewCard     = 'viewCard';
 $lang->resource->kanban->sortCard     = 'sortCard';
 $lang->resource->kanban->archiveCard  = 'archiveCard';
+$lang->resource->kanban->assigntoCard = 'assigntoCard';
 $lang->resource->kanban->copyCard     = 'copyCard';
 $lang->resource->kanban->deleteCard   = 'deleteCard';
 $lang->resource->kanban->moveCard     = 'moveCard';
@@ -685,10 +686,11 @@ $lang->kanban->methodOrder[140] = 'sortCard';
 $lang->kanban->methodOrder[145] = 'archivedCard';
 $lang->kanban->methodOrder[150] = 'copyCard';
 $lang->kanban->methodOrder[155] = 'deleteCard';
-$lang->kanban->methodOrder[160] = 'moveCard';
-$lang->kanban->methodOrder[165] = 'setCardColor';
-$lang->kanban->methodOrder[170] = 'laneMove';
-$lang->kanban->methodOrder[175] = 'cardsSort';
+$lang->kanban->methodOrder[160] = 'assigntoCard';
+$lang->kanban->methodOrder[165] = 'moveCard';
+$lang->kanban->methodOrder[170] = 'setCardColor';
+$lang->kanban->methodOrder[175] = 'laneMove';
+$lang->kanban->methodOrder[180] = 'cardsSort';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
