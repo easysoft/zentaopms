@@ -18,7 +18,7 @@
         <?php echo $lang->kanban->editRegion;?>
       </h2>
     </div>
-    <form class="load-indicator main-form form-ajax" method='post' target='hiddenwin'>
+    <form class="load-indicator main-form form-ajax" method='post'>
       <table align='center' class='table table-form'>
         <tr>
           <th><?php echo $lang->kanbanregion->name;?></th>
