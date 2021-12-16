@@ -305,12 +305,11 @@ class branch extends control
     /**
      * Merge multiple branches into one branch.
      *
-     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function mergeBranch($productID)
+    public function mergeBranch()
     {
-        $this->display();
+        $this->branch->mergeBranch();
     }
 }

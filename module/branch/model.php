@@ -574,4 +574,15 @@ class branchModel extends model
         $this->lang->branch->confirmActivate   = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmActivate);
         $this->lang->branch->existName         = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
     }
+
+    /**
+     * Merge branch.
+     *
+     * @access public
+     * @return void
+     */
+    public function mergeBranch()
+    {
+        $data = fixer::input('post')->get();
+    }
 }

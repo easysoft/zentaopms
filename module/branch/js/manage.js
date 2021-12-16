@@ -49,7 +49,7 @@ $(function()
     {
         if($(this).prop('checked'))
         {
-            $('#targetBranches').attr('disabled', true).trigger('chosen:updated');
+            $('#targetBranch').attr('disabled', true).trigger('chosen:updated');
 
             var newBranchName = '<tr><th>' + branchLang.name + "</th><td><input type='text' name='name' id='name' class='form-control' /></td></tr>";
             var newBranchDesc = '<tr><th>' + branchLang.desc + "</th><td><input type='text' name='desc' id='desc' class='form-control' /></td></tr>";
@@ -57,10 +57,35 @@ $(function()
         }
         else
         {
-            $('#targetBranches').attr('disabled', false).trigger('chosen:updated');
+            $('#targetBranch').attr('disabled', false).trigger('chosen:updated');
 
             $('#name').closest('tr').remove();
             $('#desc').closest('tr').remove();
         }
     })
+
+    $('#saveButton').on('click', function()
+    {
+        var mergedBranchIDList = [];
+        $("input:checkbox[name^='branchIDList']:checked").each(function()
+        {
+            mergedBranchIDList.push($(this).val());
+        });
+
+        var isChecked = $('#newBranch').attr('checked') ? true : false;
+        if(isChecked)
+        {
+            var postData = {'newBranchName' : $('#name').val(), 'newBranchDesc' : $('#desc').val(), 'newBranch' : isChecked, 'mergedBranchIDList' : mergedBranchIDList};
+        }
+        else
+        {
+            var postData = {'targetBranch' : $('#targetBranch').val(), 'mergedBranchIDList' : mergedBranchIDList};
+        }
+
+        $.post(createLink('branch', 'mergeBranch'), postData, function()
+        {
+            $('#mergeBranch').modal('hide');
+            window.location.reload();
+        });
+    });
 });

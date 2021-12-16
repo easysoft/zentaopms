@@ -151,12 +151,9 @@
               <th class='thWidth'><?php echo $lang->branch->mergeTo;?></th>
               <td>
                 <div class="input-group">
-                  <?php echo html::select('targetBranches', $branchPairs, '', "class='form-control chosen'");?>
+                  <?php echo html::select('targetBranch', $branchPairs, '', "class='form-control chosen'");?>
                   <span class='input-group-addon'>
-                    <div class="checkbox-primary">
-                      <input type="checkbox" name="newBranch" value="" id="newBranch"/>
-                      <label for="newBranch"><?php echo $lang->branch->createAction;?></label>
-                    </div>
+                    <?php echo html::checkbox('newBranch', $lang->branch->createAction, '', "id='newBranch'")?>
                   </span>
                 </div>
               </td>
@@ -167,7 +164,7 @@
             </tr>
             <tr>
               <td colspan='3' class='text-center form-actions'>
-                <?php echo html::submitButton();?>
+                <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
                 <?php echo html::linkButton($lang->goback, $this->createLink('branch', 'manage', "productID=$productID"), 'self', '', 'btn btn-wide');?>
               </td>
             </tr>
