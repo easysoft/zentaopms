@@ -32,6 +32,7 @@ $lang->kanban->moveCard            = '移动卡片';
 $lang->kanban->cardColor           = '卡片颜色';
 $lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
+$lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
 $lang->kanban->splitColumn         = '新增子看板列';
 $lang->kanban->createColumnOnLeft  = '左侧新增看板列';
