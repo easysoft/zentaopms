@@ -1048,6 +1048,7 @@ class kanbanModel extends model
         if(!dao::isError())
         {
             $kanbanID = $this->dao->lastInsertID();
+            $kanban   = $this->getByID($kanbanID);
 
             $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
             $this->createDefaultRegion($kanban);
