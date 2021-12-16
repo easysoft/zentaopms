@@ -16,8 +16,8 @@ $config->kanban->createspace   = new stdclass();
 $config->kanban->editspace     = new stdclass();
 $config->kanban->createregion  = new stdclass();
 $config->kanban->createcard    = new stdclass();
-
 $config->kanban->editcard      = new stdclass();
+$config->kanban->editregion    = new stdclass();
 
 $config->kanban->setwip->requiredFields        = 'limit';
 $config->kanban->setlane->requiredFields       = 'name,type';
@@ -28,8 +28,8 @@ $config->kanban->createspace->requiredFields   = 'name,owner';
 $config->kanban->editspace->requiredFields     = 'name,owner';
 $config->kanban->createregion->requiredFields  = 'name';
 $config->kanban->createcard->requiredFields    = 'name';
-
-$config->kanban->editcard->requiredFields = 'name';
+$config->kanban->editcard->requiredFields      = 'name';
+$config->kanban->editregion->requiredFields    = 'name';
 
 $config->kanban->editor = new stdclass();
 $config->kanban->editor->create      = array('id' => 'desc', 'tools' => 'simpleTools');

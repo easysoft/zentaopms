@@ -1327,6 +1327,34 @@ class kanbanModel extends model
     }
 
     /**
+     * Update a region.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return array
+     */
+    public function updateRegion($regionID)
+    {
+        $region    = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->trim('name')
+            ->get();
+        $oldRegion = $this->getRegionById($regionID);
+
+        $this->dao->update(TABLE_KANBANREGION)->data($region)
+            ->autoCheck()
+            ->batchcheck($this->config->kanban->editregion->requiredFields, 'notempty')
+            ->where('id')->eq($regionID)
+            ->exec();
+
+        if(dao::isError()) return;
+
+        $changes = common::createChanges($oldRegion, $region);
+        return $changes;
+    }
+
+    /**
      * Update kanban lane.
      *
      * @param  int    $executionID

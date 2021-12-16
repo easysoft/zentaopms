@@ -18,7 +18,7 @@
       <h2>
         <span class='label label-id'><?php echo $space->id;?></span>
         <?php echo "<span title='$space->name'>" . $space->name . '</span>';?>
-      </div>
+      </h2>
     </div>
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>

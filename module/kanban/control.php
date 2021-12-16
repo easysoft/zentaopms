@@ -319,6 +319,32 @@ class kanban extends control
         $this->display();
     }
 
+     * Edit a region
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function editRegion($regionID = 0)
+    {
+        $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $changes = $this->kanban->updateRegion($regionID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->action->create('kanbanregion', $regionID, 'edited');
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->region  = $this->kanban->getRegionByID($regionID);
+
+        $this->display();
+    }
+
     /**
      * Delete a region
      *
@@ -362,7 +388,7 @@ class kanban extends control
         $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
         $this->display();
     }
-    
+
     /**
      * Delete a lane.
      *
@@ -375,7 +401,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+            die(js::confirm($this->lang->kanbanlane->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
         }
         else
         {
@@ -424,7 +450,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
+            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
         }
         else
         {
@@ -526,7 +552,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
+            die(js::confirm($this->lang->kanbancard->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
         }
         else
         {
@@ -637,6 +663,7 @@ class kanban extends control
         }
 
         $this->view->column = $column;
+        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 
