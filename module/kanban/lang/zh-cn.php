@@ -30,6 +30,7 @@ $lang->kanban->sortCard            = '卡片排序';
 $lang->kanban->copyCard            = '复制卡片';
 $lang->kanban->moveCard            = '移动卡片';
 $lang->kanban->cardColor           = '卡片颜色';
+$lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
