@@ -14,23 +14,6 @@
 class kanbanModel extends model
 {
     /**
-     * Init a kanban.
-     *
-     * @param  int    $kanbanID
-     * @param  string $type default|new
-     * @access public
-     * @return void
-     */
-    public function initKanban($kanbanID, $type = 'default')
-    {
-        $kanban = $this->getByID($kanbanID);
-
-        $function = $type == 'default' ? 'createDefaultRegion' : 'createRegion';
-        $regionID = $this->$function($kanban);
-        if(dao::isError()) return false;
-    }
-
-    /**
      * Create a kanban group.
      *
      * @param  int    $kanbanID
@@ -1067,7 +1050,7 @@ class kanbanModel extends model
             $kanbanID = $this->dao->lastInsertID();
 
             $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
-            $this->initKanban($kanbanID);
+            $this->createDefaultRegion($kanban);
             $this->file->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
 
