@@ -603,6 +603,7 @@ class kanban extends control
         }
 
         $this->view->column = $column;
+        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 
