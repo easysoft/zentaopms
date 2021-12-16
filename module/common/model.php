@@ -2943,12 +2943,8 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedown', true);
-        return parsedown::instance()
-            ->setSafeMode(true)
-            ->setBreaksEnabled(true)
-            ->setMarkupEscaped(true)
-            ->text($markdown);
+        $app->loadClass('htmlup');
+        return new htmlup($markdown);
     }
 }
 
