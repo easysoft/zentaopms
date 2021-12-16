@@ -87,6 +87,7 @@ class mrModel extends model
         $MR = fixer::input('post')
             ->setDefault('jobID', 0)
             ->setDefault('repoID', 0)
+            ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
@@ -114,11 +115,12 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertId();
 
         $MRObject = new stdclass;
-        $MRObject->target_project_id = $MR->targetProject;
-        $MRObject->source_branch     = $MR->sourceBranch;
-        $MRObject->target_branch     = $MR->targetBranch;
-        $MRObject->title             = $MR->title;
-        $MRObject->description       = $MR->description;
+        $MRObject->target_project_id    = $MR->targetProject;
+        $MRObject->source_branch        = $MR->sourceBranch;
+        $MRObject->target_branch        = $MR->targetBranch;
+        $MRObject->title                = $MR->title;
+        $MRObject->description          = $MR->description;
+        $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
         if($MR->assignee)
         {
             $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->gitlabID, $MR->assignee);
@@ -187,6 +189,7 @@ class mrModel extends model
         $MR = fixer::input('post')
             ->setDefault('jobID', 0)
             ->setDefault('repoID', 0)
+            ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->setDefault('editedBy', $this->app->user->account)
             ->setDefault('editedDate', helper::now())
@@ -212,9 +215,10 @@ class mrModel extends model
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
-        $newMR->title         = $MR->title;
-        $newMR->description   = $MR->description;
-        $newMR->target_branch = $MR->targetBranch;
+        $newMR->title                = $MR->title;
+        $newMR->description          = $MR->description;
+        $newMR->target_branch        = $MR->targetBranch;
+        $newMR->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
         if($MR->assignee)
         {
             $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->gitlabID, $MR->assignee);
