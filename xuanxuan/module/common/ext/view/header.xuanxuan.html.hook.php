@@ -3,7 +3,7 @@
 body {scrollbar-gutter: stable both-edges;}
 ::-webkit-scrollbar-thumb {border-radius: 5px;}
 
-#navbar {display: flex; align-items: center; justify-content: center;}
+#navbar {display: flex; align-items: center; justify-content: center; margin-top: 7px}
 #navbar .nav {display: flex; align-items: center;}
 #navbar .nav > li {float: none;}
 #navbar .nav > li > a {padding-top: 3px!important; padding-bottom: 3px!important; border-radius: 4px;}
