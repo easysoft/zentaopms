@@ -56,6 +56,15 @@
             <td colspan='1' class='required'><?php echo html::select('repoID', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->mr->removeSourceBranch;?></th>
+            <td colspan='1'>
+              <div class="checkbox-primary">
+                <input type="checkbox" name="removeSourceBranch" value="1" id="removeSourceBranch">
+                <label for="removeSourceBranch"></label>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th><?php echo $lang->mr->needCI;?></th>
             <td colspan='1'>
               <div class="checkbox-primary">
