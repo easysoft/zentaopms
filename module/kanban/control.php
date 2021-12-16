@@ -288,6 +288,37 @@ class kanban extends control
     }
 
     /**
+     * Create a region.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function createRegion($kanbanID)
+    {
+        if(!empty($_POST))
+        {
+            $kanban       = $this->kanban->getByID($kanbanID);
+            $copyRegionID = (int)$_POST['region'];
+            unset($_POST['region']);
+
+            $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $regions     = $this->kanban->getRegionPairs($kanbanID);
+        $regionPairs = array();
+        foreach($regions as $regionID => $region)
+        {
+            $regionPairs[$regionID] = $this->lang->kanban->copy . $region . $this->lang->kanban->styleCommon;
+        }
+
+        $this->view->regions = array('custom' => $this->lang->kanban->custom) + $regionPairs;
+        $this->display();
+    }
+
      * Edit a region
      *
      * @param  int    $regionID
@@ -526,6 +557,8 @@ class kanban extends control
         else
         {
             $this->kanban->delete(TABLE_KANBANCARD, $cardID);
+
+            if(isonlybody()) die(js::reload('parent.parent'));
             die(js::reload('parent'));
         }
     }

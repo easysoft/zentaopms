@@ -40,6 +40,9 @@ $lang->kanban->createColumnOnRight = '右侧新增看板列';
 $lang->kanban->copyColumn          = '复制看板列';
 $lang->kanban->archiveColumn       = '归档看板列';
 $lang->kanban->spaceCommon         = '看板空间';
+$lang->kanban->styleCommon         = '样式';
+$lang->kanban->copy                = '复制';
+$lang->kanban->custom              = '自定义';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -227,6 +230,7 @@ $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';
 $lang->kanbanregion->default = '默认区域';
+$lang->kanbanregion->style   = '区域样式';
 
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create  = '创建卡片';
