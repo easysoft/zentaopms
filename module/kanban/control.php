@@ -408,6 +408,17 @@ class kanban extends control
     }
 
     /**
+     * Split column.
+     *
+     * @access public
+     * @return void
+     */
+    public function splitColumn($columnID)
+    {
+        $this->display();
+    }
+
+    /**
      * Delete a column.
      *
      * @param  int    $columnID
