@@ -30,6 +30,7 @@ $lang->kanban->sortCard            = 'Sort Card';
 $lang->kanban->copyCard            = 'Copy Card';
 $lang->kanban->moveCard            = 'Move Card';
 $lang->kanban->cardColor           = 'Card Color';
+$lang->kanban->setCardColor        = 'Set Card Color';
 $lang->kanban->deleteCard          = 'Delete Card';
 $lang->kanban->setting             = 'Setting';
 $lang->kanban->splitColumn         = 'Split Column';
