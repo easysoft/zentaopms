@@ -38,6 +38,9 @@ $lang->kanban->createColumnOnRight = 'Create Column On Right';
 $lang->kanban->copyColumn          = 'Copy Column';
 $lang->kanban->archiveColumn       = 'Archive Column';
 $lang->kanban->spaceCommon         = 'Kanban Space';
+$lang->kanban->styleCommon         = 'Style';
+$lang->kanban->copy                = 'Copy';
+$lang->kanban->custom              = 'Custom';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -221,6 +224,7 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopt
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Kanban Region';
 $lang->kanbanregion->default = 'Default Region';
+$lang->kanbanregion->style   = 'Region Style';
 
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create  = 'Create Card';

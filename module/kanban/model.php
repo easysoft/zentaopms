@@ -28,15 +28,6 @@ class kanbanModel extends model
         $function = $type == 'default' ? 'createDefaultRegion' : 'createRegion';
         $regionID = $this->$function($kanban);
         if(dao::isError()) return false;
-
-        $groupID = $this->createGroup($kanban->id, $regionID);
-        if(dao::isError()) return false;
-
-        $this->createDefaultLane($kanban, $regionID, $groupID);
-        if(dao::isError()) return false;
-
-        $this->createDefaultColumns($kanban, $regionID, $groupID);
-        if(dao::isError()) return false;
     }
 
     /**
@@ -95,10 +86,11 @@ class kanbanModel extends model
      *
      * @param  object $kanban
      * @param  object $region
+     * @param  int    $copyRegionID
      * @access public
      * @return int
      */
-    public function createRegion($kanban, $region = null)
+    public function createRegion($kanban, $region = null, $copyRegionID = 0)
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -130,8 +122,60 @@ class kanbanModel extends model
             ->exec();
 
         $regionID = $this->dao->lastInsertID();
+        if(dao::isError()) return false;
+
         $this->loadModel('action')->create('kanbanRegion', $regionID, 'Created');
         $this->saveOrder($kanban->id, 'kanban', $regionID, 'region', $account, $order);
+
+        if($copyRegionID)
+        {
+            /* Gets the groups, lanes and columns of the replication region. */
+            $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
+            $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
+            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID);
+
+            /* Create groups, lanes, and columns. */
+            foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
+            {
+                $newGroupID = $this->createGroup($kanban->id, $regionID);
+                if(dao::isError()) return false;
+
+                $copyLanes   = $copyLaneGroup[$copyGroupID];
+                $copyColumns = $copyColumnGroup[$copyGroupID];
+                foreach($copyLanes as $copyLane)
+                {
+                    unset($copyLane->id);
+                    unset($copyLane->actions);
+                    $copyLane->region         = $regionID;
+                    $copyLane->group          = $newGroupID;
+                    $copyLane->lastEditedTime = helper::now();
+                    $this->createLane($kanban->id, $regionID, $copyLane);
+                    if(dao::isError()) return false;
+                }
+
+                foreach($copyColumns as $copyColumn)
+                {
+                    unset($copyColumn->id);
+                    unset($copyColumn->actions);
+                    $copyColumn->region         = $regionID;
+                    $copyColumn->group          = $newGroupID;
+                    $this->createColumn($regionID, $copyColumn);
+                    if(dao::isError()) return false;
+                }
+            }
+        }
+        else
+        {
+            $groupID = $this->createGroup($kanban->id, $regionID);
+            if(dao::isError()) return false;
+
+            $this->createDefaultLane($kanban, $regionID, $groupID);
+            if(dao::isError()) return false;
+
+            $this->createDefaultColumns($kanban, $regionID, $groupID);
+            if(dao::isError()) return false;
+        }
+
 
         return $regionID;
     }
@@ -438,6 +482,18 @@ class kanbanModel extends model
     }
 
     /**
+     * Get region by id.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return object
+     */
+    public function getRegionByID($regionID)
+    {
+        return $this->dao->findByID($regionID)->from(TABLE_KANBANREGION)->fetch();
+    }
+
+    /**
      * Get ordered region pairs.
      *
      * @param  int    $kanbanID
@@ -465,7 +521,7 @@ class kanbanModel extends model
         return $this->dao->select('*')->from(TABLE_KANBANGROUP)
             ->where('region')->in($regions)
             ->orderBy('id_asc')
-            ->fetchGroup('region');
+            ->fetchGroup('region', 'id');
     }
 
     /**
@@ -513,7 +569,7 @@ class kanbanModel extends model
             //->andWhere('archived')->eq('0')
             ->andWhere('region')->in($regions)
             ->orderBy('order')
-            ->fetchGroup('group', 'id');
+            ->fetchGroup('group');
 
         $actions = array('createColumn', 'copyColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
 
