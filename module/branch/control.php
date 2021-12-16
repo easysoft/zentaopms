@@ -27,6 +27,7 @@ class branch extends control
     {
         $this->loadModel('product')->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
+        $this->branch->changeBranchLanguage($productID);
 
         $branchList = $this->branch->getList($productID, $browseType, $orderBy);
 
@@ -310,8 +311,6 @@ class branch extends control
      */
     public function mergeBranch($productID)
     {
-        $this->loadModel('product')->setMenu($productID);
-
         $this->display();
     }
 }
