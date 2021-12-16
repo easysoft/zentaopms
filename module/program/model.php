@@ -755,6 +755,10 @@ class programModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
 
+	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
+            $this->loadModel('user');
+            foreach($children as $id => $type) $this->user->updateUserView($id, $type);
+
             if($oldProgram->parent != $program->parent)
             {
                 $this->processNode($programID, $program->parent, $oldProgram->path, $oldProgram->grade);
