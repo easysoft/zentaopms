@@ -85,6 +85,21 @@ class mr extends control
     }
 
     /**
+     * Create MR function by api.
+     *
+     * @access public
+     * @return void
+     */
+    public function apiCreate()
+    {
+        if($_POST)
+        {
+            $result = $this->mr->apiCreate();
+            return $this->send($result);
+        }
+    }
+
+    /**
      * Edit MR function.
      *
      * @access public
