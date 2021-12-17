@@ -39,6 +39,7 @@ $(document).on('showapp', function(e, app)
 #xx-embed-container .xx-embed {width: 280px; height: 100%; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1),0 2px 4px -1px rgba(0,0,0,0.06)!important;}
 #xx-embed-container .xx-embed.xx-embed-hidden,
 #xx-embed-container .xx-embed.xx-embed-collapsed {width: 280px!important; height: 100%!important; opacity: .7; pointer-events: none; transform: translateY(100%); display: block!important;}
+#xx-embed-container .xx-embed.has-chat-view {min-width: 1000px!important;}
 #xx-embed-container .xx-embed-body {min-height: initial!important;}
 </style>
 <?php js::import($webRoot . 'data/xuanxuan/sdk/sdk.min.js'); ?>
@@ -61,7 +62,7 @@ function handleXuanNoticeChange(notice)
 /* Handle client route change */
 function handleXuanRouteChange(route)
 {
-    var hasShowChatView = route.indexOf('/chats/') === 0 && route.length > '/chats/'.length;
+    var hasShowChatView = route.indexOf('#/chats/') === 0 && !!route.split('/')[3];
     $('#' + window.xuan.id).toggleClass('has-chat-view', hasShowChatView);
 }
 
@@ -85,21 +86,6 @@ $(function() {
 
 /* Create client instance */
 window.xuan = new Xuanxuan(xuanConfig);
-
-function setXuanClientLarge()
-{
-    xuan._element.style.minWidth = '1000px';
-}
-
-function setXuanClientSmall()
-{
-    xuan._element.style.minWidth = '280px';
-}
-
-function closeXuanClient()
-{
-    xuan.toggleCollapse();
-}
 
 /* Hide xuan popover on click page */
 $(document).on('click', function(e)
