@@ -121,6 +121,12 @@ $lang->action->objectTypes['mr']            = 'Merge Request';
 $lang->action->objectTypes['gitlabproject'] = 'GitLab Project';
 $lang->action->objectTypes['gitlabuser']    = 'GitLab User';
 $lang->action->objectTypes['gitlabgroup']   = 'GitLab Group';
+$lang->action->objectTypes['kanbanspace']   = 'Space';
+$lang->action->objectTypes['kanban']        = 'Kanban';
+$lang->action->objectTypes['kanbanregion']  = 'Region';
+$lang->action->objectTypes['kanbanlane']    = 'Lane';
+$lang->action->objectTypes['kanbancolumn']  = 'Column';
+$lang->action->objectTypes['kanbancard']    = 'Card';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();

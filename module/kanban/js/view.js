@@ -271,14 +271,14 @@ function renderKanbanItem(item, $item)
                         ).attr('data-name', user.realname || user.account)
                     .attr('data-id', user.id || user.account);
                 if(user.avatar)
-                {   
+                {
                     $avatar.append('<img src="' + user.avatar + '" />');
-                }   
+                }
 
                 if(priv.canAssignCard)
-                {   
+                {
                     $avatar.attr('href', createLink('kanban', 'assignCard', 'id=' + item.id, '', 1));
-                } 
+                }
 
                 $user.empty()
                     .append($avatar)
@@ -604,8 +604,8 @@ function processMinusBtn()
 
 /**
  * Create lane menu.
- * 
- * @param  object $options 
+ *
+ * @param  object $options
  * @access public
  * @return void
  */
@@ -796,10 +796,12 @@ $(function()
 
     /* Init sortable */
     var sortType = '';
+    var cards    = null;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        listenClick : false,
         targetSelector: function($ele)
         {
             /* Sort regions */
@@ -820,6 +822,8 @@ $(function()
             if($ele.hasClass('kanban-lane'))
             {
                 sortType = 'lane';
+                $cards = $ele.find('.kanban-item');
+                $cards.hide();
                 return $ele.parent().children('.kanban-lane');
             }
 
@@ -877,6 +881,10 @@ $(function()
                     setTimeout(function(){return location.reload()}, 3000);
                 }
             });
-        }
+        },
+      always: function(e)
+      {
+          $cards.show();
+      }
     });
 });

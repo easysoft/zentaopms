@@ -79,8 +79,8 @@ body {background-color: #fff}
 .kanban-card > .title {display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
 .kanban-card > .info {position: relative; margin-top: 5px}
 .kanban-card > .info > .info + .info {margin-left: 8px}
-.kanban-card:hover > .actions {opacity: 1;} 
-.kanban-card > .actions {position: absolute; top: 4px; right: 4px; opacity: 0;} 
+.kanban-card:hover > .actions {opacity: 1;}
+.kanban-card > .actions {position: absolute; top: 4px; right: 4px; opacity: 0;}
 .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 

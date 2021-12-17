@@ -391,6 +391,29 @@ class kanban extends control
     }
 
     /**
+     * Sort lanes.
+     *
+     * @param  int    $regionID
+     * @param  string $lanes
+     * @access public
+     * @return void
+     */
+    public function sortLane($regionID, $lanes = '')
+    {
+        if(empty($lanes)) return;
+        $lanes   = explode(',', trim($lanes, ','));
+
+        $order = 1;
+        foreach($lanes as $laneID)
+        {
+            $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($order)->where('id')->eq($laneID)->andWhere('region')->eq($regionID)->exec();
+            $order++;
+        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
+
+    /**
      * Delete a lane.
      *
      * @param  int    $laneID

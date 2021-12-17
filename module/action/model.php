@@ -580,6 +580,10 @@ class actionModel extends model
                 $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
                 $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
             }
+            elseif(strpos($objectType, 'kanban') >= 0)
+            {
+                $objectNames[$objectType] = $this->dao->select("*, $field AS field")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
+            }
             else
             {
                 $objectNames[$objectType] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
@@ -595,6 +599,28 @@ class actionModel extends model
                 if(isset($objectNames['gitlab'][$trash->objectID]))  $objectType = 'gitlab';
                 if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
                 $trash->objectType = $objectType;
+            }
+            elseif(strpos($objectType, 'kanban') >= 0)
+            {
+                if($trash->objectID == 0) $trash->openID = 0;
+                elseif($objectType == 'kanbanregion')
+                {
+                    $trash->openID = $objectNames[$objectType][$trash->objectID]->kanban;
+                }
+                elseif($objectType == 'kanbanlane' or $objectType == 'kanbancolumn' or $objectType == 'kanbancard')
+                {
+                    $trash->openID = $this->loadModel('kanban')->getRegionById($objectNames[$objectType][$trash->objectID]->region)->kanban;
+                }
+                elseif($objectType == 'kanban')
+                {
+                    $trash->openID = $objectNames[$objectType][$trash->objectID]->space;
+                }
+                else
+                {
+                    $trash->openID = $objectNames[$objectType][$trash->objectID]->id;
+                }
+                $trash->objectName = isset($objectNames[$objectType][$trash->objectID]->field) ? $objectNames[$objectType][$trash->objectID]->field : '';
+                continue;
             }
             $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
         }

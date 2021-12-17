@@ -71,6 +71,14 @@
             {
                 echo $action->objectName;
             }
+            elseif($action->objectType == 'kanban' or $action->objectType == 'kanbanspce')
+            {
+                echo html::a($this->createLink('kanban', 'space'), $action->objectName, '_self', "title={$action->objectName}");
+            }
+            elseif(strpos($action->objectType, 'kanban') >= 0)
+            {
+                echo html::a($this->createLink('kanban', 'view', "kanbanID={$action->openID}"), $action->objectName, '_self', "title={$action->objectName}");
+            }
             else
             {
                 $tab = '';
