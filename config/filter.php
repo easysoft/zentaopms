@@ -147,7 +147,7 @@ $filter->user->edit               = new stdclass();
 $filter->webhook->bind            = new stdclass();
 $filter->user->ajaxgetmore        = new stdclass();
 $filter->repo->ajaxsynccommit     = new stdclass();
-$filter->repo->ajaxgetrepobyurl   = new stdclass();
+$filter->repo->apigetrepobyurl    = new stdclass();
 $filter->search->index            = new stdclass();
 $filter->gitlab->webhook          = new stdclass();
 $filter->gitlab->importissue      = new stdclass();
@@ -365,7 +365,8 @@ $filter->repo->view    = new stdclass();
 $filter->repo->default->get['repoPath'] = 'reg::base64';
 $filter->repo->default->get['path']     = 'reg::base64';
 $filter->repo->default->get['entry']    = 'reg::base64';
-$filter->repo->ajaxgetrepobyurl->get['url']    = 'reg::any';
+
+$filter->repo->apigetrepobyurl->get['url'] = 'reg::any';
 
 $filter->repo->default->cookie['repoBranch']        = 'reg::any';
 $filter->repo->diff->cookie['arrange']              = 'reg::word';
