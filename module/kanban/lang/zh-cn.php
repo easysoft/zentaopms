@@ -266,6 +266,8 @@ $lang->kanbancard->archivedDate    = '归档时间';
 $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = '未指派';
 $lang->kanbancard->deadlineAB      = '截止';
+$lang->kanbancard->beginAB         = '开始';
+$lang->kanbancard->to              = '至';
 
 $lang->kanbancard->confirmDelete = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
 
