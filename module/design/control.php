@@ -80,7 +80,7 @@ class design extends control
         if($this->config->maxVersion and common::hasPriv('design', 'submit'))
         {
             $this->lang->TRActions .= '<div class="btn-group">';
-            $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->createReview}", '', "class='btn btn-secondary iframe'");
+            $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->submit}", '', "class='btn btn-secondary iframe'");
             $this->lang->TRActions .= '</div>';
         }
         $this->lang->TRActions .= '<div class="btn-group dropdown">';
