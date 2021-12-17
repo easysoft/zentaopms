@@ -31,7 +31,7 @@ $config->kanban->createregion->requiredFields  = 'name';
 $config->kanban->createcard->requiredFields    = 'name';
 $config->kanban->editcard->requiredFields      = 'name';
 $config->kanban->editregion->requiredFields    = 'name';
-$config->kanban->splitcolumn->requiredFields   = 'name,color,limit';
+$config->kanban->splitcolumn->requiredFields   = 'name,limit';
 
 $config->kanban->editor = new stdclass();
 $config->kanban->editor->create      = array('id' => 'desc', 'tools' => 'simpleTools');

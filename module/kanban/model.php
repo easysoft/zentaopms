@@ -225,6 +225,7 @@ class kanbanModel extends model
      * @param  int    $regionID
      * @param  object $column
      * @param  int    $order
+     * @param  int    $parent
      * @access public
      * @return int
      */
