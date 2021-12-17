@@ -108,8 +108,6 @@ class baseHTML
      */
     static public function a($href = '', $title = '', $misc = '', $newline = true)
     {
-        global $config;
-
         if(strlen(trim($title)) == 0) $title = $href;
         $newline = $newline ? "\n" : '';
 

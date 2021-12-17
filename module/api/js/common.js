@@ -164,9 +164,7 @@ $(document).ready(function()
     {
         $('.split-row').splitRow();
     });
-
 });
-
 
 /**
  * Redirect the parent window.

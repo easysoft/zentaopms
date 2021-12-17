@@ -8,6 +8,10 @@ title=测试删除产品;
 cid=1
 pid=1
 
+调用成功，返回200 >> 200
+调用查找接口，成功返回200 >> 200
+已删除的产品的deleted字段为1 >> 1
+
 */
 global $token;
 $header = array('Token' => $token->token);
