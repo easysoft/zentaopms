@@ -931,6 +931,53 @@ class gitlab extends control
     }
 
     /**
+     * Browse gitlab tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseTag($gitlabID, $projectID, $orderBy = 'updated_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->session->set('gitlabTagList', $this->app->getURI(true));
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+
+        $tagList = array();
+        $result  = $this->gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword);
+        foreach($result as $gitlabTag)
+        {
+            $tag = new stdClass();
+            $tag->name          = $gitlabTag->name;
+            $tag->lastCommitter = $gitlabTag->commit->committer_name;
+            $tag->updated       = date('Y-m-d H:i:s', strtotime($gitlabTag->commit->committed_date));
+
+            $tagList[] = $tag;
+        }
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal   = count($tagList);
+        $pager      = new pager($recTotal, $recPerPage, $pageID);
+        $tagList    = array_chunk($tagList, $pager->recPerPage);
+
+        $this->view->gitlab            = $this->gitlab->getByID($gitlabID);
+        $this->view->pager             = $pager;
+        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTag;
+        $this->view->gitlabID          = $gitlabID;
+        $this->view->projectID         = $projectID;
+        $this->view->keyword           = $keyword;
+        $this->view->project           = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->gitlabTagList     = empty($tagList) ? $tagList: $tagList[$pageID - 1];
+        $this->view->orderBy           = $orderBy;
+        $this->display();
+    }
+
+    /**
      * Import gitlab issue to zentaopms.
      *
      * @param  int    $repoID

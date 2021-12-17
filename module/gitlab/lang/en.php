@@ -31,6 +31,7 @@ $lang->gitlab->browseProject        = "GitLab Project List";
 $lang->gitlab->browseUser           = "User List";
 $lang->gitlab->browseGroup          = "Group List";
 $lang->gitlab->browseBranch         = "GitLab Branch List";
+$lang->gitlab->browseTag            = "GitLab Tag List";
 $lang->gitlab->gitlabIssue          = "GitLab Issue";
 $lang->gitlab->zentaoProduct        = 'Zentao Product';
 $lang->gitlab->objectType           = 'Type'; // task, bug, story
@@ -51,6 +52,8 @@ $lang->gitlab->browseBranchPriv     = 'Protect branch';
 $lang->gitlab->createBranchPriv     = 'Cerate branch protected';
 $lang->gitlab->editBranchPriv       = 'Edit branch protected';
 $lang->gitlab->deleteBranchPriv     = 'Delete branch protected';
+$lang->gitlab->createTag            = 'Add tag';
+$lang->gitlab->deleteTag            = 'Delete tag';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "GitLab Name";
@@ -202,3 +205,9 @@ $lang->gitlab->branch->branchCreationLevelList[30] = "Developers + Maintainers";
 $lang->gitlab->branch->branchCreationLevelList[0]  = "No one";
 $lang->gitlab->branch->emptyPrivNameError          = "Branch cannot be empty.";
 $lang->gitlab->branch->issetPrivNameError          = "The protection branch already exists";
+
+$lang->gitlab->tag = new stdclass();
+$lang->gitlab->tag->name              = 'Tag name';
+$lang->gitlab->tag->lastCommitter     = 'Last Committer';
+$lang->gitlab->tag->lastCommittedDate = 'Last Committed Date';
+$lang->gitlab->tag->placeholderSearch = "Enter branch tag";

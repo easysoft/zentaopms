@@ -31,6 +31,7 @@ $lang->gitlab->browseProject        = "{$lang->gitlab->common}项目列表";
 $lang->gitlab->browseUser           = "用户列表";
 $lang->gitlab->browseGroup          = "群组列表";
 $lang->gitlab->browseBranch         = "GitLab分支列表";
+$lang->gitlab->browseTag            = "GitLab标签列表";
 $lang->gitlab->gitlabIssue          = "{$lang->gitlab->common} issue";
 $lang->gitlab->zentaoProduct        = '禅道产品';
 $lang->gitlab->objectType           = '类型'; // task, bug, story
@@ -51,6 +52,8 @@ $lang->gitlab->browseBranchPriv     = '分支保护管理';
 $lang->gitlab->createBranchPriv     = '创建分支保护';
 $lang->gitlab->editBranchPriv       = '编辑分支保护';
 $lang->gitlab->deleteBranchPriv     = '删除分支保护';
+$lang->gitlab->createTag            = '添加标签';
+$lang->gitlab->deleteTag            = '删除标签';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "{$lang->gitlab->common}名称";
@@ -202,3 +205,9 @@ $lang->gitlab->branch->branchCreationLevelList[30] = "开发者 + 维护者";
 $lang->gitlab->branch->branchCreationLevelList[0]  = "禁止";
 $lang->gitlab->branch->emptyPrivNameError          = "分支不能为空";
 $lang->gitlab->branch->issetPrivNameError          = "已存在该保护分支";
+
+$lang->gitlab->tag = new stdclass();
+$lang->gitlab->tag->name              = '标签名';
+$lang->gitlab->tag->lastCommitter     = '最后提交';
+$lang->gitlab->tag->lastCommittedDate = '最后修改时间';
+$lang->gitlab->tag->placeholderSearch = "请输入标签名称";

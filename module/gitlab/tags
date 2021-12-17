@@ -1,0 +1,486 @@
+!_TAG_FILE_FORMAT	2	/extended format; --format=1 will not append ;" to lines/
+!_TAG_FILE_SORTED	1	/0=unsorted, 1=sorted, 2=foldcase/
+!_TAG_PROGRAM_AUTHOR	Darren Hiebert	/dhiebert@users.sourceforge.net/
+!_TAG_PROGRAM_NAME	Exuberant Ctags	//
+!_TAG_PROGRAM_URL	http://ctags.sourceforge.net	/official site/
+!_TAG_PROGRAM_VERSION	5.9~svn20110310	//
+__construct	control.php	/^    public function __construct($moduleName = '', $methodName = '')$/;"	f
+accessLevels	control.php	/^        $accessLevels   = $this->lang->gitlab->accessLevels;$/;"	v
+account	control.php	/^                $account                  = $bindedUsers[$projectMember->id];$/;"	v
+accountList	control.php	/^            $accountList = array();$/;"	v
+accounts	control.php	/^            $accounts = array_filter($data->accounts);$/;"	v
+action	model.php	/^            $action = empty($branch) ? 'created' : 'edited';$/;"	v
+actionID	control.php	/^            $actionID = $this->action->create('gitlab', $gitlabID, 'created');$/;"	v
+actionID	control.php	/^            $actionID = $this->action->create('gitlab', $id, 'edited');$/;"	v
+actionID	control.php	/^        $actionID = $this->action->create('gitlab', $id, 'deleted');$/;"	v
+actionID	model.php	/^        $actionID  = $this->loadModel('action')->create($issue->objectType, $issue->objectID, 'Assigned', "Assigned by webhook by gitlab issue : {$issue->issue->url}", $data->assignedTo);$/;"	v
+actionID	model.php	/^        $actionID  = $this->loadModel('action')->create($issue->objectType, $issue->objectID, 'Closed', "Closed by gitlab issue: {$issue->issue->url}.");$/;"	v
+addItem	js/managegroupmembers.js	/^function addItem(obj)$/;"	f
+addItem	js/manageprojectmembers.js	/^function addItem(obj)$/;"	f
+addPushWebhook	model.php	/^    public function addPushWebhook($repo)$/;"	f
+addedData	control.php	/^                    $addedData = new stdClass();$/;"	v
+addedMembers	control.php	/^            $addedMembers = $deletedMembers = $updatedMembers = array();$/;"	v
+addedMembers	control.php	/^            $addedMembers = $updatedMembers = $deletedMembers = array();$/;"	v
+ajaxGetExecutionsByProduct	control.php	/^    public function ajaxGetExecutionsByProduct($productID)$/;"	f
+ajaxGetMRUserPairs	control.php	/^    public function ajaxGetMRUserPairs($gitlabID, $projectID)$/;"	f
+ajaxGetProjectBranches	control.php	/^    public function ajaxGetProjectBranches($gitlabID, $projectID)$/;"	f
+allResults	model.php	/^        $allResults = array();$/;"	v
+apiCreateBranch	model.php	/^    public function apiCreateBranch($gitlabID, $projectID, $branch)$/;"	f
+apiCreateBranchPriv	model.php	/^    public function apiCreateBranchPriv($gitlabID, $projectID, $priv)$/;"	f
+apiCreateGroup	model.php	/^    public function apiCreateGroup($gitlabID, $group)$/;"	f
+apiCreateGroupMember	model.php	/^    public function apiCreateGroupMember($gitlabID, $groupID, $member)$/;"	f
+apiCreateHook	model.php	/^    public function apiCreateHook($gitlabID, $projectID, $hook)$/;"	f
+apiCreateIssue	model.php	/^    public function apiCreateIssue($gitlabID, $projectID, $objectType, $objectID, $object)$/;"	f
+apiCreateLabel	model.php	/^    public function apiCreateLabel($gitlabID, $projectID, $label)$/;"	f
+apiCreatePipeline	model.php	/^    public function apiCreatePipeline($gitlabID, $projectID, $params)$/;"	f
+apiCreateProject	model.php	/^    public function apiCreateProject($gitlabID, $project)$/;"	f
+apiCreateProjectMember	model.php	/^    public function apiCreateProjectMember($gitlabID, $projectID, $member)$/;"	f
+apiCreateUser	model.php	/^    public function apiCreateUser($gitlabID, $user)$/;"	f
+apiDeleteBranchPriv	model.php	/^    public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)$/;"	f
+apiDeleteGroup	model.php	/^    public function apiDeleteGroup($gitlabID, $groupID)$/;"	f
+apiDeleteGroupMember	model.php	/^    public function apiDeleteGroupMember($gitlabID, $groupID, $memberID)$/;"	f
+apiDeleteHook	model.php	/^    public function apiDeleteHook($gitlabID, $projectID, $hookID)$/;"	f
+apiDeleteIssue	model.php	/^    public function apiDeleteIssue($gitlabID, $projectID, $issueID)$/;"	f
+apiDeleteLabel	model.php	/^    public function apiDeleteLabel($gitlabID, $projectID, $labelName)$/;"	f
+apiDeleteProject	model.php	/^    public function apiDeleteProject($gitlabID, $projectID)$/;"	f
+apiDeleteProjectMember	model.php	/^    public function apiDeleteProjectMember($gitlabID, $groupID, $memberID)$/;"	f
+apiDeleteUser	model.php	/^    public function apiDeleteUser($gitlabID, $userID)$/;"	f
+apiErrorHandling	model.php	/^    public function apiErrorHandling($response)$/;"	f
+apiGet	model.php	/^    public function apiGet($host, $api, $data = array(), $options = array())$/;"	f
+apiGetBranchPrivs	model.php	/^    public function apiGetBranchPrivs($gitlabID, $projectID, $keyword = '', $orderBy = 'id_desc')$/;"	f
+apiGetBranches	model.php	/^    public function apiGetBranches($gitlabID, $projectID)$/;"	f
+apiGetCurrentUser	model.php	/^    public function apiGetCurrentUser($host, $token)$/;"	f
+apiGetForks	model.php	/^    public function apiGetForks($gitlabID, $projectID)$/;"	f
+apiGetGroupMembers	model.php	/^    public function apiGetGroupMembers($gitlabID, $groupID)$/;"	f
+apiGetGroups	model.php	/^    public function apiGetGroups($gitlabID, $orderBy)$/;"	f
+apiGetHook	model.php	/^    public function apiGetHook($gitlabID, $projectID, $hookID)$/;"	f
+apiGetHooks	model.php	/^    public function apiGetHooks($gitlabID, $projectID)$/;"	f
+apiGetIssues	model.php	/^    public function apiGetIssues($gitlabID, $projectID, $options = null)$/;"	f
+apiGetJobLog	model.php	/^    public function apiGetJobLog($gitlabID, $projectID, $jobID)$/;"	f
+apiGetJobs	model.php	/^    public function apiGetJobs($gitlabID, $projectID, $pipelineID)$/;"	f
+apiGetLabels	model.php	/^    public function apiGetLabels($gitlabID, $projectID)$/;"	f
+apiGetNamespaces	model.php	/^    public function apiGetNamespaces($gitlabID)$/;"	f
+apiGetProjectMember	model.php	/^    public function apiGetProjectMember($gitlabID, $projectID, $userID)$/;"	f
+apiGetProjectMembers	model.php	/^    public function apiGetProjectMembers($gitlabID, $projectID)$/;"	f
+apiGetProjectUsers	model.php	/^    public function apiGetProjectUsers($gitlabID, $projectID)$/;"	f
+apiGetProjects	model.php	/^    public function apiGetProjects($gitlabID)$/;"	f
+apiGetProjectsPager	model.php	/^    public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy, $pager)$/;"	f
+apiGetSingleBranch	model.php	/^    public function apiGetSingleBranch($gitlabID, $projectID, $branch)$/;"	f
+apiGetSingleBranchPriv	model.php	/^    public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)$/;"	f
+apiGetSingleGroup	model.php	/^    public function apiGetSingleGroup($gitlabID, $groupID)$/;"	f
+apiGetSingleIssue	model.php	/^    public function apiGetSingleIssue($gitlabID, $projectID, $issueID)$/;"	f
+apiGetSingleJob	model.php	/^    public function apiGetSingleJob($gitlabID, $projectID, $jobID)$/;"	f
+apiGetSinglePipeline	model.php	/^    public function apiGetSinglePipeline($gitlabID, $projectID, $pipelineID)$/;"	f
+apiGetSingleProject	model.php	/^    public function apiGetSingleProject($gitlabID, $projectID)$/;"	f
+apiGetSingleUser	model.php	/^    public function apiGetSingleUser($gitlabID, $userID)$/;"	f
+apiGetTags	model.php	/^    public function apiGetTags($gitlabID, $projectID, $orderBy = '')$/;"	f
+apiGetTodoList	model.php	/^    public function apiGetTodoList($gitlabID, $projectID, $sudo)$/;"	f
+apiGetUpstream	model.php	/^    public function apiGetUpstream($gitlabID, $projectID)$/;"	f
+apiGetUsers	model.php	/^    public function apiGetUsers($gitlabID, $onlyLinked = false, $orderBy = 'id_desc')$/;"	f
+apiPath	model.php	/^        $apiPath  = "\/projects\/$projectID\/hooks\/$hookID)";$/;"	v
+apiPath	model.php	/^        $apiPath  = "\/projects\/{$projectID}\/hooks";$/;"	v
+apiPost	model.php	/^    public function apiPost($host, $api, $data = array(), $options = array())$/;"	f
+apiRoot	model.php	/^        $apiRoot  = $this->getApiRoot($gitlabID);$/;"	v
+apiRoot	model.php	/^        $apiRoot = $this->getApiRoot($gitlabID);$/;"	v
+apiUpdateGroup	model.php	/^    public function apiUpdateGroup($gitlabID, $group)$/;"	f
+apiUpdateGroupMember	model.php	/^    public function apiUpdateGroupMember($gitlabID, $groupID, $member)$/;"	f
+apiUpdateHook	model.php	/^    public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)$/;"	f
+apiUpdateIssue	model.php	/^    public function apiUpdateIssue($gitlabID, $projectID, $issueID, $objectType, $object, $objectID = null)$/;"	f
+apiUpdateProject	model.php	/^    public function apiUpdateProject($gitlabID, $project)$/;"	f
+apiUpdateProjectMember	model.php	/^    public function apiUpdateProjectMember($gitlabID, $projectID, $member)$/;"	f
+apiUpdateUser	model.php	/^    public function apiUpdateUser($gitlabID, $user)$/;"	f
+bindProduct	control.php	/^    public function bindProduct($gitlabID)$/;"	f
+bindUser	control.php	/^    public function bindUser($gitlabID)$/;"	f
+bindedUsers	control.php	/^            $bindedUsers = $this->dao->select('account,openID')$/;"	v
+bindedUsers	control.php	/^        $bindedUsers     = $this->gitlab->getUserIdRealnamePairs($gitlabID);$/;"	v
+bindedUsers	control.php	/^        $bindedUsers    = $this->dao->select('openID,account')$/;"	v
+bindedUsers	model.php	/^        $bindedUsers = $this->dao->select('openID,account')$/;"	v
+branch	control.php	/^            $branch = new stdClass();$/;"	v
+branch	model.php	/^        $branch = fixer::input('post')->get();$/;"	v
+branchList	control.php	/^        $branchList = array();$/;"	v
+branchList	control.php	/^        $branchList = array_chunk($branchList, $pager->recPerPage);$/;"	v
+branchList	control.php	/^        $branchList = array_chunk($branches, $pager->recPerPage);$/;"	v
+branchPairs	control.php	/^        $branchPairs = array();$/;"	v
+branchPriv	control.php	/^            $branchPriv = $this->gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);$/;"	v
+branchPriv	control.php	/^        $branchPriv = new stdClass();$/;"	v
+branches	control.php	/^        $branches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, $keyword, $orderBy);$/;"	v
+branches	control.php	/^        $branches = $this->gitlab->apiGetBranches($gitlabID, $projectID);$/;"	v
+branches	control.php	/^        $branches = array();$/;"	v
+branches	model.php	/^        $branches = $this->apiGetBranches($gitlabID, $projectID);$/;"	v
+branches	model.php	/^        $branches = array();$/;"	v
+branches	model.php	/^        $branches = json_decode(commonModel::http($url));$/;"	v
+browse	control.php	/^    public function browse($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+browseBranch	control.php	/^    public function browseBranch($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+browseBranchPriv	control.php	/^    public function browseBranchPriv($gitlabID, $projectID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)$/;"	f
+browseGroup	control.php	/^    public function browseGroup($gitlabID, $orderBy = 'name_asc')$/;"	f
+browseProject	control.php	/^    public function browseProject($gitlabID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)$/;"	f
+browseTag	control.php	/^    public function browseTag($gitlabID, $projectID, $orderBy = 'updated_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)$/;"	f
+browseUser	control.php	/^    public function browseUser($gitlabID, $orderBy = 'id_desc')$/;"	f
+bugToIssue	model.php	/^    public function bugToIssue($gitlabID, $projectID, $bug)$/;"	f
+changeBind	model.php	/^            $changeBind = (!$zentaoBindUser or $zentaoBindUser->openID != $user->id) ? true : false;$/;"	v
+changes	control.php	/^            $changes  = common::createChanges($oldGitLab, $gitLab);$/;"	v
+changes	control.php	/^        $changes  = common::createChanges($oldGitLab, $gitLab);$/;"	v
+changes	model.php	/^        $changes   = common::createChanges($oldObject, $data);$/;"	v
+checkAccessLevel	model.php	/^    public function checkAccessLevel($accessLevels)$/;"	f
+checkToken	control.php	/^    public function checkToken()$/;"	f
+clonedObject	control.php	/^                $clonedObject      = clone $object;$/;"	v
+create	control.php	/^    public function create()$/;"	f
+create	model.php	/^    public function create()$/;"	f
+createBranch	control.php	/^    public function createBranch($gitlabID, $projectID)$/;"	f
+createBranch	model.php	/^    public function createBranch($gitlabID, $projectID)$/;"	f
+createBranchPriv	control.php	/^    public function createBranchPriv($gitlabID, $projectID, $branch = '')$/;"	f
+createBranchPriv	model.php	/^    public function createBranchPriv($gitlabID, $projectID, $branch = '')$/;"	f
+createGroup	control.php	/^    public function createGroup($gitlabID)$/;"	f
+createGroup	model.php	/^    public function createGroup($gitlabID)$/;"	f
+createProject	control.php	/^    public function createProject($gitlabID)$/;"	f
+createProject	model.php	/^    public function createProject($gitlabID)$/;"	f
+createUser	control.php	/^    public function createUser($gitlabID)$/;"	f
+createUser	model.php	/^    public function createUser($gitlabID)$/;"	f
+createWebhook	control.php	/^    public function createWebhook($repoID, $confirm = 'no')$/;"	f
+createZentaoObjectLabel	model.php	/^    public function createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID)$/;"	f
+currentMembers	control.php	/^            $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);$/;"	v
+currentMembers	control.php	/^        $currentMembers = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID);$/;"	v
+currentProject	model.php	/^        $currentProject = $this->apiGetSingleProject($gitlabID, $projectID);$/;"	v
+data	control.php	/^            $data = fixer::input('post')->get();$/;"	v
+data	model.php	/^        $data               = $issue->object;$/;"	v
+data	model.php	/^        $data             = $issue->object;$/;"	v
+data	model.php	/^        $data  = new stdclass;$/;"	v
+delete	control.php	/^    public function delete($id, $confirm = 'no')$/;"	f
+deleteBranchPriv	control.php	/^    public function deleteBranchPriv($gitlabID, $projectID, $branch, $confirm = 'no')$/;"	f
+deleteGroup	control.php	/^    public function deleteGroup($gitlabID, $groupID, $confirm = 'no')$/;"	f
+deleteIssue	model.php	/^    public function deleteIssue($objectType, $objectID, $issueID)$/;"	f
+deleteItem	js/managegroupmembers.js	/^function deleteItem(obj)$/;"	f
+deleteItem	js/manageprojectmembers.js	/^function deleteItem(obj)$/;"	f
+deleteProject	control.php	/^    public function deleteProject($gitlabID, $projectID, $confirm = 'no')$/;"	f
+deleteProjectRelation	model.php	/^    public function deleteProjectRelation($repoID)$/;"	f
+deleteUser	control.php	/^    public function deleteUser($gitlabID, $userID, $confirm = 'no')$/;"	f
+developerAccess	model.php	/^        $developerAccess  = 30;$/;"	v
+disabled	view/browse.html.php	/^            $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';$/;"	v
+edit	control.php	/^    public function edit($id)$/;"	f
+editBranchPriv	control.php	/^    public function editBranchPriv($gitlabID, $projectID, $branch)$/;"	f
+editGroup	control.php	/^    public function editGroup($gitlabID, $groupID)$/;"	f
+editGroup	model.php	/^    public function editGroup($gitlabID)$/;"	f
+editProject	control.php	/^    public function editProject($gitlabID, $projectID)$/;"	f
+editProject	model.php	/^    public function editProject($gitlabID)$/;"	f
+editUser	control.php	/^    public function editUser($gitlabID, $userID)$/;"	f
+editUser	model.php	/^    public function editUser($gitlabID)$/;"	f
+errorKey	model.php	/^                        $errorKey = array_search($error, $this->lang->gitlab->apiError);$/;"	v
+errorKey	model.php	/^                $errorKey = array_search($response->message, $this->lang->gitlab->apiError);$/;"	v
+executionList	control.php	/^            $executionList  = $this->post->executionList;$/;"	v
+executions	control.php	/^        $executions = $this->loadModel('product')->getAllExecutionPairsByProduct($productID);$/;"	v
+exist	control.php	/^                            $exist            = true;$/;"	v
+exist	control.php	/^                        $exist = true;$/;"	v
+exist	control.php	/^                    $exist = false;$/;"	v
+exist	control.php	/^                $exist = false;$/;"	v
+failedIssues	control.php	/^            $failedIssues = array();$/;"	v
+fh	control.php	/^        $fh = @fopen($logFile, 'a');$/;"	v
+getApiRoot	model.php	/^    public function getApiRoot($id)$/;"	f
+getBranches	model.php	/^    public function getBranches($gitlabID, $projectID)$/;"	f
+getByID	model.php	/^    public function getByID($id)$/;"	f
+getExecutionsByProduct	model.php	/^    public function getExecutionsByProduct($productID)$/;"	f
+getGitlabUserID	model.php	/^    public function getGitlabUserID($gitlabID, $account)$/;"	f
+getIssueListByObjects	model.php	/^    public function getIssueListByObjects($objectType, $objects)$/;"	f
+getList	model.php	/^    public function getList($orderBy = 'id_desc', $pager = null)$/;"	f
+getMatchedUsers	model.php	/^    public function getMatchedUsers($gitlabID, $gitlabUsers, $zentaoUsers)$/;"	f
+getPairs	model.php	/^    public function getPairs()$/;"	f
+getProductsByProjects	model.php	/^    public function getProductsByProjects($projectIDs)$/;"	f
+getProjectName	model.php	/^    public function getProjectName($gitlabID, $projectID)$/;"	f
+getProjectPairs	model.php	/^    public function getProjectPairs($gitlabID)$/;"	f
+getProjectsByExecution	model.php	/^    public function getProjectsByExecution($executionID)$/;"	f
+getReferenceOptions	model.php	/^    public function getReferenceOptions($gitlabID, $projectID)$/;"	f
+getRelationByObject	model.php	/^    public function getRelationByObject($objectType, $objectID)$/;"	f
+getUserAccountIdPairs	model.php	/^    public function getUserAccountIdPairs($gitlabID)$/;"	f
+getUserIDByZentaoAccount	model.php	/^    public function getUserIDByZentaoAccount($gitlabID, $zentaoAccount)$/;"	f
+getUserIdAccountPairs	model.php	/^    public function getUserIdAccountPairs($gitlabID)$/;"	f
+getUserIdRealnamePairs	model.php	/^    public function getUserIdRealnamePairs($gitlabID)$/;"	f
+gitLab	control.php	/^            $gitLab = $this->gitlab->getByID($id);$/;"	v
+gitLab	control.php	/^        $gitLab   = $this->gitlab->getByID($id);$/;"	v
+gitlab	control.php	/^        $gitlab  = $this->get->gitlab;$/;"	v
+gitlab	control.php	/^        $gitlab = $this->gitlab->getByID($gitlabID);$/;"	v
+gitlab	control.php	/^        $gitlab = $this->gitlab->getByID($id);$/;"	v
+gitlab	control.php	/^class gitlab extends control$/;"	c
+gitlab	model.php	/^        $gitlab   = $this->getByID($gitlabID);$/;"	v
+gitlab	model.php	/^        $gitlab = $this->getByID($gitlabID);$/;"	v
+gitlab	model.php	/^        $gitlab = $this->getByID($id);$/;"	v
+gitlab	model.php	/^        $gitlab = $this->getByID($this->get->gitlab);$/;"	v
+gitlab	model.php	/^        $gitlab = $this->loadModel('gitlab')->getByID($gitlabID);$/;"	v
+gitlabBranches	control.php	/^        $gitlabBranches  = $this->gitlab->apiGetBranches($gitlabID, $projectID);$/;"	v
+gitlabCurrentMembers	control.php	/^            $gitlabCurrentMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);$/;"	v
+gitlabID	control.php	/^            $gitlabID = $this->gitlab->create();$/;"	v
+gitlabID	control.php	/^        $gitlabID      = $repo->gitlab;$/;"	v
+gitlabIssues	control.php	/^        $gitlabIssues = $this->gitlab->apiGetIssues($gitlabID, $projectID, '&state=opened');$/;"	v
+gitlabList	control.php	/^        $gitlabList = $this->gitlab->getList($orderBy, $pager);$/;"	v
+gitlabList	model.php	/^        $gitlabList = $this->loadModel('pipeline')->getList('gitlab', $orderBy, $pager);$/;"	v
+gitlabModel	model.php	/^class gitlabModel extends model$/;"	c
+gitlabURL	control.php	/^        $gitlabURL = trim($this->post->url);$/;"	v
+gitlabUserList	control.php	/^        $gitlabUserList = $this->gitlab->apiGetUsers($gitlabID, true);$/;"	v
+gitlabUsers	control.php	/^        $gitlabUsers    = array(''=>'');$/;"	v
+gitlabUsers	model.php	/^        $gitlabUsers = $this->getUserAccountIdPairs($gitlabID);$/;"	v
+gitlabUsers	model.php	/^        $gitlabUsers = $this->getUserIdAccountPairs($gitlabID);$/;"	v
+group	control.php	/^        $group   = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);$/;"	v
+group	control.php	/^        $group  = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);$/;"	v
+group	model.php	/^        $group = fixer::input('post')->remove('path')->setDefault('request_access_enabled,lfs_enabled', 0)->get();$/;"	v
+group	model.php	/^        $group = fixer::input('post')->setDefault('request_access_enabled,lfs_enabled', 0)->get();$/;"	v
+header	model.php	/^        $header     = $result['header'];$/;"	v
+hook	model.php	/^        $hook = new stdClass;$/;"	v
+hookList	model.php	/^        $hookList = $this->apiGetHooks($repo->gitlab, $repo->project);$/;"	v
+host	model.php	/^        $host = rtrim($gitlab->url, '\/');$/;"	v
+host	model.php	/^        $host = rtrim($host, '\/') . "\/api\/v4%s?private_token=$token";$/;"	v
+ids	control.php	/^            $ids = array_filter($data->ids);$/;"	v
+importIssue	control.php	/^    public function importIssue($repoID)$/;"	f
+initWebhooks	model.php	/^    public function initWebhooks($products, $gitlabID, $projectID)$/;"	f
+input	control.php	/^        $input       = file_get_contents('php:\/\/input');$/;"	v
+isWebhookExists	model.php	/^    public function isWebhookExists($repo, $url = '')$/;"	f
+issue	control.php	/^                $issue             = $this->gitlab->apiGetSingleIssue($gitlabID, $projectID, $issueID);$/;"	v
+issue	model.php	/^        $issue             = new stdclass;$/;"	v
+issue	model.php	/^        $issue       = new stdclass;$/;"	v
+issue	model.php	/^        $issue   = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);$/;"	v
+issue	model.php	/^        $issue = $this->parseObjectToIssue($gitlabID, $projectID, $objectType, $object);$/;"	v
+issue	model.php	/^        $issue = new stdclass;$/;"	v
+issueToZentaoObject	model.php	/^    public function issueToZentaoObject($issue, $gitlabID, $changes = null)$/;"	f
+keyword	control.php	/^        $keyword  = fixer::input('post')->setDefault('keyword', '')->get('keyword');$/;"	v
+keyword	control.php	/^        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword'); \/\/ Fix bug#16741.$/;"	v
+keyword	control.php	/^        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');$/;"	v
+keyword	model.php	/^        $keyword  = urlencode($keyword);$/;"	v
+keyword	model.php	/^        $keyword = urlencode($keyword);$/;"	v
+label	model.php	/^        $label              = new stdclass;$/;"	v
+label	model.php	/^        $label = $this->createZentaoObjectLabel($gitlabID, $projectID, $objectType, $objectID);$/;"	v
+labels	model.php	/^        $labels = $this->apiGetLabels($gitlabID, $projectID);$/;"	v
+levels	model.php	/^            $levels = array();$/;"	v
+linkedUsers	model.php	/^        $linkedUsers = array();$/;"	v
+locate	control.php	/^            $locate = $this->session->gitlabBranchList ? $this->session->gitlabBranchList : inlink('browseBranch', "gitlibID=$gitlabID&projectID=$projectID");$/;"	v
+logFile	control.php	/^        $logFile = $this->app->getLogRoot() . 'webhook.'. date('Ymd') . '.log.php';$/;"	v
+maintainerAccess	model.php	/^        $maintainerAccess = 40;$/;"	v
+manageGroupMembers	control.php	/^    public function manageGroupMembers($gitlabID, $groupID)$/;"	f
+manageProjectMembers	control.php	/^    public function manageProjectMembers($repoID)$/;"	f
+map	model.php	/^        $map         = $this->config->gitlab->maps->bug;$/;"	v
+map	model.php	/^        $map         = $this->config->gitlab->maps->story;$/;"	v
+map	model.php	/^        $map         = $this->config->gitlab->maps->task;$/;"	v
+map	model.php	/^        $map   = $this->config->gitlab->maps->$objectType;$/;"	v
+maps	model.php	/^        $maps        = $this->config->gitlab->maps->{$issue->objectType};$/;"	v
+matchedUsers	model.php	/^        $matchedUsers = array();$/;"	v
+matchedZentaoUsers	model.php	/^            $matchedZentaoUsers = array();$/;"	v
+matchedZentaoUsers	model.php	/^            $matchedZentaoUsers = array_unique($matchedZentaoUsers);$/;"	v
+matches	model.php	/^        $matches = new stdclass;$/;"	v
+memberID	control.php	/^                $memberID = $currentMember->id;$/;"	v
+memberID	control.php	/^                $memberID = isset($gitlabCurrentMember->id) ? $gitlabCurrentMember->id : 0;$/;"	v
+namespaces	control.php	/^        $namespaces = array();$/;"	v
+namespacesList	control.php	/^        $namespacesList = $this->gitlab->apiGetNamespaces($gitlabID);$/;"	v
+newBranches	model.php	/^        $newBranches = array();$/;"	v
+newGitlabMembers	control.php	/^            $newGitlabMembers = array();$/;"	v
+newHook	model.php	/^        $newHook = new stdclass;$/;"	v
+newMembers	control.php	/^            $newMembers = array();$/;"	v
+noAccess	model.php	/^        $noAccess         = 0;$/;"	v
+object	control.php	/^                $object            = $this->gitlab->issueToZentaoObject($issue, $gitlabID);$/;"	v
+object	model.php	/^                $object       = new stdclass;$/;"	v
+object	model.php	/^        $object     = new stdclass;$/;"	v
+object	model.php	/^        $object     = null;$/;"	v
+object	model.php	/^        $object   = $this->loadModel($objectType)->getByID($objectID);$/;"	v
+object	model.php	/^        $object = $this->webhookParseObject($body->labels);$/;"	v
+objectType	control.php	/^                $objectType = $objectTypeList[$issueID];$/;"	v
+objectType	model.php	/^        $objectType = '';$/;"	v
+objectTypeList	control.php	/^            $objectTypeList = $this->post->objectTypeList;$/;"	v
+oldGitLab	control.php	/^        $oldGitLab = $this->gitlab->getByID($id);$/;"	v
+oldObject	model.php	/^        $oldObject = $this->dao->findById($issue->objectID)->from($tableName)->fetch();$/;"	v
+oldObject	model.php	/^        $oldObject = clone $object;$/;"	v
+options	control.php	/^        $options    = "<option value=''><\/option>";$/;"	v
+options	control.php	/^        $options  = "<option value=''><\/option>";$/;"	v
+order	model.php	/^        $order  = join('_', $orders);$/;"	v
+order	model.php	/^        $order = explode('_', $orderBy);$/;"	v
+orderList	control.php	/^        $orderList = array();$/;"	v
+orders	model.php	/^        $orders = explode('_', $orderBy);$/;"	v
+originalUsers	control.php	/^            $originalUsers = $repo->acl->users;$/;"	v
+page	model.php	/^        $page     = 1;$/;"	v
+pager	control.php	/^        $pager      = new pager($recTotal, $recPerPage, $pageID);$/;"	v
+pager	control.php	/^        $pager = new pager($recTotal, $recPerPage, $pageID);$/;"	v
+pager	model.php	/^        $pager = pager::init($recTotal, $recPerPage, $pager->pageID);$/;"	v
+parseObjectToIssue	model.php	/^    public function parseObjectToIssue($gitlabID, $projectID, $objectType, $object)$/;"	f
+priv	model.php	/^        $priv = fixer::input('post')->get();$/;"	v
+product	control.php	/^        $product = $this->get->product;$/;"	v
+productIDList	control.php	/^        $productIDList = explode(',', $repo->product);$/;"	v
+productIDList	model.php	/^        $productIDList = explode(',', $repo->product);$/;"	v
+productIdList	model.php	/^        $productIdList = array_keys($products);$/;"	v
+productList	control.php	/^            $productList    = $this->post->productList;$/;"	v
+products	control.php	/^        $products = array('' => '');$/;"	v
+products	model.php	/^        $products      = $this->loadModel('product')->getProducts($executionID, 'all', '', false);$/;"	v
+programs	model.php	/^        $programs = $this->dao->select('id,program')->from(TABLE_PRODUCT)->where('id')->in($products)->fetchPairs();$/;"	v
+project	control.php	/^        $project  = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);$/;"	v
+project	control.php	/^        $project = $this->get->project;$/;"	v
+project	control.php	/^        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);$/;"	v
+project	model.php	/^        $project = $this->apiGetSingleProject($gitlabID, $projectID);$/;"	v
+project	model.php	/^        $project = fixer::input('post')->get();$/;"	v
+projectID	control.php	/^        $projectID     = $repo->project;$/;"	v
+projectMembers	control.php	/^        $projectMembers = $this->gitlab->apiGetProjectMembers($repo->gitlab, $repo->project);$/;"	v
+projectPairs	model.php	/^        $projectPairs = array();$/;"	v
+projects	model.php	/^        $projects = $this->apiGetProjects($gitlabID);$/;"	v
+protectBranches	control.php	/^        $protectBranches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, '', 'name_asc');$/;"	v
+protectNames	control.php	/^        $protectNames    = array_keys($protectBranches);$/;"	v
+rawBranches	model.php	/^        $rawBranches = $this->apiGetBranches($gitlabID, $projectID);$/;"	v
+rawProjectUsers	control.php	/^        $rawProjectUsers = $this->gitlab->apiGetProjectUsers($gitlabID, $projectID);$/;"	v
+recPerPage	model.php	/^        $recPerPage = $header['X-Per-Page'];$/;"	v
+recTotal	control.php	/^        $recTotal   = count($branchList);$/;"	v
+recTotal	control.php	/^        $recTotal   = count($branches);$/;"	v
+recTotal	control.php	/^        $recTotal   = count($tagList);$/;"	v
+recTotal	model.php	/^        $recTotal   = $header['X-Total'];$/;"	v
+refList	model.php	/^        $refList = array();$/;"	v
+relation	model.php	/^        $relation            = new stdclass;$/;"	v
+relation	model.php	/^        $relation = $this->getRelationByObject($objectType, $objectID);$/;"	v
+repeatUsers	control.php	/^            $repeatUsers = array();$/;"	v
+repo	control.php	/^            $repo        = $this->loadModel('repo')->getRepoByID($repoID);$/;"	v
+repo	control.php	/^            $repo = $this->loadModel('repo')->getRepoByID($repoID);$/;"	v
+repo	control.php	/^        $repo           = $this->loadModel('repo')->getRepoByID($repoID);$/;"	v
+repo	control.php	/^        $repo          = $this->loadModel('repo')->getRepoByID($repoID);$/;"	v
+repo	model.php	/^        $repo = $this->dao->select('product,path as gitlabProjectID,client as gitlabID')->from(TABLE_REPO)$/;"	v
+reponse	control.php	/^        $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);$/;"	v
+reponse	control.php	/^        $reponse = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);$/;"	v
+reponse	control.php	/^        $reponse = $this->gitlab->apiDeleteProject($gitlabID, $projectID);$/;"	v
+reponse	control.php	/^        $reponse = $this->gitlab->apiDeleteUser($gitlabID, $userID);$/;"	v
+requestBody	control.php	/^        $requestBody = json_decode($input);$/;"	v
+res	control.php	/^            $res  = $this->gitlab->addPushWebhook($repo);$/;"	v
+response	model.php	/^                $response = array_merge($response, $result);$/;"	v
+response	model.php	/^            $response = $this->apiCreateHook($gitlabID, $projectID, $url);$/;"	v
+response	model.php	/^        $response = $this->apiCreateBranch($gitlabID, $projectID, $branch);$/;"	v
+response	model.php	/^        $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);$/;"	v
+response	model.php	/^        $response = $this->apiCreateGroup($gitlabID, $group);$/;"	v
+response	model.php	/^        $response = $this->apiCreateProject($gitlabID, $project);$/;"	v
+response	model.php	/^        $response = $this->apiCreateUser($gitlabID, $user);$/;"	v
+response	model.php	/^        $response = $this->apiUpdateGroup($gitlabID, $group);$/;"	v
+response	model.php	/^        $response = $this->apiUpdateProject($gitlabID, $project);$/;"	v
+response	model.php	/^        $response = $this->apiUpdateUser($gitlabID, $user);$/;"	v
+response	model.php	/^        $response = array();$/;"	v
+response	model.php	/^        $response = commonModel::http($url);$/;"	v
+response	model.php	/^        $response = json_decode(commonModel::http($url, $issue));$/;"	v
+result	control.php	/^        $result      = $this->gitlab->webhookParseBody($requestBody, $gitlab);$/;"	v
+result	control.php	/^        $result = $this->gitlab->apiGetBranches($gitlabID, $projectID);$/;"	v
+result	control.php	/^        $result = $this->gitlab->apiGetProjectsPager($gitlabID, $keyword, $orderBy, $pager);$/;"	v
+result	control.php	/^        $result = $this->gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword);$/;"	v
+result	model.php	/^            $result   = json_decode(commonModel::http($url));$/;"	v
+result	model.php	/^        $result  = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");$/;"	v
+result	model.php	/^        $result = $this->apiCreateHook($repo->gitlab, $repo->project, $hook);$/;"	v
+results	model.php	/^            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));$/;"	v
+results	model.php	/^            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));$/;"	v
+results	model.php	/^            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100"));$/;"	v
+saveImportedIssue	model.php	/^    public function saveImportedIssue($gitlabID, $projectID, $objectType, $objectID, $issue, $object)$/;"	f
+saveIssueRelation	model.php	/^    public function saveIssueRelation($objectType, $object, $gitlabID, $issue)$/;"	f
+saveMembers	js/managegroupmembers.js	/^function saveMembers()$/;"	f
+saveMembers	js/manageprojectmembers.js	/^function saveMembers()$/;"	f
+saveProjectRelation	model.php	/^    public function saveProjectRelation($products, $gitlabID, $gitlabProjectID)$/;"	f
+savedIssueIDList	control.php	/^        $savedIssueIDList = $this->dao->select('BID as issueID')->from(TABLE_RELATION)$/;"	v
+setAvatar	js/common.js	/^function setAvatar()$/;"	f
+singleBranch	model.php	/^        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);$/;"	v
+sort	model.php	/^        $sort   = array_pop($orders);$/;"	v
+storyToIssue	model.php	/^    public function storyToIssue($gitlabID, $gitlabProjectID, $story)$/;"	f
+tableName	model.php	/^        $tableName = zget($this->config->gitlab->objectTables, $issue->objectType, '');$/;"	v
+tag	control.php	/^            $tag = new stdClass();$/;"	v
+tagList	control.php	/^        $tagList = array();$/;"	v
+tagList	control.php	/^        $tagList = array_chunk($tagList, $pager->recPerPage);$/;"	v
+tags	model.php	/^        $tags = $this->apiGetTags($gitlabID, $projectID);$/;"	v
+taskToIssue	model.php	/^    public function taskToIssue($gitlabID, $gitlabProjectID, $task)$/;"	f
+title	control.php	/^            $title      = $this->lang->gitlab->editBranchPriv;$/;"	v
+title	control.php	/^        $title  = $this->lang->gitlab->createBranchPriv;$/;"	v
+token	control.php	/^            $token = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);$/;"	v
+token	control.php	/^        $token     = trim($this->post->token);$/;"	v
+triggerSearch	js/browsebranchpriv.js	/^function triggerSearch()$/;"	f
+triggerSearch	js/browseproject.js	/^function triggerSearch()$/;"	f
+triggerSearch	js/browsetag.js	/^function triggerSearch()$/;"	f
+type	model.php	/^        $type = zget($body, 'object_kind', '');$/;"	v
+update	model.php	/^    public function update($id)$/;"	f
+updatedData	control.php	/^                        $updatedData = new stdClass();$/;"	v
+updatedData	control.php	/^                    $updatedData = new stdClass();$/;"	v
+url	model.php	/^            $url      = sprintf($apiRoot, "\/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";$/;"	v
+url	model.php	/^            $url = sprintf($this->config->gitlab->webhookURL, commonModel::getSysURL(), $product, $gitlabID);$/;"	v
+url	model.php	/^            $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/issues") . '&per_page=20' . $options;$/;"	v
+url	model.php	/^            $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/issues") . '&per_page=20';$/;"	v
+url	model.php	/^        $url      = sprintf($apiRoot, "\/projects\/{$projectID}\/labels\/");$/;"	v
+url	model.php	/^        $url      = sprintf($apiRoot, $apiPath);$/;"	v
+url	model.php	/^        $url      = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/protected_branches");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups\/$groupID\/members\/all");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups\/{$group->id}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups\/{$groupID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups\/{$groupID}\/members");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups\/{$groupID}\/members\/{$member->user_id}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/groups\/{$groupID}\/members\/{$memberID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/namespaces");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$groupID}\/members\/{$memberID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$project->id}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/hooks");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/hooks\/{$hookID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/issues\/");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/issues\/{$issue->iid}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/issues\/{$issueID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/labels\/");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/labels\/{$labelID}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/members");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/members\/{$member->user_id}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/protected_branches\/{$branch}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/projects\/{$projectID}\/repository\/branches");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/users");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/users\/{$user->id}");$/;"	v
+url	model.php	/^        $url     = sprintf($apiRoot, "\/users\/{$userID}");$/;"	v
+url	model.php	/^        $url = rtrim($gitlab->url, '\/') . "\/api\/v4\/todos?project_id=$projectID&type=MergeRequest&state=pending&private_token={$gitlab->token}&sudo={$sudo}";$/;"	v
+url	model.php	/^        $url = sprintf($apiRoot, "\/projects\/{$projectID}\/hooks\/{$hookID}");$/;"	v
+url	model.php	/^        $url = sprintf($apiRoot, "\/projects\/{$projectID}\/repository\/tags");$/;"	v
+url	model.php	/^        $url = sprintf($host, $api);$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/groups\/$groupID");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/" . $projectID . '\/protected_branches');$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/forks");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/issues\/{$issueID}");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/members\/all");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/members\/all\/$userID");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/protected_branches\/$branch");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/repository\/branches\/$branch");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/$projectID\/users");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/jobs\/{$jobID}");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/jobs\/{$jobID}\/trace");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/pipeline");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/pipelines\/{$pipelineID}");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/pipelines\/{$pipelineID}\/jobs");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/projects\/{$projectID}\/repository\/branches");$/;"	v
+url	model.php	/^        $url = sprintf($this->getApiRoot($gitlabID), "\/users\/$userID");$/;"	v
+user	control.php	/^            $user = new stdclass;$/;"	v
+user	control.php	/^        $user              = $this->gitlab->apiGetSingleUser($gitlabID, $userID);$/;"	v
+user	control.php	/^        $user    = $this->gitlab->apiGetSingleUser($gitlabID, $userID);$/;"	v
+user	control.php	/^        $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);$/;"	v
+user	control.php	/^        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token);$/;"	v
+user	model.php	/^            $user = new stdclass;$/;"	v
+user	model.php	/^        $user = fixer::input('post')$/;"	v
+user	model.php	/^        $user = fixer::input('post')->remove('avatar')->get();$/;"	v
+userAccessData	control.php	/^        $userAccessData = array();$/;"	v
+userBind	model.php	/^                $userBind = new stdclass;$/;"	v
+userPairs	control.php	/^        $userPairs         = $this->loadModel('user')->getPairs('noclosed|noletter');$/;"	v
+userPairs	control.php	/^        $userPairs = $this->loadModel('user')->getPairs('noclosed|noletter');$/;"	v
+users	control.php	/^            $users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');$/;"	v
+users	control.php	/^            $users       = $this->post->zentaoUsers;$/;"	v
+users	control.php	/^        $users           = array();$/;"	v
+users	control.php	/^        $users          = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted|noclosed');$/;"	v
+users	model.php	/^        $users = array();$/;"	v
+value	model.php	/^                $value = zget($gitlabUsers, $bug->$bugField);$/;"	v
+value	model.php	/^                $value = zget($gitlabUsers, $object->$objectField);$/;"	v
+value	model.php	/^                $value = zget($gitlabUsers, $story->$storyField);$/;"	v
+value	model.php	/^                $value = zget($this->config->gitlab->$options, $bug->$bugField, '');$/;"	v
+value	model.php	/^                $value = zget($this->config->gitlab->$options, $object->$objectField, '');$/;"	v
+value	model.php	/^                $value = zget($this->config->gitlab->$options, $story->$storyField, '');$/;"	v
+value	model.php	/^            $value = '';$/;"	v
+view	control.php	/^    public function view($id)$/;"	f
+webhook	control.php	/^    public function webhook()$/;"	f
+webhookAssignIssue	model.php	/^    public function webhookAssignIssue($issue)$/;"	f
+webhookCheckToken	model.php	/^    public function webhookCheckToken()$/;"	f
+webhookCloseIssue	model.php	/^    public function webhookCloseIssue($issue)$/;"	f
+webhookParseBody	model.php	/^    public function webhookParseBody($body, $gitlabID)$/;"	f
+webhookParseIssue	model.php	/^    public function webhookParseIssue($body, $gitlabID)$/;"	f
+webhookParseNote	model.php	/^    public function webhookParseNote($body)$/;"	f
+webhookParseObject	model.php	/^    public function webhookParseObject($labels)$/;"	f
+webhookSyncIssue	model.php	/^    public function webhookSyncIssue($gitlabID, $issue)$/;"	f
+webhooks	model.php	/^        $webhooks = $this->apiGetHooks($gitlabID, $projectID);$/;"	v
+zentaoBindAccount	control.php	/^        $zentaoBindAccount = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($user->id)->fetch('account');$/;"	v
+zentaoBindUser	model.php	/^            $zentaoBindUser = $this->dao->select('account')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();$/;"	v
+zentaoBindUser	model.php	/^            $zentaoBindUser = $this->dao->select('account,openID')->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('account')->eq($user->account)->fetch();$/;"	v
+zentaoLink	model.php	/^        $zentaoLink         = common::getSysURL() . helper::createLink('bug', 'view', "bugID={$bug->id}");$/;"	v
+zentaoLink	model.php	/^        $zentaoLink         = common::getSysURL() . helper::createLink('story', 'view', "storyID={$story->id}");$/;"	v
+zentaoLink	model.php	/^        $zentaoLink         = common::getSysURL() . helper::createLink('task', 'view', "taskID={$task->id}");$/;"	v
+zentaoLink	model.php	/^        $zentaoLink = common::getSysURL() . helper::createLink($objectType, 'view', "id={$object->id}");$/;"	v
+zentaoUsers	control.php	/^        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');$/;"	v

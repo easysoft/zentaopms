@@ -635,7 +635,7 @@ class gitlabModel extends model
      *
      * @param  int $gitlabID
      * @access public
-     * @return array 
+     * @return array
      */
     public function apiGetProjects($gitlabID)
     {
@@ -1462,14 +1462,27 @@ class gitlabModel extends model
     /**
      * Get project repository tags by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  string $keyword
      * @access public
      * @return object
      */
-    public function apiGetTags($gitlabID, $projectID)
+    public function apiGetTags($gitlabID, $projectID, $orderBy = '', $keyword = '')
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/tags");
+        $apiRoot = $this->getApiRoot($gitlabID);
+
+        /* Parse order string. */
+        if($orderBy)
+        {
+            list($order, $sort) = explode('_', $orderBy);
+            $apiRoot .= "&order_by={$order}&sort={$sort}";
+        }
+
+        if($keyword) $apiRoot .= "&search={$keyword}";
+
+        $url = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
         return json_decode(commonModel::http($url));
     }
 
@@ -2460,7 +2473,7 @@ class gitlabModel extends model
         if(is_array($accessLevels))
         {
             $levels = array();
-            foreach($accessLevels as $level) 
+            foreach($accessLevels as $level)
             {
                 if(is_array($level)) $level = (object)$level;
                 $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
