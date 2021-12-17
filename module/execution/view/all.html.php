@@ -77,7 +77,7 @@
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
           <?php if($config->systemMode == 'new'):?>
-          <th class='c-begin'><?php common::printOrderLink('name', $orderBy, $vars, $lang->execution->project);?></th></th>
+          <th class='c-begin'><?php common::printOrderLink('projectName', $orderBy, $vars, $lang->execution->project);?></th></th>
           <?php endif;?>
           <th class='c-pm'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
@@ -130,8 +130,8 @@
             <?php endif;?>
           </td>
           <?php if($config->systemMode == 'new'):?>
-          <td class='c-begin' title='<?php echo $execution->parentName;?>'>
-             <span class="status-execution status-<?php echo $execution->parentName?>"><?php echo $execution->parentName;?></span>
+          <td class='c-begin' title='<?php echo $execution->projectName;?>'>
+             <span class="status-execution status-<?php echo $execution->projectName?>"><?php echo $execution->projectName;?></span>
           </td>
           <?php endif;?>
           <td><?php echo zget($users, $execution->PM);?></td>
