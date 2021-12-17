@@ -1647,7 +1647,7 @@ class kanbanModel extends model
             return false;
         }
 
-        if($this->post->begin > $this->post->end)
+        if($this->post->end && $this->post->begin > $this->post->end)
         {
             dao::$errors[] = $this->lang->kanbancard->error->endSmall;
             return false;

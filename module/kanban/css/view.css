@@ -9,7 +9,7 @@ body {background-color: #fff}
 .has-error .form-control:focus {box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 6px #f5b2a5!important;}
 .has-error .form-control::placeholder {color: #ff4268!important;}
 
-.label.text-red {color: #ff4268;}
+.label.text-red {background: #ff4268 !important; color: #ffffff;}
 
 .dropdown-menu > li {padding: 0 10px;}
 .dropdown-menu > li > a > .icon {position: relative; left: -5px;}
@@ -20,7 +20,7 @@ body {background-color: #fff}
 .region .region-header label {color: #999; background: transparent; border: 1px solid #ddd; margin-left: 10px; margin-right: 10px}
 .region .region-header .action {float: right}
 .region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
-.region.sort .region-header {cursor: move;}
+.region .sort .region-header {cursor: move;}
 
 .region .kanban {padding: 0px 10px 10px 10px; min-height: unset;}
 .region .kanban .form-actions {margin: 0;}

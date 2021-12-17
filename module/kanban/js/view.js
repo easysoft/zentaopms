@@ -279,19 +279,35 @@ function renderKanbanItem(item, $item)
         .text(item.pri);
 
     var $time = $info.children('.time');
-    if(item.end && item.end !== '0000-00-00')
+    if(item.end == '0000-00-00' && item.begin == '0000-00-00')
     {
-        var end        = $.zui.createDate(item.end);
-        var today      = new Date();
-        var isExpired  = end.getTime() < today.getTime();
-        var dateFormat = (today.getFullYear() === end.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
-        $time.text($.zui.formatDate(end, dateFormat))
-            .toggleClass('text-red', isExpired)
-            .show();
+        $time.hide();
     }
     else
     {
-        $time.hide();
+        var today = new Date();
+        var begin = $.zui.createDate(item.begin);
+        var end   = $.zui.createDate(item.end);
+        var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
+        var isCureentYear = today.getFullYear() == begin.getFullYear();
+        if(item.end == '0000-00-00' && item.begin != '0000-00-00')
+        {
+            var dateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.beginAB;
+            $time.text($.zui.formatDate(begin, dateFormat)).show();
+        }
+        else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
+        {
+            var dateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
+            $time.text($.zui.formatDate(end, dateFormat)).show();
+        }
+        else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
+        {
+            var beginDateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.to + ' ';
+            var endDateFormat   = isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ';
+            $time.text($.zui.formatDate(begin, beginDateFormat) + $.zui.formatDate(end, endDateFormat)).show();
+        }
+
+        $time.toggleClass('text-red', needRemind);
     }
 
     /* Display avatars of assignedTo. */
