@@ -10,5 +10,3 @@
 .linkButton {float: right; padding-right: 10px; cursor: pointer;}
 .linkButton i {font-size: 17px !important;}
 .linkButton span {line-height: 36px; display: block;}
-::-webkit-scrollbar {width: 10px; height: 10px;}
-::-webkit-scrollbar-thumb:vertical {box-shadow: inset 1px 1px 0 rgb(0 0 0 / 10%), inset 0 -1px 0 rgb(0 0 0 / 7%); background-color: rgba(0, 0, 0, 0.2); border-radius: 10px; opacity: 0; transition: opacity 0.1s;}
