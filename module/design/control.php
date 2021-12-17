@@ -294,7 +294,7 @@ class design extends control
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
         /* Get the repository information through the repoID. */
-        $repos  = $this->loadModel('repo')->getRepoPairs($design->project);
+        $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
         if(empty($repoID)) die(js::locate(helper::createLink('repo', 'create', "objectID=$design->project")));
