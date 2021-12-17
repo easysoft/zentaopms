@@ -593,6 +593,7 @@ class gitlab
     public function getCommittedDate($sha)
     {
         if(!scm::checkRevision($sha)) return null;
+        if(!$sha or $sha == 'HEAD') return date('c');
 
         global $dao;
         $time = $dao->select('time')->from(TABLE_REPOHISTORY)->where('revision')->eq($sha)->fetch('time');
