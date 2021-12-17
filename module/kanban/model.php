@@ -228,12 +228,13 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function createColumn($regionID, $column = null, $order = 0)
+    public function createColumn($regionID, $column = null, $order = 0, $parent = 0)
     {
         if(empty($column))
         {
             $column = fixer::input('post')
                 ->add('region', $regionID)
+                ->add('parent', $parent)
                 ->setIF($order, 'order', $order)
                 ->setDefault('color', '#333')
                 ->trim('name')
@@ -267,7 +268,7 @@ class kanbanModel extends model
             if($parentColumn->limit)
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
-                if(!$limit || $limit > $parentColumn->limit)
+                if(!$limit or ($limit > $parentColumn->limit and $parentColumn->limit != -1))
                 {
                     dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
                     return false;
@@ -277,7 +278,7 @@ class kanbanModel extends model
                 foreach($childColumns as $childColumn)
                 {
                     $limit += (int)$childColumn->limit;
-                    if($limit > $parentColumn->limit)
+                    if($limit > $parentColumn->limit and $parentColumn->limit != -1)
                     {
                         /* The total WIP of the child columns is greater than the WIP of the parent column. */
                         dao::$errors['limit'][] = $this->lang->kanban->error->childLimitNote;
@@ -345,6 +346,12 @@ class kanbanModel extends model
                 return false;
             }
 
+            if(empty($childColumn->name))
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->kanbancolumn->name);
+                return false;
+            }
+
             $sumChildLimit += $childColumn->limit;
             if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
             {
@@ -371,6 +378,8 @@ class kanbanModel extends model
                 $this->action->create('kanbanColumn', $childColumnID, 'created');
             }
         }
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($columnID)->exec();
     }
 
     /**
@@ -632,7 +641,7 @@ class kanbanModel extends model
                     if($this->isClickable($column, $action)) $column->actions[] = $action;
                 }
 
-                if($column->parent) continue;
+                if($column->parent and $column->parent != -1) continue;
 
                 $parentColumnGroup[$group][] = $column;
             }
@@ -2012,7 +2021,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('parent')->eq($parentID)
-            ->andWhere('archived')->eq($archived)
+            //->andWhere('archived')->eq($archived)
             ->andWhere('deleted')->eq($deleted)
             ->orderBy('order')
             ->fetchAll('id');
@@ -2193,8 +2202,8 @@ class kanbanModel extends model
                     ->beginIF($action == 'sortlane')->andWhere('`group`')->eq($object->group)->fi()
                     ->fetch('count');
                 return $count > 1;
-            case 'createcolumn' :
-            case 'copycolumn' :
+            case 'createColumn' :
+            case 'copyColumn' :
             case 'splitcolumn' :
                 if($object->parent) return false;   // The current column is a child column.
 

@@ -22,10 +22,18 @@
         <tr>
           <td class='c-id'><strong><?php echo $i;?></strong></td>
           <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
-          <td class='c-name required'><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
-          <td class='c-colorTitle'><strong><?php echo $lang->kanbancolumn->childColor;?></strong></td>
-          <td class='c-color required'><?php echo html::select("color[$i]", '', '', "class='form-control chosen'");?></td>
-          <td class='c-colorTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
+          <td class='c-color required'>
+            <div class="input-control has-icon-right">
+              <?php echo html::input("name[$i]", '', "class='form-control' id='name$i'");?>
+              <div class="colorpicker">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                <ul class="dropdown-menu clearfix">
+                </ul>
+                <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control'data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
+              </div>
+            </div>
+          </td>
+          <td class='c-WIPTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
           <td class='c-WIPCount required'>
             <div class="table-col">
               <?php echo html::input("WIPCount[$i]", '', "class='form-control' disabled id='WIPCount$i'");?>
@@ -44,10 +52,18 @@
         <tr>
           <td class='c-id'><strong><?php echo $i;?></strong></td>
           <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
-          <td class='c-name required'><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
-          <td class='c-colorTitle'><strong><?php echo $lang->kanbancolumn->childColor;?></strong></td>
-          <td class='c-color required'><?php echo html::select("color[$i]", '', '', "class='form-control chosen'");?></td>
-          <td class='c-colorTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
+          <td class='c-color required'>
+            <div class="input-control has-icon-right">
+              <?php echo html::input("name[$i]", '', "class='form-control' id='name$i'");?>
+              <div class="colorpicker">
+                <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+                <ul class="dropdown-menu clearfix">
+                </ul>
+                <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control'data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
+              </div>
+            </div>
+          </td>
+          <td class='c-WIPTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
           <td class='c-WIPCount required'>
             <div class="table-col">
               <?php echo html::input("WIPCount[$i]", '', "class='form-control' disabled id='WIPCount$i'");?>
@@ -84,10 +100,18 @@
     <tr id='addItem' class='hidden'>
       <td class='c-id'><strong><?php echo $i;?></strong></td>
       <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
-      <td class='c-name required'><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
-      <td class='c-colorTitle'><strong><?php echo $lang->kanbancolumn->childColor;?></strong></td>
-      <td class='c-color required'><?php echo html::select("color[$i]", '', '', "class='form-control chosen'");?></td>
-      <td class='c-colorTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
+      <td class='c-color required'>
+        <div class="input-control has-icon-right">
+          <?php echo html::input("name[$i]", '', "class='form-control' id='name$i'");?>
+          <div class="colorpicker">
+            <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
+            <ul class="dropdown-menu clearfix">
+            </ul>
+            <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control'data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
+          </div>
+        </div>
+      </td>
+      <td class='c-WIPTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
       <td class='c-WIPCount required'>
         <div class="table-col">
           <?php echo html::input("WIPCount[$i]", '', "class='form-control' disabled id='WIPCount$i'");?>
