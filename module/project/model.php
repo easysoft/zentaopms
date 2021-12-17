@@ -1818,22 +1818,24 @@ class projectModel extends model
                     ->fetchPairs();
             }
 
-            $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-                ->where('type')->in('sprint,stage')
-                ->beginIF($projectID != 0)->andWhere('project')->eq($projectID)->fi()
-                ->beginIF(!empty($myExecutionIDList))->andWhere('id')->in(array_keys($myExecutionIDList))->fi()
-                ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
-                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('status')->eq($status)->fi()
-                ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
-                ->andWhere('deleted')->eq('0')
+            $executions = $this->dao->select('t1.*,t2.name projectName')->from(TABLE_EXECUTION)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.type')->in('sprint,stage')
+                ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
+                ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
+                ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
+                ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
+                ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+                ->andWhere('t1.deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
         }
         else
         {
-            $executions = $this->dao->select('t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $executions = $this->dao->select('t2.*,t3.name projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
+                ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
                 ->where('t1.product')->eq($productID)
                 ->beginIF($projectID)->andWhere('t2.project')->eq($projectID)->fi()
                 ->beginIF($status == 'undone')->andWhere('t2.status')->notIN('done,closed')->fi()
