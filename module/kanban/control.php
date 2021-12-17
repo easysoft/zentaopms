@@ -715,6 +715,34 @@ class kanban extends control
     }
 
     /**
+     * Ajax move card.
+     * 
+     * @param  int    $cardID 
+     * @param  int    $fromColID
+     * @param  string $toColType
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $browseType
+     * @access public
+     * @return void
+     */
+    public function ajaxMoveCard($cardID, $fromColID, $toColType = 'ready', $executionID, $browseType, $groupBy)
+    {
+        $fromColumn = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch();
+        $toColumn   = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('type')->eq($toColType)->andWhere('lane')->eq($fromColumn->lane)->fetch();
+
+        $fromCards = str_replace(",$cardID,", ',', $fromColumn->cards); 
+        $fromCards = $fromCards == ',' ? '' : $fromCards;
+        $toCards   = ",$cardID," . ltrim($toColumn->cards, ',');
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($fromCards)->where('id')->eq($fromColumn->id)->exec();
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($toCards)->where('id')->eq($toColumn->id)->exec();
+
+        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+        die(json_encode($kanbanGroup));
+    }
+
+    /**
      * Change the order through the lane move up and down.
      *
      * @param  int     $executionID
