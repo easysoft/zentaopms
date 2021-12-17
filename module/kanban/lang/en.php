@@ -232,6 +232,8 @@ $lang->kanbanregion->name    = 'Region Name';
 $lang->kanbanregion->default = 'Default Region';
 $lang->kanbanregion->style   = 'Region Style';
 
+$lang->kanbanregion->confirmDelete = 'Are you sure to delete this region? After deleting this region, all data in this region will be deleted.';
+
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create  = 'Create Card';
 $lang->kanbancard->edit    = 'Edit Card';
