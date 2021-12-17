@@ -808,6 +808,8 @@ function toggleFold(form, unfoldIdList, objectID, objectType)
  */
 function adjustMenuWidth()
 {
+    if(window.navigator.userAgent.indexOf('xuanxuan') > 0) return;
+
     var $mainHeader = $('#mainHeader .container');
     if($mainHeader.length == 0) return false;
 

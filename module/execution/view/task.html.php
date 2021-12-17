@@ -483,10 +483,24 @@ $(function()
         }
     })
 });
+
+<?php if($this->app->getViewType() == 'xhtml'):?>
 function handleLinkButtonClick()
 {
   var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
   window.open(xxcUrl);
 }
+
+$(function()
+{
+    function handleClientReady()
+    {
+        if(!window.adjustXXCViewHeight) return;
+        window.adjustXXCViewHeight(null, true);
+    }
+    if(window.xuanReady) handleClientReady();
+    else $(window).on('xuan-ready', handleClientReady);
+});
+<?php endif; ?>
 </script>
 <?php include '../../common/view/footer.html.php';?>
