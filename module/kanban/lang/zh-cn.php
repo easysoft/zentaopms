@@ -232,6 +232,8 @@ $lang->kanbanregion->name    = '区域名称';
 $lang->kanbanregion->default = '默认区域';
 $lang->kanbanregion->style   = '区域样式';
 
+$lang->kanbanregion->confirmDelete = '您确认删除该区域吗？删除该区域后，该区域中所有数据将会被删除。';
+
 $lang->kanbancard = new stdclass();
 $lang->kanbancard->create  = '创建卡片';
 $lang->kanbancard->edit    = '编辑卡片';
