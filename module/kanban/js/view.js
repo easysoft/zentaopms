@@ -226,7 +226,7 @@ function renderUsersAvatar(users, itemID, size)
         assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" href="' + link + '"/>').avatar({user: user}));
     }
     if(assignees.length > 4) assignees.splice(3, assignees.length - 4, '<span>...</span>');
-    assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s',assignees.length) + '</div>');
+    assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', assignees.length) + '</div>');
     return assignees;
 }
 
