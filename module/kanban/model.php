@@ -1405,7 +1405,7 @@ class kanbanModel extends model
                     {
                         $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
                     }
-                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
+                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false and $colType != 'backlog')
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
