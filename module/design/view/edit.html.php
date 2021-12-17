@@ -16,7 +16,7 @@
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
-      <h2>
+      <h2 id="short-content" title="<?php echo $design->name;?>">
         <span class='label label-id'><?php echo $design->id;?></span>
         <?php echo html::a($this->createLink('design', 'view', "id=$design->id"), $design->name, '');?>
         <small><?php echo $lang->arrow . ' ' . $lang->design->edit;?></small>
