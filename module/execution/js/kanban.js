@@ -527,8 +527,8 @@ function findDropColumns($element, $root)
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
     if(typeof card == 'undefined') return false;
-    var objectID    = card.id;
-    var showIframe  = false;
+    var objectID   = card.id;
+    var showIframe = false;
 
     /* Task lane. */
     if(kanbanID == 'task')

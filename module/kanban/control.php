@@ -722,9 +722,9 @@ class kanban extends control
      * @param  string $browseType
      * @param  string $browseType
      * @access public
-     * @return void
+     * @return json 
      */
-    public function ajaxMoveCard($cardID, $fromColID, $toColType = 'ready', $executionID, $browseType, $groupBy)
+    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColType = 'ready', $executionID = 0, $browseType = 'all', $groupBy = '')
     {
         $fromColumn = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch();
         $toColumn   = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('type')->eq($toColType)->andWhere('lane')->eq($fromColumn->lane)->fetch();
