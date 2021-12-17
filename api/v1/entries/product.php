@@ -27,16 +27,17 @@ class productEntry extends Entry
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $product = $this->format($data->data->product, 'createdDate:time');
+        $product = $this->format($data->data->product, 'createdDate:time,whitelist:userList,createdBy:user,PO:user,RD:user,QD:user,feedback:user');
+
+        $this->loadModel('testcase');
+        $product->caseReview = ($this->config->testcase->needReview or !empty($this->config->testcase->forceReview));
+
         if(!$fields) return $this->send(200, $product);
 
         /* Set other fields. */
-        $fields = explode(',', $fields);
+        $fields = explode(',', strtolower($fields));
         foreach($fields as $field)
         {
             switch($field)
@@ -49,6 +50,29 @@ class productEntry extends Entry
                     {
                         $product->modules = $data->data->tree;
                     }
+                    break;
+                case 'actions':
+                    $product->addComment = common::hasPriv('action', 'comment') ? true : false;
+
+                    $actions = $data->data->actions;
+                    $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
+                    break;
+                case 'lastexecution':
+                    $execution = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+                        ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                        ->where('t2.deleted')->eq(0)
+                        ->andWhere('t1.product')->eq($productID)
+                        ->andWhere('t2.type')->in('sprint,stage')
+                        ->orderBy('t2.id desc')
+                        ->limit(1)
+                        ->fetch();
+                    if($execution)
+                    {
+                        $workhour = $this->loadModel('project')->computerProgress(array($execution->id => $execution));
+                        if(isset($workhour[$execution->id])) $execution->progress = $workhour[$execution->id]->progress;
+                    }
+
+                    $product->lastExecution = $execution;
                     break;
             }
         }
@@ -78,7 +102,7 @@ class productEntry extends Entry
         if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
 
         $product = $this->product->getByID($productID);
-        $this->send(200, array('product' => $this->format($product, 'createdDate:time')));
+        $this->send(200, $this->format($product, 'createdDate:time'));
     }
 
     /**

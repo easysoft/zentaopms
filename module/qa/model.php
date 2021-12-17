@@ -14,14 +14,14 @@ class qaModel extends model
     /**
      * Set menu.
      *
-     * @param  array  $products
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $extra
+     * @param  array       $products
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $extra
      * @access public
      * @return void
      */
-    public function setMenu($products, $productID, $branch = 0, $extra = '')
+    public function setMenu($products, $productID, $branch = '', $extra = '')
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL'))
         {
@@ -29,7 +29,13 @@ class qaModel extends model
             die(js::error($this->lang->product->accessDenied) . js::locate('back'));
         }
 
-        if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->loadModel('product')->getSwitcher($productID, $extra, $branch);
+        $branch = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        setcookie('preBranch', $branch, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, true);
+
+        $product = $this->loadModel('product')->getById($productID);
+        if($product and $product->type != 'normal') $this->lang->product->branch = sprintf($this->lang->product->branch, $this->lang->product->branchName[$product->type]);
+
+        if(!in_array($this->app->rawModule, $this->config->qa->noDropMenuModule)) $this->lang->switcherMenu = $this->product->getSwitcher($productID, $extra, $branch);
         if($this->app->rawModule == 'product' and $this->app->rawMethod == 'showerrornone') $this->lang->switcherMenu = '';
         common::setMenuVars('qa', $productID);
     }

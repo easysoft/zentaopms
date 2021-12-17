@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<style>.action-cell {margin-bottom: 10px;}</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <div class="page-title">
@@ -22,9 +23,13 @@
 </div>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
-    <div class='cell'><?php include '../../common/view/action.html.php';?></div>
+    <div class="cell">
+      <div class="detail">
+        <div class="detail-title"><?php echo $lang->gitlab->url;?></div>
+        <div class="detail-content article-content"><?php echo $gitlab->url;?></div>
+      </div>
+    </div>
+    <div class='cell action-cell'><?php include '../../common/view/action.html.php';?></div>
   </div>
 </div>
-
 <?php include '../../common/view/footer.html.php';?>
-

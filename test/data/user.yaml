@@ -12,7 +12,7 @@ fields:
     format: ""
   - field: type
     note: "内外部人员"
-    range: inside{344},outside,inside
+    range: inside{900},outside,inside{10000}
     prefix: ""
     postfix: ""
     loop: 0
@@ -25,9 +25,9 @@ fields:
     note: "用户名"
     fields:
     - field: account1
-      range: admi,test{100},dev{200},pm{10},po{10},td{2},pd{2},qd{2},top{5},others{10},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
     - field: account2
-      range: n,1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
+      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: password
     note: "密码"
     range: 123qwe!@#{346}
@@ -43,9 +43,9 @@ fields:
     note: "真实姓名"
     fields:
     - field: realname1
-      range: admi,测试{100},开发{200},项目经理{10},产品经理{10},研发主管{2},产品主管{2},测试主管{2},高层管理{5},其他{10},短用户名,BB,CCC,非常长非常长的用户名怎么这么长?
+      range: admin,用户,测试{100},开发{100},项目经理{100},产品经理{100},研发主管{100},产品主管{100},测试主管{100},高层管理{100},用户{100},其他{100},A,BB,CCC,非常长非常长的用户名怎么这么长?
     - field: realname2
-      range: n,1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1-10
+      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: nickname
     note: "昵称"
   - field: commiter
@@ -77,7 +77,7 @@ fields:
     - field: email2
       range: 100-999:R
     - field: email3
-      range: [@qq.com,@163.com,@gmail.com] 
+      range: [@qq.com,@163.com,@gmail.com]
   - field: skype
     note: "Skype"
     range: Skype
@@ -148,6 +148,9 @@ fields:
   - field: locked
     note: "锁定时间"
     range: 0
+  - field: company
+    note: "公司"
+    range: 1
   - field: ranzhi
     note: "ZDOO账号"
   - field: score

@@ -18,7 +18,6 @@
   <div class="main-header">
     <h2>
       <?php echo $lang->testcase->batchCreate;?>
-      <?php if($this->session->currentProductType !== 'normal') echo '<span class="label label-info">' . $branches[$branch] . '</span>';?>
       <?php if($story):?>
       <small class='text' title='<?php echo $story->title ?>'><?php echo $lang->arrow . $story->title ?></small>
       <?php endif;?>
@@ -83,8 +82,8 @@
           <tr>
             <td class="text-center"><?php echo $i+1;?></td>
             <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[$i]", $branches, $branch, "class='form-control' onchange='setModules(this.value, $productID, $i)'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
-            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyList, $story ? $story->id : '', 'class="form-control chosen"');?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[$i]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, $i)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[$i]", $storyPairs, $story ? $story->id : '', 'class="form-control chosen"');?></td>
             <td style='overflow:visible'>
               <div class="input-control has-icon-right">
                 <?php echo html::input("title[$i]", '', "class='form-control title-import'");?>
@@ -124,7 +123,7 @@
     <tr>
       <td class="text-center">%s</td>
       <td class='text-left<?php echo zget($visibleFields, $product->type, ' hidden')?>'><?php echo html::select("branch[%s]", $branches, $branch, "class='form-control chosen' onchange='setModules(this.value, $productID, \"%s\")'");?></td>
-      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen'");?></td>
+      <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("module[%s]", $moduleOptionMenu, $currentModuleID, "class='form-control chosen' onchange='loadStories($productID, this.value, \"%s\")'");?></td>
       <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden'); echo $hiddenStory;?>' style='overflow:visible'> <?php echo html::select("story[%s]", '', '', 'class="form-control chosen"');?></td>
       <td style='overflow:visible'>
         <div class="input-control has-icon-right">

@@ -15,8 +15,11 @@
 #product_chosen {border-right:1px solid #dcdcdc;}
 #branch_chosen>a {border-left:0px;}
 </style>
+<?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
+<?php js::set('feedbackSource', $config->story->feedbackSource); ?>
+<?php js::set('storyType', $type);?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
@@ -90,7 +93,7 @@
                   <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
                   <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
                   <span class='input-group-addon' id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></span>
-                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 70px;'" : "style='width: 140px;'"?>
+                  <?php $sourceNoteWidth = isonlybody() ? "style='width: 89px;'" : "style='width: 180px;'"?>
                   <?php echo html::input('sourceNote', $sourceNote, "class='form-control' $sourceNoteWidth");?>
                 </div>
               </div>
@@ -100,11 +103,10 @@
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->reviewedBy;?></th>
-            <?php $colspan = $type == 'story' ? "colspan='4'" : "colspan='2'";?>
-            <td <?php echo $colspan;?> id='reviewerBox'>
+            <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
               <div class="table-row">
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $users, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
                 </div>
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col w-130px">
@@ -119,18 +121,29 @@
               </div>
             </td>
             <?php if($type == 'requirement'):?>
-              <?php if(strpos(",$showFields,", ',source,') !== false):?>
-              <td colspan="2" class='sourceTd'>
+            <?php if(strpos(",$showFields,", ',source,') !== false):?>
+            <td colspan="2" class='sourceTd'>
+              <div class="input-group">
                 <div class="input-group">
-                  <div class="input-group">
-                    <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
-                    <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
-                    <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
-                    <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
-                  </div>
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->source;?></div>
+                  <?php echo html::select('source', $lang->story->sourceList, $source, "class='form-control chosen'");?>
+                  <span class='input-group-addon' id="sourceNoteBox"><?php echo $lang->story->sourceNote;?></span>
+                  <?php echo html::input('sourceNote', $sourceNote, "class='form-control' style='width:140px;'");?>
                 </div>
-              </td>
-              <?php endif;?>
+              </div>
+            </td>
+            <?php endif;?>
+            <?php else:?>
+            <td colspan="2" id='feedbackBox' class='hidden'>
+              <div class="input-group">
+                <div class="input-group">
+                  <div class="input-group-addon" style="min-width: 77px;"><?php echo $lang->story->feedbackBy;?></div>
+                  <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+                  <span class='input-group-addon'><?php echo $lang->story->notifyEmail;?></span>
+                  <?php echo html::input('notifyEmail', '', "class='form-control'");?>
+                </div>
+              </div>
+            </td>
             <?php endif;?>
           </tr>
           <?php if($type == 'story' and $this->config->URAndSR):?>
@@ -214,7 +227,7 @@
             <th><?php echo $lang->story->spec;?></th>
             <td colspan="4">
               <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=story&link=spec');?>
-              <?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlspecialchars($lang->story->specTemplate . "\n" . $lang->noticePasteImg) . "'");?>
+              <?php echo html::textarea('spec', $spec, "rows='9' class='form-control kindeditor disabled-ie-placeholder' hidefocus='true' placeholder='" . htmlSpecialString($lang->story->specTemplate . "\n" . $lang->noticePasteImg) . "'");?>
             </td>
           </tr>
           <?php if(strpos(",$showFields,", ',verify,') !== false):?>

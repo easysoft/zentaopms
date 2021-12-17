@@ -66,8 +66,6 @@ class actionModel extends model
         $action->product   = $relation['product'];
         $action->project   = (int)$relation['project'];
         $action->execution = (int)$relation['execution'];
-
-
         $this->dao->insert(TABLE_ACTION)->data($action)->autoCheck()->exec();
         $actionID = $this->dao->lastInsertID();
 
@@ -154,31 +152,30 @@ class actionModel extends model
     {
         $emptyRecord = array('product' => ',0,', 'project' => 0, 'execution' => 0);
 
-        /* If objectType is program, return empty record. */
-        if($objectType == 'program') return $emptyRecord;
-
-        /* If objectType is product or execution, return the objectID. */
-        if($objectType == 'product') return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
-
-        /* If objectType is project or execution, return objectID products and project. */
-        if($objectType == 'project' or $objectType == 'execution')
+        switch($objectType)
         {
-            $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
-            $productList = ',' . join(',', array_keys($products)) . ',';
+            case 'program':
+                return $emptyRecord;
+            case 'product':
+                return array('product' => ",$objectID,", 'project' => 0, 'execution' => 0);
+            case 'project':
+            case 'execution':
+                $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($objectID)->fetchPairs('product');
+                $productList = ',' . join(',', array_keys($products)) . ',';
 
-            $relation = array($objectType => $objectID, 'product' => $productList);
+                $relation = array($objectType => $objectID, 'product' => $productList);
 
-            if($objectType == 'execution')
-            {
-                $project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
-                $relation['project'] = $project;
-            }
-            else
-            {
-                $relation['execution'] = 0;
-            }
+                if($objectType == 'execution')
+                {
+                    $project = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($objectID)->fetch('project');
+                    $relation['project'] = $project;
+                }
+                else
+                {
+                    $relation['execution'] = 0;
+                }
 
-            return $relation;
+                return $relation;
         }
 
         /* Only process these object types. */
@@ -186,77 +183,126 @@ class actionModel extends model
         {
             if(!isset($this->config->objectTables[$objectType])) return $emptyRecord;
 
-            /* Set fields to fetch. */
-            $fields = '*';
-            if(strpos('story, productplan, case',  $objectType) !== false) $fields = 'product';
-            if(strpos('build, bug, testtask, doc', $objectType) !== false) $fields = 'product, project, execution';
-            if(strpos('case, repo', $objectType) !== false) $fields = 'execution';
-            if($objectType == 'release') $fields = 'product, build';
-            if($objectType == 'task')    $fields = 'project, execution, story';
-
-            if($objectType != 'team') $record = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-
-            /* Process story, release and task. */
-            if($objectType == 'story') $record->project = $this->dao->select('project')->from(TABLE_PROJECTSTORY)->where('story')->eq($objectID)->orderBy('project_desc')->limit(1)->fetch('project');
-            if($objectType == 'release') $record->project = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($record->build)->fetch('project');
-            if($objectType == 'team')
+            $record = $emptyRecord;
+            switch($objectType)
             {
-                $team   = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
-                $type   = $team->type == 'project' ? 'project' : 'execution';
-                $record = new stdclass();
-                $record->$type = $objectID;
-            }
-            if($objectType == 'task')
-            {
-                if($record->story != 0)
-                {
-                    $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($record->story)->fetchPairs('product');
-                    $record->product = join(',', array_keys($product));
-                }
-                else
-                {
-                    $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($record->execution)->fetchPairs('product');
-                    $record->product = join(',', array_keys($products));
-                }
+                case 'story':
+                    if($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild')
+                    {
+                        $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
+                        $record['project']   = $build->project;
+                        $record['execution'] = $build->execution;
+                    }
+                    elseif($actionType == 'estimated')
+                    {
+                        $record['project']   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
+                        $record['execution'] = (int)$extra;
+                    }
+                    else
+                    {
+                        $projects = $this->dao->select('t2.id,t2.project,t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
+                            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                            ->where('t1.story')->eq($objectID)
+                            ->fetchAll();
+                        foreach($projects as $project)
+                        {
+                            if($project->type == 'project')
+                            {
+                                $record['project'] = $project->id;
+                                continue;
+                            }
+                            $record['project']   = $project->project;
+                            $record['execution'] = $project->id;
+                        }
+                    }
+                case 'productplan':
+                case 'branch':
+                    $record['product'] = $objectID == 0 ? $extra : $this->dao->select('product')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('product');
+                    break;
+                case 'case':
+                    $result = $this->dao->select('product, project, execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    $record['product']   = $result->product;
+                    $record['project']   = $result->project;
+                    $record['execution'] = $result->execution;
+                    if(strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false and (int)$extra)
+                    {
+                        $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
+                        $record['project']   = $testtask->project;
+                        $record['execution'] = $testtask->execution;
+                    }
+                    break;
+                case 'build':
+                case 'bug':
+                case 'testtask':
+                case 'doc':
+                    $result = $this->dao->select('product, project, execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    $record['product']   = $result->product;
+                    $record['project']   = $result->project;
+                    $record['execution'] = $result->execution;
+                    break;
+                case 'repo':
+                    $record['execution'] = $this->dao->select('execution')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch('execution');
+                    break;
+                case 'release':
+                    $result = $this->dao->select('product, build')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    $record['product'] = $result->product;
+                    $record['project'] = $this->dao->select('project')->from(TABLE_BUILD)->where('id')->eq($result->build)->fetch('project');
+                    break;
+                case 'task':
+                    $fields = 'project, execution, story';
+                    $result = $this->dao->select($fields)->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    if($result->story != 0)
+                    {
+                        $product = $this->dao->select('product')->from(TABLE_STORY)->where('id')->eq($result->story)->fetchPairs('product');
+                        $record['product'] = join(',', array_keys($product));
+                    }
+                    else
+                    {
+                        $products = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($result->execution)->fetchPairs('product');
+                        $record['product'] = join(',', array_keys($products));
+                    }
+                    $record['project']   = $result->project;
+                    $record['execution'] = $result->execution;
+                    break;
+                case 'kanbanlane':
+                    $record['execution'] = $this->dao->select('execution')->from(TABLE_KANBANLANE)->where('id')->eq($objectID)->fetch('execution');
+                    break;
+                case 'kanbancolumn':
+                    $record['execution'] = $extra;
+                    break;
+                case 'team':
+                    $team = $this->dao->select('type')->from(TABLE_PROJECT)->where('id')->eq($objectID)->fetch();
+                    $type = $team->type == 'project' ? 'project' : 'execution';
+                    $record[$type] = $objectID;
+                    break;
+                case 'whitelist':
+                    if($extra == 'product') $record['product'] = $objectID;
+                    if($extra == 'project') $record['project'] = $objectID;
+                    if($extra == 'sprint' or $extra == 'stage') $record['execution'] = $objectID;
+                    break;
+                default:
+                    $result = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+                    $record['product']   = zget($result, 'product', '0');
+                    $record['project']   = zget($result, 'project', 0);
+                    $record['execution'] = zget($result, 'execution', 0);
             }
 
-            if($objectType == 'story' and ($actionType == 'linked2build' or $actionType == 'unlinkedfrombuild'))
-            {
-                $build = $this->dao->select('project,execution')->from(TABLE_BUILD)->where('id')->eq((int)$extra)->fetch();
-                $record->project   = $build->project;
-                $record->execution = $build->execution;
-            }
-
-            if($objectType == 'story' and $actionType == 'estimated')
-            {
-                $record->project   = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq((int)$extra)->fetch('project');
-                $record->execution = (int)$extra;
-            }
-
-            if($objectType == 'case' and (strpos(',linked2testtask,unlinkedfromtesttask,assigned,run,', ',' . $actionType . ',') !== false) and (int)$extra)
-            {
-                $testtask = $this->dao->select('project,execution')->from(TABLE_TESTTASK)->where('id')->eq((int)$extra)->fetch();
-                $record->project   = $testtask->project;
-                $record->execution = $testtask->execution;
-            }
-
-            if($objectType == 'whitelist' and $extra == 'product') $record->product = $objectID;
-            if($objectType == 'whitelist' and $extra == 'project') $record->project = $objectID;
-            if($objectType == 'whitelist' and ($extra == 'sprint' or $extra == 'stage')) $record->execution = $objectID;
-            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record->project = (int)$extra ;
-            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record->execution = (int)$extra;
+            if($actionType == 'unlinkedfromproject' or $actionType == 'linked2project') $record['project'] = (int)$extra ;
+            if($actionType == 'unlinkedfromexecution' or $actionType == 'linked2execution') $record['execution'] = (int)$extra;
 
             if($record)
             {
-                $record = (array)$record;
                 $record['product'] = isset($record['product']) ? ',' . $record['product'] . ',' : ',0,';
                 if(empty($record['project']))   $record['project']   = 0;
                 if(empty($record['execution'])) $record['execution'] = 0;
+
+                if(!empty($record['execution']) and empty($record['project'])) $record['project'] = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($record['execution'])->fetch('project');
                 return $record;
             }
 
             return $emptyRecord;
         }
+
         return $emptyRecord;
     }
 
@@ -635,7 +681,7 @@ class actionModel extends model
     /**
      * Print actions of an object.
      *
-     * @param  array    $action
+     * @param  object    $action
      * @param  string   $desc
      * @access public
      * @return void
@@ -715,7 +761,7 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
             {
                 list($extra, $reason) = explode(',', $extra);
                 $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
@@ -774,7 +820,7 @@ class actionModel extends model
 
         /* If is project, select its related. */
         $executions = array();
-        if(is_numeric($projectID) and $executionID == 'all') $executions = $this->loadModel('execution')->getPairs($projectID);
+        if(is_numeric($projectID) and $executionID == 'all') $executions = $this->loadModel('execution')->getPairs($projectID) + array(0 => 0);
 
         $this->loadModel('doc');
         $libs = $this->doc->getLibs('includeDeleted') + array('' => '');
@@ -795,7 +841,7 @@ class actionModel extends model
             ->markLeft(1)
             ->where(1)
             ->beginIF(is_numeric($projectID))->andWhere('project')->eq($projectID)->fi()
-            ->beginIF(!empty($executions))->orWhere('execution')->in(array_keys($executions))->fi()
+            ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
             ->markRight(1)
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
@@ -812,7 +858,7 @@ class actionModel extends model
         if(!$actions) return array();
 
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
-        return $this->transformActions($actions);;
+        return $this->transformActions($actions);
     }
 
     /**
@@ -876,31 +922,19 @@ class actionModel extends model
         }
 
         /* If the sql not include 'product', add check purview for product. */
-        if(strpos($actionQuery, $allProducts) === false)
-        {
-            if(!in_array($productID, array_keys($products))) return array();
-        }
-        else
+        if(strpos($actionQuery, $allProducts) !== false)
         {
             $actionQuery = str_replace($allProducts, '1', $actionQuery);
         }
 
         /* If the sql not include 'project', add check purview for project. */
-        if(strpos($actionQuery, $allProjects) === false)
-        {
-            $actionQuery = $actionQuery . ' AND `project`' . helper::dbIN(array_keys($projects));
-        }
-        else
+        if(strpos($actionQuery, $allProjects) !== false)
         {
             $actionQuery = str_replace($allProjects, '1', $actionQuery);
         }
 
         /* If the sql not include 'execution', add check purview for execution. */
-        if(strpos($actionQuery, $allExecutions) === false)
-        {
-            $actionQuery = $actionQuery . ' AND `execution`' . helper::dbIN(array_keys($executions));
-        }
-        else
+        if(strpos($actionQuery, $allExecutions) !== false)
         {
             $actionQuery = str_replace($allExecutions, '1', $actionQuery);
         }
@@ -939,9 +973,9 @@ class actionModel extends model
     /**
      * Transform the actions for display.
      *
-     * @param  int    $actions
+     * @param  array    $actions
      * @access public
-     * @return void
+     * @return object
      */
     public function transformActions($actions)
     {
@@ -963,6 +997,11 @@ class actionModel extends model
             /* Add name field to the actions. */
             $action->objectName = isset($objectNames[$action->objectType][$action->objectID]) ? $objectNames[$action->objectType][$action->objectID] : '';
 
+            if($action->objectType =='program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !==false)
+            {
+                $action->objectName .= $this->lang->action->label->startProgram;
+            }
+
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
@@ -972,10 +1011,13 @@ class actionModel extends model
             $action->date         = date(DT_MONTHTIME2, strtotime($action->date));
             $action->actionLabel  = isset($this->lang->$objectType->$actionType) ? $this->lang->$objectType->$actionType : $action->action;
             $action->actionLabel  = isset($this->lang->action->label->$actionType) ? $this->lang->action->label->$actionType : $action->actionLabel;
-            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $requirements);
+            $action->objectLabel  = $this->getObjectLabel($objectType, $action->objectID, $actionType, $requirements);
 
             /* If action type is login or logout, needn't link. */
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
+
+            /* Get gitlab objectname. */
+            if(substr($objectType, 0,6) == 'gitlab') $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             if(!$this->setObjectLink($action, $deptUsers))
@@ -1059,6 +1101,12 @@ class actionModel extends model
                         ->where('t1.id')->in($objectIdList)
                         ->fetchPairs();
                 }
+                elseif($objectType == 'branch')
+                {
+                    $this->app->loadLang('branch');
+                    $objectName = $this->dao->select("id,name")->from(TABLE_BRANCH)->where('id')->in($objectIdList)->fetchPairs();
+                    if(in_array(BRANCH_MAIN, $objectIdList)) $objectName[BRANCH_MAIN] = $this->lang->branch->main;
+                }
                 else
                 {
                     $objectName = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->fetchPairs();
@@ -1093,11 +1141,12 @@ class actionModel extends model
      *
      * @param  string $objectType
      * @param  int    $objectID
+     * @param  string $actionType
      * @param  array  $requirements
      * @access public
      * @return string
      */
-    public function getObjectLabel($objectType, $objectID, $requirements)
+    public function getObjectLabel($objectType, $objectID, $actionType, $requirements)
     {
         $actionObjectLabel = $objectType;
         if(isset($this->lang->action->label->$objectType))
@@ -1177,6 +1226,14 @@ class actionModel extends model
                     $api = $this->dao->select('id,lib,module')->from(TABLE_API)->where('id')->eq($action->objectID)->fetch();
                     $params = sprintf($vars, $api->lib, $api->module, $api->id);
                 }
+                elseif($action->objectType == 'branch')
+                {
+                    $params = sprintf($vars, trim($action->product, ','));
+                }
+                elseif($action->objectType == 'kanbancolumn' or $action->objectType == 'kanbanlane')
+                {
+                    $params = sprintf($vars, $action->extra);
+                }
                 else
                 {
                     $params = sprintf($vars, $action->objectID);
@@ -1210,6 +1267,11 @@ class actionModel extends model
         }
 
         if($action->objectType == 'stakeholder' and $action->project == 0) $action->objectLink = '';
+
+        if($action->objectType == 'story' and $action->action == 'import2storylib')
+        {
+            $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        }
 
         return $action;
     }
@@ -1283,7 +1345,7 @@ class actionModel extends model
             if($history->diff != '')
             {
                 $history->diff      = str_replace(array('<ins>', '</ins>', '<del>', '</del>'), array('[ins]', '[/ins]', '[del]', '[/del]'), $history->diff);
-                $history->diff      = ($history->field != 'subversion' and $history->field != 'git') ? htmlspecialchars($history->diff) : $history->diff;   // Keep the diff link.
+                $history->diff      = ($history->field != 'subversion' and $history->field != 'git') ? htmlSpecialString($history->diff) : $history->diff;   // Keep the diff link.
                 $history->diff      = str_replace(array('[ins]', '[/ins]', '[del]', '[/del]'), array('<ins>', '</ins>', '<del>', '</del>'), $history->diff);
                 $history->diff      = nl2br($history->diff);
                 $history->noTagDiff = $canChangeTag ? preg_replace('/&lt;\/?([a-z][a-z0-9]*)[^\/]*\/?&gt;/Ui', '', $history->diff) : '';
@@ -1329,17 +1391,11 @@ class actionModel extends model
         $table = $this->config->objectTables[$action->objectType];
         $this->dao->update($table)->set('deleted')->eq(0)->where('id')->eq($action->objectID)->exec();
 
-        /* Revert userView products when undelete project. */
-        if($action->objectType == 'project')
+        $this->loadModel('product');
+        /* Revert userView products when undelete project or execution. */
+        if($action->objectType == 'project' or $action->objectType == 'execution')
         {
-            $products = $this->loadModel('project')->getProducts($project->id, $withBranch = false);
-            if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
-        }
-
-        /* Revert userView products when undelete execution. */
-        if($action->objectType == 'execution')
-        {
-            $products = $this->loadModel('execution')->getProducts($project->id, $withBranch = false);
+            $products = $this->product->getProducts($project->id, 'all', '', false);
             if(!empty($products)) $this->loadModel('user')->updateUserView(array_keys($products), 'product');
         }
 
@@ -1420,10 +1476,11 @@ class actionModel extends model
      * @param  array  $actions
      * @param  string $direction
      * @param  string $type all|today|yesterday|thisweek|lastweek|thismonth|lastmonth
+     * @param  string $orderBy date_desc|date_asc
      * @access public
      * @return array
      */
-    public function buildDateGroup($actions, $direction = 'next', $type = 'today')
+    public function buildDateGroup($actions, $direction = 'next', $type = 'today', $orderBy = 'date_desc')
     {
         $dateGroup = array();
         foreach($actions as $action)
@@ -1451,7 +1508,19 @@ class actionModel extends model
             }
         }
 
-        if($direction != 'next') $dateGroup = array_reverse($dateGroup);
+        /* Modify date to the corrret order. */
+        if($this->app->rawModule != 'company' and $direction != 'next')
+        {
+            $dateGroup = array_reverse($dateGroup);
+        }
+        elseif($this->app->rawModule == 'company')
+        {
+            if($direction == 'pre') $dateGroup = array_reverse($dateGroup);
+            if(($direction == 'next' and $orderBy == 'date_asc') or ($direction == 'pre' and $orderBy == 'date_desc'))
+            {
+                foreach($dateGroup as $key => $dateItem) $dateGroup[$key] = array_reverse($dateItem);
+            }
+        }
         return $dateGroup;
     }
 
@@ -1529,7 +1598,7 @@ class actionModel extends model
     /**
      * Print actions of an object for API(JIHU).
      *
-     * @param  array    $action
+     * @param  object    $action
      * @access public
      * @return void
      */
@@ -1563,5 +1632,84 @@ class actionModel extends model
         {
             echo $actionType;
         }
+    }
+
+    /**
+     * Process action for API.
+     *
+     * @param  array  $actions
+     * @param  array  $users
+     * @param  array  $objectLang
+     * @access public
+     * @return array
+     */
+    public function processActionForAPI($actions, $users = array(), $objectLang = array())
+    {
+        $actions = (array)$actions;
+        foreach($actions as $action)
+        {
+            $action->actor = zget($users, $action->actor);
+            if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
+            if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
+
+            ob_start();
+            $this->printAction($action);
+            $action->desc = ob_get_contents();
+            ob_end_clean();
+
+            if($action->history)
+            {
+                foreach($action->history as $i => $history)
+                {
+                    $history->fieldName = zget($objectLang, $history->field);
+                    $action->history[$i] = $history;
+                }
+            }
+        }
+        return array_values($actions);
+    }
+
+    /**
+     * Process dynamic for API.
+     *
+     * @param  array    $dynamics
+     * @access public
+     * @return array
+     */
+    public function processDynamicForAPI($dynamics)
+    {
+        $users = $this->loadModel('user')->getList();
+        $simplifyUsers = array();
+        foreach($users as $user)
+        {
+            $simplifyUser = new stdclass();
+            $simplifyUser->id       = $user->id;
+            $simplifyUser->account  = $user->account;
+            $simplifyUser->realname = $user->realname;
+            $simplifyUser->avatar   = $user->avatar;
+            $simplifyUsers[$user->account] = $simplifyUser;
+        }
+
+        $actions = array();
+        foreach($dynamics as $key => $dynamic)
+        {
+            if($dynamic->objectType == 'user') continue;
+
+            $simplifyUser = zget($simplifyUsers, $dynamic->actor, '');
+            $actor = $simplifyUser;
+            if(empty($simplifyUser))
+            {
+                $actor = new stdclass();
+                $actor->id       = 0;
+                $actor->account  = $dynamic->actor;
+                $actor->realname = $dynamic->actor;
+                $actor->avatar   = '';
+            }
+
+            $dynamic->actor = $actor;
+            $actions[]      = $dynamic;
+        }
+
+        return $actions;
     }
 }

@@ -166,7 +166,19 @@ class blockModel extends model
     {
         $data = array();
 
-        $data['tasks']      = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->fetch('count');
+        $tasks = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('t2.status')->ne('suspended')
+            ->andWhere('t3.status')->ne('suspended')
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t3.type')->in('sprint,stage')
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('id');
+        $data['tasks']      = isset($tasks) ? count($tasks) : 0;
         $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
         $data['bugs']       = (int)$this->dao->select('count(*) AS count')->from(TABLE_BUG)
             ->where('assignedTo')->eq($this->app->user->account)

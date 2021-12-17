@@ -26,9 +26,21 @@
   </div>
   <div class="btn-toolbar pull-right">
     <?php common::printLink('bug', 'export', "productID=$productID&orderBy=$orderBy&browseType=&executionID=$execution->id", "<i class='icon icon-export muted'> </i> " . $lang->bug->export, '', "class='btn btn-link export'");?>
-    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$productID&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
+    <?php if(common::canModify('execution', $execution)) common::printLink('bug', 'create', "productID=$defaultProduct&branch=$branchID&extras=executionID=$execution->id", "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-primary'");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
+  </strong>
+  <div class="linkButton" onclick="handleLinkButtonClick()">
+    <span title="<?php echo $lang->viewDetails;?>">
+      <i class="icon icon-import icon-rotate-270"></i>
+    </span>
+  </div>
+</div>
+<?php endif;?>
 <div id="mainContent">
   <div class="cell <?php if($type == 'bysearch') echo 'show';?>" id="queryBox" data-module='executionBug'></div>
   <?php if(empty($bugs)):?>
@@ -36,17 +48,29 @@
     <p>
       <span class="text-muted"><?php echo $lang->bug->noBug;?></span>
       <?php if(common::canModify('execution', $execution) and common::hasPriv('bug', 'create')):?>
-      <?php echo html::a($this->createLink('bug', 'create', "productID=$productID&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='execution'");?>
+      <?php echo html::a($this->createLink('bug', 'create', "productID=$defaultProduct&branch=$branchID&extra=executionID=$execution->id"), "<i class='icon icon-plus'></i> " . $lang->bug->create, '', "class='btn btn-info' data-app='execution'");?>
       <?php endif;?>
     </p>
   </div>
   <?php else:?>
+  <?php if($this->app->getViewType() == 'xhtml'):?>
+  <form class='main-table' method='post' id='executionBugForm'>
+  <?php else:?>
   <form class='main-table' method='post' id='executionBugForm' data-ride="table">
+  <?php endif;?>
     <table class='table has-sort-head' id='bugList'>
       <?php $canBatchAssignTo = common::hasPriv('bug', 'batchAssignTo');?>
       <?php $vars = "executionID={$execution->id}&productID={$productID}&orderBy=%s&build=$buildID&type=$type&param=$param&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <thead>
         <tr>
+          <?php if($this->app->getViewType() == 'xhtml'):?>
+          <th class='c-id'>
+            <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
+          </th>
+          <th class='c-pri'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
+          <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->bug->statusAB);?></th>
+          <?php else:?>
           <th class='c-id'>
             <?php if($canBatchAssignTo):?>
             <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
@@ -64,6 +88,7 @@
           <th class='c-user'><?php common::printOrderLink('resolvedBy', $orderBy, $vars, $lang->bug->resolvedBy);?></th>
           <th class='c-resolution'><?php common::printOrderLink('resolution', $orderBy, $vars, $lang->bug->resolutionAB);?></th>
           <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <?php endif;?>
         </tr>
       </thead>
       <?php
@@ -85,6 +110,17 @@
       $viewLink     = helper::createLink('bug', 'view', "bugID=$bug->id");
       ?>
       <tr>
+        <?php if($this->app->getViewType() == 'xhtml'):?>
+        <?php $status = $this->processStatus('bug', $bug);?>
+        <td class='cell-id'>
+          <?php printf('%03d', $bug->id);?>
+        </td>
+        <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
+        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->tab}");?></td>
+        <td class='c-status' title='<?php echo $status;?>'>
+          <span class='status-bug status-<?php echo $bug->status;?>'><?php echo $status;?></span>
+        </td>
+        <?php else:?>
         <td class='cell-id'>
           <?php if($canBatchAssignTo):?>
           <?php echo html::checkbox('bugIDList', array($bug->id => ''), '', $arrtibute) . html::a($viewLink, sprintf('%03d', $bug->id), '', "data-app={$this->app->tab}");?>
@@ -100,7 +136,7 @@
           <?php endif;?>
         </td>
         <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri)?></span></td>
-        <td class='text-left' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->tab}");?></td>
+        <td class='text-left text-ellipsis' title="<?php echo $bug->title?>"><?php echo html::a($viewLink, $bug->title, null, "style='color: $bug->color' data-app={$this->app->tab}");?></td>
         <td><?php echo zget($users, $bug->openedBy, $bug->openedBy);?></td>
         <td class="text-center <?php echo (isset($bug->delay) and $bug->status == 'active') ? 'delayed' : '';?>"><?php if(substr($bug->deadline, 0, 4) > 0) echo substr($bug->deadline, 5, 6);?></td>
         <td class='c-assignedTo has-btn text-left'><?php $this->bug->printAssignedHtml($bug, $users);?></td>
@@ -119,6 +155,7 @@
           }
           ?>
         </td>
+        <?php endif;?>
       </tr>
       <?php endforeach;?>
       </tbody>
@@ -168,4 +205,11 @@
 </div>
 <?php js::set('replaceID', 'bugList');?>
 <?php js::set('browseType', $type);?>
+<script>
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
+</script>
 <?php include '../../common/view/footer.html.php';?>

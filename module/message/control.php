@@ -84,7 +84,9 @@ class message extends control
         {
             $data = fixer::input('post')->get();
             $data->messageSetting = !empty($data->messageSetting) ? json_encode($data->messageSetting) : '';
+            $data->blockUser      = !empty($data->blockUser) ? implode(',', $data->blockUser) : '';
             $this->loadModel('setting')->setItem('system.message.setting', $data->messageSetting);
+            $this->loadModel('setting')->setItem('system.message.blockUser', $data->blockUser);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
@@ -95,7 +97,7 @@ class message extends control
         $this->view->position[] = $this->lang->message->common;
         $this->view->position[] = $this->lang->message->setting;
 
-        $users = $this->loadModel('user')->getPairs('noletter');
+        $users = $this->loadModel('user')->getPairs('noletter,noclosed');
         unset($users['']);
 
         $this->view->users         = $users;

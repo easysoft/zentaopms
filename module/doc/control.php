@@ -189,19 +189,31 @@ class doc extends control
         if(!empty($_POST))
         {
             $changes = $this->doc->updateLib($libID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+                return $this->send($response);
+            }
+
             if($changes)
             {
                 $actionID = $this->action->create('docLib', $libID, 'edited');
                 $this->action->logHistory($actionID, $changes);
             }
-            $docLib     = $this->doc->getLibById($libID);
+            $docLib   = $this->doc->getLibById($libID);
+            $objectID = 0;
+            if(strpos('product,project,execution', $docLib->type) !== false)
+            {
+                $libType  = $docLib->type;
+                $objectID = $docLib->$libType;
+            }
             $hasLibPriv = $this->doc->checkPrivLib($docLib) ? 1 : 0;
 
             $response['message']    = $this->lang->saveSuccess;
             $response['result']     = 'success';
             $response['closeModal'] = true;
-            $response['callback']   = "redirectParentWindow($hasLibPriv, $libID)";
+            $response['callback']   = "redirectParentWindow($hasLibPriv, $libID, $objectID)";
             return $this->send($response);
         }
 
@@ -385,7 +397,8 @@ class doc extends control
 
             $link = $this->session->docList ? $this->session->docList : $this->createLink('doc', 'index');
             $doc  = $this->doc->getById($docID);
-            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter')
+
+            if(!empty($objectType) and $objectType != 'doc' and $doc->type != 'chapter' and $doc->type != 'article')
             {
                 $link = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID&docID=$docID");
             }
@@ -476,7 +489,11 @@ class doc extends control
         /* Get doc. */
         $docID = (int)$docID;
         $doc   = $this->doc->getById($docID, $version, true);
-        if(!$doc) die(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
+        if(!$doc)
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
+            die(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
+        }
 
         /* The global search opens in the document library. */
         if(!isonlybody())
@@ -496,7 +513,7 @@ class doc extends control
             }
 
             $browseLink = inLink('objectLibs', "type=$type&objectID=$objectID&libID=$libID&docID=$docID");
-            $this->locate($browseLink);
+            if(!(defined('RUN_MODE') && RUN_MODE == 'api')) $this->locate($browseLink);
         }
 
         if($doc->contentType == 'markdown')

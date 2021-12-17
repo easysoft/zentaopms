@@ -150,6 +150,9 @@ $lang->action->desc->resolved        = '$date, resolved by <strong>$actor</stron
 $lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
 $lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
 $lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
+$lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> a créé un sous-tâche <strong>$extra</strong>。' . "\n";
@@ -235,6 +238,7 @@ $lang->action->label->delayed               = 'a ajourné ';
 $lang->action->label->suspended             = 'a suspendu ';
 $lang->action->label->login                 = "s'est Connecté";
 $lang->action->label->logout                = "s'est Déconnecté";
+$lang->action->label->notified              = "Notified";
 $lang->action->label->deleteestimate        = "a remis à zéro ";
 $lang->action->label->linked2build          = "a ajouté au Build ";
 $lang->action->label->linked2bug            = "a lié au Bug ";
@@ -265,6 +269,10 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->syncprogram           = 'start';
+$lang->action->label->syncproject           = 'start';
+$lang->action->label->syncexecution         = 'start';
+$lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -305,6 +313,7 @@ $lang->action->dynamicAction->release['opened']       = 'Créer Release';
 $lang->action->dynamicAction->release['edited']       = 'Editer Release';
 $lang->action->dynamicAction->release['changestatus'] = 'Changer Statut Release';
 $lang->action->dynamicAction->release['undeleted']    = 'Restaurer Release';
+$lang->action->dynamicAction->release['notified']     = 'Notify Release';
 $lang->action->dynamicAction->release['hidden']       = 'Masquer Release';
 
 $lang->action->dynamicAction->story['opened']                = 'Créer Story';

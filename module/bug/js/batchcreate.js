@@ -7,42 +7,6 @@ $(function()
 })
 
 /**
- * Set branch related.
- *
- * @param  int     $branchID
- * @param  int     $productID
- * @param  int     $num
- * @access public
- * @return void
- */
-function setBranchRelated(branchID, productID, num)
-{
-    moduleLink = createLink('tree', 'ajaxGetModules', 'productID=' + productID + '&viewType=bug&branch=' + branchID + '&num=' + num);
-    $.get(moduleLink, function(modules)
-    {
-        if(!modules) modules = '<select id="modules' + num + '" name="modules[' + num + ']" class="form-control"></select>';
-        $('#modules' + num).replaceWith(modules);
-        $("#modules" + num + "_chosen").remove();
-        $("#modules" + num).next('.picker').remove();
-        $("#modules" + num).chosen();
-    });
-
-    executionLink = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=0&branch=' + branchID + '&num=' + num);
-    $.get(executionLink, function(executions)
-    {
-        if(!executions) executions = '<select id="executions' + num + '" name="executions[' + num + ']" class="form-control"></select>';
-        $('#executions' + num).replaceWith(executions);
-        $("#executions" + num + "_chosen").remove();
-        $("#executions" + num).next('.picker').remove();
-        $("#executions" + num).chosen();
-    });
-
-    buildLink = createLink('build', 'ajaxGetProductBuilds', 'productID=' + productID + "&varName=openedBuilds&build=&branch=" + branchID + "&index=" + num);
-
-    setOpenedBuilds(buildLink, num);
-}
-
-/**
  * Set opened builds.
  *
  * @param  string  $link

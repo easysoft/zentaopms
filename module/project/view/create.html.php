@@ -18,12 +18,16 @@
 <?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
+<?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
 <?php js::set('longTime', $lang->project->longTime);?>
+<?php js::set('multiBranchProducts', $multiBranchProducts);?>
+<?php js::set('selectedProductID', $productID);?>
+<?php js::set('selectedBranchID', $branchID);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <?php $createTitle = isset($this->config->maxVersion) ? $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '') : $lang->project->create;?>
+      <?php $createTitle = $lang->project->create . ' - ' . zget($lang->project->modelList, $model, '');?>
       <h2><?php echo $createTitle;?></h2>
       <?php if(!commonModel::isTutorialMode()): ?>
       <div class="pull-right btn-toolbar">
@@ -107,7 +111,7 @@
                 <div class="input-group<?php if($hasBranch) echo ' has-branch';?>">
                   <?php echo html::select("products[$i]", $allProducts, $product->id, "class='form-control chosen' onchange='loadBranches(this)' data-last='" . $product->id . "'");?>
                   <span class='input-group-addon fix-border'></span>
-                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], $product->branch, "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
+                  <?php if($hasBranch) echo html::select("branch[$i]", $branchGroups[$product->id], key($product->branches), "class='form-control chosen' onchange=\"loadPlans('#products{$i}', this.value)\"");?>
                 </div>
               </div>
               <?php $i++;?>
@@ -137,7 +141,7 @@
               <?php $i++;?>
               <?php endforeach;?>
               <?php else:?>
-              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[]", '', '', "class='form-control chosen'");?></div>
+              <div class="col-sm-4" id="plan0" style="padding-right: 6px;"><?php echo html::select("plans[][]", '', '', "class='form-control chosen'");?></div>
               <?php endif;?>
             </div>
           </td>

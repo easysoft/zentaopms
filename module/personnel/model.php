@@ -485,7 +485,8 @@ class personnelModel extends model
                 ->orWhere('id')->in($this->app->user->view->sprints)
                 ->markRight(1)
                 ->andWhere('deleted')->eq(0)
-                ->orderBy('type')
+                ->orderBy('type_asc,openedDate_desc')
+                ->limit('10')
                 ->fetchPairs();
             foreach($objects as $id => &$object)
             {
@@ -607,7 +608,7 @@ class personnelModel extends model
                 if($oldWhitelist) $accounts = array_unique(array_merge($accounts, $oldWhitelist));
             }
         }
-        $whitelist = ',' . implode(',', $accounts);
+        $whitelist = !empty($accounts) ? ',' . implode(',', $accounts) : '';
         $this->dao->update($objectTable)->set('whitelist')->eq($whitelist)->where('id')->eq($objectID)->exec();
 
         $deletedAccounts = array();

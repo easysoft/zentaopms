@@ -64,6 +64,10 @@
             <th class='c-status<?php echo zget($visibleFields, 'status', ' hidden') . zget($requiredFields, 'status', '', ' required');?>'><?php echo $lang->product->status;?></th>
             <th class='c-desc<?php echo zget($visibleFields, 'desc',     ' hidden') . zget($requiredFields, 'desc',   '', ' required');?>'><?php echo $lang->product->desc;?></th>
             <th class='c-acl<?php echo zget($visibleFields, 'acl',       ' hidden');?>'><?php echo $lang->product->acl;?></th>
+            <?php
+            $extendFields = $this->product->getFlowExtendFields();
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
+            ?>
           </tr>
         </thead>
         <tbody>
@@ -90,8 +94,9 @@
             <td class='text-left<?php echo zget($visibleFields, 'RD', ' hidden')?>' style='overflow:visible'><?php echo html::select("RDs[$productID]",  $rdUsers, $products[$productID]->RD, "class='form-control picker-select'");?></td>
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>'><?php echo html::select("types[$productID]",    $lang->product->typeList,   $products[$productID]->type,   "class='form-control'");?></td>
             <td class='<?php echo zget($visibleFields, 'status', 'hidden')?>'><?php echo html::select("statuses[$productID]", $lang->product->statusList, $products[$productID]->status, "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlspecialchars($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
+            <td class='<?php echo zget($visibleFields, 'desc',   'hidden')?>'><?php echo html::textarea("descs[$productID]", htmlSpecialString($products[$productID]->desc), "rows='1' class='form-control autosize'");?></td>
             <td class='<?php echo zget($visibleFields, 'acl', 'hidden')?>'> <?php echo nl2br(html::radio("acls[$productID]", $lang->product->acls, $products[$productID]->acl));?></td>
+            <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $products[$productID], $extendField->field . "[{$productID}]") . "</td>";?>
           </tr>
           <?php
           if(isset($this->config->moreLinks["POs[$productID]"])) unset($this->config->moreLinks["POs[$productID]"]);

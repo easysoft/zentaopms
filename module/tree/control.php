@@ -29,18 +29,21 @@ class tree extends control
     {
         $this->loadModel('product');
 
-        if($this->app->tab == 'product')
+        if($this->app->tab == 'product' and strpos($viewType, 'doc') === false)
         {
-            $this->product->setMenu($rootID, 0, 0, '', $viewType);
+            $this->product->setMenu($rootID, $branch, 0, '', $viewType);
         }
         else if($this->app->tab == 'qa' and $viewType != 'caselib')
         {
             $products = $this->product->getPairs('noclosed');
-            $this->loadModel('qa')->setMenu($products, $rootID, 0, $viewType);
+            $this->loadModel('qa')->setMenu($products, $rootID, $branch, $viewType);
         }
-        else if($this->app->tab == 'project')
+        else if($this->app->tab == 'project' and strpos($viewType, 'doc') === false)
         {
             $this->loadModel('project')->setMenu($this->session->project);
+
+            $products = $this->product->getProducts($this->session->project, 'all', '', false);
+            if($viewType == 'case') $this->lang->modulePageNav = $this->product->select($products, $rootID, 'tree', 'browse', 'case', $branch);
         }
 
         /* According to the type, set the module root and modules. */
@@ -53,9 +56,10 @@ class tree extends control
                 $branches = $this->loadModel('branch')->getPairs($product->id);
                 if($currentModuleID)
                 {
-                    $branchName = $branches[$branch];
+                    $currentModuleBranch = $this->dao->select('branch')->from(TABLE_MODULE)->where('id')->eq($currentModuleID)->fetch('branch');
+                    $branchName = $branches[$currentModuleBranch];
                     unset($branches);
-                    $branches[$branch] = $branchName;
+                    $branches[$currentModuleBranch] = $branchName;
                 }
                 $this->view->branches = $branches;
             }
@@ -162,13 +166,10 @@ class tree extends control
 
                 $products = $this->product->getPairs();
                 $this->product->saveState($productID, $products);
-                $this->product->setMenu($productID, $branch);
             }
             elseif($from == 'project')
             {
                 $this->lang->navGroup->tree  = 'project';
-                $this->lang->tree->menu      = $this->lang->project->menu;
-                $this->lang->tree->menuOrder = $this->lang->project->menuOrder;
 
                 /* The project parameter needs to be present when the tree module belongs to the project grouping. */
                 if($this->session->docList && $this->session->project && strpos($this->session->docList, 'project') === false) $this->session->set('docList', $this->session->docList . '?project=' . $this->session->project, 'project');
@@ -229,13 +230,12 @@ class tree extends control
         $this->view->position        = $position;
         $this->view->rootID          = $rootID;
         $this->view->viewType        = $viewType;
-        $this->view->modules         = $this->tree->getTreeMenu($rootID, $viewType, $rooteModuleID = 0, array('treeModel', 'createManageLink'));
         $this->view->sons            = $this->tree->getSons($rootID, $currentModuleID, $viewType, $branch);
         $this->view->currentModuleID = $currentModuleID;
         $this->view->parentModules   = $parentModules;
         $this->view->branch          = $branch;
         $this->view->from            = $from;
-        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType);
+        $this->view->tree            = $this->tree->getProductStructure($rootID, $viewType, $branch);
         $this->view->canBeChanged    = isset($canBeChanged) ? $canBeChanged : true;
         $this->display();
     }
@@ -258,7 +258,7 @@ class tree extends control
         $this->view->root = $execution;
 
         /* Get all associated products. */
-        $products             = $this->execution->getProducts($rootID);
+        $products             = $this->loadModel('product')->getProducts($rootID);
         $this->view->products = $products;
 
         $executions = $this->execution->getPairs($this->session->project);
@@ -463,7 +463,11 @@ class tree extends control
             {
                 $changeFunc = '';
                 if($viewType == 'task' or $viewType == 'bug' or $viewType == 'case') $changeFunc = "onchange='loadModuleRelated()'";
-                $field  = $fieldID ? "modules[$fieldID]" : 'module';
+                $field = $fieldID ? "modules[$fieldID]" : 'module';
+
+                $currentModule   = $this->tree->getById($currentModuleID);
+                $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
+
                 $output = html::select("$field", $optionMenu, $currentModuleID, "class='form-control' $changeFunc");
                 if(count($optionMenu) == 1 and $needManage)
                 {
@@ -526,16 +530,20 @@ class tree extends control
      * @param  string $viewType
      * @param  int    $branchID
      * @param  int    $number
+     * @param  int    $currentModuleID
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetModules($productID, $viewType = 'story', $branchID, $number)
+    public function ajaxGetModules($productID, $viewType = 'story', $branchID, $number, $currentModuleID = 0)
     {
+        $currentModule   = $this->tree->getById($currentModuleID);
+        $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
+
         $modules = $this->tree->getOptionMenu($productID, $viewType, $startModuleID = 0, $branchID);
 
         $moduleName = $viewType == 'bug' ? "modules[$number]" : "module[$number]";
         $modules    = empty($modules) ? array('' => '') : $modules;
-        die(html::select($moduleName, $modules, '', 'class=form-control'));
+        die(html::select($moduleName, $modules, $currentModuleID, 'class=form-control'));
     }
 
     /**

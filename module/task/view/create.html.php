@@ -79,7 +79,7 @@
           <td><?php echo html::hidden('status', 'wait');?></td>
         </tr>
         <?php $this->printExtendFields('', 'table', 'columns=3');?>
-        <?php if(strpos(",$showFields,", ',story,') !== false and $execution->type != 'ops'):?>
+        <?php if(strpos(",$showFields,", ',story,') !== false and $execution->lifetime != 'ops'):?>
         <tr>
           <th><?php echo $lang->task->story;?></th>
           <td colspan='3'>
@@ -201,7 +201,7 @@
           <th><?php echo $lang->task->desc;?></th>
           <td colspan='3'>
             <?php echo $this->fetch('user', 'ajaxPrintTemplates', 'type=task&link=desc');?>
-            <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='10' class='form-control'");?>
+            <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows='10' class='form-control'");?>
           </td>
         </tr>
         <tr>
@@ -241,10 +241,12 @@
           </td>
         </tr>
         <?php endif;?>
+        <?php if(!isonlybody()):?>
         <tr id='after-tr'>
           <th><?php echo $lang->task->afterSubmit;?></th>
           <td colspan='3'><?php echo html::radio('after', $lang->task->afterChoices, !empty($task->id) ? 'toTaskList' : 'continueAdding');?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton();?>

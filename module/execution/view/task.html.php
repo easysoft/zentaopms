@@ -37,7 +37,6 @@ body {margin-bottom: 25px;}
   <?php
   if(!empty($productID))
   {
-      $product    = $this->product->getById($productID);
       $removeLink = $browseType == 'byproduct' ? inlink('task', "executionID=$executionID&browseType=$status&param=0&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("productBrowseParam")';
       $moduleName = $product->name;
       $html       = $moduleName . html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted'");
@@ -104,6 +103,7 @@ body {margin-bottom: 25px;}
     ?>
     <a class="btn btn-link querybox-toggle" id='bysearchTab'><i class="icon icon-search muted"></i> <?php echo $lang->product->searchStory;?></a>
   </div>
+  <?php if(!isonlybody()): ?>
   <div class="btn-toolbar pull-right">
     <?php
     if(!isset($browseType)) $browseType = '';
@@ -177,7 +177,20 @@ body {margin-bottom: 25px;}
     <?php echo "</div>";?>
     <?php endif;?>
   </div>
+  <?php endif; ?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
+  </strong>
+  <div class="linkButton" onclick="handleLinkButtonClick()">
+    <span title="<?php echo $lang->viewDetails;?>">
+      <i class="icon icon-import icon-rotate-270"></i>
+    </span>
+  </div>
+</div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -236,6 +249,20 @@ body {margin-bottom: 25px;}
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='taskList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
         <thead>
           <tr>
+          <?php if($this->app->getViewType() == 'xhtml'):?>
+          <?php
+          foreach($customFields as $field)
+          {
+              if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+              {
+                  if($field->show)
+                  {
+                      $this->datatable->printHead($field, $orderBy, $vars, $canBatchAction);
+                      $columns++;
+                  }
+              }
+          }?>
+          <?php else:?>
           <?php
           foreach($customFields as $field)
           {
@@ -246,12 +273,24 @@ body {margin-bottom: 25px;}
               }
           }
           ?>
+          <?php endif;?>
           </tr>
         </thead>
         <tbody>
           <?php foreach($tasks as $task):?>
           <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php
+            foreach($customFields as $field)
+            {
+                if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+                {
+                  $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');
+                }
+            }?>
+            <?php else:?>
             <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+            <?php endif;?>
           </tr>
           <?php if(!empty($task->children)):?>
           <?php $i = 0;?>
@@ -259,7 +298,16 @@ body {margin-bottom: 25px;}
           <?php $class  = $i == 0 ? ' table-child-top' : '';?>
           <?php $class .= ($i + 1 == count($task->children)) ? ' table-child-bottom' : '';?>
           <tr class='table-children<?php echo $class;?> parent-<?php echo $task->id;?>' data-id='<?php echo $child->id?>' data-status='<?php echo $child->status?>' data-estimate='<?php echo $child->estimate?>' data-consumed='<?php echo $child->consumed?>' data-left='<?php echo $child->left?>'>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php
+            foreach($customFields as $field)
+            {
+                if($field->id == 'name' || $field->id == 'id' || $field->id == 'pri' || $field->id == 'status')
+                $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);
+            }?>
+            <?php else:?>
             <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+            <?php endif;?>
           </tr>
           <?php $i ++;?>
           <?php endforeach;?>
@@ -365,6 +413,7 @@ body {margin-bottom: 25px;}
   </div>
 </div>
 <?php js::set('replaceID', 'taskList')?>
+<?php if(isonlybody()) js::set('modalWidthReset', 1200) ?>
 <script>
 $(function()
 {
@@ -434,5 +483,24 @@ $(function()
         }
     })
 });
+
+<?php if($this->app->getViewType() == 'xhtml'):?>
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
+
+$(function()
+{
+    function handleClientReady()
+    {
+        if(!window.adjustXXCViewHeight) return;
+        window.adjustXXCViewHeight(null, true);
+    }
+    if(window.xuanReady) handleClientReady();
+    else $(window).on('xuan-ready', handleClientReady);
+});
+<?php endif; ?>
 </script>
 <?php include '../../common/view/footer.html.php';?>

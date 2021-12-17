@@ -147,7 +147,7 @@
       <div class="row form-group">
         <label class="col-sm-1"><?php echo $lang->todo->desc;?></label>
         <div class="col-sm-10">
-          <?php echo html::textarea('desc', htmlspecialchars($todo->desc), "rows='8' class='form-control'");?>
+          <?php echo html::textarea('desc', htmlSpecialString($todo->desc), "rows='8' class='form-control'");?>
         </div>
       </div>
       <div class="row form-group">

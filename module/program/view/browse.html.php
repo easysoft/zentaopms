@@ -29,11 +29,7 @@
     <?php if(common::hasPriv('project', 'batchEdit') and $programType != 'bygrid') echo html::checkbox('editProject', array('1' => $lang->project->edit), '', $this->cookie->editProject ? 'checked=checked' : '');?>
   </div>
   <div class='pull-right'>
-    <?php if(isset($this->config->maxVersion)):?>
-    <?php common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-secondary" data-toggle="modal" data-target="#guideDialog"');?>
-    <?php elseif($this->config->systemMode == 'new'):?>
-    <?php common::printLink('project', 'create', "mode=scrum&programID=0", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-secondary"');?>
-    <?php endif;?>
+    <?php if(common::hasPriv('project', 'create')) common::printLink('project', 'createGuide', "programID=0&from=PGM", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-secondary" data-toggle="modal" data-target="#guideDialog"');?>
     <?php if(isset($lang->pageActions)) echo $lang->pageActions;?>
   </div>
 </div>

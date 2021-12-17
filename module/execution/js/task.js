@@ -9,7 +9,7 @@ $(function()
         $td.find('a').eq(0).css('max-width', $td.width() - labelWidth - 60);
     });
 
-    toggleFold('#executionTaskForm', unfoldTasks, executionID, 'project');
+    toggleFold('#executionTaskForm', unfoldTasks, executionID, 'execution');
 
     adjustTableFooter();
     $('body').on('click', '#toggleFold', adjustTableFooter);

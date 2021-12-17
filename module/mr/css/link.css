@@ -1,0 +1,26 @@
+#storyList th {border: none;}
+#bugList th {border: none;}
+#taskList th {border: none;}
+.hide-side .col-main {width: 100%;}
+.hide-side .col-side .main-side {width: 0; display: none;}
+
+.dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
+.dropdown-menu > .menu-search .input-group {width: 100%;}
+.dropdown-menu > .menu-search .input-group-addon {position: absolute; right: 10px; top: 0; z-index: 10; background: none; border: none; color: #666;}
+.dropdown-menu > .menu-search .form-control {border: none !important; box-shadow: none !important; border-top: 1px solid #ddd !important;}
+.dropdown-list {display: block; padding: 0; max-height: 270px; overflow-y: auto;}
+.dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
+.dropdown-list > li > a:hover,
+.dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
+
+.checkbox.btn {margin-top: 0px;}
+
+.linkBox #queryBox .search-form .form-actions {padding-bottom: 5px;}
+.linkBox .table-header {padding: 8px 15px; border-bottom: 1px solid #cbd0db;}
+#unlinkStoryList, #unlinkBugList, #unlinkTaskList{border-top: 1px solid #cbd0db;}
+.fixed-footer .text {color: #fff;}
+ol, ul {padding-left: 20px;}
+#tabsNav .tab-pane>.main-table {border-radius: 0;}
+.body-modal #mainMenu>.btn-toolbar {width: auto;}
+.body-modal #mainContent {min-height: 240px;}
+.body-modal #mainMenu>.btn-toolbar .page-title>.text {overflow: visible}

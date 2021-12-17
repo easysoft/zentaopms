@@ -26,6 +26,9 @@ js::set('isStepsTemplate', $isStepsTemplate);
 js::set('oldProjectID', $projectID);
 js::set('blockID', $blockID);
 js::set('moduleID', $moduleID);
+js::set('tab', $this->app->tab);
+if($this->app->tab == 'execution') js::set('objectID', $executionID);
+if($this->app->tab == 'project')   js::set('objectID', $projectID);
 ?>
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
@@ -50,7 +53,7 @@ js::set('moduleID', $moduleID);
             <td>
               <div class='input-group'>
                 <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value);' class='form-control chosen control-product'");?>
-                <?php if($this->session->currentProductType != 'normal' and isset($products[$productID])):?>
+                <?php if($productInfo->type != 'normal' and isset($products[$productID])):?>
                 <?php  echo html::select('branch', $branches, $branch, "onchange='loadBranch()' class='form-control chosen control-branch'");?>
                 <?php endif;?>
               </div>
@@ -140,6 +143,26 @@ js::set('moduleID', $moduleID);
               <div class='input-group'>
                 <span class='input-group-addon'><?php echo $lang->bug->deadline?></span>
                 <span><?php echo html::input('deadline', $deadline, "class='form-control form-date'");?></span>
+              </div>
+            </td>
+          </tr>
+          <tr>
+            <th><nobr><?php echo $lang->bug->feedbackBy;?></nobr></th>
+            <td><?php echo html::input('feedbackBy', '', "class='form-control'");?></td>
+            <td id='notifyEmailTd'>
+              <div class='input-group'>
+                <span class='input-group-addon'><?php echo $lang->bug->notifyEmail?></span>
+                <span><?php echo html::input('notifyEmail', '', "class='form-control'");?></span>
+              </div>
+            </td>
+          </tr>
+          <?php else:?>
+            <td>
+              <div class='input-group' id='feedback'>
+              <span class="input-group-addon"><?php echo $lang->bug->feedbackBy?></span>
+              <?php echo html::input('feedbackBy', '', "class='form-control'");?>
+              <span class="input-group-addon"><?php echo $lang->bug->notifyEmail?></span>
+              <?php echo html::input('notifyEmail', '', "class='form-control'");?>
               </div>
             </td>
           </tr>

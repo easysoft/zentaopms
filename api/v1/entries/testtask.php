@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class testtaskEntry extends entry 
+class testtaskEntry extends entry
 {
     /**
      * GET method.
@@ -24,12 +24,12 @@ class testtaskEntry extends entry
         $control->view($testtaskID);
 
         $data = $this->getData();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         if(!isset($data->data->task)) $this->sendError(400, 'error');
 
         $testtask = $data->data->task;
 
-        $this->send(200, $this->format($testtask, 'realFinishedDate:time'));
+        $this->send(200, $this->format($testtask, 'begin:date,end:date,mailto:userList,owner:user,realFinishedDate:time'));
     }
 
     /**

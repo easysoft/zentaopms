@@ -24,6 +24,23 @@ $(function()
         var value = $select.val();
         $selector.find('.pri-text').html('<span class="label-pri label-pri-' + value + '" title="' + value + '">' + value + '</span>');
     });
+
+    $('#source').on('change', function()
+    {
+        if(storyType == 'requirement') return false;
+
+        var source = $(this).val();
+        if($.inArray(source, feedbackSource) != -1)
+        {
+            $('#feedbackBox').removeClass('hidden');
+            $('#reviewerBox').attr('colspan', 2);
+        }
+        else
+        {
+            $('#feedbackBox').addClass('hidden');
+            $('#reviewerBox').attr('colspan', 4);
+        }
+    });
 });
 
 function refreshPlan()

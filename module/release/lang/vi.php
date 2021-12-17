@@ -57,6 +57,7 @@ $lang->release->export        = 'Xuất ra HTML';
 $lang->release->yesterday     = 'Phát hành hôm qua';
 $lang->release->all           = 'Tất cả';
 $lang->release->notify        = 'Notify';
+$lang->release->notifyUsers   = 'Notify Users';
 $lang->release->mailto        = 'Mailto';
 
 $lang->release->filePath = 'Tải về : ';
@@ -75,7 +76,8 @@ $lang->release->changeStatusList['normal']    = 'Kích hoạt';
 $lang->release->changeStatusList['terminate'] = 'Hoàn thành';
 
 $lang->release->action = new stdclass();
-$lang->release->action->changestatus = array('main' => '$date,  $extra bởi  <strong>$actor</strong>', 'extra' => 'changeStatusList');
+$lang->release->action->changestatus = array('main' => '$date,  $extra bởi  <strong>$actor</strong>.', 'extra' => 'changeStatusList');
+$lang->release->action->notified     = array('main' => '$date, <strong>$actor</strong> send notify.');
 
 $lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
 $lang->release->notifyList['QD'] = 'QA Manager';

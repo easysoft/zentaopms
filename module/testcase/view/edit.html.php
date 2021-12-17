@@ -12,10 +12,15 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('page', 'edit');?>
 <?php js::set('lblDelete', $lang->testcase->deleteStep);?>
 <?php js::set('lblBefore', $lang->testcase->insertBefore);?>
 <?php js::set('lblAfter',  $lang->testcase->insertAfter);?>
 <?php js::set('caseID', $case->id);?>
+<?php js::set('executionID', $case->execution);?>
+<?php js::set('tab', $this->app->tab);?>
+<?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
+<?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
@@ -168,7 +173,7 @@
                 <td>
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                    <?php if($this->session->currentProductType != 'normal') echo html::select('branch', $branches, $case->branch, "onchange='loadBranch();' class='form-control' style='width:65px'");?>
+                    <?php if(isset($product->type) and $product->type != 'normal') echo html::select('branch', $branches, $case->branch, "onchange='loadBranch();' class='form-control'");?>
                   </div>
                 </td>
               </tr>

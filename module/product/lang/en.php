@@ -33,10 +33,11 @@ $lang->product->changeProgram   = "{$lang->productCommon} confirmation of the sc
 $lang->product->addWhitelist    = 'Add Whitelist';
 $lang->product->unbindWhitelist = 'Unbind Whitelist';
 
-$lang->product->indexAction   = "All {$lang->productCommon}";
-$lang->product->closeAction   = "Close {$lang->productCommon}";
-$lang->product->orderAction   = "Sort {$lang->productCommon}";
-$lang->product->exportAction  = "Export {$lang->productCommon}";
+$lang->product->indexAction  = "All {$lang->productCommon}";
+$lang->product->closeAction  = "Close {$lang->productCommon}";
+$lang->product->orderAction  = "Sort {$lang->productCommon}";
+$lang->product->exportAction = "Export {$lang->productCommon}";
+$lang->product->link2Project = "Link Project";
 
 $lang->product->basicInfo = 'Basic Info';
 $lang->product->otherInfo = 'Other Info';
@@ -55,6 +56,7 @@ $lang->product->project     = $lang->executionCommon . ' List';
 $lang->product->build       = 'Build List';
 $lang->product->moreProduct = "More Product";
 $lang->product->projectInfo = "Projects that are linked to this {$lang->productCommon} are listed below.";
+$lang->product->progress    = "Progress";
 
 $lang->product->currentExecution      = "Current Execution";
 $lang->product->activeStories         = 'Active [S]';
@@ -77,6 +79,7 @@ $lang->product->assignToNullBugs      = 'Unassigned [B]';
 $lang->product->assignToNullBugsTitle = 'Unassigned Bugs';
 $lang->product->closedBugs            = 'Closed Bug';
 $lang->product->bugFixedRate          = 'Bug Repair rate';
+$lang->product->unfoldClosed          = 'Unfold Closed';
 
 $lang->product->confirmDelete        = " Do you want to delete the {$lang->productCommon}?";
 $lang->product->errorNoProduct       = "No {$lang->productCommon} is created yet!";
@@ -85,6 +88,7 @@ $lang->product->programChangeTip     = "The projects linked with this {$lang->pr
 $lang->product->notChangeProgramTip  = "The {$lang->SRCommon} of {$lang->productCommon} has been linked to the following projects, please cancel the link before proceeding";
 $lang->product->confirmChangeProgram = "The projects linked with this {$lang->productCommon}: %s is also linked with other products, whether to transfer projects to the modified program set.";
 $lang->product->changeProgramError   = "The {$lang->SRCommon} of this {$lang->productCommon} has been linked to the project, please unlink it before proceeding";
+$lang->product->programEmpty         = 'Program should not be empty!';
 
 $lang->product->id             = 'ID';
 $lang->product->program        = "Program";
@@ -105,6 +109,7 @@ $lang->product->QD             = 'QA Manager';
 $lang->product->RD             = 'Release Manager';
 $lang->product->feedback       = 'Feedback Manger';
 $lang->product->acl            = 'Access Control';
+$lang->product->reviewer       = 'Reviewer';
 $lang->product->whitelist      = 'Whitelist';
 $lang->product->branch         = '%s';
 $lang->product->qa             = 'Test';

@@ -11,6 +11,7 @@
  */
 ?>
 <?php include './header.html.php';?>
+<?php js::set('page', 'edit')?>
 <?php js::set('oldProductID', $story->product);?>
 <?php js::set('parentStory', !empty($story->children));?>
 <?php js::set('moveChildrenTips', $lang->story->moveChildrenTips);?>
@@ -19,6 +20,7 @@
 <?php js::set('storyModule', $lang->story->module);?>
 <?php js::set('reviewers', explode(',', $reviewers));?>
 <?php js::set('reviewerNotEmpty', $lang->story->notice->reviewerNotEmpty);?>
+<?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <div class='main-content' id='mainContent'>
   <form method='post' enctype='multipart/form-data' target='hiddenwin' id='dataform'>
     <div class='main-header'>
@@ -87,7 +89,7 @@
               </tr>
               <?php elseif($product->type != 'normal'):?>
               <tr>
-                <th class='thWidth'><?php echo $lang->product->branch;?></th>
+                <th class='thWidth'><?php echo $lang->product->branch = sprintf($lang->product->branch, $lang->product->branchName['branch']);?></th>
                 <td>
                   <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branches, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
                 </td>
@@ -182,6 +184,14 @@
                 <th><?php echo $lang->story->estimate;?></th>
                 <td><?php echo $story->parent >= 0 ? html::input('estimate', $story->estimate, "class='form-control'") : $story->estimate;?></td>
               </tr>
+              <tr class='feedbackBox <?php echo in_array($story->source, $config->story->feedbackSource) ? '' : 'hidden';?>'>
+                <th><?php echo $lang->story->feedbackBy;?></th>
+                <td><?php echo html::input('feedbackBy', $story->feedbackBy, "class='form-control'");?></td>
+              </tr>
+              <tr class='feedbackBox <?php echo in_array($story->source, $config->story->feedbackSource) ? '' : 'hidden';?>'>
+                <th><?php echo $lang->story->notifyEmail;?></th>
+                <td><?php echo html::input('notifyEmail', $story->notifyEmail, "class='form-control'");?></td>
+              </tr>
               <tr>
                 <th><?php echo $lang->story->keywords;?></th>
                 <td><?php echo html::input('keywords', $story->keywords, "class='form-control'");?></td>
@@ -211,7 +221,7 @@
               <?php if($isShowReviewer):?>
               <tr>
                 <th><?php echo $lang->story->reviewers;?></th>
-                <td><?php echo html::select('reviewer[]', $users, $reviewers, 'class="form-control chosen" multiple')?></td>
+                <td><?php echo html::select('reviewer[]', $productReviewers, $reviewers, 'class="form-control chosen" multiple')?></td>
               </tr>
               <?php endif;?>
               <?php if($story->status == 'closed'):?>
@@ -278,4 +288,5 @@
   </form>
 </div>
 <?php js::set('storyType', $story->type);?>
+<?php js::set('executionID', isset($objectID) ? $objectID : 0);?>
 <?php include '../../common/view/footer.html.php';?>

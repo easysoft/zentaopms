@@ -24,7 +24,7 @@
       <strong><?php echo $lang->project->typeList[$type];?></strong>
     </div>
     <div class='panel-body'>
-      <div id='kanban-<?php echo $type;?>' class='kanban'></div>
+      <div id='kanban-<?php echo $type;?>' class='kanban' data-id='<?php echo $type;?>'></div>
     </div>
   </div>
   <?php endforeach; ?>
@@ -38,12 +38,19 @@ $kanbanColumns['closedProject']  = array('name' => $lang->project->closedProject
 $userPrivs = array();
 $userPrivs['project']   = common::hasPriv('project', 'index');
 $userPrivs['execution'] = common::hasPriv('execution', 'task');
-js::set('kanbanColumns',    $kanbanColumns);
+js::set('kanbanColumns',    array_values($kanbanColumns));
 js::set('userPrivs',        $userPrivs);
 js::set('kanbanGroup',      $kanbanGroup);
 js::set('latestExecutions', $latestExecutions);
 js::set('programPairs',     $programPairs);
 js::set('doingText',        $lang->project->statusList['doing']);
+js::set('priv',
+    array(
+        'canStart'    => common::hasPriv('project', 'start'),
+        'canClose'    => common::hasPriv('project', 'close'),
+        'canActivate' => common::hasPriv('project', 'activate'),
+    )
+);
 ?>
 <?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

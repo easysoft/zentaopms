@@ -9,18 +9,29 @@
  * @version     $Id: de.php 4729 2013-05-03 07:53:55Z chencongzhi520@gmail.com $
  * @link        http://www.zentao.net
  */
-$lang->action->common     = 'Log';
-$lang->action->product    = $lang->productCommon;
-$lang->action->project    = 'Project';
-$lang->action->execution  = $lang->execution->common;
-$lang->action->objectType = 'Object Type';
-$lang->action->objectID   = 'ID';
-$lang->action->objectName = 'Objekt Name';
-$lang->action->actor      = 'Handler';
-$lang->action->action     = 'Aktion';
-$lang->action->actionID   = 'Aktion ID';
-$lang->action->date       = 'Datum';
-$lang->action->extra      = 'Wertschöpfung';
+global $config;
+
+$lang->action->common      = 'Log';
+$lang->action->id          = 'ID';
+$lang->action->product     = $lang->productCommon;
+$lang->action->project     = 'Project';
+$lang->action->execution   = $lang->execution->common;
+$lang->action->objectType  = 'Object Type';
+$lang->action->objectID    = 'ID';
+$lang->action->objectName  = 'Objekt Name';
+$lang->action->actor       = 'Handler';
+$lang->action->action      = 'Aktion';
+$lang->action->actionID    = 'Aktion ID';
+$lang->action->date        = 'Datum';
+$lang->action->extra       = 'Wertschöpfung';
+$lang->action->system      = 'System';
+$lang->action->url         = 'URL';
+$lang->action->contentType = 'Content Type';
+$lang->action->data        = 'Data';
+$lang->action->result      = 'Result';
+$lang->action->modified    = 'Modified';
+$lang->action->old         = 'Old';
+$lang->action->new         = 'New';
 
 $lang->action->trash       = 'Aufräumen';
 $lang->action->undelete    = 'Wiederherstellen';
@@ -150,6 +161,9 @@ $lang->action->desc->resolved        = '$date, resolved by <strong>$actor</stron
 $lang->action->desc->managed         = '$date, by <strong>$actor</strong> managed.' . "\n";
 $lang->action->desc->estimated       = '$date, by <strong>$actor</strong> estimated.' . "\n";
 $lang->action->desc->run             = '$date, by <strong>$actor</strong> executed.' . "\n";
+$lang->action->desc->syncprogram     = '$date, started by <strong>$actor</strong>(starting the project sets the program status as Ongoing).' . "\n";
+$lang->action->desc->syncproject     = '$date, starting the execution sets the project status as Ongoing.' . "\n";
+$lang->action->desc->syncexecution   = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 
 /* 子任务修改父任务的历史操作记录 */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -235,6 +249,7 @@ $lang->action->label->delayed               = 'delayed ';
 $lang->action->label->suspended             = 'suspended ';
 $lang->action->label->login                 = 'Login';
 $lang->action->label->logout                = "Logout";
+$lang->action->label->notified              = "Notified";
 $lang->action->label->deleteestimate        = "deleted ";
 $lang->action->label->linked2build          = "linked ";
 $lang->action->label->linked2bug            = "linked ";
@@ -265,6 +280,10 @@ $lang->action->label->reviewrejected        = 'Reject';
 $lang->action->label->reviewclarified       = 'Clarify';
 $lang->action->label->commitsummary         = 'Commit Summary';
 $lang->action->label->updatetrainee         = 'Update Trainee';
+$lang->action->label->syncprogram           = 'start';
+$lang->action->label->syncproject           = 'start';
+$lang->action->label->syncexecution         = 'start';
+$lang->action->label->startProgram          = '(The start of the project sets the status of the program as Ongoing)';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass;
@@ -305,6 +324,7 @@ $lang->action->dynamicAction->release['opened']       = 'Create Release';
 $lang->action->dynamicAction->release['edited']       = 'Edit Release';
 $lang->action->dynamicAction->release['changestatus'] = 'Change Release Status';
 $lang->action->dynamicAction->release['undeleted']    = 'Restore Release';
+$lang->action->dynamicAction->release['notified']     = 'Notify Release';
 $lang->action->dynamicAction->release['hidden']       = 'Hide Release';
 
 $lang->action->dynamicAction->story['opened']                = 'Create Story';

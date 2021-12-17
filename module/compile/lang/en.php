@@ -30,3 +30,4 @@ $lang->compile->statusList['building']    = 'Building';
 $lang->compile->statusList['create_fail'] = 'Failed to create';
 $lang->compile->statusList['timeout']     = 'Timeout';
 $lang->compile->statusList['canceled']    = 'Canceled';
+$lang->compile->statusList['failed']      = 'Build failed';

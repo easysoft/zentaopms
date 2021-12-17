@@ -29,6 +29,9 @@ $lang->action->url         = '網址';
 $lang->action->contentType = '內容類型';
 $lang->action->data        = '數據';
 $lang->action->result      = '結果';
+$lang->action->modified    = '修改了';
+$lang->action->old         = '舊值為';
+$lang->action->new         = '新值為';
 
 $lang->action->trash       = '資源回收筒';
 $lang->action->undelete    = '還原';
@@ -76,44 +79,48 @@ $lang->action->periods['lastweek']  = $lang->action->dynamic->lastWeek;
 $lang->action->periods['thismonth'] = $lang->action->dynamic->thisMonth;
 $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 
-$lang->action->objectTypes['product']     = $lang->productCommon;
-$lang->action->objectTypes['branch']      = '分支';
-$lang->action->objectTypes['story']       = $lang->SRCommon;
-$lang->action->objectTypes['design']      = '設計';
-$lang->action->objectTypes['productplan'] = '計劃';
-$lang->action->objectTypes['release']     = '發佈';
-$lang->action->objectTypes['program']     = '項目集';
-$lang->action->objectTypes['project']     = '項目';
-$lang->action->objectTypes['execution']   = $config->systemMode == 'new' ? '執行' : $lang->executionCommon;
-$lang->action->objectTypes['task']        = '任務';
-$lang->action->objectTypes['build']       = '版本';
-$lang->action->objectTypes['job']         = '構建';
-$lang->action->objectTypes['bug']         = 'Bug';
-$lang->action->objectTypes['case']        = '用例';
-$lang->action->objectTypes['caseresult']  = '用例結果';
-$lang->action->objectTypes['stepresult']  = '用例步驟';
-$lang->action->objectTypes['caselib']     = '用例庫';
-$lang->action->objectTypes['testsuite']   = '套件';
-$lang->action->objectTypes['testtask']    = '測試單';
-$lang->action->objectTypes['testreport']  = '報告';
-$lang->action->objectTypes['doc']         = '文檔';
-$lang->action->objectTypes['api']         = '介面';
-$lang->action->objectTypes['doclib']      = '文檔庫';
-$lang->action->objectTypes['apistruct']   = '資料結構';
-$lang->action->objectTypes['todo']        = '待辦';
-$lang->action->objectTypes['risk']        = '風險';
-$lang->action->objectTypes['issue']       = '問題';
-$lang->action->objectTypes['module']      = '模組';
-$lang->action->objectTypes['user']        = '用戶';
-$lang->action->objectTypes['stakeholder'] = '干係人';
-$lang->action->objectTypes['budget']      = '費用估算';
-$lang->action->objectTypes['entry']       = '應用';
-$lang->action->objectTypes['webhook']     = 'Webhook';
-$lang->action->objectTypes['team']        = '團隊';
-$lang->action->objectTypes['whitelist']   = '白名單';
-$lang->action->objectTypes['pipeline']    = 'GitLab';
-$lang->action->objectTypes['gitlab']      = 'GitLab';
-$lang->action->objectTypes['jenkins']     = 'Jenkins';
+$lang->action->objectTypes['product']       = $lang->productCommon;
+$lang->action->objectTypes['branch']        = '分支';
+$lang->action->objectTypes['story']         = $lang->SRCommon;
+$lang->action->objectTypes['design']        = '設計';
+$lang->action->objectTypes['productplan']   = '計劃';
+$lang->action->objectTypes['release']       = '發佈';
+$lang->action->objectTypes['program']       = '項目集';
+$lang->action->objectTypes['project']       = '項目';
+$lang->action->objectTypes['execution']     = $config->systemMode == 'new' ? '執行' : $lang->executionCommon;
+$lang->action->objectTypes['task']          = '任務';
+$lang->action->objectTypes['build']         = '版本';
+$lang->action->objectTypes['job']           = '構建';
+$lang->action->objectTypes['bug']           = 'Bug';
+$lang->action->objectTypes['case']          = '用例';
+$lang->action->objectTypes['caseresult']    = '用例結果';
+$lang->action->objectTypes['stepresult']    = '用例步驟';
+$lang->action->objectTypes['caselib']       = '用例庫';
+$lang->action->objectTypes['testsuite']     = '套件';
+$lang->action->objectTypes['testtask']      = '測試單';
+$lang->action->objectTypes['testreport']    = '報告';
+$lang->action->objectTypes['doc']           = '文檔';
+$lang->action->objectTypes['api']           = '介面';
+$lang->action->objectTypes['doclib']        = '文檔庫';
+$lang->action->objectTypes['apistruct']     = '資料結構';
+$lang->action->objectTypes['todo']          = '待辦';
+$lang->action->objectTypes['risk']          = '風險';
+$lang->action->objectTypes['issue']         = '問題';
+$lang->action->objectTypes['module']        = '模組';
+$lang->action->objectTypes['user']          = '用戶';
+$lang->action->objectTypes['stakeholder']   = '干係人';
+$lang->action->objectTypes['budget']        = '費用估算';
+$lang->action->objectTypes['entry']         = '應用';
+$lang->action->objectTypes['webhook']       = 'Webhook';
+$lang->action->objectTypes['team']          = '團隊';
+$lang->action->objectTypes['whitelist']     = '白名單';
+$lang->action->objectTypes['pipeline']      = 'GitLab';
+$lang->action->objectTypes['gitlab']        = 'GitLab';
+$lang->action->objectTypes['jenkins']       = 'Jenkins';
+$lang->action->objectTypes['mr']            = '合併請求';
+$lang->action->objectTypes['gitlabproject'] = 'GitLab項目';
+$lang->action->objectTypes['gitlabuser']    = 'GitLab用戶';
+$lang->action->objectTypes['gitlabgroup']   = 'GitLab群組';
 
 /* 用來描述操作歷史記錄。*/
 $lang->action->desc = new stdclass();
@@ -164,6 +171,9 @@ $lang->action->desc->resolved        = '$date, 由 <strong>$actor</strong> 解�
 $lang->action->desc->managed         = '$date, 由 <strong>$actor</strong> 維護。' . "\n";
 $lang->action->desc->estimated       = '$date, 由 <strong>$actor</strong> 估算。' . "\n";
 $lang->action->desc->run             = '$date, 由 <strong>$actor</strong> 執行。' . "\n";
+$lang->action->desc->syncprogram     = '$date, 由 <strong>$actor</strong> 啟動(因項目開始而啟動項目集)。' . "\n";
+$lang->action->desc->syncproject     = '$date, 系統判斷由於執行開始，將項目狀態置為進行中。' . "\n";
+$lang->action->desc->syncexecution   = '$date, 系統判斷由於任務開始，將執行狀態置為進行中。' . "\n";
 
 /* 用來描述和父子任務相關的操作歷史記錄。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 創建子任務 <strong>$extra</strong>。' . "\n";
@@ -249,6 +259,7 @@ $lang->action->label->delayed               = '延期';
 $lang->action->label->suspended             = '掛起';
 $lang->action->label->login                 = '登錄系統';
 $lang->action->label->logout                = "退出登錄";
+$lang->action->label->notified              = "通知了";
 $lang->action->label->deleteestimate        = "刪除了工時";
 $lang->action->label->linked2build          = "關聯了";
 $lang->action->label->linked2bug            = "關聯了";
@@ -279,6 +290,19 @@ $lang->action->label->reviewrejected        = '拒絶';
 $lang->action->label->reviewclarified       = '有待明確';
 $lang->action->label->commitsummary         = '提交培訓總結';
 $lang->action->label->updatetrainee         = '更新培訓人員';
+$lang->action->label->setdefaultbranch      = '設置了預設分支';
+$lang->action->label->syncprogram           = '開始了';
+$lang->action->label->syncproject           = '開始了';
+$lang->action->label->syncexecution         = '開始了';
+$lang->action->label->startProgram          = '（因項目開始而啟動項目集）';
+$lang->action->label->createmr              = '合併請求關聯了';
+$lang->action->label->deletemr              = '合併請求取消了';
+$lang->action->label->mergedmr              = '合併請求合併了';
+$lang->action->label->compilepass           = '構建成功';
+$lang->action->label->compilefail           = '構建失敗';
+$lang->action->label->reopen                = '重新打開';
+$lang->action->label->approve               = '通過了';
+$lang->action->label->reject                = '拒絶了';
 
 /* 動態信息按照對象分組 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -312,6 +336,12 @@ $lang->action->dynamicAction->product['closed']    = '關閉' . $lang->productCo
 $lang->action->dynamicAction->product['undeleted'] = '還原' . $lang->productCommon;
 $lang->action->dynamicAction->product['hidden']    = '隱藏' . $lang->productCommon;
 
+$lang->action->dynamicAction->branch['opened']           = '創建分支';
+$lang->action->dynamicAction->branch['edited']           = '編輯分支';
+$lang->action->dynamicAction->branch['closed']           = '關閉分支';
+$lang->action->dynamicAction->branch['activated']        = '激活分支';
+$lang->action->dynamicAction->branch['setdefaultbranch'] = '設置預設分支';
+
 $lang->action->dynamicAction->productplan['opened'] = "創建計劃";
 $lang->action->dynamicAction->productplan['edited'] = "編輯計劃";
 
@@ -319,6 +349,7 @@ $lang->action->dynamicAction->release['opened']       = '創建發佈';
 $lang->action->dynamicAction->release['edited']       = '編輯發佈';
 $lang->action->dynamicAction->release['changestatus'] = '修改發佈狀態';
 $lang->action->dynamicAction->release['undeleted']    = '還原發佈';
+$lang->action->dynamicAction->release['notified']     = '通知發佈';
 $lang->action->dynamicAction->release['hidden']       = '隱藏發佈';
 
 $lang->action->dynamicAction->story['opened']                = "創建{$lang->SRCommon}";
@@ -354,6 +385,10 @@ $lang->action->dynamicAction->execution['managed']   = '維護' . $lang->executi
 $lang->action->dynamicAction->execution['undeleted'] = '還原' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['hidden']    = '隱藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '導入任務';
+
+$lang->action->dynamicAction->kanbancolumn['edited'] = '設置看板列';
+$lang->action->dynamicAction->kanbanlane['edited']   = '設置泳道';
+$lang->action->dynamicAction->kanbanlane['moved']    = '移動泳道';
 
 $lang->action->dynamicAction->team['managedTeam'] = '維護團隊';
 
@@ -486,26 +521,29 @@ else
 {
     $lang->action->label->execution = "$lang->executionCommon|execution|task|executionID=%s";
 }
-$lang->action->label->task        = '任務|task|view|taskID=%s';
-$lang->action->label->build       = '版本|build|view|buildID=%s';
-$lang->action->label->bug         = 'Bug|bug|view|bugID=%s';
-$lang->action->label->case        = '用例|testcase|view|caseID=%s';
-$lang->action->label->testtask    = '測試單|testtask|view|caseID=%s';
-$lang->action->label->testsuite   = '測試套件|testsuite|view|suiteID=%s';
-$lang->action->label->caselib     = '用例庫|caselib|view|libID=%s';
-$lang->action->label->todo        = '待辦|todo|view|todoID=%s';
-$lang->action->label->doclib      = '文檔庫|doc|tablecontents|type=%s&objectID=%s&libID=%s';
-$lang->action->label->doc         = '文檔|doc|view|docID=%s';
-$lang->action->label->user        = '用戶|user|view|account=%s';
-$lang->action->label->testreport  = '報告|testreport|view|report=%s';
-$lang->action->label->entry       = '應用|entry|browse|';
-$lang->action->label->webhook     = 'Webhook|webhook|browse|';
-$lang->action->label->space       = ' ';
-$lang->action->label->risk        = '風險|risk|view|riskID=%s';
-$lang->action->label->issue       = '問題|issue|view|issueID=%s';
-$lang->action->label->design      = '設計|design|view|designID=%s';
-$lang->action->label->stakeholder = '干係人|stakeholder|view|userID=%s';
-$lang->action->label->api         = '介面|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->task         = '任務|task|view|taskID=%s';
+$lang->action->label->build        = '版本|build|view|buildID=%s';
+$lang->action->label->bug          = 'Bug|bug|view|bugID=%s';
+$lang->action->label->case         = '用例|testcase|view|caseID=%s';
+$lang->action->label->testtask     = '測試單|testtask|view|caseID=%s';
+$lang->action->label->testsuite    = '測試套件|testsuite|view|suiteID=%s';
+$lang->action->label->caselib      = '用例庫|caselib|view|libID=%s';
+$lang->action->label->todo         = '待辦|todo|view|todoID=%s';
+$lang->action->label->doclib       = '文檔庫|doc|tablecontents|type=%s&objectID=%s&libID=%s';
+$lang->action->label->doc          = '文檔|doc|view|docID=%s';
+$lang->action->label->user         = '用戶|user|view|account=%s';
+$lang->action->label->testreport   = '報告|testreport|view|report=%s';
+$lang->action->label->entry        = '應用|entry|browse|';
+$lang->action->label->webhook      = 'Webhook|webhook|browse|';
+$lang->action->label->space        = ' ';
+$lang->action->label->risk         = '風險|risk|view|riskID=%s';
+$lang->action->label->issue        = '問題|issue|view|issueID=%s';
+$lang->action->label->design       = '設計|design|view|designID=%s';
+$lang->action->label->stakeholder  = '干係人|stakeholder|view|userID=%s';
+$lang->action->label->api          = '介面|api|index|libID=%s&moduleID=%s&apiID=%s';
+$lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
+$lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
+$lang->action->label->mr           = '合併請求|mr|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();
@@ -674,3 +712,13 @@ $lang->action->apiTitle->reviewrejected        = '拒絶';
 $lang->action->apiTitle->reviewclarified       = '有待明確';
 $lang->action->apiTitle->commitsummary         = '提交培訓總結';
 $lang->action->apiTitle->updatetrainee         = '更新培訓人員';
+
+/* Code Review in Repo or Merge Request module. */
+$lang->action->desc->repocreated                  = '$date, 由 <strong>$actor</strong> 評審創建：$extra。' . "\n";
+$lang->action->label->repocreated                 = "創建評審";
+$lang->action->dynamicAction->task['gitcommited'] = 'git提交';
+$lang->action->dynamicAction->bug['repocreated']  = '創建代碼評審';
+$lang->action->desc->createmr                     = '$extra';
+$lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合併了 <a href="$extra">代碼</a>。';
+$lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 審核通過。';
+$lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒絶。';

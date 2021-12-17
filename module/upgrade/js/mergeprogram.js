@@ -441,16 +441,15 @@ $(function()
             if(lineID && $('[data-lineid=' + lineID + ']').length > 0 && !$('[data-lineid=' + lineID + ']').prop('checked')) $('[data-lineid=' + lineID + ']').prop('checked', true);
 
             $('#programName').val($("[lineid='" + lineID + "']").find('a').text());
-            $('#programStatus').val('wait');
-            $('#programStatus').trigger('chosen:updated');
         }
         else
         {
             $('[data-product=' + value + ']').prop('checked', false)
             $('#programName').val('');
-            $('#programStatus').val('wait');
-            $('#programStatus').trigger('chosen:updated');
         }
+
+        $('#programStatus').val('wait');
+        $('#programStatus').trigger('chosen:updated');
 
         var checkedProject = true;
         if($('[id^=productLines]').length > 0)
@@ -639,7 +638,7 @@ function getLineByProgram()
 function toggleProgram(obj)
 {
     var $obj = $(obj);
-    if($obj.length == 0 && type != 'noProject') return false;
+    if($obj.length == 0) return false;
 
     var $programs = $obj.closest('table').find('#programs');
     if($obj.prop('checked'))
@@ -649,7 +648,7 @@ function toggleProgram(obj)
         $programs.attr('disabled', 'disabled');
         $('.programStatus').show();
         $('#programStatus').val('wait');
-        $('#programStatus').removeAttr('disabled').trigger("chosen:updated");
+        $('#programStatus').trigger("chosen:updated");
 
         $('form #newProject0').prop('checked', true);
         $('form #newLine0').prop('checked', true);
@@ -661,7 +660,6 @@ function toggleProgram(obj)
         $('form .pgm-exist').removeClass('hidden');
         $('form .pgm-no-exist').addClass('hidden');
         $('.programStatus').hide();
-        $('#programStatus').attr('disabled', 'disabled');
 
         if(!$('#newProgram0').prop('disabled'))
         {

@@ -29,13 +29,13 @@ class testtasksEntry extends entry
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $pager  = $data->data->pager;
         $result = array();
         foreach($data->data->tasks as $testtask)
         {
-            $result[] = $this->format($testtask, 'realFinishedDate:time');
+            $result[] = $this->format($testtask, 'begin:date,end:date,mailto:userList,owner:user,realFinishedDate:time');
         }
 
         return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'testtasks' => $result));

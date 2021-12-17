@@ -16,7 +16,7 @@
 span.item>a {padding-left: 6px;}
 span.dotted-line+a {display: block;}
 #modules li.doc:before, .chapterNode:before, .independent:before {content: " "; width: 100%; border-bottom: 1px dashed #b5b9c5; position: absolute; top: 13px; right: 0; left: 30px;}
-.doc-title {display: inline-block !important; position: relative; padding-right: 10px;}
+.doc-title ,.item{display: inline-block !important; position: relative; padding-right: 10px; max-width:80%; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
 .tree li.has-list.open:before {content: unset;}
 #modules i.icon-file-text {color: #D0D2D6; font-size: 14px;}
 .tree li>a {max-width: 80%;}

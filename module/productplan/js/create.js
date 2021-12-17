@@ -41,7 +41,6 @@ function computeEndDate(delta)
 
 $('#begin').on('change', function()
 {
-    $("#end").val('');
     $("input:radio[name='delta']").attr("checked",false);
 });
 
@@ -55,11 +54,24 @@ $('#future').on('change', function()
     if($(this).prop('checked'))
     {
         $('#begin').attr('disabled', 'disabled');
-        $('#end').val('').parents('tr').hide();
+        $('#end').attr('disabled', 'disabled').parents('tr').hide();
     }
     else
     {
         $('#begin').removeAttr('disabled');
-        $('#end').val('').parents('tr').show();
+        $('#end').removeAttr('disabled').parents('tr').show();
     }
 });
+
+$('#branch').change(function()
+{
+    var branchID = $(this).val();
+    var link     = createLink('productplan', 'ajaxGetLast', "productID=" + productID + "&branch=" + branchID);
+
+    $.post(link, function(data)
+    {
+        data = JSON.parse(data);
+        var planTitle = data ? '(' + lastLang + ': ' + data.title + ')' : '';
+        $('#title').parent().next('td').html(planTitle);
+    })
+})

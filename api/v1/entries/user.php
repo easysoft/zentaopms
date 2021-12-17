@@ -14,7 +14,7 @@ class userEntry extends Entry
     /**
      * GET method.
      *
-     * @param  int    $userID
+     * @param  int|string $userID
      * @access public
      * @return void
      */
@@ -22,6 +22,13 @@ class userEntry extends Entry
     {
         /* Get my info defaultly. */
         if(!$userID) return $this->getInfo($this->param('fields', ''));
+
+        if(!is_numeric($userID))
+        {
+            $user = $this->loadModel('user')->getById($userID, 'account');
+            if(!$user) return $this->send404();
+            $userID = $user->id;
+        }
 
         /* Get user by id. */
         $control = $this->loadController('user', 'profile');
@@ -71,7 +78,7 @@ class userEntry extends Entry
                     $products = $this->my->getProducts('ownbyme');
                     if($products)
                     {
-                        $info->product['total']    = $products->allCount;
+                        $info->product['total']    = $products->unclosedCount;
                         $info->product['products'] = $products->products;
                     }
                     break;
@@ -95,6 +102,41 @@ class userEntry extends Entry
                         $info->project['projects'] = $projects->projects;
                     }
                     break;
+                case 'lastproject':
+                    $info->lastProject = array('total' => 0, 'projects' => array());
+
+                    $control = $this->loadController('project', 'ajaxGetDropMenu');
+                    $control->ajaxGetDropMenu(0, 'project', 'index');
+                    $data = $this->getData();
+
+                    if($data->status == 'success')
+                    {
+                        $myProjects['owner'] = array();
+                        $myProjects['other'] = array();
+                        foreach($data->data->projects as $programID => $programProjects)
+                        {
+                            foreach($programProjects as $project)
+                            {
+                                if($project->status == 'closed') continue;
+
+                                $project = $this->filterFields($project, 'id,model,type,name,code,parent,status,PM');
+                                if($project->PM == $this->app->user->account)
+                                {
+                                    $myProjects['owner'][] = $project;
+                                }
+                                else
+                                {
+                                    $myProjects['other'][] = $project;
+                                }
+                            }
+                        }
+                        $lastProjects = array_merge($myProjects['owner'], $myProjects['other']);
+                        $lastProjects = array_slice($lastProjects, 0, 3);
+
+                        $info->lastProject['total']    = count($lastProjects);
+                        $info->lastProject['projects'] = $lastProjects;
+                    }
+                    break;
                 case 'execution':
                     $info->execution = array('total' => 0, 'executions' => array());
                     if(!common::hasPriv('my', 'execution')) break;
@@ -107,6 +149,41 @@ class userEntry extends Entry
                     {
                         $info->execution['total'] = $data->data->pager->recTotal;
                         $info->execution['executions'] = array_values((array)$data->data->executions);
+                    }
+                    break;
+                case 'lastexecution':
+                    $info->lastExecution = array('total' => 0, 'executions' => array());
+
+                    $control = $this->loadController('execution', 'ajaxGetDropMenu');
+                    $control->ajaxGetDropMenu(0, 'execution', 'browse', '');
+                    $data = $this->getData();
+
+                    $account = $this->app->user->account;
+                    if($data->status == 'success')
+                    {
+                        $myExecutions['owner'] = array();
+                        $myExecutions['other'] = array();
+                        foreach($data->data->executions as $projectID => $projectExecutions)
+                        {
+                            foreach($projectExecutions as $execution)
+                            {
+                                if($execution->status == 'done' or $execution->status == 'closed') continue;
+
+                                if($execution->PM == $account or isset($execution->teams->$account))
+                                {
+                                    $myExecutions['owner'][] = $this->filterFields($execution, 'id,model,type,name,code,parent,status,PM');
+                                }
+                                else
+                                {
+                                    $myExecutions['other'][] = $this->filterFields($execution, 'id,model,type,name,code,parent,status,PM');
+                                }
+                            }
+                        }
+                        $lastExecutions = array_merge($myExecutions['owner'], $myExecutions['other']);
+                        $lastExecutions = array_slice($lastExecutions, 0, 3);
+
+                        $info->lastExecution['total']      = count($lastExecutions);
+                        $info->lastExecution['executions'] = $lastExecutions;
                     }
                     break;
                 case 'actions':
@@ -144,7 +221,8 @@ class userEntry extends Entry
                             if($bug->status == 'active' and $bug->confirmed) $status = array('code' => 'confirmed', 'name' => $this->lang->bug->labelConfirmed);
                             if($bug->resolution == 'postponed') $status = array('code' => 'postponed', 'name' => $this->lang->bug->labelPostponed);
                             if(!empty($bug->delay)) $status = array('code' => 'delay', 'name' => $this->lang->bug->overdueBugs);
-                            $bug->status = $status;
+                            $bug->status     = $status['code'];
+                            $bug->statusName = $status['name'];
 
                             $bugs[$bug->id] = $bug;
                         }
@@ -154,11 +232,12 @@ class userEntry extends Entry
                             ->where('t1.id')->in(array_keys($bugs))
                             ->andWhere('t1.story')->ne('0')
                             ->andWhere('t1.storyVersion != t2.version')
-                            ->fetchAll();
+                            ->fetchPairs('id', 'id');
                         foreach($storyChangeds as $bugID)
                         {
-                            $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->storyChanged);
-                            $bugs[$bugID]->status = $status;
+                            $status = array('code' => 'storyChanged', 'name' => $this->lang->bug->changed);
+                            $bugs[$bugID]->status     = $status['code'];
+                            $bugs[$bugID]->statusName = $status['name'];
                         }
 
                         $info->bug['total'] = $data->data->pager->recTotal;
@@ -194,7 +273,7 @@ class userEntry extends Entry
                         $stories = array();
                         foreach($data->data->stories as $story)
                         {
-                            $story->status = array('code' => $story->status, 'name' => $this->lang->story->statusList[$story->status]);
+                            $story->statusName = $this->lang->story->statusList[$story->status];
                             $stories[$story->id] = $story;
                         }
 
@@ -279,17 +358,25 @@ class userEntry extends Entry
     /**
      * PUT method.
      *
-     * @param  int    $userID
+     * @param  int|string $userID
      * @access public
      * @return void
      */
     public function put($userID)
     {
+        if(!is_numeric($userID))
+        {
+            $user = $this->loadModel('user')->getById($userID, 'account');
+            if(!$user) return $this->send404();
+            $userID = $user->id;
+        }
+
         $oldUser = $this->loadModel('user')->getByID($userID, 'id');
 
         /* Set $_POST variables. */
         $fields = 'dept,realname,email,commiter,gender';
         $this->batchSetPost($fields, $oldUser);
+        $this->setPost('account', $oldUser->account);
 
         if($this->request('gender') and !in_array($this->request('gender'), array('f', 'm'))) return $this->sendError(400, "The value of gendar must be 'f' or 'm'");
 
@@ -310,12 +397,19 @@ class userEntry extends Entry
     /**
      * DELETE method.
      *
-     * @param  int    $userID
+     * @param  int|string $userID
      * @access public
      * @return void
      */
     public function delete($userID)
     {
+        if(!is_numeric($userID))
+        {
+            $user = $this->loadModel('user')->getById($userID, 'account');
+            if(!$user) return $this->send404();
+            $userID = $user->id;
+        }
+
         $this->setPost('verifyPassword', md5($this->app->user->password . $this->app->session->rand));
 
         $control = $this->loadController('user', 'delete');

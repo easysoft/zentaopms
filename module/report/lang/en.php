@@ -110,6 +110,8 @@ $lang->report->mailTitle->testTask = " Request (%s),";
 $lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
 $lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
 $lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
+For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s work summary in %s";
@@ -193,6 +195,9 @@ $lang->report->annualData->actionList['assign']    = 'Assigned';
 $lang->report->annualData->actionList['activate']  = 'Activated';
 $lang->report->annualData->actionList['resolve']   = 'Resolved';
 $lang->report->annualData->actionList['run']       = 'Execute';
+$lang->report->annualData->actionList['stop']      = 'Stop Maintenance';
+$lang->report->annualData->actionList['putoff']    = 'Postponed ';
+$lang->report->annualData->actionList['suspend']   = 'Suspended';
 $lang->report->annualData->actionList['change']    = 'Changed';
 $lang->report->annualData->actionList['pause']     = 'Paused';
 $lang->report->annualData->actionList['cancel']    = 'Canceled';

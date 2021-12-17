@@ -50,7 +50,23 @@ class jobModel extends model
             ->fetchAll('id');
     }
 
-    /**
+     /**
+     * Get job list by RepoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return array
+     */
+    public function getListByRepoID($repoID)
+    {
+        return $this->dao->select('id, name, lastStatus')->from(TABLE_JOB)
+            ->where('deleted')->eq('0')
+            ->andWhere('repo')->eq($repoID)
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+    }
+
+   /**
      * Get list by triggerType field.
      *
      * @param  string  $triggerType
@@ -136,10 +152,9 @@ class jobModel extends model
 
         if(strtolower($job->engine) == 'gitlab')
         {
-            $repo    = $this->loadModel('repo')->getRepoByID($job->gitlabRepo);
+            $repo    = $this->loadModel('repo')->getRepoByID($job->repo);
             $project = zget($repo, 'project');
 
-            $job->repo     = $job->gitlabRepo;
             $job->server   = (int)zget($repo, 'gitlab', 0);
             $job->pipeline = json_encode(array('project' => $project, 'reference' => $this->post->reference));
         }
@@ -183,7 +198,6 @@ class jobModel extends model
 
         $this->dao->insert(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->create->requiredFields, 'notempty')
-
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
@@ -364,7 +378,7 @@ class jobModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $lastTag = $this->getLastTagByRepo($repo);
+            $lastTag = $this->getLastTagByRepo($repo, $job);
             if($lastTag)
             {
                 $build->tag   = $lastTag;
@@ -430,7 +444,7 @@ class jobModel extends model
     /**
      * Exec gitlab pipeline.
      *
-     * @param  int    $job
+     * @param  object $job
      * @access public
      * @return void
      */
@@ -472,11 +486,12 @@ class jobModel extends model
     /**
      * Get last tag of one repo.
      *
-     * @param  object    $repo
+     * @param  object $repo
+     * @param  object $job
      * @access public
      * @return void
      */
-    public function getLastTagByRepo($repo)
+    public function getLastTagByRepo($repo, $job)
     {
         if($repo->SCM == 'Subversion')
         {

@@ -25,7 +25,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testsuite->desc;?></th>
-          <td><?php echo html::textarea('desc', htmlspecialchars($suite->desc), "rows=10 class='form-control'");?></td>
+          <td><?php echo html::textarea('desc', htmlSpecialString($suite->desc), "rows=10 class='form-control'");?></td>
         </tr>
         <?php $this->printExtendFields($suite, 'table');?>
         <?php if($suite->type != 'library'):?>

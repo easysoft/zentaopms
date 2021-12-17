@@ -8,6 +8,7 @@ $(document).on('click', '.task-toggle', function(e)
     e.stopPropagation();
     e.preventDefault();
 });
+
 $(function()
 {
     $('#productplanList tbody tr').each(function()
@@ -24,9 +25,19 @@ $(function()
     {
         var projectID = $('#project').val();
         var planID    = $('#planID').val();
-        $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        if(!projectID)
+        {
+            alert(projectNotEmpty);
+            return false;
+        }
+        else
+        {
+            $.apps.open(createLink('execution', 'create', 'projectID=' + projectID + '&executionID=&copyExecutionID=&planID=' + planID + '&confirm=&productID=' + productID), 'project')
+        }
+        $('#projects').modal('hide');
     });
 });
+
 $(document).on('click', 'td.content .more', function(e)
 {
     var $toggle = $(this);
@@ -50,11 +61,36 @@ $(document).on('click', 'td.content .more', function(e)
  * Get planID
  *
  * @param  object $obj
+ * @param  int    $branch
  * @access public
  * @return void
  */
-function getPlanID(obj)
+function getPlanID(obj, branch)
 {
     var planID = $(obj).attr("data-id");
     $('#planID').val(planID);
+
+    link = createLink('productplan', 'ajaxGetProjects', 'productID=' + productID + '&branch=' + branch);
+    $.get(link, function(projects)
+    {
+        $('#project').replaceWith(projects);
+        $("#project_chosen").remove();
+        $("#project").chosen();
+
+        var projectList = $("#project").val();
+        if(!projectList)
+        {
+            $("#project").attr('disabled', true);
+            $("#project").trigger('chosen:updated');
+            $(".tips").removeClass('hidden');
+
+            var locateLink   = createLink('product', 'project', 'status=all&productID=' + productID + '&branch=' + branch);
+            var locateButton = "<a href=" + locateLink + " class='btn btn-primary' data-app='product'>" + enterProjectList + "</a>";
+            $("#projects .btn-primary").replaceWith(locateButton);
+        }
+        else
+        {
+            $(".tips").addClass('hidden');
+        }
+    });
 }

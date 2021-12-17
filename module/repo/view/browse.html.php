@@ -59,6 +59,7 @@
   <div class="btn-toolbar pull-right">
     <span class='last-sync-time'><?php echo $lang->repo->notice->lastSyncTime . $cacheTime?></span>
     <?php echo html::a($this->repo->createLink('browse', "repoID=$repoID&branchID=$base64BranchID&objectID=$objectID&path=" . $this->repo->encodePath($path) . "&revision=$revision&refresh=1"), "<i class='icon icon-refresh'></i> " . $lang->refresh, '', "class='btn btn-primary' data-app={$app->tab}");?>
+    <?php if($repo->SCM == 'Gitlab' and common::hasPriv('gitlab', 'createBranch')) echo html::a($this->createLink('gitlab', 'createBranch', "gitlabID={$repo->gitlab}&projectID={$repo->project}"), "<i class='icon icon-sm icon-plus'></i> " . $lang->gitlab->createBranch, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <div id="mainContent" class="main-row fade">
@@ -91,7 +92,7 @@
           <td align='center'><?php echo $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);?></td>
           <td><?php echo substr($info->date, 0, 10)?></td>
           <td><?php echo $info->committer?></td>
-          <?php $comment = htmlspecialchars($info->comment, ENT_QUOTES);?>
+          <?php $comment = htmlSpecialString($info->comment, ENT_QUOTES);?>
           <td class='comment' title='<?php echo $comment?>'><?php echo $comment?></td>
         </tr>
         <?php endforeach;?>

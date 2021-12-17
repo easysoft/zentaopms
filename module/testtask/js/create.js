@@ -23,7 +23,7 @@ function loadProductRelated()
  */
 function loadExecutions(productID)
 {
-    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID);
+    link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=');
     $.get(link, function(data)
     {
         if(!data) data = '<select id="execution" name="execution" class="form-control"></select>';
@@ -37,5 +37,5 @@ function loadExecutions(productID)
 $(function()
 {
     adjustPriBoxWidth();
-    if($('#execution').val()) loadExecutionBuilds($('#execution').val());
+    if($('#execution').val() != 0) loadExecutionBuilds($('#execution').val());
 });

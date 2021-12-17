@@ -103,7 +103,7 @@
       <?php if(!empty($case->xml)):?>
       <div class='detail'>
         <div class='detail-title'><?php echo $lang->testcase->xml;?></div>
-        <div class="detail-content article-content"><?php echo nl2br(htmlspecialchars($case->xml));?></div>
+        <div class="detail-content article-content"><?php echo nl2br(htmlSpecialString($case->xml));?></div>
       </div>
       <?php endif;?>
       <?php echo $this->fetch('file', 'printFiles', array('files' => $case->files, 'fieldset' => 'true', 'object' => $case));?>
@@ -131,7 +131,7 @@
         <?php
         if(!isonlybody()) common::printIcon('testcase', 'edit',"caseID=$case->id", $case, 'button', '', '', 'showinonlybody');
         if(!$isLibCase and $case->auto != 'unit') common::printIcon('testcase', 'create', "productID=$case->product&branch=$case->branch&moduleID=$case->module&from=testcase&param=$case->id", $case, 'button', 'copy');
-        if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id", $case), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
+        if($isLibCase and common::hasPriv('caselib', 'createCase')) echo html::a($this->createLink('caselib', 'createCase', "libID=$case->lib&moduleID=$case->module&param=$case->id"), "<i class='icon-copy'></i>", '', "class='btn' title='{$lang->testcase->copy}'");
         common::printIcon('testcase', 'delete', "caseID=$case->id", $case, 'button', 'trash', 'hiddenwin', '');
         ?>
         <?php endif;?>

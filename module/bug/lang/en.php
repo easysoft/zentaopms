@@ -41,13 +41,15 @@ $lang->bug->steps            = 'Repro Steps';
 $lang->bug->status           = 'Status';
 $lang->bug->statusAB         = 'Status';
 $lang->bug->subStatus        = 'Sub Status';
-$lang->bug->activatedCount   = 'Activated Times';
+$lang->bug->activatedCount   = 'Activation';
 $lang->bug->activatedCountAB = 'Active';
 $lang->bug->activatedDate    = 'ActivatedDate';
 $lang->bug->confirmed        = 'Confirmed';
 $lang->bug->confirmedAB      = 'C';
 $lang->bug->toTask           = 'Convert to Task';
 $lang->bug->toStory          = 'Convert to Story';
+$lang->bug->feedbackBy       = 'From Name';
+$lang->bug->notifyEmail      = 'From Email';
 $lang->bug->mailto           = 'Mailto';
 $lang->bug->openedBy         = 'ReportedBy';
 $lang->bug->openedByAB       = 'Reporter';
@@ -63,8 +65,8 @@ $lang->bug->resolvedByAB     = 'ResolvedBy';
 $lang->bug->resolution       = 'Resolution';
 $lang->bug->resolutionAB     = 'Resolution';
 $lang->bug->resolvedBuild    = 'Build';
-$lang->bug->resolvedDate     = 'Resolved Date';
-$lang->bug->resolvedDateAB   = 'ResolvedDate';
+$lang->bug->resolvedDate     = 'Resolved';
+$lang->bug->resolvedDateAB   = 'Resolved';
 $lang->bug->deadline         = 'Deadline';
 $lang->bug->deadlineAB       = 'Deadline';
 $lang->bug->plan             = 'Plan';
@@ -99,6 +101,7 @@ $lang->bug->edit               = 'Edit Bug';
 $lang->bug->batchEdit          = 'Batch Edit';
 $lang->bug->batchChangeModule  = 'Batch Edit Modules';
 $lang->bug->batchChangeBranch  = 'Batch Edit Branches';
+$lang->bug->batchChangePlan    = 'Batch Edit Plans';
 $lang->bug->batchClose         = 'Batch Close';
 $lang->bug->assignTo           = 'Assign';
 $lang->bug->assignAction       = 'Assign Bug';
@@ -140,7 +143,8 @@ $lang->bug->overdueBugs        = 'Overdue';
 $lang->bug->allBugs            = 'All Bugs';
 $lang->bug->byQuery            = 'Search';
 $lang->bug->needConfirm        = 'Story Changed';
-$lang->bug->allProduct         = 'All' . $lang->productCommon . 's';
+$lang->bug->allProject         = 'All Projects';
+$lang->bug->allProduct         = 'All ' . $lang->productCommon . 's';
 $lang->bug->my                 = 'My';
 $lang->bug->yesterdayResolved  = 'Bug Resolved Yesterday ';
 $lang->bug->yesterdayConfirmed = 'Bug Confirmed Yesterday ';
@@ -150,12 +154,16 @@ $lang->bug->assignToMeAB   = 'AssignedToMe';
 $lang->bug->openedByMeAB   = 'ReportedByMe';
 $lang->bug->resolvedByMeAB = 'ResolvedByMe';
 
-$lang->bug->ditto        = 'Ditto';
-$lang->bug->dittoNotice  = 'This bug is not linked to the same product as the last one is!';
-$lang->bug->noAssigned   = 'Unassigned';
-$lang->bug->noBug        = 'No bugs yet.';
-$lang->bug->noModule     = '<div>You have no modules.</div><div>Manage now</div>';
-$lang->bug->delayWarning = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->ditto          = 'Ditto';
+$lang->bug->dittoNotice    = 'This bug is not linked to the same product as the last one is!';
+$lang->bug->noAssigned     = 'Unassigned';
+$lang->bug->noBug          = 'No bugs yet.';
+$lang->bug->noModule       = '<div>You have no modules.</div><div>Manage now</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> Delay %s days </strong>";
+$lang->bug->labelConfirmed = 'Confirmed';
+$lang->bug->labelPostponed = 'Postponed';
+$lang->bug->changed        = 'Changed';
+$lang->bug->storyChanged   = 'Story Changed';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';
@@ -178,6 +186,7 @@ $lang->bug->legendComment               = 'Note';
 $lang->bug->legendLife                  = 'Bug Life';
 $lang->bug->legendMisc                  = 'Misc.';
 $lang->bug->legendRelated               = 'Related Info';
+$lang->bug->legendThisWeekCreated       = 'This Week Created';
 
 /* Button. */
 $lang->bug->buttonConfirm = 'Confirm';
@@ -191,6 +200,7 @@ $lang->bug->skipClose             = 'Bug %s is active. You cannot close it.';
 $lang->bug->executionAccessDenied = "You access to the {$lang->executionCommon} to which this bug belongs is denied!";
 $lang->bug->stepsNotEmpty         = "The reproduction step cannot be empty.";
 $lang->bug->confirmUnlinkBuild    = "Replacing the solution version will disassociate the bug from the old version. Are you sure you want to disassociate the bug from %s?";
+$lang->bug->noSwitchBranch        = 'The linked module of Bug%s is not in the current branch. It will be omitted.';
 
 /* Template. */
 $lang->bug->tplStep   = "<p>[Steps]</p><br/>";
@@ -271,6 +281,7 @@ $lang->bug->statusList['active']   = 'Active';
 $lang->bug->statusList['resolved'] = 'Resolved';
 $lang->bug->statusList['closed']   = 'Closed';
 
+$lang->bug->confirmedList[''] = '';
 $lang->bug->confirmedList[1] = 'Yes';
 $lang->bug->confirmedList[0] = 'No';
 

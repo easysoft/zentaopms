@@ -132,11 +132,27 @@ class searchModel extends model
             $condition = '';
             if($operator == "include")
             {
-                $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = helper::dbIN($allModules);
+                }
+                else
+                {
+                    $condition = ' LIKE ' . $this->dbh->quote("%$value%");
+                }
             }
             elseif($operator == "notinclude")
             {
-                $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                if($this->post->$fieldName == 'module')
+                {
+                    $allModules = $this->loadModel('tree')->getAllChildId($value);
+                    if($allModules) $condition = " NOT " . helper::dbIN($allModules);
+                }
+                else
+                {
+                    $condition = ' NOT LIKE ' . $this->dbh->quote("%$value%");
+                }
             }
             elseif($operator == 'belong')
             {
@@ -266,7 +282,7 @@ class searchModel extends model
 
         if($hasUser)
         {
-            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers);
+            $users = $this->loadModel('user')->getPairs('realname|noclosed', $appendUsers, $this->config->maxCount);
             $users['$@me'] = $this->lang->search->me;
         }
         if($hasProduct) $products = array('' => '') + $this->loadModel('product')->getPairs('', $this->session->project);

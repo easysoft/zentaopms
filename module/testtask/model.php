@@ -58,13 +58,13 @@ class testtaskModel extends model
     /**
      * Get test tasks of a product.
      *
-     * @param  int    $productID
-     * @param  int    $branch
-     * @param  string $orderBy
-     * @param  object $pager
-     * @param  array  $scopeAndStatus
-     * @param  int    $beginTime
-     * @param  int    $endTime
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $orderBy
+     * @param  object      $pager
+     * @param  array       $scopeAndStatus
+     * @param  int         $beginTime
+     * @param  int         $endTime
      * @access public
      * @return array
      */
@@ -72,21 +72,20 @@ class testtaskModel extends model
     {
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
 
-        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName, if(t4.name != '', t4.branch, t5.branch) AS branch")
+        return $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.execution = t3.id')
             ->leftJoin(TABLE_BUILD)->alias('t4')->on('t1.build = t4.id')
-            ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t5')->on('t1.execution = t5.project and t1.product = t5.product')
 
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.auto')->ne('unit')
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in("0,{$this->app->user->view->sprints}")->fi()
             ->beginIF($scopeAndStatus[0] == 'local')->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($scopeAndStatus[0] == 'all')->andWhere('t1.product')->in($products)->fi()
-            ->beginIF($scopeAndStatus[1] == 'totalStatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
-            ->beginIF($scopeAndStatus[1] != 'totalStatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
-            ->beginIF($branch)->andWhere("if(t4.branch, t4.branch, t5.branch) = '$branch'")->fi()
+            ->beginIF(strtolower($scopeAndStatus[1]) == 'totalstatus')->andWhere('t1.status')->in('blocked,doing,wait,done')->fi()
+            ->beginIF(strtolower($scopeAndStatus[1]) != 'totalstatus')->andWhere('t1.status')->eq($scopeAndStatus[1])->fi()
+            ->beginIF($branch !== 'all')->andWhere('t4.branch')->eq($branch)->fi()
             ->beginIF($beginTime)->andWhere('t1.begin')->ge($beginTime)->fi()
             ->beginIF($endTime)->andWhere('t1.end')->le($endTime)->fi()
             ->orderBy($orderBy)
@@ -359,7 +358,7 @@ class testtaskModel extends model
                 ->andWhere('id')->notIN($linkedCases)
                 ->andWhere('status')->ne('wait')
                 ->andWhere('type')->ne('unit')
-                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
                 ->page($pager)
@@ -389,7 +388,7 @@ class testtaskModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('story')->in(trim($stories, ','))
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
@@ -422,7 +421,7 @@ class testtaskModel extends model
                 ->andWhere('product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch)->andWhere('branch')->in("0,$task->branch")->fi()
+                ->beginIF($task->branch !== '')->andWhere('branch')->in("0,$task->branch")->fi()
                 ->andWhere('fromBug')->in(trim($bugs, ','))
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
@@ -456,7 +455,7 @@ class testtaskModel extends model
                 ->andWhere('t1.product')->eq($productID)
                 ->andWhere('status')->ne('wait')
                 ->beginIF($linkedCases)->andWhere('t1.id')->notIN($linkedCases)->fi()
-                ->beginIF($task->branch)->andWhere('t1.branch')->in("0,$task->branch")->fi()
+                ->beginIF($task->branch !== '')->andWhere('t1.branch')->in("0,$task->branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->orderBy('id desc')
                 ->page($pager)
@@ -1433,7 +1432,7 @@ class testtaskModel extends model
                 echo "</span>";
                 break;
             case 'title':
-                if($run->branch) echo "<span class='label label-info label-outline'>{$branches[$run->branch]}</span>";
+                if(!empty($branches)) echo "<span class='label label-badge label-outline'>{$branches[$run->branch]}</span>";
                 if($canView)
                 {
                     if($fromCaseID)

@@ -23,6 +23,7 @@ $lang->repo->encrypt         = 'Encrypt';
 $lang->repo->repo            = 'Repository';
 $lang->repo->parent          = 'Parent File';
 $lang->repo->branch          = 'Branch';
+$lang->repo->addWebHook      = 'Add Webhook';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';
@@ -127,13 +128,13 @@ $lang->repo->logStyles['D'] = 'Delete';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Git']        = 'Git';
 $lang->repo->scmList['Subversion'] = 'SVN';
 
-$lang->repo->gitlabHost    = 'Gitlab Host';
-$lang->repo->gitlabToken   = 'Gitlab Token';
-$lang->repo->gitlabProject = 'Projects';
+$lang->repo->gitlabHost    = 'GitLab Host';
+$lang->repo->gitlabToken   = 'GitLab Token';
+$lang->repo->gitlabProject = 'Project';
 
 $lang->repo->placeholder = new stdclass;
 $lang->repo->placeholder->gitlabHost = 'Input url of gitlab';
@@ -145,6 +146,7 @@ $lang->repo->notice->syncedCount    = 'The number of records synchronized is ';
 $lang->repo->notice->delete         = 'Do you want to delete this repo?';
 $lang->repo->notice->successDelete  = 'Repository is removed.';
 $lang->repo->notice->commentContent = 'Comment';
+$lang->repo->notice->deleteReview   = 'Do you want to delete this review?';
 $lang->repo->notice->deleteBug      = 'Do you want to delete this bug?';
 $lang->repo->notice->deleteComment  = 'Do you want to delete this comment?';
 $lang->repo->notice->lastSyncTime   = 'Last Sync:';

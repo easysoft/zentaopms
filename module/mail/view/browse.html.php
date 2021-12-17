@@ -49,7 +49,7 @@
             <?php echo $queue->id?>
           </td>
           <td><?php echo zget($users, $queue->toList, $queue->toList)?></td>
-          <td class='text-left'><?php echo $queue->subject?></td>
+          <td class='text-left' title='<?php echo $queue->subject;?>'><?php echo $queue->subject?></td>
           <td><?php echo zget($users, $queue->createdBy)?></td>
           <td><?php echo $queue->createdDate?></td>
           <td><?php echo $queue->sendTime?></td>

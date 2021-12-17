@@ -14,7 +14,15 @@
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php $browseLink = $app->session->taskList != false ? $app->session->taskList : $this->createLink('execution', 'browse', "executionID=$task->execution");?>
 <?php js::set('sysurl', common::getSysUrl());?>
+<?php if(strpos($_SERVER["QUERY_STRING"], 'isNotice=1') === false):?>
 <div id="mainMenu" class="clearfix">
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div class="linkButton" onclick="handleLinkButtonClick()">
+  <span title="<?php echo $lang->viewDetails;?>">
+    <i class="icon icon-import icon-rotate-270"></i>
+  </span>
+</div>
+<?php endif;?>
   <div class="btn-toolbar pull-left">
     <?php if(!isonlybody()):?>
     <?php echo html::a($browseLink, '<i class="icon icon-back icon-sm"></i> ' . $lang->goback, '', "class='btn btn-secondary'");?>
@@ -31,7 +39,7 @@
       <span class='label label-danger'><?php echo $lang->task->deleted;?></span>
       <?php endif;?>
       <?php if($task->fromBug != 0):?>
-      <small><?php echo html::icon($lang->icons['bug']) . " {$lang->task->fromBug}$lang->colon$task->fromBug";?></small>
+      <small><?php echo html::a(helper::createLink('bug', 'view', "bugID=$task->fromBug", '', true), "<i class='icon icon-bug'></i> {$lang->task->fromBug}$lang->colon$task->fromBug", '', "class='iframe' data-width='80%'");?></small>
       <?php endif;?>
     </div>
   </div>
@@ -46,6 +54,10 @@
   </div>
   <?php endif;?>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="scrollContent">
+<?php endif;?>
+<?php endif;?>
 <div id="mainContent" class="main-row">
   <div class="main-col col-8">
     <div class="cell">
@@ -150,7 +162,9 @@
       ?>
     </div>
     <?php $this->printExtendFields($task, 'div', "position=left&inForm=0&inCell=1");?>
+    <?php if($this->app->getViewType() != 'xhtml'):?>
     <div class="cell"><?php include '../../common/view/action.html.php';?></div>
+    <?php endif;?>
     <div class='main-actions'>
       <div class="btn-toolbar">
         <?php common::printBack($browseLink);?>
@@ -386,9 +400,19 @@
     <?php $this->printExtendFields($task, 'div', "position=right&inForm=0&inCell=1");?>
   </div>
 </div>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+</div>
+<?php endif;?>
 
 <div id="mainActions" class='main-actions'>
   <?php common::printPreAndNext($preAndNext);?>
 </div>
+<script>
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
+</script>
 <?php include '../../common/view/syntaxhighlighter.html.php';?>
 <?php include '../../common/view/footer.html.php';?>

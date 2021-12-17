@@ -43,7 +43,7 @@ if(isset($entry)) $pathInfo .= '&type=file';
         <?php endif;?>
         <td><?php echo substr($log->time, 0, 10);?></td>
         <td><?php echo $log->committer;?></td>
-        <?php $comment = htmlspecialchars($log->comment, ENT_QUOTES);?>
+        <?php $comment = htmlSpecialString($log->comment, ENT_QUOTES);?>
         <td title='<?php echo $comment?>' class='comment'><?php echo $log->comment?></td>
       </tr>
       <?php endforeach;?>

@@ -129,10 +129,12 @@ $lang->story->reviewedBy     = '由誰評審';
 $lang->story->reviewers      = '評審人員';
 $lang->story->reviewedDate   = '評審時間';
 $lang->story->version        = '版本號';
+$lang->story->feedbackBy     = '反饋者';
+$lang->story->notifyEmail    = '通知郵箱';
 $lang->story->plan           = "所屬計劃";
 $lang->story->planAB         = '計劃';
 $lang->story->comment        = '備註';
-$lang->story->children       = "子{$lang->SRCommon}";
+$lang->story->children       = "子需求";
 $lang->story->childrenAB     = "子";
 $lang->story->linkStories    = "相關{$lang->SRCommon}";
 $lang->story->childStories   = "細分{$lang->SRCommon}";
@@ -235,7 +237,7 @@ $lang->story->changeList['no']  = '不變更';
 $lang->story->changeList['yes'] = '變更';
 
 $lang->story->legendBasicInfo      = '基本信息';
-$lang->story->legendLifeTime       = "{$lang->SRCommon}的一生";
+$lang->story->legendLifeTime       = "需求的一生";
 $lang->story->legendRelated        = '相關信息';
 $lang->story->legendMailto         = '抄送給';
 $lang->story->legendAttatch        = '附件';
@@ -245,9 +247,10 @@ $lang->story->legendFromBug        = '來源Bug';
 $lang->story->legendCases          = '相關用例';
 $lang->story->legendLinkStories    = "相關{$lang->SRCommon}";
 $lang->story->legendChildStories   = "細分{$lang->SRCommon}";
-$lang->story->legendSpec           = "{$lang->SRCommon}描述";
+$lang->story->legendSpec           = "需求描述";
 $lang->story->legendVerify         = '驗收標準';
 $lang->story->legendMisc           = '其他相關';
+$lang->story->legendInformation    = '需求信息';
 
 $lang->story->lblChange            = "變更{$lang->SRCommon}";
 $lang->story->lblReview            = "評審{$lang->SRCommon}";
@@ -256,7 +259,7 @@ $lang->story->lblClose             = "關閉{$lang->SRCommon}";
 $lang->story->lblTBC               = '任務Bug用例';
 
 $lang->story->checkAffection       = '影響範圍';
-$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影響的{$lang->project->common}或{$lang->execution->common}": "影響的{$lang->project->common}";
+$lang->story->affectedProjects     = $config->systemMode == 'new' ? "影響的{$lang->project->common}或{$lang->execution->common}" : "影響的{$lang->project->common}";
 $lang->story->affectedBugs         = '影響的Bug';
 $lang->story->affectedCases        = '影響的用例';
 
@@ -277,6 +280,7 @@ $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所屬產品
 $lang->story->changeTips            = '該軟件需求關聯的用戶需求有變更，點擊“不變更”忽略此條變更，點擊“變更”來進行該軟件需求的變更。';
 $lang->story->estimateMustBeNumber  = '估算值必須是數字';
 $lang->story->estimateMustBePlus    = '估算值不能是負數';
+$lang->story->confirmChangeBranch  = $lang->SRCommon . '%s已關聯在之前所屬分支的計劃中，調整分支後，' . $lang->SRCommon . '將從之前所屬分支的計劃中移除，請確認是否繼續修改上述' . $lang->SRCommon . '的分支。';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "該{$lang->SRCommon}所屬範圍";

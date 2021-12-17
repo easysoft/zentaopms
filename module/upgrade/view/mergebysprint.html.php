@@ -1,7 +1,8 @@
 <div class='alert alert-info'>
   <?php
   printf($lang->upgrade->mergeSummary, $noMergedProductCount, $noMergedSprintCount);
-  if($type == 'moreLink') echo '<br />' . $lang->upgrade->mergeByProject;
+  if($type == 'sprint') echo '<br />' . $lang->upgrade->mergeByProject;
+  if($type == 'moreLink') echo '<br />' . $lang->upgrade->mergeByMoreLink;
   ?>
 </div>
 <div class='main-row'>
@@ -14,7 +15,9 @@
       </div>
       <div class='line-groups sprintGroup'>
         <?php foreach($noMergedSprints as $sprintID => $sprint):?>
-        <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), '', "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+        <div class="sprintItem">
+          <?php echo html::checkBox("sprints", array($sprint->id => $sprint->name), '', "data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}'");?>
+        </div>
         <?php endforeach;?>
       </div>
     </div>

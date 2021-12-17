@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class bugEntry extends entry 
+class bugEntry extends entry
 {
     /**
      * GET method.
@@ -20,12 +20,64 @@ class bugEntry extends entry
      */
     public function get($bugID)
     {
+        $this->resetOpenApp($this->param('tab', 'product'));
+
         $control = $this->loadController('bug', 'view');
         $control->view($bugID);
 
         $data = $this->getData();
-        $bug  = $data->data->bug;
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
+
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
+        $bug = $data->data->bug;
+
+        /* Set product name */
+        $bug->productName = $data->data->product->name;
+
+        /* Set module title */
+        $moduleTitle = '';
+        if(empty($bug->module)) $moduleTitle = '/';
+        if($bug->module)
+        {
+            $modulePath = $data->data->modulePath;
+            foreach($modulePath as $key => $module)
+            {
+                $moduleTitle .= $module->name;
+                if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
+            }
+        }
+        $bug->moduleTitle = $moduleTitle;
+
+        $openedBuilds = array();
+        foreach(explode(',', $bug->openedBuild) as $buildID)
+        {
+            if(empty($buildID)) continue;
+
+            $openedBuild        = new stdclass();
+            $openedBuild->id    = $buildID;
+            $openedBuild->title = zget($data->data->builds, $buildID, '');
+
+            $openedBuilds[] = $openedBuild;
+        }
+        $bug->openedBuild = $openedBuilds;
+
+        if($bug->resolvedBuild)
+        {
+            $resolvedBuild = new stdclass();
+            $resolvedBuild->id    = $bug->resolvedBuild;
+            $resolvedBuild->title = zget($data->data->builds, $bug->resolvedBuild, '');
+            $bug->resolvedBuild   = $resolvedBuild;
+        }
+
+        $bug->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->bug);
+
+        $preAndNext = $data->data->preAndNext;
+        $bug->preAndNext = array();
+        $bug->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $bug->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
+
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**
@@ -42,6 +94,7 @@ class bugEntry extends entry
         /* Set $_POST variables. */
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,closedBy,resolution,product,plan,task';
         $this->batchSetPost($fields, $oldBug);
+        $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
         $control = $this->loadController('bug', 'edit');
         $control->edit($bugID);
@@ -52,7 +105,7 @@ class bugEntry extends entry
         if(!isset($data->status)) return $this->sendError(400, 'error');
 
         $bug = $this->bug->getByID($bugID);
-        $this->send(200, $this->format($bug, 'activatedDate:time,openedDate:time,assignedDate:time,resolvedDate:time,closedDate:time,lastEditedDate:time,deadline:date,deleted:bool'));
+        $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**

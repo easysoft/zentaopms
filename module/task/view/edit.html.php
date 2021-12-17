@@ -62,7 +62,7 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->task->desc;?></div>
             <div class='detail-content'>
-              <?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows='8' class='form-control'");?>
+              <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows='8' class='form-control'");?>
             </div>
           </div>
           <div class='detail'>

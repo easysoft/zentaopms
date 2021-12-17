@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('weekend', $config->execution->weekend);?>
+<?php js::set('productID', $productID);?>
+<?php js::set('lastLang', $lang->productplan->last);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <div id='mainContent'class='main-content'>
   <div class='center-block'>
@@ -25,7 +27,10 @@
           <?php if($parent):?>
           <tr>
             <th><?php echo $lang->productplan->parent;?></th>
-            <td class='muted'><?php echo $parentPlan->title;?></td><td></td><td></td>
+            <td class='muted'><?php echo $parentPlan->title;?>
+            <?php echo html::hidden('parentBegin', $parentPlan->begin);?>
+            <?php echo html::hidden('parentEnd', $parentPlan->end);?>
+            </td><td></td><td></td>
           </tr>
           <?php else:?>
           <tr>
@@ -48,7 +53,7 @@
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo html::input('begin', formatTime($begin), "class='form-control form-date'");?></td>
             <td>
-              <div class='checkbox-primary'> 
+              <div class='checkbox-primary'>
                 <input type='checkbox' id='future' name='future' value='1' />
                 <label for='future'><?php echo $lang->productplan->future;?></label>
               </div>

@@ -33,7 +33,7 @@
     <p><span class="text-muted"><?php echo $lang->task->noTask;?></span></p>
   </div>
   <?php else:?>
-  <form id='myTaskForm' class="main-table table-task" method="post">
+  <form id='myTaskForm' class="main-table table-task skip-iframe-modal" method="post">
     <?php $canBatchEdit  = (common::hasPriv('task', 'batchEdit')  and $type == 'assignedTo');?>
     <?php $canBatchClose = (common::hasPriv('task', 'batchClose') and $type != 'closedBy');?>
     <table class="table has-sort-head table-fixed" id='taskTable'>
@@ -73,7 +73,7 @@
           <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
-      <tbody>
+      <tbody id='myTaskList'>
         <?php foreach($tasks as $task):?>
         <?php $canBeChanged = common::canBeChanged('task', $task);?>
         <tr data-id='<?php echo $task->id;?>' data-status='<?php echo $task->status?>' data-estimate='<?php echo $task->estimate?>' data-consumed='<?php echo $task->consumed?>' data-left='<?php echo $task->left?>'>
@@ -89,14 +89,22 @@
           <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri);?></span></td>
           <td class='c-name <?php if(!empty($task->children)) echo 'has-child';?>' title='<?php echo $task->name?>'>
             <?php if(!empty($task->team))   echo '<span class="label label-badge label-light">' . $this->lang->task->multipleAB . '</span> ';?>
-            <?php if($task->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-            <?php echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color' data-group='execution'");?>
+            <?php 
+            if($task->parent > 0)
+            {
+                echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ' . html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->parentName . ' / '. $task->name, '', "title='{$task->parentName} / {$task->name}'");
+            }
+            else 
+            {
+                echo html::a($this->createLink('task', 'view', "taskID=$task->id", '', '', $task->project), $task->name, null, "style='color: $task->color'");
+            }
+            ?>
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <?php if($config->systemMode == 'new'):?>
           <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'index', "projectID=$task->project"), $task->projectName);?></td>
           <?php endif;?>
-          <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '', "data-group='execution'");?></td>
+          <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?></td>
           <?php if($type != 'openedBy'): ?>
           <td class='c-user'><?php echo zget($users, $task->openedBy);?></td>
           <?php endif;?>
@@ -158,12 +166,12 @@
             <td class="c-pri"><span class='label-pri <?php echo 'label-pri-' . $child->pri;?>' title='<?php echo zget($lang->task->priList, $child->pri);?>'><?php echo zget($lang->task->priList, $child->pri);?></span></td>
             <td class='c-name' title='<?php echo $child->name?>'>
               <?php if($child->parent > 0) echo '<span class="label label-badge label-light">' . $this->lang->task->childrenAB . '</span> ';?>
-              <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color' data-group='project'");?>
+              <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color'");?>
             </td>
             <?php if($config->systemMode == 'new'):?>
             <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$child->project"), $child->projectName);?></td>
             <?php endif;?>
-            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '', "data-group='execution'");?></td>
+            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?></td>
             <?php if($type != 'openedBy'): ?>
             <td class='c-user'><?php echo zget($users, $child->openedBy);?></td>
             <?php endif;?>
@@ -200,8 +208,8 @@
                       common::printIcon('task', 'finish', "taskID=$child->id", $child, 'list', '', '', 'iframe', true, '', '', $child->project);
 
                       common::printIcon('task', 'recordEstimate', "taskID=$child->id", $child, 'list', 'time', '', 'iframe', true, '', '', $child->project);
-                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', 'data-group="execution"', '', $child->project);
-                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, 'data-group="execution"', $this->lang->task->children, $child->project);
+                      common::printIcon('task', 'edit',   "taskID=$child->id", $child, 'list', '', '', '', '', '', '', $child->project);
+                      common::printIcon('task', 'batchCreate', "executionID=$child->execution&storyID=$child->story&moduleID=$child->module&taskID=$child->id&iframe=true", $child, 'list', 'split', '', 'iframe', true, '', $this->lang->task->children, $child->project);
                   }
               }
               ?>
@@ -249,6 +257,8 @@ $(function()
 
     $('#myTaskForm').table(
     {
+        hot: true,
+        replaceId: 'myTaskList',
         statisticCreator: function(table)
         {
             var $table = table.getTable();

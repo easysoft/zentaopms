@@ -41,7 +41,7 @@ $lang->api->noUniqueName     = '接口库名已存在。';
 $lang->api->noUniqueVersion  = '版本已存在。';
 $lang->api->version          = '版本';
 $lang->api->createStruct     = '创建数据结构';
-$lang->api->editStruct       = '修改数据结构';
+$lang->api->editStruct       = '编辑数据结构';
 $lang->api->deleteStruct     = '删除数据结构';
 $lang->api->create           = '创建接口';
 $lang->api->title            = '接口名称';
@@ -148,15 +148,18 @@ $lang->api->methodOptions      = array(
     'OPTIONS' => 'OPTIONS',
     'HEAD'    => 'HEAD'
 );
-$lang->api->protocalOptions    = array(
-    'HTTP'  => 'HTTP',
-    'HTTPS' => 'HTTPS',
-);
-$lang->api->requestTypeOptions = array(
-    'application/json'                  => 'application/json',
-    'application/x-www-form-urlencoded' => 'application/x-www-form-urlencoded',
-    'multipart/form-data'               => 'multipart/form-data'
-);
+
+$lang->api->protocalOptions = array();
+$lang->api->protocalOptions['HTTP']  = 'HTTP';
+$lang->api->protocalOptions['HTTPS'] = 'HTTPS';
+$lang->api->protocalOptions['WS']    = 'WS';
+$lang->api->protocalOptions['WSS']   = 'WSS';
+
+$lang->api->requestTypeOptions = array();
+$lang->api->requestTypeOptions['application/json']                  = 'application/json';
+$lang->api->requestTypeOptions['application/x-www-form-urlencoded'] = 'application/x-www-form-urlencoded';
+$lang->api->requestTypeOptions['multipart/form-data']               = 'multipart/form-data';
+
 $lang->api->statusOptions      = array(
     'done'   => '开发完成',
     'doing'  => '开发中',
@@ -173,6 +176,7 @@ $lang->api->paramsScopeOptions = array(
 /* Api global common params */
 $lang->api->paramsTypeOptions = array(
     'object'   => 'object',
+    'array'    => 'array',
     'string'   => 'string',
     'date'     => 'date',
     'datetime' => 'datetime',
@@ -184,11 +188,10 @@ $lang->api->paramsTypeOptions = array(
     'decimal'  => 'decimal'
 );
 
+$lang->api->boolList = array(false => '否', true => '是', '' => '否');
+
 /* Api params */
-$lang->api->paramsTypeCustomOptions = array(
-    'file' => 'file',
-    'ref'  => 'ref',
-);
+$lang->api->paramsTypeCustomOptions = array('file' => 'file', 'ref' => 'ref');
 
 $lang->api->structParamsOptons   = array_merge($lang->api->paramsTypeOptions, array('file' => 'file', 'ref' => 'ref'));
 $lang->api->allParamsTypeOptions = array_merge($lang->api->paramsTypeOptions, $lang->api->paramsTypeCustomOptions);

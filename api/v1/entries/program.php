@@ -11,4 +11,60 @@
  */
 class programEntry extends Entry
 {
+    /**
+     * GET method.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function get($programID)
+    {
+        $program = $this->loadModel('program')->getByID($programID);
+        if(!$program) return $this->send404();
+
+        $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
+    }
+
+    /**
+     * PUT method.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function put($programID)
+    {
+        $oldProgram = $this->loadModel('program')->getByID($programID);
+
+        /* Set $_POST variables. */
+        $fields = 'name,PM,budget,budgetUnit,desc,parent,begin,end,realBegan,realEnd,acl,whitelist';
+        $this->batchSetPost($fields, $oldProgram);
+        $this->setPost('parent', $this->request('parent', 0));
+
+        $control = $this->loadController('program', 'edit');
+        $control->edit($programID);
+
+        $this->getData();
+        $program = $this->program->getByID($programID);
+        $this->send(200, $this->format($program, 'begin:date,end:date,PO:user,PM:user,QD:user,RD:user,realBegan:date,realEnd:date,openedBy:user,openedDate:time,lastEditedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,deleted:bool,whitelist:userList'));
+    }
+
+    /**
+     * DELETE method.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return void
+     */
+    public function delete($programID)
+    {
+        $control = $this->loadController('program', 'delete');
+        $control->delete(0, $programID, 'true');
+
+        $data = $this->getData();
+        if(isset($data->result) and $data->result == 'fail') return $this->sendError(400, $data->message);
+
+        $this->sendSuccess(200, 'success');
+    }
 }

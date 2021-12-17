@@ -48,12 +48,12 @@ class testtask extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products  = $this->product->getProducts($objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -82,12 +82,13 @@ class testtask extends control
     /**
      * Browse test tasks.
      *
-     * @param  int    $productID
-     * @param  string $type
-     * @param  string $orderBy
-     * @param  int    $recTotal
-     * @param  int    $recPerPage
-     * @param  int    $pageID
+     * @param  int         $productID
+     * @param  int|string  $branch
+     * @param  string      $type
+     * @param  string      $orderBy
+     * @param  int         $recTotal
+     * @param  int         $recPerPage
+     * @param  int         $pageID
      * @access public
      * @return void
      */
@@ -108,7 +109,7 @@ class testtask extends control
 
         /* Set menu. */
         $productID = $this->product->saveState($productID, $this->products);
-        if($branch === '') $branch = (int)$this->cookie->preBranch;
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
         $this->loadModel('qa')->setMenu($this->products, $productID, $branch, $type);
 
         /* Load pager. */
@@ -151,7 +152,7 @@ class testtask extends control
      * @access public
      * @return void
      */
-    public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function browseUnits($productID = 0, $browseType = 'newest', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         /* Save session. */
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
@@ -174,7 +175,7 @@ class testtask extends control
             }
 
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', "projectID=$projectID", '', 0, '', false);
         }
         else
         {
@@ -193,6 +194,7 @@ class testtask extends control
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), $this->products[$productID]);
         $this->view->position[]  = $this->lang->testtask->common;
+        $this->view->projectID   = $projectID;
         $this->view->productID   = $productID;
         $this->view->productName = $this->products[$productID];
         $this->view->orderBy     = $orderBy;
@@ -250,8 +252,8 @@ class testtask extends control
 
         /* Create testtask from testtask of test.*/
         $productID  = $productID ? $productID : key($this->products);
-        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
 
         $testreports = $this->testtask->getTestReportPairsByBuild($build);
 
@@ -363,7 +365,7 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', '', '', 0, '', false);
         }
         else
         {
@@ -549,7 +551,7 @@ class testtask extends control
         $this->view->runs           = $runs;
         $this->view->users          = $this->loadModel('user')->getPairs('noclosed|qafirst|noletter');
         $this->view->assignedToList = $assignedToList;
-        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, $viewType = 'case', $startModuleID = 0, array('treeModel', 'createTestTaskLink'), $extra = $taskID);
+        $this->view->moduleTree     = $this->loadModel('tree')->getTreeMenu($productID, 'case', 0, array('treeModel', 'createTestTaskLink'), $taskID, $task->branch);
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->orderBy        = $orderBy;
@@ -745,7 +747,6 @@ class testtask extends control
         if($this->app->tab == 'project')
         {
             $this->loadModel('project')->setMenu($task->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
         }
         elseif($this->app->tab == 'execution')
         {
@@ -765,7 +766,8 @@ class testtask extends control
         $productID   = $productID ? $productID : key($this->products);
         $projectID   = $this->lang->navGroup->testtask == 'qa' ? 0 : $this->session->project;
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds      = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk', true);
+        $executionID = $task->execution;
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
         $testreports = $this->testtask->getTestReportPairsByBuild($task->build);
 
         $this->view->task         = $task;
@@ -1034,22 +1036,23 @@ class testtask extends control
 
         /* Build the search form. */
         $this->loadModel('testcase');
-        $this->config->testcase->search['params']['product']['values']= array($productID => $this->products[$productID]);
-        $this->config->testcase->search['params']['module']['values'] = $this->loadModel('tree')->getOptionMenu($productID, $viewType = 'case');
+        $this->config->testcase->search['params']['product']['values'] = array($productID => $this->products[$productID]);
+        $this->config->testcase->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($productID, 'case', 0, $task->branch);
         $this->config->testcase->search['actionURL'] = inlink('linkcase', "taskID=$taskID&type=$type&param=$param");
         $this->config->testcase->search['style']     = 'simple';
-        if($this->session->currentProductType == 'normal')
+        if($task->productType == 'normal')
         {
             unset($this->config->testcase->search['fields']['branch']);
             unset($this->config->testcase->search['params']['branch']);
         }
         else
         {
-            $this->config->testcase->search['fields']['branch'] = $this->lang->product->branch;
-            $branches = array('' => '') + $this->loadModel('branch')->getPairs($task->product, 'noempty');
-            if($task->branch) $branches = array('' => '', $task->branch => $branches[$task->branch]);
+            $this->config->testcase->search['fields']['branch'] = sprintf($this->lang->product->branch, $this->lang->product->branchName[$task->productType]);
+            $branchName = $this->loadModel('branch')->getById($task->branch);
+            $branches   = array('' => '', BRANCH_MAIN => $this->lang->branch->main, $task->branch => $branchName);
             $this->config->testcase->search['params']['branch']['values'] = $branches;
         }
+
         if(!$this->config->testcase->needReview) unset($this->config->testcase->search['params']['status']['values']['wait']);
         $this->loadModel('search')->setSearchParams($this->config->testcase->search);
 
@@ -1227,6 +1230,7 @@ class testtask extends control
      */
     public function batchRun($productID, $orderBy = 'id_desc', $from = 'testcase', $taskID = 0)
     {
+        $this->loadModel('tree');
         $url = $this->session->caseList ? $this->session->caseList : $this->createLink('testcase', 'browse', "productID=$productID");
         if($this->post->results)
         {
@@ -1254,7 +1258,7 @@ class testtask extends control
             {
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
-            $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'case');
+            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, 'all');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }
@@ -1340,7 +1344,7 @@ class testtask extends control
         $this->view->case    = $case;
         $this->view->runID   = $runID;
         $this->view->results = $results;
-        $this->view->builds  = $this->loadModel('build')->getProductBuildPairs($case->product, $branch = 0, $params = '');
+        $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $branch = 0, $params = '');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
         die($this->display());
@@ -1361,7 +1365,7 @@ class testtask extends control
             ->andWhere('`case`')->in($this->post->caseIDList)
             ->exec();
         $this->loadModel('action');
-        foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $taskID);
+        foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $this->post->assignedTo);
         die(js::locate($this->session->caseList, 'parent'));
     }
 
@@ -1390,7 +1394,7 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
             $this->loadModel('project')->setMenu($this->session->project);
-            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits');
+            $this->lang->modulePageNav = $this->product->select($this->products, $productID, 'testtask', 'browseUnits', '', '', 0, '', false);
 
             /* Replace language. */
             $project = $this->project->getByID($this->session->project);
@@ -1410,7 +1414,7 @@ class testtask extends control
 
         $projectID  = $this->app->tab == 'qa' ? 0 : $this->session->project;
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getProductBuildPairs($productID, 0, 'notrunk');
+        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 0, 'notrunk');
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->importUnitResult;
         $this->view->position[] = html::a($this->createLink('testtask', 'browse', "productID=$productID"), $this->products[$productID]);

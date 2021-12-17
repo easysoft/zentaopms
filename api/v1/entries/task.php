@@ -20,19 +20,74 @@ class taskEntry extends Entry
      */
     public function get($taskID)
     {
+        $this->resetOpenApp($this->param('tab', 'execution'));
+
         $control = $this->loadController('task', 'view');
         $control->view($taskID);
 
         $data = $this->getData();
 
         if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $task = $data->data->task;
-        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool'));
+
+        if(!empty($task->children)) $task->children = array_values((array)$task->children);
+        if($task->parent > 0) $task->parentPri = $this->dao->select('pri')->from(TABLE_TASK)->where('id')->eq($task->parent)->fetch('pri');
+
+        /* Set execution name */
+        $task->executionName = $data->data->execution->name;
+
+        /* Set module title */
+        $moduleTitle = '';
+        if(empty($task->module)) $moduleTitle = '/';
+        if($task->module)
+        {
+            $modulePath = $data->data->modulePath;
+            foreach($modulePath as $key => $module)
+            {
+                $moduleTitle .= $module->name;
+                if(isset($modulePath[$key + 1])) $moduleTitle .= '/';
+            }
+        }
+        $task->moduleTitle = $moduleTitle;
+
+        $queryAccounts = array();
+        if($task->assignedTo) $queryAccounts[$task->assignedTo] = $task->assignedTo;
+        if(!empty($task->team))
+        {
+            foreach($task->team as $account => $team) $queryAccounts[$account] = $account;
+        }
+        $usersWithAvatar = $this->loadModel('user')->getListByAccounts($queryAccounts, 'account');
+
+        if(!empty($task->team))
+        {
+            $teams = array();
+            foreach($task->team as $account => $team)
+            {
+                $user = zget($usersWithAvatar, $account, '');
+                $team->realname = $user ? $user->realname : $account;
+                $team->avatar   = $user ? $user->avatar : '';
+                $team->estimate = round($team->estimate, 1);
+                $team->consumed = round($team->consumed, 1);
+                $team->left     = round($team->left, 1);
+
+                $allHours = $team->consumed + $team->left;
+                $team->progress = empty($allHours) ? 0 : round($team->consumed / $allHours * 100, 1);
+
+                $teams[] = $team;
+            }
+            $task->team = $teams;
+        }
+
+        $task->actions = $this->loadModel('action')->processActionForAPI($data->data->actions, $data->data->users, $this->lang->task);
+
+        $preAndNext = $data->data->preAndNext;
+        $task->preAndNext = array();
+        $task->preAndNext['pre']  = $preAndNext->pre  ? $preAndNext->pre->id : '';
+        $task->preAndNext['next'] = $preAndNext->next ? $preAndNext->next->id : '';
+
+        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**
@@ -55,7 +110,7 @@ class taskEntry extends Entry
 
         $this->getData();
         $task = $this->task->getByID($taskID);
-        $this->send(200, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
+        $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 
     /**

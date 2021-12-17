@@ -121,6 +121,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       }
       else
       {
+          $branch = $branch != 'all' ? $branch : 0;
           $createBugLink = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
       }
       $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
@@ -186,6 +187,18 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
   <?php endif;?>
 </div>
 <?php endif;?>
+<?php if($this->app->getViewType() == 'xhtml'):?>
+<div id="xx-title">
+  <strong>
+  <?php echo $this->product->getByID($productID)->name ?>
+  </strong>
+  <div class="linkButton" onclick="handleLinkButtonClick()">
+    <span title="<?php echo $lang->viewDetails;?>">
+      <i class="icon icon-import icon-rotate-270"></i>
+    </span>
+  </div>
+</div>
+<?php endif;?>
 <div id="mainContent" class="main-row fade">
   <div class="side-col" id="sidebar">
     <div class="sidebar-toggle"><i class="icon icon-angle-left"></i></div>
@@ -218,7 +231,11 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     $datatableId  = $this->moduleName . ucfirst($this->methodName);
     $useDatatable = (isset($config->datatable->$datatableId->mode) and $config->datatable->$datatableId->mode == 'datatable');
     ?>
+    <?php if($this->app->getViewType() == 'xhtml'):?>
+    <form class='main-table table-bug' method='post' id='bugForm'>
+    <?php else:?>
     <form class='main-table table-bug' method='post' id='bugForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
+    <?php endif;?>
       <div class="table-header fixed-right">
         <nav class="btn-toolbar pull-right"></nav>
       </div>
@@ -246,6 +263,20 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       <table class='table has-sort-head<?php if($useDatatable) echo ' datatable';?>' id='bugList' data-fixed-left-width='<?php echo $widths['leftWidth']?>' data-fixed-right-width='<?php echo $widths['rightWidth']?>'>
         <thead>
           <tr>
+          <?php if($this->app->getViewType() == 'xhtml'):?>
+          <?php
+          foreach($setting as $value)
+          {
+              if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+              {
+                  if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
+
+                  $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
+                  $columns ++;
+              }
+          }
+          ?>
+          <?php else:?>
           <?php
           foreach($setting as $value)
           {
@@ -259,12 +290,24 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               }
           }
           ?>
+          <?php endif;?>
           </tr>
         </thead>
         <tbody>
           <?php foreach($bugs as $bug):?>
           <tr data-id='<?php echo $bug->id?>'>
+            <?php if($this->app->getViewType() == 'xhtml'):?>
+            <?php
+              foreach($setting as $value)
+              {
+                  if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
+                  {
+                    $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');
+                  }
+              }?>
+            <?php else:?>
             <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+            <?php endif;?>
           </tr>
           <?php endforeach;?>
         </tbody>
@@ -342,7 +385,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php if($canBatchChangeBranch and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
-            <?php $withSearch = count($branches) > 8;?>
+            <?php $withSearch = count($branches) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -367,10 +410,10 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule):?>
+          <?php if($canBatchChangeModule and $branch !== 'all'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->moduleAB;?> <span class="caret"></span></button>
-            <?php $withSearch = count($modules) > 8;?>
+            <?php $withSearch = count($modules) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -398,7 +441,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php if($canBatchAssignTo):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->bug->assignedTo;?> <span class="caret"></span></button>
-            <?php $withSearch = count($memberPairs) > 10;?>
+            <?php $withSearch = count($memberPairs) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -447,5 +490,10 @@ $(function(){$('#bugForm').table();})
 <?php if(isset($config->qa->homepage) and $config->qa->homepage != 'browse' and $config->global->flow == 'full'):?>
 $(function(){$('#modulemenu .nav li:last').after("<li class='right'><a style='font-size:12px' href='javascript:setHomepage(\"qa\", \"browse\")'><i class='icon icon-cog'></i> <?php echo $lang->homepage?></a></li>")});
 <?php endif;?>
+function handleLinkButtonClick()
+{
+  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+  window.open(xxcUrl);
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>

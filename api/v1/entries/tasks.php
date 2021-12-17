@@ -31,7 +31,7 @@ class tasksEntry extends entry
         {
             /* Get tasks by execution. */
             $control = $this->loadController('execution', 'task');
-            $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', ''), $this->param('total', 0), $this->param('limit', 100), $this->param('page', 1));
+            $control->task($executionID, $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 100), $this->param('page', 1));
             $data = $this->getData();
         }
 
@@ -42,13 +42,13 @@ class tasksEntry extends entry
             $result = array();
             foreach($tasks as $task)
             {
-                $result[] = $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time,deleted:bool');
+                if(isset($task->children)) $task->children = array_values((array)$task->children);
+                $result[] = $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList');
             }
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'tasks' => $result));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         return $this->sendError(400, 'error');
     }
 
@@ -77,6 +77,6 @@ class tasksEntry extends entry
 
         $task = $this->loadModel('task')->getByID($data->id);
 
-        $this->send(201, $this->format($task, 'openedDate:time,assignedDate:time,realStarted:time,finishedDate:time,canceledDate:time,closedDate:time,lastEditedDate:time'));
+        $this->send(201, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 }

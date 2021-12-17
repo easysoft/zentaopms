@@ -38,16 +38,21 @@ class mrModel extends model
     /**
      * Get MR list of gitlab project.
      *
+     * @param  string   $mode
+     * @param  string   $param
      * @param  string   $orderBy
      * @param  object   $pager
      * @access public
      * @return array
      */
-    public function getList($orderBy = 'id_desc', $pager = null)
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null)
     {
         $MRList = $this->dao->select('*')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
+            ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
+            ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
+            ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -80,12 +85,28 @@ class mrModel extends model
     public function create()
     {
         $MR = fixer::input('post')
+            ->setDefault('jobID', 0)
+            ->setDefault('repoID', 0)
+            ->setDefault('needCI', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
 
+        /* Exec Job */
+        if(isset($MR->jobID) && $MR->jobID)
+        {
+            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+            if(!empty($pipeline->queue))
+            {
+                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $MR->compileID = $compile->id;
+                $MR->compileStatus = $compile->status;
+            }
+        }
+
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
+            ->checkIF($MR->needCI, 'jobID',  'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -98,7 +119,11 @@ class mrModel extends model
         $MRObject->target_branch     = $MR->targetBranch;
         $MRObject->title             = $MR->title;
         $MRObject->description       = $MR->description;
-        $MRObject->assignee_ids      = $MR->assignee;
+        if($MR->assignee)
+        {
+            $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->gitlabID, $MR->assignee);
+            if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
+        }
 
         $rawMR = $this->apiCreateMR($this->post->gitlabID, $this->post->sourceProject, $MRObject);
 
@@ -109,7 +134,22 @@ class mrModel extends model
         if(isset($rawMR->message) and !isset($rawMR->iid))
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $rawMR->message[0]));
+
+            foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+            {
+                if(strpos($errorMsg, '/') === 0)
+                {
+                    $result = preg_match($errorMsg, $rawMR->message[0], $matches);
+                    if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+                }
+                else
+                {
+                    if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
+                }
+
+                if(isset($errorMessage)) break;
+            }
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]));
         }
 
         /* Create MR failed. */
@@ -120,16 +160,12 @@ class mrModel extends model
         }
 
         /* Create a todo item for this MR. */
-        $this->apiCreateMRTodo($this->post->gitlabID, $this->post->targetProject, $rawMR->iid);
+        if(empty($MR->jobID)) $this->apiCreateMRTodo($this->post->gitlabID, $this->post->targetProject, $rawMR->iid);
 
         $newMR = new stdclass;
         $newMR->mriid       = $rawMR->iid;
         $newMR->status      = $rawMR->state;
         $newMR->mergeStatus = $rawMR->merge_status;
-
-        /* Change gitlab user ID to zentao account. */
-        $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($MR->gitlabID);
-        $newMR->assignee = zget($gitlabUsers, $MR->assignee, '');
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($newMR)
@@ -149,28 +185,47 @@ class mrModel extends model
     public function update($MRID)
     {
         $MR = fixer::input('post')
+            ->setDefault('jobID', 0)
+            ->setDefault('repoID', 0)
+            ->setDefault('needCI', 0)
             ->setDefault('editedBy', $this->app->user->account)
             ->setDefault('editedDate', helper::now())
+            ->setIF($this->post->needCI == 0, 'jobID', 0)
             ->get();
+        $oldMR = $this->getByID($MRID);
+
+        $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        /* Exec Job */
+        if(isset($MR->jobID) && $MR->jobID)
+        {
+            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+
+            if(!empty($pipeline->queue) && $MR->jobID != $oldMR->jobID)
+            {
+                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $MR->compileID = $compile->id;
+                $MR->compileStatus = $compile->status;
+            }
+        }
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
         $newMR->title         = $MR->title;
         $newMR->description   = $MR->description;
-        $newMR->assignee_ids  = $MR->assignee;
         $newMR->target_branch = $MR->targetBranch;
-
-        $oldMR = $this->getByID($MRID);
+        if($MR->assignee)
+        {
+            $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->gitlabID, $MR->assignee);
+            if($gitlabAssignee) $newMR->assignee_ids = $gitlabAssignee;
+        }
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
 
-        /* Change gitlab user ID to zentao account. */
-        $gitlabUsers  = $this->gitlab->getUserIdAccountPairs($oldMR->gitlabID);
-        $MR->assignee = zget($gitlabUsers, $MR->assignee, '');
-
         /* Update MR in Zentao database. */
-        $this->dao->update(TABLE_MR)->data($MR)
+        $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)
             ->where('id')->eq($MRID)
             ->batchCheck($this->config->mr->edit->requiredFields, 'notempty')
             ->autoCheck()
@@ -207,9 +262,10 @@ class mrModel extends model
                 if($optionType == 'userPairs')
                 {
                     $gitlabUserID = '';
-                    if(isset($rawMR->$field[0]))
+                    if(isset($rawMR->$field))
                     {
-                        $gitlabUserID = $rawMR->$field[0]->$options;
+                        $values = $rawMR->$field;
+                        if(isset($values[0])) $gitlabUserID = $values[0]->$options;
                     }
                     $value = zget($gitlabUsers, $gitlabUserID, '');
                 }
@@ -258,9 +314,10 @@ class mrModel extends model
                     if($optionType == 'userPairs')
                     {
                         $gitlabUserID = '';
-                        if(isset($rawMR->$field[0]))
+                        if(isset($rawMR->$field))
                         {
-                            $gitlabUserID = $rawMR->$field[0]->$options;
+                            $values = $rawMR->$field;
+                            if(isset($values[0])) $gitlabUserID = $values[0]->$options;
                         }
                         $value = zget($gitlabUsers, $gitlabUserID, '');
                     }
@@ -271,6 +328,12 @@ class mrModel extends model
                 /* For compatibility with PHP 5.4 . */
                 $condition = (array)$newMR;
                 if(empty($condition)) continue;
+
+                /* Update compile status of current MR object */
+                if(isset($MR->needCI) and $MR->needCI == '1')
+                {
+                    $newMR->compileStatus = empty($MR->compileID) ? 'failed' : $this->loadModel('compile')->getByID($MR->compileID)->status;
+                }
 
                 /* Update MR in Zentao database. */
                 $this->dao->update(TABLE_MR)->data($newMR)
@@ -359,11 +422,10 @@ class mrModel extends model
         return rtrim($gitlab->url, '/')."/dashboard/todos?project_id=$projectID&type=MergeRequest";
     }
 
-
     /**
      * Create MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#create-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  object $MR
@@ -379,7 +441,7 @@ class mrModel extends model
     /**
      * Get MR list by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#list-project-merge-requests
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @access public
@@ -394,7 +456,7 @@ class mrModel extends model
     /**
      * Get single MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#get-single-mr
      * @param  int    $gitlabID
      * @param  int    $projectID  targetProject
      * @param  int    $MRID
@@ -410,7 +472,7 @@ class mrModel extends model
     /**
      * Update MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -427,7 +489,7 @@ class mrModel extends model
     /**
      * Delete MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#delete-a-merge-request
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#delete-a-merge-request
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -440,10 +502,42 @@ class mrModel extends model
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
+     /**
+     * Close MR by API.
+     *
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiCloseMR($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=close';
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
+    /**
+     * Reopen MR by API.
+     *
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#update-mr
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiReopenMR($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID") . '&state_event=reopen';
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+    }
+
     /**
      * Accept MR by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#accept-mr
      * @param  int    $gitlabID
      * @param  int    $projectID
      * @param  int    $MRID
@@ -461,14 +555,16 @@ class mrModel extends model
     /**
      * Get MR diff versions by API.
      *
-     * @docs   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
+     * @link   https://docs.gitlab.com/ee/api/merge_requests.html#get-mr-diff-versions
      * @param  object    $MR
+     * @param  string    $encoding
      * @access public
      * @return object
      */
-    public function getDiffs($MR)
+    public function getDiffs($MR, $encoding = '')
     {
-        $gitlab = $this->gitlab->getByID($MR->gitlabID);
+        $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $gitlab       = $this->gitlab->getByID($MR->gitlabID);
 
         $this->loadModel('repo');
         $repo = new stdclass;
@@ -478,13 +574,38 @@ class mrModel extends model
         $repo->path     = sprintf($this->config->repo->gitlab->apiPath, $gitlab->url, $MR->targetProject);
         $repo->client   = $gitlab->url;
         $repo->password = $gitlab->token;
+        $repo->account  = '';
+        $repo->encoding = $encoding;
+
+        $lines      = array();
+        $commitList = array();
+        foreach ($diffVersions as $diffVersion)
+        {
+            $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
+            if($singleDiff->state == 'empty') continue;
+            $commits = $singleDiff->commits;
+            $diffs   = $singleDiff->diffs;
+            foreach($diffs as $index => $diff)
+            {
+                if(empty($commits[$index])) continue;
+                /* Make sure every file with same commitID is unique in $lines. */
+                $shortID = $commits[$index]->short_id;
+                if(in_array($shortID, $commitList)) continue;
+                $commitList[] = $shortID;
+
+                $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
+                $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
+                $lines[] = sprintf("--a/%s", $diff->old_path);
+                $lines[] = sprintf("--b/%s", $diff->new_path);
+                $diffLines = explode("\n", $diff->diff);
+                foreach($diffLines as $diffLine) $lines[] = $diffLine;
+            }
+        }
 
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
-
-        $encoding = empty($encoding) ? $repo->encoding : $encoding;
-        $encoding = strtolower(str_replace('_', '-', $encoding));
-        return $scm->diff('', $MR->sourceBranch, $MR->targetBranch, $parse = true, $MR->sourceProject);
+        $diff = $scm->engine->parseDiff($lines);
+        return $diff;
     }
 
     /**
@@ -499,9 +620,9 @@ class mrModel extends model
     public function getSudoAccountPair($gitlabID, $projectID, $account)
     {
         $bindedUsers = $this->gitlab->getUserAccountIdPairs($gitlabID);
-        $accuntPair = array();
-        if(isset($bindedUsers[$account])) $accuntPair[$account] = $bindedUsers[$account];
-        return $accuntPair;
+        $accountPair = array();
+        if(isset($bindedUsers[$account])) $accountPair[$account] = $bindedUsers[$account];
+        return $accountPair;
     }
 
     /**
@@ -525,7 +646,7 @@ class mrModel extends model
             if(!empty($bindedUsers[$rawProjectUser->username])) $users[$rawProjectUser->username] = $bindedUsers[$rawProjectUser->username];
         }
         if(!empty($users[$zentaoUser])) return $users[$zentaoUser];
-        return "";
+        return '';
     }
 
     /**
@@ -541,5 +662,653 @@ class mrModel extends model
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/todo");
         return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'POST')));
+    }
+
+    /**
+     * Get diff versions of MR from GitLab API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiGetDiffVersions($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get a single diff version of MR from GitLab API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @param  int    $versionID
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleDiffVersion($gitlabID, $projectID, $MRID, $versionID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/versions/$versionID");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get diff commits of MR from GitLab API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  int    $MRID
+     * @access public
+     * @return object
+     */
+    public function apiGetDiffCommits($gitlabID, $projectID, $MRID)
+    {
+        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/commits");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Reject or Approve this MR.
+     *
+     * @param  object $MR
+     * @param  string $action
+     * @param  string $comment
+     * @return array
+     */
+    public function approve($MR, $action = 'approve', $comment = '')
+    {
+        $this->loadModel('action');
+        $actionID = $this->action->create('mr', $MR->id, $action);
+
+        $oldMR = $MR;
+        if(isset($MR->status) and $MR->status == 'opened')
+        {
+            $rawApprovalStatus = '';
+            if(isset($MR->approvalStatus)) $rawApprovalStatus = $MR->approvalStatus;
+            $MR->approver = $this->app->user->account;
+            if ($action == 'reject' and $rawApprovalStatus != 'rejected') $MR->approvalStatus = 'rejected';
+            if ($action == 'approve' and $rawApprovalStatus != 'approved') $MR->approvalStatus = 'approved';
+            if (isset($MR->approvalStatus) and $rawApprovalStatus != $MR->approvalStatus)
+            {
+                $changes = common::createChanges($oldMR, $MR);
+                $this->action->logHistory($actionID, $changes);
+                $this->dao->update(TABLE_MR)->data($MR)
+                    ->where('id')->eq($MR->id)
+                    ->exec();
+                if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+                /* Save approval history into db. */
+                $approval = new stdClass;
+                $approval->date    = helper::now();
+                $approval->mrID    = $MR->id;
+                $approval->account = $MR->approver;
+                $approval->action  = $action;
+                $approval->comment = $comment;
+                $this->dao->insert(TABLE_MRAPPROVAL)->data($approval, $this->config->mrapproval->create->skippedFields)
+                    ->batchCheck($this->config->mrapproval->create->requiredFields, 'notempty')
+                    ->autoCheck()
+                    ->exec();
+                if (dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+                return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refresh()');
+            }
+        }
+        return array('result' => 'fail', 'message' => $this->lang->mr->repeatedOperation, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
+
+    /**
+     * Close this MR.
+     *
+     * @param  mixed $MR
+     * @return void
+     */
+    public function close($MR)
+    {
+        $this->loadModel('action');
+        $actionID = $this->action->create('mr', $MR->id, 'closed');
+        $rawMR = $this->apiCloseMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $changes = common::createChanges($MR, $rawMR);
+        $this->action->logHistory($actionID, $changes);
+        if(isset($rawMR->state) and $rawMR->state == 'closed') return array('result' => 'success', 'message' => $this->lang->mr->closeSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
+
+    /**
+     * Reopen this MR.
+     *
+     * @param  mixed $MR
+     * @return void
+     */
+    public function reopen($MR)
+    {
+        $this->loadModel('action');
+        $actionID = $this->action->create('mr', $MR->id, 'reopen');
+        $rawMR = $this->apiReopenMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+        $changes = common::createChanges($MR, $rawMR);
+        $this->action->logHistory($actionID, $changes);
+        if(isset($rawMR->state) and $rawMR->state == 'opened') return array('result' => 'success', 'message' => $this->lang->mr->reopenSuccess, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+        return array('result' => 'fail', 'message' => $this->lang->fail, 'locate' => helper::createLink('mr', 'view', "mr={$MR->id}"));
+    }
+
+
+    /**
+     * Get review.
+     *
+     * @param  int    $repoID
+     * @param  int    $MRID
+     * @param  string $revision
+     * @access public
+     * @return array
+     */
+    public function getReview($repoID, $MRID, $revision = '')
+    {
+        if(empty($repoID) or empty($MRID)) return array();
+
+        $reviews = array();
+        $bugs    = $this->dao->select('t1.*, t2.realname')->from(TABLE_BUG)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
+            ->where('t1.repo')->eq((int)$repoID)
+            ->andWhere('t1.mr')->eq((int)$MRID)
+            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+        foreach($bugs as $bug)
+        {
+            if(common::hasPriv('bug', 'edit'))   $bug->edit   = true;
+            if(common::hasPriv('bug', 'delete')) $bug->delete = true;
+            if(common::hasPriv('bug', 'view'))   $bug->view   = true;
+            $lines = explode(',', trim($bug->lines, ','));
+            $line  = $lines[0];
+            $reviews[$line]['bug'][$bug->id] = $bug;
+        }
+
+        $tasks = $this->dao->select('t1.*, t2.realname')->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.openedBy = t2.account')
+            ->where('t1.repo')->eq((int)$repoID)
+            ->andWhere('t1.mr')->eq((int)$MRID)
+            ->beginIF($revision)->andWhere('t1.v2')->eq($revision)->fi()
+            ->andWhere('t1.deleted')->eq(0)
+            ->fetchAll('id');
+        foreach($tasks as $task)
+        {
+            if(common::hasPriv('task', 'edit'))   $task->edit   = true;
+            if(common::hasPriv('task', 'delete')) $task->delete = true;
+            if(common::hasPriv('task', 'view'))   $task->view   = true;
+            $lines = explode(',', trim($task->lines, ','));
+            $line  = $lines[0];
+            $reviews[$line]['task'][$task->id] = $task;
+        }
+
+        return $reviews;
+    }
+
+    /**
+     * Get bugs by repo.
+     *
+     * @param  int    $repoID
+     * @param  string $browseType
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getBugsByRepo($repoID, $browseType, $orderBy, $pager)
+    {
+        /* Get execution that user can access. */
+        $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty|withdelete');
+
+        $bugs = $this->dao->select('*')->from(TABLE_BUG)
+            ->where('repo')->eq($repoID)
+            ->andWhere('deleted')->eq('0')
+            ->beginIF(!$this->app->user->admin)->andWhere('product')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('execution')->in(array_keys($executions))->fi()
+            ->beginIF($browseType == 'assigntome')->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'openedbyme')->andWhere('openedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'resolvedbyme')->andWhere('resolvedBy')->eq($this->app->user->account)->fi()
+            ->beginIF($browseType == 'assigntonull')->andWhere('assignedTo')->eq('')->fi()
+            ->beginIF($browseType == 'unresolved')->andWhere('resolvedBy')->eq('')->fi()
+            ->beginIF($browseType == 'unclosed')->andWhere('status')->ne('closed')->fi()
+            ->orderBy($orderBy)
+            ->page($pager)
+            ->fetchAll();
+        return $bugs;
+    }
+
+    /**
+     * Get execution pairs.
+     *
+     * @param  int    $product
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getExecutionPairs($product, $branch = 0)
+    {
+        $pairs = array();
+        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
+        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        return $pairs;
+    }
+
+    /**
+     * Save bug.
+     *
+     * @param  int    $repoID
+     * @param  int    $mr
+     * @param  int    $v1
+     * @param  int    $v2
+     * @access public
+     * @return array
+     */
+    public function saveBug($repoID, $mr, $v1, $v2)
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')
+            ->stripTags('commentText', $this->config->allowedTags)
+            ->add('pri', 2)
+            ->add('severity', 2)
+            ->add('openedBy', $this->app->user->account)
+            ->add('openedDate', $now)
+            ->add('openedBuild', 'trunk')
+            ->add('type', 'codeerror')
+            ->add('repo', $repoID)
+            ->add('mr', $mr)
+            ->add('lines', $this->post->begin . ',' . $this->post->end)
+            ->add('v1', $v1)
+            ->add('v2', $v2)
+            ->cleanInt('module,execution,mr,repo')
+            ->remove('begin,end,uid,reviewType,taskExecution,taskModule,taskAssignedTo')
+            ->get();
+
+        $data->steps = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
+        if($data->execution) $data->project = (int)$this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($data->execution)->fetch('project');
+        if($data->assignedTo) $data->assignedDate = $now;
+        unset($data->commentText);
+
+        $this->loadModel('bug');
+        foreach(explode(',', $this->config->bug->create->requiredFields . ',repo,mr') as $requiredField)
+        {
+            $requiredField = trim($requiredField);
+            if(empty($requiredField)) continue;
+            if(!isset($data->$requiredField)) continue;
+            if(empty($data->$requiredField))
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->bug->$requiredField)) $fieldName = $this->lang->bug->$requiredField;
+                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $this->dao->insert(TABLE_BUG)->data($data)->autocheck()->exec();
+
+        if(!dao::isError())
+        {
+            $bugID = $this->dao->lastInsertID();
+            $this->loadModel('file')->updateObjectID($this->post->uid, $bugID, 'bug');
+            setcookie("repoPairs[$repoID]", $data->product);
+
+            $bugInfo = array();
+            $bugInfo['result']     = 'success';
+            $bugInfo['id']         = $bugID;
+            $bugInfo['realname']   = $this->app->user->realname;
+            $bugInfo['openedDate'] = substr($now, 5, 11);
+            $bugInfo['edit']       = common::hasPriv('bug', 'edit');
+            $bugInfo['view']       = common::hasPriv('bug', 'view');
+            $bugInfo['delete']     = common::hasPriv('bug', 'delete');
+            $bugInfo['lines']      = $data->lines;
+            $bugInfo['line']       = $this->post->begin;
+            $bugInfo['content']    = $data->steps;
+            $bugInfo['title']      = $data->title;
+            $bugInfo['objectType'] = 'bug';
+            $bugInfo['entry']      = $data->entry;
+            return $bugInfo;
+        }
+
+        return array('result' => 'fail', 'message' => dao::getError());
+    }
+
+    /**
+     * Save task.
+     *
+     * @param  int    $repoID
+     * @param  int    $mr
+     * @param  int    $v1
+     * @param  int    $v2
+     * @access public
+     * @return array
+     */
+    public function saveTask($repoID, $mr, $v1, $v2)
+    {
+        $now  = helper::now();
+        $data = fixer::input('post')->stripTags('commentText', $this->config->allowedTags)->get();
+
+        $task = new stdclass();
+        $task->execution  = (int)$data->taskExecution;
+        $task->project    = (int)$this->dao->select('project')->from(TABLE_PROJECT)->where('id')->eq($task->execution)->fetch('project');
+        $task->module     = (int)$data->taskModule;
+        $task->name       = $data->title;
+        $task->type       = 'devel';
+        $task->pri        = '2';
+        $task->status     = 'wait';
+        $task->version    = '1';
+        $task->openedBy   = $this->app->user->account;
+        $task->assignedTo = $data->taskAssignedTo;
+        $task->repo       = (int)$repoID;
+        $task->mr         = (int)$mr;
+        $task->lines      = $this->post->begin . ',' . $this->post->end;
+        $task->entry      = $data->entry;
+        $task->v1         = $v1;
+        $task->v2         = $v2;
+        $task->desc       = $this->loadModel('file')->pasteImage($data->commentText, $this->post->uid);
+        if($task->assignedTo) $task->assignedDate = $now;
+
+        $this->loadModel('task');
+        foreach(explode(',', $this->config->task->create->requiredFields . ',repo,mr') as $requiredField)
+        {
+            $requiredField = trim($requiredField);
+            if(empty($requiredField)) continue;
+            if(!isset($task->$requiredField)) continue;
+            if(empty($task->$requiredField))
+            {
+                $fieldName = $requiredField;
+                if(isset($this->lang->task->$requiredField)) $fieldName = $this->lang->task->$requiredField;
+                dao::$errors[$requiredField][] = sprintf($this->lang->error->notempty, $fieldName);
+            }
+        }
+        if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
+
+        $this->dao->insert(TABLE_TASK)->data($task)->autocheck()->exec();
+
+        if(!dao::isError())
+        {
+            $taskID = $this->dao->lastInsertID();
+            $this->file->updateObjectID($this->post->uid, $taskID, 'task');
+
+            $taskInfo = array();
+            $taskInfo['result']     = 'success';
+            $taskInfo['id']         = $taskID;
+            $taskInfo['realname']   = $this->app->user->realname;
+            $taskInfo['openedDate'] = substr($now, 5, 11);
+            $taskInfo['edit']       = common::hasPriv('task', 'edit');
+            $taskInfo['view']       = common::hasPriv('task', 'view');
+            $taskInfo['delete']     = common::hasPriv('task', 'delete');
+            $taskInfo['lines']      = $task->lines;
+            $taskInfo['line']       = $this->post->begin;
+            $taskInfo['content']    = $task->desc;
+            $taskInfo['title']      = $data->title;
+            $taskInfo['objectType'] = 'task';
+            $taskInfo['entry']      = $task->entry;
+            return $taskInfo;
+        }
+
+        return array('result' => 'fail', 'message' => dao::getError());
+    }
+
+    /**
+     * Update bug.
+     *
+     * @param  int    $bugID
+     * @param  string $title
+     * @access public
+     * @return string
+     */
+    public function updateBug($bugID, $title)
+    {
+        $this->dao->update(TABLE_BUG)->set('title')->eq($title)->where('id')->eq($bugID)->exec();
+        return $title;
+    }
+
+    /**
+     * Update comment.
+     *
+     * @param  int    $commentID
+     * @param  string $comment
+     * @access public
+     * @return string
+     */
+    public function updateComment($commentID, $comment)
+    {
+        $this->dao->update(TABLE_ACTION)->set('comment')->eq($comment)->where('id')->eq($commentID)->exec();
+        return $comment;
+    }
+
+    /**
+     * Delete comment.
+     *
+     * @param  int    $commentID
+     * @access public
+     * @return void
+     */
+    public function deleteComment($commentID)
+    {
+        return $this->dao->delete()->from(TABLE_ACTION)->where('id')->eq($commentID)->exec();
+    }
+
+    /**
+     * Get last review info.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return object
+     */
+    public function getLastReviewInfo($repoID)
+    {
+        if(empty($repoID)) return null;
+
+        $lastReview = new stdclass();
+        $lastReview->bug  = $this->dao->select('*')->from(TABLE_BUG)->where('repo')->eq((int)$repoID)->orderby('id_desc')->fetch();
+        $lastReview->task = $this->dao->select('*')->from(TABLE_TASK)->where('repo')->eq((int)$repoID)->orderby('id_desc')->fetch();
+        return $lastReview;
+    }
+
+    /**
+     * Get mr link list.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @param string $orderBy
+     * @param object $pager
+     * @access public
+     * @return array
+     */
+    public function getLinkList($MRID, $productID, $type, $orderBy = 'id_desc', $pager = null)
+    {
+        $linkIDs = $this->dao->select('BID')->from(TABLE_RELATION)
+            ->where('product')->eq($productID)
+            ->andWhere('relation')->eq('interrated')
+            ->andWhere('AType')->eq('mr')
+            ->andWhere('AID')->eq($MRID)
+            ->andWhere('BType')->eq($type)
+            ->fetchPairs('BID');
+
+        $links = array();
+        if($type == 'story' and !empty($linkIDs))
+        {
+            $orderBy = str_replace('name_', 'title_', $orderBy);
+            $links = $this->dao->select('t1.*, t2.spec, t2.verify, t3.name as productTitle')
+                ->from(TABLE_STORY)->alias('t1')
+                ->leftJoin(TABLE_STORYSPEC)->alias('t2')->on('t1.id=t2.story')
+                ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.version=t2.version')
+                ->andWhere('t1.id')->in($linkIDs)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        if($type == 'bug' and !empty($linkIDs))
+        {
+            $orderBy = str_replace('name_', 'title_', $orderBy);
+            $links = $this->dao->select('*')->from(TABLE_BUG)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($linkIDs)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+        if($type == 'task' and !empty($linkIDs))
+        {
+            $orderBy = str_replace('title_', 'name_', $orderBy);
+            $links = $this->dao->select('*')->from(TABLE_TASK)
+                ->where('deleted')->eq(0)
+                ->andWhere('id')->in($linkIDs)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        return $links;
+    }
+
+    /**
+     * Create an mr link.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @access public
+     * @return void
+     */
+    public function link($MRID, $productID, $type)
+    {
+        $this->loadModel('action');
+        if($type == 'story') $links = $this->post->stories;
+        if($type == 'bug')   $links = $this->post->bugs;
+        if($type == 'task')  $links = $this->post->tasks;
+
+        /* Get link action text. */
+        $MR       = $this->getByID($MRID);
+        $users    = $this->loadModel('user')->getPairs('noletter');
+        $MRCreateAction = sprintf($this->lang->mr->createAction, $MR->createdDate, zget($users, $MR->createdBy), helper::createLink('mr', 'view', "mr={$MR->id}"));
+
+        foreach($links as $linkID)
+        {
+            $relation           = new stdclass;
+            $relation->product  = $productID;
+            $relation->AType    = 'mr';
+            $relation->AID      = $MRID;
+            $relation->relation = 'interrated';
+            $relation->BType    = $type;
+            $relation->BID      = $linkID;
+
+            $this->dao->replace(TABLE_RELATION)->data($relation)->exec();
+
+            if($type == 'story') $this->action->create('story', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'bug')   $this->action->create('bug', $linkID, 'createmr', '', $MRCreateAction);
+            if($type == 'task')  $this->action->create('task', $linkID, 'createmr', '', $MRCreateAction);
+        }
+    }
+
+    /**
+     * unLink an mr link.
+     *
+     * @param int    $MRID
+     * @param int    $productID
+     * @param string $type
+     * @param int    $linkID
+     * @access public
+     * @return void
+     */
+    public function unlink($MRID, $productID, $type, $linkID)
+    {
+        $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
+
+        $this->loadModel('action')->create($type, $linkID, 'deletemr');
+    }
+
+    /**
+     * Get links by mr commites.
+     *
+     * @param int    $gitlabID
+     * @param int    $projectID
+     * @param int    $MRID
+     * @param string $type
+     * @access public
+     * @return array
+     */
+    public function getCommitedLink($gitlabID, $projectID, $MRID, $type)
+    {
+        $DiffCommits = $this->apiGetDiffCommits($gitlabID, $projectID, $MRID);
+
+        $commits = array();
+        foreach($DiffCommits as $DiffCommit)
+        {
+            $commits[] = substr($DiffCommit->id, 0, 10);
+        }
+
+        return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
+    }
+
+    /**
+     * Get mr product.
+     *
+     * @param object $MR
+     * @access public
+     * @return mix
+     */
+    public function getMRProduct($MR)
+    {
+        $product = array();
+
+        if($MR->repoID)
+        {
+            $productID = $this->dao->select('product')->from(TABLE_REPO)->where('id')->eq($MR->repoID)->fetch('product');
+        }
+        else
+        {
+            $products  = $this->loadModel('gitlab')->getProductsByProjects(array($MR->targetProject, $MR->sourceProject));
+            $productID = array_shift($products);
+        }
+
+        if($productID) $product = $this->loadModel('product')->getById($productID);
+        return $product;
+    }
+
+    /**
+     * Get toList and ccList.
+     *
+     * @param  object $mr
+     * @access public
+     * @return bool|array
+     */
+    public function getToAndCcList($mr)
+    {
+        return array($mr->createdBy, $mr->assignee);
+    }
+
+    /**
+     * Log merged action to links.
+     *
+     * @param object $MR
+     * @access public
+     * @return void
+     */
+    public function logMergedAction($MR)
+    {
+        $this->loadModel('action');
+        $product = $this->getMRProduct($MR);
+
+        $stories = $this->getLinkList($MR->id, $product->id, 'story');
+        foreach($stories as $story)
+        {
+            $this->action->create('story', $story->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+        }
+
+        $bugs = $this->getLinkList($MR->id, $product->id, 'bug');
+        foreach($bugs as $bug)
+        {
+            $this->action->create('bug', $bug->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+        }
+
+        $tasks = $this->getLinkList($MR->id, $product->id, 'task');
+        foreach($tasks as $task)
+        {
+            $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
+        }
     }
 }

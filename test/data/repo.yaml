@@ -1,0 +1,20 @@
+title: zt_repo
+author: Yidong Wang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: product
+    range: 1
+  - field: name
+    range: 723test
+  - field: path
+    range: 42
+  - field: SCM
+    range: Gitlab
+  - field: client
+    range: 1
+  - field: extra
+    range: 42
+  - field: deleted
+    range: 0

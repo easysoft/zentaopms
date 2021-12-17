@@ -77,7 +77,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->desc;?></th>
-          <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($task->desc), "rows=10 class='form-control'");?></td>
+          <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows=10 class='form-control'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->comment;?></th>

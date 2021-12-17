@@ -147,8 +147,17 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
+        $todos = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
+        $tasks = $this->loadModel('task')->getUserSuspendedTasks($account);
+        foreach($todos as $key => $todo)
+        {
+            if($todo->type == 'task' and isset($tasks[$todo->idvalue])) unset($todos[$key]);
+        }
+
+        $pager->recTotal = count($todos);
+
         /* Assign. */
-        $this->view->todos        = $this->loadModel('todo')->getList($type, $account, $status, 0, $pager, $sort);
+        $this->view->todos        = $todos;
         $this->view->date         = (int)$type == 0 ? date(DT_DATE1) : date(DT_DATE1, strtotime($type));
         $this->view->type         = $type;
         $this->view->recTotal     = $recTotal;
@@ -181,7 +190,7 @@ class my extends control
     public function story($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -225,7 +234,7 @@ class my extends control
     public function requirement($type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Save session. */
-        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'product');
+        if($this->app->viewType != 'json') $this->session->set('storyList', $this->app->getURI(true), 'my');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -355,7 +364,7 @@ class my extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, $type, $sort, 0, $pager);
         $bugs = $this->bug->checkDelayedBugs($bugs);
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'myBug');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'bug', false);
 
         /* assign. */
         $this->view->title       = $this->lang->my->common . $this->lang->colon . $this->lang->my->bug;
@@ -711,7 +720,7 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->ncs        = $this->my->getNcList($browseType, $orderBy, $pager);
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->mode       = 'nc';
         $this->display();
     }

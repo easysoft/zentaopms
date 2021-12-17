@@ -56,8 +56,12 @@ $lang->release->createdBugs   = '本次共遗留 %s 个Bug';
 $lang->release->export        = '导出HTML';
 $lang->release->yesterday     = '昨日发布';
 $lang->release->all           = '所有';
-$lang->release->notify        = '通知人员';
+$lang->release->notify        = '发送通知';
+$lang->release->notifyUsers   = '通知人员';
 $lang->release->mailto        = '抄送给';
+$lang->release->mailContent   = '<p>尊敬的用户，您好！</p><p style="margin-left: 30px;">您反馈的如下需求和Bug已经在 %s版本中发布，请联系客户经理查看最新版本。</p>';
+$lang->release->storyList     = '<p style="margin-left: 30px;">需求列表：%s。</p>';
+$lang->release->bugList       = '<p style="margin-left: 30px;">Bug列表：%s。</p>';
 
 $lang->release->filePath = '下载地址：';
 $lang->release->scmPath  = '版本库地址：';
@@ -76,7 +80,9 @@ $lang->release->changeStatusList['terminate'] = '停止维护';
 
 $lang->release->action = new stdclass();
 $lang->release->action->changestatus = array('main' => '$date, 由 <strong>$actor</strong> $extra。', 'extra' => 'changeStatusList');
+$lang->release->action->notified     = array('main' => '$date, 由 <strong>$actor</strong> 发送通知。');
 
+$lang->release->notifyList['FB'] = "反馈者";
 $lang->release->notifyList['PO'] = "{$lang->productCommon}负责人";
 $lang->release->notifyList['QD'] = '测试负责人';
 $lang->release->notifyList['SC'] = '需求提交人';

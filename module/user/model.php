@@ -58,23 +58,22 @@ class userModel extends model
     {
         if(empty($accounts)) return array();
 
-        return $this->dao->select('id,account,realname,role')->from(TABLE_USER)
+        return $this->dao->select('id,account,realname,avatar,role')->from(TABLE_USER)
             ->where('account')->in($accounts)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq('inside')
             ->fetchAll($keyField);
     }
 
     /**
      * Get the account=>realname pairs.
      *
-     * @param  string $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
-     * @param  string $usersToAppended  account1,account2
-     * @param  int    $maxCount
+     * @param  string       $params   noletter|noempty|nodeleted|noclosed|withguest|pofirst|devfirst|qafirst|pmfirst|realname|outside|inside|all, can be sets of theme
+     * @param  string       $usersToAppended  account1,account2
+     * @param  int          $maxCount
+     * @param  string|array $accounts
      * @access public
      * @return array
      */
-    public function getPairs($params = '', $usersToAppended = '', $maxCount = 0)
+    public function getPairs($params = '', $usersToAppended = '', $maxCount = 0, $accounts = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getUserPairs();
         /* Set the query fields and orderBy condition.
@@ -102,6 +101,7 @@ class userModel extends model
             ->where('1')
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
+            ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);
@@ -969,8 +969,12 @@ class userModel extends model
         }
 
         /* Get can manage projects by user. */
-        $projectAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
-        $canManageProjects   = $this->dao->select('project')->from(TABLE_USERGROUP)->where('`group`')->eq($projectAdminGroupID)->andWhere('account')->eq($account)->fetch('project');
+        $canManageProjects = array();
+        if(!defined('IN_UPGRADE'))
+        {
+            $projectAdminGroupID = $this->dao->select('id')->from(TABLE_GROUP)->where('role')->eq('projectAdmin')->fetch('id');
+            $canManageProjects   = $this->dao->select('project')->from(TABLE_USERGROUP)->where('`group`')->eq($projectAdminGroupID)->andWhere('account')->eq($account)->fetch('project');
+        }
         return array('rights' => $rights, 'acls' => $acls, 'projects' => $canManageProjects);
     }
 
@@ -2060,12 +2064,10 @@ class userModel extends model
         /* Get all groups for whiteList. */
         $allGroups  = $this->dao->select('account, `group`')->from(TABLE_USERGROUP)->fetchAll();
         $userGroups = array();
-        $groupUsers = array();
         foreach($allGroups as $group)
         {
             if(!isset($userGroups[$group->account])) $userGroups[$group->account] = '';
             $userGroups[$group->account] .= "{$group->group},";
-            $groupUsers[$group->group][$group->account] = $group->account;
         }
 
         list($productTeams, $productStakeholders) = $this->getProductMembers($products);
@@ -2088,17 +2090,14 @@ class userModel extends model
                 $teams        = zget($productTeams, $productID, array());
                 $stakeholders = zget($productStakeholders, $productID, array());
                 $whiteList    = zget($whiteListGroup, $productID, array());
-                $viewList    += $this->getProductViewListUsers($product, $groupUsers, $teams, $stakeholders, $whiteList);
+                $viewList    += $this->getProductViewListUsers($product, $teams, $stakeholders, $whiteList);
             }
 
             $users = $viewList;
         }
 
         $stmt = $this->dao->select("account,products")->from(TABLE_USERVIEW)->where('account')->in($users);
-        if($whiteList)
-        {
-            foreach($products as $productID => $product) $stmt->orWhere("CONCAT(',', products, ',')")->like("%,{$productID},%");
-        }
+        foreach($products as $productID => $product) $stmt->orWhere("CONCAT(',', products, ',')")->like("%,{$productID},%");
         $userViews = $stmt->fetchPairs('account', 'products');
 
         /* Process user view. */
@@ -2414,14 +2413,13 @@ class userModel extends model
      * Get product view list users.
      *
      * @param  object $product
-     * @param  array  $groupUsers
      * @param  array  $linkedProjects
      * @param  array  $teams
      * @param  array  $whiteList
      * @access public
      * @return array
      */
-    public function getProductViewListUsers($product, $groupUsers, $teams, $stakeholders, $whiteList)
+    public function getProductViewListUsers($product, $teams, $stakeholders, $whiteList)
     {
         $users = array();
 
@@ -2432,6 +2430,21 @@ class userModel extends model
         $users[$product->RD]        = $product->RD;
         $users[$product->createdBy] = $product->createdBy;
         if(isset($product->feedback)) $users[$product->feedback] = $product->feedback;
+
+        if($teams === '' and $stakeholders === '')
+        {
+            list($productTeams, $productStakeholders) = $this->getProductMembers(array($product->id => $product));
+            $teams        = isset($productTeams[$product->id])        ? $productTeams[$product->id]        : array();
+            $stakeholders = isset($productStakeholders[$product->id]) ? $productStakeholders[$product->id] : array();
+        }
+
+        if($whiteList === '')
+        {
+            $whiteList = $this->dao->select('account')->from(TABLE_ACL)
+                ->where('objectType')->eq('product')
+                ->andWhere('objectID')->eq($product->id)
+                ->fetchPairs();
+        }
 
         $users += $teams ? $teams : array();
         $users += $stakeholders ? $stakeholders : array();

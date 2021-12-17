@@ -16,3 +16,5 @@ td .warning {color: red;}
 
 .fail .result-fail, .blocked .result-blocked {color: #f00;}
 .pass .result-pass {color: green;}
+
+.tree li > a.active {color: #0c64eb;}

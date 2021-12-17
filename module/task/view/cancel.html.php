@@ -37,7 +37,7 @@
         </tr>
         <tr>
           <td colspan='2' class='text-center'>
-            <?php echo html::submitButton($lang->task->cancel);?>
+            <?php echo html::submitButton($lang->save);?>
             <?php echo html::linkButton($lang->goback, $this->session->taskList);?>
           </td>
         </tr>

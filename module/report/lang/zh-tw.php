@@ -110,6 +110,8 @@ $lang->report->mailTitle->testTask = " 測試版本(%s),";
 $lang->report->deviationDesc = '按照已關閉執行統計偏差率（偏差率 = (總消耗 - 總預計) / 總預計），總預計為0時偏差率為n/a。';
 $lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，盡在專業版！</a>';
 $lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->workloadDesc  = '工作負載=用戶所有任務剩餘工時之和/選擇的時間天數*每天的工時。例如：起止時間設為1月1日~1月7日、工作日天數5天、每天工時8h，統計的是所有指派給該人員的未完成的任務，在5天內，每天8h的情況下的工作負載。';
+
 
 $lang->report->annualData = new stdclass();
 $lang->report->annualData->title            = "%s %s年工作彙總";
@@ -193,6 +195,9 @@ $lang->report->annualData->actionList['assign']    = '指派';
 $lang->report->annualData->actionList['activate']  = '激活';
 $lang->report->annualData->actionList['resolve']   = '解決';
 $lang->report->annualData->actionList['run']       = '執行';
+$lang->report->annualData->actionList['stop']      = '停止維護';
+$lang->report->annualData->actionList['putoff']    = '延期';
+$lang->report->annualData->actionList['suspend']   = '掛起';
 $lang->report->annualData->actionList['change']    = '變更';
 $lang->report->annualData->actionList['pause']     = '暫停';
 $lang->report->annualData->actionList['cancel']    = '取消';
@@ -203,8 +208,25 @@ $lang->report->annualData->todoStatus['all']    = '所有待辦';
 $lang->report->annualData->todoStatus['undone'] = '未完成';
 $lang->report->annualData->todoStatus['done']   = '已完成';
 
-$lang->report->annualData->radarItems['product']   = '產品';
-$lang->report->annualData->radarItems['execution'] = $lang->executionCommon;
+$lang->report->annualData->radarItems['product']   = '產品管理';
+$lang->report->annualData->radarItems['execution'] = '項目管理';
 $lang->report->annualData->radarItems['devel']     = "研發";
 $lang->report->annualData->radarItems['qa']        = "測試";
 $lang->report->annualData->radarItems['other']     = "其他";
+
+$lang->report->companyRadar        = "公司能力雷達圖";
+$lang->report->outputData          = "產出數據";
+$lang->report->outputTotal         = "產出總數";
+$lang->report->storyOutput         = "需求產出";
+$lang->report->planOutput          = "計劃產出";
+$lang->report->releaseOutput       = "發佈產出";
+$lang->report->executionOutput     = "執行產出";
+$lang->report->taskOutput          = "任務產出";
+$lang->report->bugOutput           = "Bug產出";
+$lang->report->caseOutput          = "用例產出";
+$lang->report->bugProgress         = "Bug進展";
+$lang->report->productProgress     = "產品進展";
+$lang->report->executionProgress   = "執行進展";
+$lang->report->projectProgress     = "項目進展";
+$lang->report->yearProjectOverview = "年度項目總覽";
+$lang->report->projectOverview     = "截止目前項目總覽";

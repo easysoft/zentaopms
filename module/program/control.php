@@ -156,10 +156,9 @@ class program extends control
         {
             $programID = $this->program->create();
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID));
 
             $this->loadModel('action')->create('program', $programID, 'opened');
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $programID, 'locate' => inlink('browse')));
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -288,6 +287,8 @@ class program extends control
                 $actionID = $this->action->create('program', $programID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->loadModel('common')->syncPPEStatus($programID);
             $this->executeHooks($programID);
             die(js::reload('parent.parent'));
         }
@@ -384,7 +385,11 @@ class program extends control
     public function delete($programID, $confirm = 'no')
     {
         $childrenCount = $this->dao->select('count(*) as count')->from(TABLE_PROGRAM)->where('parent')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
-        if($childrenCount) die(js::alert($this->lang->program->hasChildren));
+        if($childrenCount)
+        {
+            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Cannot delete the program has children'));
+            die(js::alert($this->lang->program->hasChildren));
+        }
 
         $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
         if($productCount) die(js::alert($this->lang->program->hasProduct));
@@ -492,6 +497,8 @@ class program extends control
             die(js::locate($this->createLink('program', 'stakeholder', "programID=$programID"), 'parent'));
         }
 
+        $this->program->setMenu($programID);
+
         $this->loadModel('user');
         $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
 
@@ -508,7 +515,7 @@ class program extends control
         $this->view->dept               = $dept;
         $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
         $this->view->stakeholders       = $this->program->getStakeholders($programID, 't1.id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholdersByList($parentIdList);
+        $this->view->parentStakeholders = $this->program->getStakeholdersByPrograms($parentIdList);
 
         $this->display();
     }

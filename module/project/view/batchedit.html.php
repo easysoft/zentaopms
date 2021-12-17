@@ -30,6 +30,10 @@
           <th class='c-date required'><?php echo $lang->project->begin;?></th>
           <th class='c-date required'><?php echo $lang->project->end;?></th>
           <th class='c-acl'><?php echo $lang->project->acl;?></th>
+          <?php
+          $extendFields = $this->project->getFlowExtendFields();
+          foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
+          ?>
         </tr>
       </thead>
       <tbody>
@@ -56,6 +60,7 @@
             ?>
           </td>
           <td><?php echo nl2br(html::radio("acls[$projectID]", $aclList, $project->acl));?></td>
+          <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $project, $extendField->field . "[{$projectID}]") . "</td>";?>
         </tr>
         <?php endforeach;?>
       </tbody>

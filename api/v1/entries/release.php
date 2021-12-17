@@ -25,10 +25,7 @@ class releaseEntry extends Entry
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
-        if(isset($data->status) and $data->status == 'fail')
-        {
-            return isset($data->code) and $data->code == 404 ? $this->send404() : $this->sendError(400, $data->message);
-        }
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $release = $this->format($data->data->release, 'date:date,deleted:bool');
 

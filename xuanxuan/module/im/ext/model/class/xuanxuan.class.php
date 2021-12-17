@@ -140,4 +140,121 @@ class xuanxuanIm extends imModel
         $extra   = json_encode(array('actorId' => $userID));
         $this->loadModel('action')->create('user', $userID, $actionType, $comment, $extra, $actor);
     }
+
+    public function messageGetNotifyList()
+    {
+        $onlineUsers = $this->loadModel('im')->userGetList('online');
+        if(empty($onlineUsers)) return array();
+        $onlineUsers = array_keys($onlineUsers);
+
+        $messageUserPairsData = $this->dao->select('message,user')->from(TABLE_IM_MESSAGESTATUS)
+                            ->where('status')->eq('waiting')
+                            ->andWhere('user')->in($onlineUsers)
+                            ->fetchAll();
+        if(empty($messageUserPairsData)) return array();
+
+        $messageUserPairs = array();
+        foreach($messageUserPairsData as $data)
+        {
+            if(isset($messageUserPairs[$data->message]))
+            {
+                $messageUserPairs[$data->message][] = $data->user;
+                continue;
+            }
+            $messageUserPairs[$data->message] = array($data->user);
+        }
+        $notifyMessages = $this->im->messageGetList('', array_keys($messageUserPairs), null, '', 'notify', false);
+        if(empty($notifyMessages)) return array();
+
+        $messageIDs = array();
+        foreach($notifyMessages as $message) $messageIDs[] = $message->id;
+        $messageUserPairs = array_intersect_key($messageUserPairs, array_flip($messageIDs));
+
+        $notifications = $this->im->messageFormatNotify($notifyMessages);
+        $data          = array();
+        $messages      = array();
+        foreach($notifications as $message)
+        {
+            foreach($messageUserPairs[$message->id] as $userID)
+            {
+                $messages[$userID][] = $message->id;
+                $data[$userID][]     = $message;
+            }
+        }
+
+        foreach($messages as $userID => $message)
+        {
+            $this->dao->delete()->from(TABLE_IM_MESSAGESTATUS)
+                ->where('message')->in($message)
+                ->andWhere('user')->eq($userID)
+                ->exec();
+        }
+        return $this->mergeNotifications($data);
+    }
+
+    /**
+     * Merge notifications with same actor, objectType, actionType.
+     *
+     * @param  array  $notificationData
+     * @access public
+     * @return array
+     */
+    public function mergeNotifications($notificationData)
+    {
+        /* Notification data: array($userID1 => array($notification1, $notification2), $userID2 => array($notification3)) */
+        foreach($notificationData as $userID => $userMessages)
+        {
+            $messageGroups = array();
+            foreach($userMessages as $message)
+            {
+                /* Group by $message->content->content->objectType, ...->parentType, ...->action, ...->actor */
+                $contentData = json_decode($message->content);
+                $contentData = json_decode($contentData->content);
+                $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor"][] = $message;
+            }
+            foreach($messageGroups as $groupKey => $messages)
+            {
+                if(count($messages) < 2) continue;
+
+                $notification = current($messages);
+                array_shift($messages);
+                $notificationContent = json_decode($notification->content);
+                $notificationInnerContent = json_decode($notificationContent->content);
+
+                /* Inner content: array($parentID => array($content1, $content2)) */
+                $objectGroups = array($notificationInnerContent->parent => array($notificationInnerContent));
+                foreach($messages as $message)
+                {
+                    $messageContent = json_decode($message->content);
+                    $messageInnerContent = json_decode($messageContent->content);
+                    $objectGroups[$messageInnerContent->parent][] = $messageInnerContent;
+                }
+                $objectTotal = 0;
+                foreach($objectGroups as $parent => $objectGroup)
+                {
+                    $object = current($objectGroup);
+                    $object->count = count($objectGroup);
+                    $object->url   = $object->parentURL;
+                    unset($object->title);
+
+                    $objectGroups[$parent] = $object;
+                    $objectTotal += $object->count;
+                }
+                $notificationContent->content = json_encode(array_values($objectGroups));
+                /* Hack alert: title count replacement currently assumes that default count is 1. */
+                $notification->title = substr_replace($notification->title, "$objectTotal", strrpos($notification->title, '1'), 1);
+                $notificationContent->title = $notification->title;
+
+                $notification->content = json_encode($notificationContent);
+                $messageGroups[$groupKey] = array($notification);
+            }
+
+            $mergedMessages = array();
+            $userMessageGroups = array_values($messageGroups);
+            foreach($userMessageGroups as $messageGroup) $mergedMessages = array_merge($mergedMessages, $messageGroup);
+            $notificationData[$userID] = $mergedMessages;
+        }
+
+        return $notificationData;
+    }
 }

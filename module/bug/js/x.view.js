@@ -28,8 +28,18 @@ $(function()
         xuanAction += "<a href='" + url + "'" + title + target + btnClass + '>' + action + "</a>";
     });
 
-    xuanAction += '</div>';
-
-    $('body').append(xuanAction);
+    if(xuanAction != "<div class='xuancard-actions fixed'>")
+    {
+        var params = window.location.search;
+        if(params.indexOf('isNotice=1') == -1)
+        {
+            xuanAction += '</div>';
+            $('body').append(xuanAction);
+        }
+    }
+    else
+    {
+        $('#scrollContent').css('height', 'calc(100% - 36px)');
+    }
     $('.xuancard-actions a.iframe').modalTrigger();
 })

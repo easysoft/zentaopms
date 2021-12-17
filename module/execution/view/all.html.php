@@ -13,6 +13,21 @@
 <?php include '../../common/view/sortable.html.php';?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
+    <?php if($from == 'project'):?>
+    <div class='btn-group'>
+      <?php $viewName = $productID != 0 ? zget($productList,$productID) : $lang->product->allProduct;?>
+      <a href='javascript:;' class='btn btn-link btn-limit' data-toggle='dropdown'><span class='text' title='<?php echo $viewName;?>'><?php echo $viewName;?></span> <span class='caret'></span></a>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+        <?php
+          echo "<li>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy"), $lang->product->allProduct) . "</li>";
+          foreach($productList as $key => $product)
+          {
+            echo "<li>" . html::a($this->createLink('project', 'execution', "status=$status&projectID=$projectID&orderby=$orderBy&productID=$key"), $product) . "</li>";
+          }
+        ?>
+      </ul>
+    </div>
+    <?php endif;?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
@@ -24,7 +39,11 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php common::printLink('execution', 'export', "status=$status&productID=$productID&orderBy=$orderBy&from=$from", "<i class='icon-export muted'> </i> " . $lang->export, '', "class='btn btn-link export'")?>
+     <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
+     <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-primary'");?>
+    <?php else: ?>
     <?php if(common::hasPriv('execution', 'create')) echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-sm icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-primary create-execution-btn' data-app='$from'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class="main-row fade">
@@ -32,8 +51,12 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $from == 'execution' ? $lang->execution->noExecutions : $lang->execution->noExecution;?></span>
+      <?php if(common::hasPriv('programplan', 'create') and $isStage):?>
+      <?php echo html::a($this->createLink('programplan', 'create', "projectID=$projectID&productID=$productID"), "<i class='icon icon-plus'></i> " . $lang->programplan->create, '', "class='btn btn-info'");?>
+      <?php else: ?>
       <?php if(common::hasPriv('execution', 'create')):?>
       <?php echo html::a($this->createLink('execution', 'create', "projectID=$projectID"), "<i class='icon icon-plus'></i> " . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->createExec : $lang->execution->create), '', "class='btn btn-info' data-app='$from'");?>
+      <?php endif;?>
       <?php endif;?>
     </p>
   </div>
@@ -53,14 +76,33 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
-          <th class='thWidth'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
-          <th class='c-date'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <?php if($config->systemMode == 'new'):?>
+          <th class='c-begin'><?php common::printOrderLink('projectName', $orderBy, $vars, $lang->execution->project);?></th></th>
+          <?php endif;?>
+          <th class='c-pm'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $from == 'execution' ? $lang->execution->execStatus : $lang->execution->status);?></th>
+          <th class='c-progress'><?php echo $lang->execution->progress;?></th>
+          <?php if($isStage):?>
+          <th class='c-percent'><?php common::printOrderLink('percent', $orderBy, $vars, $lang->programplan->percent);?></th>
+          <th class='c-attribute'><?php common::printOrderLink('attribute', $orderBy, $vars, $lang->programplan->attribute);?></th>
+          <th class='c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
+          <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
+          <th class='c-realBegan'><?php common::printOrderLink('realBegan', $orderBy, $vars, $lang->execution->realBegan);?></th>
+          <th class='c-realEnd'><?php common::printOrderLink('realEnd', $orderBy, $vars, $lang->execution->realEnd);?></th>
+          <th class='c-action'><?php echo $lang->actions;?></th>
+          <?php else:;?>
           <th class='c-estimate text-right hours'><?php echo $lang->execution->totalEstimate;?></th>
           <th class='c-consumed text-right hours'><?php echo $lang->execution->totalConsumed;?></th>
           <th class='c-left text-right hours'><?php echo $lang->execution->totalLeft;?></th>
-          <th class='c-progress'><?php echo $lang->execution->progress;?></th>
+          <?php endif;?>
+
+          <?php if(!$isStage):?>
           <th class='c-burn'><?php echo $lang->execution->burn;?></th>
+          <?php endif;?>
+          <?php
+          $extendFields = $this->execution->getFlowExtendFields();
+          foreach($extendFields as $extendField) echo "<th rowspan='2'>{$extendField->name}</th>";
+          ?>
         </tr>
       </thead>
       <tbody class='sortable' id='executionTableList'>
@@ -87,21 +129,60 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
+          <?php if($config->systemMode == 'new'):?>
+          <td class='c-begin' title='<?php echo $execution->projectName;?>'>
+             <span class="status-execution status-<?php echo $execution->projectName?>"><?php echo $execution->projectName;?></span>
+          </td>
+          <?php endif;?>
           <td><?php echo zget($users, $execution->PM);?></td>
-          <td><?php echo $execution->end;?></td>
           <?php $executionStatus = $this->processStatus('execution', $execution);?>
           <td class='c-status text-center' title='<?php echo $executionStatus;?>'>
             <span class="status-execution status-<?php echo $execution->status?>"><?php echo $executionStatus;?></span>
           </td>
+          <td class="c-progress">
+            <?php echo html::ring($execution->hours->progress); ?>
+          </td>
+          <?php if($isStage):?>
+          <td><?php echo $execution->percent . '%';?></td>
+          <td><?php echo zget($lang->stage->typeList, $execution->attribute, '');?></td>
+          <td><?php echo helper::isZeroDate($execution->begin)     ? '' : $execution->begin;?></td>
+          <td><?php echo helper::isZeroDate($execution->end)       ? '' : $execution->end;?></td>
+          <td><?php echo helper::isZeroDate($execution->realBegan) ? '' : $execution->realBegan;?></td>
+          <td><?php echo helper::isZeroDate($execution->realEnd)   ? '' : $execution->realEnd;?></td>
+          <td class="c-actions text-center c-actions">
+            <?php
+                common::printIcon('execution', 'start', "executionID={$execution->id}", $execution, 'list', '', '', 'iframe', true);
+                $class = !empty($execution->children) ? 'disabled' : '';
+                common::printIcon('task', 'create', "executionID={$execution->id}", $execution, 'list', '', '', $class, false, "data-app='execution'");
+
+                if($execution->grade == 1 && $this->loadModel('programplan')->isCreateTask($execution->id))
+                {
+                    common::printIcon('programplan', 'create', "program={$execution->parent}&productID=$productID&planID=$execution->id", $execution, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+                }
+                else
+                {
+                    $disabled = ($execution->grade == 2) ? ' disabled' : '';
+                    echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"');
+                }
+
+                common::printIcon('programplan', 'edit', "planID=$execution->id&projectID=$projectID", $execution, 'list', '', '', 'iframe', true);
+
+                $disabled = !empty($execution->children) ? ' disabled' : '';
+                if(common::hasPriv('execution', 'delete', $execution))
+                {
+                    common::printIcon('execution', 'delete', "planID=$execution->id&confirm=no", $execution, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
+                }
+            ?></td>
+          <?php else:?>
           <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
           <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
           <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . $this->lang->execution->workHourUnit;?></td>
-          <td class="c-progress">
-            <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($execution->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-              <div class='progress-info'><?php echo round($execution->hours->progress);?></div>
-            </div>
-          </td>
+          <?php endif;?>
+
+          <?php if(!$isStage):?>
           <td id='spark-<?php echo $execution->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $execution->burns);?>'></td>
+          <?php endif;?>
+          <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $execution) . "</td>";?>
         </tr>
         <?php if(!empty($execution->children)):?>
          <?php $i = 0;?>
@@ -126,20 +207,54 @@
                ?>
              </td>
              <td><?php echo zget($users, $child->PM);?></td>
-             <td><?php echo $child->end;?></td>
              <?php $executionStatus = $this->processStatus('execution', $child);?>
-             <td class='c-status' title='<?php echo $executionStatus;?>'>
+             <td class='c-status text-center' title='<?php echo $executionStatus;?>'>
                <span class="status-execution status-<?php echo $child->status?>"><?php echo $executionStatus;?></span>
              </td>
+             <td class="c-progress">
+               <?php echo html::ring($child->hours->progress); ?>
+             </td>
+             <?php if($isStage):?>
+             <td><?php echo $child->percent . '%';?></td>
+             <td><?php echo zget($lang->stage->typeList, $child->attribute, '');?></td>
+             <td><?php echo helper::isZeroDate($child->begin)     ? '' : $child->begin;?></td>
+             <td><?php echo helper::isZeroDate($child->end)       ? '' : $child->end;?></td>
+             <td><?php echo helper::isZeroDate($child->realBegan) ? '' : $child->realBegan;?></td>
+             <td><?php echo helper::isZeroDate($child->realEnd)   ? '' : $child->realEnd;?></td>
+             <td class="c-actions text-center c-actions">
+                <?php
+                  common::printIcon('execution', 'start', "executionID={$child->id}", $child, 'list', '', '', 'iframe', true);
+                  $class = !empty($child->children) ? 'disabled' : '';
+                  common::printIcon('task', 'create', "executionID={$child->id}", $child, 'list', '', '', $class, false, "data-app='execution'");
+
+                  if($child->grade == 1 && $this->loadModel('programplan')->isCreateTask($child->id))
+                  {
+                      common::printIcon('programplan', 'create', "program={$child->parent}&productID=$productID&planID=$child->id", $child, 'list', 'split', '', '', '', '', $this->lang->programplan->createSubPlan);
+                  }
+                  else
+                  {
+                      $disabled = ($child->grade == 2) ? ' disabled' : '';
+                      echo html::a('javascript:alert("' . $this->lang->programplan->error->createdTask . '");', '<i class="icon-programplan-create icon-split"></i>', '', 'class="btn ' . $disabled . '"');
+                  }
+
+                  common::printIcon('programplan', 'edit', "planID=$child->id&projectID=$projectID", $child, 'list', '', '', 'iframe', true);
+
+                  $disabled = !empty($child->children) ? ' disabled' : '';
+                  if(common::hasPriv('execution', 'delete', $child))
+                  {
+                      common::printIcon('execution', 'delete', "planID=$child->id&confirm=no", $child, 'list', 'trash', 'hiddenwin' , $disabled, '', '', $this->lang->programplan->delete);
+                  }
+                ?>
+             </td>
+             <?php else:?>
              <td class='hours' title='<?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalEstimate . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalConsumed . ' ' . $this->lang->execution->workHourUnit;?></td>
              <td class='hours' title='<?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $child->hours->totalLeft     . ' ' . $this->lang->execution->workHourUnit;?></td>
-             <td class="c-progress">
-               <div class='progress-pie' data-doughnut-size='90' data-color='#3CB371' data-value='<?php echo round($child->hours->progress);?>' data-width='24' data-height='24' data-back-color='#e8edf3'>
-                 <div class='progress-info'><?php echo round($child->hours->progress);?></div>
-               </div>
-             </td>
+             <?php endif;?>
+             <?php if(!$isStage):?>
              <td id='spark-<?php echo $child->id?>' class='sparkline text-left no-padding' values='<?php echo join(',', $child->burns);?>'></td>
+             <?php endif;?>
+             <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $child) . "</td>";?>
            </tr>
            <?php $i ++;?>
            <?php endforeach;?>

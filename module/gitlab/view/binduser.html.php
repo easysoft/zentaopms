@@ -21,8 +21,8 @@
         <thead>
           <tr>
             <th colspan='2'><?php echo $lang->gitlab->gitlabAccount;?></th>
-            <th><?php echo $lang->gitlab->zentaoAccount;?></th>
-            <th><?php echo $lang->gitlab->bindingStatus;?></th>
+            <th class='w-150px'><?php echo $lang->gitlab->zentaoAccount;?></th>
+            <th class='w-150px'><?php echo $lang->gitlab->bindingStatus;?></th>
           </tr>
         </thead>
         <tbody>
@@ -37,11 +37,11 @@
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
             <td></td>
-         </tr>
-         <?php endforeach;?>
-         <?php foreach($gitlabUsers as $gitlabUser):?>
-         <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
-         <tr>
+          </tr>
+          <?php endforeach;?>
+          <?php foreach($gitlabUsers as $gitlabUser):?>
+          <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
+          <tr>
             <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td>
               <strong><?php echo $gitlabUser->realname;?></strong>
@@ -49,9 +49,18 @@
               <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
-            <td><?php echo isset($bindedUsers[$gitlabUser->account]) ? $lang->gitlab->binded : ""; ?></td>
-         </tr>
-         <?php endforeach;?>
+            <td>
+              <?php if(isset($bindedUsers[$gitlabUser->zentaoAccount])):?>
+              <?php $zentaoAccount = zget($userPairs, $gitlabUser->zentaoAccount, '');?>
+              <?php if(!empty($zentaoAccount)):?>
+              <?php echo $lang->gitlab->binded;?>
+              <?php else:?>
+              <?php echo '<span class="text-red">' . $lang->gitlab->bindedError . '</span>';?>
+              <?php endif;?>
+              <?php endif;?>
+            </td>
+          </tr>
+          <?php endforeach;?>
         </tbody>
         <tfoot>
           <tr>

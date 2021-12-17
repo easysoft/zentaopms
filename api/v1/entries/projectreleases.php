@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class projectreleasesEntry extends entry
+class projectReleasesEntry extends entry
 {
      /**
      * GET method.
@@ -20,7 +20,26 @@ class projectreleasesEntry extends entry
      */
     public function get($projectID = 0)
     {
-        $this->fetch('releases', 'get', array('productID' => 0, 'projectID' => $projectID));
+        if(empty($projectID)) $projectID = $this->param('project');
+        if(empty($projectID)) return $this->sendError(400, 'Need project id.');
+
+        $control = $this->loadController('projectrelease', 'browse');
+        $control->browse($projectID, $this->param('execution', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'));
+
+        /* Response */
+        $data = $this->getData();
+
+        if(isset($data->status) and $data->status == 'success')
+        {
+            $result   = array();
+            $releases = $data->data->releases;
+            foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date,mailto:userList');
+
+            return $this->send(200, array('total' => count($result), 'releases' => $result));
+        }
+
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+        return $this->sendError(400, 'error');
     }
 
     /**

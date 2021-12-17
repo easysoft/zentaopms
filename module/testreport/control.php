@@ -53,12 +53,12 @@ class testreport extends control
             if($this->app->tab == 'project')
             {
                 $objectID = $this->session->project;
-                $products  = $this->loadModel('project')->getProducts($objectID, false);
+                $products  = $this->product->getProducts($objectID, 'all', '', false);
             }
             elseif($this->app->tab == 'execution')
             {
                 $objectID = $this->session->execution;
-                $products = $this->loadModel('execution')->getProducts($objectID, false);
+                $products = $this->product->getProducts($objectID, 'all', '', false);
             }
             else
             {
@@ -189,7 +189,7 @@ class testreport extends control
             $taskPairs         = array();
             $scopeAndStatus[0] = 'local';
             $scopeAndStatus[1] = 'totalStatus';
-            $tasks = $this->testtask->getProductTasks($productID, 0, 'id_desc', null, $scopeAndStatus);
+            $tasks = $this->testtask->getProductTasks($productID, empty($objectID) ? 'all' : $task->branch, 'id_desc', null, $scopeAndStatus);
             foreach($tasks as $testTask)
             {
                 if($testTask->build == 'trunk') continue;
@@ -250,6 +250,7 @@ class testreport extends control
 
             $execution     = $this->execution->getById($executionID);
             $tasks         = $this->testtask->getExecutionTasks($executionID);
+            $task          = $objectID ? $this->testtask->getById($objectID) : key($tasks);
             $owners        = array();
             $buildIdList   = array();
             $productIdList = array();
@@ -287,8 +288,8 @@ class testreport extends control
             $builds  = $this->build->getByList($buildIdList);
             $stories = !empty($builds) ? $this->testreport->getStories4Test($builds) : $this->story->getExecutionStories($execution->id);;
 
-            $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $execution->begin;
-            $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $execution->end;
+            $begin = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
+            $end   = !empty($end) ? date("Y-m-d", strtotime($end)) : $task->end;
             $owner = current($owners);
             $bugs  = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
 

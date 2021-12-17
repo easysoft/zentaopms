@@ -249,7 +249,7 @@ $(document).ready(function()
         }).on('click', function(e){e.stopPropagation()});
     }
 
-    $('.ajaxCollect').mousedown(function (event) {
+    $(document).on('mousedown', '.ajaxCollect', function (event) {
         var obj = $(this);
         var url = obj.data('url');
         $.get(url, function(response)

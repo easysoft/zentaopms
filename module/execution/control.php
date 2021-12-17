@@ -40,8 +40,9 @@ class execution extends control
 
         $this->loadModel('project');
 
+        if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
+        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
         if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
@@ -99,7 +100,7 @@ class execution extends control
         /* Get executions and products info. */
         $executionID     = $this->execution->saveState($executionID, $this->executions);
         $execution       = $this->execution->getById($executionID);
-        $products        = $this->execution->getProducts($executionID);
+        $products        = $this->product->getProducts($executionID);
         $childExecutions = $this->execution->getChildExecutions($executionID);
         $teamMembers     = $this->execution->getTeamMembers($executionID);
         $actions         = $this->loadModel('action')->getList($this->objectType, $executionID);
@@ -137,6 +138,7 @@ class execution extends control
         $this->loadModel('task');
         $this->loadModel('datatable');
         $this->loadModel('setting');
+        $this->loadModel('product');
 
         if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
 
@@ -148,7 +150,7 @@ class execution extends control
         /* Get products by execution. */
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        $products    = $this->loadModel('product')->getProductPairsByProject($executionID);
+        $products    = $this->product->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Save the recently five executions visited in the cookie. */
@@ -205,7 +207,7 @@ class execution extends control
 
         /* Load pager and get tasks. */
         $this->app->loadClass('pager', $static = true);
-        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        if($this->app->getViewType() == 'mhtml' || $this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get tasks. */
@@ -215,6 +217,12 @@ class execution extends control
             $pager = pager::init(0, $recPerPage, 1);
             $tasks = $this->execution->getTasks($productID, $executionID, $this->executions, $browseType, $queryID, $moduleID, $sort, $pager);
         }
+
+        /* Get product. */
+        $product = $this->product->getById($productID);
+
+        /* Display of branch label. */
+        $showBranch = $this->loadModel('branch')->showBranch($productID, $moduleID, $executionID);
 
         /* Build the search form. */
         $actionURL = $this->createLink('execution', 'task', "executionID=$executionID&status=bySearch&param=myQueryID");
@@ -245,6 +253,7 @@ class execution extends control
         $this->view->executionID  = $executionID;
         $this->view->execution    = $execution;
         $this->view->productID    = $productID;
+        $this->view->product      = $product;
         $this->view->modules      = $this->tree->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
         $this->view->moduleID     = $moduleID;
         $this->view->moduleTree   = $this->tree->getTaskTreeMenu($executionID, $productID, $startModuleID = 0, array('treeModel', 'createTaskLink'), $extra);
@@ -252,6 +261,7 @@ class execution extends control
         $this->view->branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->showBranch   = $showBranch;
 
         $this->display();
     }
@@ -593,7 +603,7 @@ class execution extends control
                 if($this->session->importBugQuery == false) $this->session->set('importBugQuery', ' 1 = 1');
             }
             $bugQuery = str_replace("`product` = 'all'", "`product`" . helper::dbIN(array_keys($products)), $this->session->importBugQuery); // Search all execution.
-            $bugs = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
+            $bugs     = $this->execution->getSearchBugs($products, $executionID, $bugQuery, $pager, 'id_desc');
         }
 
        /* Build the search form. */
@@ -611,7 +621,24 @@ class execution extends control
         $this->config->bug->search['params']['plan']['values']    = $this->loadModel('productplan')->getPairs(array_keys($products));
         $this->config->bug->search['module'] = 'importBug';
         $this->config->bug->search['params']['confirmed']['values'] = array('' => '') + $this->lang->bug->confirmedList;
-        $this->config->bug->search['params']['module']['values']  = $this->loadModel('tree')->getOptionMenu($executionID, $viewType = 'bug', $startModuleID = 0);
+
+        $this->loadModel('tree');
+        $bugModules = array();
+        foreach($products as $productID => $productName)
+        {
+            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0);
+            foreach($productModules as $moduleID => $moduleName)
+            {
+                if(empty($moduleID))
+                {
+                    $bugModules[$moduleID] = $moduleName;
+                    continue;
+                }
+                $bugModules[$moduleID] = $productName . $moduleName;
+            }
+        }
+        $this->config->bug->search['params']['module']['values'] = $bugModules;
+
         unset($this->config->bug->search['fields']['resolvedBy']);
         unset($this->config->bug->search['fields']['closedBy']);
         unset($this->config->bug->search['fields']['status']);
@@ -646,8 +673,8 @@ class execution extends control
         $this->view->browseType     = $browseType;
         $this->view->param          = $param;
         $this->view->users          = $users;
-        $this->view->execution        = $this->execution->getByID($executionID);
-        $this->view->executionID      = $executionID;
+        $this->view->execution      = $this->execution->getByID($executionID);
+        $this->view->executionID    = $executionID;
         $this->view->requiredFields = explode(',', $this->config->task->create->requiredFields);
         $this->display();
     }
@@ -671,6 +698,7 @@ class execution extends control
         $this->loadModel('story');
         $this->loadModel('user');
         $this->loadModel('datatable');
+        $this->app->loadLang('datatable');
         $this->app->loadLang('testcase');
 
         $type      = strtolower($type);
@@ -733,6 +761,7 @@ class execution extends control
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $stories = $this->story->getExecutionStories($executionID, 0, 0, $sort, $type, $param, 'story', '', $pager);
@@ -744,21 +773,30 @@ class execution extends control
         $users = $this->user->getPairs('noletter');
 
         /* Build the search form. */
-        $modules = array();
+        $modules          = array();
+        $productModules   = array();
         $executionModules = $this->loadModel('tree')->getTaskTreeModules($executionID, true);
-        $products = $this->execution->getProducts($executionID);
-        foreach($products as $product)
+        $products         = $this->product->getProducts($executionID);
+        if($productID)
         {
-            $productModules = $this->tree->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName)
+            $product = $products[$productID];
+            $productModules = $this->tree->getOptionMenu($productID, 'story', 0, $product->branches);
+        }
+        else
+        {
+            foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
+        }
+        foreach($productModules as $branchID => $moduleList)
+        {
+            foreach($moduleList as $moduleID => $moduleName)
             {
                 if($moduleID and !isset($executionModules[$moduleID])) continue;
                 $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
             }
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'executionStory', $executionID);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->story;
@@ -771,14 +809,14 @@ class execution extends control
         $storyBugs   = $this->loadModel('bug')->getStoryBugCounts($storyIdList, $executionID);
         $storyCases  = $this->loadModel('testcase')->getStoryCaseCounts($storyIdList);
 
-        $plans    = $this->execution->getPlans($products);
+        $plans    = $this->execution->getPlans($products, 'skipParent|withMainPlan');
         $allPlans = array('' => '');
         if(!empty($plans))
         {
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        if($this->cookie->storyModuleParam)  $this->view->module  = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
+        if($this->cookie->storyModuleParam) $this->view->module = $this->loadModel('tree')->getById($this->cookie->storyModuleParam);
         if($this->cookie->storyProductParam) $this->view->product = $this->loadModel('product')->getById($this->cookie->storyProductParam);
         if($this->cookie->storyBranchParam)
         {
@@ -786,6 +824,9 @@ class execution extends control
             if(strpos($branchID, ',') !== false) list($productID, $branchID) = explode(',', $branchID);
             $this->view->branch  = $this->loadModel('branch')->getById($branchID, $productID);
         }
+
+        /* Display of branch label. */
+        $showBranch = $this->loadModel('branch')->showBranch($this->cookie->storyProductParam, $this->cookie->storyModuleParam, $executionID);
 
         /* Get execution's product. */
         $productPairs = $this->loadModel('product')->getProductPairsByProject($executionID);
@@ -795,27 +836,29 @@ class execution extends control
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
         /* Assign. */
-        $this->view->title        = $title;
-        $this->view->position     = $position;
-        $this->view->productID    = $productID;
-        $this->view->execution    = $execution;
-        $this->view->stories      = $stories;
-        $this->view->allPlans     = $allPlans;
-        $this->view->summary      = $this->product->summary($stories);
-        $this->view->orderBy      = $orderBy;
-        $this->view->type         = $this->session->executionStoryBrowseType;
-        $this->view->param        = $param;
-        $this->view->moduleTree   = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, $startModuleID = 0, array('treeModel', 'createStoryLink'));
-        $this->view->modulePairs  = $modulePairs;
-        $this->view->tabID        = 'story';
-        $this->view->storyTasks   = $storyTasks;
-        $this->view->storyBugs    = $storyBugs;
-        $this->view->storyCases   = $storyCases;
-        $this->view->users        = $users;
-        $this->view->pager        = $pager;
-        $this->view->setModule    = true;
-        $this->view->branchGroups = $branchGroups;
-        $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->title             = $title;
+        $this->view->position          = $position;
+        $this->view->productID         = $productID;
+        $this->view->execution         = $execution;
+        $this->view->stories           = $stories;
+        $this->view->linkedTaskStories = $this->story->getIdListWithTask($executionID);
+        $this->view->allPlans          = $allPlans;
+        $this->view->summary           = $this->product->summary($stories);
+        $this->view->orderBy           = $orderBy;
+        $this->view->type              = $this->session->executionStoryBrowseType;
+        $this->view->param             = $param;
+        $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, 0, array('treeModel', 'createStoryLink'));
+        $this->view->modulePairs       = $modulePairs;
+        $this->view->tabID             = 'story';
+        $this->view->storyTasks        = $storyTasks;
+        $this->view->storyBugs         = $storyBugs;
+        $this->view->storyCases        = $storyCases;
+        $this->view->users             = $users;
+        $this->view->pager             = $pager;
+        $this->view->setModule         = true;
+        $this->view->branchGroups      = $branchGroups;
+        $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
+        $this->view->showBranch        = $showBranch;
 
         $this->display();
     }
@@ -863,12 +906,12 @@ class execution extends control
         $queryID     = ($type == 'bysearch') ? (int)$param : 0;
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
-        $products    = $this->execution->getProducts($execution->id);
-        $branchID    = isset($products[$productID]) ? $products[$productID]->branch : 0;
+        $products    = $this->product->getProducts($execution->id);
+        $branchID    = isset($products[$productID]) ? current($products[$productID]->branches) : 0;
 
         $productPairs = array('0' => $this->lang->product->all);
         foreach($products as $product) $productPairs[$product->id] = $product->name;
-        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', '', $branchID, 0, '', false);
+        $this->lang->modulePageNav = $this->product->select($productPairs, $productID, 'execution', 'bug', $executionID, $branchID, 0, '', false);
 
         /* Header and position. */
         $title      = $execution->name . $this->lang->colon . $this->lang->execution->bug;
@@ -877,6 +920,7 @@ class execution extends control
 
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $sort  = $this->loadModel('common')->appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
@@ -896,20 +940,21 @@ class execution extends control
         $this->execution->buildBugSearchForm($products, $queryID, $actionURL);
 
         /* Assign. */
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->bugs        = $bugs;
-        $this->view->tabID       = 'bug';
-        $this->view->build       = $this->loadModel('build')->getById($build);
-        $this->view->buildID     = $this->view->build ? $this->view->build->id : 0;
-        $this->view->pager       = $pager;
-        $this->view->orderBy     = $orderBy;
-        $this->view->users       = $users;
-        $this->view->productID   = $productID;
-        $this->view->branchID    = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
-        $this->view->memberPairs = $memberPairs;
-        $this->view->type        = $type;
-        $this->view->param       = $param;
+        $this->view->title          = $title;
+        $this->view->position       = $position;
+        $this->view->bugs           = $bugs;
+        $this->view->tabID          = 'bug';
+        $this->view->build          = $this->loadModel('build')->getById($build);
+        $this->view->buildID        = $this->view->build ? $this->view->build->id : 0;
+        $this->view->pager          = $pager;
+        $this->view->orderBy        = $orderBy;
+        $this->view->users          = $users;
+        $this->view->productID      = $productID;
+        $this->view->branchID       = empty($this->view->build->branch) ? $branchID : $this->view->build->branch;
+        $this->view->memberPairs    = $memberPairs;
+        $this->view->type           = $type;
+        $this->view->param          = $param;
+        $this->view->defaultProduct = (empty($productID) and !empty($products)) ? current(array_keys($products)) : $productID;
 
         $this->display();
     }
@@ -935,7 +980,7 @@ class execution extends control
         $this->session->set('caseList', $uri, 'execution');
         $this->session->set('bugList',  $uri, 'execution');
 
-        $products  = $this->execution->getProducts($executionID);
+        $products  = $this->product->getProducts($executionID);
         $productID = key($products);    // Get the first product for creating testcase.
 
         /* Load pager. */
@@ -985,10 +1030,11 @@ class execution extends control
      * @param  int    $executionID
      * @param  string $type      all|product|bysearch
      * @param  int    $param
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function build($executionID = 0, $type = 'all', $param = 0)
+    public function build($executionID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
     {
         /* Load module and set session. */
         $this->loadModel('testtask');
@@ -998,13 +1044,23 @@ class execution extends control
         $executionID = $execution->id;
 
         /* Get products' list. */
-        $products = $this->execution->getProducts($executionID, false);
+        $products = $this->product->getProducts($executionID, 'all', '', false);
         $products = array('' => '') + $products;
 
         /* Build the search form. */
         $type      = strtolower($type);
         $queryID   = ($type == 'bysearch') ? (int)$param : 0;
         $actionURL = $this->createLink('execution', 'build', "executionID=$executionID&type=bysearch&queryID=myQueryID");
+
+        $product = $param ? $this->loadModel('product')->getById($param) : '';
+        if($product and $product->type != 'normal')
+        {
+            $this->loadModel('build');
+            $this->loadModel('branch');
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->branch->getPairs($product->id, '', $executionID);
+            $this->config->build->search['fields']['branch'] = sprintf($this->lang->build->branchName, $this->lang->product->branchName[$product->type]);
+            $this->config->build->search['params']['branch'] = array('operator' => '=', 'control' => 'select', 'values' => $branches);
+        }
         $this->project->buildProjectBuildSearchForm($products, $queryID, $actionURL, 'execution');
 
         /* Get builds. */
@@ -1014,18 +1070,26 @@ class execution extends control
         }
         else
         {
-            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param);
+            $builds = $this->loadModel('build')->getExecutionBuilds((int)$executionID, $type, $param, $orderBy);
         }
 
         /* Set execution builds. */
         $executionBuilds = array();
-        $productList     = $this->execution->getProducts($executionID);
+        $productList     = $this->product->getProducts($executionID);
+        $this->app->loadLang('branch');
         if(!empty($builds))
         {
             foreach($builds as $build)
             {
                 /* If product is normal, unset branch name. */
-                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal') $build->branchName = '';
+                if(isset($productList[$build->product]) and $productList[$build->product]->type == 'normal')
+                {
+                    $build->branchName = '';
+                }
+                else
+                {
+                    $build->branchName = isset($build->branchName) ? $build->branchName : $this->lang->branch->main;
+                }
                 $executionBuilds[$build->product][] = $build;
             }
         }
@@ -1234,6 +1298,8 @@ class execution extends control
             unset($this->lang->doc->menu->execution['subMenu']);
         }
 
+        $project = $this->project->getByID($projectID);
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -1275,17 +1341,29 @@ class execution extends control
         if($copyExecutionID)
         {
             $copyExecution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($copyExecutionID)->fetch();
-            $name        = $copyExecution->name;
-            $code        = $copyExecution->code;
-            $team        = $copyExecution->team;
-            $acl         = $copyExecution->acl;
-            $whitelist   = $copyExecution->whitelist;
-            $projectID   = $copyExecution->project;
-            $products    = $this->execution->getProducts($copyExecutionID);
-            foreach($products as $product)
+            $name          = $copyExecution->name;
+            $code          = $copyExecution->code;
+            $team          = $copyExecution->team;
+            $acl           = $copyExecution->acl;
+            $whitelist     = $copyExecution->whitelist;
+            $projectID     = $copyExecution->project;
+            $products      = $this->loadModel('product')->getProducts($copyExecutionID);
+            $branches      = $this->project->getBranchesByProject($copyExecutionID);
+            $plans         = $this->loadModel('productplan')->getGroupByProduct(array_keys($products), 'skipParent|unexpired');
+            $branchGroups  = $this->execution->getBranchByProduct(array_keys($products), $projectID);
+
+            $linkedBranches = array();
+            foreach($products as $productID => $product)
             {
-                $productPlans[$product->id] = $this->loadModel('productplan')->getPairs($product->id);
+                foreach($branches[$productID] as $branchID => $branch)
+                {
+                    $linkedBranches[$productID][$branchID] = $branchID;
+                    $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                }
             }
+
+            $this->view->branches       = $branches;
+            $this->view->linkedBranches = $linkedBranches;
         }
 
         if(!empty($planID))
@@ -1296,7 +1374,11 @@ class execution extends control
                 ->where('t1.id')->eq($plan->product)
                 ->fetchAll('id');
 
-            $productPlan = $this->loadModel('productplan')->getPairs($plan->product, 0, 'unexpired');
+            $productPlan    = $this->loadModel('productplan')->getPairsForStory($plan->product, $plan->branch, 'skipParent|unexpired|withMainPlan');
+            $linkedBranches = array();
+            $linkedBranches[$plan->product][$plan->branch] = $plan->branch;
+
+            $this->view->linkedBranches = $linkedBranches;
         }
 
         if(!empty($_POST))
@@ -1321,9 +1403,12 @@ class execution extends control
             $planID = '';
             if(isset($_POST['plans']))
             {
-                foreach($_POST['plans'] as $planID)
+                foreach($_POST['plans'] as $plans)
                 {
-                    if(!empty($planID)) break;
+                    foreach($plans as $planID)
+                    {
+                        if(!empty($planID)) break;
+                    }
                 }
             }
 
@@ -1337,35 +1422,50 @@ class execution extends control
             }
         }
 
-        if(!empty($project->model) and $project->model == 'waterfall')
-        {
-            $this->lang->execution->type = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->type);
-        }
+        $this->loadModel('user');
+        $poUsers = $this->user->getPairs('noclosed|nodeleted|pofirst', '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PM"] = $this->config->user->moreLink;
 
-        $this->view->title           = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
-        $this->view->position[]      = $this->view->title;
-        $this->view->gobackLink      = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
-        $this->view->executions      = array('' => '') + $this->execution->getList($projectID);
-        $this->view->groups          = $this->loadModel('group')->getPairs();
-        $this->view->allProducts     = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
-        $this->view->acl             = $acl;
-        $this->view->plan            = $plan;
-        $this->view->name            = $name;
-        $this->view->code            = $code;
-        $this->view->team            = $team;
-        $this->view->teams           = array(0 => '') + $this->execution->getTeamPairsByProject((int)$projectID);
-        $this->view->allProjects     = array(0 => '') + $this->project->getPairsByModel();
-        $this->view->executionID     = $executionID;
-        $this->view->productID       = $productID;
-        $this->view->projectID       = $projectID;
-        $this->view->products        = $products;
-        $this->view->productPlan     = array(0 => '') + $productPlan;
-        $this->view->productPlans    = array(0 => '') + $productPlans;
-        $this->view->whitelist       = $whitelist;
-        $this->view->copyExecutionID = $copyExecutionID;
-        $this->view->branchGroups    = $this->loadModel('branch')->getByProducts(array_keys($products));
-        $this->view->users           = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->from            = $this->app->tab;
+        $pmUsers = $this->user->getPairs('noclosed|nodeleted|pmfirst', '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
+
+        $qdUsers = $this->user->getPairs('noclosed|nodeleted|qdfirst', '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
+
+        $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
+        if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
+
+        $this->view->title               = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
+        $this->view->position[]          = $this->view->title;
+        $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
+        $this->view->executions          = array('' => '') + $this->execution->getList($projectID);
+        $this->view->groups              = $this->loadModel('group')->getPairs();
+        $this->view->allProducts         = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
+        $this->view->acl                 = $acl;
+        $this->view->plan                = $plan;
+        $this->view->name                = $name;
+        $this->view->code                = $code;
+        $this->view->team                = $team;
+        $this->view->teams               = array(0 => '') + $this->execution->getCanCopyObjects((int)$projectID);
+        $this->view->allProjects         = array(0 => '') + $this->project->getPairsByModel('all', 0, 'noclosed');
+        $this->view->executionID         = $executionID;
+        $this->view->productID           = $productID;
+        $this->view->projectID           = $projectID;
+        $this->view->products            = $products;
+        $this->view->multiBranchProducts = $this->product->getMultiBranchPairs();
+        $this->view->productPlan         = array(0 => '') + $productPlan;
+        $this->view->productPlans        = array(0 => '') + $productPlans;
+        $this->view->whitelist           = $whitelist;
+        $this->view->copyExecutionID     = $copyExecutionID;
+        $this->view->branchGroups        = isset($branchGroups) ? $branchGroups : $this->execution->getBranchByProduct(array_keys($products), $this->config->systemMode == 'new' ? $projectID : 0);
+        $this->view->poUsers             = $poUsers;
+        $this->view->pmUsers             = $pmUsers;
+        $this->view->qdUsers             = $qdUsers;
+        $this->view->rdUsers             = $rdUsers;
+        $this->view->users               = $this->loadModel('user')->getPairs('nodeleted|noclosed');
+        $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
+        $this->view->from                = $this->app->tab;
+        $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->display();
     }
 
@@ -1382,6 +1482,7 @@ class execution extends control
     public function edit($executionID, $action = 'edit', $extra = '')
     {
         /* Load language files and get browseExecutionLink. */
+        $this->loadModel('product');
         $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
@@ -1390,7 +1491,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
-            $oldProducts = $this->execution->getProducts($executionID);
+            $oldProducts = $this->product->getProducts($executionID);
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1405,7 +1506,7 @@ class execution extends control
             }
 
             $oldProducts  = array_keys($oldProducts);
-            $newProducts  = $this->execution->getProducts($executionID);
+            $newProducts  = $this->product->getProducts($executionID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             $products     = $diffProducts ? join(',', $newProducts) : '';
@@ -1417,17 +1518,26 @@ class execution extends control
             }
 
             /* Link the plan stories. */
-            $newPlans   = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
+            $newPlans = array();
+            if(isset($_POST['plans']))
+            {
+                foreach($_POST['plans'] as $plans)
+                {
+                    foreach($plans as $planID) $newPlans[$planID] = $planID;
+                }
+            }
+
             $diffResult = array_diff($oldPlans, $newPlans);
             $diffResult = array_merge($diffResult, array_diff($newPlans, $oldPlans));
             if(!empty($newPlans) and !empty($diffResult))
             {
                 $projectID = $this->dao->select('project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch('project');
-                $this->loadModel('productplan')->linkProject($executionID, $_POST['plans']);
-                $this->productplan->linkProject($projectID, $_POST['plans']);
+                $this->loadModel('productplan')->linkProject($executionID, $newPlans);
+                $this->productplan->linkProject($projectID, $newPlans);
             }
 
             $this->executeHooks($executionID);
+            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
@@ -1436,7 +1546,8 @@ class execution extends control
 
         $executions = array('' => '') + $this->executions;
         $execution  = $this->execution->getById($executionID);
-        $managers = $this->execution->getDefaultManagers($executionID);
+        $managers   = $this->execution->getDefaultManagers($executionID);
+
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -1445,32 +1556,33 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->edit;
 
-        $allProducts       = array(0 => '');
-        $executionProsucts = $this->execution->getProducts($execution->project, true, 'noclosed');
-        foreach($executionProsucts as $product) $allProducts[$product->id] = $product->name;
+        $allProducts = array(0 => '') + $this->product->getProducts($execution->project, 'noclosed', '', false);
 
-        $linkedProducts = $this->execution->getProducts($execution->id);
-        $linkedBranches = array();
+        $this->loadModel('productplan');
+        $productPlans     = array(0 => '');
+        $linkedBranches   = array();
+        $linkedProducts   = $this->product->getProducts($executionID);
+        $branches         = $this->project->getBranchesByProject($executionID);
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
+        $unmodifiableBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $executionStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($executionStories)) array_push($unmodifiableProducts, $productID);
-        }
-
-        foreach($linkedProducts as $product)
-        {
-            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
-        }
-
-        $this->loadModel('productplan');
-        $productPlans = array(0 => '');
-        foreach($linkedProducts as $product)
-        {
-            $productPlans[$product->id] = $this->productplan->getPairs($product->id);
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $linkedBranches[$productID][$branchID] = $branchID;
+                $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
+                if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID][$branchID] += $plans[$productID][BRANCH_MAIN];
+                if(!empty($executionStories[$productID][$branchID]))
+                {
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                }
+            }
         }
 
         $this->loadModel('user');
@@ -1495,13 +1607,17 @@ class execution extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->allProjects          = $this->project->getPairsByModel();
+        $this->view->allProjects          = $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
+        $this->view->linkedBranches       = $linkedBranches;
+        $this->view->branches             = $branches;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
+        $this->view->unmodifiableBranches = $unmodifiableBranches;
+        $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), '', $linkedBranches);
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
         $this->display();
     }
 
@@ -1527,6 +1643,17 @@ class execution extends control
 
                     $actionID = $this->loadModel('action')->create($this->objectType, $executionID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
+
+                    $syncExecution = '';
+                    foreach($changes as $changeField)
+                    {
+                        if($changeField['field'] == 'status' && $changeField['old'] =='wait' && $changeField['new'] =='doing')
+                        {
+                            $syncExecution = $executionID;
+                            break;
+                        }
+                    }
+                    $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
             die(js::locate($this->session->executionList, 'parent'));
@@ -1572,7 +1699,7 @@ class execution extends control
         $this->view->position[]      = $this->lang->execution->batchEdit;
         $this->view->executionIDList = $executionIDList;
         $this->view->executions      = $executions;
-        $this->view->allProjects     = $this->project->getPairsByModel();
+        $this->view->allProjects     = $this->project->getPairsByModel('all', 0, 'noclosed');
         $this->view->pmUsers         = $pmUsers;
         $this->view->poUsers         = $poUsers;
         $this->view->qdUsers         = $qdUsers;
@@ -1604,6 +1731,8 @@ class execution extends control
                 $actionID = $this->action->create($this->objectType, $executionID, 'Started', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
+
+            $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
             die(js::reload('parent.parent'));
         }
@@ -1781,11 +1910,14 @@ class execution extends control
         /* Execution not found to prevent searching for .*/
         if(!isset($this->executions[$execution->id])) $this->executions = $this->execution->getPairs($execution->project, 'all', 'nocode');
 
-        $products = $this->execution->getProducts($execution->id);
+        $products = $this->loadModel('product')->getProducts($execution->id);
         $linkedBranches = array();
         foreach($products as $product)
         {
-            if($product->branch) $linkedBranches[$product->branch] = $product->branch;
+            if(isset($product->branches))
+            {
+                foreach($product->branches as $branchID) $linkedBranches[$branchID] = $branchID;
+            }
         }
 
         /* Set menu. */
@@ -1825,50 +1957,81 @@ class execution extends control
      * Kanban.
      *
      * @param  int    $executionID
-     * @param  string $type
+     * @param  string $browseType story|bug|task|all
      * @param  string $orderBy
+     * @param  string $groupBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $type = 'story', $orderBy = 'order_asc')
+    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
+        if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
+        if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->{'kanbanGroupBy' . $browseType} ? $this->session->{'kanbanGroupBy' . $browseType} : 'default';
+        if(empty($groupBy) and $browseType == 'all') $groupBy = 'default';
+
         /* Save to session. */
         $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList',  $uri, 'execution');
-        $this->app->session->set('bugList',   $uri, 'qa');
+        $this->app->session->set('taskList', $uri, 'execution');
+        $this->app->session->set('bugList',  $uri, 'qa');
+        $this->app->session->set('kanbanType', $browseType, 'execution');
+        $this->app->session->set('kanbanGroupBy' . $browseType, $groupBy, 'execution');
 
-        /* Compatibility IE8*/
+        /* Load language. */
+        $this->app->loadLang('story');
+        $this->app->loadLang('task');
+        $this->app->loadLang('bug');
+
+        /* Compatibility IE8. */
         if(strpos($this->server->http_user_agent, 'MSIE 8.0') !== false) header("X-UA-Compatible: IE=EmulateIE7");
+
+        $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
+        if(empty($kanbanGroup))
+        {
+            $this->kanban->createLanes($executionID, $browseType, $groupBy);
+            $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+        }
 
         $this->execution->setMenu($executionID);
         $execution = $this->loadModel('execution')->getById($executionID);
-        $tasks   = $this->execution->getKanbanTasks($executionID, "id");
-        $bugs    = $this->loadModel('bug')->getExecutionBugs($executionID);
-        $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
 
         /* Determines whether an object is editable. */
         $canBeChanged = common::canModify('execution', $execution);
 
-        $kanbanGroup   = $this->execution->getKanbanGroupData($stories, $tasks, $bugs, $type);
-        $kanbanSetting = $this->execution->getKanbanSetting();
+        /* Get execution's product. */
+        $productID = 0;
+        $products  = $this->loadModel('product')->getProducts($executionID);
+        if($products) $productID = key($products);
+
+        $plans    = $this->execution->getPlans($products);
+        $allPlans = array('' => '');
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
+        $userList    = array();
+        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!$avatar) continue;
+            $userList[$account]['avatar'] = $avatar;
+        }
 
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
         $this->view->position[]    = $this->lang->execution->kanban;
-        $this->view->stories       = $stories;
         $this->view->realnames     = $this->loadModel('user')->getPairs('noletter');
         $this->view->storyOrder    = $orderBy;
         $this->view->orderBy       = 'id_asc';
         $this->view->executionID   = $executionID;
-        $this->view->browseType    = '';
-        $this->view->execution     = $execution;
-        $this->view->type          = $type;
+        $this->view->productID     = $productID;
+        $this->view->allPlans      = $allPlans;
+        $this->view->browseType    = $browseType;
         $this->view->kanbanGroup   = $kanbanGroup;
-        $this->view->kanbanColumns = $this->execution->getKanbanColumns($kanbanSetting);
-        $this->view->statusMap     = $canBeChanged ? $this->execution->getKanbanStatusMap($kanbanSetting) : array();
-        $this->view->statusList    = $this->execution->getKanbanStatusList($kanbanSetting);
-        $this->view->colorList     = $this->execution->getKanbanColorList($kanbanSetting);
+        $this->view->execution     = $execution;
+        $this->view->groupBy       = $groupBy;
         $this->view->canBeChanged  = $canBeChanged;
+        $this->view->userList      = $userList;
 
         $this->display();
     }
@@ -1882,8 +2045,8 @@ class execution extends control
     public function executionKanban()
     {
         $this->loadModel('project');
-        $projects   = $this->project->getPairsByProgram(0, 'noclosed');
-        $executions = $this->project->getStats(0, 'all');
+        $projects   = $this->project->getPairsByProgram('', 'noclosed');
+        $executions = $this->project->getStats(0, 'all', 0, 0, 30, 'id_desc');
 
         $teams = $this->dao->select('root,account')->from(TABLE_TEAM)
             ->where('root')->in($this->app->user->view->sprints)
@@ -1911,18 +2074,38 @@ class execution extends control
 
                 $statusCount[$status] += isset($kanbanGroup[$projectID][$status]) ? count($kanbanGroup[$projectID][$status]) : 0;
 
-                /* Max 5 closed executions. */
+                /* Max 2 closed executions. */
                 if($status == 'closed')
                 {
-                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) >= 5) $myExecutions[$status] = array_slice($myExecutions[$status], 0, 5, true);
-                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) >= 5) $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 5, true);
+                    if(isset($myExecutions[$status]) and count($myExecutions[$status]) > 2)
+                    {
+                        foreach($myExecutions[$status] as $executionID => $execution)
+                        {
+                            unset($myExecutions[$status][$executionID]);
+                            $myExecutions[$status][$execution->closedDate] = $execution;
+                        }
+
+                        krsort($myExecutions[$status]);
+                        $myExecutions[$status] = array_slice($myExecutions[$status], 0, 2, true);
+                    }
+
+                    if(isset($kanbanGroup[$projectID][$status]) and count($kanbanGroup[$projectID][$status]) > 2)
+                    {
+                        foreach($kanbanGroup[$projectID][$status] as $executionID => $execution)
+                        {
+                            unset($kanbanGroup[$projectID][$status][$executionID]);
+                            $kanbanGroup[$projectID][$status][$execution->closedDate] = $execution;
+                        }
+
+                        krsort($kanbanGroup[$projectID][$status]);
+                        $kanbanGroup[$projectID][$status] = array_slice($kanbanGroup[$projectID][$status], 0, 2);
+                    }
                 }
             }
 
             if(empty($kanbanGroup[$projectID])) continue;
             $projectCount++;
         }
-        krsort($kanbanGroup);
 
         $this->view->title        = $this->lang->execution->executionKanban;
         $this->view->kanbanGroup  = empty($myExecutions) ? $kanbanGroup : array($myExecutions) + $kanbanGroup;
@@ -2048,6 +2231,14 @@ class execution extends control
                 }
             }
 
+            /* Close the page when there is no data. */
+            $hasData = false;
+            foreach($datas as $data)
+            {
+                if(!empty($data)) $hasData = true;
+            }
+            if(!$hasData) die(js::alert($this->lang->execution->noPrintData) . js::close());
+
             $this->execution->saveKanbanData($executionID, $originalDatas);
 
             $hasBurn = $this->post->content == 'all';
@@ -2073,8 +2264,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
         $execution = $this->execution->getById($executionID);
 
-        $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
-        $this->view->position[] = $this->lang->execution->printKanban;
+        $this->view->executionID = $executionID;
         $this->display();
     }
 
@@ -2198,7 +2388,7 @@ class execution extends control
                 if(count($_POST['products']) > 1) die(js::alert($this->lang->execution->oneProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
             }
 
-            $oldProducts = $this->execution->getProducts($executionID);
+            $oldProducts = $this->product->getProducts($executionID);
 
             if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
 
@@ -2206,7 +2396,7 @@ class execution extends control
             if(dao::isError()) die(js::error(dao::getError()));
 
             $oldProducts  = array_keys($oldProducts);
-            $newProducts  = $this->execution->getProducts($executionID);
+            $newProducts  = $this->product->getProducts($executionID);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             if($diffProducts) $this->loadModel('action')->create($this->objectType, $executionID, 'Managed', '', !empty($_POST['products']) ? join(',', $_POST['products']) : '');
@@ -2226,33 +2416,41 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->manageProducts;
 
-        $allProducts     = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($execution->project);
-        $linkedProducts  = $this->execution->getProducts($execution->id);
-        $linkedBranches  = array();
+        $allProducts      = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($execution->project);
+        $linkedProducts   = $this->product->getProducts($execution->id);
+        $linkedBranches   = array();
+        $branches         = $this->project->getBranchesByProject($executionID);
+        $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
+        $unmodifiableBranches = array();
         foreach($linkedProducts as $productID => $linkedProduct)
         {
-            $executionStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('product')->eq($productID)->fetchAll('story');
-            if(!empty($executionStories)) array_push($unmodifiableProducts, $productID);
-        }
-
-        // Merge allProducts and linkedProducts for closed product.
-        foreach($linkedProducts as $product)
-        {
-            if(!isset($allProducts[$product->id])) $allProducts[$product->id] = $product->name;
-            if(!empty($product->branch)) $linkedBranches[$product->branch] = $product->branch;
+            $linkedBranches[$productID] = array();
+            if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
+            foreach($branches[$productID] as $branchID => $branch)
+            {
+                $linkedBranches[$productID][$branchID] = $branchID;
+                if(!empty($executionStories[$productID][$branchID]))
+                {
+                    array_push($unmodifiableProducts, $productID);
+                    array_push($unmodifiableBranches, $branchID);
+                }
+            }
         }
 
         /* Assign. */
         $this->view->title                = $title;
         $this->view->position             = $position;
         $this->view->allProducts          = $allProducts;
-        $this->view->execution              = $execution;
+        $this->view->execution            = $execution;
         $this->view->linkedProducts       = $linkedProducts;
         $this->view->unmodifiableProducts = $unmodifiableProducts;
-        $this->view->branchGroups         = $this->loadModel('branch')->getByProducts(array_keys($allProducts), 'ignoreNormal', $linkedBranches);
+        $this->view->unmodifiableBranches = $unmodifiableBranches;
+        $this->view->linkedBranches       = $linkedBranches;
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'all');
 
         $this->display();
     }
@@ -2377,7 +2575,7 @@ class execution extends control
 
         /* Get projects, executions and products. */
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage');
-        $products   = $this->project->getProducts($objectID);
+        $products   = $this->product->getProducts($objectID);
         $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
@@ -2393,6 +2591,8 @@ class execution extends control
         {
             $this->execution->linkStory($objectID);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
+
+            if(isonlybody()) die(js::reload('parent'));
             die(js::locate($browseLink));
         }
 
@@ -2408,38 +2608,41 @@ class execution extends control
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Set modules and branches. */
-        $modules     = array();
-        $branches    = array();
-        $productType = 'normal';
+        $modules      = array();
+        $branchIDList = array(BRANCH_MAIN);
+        $branches     = $this->project->getBranchesByProject($objectID);
+        $productType  = 'normal';
         $this->loadModel('tree');
         $this->loadModel('branch');
         foreach($products as $product)
         {
-            $productModules = $this->tree->getOptionMenu($product->id);
-            foreach($productModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
+            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
+            foreach($productModules as $branch => $branchModules)
+            {
+                foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
+            }
             if($product->type != 'normal')
             {
                 $productType = $product->type;
-                $branches[$product->branch] = $product->branch;
-                if($product->branch == 0)
+                if(isset($branches[$product->id]))
                 {
-                    foreach($this->branch->getPairs($product->id, 'noempty') as $branchID => $branchName) $branches[$branchID] = $branchID;
+                    foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
                 }
             }
         }
 
         /* Build the search form. */
         $actionURL    = $this->createLink($this->app->rawModule, 'linkStory', "objectID=$objectID&browseType=bySearch&queryID=myQueryID");
-        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noempty');
-        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory');
+        $branchGroups = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $this->execution->buildStorySearchForm($products, $branchGroups, $modules, $queryID, $actionURL, 'linkStory', $objectID);
 
         if($browseType == 'bySearch')
         {
-            $allStories = $this->story->getBySearch('', 0, $queryID, 'id', $objectID);
+            $allStories = $this->story->getBySearch('', '', $queryID, 'id', $objectID);
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branches, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);
@@ -2627,7 +2830,7 @@ class execution extends control
      */
     public function ajaxGetProducts($executionID)
     {
-        $products = $this->execution->getProducts($executionID, false);
+        $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
         die(html::select('product', $products, '', 'class="form-control"'));
     }
 
@@ -2865,18 +3068,22 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function all($status = 'all', $projectID = 0, $orderBy = 'id_desc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
+    public function all($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->app->loadLang('my');
         $this->app->loadLang('product');
+        $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
 
         $from = $this->app->tab;
         if($from == 'execution') $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
         if($from == 'project')
         {
             $projects  = $this->project->getPairsByProgram();
             $projectID = $this->project->saveState($projectID, $projects);
+            $project = $this->loadModel('project')->getByID($projectID);
+            $this->view->project = $project;
             $this->project->setMenu($projectID);
         }
 
@@ -2903,6 +3110,7 @@ class execution extends control
         $this->view->position[] = $this->lang->execution->allExecutions;
 
         $this->view->executionStats = $this->project->getStats($projectID, $status, $productID, 0, 30, $orderBy, $pager);
+        $this->view->productList    = $this->loadModel('product')->getProductPairsByProject($projectID);
         $this->view->productID      = $productID;
         $this->view->projectID      = $projectID;
         $this->view->projects       = array('') + $this->project->getPairsByProgram();
@@ -2911,7 +3119,7 @@ class execution extends control
         $this->view->users          = $this->loadModel('user')->getPairs('noletter');
         $this->view->status         = $status;
         $this->view->from           = $from;
-
+        $this->view->isStage        = (isset($project->model) and $project->model == 'waterfall') ? true : false;
         $this->display();
     }
 
@@ -3109,13 +3317,14 @@ class execution extends control
     /**
      * Import stories by plan.
      *
-     * @param int $executionID
-     * @param int $planID
-     * @param int $productID
+     * @param  int    $executionID
+     * @param  int    $planID
+     * @param  int    $productID
+     * @param  string $fromMethod
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0)
+    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -3150,7 +3359,7 @@ class execution extends control
             $param      = "projectID=$executionID";
         }
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
-        die(js::locate(helper::createLink($moduleName, 'story', $param), 'parent'));
+        die(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 
     /**
@@ -3235,5 +3444,63 @@ class execution extends control
         $this->view->actions = $this->loadModel('action')->getList('task', $taskID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter');
         $this->display();
+    }
+
+    /**
+     *Ajax get group menu of lanes.
+     *
+     * @param string $type all|syory|task|bug
+     * @param string $group
+     * @access public
+     * @return void
+     */
+    public function ajaxGetGroup($type, $group = 'default')
+    {
+        $this->app->loadLang('kanban');
+        $groups = array();
+        $groups = $this->lang->kanban->group->$type;
+        die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
+    }
+
+    /**
+     * Ajax update kanban.
+     *
+     * @param  int    $executionID
+     * @param  string $enterTime
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @access public
+     * @return void
+     */
+    public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '')
+    {
+        $enterTime = date('Y-m-d H:i:s', $enterTime);
+        $lastEditedTime = $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
+
+        if($lastEditedTime > $enterTime)
+        {
+            $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
+            die(json_encode($kanbanGroup));
+        }
+        else
+        {
+            die('');
+        }
+    }
+
+    /**
+     * AJAX: Update the execution name.
+     *
+     * @param  int     $executionID
+     * @param  string  $newExecutionName
+     * @access public
+     * @return bool
+     */
+    public function ajaxUpdateExecutionName($executionID, $newExecutionName)
+    {
+        $this->dao->update(TABLE_EXECUTION)->set('name')->eq($newExecutionName)->where('id')->eq($executionID)->exec();
+        if(dao::isError()) echo false;
+
+        echo true;
     }
 }

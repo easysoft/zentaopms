@@ -2,16 +2,19 @@ title: table zt_project
 author: Zhu Jinyong
 version: "1.0"
 fields:
-  - field: id
-    range: 1-10000
   - field: project
-    range: 1-10000
+    range: 0
   - field: model
-    range:
+    range: ""
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: '项目'
+    - field: name2
+      range: []{100000}
   - field: type
     range: project
-  - field: product
-    range: single
   - field: lifetime
     range:
   - field: budget

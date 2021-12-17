@@ -17,7 +17,7 @@
       <small class='text-muted'> <?php echo $lang->group->byModuleTips; ?></small>
     </h2>
   </div>
-  
+
   <form class='table-bymodule pdb-20' method='post' target='hiddenwin'>
     <table class='table table-form'>
       <tr class='text-center'>

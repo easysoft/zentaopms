@@ -53,10 +53,11 @@ class api extends control
                 $libID     = $api->lib;
                 $api->desc = htmlspecialchars_decode($api->desc);
 
-                $this->view->api     = $api;
-                $this->view->apiID   = $apiID;
-                $this->view->version = $version;
-                $this->view->actions = $apiID ? $this->action->getList('api', $apiID) : array();
+                $this->view->api      = $api;
+                $this->view->apiID    = $apiID;
+                $this->view->version  = $version;
+                $this->view->typeList = $this->api->getTypeList($api->lib);
+                $this->view->actions  = $apiID ? $this->action->getList('api', $apiID) : array();
             }
         }
         else
@@ -64,7 +65,8 @@ class api extends control
             /* Get module api list. */
             $apiList = $this->api->getListByModuleId($libID, $moduleID, $release);
 
-            $this->view->apiList = $apiList;
+            $this->view->apiList  = $apiList;
+            $this->view->typeList = $this->api->getTypeList($libID);
         }
 
         $this->setMenu($libID, $moduleID);
@@ -435,21 +437,12 @@ class api extends control
 
         $this->setMenu($api->lib);
 
-        $example = array('example' => 'type,description');
-        $example = json_encode($example, JSON_PRETTY_PRINT);
-
-        $options = array();
-        foreach($this->lang->api->paramsTypeOptions as $key => $item)
-        {
-            $options[] = array('label' => $item, 'value' => $key);
-        }
-        $this->view->typeOptions = $options;
-        $this->view->gobackLink  = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
-        $this->view->user        = $this->app->user->account;
-        $this->view->allUsers    = $this->loadModel('user')->getPairs('devfirst|noclosed');;
+        $this->getTypeOptions($api->lib);
+        $this->view->gobackLink       = $this->createLink('api', 'index', "libID={$api->lib}&moduleID={$api->module}");
+        $this->view->user             = $this->app->user->account;
+        $this->view->allUsers         = $this->loadModel('user')->getPairs('devfirst|noclosed');;
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($api->lib, 'api', $startModuleID = 0);
         $this->view->moduleID         = $api->module ? (int)$api->module : (int)$this->cookie->lastDocModule;
-        $this->view->example          = $example;
         $this->view->title            = $api->title . $this->lang->api->edit;
 
         $this->display();
@@ -469,7 +462,7 @@ class api extends control
         {
             $now    = helper::now();
             $params = fixer::input('post')
-				->trim('title,path')
+                ->trim('title,path')
                 ->remove('type')
                 ->skipSpecial('params,response')
                 ->add('addedBy', $this->app->user->account)
@@ -495,9 +488,6 @@ class api extends control
         $lib     = $this->doc->getLibByID($libID);
         $libName = isset($lib->name) ? $lib->name . $this->lang->colon : '';
 
-        $example = array('example' => 'type,description');
-        $example = json_encode($example, JSON_PRETTY_PRINT);
-
         $this->getTypeOptions($libID);
         $this->view->gobackLink       = $this->createLink('api', 'index', "libID=$libID&moduleID=$moduleID");
         $this->view->user             = $this->app->user->account;
@@ -507,7 +497,6 @@ class api extends control
         $this->view->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($libID, 'api', $startModuleID = 0);
         $this->view->moduleID         = $moduleID ? (int)$moduleID : (int)$this->cookie->lastDocModule;
         $this->view->libs             = $libs;
-        $this->view->example          = $example;
         $this->view->title            = $libName . $this->lang->api->create;
         $this->view->users            = $this->user->getPairs('nocode');
 
@@ -613,7 +602,7 @@ class api extends control
      * Set doc menu by method name.
      *
      * @param  int $libID
-	 * @param  int $moduleID
+     * @param  int $moduleID
      * @access public
      * @return void
      */
@@ -845,7 +834,7 @@ EOT;
     /**
      * Get options of type.
      *
-     * @param  string $keyField
+     * @param  int   $libID
      * @access public
      * @return void
      */
@@ -866,4 +855,14 @@ EOT;
         $this->view->typeOptions = $options;
     }
 
+    /**
+     * Create demo library.
+     *
+     * @access public
+     * @return void
+     */
+    public function createDemo()
+    {
+        $this->api->createDemoData();
+    }
 }

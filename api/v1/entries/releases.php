@@ -15,26 +15,16 @@ class releasesEntry extends entry
      * GET method.
      *
      * @param  int    $productID
-     * @param  int    $projectID
      * @access public
      * @return void
      */
-    public function get($productID = 0, $projectID = 0)
+    public function get($productID = 0)
     {
-        if(!$productID) $productID = $this->param('product');
-        if(!$projectID) $projectID = $this->param('project');
-        if(!$productID and !$projectID) return $this->sendError(400, 'Need product or project id.');
+        if(empty($productID)) $productID = $this->param('product');
+        if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
-        if($projectID)
-        {
-            $control = $this->loadController('projectrelease', 'browse');
-            $control->browse($projectID, 0, $this->param('status', 'all'));
-        }
-        else
-        {
-            $control = $this->loadController('release', 'browse');
-            $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'));
-        }
+        $control = $this->loadController('release', 'browse');
+        $control->browse($productID, $this->param('branch', 0), $this->param('status', 'all'), $this->param('order', 't1.date_desc'));
 
         /* Response */
         $data = $this->getData();
@@ -42,13 +32,12 @@ class releasesEntry extends entry
         {
             $result   = array();
             $releases = $data->data->releases;
-            foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date');
+            foreach($releases as $release) $result[] = $this->format($release, 'deleted:bool,date:date,mailto:userList');
 
-            return $this->send(200, array('releases' => $result));
+            return $this->send(200, array('total' => count($result), 'releases' => $result));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         return $this->sendError(400, 'error');
     }
 }

@@ -48,6 +48,8 @@ $lang->bug->confirmed        = '是否确认';
 $lang->bug->confirmedAB      = '确认';
 $lang->bug->toTask           = '转任务';
 $lang->bug->toStory          = "转{$lang->SRCommon}";
+$lang->bug->feedbackBy       = '反馈者';
+$lang->bug->notifyEmail      = '通知邮箱';
 $lang->bug->mailto           = '抄送给';
 $lang->bug->openedBy         = '由谁创建';
 $lang->bug->openedByAB       = '创建者';
@@ -99,6 +101,7 @@ $lang->bug->edit               = '编辑Bug';
 $lang->bug->batchEdit          = '批量编辑';
 $lang->bug->batchChangeModule  = '批量修改模块';
 $lang->bug->batchChangeBranch  = '批量修改分支';
+$lang->bug->batchChangePlan    = '批量修改计划';
 $lang->bug->batchClose         = '批量关闭';
 $lang->bug->assignTo           = '指派';
 $lang->bug->assignAction       = '指派Bug';
@@ -140,6 +143,7 @@ $lang->bug->overdueBugs        = '过期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = "{$lang->SRCommon}变动";
+$lang->bug->allProject         = '所有项目';
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解决Bug数';
@@ -158,6 +162,7 @@ $lang->bug->noModule       = '<div>您现在还没有模块信息</div><div>请�
 $lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
 $lang->bug->labelConfirmed = '已确认';
 $lang->bug->labelPostponed = '被延期';
+$lang->bug->changed        = '已变动';
 $lang->bug->storyChanged   = '需求变动';
 
 /* 页面标签。*/
@@ -181,6 +186,7 @@ $lang->bug->legendComment               = '备注';
 $lang->bug->legendLife                  = 'Bug的一生';
 $lang->bug->legendMisc                  = '其他相关';
 $lang->bug->legendRelated               = '其他信息';
+$lang->bug->legendThisWeekCreated       = '本周新增';
 
 /* 功能按钮。*/
 $lang->bug->buttonConfirm = '确认';
@@ -194,6 +200,7 @@ $lang->bug->skipClose             = 'Bug %s 不是已解决状态，不能关闭
 $lang->bug->executionAccessDenied = "您无权访问该Bug所属的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重现步骤不能为空。";
 $lang->bug->confirmUnlinkBuild    = "更换解决版本将取消与旧版本的关联，您确定取消该bug与%s的关联吗？";
+$lang->bug->noSwitchBranch        = 'Bug%s所属模块不在当前分支下，将自动忽略。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步骤]</p><br/>";
@@ -274,8 +281,9 @@ $lang->bug->statusList['active']   = '激活';
 $lang->bug->statusList['resolved'] = '已解决';
 $lang->bug->statusList['closed']   = '已关闭';
 
-$lang->bug->confirmedList[1] = '是';
-$lang->bug->confirmedList[0] = '否';
+$lang->bug->confirmedList[''] = '';
+$lang->bug->confirmedList[1]  = '是';
+$lang->bug->confirmedList[0]  = '否';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '设计如此';

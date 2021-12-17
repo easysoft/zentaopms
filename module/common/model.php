@@ -37,6 +37,124 @@ class commonModel extends model
     }
 
     /**
+     * Set the status of execution, project, and program to doing.
+     *
+     * @param  int    $objectID
+     * @access public
+     * @return void
+     */
+    public function syncPPEStatus($objectID)
+    {
+        global $app;
+        $thisModule = $app->rawModule;
+
+        if($this->config->systemMode == 'classic')
+        {
+            if($thisModule == 'task') $this->syncExecutionStatus($objectID);
+        }
+
+        if($this->config->systemMode == 'new')
+        {
+            if($thisModule == 'task')
+            {
+                $taskID    = $objectID;
+                $execution = $this->syncExecutionStatus($taskID);
+                $project   = $this->syncProjectStatus($execution);
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'execution')
+            {
+                $executionID = $objectID;
+                $execution   = $this->dao->select('id, project')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->fetch();
+                $project     = $this->syncProjectStatus($execution);
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'project')
+            {
+                $projectID = $objectID;
+                $project   = $this->dao->select('id, parent, path')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+                $this->syncProgramStatus($project);
+            }
+            if($thisModule == 'program')
+            {
+                $programID = $objectID;
+                $program   = $this->dao->select('id, parent, path')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
+                $this->syncProgramStatus($program);
+            }
+        }
+    }
+
+   /**
+     * Set the status of the program to which theproject is linked as Ongoing.
+     *
+     * @param  object   $project
+     * @access public
+     * @return void
+     */
+    public function syncProgramStatus($project)
+    {
+        if($project->parent == 0) return;
+
+        $parentPath = str_replace(",{$project->id},", '', $project->path);
+        $parentPath = explode(',', trim($parentPath, ','));
+        $waitList   = $this->dao->select('id')->from(TABLE_PROGRAM)
+            ->where('id')->in($parentPath)
+            ->andWhere('status')->eq('wait')
+            ->orderBy('id_desc')
+            ->fetchPairs();
+
+        $now = helper::now();
+        $this->dao->update(TABLE_PROGRAM)->set('status')->eq('doing')->set('realBegan')->eq($now)->where('id')->in($waitList)->exec();
+        foreach($waitList as $programID)
+        {
+            $this->loadModel('action')->create('program', $programID, 'syncprogram');
+        }
+    }
+
+    /**
+     * Set the status of the project to which the execution is linked as Ongoing.
+     *
+     * @param  object  $execution
+     * @access public
+     * @return object  $project
+     */
+    public function syncProjectStatus($execution)
+    {
+        $projectID = $execution->project;
+        $project   = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch();
+
+        if($project->status == 'wait')
+        {
+            $this->dao->update(TABLE_PROJECT)->set('status')->eq('doing')->where('id')->eq($projectID)->exec();
+            $this->loadModel('action')->create('project', $projectID, 'syncproject');
+        }
+        return $project;
+    }
+
+    /**
+     * Set the status of the execution to which the task is linked as Ongoing.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return object $execution
+     */
+    public function syncExecutionStatus($taskID)
+    {
+        $execution = $this->dao->select('t1.*')->from(TABLE_EXECUTION)->alias('t1')
+            ->leftJoin(TABLE_TASK)->alias('t2')->on('t1.id=t2.execution')
+            ->where('t2.id')->eq($taskID)
+            ->fetch();
+
+        $today = helper::today();
+        if($execution->status == 'wait')
+        {
+            $this->dao->update(TABLE_EXECUTION)->set('status')->eq('doing')->set('realBegan')->eq($today)->where('id')->eq($execution->id)->exec();
+            $this->loadModel('action')->create('execution', $execution->id, 'syncexecution');
+        }
+        return $execution;
+    }
+
+    /**
      * Set the header info.
      *
      * @access public
@@ -203,7 +321,6 @@ class commonModel extends model
             if($module == 'block' and $method == 'main') return true;
             if($module == 'block' and $method == 'delete') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
-            if($module == 'report' and $method == 'annualdata') return true;
         }
         return false;
     }
@@ -731,6 +848,11 @@ class commonModel extends model
                     $linkPart = explode('|', $menu['link']);
                     if(!isset($linkPart[2])) continue;
                     $method = $linkPart[2];
+
+                    /* Skip some pages that do not require permissions.*/
+                    if($currentModule == 'report' and $method == 'annualData') continue;
+                    if($currentModule == 'my' and $currentMethod == 'team') continue;
+
                     if(common::hasPriv($currentModule, $method))
                     {
                         $display       = true;
@@ -1726,13 +1848,18 @@ EOD;
         $typeOnlyCondition = $type . 'OnlyCondition';
         $queryCondition    = $this->session->$queryCondition;
 
+        $preAndNextObject       = new stdClass();
+        $preAndNextObject->pre  = '';
+        $preAndNextObject->next = '';
+        if(empty($queryCondition)) return $preAndNextObject;
+
         $table   = $this->config->objectTables[$type];
         $orderBy = $type . 'OrderBy';
         $orderBy = $this->session->$orderBy;
-        if(empty($queryCondition) or $this->session->$typeOnlyCondition)
+        if($this->session->$typeOnlyCondition)
         {
             $sql = $this->dao->select('*')->from($table)
-                ->beginIF($queryCondition != false)->where($queryCondition)->fi()
+                ->where($queryCondition)
                 ->beginIF($orderBy != false)->orderBy($orderBy)->fi()
                 ->get();
         }
@@ -1748,9 +1875,10 @@ EOD;
         {
             $queryObjects = $this->dao->query($sql);
             $objectList   = array();
+            $key          = 'id';
             while($object = $queryObjects->fetch())
             {
-                $key = (!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) ? 'case' : 'id';
+                if(!$this->session->$typeOnlyCondition and $type == 'testcase' and isset($object->case)) $key = 'case';
                 $id  = $object->$key;
                 $objectList[$id] = $id;
             }
@@ -1758,10 +1886,6 @@ EOD;
             $this->session->set($objectIdListKey, array('sql' => $sql, 'idkey' => $key, 'objectList' => $objectList), $this->app->tab);
             $existsObjectList = $this->session->$objectIdListKey;
         }
-
-        $preAndNextObject       = new stdClass();
-        $preAndNextObject->pre  = '';
-        $preAndNextObject->next = '';
 
         $preObj = false;
         if(isset($existsObjectList['objectList']))
@@ -1986,6 +2110,8 @@ EOD;
 
         if(isset($this->app->user))
         {
+            if(in_array($module, $this->config->programPriv->waterfall)) return true;
+
             $this->app->user = $this->session->user;
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
@@ -2032,8 +2158,6 @@ EOD;
         $rights = $app->user->rights['rights'];
         $acls   = $app->user->rights['acls'];
 
-        if((($app->user->account != 'guest') or ($app->company->guest and $app->user->account == 'guest')) and $module == 'report' and $method == 'annualdata') return true;
-
         if(isset($rights[$module][$method]))
         {
             if(!commonModel::hasDBPriv($object, $module, $method)) return false;
@@ -2042,7 +2166,7 @@ EOD;
             $menu = isset($lang->navGroup->$module) ? $lang->navGroup->$module : $module;
             $menu = strtolower($menu);
             if($menu != 'qa' and !isset($lang->$menu->menu)) return true;
-            if($menu == 'my' or $menu == 'index' or $module == 'tree') return true;
+            if(($menu == 'my' && $method != 'team')or $menu == 'index' or $module == 'tree') return true;
             if($module == 'company' and $method == 'dynamic') return true;
             if($module == 'action' and $method == 'editcomment') return true;
             if($module == 'action' and $method == 'comment') return true;
@@ -2495,6 +2619,90 @@ EOD;
         }
     }
 
+
+    /**
+     * Http response with header.
+     *
+     * @param  string       $url
+     * @param  string|array $data
+     * @param  array        $options   This is option and value pair, like CURLOPT_HEADER => true. Use curl_setopt function to set options.
+     * @param  array        $headers   Set request headers.
+     * @static
+     * @access public
+     * @return string
+     */
+    public static function httpWithHeader($url, $data = null, $options = array(), $headers = array())
+    {
+        global $lang, $app;
+        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+
+        commonModel::$requestErrors = array();
+
+        if(!is_array($headers)) $headers = (array)$headers;
+        $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+
+        $curl = curl_init();
+        curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
+        curl_setopt($curl, CURLOPT_USERAGENT, 'Sae T OAuth2 v0.1');
+        curl_setopt($curl, CURLOPT_CONNECTTIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_TIMEOUT, 30);
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, TRUE);
+        curl_setopt($curl, CURLOPT_ENCODING, "");
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, FALSE);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, FALSE);
+        curl_setopt($curl, CURLOPT_IPRESOLVE, CURL_IPRESOLVE_V4);
+        curl_setopt($curl, CURLOPT_HEADER, true);
+        curl_setopt($curl, CURLINFO_HEADER_OUT, TRUE);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_URL, $url);
+
+        if(!empty($data))
+        {
+            if(is_object($data)) $data = (array) $data;
+            curl_setopt($curl, CURLOPT_POST, true);
+            curl_setopt($curl, CURLOPT_POSTFIELDS, $data);
+        }
+
+        if($options) curl_setopt_array($curl, $options);
+        $response = curl_exec($curl);
+        $errors   = curl_error($curl);
+
+        $headerSize = curl_getinfo($curl, CURLINFO_HEADER_SIZE);
+        $headerString = substr($response, 0, $headerSize);
+        $body       = substr($response, $headerSize);
+
+        /* Parse header. */
+        $header = explode("\n", $headerString);
+        $newHeader = array();
+        foreach($header as $item)
+        {
+            $field = explode(':', $item);
+            if(count($field) < 2) continue;
+            $headerkey = array_shift($field);
+            $newHeader[$headerkey] = join('', $field);
+        }
+        curl_close($curl);
+
+
+        $logFile = $app->getLogRoot() . 'saas.'. date('Ymd') . '.log.php';
+        if(!file_exists($logFile)) file_put_contents($logFile, '<?php die(); ?' . '>');
+
+        $fh = @fopen($logFile, 'a');
+        if($fh)
+        {
+            fwrite($fh, date('Ymd H:i:s') . ": " . $app->getURI() . "\n");
+            fwrite($fh, "url:    " . $url . "\n");
+            if(!empty($data)) fwrite($fh, "data:   " . print_r($data, true) . "\n");
+            fwrite($fh, "results:" . print_r($response, true) . "\n");
+            if(!empty($errors)) fwrite($fh, "errors: " . $errors . "\n");
+            fclose($fh);
+        }
+
+        if($errors) commonModel::$requestErrors[] = $errors;
+
+        return array('body' => $body, 'header' => $newHeader);
+    }
+
     /**
      * Http.
      *
@@ -2506,15 +2714,24 @@ EOD;
      * @access public
      * @return string
      */
-    public static function http($url, $data = null, $options = array(), $headers = array())
+    public static function http($url, $data = null, $options = array(), $headers = array(), $dataType = 'data')
     {
         global $lang, $app;
-        if(!extension_loaded('curl')) return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        if(!extension_loaded('curl'))
+        {
+             if($dataType == 'json') die($this->lang->error->noCurlExt);
+             return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
+        }
 
         commonModel::$requestErrors = array();
 
         if(!is_array($headers)) $headers = (array)$headers;
         $headers[] = "API-RemoteIP: " . zget($_SERVER, 'REMOTE_ADDR', '');
+        if($dataType == 'json')
+        {
+            $headers[] = 'Content-Type: application/json;charset=utf-8';
+            if(!empty($data)) $data = json_encode($data);
+        }
 
         $curl = curl_init();
         curl_setopt($curl, CURLOPT_HTTP_VERSION, CURL_HTTP_VERSION_1_0);
@@ -2727,15 +2944,9 @@ EOD;
     {
         if(empty($markdown)) return false;
 
-        $markdown = str_replace('&', '&amp;', $markdown);
-
         global $app;
-        $hyperdown = $app->loadClass('hyperdown');
-        $content   = $hyperdown->makeHtml($markdown);
-
-        $content = htmlspecialchars_decode($content);
-        $content = fixer::stripDataTags($content);
-        return $content;
+        $app->loadClass('htmlup');
+        return new htmlup($markdown);
     }
 }
 

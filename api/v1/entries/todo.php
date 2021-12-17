@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class todoEntry extends entry 
+class todoEntry extends entry
 {
     /**
      * GET method.
@@ -25,7 +25,8 @@ class todoEntry extends entry
 
         $data = $this->getData();
         if(!$data or (isset($data->message) and $data->message == '404 Not found')) return $this->send404();
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!$data or !isset($data->status)) return $this->send400('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $todo = $data->data->todo;
         $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));
@@ -45,7 +46,7 @@ class todoEntry extends entry
         /* Set $_POST variables. */
         $fields = 'date,type,name,pri,desc,status,begin,end,private';
         $this->batchSetPost($fields, $oldTodo);
-        
+
         $this->setPost('idvalue', 0);
         $this->setPost('date', $this->request('date', date("Y-m-d", strtotime($oldTodo->date))));
         $this->setPost('begin', $this->request('begin') ? str_replace(':', '', $this->request('begin')) : $oldTodo->begin);
@@ -57,7 +58,7 @@ class todoEntry extends entry
         $data = $this->getData();
 
         if(!isset($data->status)) return $this->sendError(400, 'error');
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $todo = $this->todo->getByID($todoID);
         $this->send(200, $this->format($todo, 'assignedDate:time,finishedDate:time,closedDate:time'));

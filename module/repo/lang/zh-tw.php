@@ -23,6 +23,7 @@ $lang->repo->encrypt         = '加密方式';
 $lang->repo->repo            = '代碼庫';
 $lang->repo->parent          = '父檔案夾';
 $lang->repo->branch          = '分支';
+$lang->repo->addWebHook      = '添加Webhook';
 
 $lang->repo->browseAction    = '瀏覽版本庫';
 $lang->repo->createAction    = '創建版本庫';
@@ -127,7 +128,7 @@ $lang->repo->logStyles['D'] = '刪除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 

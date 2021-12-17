@@ -136,7 +136,7 @@ class dingapi
                 $node['id']   = $deptID;
                 $node['pId']  = $parentID;
                 $node['name'] = $deptName;
-                if($parentID == 0) $node['open'] = true;
+                $node['open'] = true;
 
                 $tree[] = $node;
             }

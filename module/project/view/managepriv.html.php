@@ -21,6 +21,7 @@
 #mainMenu #groupName{line-height:33px; float: left}
 .checkbox-right{padding-left:0px !important;}
 
+.thWidth {width: 160px;}
 td.menus {border-right: 0;padding-right: 0;width: 220px !important;}
 td.menus + td {border-left: 0;}
 .menus .checkbox-primary {float: left; width: 220px;}
@@ -119,7 +120,7 @@ td.menus + td {border-left: 0;}
           <?php if(!empty($lang->$moduleName->menus) and $action == 'browse') continue;;?>
           <?php if(!empty($version) and strpos($changelogs, ",$moduleName-$actionLabel,") === false) continue;?>
           <div class='group-item'>
-            <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', '', 'inline');?>
+            <?php echo html::checkbox("actions[{$moduleName}]", array($action => $lang->$moduleName->$actionLabel), isset($groupPrivs[$moduleName][$action]) ? $action : '', "title='{$lang->$moduleName->$actionLabel}'", 'inline');?>
           </div>
           <?php endforeach;?>
         </td>

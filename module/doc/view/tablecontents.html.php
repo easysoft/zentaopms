@@ -44,7 +44,7 @@ if(empty($type)) $type = 'product';
           echo "<ul class='dropdown-menu pull-left'>";
           if($canManageMenu)
           {
-              echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
+              echo '<li>' . html::a($this->createLink('tree', 'browse', "rootID=$libID&view=doc&currentModuleID=0&branch=0&from={$this->app->tab}", '', true), '<i class="icon-cog-outline"></i> ' . $this->lang->doc->manageType, '', "class='iframe'") . '</li>';
               echo "<li class='divider'></li>";
           }
           if($canEditLib) echo '<li>' . html::a($this->createLink('doc', 'editLib', "rootID=$libID"), '<i class="icon-edit"></i> ' . $lang->doc->editLib, '', "class='iframe'") . '</li>';
@@ -112,7 +112,7 @@ if(empty($type)) $type = 'product';
             }
             else
             {
-                common::printLink('tree', 'browse', "rootID=$libID&view=doc", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
+                common::printLink('tree', 'browse', "rootID=$libID&view=doc&currentModuleID=0&branch=0&from={$this->app->tab}", $lang->doc->manageType, '', "class='btn btn-info btn-wide iframe'", '', true);
             }
         }
         ?>

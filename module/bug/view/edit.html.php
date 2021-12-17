@@ -19,13 +19,16 @@ js::set('changeProductConfirmed' , false);
 js::set('changeExecutionConfirmed' , false);
 js::set('confirmChangeProduct'   , $lang->bug->confirmChangeProduct);
 js::set('planID'                 , $bug->plan);
-js::set('oldExecutionID'         , $bug->execution);
+js::set('oldProjectID'           , $bug->project);
 js::set('oldStoryID'             , $bug->story);
 js::set('oldTaskID'              , $bug->task);
 js::set('oldOpenedBuild'         , $bug->openedBuild);
 js::set('oldResolvedBuild'       , $bug->resolvedBuild);
 js::set('systemMode'             , $config->systemMode);
 js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget($resolvedBuilds, $bug->resolvedBuild)));
+js::set('tab'                    , $this->app->tab);
+if($this->app->tab == 'execution') js::set('objectID', $bug->execution);
+if($this->app->tab == 'project')   js::set('objectID', $bug->project);
 ?>
 
 <div class='main-content' id='mainContent'>
@@ -55,7 +58,7 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->bug->legendSteps;?></div>
             <div class='detail-content'>
-              <?php echo html::textarea('steps', htmlspecialchars($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
+              <?php echo html::textarea('steps', htmlSpecialString($bug->steps), "rows='12' class='form-control kindeditor' hidefocus='true'");?>
             </div>
           </div>
           <div class='detail'>
@@ -134,7 +137,7 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->status;?></th>
-                  <td><?php echo html::select('status', $lang->bug->statusList, $bug->status, "class='form-control chosen'");?></td>
+                  <td><?php echo zget($lang->bug->statusList, $bug->status);?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->confirmed;?></th>
@@ -147,6 +150,14 @@ js::set('confirmUnlinkBuild'     , sprintf($lang->bug->confirmUnlinkBuild, zget(
                 <tr>
                   <th><?php echo $lang->bug->deadline;?></th>
                   <td><?php echo html::input('deadline', $bug->deadline, "class='form-control form-date'");?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->feedbackBy;?></th>
+                  <td><?php echo html::input('feedbackBy', $bug->feedbackBy, "class='form-control'");?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->bug->notifyEmail;?></th>
+                  <td><?php echo html::input('notifyEmail', $bug->notifyEmail, "class='form-control'");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->bug->os;?></th>

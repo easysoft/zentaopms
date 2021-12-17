@@ -137,6 +137,8 @@ class taskModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
+            $this->loadModel('kanban')->updateLane($executionID, 'task');
+
             if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
             if($this->post->selectTestStory)
             {
@@ -324,7 +326,7 @@ class taskModel extends model
                 $data[$i]->{$extendField->field} = $this->post->{$extendField->field}[$i];
                 if(is_array($data[$i]->{$extendField->field})) $data[$i]->{$extendField->field} = join(',', $data[$i]->{$extendField->field});
 
-                $data[$i]->{$extendField->field} = htmlspecialchars($data[$i]->{$extendField->field});
+                $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
                 if($message)
                 {
@@ -407,7 +409,12 @@ class taskModel extends model
             $mails[$i]->actionID = $actionID;
         }
 
-        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
+        if(!dao::isError())
+        {
+            $this->loadModel('score')->create('ajax', 'batchCreate');
+            $this->loadModel('kanban')->updateLane($executionID, 'task');
+        }
+
         if($parentID > 0 && !empty($taskID))
         {
             $oldParentTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq((int)$parentID)->fetch();
@@ -1007,6 +1014,7 @@ class taskModel extends model
             if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
+            if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task');
 
             $this->loadModel('action');
             $changed = $task->parent != $oldTask->parent;
@@ -1139,7 +1147,7 @@ class taskModel extends model
                 $task->{$extendField->field} = $this->post->{$extendField->field}[$taskID];
                 if(is_array($task->{$extendField->field})) $task->{$extendField->field} = join(',', $task->{$extendField->field});
 
-                $task->{$extendField->field} = htmlspecialchars($task->{$extendField->field});
+                $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
                 if($message) die(js::alert($message));
             }
@@ -1285,6 +1293,7 @@ class taskModel extends model
 
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
+                if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
             else
@@ -1460,6 +1469,7 @@ class taskModel extends model
             $this->computeBeginAndEnd($oldTask->parent);
         }
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1718,7 +1728,11 @@ class taskModel extends model
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        if($task->status == 'done' && !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
+        if($task->status == 'done' && !dao::isError())
+        {
+            $this->loadModel('score')->create('task', 'finish', $taskID);
+            $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+        }
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1777,6 +1791,8 @@ class taskModel extends model
             if($oldTask->parent > 0) $this->updateParentStatus($taskID);
             if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
             $this->loadModel('score')->create('task', 'close', $taskID);
+            $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+
             return common::createChanges($oldTask, $task);
         }
     }
@@ -1815,6 +1831,7 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1880,6 +1897,7 @@ class taskModel extends model
             $this->computeWorkingHours($taskID);
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
+        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -2130,6 +2148,7 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->leftjoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
             ->where('t1.deleted')->eq(0)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
@@ -2138,13 +2157,14 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
+            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('t2.status')->ne('suspended')->andWhere('t4.status')->ne('suspended')->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
             ->page($pager)
             ->fetchAll('id');
 
-        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task');
+        $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'task', false);
 
         $taskTeam = $this->dao->select('*')->from(TABLE_TEAM)->where('root')->in(array_keys($tasks))->andWhere('type')->eq('task')->fetchGroup('root');
         if(!empty($taskTeam))
@@ -2186,6 +2206,30 @@ class taskModel extends model
         {
             $tasks[$task->id] = $task->execution . ' / ' . $task->name;
         }
+        return $tasks;
+    }
+
+    /**
+     * Get suspended tasks of a user.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getUserSuspendedTasks($account)
+    {
+        $tasks = $this->dao->select('t1.*')
+            ->from(TABLE_TASK)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.execution=t2.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.project=t3.id')
+            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->andWhere('(t2.status')->eq('suspended')
+            ->orWhere('t3.status')->eq('suspended')
+            ->markRight(1)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t3.deleted')->eq(0)
+            ->fetchAll('id');
         return $tasks;
     }
 
@@ -2494,7 +2538,7 @@ class taskModel extends model
         /* Delayed or not?. */
         if($task->status !== 'done' and $task->status !== 'cancel' and $task->status != 'closed')
         {
-            if(!empty($taks->deadline) and !helper::isZeroDate($task->deadline))
+            if(!empty($task->deadline) and !helper::isZeroDate($task->deadline))
             {
                 $delay = helper::diffDate($today, $task->deadline);
                 if($delay > 0) $task->delay = $delay;
@@ -2963,11 +3007,12 @@ class taskModel extends model
      * @param array  $modulePairs
      * @param string $mode
      * @param bool   $child
+     * @param bool   $showBranch
      *
      * @access public
      * @return void
      */
-    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false)
+    public function printCell($col, $task, $users, $browseType, $branchGroups, $modulePairs = array(), $mode = 'datatable', $child = false, $showBranch = false)
     {
         $canBatchEdit         = common::hasPriv('task', 'batchEdit', !empty($task) ? $task : null);
         $canBatchClose        = (common::hasPriv('task', 'batchClose', !empty($task) ? $task : null) and strtolower($browseType) != 'closed');
@@ -3026,12 +3071,13 @@ class taskModel extends model
                 echo "</span>";
                 break;
             case 'name':
+                if($showBranch) $showBranch = isset($this->config->execution->task->showBranch) ? $this->config->execution->task->showBranch : 1;
                 if($task->parent > 0 and isset($task->parentName)) $task->name = "{$task->parentName} / {$task->name}";
-                if(!empty($task->product) && isset($branchGroups[$task->product][$task->branch])) echo "<span class='label label-info label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
+                if(!empty($task->product) and isset($branchGroups[$task->product][$task->branch]) and $showBranch) echo "<span class='label label-badge label-outline'>" . $branchGroups[$task->product][$task->branch] . '</span> ';
                 if($task->module and isset($modulePairs[$task->module])) echo "<span class='label label-gray label-badge'>" . $modulePairs[$task->module] . '</span> ';
                 if($task->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->task->children . '">' . $this->lang->task->childrenAB . '</span> ';
                 if(!empty($task->team)) echo '<span class="label label-badge label-light" title="' . $this->lang->task->multiple . '">' . $this->lang->task->multipleAB . '</span> ';
-                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color'") : "<span style='color: $task->color'>$task->name</span>";
+                echo $canView ? html::a($taskLink, $task->name, null, "style='color: $task->color' title='$task->name'") : "<span style='color: $task->color'>$task->name</span>";
                 if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';
                 if($task->fromBug) echo html::a(helper::createLink('bug', 'view', "id=$task->fromBug"), "[BUG#$task->fromBug]", '', "class='bug'");
                 break;

@@ -26,7 +26,7 @@
           <th class='w-80px'><?php echo $lang->story->reviewedBy;?></th>
           <td colspan="2">
             <div class="input-group">
-              <?php echo html::select('reviewer[]', $users, $reviewer, 'class="form-control chosen" multiple');?>
+              <?php echo html::select('reviewer[]', $productReviewers, $reviewer, 'class="form-control chosen" multiple');?>
               <?php if(!$this->story->checkForceReview()):?>
               <span class="input-group-addon">
               <?php echo html::checkbox('needNotReview', $lang->story->needNotReview, '', "id='needNotReview' {$needReview}");?>
@@ -55,11 +55,11 @@
         </tr>
         <tr>
           <th><?php echo $lang->story->spec;?></th>
-          <td colspan='2'><?php echo html::textarea('spec', htmlspecialchars($story->spec), 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
+          <td colspan='2'><?php echo html::textarea('spec', htmlSpecialString($story->spec), 'rows=8 class="form-control"');?><span class='help-block'><?php echo $lang->story->specTemplate;?></span></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->verify;?></th>
-          <td colspan='2'><?php echo html::textarea('verify', htmlspecialchars($story->verify), 'rows=6 class="form-control"');?></td>
+          <td colspan='2'><?php echo html::textarea('verify', htmlSpecialString($story->verify), 'rows=6 class="form-control"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->story->comment;?></th>

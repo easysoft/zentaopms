@@ -1,21 +1,31 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
+$lang->mr->overview     = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->browse       = "Browse";
 $lang->mr->list         = "List";
 $lang->mr->edit         = "Edit";
 $lang->mr->delete       = "Delete";
-$lang->mr->view         = "View";
 $lang->mr->accept       = "Accept";
 $lang->mr->source       = 'source';
 $lang->mr->target       = 'target';
 $lang->mr->viewDiff     = 'View diff';
+$lang->mr->diff         = 'View diff';
 $lang->mr->viewInGitlab = 'View in GitLab';
+$lang->mr->link         = 'Link of stories,Bugs,tasks';
+$lang->mr->createAction = '%s, <strong>%s</strong> submitted a <a href="%s">Merge Request</a>.';
+
+$lang->mr->linkList  = 'Link List of stories,Bugs,tasks';
+$lang->mr->linkStory = 'Link Stories';
+$lang->mr->linkBug   = 'Link Bugs';
+$lang->mr->linkTask  = 'Link Tasks';
+$lang->mr->unlink    = 'UnLink of stories,Bugs,tasks';
+$lang->mr->addReview = 'Add Review';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "raw MR ID";
-$lang->mr->title        = 'Name';
+$lang->mr->title       = 'Name';
 $lang->mr->status      = 'Status';
 $lang->mr->author      = 'Author';
 $lang->mr->assignee    = 'Assignee';
@@ -24,26 +34,68 @@ $lang->mr->mergeStatus = 'Merge status';
 $lang->mr->commits     = 'commits';
 $lang->mr->changes     = 'changes';
 $lang->mr->gitlabID    = 'GitLab';
+$lang->mr->repoID      = 'Repo';
+$lang->mr->jobID       = 'Compile job';
+
+$lang->mr->canMerge  = "Can merge";
+$lang->mr->cantMerge = "不可合并";
+
+$lang->mr->approval = 'Approval';
+$lang->mr->approve  = 'Approve';
+$lang->mr->reject   = 'Reject';
+$lang->mr->close    = 'Close';
+$lang->mr->reopen   = 'Reopen';
+
+$lang->mr->reviewType     = 'Review Type';
+$lang->mr->reviewTypeList = array();
+$lang->mr->reviewTypeList['bug']  = 'Bug';
+$lang->mr->reviewTypeList['task'] = 'Task';
+
+$lang->mr->approvalResult     = 'Approval result';
+$lang->mr->approvalResultList = array();
+$lang->mr->approvalResultList['approve'] = 'Approve';
+$lang->mr->approvalResultList['reject']  = 'Reject';
+
+$lang->mr->needApproved = 'This MR should be approved before merge';
+$lang->mr->needCI       = 'This MR should be passed CI before merge';
+
+$lang->mr->repeatedOperation = 'Do not repeat operations';
+
+$lang->mr->approvalStatus     = 'Approve status';
+$lang->mr->approvalStatusList = array();
+$lang->mr->approvalStatusList['notReviewed'] = 'notReviewed';
+$lang->mr->approvalStatusList['approved']    = 'Approved';
+$lang->mr->approvalStatusList['rejected']    = 'Rejected';
+
+$lang->mr->notApproved  = 'Rejected';
+$lang->mr->assignedToMe = 'AssignedToMe';
+$lang->mr->createdByMe  = 'CreatedByMe';
 
 $lang->mr->statusList = array();
+$lang->mr->statusList['all']    = 'all';
 $lang->mr->statusList['opened'] = 'opened';
-$lang->mr->statusList['closed'] = 'closed';
 $lang->mr->statusList['merged'] = 'merged';
+$lang->mr->statusList['closed'] = 'closed';
 
 $lang->mr->mergeStatusList = array();
 $lang->mr->mergeStatusList['checking']         = 'checking';
 $lang->mr->mergeStatusList['can_be_merged']    = 'can be merged';
 $lang->mr->mergeStatusList['cannot_be_merged'] = 'cannot be merged';
 
-$lang->mr->description   = 'Description';
-$lang->mr->confirmDelete = 'Are you sure to delete this merge request?';
-$lang->mr->sourceProject = 'Source project';
-$lang->mr->sourceBranch  = 'Source branch';
-$lang->mr->targetProject = 'Target project';
-$lang->mr->targetBranch  = 'Target branch';
+$lang->mr->description       = 'Description';
+$lang->mr->confirmDelete     = 'Are you sure to delete this merge request?';
+$lang->mr->sourceProject     = 'Source project';
+$lang->mr->sourceBranch      = 'Source branch';
+$lang->mr->targetProject     = 'Target project';
+$lang->mr->targetBranch      = 'Target branch';
+$lang->mr->noCompileJob      = 'No Compile Job';
+$lang->mr->compileUnexecuted = 'Compile Unexecuted';
 
-$lang->mr->usersTips = 'Tip: If you cannot choose the assignee, please go to the GitLab page to bind the user first.';
-$lang->mr->notFound  = "Merge Request does not exist!";
+$lang->mr->notFound          = "Merge Request does not exist!";
+$lang->mr->toCreatedMessage  = "The merge request you submitted：<a href='%s'>%s</a>, the build task succeeded.";
+$lang->mr->toReviewerMessage = "You have one merge request <a href='%s'>%s</a> waiting.";
+$lang->mr->failMessage       = "Your merge request <a href='%s'>%s</a> failed. Please check its execution result. ";
+$lang->mr->storySummary      = "Total <strong>%s</strong> {$lang->SRCommon} on this page.";
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "Failed to create a merge request through API. Reason: %s";
@@ -51,6 +103,14 @@ $lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
+$lang->mr->reopenSuccess       = "The merge request was reopened.";
+$lang->mr->closeSuccess        = "Merge request closed.";
+
+$lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
+$lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
+
+$lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
+$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: !%u';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";
@@ -59,7 +119,7 @@ $lang->mr->at   = "at";
 $lang->mr->pipeline        = "Pipeline";
 $lang->mr->pipelineSuccess = "Success";
 $lang->mr->pipelineFailed  = "Failed";
-$lang->mr->pipelineCancled = "Canceled";
+$lang->mr->pipelineCanceled = "Canceled";
 $lang->mr->pipelineUnknown = "Unknown";
 
 $lang->mr->pipelineStatus = array();
@@ -70,8 +130,6 @@ $lang->mr->pipelineStatus['canceled'] = "canceled";
 $lang->mr->MRHasConflicts = "Merge Request has a conflict";
 $lang->mr->hasConflicts   = "There are merge conflicts or wait for push";
 $lang->mr->hasNoConflict  = "Can merge";
-$lang->mr->mergeByManual  = "This merge request can be merged manually, please refer to";
-$lang->mr->commandLine    = "Merge Request command";
 $lang->mr->acceptMR       = "Accept Merge request ";
 $lang->mr->mergeFailed    = "Unable to merge request, please check the merge request status";
 $lang->mr->mergeSuccess   = "Merge Request Successfully";
@@ -91,15 +149,15 @@ $lang->mr->todomessage = "project was assigned to you";
 $lang->mr->commandDocument = <<< EOD
 <div class='detail-title'>Check out, review and merge locally</div>
 <div class='detail-content'>
-  <p><strong>Note: This merge request status will be changed after you merge locally and you will need to delete this merge request or submit new code.</strong></p>
+  <p><blockquote>Note: This merge request status will be changed automatically after you merged locally.</blockquote></p>
   <p>
-    step 1. Fetch and check out the branch for this merge request
+    step 1. Change directory to target project. Fetch and check out the branch for this merge request
     <pre>
     git fetch "%s" %s
     git checkout -b "%s" FETCH_HEAD</pre>
   </p>
   <p>
-    step 2. Review the changes locally
+    step 2. Review the changes locally. You can use <code>git log</code> to view the changes
   </p>
   <p>
     step 3. Merge the branch and fix any conflicts that come up
@@ -114,3 +172,12 @@ $lang->mr->commandDocument = <<< EOD
   </p>
 </div>
 EOD;
+
+$lang->mr->noChanges = "Currently there are no changes in this merge request's source branch. Please push new commits or use a different branch.";
+
+$lang->mr->linkTask          = "Link task";
+$lang->mr->unlinkTask        = "Remove task";
+$lang->mr->linkedTasks       = 'Task';
+$lang->mr->unlinkedTasks     = 'Task not linked';
+$lang->mr->confirmUnlinkTask = "Are you sure to remove this task?";
+$lang->mr->taskSummary       = "There are <strong>%s</strong> tasks on this page";

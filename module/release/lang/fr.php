@@ -57,6 +57,7 @@ $lang->release->export        = 'Export HTML';
 $lang->release->yesterday     = 'Versionné Hier';
 $lang->release->all           = 'Tout';
 $lang->release->notify        = 'Notify';
+$lang->release->notifyUsers   = 'Notify Users';
 $lang->release->mailto        = 'Mailto';
 
 $lang->release->filePath = 'Télecharger : ';
@@ -75,7 +76,8 @@ $lang->release->changeStatusList['normal']    = 'Active';
 $lang->release->changeStatusList['terminate'] = 'Terminée';
 
 $lang->release->action = new stdclass();
-$lang->release->action->changestatus = array('main' => '$date,  $extra par  <strong>$actor</strong>', 'extra' => 'changeStatusList');
+$lang->release->action->changestatus = array('main' => '$date, $extra by  <strong>$actor</strong>.', 'extra' => 'changeStatusList');
+$lang->release->action->notified     = array('main' => '$date, <strong>$actor</strong> send notify.');
 
 $lang->release->notifyList['PO'] = "{$lang->productCommon} Owner";
 $lang->release->notifyList['QD'] = 'QA Manager';

@@ -13,7 +13,6 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'vue/vue.js');?>
-<?php js::set('example', $example);?>
 <?php js::set('libID', $api->lib);?>
 <?php
 js::set('typeOptions', $typeOptions);
@@ -88,17 +87,11 @@ js::set('api', $api);
             </tr>
             <tr>
               <th><?php echo $lang->api->method;?></th>
-              <td>
-            <span
-                id='moduleBox'><?php echo html::select('method', $lang->api->methodOptions, $api->method ? $api->method : 'GET', "class='form-control chosen'");?></span>
-              </td>
+              <td><span id='moduleBox'><?php echo html::select('method', $lang->api->methodOptions, $api->method ? $api->method : 'GET', "class='form-control chosen'");?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->requestType;?></th>
-              <td>
-            <span
-                id='moduleBox'><?php echo html::select('requestType', $lang->api->requestTypeOptions, $api->requestType ? $api->requestType : 'application/json', "class='form-control chosen'");?></span>
-              </td>
+              <td><span id='moduleBox'><?php echo html::select('requestType', $lang->api->requestTypeOptions, $api->requestType ? $api->requestType : 'application/json', "class='form-control chosen'");?></span></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->status;?></th>
@@ -168,9 +161,7 @@ js::set('api', $api);
                       </td>
                       <td class="w-50px">
                         <div class="checkbox">
-                          <label>
-                            <input type="checkbox" v-model="item.required">
-                          </label>
+                          <label><input type="checkbox" v-model="item.required"></label>
                         </div>
                       </td>
                       <td class="w-500px">

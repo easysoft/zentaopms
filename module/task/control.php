@@ -199,7 +199,7 @@ class task extends control
             $moduleID     = $this->tree->getStoryModule($task->module);
             $moduleIdList = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, $moduleIdList, 'full', 'unclosed');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleIdList, 'full', 'unclosed');
 
         /* Get block id of assinge to me. */
         $blockID = 0;
@@ -302,8 +302,8 @@ class task extends control
             /* Return task id list when call the API. */
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
 
-            /* Locate the browser. */
-            if(!empty($iframe)) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            /* If link from no head then reload. */
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
@@ -312,10 +312,18 @@ class task extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->task->custom->batchCreateFields;
 
+        $story = $this->story->getByID($storyID);
+        if($story)
+        {
+            $moduleID = $story->module;
+            $stories  = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleID, 'short');
+        }
+        else
+        {
+            $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', 0, 'short');
+        }
 
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 0, 0, 'short');
-        $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
-
+        $members       = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
@@ -333,7 +341,7 @@ class task extends control
         $this->view->modules      = $modules;
         $this->view->parent       = $taskID;
         $this->view->storyID      = $storyID;
-        $this->view->story        = $this->story->getByID($storyID);
+        $this->view->story        = $story;
         $this->view->storyTasks   = $this->task->getStoryTaskCounts(array_keys($stories), $executionID);
         $this->view->members      = $members;
         $this->view->moduleID     = $moduleID;
@@ -395,6 +403,8 @@ class task extends control
 
             $this->executeHooks($taskID);
 
+            if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($taskID);
+
             if($task->fromBug != 0)
             {
                 foreach($changes as $change)
@@ -408,7 +418,8 @@ class task extends control
                 }
             }
 
-            if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api'))
+            if(isonlybody()) die(js::reload('parent.parent'));
+            if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $taskID));
             }
@@ -421,12 +432,15 @@ class task extends control
         $tasks = $this->task->getParentTaskPairs($this->view->execution->id, $this->view->task->parent);
         if(isset($tasks[$taskID])) unset($tasks[$taskID]);
 
-        if($this->config->systemMode == 'classic') $executionsPair = $this->execution->getPairs();
+        if($this->config->systemMode == 'classic')
+        {
+            $executionsPair = $this->execution->getPairs();
+        }
         else
         {
             $executionsPair = array();
             $executions     = $this->execution->getByProject(0, 'all', 0);
-            $projects       = $this->project->getPairsByProgram(0, 'noclosed');
+            $projects       = $this->project->getPairsByProgram('', 'noclosed');
             foreach($executions as $executionId => $execution)
             {
                 $executionsPair[$executionId] = (isset($projects[$execution->project]) ? $projects[$execution->project] . ' / ' : '') . $execution->name;
@@ -464,9 +478,24 @@ class task extends control
 
             if(!empty($allChanges))
             {
+                /* updateStatus is a description of whether to update the responsibility performance*/
+                $waitTaskID = false;
                 foreach($allChanges as $taskID => $changes)
                 {
                     if(empty($changes)) continue;
+
+                    /* Determine whether the status of a task has been changed, if the status of a task has been changed, set $updateStatus to taskID*/
+                    if($waitTaskID == false)
+                    {
+                        foreach($changes as $changeField)
+                        {
+                            if($changeField['field'] == 'status' && $changeField['new'] == 'doing')
+                            {
+                                $waitTaskID = $taskID;
+                                break;
+                            }
+                        }
+                    }
 
                     $actionID = $this->loadModel('action')->create('task', $taskID, 'Edited');
                     $this->action->logHistory($actionID, $changes);
@@ -484,6 +513,7 @@ class task extends control
                             }
                         }
                     }
+                    if($waitTaskID !== false) $this->loadModel('common')->syncPPEStatus($waitTaskID);
                 }
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
@@ -513,7 +543,7 @@ class task extends control
         else
         {
             /* Set my menu. */
-            $this->loadModel('my')->setMenu();
+            $this->loadModel('my');
             $this->lang->my->menu->work['subModule'] = 'task';
 
             $this->view->position[] = html::a($this->createLink('my', 'task'), $this->lang->my->task);
@@ -792,6 +822,7 @@ class task extends control
             }
 
             $this->executeHooks($taskID);
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             if($changes and $this->task->needUpdateBugStatus($task))
@@ -837,6 +868,8 @@ class task extends control
         {
             $changes = $this->task->recordEstimate($taskID);
             if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('common')->syncPPEStatus($taskID);
 
             /* Remind whether to update status of the bug, if task which from that bug has been finished. */
             $task = $this->task->getById($taskID);
@@ -1347,7 +1380,12 @@ class task extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
 
-        $tasks = $this->task->getUserTaskPairs($account, $status);
+        $tasks          = $this->task->getUserTaskPairs($account, $status);
+        $suspendedTasks = $this->task->getUserSuspendedTasks($account);
+        foreach($tasks as $taskid => $task)
+        {
+            if(isset($suspendedTasks[$taskid])) unset($tasks[$taskid]);
+        }
 
         if($id) die(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
         die(html::select('task', $tasks, '', 'class=form-control'));

@@ -24,7 +24,7 @@ $lang->product->mine            = '我负责';
 $lang->product->other           = '其他';
 $lang->product->closed          = '已关闭';
 $lang->product->updateOrder     = '排序';
-$lang->product->all             = "{$lang->productCommon}列表";
+$lang->product->all             = "所有{$lang->productCommon}";
 $lang->product->manageLine      = "维护{$lang->productCommon}线";
 $lang->product->newLine         = "新建{$lang->productCommon}线";
 $lang->product->export          = '导出数据';
@@ -33,10 +33,11 @@ $lang->product->changeProgram   = "{$lang->productCommon}调整所属项目集�
 $lang->product->addWhitelist    = '添加白名单';
 $lang->product->unbindWhitelist = '移除白名单';
 
-$lang->product->indexAction   = "所有{$lang->productCommon}仪表盘";
-$lang->product->closeAction   = "关闭{$lang->productCommon}";
-$lang->product->orderAction   = "{$lang->productCommon}排序";
-$lang->product->exportAction  = "导出{$lang->productCommon}";
+$lang->product->indexAction  = "所有{$lang->productCommon}仪表盘";
+$lang->product->closeAction  = "关闭{$lang->productCommon}";
+$lang->product->orderAction  = "{$lang->productCommon}排序";
+$lang->product->exportAction = "导出{$lang->productCommon}";
+$lang->product->link2Project = "关联项目";
 
 $lang->product->basicInfo = '基本信息';
 $lang->product->otherInfo = '其他信息';
@@ -55,6 +56,7 @@ $lang->product->project     = $lang->executionCommon . '列表';
 $lang->product->build       = '版本列表';
 $lang->product->moreProduct = "更多产品";
 $lang->product->projectInfo = "所有与此产品关联的项目";
+$lang->product->progress    = "产品完成度";
 
 $lang->product->currentExecution      = "当前执行";
 $lang->product->activeStories         = "激活{$lang->SRCommon}";
@@ -77,6 +79,7 @@ $lang->product->assignToNullBugs      = '未指派Bug';
 $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->closedBugs            = '关闭Bug';
 $lang->product->bugFixedRate          = 'Bug修复率';
+$lang->product->unfoldClosed          = '展开已关闭';
 
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
@@ -85,6 +88,7 @@ $lang->product->programChangeTip     = "如下项目只关联了该{$lang->produ
 $lang->product->notChangeProgramTip  = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到如下项目，请取消关联后再操作";
 $lang->product->confirmChangeProgram = "如下项目既关联了该{$lang->productCommon}又关联了其他{$lang->productCommon}，请确认是否继续关联该{$lang->productCommon}，勾选后将取消与其他{$lang->productCommon}的关联关系，同时转移至新项目集下。";
 $lang->product->changeProgramError   = "该{$lang->productCommon}的{$lang->SRCommon}已经关联到项目，请取消关联后再操作";
+$lang->product->programEmpty         = '项目集不能为空';
 
 $lang->product->id             = '编号';
 $lang->product->program        = "所属项目集";
@@ -105,6 +109,7 @@ $lang->product->QD             = '测试负责人';
 $lang->product->RD             = '发布负责人';
 $lang->product->feedback       = '反馈负责人';
 $lang->product->acl            = '访问控制';
+$lang->product->reviewer       = '评审人';
 $lang->product->whitelist      = '白名单';
 $lang->product->branch         = '所属%s';
 $lang->product->qa             = '测试';

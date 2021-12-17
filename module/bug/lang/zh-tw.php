@@ -48,6 +48,8 @@ $lang->bug->confirmed        = '是否確認';
 $lang->bug->confirmedAB      = '確認';
 $lang->bug->toTask           = '轉任務';
 $lang->bug->toStory          = "轉{$lang->SRCommon}";
+$lang->bug->feedbackBy       = '反饋者';
+$lang->bug->notifyEmail      = '通知郵箱';
 $lang->bug->mailto           = '抄送給';
 $lang->bug->openedBy         = '由誰創建';
 $lang->bug->openedByAB       = '創建者';
@@ -99,6 +101,7 @@ $lang->bug->edit               = '編輯Bug';
 $lang->bug->batchEdit          = '批量編輯';
 $lang->bug->batchChangeModule  = '批量修改模組';
 $lang->bug->batchChangeBranch  = '批量修改分支';
+$lang->bug->batchChangePlan    = '批量修改計劃';
 $lang->bug->batchClose         = '批量關閉';
 $lang->bug->assignTo           = '指派';
 $lang->bug->assignAction       = '指派Bug';
@@ -140,6 +143,7 @@ $lang->bug->overdueBugs        = '過期Bug';
 $lang->bug->allBugs            = '所有';
 $lang->bug->byQuery            = '搜索';
 $lang->bug->needConfirm        = "{$lang->SRCommon}變動";
+$lang->bug->allProject         = '所有項目';
 $lang->bug->allProduct         = '所有' . $lang->productCommon;
 $lang->bug->my                 = '我的';
 $lang->bug->yesterdayResolved  = '昨天解決Bug數';
@@ -150,12 +154,16 @@ $lang->bug->assignToMeAB   = '指派給我';
 $lang->bug->openedByMeAB   = '由我創建';
 $lang->bug->resolvedByMeAB = '由我解決';
 
-$lang->bug->ditto         = '同上';
-$lang->bug->dittoNotice   = '該bug與上一bug不屬於同一產品！';
-$lang->bug->noAssigned    = '未指派';
-$lang->bug->noBug         = '暫時沒有Bug。';
-$lang->bug->noModule      = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
-$lang->bug->delayWarning  = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->ditto          = '同上';
+$lang->bug->dittoNotice    = '該bug與上一bug不屬於同一產品！';
+$lang->bug->noAssigned     = '未指派';
+$lang->bug->noBug          = '暫時沒有Bug。';
+$lang->bug->noModule       = '<div>您現在還沒有模組信息</div><div>請維護測試模組</div>';
+$lang->bug->delayWarning   = " <strong class='text-danger'> 延期%s天 </strong>";
+$lang->bug->labelConfirmed = '已確認';
+$lang->bug->labelPostponed = '被延期';
+$lang->bug->changed        = '已變動';
+$lang->bug->storyChanged   = '需求變動';
 
 /* 頁面標籤。*/
 $lang->bug->lblAssignedTo = '當前指派';
@@ -178,6 +186,7 @@ $lang->bug->legendComment               = '備註';
 $lang->bug->legendLife                  = 'Bug的一生';
 $lang->bug->legendMisc                  = '其他相關';
 $lang->bug->legendRelated               = '其他信息';
+$lang->bug->legendThisWeekCreated       = '本週新增';
 
 /* 功能按鈕。*/
 $lang->bug->buttonConfirm = '確認';
@@ -191,6 +200,7 @@ $lang->bug->skipClose             = 'Bug %s 不是已解決狀態，不能關閉
 $lang->bug->executionAccessDenied = "您無權訪問該Bug所屬的{$lang->executionCommon}！";
 $lang->bug->stepsNotEmpty         = "重現步驟不能為空。";
 $lang->bug->confirmUnlinkBuild    = "更換解決版本將取消與舊版本的關聯，您確定取消該bug與%s的關聯嗎？";
+$lang->bug->noSwitchBranch        = 'Bug%s所屬模組不在當前分支下，將自動忽略。';
 
 /* 模板。*/
 $lang->bug->tplStep   = "<p>[步驟]</p><br/>";
@@ -271,8 +281,9 @@ $lang->bug->statusList['active']   = '激活';
 $lang->bug->statusList['resolved'] = '已解決';
 $lang->bug->statusList['closed']   = '已關閉';
 
-$lang->bug->confirmedList[1] = '是';
-$lang->bug->confirmedList[0] = '否';
+$lang->bug->confirmedList[''] = '';
+$lang->bug->confirmedList[1]  = '是';
+$lang->bug->confirmedList[0]  = '否';
 
 $lang->bug->resolutionList['']           = '';
 $lang->bug->resolutionList['bydesign']   = '設計如此';

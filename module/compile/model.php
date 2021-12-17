@@ -24,6 +24,18 @@ class compileModel extends model
     }
 
     /**
+     * Get By Queue.
+     *
+     * @param  int    $queue
+     * @access public
+     * @return void
+     */
+    public function getByQueue($queue)
+    {
+        return $this->dao->select('*')->from(TABLE_COMPILE)->where('queue')->eq($queue)->fetch();
+    }
+
+    /**
      * Get build list.
      *
      * @param  int    $jobID
@@ -43,6 +55,22 @@ class compileModel extends model
             ->beginIF(!empty($jobID))->andWhere('t1.job')->eq($jobID)->fi()
             ->orderBy($orderBy)
             ->page($pager)
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get list by jobID.
+     *
+     * @param  int $jobID
+     * @return array
+     */
+    public function getListByJobID($jobID)
+    {
+        return $this->dao->select('id, name, status')->from(TABLE_COMPILE)
+            ->where('deleted')->eq('0')
+            ->andWhere('job')->ne('0')
+            ->beginIF(!empty($jobID))->andWhere('job')->eq($jobID)->fi()
+            ->orderBy('id_desc')
             ->fetchAll('id');
     }
 
@@ -121,7 +149,7 @@ class compileModel extends model
      */
     public function exec($compile)
     {
-        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
+        $job = $this->dao->select('t1.id,t1.name,t1.repo,t1.engine,t1.pipeline,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password,t1.triggerType,t1.customParam,t1.server')
             ->from(TABLE_JOB)->alias('t1')
             ->leftJoin(TABLE_PIPELINE)->alias('t2')->on('t1.server=t2.id')
             ->where('t1.id')->eq($compile->job)
@@ -134,7 +162,7 @@ class compileModel extends model
 
         if($job->triggerType == 'tag')
         {
-            $lastTag = $this->getLastTagByRepo($repo);
+            $lastTag = $this->loadModel('job')->getLastTagByRepo($repo, $job);
             if($lastTag)
             {
                 $job->lastTag = $lastTag;

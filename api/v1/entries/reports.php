@@ -278,6 +278,7 @@ class reportsEntry extends entry
         {
             $product->storyStat = array();
             foreach(array_keys($storyStatusList) as $storyStatus) $product->storyStat[$storyStatus] = isset($productStoryStat[$productID][$storyStatus]) ? $productStoryStat[$productID][$storyStatus] : 0;
+            $product->progress = $product->storyStat['closed'] == 0 ? 0 : round($product->storyStat['closed'] / array_sum($product->storyStat) * 100, 1);
         }
 
         foreach(array_keys($productStatusList) as $status)

@@ -14,6 +14,8 @@
 <?php js::set('confirmDelete', $lang->productplan->confirmDelete)?>
 <?php js::set('browseType', $browseType);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('noLinkedProject', $lang->productplan->noLinkedProject);?>
+<?php js::set('enterProjectList', $lang->productplan->enterProjectList);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -128,20 +130,29 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
-          if(common::hasPriv('execution', 'create', $plan))
+          $attr = $plan->expired ? "disabled='disabled'" : '';
+          if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
+              $disabled      = '';
               $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
+
+              if($product->type != 'normal')
+              {
+                  $branchStatus = $this->branch->getByID($plan->branch, 0, 'status');
+                  if($branchStatus == 'closed') $disabled = 'disabled';
+              }
+
               if($config->systemMode == 'new')
               {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this)' class='btn' title='{$lang->productplan->createExecution}'");
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
               }
               else
               {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn' title='{$lang->productplan->createExecution}'");
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
               }
           }
           if(common::hasPriv('productplan', 'linkStory', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=story&orderBy=id_desc&link=true"), '<i class="icon-link"></i>', '', "class='btn' title='{$lang->productplan->linkStory}'");
-          if(common::hasPriv('productplan', 'linkBug', $plan)) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
+          if(common::hasPriv('productplan', 'linkBug', $plan) and $plan->parent >= 0) echo html::a(inlink('view', "planID=$plan->id&type=bug&orderBy=id_desc&link=true"), '<i class="icon-bug"></i>', '', "class='btn' title='{$lang->productplan->linkBug}'");
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           if(common::hasPriv('productplan', 'create', $plan))
           {
@@ -188,7 +199,11 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->productplan->project?></th>
-            <td><?php echo html::select('projects', $projects, '', "class='form-control chosen' id=project");?></td>
+            <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr class='tips hidden'>
+            <th></th>
+            <td><span class='text-red'><?php echo $lang->productplan->noLinkedProject;?></span></td>
           </tr>
           <tr>
             <td colspan='2' class='text-center'>
@@ -202,4 +217,5 @@
     </div>
   </div>
 </div>
+<?php js::set('projectNotEmpty', $lang->productplan->projectNotEmpty)?>
 <?php include '../../common/view/footer.html.php';?>

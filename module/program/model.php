@@ -166,10 +166,14 @@ class programModel extends model
             ->andWhere('program')->in(array_keys($programs))
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
             ->andWhere('status')->ne('closed')
-            ->fetchGroup('program', 'id');
+            ->orderBy('order_asc')
+            ->fetchGroup('program');
 
         $productPairs = array();
-        foreach($productGroup as $programID => $products) $productPairs = array_merge($productPairs, array_keys($products));
+        foreach($productGroup as $programID => $products) 
+        {
+            foreach($products as $product) $productPairs[$product->id] = $product->id;
+        }
 
         /* Get all plans under products. */
         $plans = $this->dao->select('id, product, title')->from(TABLE_PRODUCTPLAN)
@@ -179,13 +183,13 @@ class programModel extends model
             ->fetchGroup('product');
 
         /* Get all products linked projects. */
-        $projectGroup = $this->dao->select('t1.product, t2.id, t2.name, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+        $projectGroup = $this->dao->select('DISTINCT t1.product, t2.id, t2.name, t2.status, t2.end')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')
             ->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->in($productPairs)
-            ->andWhere('t2.status')->eq('doing')
             ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.status')->in('wait,doing')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->fetchGroup('product');
 
@@ -226,11 +230,11 @@ class programModel extends model
         /* Group data by product. */
         foreach($productGroup as $programID => $products)
         {
-            foreach($products as $productID => $product)
+            foreach($products as $product)
             {
-                $product->plans    = zget($plans, $productID, array());
-                $product->releases = zget($releases, $productID, array());
-                $projects          = zget($projectGroup, $productID, array());
+                $product->plans    = zget($plans, $product->id, array());
+                $product->releases = zget($releases, $product->id, array());
+                $projects          = zget($projectGroup, $product->id, array());
                 foreach($projects as $project)
                 {
                     if(helper::diffDate(helper::today(), $project->end) > 0) $project->delay = 1;
@@ -260,11 +264,11 @@ class programModel extends model
 
             if(in_array($programID, $involvedPrograms))
             {
-                $kanbanGroup['my'][$programID] = $programGroup;
+                $kanbanGroup['my'][] = $programGroup;
             }
             else
             {
-                $kanbanGroup['others'][$programID] = $programGroup;
+                $kanbanGroup['others'][] = $programGroup;
             }
         }
 
@@ -440,21 +444,27 @@ class programModel extends model
             $path    = $program->path;
         }
 
-        $projectList = $this->dao->select('*')->from(TABLE_PROJECT)
-            ->where('deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('type')->eq('project')->fi()
-            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('status')->eq($browseType)->fi()
-            ->beginIF($browseType == 'undone')->andWhere('status')->in('wait,doing')->fi()
-            ->beginIF($path)->andWhere('path')->like($path . '%')->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('id')->in($this->app->user->view->projects)->fi()
-            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('id')->in($this->app->user->view->sprints)->fi()
+        $projectList = $this->dao->select('distinct t1.*')->from(TABLE_PROJECT)->alias('t1')
+            ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
+            ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
+            ->where('t1.deleted')->eq('0')
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
+            ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
+            ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t1.status')->eq($browseType)->fi()
+            ->beginIF($browseType == 'undone')->andWhere('t1.status')->in('wait,doing')->fi()
+            ->beginIF($path)->andWhere('t1.path')->like($path . '%')->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'new')->andWhere('t1.id')->in($this->app->user->view->projects)->fi()
+            ->beginIF(!$queryAll and !$this->app->user->admin and $this->config->systemMode == 'classic')->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->cookie->involved or $involved)
-            ->andWhere('openedBy', true)->eq($this->app->user->account)
-            ->orWhere('PM')->eq($this->app->user->account)
+            ->andWhere('t1.openedBy', true)->eq($this->app->user->account)
+            ->orWhere('t1.PM')->eq($this->app->user->account)
+            ->orWhere('t2.account')->eq($this->app->user->account)
+            ->orWhere('t3.user')->eq($this->app->user->account)
+            ->orWhere("CONCAT(',', t1.whitelist, ',')")->like("%,{$this->app->user->account},%")
             ->markRight(1)
             ->fi()
             ->orderBy($orderBy)
-            ->page($pager)
+            ->page($pager, 't1.id')
             ->fetchAll('id');
 
         /* Determine how to display the name of the program. */
@@ -488,7 +498,7 @@ class programModel extends model
      */
     public function getStakeholders($programID = 0, $orderBy, $pager = null)
     {
-        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
+        return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
             ->where('t1.objectID')->eq($programID)
             ->andWhere('t1.objectType')->eq('program')
@@ -625,7 +635,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "`type`='program' and `parent` = $program->parent")
             ->exec();
 
         if(!dao::isError())
@@ -686,6 +696,12 @@ class programModel extends model
 
         if($program->parent)
         {
+            $this->dao->update(TABLE_MODULE)
+                ->set('root')->eq($program->parent)
+                ->where('root')->eq($programID)
+                ->andwhere('type')->eq('line')
+                ->exec();
+
             $parentProgram = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($program->parent)->fetch();
             if($parentProgram)
             {
@@ -716,7 +732,7 @@ class programModel extends model
             ->checkIF($program->begin != '', 'begin', 'date')
             ->checkIF($program->end != '', 'end', 'date')
             ->checkIF($program->end != '', 'end', 'gt', $program->begin)
-            ->check('name', 'unique', "id!=$programID and deleted='0' and `type`='program'")
+            ->checkIF(!empty($program->name), 'name', 'unique', "id!=$programID and `type`='program' and `parent` = $program->parent")
             ->where('id')->eq($programID)
             ->limit(1)
             ->exec();
@@ -738,6 +754,11 @@ class programModel extends model
             $whitelist = explode(',', $program->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'program', $programID);
             if($program->acl != 'open') $this->loadModel('user')->updateUserView($programID, 'program');
+
+	    /* If the program changes, the authorities of programs and projects under the program should be refreshed. */
+	    $children = $this->dao->select('id, type')->from(TABLE_PROGRAM)->where('path')->like("%,{$programID},%")->andWhere('id')->ne($programID)->andWhere('acl')->eq('program')->fetchPairs('id', 'type');
+            $this->loadModel('user');
+            foreach($children as $id => $type) $this->user->updateUserView($id, $type);
 
             if($oldProgram->parent != $program->parent)
             {
@@ -896,7 +917,7 @@ class programModel extends model
             ->beginIF(!$isQueryAll)->andWhere('id')->in($this->app->user->view->programs)->fi()
             ->andWhere('deleted')->eq(0)
             ->beginIF($model)->andWhere('model')->eq($model)->fi()
-            ->orderBy('`order`')
+            ->orderBy('`order` asc')
             ->fetchPairs();
     }
 

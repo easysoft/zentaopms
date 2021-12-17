@@ -46,10 +46,11 @@ class releaseModel extends model
      * @param  int    $productID
      * @param  int    $branch
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 0, $type = 'all')
+    public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as projectName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -57,10 +58,10 @@ class releaseModel extends model
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
             ->where('t1.product')->eq((int)$productID)
-            ->beginIF($branch)->andWhere('t1.branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.date DESC')
+            ->orderBy($orderBy)
             ->fetchAll();
     }
 
@@ -85,17 +86,17 @@ class releaseModel extends model
     /**
      * Get released builds from product.
      *
-     * @param  int    $productID
-     * @param  int    $branch
+     * @param  int        $productID
+     * @param  string|int $branch
      * @access public
      * @return void
      */
-    public function getReleasedBuilds($productID, $branch = 0)
+    public function getReleasedBuilds($productID, $branch = 'all')
     {
         $releases = $this->dao->select('build')->from(TABLE_RELEASE)
             ->where('deleted')->eq(0)
             ->andWhere('product')->eq($productID)
-            ->beginIF($branch)->andWhere('branch')->eq($branch)->fi()
+            ->beginIF($branch !== 'all')->andWhere('branch')->eq($branch)->fi()
             ->fetchAll('build');
         return array_keys($releases);
     }
@@ -128,7 +129,6 @@ class releaseModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
             ->remove('allchecker,files,labels,uid')
@@ -227,9 +227,7 @@ class releaseModel extends model
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
-            ->setIF(!$this->post->notify, 'notify', '')
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
             ->get();
@@ -478,6 +476,70 @@ class releaseModel extends model
     }
 
     /**
+     * Judge btn is clickable or not. 
+     * 
+     * @param  int    $release 
+     * @param  string $action 
+     * @static
+     * @access public
+     * @return bool 
+     */
+    public static function isClickable($release, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'notify') return $release->bugs or $release->stories;
+        return true;
+    }
+
+    /**
+     * Send mail to release related users.
+     * 
+     * @param  int    $releaseID
+     * @access public
+     * @return void
+     */
+    public function sendmail($releaseID)
+    {
+        if(empty($releaseID)) return;
+        $this->app->loadConfig('mail');
+
+        /* Load module and get vars. */
+        $users   = $this->loadModel('user')->getPairs('noletter');
+        $release = $this->getByID($releaseID);
+        $suffix  = empty($release->product) ? '' : ' - ' . $this->loadModel('product')->getById($release->product)->name;
+        $subject = 'Release #' . $release->id . ' ' . $release->name . $suffix;
+
+        /* Get mail content. */
+        $modulePath = $this->app->getModulePath($appName = '', 'release');
+        $oldcwd     = getcwd();
+        $viewFile   = $modulePath . 'view/sendmail.html.php';
+        chdir($modulePath . 'view');
+        if(file_exists($modulePath . 'ext/view/sendmail.html.php'))
+        {
+            $viewFile = $modulePath . 'ext/view/sendmail.html.php';
+            chdir($modulePath . 'ext/view');
+        }
+        ob_start();
+        include $viewFile;
+        foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
+        $mailContent = ob_get_contents();
+        ob_end_clean();
+        chdir($oldcwd);
+
+        if(strpos(",{$release->notify},", ',FB,') !== false) $this->sendMail2Feedback($release, $subject);
+
+        /* Get the sender. */
+        $sendUsers = $this->getToAndCcList($release);
+        if(!$sendUsers) return;
+
+        list($toList, $ccList) = $sendUsers;
+
+        /* Send it. */
+        $this->loadModel('mail')->send($toList, $subject, $mailContent, $ccList);
+    }
+
+    /**
      * Get toList and ccList.
      *
      * @param  object    $release
@@ -518,5 +580,70 @@ class releaseModel extends model
         }
 
         return array($toList, $ccList);
+    }
+
+    /**
+     * Send mail to feedback user.
+     *
+     * @param  object $release
+     * @param  string $subject
+     * @access public
+     * @return void
+     */
+    public function sendMail2Feedback($release, $subject)
+    {
+        if(!$release->stories && !$release->bugs) return;
+
+        $stories = explode(',', trim($release->stories, ','));
+        $bugs    = explode(',', trim($release->bugs, ','));
+
+        $storyNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_STORY)
+            ->where('id')->in($stories)
+            ->andWhere('notifyEmail')->ne('')
+            ->fetchGroup('notifyEmail', 'id');
+
+        $bugNotifyList = $this->dao->select('id,title,notifyEmail')->from(TABLE_BUG)
+            ->where('id')->in($bugs)
+            ->andWhere('notifyEmail')->ne('')
+            ->fetchGroup('notifyEmail', 'id');
+
+        $toList     = array();
+        $emails     = array();
+        $storyNames = array();
+        $bugNames   = array();
+        foreach($storyNotifyList as $notifyEmail => $storyList)
+        {
+            $email = new stdClass();
+            $email->account  = $notifyEmail;
+            $email->email    = $notifyEmail;
+            $email->realname = '';
+
+            $emails[$notifyEmail] = $email;
+            $toList[$notifyEmail] = $notifyEmail;
+
+            foreach($storyList as $story) $storyNames[] = $story->title;
+        }
+        foreach($bugNotifyList as $notifyEmail => $bugList)
+        {
+            $email = new stdClass();
+            $email->account  = $notifyEmail;
+            $email->email    = $notifyEmail;
+            $email->realname = '';
+
+            $emails[$notifyEmail] = $email;
+            $toList[$notifyEmail] = $notifyEmail;
+
+            foreach($bugList as $bug) $bugNames[] = $bug->title;
+        }
+
+        if(!empty($toList))
+        {
+            $storyNames  = implode(',', $storyNames);
+            $bugNames    = implode(',', $bugNames);
+            $mailContent = sprintf($this->lang->release->mailContent, $release->name);
+            if($storyNames) $mailContent .= sprintf($this->lang->release->storyList, $storyNames);
+            if($bugNames)   $mailContent .= sprintf($this->lang->release->bugList,   $bugNames);
+            $this->loadModel('mail')->send(implode(',', $toList), $subject, $mailContent, '', false, $emails);
+        }
     }
 }

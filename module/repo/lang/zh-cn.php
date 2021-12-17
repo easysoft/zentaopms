@@ -23,6 +23,7 @@ $lang->repo->encrypt         = '加密方式';
 $lang->repo->repo            = '代码库';
 $lang->repo->parent          = '父文件夹';
 $lang->repo->branch          = '分支';
+$lang->repo->addWebHook      = '添加Webhook';
 
 $lang->repo->browseAction    = '浏览版本库';
 $lang->repo->createAction    = '创建版本库';
@@ -127,7 +128,7 @@ $lang->repo->logStyles['D'] = '删除';
 $lang->repo->encodingList['utf_8'] = 'UTF-8';
 $lang->repo->encodingList['gbk']   = 'GBK';
 
-$lang->repo->scmList['Gitlab']     = 'Gitlab';
+$lang->repo->scmList['Gitlab']     = 'GitLab';
 $lang->repo->scmList['Git']        = '本地 Git';
 $lang->repo->scmList['Subversion'] = 'Subversion';
 
@@ -145,6 +146,7 @@ $lang->repo->notice->syncedCount    = '已经同步记录条数';
 $lang->repo->notice->delete         = '是否要删除该版本库？';
 $lang->repo->notice->successDelete  = '已经成功删除版本库。';
 $lang->repo->notice->commentContent = '输入回复内容';
+$lang->repo->notice->deleteReview   = '确认删除该评审？';
 $lang->repo->notice->deleteBug      = '确认删除该Bug？';
 $lang->repo->notice->deleteComment  = '确认删除该回复？';
 $lang->repo->notice->lastSyncTime   = '最后更新于：';

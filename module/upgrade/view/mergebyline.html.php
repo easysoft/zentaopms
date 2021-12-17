@@ -50,12 +50,14 @@
             </div>
             <div class='projectList'>
               <div class='scroll-handle'>
-              <?php if(isset($productGroups[$productID])):?>
-              <?php foreach($productGroups[$productID] as $sprint):?>
-              <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => $sprint->name), '', "title='{$sprint->name}' data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}' class='tile'");?>
-              <?php echo html::hidden("sprintIdList[$line->id][$productID][$sprint->id]", $sprint->id);?>
-              <?php endforeach;?>
-              <?php endif;?>
+                <?php if(isset($productGroups[$productID])):?>
+                <?php foreach($productGroups[$productID] as $sprint):?>
+                <div class="sprintItem">
+                  <?php echo html::checkBox("sprints[$line->id][$productID]", array($sprint->id => $sprint->name), '', "title='{$sprint->name}' data-product='{$product->id}' data-line='{$line->id}' data-begin='{$sprint->begin}' data-end='{$sprint->end}' data-status='{$sprint->status}' data-pm='{$sprint->PM}' class='tile'");?>
+                  <?php echo html::hidden("sprintIdList[$line->id][$productID][$sprint->id]", $sprint->id);?>
+                </div>
+                <?php endforeach;?>
+                <?php endif;?>
               </div>
             </div>
           </div>

@@ -50,12 +50,8 @@
           <?php $this->printExtendFields($release, 'table');?>
           <tr>
             <th><?php echo $lang->release->desc;?></th>
-            <td colspan='2'><?php echo html::textarea('desc', htmlspecialchars($release->desc), "rows=10 class='form-control kindeditor' hidefocus='true'");?></td>
+            <td colspan='2'><?php echo html::textarea('desc', htmlSpecialString($release->desc), "rows=10 class='form-control kindeditor' hidefocus='true'");?></td>
           </tr>  
-          <tr>
-            <th><?php echo $lang->release->notify;?></th>
-            <td colspan='2'><?php echo html::checkbox('notify', $lang->release->notifyList, $release->notify);?></td>
-          </tr>
           <tr>
             <th><?php echo $lang->release->mailto;?></th>
             <td colspan='2'>

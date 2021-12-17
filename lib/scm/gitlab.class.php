@@ -96,7 +96,7 @@ class gitlab
      * @param  string    $path
      * @param  string    $ref
      * @access public
-     * @return array
+     * @return object
      * @doc    https://docs.gitlab.com/ee/api/repository_files.html
      */
     public function files($path, $ref = 'master')
@@ -220,7 +220,10 @@ class gitlab
         $count = $count == 0 ? '' : "-n $count";
 
         $list = $this->getCommitsByPath($path, $fromRevision, $toRevision);
-        foreach($list as $commit) $commit->diffs = $this->getFilesByCommit($commit->id);
+        foreach($list as $commit)
+        {
+            if(isset($commit->id)) $commit->diffs = $this->getFilesByCommit($commit->id);
+        }
 
         return $this->parseLog($list);
     }
@@ -369,7 +372,7 @@ class gitlab
      *
      * @param  string $cmd
      * @access public
-     * @todo Exec commads by gitlab api.
+     * @todo Exec commands by gitlab api.
      * @return array
      */
     public function exec($cmd)
@@ -447,7 +450,7 @@ class gitlab
                             $newLine->type  = $type;
                             $newLine->oldlc = $type != 'new' ? $oldCurrentLine : '';
                             $newLine->newlc = $type != 'old' ? $newCurrentLine : '';
-                            $newLine->line  = htmlspecialchars($line);
+                            $newLine->line  = htmlSpecialString($line);
 
                             if($type != 'new') $oldCurrentLine++;
                             if($type != 'old') $newCurrentLine++;
@@ -539,17 +542,34 @@ class gitlab
 
         if($version and $version != 'HEAD')
         {
-            $committedDate = $this->getCommitedDate($version);
+            /* Get since param. */
+            if(substr($version, 0, 5) == 'since')
+            {
+                $since   = true;
+                $version = substr($version, 5);
+            }
+
+            $committedDate = $this->getCommittedDate($version);
             if(!$committedDate) return array('commits' => array(), 'files' => array());
 
-            $params['until'] = $committedDate;
+            if(!empty($since))
+            {
+                $params['since'] = $committedDate;
+            }
+            else
+            {
+                $params['until'] = $committedDate;
+            }
         }
 
         $list = $this->fetch($api, $params);
 
         $commits = array();
+        $files   = array();
         foreach($list as $commit)
         {
+            if(!is_object($commit)) continue;
+
             $log = new stdclass;
             $log->committer = $commit->committer_name;
             $log->revision  = $commit->id;
@@ -570,7 +590,7 @@ class gitlab
      * @access public
      * @return void
      */
-    public function getCommitedDate($sha)
+    public function getCommittedDate($sha)
     {
         if(!scm::checkRevision($sha)) return null;
 
@@ -598,8 +618,8 @@ class gitlab
         $param->path     = urldecode($path);
         $param->ref_name = $this->branch;
 
-        $fromDate = $this->getCommitedDate($fromRevision);
-        $toDate   = $this->getCommitedDate($toRevision);
+        $fromDate = $this->getCommittedDate($fromRevision);
+        $toDate   = $this->getCommittedDate($toRevision);
 
         $since = '';
         $until = '';
@@ -639,6 +659,7 @@ class gitlab
         {
             $results = $this->fetch($api, $params);
             $params->page ++;
+            if(!is_array($results)) $results = array();
             $allResults = $allResults + $results;
             if(count($results) < 100) break;
         }
@@ -667,7 +688,7 @@ class gitlab
      * @param  string    $path
      * @param  bool      $recursive
      * @access public
-     * @return void
+     * @return mixed
      */
     public function tree($path, $recursive = 1)
     {
@@ -685,7 +706,7 @@ class gitlab
      *
      * @param  string    $api
      * @access public
-     * @return void
+     * @return mixed
      */
     public function fetch($api, $params = array())
     {
@@ -734,6 +755,7 @@ class gitlab
         $i          = 0;
         foreach($logs as $commit)
         {
+            if(!isset($commit->id)) continue;
             $parsedLog = new stdclass();
             $parsedLog->revision  = $commit->id;
             $parsedLog->committer = $commit->committer_name;

@@ -19,8 +19,8 @@
       <?php echo html::a($this->createLink('program', 'craetestakeholder', "programID={$programID}"), "<span class='text'> {$lang->program->createStakeholder}</span>");?>
     </span>
     <div class='input-group space w-200px'>
-      <span class='input-group-addon'><?php echo $lang->project->selectDept?></span>
-      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->project->selectDeptTitle}'");?>
+      <span class='input-group-addon'><?php echo $lang->execution->selectDept?></span>
+      <?php echo html::select('dept', $depts, $dept, "class='form-control chosen' onchange='setDeptUsers(this)' data-placeholder='{$lang->execution->selectDeptTitle}'");?>
     </div>
     <?php if($program->parent):?>
     <?php echo html::a($this->createLink('program', 'createStakeholder', "programID=$programID&dept=&parent=$path"), $lang->program->importStakeholder, '', 'class="btn btn-primary"');?>
@@ -85,7 +85,7 @@
         </tr>
         <?php endfor;?>
       </tbody>
-      <tfoot><tr><td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton(); ?></td></tr></tfoot>
+      <tfoot><tr><td colspan='6' class='form-actions'><?php echo html::submitButton() . ' ' . html::backButton(); ?></td></tr></tfoot>
     </table>
   </form>
 </div>

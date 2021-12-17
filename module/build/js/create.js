@@ -35,6 +35,7 @@ function loadProducts(executionID)
 
             $('#productBox').append(data);
             $('#product').chosen();
+            loadBranches($("#product").val());
         }
     });
 }

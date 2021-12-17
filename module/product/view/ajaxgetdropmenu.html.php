@@ -30,6 +30,8 @@ a.productName:focus, a.productName:hover {background: #0c64eb; color: #fff !impo
 #swapper li > a {padding-top: 4px; padding-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
+
+#subHeader .tree ul {display: block;}
 </style>
 <?php
 $productCounts      = array();
@@ -76,6 +78,7 @@ foreach($products as $programID => $programProducts)
         $selected    = $product->id == $productID ? 'selected' : '';
         $productName = $product->line ? zget($lines, $product->line, '') . ' / ' . $product->name : $product->name;
         $linkHtml    = $this->product->setParamsForLink($module, $link, $projectID, $product->id);
+        $locateTab   = ($module == 'testtask' and $method == 'browseUnits' and $app->tab == 'project') ? '' : "data-app='$app->tab'";
 
         if($product->status == 'normal' and $product->PO == $this->app->user->account)
         {
@@ -158,7 +161,7 @@ $(function()
         }
     })
 
-    $('#swapper [data-ride="tree"]').tree('expand');
+    $('#tabContent [data-ride="tree"]').tree('expand');
 
     $('#swapper #dropMenu .search-box').on('onSearchChange', function(event, value)
     {

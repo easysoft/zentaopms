@@ -45,10 +45,11 @@ class projectreleaseModel extends model
      *
      * @param  int    $projectID
      * @param  string $type
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getList($projectID, $type = 'all')
+    public function getList($projectID, $type = 'all', $orderBy = 't1.date_desc')
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.execution, t4.name as executionName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -58,7 +59,7 @@ class projectreleaseModel extends model
             ->where('t1.project')->eq((int)$projectID)
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
-            ->orderBy('t1.date DESC')
+            ->orderBy($orderBy)
             ->fetchAll();
     }
 
@@ -129,7 +130,6 @@ class projectreleaseModel extends model
             ->join('stories', ',')
             ->join('bugs', ',')
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->setIF($productID, 'product', $productID)
             ->setIF($branch, 'branch', $branch)
@@ -225,7 +225,6 @@ class projectreleaseModel extends model
         $release = fixer::input('post')->stripTags($this->config->release->editor->edit['id'], $this->config->allowedTags)
             ->add('branch',  (int)$branch)
             ->join('mailto', ',')
-            ->join('notify', ',')
             ->setIF(!$this->post->marker, 'marker', 0)
             ->cleanInt('product')
             ->remove('files,labels,allchecker,uid')
@@ -322,5 +321,22 @@ class projectreleaseModel extends model
 
         $this->loadModel('action');
         foreach($this->post->bugs as $bugID) $this->action->create('bug', $bugID, 'linked2release', '', $releaseID);
+    }
+
+    /**
+     * Judge btn is clickable or not. 
+     * 
+     * @param  int    $release 
+     * @param  string $action 
+     * @static
+     * @access public
+     * @return bool 
+     */
+    public static function isClickable($release, $action)
+    {
+        $action = strtolower($action);
+
+        if($action == 'notify') return $release->bugs or $release->stories;
+        return true;
     }
 }

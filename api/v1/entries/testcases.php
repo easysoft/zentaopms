@@ -15,28 +15,16 @@ class testcasesEntry extends entry
      * GET method.
      *
      * @param  int    $productID
-     * @param  int    $projectID
-     * @param  int    $executionID
      * @access public
      * @return void
      */
-    public function get($productID = 0, $projectID = 0, $executionID = 0)
+    public function get($productID = 0)
     {
-        if(!$productID)   $productID   = $this->param('product', 0);
-        if(!$projectID)   $projectID   = $this->param('project', 0);
-        if(!$executionID) $executionID = $this->param('execution', 0);
-        if(!$productID and !$projectID and !$executionID) return $this->sendError(400, 'Need product or project or execution id.');
+        if(empty($productID)) $productID = $this->param('product', 0);
+        if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
-        if($executionID)
-        {
-            $control = $this->loadController('execution', 'testcase');
-            $control->testcase($executionID, $this->param('status', 'all'), $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
-        }
-        else
-        {
-            $control = $this->loadController('testcase', 'browse');
-            $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1), $projectID);
-        }
+        $control = $this->loadController('testcase', 'browse');
+        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 
@@ -47,14 +35,14 @@ class testcasesEntry extends entry
             $result = array();
             foreach($cases as $case)
             {
-                $result[] = $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool');
+                $case->statusName = $this->lang->testcase->statusList[$case->status];
+                $result[] = $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool');
             }
 
             return $this->send(200, array('page' => $pager->pageID, 'total' => $pager->recTotal, 'limit' => $pager->recPerPage, 'testcases' => $result));
         }
 
-        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
-
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
         return $this->sendError(400, 'error');
     }
 
@@ -104,6 +92,6 @@ class testcasesEntry extends entry
         $case = $this->loadModel('testcase')->getByID($data->id);
         $case->steps = (isset($case->steps) and !empty($case->steps)) ? array_values($case->steps) : array();
 
-        $this->send(200, $this->format($case, 'openedDate:time,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedDate:date,deleted:bool'));
+        $this->send(200, $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool'));
     }
 }

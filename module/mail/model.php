@@ -266,40 +266,47 @@ class mailModel extends model
      * @param  string  $body
      * @param  array   $ccList
      * @param  bool    $includeMe
+     * @param  array   $emails
      * @access public
      * @return void
      */
-    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false)
+    public function send($toList, $subject, $body = '', $ccList = '', $includeMe = false, $emails = array())
     {
         if(!$this->config->mail->turnon) return;
         if(!empty($this->config->mail->async)) return $this->addQueue($toList, $subject, $body, $ccList, $includeMe);
 
         ob_start();
-        $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
-        $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
-        /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
-        if($includeMe == false)
+        if(empty($emails))
         {
-            $account = isset($this->app->user->account) ? $this->app->user->account : '';
+            $toList  = $toList ? explode(',', str_replace(' ', '', $toList)) : array();
+            $ccList  = $ccList ? explode(',', str_replace(' ', '', $ccList)) : array();
 
-            foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
-            foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+            /* Process toList and ccList, remove current user from them. If toList is empty, use the first cc as to. */
+            if($includeMe == false)
+            {
+                $account = isset($this->app->user->account) ? $this->app->user->account : '';
+
+                foreach($toList as $key => $to) if(trim($to) == $account or !trim($to)) unset($toList[$key]);
+                foreach($ccList as $key => $cc) if(trim($cc) == $account or !trim($cc)) unset($ccList[$key]);
+            }
+
+            /* Remove deleted users. */
+            $this->app->loadConfig('message');
+            $users      = $this->loadModel('user')->getPairs('nodeleted|all');
+            $blockUsers = isset($this->config->message->blockUser) ? explode(',', $this->config->message->blockUser) : array();
+            foreach($toList as $key => $to) if(!isset($users[trim($to)]) or in_array(trim($to), $blockUsers)) unset($toList[$key]);
+            foreach($ccList as $key => $cc) if(!isset($users[trim($cc)]) or in_array(trim($cc), $blockUsers)) unset($ccList[$key]);
+
+            if(!$toList and !$ccList) return;
+            if(!$toList and $ccList) $toList = array(array_shift($ccList));
+            $toList = join(',', $toList);
+            $ccList = join(',', $ccList);
+
+            /* Get realname and email of users. */
+            $this->loadModel('user');
+            $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
         }
-
-        /* Remove deleted users. */
-        $users = $this->loadModel('user')->getPairs('nodeleted|all');
-        foreach($toList as $key => $to) if(!isset($users[trim($to)])) unset($toList[$key]);
-        foreach($ccList as $key => $cc) if(!isset($users[trim($cc)])) unset($ccList[$key]);
-
-        if(!$toList and !$ccList) return;
-        if(!$toList and $ccList) $toList = array(array_shift($ccList));
-        $toList = join(',', $toList);
-        $ccList = join(',', $ccList);
-
-        /* Get realname and email of users. */
-        $this->loadModel('user');
-        $emails = $this->user->getRealNameAndEmails(str_replace(' ', '', $toList . ',' . $ccList));
 
         $this->clear();
 
@@ -691,7 +698,7 @@ class mailModel extends model
         {
             if($object->contentType == 'markdown')
             {
-                $object->content = $this->app->loadClass('hyperdown')->makeHtml($object->content);
+                $object->content = commonModel::processMarkdown($object->content);
                 $object->content = str_replace("<table>", "<table style='border-collapse: collapse;'>", $object->content);
                 $object->content = str_replace("<th>", "<th style='word-break: break-word; border:1px solid #000;'>", $object->content);
                 $object->content = str_replace("<td>", "<td style='word-break: break-word; border:1px solid #000;'>", $object->content);
@@ -724,7 +731,7 @@ class mailModel extends model
             chdir($modulePath . 'ext/view');
         }
         ob_start();
-        include $viewFile;
+        if($objectType != 'mr') include $viewFile;
         foreach(glob($modulePath . 'ext/view/sendmail.*.html.hook.php') as $hookFile) include $hookFile;
         $mailContent = ob_get_contents();
         ob_end_clean();
@@ -741,14 +748,37 @@ class mailModel extends model
         }
         else
         {
-            $sendUsers  = $this->{$objectType}->getToAndCcList($object);
+            $sendUsers = $this->{$objectType}->getToAndCcList($object);
         }
 
         if(!$sendUsers) return;
         list($toList, $ccList) = $sendUsers;
 
         /* Send it. */
-        $this->send($toList, $subject, $mailContent, $ccList);
+        if($objectType == 'mr')
+        {
+            $MRLink = common::getSysURL() . helper::createLink('mr', 'view', "id={$object->id}");
+            if($action->action == 'compilepass')
+            {
+                $mailContent = sprintf($this->lang->mr->toCreatedMessage, $MRLink, $title);
+                $this->send($toList, $subject, $mailContent);
+
+                $mailContent = sprintf($this->lang->mr->toReviewerMessage, $MRLink, $title);
+                $this->send($ccList, $subject, $mailContent);
+
+                /* Create a todo item for this MR. */
+                $this->loadModel('mr')->apiCreateMRTodo($object->gitlabID, $object->targetProject, $object->mriid);
+            }
+            elseif($action->action == 'compilefail')
+            {
+                $mailContent = sprintf($this->lang->mr->failMessage, $MRLink, $title);
+                $this->send($toList, $subject, $mailContent, $ccList);
+            }
+        }
+        else
+        {
+            $this->send($toList, $subject, $mailContent, $ccList);
+        }
         if($this->isError()) error_log(join("\n", $this->getError()));
     }
 

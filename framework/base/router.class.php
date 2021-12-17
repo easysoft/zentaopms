@@ -2250,6 +2250,7 @@ class baseRouter
         $view->methodVar   = $this->config->methodVar;
         $view->viewVar     = $this->config->viewVar;
         $view->sessionVar  = $this->config->sessionVar;
+        $view->systemMode  = $this->config->systemMode;
 
         $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
@@ -2420,7 +2421,7 @@ class baseRouter
     public function triggerError($message, $file, $line, $exit = false)
     {
         /* 设置错误信息(Set the error info) */
-        $message = htmlspecialchars($message);
+        $message = htmlSpecialString($message);
         if(preg_match('/[^\x00-\x80]/', $message)) $message = helper::convertEncoding($message, 'gbk');
 
         /* Only show error when debug is open. */

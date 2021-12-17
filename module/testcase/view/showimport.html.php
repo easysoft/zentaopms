@@ -75,13 +75,14 @@ $(function()
                 echo "<sub class='gray' style='vertical-align:sub;'>{$lang->testcase->new}</sub>";
             }
             echo html::hidden("product[$key]", $productID);
-            if(!empty($branches)) echo html::hidden("branch[$key]", (isset($case->branch) and $case->branch !== '') ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch));
+            if(!empty($branches)) echo html::hidden("branch[$key]", !empty($case->branch) ? $case->branch : ((!empty($case->id) and isset($cases[$case->id]) and !empty($cases[$case->id]->branch)) ? $cases[$case->id]->branch : $branch));
             echo html::hidden("keywords[$key]", isset($case->keywords) ? $case->keywords : "");
             ?>
           </td>
-          <td><?php echo html::input("title[$key]", htmlspecialchars($case->title, ENT_QUOTES), "class='form-control'")?></td>
+          <td><?php echo html::input("title[$key]", htmlSpecialString($case->title, ENT_QUOTES), "class='form-control'")?></td>
           <td style='overflow:visible'>
-            <?php echo html::select("module[$key]", $modules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
+            <?php $caseModules = (isset($case->branch) and $case->branch != 0) ? $modules[BRANCH_MAIN] + $modules[$case->branch] : $modules[BRANCH_MAIN];?>
+            <?php echo html::select("module[$key]", $caseModules, isset($case->module) ? $case->module : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->module : ''), "class='form-control chosen moduleChange'")?>
           </td>
           <td style='overflow:visible'>
           <?php $storyID = isset($case->story) ? $case->story : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->story : '');?>
@@ -89,7 +90,7 @@ $(function()
           <td><?php echo html::select("pri[$key]", $lang->testcase->priList, isset($case->pri) ? $case->pri : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->pri : ''), "class='form-control chosen'")?></td>
           <td><?php echo html::select("type[$key]", $lang->testcase->typeList, isset($case->type) ? $case->type : '', "class='form-control chosen'")?></td>
           <td style='overflow:visible'><?php echo html::select("stage[$key][]", $lang->testcase->stageList, !empty($case->stage) ? $case->stage : ((!empty($case->id) and isset($cases[$case->id])) ? $cases[$case->id]->stage : ''), "multiple='multiple' class='form-control chosen'")?></td>
-          <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlspecialchars($case->precondition) : "", "class='form-control'")?></td>
+          <td><?php echo html::textarea("precondition[$key]", isset($case->precondition) ? htmlSpecialString($case->precondition) : "", "class='form-control'")?></td>
           <?php if(!empty($appendFields)):?>
           <?php $this->loadModel('flow');?>
           <?php foreach($appendFields as $appendField):?>
@@ -103,8 +104,8 @@ $(function()
             <?php if(empty($desc['content'])) continue;?>
               <tr class='step'>
                 <td><?php echo $id . html::hidden("stepType[$key][$id]", $desc['type'])?></td>
-                <td><?php echo html::textarea("desc[$key][$id]", htmlspecialchars($desc['content']), "class='form-control'")?></td>
-                <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlspecialchars($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
+                <td><?php echo html::textarea("desc[$key][$id]", htmlSpecialString($desc['content']), "class='form-control'")?></td>
+                <td><?php if($desc['type'] != 'group') echo html::textarea("expect[$key][$id]", isset($stepData[$key]['expect'][$id]['content']) ? htmlSpecialString($stepData[$key]['expect'][$id]['content']) : '', "class='form-control'")?></td>
               </tr>
             <?php endforeach;?>
             </table>

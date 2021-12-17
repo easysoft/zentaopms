@@ -216,7 +216,7 @@ class apiModel extends model
             ->setDefault('product,module', 0)
             ->remove('type')
             ->get();
-       
+
         $changes = common::createChanges($oldApi, $data);
         if(!empty($changes)) $data->version = $oldApi->version + 1;
 
@@ -226,12 +226,12 @@ class apiModel extends model
             ->batchCheck($this->config->api->edit->requiredFields, 'notempty')
             ->where('id')->eq($apiID)
             ->exec();
-        
+
         $data->id = $apiID;
         $apiSpec  = $this->getApiSpecByData($data);
         $this->dao->replace(TABLE_API_SPEC)->data($apiSpec)->exec();
 
-        return $changes; 
+        return $changes;
     }
 
     /**
@@ -705,5 +705,152 @@ class apiModel extends model
             'addedBy'      => $this->app->user->account,
             'addedDate'    => helper::now(),
         );
+    }
+
+    /**
+     * Get Type list.
+     *
+     * @param  int   $libID
+     * @access public
+     * @return void
+     */
+    public function getTypeList($libID)
+    {
+        $typeList = array();
+        foreach($this->lang->api->paramsTypeOptions as $key => $item)
+        {
+            $typeList[$key] = $item;
+        }
+
+        /* Get all struct by libID. */
+        $structs = $this->getStructListByLibID($libID);
+        foreach($structs as $struct)
+        {
+            $typeList[$struct->id] = $struct->name;
+        }
+
+        return $typeList;
+    }
+
+    /**
+     * Create demo data.
+     *
+     * @access public
+     * @return void
+     */
+    public function createDemoData()
+    {
+        /* Insert doclib. */
+        $lib = new stdclass();
+        $lib->type    = 'api';
+        $lib->name    = 'demo';
+        $lib->baseUrl = '/v1';
+        $lib->acl     = 'private';
+        $lib->users   = ',' . $this->app->user->account . ',';
+        $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
+
+        $libID = $this->dao->lastInsertID();
+
+        /* Insert struct. */
+        $structMap = array();
+        $structs   = $this->getDemoData('apistruct');
+        foreach($structs as $struct)
+        {
+            $oldID = $struct->id;
+            unset($struct->id);
+
+            $struct->lib        = $libID;
+            $struct->addedBy    = $this->app->user->account;
+            $struct->addedDate  = helper::now();
+            $struct->editedBy   = $this->app->user->account;
+            $struct->editedDate = helper::now();
+
+            $this->dao->insert(TABLE_APISTRUCT)->data($struct)->exec();
+            $newID = $this->dao->lastInsertID();
+
+            $structMap[$oldID] = $newID;
+        }
+
+        /* Insert struct spec. */
+        $specs = $this->getDemoData('apistruct_spec');
+        foreach($specs as $spec)
+        {
+            unset($spec->id);
+
+            $spec->addedBy   = $this->app->user->account;
+            $spec->addedDate = helper::now();
+
+            $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($spec)->exec();
+        }
+
+        /* Insert module. */
+        $modules = $this->getDemoData('module');
+        foreach($modules as $module)
+        {
+            if($module->type != 'api') continue;
+
+            $oldID = $module->id;
+            unset($module->id);
+
+            $module->root = $libID;
+
+            $this->dao->insert(TABLE_MODULE)->data($module)->exec();
+            $newID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_MODULE)->set('path')->eq(",$newID,")->where('id')->eq($newID)->exec();
+
+            $moduleMap[$oldID] = $newID;
+        }
+
+        /* Insert api. */
+        $this->loadModel('action');
+        $apiMap = array();
+        $apis   = $this->getDemoData('api');
+        foreach($apis as $api)
+        {
+            $oldID = $api->id;
+            unset($api->id);
+
+            $api->lib        = $libID;
+            $api->module     = $moduleMap[$api->module];
+            $api->addedBy    = $this->app->user->account;
+            $api->addedDate  = helper::now();
+            $api->editedBy   = $this->app->user->account;
+            $api->editedDate = helper::now();
+
+            $this->dao->insert(TABLE_API)->data($api)->exec();
+            $newID = $this->dao->lastInsertID();
+
+            $this->action->create('api', $newID, 'Created');
+
+            $apiMap[$oldID] = $newID;
+        }
+
+        /* Insert api spec. */
+        $specs = $this->getDemoData('apispec');
+        foreach($specs as $spec)
+        {
+            unset($spec->id);
+
+            $spec->doc       = $apiMap[$spec->doc];
+            $spec->module    = zget($moduleMap, $spec->module, 0);
+            $spec->owner     = $this->app->user->account;
+            $spec->addedBy   = $this->app->user->account;
+            $spec->addedDate = helper::now();
+
+            $this->dao->insert(TABLE_API_SPEC)->data($spec)->exec();
+        }
+    }
+
+    /**
+     * Get demo data
+     *
+     * @param  string $table
+     * @access private
+     * @return array
+     */
+    private function getDemoData($table)
+    {
+        $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $table;
+        return unserialize(file_get_contents($file));
     }
 }

@@ -66,6 +66,10 @@
             <th class='c-desc <?php echo zget($visibleFields, 'desc', ' hidden') . zget($requiredFields, 'desc', '', ' required');?>'><?php echo $lang->execution->$desc;?></th>
             <th class='c-team-name <?php echo zget($visibleFields, 'teamname', ' hidden') . zget($requiredFields, 'teamname', '', ' required');?>'><?php echo $lang->execution->teamname;?></th>
             <th class='c-days<?php echo zget($visibleFields, 'days', ' hidden') . zget($requiredFields, 'days', '', ' required');?>'><?php echo $lang->execution->days;?></th>
+            <?php
+            $extendFields = $this->execution->getFlowExtendFields();
+            foreach($extendFields as $extendField) echo "<th class='c-extend'>{$extendField->name}</th>";
+            ?>
           </tr>
         </thead>
         <tbody>
@@ -110,6 +114,7 @@
                 <span class='input-group-addon'><?php echo $lang->execution->day;?></span>
               </div>
             </td>
+            <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $executions[$executionID], $extendField->field . "[{$executionID}]") . "</td>";?>
           </tr>
           <?php
           if(isset($this->config->moreLinks["PMs[$executionID]"])) unset($this->config->moreLinks["PMs[$executionID]"]);

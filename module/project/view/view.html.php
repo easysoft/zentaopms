@@ -140,10 +140,12 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php $branchName = isset($branchGroups[$productID][$product->branch]) ? '/' . $branchGroups[$productID][$product->branch] : '';?>
+                <?php foreach($product->branches as $branchID):?>
+                <?php $branchName = isset($branchGroups[$productID][$branchID]) ? '/' . $branchGroups[$productID][$branchID] : '';?>
                 <div class="col-xs-6">
-                  <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$product->branch"), "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName);?>
+                  <?php echo html::a($this->createLink('product', 'browse', "productID=$productID&branch=$branchID"), "<i class='icon icon-product text-muted'></i> " . $product->name . $branchName);?>
                 </div>
+                <?php endforeach;?>
                 <?php endforeach;?>
               </div>
             </div>
@@ -153,9 +155,11 @@
             <div class="detail-content">
               <div class="row row-grid">
                 <?php foreach($products as $productID => $product):?>
-                <?php if(isset($planGroups[$productID][$product->plan])):?>
-                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$product->plan}"), $product->name . '/' . $planGroups[$productID][$product->plan]);?></div>
+                <?php foreach($product->plans as $planID):?>
+                <?php if(isset($planGroup[$productID][$planID])):?>
+                <div class="col-xs-12"><?php echo html::a($this->createLink('productplan', 'view', "planID={$planID}"), $product->name . '/' . $planGroup[$productID][$planID]);?></div>
                 <?php endif;?>
+                <?php endforeach;?>
                 <?php endforeach;?>
               </div>
             </div>
@@ -178,24 +182,30 @@
                   <tr>
                     <th><?php echo $lang->project->begin;?></th>
                     <td><?php echo $project->begin;?></td>
-                    <th><?php echo $lang->execution->totalEstimate;?></th>
-                    <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>
+                    <th><?php echo $lang->project->realBeganAB;?></th>
+                    <td><?php echo $project->realBegan == '0000-00-00' ? '' : $project->realBegan;?></td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->project->end;?></th>
                     <td><?php echo $project->end;?></td>
-                    <th><?php echo $lang->execution->totalConsumed;?></th>
-                    <td><?php echo (float)$workhour->totalConsumed . $lang->execution->workHour;?></td>
+                    <th><?php echo $lang->project->realEndAB;?></th>
+                    <td><?php echo $project->realEnd == '0000-00-00' ? '' : $project->realEnd;?></td>
                   </tr>
                   <tr>
+                    <th><?php echo $lang->execution->totalEstimate;?></th>
+                    <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>                   
                     <th><?php echo $lang->execution->totalDays;?></th>
                     <td><?php echo $project->days;?></td>
-                    <th><?php echo $lang->execution->totalLeft;?></th>
-                    <td><?php echo (float)$workhour->totalLeft . $lang->execution->workHour;?></td>
                   </tr>
                   <tr>
+                    <th><?php echo $lang->execution->totalConsumed;?></th>
+                    <td><?php echo (float)$workhour->totalConsumed . $lang->execution->workHour;?></td>
                     <th><?php echo $lang->execution->totalHours;?></th>
                     <td><?php echo (float)$workhour->totalHours . $lang->execution->workHour;?></td>
+                  </tr>
+                  <tr>
+                    <th><?php echo $lang->execution->totalLeft;?></th>
+                    <td><?php echo (float)$workhour->totalLeft . $lang->execution->workHour;?></td>
                   </tr>
                 </tbody>
               </table>

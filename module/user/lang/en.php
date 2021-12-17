@@ -186,8 +186,9 @@ $lang->user->personalData['createdIssues']       = 'Issues Created';
 $lang->user->personalData['resolvedIssues']      = 'Issues Resolved';
 $lang->user->personalData['createdDocs']         = 'Docs Created';
 
-$lang->user->keepLogin['on']      = 'Keep Login';
-$lang->user->loginWithDemoUser    = 'Login as Demo User:';
+$lang->user->keepLogin['on']   = 'Keep Login';
+$lang->user->loginWithDemoUser = 'Login as Demo User:';
+$lang->user->scanToLogin       = 'Scan QR Code';
 
 $lang->user->tpl = new stdclass();
 $lang->user->tpl->type    = 'Type';
@@ -206,6 +207,10 @@ $lang->user->placeholder->group     = "Group is related to user privileges.";
 $lang->user->placeholder->commiter  = 'SVN/Git account';
 $lang->user->placeholder->verify    = 'Please enter your ZenTao login password to verify..';
 
+$lang->user->placeholder->loginPassword = 'Enter your password';
+$lang->user->placeholder->loginAccount  = 'Enter your account';
+$lang->user->placeholder->loginUrl      = 'Enter your ZenTao address';
+
 $lang->user->placeholder->passwordStrength[1] = '>= 6 letters and numbers';
 $lang->user->placeholder->passwordStrength[2] = '>= 10 letters, numbers and special characters';
 
@@ -219,6 +224,8 @@ $lang->user->error->reserved       = "ID %s，account is reserved.";
 $lang->user->error->weakPassword   = "ID %s，the password strength is less than the system setting.";
 $lang->user->error->dangerPassword = "ID %s，passwords cannot be used with [%s] these commonly used if-passwords.";
 
+$lang->user->error->url              = "Invalid address. Please contact your ZenTao Admin.";
+$lang->user->error->verify           = "Wrong account or password.";
 $lang->user->error->verifyPassword   = "Verification failed. Please enter your Login Password.";
 $lang->user->error->originalPassword = "Old password is incorrect.";
 $lang->user->error->companyEmpty     = "Company name must be not empty.";

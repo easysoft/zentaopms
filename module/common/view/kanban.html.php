@@ -5,63 +5,59 @@
 #kanbanList .panel-heading {padding: 10px;}
 #kanbanList .panel-body {padding: 0 10px 10px;}
 #kanbanList .kanban {min-height: 120px; overflow: visible;}
-#kanbanList .kanban-item {margin-top: 0; border: 1px solid #ebebeb; border-radius: 2px;}
-#kanbanList .kanban-item:hover {border: 1px solid #ccc;}
-#kanbanList .kanban-item + .kanban-item {margin-top: 10px;}
-#kanbanList .kanban-lane-items {padding: 10px; min-height: 38px;}
+#kanbanList .kanban-card {border-radius: 2px; padding: 10px;}
+#kanbanList .kanban-card:hover {border: 1px solid #ccc;}
 #kanbanList .kanban-header,
-#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0; min-height: 60px;}
+#kanbanList .kanban-lane {border-bottom: none; margin-bottom: 0;}
 #kanbanList .kanban-sub-lane {border-bottom: 0;}
 #kanbanList .kanban-lane {margin-top: 2px; min-height: 100px;}
 #kanbanList .kanban-lane.has-sub-lane {background-color: transparent;}
-#kanbanList .kanban-lane + .kanban-lane {border-top: 10px solid #fff;}
+#kanbanList .kanban-lane + .kanban-lane {margin-top: 10px;}
 #kanbanList .kanban-sub-lane + .kanban-sub-lane {margin-top: 2px;}
-#kanbanList .kanban-col + .kanban-col {border-left: 2px solid #fff;}
-#kanbanList .kanban-header-col {height: 72px; padding: 20px 5px;}
-#kanbanList .kanban-header-col > .title {margin: 0; line-height: 32px; height: 32px}
-#kanbanList .kanban-header-col > .title > .text {font-weight: bold; max-width: 200px; max-width: calc(100% - 50px);}
-#kanbanList .kanban-header-col > .title > .icon, #kanbanList .kanban-header-col > .title > .count {top: -11px}
+#kanbanList .kanban-header-col > .title > .text {max-width: 200px; max-width: calc(100% - 50px);}
 #kanbanList .kanban-header + .kanban-lane > .kanban-lane-name {margin-top: 0;}
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
-#kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
-#kanbanList .kanban-item > .title {white-space: nowrap; overflow: hidden; text-overflow: clip;}
-#kanbanList .kanban-item.link-block > a {padding: 10px; display: block;}
-#kanbanList .kanban-item.has-progress {padding-right: 40px; position: relative;}
-#kanbanList .kanban-item.has-progress > .progress-pie {position: absolute; right: 7px; top: 7px}
-#kanbanList .kanban-item.has-left-border {border-left: 2px solid #838a9d;}
-#kanbanList .kanban-item.has-left-border.border-left-green {border-left-color: #0bd986;}
-#kanbanList .kanban-item.has-left-border.border-left-red {border-left-color: #ff5d5d;}
-#kanbanList .kanban-item.has-left-border.border-left-blue {border-left-color: #0991ff;}
+#kanbanList .kanban-item.link-block a {padding: 10px; display: block;}
+#kanbanList .kanban-card {display: grid;}
+#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+#kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
+#kanbanList .kanban-card.has-progress > .progress-pie,
+#kanbanList .kanban-card.has-progress > .ring {position: absolute; right: 7px; top: 7px; width: 24px; height: 24px;}
+#kanbanList .kanban-card.has-left-border {border-left: 2px solid #838a9d;}
+#kanbanList .kanban-card.has-left-border.border-left-green {border-left-color: #0bd986;}
+#kanbanList .kanban-card.has-left-border.border-left-red {border-left-color: #ff5d5d;}
+#kanbanList .kanban-card.has-left-border.border-left-blue {border-left-color: #0991ff;}
 #kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="1"] > .kanban-sub-lane {min-height: 90px;}
 #kanbanList .no-flex .kanban-lane > .kanban-sub-lanes[data-sub-lanes-count="2"] > .kanban-sub-lane {min-height: 45px;}
 
 .kanban-affixed {padding-top: 72px;}
 .kanban-affixed > .kanban-header {position: fixed!important; top: 0; background: rgba(80,80,80,.9); color: #fff; z-index: 100;}
 
-#kanbanList .kanban-header-col[data-type="doingProject"],
-#kanbanList .kanban-header-col[data-type="doingProject"] + .kanban-header-col[data-type="doingExecution"] {padding: 38px 10px 0;}
-#kanbanList .kanban-header-col[data-type="doingProject"]:after {content: attr(data-span-text); display: block; position: absolute; z-index: 10; left: 0; right:  -100%; right: calc(-100% - 2px); top: 0; line-height: 36px; text-align: center; font-weight: bold; border-bottom: 2px solid #fff; background-color: #ededed;}
-#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center;}
-#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {background-color: transparent; border: none; padding: 0; text-align: center;}
-#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item:hover {box-shadow: none;}
-#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item > .title {white-space: normal;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center; height: 38px;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: block; white-space: nowrap; text-overflow: clip; overflow: hidden;}
-#kanbanList .kanban-col[data-type="normalRelease"] .kanban-item > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
-#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title {display: block; height: 38px;}
-#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .text {display: inline-block;}
-#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-item > .title > .icon {position: relative; top: -5px}
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-item {padding: 0;}
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-lane-items {height: 100%; display: flex; flex-direction: column; justify-content: center; padding: 0; overflow: hidden;}
+#kanbanList .kanban-card.kanban-card-span,
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card {background-color: transparent; border: none; padding: 0; text-align: center; box-shadow: none!important; margin: 0; height: auto!important;}
+#kanbanList .kanban-card.kanban-card-span:hover,
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card:hover {box-shadow: none;}
+#kanbanList .kanban-card.kanban-card-span > .title,
+#kanbanList .kanban-col[data-type="unclosedProduct"] .kanban-card > .title {white-space: nowrap; line-height: 1;}
+
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: flex; flex-direction: row; flex-wrap: nowrap; align-items: center;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: block; white-space: nowrap; text-overflow: ellipsis; overflow: hidden;}
+#kanbanList .kanban-col[data-type="normalRelease"] .kanban-card > .title.has-icon > .text {margin-right: 5px; max-width: calc(100% - 20px);}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title {display: block; height: 38px;}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title > .text {display: inline-block;}
+#kanbanList .no-flex .kanban-col[data-type="normalRelease"] .kanban-card > .title > .icon {position: relative; top: -5px}
 #kanbanList .kanban-affixed .kanban-header-col[data-type="doingProject"]:after {background-color: #606060;}
 
 /* Show project and execution in one row */
-#kanbanList .kanban-lane-col[data-type="doingProject"] {box-shadow: 2px 0 0 #fff;}
-#kanbanList .kanban-lane-col[data-type="doingProject"] + .kanban-lane-col {border-left: none;}
-#kanbanList .kanban-lane-col[data-type="doingProject"] > .kanban-lane-items {padding: 0; overflow: visible; max-height: none!important;}
-#kanbanList .project-row {position: relative; width: 200%; width: calc(200% + 2px);}
-#kanbanList .project-row + .project-row {border-top: 2px solid #fff;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] + .kanban-lane-col {border-left: none; box-shadow: inset 2px 0 0 #fff;}
+#kanbanList .kanban-lane-col[data-type="doingProject"] > .kanban-lane-items {padding: 0!important; overflow: visible; max-height: none!important;}
+#kanbanList .kanban-item-span {padding: 0!important;}
+#kanbanList .project-row {position: relative; width: 200%; width: calc(200% + 2px); height: 62px!important;}
+#kanbanList .kanban-item-span + .kanban-item-span > .project-row {border-top: 2px solid #fff;}
 #kanbanList .project-row > .project-col {float: left; width: 50%; padding: 10px;}
-#kanbanList .project-row > .project-col + .project-col {padding: 10px 9px 10px 11px;}
 #kanbanList .project-row > .execution-item {position: absolute!important; left: 100%; top: 0}
 </style>
 <script>
@@ -82,6 +78,24 @@ function isEarlierThanToday(date)
         window.todayBegin = now.getTime();
     }
     return $.zui.createDate(date).getTime() < window.todayBegin;
+}
+
+/**
+ * Render normal text span item
+ * @param {Object} item  Product item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderSpanItem(item, $item)
+{
+    var $title = $item.find('.title');
+    if(!$title.length)
+    {
+        $title = $('<div class="title" />').appendTo($item);
+    }
+    $title.text(item.name).attr('title', item.name);
+    return $item.addClass('kanban-card-span');
 }
 
 /**
@@ -167,14 +181,14 @@ function renderProjectItem(item, $item)
 
     if(item.status === 'doing')
     {
-        var progress = item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress || 0) : 0;
-        var $progress = $item.find('.progress-pie');
+        var $progress = $item.find('.ring');
         if(!$progress.length)
         {
-            $progress = $('<div class="progress-pie" data-doughnut-size="90" data-color="#3CB371" data-width="24" data-height="24" data-back-color="#e8edf3"><div class="progress-info"></div></div>').appendTo($item);
+            $progress = $('<div class="ring"><span></span></div>').appendTo($item);
         }
-        $progress.find('.progress-info').text(progress);
-        $progress.attr('data-value', progress).progressPie();
+        var progress = Math.max(0, Math.min(100, Math.round(item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress || 0) : 0)));
+        $progress.find('span').text(progress);
+        $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
         $item.addClass('has-progress');
     }
     return $item.addClass('has-left-border')
@@ -210,6 +224,11 @@ function renderExecutionItem(item, $item)
     }
     $title.text(item.name).attr('title', item.name);
 
+    if(window.statusColorList && window.statusColorList[item.status])
+    {
+        $item.css('borderLeftColor', window.statusColorList[item.status]);
+    }
+
     var progress = item.progress || (item.hours && !Array.isArray(item.hours) ? Math.round(item.hours.progress) : undefined);
     if(progress === undefined && window.hourList)
     {
@@ -218,13 +237,15 @@ function renderExecutionItem(item, $item)
     }
     if(progress !== undefined)
     {
-        var $progress   = $item.find('.progress-pie');
+        var $progress = $item.find('.ring');
         if(!$progress.length)
         {
-            $progress = $('<div class="progress-pie" data-doughnut-size="90" data-color="#3CB371" data-width="24" data-height="24" data-back-color="#e8edf3"><div class="progress-info"></div></div>').appendTo($item);
+            $progress = $('<div class="ring"><span></span></div>').appendTo($item);
         }
-        $progress.find('.progress-info').text(progress);
-        $progress.attr('data-value', progress).progressPie();
+        progress = Math.max(0, Math.min(100, Math.round(progress)));
+        $progress.find('span').text(progress);
+        $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
+        $item.addClass('has-progress');
     }
     var isDelay = item.end && isEarlierThanToday(item.end);
     return $item.addClass('has-progress has-left-border')
@@ -282,16 +303,17 @@ function renderReleaseItem(item, $item)
  */
 function renderDoingProjectItem(item, $item)
 {
-    $item.removeClass('kanban-item').addClass('project-row clearfix').empty();
+    $item.closest('.kanban-item').addClass('kanban-item-span');
+    $item.removeClass('kanban-card').addClass('project-row clearfix').empty();
 
     var $projectCol = $('<div class="project-col"></div>').appendTo($item);
-    var $projectItem = $('<div class="kanban-item project-item"></div>').appendTo($projectCol);
+    var $projectItem = $('<div class="kanban-card project-item"></div>').appendTo($projectCol);
     renderProjectItem(item, $projectItem);
 
     var $executionCol = $('<div class="project-col"></div>').appendTo($item);
     if(item.execution)
     {
-        var $executionItem = $('<div class="kanban-item execution-item"></div>').appendTo($executionCol);
+        var $executionItem = $('<div class="kanban-card execution-item"></div>').appendTo($executionCol);
         renderExecutionItem(item.execution, $executionItem);
     }
 
@@ -301,6 +323,8 @@ function renderDoingProjectItem(item, $item)
 /** All build-in columns renderers */
 if(!window.columnRenderers) window.columnRenderers =
 {
+    span: renderSpanItem,
+    execution: renderExecutionItem,
     unclosedProduct: renderProductItem,
     unexpiredPlan: renderPlanItem,
     waitProject: renderProjectItem,
@@ -331,9 +355,10 @@ function addColumnRenderer(columnType, renderer)
  * @param {Object} col   Column object
  * @returns {JQuery} $item Kanban item element
  */
-function renderKanbanItem(item, $item, col)
+function renderKanbanItem(item, $item, col, lane, kanban)
 {
-    var renderer = window.columnRenderers[col.type];
+    var columnRenderers = window.columnRenderers;
+    var renderer        = columnRenderers[col.cardType] || columnRenderers[col.type] || columnRenderers[lane.defaultCardType || kanban.defaultCardType];
     if(renderer) return renderer(item, $item, col);
     return $item;
 }
@@ -360,23 +385,20 @@ function affixKanbanHeader($kanbanBoard, affixed)
     $kanbanBoard.css('padding-top', affixed ? $header.outerHeight() : '');
 }
 
-/**
- * Update kanban affix state for all boards in page
- */
+/** Update kanban affix state for all boards in page */
 function updateKanbanAffixState()
 {
-    var $boards = $('.kanban-board');
+    var $boards           = $('.kanban-board');
     var $lastAffixedBoard = $boards.filter('.kanban-affixed');
+    var containerTop      = window.kanbanAffixContainer ? $(window.kanbanAffixContainer)[0].getBoundingClientRect().top : 0;
     var $currentAffixedBoard;
-    var currentOffsetTop = 0;
-    var scrollTop = $(window).scrollTop();
+
     $('.kanban-board').each(function()
     {
         var $board = $(this);
-        var offsetTop = $board.offset().top;
-        if(scrollTop >= offsetTop && offsetTop > currentOffsetTop && scrollTop < (offsetTop + $board.outerHeight() - 72))
+        var bounds = $board[0].getBoundingClientRect();
+        if(bounds.top < containerTop && bounds.bottom > (containerTop))
         {
-            currentOffsetTop = offsetTop;
             $currentAffixedBoard = $board;
         }
     });
@@ -389,64 +411,43 @@ function updateKanbanAffixState()
     if($currentAffixedBoard) affixKanbanHeader($currentAffixedBoard, true);
 }
 
+/** Try to update kanban affix state */
+function tryUpdateKanbanAffix()
+{
+    if(window.updateKanbanAffixTimer) $.zui.clearAsap(window.updateKanbanAffixTimer);
+    window.updateKanbanAffixTimer = $.zui.asap(function()
+    {
+        updateKanbanAffixState();
+        window.updateKanbanAffixTimer = null;
+    });
+}
+
 /* Kanban color list for lane name */
 if(!window.kanbanColorList) window.kanbanColorList = ['#32C5FF', '#006AF1', '#9D28B2', '#FF8F26', '#7FBB00', '#424BAC', '#66c5f8', '#EC2761'];
 
 /* Set default options to kanban component */
 $.extend($.fn.kanban.Constructor.DEFAULTS,
 {
-    readonly: true,
-    maxColHeight: 260,
-    /* laneItemsClass: 'scrollbar-hover', */ // only show scrollbar on mouse hover
-    itemRender: renderKanbanItem,
-    useFlex: false,
-    showCount: false,
-    onRenderHeaderCol: function($col, col)
+    readonly:        true,
+    maxColHeight:    260,
+    itemRender:      renderKanbanItem,
+    showCount:       true,
+    showZeroCount:   true,
+    fluidBoardWidth: true,
+    onRenderLaneName: function($name, lane, $kanban, columns, kanban)
     {
-        if(col.type === 'doingProject') $col.attr('data-span-text', doingText);
+        var color = kanbanColorList[lane.$index % kanbanColorList.length];
+        $name.css('background-color', color);
     },
-    onRenderKanban: function($kanban, kanbanData)
+    onCreate: function(kanban)
     {
-        $kanban.find('.kanban-lane-name').each(function(index)
-        {
-            var color = kanbanColorList[index % kanbanColorList.length];
-            $(this).css('background-color', color);
-        });
-
-        /* Update project count and execution count */
-        var doingProjectCount   = 0;
-        var doingExecutionCount = 0;
-        var $doingProjectItems = $kanban.find('.kanban-lane-col[data-type="doingProject"] > .kanban-lane-items');
-        if($doingProjectItems.length)
-        {
-            doingProjectCount = $doingProjectItems.find('.project-item').length;
-            doingExecutionCount = $doingProjectItems.find('.execution-item').length;
-        }
-        $kanban.find('.kanban-header-col[data-type="doingProject"] > .title > .count').text(doingProjectCount || 0);
-        $kanban.find('.kanban-header-col[data-type="doingExecution"] > .title > .count').text(doingExecutionCount || 0);
-
-        updateKanbanAffixState();
+        kanban.$.on('scroll', tryUpdateKanbanAffix);
+        tryUpdateKanbanAffix();
     }
 });
 
 $(function()
 {
-    /* Update kanban affix state on window resize or scroll */
-    var updateTimer;
-    var updateCallback = function()
-    {
-        updateKanbanAffixState();
-        updateTimer = null;
-    };
-    $(window).on('scroll resize', function(e)
-    {
-        if(updateTimer)
-        {
-            if(window.requestAnimationFrame) cancelAnimationFrame(updateTimer);
-            else clearTimeout(updateTimer);
-        }
-        if(window.requestAnimationFrame) updateTimer = requestAnimationFrame(updateCallback);
-        else updateTimer = setTimeout(updateCallback, 50);
-    });
+    $(window.kanbanAffixContainer || window).on('scroll resize', tryUpdateKanbanAffix);
 });
 </script>
