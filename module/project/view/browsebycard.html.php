@@ -162,7 +162,7 @@
                 </a>
                 <?php endforeach;?>
                 <?php if($project->teamCount > 3):?>
-                <?php echo '<span>…</span>';?>
+                <?php if($project->teamCount > 4) echo '<span>…</span>';?>
                 <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
                   <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member)); ?>
                 </a>

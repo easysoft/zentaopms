@@ -16,15 +16,15 @@
     <div class='main-header'>
     <h2><span><?php echo $lang->kanban->splitColumn;?></span></h2>
     </div>
-    <form metdod='post' enctype='multipart/form-data' target='hiddenwin' id='columnForm'>
+    <form class='form-ajax' metdod='post' enctype='multipart/form-data' id='columnForm'>
       <table class='table table-form'>
         <?php $i = 1;?>
         <tr>
           <td class='c-id'><strong><?php echo $i;?></strong></td>
           <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
-          <td class='c-name'><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
+          <td class='c-name required'><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
           <td class='c-colorTitle'><strong><?php echo $lang->kanbancolumn->childColor;?></strong></td>
-          <td class='c-color'><?php echo html::select("color[$i]", '', '', "class='form-control chosen'");?></td>
+          <td class='c-color required'><?php echo html::select("color[$i]", '', '', "class='form-control chosen'");?></td>
           <td class='c-colorTitle'><strong><?php echo $lang->kanban->WIPCount;?></strong></td>
           <td class='c-WIPCount required'>
             <div class="table-col">
@@ -33,7 +33,7 @@
             <div class="table-col w-50px">
               <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-widtd: 0px;">
                 <div class='checkbox-primary'>
-                  <input id="noLimit<?php echo $i;?>" name="noLimit<?php echo $i;?>" value='-1' type='checkbox' class='no-margin' checked/>
+                  <input id="noLimit<?php echo $i;?>" name="noLimit[<?php echo $i;?>]" value='-1' type='checkbox' class='no-margin' checked/>
                   <label for='needNotReview'><?php echo $lang->kanban->noLimit;?></label>
                 </div>
               </span>
@@ -55,7 +55,7 @@
             <div class="table-col w-50px">
               <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-widtd: 0px;">
                 <div class='checkbox-primary'>
-                  <input id="noLimit<?php echo $i;?>" name="noLimit<?php echo $i;?>" value='-1' type='checkbox' class='no-margin' checked/>
+                  <input id="noLimit<?php echo $i;?>" name="noLimit[<?php echo $i;?>]" value='-1' type='checkbox' class='no-margin' checked/>
                   <label for='needNotReview'><?php echo $lang->kanban->noLimit;?></label>
                 </div>
               </span>
@@ -66,6 +66,7 @@
             <a href='javascript:;' onclick='deleteItem(this)' class='btn btn-link'><i class='icon icon-close'></i></a>
           </td>
         </tr>
+        <?php $i++;?>
         <tr>
           <td colspan='12' class='text-center form-actions'>
             <?php echo html::submitButton();?>
@@ -94,7 +95,7 @@
         <div class="table-col w-50px">
           <span class="input-group-addon" style="border: 1px solid #dcdcdc; border-left-widtd: 0px;">
             <div class='checkbox-primary'>
-              <input id="noLimit<?php echo $i;?>" name="noLimit<?php echo $i;?>" value='-1' type='checkbox' class='no-margin' checked/>
+              <input id="noLimit<?php echo $i;?>" name="noLimit[<?php echo $i;?>]" value='-1' type='checkbox' class='no-margin' checked/>
               <label for='needNotReview'><?php echo $lang->kanban->noLimit;?></label>
             </div>
           </span>

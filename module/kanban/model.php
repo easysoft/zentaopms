@@ -311,6 +311,69 @@ class kanbanModel extends model
     }
 
     /**
+     * Split column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function splitColumn($columnID)
+    {
+        $this->loadModel('action');
+        $data            = fixer::input('post')->get();
+        $column          = $this->getColumnByID($columnID);
+        $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
+        $order           = $maxOrder + 1;
+        $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
+
+        $childrenColumn  = array();
+        foreach($data->name as $i => $name)
+        {
+            $childColumn = new stdclass();
+            $childColumn->lane   = $column->lane;
+            $childColumn->parent = $column->id;
+            $childColumn->region = $column->region;
+            $childColumn->group  = $column->group;
+            $childColumn->name   = $name;
+            $childColumn->color  = $data->color[$i];
+            $childColumn->limit  = isset($data->noLimit[$i]) ? -1 : $data->WIPCount[$i];
+            $childColumn->order  = $order;
+
+            if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!isset($data->noLimit[$i]) and $childColumn->limit <= 0))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+                return false;
+            }
+
+            $sumChildLimit += $childColumn->limit;
+            if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                return false;
+            }
+
+            $order ++;
+            $childrenColumn[$i] = $childColumn;
+        }
+
+        foreach($childrenColumn as $i => $childColumn)
+        {
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($childColumn)
+                ->autoCheck()
+                ->batchCheck($this->config->kanban->splitcolumn->requiredFields, 'notempty')
+                ->exec();
+
+            if(dao::isError()) return false;
+            if(!dao::isError())
+            {
+                $childColumnID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
+                $this->action->create('kanbanColumn', $childColumnID, 'created');
+            }
+        }
+    }
+
+    /**
      * Create a kanban card.
      *
      * @param  int $kanbanID

@@ -447,6 +447,13 @@ class kanban extends control
      */
     public function splitColumn($columnID)
     {
+        if(!empty($_POST['name']))
+        {
+            $this->kanban->splitColumn($columnID);
+            if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
+            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
+        }
+
         $this->display();
     }
 
