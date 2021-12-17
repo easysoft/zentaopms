@@ -453,14 +453,33 @@ if(!window.kanbanDropRules)
     {
         story:
         {
-            blacklog: true,
-            ready: ['blacklog', 'dev-doing'],
-            'dev-doing': ['dev-done'],
-            'dev-done': ['test-doing'],
-            'test-doing': ['test-done'],
-            'test-done': ['accepted'],
-            'accepted': ['published'],
-            'published': false,
+            backlog: true,
+            ready: ['backlog', 'doing'],
+            'doing': ['developed'],
+            'developed': ['doing', 'testing'],
+            'testing': ['tested'],
+            'tested': ['verified'],
+            'verified': ['released'],
+            'released': false,
+        },
+        bug:
+        {
+            'unconfirmed': ['confirmed'],
+            'confirmed': ['fixing'],
+            'fixing': ['fixed'],
+            'fixed': ['testing'],
+            'testing': ['tested'],
+            'tested': ['closed'],
+            'closed': ['fixing'],
+        },
+        task:
+        {
+            'wait': ['developing', 'developed', 'canceled', 'closed'],
+            'developing': ['developed', 'pause'],
+            'developed': ['canceled', 'closed'],
+            'pause': ['developing'],
+            'canceled': ['developing'],
+            'closed': ['developing'],
         }
     }
 }
@@ -511,6 +530,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     var objectID    = card.id;
     var showIframe  = false;
 
+    /* Task lane. */
     if(kanbanID == 'task')
     {
         if(toColType == 'developed')
@@ -557,6 +577,44 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
                 var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
                 showIframe = true;
             }
+        }
+    }
+
+    /* Bug lane. */
+    if(kanbanID == 'bug')
+    {
+        if(toColType == 'confirmed')
+        {
+            if(fromColType == 'unconfirmed' && priv.canConfirmBug)
+            {
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+    }
+
+    /* Story lane. */
+    if(kanbanID == 'story')
+    {
+        if(toColType == 'ready' || toColType == 'backlog')
+        {
+            var colID = card.$col.columnID;
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&colID=' + colID + '&toColType=' + toColType + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            $.get(link, function(data)
+            {
+                if(data)
+                {
+                    kanbanGroup = $.parseJSON(data);
+                    if(groupBy == 'default')
+                    {
+                        updateKanban('story', kanbanGroup.story);
+                    }
+                    else
+                    {
+                        updateKanban(browseType, kanbanGroup[groupBy]);
+                    }
+                }
+            })
         }
     }
 
