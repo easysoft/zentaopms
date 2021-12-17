@@ -1177,4 +1177,61 @@ class repo extends control
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
 
+    /**
+     * API: get repo by url.
+     *
+     * @param  string $type  gitlab
+     * @access public
+     * @return void
+     */
+    public function apiGetRepoByUrl($type = 'gitlab')
+    {
+        if($type != 'gitlab') return $this->send(array('result' => 'fail', 'message' => 'Now only search gitlab.'));
+
+        $url       = urldecode($this->get->url);
+        $parsedUrl = parse_url($url);
+
+        $isSSH         = $parsedUrl['scheme'] == 'ssh';
+        $gitlabBaseURL = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
+
+        $gitlabs = $this->dao->select('*')->from(TABLE_PIPELINE)->where('type')->eq('gitlab')
+            ->beginIF($isSSH)->andWhere('url')->like("%{$parsedUrl['host']}%")->fi()
+            ->beginIF(!$isSSH)->andWhere('url')->eq($gitlabBaseURL)->fi()
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        $this->loadModel('gitlab');
+        $matched = new stdclass();
+        $matched->gitlab  = 0;
+        $matched->project = 0;
+        foreach($gitlabs as $gitlabID => $gitlab)
+        {
+            $projects = $this->gitlab->apiGetProjects($gitlabID);
+            foreach($projects as $project)
+            {
+                if((!$isSSH and $project->http_url_to_repo == $url) or ($isSSH and $project->ssh_url_to_repo == $url))
+                {
+                    $matched->gitlab  = $gitlabID;
+                    $matched->project = $project->id;
+                    break;
+                }
+            }
+        }
+
+        $matchedRepo = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')
+            ->andWhere('client')->eq($matched->gitlab)
+            ->andWhere('path')->eq($matched->project)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('preMerge')->eq(1)
+            ->orderBy('id_desc')
+            ->fetch();
+        if(empty($matchedRepo)) return $this->send(array('result' => 'fail', 'message' => 'No matched gitlab.'));
+        if(empty($matchedRepo->linkJob)) return $this->send(array('result' => 'fail', 'message' => 'No linked job.'));
+
+        $job = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($matchedRepo->linkJob)->andWhere('deleted')->eq(0)->fetch();
+        if(empty($job)) return $this->send(array('result' => 'fail', 'message' => 'Linked job is not exists.'));
+
+        $matchedRepo->linkJob = $job;
+        return $this->send(array('result' => 'success', 'data' => $matchedRepo));
+    }
 }
