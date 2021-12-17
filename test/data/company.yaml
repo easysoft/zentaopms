@@ -6,14 +6,14 @@ fields:
   - field: id
     note: "id"
     range: 1
-  - field: name 
+  - field: name
     note: "公司名"
     range: 易软天创网络科技有限公司
-  - field: admins 
+  - field: admins
     note: "管理员"
-    prefix: "," 
+    prefix: ","
     range: admin
-    postfix: "," 
+    postfix: ","
   - field: phone
     note: "电话"
     range: 15666933065
@@ -23,9 +23,9 @@ fields:
   - field: website
     note: "网站"
     range: www.zentao.net
-  - field: guest 
+  - field: guest
     note: "匿名登录"
     range: 0
-  - field: deleted 
+  - field: deleted
     note: "是否删除"
     range: 0

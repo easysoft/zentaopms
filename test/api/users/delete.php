@@ -8,7 +8,7 @@ title=删除用户;
 cid=1
 pid=1
 
-删除用户 >> message:success
+删除ID为10的用户，判断返回信息 >> message:success
 
 */
 

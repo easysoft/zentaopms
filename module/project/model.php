@@ -127,12 +127,6 @@ class projectModel extends model
             if($projectID and strpos(",{$this->app->user->view->projects},", ",{$this->session->project},") === false and !empty($projects)) $this->accessDenied();
         }
 
-        /* Reset program priv. */
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
-        $this->loadModel('common')->resetProjectPriv($this->session->project);
-        if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
-
         return $this->session->project;
     }
 
@@ -2080,6 +2074,13 @@ class projectModel extends model
         }
 
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
+
+        /* Reset project priv. */
+        $moduleName = $this->app->getModuleName();
+        $methodName = $this->app->getMethodName();
+
+        $this->loadModel('common')->resetProjectPriv($objectID);
+        if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
         common::setMenuVars('project', $objectID);
     }
 }

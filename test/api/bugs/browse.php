@@ -8,10 +8,19 @@ title=测试API 获取bug列表
 cid=1
 pid=1
 
-通过正确的productID获取bug列表的状态码 >> 200
-通过错误的productID获取bug列表的状态码 >> 200
-通过正确的productID获取bug列表的数量 >> 10
-通过错误的productID获取bug列表的数量 >> 0
+ >> /bugs/
+创建最少字段的Bug >> product required.
+创建最少字段的Bug >> title required.
+创建最少字段的Bug >> Bug1
+创建最多字段的Bug >> Bug2
+创建不存在产品的Bug >> product does not exist.
+ >> Bug2
+ >> Bug1
+ >> Bug1
+ >> Bug1
+ >> Bug3
+ >> Bug3
+ >> true
 
 */
 
