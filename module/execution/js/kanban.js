@@ -453,7 +453,7 @@ if(!window.kanbanDropRules)
     {
         story:
         {
-            backlog: 'ready',
+            backlog: ['ready'],
             ready: ['backlog', 'doing'],
             'doing': ['developed'],
             'developed': ['doing', 'testing'],
