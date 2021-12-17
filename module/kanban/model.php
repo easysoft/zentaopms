@@ -266,10 +266,11 @@ class kanbanModel extends model
         {
             /* Create a child column. */
             $parentColumn = $this->getColumnByID($column->parent);
-            if($parentColumn->limit)
+            if($parentColumn->limit != -1)
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
-                if(!$limit or ($limit > $parentColumn->limit and $parentColumn->limit != -1))
+                $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->fetch('sumChildLimit');
+                if($limit == -1 or (($limit + $sumChildLimit) > $parentColumn->limit))
                 {
                     dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
                     return false;
