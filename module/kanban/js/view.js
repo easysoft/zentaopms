@@ -314,7 +314,6 @@ function renderKanbanItem(item, $item)
     /* Display avatars of assignedTo. */
     var assignedTo = item.assignedTo.split(',');
     var $user = $info.children('.user');
-
     $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', assignedTo);
 
     $item.css('background-color', item.color);
