@@ -17,8 +17,22 @@
     <?php echo html::a($this->createLink('stakeholder', 'browse', 'browseType=all'), '<span class="text">' . $lang->stakeholder->browse . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
+    <?php if(common::hasPriv('stakeholder', 'batchcreate') and common::hasPriv('stakeholder', 'create')):?>
+    <div class='btn-group dropdown'>
+      <?php
+      $actionLink = $this->createLink('stakeholder', 'create', "projectID=$projectID");
+      echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary'");
+      ?>
+      <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
+      <ul class='dropdown-menu pull-right'>
+        <li><?php echo html::a($actionLink, $lang->stakeholder->create);?></li>
+        <li><?php echo html::a($this->createLink('stakeholder', 'batchCreate', "projectID=$projectID&from="), $lang->stakeholder->batchCreate);?></li>
+      </ul>
+    </div>
+    <?php else:?>
     <?php common::printLink('stakeholder', 'batchcreate', "projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->stakeholder->batchCreate, '', "class='btn btn-primary'");?>
     <?php common::printLink('stakeholder', 'create', "projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->stakeholder->create, '', "class='btn btn-primary'");?>
+    <?php endif;?>
   </div>
 </div>
 <div id='mainContent' class='main-row fade'>
