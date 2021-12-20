@@ -125,7 +125,7 @@ $config->project->datatable->fieldList['actions']['width']    = '180';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
-$config->project->removePriv['project']   = array('browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle');
+$config->project->removePriv['project']   = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle');
 $config->project->removePriv['bug']       = array('batchChangePlan');
 $config->project->removePriv['doc']       = array('catalog', 'index');
 $config->project->removePriv['auditplan'] = array('delete');
