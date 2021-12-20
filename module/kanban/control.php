@@ -401,7 +401,7 @@ class kanban extends control
     public function sortLane($regionID, $lanes = '')
     {
         if(empty($lanes)) return;
-        $lanes   = explode(',', trim($lanes, ','));
+        $lanes = explode(',', trim($lanes, ','));
 
         $order = 1;
         foreach($lanes as $laneID)
