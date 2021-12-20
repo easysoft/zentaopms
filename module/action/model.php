@@ -1384,7 +1384,7 @@ class actionModel extends model
         {
             $module     = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
             $repeatName = $this->loadModel('tree')->checkUnique($module);
-            if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+            if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
         }
 
         /* Update deleted field in object table. */

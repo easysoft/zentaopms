@@ -85,7 +85,7 @@ class action extends control
     public function undelete($actionID)
     {
         $this->action->undelete($actionID);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -98,7 +98,7 @@ class action extends control
     public function hideOne($actionID)
     {
         $this->action->hideOne($actionID);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -112,12 +112,12 @@ class action extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->action->confirmHideAll, inlink('hideAll', "confirm=yes")));
+            echo js::confirm($this->lang->action->confirmHideAll, inlink('hideAll', "confirm=yes"));
         }
         else
         {
             $this->action->hideAll();
-            die(js::reload('parent'));
+            echo js::reload('parent');
         }
     }
 
@@ -138,7 +138,7 @@ class action extends control
         }
         else
         {
-            die(js::reload('parent'));
+            echo js::reload('parent');
         }
     }
 
