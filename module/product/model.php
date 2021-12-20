@@ -1448,10 +1448,10 @@ class productModel extends model
         }
 
         $plans    = $this->dao->select('count(*) AS count')->from(TABLE_PRODUCTPLAN)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('end')->gt(helper::now())->fetch();
-        $builds   = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-        $cases    = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-        $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
-        $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
+        $builds   = $this->dao->select('count(*) AS count')->from(TABLE_BUILD)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+        $cases    = $this->dao->select('count(*) AS count')->from(TABLE_CASE)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+        $bugs     = $this->dao->select('count(*) AS count')->from(TABLE_BUG)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
+        $docs     = $this->dao->select('count(*) AS count')->from(TABLE_DOC)->where('product')->eq($productID)->andWhere('deleted')->eq(0)->fetch();
         $releases = $this->dao->select('count(*) AS count')->from(TABLE_RELEASE)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch();
         $projects = $this->dao->select('count("t1.*") AS count')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
@@ -1477,7 +1477,7 @@ class productModel extends model
         $product->bugs       = $bugs       ? $bugs->count : 0;
         $product->docs       = $docs       ? $docs->count : 0;
 
-        $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('status')->eq('closed')->andWhere('product')->eq($productID)->fetch('count');
+        $closedTotal = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->andWhere('status')->eq('closed')->fetch('count');
         $allTotal    = $this->dao->select('count(id) AS count')->from(TABLE_STORY)->where('deleted')->eq(0)->andWhere('product')->eq($productID)->fetch('count');
         $product->progress = empty($closedTotal) ? 0 : round($closedTotal / $allTotal * 100, 1);
 
@@ -1588,33 +1588,33 @@ class productModel extends model
 
         $bugs = $this->dao->select('product,count(*) AS conut')
             ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andWhere('product')->in($productKeys)
+            ->where('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
 
         $unResolved = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andwhere('status')->eq('active')
+            ->where('status')->eq('active')
             ->andWhere('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
 
         $fixedBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andwhere('status')->eq('closed')
+            ->where('status')->eq('closed')
             ->andWhere('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('resolution')->eq('fixed')
             ->groupBy('product')
             ->fetchPairs();
 
         $closedBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andwhere('status')->eq('closed')
+            ->where('status')->eq('closed')
             ->andWhere('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
 
@@ -1622,17 +1622,17 @@ class productModel extends model
         $weekDate     = date::getThisWeek();
         $thisWeekBugs = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andWhere('openedDate')->between($weekDate['begin'], $weekDate['end'])
+            ->where('openedDate')->between($weekDate['begin'], $weekDate['end'])
             ->andWhere('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
 
         $assignToNull = $this->dao->select('product,count(*) AS count')
             ->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andwhere('assignedTo')->eq('')
+            ->where('assignedTo')->eq('')
             ->andWhere('product')->in($productKeys)
+            ->andWhere('deleted')->eq(0)
             ->groupBy('product')
             ->fetchPairs();
 
@@ -1741,8 +1741,8 @@ class productModel extends model
         $hourList = $this->loadModel('project')->computerProgress($latestExecutionList);
 
         $releaseList = $this->dao->select('id,product,name,marker')->from(TABLE_RELEASE)
-            ->where('product')->in(array_keys($productList))
-            ->andWhere('deleted')->eq('0')
+            ->where('deleted')->eq('0')
+            ->andWhere('product')->in(array_keys($productList))
             ->andWhere('status')->eq('normal')
             ->fetchGroup('product', 'id');
 

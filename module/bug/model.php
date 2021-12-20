@@ -2353,13 +2353,13 @@ class bugModel extends model
     public function getUnconfirmed($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
-            ->where('confirmed')->eq(0)
+            ->where('product')->in($productIDList)
+            ->andWhere('execution')->in(array_keys($executions))
+            ->andWhere('deleted')->eq(0)
+            ->andWhere('confirmed')->eq(0)
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
-            ->andWhere('product')->in($productIDList)
-            ->andWhere('execution')->in(array_keys($executions))
-            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)->page($pager)->fetchAll();
     }
 
@@ -2380,8 +2380,8 @@ class bugModel extends model
     public function getOverdueBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager, $projectID)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('product')->in($productIDList)
+            ->where('product')->in($productIDList)
+            ->andWhere('execution')->in(array_keys($executions))
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
@@ -2409,8 +2409,8 @@ class bugModel extends model
     public function getByStatus($productIDList, $branch, $modules, $executions, $status, $orderBy, $pager, $projectID)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
-            ->where('execution')->in(array_keys($executions))
-            ->andWhere('product')->in($productIDList)
+            ->where('product')->in($productIDList)
+            ->andWhere('execution')->in(array_keys($executions))
             ->beginIF($branch !== 'all')->andWhere('branch')->in($branch)->fi()
             ->beginIF($modules)->andWhere('module')->in($modules)->fi()
             ->beginIF($status == 'unclosed')->andWhere('status')->ne('closed')->fi()
@@ -3051,8 +3051,8 @@ class bugModel extends model
     {
         return $this->dao->select('id')
             ->from(TABLE_PROJECT)
-            ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('project')
+            ->where('type')->eq('project')
+            ->andWhere('deleted')->eq(0)
             ->fetchPairs('id');
     }
 }
