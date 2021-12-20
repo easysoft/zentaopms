@@ -568,6 +568,7 @@ class actionModel extends model
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
 
+        $kanbanModuleList = array('kanbanspace', 'kanban', 'kanbanregion', 'kanbanlane', 'kanbancolumn', 'kanbancard');
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
@@ -579,6 +580,10 @@ class actionModel extends model
             {
                 $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
                 $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
+            }
+            elseif(in_array($objectType, $kanbanModuleList))
+            {
+                $objectNames[$objectType] = $this->dao->select("*")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
             }
             else
             {
@@ -595,8 +600,24 @@ class actionModel extends model
                 if(isset($objectNames['gitlab'][$trash->objectID]))  $objectType = 'gitlab';
                 if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
                 $trash->objectType = $objectType;
+                $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
             }
-            $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
+            elseif(in_array($objectType, $kanbanModuleList))
+            {
+                if($trash->objectID == 0)
+                {
+                    $trash->kanbanID = 0;
+                }
+                elseif($objectType == 'kanbanregion')
+                {
+                    $trash->kanbanID = $objectNames[$objectType][$trash->objectID]->kanban;
+                }
+                elseif(in_array($objectType, array('kanbanlane', 'kanbancolumn', 'kanbancard')))
+                {
+                    $trash->kanbanID = $this->loadModel('kanban')->getRegionById($objectNames[$objectType][$trash->objectID]->region)->kanban;
+                }
+                $trash->objectName = isset($objectNames[$objectType][$trash->objectID]->name) ? $objectNames[$objectType][$trash->objectID]->name : '';
+            }
         }
         return $trashes;
     }

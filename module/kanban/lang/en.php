@@ -266,6 +266,8 @@ $lang->kanbancard->archivedDate    = 'Archived Date';
 $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = 'No Assigned';
 $lang->kanbancard->deadlineAB      = 'DL';
+$lang->kanbancard->beginAB         = 'Begin';
+$lang->kanbancard->to              = 'to';
 
 $lang->kanbancard->confirmDelete = 'Do you want to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
 

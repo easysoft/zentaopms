@@ -391,6 +391,29 @@ class kanban extends control
     }
 
     /**
+     * Sort lanes.
+     *
+     * @param  int    $regionID
+     * @param  string $lanes
+     * @access public
+     * @return void
+     */
+    public function sortLane($regionID, $lanes = '')
+    {
+        if(empty($lanes)) return;
+        $lanes = explode(',', trim($lanes, ','));
+
+        $order = 1;
+        foreach($lanes as $laneID)
+        {
+            $this->dao->update(TABLE_KANBANLANE)->set('`order`')->eq($order)->where('id')->eq($laneID)->andWhere('region')->eq($regionID)->exec();
+            $order++;
+        }
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
+
+    /**
      * Delete a lane.
      *
      * @param  int    $laneID
@@ -710,6 +733,34 @@ class kanban extends control
             $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($objectIdList)->where('id')->eq($colID)->exec();
         }
         echo true;
+    }
+
+    /**
+     * Ajax move card.
+     * 
+     * @param  int    $cardID 
+     * @param  int    $fromColID
+     * @param  string $toColType
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $browseType
+     * @access public
+     * @return json 
+     */
+    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColType = 'ready', $executionID = 0, $browseType = 'all', $groupBy = '')
+    {
+        $fromColumn = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch();
+        $toColumn   = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('type')->eq($toColType)->andWhere('lane')->eq($fromColumn->lane)->fetch();
+
+        $fromCards = str_replace(",$cardID,", ',', $fromColumn->cards); 
+        $fromCards = $fromCards == ',' ? '' : $fromCards;
+        $toCards   = ",$cardID," . ltrim($toColumn->cards, ',');
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($fromCards)->where('id')->eq($fromColumn->id)->exec();
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($toCards)->where('id')->eq($toColumn->id)->exec();
+
+        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+        die(json_encode($kanbanGroup));
     }
 
     /**
