@@ -120,14 +120,13 @@ class api extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteRelease', "libID=$libID&id=$id&confirm=yes"), '');
-            die;
+            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteRelease', "libID=$libID&id=$id&confirm=yes"), ''));
         }
         else
         {
             $this->api->deleteRelease($id);
             if(dao::isError()) return $this->sendError(dao::getError());
-            die(js::locate(inlink('releases', "libID=$libID"), 'parent'));
+            return print(js::locate(inlink('releases', "libID=$libID"), 'parent'));
         }
     }
 
@@ -298,15 +297,14 @@ class api extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteStruct', "libID=$libID&structID=$structID&confirm=yes"), '');
-            die;
+            return print(js::confirm($this->lang->custom->notice->confirmDelete, $this->createLink('api', 'deleteStruct', "libID=$libID&structID=$structID&confirm=yes"), ''));
         }
         else
         {
             $this->api->deleteStruct($structID);
             if(dao::isError()) return $this->sendError(dao::getError());
             $this->action->create('apistruct', $structID, 'Deleted');
-            die(js::locate(inlink('struct', "libID=$libID"), 'parent'));
+            return print(js::locate(inlink('struct', "libID=$libID"), 'parent'));
         }
     }
 
@@ -390,7 +388,7 @@ class api extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->api->confirmDeleteLib, $this->createLink('api', 'deleteLib', "libID=$libID&confirm=yes")));
+            return print(js::confirm($this->lang->api->confirmDeleteLib, $this->createLink('api', 'deleteLib', "libID=$libID&confirm=yes")));
         }
         else
         {
@@ -398,10 +396,10 @@ class api extends control
             if(isonlybody())
             {
                 unset($_GET['onlybody']);
-                die(js::locate($this->createLink('api', 'index'), 'parent.parent'));
+                return print(js::locate($this->createLink('api', 'index'), 'parent.parent'));
             }
 
-            die(js::locate($this->createLink('api', 'index'), 'parent'));
+            return print(js::locate($this->createLink('api', 'index'), 'parent'));
         }
     }
 
@@ -514,7 +512,7 @@ class api extends control
         if($confirm == 'no')
         {
             $tips = $this->lang->api->confirmDelete;
-            die(js::confirm($tips, inlink('delete', "apiID=$apiID&confirm=yes")));
+            return print(js::confirm($tips, inlink('delete', "apiID=$apiID&confirm=yes")));
         }
         else
         {
@@ -594,7 +592,7 @@ class api extends control
         $this->loadModel('tree');
         $childModules = $this->tree->getOptionMenu($libID, 'api');
         $select       = ($type == 'module') ? html::select('module', $childModules, '0', "class='form-control chosen'") : html::select('parent', $childModules, '0', "class='form-control chosen'");
-        die($select);
+        echo $select;
     }
 
 
@@ -751,7 +749,7 @@ EOT;
      */
     public function getModel($moduleName, $methodName, $params = '')
     {
-        if(!$this->config->features->apiGetModel) die(sprintf($this->lang->api->error->disabled, '$config->features->apiGetModel'));
+        if(!$this->config->features->apiGetModel) return printf($this->lang->api->error->disabled, '$config->features->apiGetModel');
 
         $params    = explode(',', $params);
         $newParams = array_shift($params);
@@ -764,12 +762,12 @@ EOT;
         parse_str($newParams, $params);
         $module = $this->loadModel($moduleName);
         $result = call_user_func_array(array(&$module, $methodName), $params);
-        if(dao::isError()) die(json_encode(dao::getError()));
+        if(dao::isError()) return print(json_encode(dao::getError()));
         $output['status'] = $result ? 'success' : 'fail';
         $output['data']   = json_encode($result);
         $output['md5']    = md5($output['data']);
         $this->output     = json_encode($output);
-        die($this->output);
+        print($this->output);
     }
 
     /**
@@ -821,14 +819,14 @@ EOT;
      */
     public function sql($keyField = '')
     {
-        if(!$this->config->features->apiSQL) die(sprintf($this->lang->api->error->disabled, '$config->features->apiSQL'));
+        if(!$this->config->features->apiSQL) return printf($this->lang->api->error->disabled, '$config->features->apiSQL');
 
         $sql    = isset($_POST['sql']) ? $this->post->sql : '';
         $output = $this->api->sql($sql, $keyField);
 
         $output['sql'] = $sql;
         $this->output  = json_encode($output);
-        die($this->output);
+        print($this->output);
     }
 
     /**
