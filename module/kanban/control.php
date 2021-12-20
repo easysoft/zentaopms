@@ -584,6 +584,23 @@ class kanban extends control
         $this->display();
     }
 
+    /**
+     * Move a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $toColID
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function moveCard($cardID, $toColID, $kanbanID)
+    {
+        $this->kanban->moveCard($cardID, $toColID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
+        die(json_encode($kanbanGroup));
+    }
+
 	/**
 	 * Delete a card.
 	 *
@@ -757,22 +774,22 @@ class kanban extends control
 
     /**
      * Ajax move card.
-     * 
-     * @param  int    $cardID 
+     *
+     * @param  int    $cardID
      * @param  int    $fromColID
      * @param  string $toColType
      * @param  int    $executionID
      * @param  string $browseType
      * @param  string $browseType
      * @access public
-     * @return json 
+     * @return json
      */
     public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColType = 'ready', $executionID = 0, $browseType = 'all', $groupBy = '')
     {
         $fromColumn = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch();
         $toColumn   = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('type')->eq($toColType)->andWhere('lane')->eq($fromColumn->lane)->fetch();
 
-        $fromCards = str_replace(",$cardID,", ',', $fromColumn->cards); 
+        $fromCards = str_replace(",$cardID,", ',', $fromColumn->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
         $toCards   = ",$cardID," . ltrim($toColumn->cards, ',');
 
