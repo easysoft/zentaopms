@@ -22,7 +22,7 @@ body {background-color: #fff}
 .region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
 .region .sort .region-header {cursor: move;}
 
-.region .kanban {padding: 0px 10px 10px 10px; min-height: unset;}
+.region .kanban {padding: 0px 10px 10px 10px; min-height: unset; overflow: auto}
 .region .kanban .form-actions {margin: 0;}
 .region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
 
