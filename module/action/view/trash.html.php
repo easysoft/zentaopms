@@ -71,13 +71,13 @@
             {
                 echo $action->objectName;
             }
-            elseif($action->objectType == 'kanban' or $action->objectType == 'kanbanspce')
+            elseif(in_array($action->objectType, array('kanban', 'kanbanspace')))
             {
                 echo html::a($this->createLink('kanban', 'space'), $action->objectName, '_self', "title={$action->objectName}");
             }
-            elseif(strpos($action->objectType, 'kanban') >= 0)
+            elseif(in_array($action->objectType, array('kanbanregion', 'kanbanlane', 'kanbancolumn', 'kanbancard')))
             {
-                echo html::a($this->createLink('kanban', 'view', "kanbanID={$action->openID}"), $action->objectName, '_self', "title={$action->objectName}");
+                echo html::a($this->createLink('kanban', 'view', "kanbanID={$action->kanbanID}"), $action->objectName, '_self', "title={$action->objectName}");
             }
             else
             {

@@ -121,12 +121,12 @@ $lang->action->objectTypes['mr']            = '合并请求';
 $lang->action->objectTypes['gitlabproject'] = 'GitLab项目';
 $lang->action->objectTypes['gitlabuser']    = 'GitLab用户';
 $lang->action->objectTypes['gitlabgroup']   = 'GitLab群组';
-$lang->action->objectTypes['kanbanspace']   = '空间';
+$lang->action->objectTypes['kanbanspace']   = '看板空间';
 $lang->action->objectTypes['kanban']        = '看板';
-$lang->action->objectTypes['kanbanregion']  = '区域';
-$lang->action->objectTypes['kanbanlane']    = '泳道';
-$lang->action->objectTypes['kanbancolumn']  = '列';
-$lang->action->objectTypes['kanbancard']    = '卡片';
+$lang->action->objectTypes['kanbanregion']  = '看板区域';
+$lang->action->objectTypes['kanbanlane']    = '看板泳道';
+$lang->action->objectTypes['kanbancolumn']  = '看板列';
+$lang->action->objectTypes['kanbancard']    = '看板卡片';
 
 
 /* 用来描述操作历史记录。*/

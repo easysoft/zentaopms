@@ -801,7 +801,6 @@ $(function()
     {
         selector: '.region, .kanban-board, .kanban-lane',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
-        listenClick : false,
         targetSelector: function($ele)
         {
             /* Sort regions */
