@@ -232,6 +232,7 @@ function renderUsersAvatar(users, itemID, size)
         assignees.splice(1, assignees.length - 2, '<span>...</span>');
         assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
     }
+
     return assignees;
 }
 
