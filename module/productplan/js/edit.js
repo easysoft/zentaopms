@@ -12,6 +12,13 @@ function convertStringToDate(dateString)
 
     return Date.parse(dateString);
 }
+function loadWarning(branch)
+{
+    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&oldBranch=' + oldBranch + '&newBranch=' + branch), function(conflictStories)
+    {
+         if(conflictStories != '') alert(conflictStories);
+    });
+}
 
 /**
  * Compute the end date for productplan.

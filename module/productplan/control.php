@@ -102,6 +102,8 @@ class productplan extends control
         if(!empty($_POST))
         {
             $changes = $this->productplan->update($planID);
+            $change[$planID] = $changes;
+            $this->synchronizeStory($change);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -144,6 +146,7 @@ class productplan extends control
         elseif($_POST)
         {
             $changes = $this->productplan->batchUpdate($productID);
+            $this->productplan->synchronizeStory($changes);
             $this->loadModel('action');
             foreach($changes as $planID => $change)
             {
@@ -651,6 +654,68 @@ class productplan extends control
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 
+    /**
+     * Synchronize story when edit plan.
+     * @param  int    $planID
+     * @param  int    $oldBranch
+     * @access public
+     * @return void
+     */
+
+    public function synchronizeStory($changes)
+    {
+        $oldBranch = '';
+        $newBranch = '';
+        foreach($changes as $planID => $changes)
+        {
+            foreach($changes as $changeId => $change)
+            {
+                if($change['field'] == 'branch')
+                {
+                    $oldBranch = $change['old'];
+                    $newBranch = $change['new'];
+                    break;
+                }
+            }
+            $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
+            if($oldBranch)
+            {
+                foreach($planStories as $storyID => $story)
+                {
+                    if($story->branch and $story->branch != $newBranch)$this->productplan->unlinkStory($storyID, $planID);
+                }
+            }
+            $oldBranch = '';
+        }
+    }
+    /**
+     * AJAX: Get conflict story.
+     *
+     * @param  int    $planID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetConflictStory($planID, $oldBranch, $newBranch)
+    {
+        $planStories         = $this->loadModel('story')->getPlanStories($planID, 'all');
+        $conflictStoryIdList = '';
+        if($oldBranch)
+        {
+            foreach($planStories as $storyID => $story)
+            {
+                if($story->branch and $story->branch != $newBranch) $conflictStoryIdList .= '[' . $storyID . ']';
+            }
+        }
+        if($conflictStoryIdList != '')
+        {
+            echo sprintf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
+        }
+        else
+        {
+            echo '';
+        }
+    }
 
     /**
      * AJAX: Get last plan.
