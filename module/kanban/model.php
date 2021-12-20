@@ -1907,6 +1907,19 @@ class kanbanModel extends model
     }
 
     /**
+     * Move a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $toColID
+     * @access public
+     * @return void
+     */
+    public function moveCard($cardID, $toColID)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('column')->eq($toColID)->where('id')->eq($cardID)->exec();
+    }
+
+    /**
      * Reset order of lane.
      *
      * @param  int    $executionID
