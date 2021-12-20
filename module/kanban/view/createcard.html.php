@@ -45,7 +45,7 @@
         <tr>
           <th><?php echo $lang->kanbancard->assignedTo;?></th>
           <td colspan='2'>
-            <?php echo html::select('assignedTo', $users, $app->user->account, "class='form-control chosen' multiple");?>
+            <?php echo html::select('assignedTo[]', $users, $app->user->account, "class='form-control chosen' multiple");?>
           </td>
         </tr>
         <tr>

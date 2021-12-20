@@ -235,6 +235,7 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
+        $users  = $this->loadModel('user')->getPairs('noletter');
 
         if(!$kanban)
         {
@@ -258,6 +259,7 @@ class kanban extends control
             $userList[$account]['avatar'] = $avatar;
         }
 
+        $this->view->users    = $users;
         $this->view->title    = $this->lang->kanban->view;
         $this->view->regions  = $this->kanban->getKanbanData($kanbanID);
         $this->view->userList = $userList;
