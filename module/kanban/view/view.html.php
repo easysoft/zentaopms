@@ -1,3 +1,15 @@
+<?php
+/**
+ * The view file of kanban module of ZenTaoPMS.
+ *
+ * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @license     ZPL (http://zpl.pub/page/zplv12.html)
+ * @author      Guangming Sun<sungangming@easycorp.ltd>
+ * @package     kanban
+ * @version     $Id: view.html.php 935 2021-12-09 10:49:24Z $
+ * @link        https://www.zentao.net
+ */
+?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kanban.html.php';?>
 
@@ -33,7 +45,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
     <div class="region-header dropdown">
       <span class="strong"><?php echo $region->name;?></span>
       <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
-      <i class="icon icon-double-angle-up"></i>
+      <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
       <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
       <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
       <ul class="dropdown-menu pull-right">
