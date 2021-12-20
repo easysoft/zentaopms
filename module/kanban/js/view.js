@@ -952,7 +952,7 @@ $(function()
         },
         always: function(e)
         {
-            $cards.show();
+            if(sortType == 'lane') $cards.show();
         }
     });
 });
