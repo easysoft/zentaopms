@@ -60,7 +60,6 @@ body {background-color: #fff}
 .region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
 
 .region .kanban-item {position: relative}
-.region .kanban-item > .kanban-card > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
 .region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
 .region .kanban-item > .kanban-card > .info {margin-top: 5px; position: relative;}
 .region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
