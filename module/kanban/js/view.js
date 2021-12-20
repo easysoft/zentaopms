@@ -894,10 +894,10 @@ $(function()
         {
             if(sortType == 'region')
             {
-                showRegion = '';
+                showRegionIdList = '';
                 $('.icon-chevron-double-up').each(function()
                 {
-                    showRegion += $(this).attr('data-id') + ',';
+                    showRegionIdList += $(this).attr('data-id') + ',';
                     $(this).attr('class', 'icon-chevron-double-down');
                 });
 
@@ -918,7 +918,7 @@ $(function()
             {
                 $('.region').each(function()
                 {
-                    if(showRegion.includes($(this).attr('data-id')))
+                    if(showRegionIdList.includes($(this).attr('data-id')))
                     {
                         $(this).find('.icon-chevron-double-down').attr('class', 'icon-chevron-double-up');
                         $(this).find('.kanban').show();
