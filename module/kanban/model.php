@@ -1733,7 +1733,7 @@ class kanbanModel extends model
         $now  = helper::now();
         $card = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
-            ->add('createdDate', $now)
+            ->add('lastEditedDate', $now)
             ->trim('name')
             ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
