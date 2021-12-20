@@ -227,7 +227,7 @@ function renderUsersAvatar(users, itemID, size)
     }
 
     var members = assignees.length;
-    if(assignees.length > 1)
+    if(assignees.length > 2)
     {
         assignees.splice(1, assignees.length - 2, '<span>...</span>');
         assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
