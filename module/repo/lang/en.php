@@ -24,6 +24,7 @@ $lang->repo->repo            = 'Repository';
 $lang->repo->parent          = 'Parent File';
 $lang->repo->branch          = 'Branch';
 $lang->repo->addWebHook      = 'Add Webhook';
+$lang->repo->apiGetRepoByUrl = 'API: Get repo by URL';
 
 $lang->repo->browseAction    = 'Browse Repo';
 $lang->repo->createAction    = 'Create Repo';
