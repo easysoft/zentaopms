@@ -883,6 +883,7 @@ $(function()
             {
                 $('.icon-double-angle-down').attr('class', 'icon-double-angle-up');
                 $('.region').find('.kanban').show();
+                url = createLink('kanban', 'sortRegion', 'regions=' + orders.join(','));
             }
             if(sortType == 'board')
             {
@@ -911,7 +912,7 @@ $(function()
         },
       always: function(e)
       {
-          $cards.show();
+          if(sortType == 'lane') $cards.show();
       }
     });
 });

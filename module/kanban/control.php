@@ -349,6 +349,29 @@ class kanban extends control
     }
 
     /**
+     * Sort regions.
+     *
+     * @param  string $regions
+     * @access public
+     * @return void
+     */
+    public function sortRegion($regions = '')
+    {
+        if(empty($regions)) return;
+        $regionIdList = explode(',', trim($regions, ','));
+
+        $order = 1;
+        foreach($regionIdList as $regionID)
+        {
+            $this->dao->update(TABLE_KANBANREGION)->set('`order`')->eq($order)->where('id')->eq($regionID)->exec();
+            $order++;
+        }
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
+
+    /**
      * Delete a region
      *
      * @param  int    $regionID

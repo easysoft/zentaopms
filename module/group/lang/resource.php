@@ -654,6 +654,7 @@ $lang->resource->kanban->moveCard     = 'moveCard';
 $lang->resource->kanban->setCardColor = 'setCardColor';
 $lang->resource->kanban->laneMove     = 'laneMove';
 $lang->resource->kanban->cardsSort    = 'cardsSort';
+$lang->resource->kanban->splitColumn  = 'splitColumn';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -690,7 +691,8 @@ $lang->kanban->methodOrder[160] = 'assigntoCard';
 $lang->kanban->methodOrder[165] = 'moveCard';
 $lang->kanban->methodOrder[170] = 'setCardColor';
 $lang->kanban->methodOrder[175] = 'laneMove';
-$lang->kanban->methodOrder[180] = 'cardsSort';
+$lang->kanban->methodorder[180] = 'cardsSort';
+$lang->kanban->methodorder[185] = 'splitColumn';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
