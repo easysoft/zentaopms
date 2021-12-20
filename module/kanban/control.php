@@ -589,6 +589,7 @@ class kanban extends control
      *
      * @param  int    $cardID
      * @param  int    $toColID
+     * @param  int    $kanbanID
      * @access public
      * @return void
      */

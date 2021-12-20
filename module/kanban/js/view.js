@@ -371,7 +371,7 @@ function showErrorMessager(message)
  * @param  int    $kanbanID
  * @param  int    $regionID
  * @access public
- * @return void
+ * @return string
  */
 function moveCard(cardID, toColID, kanbanID, regionID)
 {
@@ -400,7 +400,7 @@ function moveCard(cardID, toColID, kanbanID, regionID)
  * @param  int      regionID
  * @param  array    regionData
  * @access public
- * @return void
+ * @return boolean
  */
 function updateRegion(regionID, regionData = [])
 {
@@ -408,10 +408,11 @@ function updateRegion(regionID, regionData = [])
 
     var $kanban = $('#kanban'+ regionID).kanban();
 
-    if(!$kanban.length) return;
+    if(!$kanban.length) return false;
     if(!regionData) regionData = regions[regionID].groups[0];
 
     $kanban.data('zui.kanban').render(regionData);
+    return true;
 }
 
 /**
@@ -944,6 +945,5 @@ $(function()
         {
             $cards.show();
         }
-
     });
 });
