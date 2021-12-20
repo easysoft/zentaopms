@@ -26,7 +26,6 @@ body {background-color: #fff}
 .region .kanban .form-actions {margin: 0;}
 .region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
 
-.region .kanban-board {overflow-x: auto; min-width: 100%!important;}
 .region .kanban-board + .kanban-board {margin-top: 20px;}
 .region .kanban-board > .kanban-header > .kanban-group-header {padding: 8px 2px; width: 20px;}
 .region .kanban-board > .kanban-header > .kanban-group-header:hover {cursor: move;}
