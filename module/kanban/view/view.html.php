@@ -13,6 +13,7 @@ js::set('kanbancardLang', $lang->kanbancard);
 js::set('kanbanID', $kanban->id);
 js::set('laneCount', $laneCount);
 js::set('userList', $userList);
+js::set('noAssigned', $lang->kanbancard->noAssigned);
 
 js::set('priv',
     array(

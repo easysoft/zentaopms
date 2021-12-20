@@ -190,6 +190,48 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 }
 
 /**
+ * Render avatars of user.
+ * @param {String|{account: string, avatar: string}} user User account or user object
+ * @returns {string}
+ */
+function renderUsersAvatar(users, itemID, size)
+{
+    var avatarSizeClass = 'avatar-' + (size || 'sm');
+    var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
+
+    if(users.length == 0 || (users.length == 1 && users[0] == ''))
+    {
+        return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
+    }
+
+    var assignees = [];
+    for(var user of users)
+    {
+        var $noPrivAndNoAssigned = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
+        if(!priv.canAssignCard && !user)
+        {
+            assignees.push($noPrivAndNoAssigned);
+            continue;
+        }
+
+        if(!user) 
+        {
+            assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>'));
+            continue;
+        }
+
+        if(typeof user === 'string') user = {account: user};
+        if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+
+        assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" href="' + link + '"/>').avatar({user: user}));
+    }
+    if(assignees.length > 4) assignees.splice(3, assignees.length - 4, '<span>...</span>');
+    assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', assignees.length) + '</div>');
+    return assignees;
+}
+
+
+/**
  * The function for rendering kanban item
  */
 function renderKanbanItem(item, $item)
@@ -237,60 +279,41 @@ function renderKanbanItem(item, $item)
         .text(item.pri);
 
     var $time = $info.children('.time');
-    if(item.end && item.end !== '0000-00-00')
-    {
-        var end      = $.zui.createDate(item.end);
-        var today    = new Date();
-        var isExpired = end.getTime() < today.getTime();
-        var dateFormat = (today.getFullYear() === end.getFullYear() ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
-        $time.text($.zui.formatDate(end, dateFormat))
-            .toggleClass('text-red', isExpired)
-            .show();
-    }
-    else
+    if(item.end == '0000-00-00' && item.begin == '0000-00-00')
     {
         $time.hide();
     }
-
-    var $user = $info.children('.user');
-    if(item.assignedTo)
-    {
-        var assignedTo = item.assignedTo.split(',');
-        if(assignedTo.length != 0)
-        {
-            for(var index = 0; index < assignedTo.length; index ++)
-            {
-                var user = assignedTo[index];
-
-                if(typeof user === 'string') user = {account: user};
-                if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
-
-                var $avatar = $(
-                        priv.canAssignCard ? '<a class="avatar avatar-sm avatar-user avatar-circle iframe"></a>'
-                        : '<div class="avatar avatar-sm avatar-user avatar-circle"></div>'
-                        ).attr('data-name', user.realname || user.account)
-                    .attr('data-id', user.id || user.account);
-                if(user.avatar)
-                {
-                    $avatar.append('<img src="' + user.avatar + '" />');
-                }
-
-                if(priv.canAssignCard)
-                {
-                    $avatar.attr('href', createLink('kanban', 'assignCard', 'id=' + item.id, '', 1));
-                }
-
-                $user.empty()
-                    .append($avatar)
-                    .attr('title', user.realname || user.account)
-                    .show();
-            }
-        }
-    }
     else
     {
-        $user.hide();
+        var today = new Date();
+        var begin = $.zui.createDate(item.begin);
+        var end   = $.zui.createDate(item.end);
+        var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
+        var isCureentYear = today.getFullYear() == begin.getFullYear();
+        if(item.end == '0000-00-00' && item.begin != '0000-00-00')
+        {
+            var dateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.beginAB;
+            $time.text($.zui.formatDate(begin, dateFormat)).show();
+        }
+        else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
+        {
+            var dateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
+            $time.text($.zui.formatDate(end, dateFormat)).show();
+        }
+        else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
+        {
+            var beginDateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.to + ' ';
+            var endDateFormat   = isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ';
+            $time.text($.zui.formatDate(begin, beginDateFormat) + $.zui.formatDate(end, endDateFormat)).show();
+        }
+
+        $time.toggleClass('text-red', needRemind);
     }
+
+    /* Display avatars of assignedTo. */
+    var assignedTo = item.assignedTo.split(',');
+    var $user = $info.children('.user');
+    $user.html(renderUsersAvatar(assignedTo, item.id));
 
     $item.css('background-color', item.color);
     $item.toggleClass('has-color', item.color != '#FFFFFF');
