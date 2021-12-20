@@ -77,7 +77,7 @@ a.showMoreImage:hover {opacity: 1;}
 
 #headerActions {position: absolute; top: 9px; right: 130px; border-right: 2px solid rgba(255, 255, 255, 0.3);}
 #headerActions .btn-group > .btn{ color: #fff; margin-right: 8px; border-radius: 4px !important;}
-#headerActions .btn-group > .btn.active, .btn:active, .open .dropdown-toggle.btn {background: rgba(0,0,0,0.15) !important;}
+#headerActions .btn-group > .btn.active, .btn:active, {background: rgba(0,0,0,0.15) !important;}
 #headerActions #kanbanActionMenu {left: 55px}
 #headerActions .setting {border-color: transparent;}
 #headerActions .dropdown-menu {top: 35px;}
