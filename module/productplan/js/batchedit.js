@@ -30,7 +30,6 @@ function loadWarning(planID, branch)
     {
         if(conflictStories != '' && !confirm(conflictStories))
         {
-            console.log('yes');
             $('#branch' + planID).val(oldBranch[planID]);
             $('#branch' + planID).trigger("chosen:updated");
         }

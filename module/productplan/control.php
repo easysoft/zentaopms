@@ -721,14 +721,7 @@ class productplan extends control
                 if($story->branch and $story->branch != $newBranch) $conflictStoryIdList .= '[' . $storyID . ']';
             }
         }
-        if($conflictStoryIdList != '')
-        {
-            echo sprintf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
-        }
-        else
-        {
-            echo '';
-        }
+        if($conflictStoryIdList != '') echo sprintf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
     }
 
     /**
