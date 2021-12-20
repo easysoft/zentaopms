@@ -75,10 +75,6 @@
             {
                 echo html::a($this->createLink('kanban', 'space'), $action->objectName, '_self', "title={$action->objectName}");
             }
-            elseif(in_array($action->objectType, array('kanbanregion', 'kanbanlane', 'kanbancolumn', 'kanbancard')))
-            {
-                echo html::a($this->createLink('kanban', 'view', "kanbanID={$action->kanbanID}"), $action->objectName, '_self', "title={$action->objectName}");
-            }
             else
             {
                 $tab = '';
