@@ -83,7 +83,7 @@ class repo extends control
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList = $this->repo->getList(0, $orderBy);
+        $repoList = $this->repo->getList(0, '', $orderBy);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
