@@ -79,7 +79,7 @@ class kanbanModel extends model
                 ->where('kanban')->eq($kanban->id)
                 ->fetch('maxOrder');
 
-            $order  = $maxOrder + 1;
+            $order  = $maxOrder ? $maxOrder + 1 : 1;
             $region = fixer::input('post')
                 ->add('kanban', $kanban->id)
                 ->add('space', $kanban->space)
@@ -237,7 +237,7 @@ class kanbanModel extends model
                 $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)
                     ->where('`group`')->eq($column->group)
                     ->fetch('maxOrder');
-                $column->order = $maxOrder + 1;
+                $column->order = $maxOrder ? $maxOrder + 1 : 1;
             }
 
             if(!$column->limit && empty($_POST['noLimit'])) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
@@ -316,7 +316,7 @@ class kanbanModel extends model
         $data            = fixer::input('post')->get();
         $column          = $this->getColumnByID($columnID);
         $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
-        $order           = $maxOrder + 1;
+        $order           = $maxOrder ? $maxOrder + 1 : 1;
         $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
 
         $childrenColumn  = array();
@@ -1023,7 +1023,7 @@ class kanbanModel extends model
                 ->fetch('maxOrder');
             $lane = fixer::input('post')
                 ->add('region', $regionID)
-                ->add('order', $maxOrder + 1)
+                ->add('order', $maxOrder ? $maxOrder + 1 : 1)
                 ->add('lastEditedTime', helper::now())
                 ->add('type', 'common')
                 ->trim('name')
@@ -1083,7 +1083,7 @@ class kanbanModel extends model
             $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBAN)
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
-            $kanban->order = $maxOrder + 1;
+            $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
         }
 
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
