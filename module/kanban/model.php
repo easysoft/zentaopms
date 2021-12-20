@@ -2114,6 +2114,8 @@ class kanbanModel extends model
      */
     public function getKanbanCardMenu($executionID, $objects, $objecType)
     {
+        $this->app->loadLang('execution');
+
         $menus = array();
         switch ($objecType)
         {
