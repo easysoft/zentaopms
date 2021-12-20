@@ -1254,6 +1254,7 @@ $lang->resource->gitlab->browseBranchPriv     = 'browseBranchPriv';
 $lang->resource->gitlab->createBranchPriv     = 'createBranchPriv';
 $lang->resource->gitlab->editBranchPriv       = 'editBranchPriv';
 $lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
+$lang->resource->gitlab->createTag            = 'createTag';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';

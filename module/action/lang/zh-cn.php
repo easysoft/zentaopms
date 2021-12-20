@@ -123,6 +123,7 @@ $lang->action->objectTypes['gitlabuser']       = 'GitLab用户';
 $lang->action->objectTypes['gitlabgroup']      = 'GitLab群组';
 $lang->action->objectTypes['gitlabbranch']     = 'GitLab分支';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab保护分支';
+$lang->action->objectTypes['gitlabtag']        = 'GitLab标签';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
