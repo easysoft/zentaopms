@@ -755,6 +755,9 @@ function initKanban($kanban)
     {
         data:              region.groups,
         maxColHeight:      510,
+        fluidBoardWidth:   false,
+        minColWidth:       300,
+        maxColWidth:       300,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         itemRender:        renderKanbanItem,

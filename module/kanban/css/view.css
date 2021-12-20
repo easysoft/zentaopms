@@ -22,11 +22,10 @@ body {background-color: #fff}
 .region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
 .region .sort .region-header {cursor: move;}
 
-.region .kanban {padding: 0px 10px 10px 10px; min-height: unset;}
+.region .kanban {padding: 0px 10px 10px 10px; min-height: unset; overflow: auto}
 .region .kanban .form-actions {margin: 0;}
 .region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
 
-.region .kanban-board {overflow-x: auto; min-width: 100%!important;}
 .region .kanban-board + .kanban-board {margin-top: 20px;}
 .region .kanban-board > .kanban-header > .kanban-group-header {padding: 8px 2px; width: 20px;}
 .region .kanban-board > .kanban-header > .kanban-group-header:hover {cursor: move;}
@@ -61,7 +60,6 @@ body {background-color: #fff}
 .region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
 
 .region .kanban-item {position: relative}
-.region .kanban-item > .kanban-card > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
 .region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
 .region .kanban-item > .kanban-card > .info {margin-top: 5px; position: relative;}
 .region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
@@ -74,7 +72,7 @@ body {background-color: #fff}
 .region .kanban-item > .kanban-card > .info > .user > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
 .region .kanban-item > .kanban-card > .info > .user > span:before {left: -4px;}
 .region .kanban-item > .kanban-card > .info > .user > span:after {right: -4px;}
-.region .kanban-item > .kanban-card > .info > .user > div {display: inline-block; height: 24px; position: sticky; border-radius: 50%; top: 3px; margin:  5px;}
+.region .kanban-item > .kanban-card > .info > .user > div {display: inline-block; height: 24px; position: relative; border-radius: 50%; top: -5px; margin:  5px;}
 .region .kanban-item > .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .region .kanban-item > .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 .region .kanban-item:hover > .actions {opacity: 1;}
