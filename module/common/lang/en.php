@@ -179,6 +179,7 @@ $lang->design->ADS        = 'ADS';
 $lang->stage->common      = 'Stage';
 $lang->stage->list        = 'Stage List';
 $lang->execution->list    = "{$lang->executionCommon} List";
+$lang->kanban->common     = 'Kanban';
 
 $lang->personnel->common     = 'Member';
 $lang->personnel->invest     = 'Investment';

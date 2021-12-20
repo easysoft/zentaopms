@@ -76,7 +76,14 @@ class design extends control
         $this->design->buildSearchForm($queryID, $actionURL);
 
         /* Print top and right actions. */
-        $this->lang->TRActions  = '<div class="btn-group dropdown">';
+        $this->lang->TRActions  = '<div class="btn-toolbar pull-right">';
+        if($this->config->maxVersion and common::hasPriv('design', 'submit'))
+        {
+            $this->lang->TRActions .= '<div class="btn-group">';
+            $this->lang->TRActions .= html::a($this->createLink('design', 'submit', "productID=$productID", '', true), "<i class='icon-plus'></i> {$this->lang->design->submit}", '', "class='btn btn-secondary iframe'");
+            $this->lang->TRActions .= '</div>';
+        }
+        $this->lang->TRActions .= '<div class="btn-group dropdown">';
         $this->lang->TRActions .= html::a(inlink('create', "projectID=$projectID&productID=$productID&type=$type"), "<i class='icon-plus'></i> {$this->lang->design->create}", '', "class='btn btn-primary'");
         $this->lang->TRActions .= "<button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span>";
         $this->lang->TRActions .= '</button>';
@@ -86,6 +93,7 @@ class design extends control
         if(common::hasPriv('design', 'batchCreate')) $this->lang->TRActions .= '<li>' . html::a($this->createLink('design', 'batchCreate', "projectID=$projectID&productID=$productID&type=$type"), $this->lang->design->batchCreate, '', "class='btn btn-link'") . '</li>';
 
         $this->lang->TRActions .= '</ul>';
+        $this->lang->TRActions .= '</div>';
         $this->lang->TRActions .= '</div>';
 
         /* Init pager and get designs. */
@@ -286,7 +294,7 @@ class design extends control
         $end     = $end ? date('Y-m-d', strtotime($end)) : helper::today();
 
         /* Get the repository information through the repoID. */
-        $repos  = $this->loadModel('repo')->getRepoPairs($design->project);
+        $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
         if(empty($repoID)) die(js::locate(helper::createLink('repo', 'create', "objectID=$design->project")));
@@ -401,7 +409,7 @@ class design extends control
     public function revision($repoID = 0, $projectID = 0)
     {
         $repo    = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('id')->eq($repoID)->fetch();
-        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&objectID=$projectID&revistion=$repo->revision");
+        $repoURL = $this->createLink('repo', 'revision', "repoID=$repo->repo&objectID=$projectID&revistion=$repo->revision", '', true);
         header("location:" . $repoURL);
     }
 

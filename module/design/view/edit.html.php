@@ -16,7 +16,13 @@
 <div id="mainContent" class="main-content fade">
   <div class="center-block">
     <div class="main-header">
-      <h2><?php echo $lang->design->edit;?></h2>
+      <h2 id="short-content" title="<?php echo $design->name;?>">
+        <span class='label label-id'><?php echo $design->id;?></span>
+        <?php echo html::a($this->createLink('design', 'view', "id=$design->id"), $design->name, '');?>
+      </h2>
+      <h2>
+        <small><?php echo $lang->arrow . ' ' . $lang->design->edit;?></small>
+      </h2>
     </div>
     <form class="load-indicator main-form form-ajax" method='post' enctype='multipart/form-data' id='dataform'>
       <table class="table table-form">

@@ -200,7 +200,7 @@ class my extends control
         /* Append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story');
+        $stories = $this->loadModel('story')->getUserStories($this->app->user->account, $type, $sort, $pager, 'story', false);
         if(!empty($stories)) $stories = $this->story->mergeReviewer($stories);
 
         /* Assign. */
@@ -625,6 +625,9 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->issues     = $this->loadModel('issue')->getUserIssues($type, $this->app->user->account, $orderBy, $pager);
+
+        $this->view->projectList = $this->loadModel('project')->getPairsByProgram(0);
+
         $this->display();
     }
 
@@ -655,6 +658,9 @@ class my extends control
         $this->view->pager      = $pager;
         $this->view->type       = $type;
         $this->view->mode       = 'risk';
+
+        $this->view->projectList = $this->loadModel('project')->getPairsByProgram(0);
+
         $this->display();
     }
 
@@ -712,15 +718,21 @@ class my extends control
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage = 50, $pageID = 1);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager  = pager::init($recTotal, $recPerPage, $pageID);
+        $ncList = $this->my->getNcList($browseType, $orderBy, $pager);
+
+        foreach($ncList as $nc) $ncIdList[] = $nc->id;
+        $this->session->set('ncIdList', isset($ncIdList) ? $ncIdList : '');
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->nc;
         $this->view->position[] = $this->lang->my->nc;
         $this->view->browseType = $browseType;
-        $this->view->pager      = $pager;
-        $this->view->ncs        = $this->my->getNcList($browseType, $orderBy, $pager);
+        $this->view->ncs        = $ncList;
         $this->view->users      = $this->loadModel('user')->getPairs('noclosed|noletter');
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
+        $this->view->projects   = $this->loadModel('project')->getPairsByProgram(0);
+        $this->view->pager      = $pager;
+        $this->view->orderBy    = $orderBy;
         $this->view->mode       = 'nc';
         $this->display();
     }

@@ -1,4 +1,80 @@
 <?php
+/* Actions. */
+$lang->kanban->create              = 'Create Kanban';
+$lang->kanban->createSpace         = 'Create Space';
+$lang->kanban->editSpace           = 'Edit Space';
+$lang->kanban->closeSpace          = 'Close Space';
+$lang->kanban->deleteSpace         = 'Delete Space';
+$lang->kanban->sortSpace           = 'Sort Space';
+$lang->kanban->edit                = 'Edit Kanban';
+$lang->kanban->view                = 'View Kanban';
+$lang->kanban->close               = 'Close Kanban';
+$lang->kanban->delete              = 'Delete Kanban';
+$lang->kanban->createRegion        = 'Create Region';
+$lang->kanban->editRegion          = 'Edit Region';
+$lang->kanban->sortRegion          = 'Sort Region';
+$lang->kanban->deleteRegion        = 'Delete Region';
+$lang->kanban->createLane          = 'Create Lane';
+$lang->kanban->editLane            = 'Edit Lane';
+$lang->kanban->sortLane            = 'Sort Lane';
+$lang->kanban->deleteLane          = 'Delete Lane';
+$lang->kanban->createColumn        = 'Create Column';
+$lang->kanban->editColumn          = 'Edit Column';
+$lang->kanban->sortColumn          = 'Sort Column';
+$lang->kanban->deleteColumn        = 'Delete Column';
+$lang->kanban->createCard          = 'Create Card';
+$lang->kanban->editCard            = 'Edit Card';
+$lang->kanban->viewCard            = 'View Card';
+$lang->kanban->archiveCard         = 'Archive Card';
+$lang->kanban->sortCard            = 'Sort Card';
+$lang->kanban->copyCard            = 'Copy Card';
+$lang->kanban->moveCard            = 'Move Card';
+$lang->kanban->cardColor           = 'Card Color';
+$lang->kanban->setCardColor        = 'Set Card Color';
+$lang->kanban->deleteCard          = 'Delete Card';
+$lang->kanban->assigntoCard        = 'Assign';
+$lang->kanban->setting             = 'Setting';
+$lang->kanban->splitColumn         = 'Split Column';
+$lang->kanban->createColumnOnLeft  = 'Create Column On Left';
+$lang->kanban->createColumnOnRight = 'Create Column On Right';
+$lang->kanban->copyColumn          = 'Copy Column';
+$lang->kanban->archiveColumn       = 'Archive Column';
+$lang->kanban->spaceCommon         = 'Kanban Space';
+$lang->kanban->styleCommon         = 'Style';
+$lang->kanban->copy                = 'Copy';
+$lang->kanban->custom              = 'Custom';
+
+/* Fields. */
+$lang->kanban->space          = 'Space';
+$lang->kanban->name           = 'Name';
+$lang->kanban->owner          = 'Owner';
+$lang->kanban->team           = 'Team';
+$lang->kanban->desc           = 'Description';
+$lang->kanban->acl            = 'ACL';
+$lang->kanban->whitelist      = 'White List';
+$lang->kanban->status         = 'Status';
+$lang->kanban->createdBy      = 'Created By';
+$lang->kanban->createdDate    = 'Created Date';
+$lang->kanban->lastEditedBy   = 'Edited By';
+$lang->kanban->lastEditedDate = 'Edited Date';
+$lang->kanban->closed         = 'Closed';
+$lang->kanban->closedBy       = 'Closed By';
+$lang->kanban->closedDate     = 'Closed Date';
+$lang->kanban->empty          = 'No Kanban';
+$lang->kanban->teamSumCount   = '%s people in total';
+
+$lang->kanban->createColumnOnLeft  = 'Create Column On Left';
+$lang->kanban->createColumnOnRight = 'Create Column On Right';
+
+$lang->kanban->accessDenied  = "You have no access to the kanban.";
+$lang->kanban->confirmDelete = 'Do you want to delete this?';
+
+$lang->kanban->aclGroup['open']    = 'Open';
+$lang->kanban->aclGroup['private'] = 'Private';
+
+$lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
+$lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
+
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
 $lang->kanban->type['story'] = "Story KanBan";
@@ -51,13 +127,21 @@ $lang->kanban->moveDown           = 'Swimlane Down';
 $lang->kanban->laneMove           = 'Swimlane Sorting';
 $lang->kanban->laneGroup          = 'Lane Group';
 $lang->kanban->cardsSort          = 'Cards Sortting';
+$lang->kanban->more               = 'More';
 $lang->kanban->moreAction         = 'More Action';
 $lang->kanban->noGroup            = 'None';
+$lang->kanban->limitExceeded      = 'Limit Exceeded';
+$lang->kanban->fullScreen         = 'Full Screen';
+$lang->kanban->setting            = 'Setting';
+$lang->kanban->my                 = 'My';
+$lang->kanban->other              = 'Other';
 
 $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
 $lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
 $lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
+
+$lang->kanban->defaultColumn = array('wait', 'doing', 'done', 'close');
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
@@ -97,9 +181,103 @@ $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
 
+$lang->kanbanspace = new stdclass();
+$lang->kanbanspace->common         = 'Kanban Space';
+$lang->kanbanspace->name           = 'Name';
+$lang->kanbanspace->owner          = 'Owner';
+$lang->kanbanspace->team           = 'Team';
+$lang->kanbanspace->desc           = 'Description';
+$lang->kanbanspace->acl            = 'ACL';
+$lang->kanbanspace->whitelist      = 'White List';
+$lang->kanbanspace->status         = 'Status';
+$lang->kanbanspace->createdBy      = 'Created By';
+$lang->kanbanspace->createdDate    = 'Created Date';
+$lang->kanbanspace->lastEditedBy   = 'Edited By';
+$lang->kanbanspace->lastEditedDate = 'Edited Date';
+$lang->kanbanspace->closedBy       = 'Closed By';
+$lang->kanbanspace->closedDate     = 'Closed Date';
+
+$lang->kanbanspace->empty = 'No Space';
+
+$lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
+$lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
+
+$lang->kanbanspace->featureBar['all']    = 'All';
+$lang->kanbanspace->featureBar['my']     = 'My';
+$lang->kanbanspace->featureBar['other']  = 'Other';
+$lang->kanbanspace->featureBar['closed'] = 'Closed';
+
 $lang->kanbancolumn = new stdclass();
-$lang->kanbancolumn->name  = $lang->kanban->columnName;
-$lang->kanbancolumn->limit = $lang->kanban->WIPCount;
+$lang->kanbancolumn->name       = $lang->kanban->columnName;
+$lang->kanbancolumn->limit      = $lang->kanban->WIPCount;
+$lang->kanbancolumn->color      = 'Column Color';
+$lang->kanbancolumn->childName  = 'Name';
+$lang->kanbancolumn->childColor = 'Color';
+
+$lang->kanbancolumn->confirmDelete = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
 
 $lang->kanbanlane = new stdclass();
-$lang->kanbanlane->name = $lang->kanban->laneName;
+$lang->kanbanlane->name      = $lang->kanban->laneName;
+$lang->kanbanlane->common    = 'Lane';
+$lang->kanbanlane->default   = 'Default Lane';
+$lang->kanbanlane->column    = 'Lane Kanban Column';
+$lang->kanbanlane->otherlane = 'Select Existed Lane';
+$lang->kanbanlane->color     = 'Lane Color';
+
+$lang->kanbanlane->confirmDelete = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
+
+$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
+$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
+
+$lang->kanbanregion = new stdclass();
+$lang->kanbanregion->name    = 'Region Name';
+$lang->kanbanregion->default = 'Default Region';
+$lang->kanbanregion->style   = 'Region Style';
+
+$lang->kanbanregion->confirmDelete = 'Are you sure to delete this region? After deleting this region, all data in this region will be deleted.';
+
+$lang->kanbancard = new stdclass();
+$lang->kanbancard->create  = 'Create Card';
+$lang->kanbancard->edit    = 'Edit Card';
+$lang->kanbancard->view    = 'View Card';
+$lang->kanbancard->archive = 'Archive';
+$lang->kanbancard->assign  = 'Assign';
+$lang->kanbancard->copy    = 'Copy';
+$lang->kanbancard->delete  = 'Delete';
+
+$lang->kanbancard->name            = 'Card Name';
+$lang->kanbancard->legendBasicInfo = 'Basic Info';
+$lang->kanbancard->legendLifeTime  = 'Card Life';
+$lang->kanbancard->space           = 'Space';
+$lang->kanbancard->kanban          = 'Kanban';
+$lang->kanbancard->lane            = 'Lane';
+$lang->kanbancard->column          = 'Column';
+$lang->kanbancard->assignedTo      = 'Assignee';
+$lang->kanbancard->beginAndEnd     = 'Begin & End';
+$lang->kanbancard->begin           = 'Begin';
+$lang->kanbancard->end             = 'End';
+$lang->kanbancard->pri             = 'Priority';
+$lang->kanbancard->desc            = 'Description';
+$lang->kanbancard->estimate        = 'Estimate';
+$lang->kanbancard->createdBy       = 'Created By';
+$lang->kanbancard->createdDate     = 'Created Date';
+$lang->kanbancard->lastEditedBy    = 'Last Edited By';
+$lang->kanbancard->lastEditedDate  = 'Last Edited Date';
+$lang->kanbancard->archivedBy      = 'Archived By';
+$lang->kanbancard->archivedDate    = 'Archived Date';
+$lang->kanbancard->lblHour         = 'h';
+$lang->kanbancard->noAssigned      = 'No Assigned';
+$lang->kanbancard->deadlineAB      = 'DL';
+$lang->kanbancard->beginAB         = 'Begin';
+$lang->kanbancard->to              = 'to';
+
+$lang->kanbancard->confirmDelete = 'Do you want to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
+
+$lang->kanbancard->priList[1] = 1;
+$lang->kanbancard->priList[2] = 2;
+$lang->kanbancard->priList[3] = 3;
+$lang->kanbancard->priList[4] = 4;
+
+$lang->kanbancard->error = new stdClass();
+$lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
+$lang->kanbancard->error->endSmall    = '"End Date" cannot be less than "Begin Date"';

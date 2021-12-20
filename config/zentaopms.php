@@ -237,8 +237,14 @@ define('TABLE_RELATION',     '`' . $config->db->prefix . 'relation`');
 define('TABLE_REPOHISTORY',  '`' . $config->db->prefix . 'repohistory`');
 define('TABLE_REPOFILES',    '`' . $config->db->prefix . 'repofiles`');
 define('TABLE_REPOBRANCH',   '`' . $config->db->prefix . 'repobranch`');
+define('TABLE_KANBAN',       '`' . $config->db->prefix . 'kanban`');
+define('TABLE_KANBANSPACE',  '`' . $config->db->prefix . 'kanbanspace`');
+define('TABLE_KANBANREGION', '`' . $config->db->prefix . 'kanbanregion`');
 define('TABLE_KANBANLANE',   '`' . $config->db->prefix . 'kanbanlane`');
 define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
+define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
+define('TABLE_KANBANGROUP',  '`' . $config->db->prefix . 'kanbangroup`');
+define('TABLE_KANBANCARD',   '`' . $config->db->prefix . 'kanbancard`');
 if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 
@@ -277,8 +283,14 @@ $config->objectTables['job']          = TABLE_JOB;
 $config->objectTables['team']         = TABLE_TEAM;
 $config->objectTables['pipeline']     = TABLE_PIPELINE;
 $config->objectTables['mr']           = TABLE_MR;
+$config->objectTables['kanban']       = TABLE_KANBAN;
+$config->objectTables['kanbanspace']  = TABLE_KANBANSPACE;
+$config->objectTables['kanbanregion'] = TABLE_KANBANREGION;
 $config->objectTables['kanbancolumn'] = TABLE_KANBANCOLUMN;
 $config->objectTables['kanbanlane']   = TABLE_KANBANLANE;
+$config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
+$config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
+$config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 

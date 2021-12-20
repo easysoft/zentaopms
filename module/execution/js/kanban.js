@@ -453,14 +453,33 @@ if(!window.kanbanDropRules)
     {
         story:
         {
-            blacklog: true,
-            ready: ['blacklog', 'dev-doing'],
-            'dev-doing': ['dev-done'],
-            'dev-done': ['test-doing'],
-            'test-doing': ['test-done'],
-            'test-done': ['accepted'],
-            'accepted': ['published'],
-            'published': false,
+            backlog: ['ready'],
+            ready: ['backlog', 'doing'],
+            'doing': ['developed'],
+            'developed': ['doing', 'testing'],
+            'testing': ['tested'],
+            'tested': ['verified'],
+            'verified': ['released'],
+            'released': false,
+        },
+        bug:
+        {
+            'unconfirmed': ['confirmed'],
+            'confirmed': ['fixing'],
+            'fixing': ['fixed'],
+            'fixed': ['testing'],
+            'testing': ['tested'],
+            'tested': ['closed'],
+            'closed': ['fixing'],
+        },
+        task:
+        {
+            'wait': ['developing', 'developed', 'canceled', 'closed'],
+            'developing': ['developed', 'pause'],
+            'developed': ['canceled', 'closed'],
+            'pause': ['developing'],
+            'canceled': ['developing'],
+            'closed': ['developing'],
         }
     }
 }
@@ -508,9 +527,10 @@ function findDropColumns($element, $root)
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
     if(typeof card == 'undefined') return false;
-    var objectID    = card.id;
-    var showIframe  = false;
+    var objectID   = card.id;
+    var showIframe = false;
 
+    /* Task lane. */
     if(kanbanID == 'task')
     {
         if(toColType == 'developed')
@@ -557,6 +577,44 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
                 var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
                 showIframe = true;
             }
+        }
+    }
+
+    /* Bug lane. */
+    if(kanbanID == 'bug')
+    {
+        if(toColType == 'confirmed')
+        {
+            if(fromColType == 'unconfirmed' && priv.canConfirmBug)
+            {
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+    }
+
+    /* Story lane. */
+    if(kanbanID == 'story')
+    {
+        if(toColType == 'ready' || toColType == 'backlog')
+        {
+            var colID = card.$col.columnID;
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&colID=' + colID + '&toColType=' + toColType + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            $.get(link, function(data)
+            {
+                if(data)
+                {
+                    kanbanGroup = $.parseJSON(data);
+                    if(groupBy == 'default')
+                    {
+                        updateKanban('story', kanbanGroup.story);
+                    }
+                    else
+                    {
+                        updateKanban(browseType, kanbanGroup[groupBy]);
+                    }
+                }
+            })
         }
     }
 
@@ -607,8 +665,8 @@ function createColumnMenu(options)
     var kanbanID = options.kanban;
 
 	var items = [];
-	if(priv.canEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
-	if(priv.canSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.canEditName) items.push({label: executionLang.editName, url: $.createLink('kanban', 'setColumn', 'col=' + col.columnID + '&executionID=' + executionID + '&from=execution'), className: 'iframe', attrs: {'data-width': '500px'}})
+	if(priv.canSetWIP) items.push({label: executionLang.setWIP, url: $.createLink('kanban', 'setWIP', 'col=' + col.columnID + '&executionID=' + executionID + '&from=execution'), className: 'iframe', attrs: {'data-width': '500px'}})
 	//if(priv.canSortCards) items.push({label: executionLang.sortColumn, items: ['按ID倒序', '按ID顺序'], className: 'iframe', onClick: handleSortColCards})
     return items;
 }
@@ -657,7 +715,7 @@ function createLaneMenu(options)
     var downTargetKanban = $kanban.next('.kanban').length ? $kanban.next('.kanban').data('id') : '';
 
     var items = [];
-    if(priv.canSetLane)  items.push({label: kanbanLang.setLane, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.laneID + '&executionID=' + executionID), className: 'iframe'});
+    if(priv.canSetLane)  items.push({label: kanbanLang.setLane, icon: 'edit', url: $.createLink('kanban', 'setLane', 'lane=' + lane.laneID + '&executionID=' + executionID + '&from=execution'), className: 'iframe'});
     if(priv.canMoveLane) items.push(
         {label: kanbanLang.moveUp, icon: 'arrow-up', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + upTargetKanban), className: 'iframe', disabled: !$kanban.prev('.kanban').length},
         {label: kanbanLang.moveDown, icon: 'arrow-down', url: $.createLink('kanban', 'laneMove', 'executionID=' + executionID + '&currentLane=' + lane.id + '&targetLane=' + downTargetKanban), className: 'iframe', disabled: !$kanban.next('.kanban').length}

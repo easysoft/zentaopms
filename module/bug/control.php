@@ -790,7 +790,7 @@ class bug extends control
 
             if($this->app->tab == 'devops')
             {
-                $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
+                $repos = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
                 $this->repo->setMenu($repos);
                 $this->lang->navGroup->bug = 'devops';
             }
@@ -904,7 +904,7 @@ class bug extends control
         if($this->app->tab == 'devops')
         {
             session_write_close();
-            $repos = $this->loadModel('repo')->getRepoPairs($bug->project);
+            $repos = $this->loadModel('repo')->getRepoPairs('project', $bug->project);
             $this->repo->setMenu($repos);
             $this->lang->navGroup->bug = 'devops';
         }
