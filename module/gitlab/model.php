@@ -2483,4 +2483,52 @@ class gitlabModel extends model
         }
         return $maintainerAccess;
     }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleTag($gitlabID, $projectID, $tag)
+    {
+        if(empty($gitlabID)) return false;
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/tags/$tag");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Create gitlab tag.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @access public
+     * @return bool
+     */
+    public function createTag($gitlabID, $projectID)
+    {
+        if(empty($gitlabID)) return false;
+
+        $tag = fixer::input('post')->get();
+        if(empty($tag->tag_name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->emptyNameError;
+        if(empty($tag->ref))  dao::$errors['ref'][] = $this->lang->gitlab->tag->emptyRefError;
+
+        $singleBranch = $this->apiGetSingleTag($gitlabID, $projectID, $tag->tag_name);
+        if(!empty($singleBranch->name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->issetNameError;
+        if(dao::isError()) return false;
+
+        $url      = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/repository/tags');
+        $response = json_decode(commonModel::http($url, $tag));
+
+        if(!empty($response->name))
+        {
+            $this->loadModel('action')->create('gitlabtag', 0, 'created', '', $response->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
+    }
 }

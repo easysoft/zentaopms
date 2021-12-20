@@ -52,7 +52,7 @@ $lang->gitlab->browseBranchPriv     = 'Protect branch';
 $lang->gitlab->createBranchPriv     = 'Cerate branch protected';
 $lang->gitlab->editBranchPriv       = 'Edit branch protected';
 $lang->gitlab->deleteBranchPriv     = 'Delete branch protected';
-$lang->gitlab->createTag            = 'Add tag';
+$lang->gitlab->createTag            = 'Create Tag';
 $lang->gitlab->deleteTag            = 'Delete tag';
 
 $lang->gitlab->id             = 'ID';
@@ -208,6 +208,11 @@ $lang->gitlab->branch->issetPrivNameError          = "The protection branch alre
 
 $lang->gitlab->tag = new stdclass();
 $lang->gitlab->tag->name              = 'Tag name';
+$lang->gitlab->tag->ref               = 'Create from';
+$lang->gitlab->tag->message           = 'Message';
 $lang->gitlab->tag->lastCommitter     = 'Last Committer';
 $lang->gitlab->tag->lastCommittedDate = 'Last Committed Date';
 $lang->gitlab->tag->placeholderSearch = "Enter branch tag";
+$lang->gitlab->tag->emptyNameError    = "Name cannot be empty.";
+$lang->gitlab->tag->emptyRefError     = "Create from cannot be empty.";
+$lang->gitlab->tag->issetNameError    = "The tag already exists";
