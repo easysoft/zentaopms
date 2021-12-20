@@ -123,6 +123,7 @@ $lang->action->objectTypes['gitlabuser']       = 'GitLab User';
 $lang->action->objectTypes['gitlabgroup']      = 'GitLab Group';
 $lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
+$lang->action->objectTypes['gitlabtag']        = 'GitLab Tag';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
