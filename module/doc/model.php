@@ -905,6 +905,15 @@ class docModel extends model
         $account = ',' . $this->app->user->account . ',';
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
+
+        if($object->project)
+        {
+            $project         = $this->loadModel('project')->getById($object->project);
+            $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
+            $authorizedUsers = $this->user->getProjectAuthedUsers($project, '', $projectTeams, array_flip(explode(",", $project->whitelist)));
+            if(array_key_exists($this->app->user->account, $authorizedUsers)) return true;
+        }
+
         if($object->acl == 'custom')
         {
             $userGroups = $this->app->user->groups;
@@ -912,6 +921,7 @@ class docModel extends model
             {
                 if(strpos(",$object->groups,", ",$groupID,") !== false) return true;
             }
+            if(strpos(",{$object->users},", $account) !== false) return true;
         }
 
         if(strpos($extra, 'notdoc') === false)
