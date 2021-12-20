@@ -227,8 +227,11 @@ function renderUsersAvatar(users, itemID, size)
     }
 
     var members = assignees.length;
-    if(assignees.length > 4) assignees.splice(3, assignees.length - 4, '<span>...</span>');
-    assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
+    if(assignees.length > 1)
+    {
+        assignees.splice(1, assignees.length - 2, '<span>...</span>');
+        assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
+    }
     return assignees;
 }
 
