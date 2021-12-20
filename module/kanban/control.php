@@ -234,8 +234,8 @@ class kanban extends control
      */
     public function view($kanbanID)
     {
-        $kanban     = $this->kanban->getByID($kanbanID);
-        $usersName  = $this->loadModel('user')->getPairs('noletter');
+        $kanban    = $this->kanban->getByID($kanbanID);
+        $usersName = $this->loadModel('user')->getPairs('noletter');
 
         if(!$kanban)
         {
