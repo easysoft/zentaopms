@@ -12,11 +12,15 @@ function convertStringToDate(dateString)
 
     return Date.parse(dateString);
 }
-function loadWarning(branch)
+function loadWarning(planID, branch)
 {
-    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&oldBranch=' + oldBranch + '&newBranch=' + branch), function(conflictStories)
+    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
     {
-         if(conflictStories != '') alert(conflictStories);
+        if(conflictStories != '' && !confirm(conflictStories))
+        {
+            $('#branch').val(oldBranch[planID]);
+            $('#branch').trigger("chosen:updated");
+        }
     });
 }
 

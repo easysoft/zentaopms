@@ -24,3 +24,15 @@ function changeDate(planID)
         $('.form-date').datetimepicker('update');
     }
 };
+function loadWarning(planID, branch)
+{
+    $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
+    {
+        if(conflictStories != '' && !confirm(conflictStories))
+        {
+            console.log('yes');
+            $('#branch' + planID).val(oldBranch[planID]);
+            $('#branch' + planID).trigger("chosen:updated");
+        }
+    });
+}

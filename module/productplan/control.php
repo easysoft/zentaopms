@@ -115,9 +115,12 @@ class productplan extends control
         }
 
         $plan = $this->productplan->getByID($planID);
+        $oldBranch = array();
+        $oldBranch[$planID] = $plan->branch;
         $this->commonAction($plan->product, $plan->branch);
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
+        $this->view->oldBranch  = $oldBranch;
         $this->view->plan = $plan;
         $this->display();
     }
@@ -135,18 +138,26 @@ class productplan extends control
     {
         if(isset($_POST['planIDList']))
         {
+
             $this->commonAction($productID, $branch);
             $this->view->title      = $this->lang->productplan->batchEdit;
             $this->view->position[] = html::a(inlink('browse', "productID=$productID&branch=$branch"), $this->lang->productplan->common);
             $this->view->position[] = $this->lang->productplan->batchEdit;
 
-            $this->view->plans = $this->productplan->getByIDList($this->post->planIDList);
+            $plans = $this->productplan->getByIDList($this->post->planIDList);
+            $this->view->plans = $plans;
+            $oldBranch = array();
+            foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
+            $this->view->oldBranch = $oldBranch;
+
+            $product = $this->loadModel('product')->getById($productID);
+            $this->view->branchProduct = $product->type == 'normal' ? false : true;
             die($this->display());
         }
         elseif($_POST)
         {
             $changes = $this->productplan->batchUpdate($productID);
-            $this->productplan->synchronizeStory($changes);
+            $this->synchronizeStory($changes);
             $this->loadModel('action');
             foreach($changes as $planID => $change)
             {
@@ -686,6 +697,7 @@ class productplan extends control
                 }
             }
             $oldBranch = '';
+            $newBranch = '';
         }
     }
     /**
@@ -696,8 +708,10 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function ajaxGetConflictStory($planID, $oldBranch, $newBranch)
+    public function ajaxGetConflictStory($planID, $newBranch)
     {
+        $plan                = $this->productplan->getByID($planID);
+        $oldBranch           = $plan->branch;
         $planStories         = $this->loadModel('story')->getPlanStories($planID, 'all');
         $conflictStoryIdList = '';
         if($oldBranch)
