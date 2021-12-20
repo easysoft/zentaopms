@@ -965,15 +965,15 @@ class gitlab extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $tagList    = array_chunk($tagList, $pager->recPerPage);
 
-        $this->view->gitlab            = $this->gitlab->getByID($gitlabID);
-        $this->view->pager             = $pager;
-        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTag;
-        $this->view->gitlabID          = $gitlabID;
-        $this->view->projectID         = $projectID;
-        $this->view->keyword           = $keyword;
-        $this->view->project           = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-        $this->view->gitlabTagList     = empty($tagList) ? $tagList: $tagList[$pageID - 1];
-        $this->view->orderBy           = $orderBy;
+        $this->view->gitlab        = $this->gitlab->getByID($gitlabID);
+        $this->view->pager         = $pager;
+        $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTag;
+        $this->view->gitlabID      = $gitlabID;
+        $this->view->projectID     = $projectID;
+        $this->view->keyword       = $keyword;
+        $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->gitlabTagList = empty($tagList) ? $tagList: $tagList[$pageID - 1];
+        $this->view->orderBy       = $orderBy;
         $this->display();
     }
 
