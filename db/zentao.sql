@@ -654,6 +654,7 @@ CREATE TABLE `zt_kanbanspace` (
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
   `status` enum('active','closed') NOT NULL default 'active',
+  `order` mediumint(8) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,
@@ -675,6 +676,7 @@ CREATE TABLE `zt_kanban` (
   `whitelist` text NOT NULL,
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `status` enum('active','closed') NOT NULL default 'active',
+  `order` mediumint(8) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,
@@ -690,6 +692,7 @@ CREATE TABLE `zt_kanbanregion` (
   `space` mediumint(8) unsigned NOT NULL,
   `kanban` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
+  `order` mediumint(8) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,
@@ -715,6 +718,7 @@ CREATE TABLE `zt_kanbancard` (
   `color` char(7) NOT NULL,
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
+  `order` mediumint(8) NOT NULL DEFAULT '0',
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
@@ -732,17 +736,7 @@ CREATE TABLE `zt_kanbangroup` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=MyISAM DEFAULT CHARSET=utf8;
--- DROP TABLE IF EXISTS `zt_kanbanorder`;
-CREATE TABLE `zt_kanbanorder` (
-  `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `parentID` mediumint(8) unsigned NOT NULL,
-  `parentType` varchar(20) NOT NULL,
-  `objectID` mediumint(8) NOT NULL,
-  `objectType` varchar(20) NOT NULL,
-  `account` varchar(30) NOT NULL,
-  `order` int NOT NULL,
+  `order` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbanlane`;

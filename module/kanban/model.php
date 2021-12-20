@@ -23,11 +23,8 @@ class kanbanModel extends model
      */
     public function createGroup($kanbanID, $regionID)
     {
-        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANORDER)
-            ->where('objectType')->eq('group')
-            ->andWhere('parentID')->eq($regionID)
-            ->andWhere('parentType')->eq('region')
-            ->andWhere('account')->eq('')
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANGROUP)
+            ->where('region')->eq($regionID)
             ->fetch('maxOrder');
 
         $order = $maxOrder ? $maxOrder + 1 : 1;
@@ -35,14 +32,12 @@ class kanbanModel extends model
         $group = new stdclass();
         $group->kanban = $kanbanID;
         $group->region = $regionID;
+        $group->order  = $order;
 
         $this->dao->insert(TABLE_KANBANGROUP)->data($group)->autoCheck()->exec();
         if(dao::isError()) return false;
 
-        $groupID = $this->dao->lastInsertID();
-        $this->saveOrder($regionID, 'region', $groupID, 'group', '', $order);
-
-        return $groupID;
+        return $this->dao->lastInsertID();
     }
 
     /**
@@ -80,15 +75,11 @@ class kanbanModel extends model
 
         if(!$region)
         {
-            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANORDER)
-                ->where('objectType')->eq('region')
-                ->andWhere('parentID')->eq($kanban->id)
-                ->andWhere('parentType')->eq('kanban')
-                ->andWhere('account')->eq('')
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANREGION)
+                ->where('kanban')->eq($kanban->id)
                 ->fetch('maxOrder');
 
-            $order = $maxOrder + 1;
-
+            $order  = $maxOrder ? $maxOrder + 1 : 1;
             $region = fixer::input('post')
                 ->add('kanban', $kanban->id)
                 ->add('space', $kanban->space)
@@ -98,6 +89,7 @@ class kanbanModel extends model
                 ->get();
         }
 
+        $region->order = $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
             ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0'")
@@ -108,7 +100,6 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $this->loadModel('action')->create('kanbanRegion', $regionID, 'Created');
-        $this->saveOrder($kanban->id, 'kanban', $regionID, 'region', $account, $order);
 
         if($copyRegionID)
         {
@@ -181,11 +172,11 @@ class kanbanModel extends model
         $lane->type           = 'common';
         $lane->lastEditedTime = helper::now();
         $lane->color          = '#7ec5ff';
+        $lane->order          = 1;
 
         $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
         $laneID = $this->dao->lastInsertId();
 
-        $this->saveOrder($regionID, 'region', $laneID, 'lane', '', 1);
         return $laneID;
     }
 
@@ -213,7 +204,6 @@ class kanbanModel extends model
 
             $this->createColumn($regionID, $column);
             $order ++;
-            //$this->saveOrder($regionID, 'region', $this->dao->lastInsertID(), 'column', '', $index);
         }
 
         return !dao::isError();
@@ -247,7 +237,7 @@ class kanbanModel extends model
                 $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)
                     ->where('`group`')->eq($column->group)
                     ->fetch('maxOrder');
-                $column->order = $maxOrder + 1;
+                $column->order = $maxOrder ? $maxOrder + 1 : 1;
             }
 
             if(!$column->limit && empty($_POST['noLimit'])) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
@@ -326,7 +316,7 @@ class kanbanModel extends model
         $data            = fixer::input('post')->get();
         $column          = $this->getColumnByID($columnID);
         $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
-        $order           = $maxOrder + 1;
+        $order           = $maxOrder ? $maxOrder + 1 : 1;
         $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
 
         $childrenColumn  = array();
@@ -376,6 +366,7 @@ class kanbanModel extends model
             if(!dao::isError())
             {
                 $childColumnID = $this->dao->lastInsertID();
+                if($i == 1) $this->dao->update(TABLE_KANBANCARD)->set('`column`')->eq($childColumnID)->where('`column`')->eq($columnID)->exec();
                 $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
                 $this->action->create('kanbanColumn', $childColumnID, 'created');
             }
@@ -443,33 +434,6 @@ class kanbanModel extends model
         }
 
         return false;
-    }
-
-
-    /**
-     * Save kanban object order.
-     *
-     * @param  int    $parentID
-     * @param  string $parentType
-     * @param  int    $objectID
-     * @param  string $objectType
-     * @param  string $account
-     * @param  int    $order
-     * @access public
-     * @return void
-     */
-    public function saveOrder($parentID, $parentType, $objectID, $objectType, $account, $order)
-    {
-        $kanbanOrder = new stdclass();
-        $kanbanOrder->parentID   = $parentID;
-        $kanbanOrder->parentType = $parentType;
-        $kanbanOrder->objectID   = $objectID;
-        $kanbanOrder->objectType = $objectType;
-        $kanbanOrder->account    = $account;
-        $kanbanOrder->order      = $order;
-
-        $this->dao->insert(TABLE_KANBANORDER)->data($kanbanOrder)->exec();
-        return !dao::isError();
     }
 
     /**
@@ -562,7 +526,7 @@ class kanbanModel extends model
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('deleted')->eq('0')
-            ->orderBy('id_asc')
+            ->orderBy('order_asc')
             ->fetchPairs();
     }
 
@@ -950,7 +914,7 @@ class kanbanModel extends model
         if(!dao::isError())
         {
             $spaceID = $this->dao->lastInsertID();
-            $this->saveOrder(0, '', $spaceID, 'space', '', $spaceID);
+            $this->dao->update(TABLE_KANBANSPACE)->set('`order`')->eq($spaceID)->where('id')->eq($spaceID)->exec();
             $this->file->saveUpload('kanbanspace', $spaceID);
             $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
 
@@ -1059,7 +1023,7 @@ class kanbanModel extends model
                 ->fetch('maxOrder');
             $lane = fixer::input('post')
                 ->add('region', $regionID)
-                ->add('order', $maxOrder + 1)
+                ->add('order', $maxOrder ? $maxOrder + 1 : 1)
                 ->add('lastEditedTime', helper::now())
                 ->add('type', 'common')
                 ->trim('name')
@@ -1114,6 +1078,14 @@ class kanbanModel extends model
 
          $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
 
+        if(!empty($kanban->space))
+        {
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBAN)
+                ->where('space')->eq($kanban->space)
+                ->fetch('maxOrder');
+            $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+        }
+
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
@@ -1124,7 +1096,6 @@ class kanbanModel extends model
             $kanbanID = $this->dao->lastInsertID();
             $kanban   = $this->getByID($kanbanID);
 
-            $this->saveOrder(0, '', $kanbanID, 'kanban', '', $kanbanID);
             $this->createDefaultRegion($kanban);
             $this->file->saveUpload('kanban', $kanbanID);
             $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
@@ -1728,12 +1699,12 @@ class kanbanModel extends model
         }
 
         $cardID  = (int)$cardID;
-        $oldCard = $this->getCardById($cardID);
+        $oldCard = $this->getCardByID($cardID);
 
         $now  = helper::now();
         $card = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
-            ->add('createdDate', $now)
+            ->add('lastEditedDate', $now)
             ->trim('name')
             ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
@@ -2127,6 +2098,8 @@ class kanbanModel extends model
      */
     public function getKanbanCardMenu($executionID, $objects, $objecType)
     {
+        $this->app->loadLang('execution');
+
         $menus = array();
         switch ($objecType)
         {
