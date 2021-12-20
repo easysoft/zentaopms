@@ -1704,7 +1704,7 @@ class kanbanModel extends model
         $now  = helper::now();
         $card = fixer::input('post')
             ->add('lastEditedBy', $this->app->user->account)
-            ->add('createdDate', $now)
+            ->add('lastEditedDate', $now)
             ->trim('name')
             ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
@@ -1875,6 +1875,19 @@ class kanbanModel extends model
         $switcher .= "</div></div>";
 
         $this->lang->switcherMenu = $switcher;
+    }
+
+    /**
+     * Move a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $toColID
+     * @access public
+     * @return void
+     */
+    public function moveCard($cardID, $toColID)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('column')->eq($toColID)->where('id')->eq($cardID)->exec();
     }
 
     /**
@@ -2085,6 +2098,8 @@ class kanbanModel extends model
      */
     public function getKanbanCardMenu($executionID, $objects, $objecType)
     {
+        $this->app->loadLang('execution');
+
         $menus = array();
         switch ($objecType)
         {

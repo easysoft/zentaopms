@@ -214,7 +214,7 @@ function renderUsersAvatar(users, itemID, size)
             continue;
         }
 
-        if(!user) 
+        if(!user)
         {
             assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>'));
             continue;
@@ -227,8 +227,12 @@ function renderUsersAvatar(users, itemID, size)
     }
 
     var members = assignees.length;
-    if(assignees.length > 4) assignees.splice(3, assignees.length - 4, '<span>...</span>');
-    assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
+    if(assignees.length > 2)
+    {
+        assignees.splice(1, assignees.length - 2, '<span>...</span>');
+        assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
+    }
+
     return assignees;
 }
 
@@ -364,39 +368,55 @@ function showErrorMessager(message)
 }
 
 /**
- * Update kanban
- * @param {string} [regionID] Region ID
- * @param {string} [groupID] Group ID
- * @param {function(Error)} [callback] Callback on completed
+ * Move a card.
+ *
+ * @param  int    $cardID
+ * @param  int    $toColID
+ * @param  int    $kanbanID
+ * @param  int    $regionID
+ * @access public
+ * @return string
  */
-function updateRegion(regionID, groupID, callback)
+function moveCard(cardID, toColID, kanbanID, regionID)
 {
-    if(!regionID) return false;
-    if(typeof groupID == 'function')
+    if(!cardID) return false;
+    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&toColID=' + toColID + '&kanbanID=' + kanbanID);
+    return $.ajax(
     {
-        callback = groupID;
-        groupID = 0;
-    }
-
-    var url = createLink('kanban', 'ajaxGetData', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&group=' + (groupID || 0));
-    $.ajax(
-    {
-        method:   'get',
+        method:   'post',
         dataType: 'json',
         url:      url,
-        success: function(response)
+        success: function(data)
         {
-            var kanban = $('#kanban' + regionID).data('zui.kanban');
-            if(groupID) kanban.renderKanban(response.data);
-            else kanban.render(response.data);
-            typeof callback === 'function' && callback();
+            regions = data;
+            updateRegion(regionID, data[regionID].groups[0]);
         },
         error: function(xhr, status, error)
         {
             showErrorMessager(error || lang.timeout);
-            typeof callback === 'function' && callback(error);
         }
     });
+}
+
+/**
+ * Update a region
+ *
+ * @param  int      regionID
+ * @param  array    regionData
+ * @access public
+ * @return boolean
+ */
+function updateRegion(regionID, regionData = [])
+{
+    if(!regionID) return false;
+
+    var $kanban = $('#kanban'+ regionID).kanban();
+
+    if(!$kanban.length) return false;
+    if(!regionData) regionData = regions[regionID].groups[0];
+
+    $kanban.data('zui.kanban').render(regionData);
+    return true;
 }
 
 /**
@@ -669,7 +689,20 @@ function createCardMenu(options)
     if(privs.includes('archiveCard')) items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail, 'target': 'hiddenwin'}});
-    if(privs.includes('moveCard')) items.push({label: kanbanLang.moveCard, icon: 'move', url: createLink('kanban', 'moveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('moveCard'))
+    {
+        var moveCardItems = [];
+        var moveColumns   = regions[options.$trigger.closest('.region').data('id')].groups[0].columns;
+        var parentColumns = [];
+        for(let i = moveColumns.length-1 ; i >= 0 ; i -- )
+        {
+            if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
+            if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
+            moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, moveColumns[i].id, card.kanban, card.region);}});
+        }
+        moveCardItems = moveCardItems.reverse();
+        items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
+    }
     if(privs.includes('setCardColor')) items.push({label: kanbanLang.cardColor, icon: 'color', url: createLink('kanban', 'setCardColor', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
@@ -722,6 +755,9 @@ function initKanban($kanban)
     {
         data:              region.groups,
         maxColHeight:      510,
+        fluidBoardWidth:   false,
+        minColWidth:       300,
+        maxColWidth:       300,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         itemRender:        renderKanbanItem,
@@ -910,9 +946,9 @@ $(function()
                 }
             });
         },
-      always: function(e)
-      {
-          if(sortType == 'lane') $cards.show();
-      }
+        always: function(e)
+        {
+            if(sortType == 'lane') $cards.show();
+        }
     });
 });
