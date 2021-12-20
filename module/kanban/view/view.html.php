@@ -14,7 +14,7 @@ js::set('kanbanID', $kanban->id);
 js::set('laneCount', $laneCount);
 js::set('userList', $userList);
 js::set('noAssigned', $lang->kanbancard->noAssigned);
-js::set('usersName', $usersName);
+js::set('users', $users);
 
 js::set('priv',
     array(

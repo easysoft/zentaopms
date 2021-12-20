@@ -225,6 +225,7 @@ function renderUsersAvatar(users, itemID, size)
 
         assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" href="' + link + '"/>').avatar({user: user}));
     }
+
     var members = assignees.length;
     if(assignees.length > 4) assignees.splice(3, assignees.length - 4, '<span>...</span>');
     assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
@@ -314,9 +315,9 @@ function renderKanbanItem(item, $item)
     /* Display avatars of assignedTo. */
     var assignedTo = item.assignedTo.split(',');
     var $user = $info.children('.user');
-    var users = [];
-    for(i=0; i < assignedTo.length; i++) users.push(usersName[assignedTo[i]]);
-    $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', users);
+    var title = [];
+    for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
+    $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
 
     $item.css('background-color', item.color);
     $item.toggleClass('has-color', item.color != '#FFFFFF');
