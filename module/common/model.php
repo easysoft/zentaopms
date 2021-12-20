@@ -2196,7 +2196,7 @@ EOD;
 
         /* Group priv by module the same as rights. */
         $programRightGroup = array();
-        foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
+        foreach($programRights as $programRight) $programRightGroup[strtolower($programRight->module)][strtolower($programRight->method)] = 1;
 
         /* Reset priv by program privway. */
         $rights = $this->app->user->rights['rights'];
