@@ -91,7 +91,7 @@
                     </div>
                     <?php endforeach;?>
                     <?php if($teamCount > 3):?>
-                    <?php echo '<span>…</span>';?>
+                    <?php if($teamCount > 4) echo '<span>…</span>';?>
                     <div title="<?php echo $users[$member];?>">
                       <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($teamPairs)], 'account' => $member)); ?>
                     </div>

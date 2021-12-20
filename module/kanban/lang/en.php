@@ -208,9 +208,11 @@ $lang->kanbanspace->featureBar['other']  = 'Other';
 $lang->kanbanspace->featureBar['closed'] = 'Closed';
 
 $lang->kanbancolumn = new stdclass();
-$lang->kanbancolumn->name  = $lang->kanban->columnName;
-$lang->kanbancolumn->limit = $lang->kanban->WIPCount;
-$lang->kanbancolumn->color = 'Column Color';
+$lang->kanbancolumn->name       = $lang->kanban->columnName;
+$lang->kanbancolumn->limit      = $lang->kanban->WIPCount;
+$lang->kanbancolumn->color      = 'Column Color';
+$lang->kanbancolumn->childName  = 'Name';
+$lang->kanbancolumn->childColor = 'Color';
 
 $lang->kanbancolumn->confirmDelete = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
 

@@ -451,7 +451,7 @@ class kanban extends control
         if($_POST)
         {
             $order    = $position == 'left' ? $column->order : $column->order + 1;
-            $columnID = $this->kanban->createColumn($column->region, null, $order);
+            $columnID = $this->kanban->createColumn($column->region, null, $order, $column->parent);
             if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
             $this->loadModel('action')->create('kanbanColumn', $columnID, 'Created');
@@ -461,6 +461,24 @@ class kanban extends control
         $this->view->title    = $this->lang->kanban->createColumn;
         $this->view->column   = $column;
         $this->view->position = $position;
+        $this->display();
+    }
+
+    /**
+     * Split column.
+     *
+     * @access public
+     * @return void
+     */
+    public function splitColumn($columnID)
+    {
+        if(!empty($_POST))
+        {
+            $this->kanban->splitColumn($columnID);
+            if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
+            $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => 'parent'));
+        }
+
         $this->display();
     }
 

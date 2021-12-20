@@ -225,15 +225,17 @@ class kanbanModel extends model
      * @param  int    $regionID
      * @param  object $column
      * @param  int    $order
+     * @param  int    $parent
      * @access public
      * @return int
      */
-    public function createColumn($regionID, $column = null, $order = 0)
+    public function createColumn($regionID, $column = null, $order = 0, $parent = 0)
     {
         if(empty($column))
         {
             $column = fixer::input('post')
                 ->add('region', $regionID)
+                ->add('parent', $parent)
                 ->setIF($order, 'order', $order)
                 ->setDefault('color', '#333')
                 ->trim('name')
@@ -264,10 +266,11 @@ class kanbanModel extends model
         {
             /* Create a child column. */
             $parentColumn = $this->getColumnByID($column->parent);
-            if($parentColumn->limit)
+            if($parentColumn->limit != -1)
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
-                if(!$limit || $limit > $parentColumn->limit)
+                $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->fetch('sumChildLimit');
+                if($limit == -1 or (($limit + $sumChildLimit) > $parentColumn->limit))
                 {
                     dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
                     return false;
@@ -277,7 +280,7 @@ class kanbanModel extends model
                 foreach($childColumns as $childColumn)
                 {
                     $limit += (int)$childColumn->limit;
-                    if($limit > $parentColumn->limit)
+                    if($limit > $parentColumn->limit and $parentColumn->limit != -1)
                     {
                         /* The total WIP of the child columns is greater than the WIP of the parent column. */
                         dao::$errors['limit'][] = $this->lang->kanban->error->childLimitNote;
@@ -308,6 +311,77 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
         return $columnID;
+    }
+
+    /**
+     * Split column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function splitColumn($columnID)
+    {
+        $this->loadModel('action');
+        $data            = fixer::input('post')->get();
+        $column          = $this->getColumnByID($columnID);
+        $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
+        $order           = $maxOrder + 1;
+        $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
+
+        $childrenColumn  = array();
+        foreach($data->name as $i => $name)
+        {
+            $childColumn = new stdclass();
+            $childColumn->lane   = $column->lane;
+            $childColumn->parent = $column->id;
+            $childColumn->region = $column->region;
+            $childColumn->group  = $column->group;
+            $childColumn->name   = $name;
+            $childColumn->color  = $data->color[$i];
+            $childColumn->limit  = isset($data->noLimit[$i]) ? -1 : $data->WIPCount[$i];
+            $childColumn->order  = $order;
+
+            if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!isset($data->noLimit[$i]) and $childColumn->limit <= 0))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+                return false;
+            }
+
+            if(empty($childColumn->name))
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->kanbancolumn->name);
+                return false;
+            }
+
+            $sumChildLimit += $childColumn->limit;
+            if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                return false;
+            }
+
+            $order ++;
+            $childrenColumn[$i] = $childColumn;
+        }
+
+        foreach($childrenColumn as $i => $childColumn)
+        {
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($childColumn)
+                ->autoCheck()
+                ->batchCheck($this->config->kanban->splitcolumn->requiredFields, 'notempty')
+                ->exec();
+
+            if(dao::isError()) return false;
+            if(!dao::isError())
+            {
+                $childColumnID = $this->dao->lastInsertID();
+                $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
+                $this->action->create('kanbanColumn', $childColumnID, 'created');
+            }
+        }
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($columnID)->exec();
     }
 
     /**
@@ -569,7 +643,7 @@ class kanbanModel extends model
                     if($this->isClickable($column, $action)) $column->actions[] = $action;
                 }
 
-                if($column->parent) continue;
+                if($column->parent and $column->parent != -1) continue;
 
                 $parentColumnGroup[$group][] = $column;
             }
@@ -2130,8 +2204,8 @@ class kanbanModel extends model
                     ->beginIF($action == 'sortlane')->andWhere('`group`')->eq($object->group)->fi()
                     ->fetch('count');
                 return $count > 1;
-            case 'createcolumn' :
-            case 'copycolumn' :
+            case 'createColumn' :
+            case 'copyColumn' :
             case 'splitcolumn' :
                 if($object->parent) return false;   // The current column is a child column.
 

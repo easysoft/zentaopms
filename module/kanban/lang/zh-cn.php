@@ -208,9 +208,11 @@ $lang->kanbanspace->featureBar['other']  = '其他空间';
 $lang->kanbanspace->featureBar['closed'] = '已关闭';
 
 $lang->kanbancolumn = new stdclass();
-$lang->kanbancolumn->name  = $lang->kanban->columnName;
-$lang->kanbancolumn->limit = $lang->kanban->WIPCount;
-$lang->kanbancolumn->color = '看板列颜色';
+$lang->kanbancolumn->name       = $lang->kanban->columnName;
+$lang->kanbancolumn->limit      = $lang->kanban->WIPCount;
+$lang->kanbancolumn->color      = '看板列颜色';
+$lang->kanbancolumn->childName  = '子列名称';
+$lang->kanbancolumn->childColor = '子状态颜色';
 
 $lang->kanbancolumn->confirmDelete = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
 
