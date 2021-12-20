@@ -2023,7 +2023,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where('parent')->eq($parentID)
-            //->andWhere('archived')->eq($archived)
+            ->andWhere('archived')->eq($archived)
             ->andWhere('deleted')->eq($deleted)
             ->orderBy('order')
             ->fetchAll('id');
