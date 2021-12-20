@@ -788,9 +788,9 @@ $(function()
         initKanban($(this));
     });
 
-    $('.icon-double-angle-up,.icon-double-angle-down').on('click', function()
+    $('.icon-chevron-double-up,.icon-chevron-double-down').on('click', function()
     {
-        $(this).toggleClass('icon-double-angle-up icon-double-angle-down');
+        $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
     });
@@ -901,7 +901,13 @@ $(function()
         {
             if(sortType == 'region')
             {
-                $('.icon-double-angle-up').attr('class', 'icon-double-angle-down');
+                showRegionIdList = '';
+                $('.icon-chevron-double-up').each(function()
+                {
+                    showRegionIdList += $(this).attr('data-id') + ',';
+                    $(this).attr('class', 'icon-chevron-double-down');
+                });
+
                 $('.region').find('.kanban').hide();
                 hideKanbanAction();
             }
@@ -917,8 +923,15 @@ $(function()
 
             if(sortType == 'region')
             {
-                $('.icon-double-angle-down').attr('class', 'icon-double-angle-up');
-                $('.region').find('.kanban').show();
+                $('.region').each(function()
+                {
+                    if(showRegionIdList.includes($(this).attr('data-id')))
+                    {
+                        $(this).find('.icon-chevron-double-down').attr('class', 'icon-chevron-double-up');
+                        $(this).find('.kanban').show();
+                    }
+                })
+
                 url = createLink('kanban', 'sortRegion', 'regions=' + orders.join(','));
             }
             if(sortType == 'board')
