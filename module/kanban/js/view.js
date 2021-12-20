@@ -821,7 +821,8 @@ $(function()
             if($ele.hasClass('kanban-lane'))
             {
                 sortType = 'lane';
-                $cards = $ele.find('.kanban-item');
+                $cards   = $ele.find('.kanban-item');
+
                 $cards.hide();
                 return $ele.parent().children('.kanban-lane');
             }

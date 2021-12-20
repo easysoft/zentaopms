@@ -568,7 +568,7 @@ class actionModel extends model
             $typeTrashes[$object->objectType][] = $object->objectID;
         }
 
-        $kanban = array('kanbanspace', 'kanban', 'kanbanregion', 'kanbanlane', 'kanbancolumn', 'kanbancard');
+        $kanbanModuleList = array('kanbanspace', 'kanban', 'kanbanregion', 'kanbanlane', 'kanbancolumn', 'kanbancard');
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
@@ -581,7 +581,7 @@ class actionModel extends model
                 $objectNames['jenkins'] = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('jenkins')->fetchPairs();
                 $objectNames['gitlab']  = $this->dao->select("id, $field AS name")->from($table)->where('id')->in($objectIdList)->andWhere('type')->eq('gitlab')->fetchPairs();
             }
-            elseif(in_array($objectType, $kanban))
+            elseif(in_array($objectType, $kanbanModuleList))
             {
                 $objectNames[$objectType] = $this->dao->select("*")->from($table)->where('id')->in($objectIdList)->fetchAll('id');
             }
@@ -602,7 +602,7 @@ class actionModel extends model
                 $trash->objectType = $objectType;
                 $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
             }
-            elseif(in_array($objectType, $kanban))
+            elseif(in_array($objectType, $kanbanModuleList))
             {
                 if($trash->objectID == 0)
                 {
