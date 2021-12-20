@@ -21,11 +21,11 @@
     <div class='btn-group dropdown'>
       <?php
       $actionLink = $this->createLink('stakeholder', 'create', "projectID=$projectID");
-      echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary'");
+      echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->stakeholder->create}", '', "class='btn btn-primary' data-app='{$app->tab}'");
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
-        <li><?php echo html::a($actionLink, $lang->stakeholder->create);?></li>
+        <li><?php echo html::a($actionLink, $lang->stakeholder->create, '', "data-app='{$app->tab}'");?></li>
         <li><?php echo html::a($this->createLink('stakeholder', 'batchCreate', "projectID=$projectID&from="), $lang->stakeholder->batchCreate);?></li>
       </ul>
     </div>
