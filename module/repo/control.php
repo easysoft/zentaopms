@@ -1184,11 +1184,9 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function apiGetRepoByUrl($type = 'gitlab')
+    public function apiGetRepoByUrl()
     {
-        if($type != 'gitlab') return $this->send(array('result' => 'fail', 'message' => 'Now only search gitlab.'));
-
-        $url    = urldecode($this->get->url);
+        $url    = urldecode($this->post->repoUrl);
         $result = $this->repo->getRepoByUrl($url);
         return $this->send($result);
     }
