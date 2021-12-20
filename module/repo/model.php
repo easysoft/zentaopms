@@ -405,6 +405,8 @@ class repoModel extends model
      */
     public function getRepoByUrl($url)
     {
+        if(empty($url)) return array('result' => 'fail', 'message' => 'Url is empty.');
+
         $parsedUrl = parse_url($url);
 
         $isSSH   = $parsedUrl['scheme'] == 'ssh';
@@ -448,7 +450,7 @@ class repoModel extends model
         $matchedRepo = '';
         foreach($matchedRepos as $repo)
         {
-            if(!empty($matchedRepo->preMerge))
+            if(!empty($repo->preMerge))
             {
                 $matchedRepo = $repo;
                 break;

@@ -1188,6 +1188,13 @@ class repo extends control
     {
         $url    = urldecode($this->post->repoUrl);
         $result = $this->repo->getRepoByUrl($url);
-        return $this->send($result);
+        if($result['result'] == 'fail') return $this->send($result);
+
+        $repo = $result['data'];
+        $fileServer = new stdclass();
+        $fileServer->fileServerUrl      = $repo->fileServerUrl;
+        $fileServer->fileServerAccount  = $repo->fileServerAccount;
+        $fileServer->fileServerPassword = $repo->fileServerPassword;
+        return $this->send($fileServer);
     }
 }
