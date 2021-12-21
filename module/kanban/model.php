@@ -225,7 +225,7 @@ class kanbanModel extends model
         {
             $column = fixer::input('post')
                 ->add('region', $regionID)
-                ->add('parent', $parent)
+                ->setIF($parent > 0, 'parent', $parent)
                 ->setIF($order, 'order', $order)
                 ->setDefault('color', '#333')
                 ->trim('name')
@@ -252,7 +252,7 @@ class kanbanModel extends model
         $column->limit = (int)$column->limit;
 
         $limit = $column->limit;
-        if($column->parent > 0)
+        if(isset($column->parent) and $column->parent > 0)
         {
             /* Create a child column. */
             $parentColumn = $this->getColumnByID($column->parent);
