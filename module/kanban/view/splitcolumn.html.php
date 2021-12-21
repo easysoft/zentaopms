@@ -20,7 +20,6 @@
       <table class='table table-form'>
         <?php $i = 1;?>
         <tr>
-          <td class='c-id'><strong><?php echo $i;?></strong></td>
           <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
           <td class='c-color required'>
             <div class="input-control has-icon-right">
@@ -50,7 +49,6 @@
         </tr>
         <?php $i++;?>
         <tr>
-          <td class='c-id'><strong><?php echo $i;?></strong></td>
           <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
           <td class='c-color required'>
             <div class="input-control has-icon-right">
@@ -59,7 +57,7 @@
                 <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
                 <ul class="dropdown-menu clearfix">
                 </ul>
-                <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control'data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
+                <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control' data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
               </div>
             </div>
           </td>
@@ -98,7 +96,6 @@
   <?php $i = '%i%';?>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
-      <td class='c-id'><strong><?php echo $i;?></strong></td>
       <td class='c-nameTitle'><strong><?php echo $lang->kanbancolumn->childName;?></strong></td>
       <td class='c-color required'>
         <div class="input-control has-icon-right">
@@ -107,7 +104,7 @@
             <button type="button" class="btn btn-link dropdown-toggle" data-toggle="dropdown"><span class="cp-title"></span><span class="color-bar"></span><i class="ic"></i></button>
             <ul class="dropdown-menu clearfix">
             </ul>
-            <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control'data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
+            <input type='hidden' id='color<?php echo $i;?>' name="color[<?php echo $i;?>]" class='form-control' data-icon="color" data-provide='colorpicker' data-wrapper='input-control-icon-right' data-pull-menu-right="true" data-optional='false' value='#333' data-colors="<?php echo implode(',', $config->kanban->columnColorList);?>">
           </div>
         </div>
       </td>

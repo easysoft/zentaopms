@@ -22,6 +22,8 @@ function fullScreen()
 {
     var element       = document.getElementById('kanban');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+
+    $('.region-header .action').attr('disabled', true);
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
@@ -125,7 +127,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
         var $actions = $column.children('.actions');
 
-        if(columnPrivs.includes('createCard'))
+        if(columnPrivs.includes('createCard') && column.parent != -1)
         {
             var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
             addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
