@@ -506,6 +506,33 @@ class kanban extends control
     }
 
     /**
+     * Archive a column.
+     *
+     * @param  int    $columnID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function archiveColumn($columnID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanbancolumn->confirmArchive, $this->createLink('kanban', 'archiveColumn', "columnID=$columnID&confirm=yes")));
+        }
+        else
+        {
+            $changes = $this->kanban->archiveColumn($columnID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
+            $this->action->logHistory($actionID, $changes);
+
+            if(isonlybody()) die(js::reload('parent.parent'));
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
      * Delete a column.
      *
      * @param  int    $columnID
@@ -639,6 +666,33 @@ class kanban extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         die(json_encode($kanbanGroup));
+    }
+
+    /**
+     * Archive a card.
+     *
+     * @param  int    $cardID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function archiveCard($cardID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanbancard->confirmArchive, $this->createLink('kanban', 'archiveCard', "cardID=$cardID&confirm=yes")));
+        }
+        else
+        {
+            $changes = $this->kanban->archiveCard($cardID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
+            $this->action->logHistory($actionID, $changes);
+
+            if(isonlybody()) die(js::reload('parent.parent'));
+            die(js::reload('parent'));
+        }
     }
 
 	/**

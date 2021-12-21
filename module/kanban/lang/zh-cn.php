@@ -214,7 +214,8 @@ $lang->kanbancolumn->color      = '看板列颜色';
 $lang->kanbancolumn->childName  = '子列名称';
 $lang->kanbancolumn->childColor = '子状态颜色';
 
-$lang->kanbancolumn->confirmDelete = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
+$lang->kanbancolumn->confirmArchive = '您确认归档该列吗？归档列后，该列和列中所有卡片将被隐藏，您可以在区域-已归档中查看已归档的列。';
+$lang->kanbancolumn->confirmDelete  = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name      = $lang->kanban->laneName;
@@ -271,7 +272,8 @@ $lang->kanbancard->deadlineAB      = '截止';
 $lang->kanbancard->beginAB         = '开始';
 $lang->kanbancard->to              = '至';
 
-$lang->kanbancard->confirmDelete = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
+$lang->kanbancard->confirmArchive = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
+$lang->kanbancard->confirmDelete  = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

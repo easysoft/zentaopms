@@ -739,12 +739,13 @@ function createCardMenu(options)
     {
         var cardColoritems = [];
         if(!card.color) color = "#fff";
-        colorList.forEach(function(color)
+        for(let i = 0 ; i < colorList.length ; i ++ )
         {
-            attr = card.color == color ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
-            cardColoritems.push({label: "<div class='cardcolor' style='background:" + color + "; width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px;'></div>" + colorListLang[color]  + attr ,
-                onClick: function(){setCardColor(card.id, color, card.kanban, card.region);}, html: true, attrs: {'style' : 'padding:2px 2px; width: 100px;'}});
-        });
+            let attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
+            let border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
+            cardColoritems.push({label: "<div class='cardcolor' style='background:" + colorList[i] + ";" + border + "'></div>" + colorListLang[colorList[i]]  + attr ,
+                onClick: function(){setCardColor(card.id, colorList[i], card.kanban, card.region);}, html: true, attrs: {id: 'cardcolormenu'}, className: 'color' + i});
+        };
         items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
     }
 
@@ -898,6 +899,18 @@ $(function()
         $(this).closest('tr').remove();
         processMinusBtn();
         return false;
+    });
+
+    /* Mofidy dafault color's border color. */
+    $(document).on('mouseout', '.color0', function()
+    {
+        $('.color0 .cardcolor').css('border', '1px solid #b0b0b0');
+    });
+
+    /* Mofidy dafault color's border color. */
+    $(document).on('mouseover', '.color0', function()
+    {
+        $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
     /* Init sortable */

@@ -1941,6 +1941,50 @@ class kanbanModel extends model
     }
 
     /**
+     * Archive a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return string
+     */
+    public function archiveColumn($columnID)
+    {
+        $oldColumn = $this->getColumnByID($columnID);
+
+        $this->dao->update(TABLE_KANBANCOLUMN)
+            ->set('archived')->eq(1)
+            ->where('id')->eq($columnID)
+            ->exec();
+
+        $column = $this->getColumnByID($columnID);
+
+        if(!dao::isError()) return common::createChanges($oldColumn, $column);
+    }
+
+    /**
+     * Archive a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return string
+     */
+    public function archiveCard($cardID)
+    {
+        $oldCard = $this->getCardByID($cardID);
+
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('archived')->eq(1)
+            ->set('archivedBy')->eq($this->app->user->account)
+            ->set('archivedDate')->eq(helper::now())
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        $card = $this->getCardByID($cardID);
+
+        if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
      * Get space by id.
      *
      * @param  int    $spaceID
