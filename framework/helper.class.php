@@ -255,7 +255,7 @@ class helper extends baseHelper
      * @param string $content
      * @return void
      */
-    public static function die($content)
+    public static function end($content)
     {
         throw EndResponseException::create($content);
     }
