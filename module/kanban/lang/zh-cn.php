@@ -43,6 +43,9 @@ $lang->kanban->spaceCommon         = '看板空间';
 $lang->kanban->styleCommon         = '样式';
 $lang->kanban->copy                = '复制';
 $lang->kanban->custom              = '自定义';
+$lang->kanban->archived            = '已归档';
+$lang->kanban->viewArchivedCard    = '查看已归档卡片';
+$lang->kanban->viewArchivedColumn  = '查看已归档列';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';

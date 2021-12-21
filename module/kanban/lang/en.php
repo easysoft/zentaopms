@@ -43,6 +43,9 @@ $lang->kanban->spaceCommon         = 'Kanban Space';
 $lang->kanban->styleCommon         = 'Style';
 $lang->kanban->copy                = 'Copy';
 $lang->kanban->custom              = 'Custom';
+$lang->kanban->archived            = 'Archived';
+$lang->kanban->viewArchivedCard    = 'View archived card';
+$lang->kanban->viewArchivedColumn  = 'View archived column';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
