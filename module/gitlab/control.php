@@ -945,8 +945,12 @@ class gitlab extends control
         $this->session->set('gitlabTagList', $this->app->getURI(true));
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         $tagList = array();
-        $result  = $this->gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword);
+        $result  = $this->gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword, $pager);
         foreach($result as $gitlabTag)
         {
             $tag = new stdClass();
@@ -957,12 +961,6 @@ class gitlab extends control
             $tagList[] = $tag;
         }
 
-        /* Pager. */
-        $this->app->loadClass('pager', $static = true);
-        $recTotal   = count($tagList);
-        $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $tagList    = array_chunk($tagList, $pager->recPerPage);
-
         $this->view->gitlab        = $this->gitlab->getByID($gitlabID);
         $this->view->pager         = $pager;
         $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTag;
@@ -970,7 +968,7 @@ class gitlab extends control
         $this->view->projectID     = $projectID;
         $this->view->keyword       = $keyword;
         $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-        $this->view->gitlabTagList = empty($tagList) ? $tagList: $tagList[$pageID - 1];
+        $this->view->gitlabTagList = $tagList;
         $this->view->orderBy       = $orderBy;
         $this->display();
     }
