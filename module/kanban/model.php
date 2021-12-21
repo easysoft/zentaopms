@@ -259,7 +259,7 @@ class kanbanModel extends model
             if($parentColumn->limit != -1)
             {
                 /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
-                $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->fetch('sumChildLimit');
+                $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->andWhere('deleted')->eq(0)->fetch('sumChildLimit');
                 if($limit == -1 or (($limit + $sumChildLimit) > $parentColumn->limit))
                 {
                     dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
@@ -1757,7 +1757,7 @@ class kanbanModel extends model
         $sumChildLimit = 0;
         if($oldColumn->parent == -1 and $column->limit != -1)
         {
-            $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
+            $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->andWhere('deleted')->eq(0)->fetchAll();
             foreach($childColumns as $childColumn)
             {
                 if($childColumn->limit == -1)

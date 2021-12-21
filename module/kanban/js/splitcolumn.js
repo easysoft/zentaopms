@@ -16,8 +16,9 @@ function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
+    $('.colorpicker #color' + i).colorPicker();
 
-    i++;
+    i ++;
 }
 
 function deleteItem(obj)
