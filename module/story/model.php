@@ -2825,7 +2825,7 @@ class storyModel extends model
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
             ->fi()
-            ->beginIF($includeLibStories == false)->andWhere('t1.lib')->eq('0')->fi()
+            ->beginIF($includeLibStories == false and isset($this->config->maxVersion))->andWhere('t1.lib')->eq('0')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
