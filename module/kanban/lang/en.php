@@ -278,6 +278,11 @@ $lang->kanbancard->priList[2] = 2;
 $lang->kanbancard->priList[3] = 3;
 $lang->kanbancard->priList[4] = 4;
 
+$lang->kanbancard->colorList['#fff']    = 'Default';
+$lang->kanbancard->colorList['#d2323d'] = 'Blocking';
+$lang->kanbancard->colorList['#f7b501'] = 'Warning';
+$lang->kanbancard->colorList['#278427'] = 'Urgent';
+
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
 $lang->kanbancard->error->endSmall    = '"End Date" cannot be less than "Begin Date"';

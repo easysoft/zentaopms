@@ -1920,6 +1920,19 @@ class kanbanModel extends model
     }
 
     /**
+     * Update a card's color.
+     *
+     * @param  int    $cardID
+     * @param  int    $color
+     * @access public
+     * @return void
+     */
+    public function updateCardColor($cardID, $color)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('`color`')->eq('#' . $color)->where('id')->eq($cardID)->exec();
+    }
+
+    /**
      * Reset order of lane.
      *
      * @param  int    $executionID

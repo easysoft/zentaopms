@@ -601,6 +601,23 @@ class kanban extends control
         die(json_encode($kanbanGroup));
     }
 
+    /**
+     * Set a card's color.
+     *
+     * @param  int   $cardID
+     * @param  int   $color
+     * @param  int   $kanbanID
+     * @access public
+     * @return string
+     */
+    public function setCardColor($cardID, $color, $kanbanID)
+    {
+        $this->kanban->updateCardColor($cardID, $color);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
+        die(json_encode($kanbanGroup));
+    }
+
 	/**
 	 * Delete a card.
 	 *

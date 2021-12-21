@@ -278,6 +278,11 @@ $lang->kanbancard->priList[2] = 2;
 $lang->kanbancard->priList[3] = 3;
 $lang->kanbancard->priList[4] = 4;
 
+$lang->kanbancard->colorList['#fff']    = '默认';
+$lang->kanbancard->colorList['#d2323d'] = '阻塞';
+$lang->kanbancard->colorList['#f7b501'] = '警告';
+$lang->kanbancard->colorList['#278427'] = '加急';
+
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = '预计不能为负数!';
 $lang->kanbancard->error->endSmall    = '"截止日期"不能小于"预计开始"!';
