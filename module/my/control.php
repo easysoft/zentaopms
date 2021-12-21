@@ -816,14 +816,19 @@ class my extends control
      */
     public function editProfile()
     {
-        if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
+        if($this->app->user->account == 'guest')
+        {
+            echo js::alert('guest'), js::locate('back');
+            return;
+        }
         if(!empty($_POST))
         {
             $_POST['account'] = $this->app->user->account;
             $_POST['groups']  = $this->dao->select('`group`')->from(TABLE_USERGROUP)->where('account')->eq($this->post->account)->fetchPairs('group', 'group');
             $this->user->update($this->app->user->id);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate($this->createLink('my', 'profile'), 'parent'));
+            if(dao::isError()) helper::die(js::error(dao::getError()));
+            echo js::locate($this->createLink('my', 'profile'), 'parent');
+            return;
         }
 
         $this->app->loadConfig('user');
