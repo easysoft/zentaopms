@@ -419,6 +419,7 @@ class kanbanModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
+            ->add('color', '#fff')
             ->trim('name')
             ->setDefault('estimate', 0)
             ->join('assignedTo', ',')

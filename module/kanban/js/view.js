@@ -381,7 +381,7 @@ function moveCard(cardID, toColID, kanbanID, regionID)
     {
         method:   'post',
         dataType: 'json',
-        url:      url,
+        url:       url,
         success: function(data)
         {
             regions = data;
@@ -413,7 +413,7 @@ function setCardColor(cardID, color, kanbanID, regionID)
     {
         method:   'post',
         dataType: 'json',
-        url:      url,
+        url:       url,
         success: function(data)
         {
             regions = data;
