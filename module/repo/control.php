@@ -1177,4 +1177,24 @@ class repo extends control
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
 
+    /**
+     * API: get repo by url.
+     *
+     * @param  string $type  gitlab
+     * @access public
+     * @return void
+     */
+    public function apiGetRepoByUrl()
+    {
+        $url    = urldecode($this->post->repoUrl);
+        $result = $this->repo->getRepoByUrl($url);
+        if($result['result'] == 'fail') return $this->send($result);
+
+        $repo = $result['data'];
+        $fileServer = new stdclass();
+        $fileServer->fileServerUrl      = $repo->fileServerUrl;
+        $fileServer->fileServerAccount  = $repo->fileServerAccount;
+        $fileServer->fileServerPassword = $repo->fileServerPassword;
+        return $this->send($fileServer);
+    }
 }

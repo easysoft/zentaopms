@@ -1466,10 +1466,11 @@ class gitlabModel extends model
      * @param  int    $projectID
      * @param  string $orderBy
      * @param  string $keyword
+     * @param  object $pager
      * @access public
      * @return object
      */
-    public function apiGetTags($gitlabID, $projectID, $orderBy = '', $keyword = '')
+    public function apiGetTags($gitlabID, $projectID, $orderBy = '', $keyword = '', $pager = null)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
 
@@ -1482,8 +1483,24 @@ class gitlabModel extends model
 
         if($keyword) $apiRoot .= "&search={$keyword}";
 
-        $url = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
-        return json_decode(commonModel::http($url));
+        if(!$pager)
+        {
+            $url = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
+            return json_decode(commonModel::http($url));
+        }
+        else
+        {
+            $apiRoot .= "&per_page={$pager->recPerPage}&page={$pager->pageID}";
+            $url      = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
+            $result   = commonModel::httpWithHeader($url);
+
+            $header = $result['header'];
+            $pager->setRecTotal($header['X-Total']);
+            $pager->setPageTotal();
+            if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+
+            return json_decode($result['body']);
+        }
     }
 
     /**

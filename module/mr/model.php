@@ -179,6 +179,71 @@ class mrModel extends model
     }
 
     /**
+     * Create MR function by api.
+     *
+     * @access public
+     * @return int|bool|object
+     */
+    public function apiCreate()
+    {
+        $postData = fixer::input('post')
+            ->setDefault('url,sourceBranch,targetBranch,diff,mergeStatus,hasNoConflict', '')
+            ->get();
+
+        $repo = $this->loadModel('repo')->getRepoByUrl($postData->url);
+        if(!$repo || $repo->result != 'fail') return false;
+        $repo = (object)$repo->data;
+
+        /* Process and insert mr data. */
+        $MR = new stdClass();
+        $MR->gitlabID       = $repo->client;
+        $MR->sourceProject  = $repo->path;
+        $MR->sourceBranch   = $postData->sourceBranch;
+        $MR->targetProject  = $repo->path;
+        $MR->targetBranch   = $postData->taretBranch;
+        $MR->diffs          = $postData->diff;
+        $MR->title          = 'Merge request';
+        $MR->repoID         = $repo->id;
+        $MR->jobID          = $postData->jobID; 
+        $MR->synced         = '0';
+        $MR->needCI         = '1';
+        $MR->approvalStatus = 'approved';
+        $MR->hasNoConflict  = $postData->hasNoConflict ? '1' : '0';
+        $MR->mergeStatus    = $postData->mergeStatus ? 'can_be_merged' : 'cannot_be_merged';
+        $MR->createdBy      = $this->app->user->account;
+        $MR->createdDate    = date('Y-m-d H:i:s');
+
+        $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+            ->batchCheck($this->config->mr->apicreate->requiredFields, 'notempty')
+            ->checkIF($MR->needCI, 'jobID',  'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        /* Exec Job */
+        if($MR->hasNoConflict == '1' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
+        {
+            $MRID     = $this->dao->lastInsertId();
+            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+            if(!empty($pipeline->queue))
+            {
+                $newMR   = new stdClass();
+                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $newMR->compileID = $compile->id;
+                $newMR->compileStatus = $compile->status;
+
+                /* Update MR in Zentao database. */
+                $this->dao->update(TABLE_MR)->data($newMR)
+                    ->where('id')->eq($MRID)
+                    ->autoCheck()
+                    ->exec();
+                if(dao::isError()) return false;
+            }
+        }
+        return true;
+    }
+
+    /**
      * Edit MR function.
      *
      * @access public

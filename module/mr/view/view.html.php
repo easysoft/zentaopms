@@ -74,7 +74,8 @@
                    </tr>
                    <tr>
                      <th><?php echo $lang->mr->MRHasConflicts; ?></th>
-                     <td><?php echo ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
+                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict; ?>
+                     <td><?php echo ($hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
                   </tr>
                    <tr>
                      <th><?php echo $lang->mr->description;?></th>
@@ -96,10 +97,10 @@
         <div class='main-actions'>
           <div class="btn-toolbar">
             <?php common::printBack(inlink('browse', '')); ?>
-            <?php $acceptDisabled = ($MR->approvalStatus != 'approved' or ($MR->compileID !=0 and $MR->compileStatus != 'success')) ? ' disabled' : ''; ?>
+            <?php $acceptDisabled = ($MR->approvalStatus != 'approved' or ($MR->compileID != 0 and $MR->compileStatus != 'success')) ? ' disabled' : ''; ?>
             <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) common::printIcon('mr', 'accept', "mr=$MR->id", $MR, 'button', 'flow', 'hiddenwin', 'mergeButton btn', false, $acceptDisabled, $lang->mr->acceptMR);?>
             <?php if($rawMR->state == 'opened'): ?>
-              <?php if($rawMR->has_conflicts or ($MR->compileID !=0 and $MR->compileStatus != 'success') or $MR->approvalStatus == 'approved'):?>
+              <?php if($rawMR->has_conflicts or ($MR->compileID != 0 and $MR->compileStatus != 'success') or $MR->approvalStatus == 'approved'):?>
               <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
               <?php else:?>
               <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
