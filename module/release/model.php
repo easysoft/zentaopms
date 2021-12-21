@@ -112,9 +112,10 @@ class releaseModel extends model
     public function create($productID, $branch = 0)
     {
         /* Init vars. */
-        $productID = (int)$productID;
-        $branch    = (int)$branch;
-        $buildID   = 0;
+        $productID     = (int)$productID;
+        $branch        = (int)$branch;
+        $buildID       = 0;
+        $linkToRelease = $this->post->sync;
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
@@ -131,7 +132,7 @@ class releaseModel extends model
             ->join('mailto', ',')
             ->setIF($this->post->build == false, 'build', $buildID)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-            ->remove('allchecker,files,labels,uid')
+            ->remove('allchecker,files,labels,uid,sync')
             ->get();
 
         /* Auto create build when release is not link build. */
@@ -177,13 +178,12 @@ class releaseModel extends model
             $buildInfo = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
             $release->project = $buildInfo->project;
-            if($release->sync)
+            if($linkToRelease)
             {
                 $release->stories = $buildInfo->stories;
                 $release->bugs    = $buildInfo->bugs;
             }
         }
-
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
             ->autoCheck()
