@@ -722,7 +722,7 @@ function createCardMenu(options)
         var moveCardItems = [];
         var moveColumns   = regions[options.$trigger.closest('.region').data('id')].groups[0].columns;
         var parentColumns = [];
-        for(let i = moveColumns.length-1 ; i >= 0 ; i -- )
+        for(var i = moveColumns.length-1 ; i >= 0 ; i -- )
         {
             if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
             if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
@@ -735,12 +735,13 @@ function createCardMenu(options)
     {
         var cardColoritems = [];
         if(!card.color) color = "#fff";
-        colorList.forEach(function(color)
+        for(var i = 0 ; i < colorList.length ; i ++ )
         {
-            attr = card.color == color ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
-            cardColoritems.push({label: "<div class='cardcolor' style='background:" + color + "; width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px;'></div>" + colorListLang[color]  + attr ,
-                onClick: function(){setCardColor(card.id, color, card.kanban, card.region);}, html: true, attrs: {'style' : 'padding:2px 2px; width: 100px;'}});
-        });
+            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
+            var border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
+            cardColoritems.push({label: "<div class='cardcolor' style='background:" + colorList[i] + ";" + border + "'></div>" + colorListLang[colorList[i]]  + attr ,
+                onClick: function(){setCardColor(card.id, colorList[i], card.kanban, card.region);}, html: true, attrs: {id: 'cardcolormenu'}, className: 'color' + i});
+        };
         items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
     }
 
@@ -894,6 +895,18 @@ $(function()
         $(this).closest('tr').remove();
         processMinusBtn();
         return false;
+    });
+
+    /* Mofidy dafault color's border color. */
+    $(document).on('mouseout', '.color0', function()
+    {
+        $('.color0 .cardcolor').css('border', '1px solid #b0b0b0');
+    });
+
+    /* Mofidy dafault color's border color. */
+    $(document).on('mouseover', '.color0', function()
+    {
+        $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
     /* Init sortable */

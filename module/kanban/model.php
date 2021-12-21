@@ -225,7 +225,7 @@ class kanbanModel extends model
         {
             $column = fixer::input('post')
                 ->add('region', $regionID)
-                ->add('parent', $parent)
+                ->setIF($parent > 0, 'parent', $parent)
                 ->setIF($order, 'order', $order)
                 ->setDefault('color', '#333')
                 ->trim('name')
@@ -252,7 +252,7 @@ class kanbanModel extends model
         $column->limit = (int)$column->limit;
 
         $limit = $column->limit;
-        if($column->parent > 0)
+        if(isset($column->parent) and $column->parent > 0)
         {
             /* Create a child column. */
             $parentColumn = $this->getColumnByID($column->parent);
@@ -1940,6 +1940,50 @@ class kanbanModel extends model
         }
 
         if($noExtra) $this->dao->update(TABLE_KANBANLANE)->set('order')->eq($laneOrder)->where('id')->eq($noExtra)->exec();
+    }
+
+    /**
+     * Archive a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return string
+     */
+    public function archiveColumn($columnID)
+    {
+        $oldColumn = $this->getColumnByID($columnID);
+
+        $this->dao->update(TABLE_KANBANCOLUMN)
+            ->set('archived')->eq(1)
+            ->where('id')->eq($columnID)
+            ->exec();
+
+        $column = $this->getColumnByID($columnID);
+
+        if(!dao::isError()) return common::createChanges($oldColumn, $column);
+    }
+
+    /**
+     * Archive a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return string
+     */
+    public function archiveCard($cardID)
+    {
+        $oldCard = $this->getCardByID($cardID);
+
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('archived')->eq(1)
+            ->set('archivedBy')->eq($this->app->user->account)
+            ->set('archivedDate')->eq(helper::now())
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        $card = $this->getCardByID($cardID);
+
+        if(!dao::isError()) return common::createChanges($oldCard, $card);
     }
 
     /**

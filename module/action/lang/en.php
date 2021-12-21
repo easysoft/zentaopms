@@ -183,6 +183,7 @@ $lang->action->desc->syncprogram      = '$date, started by <strong>$actor</stron
 $lang->action->desc->syncproject      = '$date, starting the execution sets the project status as Ongoing.' . "\n";
 $lang->action->desc->syncexecution    = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->importfromgitlab = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->archived         = '$date, archived by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -313,6 +314,7 @@ $lang->action->label->reopen                = 'Reopen';
 $lang->action->label->approve               = 'Passed';
 $lang->action->label->reject                = 'Rejected';
 $lang->action->label->importfromgitlab      = 'Issue associate created';
+$lang->action->label->archived              = 'Archived';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
