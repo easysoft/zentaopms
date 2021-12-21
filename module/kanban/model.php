@@ -589,7 +589,7 @@ class kanbanModel extends model
     {
         $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
-            //->andWhere('archived')->eq('0')
+            ->andWhere('archived')->eq('0')
             ->andWhere('region')->in($regions)
             ->orderBy('order')
             ->fetchGroup('group');
@@ -649,6 +649,7 @@ class kanbanModel extends model
     {
         $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
+            ->andWhere('archived')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
             //->orderBy('`order` asc')
             ->fetchAll('id');
