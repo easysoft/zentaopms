@@ -385,7 +385,39 @@ function moveCard(cardID, toColID, kanbanID, regionID)
     {
         method:   'post',
         dataType: 'json',
-        url:      url,
+        url:       url,
+        success: function(data)
+        {
+            regions = data;
+            updateRegion(regionID, data[regionID].groups[0]);
+        },
+        error: function(xhr, status, error)
+        {
+            showErrorMessager(error || lang.timeout);
+        }
+    });
+}
+
+/**
+ * Set a card's color.
+ *
+ * @param int     $cardID
+ * @param string  $color
+ * @param int     $kanbanID
+ * @param int     $regionID
+ * @access public
+ * @return string
+ */
+function setCardColor(cardID, color, kanbanID, regionID)
+{
+    if(!cardID) return false;
+    color = color.replace('#', '');
+    var url = createLink('kanban', 'setCardColor', 'cardID=' + cardID + '&color=' + color + '&kanbanID=' + kanbanID);
+    return $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       url,
         success: function(data)
         {
             regions = data;
@@ -703,7 +735,18 @@ function createCardMenu(options)
         moveCardItems = moveCardItems.reverse();
         items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
     }
-    if(privs.includes('setCardColor')) items.push({label: kanbanLang.cardColor, icon: 'color', url: createLink('kanban', 'setCardColor', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setCardColor'))
+    {
+        var cardColoritems = [];
+        if(!card.color) color = "#fff";
+        colorList.forEach(function(color)
+        {
+            attr = card.color == color ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
+            cardColoritems.push({label: "<div class='cardcolor' style='background:" + color + "; width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px;'></div>" + colorListLang[color]  + attr ,
+                onClick: function(){setCardColor(card.id, color, card.kanban, card.region);}, html: true, attrs: {'style' : 'padding:2px 2px; width: 100px;'}});
+        });
+        items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
+    }
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};

@@ -410,6 +410,7 @@ class kanbanModel extends model
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
+            ->add('color', '#fff')
             ->trim('name')
             ->setDefault('estimate', 0)
             ->join('assignedTo', ',')
@@ -1888,6 +1889,19 @@ class kanbanModel extends model
     public function moveCard($cardID, $toColID)
     {
         $this->dao->update(TABLE_KANBANCARD)->set('column')->eq($toColID)->where('id')->eq($cardID)->exec();
+    }
+
+    /**
+     * Update a card's color.
+     *
+     * @param  int    $cardID
+     * @param  int    $color
+     * @access public
+     * @return void
+     */
+    public function updateCardColor($cardID, $color)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('`color`')->eq('#' . $color)->where('id')->eq($cardID)->exec();
     }
 
     /**
