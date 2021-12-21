@@ -1197,4 +1197,21 @@ class repo extends control
         $fileServer->fileServerPassword = $repo->fileServerPassword;
         return $this->send($fileServer);
     }
+
+    /**
+     * API: get rules.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRules()
+    {
+        $regRules = $this->repo->processRules();
+        $rawRules = $this->config->repo->rules;
+
+        $data = array();
+        $data['reg'] = $regRules;
+        $data['raw'] = $rawRules;
+        return $this->send(array('status' => 'success', 'rules' => json_encode($data)));
+    }
 }
