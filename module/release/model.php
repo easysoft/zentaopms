@@ -115,7 +115,6 @@ class releaseModel extends model
         $productID     = (int)$productID;
         $branch        = (int)$branch;
         $buildID       = 0;
-        $linkToRelease = $this->post->sync;
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
@@ -178,7 +177,7 @@ class releaseModel extends model
             $buildInfo = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
             $release->project = $buildInfo->project;
-            if($linkToRelease)
+            if($this->post->sync == 'true')
             {
                 $release->stories = $buildInfo->stories;
                 $release->bugs    = $buildInfo->bugs;
