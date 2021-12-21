@@ -12,7 +12,16 @@ function convertStringToDate(dateString)
 
     return Date.parse(dateString);
 }
-function loadWarning(planID, branch)
+
+/**
+ * Get conflict stories.
+ *
+ * @param  int    $planID
+ * @param  int    $branch
+ * @access public
+ * @return void
+ */
+function getConflictStories(planID, branch)
 {
     $.get(createLink('productplan', 'ajaxGetConflictStory', 'planID=' + planID + '&newBranch=' + branch), function(conflictStories)
     {

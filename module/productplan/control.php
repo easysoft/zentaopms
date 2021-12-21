@@ -117,6 +117,7 @@ class productplan extends control
         $plan = $this->productplan->getByID($planID);
         $oldBranch = array();
         $oldBranch[$planID] = $plan->branch;
+
         $this->commonAction($plan->product, $plan->branch);
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
@@ -144,13 +145,13 @@ class productplan extends control
             $this->view->position[] = html::a(inlink('browse', "productID=$productID&branch=$branch"), $this->lang->productplan->common);
             $this->view->position[] = $this->lang->productplan->batchEdit;
 
-            $plans = $this->productplan->getByIDList($this->post->planIDList);
-            $this->view->plans = $plans;
+            $plans     = $this->productplan->getByIDList($this->post->planIDList);
+            $product   = $this->loadModel('product')->getById($productID);
             $oldBranch = array();
             foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
-            $this->view->oldBranch = $oldBranch;
 
-            $product = $this->loadModel('product')->getById($productID);
+            $this->view->plans         = $plans;
+            $this->view->oldBranch     = $oldBranch;
             $this->view->branchProduct = $product->type == 'normal' ? false : true;
             die($this->display());
         }
