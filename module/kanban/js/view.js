@@ -278,7 +278,8 @@ function renderKanbanItem(item, $item)
 
     $item.data('card', item);
 
-    if(item.estimate != 0) $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
+    $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
+    if(item.estimate == 0) $info.children('.estimate').hide();
 
     $info.children('.pri')
         .attr('class', 'pri label-pri label-pri-' + item.pri)
@@ -295,23 +296,9 @@ function renderKanbanItem(item, $item)
         var begin = $.zui.createDate(item.begin);
         var end   = $.zui.createDate(item.end);
         var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
-        var isCureentYear = today.getFullYear() == begin.getFullYear() || today.getFullYear() == end.getFullYear();
-        if(item.end == '0000-00-00' && item.begin != '0000-00-00')
-        {
-            var dateFormat = (isCureentYear ? 'MM-dd' : 'yyyy-MM-dd') + kanbancardLang.beginAB;
-            $time.text($.zui.formatDate(begin, dateFormat)).show();
-        }
-        else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
-        {
-            var dateFormat = (isCureentYear ? 'MM-dd' : 'yyyy-MM-dd') + kanbancardLang.deadlineAB;
-            $time.text($.zui.formatDate(end, dateFormat)).show();
-        }
-        else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
-        {
-            var beginDateFormat = (isCureentYear ? 'MM-dd' : 'yyyy-MM-dd') + kanbancardLang.to + ' ';
-            var endDateFormat   = isCureentYear ? 'MM-dd' : 'yyyy-MM-dd';
-            $time.text($.zui.formatDate(begin, beginDateFormat) + $.zui.formatDate(end, endDateFormat)).show();
-        }
+        if(item.end == '0000-00-00' && item.begin != '0000-00-00') $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +kanbancardLang.beginAB).show();
+        else if(item.begin == '0000-00-00' && item.end != '0000-00-00') $time.text($.zui.formatDate(end, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+        else if(item.begin != '0000-00-00' && item.end != '0000-00-00') $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +  kanbancardLang.to + ' ' +  $.zui.formatDate(end, 'yyyy-MM-dd')).show();
 
         $time.toggleClass('text-red', needRemind);
     }
