@@ -1556,7 +1556,7 @@ EOD;
         if(empty($object)) return;
 
         $executionPairs = array();
-        $userCondition  = !$app->user->admin ? " AND `id` IN ({$app->user->view->sprints}) " : '';
+        $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
         $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
