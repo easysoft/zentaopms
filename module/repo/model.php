@@ -118,7 +118,7 @@ class repoModel extends model
      * Get repo list.
      *
      * @param  int    $projectID
-     * @param  string $SCM
+     * @param  string $SCM  Subversion|Git|Gitlab
      * @param  string $orderBy
      * @param  object $pager
      * @access public

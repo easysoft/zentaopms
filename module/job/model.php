@@ -67,10 +67,10 @@ class jobModel extends model
     }
 
      /**
-     * Get job list by RepoID.
+     * Get job pairs by RepoID.
      *
      * @param  int    $repoID
-     * @param  string $engine
+     * @param  string $engine gitlab|jenkins
      * @access public
      * @return array
      */
