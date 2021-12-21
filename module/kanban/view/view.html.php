@@ -48,6 +48,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <span class="strong"><?php echo $region->name;?></span>
       <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
       <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
+      <span>
       <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
       <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
       <ul class="dropdown-menu pull-right">
@@ -56,6 +57,17 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
         <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
       </ul>
       <?php endif;?>
+      </span>
+      <span>
+        <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
+          <span><?php echo $this->lang->kanban->archived;?> </span>
+          <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu pull-right">
+          <?php echo '<li>' . html::a(inlink('viewArchivedCard', "", '', 1), '<i class="icon icon-archived"></i>' . $this->lang->kanban->viewArchivedCard, '', 'class    ="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
+          <?php echo '<li>' . html::a(inlink('viewArchivedColumn', "", '', 1), '<i class="icon icon-archived"></i>' . $this->lang->kanban->viewArchivedColumn, '', 'class    ="iframe" data-to    ggle="modal" data-width="600px"') . '</li>';?>
+        </ul>
+      </span>
     </div>
     <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
   </div>
