@@ -726,7 +726,7 @@ function createCardMenu(options)
         var moveCardItems = [];
         var moveColumns   = regions[options.$trigger.closest('.region').data('id')].groups[0].columns;
         var parentColumns = [];
-        for(let i = moveColumns.length-1 ; i >= 0 ; i -- )
+        for(var i = moveColumns.length-1 ; i >= 0 ; i -- )
         {
             if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
             if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
@@ -739,10 +739,10 @@ function createCardMenu(options)
     {
         var cardColoritems = [];
         if(!card.color) color = "#fff";
-        for(let i = 0 ; i < colorList.length ; i ++ )
+        for(var i = 0 ; i < colorList.length ; i ++ )
         {
-            let attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
-            let border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
+            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
+            var border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
             cardColoritems.push({label: "<div class='cardcolor' style='background:" + colorList[i] + ";" + border + "'></div>" + colorListLang[colorList[i]]  + attr ,
                 onClick: function(){setCardColor(card.id, colorList[i], card.kanban, card.region);}, html: true, attrs: {id: 'cardcolormenu'}, className: 'color' + i});
         };
