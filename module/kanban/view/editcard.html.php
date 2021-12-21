@@ -65,8 +65,7 @@
                 <tr>
                   <th><?php echo $lang->kanbancard->estimate;?></th>
                   <td>
-                    <?php $disabled = "disabled='disabled'" ;?>
-                    <?php echo html::input('estimate', $card->estimate, "class='form-control' ");?>
+                    <?php echo html::input('estimate', $card->estimate, "class='form-control'");?>
                   </td>
                 </tr>
               </table>
