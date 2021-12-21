@@ -311,13 +311,20 @@ class api extends control
     /**
      * Create a api doc library.
      *
+     * @param  string normal|demo
      * @access public
      * @return void
      */
-    public function createLib()
+    public function createLib($type = 'normal')
     {
         if(!empty($_POST))
         {
+            if($type == 'demo')
+            {
+                $libID = $this->api->createDemoData();
+                return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
+            }
+
             $lib = fixer::input('post')
                 ->join('groups', ',')
                 ->join('users', ',')
@@ -337,6 +344,8 @@ class api extends control
             /* save doc library success */
             return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
         }
+
+        $this->view->type   = $type;
         $this->view->groups = $this->loadModel('group')->getPairs();
         $this->view->users  = $this->user->getPairs('nocode');
 
@@ -636,8 +645,10 @@ class api extends control
                 /* check has permission create api doc lib */
                 if(common::hasPriv('api', 'createLib'))
                 {
-                    $menu .= '<li class="divider"></li>';
                     $menu .= '<li>' . html::a(helper::createLink('api', 'createLib'), "<i class='icon-doc-lib icon'></i> " . $this->lang->api->createLib, '', "class='iframe' data-width='70%'") . '</li>';
+
+                    $menu .= '<li class="divider"></li>';
+                    $menu .= '<li>' . html::a(helper::createLink('api', 'createLib', 'type=demo'), "<i class='icon-zentao icon'></i> " . $this->lang->api->createDemo, '', "class='iframe' data-width='70%'") . '</li>';
                 }
 
                 $menu .= "</ul></div>";
@@ -851,16 +862,5 @@ EOT;
             $options[] = array('label' => $struct->name, 'value' => $struct->id);
         }
         $this->view->typeOptions = $options;
-    }
-
-    /**
-     * Create demo library.
-     *
-     * @access public
-     * @return void
-     */
-    public function createDemo()
-    {
-        $this->api->createDemoData();
     }
 }

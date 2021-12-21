@@ -103,7 +103,7 @@ class block extends control
         {
             $source = isset($this->lang->block->moduleList[$source]) ? $source : '';
             $this->block->save($id, $source, $type, $this->session->blockModule);
-            if(dao::isError())  die(js::error(dao::geterror()));
+            if(dao::isError()) die(js::error(dao::geterror()));
             die(js::reload('parent'));
         }
 

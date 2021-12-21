@@ -18,17 +18,17 @@
     <div id='mainContent' class='main-content'>
       <div class='center-block'>
         <div class='main-header'>
-          <h2><?php echo $lang->api->createLib;?></h2>
+          <h2><?php echo $type == 'normal' ? $lang->api->createLib : $lang->api->createDemo;?></h2>
         </div>
         <form class='load-indicator main-form' id="apiForm" method='post' enctype='multipart/form-data'>
           <table class='table table-form'>
             <tr>
               <th><?php echo $lang->api->name?></th>
-              <td style="width: 80%"><?php echo html::input('name', '', "class='form-control'")?></td>
+              <td style="width: 80%"><?php echo html::input('name', $type == 'demo' ? $lang->api->zentaoAPI : '', "class='form-control'")?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->baseUrl?></th>
-              <td style="width: 80%"><?php echo html::input('baseUrl', '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
+              <td style="width: 80%"><?php echo html::input('baseUrl', $type == 'demo' ? ('http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1') : '', "class='form-control' placeholder='" . $lang->api->baseUrlDesc . "'");?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->control;?></th>

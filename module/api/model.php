@@ -736,15 +736,15 @@ class apiModel extends model
      * Create demo data.
      *
      * @access public
-     * @return void
+     * @return int
      */
     public function createDemoData()
     {
         /* Insert doclib. */
         $lib = new stdclass();
         $lib->type    = 'api';
-        $lib->name    = 'demo';
-        $lib->baseUrl = '/v1';
+        $lib->name    = $this->post->name;
+        $lib->baseUrl = $this->post->baseUrl;
         $lib->acl     = 'private';
         $lib->users   = ',' . $this->app->user->account . ',';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
@@ -839,6 +839,8 @@ class apiModel extends model
 
             $this->dao->insert(TABLE_API_SPEC)->data($spec)->exec();
         }
+
+        return $libID;
     }
 
     /**
