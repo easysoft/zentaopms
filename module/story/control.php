@@ -489,8 +489,7 @@ class story extends control
             }
             $this->view->titles = $titles;
         }
-
-        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' ? 0 : $branch, 'skipParent|unexpired');
+        $plans          = $this->loadModel('productplan')->getPairsForStory($productID, $branch === 'all' or !in_array($branch, array_keys($branches)) ? 0 : $branch, 'skipParent|unexpired');
         $plans['ditto'] = $this->lang->story->ditto;
 
         $priList          = (array)$this->lang->story->priList;
