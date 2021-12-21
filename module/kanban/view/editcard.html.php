@@ -64,9 +64,7 @@
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->estimate;?></th>
-                  <td>
-                    <?php echo html::input('estimate', $card->estimate, "class='form-control'");?>
-                  </td>
+                  <td><?php echo html::input('estimate', $card->estimate, "class='form-control'");?></td>
                 </tr>
               </table>
             </div>
