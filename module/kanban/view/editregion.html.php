@@ -22,12 +22,12 @@
       <table align='center' class='table table-form'>
         <tr>
           <th><?php echo $lang->kanbanregion->name;?></th>
-          <td colspan='2'>
+          <td colspan='4'>
             <?php echo html::input('name', $region->name, "class='form-control'");?>
           </td>
         </tr>
         <tr>
-          <td colspan='4' class='text-center form-actions'>
+          <td colspan='5' class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>
           </td>

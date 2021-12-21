@@ -51,7 +51,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
       <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
       <ul class="dropdown-menu pull-right">
-        <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe"') . '</li>';?>
+        <?php if($canEditRegion) echo '<li>' . html::a(inlink('editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
         <?php if($canCreateLane) echo '<li>' . html::a(inlink('createLane', "kanbanID={$kanban->id}&regionID={$region->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
         <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
       </ul>
