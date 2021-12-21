@@ -64,8 +64,8 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu pull-right">
-          <?php echo '<li>' . html::a(inlink('viewArchivedCard', "", '', 1), '<i class="icon icon-archived"></i>' . $this->lang->kanban->viewArchivedCard, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-          <?php echo '<li>' . html::a(inlink('viewArchivedColumn', "", '', 1), '<i class="icon icon-archived"></i>' . $this->lang->kanban->viewArchivedColumn, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
+          <?php echo '<li>' . html::a(inlink('viewArchivedCard', "", '', 1), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
+          <?php echo '<li>' . html::a(inlink('viewArchivedColumn', "", '', 1), '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
         </ul>
       </span>
     </div>
