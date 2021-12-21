@@ -569,11 +569,11 @@ class commonModel extends model
                     case 'kanbanspace':
                         $createMethod = 'createSpace';
                         $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='75%' data-app='kanban'";
+                        $attr         = "class='iframe' data-width='75%'";
                         break;
                     case 'kanban':
                         $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='75%' data-app='kanban'";
+                        $attr         = "class='iframe' data-width='75%'";
                         break;
                 }
 
