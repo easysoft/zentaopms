@@ -718,7 +718,7 @@ function createCardMenu(options)
             if(group.id == options.$trigger.closest('.kanban-board').data('id'))
             {
                 moveColumns = group.columns;
-                break;
+                return;
             }
         });
         var parentColumns = [];
