@@ -506,7 +506,7 @@ class commonModel extends model
 
             $createMethod = 'create';
             if($objectType == 'effort') $createMethod = 'batchCreate';
-            if(strpos('bug|execution', $objectType) !== false) $needPrintDivider = true;
+            if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
             if(common::hasPriv($objectType, $createMethod))
             {
@@ -566,9 +566,19 @@ class commonModel extends model
                     case 'program':
                         $params = "parentProgramID=0&extra=from=global";
                         break;
+                    case 'kanbanspace':
+                        $createMethod = 'createSpace';
+                        $isOnlyBody   = true;
+                        $attr         = "class='iframe' data-width='75%'";
+                        break;
+                    case 'kanban':
+                        $isOnlyBody = true;
+                        $attr       = "class='iframe' data-width='75%'";
+                        break;
                 }
 
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $attr) . '</li>';
+                $module = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
+                $html  .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $attr) . '</li>';
             }
         }
 
