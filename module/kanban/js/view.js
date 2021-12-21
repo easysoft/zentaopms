@@ -158,7 +158,7 @@ function renderCount($count, count, column)
         $count.parents('.title').parent('.kanban-header-col').css('background-color', '#F6A1A1');
         $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 200);
         $count.css('color', '#E33030');
-        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'>(" + kanbanLang.limitExceeded + ")</span>");
+        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-help' title='" + kanbanLang.limitExceeded + "'></icon></span>");
     }
     else
     {
