@@ -170,10 +170,10 @@ class storyModel extends model
     public function getRequierements($productID)
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
+           ->where('deleted')->eq(0)
            ->andWhere('product')->eq($productID)
            ->andWhere('type')->eq('requirement')
            ->andWhere('status')->notIN('draft,closed')
-           ->where('deleted')->eq(0)
            ->fetchPairs();
     }
 

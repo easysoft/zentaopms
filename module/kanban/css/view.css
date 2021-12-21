@@ -36,7 +36,7 @@ body {background-color: #fff}
 .region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial;}
 .region .kanban-header-col > .title > .text-grey {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
-.region .kanban-header-col > .title > .error {color: #333333; padding-left: 5px}
+.region .kanban-header-col > .title > .error {color: #333333; padding-left: 5px; font-size: 10px; padding-top: 1px;}
 .region .kanban-header-col > .actions {position: relative; right: -30px;}
 .region .kanban-header-parent-col > .actions {position: absolute; right: 0px;}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px;}
