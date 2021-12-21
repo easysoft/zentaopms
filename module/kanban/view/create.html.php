@@ -28,6 +28,10 @@
         <td><?php echo html::input('name', '', "class='form-control'");?></td>
       </tr>
       <tr>
+        <th><?php echo $lang->kanban->archived;?></th>
+        <td><?php echo html::radio('archived', $lang->kanban->enableArchived, '0');?></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->kanban->owner;?></th>
         <td><?php echo html::select('owner', $users, '', "class='form-control chosen'");?></td>
       </tr>
