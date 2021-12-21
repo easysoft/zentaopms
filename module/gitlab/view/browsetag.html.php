@@ -62,7 +62,7 @@
           <td class='text'><?php echo $gitlabTag->updated?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name={$gitlabTag->name}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn btn-primary'");
+            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name={$gitlabTag->name}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn btn-primary' target='hiddenwin'");
             ?>
           </td>
         </tr>

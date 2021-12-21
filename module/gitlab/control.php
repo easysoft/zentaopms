@@ -1356,4 +1356,30 @@ class gitlab extends control
         $this->view->branches  = $branches;
         $this->display();
     }
+
+    /**
+     * Delete a gitlab tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tagName
+     * @param  string $confirm yes|no
+     * @access public
+     * @return void
+     */
+    public function deleteTag($gitlabID, $projectID, $tagName = '', $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
+
+        $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
+
+        /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        {
+            $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $project->name);
+            die(js::reload('parent'));
+        }
+
+        die(js::alert($reponse->message));
+    }
 }
