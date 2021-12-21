@@ -713,7 +713,8 @@ function createCardMenu(options)
     {
         var moveCardItems = [];
         var moveColumns   = [];
-        regions[options.$trigger.closest('.region').data('id')].groups.forEach(function(group){
+        regions[options.$trigger.closest('.region').data('id')].groups.forEach(function(group)
+        {
             if(group.id == options.$trigger.closest('.kanban-board').data('id'))
             {
                 moveColumns = group.columns;
