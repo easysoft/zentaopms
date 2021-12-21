@@ -252,7 +252,7 @@ class kanbanModel extends model
         $column->limit = (int)$column->limit;
 
         $limit = $column->limit;
-        if(!empty($column->parent))
+        if($column->parent > 0)
         {
             /* Create a child column. */
             $parentColumn = $this->getColumnByID($column->parent);
@@ -413,6 +413,7 @@ class kanbanModel extends model
             ->add('color', '#fff')
             ->trim('name')
             ->setDefault('estimate', 0)
+            ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->remove('uid')
@@ -1710,6 +1711,7 @@ class kanbanModel extends model
             ->setDefault('estimate', $oldCard->estimate)
             ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->stripTags($this->config->kanban->editor->editcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
             ->remove('uid')
             ->get();
