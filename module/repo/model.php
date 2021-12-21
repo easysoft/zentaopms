@@ -118,15 +118,17 @@ class repoModel extends model
      * Get repo list.
      *
      * @param  int    $projectID
+     * @param  string $SCM  Subversion|Git|Gitlab
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->beginIF($SCM)->andWhere('SCM')->eq($SCM)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

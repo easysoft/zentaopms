@@ -66,6 +66,24 @@ class jobModel extends model
             ->fetchAll('id');
     }
 
+     /**
+     * Get job pairs by RepoID.
+     *
+     * @param  int    $repoID
+     * @param  string $engine gitlab|jenkins
+     * @access public
+     * @return array
+     */
+    public function getPairs($repoID, $engine = '')
+    {
+        return $this->dao->select('id, name')->from(TABLE_JOB)
+            ->where('deleted')->eq('0')
+            ->andWhere('repo')->eq($repoID)
+            ->beginIF($engine)->andWhere('engine')->eq($engine)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs();
+    }
+
    /**
      * Get list by triggerType field.
      *

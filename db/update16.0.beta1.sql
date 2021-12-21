@@ -15,3 +15,7 @@ ALTER TABLE `zt_job` ADD `buildDir` text COLLATE 'utf8_general_ci' NULL AFTER `l
 ALTER TABLE `zt_mr` ADD `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1';
 ALTER TABLE `zt_mr` ADD `diffs` longtext COLLATE 'utf8_general_ci' NULL AFTER `synced`;
 ALTER TABLE `zt_mr` ADD `removeSourceBranch` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `compileStatus`;
+
+ALTER TABLE zt_repo ADD fileServerUrl text COLLATE 'utf8_general_ci' NULL AFTER `job`;
+ALTER TABLE zt_repo ADD fileServerAccount varchar(40) NOT NULL default '' AFTER `fileServerUrl`;
+ALTER TABLE zt_repo ADD fileServerPassword varchar(100) NOT NULL default '' AFTER `fileServerAccount`;
