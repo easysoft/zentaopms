@@ -18,6 +18,7 @@ $laneCount = 0;
 foreach($regions as $region) $laneCount += $region->laneCount;
 
 js::set('regions', $regions);
+js::set('kanban', $kanban);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('kanbancolumnLang', $lang->kanbancolumn);

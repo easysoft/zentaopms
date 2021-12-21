@@ -50,6 +50,7 @@ $lang->kanban->viewArchivedColumn  = 'View archived column';
 /* Fields. */
 $lang->kanban->space          = 'Space';
 $lang->kanban->name           = 'Name';
+$lang->kanban->archived       = 'Archive';
 $lang->kanban->owner          = 'Owner';
 $lang->kanban->team           = 'Team';
 $lang->kanban->desc           = 'Description';
@@ -77,6 +78,9 @@ $lang->kanban->aclGroup['private'] = 'Private';
 
 $lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
+
+$lang->kanban->enableArchived['0'] = 'Enable';
+$lang->kanban->enableArchived['1'] = 'No Enable';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";

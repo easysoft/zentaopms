@@ -76,11 +76,11 @@ body {background-color: #fff}
 .region .kanban-item > .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .region .kanban-item > .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 .region .kanban-item:hover > .actions {opacity: 1;}
-.region .kanban-item.has-color .title,
-.region .kanban-item.has-color .actions .icon-more-v,
-.region .kanban-item.has-color .info > .label-pri,
-.region .kanban-item.has-color .info > .label-light {color: #FFFFFF;}
-.region .kanban-item.has-color .info > .label-pri {border-color: #FFFFFF;}
+.region .kanban-item .has-color .title,
+.region .kanban-item .has-color .actions .icon-more-v,
+.region .kanban-item .has-color .info > .label-pri,
+.region .kanban-item .has-color .info > .label-light {color: #FFFFFF;}
+.region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
 .kanban-card {height: 60px !important}

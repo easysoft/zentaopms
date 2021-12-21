@@ -15,7 +15,7 @@ $lang->kanban->editRegion          = '编辑区域';
 $lang->kanban->sortRegion          = '区域排序';
 $lang->kanban->deleteRegion        = '删除区域';
 $lang->kanban->createLane          = '创建泳道';
-$lang->kanban->editLane            = '编辑泳道';
+$lang->kanban->editLane            = '泳道设置';
 $lang->kanban->sortLane            = '泳道排序';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
@@ -50,6 +50,7 @@ $lang->kanban->viewArchivedColumn  = '查看已归档列';
 /* Fields. */
 $lang->kanban->space          = '所属空间';
 $lang->kanban->name           = '看板名称';
+$lang->kanban->archived       = '归档功能';
 $lang->kanban->owner          = '负责人';
 $lang->kanban->team           = '团队';
 $lang->kanban->desc           = '看板描述';
@@ -77,6 +78,9 @@ $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、�
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';
+
+$lang->kanban->enableArchived['0'] = '启用';
+$lang->kanban->enableArchived['1'] = '不启用';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
