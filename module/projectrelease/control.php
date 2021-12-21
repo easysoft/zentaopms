@@ -104,6 +104,8 @@ class projectrelease extends control
         $this->app->loadConfig('release');
         $this->config->projectrelease->create = $this->config->release->create;
 
+        $this->app->loadLang('release');
+
         if(!empty($_POST))
         {
             $releaseID = $this->projectrelease->create($projectID);
@@ -130,6 +132,7 @@ class projectrelease extends control
         $this->view->builds      = $builds;
         $this->view->lastRelease = $this->projectrelease->getLast($projectID);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
+        $this->view->confirmLink = $this->lang->release->confirmLink;
         $this->display();
     }
 

@@ -134,7 +134,7 @@ class projectreleaseModel extends model
             ->setIF($productID, 'product', $productID)
             ->setIF($branch, 'branch', $branch)
             ->stripTags($this->config->release->editor->create['id'], $this->config->allowedTags)
-            ->remove('allchecker,files,labels,uid')
+            ->remove('allchecker,files,labels,uid,sync')
             ->get();
 
         /* Auto create build when release is not link build. */
@@ -175,7 +175,16 @@ class projectreleaseModel extends model
             }
         }
 
-        if($release->build) $release->branch = $this->dao->select('branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch('branch');
+        if($release->build)
+        {
+            $buildInfo = $this->dao->select('branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
+            $release->branch = $buildInfo->branch;
+            if($this->post->sync == 'true');
+            {
+                $release->stories = $buildInfo->stories;
+                $release->bugs    = $buildInfo->bugs;
+            }
+        }
 
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
         $this->dao->insert(TABLE_RELEASE)->data($release)
