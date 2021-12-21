@@ -39,17 +39,29 @@ class branchModel extends model
      * Get branch list.
      *
      * @param  int    $productID
+     * @param  int    $executionID
      * @param  string $browseType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($productID, $browseType = 'active', $orderBy = 'order', $pager = null)
+    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null)
     {
+        $executionBranches = array();
+        if($executionID)
+        {
+            $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+                ->where('project')->eq($executionID)
+                ->andWhere('product')->eq($productID)
+                ->fetchAll('branch');
+            if(empty($executionBranches)) return array();
+        }
+
         $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->eq($productID)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->orderBy($orderBy)
             ->page($pager)

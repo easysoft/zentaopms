@@ -28,7 +28,7 @@ class branch extends control
         $this->loadModel('product')->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
 
-        $branchList = $this->branch->getList($productID, $browseType, $orderBy);
+        $branchList = $this->branch->getList($productID, 0, $browseType, $orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -117,7 +117,7 @@ class branch extends control
             die(js::locate($this->session->branchManage, 'parent'));
         }
 
-        $branchList   = $this->branch->getList($productID, 'all');
+        $branchList   = $this->branch->getList($productID, 0, 'all');
         $branchIDList = $this->post->branchIDList;
         if(empty($branchIDList)) die(js::locate($this->session->branchManage, 'parent'));
 

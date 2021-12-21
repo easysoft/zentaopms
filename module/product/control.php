@@ -224,18 +224,12 @@ class product extends control
 
         $product = $this->product->getById($productID);
 
-        /* Get stories and branches. */
+        /* Get stories. */
         if($this->app->rawModule == 'projectstory')
         {
             $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 
-            $branches = array();
-            if(!empty($product))
-            {
-                $this->session->set('currentProductType', $product->type);
-                $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($product->id, $projectID) : array();
-                $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
-            }
+            if(!empty($product)) $this->session->set('currentProductType', $product->type);
 
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
@@ -246,8 +240,17 @@ class product extends control
         }
         else
         {
-            $branches = $this->loadModel('branch')->getPairs($productID);
-            $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+            $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        }
+
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -316,7 +319,8 @@ class product extends control
         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
-        $this->view->branches        = $branches;
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
         $this->view->showBranch      = $showBranch;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;
