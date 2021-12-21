@@ -36,7 +36,7 @@
     <div class='space'>
       <div class='row menu'>
         <div class='spaceTitle pull-left'>
-          <div><i class='icon-zone'></i></div>
+          <div><i class='icon-cube'></i></div>
           <div>
             <h4>
               <?php if($space->status == 'closed'):?>

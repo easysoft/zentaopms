@@ -31,11 +31,11 @@
           <td>
             <div class='required required-wrapper'></div>
             <div class='input-group'>
-              <?php echo html::input('WIPCount', $column->limit != -1 ? $column->limit : '', "class='form-control'" . ($column->limit > 0 ? '' : "disabled"));?>
-              <?php echo html::hidden('limit', $column->limit, "class='form-control'");?>
+              <?php echo html::input('WIPCount', '', "class='form-control' disabled");?>
+              <?php echo html::hidden('limit', -1, "class='form-control'");?>
               <span class='input-group-addon'>
                 <label class='checkbox-inline'>
-                  <input type='checkbox' name='noLimit' id='noLimit' value='-1' <?php if($column->limit == -1) echo "checked";?>/> <?php echo $this->lang->kanban->noLimit;?>
+                  <input type='checkbox' name='noLimit' id='noLimit' value='-1' checked/> <?php echo $this->lang->kanban->noLimit;?>
                 </label>
               </span>
             </div>
@@ -52,7 +52,7 @@
           <td colspan='2' class='form-actions text-center'>
             <?php echo html::hidden('color', '#333');?>
             <?php echo html::hidden('group', $column->group);?>
-            <?php echo html::hidden('parent', $column->parent);?>
+            <?php echo html::hidden('parent', $column->parent > 0 ? $column->parent : 0);?>
             <?php echo html::submitButton();?>
             <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>
           </td>

@@ -169,7 +169,7 @@ $lang->createIcons['execution']   = 'run';
 $lang->createIcons['project']     = 'project';
 $lang->createIcons['product']     = 'product';
 $lang->createIcons['program']     = 'program';
-$lang->createIcons['kanbanspace'] = 'zone';
+$lang->createIcons['kanbanspace'] = 'cube';
 $lang->createIcons['kanban']      = 'kanban';
 
 
