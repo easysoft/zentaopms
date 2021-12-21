@@ -9,7 +9,7 @@
     <rule ref="PHPCompatibility">
         <exclude-pattern>roadmap.css</exclude-pattern>
     </rule>
-    <config name="testVersion" value="5.3-" />
+    <config name="testVersion" value="5.4-" />
 
     <!--rule ref="Generic.Files.LineLength">
         <properties>
