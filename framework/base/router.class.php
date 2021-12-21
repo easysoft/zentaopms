@@ -12,7 +12,6 @@
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
  */
-include dirname(__DIR__) . '/exception/EndResponseException.class.php';
 class baseRouter
 {
     /**
@@ -2779,5 +2778,37 @@ class super
         if($this->scope == 'session') a($_SESSION);
         if($this->scope == 'env')     a($_ENV);
         if($this->scope == 'global')  a($GLOBALS);
+    }
+}
+
+class EndResponseException extends \Exception
+{
+    /**
+     * 响应内容
+     *
+     * @var string
+     */
+    private $content;
+
+    /**
+     * @param string $content
+     * 
+     * @return sellf
+     */
+    public static function create($content = '')
+    {
+        $exception = new self;
+        $exception->content = $content;
+        return $exception;
+    }
+
+    /**
+     * Get 响应内容
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 }
