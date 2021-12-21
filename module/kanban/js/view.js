@@ -909,6 +909,7 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
+    /* Init sortable */
     var sortType = '';
     var cards    = null;
     $('#kanban').sortable(
