@@ -32,6 +32,7 @@ $lang->action->result      = 'Result';
 $lang->action->modified    = 'Modified';
 $lang->action->old         = 'Old';
 $lang->action->new         = 'New';
++$lang->action->to         = 'To';
 
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';
@@ -303,6 +304,7 @@ $lang->action->label->compilefail           = 'Compile Fail';
 $lang->action->label->reopen                = 'Reopen';
 $lang->action->label->approve               = 'Passed';
 $lang->action->label->reject                = 'Rejected';
+$lang->action->label->mergedbranch          = 'Merge Branch';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -341,6 +343,7 @@ $lang->action->dynamicAction->branch['edited']           = 'Edit Branch';
 $lang->action->dynamicAction->branch['closed']           = 'Close Branch';
 $lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
+$lang->action->dynamicAction->branch['mergebranch']      = 'Merge Branch';
 
 $lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
 $lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';

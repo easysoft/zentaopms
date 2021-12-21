@@ -2048,7 +2048,7 @@ class productModel extends model
         }
         elseif($module == 'project' and $method == 'testcase')
         {
-            $params = explode('|', $extra);
+            $params = explode(',', $extra);
             return helper::createLink('project', 'testcase', "projectID={$params[0]}&productID=%s&branch=all&browseType={$params[1]}");
         }
         elseif($module == 'project' or $module == 'execution')

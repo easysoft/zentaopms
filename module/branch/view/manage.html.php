@@ -14,6 +14,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('branchLang', $lang->branch);?>
+<?php js::set('productID', $productID);?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
 <?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
@@ -66,7 +67,7 @@
       <tbody id='branchTableList'>
         <?php foreach($branchList as $branch):?>
         <?php $isMain = $branch->id == BRANCH_MAIN;?>
-        <tr data-id='<?php echo $branch->id;?>'>
+        <tr data-id='<?php echo $branch->id;?>' data-status='<?php echo $branch->status;?>'>
           <?php if($canBatchAction):?>
           <td class='cell-id'>
             <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
@@ -125,7 +126,7 @@
         <?php
         $batchEditLink = $this->createLink('branch', 'batchEdit', "productID=$productID");
         echo html::submitButton($lang->edit, "data-form-action='$batchEditLink'", 'btn');
-        echo html::a('#mergeBranch', $lang->branch->merge, '', "data-toggle='modal' class='btn'");
+        if($browseType != 'closed') echo html::a('#mergeBranch', $lang->branch->merge, '', "data-toggle='modal' class='btn'");
         ?>
       </div>
       <?php endif;?>
@@ -145,7 +146,7 @@
         <small> <?php echo $lang->branch->mergeTips;?></small>
       </div>
       <div class="modal-body">
-        <form method='post' enctype='multipart/form-data' target='hiddenwin'>
+        <form method='post' enctype='multipart/form-data' class="form-ajax">
           <table class='table table-form'>
             <tr>
               <th class='thWidth'><?php echo $lang->branch->mergeTo;?></th>
@@ -153,7 +154,7 @@
                 <div class="input-group">
                   <?php echo html::select('targetBranch', $branchPairs, '', "class='form-control chosen'");?>
                   <span class='input-group-addon'>
-                    <?php echo html::checkbox('newBranch', $lang->branch->createAction, '', "id='newBranch'")?>
+                    <?php echo html::checkbox('createBranch', $lang->branch->create, '', "id='createBranch'")?>
                   </span>
                 </div>
               </td>

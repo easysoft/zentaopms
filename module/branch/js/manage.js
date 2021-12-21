@@ -43,15 +43,26 @@ $(function()
     }).mouseleave(function()
     {
         $(this).find('.setDefault').addClass('hidden');
-    })
+    });
 
-    $('#newBranch').change(function()
+    $("input[id*='branchIDList']").change(function()
+    {
+        if($(this).prop('checked') && $(this).closest('tr').data('status') === 'closed')
+        {
+            $("a[href='#mergeBranch']").hide();
+            return false;
+        }
+
+        $("a[href='#mergeBranch']").show();
+    });
+
+    $('#createBranch').change(function()
     {
         if($(this).prop('checked'))
         {
             $('#targetBranch').attr('disabled', true).trigger('chosen:updated');
 
-            var newBranchName = '<tr><th>' + branchLang.name + "</th><td><input type='text' name='name' id='name' class='form-control' /></td></tr>";
+            var newBranchName = '<tr><th>' + branchLang.name + "</th><td class='required'><input type='text' name='name' id='name' class='form-control' /></td></tr>";
             var newBranchDesc = '<tr><th>' + branchLang.desc + "</th><td><input type='text' name='desc' id='desc' class='form-control' /></td></tr>";
             $(this).closest('tr').after(newBranchName + newBranchDesc);
         }
@@ -62,7 +73,7 @@ $(function()
             $('#name').closest('tr').remove();
             $('#desc').closest('tr').remove();
         }
-    })
+    });
 
     $('#saveButton').on('click', function()
     {
@@ -72,20 +83,27 @@ $(function()
             mergedBranchIDList.push($(this).val());
         });
 
-        var isChecked = $('#newBranch').attr('checked') ? true : false;
-        if(isChecked)
+        var isChecked = $('#createBranch').attr('checked') ? 1 : 0;
+        var postData  = {'name' : $('#name').val(), 'desc' : $('#desc').val(), 'createBranch' : isChecked, 'mergedBranchIDList' : mergedBranchIDList, 'targetBranch' : $('#targetBranch').val()};
+        $.ajax(
         {
-            var postData = {'newBranchName' : $('#name').val(), 'newBranchDesc' : $('#desc').val(), 'newBranch' : isChecked, 'mergedBranchIDList' : mergedBranchIDList};
-        }
-        else
-        {
-            var postData = {'targetBranch' : $('#targetBranch').val(), 'mergedBranchIDList' : mergedBranchIDList};
-        }
-
-        $.post(createLink('branch', 'mergeBranch'), postData, function()
-        {
-            $('#mergeBranch').modal('hide');
-            window.location.reload();
-        });
+            url: createLink('branch', 'mergeBranch', 'productID=' + productID),
+            dataType: 'json',
+            method: 'post',
+            data: postData,
+            success: function(data)
+            {
+                if(data.result == 'fail')
+                {
+                    alert(data.message.name)
+                    return false;
+                }
+                else
+                {
+                    $('#mergeBranch').modal('hide');
+                    window.location.reload();
+                }
+            }
+        })
     });
-});
+})

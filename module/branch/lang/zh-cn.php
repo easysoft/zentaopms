@@ -22,8 +22,8 @@ $lang->branch->batchEdit        = '批量编辑';
 $lang->branch->defaultBranch    = '默认分支';
 $lang->branch->setDefault       = '设为默认分支';
 $lang->branch->setDefaultAction = '设置默认分支';
-$lang->branch->mergeTo          = '合并分支到';
-$lang->branch->mergeBranch      = '合并分支';
+$lang->branch->mergeTo          = '合并@branch@到';
+$lang->branch->mergeBranch      = '合并@branch@';
 
 $lang->branch->id          = 'ID';
 $lang->branch->product     = '所属产品';
@@ -44,8 +44,8 @@ $lang->branch->nameNotEmpty      = '名称不能为空！';
 $lang->branch->confirmClose      = '是否关闭该@branch@？';
 $lang->branch->confirmActivate   = '是否激活该@branch@？';
 $lang->branch->existName         = '@branch@名称已存在';
-$lang->branch->mergeTips         = '（主干不支持被合并，合并分支后，会将分支下面对应的发布、计划、模块、需求、Bug、用例都合并到新的分支下）';
-$lang->branch->targetBranchTips  = '注：您可以将其合并到已有的一个分支，也可以合并到主干，也可以新创建一个分支。';
+$lang->branch->mergeTips         = '（主干不支持被合并，合并@branch@后，会将@branch@下面对应的发布、计划、模块、需求、Bug、用例都合并到新的@branch@下）';
+$lang->branch->targetBranchTips  = '注：您可以将其合并到已有的一个@branch@，也可以合并到主干，也可以新创建一个@branch@。';
 
 $lang->branch->noData     = '暂时没有分支。';
 $lang->branch->mainBranch = '产品默认主干%s。';

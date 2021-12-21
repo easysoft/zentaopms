@@ -974,6 +974,11 @@ class actionModel extends model
                 $action->objectName .= $this->lang->action->label->startProgram;
             }
 
+            if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+            {
+                $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
+            }
+
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
@@ -1243,6 +1248,11 @@ class actionModel extends model
         if($action->objectType == 'story' and $action->action == 'import2storylib')
         {
             $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        }
+
+        if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+        {
+            $action->objectLink = 'javascript:void(0)';
         }
 
         return $action;

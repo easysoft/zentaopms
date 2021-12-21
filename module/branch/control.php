@@ -305,11 +305,27 @@ class branch extends control
     /**
      * Merge multiple branches into one branch.
      *
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function mergeBranch()
+    public function mergeBranch($productID)
     {
-        $this->branch->mergeBranch();
+        /* Filter out the main branch and target branch. */
+        $mergedBranches = array_filter($_POST['mergedBranchIDList'], function($branch)
+        {
+            $mergeToBranch  = $_POST['createBranch'] ? '' : $_POST['targetBranch'];
+            return $branch != 0 and $branch != $mergeToBranch;
+        });
+        $mergedBranchIDList = implode(',', $mergedBranches);
+        $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
+
+        $targetBranch = $this->branch->mergeBranch($productID, $mergedBranchIDList);
+
+        $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
+
+        if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
+
+        $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
     }
 }
