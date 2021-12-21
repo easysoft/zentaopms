@@ -214,7 +214,8 @@ $lang->kanbancolumn->color      = 'Column Color';
 $lang->kanbancolumn->childName  = 'Name';
 $lang->kanbancolumn->childColor = 'Color';
 
-$lang->kanbancolumn->confirmDelete = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
+$lang->kanbancolumn->confirmArchive = 'Are you sure to archive this column? After archiving the column, the column and all cards in the column will be hidden. You can view the archived columns in the Region - Archived.';
+$lang->kanbancolumn->confirmDelete  = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name      = $lang->kanban->laneName;
@@ -271,7 +272,8 @@ $lang->kanbancard->deadlineAB      = 'DL';
 $lang->kanbancard->beginAB         = 'Begin';
 $lang->kanbancard->to              = 'to';
 
-$lang->kanbancard->confirmDelete = 'Do you want to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
+$lang->kanbancard->confirmArchive = 'Are you sure to archive this card? After archiving the card, it will be hidden from the column and you can view it in the Region - Archived.';
+$lang->kanbancard->confirmDelete  = 'Are you sure to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;

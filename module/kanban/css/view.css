@@ -92,6 +92,9 @@ body {background-color: #fff}
 .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 
+.cardcolor {width:40px; height: 14px; float: left; margin-left: 5px; margin-right: 5px; margin-top: 2px; border-radius: 2px;}
+#cardcolormenu {padding:2px 2px; width: 100px;}
+
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
 .kanban-item:hover .title {padding-right: 10px;}
