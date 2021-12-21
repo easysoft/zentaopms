@@ -1831,88 +1831,100 @@ class baseRouter
      */
     public function loadModule()
     {
-        $appName    = $this->appName;
-        $moduleName = $this->moduleName;
-        $methodName = $this->methodName;
+        try {
+            $appName    = $this->appName;
+            $moduleName = $this->moduleName;
+            $methodName = $this->methodName;
 
-        /*
-         * 引入该模块的control文件。
-         * Include the control file of the module.
-         **/
-        $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
-        chdir(dirname($file2Included));
-        helper::import($file2Included);
+            /*
+            * 引入该模块的control文件。
+            * Include the control file of the module.
+            **/
+            $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
+            chdir(dirname($file2Included));
+            helper::import($file2Included);
 
-        /*
-         * 设置control的类名。
-         * Set the class name of the control.
-         **/
-        $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-        if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
+            /*
+            * 设置control的类名。
+            * Set the class name of the control.
+            **/
+            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
+            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
 
-        /*
-         * 创建control类的实例。
-         * Create a instance of the control.
-         **/
-        $module = new $className();
-        if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
-        $this->control = $module;
+            /*
+            * 创建control类的实例。
+            * Create a instance of the control.
+            **/
+            $module = new $className();
+            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
+            $this->control = $module;
 
-        /* include default value for module*/
-        $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+            /* include default value for module*/
+            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
+            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
 
-        /*
-         * 使用反射机制获取函数参数的默认值。
-         * Get the default settings of the method to be called using the reflecting.
-         *
-         * */
-        $defaultParams = array();
-        $methodReflect = new reflectionMethod($className, $methodName);
-        foreach($methodReflect->getParameters() as $param)
-        {
-            $name = $param->getName();
-
-            $default = '_NOT_SET';
-            if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+            /*
+            * 使用反射机制获取函数参数的默认值。
+            * Get the default settings of the method to be called using the reflecting.
+            *
+            * */
+            $defaultParams = array();
+            $methodReflect = new reflectionMethod($className, $methodName);
+            foreach($methodReflect->getParameters() as $param)
             {
-                $default = $paramDefaultValue[$appName][$className][$methodName][$name];
-            }
-            elseif(isset($paramDefaultValue[$className][$methodName][$name]))
-            {
-                $default = $paramDefaultValue[$className][$methodName][$name];
-            }
-            elseif($param->isDefaultValueAvailable())
-            {
-                $default = $param->getDefaultValue();
+                $name = $param->getName();
+
+                $default = '_NOT_SET';
+                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$className][$methodName][$name];
+                }
+                elseif($param->isDefaultValueAvailable())
+                {
+                    $default = $param->getDefaultValue();
+                }
+
+                $defaultParams[$name] = $default;
             }
 
-            $defaultParams[$name] = $default;
+            /**
+             * 根据PATH_INFO或者GET方式设置请求的参数。
+             * Set params according PATH_INFO or GET.
+             */
+            if($this->config->requestType != 'GET')
+            {
+                $this->setParamsByPathInfo($defaultParams);
+            }
+            else
+            {
+                $this->setParamsByGET($defaultParams);
+            }
+
+            if($this->config->framework->filterParam == 2)
+            {
+                $_GET     = validater::filterParam($_GET, 'get');
+                $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
+            }
+
+            /* 调用该方法   Call the method. */
+            call_user_func_array(array($module, $methodName), $this->params);
+            $this->checkAPIFile();
+            return $module;
+        } catch (EndResponseException $endResponseException) {
+            echo $endResponseException->getContent();
         }
-
-        /**
-         * 根据PATH_INFO或者GET方式设置请求的参数。
-         * Set params according PATH_INFO or GET.
-         */
-        if($this->config->requestType != 'GET')
+        if (isset($module))
         {
-            $this->setParamsByPathInfo($defaultParams);
+            return $module;
         }
         else
         {
-            $this->setParamsByGET($defaultParams);
+            return false;
         }
-
-        if($this->config->framework->filterParam == 2)
-        {
-            $_GET     = validater::filterParam($_GET, 'get');
-            $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
-        }
-
-        /* 调用该方法   Call the method. */
-        call_user_func_array(array($module, $methodName), $this->params);
-        $this->checkAPIFile();
-        return $module;
     }
 
     /**
@@ -2766,5 +2778,37 @@ class super
         if($this->scope == 'session') a($_SESSION);
         if($this->scope == 'env')     a($_ENV);
         if($this->scope == 'global')  a($GLOBALS);
+    }
+}
+
+class EndResponseException extends \Exception
+{
+    /**
+     * 响应内容
+     *
+     * @var string
+     */
+    private $content;
+
+    /**
+     * @param string $content
+     * 
+     * @return sellf
+     */
+    public static function create($content = '')
+    {
+        $exception = new self;
+        $exception->content = $content;
+        return $exception;
+    }
+
+    /**
+     * Get 响应内容
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 }

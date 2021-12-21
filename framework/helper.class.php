@@ -248,6 +248,17 @@ class helper extends baseHelper
         if(empty($jsonDecode)) return $response;
         return $jsonDecode;
     }
+
+    /**
+     * 代替 die、exit 函数终止并输出
+     *
+     * @param string $content
+     * @return void
+     */
+    public static function die($content)
+    {
+        throw EndResponseException::create($content);
+    }
 }
 
 /**
