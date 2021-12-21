@@ -295,21 +295,21 @@ function renderKanbanItem(item, $item)
         var begin = $.zui.createDate(item.begin);
         var end   = $.zui.createDate(item.end);
         var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
-        var isCureentYear = today.getFullYear() == begin.getFullYear();
+        var isCureentYear = today.getFullYear() == begin.getFullYear() || today.getFullYear() == end.getFullYear();
         if(item.end == '0000-00-00' && item.begin != '0000-00-00')
         {
-            var dateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.beginAB;
+            var dateFormat = (isCureentYear ? 'MM-dd' : 'yyyy-MM-dd') + kanbancardLang.beginAB;
             $time.text($.zui.formatDate(begin, dateFormat)).show();
         }
         else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
         {
-            var dateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.deadlineAB;
+            var dateFormat = (isCureentYear ? 'MM-dd' : 'yyyy-MM-dd') + kanbancardLang.deadlineAB;
             $time.text($.zui.formatDate(end, dateFormat)).show();
         }
         else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
         {
-            var beginDateFormat = (isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ') + kanbancardLang.to + ' ';
-            var endDateFormat   = isCureentYear ? 'MM-dd ' : 'yyyy-MM-dd ';
+            var beginDateFormat = (isCureentYear ? 'MM-dd' : 'yyyy-MM-dd') + kanbancardLang.to + ' ';
+            var endDateFormat   = isCureentYear ? 'MM-dd' : 'yyyy-MM-dd';
             $time.text($.zui.formatDate(begin, beginDateFormat) + $.zui.formatDate(end, endDateFormat)).show();
         }
 
