@@ -139,7 +139,6 @@ class productplan extends control
     {
         if(isset($_POST['planIDList']))
         {
-
             $this->commonAction($productID, $branch);
             $this->view->title      = $this->lang->productplan->batchEdit;
             $this->view->position[] = html::a(inlink('browse', "productID=$productID&branch=$branch"), $this->lang->productplan->common);
@@ -673,7 +672,6 @@ class productplan extends control
      * @access public
      * @return void
      */
-
     public function synchronizeStory($changes)
     {
         $oldBranch = '';
@@ -701,6 +699,7 @@ class productplan extends control
             $newBranch = '';
         }
     }
+
     /**
      * AJAX: Get conflict story.
      *
