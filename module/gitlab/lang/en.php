@@ -216,3 +216,4 @@ $lang->gitlab->tag->placeholderSearch = "Enter branch tag";
 $lang->gitlab->tag->emptyNameError    = "Name cannot be empty.";
 $lang->gitlab->tag->emptyRefError     = "Create from cannot be empty.";
 $lang->gitlab->tag->issetNameError    = "The tag already exists";
+$lang->gitlab->tag->confirmDelete     = 'Do you want to delete this GitLab tag?';

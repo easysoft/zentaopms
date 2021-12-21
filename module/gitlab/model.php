@@ -1504,6 +1504,24 @@ class gitlabModel extends model
     }
 
     /**
+     * Delete a gitab tag by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tagName
+     * @access public
+     * @return object
+     */
+    public function apiDeleteTag($gitlabID, $projectID, $tagName = '')
+    {
+        if(!(int)$gitlabID or !(int)$projectID or empty($tagName)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/tags/{$tagName}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
      * Check webhook token by HTTP_X_GITLAB_TOKEN.
      *
      * @access public
