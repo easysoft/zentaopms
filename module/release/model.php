@@ -174,9 +174,14 @@ class releaseModel extends model
 
         if($release->build)
         {
-            $buildInfo = $this->dao->select('project, branch')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
+            $buildInfo = $this->dao->select('project, branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch  = $buildInfo->branch;
             $release->project = $buildInfo->project;
+            if($release->sync)
+            {
+                $release->stories = $buildInfo->stories;
+                $release->bugs    = $buildInfo->bugs;
+            }
         }
 
         $release = $this->loadModel('file')->processImgURL($release, $this->config->release->editor->create['id'], $this->post->uid);
