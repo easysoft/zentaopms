@@ -21,21 +21,21 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->tag->name;?></th>
-            <td><?php echo html::input('tag_name', '', "class='form-control' placeholder='{$lang->gitlab->tag->name}'");?></td>
+            <td><?php echo html::input('tag_name', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->tag->ref;?></th>
-            <td><?php echo html::select('ref', $branches, '', "class='form-control chosen' data-placeholder='{$lang->gitlab->tag->ref}'");?></td>
+            <td><?php echo html::select('ref', $branches, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->tag->message;?></th>
-            <td><?php echo html::textarea('message', '', "rows='10' class='form-control' placeholder='{$lang->gitlab->tag->message}'");?></td>
+            <td><?php echo html::textarea('message', '', "rows='10' class='form-control'");?></td>
           </tr>
           <tr>
             <th></th>
             <td class='text-center form-actions'>
               <?php echo html::submitButton();?>
-              <?php if(!isonlybody()) echo html::a(inlink('browseTags', "gitlabID=$gitlabID&projectID=$projectID"), $lang->goback, '', 'class="btn btn-wide"');?>
+              <?php if(!isonlybody()) echo html::a(inlink('browseTag', "gitlabID=$gitlabID&projectID=$projectID"), $lang->goback, '', 'class="btn btn-wide"');?>
             </td>
           </tr>
         </table>
