@@ -74,7 +74,8 @@
                    </tr>
                    <tr>
                      <th><?php echo $lang->mr->MRHasConflicts; ?></th>
-                     <td><?php echo ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
+                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict; ?>
+                     <td><?php echo ($hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
                   </tr>
                    <tr>
                      <th><?php echo $lang->mr->description;?></th>
