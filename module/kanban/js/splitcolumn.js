@@ -18,7 +18,7 @@ function addItem(obj)
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
     $('.colorpicker #color' + i).colorPicker();
 
-    i++;
+    i ++;
 }
 
 function deleteItem(obj)
