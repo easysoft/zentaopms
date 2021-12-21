@@ -164,12 +164,11 @@ class branchModel extends model
      */
     public function create($productID, $withMerge = false)
     {
-        $removedFields = $withMerge ? 'createBranch,mergedBranchIDList,targetBranch' : '';
         $branch = fixer::input('post')
             ->add('product', $productID)
             ->add('createdDate', helper::today())
             ->add('status', 'active')
-            ->remove($removedFields)
+            ->removeIF($withMerge, 'createBranch,mergedBranchIDList,targetBranch')
             ->get();
 
         $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');

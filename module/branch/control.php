@@ -307,7 +307,7 @@ class branch extends control
      *
      * @param  int    $productID
      * @access public
-     * @return void
+     * @return object
      */
     public function mergeBranch($productID)
     {
@@ -324,8 +324,8 @@ class branch extends control
 
         $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
 
-        if(dao::isError()) $this->send(array('message' => dao::getError(), 'result' => 'fail'));
+        if(dao::isError()) return $this->send(array('message' => dao::getError(), 'result' => 'fail'));
 
-        $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
+        return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
     }
 }
