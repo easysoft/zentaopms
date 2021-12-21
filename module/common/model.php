@@ -572,8 +572,8 @@ class commonModel extends model
                         $attr         = "class='iframe' data-width='75%'";
                         break;
                     case 'kanban':
-                        $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='75%'";
+                        $isOnlyBody = true;
+                        $attr       = "class='iframe' data-width='75%'";
                         break;
                 }
 
