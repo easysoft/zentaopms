@@ -15,6 +15,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('today', helper::today());?>
+<?php js::set('oldBranch', $oldBranch);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -30,7 +31,7 @@
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branches, $plan->branch, 'class="form-control"');?></td><td></td><td></td>
+            <td><?php echo html::select('branch', $branches, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control'");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <tr>
