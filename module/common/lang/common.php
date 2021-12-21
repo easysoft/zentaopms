@@ -158,17 +158,19 @@ $lang->icons['unlock']             = 'unlock-alt';
 $lang->icons['confirmStoryChange'] = 'search';
 $lang->icons['score']              = 'tint';
 
-$lang->createIcons['todo']      = 'todo';
-$lang->createIcons['effort']    = 'time';
-$lang->createIcons['bug']       = 'bug';
-$lang->createIcons['story']     = 'lightbulb';
-$lang->createIcons['task']      = 'check-sign';
-$lang->createIcons['testcase']  = 'sitemap';
-$lang->createIcons['doc']       = 'doc';
-$lang->createIcons['execution'] = 'run';
-$lang->createIcons['project']   = 'project';
-$lang->createIcons['product']   = 'product';
-$lang->createIcons['program']   = 'program';
+$lang->createIcons['todo']        = 'todo';
+$lang->createIcons['effort']      = 'time';
+$lang->createIcons['bug']         = 'bug';
+$lang->createIcons['story']       = 'lightbulb';
+$lang->createIcons['task']        = 'check-sign';
+$lang->createIcons['testcase']    = 'sitemap';
+$lang->createIcons['doc']         = 'doc';
+$lang->createIcons['execution']   = 'run';
+$lang->createIcons['project']     = 'project';
+$lang->createIcons['product']     = 'product';
+$lang->createIcons['program']     = 'program';
+$lang->createIcons['kanbanspace'] = 'zone';
+$lang->createIcons['kanban']      = 'kanban';
 
 
 $lang->noMenuModule = array('report', 'my', 'todo', 'effort', 'program', 'product', 'execution', 'task', 'build', 'productplan', 'project', 'projectrelease', 'projectstory', 'story', 'branch', 'release', 'attend', 'leave', 'makeup', 'overtime', 'lieu', 'custom', 'admin', 'mail', 'extension', 'dev', 'backup', 'action', 'cron', 'pssp', 'sms', 'message', 'webhook', 'search', 'score', 'stage', 'entry', 'jenkins', 'gitlab');
