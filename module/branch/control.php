@@ -27,6 +27,7 @@ class branch extends control
     {
         $this->loadModel('product')->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
+        $this->branch->changeBranchLanguage($productID);
 
         $branchList = $this->branch->getList($productID, 0, $browseType, $orderBy);
 
@@ -37,13 +38,14 @@ class branch extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branchList, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->branch->manage;
-        $this->view->branchList = empty($branchList) ? $branchList : $branchList[$pageID - 1];
-        $this->view->productID  = $productID;
-        $this->view->browseType = $browseType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->product    = $this->product->getById($productID);
+        $this->view->title       = $this->lang->branch->manage;
+        $this->view->branchList  = empty($branchList) ? $branchList : $branchList[$pageID - 1];
+        $this->view->productID   = $productID;
+        $this->view->browseType  = $browseType;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getById($productID);
+        $this->view->branchPairs = $this->branch->getPairs($productID);
 
         $this->display();
     }
@@ -297,5 +299,32 @@ class branch extends control
         $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
 
         die(js::reload('parent'));
+    }
+
+    /**
+     * Merge multiple branches into one branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function mergeBranch($productID)
+    {
+        /* Filter out the main branch and target branch. */
+        $mergedBranches = array_filter($_POST['mergedBranchIDList'], function($branch)
+        {
+            $mergeToBranch  = $_POST['createBranch'] ? '' : $_POST['targetBranch'];
+            return $branch != 0 and $branch != $mergeToBranch;
+        });
+        $mergedBranchIDList = implode(',', $mergedBranches);
+        $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
+
+        $targetBranch = $this->branch->mergeBranch($productID, $mergedBranchIDList);
+
+        $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
+
+        if(dao::isError()) return $this->send(array('message' => dao::getError(), 'result' => 'fail'));
+
+        return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
     }
 }

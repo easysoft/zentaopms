@@ -32,6 +32,7 @@ $lang->action->result      = '结果';
 $lang->action->modified    = '修改了';
 $lang->action->old         = '旧值为';
 $lang->action->new         = '新值为';
+$lang->action->to          = '到';
 
 $lang->action->trash       = '回收站';
 $lang->action->undelete    = '还原';
@@ -315,6 +316,7 @@ $lang->action->label->approve               = '通过了';
 $lang->action->label->reject                = '拒绝了';
 $lang->action->label->importfromgitlab      = '从Gitlab关联创建了';
 $lang->action->label->archived              = '归档了';
+$lang->action->label->mergedbranch          = '合并分支';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -353,6 +355,7 @@ $lang->action->dynamicAction->branch['edited']           = '编辑分支';
 $lang->action->dynamicAction->branch['closed']           = '关闭分支';
 $lang->action->dynamicAction->branch['activated']        = '激活分支';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = '设置默认分支';
+$lang->action->dynamicAction->branch['mergebranch']      = '合并分支';
 
 $lang->action->dynamicAction->productplan['opened'] = "创建计划";
 $lang->action->dynamicAction->productplan['edited'] = "编辑计划";

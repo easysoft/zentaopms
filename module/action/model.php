@@ -1003,6 +1003,11 @@ class actionModel extends model
                 $action->objectName .= $this->lang->action->label->startProgram;
             }
 
+            if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+            {
+                $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
+            }
+
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
             $actionType = strtolower($action->action);
@@ -1291,6 +1296,11 @@ class actionModel extends model
                 ->fetch('kanban');
 
             $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
+        }
+
+        if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+        {
+            $action->objectLink = 'javascript:void(0)';
         }
 
         return $action;
