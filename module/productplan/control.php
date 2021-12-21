@@ -103,7 +103,7 @@ class productplan extends control
         {
             $changes = $this->productplan->update($planID);
             $change[$planID] = $changes;
-            $this->synchronizeStory($change);
+            $this->syncStory($change);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -115,8 +115,7 @@ class productplan extends control
         }
 
         $plan = $this->productplan->getByID($planID);
-        $oldBranch = array();
-        $oldBranch[$planID] = $plan->branch;
+        $oldBranch = array($planID => $plan->branch);
 
         $this->commonAction($plan->product, $plan->branch);
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
@@ -157,7 +156,7 @@ class productplan extends control
         elseif($_POST)
         {
             $changes = $this->productplan->batchUpdate($productID);
-            $this->synchronizeStory($changes);
+            $this->syncStory($changes);
             $this->loadModel('action');
             foreach($changes as $planID => $change)
             {
@@ -672,12 +671,12 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function synchronizeStory($changes)
+    public function syncStory($changes)
     {
-        $oldBranch = '';
-        $newBranch = '';
         foreach($changes as $planID => $changes)
         {
+            $oldBranch = '';
+            $newBranch = '';
             foreach($changes as $changeId => $change)
             {
                 if($change['field'] == 'branch')
@@ -692,11 +691,9 @@ class productplan extends control
             {
                 foreach($planStories as $storyID => $story)
                 {
-                    if($story->branch and $story->branch != $newBranch)$this->productplan->unlinkStory($storyID, $planID);
+                    if($story->branch and $story->branch != $newBranch) $this->productplan->unlinkStory($storyID, $planID);
                 }
             }
-            $oldBranch = '';
-            $newBranch = '';
         }
     }
 
@@ -721,7 +718,7 @@ class productplan extends control
                 if($story->branch and $story->branch != $newBranch) $conflictStoryIdList .= '[' . $storyID . ']';
             }
         }
-        if($conflictStoryIdList != '') echo sprintf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
+        if($conflictStoryIdList != '') printf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
     }
 
     /**

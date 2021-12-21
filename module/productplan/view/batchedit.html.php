@@ -12,7 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
-<?php js::set('oldBranch', $oldBranch)?>
+<?php js::set('oldBranch', $oldBranch);?>
 <div id="mainContent" class="main-content">
   <div class="main-header">
     <h2><?php echo $lang->productplan->batchEdit;?></h2>
