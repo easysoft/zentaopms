@@ -170,10 +170,10 @@ class storyModel extends model
     public function getRequierements($productID)
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
+           ->where('deleted')->eq(0)
            ->andWhere('product')->eq($productID)
            ->andWhere('type')->eq('requirement')
            ->andWhere('status')->notIN('draft,closed')
-           ->where('deleted')->eq(0)
            ->fetchPairs();
     }
 
@@ -2825,7 +2825,7 @@ class storyModel extends model
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
             ->fi()
-            ->beginIF($includeLibStories == false)->andWhere('t1.lib')->eq('0')->fi()
+            ->beginIF($includeLibStories == false and isset($this->config->maxVersion))->andWhere('t1.lib')->eq('0')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
