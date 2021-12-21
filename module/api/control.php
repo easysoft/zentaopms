@@ -604,7 +604,6 @@ class api extends control
         echo $select;
     }
 
-
     /**
      * Set doc menu by method name.
      *
@@ -626,41 +625,30 @@ class api extends control
         }
 
         /* page of index menu. */
-        if(intval($libID) > 0)
+        if(common::hasPriv('api', 'create') or common::hasPriv('api', 'createLib'))
         {
-            if(common::hasPriv('api', 'create') or common::hasPriv('api', 'createLib'))
+            $menu .= "<div class='dropdown' id='createDropdown'>";
+            $menu .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->api->createAB . " <span class='caret'></span></button>";
+            $menu .= "<ul class='dropdown-menu pull-right'>";
+
+            /* check has permission create api doc */
+            if(intval($libID) > 0 and common::hasPriv('api', 'create'))
             {
-                $menu .= "<div class='dropdown' id='createDropdown'>";
-                $menu .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->api->createAB . " <span class='caret'></span></button>";
-                $menu .= "<ul class='dropdown-menu pull-right'>";
-
-                /* check has permission create api doc */
-                if(common::hasPriv('api', 'create'))
-                {
-                    $menu .= "<li>";
-                    $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
-                    $menu .= "</li>";
-                }
-
-                /* check has permission create api doc lib */
-                if(common::hasPriv('api', 'createLib'))
-                {
-                    $menu .= '<li>' . html::a(helper::createLink('api', 'createLib'), "<i class='icon-doc-lib icon'></i> " . $this->lang->api->createLib, '', "class='iframe' data-width='70%'") . '</li>';
-
-                    $menu .= '<li class="divider"></li>';
-                    $menu .= '<li>' . html::a(helper::createLink('api', 'createLib', 'type=demo'), "<i class='icon-zentao icon'></i> " . $this->lang->api->createDemo, '', "class='iframe' data-width='70%'") . '</li>';
-                }
-
-                $menu .= "</ul></div>";
+                $menu .= "<li>";
+                $menu .= html::a(helper::createLink('api', 'create', "libID=$libID&moduleID=$moduleID"), "<i class='icon-rich-text icon'></i> " . $this->lang->api->apiDoc, '', "data-app='{$this->app->tab}'");
+                $menu .= "</li>";
             }
-        }
-        else
-        {
-            /* generate create api doc lib button */
+
+            /* check has permission create api doc lib */
             if(common::hasPriv('api', 'createLib'))
             {
-                $menu .= html::a(helper::createLink('api', 'createLib'), '<i class="icon icon-plus"></i> ' . $this->lang->api->createLib, '', 'class="btn btn-secondary iframe"');
+                $menu .= '<li>' . html::a(helper::createLink('api', 'createLib'), "<i class='icon-doc-lib icon'></i> " . $this->lang->api->createLib, '', "class='iframe' data-width='70%'") . '</li>';
+
+                $menu .= '<li class="divider"></li>';
+                $menu .= '<li>' . html::a(helper::createLink('api', 'createLib', 'type=demo'), "<i class='icon-zentao icon'></i> " . $this->lang->api->createDemo, '', "class='iframe' data-width='70%'") . '</li>';
             }
+
+            $menu .= "</ul></div>";
         }
 
         $this->lang->TRActions = $menu;
