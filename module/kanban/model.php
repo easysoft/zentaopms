@@ -84,7 +84,7 @@ class kanbanModel extends model
                 ->add('kanban', $kanban->id)
                 ->add('space', $kanban->space)
                 ->add('createdBy', $account)
-                ->add('createdDate', helper::today())
+                ->add('createdDate', helper::now())
                 ->trim('name')
                 ->get();
         }
