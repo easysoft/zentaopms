@@ -204,8 +204,8 @@ class mrModel extends model
         $MR->sourceBranch   = $postData->RepoSrcBranch;
         $MR->targetProject  = $repo->path;
         $MR->targetBranch   = $postData->RepoDistBranch;
-        $MR->diffs          = $postData->DiffMsg;
-        $MR->title          = 'Merge request';
+        $MR->diffs          = $this->post->data['DiffMsg'];
+        $MR->title          = $this->lang->mr->common . ' ' . $postData->RepoSrcBranch . $this->lang->mr->to . $postData->RepoDistBranch ;
         $MR->repoID         = $repo->id;
         $MR->jobID          = isset($repo->job->id) ? $repo->job->id : 0;
         $MR->synced         = '0';
