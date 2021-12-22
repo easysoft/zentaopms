@@ -14,7 +14,7 @@
 .kanbans .panel:hover {border-color: #006AF1; box-shadow: 0 0 10px 0 rgba(0,0,100,.25);}
 .kanbans .panel-heading {padding: 12px 24px 10px 16px;}
 .kanbans .kanban-name {overflow: hidden; white-space:nowrap}
-.kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-6px;}
+.kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-1px;}
 .kanbans .panel-body {padding: 0 16px 16px;}
 .kanbans .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; display: -webkit-box;}
 .kanbans .kanban-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}
