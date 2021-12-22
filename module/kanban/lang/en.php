@@ -13,6 +13,7 @@ $lang->kanban->delete              = 'Delete Kanban';
 $lang->kanban->createRegion        = 'Create Region';
 $lang->kanban->editRegion          = 'Edit Region';
 $lang->kanban->sortRegion          = 'Sort Region';
+$lang->kanban->sortGroup           = 'Sort Group';
 $lang->kanban->deleteRegion        = 'Delete Region';
 $lang->kanban->createLane          = 'Create Lane';
 $lang->kanban->editLane            = 'Edit Lane';
@@ -84,8 +85,8 @@ $lang->kanban->aclGroup['private'] = 'Private';
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->enableArchived['0'] = 'Enable';
-$lang->kanban->enableArchived['1'] = 'No Enable';
+$lang->kanban->enableArchived['0'] = 'No Enable';
+$lang->kanban->enableArchived['1'] = 'Enable';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";

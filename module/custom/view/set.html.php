@@ -80,6 +80,10 @@ EOT;
           <td></td>
         </tr>
         <tr>
+          <th class="thWidth"><?php echo $lang->custom->superReviewers;?></th>
+          <td><?php echo html::select('superReviewers[]', $users, $superReviewers, "class='form-control chosen' multiple");?></td>
+        </tr>
+        <tr>
           <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
         </tr>
       </table>

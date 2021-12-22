@@ -476,15 +476,16 @@ $lang->product->methodOrder[105] = 'unbindWhitelist';
 
 /* Branch. */
 $lang->resource->branch = new stdclass();
-$lang->resource->branch->manage     = 'manage';
-$lang->resource->branch->create     = 'createAction';
-$lang->resource->branch->edit       = 'editAction';
-$lang->resource->branch->close      = 'closeAction';
-$lang->resource->branch->activate   = 'activateAction';
-$lang->resource->branch->sort       = 'sort';
-$lang->resource->branch->delete     = 'delete';
-$lang->resource->branch->batchEdit  = 'batchEdit';
-$lang->resource->branch->setDefault = 'setDefaultAction';
+$lang->resource->branch->manage      = 'manage';
+$lang->resource->branch->create      = 'createAction';
+$lang->resource->branch->edit        = 'editAction';
+$lang->resource->branch->close       = 'closeAction';
+$lang->resource->branch->activate    = 'activateAction';
+$lang->resource->branch->sort        = 'sort';
+$lang->resource->branch->delete      = 'delete';
+$lang->resource->branch->batchEdit   = 'batchEdit';
+$lang->resource->branch->setDefault  = 'setDefaultAction';
+$lang->resource->branch->mergeBranch = 'mergeBranchAction';
 
 $lang->branch->methodOrder[0]  = 'manage';
 $lang->branch->methodOrder[5]  = 'create';
@@ -494,6 +495,8 @@ $lang->branch->methodOrder[20] = 'activate';
 $lang->branch->methodOrder[25] = 'sort';
 $lang->branch->methodOrder[30] = 'delete';
 $lang->branch->methodOrder[35] = 'batchEdit';
+$lang->branch->methodOrder[40] = 'setDefault';
+$lang->branch->methodOrder[45] = 'mergeBranch';
 
 /* Story. */
 $lang->resource->story = new stdclass();
@@ -632,6 +635,7 @@ $lang->resource->kanban->delete        = 'delete';
 $lang->resource->kanban->createRegion  = 'createRegion';
 $lang->resource->kanban->editRegion    = 'editRegion';
 $lang->resource->kanban->sortRegion    = 'sortRegion';
+$lang->resource->kanban->sortGroup     = 'sortGroup';
 $lang->resource->kanban->deleteRegion  = 'deleteRegion';
 $lang->resource->kanban->createLane    = 'createLane';
 $lang->resource->kanban->setLane       = 'setLane';
@@ -671,6 +675,7 @@ $lang->kanban->methodOrder[55]  = 'delete';
 $lang->kanban->methodOrder[60]  = 'createRegion';
 $lang->kanban->methodOrder[65]  = 'editRegion';
 $lang->kanban->methodOrder[70]  = 'sortRegion';
+$lang->kanban->methodOrder[72]  = 'sortGroup';
 $lang->kanban->methodOrder[75]  = 'deleteRegion';
 $lang->kanban->methodOrder[80]  = 'createLane';
 $lang->kanban->methodOrder[85]  = 'setLane';

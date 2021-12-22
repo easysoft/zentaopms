@@ -15,6 +15,10 @@
 .kanbans .panel-heading {padding: 12px 24px 10px 16px;}
 .kanbans .kanban-name {overflow: hidden; white-space:nowrap}
 .kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-1px;}
+.kanbans .kanban-actions {float: right; display: none;}
+.kanbans .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
+.kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
+.kanbans .panel .label-closed {background: #AAA !important; color: #FFF; margin-top:-6px;}
 .kanbans .panel-body {padding: 0 16px 16px;}
 .kanbans .kanban-desc {color: #838a9d; word-break:break-all; height: 70px; overflow: hidden; display: -webkit-box;}
 .kanbans .kanban-footer {position: absolute; bottom: 10px; right: 10px; left: 15px;}

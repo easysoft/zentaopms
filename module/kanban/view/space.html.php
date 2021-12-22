@@ -32,6 +32,7 @@
   </div>
   <?php else:?>
   <?php foreach($spaceList as $space):?>
+  <?php $kanbanCount = 1;?>
   <div class='row cell' id='spaceList'>
     <div class='space'>
       <div class='row menu'>
@@ -66,6 +67,37 @@
                 <?php endif;?>
                 <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
               </div>
+              <?php $canActions = (common::hasPriv('kanban','edit') or common::hasPriv('kanban','close') or common::hasPriv('kanban','delete'));?>
+              <?php if($canActions):?>
+              <div class='kanban-actions kanban-actions<?php echo $kanbanID;?>'>
+                <div class='dropdown'>
+                  <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
+                  <ul class='dropdown-menu <?php echo $kanbanCount % 4 == 0 ? 'pull-left' : 'pull-right';?>'>
+                    <?php
+                    if(common::hasPriv('kanban','edit'))
+                    {
+                        echo '<li>';
+                        common::printLink('kanban', 'edit',   "kanbanID={$kanban->id}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
+                        echo '</li>';
+                    }
+                    if(common::hasPriv('kanban','close'))
+                    {
+                        echo '<li>';
+                        common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe' data-width='75%'", '', true);
+                        echo '</li>';
+                    }
+                    if(common::hasPriv('kanban','delete'))
+                    {
+                        echo '<li>';
+                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, '', "class='iframe' data-width='75%'", '', true);
+                        echo '</li>';
+                    }
+                    ?>
+                  </ul>
+                </div>
+              </div>
+              <?php endif;?>
+              <?php $kanbanCount ++;?>
             </div>
             <div class='panel-body'>
               <div class='kanban-desc' title="<?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?>"><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>

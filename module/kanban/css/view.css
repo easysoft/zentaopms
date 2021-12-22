@@ -14,6 +14,8 @@ body {background-color: #fff}
 .dropdown-menu > li {padding: 0 10px;}
 .dropdown-menu > li > a > .icon {position: relative; left: -5px;}
 
+.scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
+
 .region {border: 1px solid #dcdcdc; margin-bottom: 20px;}
 .region .region-header {padding: 10px;}
 .region .region-header span {font-size: 14px; color: #999EAB}
@@ -83,8 +85,7 @@ body {background-color: #fff}
 .region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
-.kanban-card {height: 60px !important}
-.kanban-card > .title {display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.kanban-card {height: auto !important}
 .kanban-card > .info {position: relative; margin-top: 5px}
 .kanban-card > .info > .info + .info {margin-left: 8px}
 .kanban-card:hover > .actions {opacity: 1;}

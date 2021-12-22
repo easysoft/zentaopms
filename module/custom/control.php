@@ -62,7 +62,9 @@ class custom extends control
         if($module == 'story' and $field == 'reviewRules')
         {
             $this->app->loadConfig($module);
-            $this->view->reviewRule = zget($this->config->$module, 'reviewRules', '1');
+            $this->view->reviewRule     = zget($this->config->$module, 'reviewRules', '1');
+            $this->view->users          = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+            $this->view->superReviewers = zget($this->config->$module, 'superReviewers', '');
         }
         if(($module == 'story' or $module == 'testcase') and $field == 'review')
         {
@@ -113,7 +115,7 @@ class custom extends control
             }
             elseif($module == 'story' and $field == 'reviewRules')
             {
-                $data = fixer::input('post')->get();
+                $data = fixer::input('post')->join('superReviewers', ',')->get();
                 $this->loadModel('setting')->setItems("system.$module", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
