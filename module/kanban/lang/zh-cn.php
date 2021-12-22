@@ -47,6 +47,11 @@ $lang->kanban->custom              = '自定义';
 $lang->kanban->archived            = '已归档';
 $lang->kanban->viewArchivedCard    = '查看已归档卡片';
 $lang->kanban->viewArchivedColumn  = '查看已归档列';
+$lang->kanban->archivedColumn      = '已归档的看板列';
+$lang->kanban->archivedCard        = '已归档的卡片';
+$lang->kanban->restoreColumn       = '还原看板列';
+$lang->kanban->restore             = '还原';
+$lang->kanban->child               = '子';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -74,7 +79,7 @@ $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 $lang->kanban->accessDenied  = '您无权访问该看板';
 $lang->kanban->confirmDelete = '您确认删除吗？';
 
-$lang->kanban->aclList['open']    = '继承空间访问权限（能访问当前空间，即可访问）';
+$lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
 $lang->kanban->aclGroup['open']    = '公开';
@@ -221,9 +226,11 @@ $lang->kanbancolumn->limit      = $lang->kanban->WIPCount;
 $lang->kanbancolumn->color      = '看板列颜色';
 $lang->kanbancolumn->childName  = '子列名称';
 $lang->kanbancolumn->childColor = '子状态颜色';
+$lang->kanbancolumn->empty      = '暂时没有看板列';
 
 $lang->kanbancolumn->confirmArchive = '您确认归档该列吗？归档列后，该列和列中所有卡片将被隐藏，您可以在区域-已归档中查看已归档的列。';
 $lang->kanbancolumn->confirmDelete  = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
+$lang->kanbancolumn->confirmRestore = '您确定要还原该看板列吗？还原看板列后，该看板列和看板列中所有的任务将同时还原到之前的位置。';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name      = $lang->kanban->laneName;

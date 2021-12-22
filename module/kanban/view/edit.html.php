@@ -53,7 +53,7 @@
       </tr>
       <tr>
         <th><?php echo $lang->kanban->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanban->aclList, $kanban->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
+        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanban->aclList, $kanban->acl == 'open' ? 'extend' : $kanban->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
       </tr>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>

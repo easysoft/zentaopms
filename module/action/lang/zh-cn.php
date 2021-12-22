@@ -186,6 +186,7 @@ $lang->action->desc->syncproject      = '$date, 系统判断由于执行开始�
 $lang->action->desc->syncexecution    = '$date, 系统判断由于任务开始，将执行状态置为进行中。' . "\n";
 $lang->action->desc->importfromgitlab = '$date, 由 <strong>$actor</strong> 从Gitlab的Issue关联创建。' . "\n";
 $lang->action->desc->archived         = '$date, 由 <strong>$actor</strong> 归档。' . "\n";
+$lang->action->desc->restore          = '$date, 由 <strong>$actor</strong> 还原。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -317,6 +318,7 @@ $lang->action->label->approve               = '通过了';
 $lang->action->label->reject                = '拒绝了';
 $lang->action->label->importfromgitlab      = '从Gitlab关联创建了';
 $lang->action->label->archived              = '归档了';
+$lang->action->label->restore               = '还原了';
 $lang->action->label->mergedbranch          = '合并分支';
 
 /* 动态信息按照对象分组 */

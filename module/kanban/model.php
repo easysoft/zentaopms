@@ -859,16 +859,16 @@ class kanbanModel extends model
      */
     public function getCanViewObjects($objectType = 'kanban')
     {
-        $table           = $this->config->objectTables[$objectType];
-        $objects         = $this->dao->select('*')->from($table)->fetchAll('id');
-        $spaceOwnerPairs = $objectType == 'kanban' ? $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchPairs() : array();
+        $table     = $this->config->objectTables[$objectType];
+        $objects   = $this->dao->select('*')->from($table)->fetchAll('id');
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'private')
+            if($object->acl == 'private' or $object->acl == 'extend')
             {
                 $remove = true;
                 if($object->owner == $account) $remove = false;
@@ -876,8 +876,12 @@ class kanbanModel extends model
                 if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
                 if($objectType == 'kanban')
                 {
-                    $parentOwner = isset($spaceOwnerPairs[$object->space]) ? $spaceOwnerPairs[$object->space] : '';
-                    if(strpos(",$parentOwner,", ",$account,") !== false) $remove = false;
+                    $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                    $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
+                    $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
+                    if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
+                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
                 }
 
                 if($remove) unset($objects[$objectID]);
@@ -1087,7 +1091,14 @@ class kanbanModel extends model
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+
+            if($kanban->acl == 'extend')
+            {
+                $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+                $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
+            }
         }
+
 
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -1128,7 +1139,13 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
-        $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        if($kanban->acl == 'extend')
+        {
+            $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+            $kanban->acl       = $spaceAcl == 'open' ? 'open' : 'extend';
+            $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        }
+
 
         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
 
@@ -1986,20 +2003,29 @@ class kanbanModel extends model
      *
      * @param  int    $columnID
      * @access public
-     * @return string
+     * @return void
      */
     public function archiveColumn($columnID)
     {
-        $oldColumn = $this->getColumnByID($columnID);
-
         $this->dao->update(TABLE_KANBANCOLUMN)
             ->set('archived')->eq(1)
             ->where('id')->eq($columnID)
             ->exec();
+    }
 
-        $column = $this->getColumnByID($columnID);
-
-        if(!dao::isError()) return common::createChanges($oldColumn, $column);
+    /**
+     * Restore a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function restoreColumn($columnID)
+    {
+        $this->dao->update(TABLE_KANBANCOLUMN)
+            ->set('archived')->eq(0)
+            ->where('id')->eq($columnID)
+            ->exec();
     }
 
     /**
@@ -2007,7 +2033,7 @@ class kanbanModel extends model
      *
      * @param  int    $cardID
      * @access public
-     * @return string
+     * @return array
      */
     public function archiveCard($cardID)
     {
@@ -2123,6 +2149,21 @@ class kanbanModel extends model
             ->where('parent')->eq($parentID)
             ->andWhere('archived')->eq($archived)
             ->andWhere('deleted')->eq($deleted)
+            ->orderBy('order')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get columns by region id.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return array
+     */
+    public function getColumnsByRegion($regionID)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
+            ->where('region')->eq($regionID)
             ->orderBy('order')
             ->fetchAll('id');
     }
