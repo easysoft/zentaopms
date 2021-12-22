@@ -1,13 +1,20 @@
-function loadMore(type)
+/**
+ * Load more.
+ *
+ * @param  string $type
+ * @param  int    $regionID
+ * @access public
+ * @return void
+ */
+function loadMore(type, regionID)
 {
-    var method = 'browseArchived' + type;
-    var selector = '#more' + type + 's';
-    var link = createLink('kanban', method, 'kanbanID=' + kanbanID);
+    var method   = 'viewArchived' + type;
+    var selector = '#archived' + type + 's';
+    var link     = createLink('kanban', method, 'regionID=' + regionID);
     $(selector).load(link, function()
     {
         var windowHeight = $(window).height();
         $(selector + ' .panel-body').css('height', windowHeight - 100);
-        $(selector + ' .avatar').renderAvatar();
         $(selector).animate({right: 0}, 500);
     });
 }
