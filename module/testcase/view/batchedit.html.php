@@ -73,10 +73,9 @@
           {
               $caseProductID   = $cases[$caseID]->product;
               $product         = $products[$caseProductID];
-              $branchTagOption = isset($branches) ? $branches : array('' => '');
+              $branchTagOption = array();
               if($product->type != 'normal')
               {
-                  //$branchTagOption = isset($productBranches[$product->id]) ? $productBranches[$product->id] : $branchTagOption;
                   $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
                   foreach($branches as $branchInfo)
                   {
