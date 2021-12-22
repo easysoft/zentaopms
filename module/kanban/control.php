@@ -235,7 +235,7 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
-        $users  = $this->loadModel('user')->getPairs('noletter');
+        $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         if(!$kanban)
         {
