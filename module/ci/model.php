@@ -172,7 +172,7 @@ class ciModel extends model
                     $newMR->mergeStatus = 'can_be_merged';
 
                     /* Create a gitlab mr. */
-                    $MRObject = new stdclass;
+                    $MRObject = new stdclass();
                     $MRObject->target_project_id    = $relateMR->targetProject;
                     $MRObject->source_branch        = $relateMR->sourceBranch;
                     $MRObject->target_branch        = $relateMR->targetBranch;
