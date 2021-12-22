@@ -83,8 +83,7 @@ body {background-color: #fff}
 .region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
-.kanban-card {height: 60px !important}
-.kanban-card > .title {display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.kanban-card {height: auto !important}
 .kanban-card > .info {position: relative; margin-top: 5px}
 .kanban-card > .info > .info + .info {margin-left: 8px}
 .kanban-card:hover > .actions {opacity: 1;}
