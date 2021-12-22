@@ -669,15 +669,18 @@ class story extends control
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
             $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID, 'all') : array();
-            $branches        = isset($productBranches[$story->product]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$story->product] : array();
             $products        = $this->product->getProductPairsByProject($objectID);
-
             $this->view->objectID = $objectID;
         }
-        else
+
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($product->id, isset($objectID) ? $objectID : 0, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
         {
-            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id) : array();
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
         /* Get product reviewers. */
@@ -694,7 +697,8 @@ class story extends control
         $this->view->product          = $product;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, 'skipParent');
         $this->view->products         = $products;
-        $this->view->branches         = $branches;
+        $this->view->branchOption     = $branchOption;
+        $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewerList, 0, $productReviewers);
