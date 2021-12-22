@@ -235,7 +235,7 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
-        $users  = $this->loadModel('user')->getPairs('noletter');
+        $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         if(!$kanban)
         {
@@ -540,15 +540,68 @@ class kanban extends control
         }
         else
         {
-            $changes = $this->kanban->archiveColumn($columnID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->kanban->archiveColumn($columnID);
+            if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
-            $this->action->logHistory($actionID, $changes);
+            $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
 
             if(isonlybody()) die(js::reload('parent.parent'));
             die(js::reload('parent'));
         }
+    }
+
+    /**
+     * Restore a column.
+     *
+     * @param  int    $columnID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function restoreColumn($columnID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanbancolumn->confirmRestore, $this->createLink('kanban', 'restoreColumn', "columnID=$columnID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->restoreColumn($columnID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * View archived columns.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function viewArchivedColumn($regionID)
+    {
+        $columns     = $this->kanban->getColumnsByRegion($regionID);
+        $columnsData = array();
+        foreach($columns as $column)
+        {
+            if($column->archived == 0) continue;
+            if($column->parent > 0)
+            {
+                if(empty($columnsData[$column->parent])) $columnsData[$column->parent] = $columns[$column->parent];
+                $columnsData[$column->parent]->child[$column->id] = $column;
+            }
+            else
+            {
+                if(empty($columnsData[$column->id])) $columnsData[$column->id] = $column;
+            }
+        }
+
+        $this->view->columns = $columnsData;
+
+        $this->display();
     }
 
     /**
@@ -563,7 +616,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
+            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
         }
         else
         {

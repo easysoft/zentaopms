@@ -81,6 +81,8 @@ body {background-color: #fff}
 .region .kanban-item .has-color .title,
 .region .kanban-item .has-color .actions .icon-more-v,
 .region .kanban-item .has-color .info > .label-pri,
+.region .kanban-item .has-color .info > .estimate,
+.region .kanban-item .has-color .info > .user .lable-teamSumCount,
 .region .kanban-item .has-color .info > .label-light {color: #FFFFFF;}
 .region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}

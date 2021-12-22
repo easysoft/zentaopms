@@ -47,6 +47,11 @@ $lang->kanban->custom              = 'Custom';
 $lang->kanban->archived            = 'Archived';
 $lang->kanban->viewArchivedCard    = 'View archived card';
 $lang->kanban->viewArchivedColumn  = 'View archived column';
+$lang->kanban->archivedColumn      = 'Archived Column';
+$lang->kanban->archivedCard        = 'Archived Card';
+$lang->kanban->restoreColumn       = 'Restore Column';
+$lang->kanban->restore             = 'Restore';
+$lang->kanban->child               = 'Child';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -77,7 +82,7 @@ $lang->kanban->confirmDelete = 'Do you want to delete this?';
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
 
-$lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
+$lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
 $lang->kanban->enableArchived['0'] = 'No Enable';
@@ -221,9 +226,11 @@ $lang->kanbancolumn->limit      = $lang->kanban->WIPCount;
 $lang->kanbancolumn->color      = 'Column Color';
 $lang->kanbancolumn->childName  = 'Name';
 $lang->kanbancolumn->childColor = 'Color';
+$lang->kanbancolumn->empty      = 'No Column';
 
 $lang->kanbancolumn->confirmArchive = 'Are you sure to archive this column? After archiving the column, the column and all cards in the column will be hidden. You can view the archived columns in the Region - Archived.';
 $lang->kanbancolumn->confirmDelete  = 'Are you sure to delete this column? After deleting the column, all cards in this column will also be deleted.';
+$lang->kanbancolumn->confirmRestore = 'Are you sure you want to restore this Kanban column? After restoring the Kanban column, the Kanban column and all tasks in the Kanban column will be restored to the previous position at the same time.';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name      = $lang->kanban->laneName;

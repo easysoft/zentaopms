@@ -179,7 +179,7 @@ class projectreleaseModel extends model
         {
             $buildInfo = $this->dao->select('branch, stories, bugs')->from(TABLE_BUILD)->where('id')->eq($release->build)->fetch();
             $release->branch = $buildInfo->branch;
-            if($this->post->sync == 'true');
+            if($this->post->sync == 'true')
             {
                 $release->stories = $buildInfo->stories;
                 $release->bugs    = $buildInfo->bugs;

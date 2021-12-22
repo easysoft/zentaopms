@@ -1,13 +1,20 @@
-function loadMore(type)
+/**
+ * Load more.
+ *
+ * @param  string $type
+ * @param  int    $regionID
+ * @access public
+ * @return void
+ */
+function loadMore(type, regionID)
 {
-    var method = 'browseArchived' + type;
-    var selector = '#more' + type + 's';
-    var link = createLink('kanban', method, 'kanbanID=' + kanbanID);
+    var method   = 'viewArchived' + type;
+    var selector = '#archived' + type + 's';
+    var link     = createLink('kanban', method, 'regionID=' + regionID);
     $(selector).load(link, function()
     {
         var windowHeight = $(window).height();
         $(selector + ' .panel-body').css('height', windowHeight - 100);
-        $(selector + ' .avatar').renderAvatar();
         $(selector).animate({right: 0}, 500);
     });
 }
@@ -284,6 +291,10 @@ function renderKanbanItem(item, $item)
         .attr('class', 'pri label-pri label-pri-' + item.pri)
         .text(item.pri);
 
+    $item.css('background-color', item.color);
+    $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
+    $item.find('.info > .label-light').css('background-color', item.color);
+
     var $time = $info.children('.time');
     if(item.end == '0000-00-00' && item.begin == '0000-00-00')
     {
@@ -308,7 +319,8 @@ function renderKanbanItem(item, $item)
             $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +  kanbancardLang.to + ' ' +  $.zui.formatDate(end, 'yyyy-MM-dd')).show();
         }
 
-        $time.toggleClass('text-red', needRemind);
+        if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
+        if($item.hasClass('has-color') && needRemind)  $time.css('background-color', 'rgba(255, 255, 255, 0.3)');
     }
 
     /* Display avatars of assignedTo. */
@@ -317,10 +329,6 @@ function renderKanbanItem(item, $item)
     var title = [];
     for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
     $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
-
-    $item.css('background-color', item.color);
-    $item.toggleClass('has-color', item.color != '#fff');
-    $item.find('.info > .label-light').css('background-color', item.color);
 }
 
 /**
@@ -683,7 +691,7 @@ function createLaneMenu(options)
 
     var items = [];
     if(privs.includes('setLane')) items.push({label: kanbanLang.setLane, icon: 'edit', url: createLink('kanban', 'setLane', 'laneID=' + lane.id + '&executionID=0&from=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '635px'}});
-    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), className: 'confirmer', attrs: {'data-confirmTitle': kanbanlaneLang.confirmDelete, 'data-confirmDetail': kanbanlaneLang.confirmDeleteDetail, 'target': 'hiddenwin'}});
+    if(privs.includes('deleteLane')) items.push({label: kanbanLang.deleteLane, icon: 'trash', url: createLink('kanban', 'deleteLane', 'lane=' + lane.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -705,9 +713,9 @@ function createCardMenu(options)
 
     var items = [];
     if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail, 'target': 'hiddenwin'}});
+    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('moveCard'))
     {
         var moveCardItems = [];
@@ -767,8 +775,8 @@ function createColumnMenu(options)
         items.push({label: kanbanLang.createColumnOnRight, icon: 'col-add-right', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     }
     if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('archiveColumn') && kanban.archived == '1') items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmArchive, 'data-confirmDetail': kanbancolumnLang.confirmArchiveDetail, 'data-confirmButton': lang.archive, 'data-confirming': lang.archiving}});
-    if(privs.includes('deleteColumn')) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), className: 'confirmer',  attrs: {'data-confirmTitle': kanbancolumnLang.confirmDelete, 'data-confirmDetail': kanbancolumnLang.confirmDeleteDetail, 'target': 'hiddenwin'}});
+    if(privs.includes('archiveColumn') && kanban.archived == '1' && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('deleteColumn') && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
