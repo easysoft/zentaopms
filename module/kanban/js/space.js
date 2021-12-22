@@ -11,12 +11,12 @@ $kanbans.on('click', '.panel', function(e)
 /* Display drop-down menu.*/
 $('.panel').mouseenter(function(e)
 {
-    $('.kanban-actions' + e.currentTarget.parentElement.dataset.id).css('display','block');
+    $('.kanban-actions' + e.currentTarget.parentElement.dataset.id).css('visibility','visible');
 });
 
 /* Hide drop-down menu. */
 $('.panel').mouseleave(function(e)
 {
-    $('.kanban-actions').css('display','none');
+    $('.kanban-actions').css('visibility','hidden');
     $('.dropdown').removeClass('open');
 });

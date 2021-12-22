@@ -241,7 +241,7 @@ function renderUsersAvatar(users, itemID, size)
     if(assignees.length > 2)
     {
         assignees.splice(1, assignees.length - 2, '<span>...</span>');
-        assignees.push('<div>' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
+        assignees.push('<div class="lable-teamSumCount">' + kanbanLang.teamSumCount.replace('%s', members) + '</div>');
     }
 
     return assignees;
@@ -296,6 +296,10 @@ function renderKanbanItem(item, $item)
         .attr('class', 'pri label-pri label-pri-' + item.pri)
         .text(item.pri);
 
+    $item.css('background-color', item.color);
+    $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
+    $item.find('.info > .label-light').css('background-color', item.color);
+
     var $time = $info.children('.time');
     if(item.end == '0000-00-00' && item.begin == '0000-00-00')
     {
@@ -320,7 +324,8 @@ function renderKanbanItem(item, $item)
             $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +  kanbancardLang.to + ' ' +  $.zui.formatDate(end, 'yyyy-MM-dd')).show();
         }
 
-        $time.toggleClass('text-red', needRemind);
+        if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
+        if($item.hasClass('has-color') && needRemind)  $time.css('background-color', 'rgba(255, 255, 255, 0.3)');
     }
 
     /* Display avatars of assignedTo. */
@@ -329,10 +334,6 @@ function renderKanbanItem(item, $item)
     var title = [];
     for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
     $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
-
-    $item.css('background-color', item.color);
-    $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
-    $item.find('.info > .label-light').css('background-color', item.color);
 }
 
 /**
