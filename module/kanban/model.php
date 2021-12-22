@@ -1443,6 +1443,11 @@ class kanbanModel extends model
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
                 {
+                    if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
+                    }
+
                     if(strpos(',ready,develop,test,', $colType) !== false) continue;
 
                     if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
@@ -1457,10 +1462,6 @@ class kanbanModel extends model
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
-                    elseif($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
-                    {
-                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                    }
                 }
             }
         }
@@ -1471,33 +1472,42 @@ class kanbanModel extends model
             {
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
-                    if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
+                    if($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
+                    }
+
+                    if(strpos(',resolving,test,testing,tested,', $colType) !== false) continue;
 
                     if($lane->groupby and $bug->{$lane->groupby} != $lane->extra)
                     {
                         $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
-                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['unconfirmed'] = empty($cardPairs['unconfirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['unconfirmed'];
                         if(strpos($cardPairs['closed'], ",$bugID,") !== false) $cardPairs['closed'] = str_replace(",$bugID,", ',', $cardPairs['closed']);
                     }
-                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['confirmed'] = empty($cardPairs['confirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['confirmed'];
+                        if(strpos($cardPairs['unconfirmed'], ",$bugID,") !== false) $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
+                    }
+                    elseif($colType == 'fixing' and $bug->status == $status and $bug->activatedCount > 0 and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    {
+                        $cardPairs['fixing'] = empty($cardPairs['fixing']) ? ",$bugID," : ",$bugID" . $cardPairs['fixing'];
+                        if(strpos($cardPairs['confirmed'], ",$bugID,") !== false)   $cardPairs['confirmed']   = str_replace(",$bugID,", ',', $cardPairs['confirmed']);
                         if(strpos($cardPairs['unconfirmed'], ",$bugID,") !== false) $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
                     }
                     elseif($colType == 'fixed' and $bug->status == $status and strpos($cardPairs['fixed'], ",$bugID,") === false and strpos($cardPairs['testing'], ",$bugID,") === false and strpos($cardPairs['tested'], ",$bugID,") === false)
                     {
                         $cardPairs['fixed'] = empty($cardPairs['fixed']) ? ",$bugID," : ",$bugID" . $cardPairs['fixed'];
+                        if(strpos($cardPairs['testing'], ",$bugID,") !== false) $cardPairs['testing'] = str_replace(",$bugID,", ',', $cardPairs['testing']);
+                        if(strpos($cardPairs['tested'], ",$bugID,") !== false)  $cardPairs['tested']  = str_replace(",$bugID,", ',', $cardPairs['tested']);
                     }
                     elseif($colType == 'closed' and $bug->status == 'closed' and strpos($cardPairs[$colType], ",$bugID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$bugID," : ",$bugID". $cardPairs[$colType];
-                    }
-                    elseif($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
-                    {
-                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
