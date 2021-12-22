@@ -187,10 +187,10 @@ class mrModel extends model
     public function apiCreate()
     {
         $postData = fixer::input('post')
-            ->setDefault('url,sourceBranch,targetBranch,diff,mergeStatus,hasNoConflict', '')
+            ->setDefault('repoUrl,repoSrcBranch,repoDistBranch,diffMsg,mergeStatus,hasNoConflict', '')
             ->get();
 
-        $repo = $this->loadModel('repo')->getRepoByUrl($postData->url);
+        $repo = $this->loadModel('repo')->getRepoByUrl($postData->repoUrl);
         if(!$repo || $repo->result != 'fail') return false;
         $repo = (object)$repo->data;
 
@@ -198,13 +198,13 @@ class mrModel extends model
         $MR = new stdClass();
         $MR->gitlabID       = $repo->client;
         $MR->sourceProject  = $repo->path;
-        $MR->sourceBranch   = $postData->sourceBranch;
+        $MR->sourceBranch   = $postData->repoSrcBranch;
         $MR->targetProject  = $repo->path;
-        $MR->targetBranch   = $postData->taretBranch;
-        $MR->diffs          = $postData->diff;
+        $MR->targetBranch   = $postData->repoDistBranch;
+        $MR->diffs          = $postData->diffMsg;
         $MR->title          = 'Merge request';
         $MR->repoID         = $repo->id;
-        $MR->jobID          = $postData->jobID; 
+        $MR->jobID          = $repo->job;
         $MR->synced         = '0';
         $MR->needCI         = '1';
         $MR->approvalStatus = 'approved';
