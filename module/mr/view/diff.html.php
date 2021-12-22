@@ -34,7 +34,7 @@
       <?php include '../../common/view/form.html.php';?>
       <?php include '../../common/view/kindeditor.html.php';?>
       <?php /* If this mr is deleted in GitLab, then show this part to user. */?>
-      <?php if(empty($rawMR) or !isset($rawMR->id)): ?>
+      <?php if($MR->synced and (empty($rawMR) or !isset($rawMR->id))): ?>
         <div id='mainContent'>
           <div class="table-empty-tip">
             <p>
