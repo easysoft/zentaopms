@@ -79,8 +79,8 @@ $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、�
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';
 
-$lang->kanban->enableArchived['0'] = '启用';
-$lang->kanban->enableArchived['1'] = '不启用';
+$lang->kanban->enableArchived['0'] = '不启用';
+$lang->kanban->enableArchived['1'] = '启用';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";

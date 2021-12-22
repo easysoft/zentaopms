@@ -79,8 +79,8 @@ $lang->kanban->aclGroup['private'] = 'Private';
 $lang->kanban->aclList['open']    = 'Open (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->enableArchived['0'] = 'Enable';
-$lang->kanban->enableArchived['1'] = 'No Enable';
+$lang->kanban->enableArchived['0'] = 'No Enable';
+$lang->kanban->enableArchived['1'] = 'Enable';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
