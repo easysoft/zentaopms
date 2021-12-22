@@ -44,7 +44,6 @@ body {background-color: #fff}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px;}
 
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
-.region .kanban-lane {min-width: max-content; min-width: -moz-max-content}
 
 .region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 100px;}
 .region .kanban-lane > .kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
@@ -56,7 +55,6 @@ body {background-color: #fff}
 .region .kanban-lane-col {max-height: unset !important; overflow: auto!important; position: relative;}
 .region .kanban-lane-col.drop-to {outline: 3px solid rgba(255, 190, 57, 0.5)!important; background-color: rgba(255, 190, 57, .1);}
 .region .kanban-lane-col.can-drop-here {outline: none; background-color: rgba(61, 198, 253, .075);}
-.region .kanban-lane-col.has-scrollbar {padding-bottom: 50px;}
 .region .kanban-lane-col.has-scrollbar > .kanban-lane-actions {position: absolute; background-color: inherit; bottom: 0; left: 0; right: 0;}
 
 .region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
