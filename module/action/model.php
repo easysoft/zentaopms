@@ -1109,6 +1109,14 @@ class actionModel extends model
                         if($object->type == 'requirement') $requirements[$object->id] = $object->id;
                     }
                 }
+                elseif($objectType == 'reviewcl')
+                {
+                    $objectInfo = $this->dao->select('id,title')->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    foreach($objectInfo as $object)
+                    {
+                        $objectName[$object->id] = $object->title;
+                    }
+                }
                 elseif($objectType == 'team')
                 {
                     $objectInfo = $this->dao->select('id,team,type')->from(TABLE_PROJECT)->where('id')->in($objectIdList)->fetchAll();
