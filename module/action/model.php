@@ -736,7 +736,14 @@ class actionModel extends model
             if(is_array($desc))
             {
                 if($key == 'extra') continue;
-                $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, '|') !== false and $key == 'actor')
+                {
+                    $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
+                }
+                else
+                {
+                    $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                }
             }
             else
             {
@@ -762,11 +769,20 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed')
             {
-                list($extra, $reason) = explode(',', $extra);
-                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
-                $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+                if(strpos($action->extra, ',') !== false)
+                {
+                    list($extra, $reason) = explode(',', $extra);
+                    $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                    $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+                }
+
+                if(strpos($action->extra, '|') !== false)
+                {
+                    list($extra, $isSuperReviewer) = explode('|', $extra);
+                    $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                }
             }
             echo $actionDesc;
         }
