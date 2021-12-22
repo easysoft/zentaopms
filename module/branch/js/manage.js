@@ -47,13 +47,16 @@ $(function()
 
     $("input[id*='branchIDList']").change(function()
     {
-        if($(this).prop('checked') && $(this).closest('tr').data('status') === 'closed')
+        $("input[id*='branchIDList']").each(function()
         {
-            $("a[href='#mergeBranch']").hide();
-            return false;
-        }
+            if($(this).prop('checked') && $(this).closest('tr').data('status') === 'closed')
+            {
+                $("a[href='#mergeBranch']").hide();
+                return false;
+            }
 
-        $("a[href='#mergeBranch']").show();
+            $("a[href='#mergeBranch']").show();
+        })
     });
 
     $('#createBranch').change(function()

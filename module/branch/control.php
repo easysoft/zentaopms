@@ -45,7 +45,7 @@ class branch extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getById($productID);
-        $this->view->branchPairs = $this->branch->getPairs($productID);
+        $this->view->branchPairs = $this->branch->getPairs($productID, 'active');
 
         $this->display();
     }
