@@ -5,13 +5,7 @@ $('#submit').click(function()
     var date       = $('#date').val();
     if(name && dateFormat.test(date))
     {
-        if(confirm(confirmLink))
-        {   
-             $('#sync').val('true');
-        }
-        else
-        {   
-             $('#sync').val('false');
-        }
+        var result = confirm(confirmLink) ? true : false;
+        $('#sync').val(result);
     }
 });

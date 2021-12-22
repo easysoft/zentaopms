@@ -112,9 +112,9 @@ class releaseModel extends model
     public function create($productID, $branch = 0)
     {
         /* Init vars. */
-        $productID     = (int)$productID;
-        $branch        = (int)$branch;
-        $buildID       = 0;
+        $productID = (int)$productID;
+        $branch    = (int)$branch;
+        $buildID   = 0;
 
         /* Check build if build is required. */
         if(strpos($this->config->release->create->requiredFields, 'build') !== false and $this->post->build == false) return dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->release->build);
