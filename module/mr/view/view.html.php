@@ -52,7 +52,8 @@
                 <thead>
                   <tr>
                     <th colspan='2'>
-                      <span><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
+                      <?php $sourceDisabled = ($MR->status == 'merged' and $MR->removeSourceBranch == '1') ? 'disabled' : '';?>
+                      <span><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue' $sourceDisabled") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
                     </th>
                   </tr>
                 </thead>
