@@ -134,7 +134,8 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branches  = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '' and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
         $branchID  = $branch;
 
         /* Set menu. */
@@ -244,7 +245,6 @@ class product extends control
         }
 
         /* Display status of branch. */
-        $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
         $branchOption    = array();
         $branchTagOption = array();
         foreach($branches as $branchInfo)

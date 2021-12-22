@@ -49,7 +49,7 @@ $(function()
     {
         $("input[id*='branchIDList']").each(function()
         {
-            if($(this).prop('checked') && $(this).closest('tr').data('status') === 'closed')
+            if($(this).prop('checked') && ($(this).closest('tr').data('status') === 'closed' || $(this).closest('tr').data('id') == '0'))
             {
                 $("a[href='#mergeBranch']").hide();
                 return false;

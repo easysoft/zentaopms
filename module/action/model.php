@@ -998,6 +998,7 @@ class actionModel extends model
     {
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
+        $this->app->loadLang('branch');
 
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -1021,6 +1022,7 @@ class actionModel extends model
 
             if($action->objectType == 'branch' and $action->action == 'mergedbranch')
             {
+                if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
                 $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
             }
 

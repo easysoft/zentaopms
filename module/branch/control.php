@@ -316,6 +316,7 @@ class branch extends control
             $mergeToBranch  = $_POST['createBranch'] ? '' : $_POST['targetBranch'];
             return $branch != 0 and $branch != $mergeToBranch;
         });
+
         $mergedBranchIDList = implode(',', $mergedBranches);
         $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
 
