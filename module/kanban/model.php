@@ -1941,12 +1941,16 @@ class kanbanModel extends model
      *
      * @param  int    $cardID
      * @param  int    $toColID
+     * @param  int    $toLaneID
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $toColID)
+    public function moveCard($cardID, $toColID, $toLaneID)
     {
-        $this->dao->update(TABLE_KANBANCARD)->set('column')->eq($toColID)->where('id')->eq($cardID)->exec();
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('column')->eq($toColID)
+            ->beginIF($toLaneID)->set('lane')->eq($toLaneID)->fi()
+            ->where('id')->eq($cardID)->exec();
     }
 
     /**
