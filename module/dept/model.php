@@ -376,7 +376,7 @@ class deptModel extends model
      * @access public
      * @return array
      */
-    public function getUsers($browseType = 'inside', $deptID, $pager = null, $orderBy = 'id')
+    public function getUsers($browseType = 'inside', $deptID = 0, $pager = null, $orderBy = 'id')
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
