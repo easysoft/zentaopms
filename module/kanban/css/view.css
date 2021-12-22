@@ -1,9 +1,4 @@
-body {background-color: #fff}
-
-#mainNavbar + #mainContent {background-color: #fff;}
-#mainNavbar + #mainContent.scrollbar-hover {margin-top: 0px; overflow: scroll;}
 #TRAction .icon {padding: 0px 6px; font-size: 14px}
-#searchbox {display: none;}
 
 .has-error .form-control {border-color: #ff4268!important;}
 .has-error .form-control:focus {box-shadow: inset 0 1px 1px rgb(0 0 0 / 8%), 0 0 6px #f5b2a5!important;}

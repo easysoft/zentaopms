@@ -27,15 +27,14 @@ function loadMore(type, regionID)
  */
 function fullScreen()
 {
-    var element       = document.getElementById('kanban');
+    var element       = document.getElementById('kanbanContainer');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
 
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
         {
-            $('#kanban').addClass('scrollbar-hover');
-            $('#kanban').css('background', '#fff');
+            $('#kanbanContainer').addClass('scrollbar-hover');
             $('.actions').hide();
             $.cookie('isFullScreen', 1);
         };
@@ -377,10 +376,10 @@ function showErrorMessager(message)
  * @access public
  * @return string
  */
-function moveCard(cardID, toColID, kanbanID, regionID)
+function moveCard(cardID, toColID, toLaneID, kanbanID, regionID)
 {
     if(!cardID) return false;
-    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&toColID=' + toColID + '&kanbanID=' + kanbanID);
+    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&toColID=' + toColID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
     return $.ajax(
     {
         method:   'post',
@@ -554,64 +553,27 @@ function findDropColumns($element, $root)
 }
 
 /**
- * Handle drop task
+ * Handle drop card 
  * @param {Object} event Drop event object
  */
 function handleDropTask($element, event, kanban)
 {
     if(!event.target || !event.isNew) return;
 
-    var $task    = $element;
-    var $oldCol  = $task.closest('.kanban-col');
+    var $card    = $element;
+    var $oldCol  = $card.closest('.kanban-col');
     var $newCol  = $(event.target).closest('.kanban-col');
     var oldCol   = $oldCol.data();
     var newCol   = $newCol.data();
     var oldLane  = $oldCol.closest('.kanban-lane').data('lane');
     var newLane  = $newCol.closest('.kanban-lane').data('lane');
-    var kanbanID = $task.closest('.kanban-board').data('id');
-    var regionID = $task.closest('.kanban').data('id');
+    var regionID = $card.closest('.region').data('id');
+    var kanbanID = $card.closest('#kanban').data('id');
 
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
-    var newStatus = newCol.type;
-    var task = $task.data('task');
-
-    /* Task status not change */
-    if(newStatus === task.status && task.kanbanLane !== newLane.id)
-    {
-        var url = createLink('sys.task', 'move', 'taskID=' + task.id + '&groupID=' + newLane.group);
-        return $.ajax(
-        {
-            method:   'post',
-            dataType: 'json',
-            url:      url,
-            data:     {lane: newLane.id},
-            success: function(data)
-            {
-                if(data && data.result === 'success')  updateRegion(regionID);
-                else showErrorMessager(data && data.message);
-            },
-            error: function(xhr, status, error)
-            {
-                showErrorMessager(error || lang.timeout);
-            }
-        });
-    }
-
-    /* Show dialog to user for changing status */
-    var methodToChangeStatus =
-    {
-        wait:   'activate',
-        doing:  'start',
-        done:   'finish',
-        cancel: 'cancel',
-        closed: 'close',
-    };
-
-    $.getJSON(createLink('task', 'move', 'taskID=' + task.id + '&groupID=' + newLane.group + '&laneID=' + newLane.id + '&columnID=' + newCol.id), function(response)
-    {
-        if(response.result == 'success') updateRegion(regionID);
-    });
+    var cardID = $card.data().id;
+    moveCard(cardID, newCol.id, newLane.id, kanbanID, regionID);
 }
 
 /**
@@ -739,7 +701,7 @@ function createCardMenu(options)
         {
             if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
             if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
-            moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, moveColumns[i].id, card.kanban, card.region);}});
+            moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, moveColumns[i].id, card.lane, card.kanban, card.region);}});
         }
         moveCardItems = moveCardItems.reverse();
         items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
