@@ -911,7 +911,7 @@ class docModel extends model
             $project         = $this->loadModel('project')->getById($object->project);
             $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, '', $projectTeams, array_flip(explode(",", $project->whitelist)));
-            if(array_key_exists($this->app->user->account, $authorizedUsers)) return true;
+            if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
         }
 
         if($object->acl == 'custom')
