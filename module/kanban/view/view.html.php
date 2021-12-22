@@ -59,17 +59,17 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
         </ul>
         <?php endif;?>
       </span>
-      <?php $canViewviewArchivedCard   = commonModel::hasPriv('kanban', 'viewArchivedCard');?>
-      <?php $canViewviewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');?>
-      <?php if($canViewviewArchivedCard or $canViewviewArchivedColumn):?>
+      <?php $canViewArchivedCard   = commonModel::hasPriv('kanban', 'viewArchivedCard');?>
+      <?php $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');?>
+      <?php if($canViewArchivedCard or $canViewArchivedColumn):?>
       <span>
         <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
           <span><?php echo $this->lang->kanban->archived;?></span>
           <span class="caret"></span>
         </button>
         <ul class="dropdown-menu pull-right">
-          <?php if($canViewviewArchivedCard) echo '<li>' . html::a("javascript:loadMore(\"card\", $region->id)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
-          <?php if($canViewviewArchivedColumn) echo '<li>' . html::a("javascript:loadMore(\"Column\", $region->id)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
+          <?php if($canViewArchivedCard) echo '<li>' . html::a("javascript:loadMore(\"card\", $region->id)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
+          <?php if($canViewArchivedColumn) echo '<li>' . html::a("javascript:loadMore(\"Column\", $region->id)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
         </ul>
       </span>
       <?php endif;?>

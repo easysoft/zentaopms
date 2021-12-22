@@ -868,7 +868,7 @@ class kanbanModel extends model
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'private')
+            if($object->acl == 'private' or $object->acl == 'extend')
             {
                 $remove = true;
                 if($object->owner == $account) $remove = false;
@@ -880,8 +880,8 @@ class kanbanModel extends model
                     $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
                     $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
                     if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
-                    if(strpos(",$spaceTeam,", ",$account,") !== false) $remove = false;
-                    if(strpos(",$spaceWhiteList,", ",$account,") !== false) $remove = false;
+                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
+                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
                 }
 
                 if($remove) unset($objects[$objectID]);
@@ -1095,9 +1095,10 @@ class kanbanModel extends model
             if($kanban->acl == 'extend')
             {
                 $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
-                $kanban->acl = $spaceAcl ? $spaceAcl : 'open';
+                $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
             }
         }
+
 
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -1138,7 +1139,13 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
-        $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        if($kanban->acl == 'extend')
+        {
+            $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+            $kanban->acl       = $spaceAcl == 'open' ? 'open' : 'extend';
+            $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        }
+
 
         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
 
