@@ -48,10 +48,10 @@ $result    = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy);
 r($result) && p('0:name') && e('with_cicredentials'); //通过gitlabID,projectID,按标签名升序获取GitLab标签列表
 
 $keyword = 'zentaopms_15.2_20210720';
-$result    = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword);
+$result  = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy, $keyword);
 r($result) && p('0:name') && e('zentaopms_15.2_20210720'); //通过gitlabID,projectID,搜索字符'zentaopms_15.2_20210720'获取GitLab标签列表
 
 $tester->app->loadClass('pager', $static = true);
-$pager = new pager(0, 20, 2);
-$result    = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy, '', $pager);
+$pager  = new pager(0, 20, 2);
+$result = $gitlab->apiGetTags($gitlabID, $projectID, $orderBy, '', $pager);
 r($result) && p('0:name') && e('zentaopms_2.0_stable_20110503'); //通过gitlabID,projectID,每页20条记录，分页获取第二页GitLab标签列表
