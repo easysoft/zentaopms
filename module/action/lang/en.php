@@ -32,7 +32,7 @@ $lang->action->result      = 'Result';
 $lang->action->modified    = 'Modified';
 $lang->action->old         = 'Old';
 $lang->action->new         = 'New';
-+$lang->action->to         = 'To';
+$lang->action->to         = 'To';
 
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';
