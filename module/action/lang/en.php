@@ -125,7 +125,6 @@ $lang->action->objectTypes['gitlabuser']       = 'GitLab User';
 $lang->action->objectTypes['gitlabgroup']      = 'GitLab Group';
 $lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
-$lang->action->objectTypes['reviewcl']         = 'Review';
 $lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
 $lang->action->objectTypes['kanban']           = 'Kanban';
 $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
