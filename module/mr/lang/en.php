@@ -79,9 +79,10 @@ $lang->mr->statusList['merged'] = 'merged';
 $lang->mr->statusList['closed'] = 'closed';
 
 $lang->mr->mergeStatusList = array();
-$lang->mr->mergeStatusList['checking']         = 'checking';
-$lang->mr->mergeStatusList['can_be_merged']    = 'can be merged';
-$lang->mr->mergeStatusList['cannot_be_merged'] = 'cannot be merged';
+$lang->mr->mergeStatusList['checking']             = 'checking';
+$lang->mr->mergeStatusList['can_be_merged']        = 'can be merged';
+$lang->mr->mergeStatusList['cannot_be_merged']     = 'cannot be merged';
+$lang->mr->mergeStatusList['cannot_merge_by_fail'] = 'Cannot be merged, check failed';
 
 $lang->mr->description       = 'Description';
 $lang->mr->confirmDelete     = 'Are you sure to delete this merge request?';

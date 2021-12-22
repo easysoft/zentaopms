@@ -79,9 +79,10 @@ $lang->mr->statusList['merged'] = '已合并';
 $lang->mr->statusList['closed'] = '已关闭';
 
 $lang->mr->mergeStatusList = array();
-$lang->mr->mergeStatusList['checking']         = '检查中';
-$lang->mr->mergeStatusList['can_be_merged']    = '可合并';
-$lang->mr->mergeStatusList['cannot_be_merged'] = '不可自动合并';
+$lang->mr->mergeStatusList['checking']             = '检查中';
+$lang->mr->mergeStatusList['can_be_merged']        = '可合并';
+$lang->mr->mergeStatusList['cannot_be_merged']     = '不可自动合并';
+$lang->mr->mergeStatusList['cannot_merge_by_fail'] = '不可合并,检查未通过';
 
 $lang->mr->description       = '描述';
 $lang->mr->confirmDelete     = '确认删除该合并请求吗？';
