@@ -906,7 +906,7 @@ class docModel extends model
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
 
-        if($object->project)
+        if($object->project and $object->main)
         {
             $project         = $this->loadModel('project')->getById($object->project);
             $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
