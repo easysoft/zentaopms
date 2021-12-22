@@ -94,8 +94,17 @@ class mr extends control
     {
         if($_POST)
         {
-            $result = $this->mr->apiCreate();
-            return $this->send($result);
+            $this->mr->apiCreate();
+
+            $response['result']  = 'success';
+            $response['message'] = '';
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+
+            return $this->send($response);
         }
     }
 
@@ -198,7 +207,7 @@ class mr extends control
         $MR = $this->mr->getByID($id);
         if(!$MR) die(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
+        if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
         $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
         $this->loadModel('gitlab');
@@ -214,7 +223,7 @@ class mr extends control
 
         /* Those variables are used to render $lang->mr->commandDocument. */
         $this->view->httpRepoURL = $sourceProject->http_url_to_repo;
-        $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $rawMR->source_branch;
+        $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
 
         /* Get mr linked list. */
         $this->app->loadLang('productplan');

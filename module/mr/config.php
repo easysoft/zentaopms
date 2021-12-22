@@ -13,7 +13,7 @@ $config->mr->editor = new stdclass();
 $config->mr->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
 
 $config->mr->apicreate = new stdclass();
-$config->mr->apicreate->requiredFields = 'repoID,sourceBranch,targetBranch,diffs,mergeStatus,hasNoConflict';
+$config->mr->apicreate->requiredFields = 'repoID,sourceBranch,targetBranch,mergeStatus';
 
 $config->mr->maps = new stdclass;
 $config->mr->maps->sync = array();

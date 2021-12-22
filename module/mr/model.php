@@ -186,30 +186,33 @@ class mrModel extends model
      */
     public function apiCreate()
     {
-        $postData = fixer::input('post')
-            ->setDefault('repoUrl,repoSrcBranch,repoDistBranch,diffMsg,mergeStatus,hasNoConflict', '')
-            ->get();
+        $postData = fixer::input('post')->get();
+        $postData = (object)$postData->data;
 
-        $repo = $this->loadModel('repo')->getRepoByUrl($postData->repoUrl);
-        if(!$repo || $repo->result != 'fail') return false;
-        $repo = (object)$repo->data;
+        $repo = $this->loadModel('repo')->getRepoByUrl($postData->RepoUrl);
+        if(empty($repo['data']))
+        {
+            dao::$errors[] = $repo['message'];
+            return false;
+        }
+        $repo = $repo['data'];
 
         /* Process and insert mr data. */
         $MR = new stdClass();
         $MR->gitlabID       = $repo->client;
         $MR->sourceProject  = $repo->path;
-        $MR->sourceBranch   = $postData->repoSrcBranch;
+        $MR->sourceBranch   = $postData->RepoSrcBranch;
         $MR->targetProject  = $repo->path;
-        $MR->targetBranch   = $postData->repoDistBranch;
-        $MR->diffs          = $postData->diffMsg;
+        $MR->targetBranch   = $postData->RepoDistBranch;
+        $MR->diffs          = $postData->DiffMsg;
         $MR->title          = 'Merge request';
         $MR->repoID         = $repo->id;
-        $MR->jobID          = $repo->job;
+        $MR->jobID          = isset($repo->job->id) ? $repo->job->id : 0;
         $MR->synced         = '0';
         $MR->needCI         = '1';
         $MR->approvalStatus = 'approved';
-        $MR->hasNoConflict  = $postData->hasNoConflict ? '1' : '0';
-        $MR->mergeStatus    = $postData->mergeStatus ? 'can_be_merged' : 'cannot_be_merged';
+        $MR->hasNoConflict  = $postData->MergeStatus ? '0' : '1';
+        $MR->mergeStatus    = $postData->MergeStatus ? 'can_be_merged' : 'cannot_be_merged';
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
 
@@ -221,24 +224,28 @@ class mrModel extends model
         if(dao::isError()) return false;
 
         /* Exec Job */
-        if($MR->hasNoConflict == '1' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
+        if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
         {
             $MRID     = $this->dao->lastInsertId();
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
+            $newMR    = new stdClass();
             if(!empty($pipeline->queue))
             {
-                $newMR   = new stdClass();
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
-                $newMR->compileID = $compile->id;
+                $newMR->compileID     = $compile->id;
                 $newMR->compileStatus = $compile->status;
-
-                /* Update MR in Zentao database. */
-                $this->dao->update(TABLE_MR)->data($newMR)
-                    ->where('id')->eq($MRID)
-                    ->autoCheck()
-                    ->exec();
-                if(dao::isError()) return false;
             }
+            else
+            {
+                $newMR->compileStatus = $pipeline->status;
+            }
+
+            /* Update MR in Zentao database. */
+            $this->dao->update(TABLE_MR)->data($newMR)
+                ->where('id')->eq($MRID)
+                ->autoCheck()
+                ->exec();
+            if(dao::isError()) return false;
         }
         return true;
     }
