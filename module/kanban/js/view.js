@@ -27,6 +27,7 @@ function fullScreen()
         var afterEnterFullscreen = function()
         {
             $('#kanban').css('background', '#fff');
+            $('.actions').hide();
             $.cookie('isFullScreen', 1);
         };
 
@@ -63,6 +64,7 @@ function fullScreen()
 function exitFullScreen()
 {
     $('#mainContent').removeClass('scrollbar-hover');
+    $('.actions').show();
     $.cookie('isFullScreen', 0);
 }
 
