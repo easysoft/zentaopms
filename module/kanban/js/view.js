@@ -23,18 +23,18 @@ function fullScreen()
     var element       = document.getElementById('kanban');
     var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
 
-    $('.region-header .action').attr('disabled', true);
     if(requestMethod)
     {
         var afterEnterFullscreen = function()
         {
+            $('#kanban').addClass('scrollbar-hover');
             $('#kanban').css('background', '#fff');
             $.cookie('isFullScreen', 1);
         };
 
         var whenFailEnterFullscreen = function(error)
         {
-            $.cookie('isFullScreen', 0);
+            exitFullScreen();
         };
 
         try

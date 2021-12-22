@@ -13,6 +13,7 @@ $lang->kanban->delete              = 'Delete Kanban';
 $lang->kanban->createRegion        = 'Create Region';
 $lang->kanban->editRegion          = 'Edit Region';
 $lang->kanban->sortRegion          = 'Sort Region';
+$lang->kanban->sortGroup           = 'Sort Group';
 $lang->kanban->deleteRegion        = 'Delete Region';
 $lang->kanban->createLane          = 'Create Lane';
 $lang->kanban->editLane            = 'Edit Lane';
