@@ -965,13 +965,17 @@ class bug extends control
 
         if($this->app->tab == 'execution' or $this->app->tab == 'project')
         {
-            $objectID        = $this->app->tab == 'project' ? $bug->project : $bug->execution;
-            $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('execution')->getBranchByProduct($productID, $objectID, 'all') : array();
-            $branches        = isset($productBranches[$productID]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$productID] : array();
+            $objectID = $this->app->tab == 'project' ? $bug->project : $bug->execution;
         }
-        else
+
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($productID, isset($objectID) ? $objectID : 0, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
         {
-            $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID) : array();
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
         $this->view->bug              = $bug;
@@ -984,7 +988,8 @@ class bug extends control
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->executions       = array(0 => '') + $this->product->getExecutionPairsByProduct($bug->product, $bug->branch, 'id_desc', $bug->project);
         $this->view->stories          = $bug->execution ? $this->story->getExecutionStoryPairs($bug->execution) : $this->story->getProductStoryPairs($bug->product, $bug->branch);
-        $this->view->branches         = $branches;
+        $this->view->branchOption     = $branchOption;
+        $this->view->branchTagOption  = $branchTagOption;
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
         $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
@@ -1053,12 +1058,17 @@ class bug extends control
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set branches and modules. */
-            $branches = array();
+            $branches        = array();
+            $branchTagOption = array();
             $modules  = array();
             if($product->type != 'normal')
             {
-                $branches = $this->loadModel('branch')->getPairs($productID);
-                foreach($branches as $branchID => $branchName)
+                $branches = $this->loadModel('branch')->getList($productID, 0 ,'all');
+                foreach($branches as $branchInfo)
+                {
+                    $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                }
+                foreach($branchTagOption as $branchID => $branchName)
                 {
                     $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'bug', 0, $branchID);
                 }
@@ -1071,11 +1081,11 @@ class bug extends control
             /* Set product menu. */
             $this->qa->setMenu($this->products, $productID, $branch);
 
-            $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
-            $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-            $this->view->plans      = $plans;
-            $this->view->branches   = $branches;
-            $this->view->modules    = $modules;
+            $this->view->title           = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
+            $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+            $this->view->plans           = $plans;
+            $this->view->branchTagOption = $branchTagOption;
+            $this->view->modules         = $modules;
         }
         /* The bugs of my. */
         else

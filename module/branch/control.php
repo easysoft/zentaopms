@@ -258,22 +258,19 @@ class branch extends control
      */
     public function ajaxGetBranches($productID, $oldBranch = 0, $param = '', $projectID = 0)
     {
+        $param   = $param ? $param : 'all';
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') die();
 
-        $branches = $this->branch->getPairs($productID, $param);
-
-        /* Remove unlinked branches of the project. */
-        if($projectID)
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param);
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
         {
-            $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
-            foreach($branches as $branchID => $branchName)
-            {
-                if(!isset($projectProducts[$productID][$branchID])) unset($branches[$branchID]);
-            }
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-
-        die(html::select('branch', $branches, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
+        die(html::select('branch', strpos($param, 'active') !== false ? $branchOption : $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
     }
 
     /**

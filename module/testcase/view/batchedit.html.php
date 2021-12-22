@@ -71,13 +71,18 @@
           $caseBranch = isset($cases[$caseID]->branch) ? $cases[$caseID]->branch : 0;
           if(!$productID and !$cases[$caseID]->lib)
           {
-              $caseProductID = $cases[$caseID]->product;
-              $product       = $products[$caseProductID];
-              $branches      = isset($branches) ? $branches : array('' => '');
+              $caseProductID   = $cases[$caseID]->product;
+              $product         = $products[$caseProductID];
+              $branchTagOption = isset($branches) ? $branches : array('' => '');
               if($product->type != 'normal')
               {
-                  $branches = isset($productBranches[$product->id]) ? $productBranches[$product->id] : $branches;
-                  foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
+                  //$branchTagOption = isset($productBranches[$product->id]) ? $productBranches[$product->id] : $branchTagOption;
+                  $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
+                  foreach($branches as $branchInfo)
+                  {
+                      $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                  }
+                  foreach($branchTagOption as $branchID => $branchName) $branchTagOption[$branchID] = '/' . $product->name . '/' . $branchName;
               }
 
               $modules[$caseProductID][$caseBranch] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case', 0, $caseBranch);
@@ -103,7 +108,7 @@
             <td class='text-left' style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $product->id;?>
               <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$caseID]", $branches, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+              <?php echo html::select("branches[$caseID]", $branchTagOption, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
             <?php $caseProductID = isset($caseProductID) ? $caseProductID : $productID;?>

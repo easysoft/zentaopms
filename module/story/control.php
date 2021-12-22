@@ -668,8 +668,8 @@ class story extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $products        = $this->product->getProductPairsByProject($objectID);
+            $objectID  = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $products  = $this->product->getProductPairsByProject($objectID);
             $this->view->objectID = $objectID;
         }
 
