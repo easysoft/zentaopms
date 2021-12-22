@@ -33,6 +33,7 @@ $config->action->objectNameFields['job']          = 'name';
 $config->action->objectNameFields['team']         = 'name';
 $config->action->objectNameFields['pipeline']     = 'name';
 $config->action->objectNameFields['mr']           = 'title';
+$config->action->objectNameFields['reviewcl']     = 'title';
 $config->action->objectNameFields['kanbancolumn'] = 'name';
 $config->action->objectNameFields['kanbanlane']   = 'name';
 $config->action->objectNameFields['kanbanspace']  = 'name';

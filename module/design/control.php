@@ -69,6 +69,7 @@ class design extends control
 
         /* Save session for design list and process product id. */
         $this->session->set('designList', $this->app->getURI(true), 'project');
+        $this->session->set('reviewList', $this->app->getURI(true), 'project');
 
         /* Build the search form. */
         $queryID   = ($type == 'bySearch') ? (int)$param : 0;
