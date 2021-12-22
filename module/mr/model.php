@@ -639,8 +639,10 @@ class mrModel extends model
      */
     public function getDiffs($MR, $encoding = '')
     {
-        $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        $gitlab       = $this->gitlab->getByID($MR->gitlabID);
+        $diffVersions = array();
+        if($MR->synced) $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
+        $gitlab = $this->gitlab->getByID($MR->gitlabID);
 
         $this->loadModel('repo');
         $repo = new stdclass;
@@ -655,10 +657,11 @@ class mrModel extends model
 
         $lines      = array();
         $commitList = array();
-        foreach ($diffVersions as $diffVersion)
+        foreach($diffVersions as $diffVersion)
         {
             $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
             if($singleDiff->state == 'empty') continue;
+
             $commits = $singleDiff->commits;
             $diffs   = $singleDiff->diffs;
             foreach($diffs as $index => $diff)
@@ -676,6 +679,12 @@ class mrModel extends model
                 $diffLines = explode("\n", $diff->diff);
                 foreach($diffLines as $diffLine) $lines[] = $diffLine;
             }
+        }
+
+        if(empty($MR->synced))
+        {
+            $diffs = preg_replace('/^\s*$\n?\r?/m', '', $MR->diffs);
+            $lines = explode("\n", $diffs);
         }
 
         $scm = $this->app->loadClass('scm');
