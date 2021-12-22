@@ -14,6 +14,8 @@ body {background-color: #fff}
 .dropdown-menu > li {padding: 0 10px;}
 .dropdown-menu > li > a > .icon {position: relative; left: -5px;}
 
+.scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
+
 .region {border: 1px solid #dcdcdc; margin-bottom: 20px;}
 .region .region-header {padding: 10px;}
 .region .region-header span {font-size: 14px; color: #999EAB}

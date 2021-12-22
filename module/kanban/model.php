@@ -543,7 +543,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('*')->from(TABLE_KANBANGROUP)
             ->where('region')->in($regions)
-            ->orderBy('id_asc')
+            ->orderBy('order')
             ->fetchGroup('region', 'id');
     }
 
@@ -1882,6 +1882,34 @@ class kanbanModel extends model
     }
 
     /**
+     * Sort kanban group.
+     *
+     * @param  int    $region
+     * @param  array  $groups
+     * @access public
+     * @return void
+     */
+    public function sortGroup($region, $groups)
+    {
+        $this->loadModel('action');
+
+        $groupList = $this->getGroupList($region);
+
+        $order = 1;
+        foreach($groups as $groupID)
+        {    
+            if(!$groupID) continue;
+            if(!isset($groupList[$groupID])) continue;
+
+            $this->dao->update(TABLE_KANBANGROUP)->set('`order`')->eq($order)->where('id')->eq($groupID)->exec();
+
+            $order++;
+        }    
+
+        return !dao::isError();
+    }
+
+    /**
      * Move a card.
      *
      * @param  int    $cardID
@@ -2016,6 +2044,21 @@ class kanbanModel extends model
             ->andWhere('space')->in($spaceIdList)
             ->beginIF($kanbanIdList)->andWhere('id')->in($kanbanIdList)->fi()
             ->fetchGroup('space', 'id');
+    }
+
+    /**
+     * Get group list by region.
+     * 
+     * @param  int    $region 
+     * @access public
+     * @return array
+     */
+    public function getGroupList($region)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANGROUP)
+            ->where('region')->eq($region)
+            ->orderBy('order')
+            ->fetchAll('id');
     }
 
     /**

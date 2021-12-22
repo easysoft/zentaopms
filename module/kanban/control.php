@@ -372,6 +372,25 @@ class kanban extends control
     }
 
     /**
+     * Sort group.
+     *
+     * @param  int    $region
+     * @param  int    $groups
+     * @access public
+     * @return void
+     */
+    public function sortGroup($region, $groups)
+    {
+        $groups = array_filter(explode(',', trim($groups, ',')));
+        if(empty($groups)) return $this->send(array('result' => 'fail', 'message' => 'No groups to sort.'));
+
+        $this->kanban->sortGroup($region, $groups);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
+    }
+
+    /**
      * Delete a region
      *
      * @param  int    $regionID
