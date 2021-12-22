@@ -1887,7 +1887,7 @@ class kanbanModel extends model
      * @param  int    $region
      * @param  array  $groups
      * @access public
-     * @return void
+     * @return bool 
      */
     public function sortGroup($region, $groups)
     {
