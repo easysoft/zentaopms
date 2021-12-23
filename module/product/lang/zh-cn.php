@@ -130,6 +130,7 @@ $lang->product->searchStory  = '搜索';
 $lang->product->assignedToMe = '指给我';
 $lang->product->openedByMe   = '我创建';
 $lang->product->reviewedByMe = '我评审';
+$lang->product->reviewByMe   = '待我评审';
 $lang->product->closedByMe   = '我关闭';
 $lang->product->draftStory   = '草稿';
 $lang->product->activeStory  = '激活';
@@ -202,6 +203,7 @@ $lang->product->featureBar['browse']['unclosed']     = $lang->product->unclosed;
 $lang->product->featureBar['browse']['assignedtome'] = $lang->product->assignedToMe;
 $lang->product->featureBar['browse']['openedbyme']   = $lang->product->openedByMe;
 $lang->product->featureBar['browse']['reviewedbyme'] = $lang->product->reviewedByMe;
+$lang->product->featureBar['browse']['reviewbyme']   = $lang->product->reviewByMe;
 $lang->product->featureBar['browse']['draftstory']   = $lang->product->draftStory;
 $lang->product->featureBar['browse']['more']         = $lang->more;
 

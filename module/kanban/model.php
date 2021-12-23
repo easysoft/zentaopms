@@ -266,7 +266,7 @@ class kanbanModel extends model
                     return false;
                 }
 
-                $childColumns = $this->getColumnsByParent($column->parent);
+                $childColumns = $this->getColumnsByObject('parent', $column->parent);
                 foreach($childColumns as $childColumn)
                 {
                     $limit += (int)$childColumn->limit;
@@ -394,7 +394,7 @@ class kanbanModel extends model
             return false;
         }
 
-        if($this->post->begin > $this->post->end)
+        if($this->post->end && $this->post->begin > $this->post->end)
         {
             dao::$errors[] = $this->lang->kanbancard->error->endSmall;
             return false;
@@ -543,7 +543,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('*')->from(TABLE_KANBANGROUP)
             ->where('region')->in($regions)
-            ->orderBy('id_asc')
+            ->orderBy('order')
             ->fetchGroup('region', 'id');
     }
 
@@ -594,7 +594,7 @@ class kanbanModel extends model
             ->orderBy('order')
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'copyColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+        $actions = array('createColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -859,16 +859,16 @@ class kanbanModel extends model
      */
     public function getCanViewObjects($objectType = 'kanban')
     {
-        $table           = $this->config->objectTables[$objectType];
-        $objects         = $this->dao->select('*')->from($table)->fetchAll('id');
-        $spaceOwnerPairs = $objectType == 'kanban' ? $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchPairs() : array();
+        $table     = $this->config->objectTables[$objectType];
+        $objects   = $this->dao->select('*')->from($table)->fetchAll('id');
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'private')
+            if($object->acl == 'private' or $object->acl == 'extend')
             {
                 $remove = true;
                 if($object->owner == $account) $remove = false;
@@ -876,8 +876,12 @@ class kanbanModel extends model
                 if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
                 if($objectType == 'kanban')
                 {
-                    $parentOwner = isset($spaceOwnerPairs[$object->space]) ? $spaceOwnerPairs[$object->space] : '';
-                    if(strpos(",$parentOwner,", ",$account,") !== false) $remove = false;
+                    $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                    $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
+                    $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
+                    if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
+                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
                 }
 
                 if($remove) unset($objects[$objectID]);
@@ -1087,7 +1091,14 @@ class kanbanModel extends model
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+
+            if($kanban->acl == 'extend')
+            {
+                $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+                $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
+            }
         }
+
 
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -1128,7 +1139,13 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
-        $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        if($kanban->acl == 'extend')
+        {
+            $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+            $kanban->acl       = $spaceAcl == 'open' ? 'open' : 'extend';
+            $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        }
+
 
         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
 
@@ -1443,6 +1460,11 @@ class kanbanModel extends model
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
                 {
+                    if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
+                    }
+
                     if(strpos(',ready,develop,test,', $colType) !== false) continue;
 
                     if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
@@ -1457,10 +1479,6 @@ class kanbanModel extends model
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
-                    elseif($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
-                    {
-                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                    }
                 }
             }
         }
@@ -1471,33 +1489,42 @@ class kanbanModel extends model
             {
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
-                    if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
+                    if($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
+                    }
+
+                    if(strpos(',resolving,test,testing,tested,', $colType) !== false) continue;
 
                     if($lane->groupby and $bug->{$lane->groupby} != $lane->extra)
                     {
                         $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
-                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['unconfirmed'] = empty($cardPairs['unconfirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['unconfirmed'];
                         if(strpos($cardPairs['closed'], ",$bugID,") !== false) $cardPairs['closed'] = str_replace(",$bugID,", ',', $cardPairs['closed']);
                     }
-                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['confirmed'] = empty($cardPairs['confirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['confirmed'];
+                        if(strpos($cardPairs['unconfirmed'], ",$bugID,") !== false) $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
+                    }
+                    elseif($colType == 'fixing' and $bug->status == $status and $bug->activatedCount > 0 and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    {
+                        $cardPairs['fixing'] = empty($cardPairs['fixing']) ? ",$bugID," : ",$bugID" . $cardPairs['fixing'];
+                        if(strpos($cardPairs['confirmed'], ",$bugID,") !== false)   $cardPairs['confirmed']   = str_replace(",$bugID,", ',', $cardPairs['confirmed']);
                         if(strpos($cardPairs['unconfirmed'], ",$bugID,") !== false) $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
                     }
                     elseif($colType == 'fixed' and $bug->status == $status and strpos($cardPairs['fixed'], ",$bugID,") === false and strpos($cardPairs['testing'], ",$bugID,") === false and strpos($cardPairs['tested'], ",$bugID,") === false)
                     {
                         $cardPairs['fixed'] = empty($cardPairs['fixed']) ? ",$bugID," : ",$bugID" . $cardPairs['fixed'];
+                        if(strpos($cardPairs['testing'], ",$bugID,") !== false) $cardPairs['testing'] = str_replace(",$bugID,", ',', $cardPairs['testing']);
+                        if(strpos($cardPairs['tested'], ",$bugID,") !== false)  $cardPairs['tested']  = str_replace(",$bugID,", ',', $cardPairs['tested']);
                     }
                     elseif($colType == 'closed' and $bug->status == 'closed' and strpos($cardPairs[$colType], ",$bugID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$bugID," : ",$bugID". $cardPairs[$colType];
-                    }
-                    elseif($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
-                    {
-                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
@@ -1882,16 +1909,48 @@ class kanbanModel extends model
     }
 
     /**
+     * Sort kanban group.
+     *
+     * @param  int    $region
+     * @param  array  $groups
+     * @access public
+     * @return bool
+     */
+    public function sortGroup($region, $groups)
+    {
+        $this->loadModel('action');
+
+        $groupList = $this->getGroupList($region);
+
+        $order = 1;
+        foreach($groups as $groupID)
+        {
+            if(!$groupID) continue;
+            if(!isset($groupList[$groupID])) continue;
+
+            $this->dao->update(TABLE_KANBANGROUP)->set('`order`')->eq($order)->where('id')->eq($groupID)->exec();
+
+            $order++;
+        }
+
+        return !dao::isError();
+    }
+
+    /**
      * Move a card.
      *
      * @param  int    $cardID
      * @param  int    $toColID
+     * @param  int    $toLaneID
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $toColID)
+    public function moveCard($cardID, $toColID, $toLaneID)
     {
-        $this->dao->update(TABLE_KANBANCARD)->set('column')->eq($toColID)->where('id')->eq($cardID)->exec();
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('column')->eq($toColID)
+            ->beginIF($toLaneID)->set('lane')->eq($toLaneID)->fi()
+            ->where('id')->eq($cardID)->exec();
     }
 
     /**
@@ -1948,20 +2007,29 @@ class kanbanModel extends model
      *
      * @param  int    $columnID
      * @access public
-     * @return string
+     * @return void
      */
     public function archiveColumn($columnID)
     {
-        $oldColumn = $this->getColumnByID($columnID);
-
         $this->dao->update(TABLE_KANBANCOLUMN)
             ->set('archived')->eq(1)
             ->where('id')->eq($columnID)
             ->exec();
+    }
 
-        $column = $this->getColumnByID($columnID);
-
-        if(!dao::isError()) return common::createChanges($oldColumn, $column);
+    /**
+     * Restore a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function restoreColumn($columnID)
+    {
+        $this->dao->update(TABLE_KANBANCOLUMN)
+            ->set('archived')->eq(0)
+            ->where('id')->eq($columnID)
+            ->exec();
     }
 
     /**
@@ -1969,7 +2037,7 @@ class kanbanModel extends model
      *
      * @param  int    $cardID
      * @access public
-     * @return string
+     * @return array
      */
     public function archiveCard($cardID)
     {
@@ -1979,6 +2047,29 @@ class kanbanModel extends model
             ->set('archived')->eq(1)
             ->set('archivedBy')->eq($this->app->user->account)
             ->set('archivedDate')->eq(helper::now())
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        $card = $this->getCardByID($cardID);
+
+        if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
+     * Restore a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function restoreCard($cardID)
+    {
+        $oldCard = $this->getCardByID($cardID);
+
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('archived')->eq(0)
+            ->set('archivedBy')->eq('')
+            ->set('archivedDate')->eq('')
             ->where('id')->eq($cardID)
             ->exec();
 
@@ -2019,6 +2110,21 @@ class kanbanModel extends model
     }
 
     /**
+     * Get group list by region.
+     *
+     * @param  int    $region
+     * @access public
+     * @return array
+     */
+    public function getGroupList($region)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANGROUP)
+            ->where('region')->eq($region)
+            ->orderBy('order')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get column by id.
      *
      * @param  int    $columnID
@@ -2056,20 +2162,22 @@ class kanbanModel extends model
     }
 
     /**
-     * Get child columns by parent id.
+     * Get columns by object id.
      *
-     * @param  int    $parentID
+     * @param  string $objectType
+     * @param  int    $objectID
      * @param  string $archived
      * @param  string $deleted
      * @access public
      * @return array
      */
-    public function getColumnsByParent($parentID, $archived = '0', $deleted = '0')
+    public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('parent')->eq($parentID)
-            ->andWhere('archived')->eq($archived)
-            ->andWhere('deleted')->eq($deleted)
+            ->where(true)
+            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
+            ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
             ->fetchAll('id');
     }
@@ -2146,6 +2254,27 @@ class kanbanModel extends model
         $card = $this->loadModel('file')->replaceImgURL($card, 'desc');
 
         return $card;
+    }
+
+    /**
+     * Get cards by object id.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $archived
+     * @param  string $deleted
+     * @access public
+     * @return array
+     */
+    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where(true)
+            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
+            ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
+            ->orderBy('order')
+            ->fetchAll('id');
     }
 
     /**

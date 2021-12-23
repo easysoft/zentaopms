@@ -1035,6 +1035,9 @@ class story extends control
             $this->loadModel('qa')->setMenu($products, $story->product);
         }
 
+        $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
+        $checkSuperReviewed = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . trim($story->reviewedBy, ',') . ',');
+
         $this->executeHooks($storyID);
 
         $title      = "STORY #$story->id $story->title - $product->name";
@@ -1042,28 +1045,30 @@ class story extends control
         $position[] = $this->lang->story->common;
         $position[] = $this->lang->story->view;
 
-        $this->view->title       = $title;
-        $this->view->position    = $position;
-        $this->view->product     = $product;
-        $this->view->branches    = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
-        $this->view->plan        = $plan;
-        $this->view->bugs        = $bugs;
-        $this->view->fromBug     = $fromBug;
-        $this->view->cases       = $cases;
-        $this->view->story       = $story;
-        $this->view->track       = $this->story->getTrackByID($story->id);
-        $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->reviewers   = $this->story->getReviewerPairs($storyID, $story->version);
-        $this->view->relations   = $this->story->getStoryRelation($story->id, $story->type);
-        $this->view->executions  = $this->execution->getPairs(0, 'all', 'nocode');
-        $this->view->execution   = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
-        $this->view->actions     = $this->action->getList('story', $storyID);
-        $this->view->storyModule = $storyModule;
-        $this->view->modulePath  = $modulePath;
-        $this->view->version     = $version == 0 ? $story->version : $version;
-        $this->view->preAndNext  = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
-        $this->view->from        = $from;
-        $this->view->param       = $param;
+        $this->view->title              = $title;
+        $this->view->position           = $position;
+        $this->view->product            = $product;
+        $this->view->branches           = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($product->id);
+        $this->view->plan               = $plan;
+        $this->view->bugs               = $bugs;
+        $this->view->fromBug            = $fromBug;
+        $this->view->cases              = $cases;
+        $this->view->story              = $story;
+        $this->view->track              = $this->story->getTrackByID($story->id);
+        $this->view->users              = $this->user->getPairs('noletter');
+        $this->view->reviewers          = $reviewers;
+        $this->view->relations          = $this->story->getStoryRelation($story->id, $story->type);
+        $this->view->executions         = $this->execution->getPairs(0, 'all', 'nocode');
+        $this->view->execution          = empty($story->execution) ? array() : $this->dao->findById($story->execution)->from(TABLE_EXECUTION)->fetch();
+        $this->view->actions            = $this->action->getList('story', $storyID);
+        $this->view->storyModule        = $storyModule;
+        $this->view->modulePath         = $modulePath;
+        $this->view->version            = $version == 0 ? $story->version : $version;
+        $this->view->preAndNext         = $this->loadModel('common')->getPreAndNextObject('story', $storyID);
+        $this->view->from               = $from;
+        $this->view->param              = $param;
+        $this->view->checkSuperReviewed = $checkSuperReviewed !== false ? true : false;
+
         $this->display();
     }
 

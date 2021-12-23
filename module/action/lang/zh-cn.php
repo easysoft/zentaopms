@@ -11,28 +11,29 @@
  */
 global $config;
 
-$lang->action->common      = '系统日志';
-$lang->action->id          = '编号';
-$lang->action->product     = $lang->productCommon;
-$lang->action->project     = '项目';
-$lang->action->execution   = $lang->execution->common;
-$lang->action->objectType  = '对象类型';
-$lang->action->objectID    = '对象ID';
-$lang->action->objectName  = '对象名称';
-$lang->action->actor       = '操作者';
-$lang->action->action      = '动作';
-$lang->action->actionID    = '记录ID';
-$lang->action->date        = '日期';
-$lang->action->extra       = '附加值';
-$lang->action->system      = '系统';
-$lang->action->url         = '网址';
-$lang->action->contentType = '内容类型';
-$lang->action->data        = '数据';
-$lang->action->result      = '结果';
-$lang->action->modified    = '修改了';
-$lang->action->old         = '旧值为';
-$lang->action->new         = '新值为';
-$lang->action->to          = '到';
+$lang->action->common        = '系统日志';
+$lang->action->id            = '编号';
+$lang->action->product       = $lang->productCommon;
+$lang->action->project       = '项目';
+$lang->action->execution     = $lang->execution->common;
+$lang->action->objectType    = '对象类型';
+$lang->action->objectID      = '对象ID';
+$lang->action->objectName    = '对象名称';
+$lang->action->actor         = '操作者';
+$lang->action->action        = '动作';
+$lang->action->actionID      = '记录ID';
+$lang->action->date          = '日期';
+$lang->action->extra         = '附加值';
+$lang->action->system        = '系统';
+$lang->action->url           = '网址';
+$lang->action->contentType   = '内容类型';
+$lang->action->data          = '数据';
+$lang->action->result        = '结果';
+$lang->action->modified      = '修改了';
+$lang->action->old           = '旧值为';
+$lang->action->new           = '新值为';
+$lang->action->to            = '到';
+$lang->action->superReviewer = '超级评审人';
 
 $lang->action->trash       = '回收站';
 $lang->action->undelete    = '还原';
@@ -185,6 +186,7 @@ $lang->action->desc->syncproject      = '$date, 系统判断由于执行开始�
 $lang->action->desc->syncexecution    = '$date, 系统判断由于任务开始，将执行状态置为进行中。' . "\n";
 $lang->action->desc->importfromgitlab = '$date, 由 <strong>$actor</strong> 从Gitlab的Issue关联创建。' . "\n";
 $lang->action->desc->archived         = '$date, 由 <strong>$actor</strong> 归档。' . "\n";
+$lang->action->desc->restore          = '$date, 由 <strong>$actor</strong> 还原。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -316,6 +318,7 @@ $lang->action->label->approve               = '通过了';
 $lang->action->label->reject                = '拒绝了';
 $lang->action->label->importfromgitlab      = '从Gitlab关联创建了';
 $lang->action->label->archived              = '归档了';
+$lang->action->label->restore               = '还原了';
 $lang->action->label->mergedbranch          = '合并分支';
 
 /* 动态信息按照对象分组 */

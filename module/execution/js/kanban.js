@@ -464,12 +464,12 @@ if(!window.kanbanDropRules)
         },
         bug:
         {
-            'unconfirmed': ['confirmed'],
-            'confirmed': ['fixing'],
+            'unconfirmed': ['confirmed', 'fixing', 'fixed'],
+            'confirmed': ['fixing', 'fixed'],
             'fixing': ['fixed'],
-            'fixed': ['testing'],
-            'testing': ['tested'],
-            'tested': ['closed'],
+            'fixed': ['testing', 'tested', 'fixing'],
+            'testing': ['tested', 'closed', 'fixing'],
+            'tested': ['closed', 'fixing'],
             'closed': ['fixing'],
         },
         task:
@@ -529,6 +529,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     if(typeof card == 'undefined') return false;
     var objectID   = card.id;
     var showIframe = false;
+    var moveCard   = false;
 
     /* Task lane. */
     if(kanbanID == 'task')
@@ -590,6 +591,60 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
                 var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
                 showIframe = true;
             }
+        }
+        else if(toColType == 'fixing')
+        {
+            if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
+            if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
+            {
+                var link = createLink('bug', 'activate', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'fixed')
+        {
+            if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed') 
+            {
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'testing')
+        {
+            if(fromColType == 'fixed') moveCard = true;
+        }
+        else if(toColType == 'tested')
+        {
+            if(fromColType == 'fixed' || fromColType == 'testing') moveCard = true;
+        }
+        else if(toColType == 'closed')
+        {
+            if(fromColType == 'testing' || fromColType == 'tested')
+            {
+                var link = createLink('bug', 'close', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+
+        if(moveCard)
+        {
+            var colID = card.$col.columnID;
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&colID=' + colID + '&toColType=' + toColType + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            $.get(link, function(data)
+            {
+                if(data)
+                {
+                    kanbanGroup = $.parseJSON(data);
+                    if(groupBy == 'default')
+                    {
+                        updateKanban('bug', kanbanGroup.bug);
+                    }
+                    else
+                    {
+                        updateKanban(browseType, kanbanGroup[groupBy]);
+                    }
+                }
+            })
         }
     }
 

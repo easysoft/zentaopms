@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Shujie Tian <tianshujie@easycorp.ltd>
  * @package     kanban
- * @version     $Id: editcard.html.php 4903 2021-12-13 14:25:59Z $ 
+ * @version     $Id: editcard.html.php 4903 2021-12-13 14:25:59Z $
  * @link        https://www.zentao.net
  */
 ?>
@@ -48,7 +48,7 @@
               <table class="table table-form">
                 <tr>
                   <th><?php echo $lang->kanbancard->assignedTo;?></th>
-                  <td><?php echo html::select('assignedTo[]', $allUsers, $card->assignedTo, "class='form-control chosen' multiple");?></td>
+                  <td><?php echo html::select('assignedTo[]', $users, $card->assignedTo, "class='form-control chosen' multiple");?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->kanbancard->begin;?></th>

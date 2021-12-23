@@ -45,7 +45,7 @@ class branch extends control
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
         $this->view->product     = $this->product->getById($productID);
-        $this->view->branchPairs = $this->branch->getPairs($productID);
+        $this->view->branchPairs = $this->branch->getPairs($productID, 'active');
 
         $this->display();
     }
@@ -313,6 +313,7 @@ class branch extends control
             $mergeToBranch  = $_POST['createBranch'] ? '' : $_POST['targetBranch'];
             return $branch != 0 and $branch != $mergeToBranch;
         });
+
         $mergedBranchIDList = implode(',', $mergedBranches);
         $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
 

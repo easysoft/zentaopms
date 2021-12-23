@@ -32,7 +32,7 @@ class kanban extends control
         $this->view->spaceList   = $this->kanban->getSpaceList($browseType, $pager);
         $this->view->browseType  = $browseType;
         $this->view->pager       = $pager;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->usersAvatar = $this->user->getAvatarPairs();
 
         $this->display();
@@ -235,7 +235,7 @@ class kanban extends control
     public function view($kanbanID)
     {
         $kanban = $this->kanban->getByID($kanbanID);
-        $users  = $this->loadModel('user')->getPairs('noletter');
+        $users  = $this->loadModel('user')->getPairs('noletter|nodeleted');
 
         if(!$kanban)
         {
@@ -369,6 +369,25 @@ class kanban extends control
 
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
+
+    /**
+     * Sort group.
+     *
+     * @param  int    $region
+     * @param  int    $groups
+     * @access public
+     * @return void
+     */
+    public function sortGroup($region, $groups)
+    {
+        $groups = array_filter(explode(',', trim($groups, ',')));
+        if(empty($groups)) return $this->send(array('result' => 'fail', 'message' => 'No groups to sort.'));
+
+        $this->kanban->sortGroup($region, $groups);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        return $this->send(array('result' => 'success'));
     }
 
     /**
@@ -521,15 +540,68 @@ class kanban extends control
         }
         else
         {
-            $changes = $this->kanban->archiveColumn($columnID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $this->kanban->archiveColumn($columnID);
+            if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
-            $this->action->logHistory($actionID, $changes);
+            $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
 
             if(isonlybody()) die(js::reload('parent.parent'));
             die(js::reload('parent'));
         }
+    }
+
+    /**
+     * Restore a column.
+     *
+     * @param  int    $columnID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function restoreColumn($columnID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->kanbancolumn->confirmRestore, $this->createLink('kanban', 'restoreColumn', "columnID=$columnID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->restoreColumn($columnID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * View archived columns.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function viewArchivedColumn($regionID)
+    {
+        $columns     = $this->kanban->getColumnsByObject('region', $regionID, '', '');
+        $columnsData = array();
+        foreach($columns as $column)
+        {
+            if($column->archived == 0) continue;
+            if($column->parent > 0)
+            {
+                if(empty($columnsData[$column->parent])) $columnsData[$column->parent] = $columns[$column->parent];
+                $columnsData[$column->parent]->child[$column->id] = $column;
+            }
+            else
+            {
+                if(empty($columnsData[$column->id])) $columnsData[$column->id] = $column;
+            }
+        }
+
+        $this->view->columns = $columnsData;
+
+        $this->display();
     }
 
     /**
@@ -544,7 +616,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes"), ''));
+            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
         }
         else
         {
@@ -603,8 +675,7 @@ class kanban extends control
 
         $this->view->card     = $this->kanban->getCardByID($cardID);
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->allUsers = $this->loadModel('user')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->display();
     }
@@ -626,7 +697,7 @@ class kanban extends control
 
         $this->view->card        = $card;
         $this->view->actions     = $this->action->getList('kanbancard', $cardID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->space       = $space;
         $this->view->kanban      = $kanban;
         $this->view->usersAvatar = $this->user->getAvatarPairs();
@@ -639,13 +710,14 @@ class kanban extends control
      *
      * @param  int    $cardID
      * @param  int    $toColID
+     * @param  int    $toLaneID
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $toColID, $kanbanID)
+    public function moveCard($cardID, $toColID, $toLaneID, $kanbanID)
     {
-        $this->kanban->moveCard($cardID, $toColID);
+        $this->kanban->moveCard($cardID, $toColID, $toLaneID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         die(json_encode($kanbanGroup));
@@ -691,6 +763,54 @@ class kanban extends control
             $this->action->logHistory($actionID, $changes);
 
             if(isonlybody()) die(js::reload('parent.parent'));
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * View archived cards.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function viewArchivedCard($regionID)
+    {
+        $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->usersAvatar = $this->user->getAvatarPairs();
+
+        $this->display();
+    }
+
+    /**
+     * Restore a card.
+     *
+     * @param  int    $cardID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function restoreCard($cardID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            $card   = $this->kanban->getCardByID($cardID);
+            $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
+            if($column->archived) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
+
+            die(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->restoreCard($cardID);
+
+            $changes = $this->kanban->restoreCard($cardID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
+            $this->action->logHistory($actionID, $changes);
+
             die(js::reload('parent'));
         }
     }
