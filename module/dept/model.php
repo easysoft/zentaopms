@@ -132,7 +132,7 @@ class deptModel extends model
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootDeptID = 0, $userFunc, $param = 0)
+    public function getTreeMenu($rootDeptID = 0, $userFunc = '', $param = 0)
     {
         $deptMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
