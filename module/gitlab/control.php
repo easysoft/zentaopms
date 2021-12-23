@@ -957,6 +957,7 @@ class gitlab extends control
             $tag->name          = $gitlabTag->name;
             $tag->lastCommitter = $gitlabTag->commit->committer_name;
             $tag->updated       = date('Y-m-d H:i:s', strtotime($gitlabTag->commit->committed_date));
+            $tag->protected     = $gitlabTag->protected;
 
             $tagList[] = $tag;
         }
