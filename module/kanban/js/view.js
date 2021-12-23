@@ -36,7 +36,6 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
             $('.actions').hide();
-            $('.kanban-group-header').hide();
             $.cookie('isFullScreen', 1);
         };
 
@@ -74,7 +73,6 @@ function exitFullScreen()
 {
     $('#mainContent').removeClass('scrollbar-hover');
     $('.actions').show();
-    $('.kanban-group-header').show();
     $.cookie('isFullScreen', 0);
 }
 
