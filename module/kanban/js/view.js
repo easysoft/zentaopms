@@ -889,6 +889,10 @@ $(function()
     {
         selector: '.region, .kanban-board, .kanban-lane',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        container: function($ele)
+        {
+            return $ele.parent();
+        },
         targetSelector: function($ele)
         {
             /* Sort regions */
@@ -911,7 +915,6 @@ $(function()
                 sortType = 'lane';
                 $cards   = $ele.find('.kanban-item');
 
-                $cards.hide();
                 return $ele.parent().children('.kanban-lane');
             }
 
