@@ -583,7 +583,7 @@ class kanban extends control
      */
     public function viewArchivedColumn($regionID)
     {
-        $columns     = $this->kanban->getColumnsByRegion($regionID);
+        $columns     = $this->kanban->getColumnsByObject('region', $regionID, '', '');
         $columnsData = array();
         foreach($columns as $column)
         {
@@ -764,6 +764,54 @@ class kanban extends control
             $this->action->logHistory($actionID, $changes);
 
             if(isonlybody()) die(js::reload('parent.parent'));
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * View archived cards.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function viewArchivedCard($regionID)
+    {
+        $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->usersAvatar = $this->user->getAvatarPairs();
+
+        $this->display();
+    }
+
+    /**
+     * Restore a card.
+     *
+     * @param  int    $cardID
+     * @param  string $confirm no|yes
+     * @access public
+     * @return void
+     */
+    public function restoreCard($cardID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            $card   = $this->kanban->getCardByID($cardID);
+            $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
+            if($column->archived) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
+
+            die(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
+        }
+        else
+        {
+            $this->kanban->restoreCard($cardID);
+
+            $changes = $this->kanban->restoreCard($cardID);
+            if(dao::isError()) die(js::error(dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
+            $this->action->logHistory($actionID, $changes);
+
             die(js::reload('parent'));
         }
     }
