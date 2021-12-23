@@ -2136,7 +2136,6 @@ class kanbanModel extends model
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
             ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
             ->where('t1.id')->eq($columnID)
-            ->andWhere('t1.deleted')->eq(0)
             ->fetch();
 
         if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
