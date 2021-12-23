@@ -51,7 +51,7 @@
         <div class='spaceActions pull-right'>
           <?php common::printLink('kanban', 'create', "spaceID={$space->id}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
           <?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?>
-          <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
+          <?php if($space->status != 'closed') common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
           <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
         </div>
       </div>
@@ -67,7 +67,7 @@
                 <?php endif;?>
                 <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
               </div>
-              <?php $canActions = (common::hasPriv('kanban','edit') or common::hasPriv('kanban','close') or common::hasPriv('kanban','delete'));?>
+              <?php $canActions = (common::hasPriv('kanban','edit') or common::hasPriv('kanban','close') or (common::hasPriv('kanban','delete') and $kanban->status != 'closed'));?>
               <?php if($canActions):?>
               <div class='kanban-actions kanban-actions<?php echo $kanbanID;?>'>
                 <div class='dropdown'>
@@ -80,7 +80,7 @@
                         common::printLink('kanban', 'edit',   "kanbanID={$kanban->id}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
                         echo '</li>';
                     }
-                    if(common::hasPriv('kanban','close'))
+                    if(common::hasPriv('kanban','close') and $kanban->status != 'closed')
                     {
                         echo '<li>';
                         common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe' data-width='75%'", '', true);
