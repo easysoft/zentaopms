@@ -775,7 +775,7 @@ class product extends control
             $this->executeHooks($productID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate($this->createLink('product', 'browse'), 'parent'));
+            die(js::locate($this->createLink('product', 'all'), 'parent'));
         }
     }
 
