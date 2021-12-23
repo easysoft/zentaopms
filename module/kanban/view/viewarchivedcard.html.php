@@ -11,7 +11,7 @@
  */
 ?>
 <style>
-#archivedCards {top: 48px; right: -400px; width: 400px; position: fixed; z-index: 1050; background-color: rgb(255,255,255);}
+#archivedCards {top: 50px; right: -400px; width: 400px; position: fixed; z-index: 1050; background-color: rgb(255,255,255);}
 #archivedCards .panel .panel-body {overflow: auto; padding: 10px;}
 #archivedCards .kanban-item {border: 1px solid #ddd; border-radius: 4px; padding: 5px;}
 #archivedCards .kanban-item > .title {display: block; max-height: 38px; overflow: hidden; color: inherit; display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical;}
