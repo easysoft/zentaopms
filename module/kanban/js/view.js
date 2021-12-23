@@ -34,11 +34,9 @@ function fullScreen()
     {
         var afterEnterFullscreen = function()
         {
-            $('#kanbanContainer').addClass('scrollbar-hover');
-            $('.regionActions').hide();
+            $('#kanbanContainer').addClass('fullscreen')
+                .on('scroll', tryUpdateKanbanAffix);
             $('.actions').hide();
-            $('.action').hide();
-            $('.kanban-group-header').hide();
             $.cookie('isFullScreen', 1);
         };
 
@@ -74,11 +72,9 @@ function fullScreen()
  */
 function exitFullScreen()
 {
-    $('#mainContent').removeClass('scrollbar-hover');
-    $('.action').show();
-    $('.regionActions').show();
+    $('#kanbanContainer').removeClass('fullscreen')
+        .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
-    $('.kanban-group-header').show();
     $.cookie('isFullScreen', 0);
 }
 
@@ -888,11 +884,15 @@ $(function()
 
     /* Init sortable */
     var sortType = '';
-    var cards    = null;
+    var $cards   = null;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        container: function($ele)
+        {
+            return $ele.parent();
+        },
         targetSelector: function($ele)
         {
             /* Sort regions */
@@ -915,7 +915,6 @@ $(function()
                 sortType = 'lane';
                 $cards   = $ele.find('.kanban-item');
 
-                $cards.hide();
                 return $ele.parent().children('.kanban-lane');
             }
 

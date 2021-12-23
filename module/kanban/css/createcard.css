@@ -1,2 +1,2 @@
-#nameBox .required:after {right: 130px; z-index: 2;}
-#nameBox .br-0 {height: 32px;}
+.pri-selector .br-0 {padding-bottom: 5px;}
+.required:after {left: 215px; z-index: 2;}
