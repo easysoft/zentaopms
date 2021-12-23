@@ -36,6 +36,7 @@ function fullScreen()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
             $('.actions').hide();
+            $('.kanban-group-header').hide();
             $.cookie('isFullScreen', 1);
         };
 
@@ -73,6 +74,7 @@ function exitFullScreen()
 {
     $('#mainContent').removeClass('scrollbar-hover');
     $('.actions').show();
+    $('.kanban-group-header').show();
     $.cookie('isFullScreen', 0);
 }
 
@@ -263,9 +265,9 @@ function renderKanbanItem(item, $item)
         $(
         [
             '<div class="actions" title="' + kanbanLang.more + '">',
-              '<button class="btn btn-link action" data-contextmenu="card" data-id="' + item.id + '">',
+              '<a data-contextmenu="card" data-id="' + item.id + '">',
                 '<i class="icon icon-ellipsis-v"></i>',
-              '</button>',
+              '</a>',
             '</div>'
         ].join('')).appendTo($item);
     }
@@ -275,7 +277,7 @@ function renderKanbanItem(item, $item)
     [
         '<div class="info">',
             '<span class="pri"></span>',
-            '<span class="estimate"></span>',
+            '<span class="estimate label label-light"></span>',
             '<span class="time label label-light"></span>',
             '<div class="user"></div>',
         '</div>'
