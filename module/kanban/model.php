@@ -594,7 +594,7 @@ class kanbanModel extends model
             ->orderBy('order')
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+        $actions = array('createColumn', 'editColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -2164,7 +2164,7 @@ class kanbanModel extends model
     /**
      * Get columns by object id.
      *
-     * @param  string $objectType
+     * @param  string $objectType parent|region|group
      * @param  int    $objectID
      * @param  string $archived
      * @param  string $deleted
@@ -2259,7 +2259,7 @@ class kanbanModel extends model
     /**
      * Get cards by object id.
      *
-     * @param  string $objectType
+     * @param  string $objectType kanban|region|group|lane|column
      * @param  int    $objectID
      * @param  string $archived
      * @param  string $deleted

@@ -22,7 +22,7 @@ $lang->branch->batchEdit         = 'Batch Edit';
 $lang->branch->defaultBranch     = 'Default Branch';
 $lang->branch->setDefault        = 'Set Default';
 $lang->branch->setDefaultAction  = 'Set Default';
-$lang->branch->mergeTo           = 'Merge branch to';
+$lang->branch->mergeTo           = 'Merge to';
 $lang->branch->mergeBranch       = 'Merge branch';
 $lang->branch->mergeBranchAction = 'Merge branch';
 
@@ -45,8 +45,10 @@ $lang->branch->nameNotEmpty      = 'Name must not be empty！';
 $lang->branch->confirmClose      = 'Do you want to close this @branch@？';
 $lang->branch->confirmActivate   = 'Do you want to activate this @branch@？';
 $lang->branch->existName         = '@branch@ name already exists.';
-$lang->branch->mergeTips         = '(Trunk does not support being merged. After the branch is merged, the corresponding releases, plans, modules, requirements, bugs, and cases under the branch will be merged into the new branch)';
-$lang->branch->targetBranchTips  = 'Note: You can merge it into an existing branch, merge it into the trunk, or create a new branch.';
+$lang->branch->mergedMain        = 'Trunk does not support being merged.';
+$lang->branch->mergeTips         = 'After the branch is merged, the corresponding releases, plans, modules, requirements, bugs, and cases under the branch will be merged into the new branch';
+$lang->branch->targetBranchTips  = 'You can merge it into an existing branch, merge it into the trunk, or create a new branch.';
+$lang->branch->confirmMerge      = 'The data of "mergedBranch" will be merged into "targetBranch", please confirm whether you want to perform the branch merge operation, the data will not be restored after the merge!';
 
 $lang->branch->noData     = 'No branches.';
 $lang->branch->mainBranch = 'The default main %s of the product.';

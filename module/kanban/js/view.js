@@ -35,7 +35,9 @@ function fullScreen()
         var afterEnterFullscreen = function()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
+            $('.regionActions').hide();
             $('.actions').hide();
+            $('.action').hide();
             $('.kanban-group-header').hide();
             $.cookie('isFullScreen', 1);
         };
@@ -73,6 +75,8 @@ function fullScreen()
 function exitFullScreen()
 {
     $('#mainContent').removeClass('scrollbar-hover');
+    $('.action').show();
+    $('.regionActions').show();
     $('.actions').show();
     $('.kanban-group-header').show();
     $.cookie('isFullScreen', 0);
@@ -309,15 +313,15 @@ function renderKanbanItem(item, $item)
         var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
         if(item.end == '0000-00-00' && item.begin != '0000-00-00')
         {
-            $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +kanbancardLang.beginAB).show();
+            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + ' ' +kanbancardLang.beginAB).show();
         }
         else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
         {
-            $time.text($.zui.formatDate(end, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+            $time.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
         }
         else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
         {
-            $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +  kanbancardLang.to + ' ' +  $.zui.formatDate(end, 'yyyy-MM-dd')).show();
+            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM/dd')).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + kanbancardLang.to + $.zui.formatDate(end, 'yyyy/MM/dd')).show();
         }
 
         if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
@@ -697,8 +701,8 @@ function createCardMenu(options)
         }
         for(let i = moveColumns.length-1 ; i >= 0 ; i -- )
         {
-            if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
             if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
+            if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
             moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, moveColumns[i].id, card.lane, card.kanban, card.region);}});
         }
         moveCardItems = moveCardItems.reverse();

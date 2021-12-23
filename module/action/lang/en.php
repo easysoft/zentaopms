@@ -405,22 +405,37 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->execu
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
-$lang->action->dynamicAction->kanban['create'] = 'Create Kanban';
-$lang->action->dynamicAction->kanban['edited'] = 'Kanban Settings';
+$lang->action->dynamicAction->kanban['created'] = 'Create Kanban';
+$lang->action->dynamicAction->kanban['edited']  = 'Kanban Settings';
+$lang->action->dynamicAction->kanban['closed']  = 'Close Kanban';
+$lang->action->dynamicAction->kanban['deleted'] = 'Delete Kanban';
 
-$lang->action->dynamicAction->kanbanspace['create'] = 'Create Space';
-$lang->action->dynamicAction->kanbanspace['edited'] = 'Space Settings';
-$lang->action->dynamicAction->kanbanspace['closed'] = 'Close Kanban';
+$lang->action->dynamicAction->kanbanspace['created'] = 'Create Space';
+$lang->action->dynamicAction->kanbanspace['edited']  = 'Space Settings';
+$lang->action->dynamicAction->kanbanspace['closed']  = 'Close Space';
+$lang->action->dynamicAction->kanbanspace['deleted'] = 'Deleted Space';
 
-$lang->action->dynamicAction->kanbancolumn['create'] = 'Create Column';
-$lang->action->dynamicAction->kanbancolumn['edited'] = 'Column Settings';
+$lang->action->dynamicAction->kanbanregion['created'] = 'Create Region';
+$lang->action->dynamicAction->kanbanregion['edited']  = 'Edit Region';
+$lang->action->dynamicAction->kanbanregion['deleted'] = 'Delete Region';
 
-$lang->action->dynamicAction->kanbanlane['created']  = 'Create Swimlane';
-$lang->action->dynamicAction->kanbanlane['edited']   = 'Swimlane Settings';
-$lang->action->dynamicAction->kanbanlane['moved']    = 'Move Swimlane';
+$lang->action->dynamicAction->kanbancolumn['created']  = 'Create Column';
+$lang->action->dynamicAction->kanbancolumn['edited']   = 'Column Settings';
+$lang->action->dynamicAction->kanbancolumn['archived'] = 'Archive Column';
+$lang->action->dynamicAction->kanbancolumn['restore']  = 'Restore Column';
+$lang->action->dynamicAction->kanbancolumn['deleted']  = 'Delete Column';
 
-$lang->action->dynamicAction->kanbancard['create'] = 'Create Card';
-$lang->action->dynamicAction->kanbancard['edited'] = 'Edit card';
+$lang->action->dynamicAction->kanbanlane['created'] = 'Create Lane';
+$lang->action->dynamicAction->kanbanlane['edited']  = 'Lane Settings';
+$lang->action->dynamicAction->kanbanlane['moved']   = 'Move Lane';
+$lang->action->dynamicAction->kanbanlane['deleted'] = 'Delete Lane';
+
+$lang->action->dynamicAction->kanbancard['created']   = 'Create Card';
+$lang->action->dynamicAction->kanbancard['edited']    = 'Edit Card';
+$lang->action->dynamicAction->kanbancard['commented'] = 'Comment Card';
+$lang->action->dynamicAction->kanbancard['archived']  = 'Archive Card';
+$lang->action->dynamicAction->kanbancard['restore']   = 'Restore Card';
+$lang->action->dynamicAction->kanbancard['deleted']   = 'Delete Card';
 
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 

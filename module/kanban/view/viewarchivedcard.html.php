@@ -23,10 +23,20 @@
 #archivedCards .card-actions {position: relative; padding: 15px 10px; padding-top: 0px;}
 #archivedCards .card-actions > .btn {display: block;}
 #archivedCards .card-actions > .btn + .btn {margin-top: 10px;}
+#archivedCards .info > .time {background-color: rgba(0, 0, 0, 0.15);}
 #archivedCards .info > .users > span:before {left: -4px;}
 #archivedCards .info > .users > span:after {right: -4px;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
 #archivedCards .cardName {word-wrap: break-word;}
+#archivedCards .card-item .red {background-color: #d2323d;}
+#archivedCards .card-item .yellow {background-color: #f7b501;}
+#archivedCards .card-item .green {background-color: #278427;}
+#archivedCards .card-item .has-color .cardName,
+#archivedCards .card-item .has-color .actions .icon-more-v,
+#archivedCards .card-item .has-color .info > .label-pri,
+#archivedCards .card-item .has-color .info > .estimate,
+#archivedCards .card-item .has-color .info > .label-light {color: #FFFFFF;}
+#archivedCards .card-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 </style>
 <div class='panel'>
   <div class='panel-heading text-center'>
@@ -37,7 +47,13 @@
     <?php foreach($cards as $card):?>
     <div class='card-item' data-card='<?php echo $card->id;?>'>
       <div class='col-xs-10'>
-        <div class="kanban-item" data-id="<?php echo $card->id;?>">
+        <?php
+        $color = '';
+        if($card->color == '#d2323d') $color = 'has-color red';
+        if($card->color == '#f7b501') $color = 'has-color yellow';
+        if($card->color == '#278427') $color = 'has-color green';
+        ?>
+        <div class="kanban-item <?php echo $color;?>" data-id="<?php echo $card->id;?>">
           <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
