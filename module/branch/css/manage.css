@@ -9,3 +9,4 @@ td.flex .label-primary {min-width: 40px;}
 td.flex .setDefault {min-width: 120px;}
 
 #mergeBranch .form-actions {padding-top: 20px;}
+.modal-body {padding-top: 0;}
