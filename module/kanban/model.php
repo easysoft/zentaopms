@@ -266,7 +266,7 @@ class kanbanModel extends model
                     return false;
                 }
 
-                $childColumns = $this->getColumnsByParent($column->parent);
+                $childColumns = $this->getColumnsByObject('parent', $column->parent);
                 foreach($childColumns as $childColumn)
                 {
                     $limit += (int)$childColumn->limit;
@@ -2056,6 +2056,29 @@ class kanbanModel extends model
     }
 
     /**
+     * Restore a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function restoreCard($cardID)
+    {
+        $oldCard = $this->getCardByID($cardID);
+
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('archived')->eq(0)
+            ->set('archivedBy')->eq('')
+            ->set('archivedDate')->eq('')
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        $card = $this->getCardByID($cardID);
+
+        if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
      * Get space by id.
      *
      * @param  int    $spaceID
@@ -2139,35 +2162,22 @@ class kanbanModel extends model
     }
 
     /**
-     * Get child columns by parent id.
+     * Get columns by object id.
      *
-     * @param  int    $parentID
+     * @param  string $objectType
+     * @param  int    $objectID
      * @param  string $archived
      * @param  string $deleted
      * @access public
      * @return array
      */
-    public function getColumnsByParent($parentID, $archived = '0', $deleted = '0')
+    public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('parent')->eq($parentID)
-            ->andWhere('archived')->eq($archived)
-            ->andWhere('deleted')->eq($deleted)
-            ->orderBy('order')
-            ->fetchAll('id');
-    }
-
-    /**
-     * Get columns by region id.
-     *
-     * @param  int    $regionID
-     * @access public
-     * @return array
-     */
-    public function getColumnsByRegion($regionID)
-    {
-        return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('region')->eq($regionID)
+            ->where(true)
+            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
+            ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
             ->fetchAll('id');
     }
@@ -2244,6 +2254,27 @@ class kanbanModel extends model
         $card = $this->loadModel('file')->replaceImgURL($card, 'desc');
 
         return $card;
+    }
+
+    /**
+     * Get cards by object id.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $archived
+     * @param  string $deleted
+     * @access public
+     * @return array
+     */
+    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where(true)
+            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
+            ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
+            ->orderBy('order')
+            ->fetchAll('id');
     }
 
     /**

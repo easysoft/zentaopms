@@ -668,16 +668,19 @@ class story extends control
 
         if($this->app->tab == 'project' or $this->app->tab == 'execution')
         {
-            $objectID        = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
-            $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($story->product, $objectID, 'all') : array();
-            $branches        = isset($productBranches[$story->product]) ? array(BRANCH_MAIN => $this->lang->branch->main) + $productBranches[$story->product] : array();
-            $products        = $this->product->getProductPairsByProject($objectID);
-
+            $objectID  = $this->app->tab == 'project' ? $this->session->project : $this->session->execution;
+            $products  = $this->product->getProductPairsByProject($objectID);
             $this->view->objectID = $objectID;
         }
-        else
+
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($product->id, isset($objectID) ? $objectID : 0, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
         {
-            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($product->id) : array();
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
         /* Get product reviewers. */
@@ -694,7 +697,8 @@ class story extends control
         $this->view->product          = $product;
         $this->view->plans            = $this->loadModel('productplan')->getPairsForStory($story->product, $story->branch, 'skipParent');
         $this->view->products         = $products;
-        $this->view->branches         = $branches;
+        $this->view->branchOption     = $branchOption;
+        $this->view->branchTagOption  = $branchTagOption;
         $this->view->reviewers        = implode(',', $reviewerList);
         $this->view->reviewedReviewer = $reviewedReviewer;
         $this->view->productReviewers = $this->user->getPairs('noclosed|nodeleted', $reviewerList, 0, $productReviewers);
@@ -772,39 +776,44 @@ class story extends control
         {
             if(!$executionID)
             {
-                $branches      = $this->branch->getPairs($productID);
-                $product       = $this->product->getByID($productID);
-                $branchProduct = $product->type == 'normal' ? false : true;
-                $modules       = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
-                $plans         = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
-                $products      = array($productID => $product);
-                $branches      = array($productID => $branches);
+                $branches = $this->branch->getList($productID, $executionID, 'all');
+                $branchOption    = array();
+                $branchTagOption = array();
+                foreach($branches as $branchInfo) $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+                $product         = $this->product->getByID($productID);
+                $branchProduct   = $product->type == 'normal' ? false : true;
+                $modules         = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
+                $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
+                $products        = array($productID => $product);
+                $branchTagOption = array($productID => $branchTagOption);
             }
             else
             {
-                $modules        = array();
-                $branches       = array();
-                $execution      = $this->execution->getByID($executionID);
-                $branchProduct  = false;
-                $linkedProducts = $this->loadModel('product')->getProducts($executionID);
+                $modules         = array();
+                $branches        = array();
+                $branchTagOption = array();
+                $execution       = $this->execution->getByID($executionID);
+                $branchProduct   = false;
+                $linkedProducts  = $this->loadModel('product')->getProducts($executionID);
                 foreach($linkedProducts as $linkedProduct)
                 {
-                    $branchList = $this->branch->getPairs($linkedProduct->id, '', $executionID);
-                    $branches[$linkedProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $branchList;
-                    $modules[$linkedProduct->id]  = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
-                    $plans[$linkedProduct->id]    = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
+                    $branchList = $this->branch->getList($linkedProduct->id, $executionID, 'all');
+                    foreach($branchList as $branchInfo) $branches[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+                    $branchTagOption[$linkedProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
+                    $modules[$linkedProduct->id]         = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
+                    $plans[$linkedProduct->id]           = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
                     if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
 
                     if($linkedProduct->type != 'normal') $branchProduct = true;
                 }
-
                 $products = $linkedProducts;
             }
-
-            $this->view->title       = (isset($product) ? $product->name : $execution->name) . $this->lang->colon . $this->lang->story->batchEdit;
-            $this->view->branches    = $branches;
-            $this->view->modules     = $modules;
-            $this->view->productName = isset($product) ? $product->name : '';
+            $this->view->title           = (isset($product) ? $product->name : $execution->name) . $this->lang->colon . $this->lang->story->batchEdit;
+            $this->view->branchTagOption = $branchTagOption;
+            $this->view->modules         = $modules;
+            $this->view->productName     = isset($product) ? $product->name : '';
         }
         else
         {
@@ -815,9 +824,11 @@ class story extends control
             $products = $this->product->getByIdList($productIdList);
             foreach($products as $storyProduct)
             {
-                $branchList   = $this->branch->getPairs($storyProduct->id);
+                $branchList = array();
+                $branches = $this->branch->getList($storyProduct->id, 0, 'all');
+                foreach($branches as $branchInfo) $branchList[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
                 $branchIdList = array_keys($branchList) ? array_keys($branchList) : 0;
-                $branches[$storyProduct->id] = $branchList;
+                $branchTagOption[$storyProduct->id] = $branchList;
 
                 $modules[$storyProduct->id] = $this->tree->getOptionMenu($storyProduct->id, 'story', 0, $branchIdList);
                 if($storyProduct->type == 'normal') $modules[$storyProduct->id][0] = $modules[$storyProduct->id];
@@ -828,9 +839,9 @@ class story extends control
                 if($storyProduct->type != 'normal') $branchProduct = true;
             }
 
-            $this->view->title    = $this->lang->story->batchEdit;
-            $this->view->branches = $branches;
-            $this->view->modules  = $modules;
+            $this->view->title           = $this->lang->story->batchEdit;
+            $this->view->branchTagOption = $branchTagOption;
+            $this->view->modules         = $modules;
         }
 
         /* Set ditto option for users. */

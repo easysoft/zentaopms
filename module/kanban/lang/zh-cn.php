@@ -79,11 +79,11 @@ $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 $lang->kanban->accessDenied  = '您无权访问该看板';
 $lang->kanban->confirmDelete = '您确认删除吗？';
 
-$lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
-$lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
-
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';
+
+$lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
+$lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
 $lang->kanban->enableArchived['0'] = '不启用';
 $lang->kanban->enableArchived['1'] = '启用';
@@ -287,8 +287,10 @@ $lang->kanbancard->deadlineAB      = '截止';
 $lang->kanbancard->beginAB         = '开始';
 $lang->kanbancard->to              = '至';
 
-$lang->kanbancard->confirmArchive = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
-$lang->kanbancard->confirmDelete  = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
+$lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
+$lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
+$lang->kanbancard->confirmRestore    = '您确定要还原该卡片吗？还原卡片后，该卡片将还原到“%s”看板列中。';
+$lang->kanbancard->confirmRestoreTip = '该卡片所属的看板列已被归档，请先还原“%s”看板列。';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;
