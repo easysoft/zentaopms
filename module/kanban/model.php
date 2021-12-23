@@ -131,6 +131,9 @@ class kanbanModel extends model
                 {
                     unset($copyColumn->id);
                     unset($copyColumn->actions);
+                    unset($copyColumn->asParent);
+                    unset($copyColumn->parentType);
+
                     $copyColumn->region         = $regionID;
                     $copyColumn->group          = $newGroupID;
                     $this->createColumn($regionID, $copyColumn);
@@ -1875,8 +1878,9 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
 
             $kanbanActions  = '';
+            $attr           = $kanban->status == 'closed' ? "disabled='disabled'" : '';
             if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
-            if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link' $attr") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
