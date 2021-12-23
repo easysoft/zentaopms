@@ -15,6 +15,7 @@
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('branchLang', $lang->branch);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('branchPairs', $branchPairs);?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
 <?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>

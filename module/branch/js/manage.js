@@ -65,8 +65,8 @@ $(function()
         {
             $('#targetBranch').attr('disabled', true).trigger('chosen:updated');
 
-            var newBranchName = '<tr><th>' + branchLang.name + "</th><td class='required'><input type='text' name='name' id='name' class='form-control' /></td></tr>";
-            var newBranchDesc = '<tr><th>' + branchLang.desc + "</th><td><input type='text' name='desc' id='desc' class='form-control' /></td></tr>";
+            var newBranchName = '<tr><th>' + branchLang.name + "</th><td class='required' colspan='7'><input type='text' name='name' id='name' class='form-control' /></td></tr>";
+            var newBranchDesc = '<tr><th>' + branchLang.desc + "</th><td colspan='7'><input type='text' name='desc' id='desc' class='form-control' /></td></tr>";
             $(this).closest('tr').after(newBranchName + newBranchDesc);
         }
         else
@@ -96,6 +96,8 @@ $(function()
             $('#targetBranch').replaceWith(data);
             $('#targetBranch_chosen').remove();
             $('#targetBranch').chosen();
+
+            if($('#createBranch').prop('checked')) $('#targetBranch').attr('disabled', true).trigger('chosen:updated')
         })
     })
 
@@ -123,6 +125,13 @@ $(function()
             return false;
         }
 
+        var branchNames = Object.values(branchPairs);
+        if(isChecked && branchNames.includes($('#name').val()) !== -1)
+        {
+            alert(branchLang.existName);
+            return false;
+        }
+
         if(confirm(confirmMergeMessage))
         {
             var postData = {'name' : $('#name').val(), 'desc' : $('#desc').val(), 'createBranch' : isChecked, 'mergedBranchIDList' : mergedBranchIDList, 'targetBranch' : $('#targetBranch').val()};
@@ -136,7 +145,7 @@ $(function()
                 {
                     if(data.result == 'fail')
                     {
-                        alert(data.message)
+                        alert(data.message.name)
                         return false;
                     }
                     else
