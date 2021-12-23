@@ -291,12 +291,12 @@
 
                   if($canBatchChangeBranch and $this->session->currentProductType != 'normal')
                   {
-                      $withSearch = count($branches) > 8;
+                      $withSearch = count($branchTagOption) > 8;
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
                       echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       echo '<ul class="dropdown-list">';
-                      foreach($branches as $branchID => $branchName)
+                      foreach($branchTagOption as $branchID => $branchName)
                       {
                           $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
                           echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
@@ -569,7 +569,7 @@
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th><?php echo $lang->product->branch;?></th>
-                  <td><?php echo $branches[$plan->branch];?></td>
+                  <td><?php echo $branchOption[$plan->branch];?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
