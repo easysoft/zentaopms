@@ -76,7 +76,7 @@
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execName : $lang->execution->name);?></th>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'new' and $this->app->tab == 'execution'):?>
           <th class='c-begin'><?php common::printOrderLink('projectName', $orderBy, $vars, $lang->execution->project);?></th></th>
           <?php endif;?>
           <th class='c-pm'><?php common::printOrderLink('PM', $orderBy, $vars, $lang->execution->owner);?></th>
@@ -129,7 +129,7 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <?php if($config->systemMode == 'new'):?>
+          <?php if($config->systemMode == 'new' and $this->app->tab == 'execution'):?>
           <td class='c-begin' title='<?php echo $execution->projectName;?>'>
              <span class="status-execution status-<?php echo $execution->projectName?>"><?php echo $execution->projectName;?></span>
           </td>
