@@ -81,6 +81,9 @@ class tutorialModel extends model
         $product->order          = 10;
         $product->deleted        = '0';
         $product->branch         = '';
+        $product->reviewer       = $this->app->user->account;
+        $product->branches       = array('1' => 'Test branch');
+        $product->plans          = array('1' => 'Test plan');
 
         return $product;
     }
@@ -127,30 +130,32 @@ class tutorialModel extends model
     public function getProject()
     {
         $project = new stdclass();
-        $project->id       = 2;
-        $project->project  = 0;
-        $project->model    = 'scrum';
-        $project->type     = 'project';
-        $project->name     = 'Test Project';
-        $project->code     = '';
-        $project->lifetime = '';
-        $project->begin    = date('Y-m-d', strtotime('-7 days'));
-        $project->end      = date('Y-m-d', strtotime('+7 days'));
-        $project->days     = 10;
-        $project->status   = 'wait';
-        $project->pri      = '1';
-        $project->desc     = '';
-        $project->goal     = '';
-        $project->acl      = 'open';
-        $project->parent   = 0;
-        $project->path     = ',2,';
-        $project->grade    = 1;
-        $project->PM       = $this->app->user->account;
-        $project->PO       = $this->app->user->account;
-        $project->QD       = $this->app->user->account;
-        $project->RD       = $this->app->user->account;
-        $project->budget   = 0;
-        $project->deleted  = '0';
+        $project->id        = 2;
+        $project->project   = 0;
+        $project->model     = 'scrum';
+        $project->type      = 'project';
+        $project->name      = 'Test Project';
+        $project->code      = '';
+        $project->lifetime  = '';
+        $project->begin     = date('Y-m-d', strtotime('-7 days'));
+        $project->end       = date('Y-m-d', strtotime('+7 days'));
+        $project->realBegan = '';
+        $project->realEnd   = '';
+        $project->days      = 10;
+        $project->status    = 'wait';
+        $project->pri       = '1';
+        $project->desc      = '';
+        $project->goal      = '';
+        $project->acl       = 'open';
+        $project->parent    = 0;
+        $project->path      = ',2,';
+        $project->grade     = 1;
+        $project->PM        = $this->app->user->account;
+        $project->PO        = $this->app->user->account;
+        $project->QD        = $this->app->user->account;
+        $project->RD        = $this->app->user->account;
+        $project->budget    = 0;
+        $project->deleted   = '0';
 
         return $project;
     }
