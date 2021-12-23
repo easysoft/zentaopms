@@ -89,7 +89,7 @@
                     if(common::hasPriv('kanban','delete'))
                     {
                         echo '<li>';
-                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin', '', '', true);
+                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin');
                         echo '</li>';
                     }
                     ?>

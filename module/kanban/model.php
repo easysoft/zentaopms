@@ -1744,6 +1744,9 @@ class kanbanModel extends model
             ->remove('uid')
             ->get();
 
+        if(isset($card->assignedTo))  $card->assignedTo = trim($card->assignedTo, ',');
+        if(!isset($card->assignedTo)) $card->assignedTo = '';
+
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->editcard['id'], $this->post->uid);
 
         $this->dao->update(TABLE_KANBANCARD)->data($card)
