@@ -141,7 +141,7 @@
                 <div class='kanbanAcl'>
                   <?php $icon = $kanban->acl == 'open' ? 'unlock' : 'lock';?>
                     <i class="<?php echo 'icon-' . $icon;?>"></i>
-                  <?php echo zget($lang->kanban->aclGroup, $kanban->acl, '');?>
+                  <?php echo zget($lang->kanban->aclGroup, $kanban->acl == 'open' ? 'open' : 'private', '');?>
                 </div>
               </div>
             </div>
