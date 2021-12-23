@@ -71,9 +71,9 @@
             {
                 echo $action->objectName;
             }
-            elseif(in_array($action->objectType, array('kanban', 'kanbanspace')))
+            elseif($action->objectType == 'kanbancard')
             {
-                echo html::a($this->createLink('kanban', 'space'), $action->objectName, '_self', "title={$action->objectName}");
+                echo html::a($this->createLink('kanban', 'viewCard', "id=$action->objectID", '', true), $action->objectName, '', "title={$action->objectName} class='iframe'");
             }
             else
             {
