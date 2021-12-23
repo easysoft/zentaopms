@@ -405,22 +405,37 @@ $lang->action->dynamicAction->execution['undeleted'] = '还原' . $lang->executi
 $lang->action->dynamicAction->execution['hidden']    = '隐藏' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = '导入任务';
 
-$lang->action->dynamicAction->kanban['create'] = '创建看板';
-$lang->action->dynamicAction->kanban['edited'] = '设置看板';
+$lang->action->dynamicAction->kanban['created']  = '创建看板';
+$lang->action->dynamicAction->kanban['edited']   = '设置看板';
+$lang->action->dynamicAction->kanban['closed']   = '关闭看板';
+$lang->action->dynamicAction->kanban['deleted']  = '删除看板';
 
-$lang->action->dynamicAction->kanbanspace['create'] = '创建看板空间';
-$lang->action->dynamicAction->kanbanspace['edited'] = '设置看板空间';
-$lang->action->dynamicAction->kanbanspace['closed'] = '关闭看板空间';
+$lang->action->dynamicAction->kanbanspace['created'] = '创建看板空间';
+$lang->action->dynamicAction->kanbanspace['edited']  = '设置看板空间';
+$lang->action->dynamicAction->kanbanspace['closed']  = '关闭看板空间';
+$lang->action->dynamicAction->kanbanspace['deleted'] = '删除看板空间';
 
-$lang->action->dynamicAction->kanbancolumn['create'] = '创建看板列';
-$lang->action->dynamicAction->kanbancolumn['edited'] = '设置看板列';
+$lang->action->dynamicAction->kanbanregion['created'] = '创建看板区域';
+$lang->action->dynamicAction->kanbanregion['edited']  = '编辑看板区域';
+$lang->action->dynamicAction->kanbanregion['deleted'] = '删除看板区域';
 
-$lang->action->dynamicAction->kanbanlane['created']  = '创建泳道';
-$lang->action->dynamicAction->kanbanlane['edited']   = '设置泳道';
-$lang->action->dynamicAction->kanbanlane['moved']    = '移动泳道';
+$lang->action->dynamicAction->kanbancolumn['created']  = '创建看板列';
+$lang->action->dynamicAction->kanbancolumn['edited']   = '设置看板列';
+$lang->action->dynamicAction->kanbancolumn['archived'] = '归档看板列';
+$lang->action->dynamicAction->kanbancolumn['restore']  = '还原看板列';
+$lang->action->dynamicAction->kanbancolumn['deleted']  = '删除看板列';
 
-$lang->action->dynamicAction->kanbancard['create'] = '创建看板卡片';
-$lang->action->dynamicAction->kanbancard['edited'] = '编辑看板卡片';
+$lang->action->dynamicAction->kanbanlane['created'] = '创建泳道';
+$lang->action->dynamicAction->kanbanlane['edited']  = '设置泳道';
+$lang->action->dynamicAction->kanbanlane['moved']   = '移动泳道';
+$lang->action->dynamicAction->kanbanlane['deleted'] = '删除泳道';
+
+$lang->action->dynamicAction->kanbancard['created']   = '创建看板卡片';
+$lang->action->dynamicAction->kanbancard['edited']    = '编辑看板卡片';
+$lang->action->dynamicAction->kanbancard['commented'] = '备注看板卡片';
+$lang->action->dynamicAction->kanbancard['archived']  = '归档看板卡片';
+$lang->action->dynamicAction->kanbancard['restore']   = '还原看板卡片';
+$lang->action->dynamicAction->kanbancard['deleted']   = '删除看板卡片';
 
 $lang->action->dynamicAction->team['managedTeam'] = '维护团队';
 
