@@ -13,7 +13,9 @@
 <style>
 #archivedColumns {top: 50px; right: -400px; width: 400px; position: fixed; z-index: 1050; background-color: rgb(255,255,255);}
 #archivedColumns .panel .panel-body {overflow: auto; padding: 0px 20px;}
-#archivedColumns .parent-item,#archivedColumns .child-item {padding: 20px 0px; border-bottom: 1px solid #ddd; line-height: 26px; overflow: hidden;}
+.hr {border-bottom: 1px solid #ddd;}
+#archivedColumns .parent-item,#archivedColumns .child-item {padding: 20px 0px; line-height: 26px; overflow: hidden;}
+#archivedColumns .child-item {padding: 5px 0px;}
 #archivedColumns .title {width: 250px; float: left;}
 #archivedColumns .label-child {border-radius: 12px; background-color: #DDDDDD; color: #333; margin-right: 10px;}
 #archivedColumns .btn {float: right; line-height: 26px; height: 26px; padding: 0 20px;}
@@ -31,15 +33,19 @@
     <?php else:?>
     <?php foreach($columns as $column):?>
     <div class="item-body">
-      <div class="item parent-item" data-archived='<?php echo $column->archived;?>' data-id="<?php echo $column->id;?>">
+      <div class="item parent-item hr" data-archived='<?php echo $column->archived;?>' data-id="<?php echo $column->id;?>">
         <div class="title text-ellipsis"><?php echo $column->name;?></div>
         <?php if(commonModel::hasPriv('kanban', 'restoreColumn') && $column->archived == '1') echo html::a(inlink('restoreColumn', "columnID={$column->id}", '',true), $lang->kanban->restore, '', "class='btn btn-primary' target='hiddenwin'");?>
       </div>
       <?php if(!empty($column->child) && $column->archived == '0'):?>
+      <?php $count = 1;?>
       <?php foreach($column->child as $childColumn):?>
-        <div class="item child-item" data-id="<?php echo $childColumn->id;?>" data-archived='<?php echo $childColumn->archived;?>'>
+        <?php $class = $count == count($column->child) ? 'hr' : '';?>
+        <div class="item child-item <?php echo $class;?>" data-id="<?php echo $childColumn->id;?>" data-archived='<?php echo $childColumn->archived;?>'>
           <div class="title text-ellipsis"><label class="label label-child"><?php echo $lang->kanban->child;?></label><?php echo $childColumn->name;?></div>
           <?php if(commonModel::hasPriv('kanban', 'restoreColumn') && $childColumn->archived == '1') echo html::a(inlink('restoreColumn', "columnID={$childColumn->id}", '',true), $lang->kanban->restore, 'hiddenwin', "class='btn btn-primary");?>
+      </div>
+      <?php $count ++;?>
       <?php endforeach;?>
       <?php endif;?>
     </div>
