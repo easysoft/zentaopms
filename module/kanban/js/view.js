@@ -34,7 +34,8 @@ function fullScreen()
     {
         var afterEnterFullscreen = function()
         {
-            $('#kanbanContainer').addClass('scrollbar-hover');
+            $('#kanbanContainer').addClass('fullscreen')
+                .on('scroll', tryUpdateKanbanAffix);
             $('.actions').hide();
             $.cookie('isFullScreen', 1);
         };
@@ -71,7 +72,8 @@ function fullScreen()
  */
 function exitFullScreen()
 {
-    $('#mainContent').removeClass('scrollbar-hover');
+    $('#kanbanContainer').removeClass('fullscreen')
+        .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
     $.cookie('isFullScreen', 0);
 }

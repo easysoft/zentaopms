@@ -9,9 +9,8 @@
 .dropdown-menu > li {padding: 0 10px;}
 .dropdown-menu > li > a > .icon {position: relative; left: -5px;}
 
-.scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
-
 #kanbanContainer {padding-bottom: 0; margin-bottom: 0;}
+#kanbanContainer.fullscreen {overflow: auto;}
 
 .region {border: 1px solid #dcdcdc; background-color: #fff;}
 .region + .region {margin-top: 20px;}
