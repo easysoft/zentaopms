@@ -848,6 +848,9 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `compileID` mediumint(8) unsigned NOT NULL,
   `compileStatus` char(30) NOT NULL,
   `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',
+  `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1',
+  `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
+  `diffs` longtext COLLATE 'utf8_general_ci' NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_mrapproval`;
@@ -1111,6 +1114,11 @@ CREATE TABLE IF NOT EXISTS `zt_repo` (
   `lastSync` datetime NOT NULL,
   `desc` text NOT NULL,
   `extra` char(30) NOT NULL,
+  `preMerge` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
+  `job` mediumint unsigned NOT NULL,
+  `fileServerUrl` text COLLATE 'utf8_general_ci' NULL,
+  `fileServerAccount` varchar(40) NOT NULL default '',
+  `fileServerPassword` varchar(100) NOT NULL default '',
   `deleted` tinyint(1) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;

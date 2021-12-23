@@ -66,10 +66,10 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->mr->mergeStatus; ?></th>
-                    <?php if($MR->synced and empty($rawMR->changes_count)):?>
+                    <?php if(empty($rawMR->changes_count)):?>
                     <td>
                       <?php echo $lang->mr->cantMerge; ?>
-                      <code class=''><?php echo $lang->mr->noChanges;?></code>
+                      <?php if($MR->synced) echo '<code>' . $lang->mr->noChanges . '</code>';?>
                     </td>
                     <?php else:?>
                     <td><?php echo zget($lang->mr->mergeStatusList, $rawMR->merge_status);?></td>
