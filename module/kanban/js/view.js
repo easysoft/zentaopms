@@ -209,7 +209,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 function renderUsersAvatar(users, itemID, size)
 {
     var avatarSizeClass = 'avatar-' + (size || 'sm');
-    var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
+    //var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
@@ -228,14 +228,14 @@ function renderUsersAvatar(users, itemID, size)
 
         if(!user)
         {
-            assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>'));
+            assignees.push($('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>'));
             continue;
         }
 
         if(typeof user === 'string') user = {account: user};
         if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
 
-        assignees.push($('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" href="' + link + '"/>').avatar({user: user}));
+        assignees.push($('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe"></div>').avatar({user: user}));
     }
 
     if(assignees.length > 3) assignees.splice(3, assignees.length - 3, '<span>...</span>');

@@ -67,7 +67,6 @@
 .region .kanban-item > .kanban-card > .info > .user > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
 .region .kanban-item > .kanban-card > .info > .user > span:before {left: -4px;}
 .region .kanban-item > .kanban-card > .info > .user > span:after {right: -4px;}
-.region .kanban-item > .kanban-card > .info > .user > div {display: inline-block; height: 24px; position: relative; border-radius: 50%; top: -5px; margin:  5px;}
 .region .kanban-item > .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 .region .kanban-item > .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
 .region .kanban-item:hover > .actions {opacity: 1;}
