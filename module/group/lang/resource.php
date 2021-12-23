@@ -1290,6 +1290,7 @@ $lang->gitlab->methodOrder[135] = 'browseTag';
 /* merge request. */
 $lang->resource->mr = new stdclass();
 $lang->resource->mr->create    = 'create';
+$lang->resource->mr->apiCreate = 'apiCreate';
 $lang->resource->mr->browse    = 'browse';
 $lang->resource->mr->edit      = 'edit';
 $lang->resource->mr->delete    = 'delete';
