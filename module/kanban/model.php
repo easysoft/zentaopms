@@ -131,6 +131,9 @@ class kanbanModel extends model
                 {
                     unset($copyColumn->id);
                     unset($copyColumn->actions);
+                    unset($copyColumn->asParent);
+                    unset($copyColumn->parentType);
+
                     $copyColumn->region         = $regionID;
                     $copyColumn->group          = $newGroupID;
                     $this->createColumn($regionID, $copyColumn);
