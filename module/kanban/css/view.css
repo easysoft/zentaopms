@@ -58,8 +58,8 @@
 .region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
 .region .kanban-item > .kanban-card > .info {margin-top: 5px; position: relative;}
 .region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
-.region .kanban-item > .kanban-card > .info > .estimate{margin-left: 10px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
-.region .kanban-item > .kanban-card > .info > .time {margin-left: 10px; font-size: 12px; background: rgb(242, 242, 242)}
+.region .kanban-item > .kanban-card > .info > .estimate{margin-left: 4px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
+.region .kanban-item > .kanban-card > .info > .time {margin-left: 4px; font-size: 12px; background: rgb(242, 242, 242)}
 .region .kanban-item > .kanban-card > .info > .user {position: absolute; right: 0; top: -2px}
 .region .kanban-item > .kanban-card > .info > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
 .region .kanban-item > .kanban-card > .info > .user > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: sticky; border-radius: 50%; top: 3px; margin: 0 7px;}

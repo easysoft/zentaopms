@@ -298,9 +298,9 @@ $lang->kanbancard->priList[3] = 3;
 $lang->kanbancard->priList[4] = 4;
 
 $lang->kanbancard->colorList['#fff']    = 'Default';
-$lang->kanbancard->colorList['#d2323d'] = 'Blocking';
-$lang->kanbancard->colorList['#f7b501'] = 'Warning';
-$lang->kanbancard->colorList['#278427'] = 'Urgent';
+$lang->kanbancard->colorList['#b10b0b'] = 'Blocking';
+$lang->kanbancard->colorList['#cfa227'] = 'Warning';
+$lang->kanbancard->colorList['#2a5f29'] = 'Urgent';
 
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
