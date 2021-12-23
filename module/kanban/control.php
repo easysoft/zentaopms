@@ -797,7 +797,7 @@ class kanban extends control
         {
             $card   = $this->kanban->getCardByID($cardID);
             $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
-            if($column->archived) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
+            if($column->archived or $column->deleted) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
 
             die(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
         }

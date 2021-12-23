@@ -290,7 +290,7 @@ $lang->kanbancard->to              = '至';
 $lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
 $lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
 $lang->kanbancard->confirmRestore    = '您确定要还原该卡片吗？还原卡片后，该卡片将还原到“%s”看板列中。';
-$lang->kanbancard->confirmRestoreTip = '该卡片所属的看板列已被归档，请先还原“%s”看板列。';
+$lang->kanbancard->confirmRestoreTip = '该卡片所属的看板列已被归档或删除，请先还原“%s”看板列。';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;
