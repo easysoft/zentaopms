@@ -54,7 +54,7 @@
       <table class='table table-form'>
         <?php if($config->systemMode == 'new'):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->project;?></th>
+          <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td class="col-main"><?php echo html::select("project", $allProjects, $projectID, "class='form-control chosen' required onchange='refreshPage(this.value)'");?></td>
           <td colspan='2'></td>
         </tr>

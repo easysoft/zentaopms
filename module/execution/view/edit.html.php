@@ -27,7 +27,7 @@
       <table class='table table-form'>
         <?php if($config->systemMode == 'new'):?>
         <tr>
-          <th class='w-120px'><?php echo $lang->execution->project;?></th>
+          <th class='w-120px'><?php echo $lang->execution->projectName;?></th>
           <td><?php echo html::select('project', $allProjects, $execution->project, "class='form-control chosen' required");?></td><td></td>
         </tr>
         <?php endif;?>
