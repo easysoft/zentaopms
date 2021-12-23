@@ -57,7 +57,7 @@ $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';
 
 $lang->mr->needApproved       = 'This MR should be approved before merge';
-$lang->mr->needCI             = 'This MR should be passed CI before merge';
+$lang->mr->needCI             = 'Merge only after passing CI';
 $lang->mr->removeSourceBranch = 'Delete source branch after merge';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
