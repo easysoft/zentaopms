@@ -89,7 +89,7 @@
                     if(common::hasPriv('kanban','delete'))
                     {
                         echo '<li>';
-                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, '', "class='iframe' data-width='75%'", '', true);
+                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin', '', '', true);
                         echo '</li>';
                     }
                     ?>
@@ -141,7 +141,7 @@
                 <div class='kanbanAcl'>
                   <?php $icon = $kanban->acl == 'open' ? 'unlock' : 'lock';?>
                     <i class="<?php echo 'icon-' . $icon;?>"></i>
-                  <?php echo zget($lang->kanban->aclGroup, $kanban->acl, '');?>
+                  <?php echo zget($lang->kanban->aclGroup, $kanban->acl == 'open' ? 'open' : 'private', '');?>
                 </div>
               </div>
             </div>

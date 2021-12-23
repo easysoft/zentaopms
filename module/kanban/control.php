@@ -797,7 +797,7 @@ class kanban extends control
         {
             $card   = $this->kanban->getCardByID($cardID);
             $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
-            if($column->archived) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
+            if($column->archived or $column->deleted) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
 
             die(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
         }
@@ -1069,15 +1069,18 @@ class kanban extends control
     public function ajaxGetKanbanMenu($kanbanID, $moduleName, $methodName)
     {
         $kanbanIdList = $this->kanban->getCanViewObjects();
+        $spacePairs   = $this->kanban->getSpacePairs('all');
+
         $this->view->kanbanList = $this->dao->select('*')->from(TABLE_KANBAN)
             ->where('deleted')->eq('0')
             ->andWhere('id')->in($kanbanIdList)
+            ->andWhere('space')->in(array_keys($spacePairs))
             ->fetchGroup('space');
 
-        $this->view->kanbanID   = $kanbanID;
-        $this->view->spaceList  = $this->kanban->getSpacePairs('all');
-        $this->view->module     = $moduleName;
-        $this->view->method     = $methodName;
+        $this->view->kanbanID  = $kanbanID;
+        $this->view->spaceList = $spacePairs;
+        $this->view->module    = $moduleName;
+        $this->view->method    = $methodName;
         $this->display();
     }
 }

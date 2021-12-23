@@ -454,13 +454,7 @@ if(!window.kanbanDropRules)
         story:
         {
             backlog: ['ready'],
-            ready: ['backlog', 'doing'],
-            'doing': ['developed'],
-            'developed': ['doing', 'testing'],
-            'testing': ['tested'],
-            'tested': ['verified'],
-            'verified': ['released'],
-            'released': false,
+            ready: ['backlog'],
         },
         bug:
         {

@@ -235,7 +235,7 @@ class buildModel extends model
             $releases = $this->dao->select('build, name')->from(TABLE_RELEASE)
                 ->where('build')->in(array_keys($builds))
                 ->andWhere('product')->in($products)
-                ->beginIF($branch !== 'all')->andWhere('branch')->in("$branch")->fi()
+                ->beginIF($branch !== 'all')->andWhere('branch')->in("0,$branch")->fi()
                 ->andWhere('deleted')->eq(0)
                 ->fetchPairs();
             foreach($releases as $buildID => $releaseName)

@@ -594,7 +594,7 @@ class kanbanModel extends model
             ->orderBy('order')
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'editColumn', 'splitColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+        $actions = array('createColumn', 'editColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -609,7 +609,7 @@ class kanbanModel extends model
                     if($this->isClickable($column, $action)) $column->actions[] = $action;
                 }
 
-                if($column->parent and $column->parent != -1) continue;
+                if($column->parent > 0) continue;
 
                 $parentColumnGroup[$group][] = $column;
             }
@@ -2136,7 +2136,6 @@ class kanbanModel extends model
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
             ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
             ->where('t1.id')->eq($columnID)
-            ->andWhere('t1.deleted')->eq(0)
             ->fetch();
 
         if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
@@ -2164,7 +2163,7 @@ class kanbanModel extends model
     /**
      * Get columns by object id.
      *
-     * @param  string $objectType
+     * @param  string $objectType parent|region|group
      * @param  int    $objectID
      * @param  string $archived
      * @param  string $deleted
@@ -2259,14 +2258,14 @@ class kanbanModel extends model
     /**
      * Get cards by object id.
      *
-     * @param  string $objectType
+     * @param  string $objectType kanban|region|group|lane|column
      * @param  int    $objectID
      * @param  string $archived
      * @param  string $deleted
      * @access public
      * @return array
      */
-    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where(true)
@@ -2380,46 +2379,45 @@ class kanbanModel extends model
                     ->beginIF($action == 'sortlane')->andWhere('`group`')->eq($object->group)->fi()
                     ->fetch('count');
                 return $count > 1;
-            case 'createColumn' :
-            case 'copyColumn' :
             case 'splitcolumn' :
                 if($object->parent) return false;   // The current column is a child column.
 
                 $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
                     ->where('parent')->eq($object->id)
                     ->andWhere('deleted')->eq('0')
-                    //->andWhere('archived')->eq('0')
+                    ->andWhere('archived')->eq('0')
                     ->fetch('count');
                 return $count == 0;     // The column has child columns.
-            case 'restoreColumn' :
-                if($object->parent)
+            case 'restorecolumn' :
+                if($object->parent > 0)
                 {
                     $parent = $this->getColumnByID($object->parent);
                     if($parent->deleted == '1' || $parent->archived == '1') return false;
                 }
                 return $object->archived == '1';
             case 'archivecolumn' :
-                //if($object->archived != '0') return false;    // The column has been archived.
+                if($object->archived != '0') return false;    // The column has been archived.
             case 'deletecolumn' :
                 if($object->deleted != '0') return false;
 
-                if($object->parent)
+                if($object->parent > 0)
                 {
                     $childrenCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
                         ->where('parent')->eq($object->parent)
                         ->andWhere('deleted')->eq('0')
-                        //->andWhere('archived')->eq('0')
+                        ->andWhere('archived')->eq('0')
                         ->fetch('count');
 
                     return $childrenCount > 2;
                 }
 
+
                 $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
                     ->where('region')->eq($object->region)
-                    ->andWhere('parent')->eq(0)
+                    ->andWhere('parent')->in('0,-1')
                     ->andWhere('`group`')->eq($object->group)
                     ->andWhere('deleted')->eq('0')
-                    //->andWhere('archived')->eq('0')
+                    ->andWhere('archived')->eq('0')
                     ->fetch('count');
 
                 return $count > 1;

@@ -15,6 +15,7 @@
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('branchLang', $lang->branch);?>
 <?php js::set('productID', $productID);?>
+<?php js::set('branchPairs', $branchPairs);?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
 <?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
@@ -78,7 +79,7 @@
             <?php echo $isMain ? '' : '<i class="icon icon-move"></i>';?>
           </td>
           <?php endif;?>
-          <td class='c-name flex' title='<?php echo $branch->name;?>'>
+          <td class='c-name flex branchName' title='<?php echo $branch->name;?>'>
             <span class="text-ellipsis"><?php echo $branch->name;?>&nbsp;</span>
             <?php
             if($branch->default)
@@ -126,7 +127,7 @@
         <?php
         $batchEditLink = $this->createLink('branch', 'batchEdit', "productID=$productID");
         echo html::submitButton($lang->edit, "data-form-action='$batchEditLink'", 'btn');
-        if($browseType != 'closed') echo html::a('#mergeBranch', $lang->branch->merge, '', "data-toggle='modal' class='btn'");
+        if(($browseType != 'closed' and common::hasPriv('branch', 'mergeBranch'))) echo html::a('#mergeBranch', $lang->branch->merge, '', "data-toggle='modal' class='btn' id='merge'");
         ?>
       </div>
       <?php endif;?>
@@ -143,14 +144,22 @@
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
         <span class="modal-title"><?php echo $lang->branch->mergeBranch;?></span>
-        <small> <?php echo $lang->branch->mergeTips;?></small>
       </div>
       <div class="modal-body">
         <form method='post' enctype='multipart/form-data' class="form-ajax">
           <table class='table table-form'>
             <tr>
-              <th class='thWidth'><?php echo $lang->branch->mergeTo;?></th>
-              <td>
+              <td colspan="8">
+                <div class="alert alert-info no-margin">
+                  <p><?php echo $lang->branch->mergedMain;?></p>
+                  <p><?php echo $lang->branch->mergeTips;?></p>
+                  <p><?php echo $lang->branch->targetBranchTips;?></p>
+                </div>
+              </td>
+            </tr>
+            <tr>
+              <th><?php echo $lang->branch->mergeTo;?></th>
+              <td colspan="7">
                 <div class="input-group">
                   <?php echo html::select('targetBranch', $branchPairs, '', "class='form-control chosen'");?>
                   <span class='input-group-addon'>
@@ -158,15 +167,10 @@
                   </span>
                 </div>
               </td>
-              <td></td>
             </tr>
             <tr>
-              <td colspan="3"><span><?php echo $lang->branch->targetBranchTips;?></span></td>
-            </tr>
-            <tr>
-              <td colspan='3' class='text-center form-actions'>
+              <td colspan='8' class='text-center form-actions'>
                 <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
-                <?php echo html::linkButton($lang->goback, $this->createLink('branch', 'manage', "productID=$productID"), 'self', '', 'btn btn-wide');?>
               </td>
             </tr>
           </table>

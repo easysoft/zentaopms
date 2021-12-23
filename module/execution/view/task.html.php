@@ -289,7 +289,7 @@ body {margin-bottom: 25px;}
                 }
             }?>
             <?php else:?>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($customFields as $field) $this->task->printCell($field, $task, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', false, $showBranch);?>
             <?php endif;?>
           </tr>
           <?php if(!empty($task->children)):?>
@@ -306,7 +306,7 @@ body {margin-bottom: 25px;}
                 $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);
             }?>
             <?php else:?>
-            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true);?>
+            <?php foreach($customFields as $field) $this->task->printCell($field, $child, $users, $browseType, $branchGroups, $modulePairs, $useDatatable ? 'datatable' : 'table', true, $showBranch);?>
             <?php endif;?>
           </tr>
           <?php $i ++;?>

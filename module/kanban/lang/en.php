@@ -50,6 +50,7 @@ $lang->kanban->viewArchivedColumn  = 'View archived column';
 $lang->kanban->archivedColumn      = 'Archived Column';
 $lang->kanban->archivedCard        = 'Archived Card';
 $lang->kanban->restoreColumn       = 'Restore Column';
+$lang->kanban->restoreCard         = 'Restore Card';
 $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
 
@@ -285,12 +286,13 @@ $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = 'No Assigned';
 $lang->kanbancard->deadlineAB      = 'DL';
 $lang->kanbancard->beginAB         = 'Begin';
-$lang->kanbancard->to              = 'to';
+$lang->kanbancard->to              = '~';
+$lang->kanbancard->archived        = 'Archived';
 
 $lang->kanbancard->confirmArchive    = 'Are you sure to archive this card? After archiving the card, it will be hidden from the column and you can view it in the Region - Archived.';
 $lang->kanbancard->confirmDelete     = 'Are you sure to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
 $lang->kanbancard->confirmRestore    = 'Are you sure you want to restore this card? After the card is restored, the card will be restored to the "%s" Kanban column.';
-$lang->kanbancard->confirmRestoreTip = "The card's column has been archived, please restore '%s' column first.";
+$lang->kanbancard->confirmRestoreTip = "The card's column has been archived or deleted, please restore '%s' column first.";
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;
@@ -298,9 +300,9 @@ $lang->kanbancard->priList[3] = 3;
 $lang->kanbancard->priList[4] = 4;
 
 $lang->kanbancard->colorList['#fff']    = 'Default';
-$lang->kanbancard->colorList['#d2323d'] = 'Blocking';
-$lang->kanbancard->colorList['#f7b501'] = 'Warning';
-$lang->kanbancard->colorList['#278427'] = 'Urgent';
+$lang->kanbancard->colorList['#b10b0b'] = 'Blocking';
+$lang->kanbancard->colorList['#cfa227'] = 'Warning';
+$lang->kanbancard->colorList['#2a5f29'] = 'Urgent';
 
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';

@@ -6,11 +6,11 @@ $lang->kanban->editSpace           = '设置空间';
 $lang->kanban->closeSpace          = '关闭空间';
 $lang->kanban->deleteSpace         = '删除空间';
 $lang->kanban->sortSpace           = '空间排序';
-$lang->kanban->edit                = '编辑看板';
+$lang->kanban->edit                = '看板设置';
 $lang->kanban->view                = '查看看板';
 $lang->kanban->close               = '关闭看板';
 $lang->kanban->delete              = '删除看板';
-$lang->kanban->createRegion        = '创建区域';
+$lang->kanban->createRegion        = '新增区域';
 $lang->kanban->editRegion          = '编辑区域';
 $lang->kanban->sortRegion          = '区域排序';
 $lang->kanban->sortGroup           = '泳道组排序';
@@ -50,6 +50,7 @@ $lang->kanban->viewArchivedColumn  = '查看已归档列';
 $lang->kanban->archivedColumn      = '已归档的看板列';
 $lang->kanban->archivedCard        = '已归档的卡片';
 $lang->kanban->restoreColumn       = '还原看板列';
+$lang->kanban->restoreCard         = '还原卡片';
 $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 
@@ -285,12 +286,13 @@ $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = '未指派';
 $lang->kanbancard->deadlineAB      = '截止';
 $lang->kanbancard->beginAB         = '开始';
-$lang->kanbancard->to              = '至';
+$lang->kanbancard->to              = '~';
+$lang->kanbancard->archived        = '已归档';
 
 $lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
 $lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';
 $lang->kanbancard->confirmRestore    = '您确定要还原该卡片吗？还原卡片后，该卡片将还原到“%s”看板列中。';
-$lang->kanbancard->confirmRestoreTip = '该卡片所属的看板列已被归档，请先还原“%s”看板列。';
+$lang->kanbancard->confirmRestoreTip = '该卡片所属的看板列已被归档或删除，请先还原“%s”看板列。';
 
 $lang->kanbancard->priList[1] = 1;
 $lang->kanbancard->priList[2] = 2;
@@ -298,9 +300,9 @@ $lang->kanbancard->priList[3] = 3;
 $lang->kanbancard->priList[4] = 4;
 
 $lang->kanbancard->colorList['#fff']    = '默认';
-$lang->kanbancard->colorList['#d2323d'] = '阻塞';
-$lang->kanbancard->colorList['#f7b501'] = '警告';
-$lang->kanbancard->colorList['#278427'] = '加急';
+$lang->kanbancard->colorList['#b10b0b'] = '阻塞';
+$lang->kanbancard->colorList['#cfa227'] = '警告';
+$lang->kanbancard->colorList['#2a5f29'] = '加急';
 
 $lang->kanbancard->error = new stdClass();
 $lang->kanbancard->error->recordMinus = '预计不能为负数!';

@@ -663,6 +663,7 @@ $lang->resource->kanban->laneMove           = 'laneMove';
 $lang->resource->kanban->cardsSort          = 'cardsSort';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
+$lang->resource->kanban->restoreCard        = 'restoreCard';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -706,6 +707,7 @@ $lang->kanban->methodorder[190] = 'cardsSort';
 $lang->kanban->methodOrder[195] = 'viewArchivedColumn';
 $lang->kanban->methodorder[200] = 'viewArchivedCard';
 $lang->kanban->methodorder[205] = 'archiveColumn';
+$lang->kanban->methodorder[210] = 'restoreCard';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();

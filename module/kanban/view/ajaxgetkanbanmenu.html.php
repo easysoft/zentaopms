@@ -93,7 +93,7 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
         }
         elseif($kanban->status == 'closed')
         {
-            $closedKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='$kanbanName' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
+            $closedKanbansHtml .= '<li>' . html::a(sprintf($link, $kanban->id), $kanbanName, '', "class='$selected kanbanName' title='{$kanban->name}' data-key='" . zget($kanbansPinYin, $kanban->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }

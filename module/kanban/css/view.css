@@ -43,7 +43,7 @@
 
 .region .kanban-lane {position: relative; border-bottom: none!important; min-height: 200px !important}
 
-.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 100px;}
+.region .kanban-lane > .kanban-lane-name > .text {margin: auto 0; max-height: 150px; overflow: hidden; text-overflow: ellipsis}
 .region .kanban-lane > .kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
 .region .kanban-lane > .kanban-lane-name > .actions > a {display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; opacity: .7; color: #fff;}
 .region .kanban-lane > .kanban-lane-name > .actions > a:hover {background-color: rgba(0,0,0,.2); opacity: 1;}
@@ -60,8 +60,8 @@
 .region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
 .region .kanban-item > .kanban-card > .info {margin-top: 5px; position: relative;}
 .region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
-.region .kanban-item > .kanban-card > .info > .estimate{margin-left: 10px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
-.region .kanban-item > .kanban-card > .info > .time {margin-left: 10px; font-size: 12px; background: rgb(242, 242, 242)}
+.region .kanban-item > .kanban-card > .info > .estimate{margin-left: 4px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
+.region .kanban-item > .kanban-card > .info > .time {margin-left: 4px; font-size: 12px; background: rgb(242, 242, 242)}
 .region .kanban-item > .kanban-card > .info > .user {position: absolute; right: 0; top: -2px}
 .region .kanban-item > .kanban-card > .info > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
 .region .kanban-item > .kanban-card > .info > .user > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: sticky; border-radius: 50%; top: 3px; margin: 0 7px;}

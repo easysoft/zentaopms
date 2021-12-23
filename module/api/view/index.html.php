@@ -81,7 +81,6 @@
           <div class="heading <?php echo $api->method;?>">
             <a href="<?php echo helper::createLink('api', 'index', "libID={$api->lib}&moduleID=0&apiID={$api->id}&version=0&release=$release");?>">
               <span class="label label-primary"><?php echo $api->method;?></span>
-              <span class="label label-warning" style="width: 60px"><?php echo apiModel::getApiStatusText($api->status);?></span>
               <span class="path"><?php echo $api->path;?></span>
               <span class="desc"><?php echo $api->title;?></span>
             </a>

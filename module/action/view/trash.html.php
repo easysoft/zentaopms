@@ -73,7 +73,7 @@
             }
             elseif($action->objectType == 'kanbancard')
             {
-                echo html::a($this->createLink('kanban', 'viewCard', "id=$action->objectID", '', true), $action->objectName, '', "title={$action->objectName} class='iframe'");
+                echo html::a($this->createLink('kanban', 'viewCard', "id=$action->objectID", '', true), $action->objectName, '', "title={$action->objectName} class='iframe' data-width=80%");
             }
             else
             {
