@@ -50,6 +50,7 @@ $lang->kanban->viewArchivedColumn  = '查看已归档列';
 $lang->kanban->archivedColumn      = '已归档的看板列';
 $lang->kanban->archivedCard        = '已归档的卡片';
 $lang->kanban->restoreColumn       = '还原看板列';
+$lang->kanban->restoreCard         = '还原卡片';
 $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 
@@ -286,6 +287,7 @@ $lang->kanbancard->noAssigned      = '未指派';
 $lang->kanbancard->deadlineAB      = '截止';
 $lang->kanbancard->beginAB         = '开始';
 $lang->kanbancard->to              = '~';
+$lang->kanbancard->archived        = '已归档';
 
 $lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
 $lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';

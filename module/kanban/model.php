@@ -2265,7 +2265,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where(true)
