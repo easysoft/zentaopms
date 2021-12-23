@@ -35,6 +35,7 @@ function fullScreen()
         var afterEnterFullscreen = function()
         {
             $('#kanbanContainer').addClass('scrollbar-hover');
+            $('.regionActions').hide();
             $('.actions').hide();
             $('.kanban-group-header').hide();
             $.cookie('isFullScreen', 1);
@@ -73,6 +74,7 @@ function fullScreen()
 function exitFullScreen()
 {
     $('#mainContent').removeClass('scrollbar-hover');
+    $('.regionActions').show();
     $('.actions').show();
     $('.kanban-group-header').show();
     $.cookie('isFullScreen', 0);

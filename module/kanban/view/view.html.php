@@ -51,7 +51,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
           <span class="strong"><?php echo $region->name;?></span>
           <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
           <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
-          <span>
+          <span class='regionActions'>
             <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
             <ul class="dropdown-menu pull-right">
@@ -61,7 +61,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
             </ul>
             <?php endif;?>
           </span>
-          <span>
+          <span class='regionActions'>
             <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
               <span><?php echo $this->lang->kanban->archived;?></span>
               <span class="caret"></span>
