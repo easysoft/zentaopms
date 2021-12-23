@@ -1914,7 +1914,7 @@ class kanbanModel extends model
      * @param  int    $region
      * @param  array  $groups
      * @access public
-     * @return bool 
+     * @return bool
      */
     public function sortGroup($region, $groups)
     {
@@ -1924,14 +1924,14 @@ class kanbanModel extends model
 
         $order = 1;
         foreach($groups as $groupID)
-        {    
+        {
             if(!$groupID) continue;
             if(!isset($groupList[$groupID])) continue;
 
             $this->dao->update(TABLE_KANBANGROUP)->set('`order`')->eq($order)->where('id')->eq($groupID)->exec();
 
             $order++;
-        }    
+        }
 
         return !dao::isError();
     }
@@ -2088,8 +2088,8 @@ class kanbanModel extends model
 
     /**
      * Get group list by region.
-     * 
-     * @param  int    $region 
+     *
+     * @param  int    $region
      * @access public
      * @return array
      */

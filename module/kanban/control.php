@@ -32,7 +32,7 @@ class kanban extends control
         $this->view->spaceList   = $this->kanban->getSpaceList($browseType, $pager);
         $this->view->browseType  = $browseType;
         $this->view->pager       = $pager;
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->usersAvatar = $this->user->getAvatarPairs();
 
         $this->display();

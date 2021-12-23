@@ -548,7 +548,7 @@ function findDropColumns($element, $root)
 }
 
 /**
- * Handle drop card 
+ * Handle drop card
  * @param {Object} event Drop event object
  */
 function handleDropTask($element, event, kanban)

@@ -104,13 +104,19 @@
               <div class='kanban-footer'>
               <?php $count     = 0;?>
               <?php $teamPairs = array_filter(explode(',', $kanban->team));?>
+              <?php
+              foreach($teamPairs as $index => $team)
+              {
+                  if(!isset($users[$team])) unset($teamPairs[$index]);
+              }
+              ?>
               <?php $teamCount = count($teamPairs);?>
                 <div class="clearfix">
                   <?php if(!empty($teamPairs)):?>
                   <div class='kanban-members pull-left'>
                     <?php foreach($teamPairs as $member):?>
                     <?php
-                    if($count > 2) continue;
+                    if($count > 2) break;
                     if(!isset($users[$member]))
                     {
                         $teamCount --;
@@ -124,8 +130,8 @@
                     <?php endforeach;?>
                     <?php if($teamCount > 3):?>
                     <?php if($teamCount > 4) echo '<span>…</span>';?>
-                    <div title="<?php echo $users[$member];?>">
-                      <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($teamPairs)], 'account' => $member)); ?>
+                    <div title="<?php echo $users[end($teamPairs)];?>">
+                      <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($teamPairs)], 'account' => end($teamPairs))); ?>
                     </div>
                     <?php endif;?>
                   </div>
