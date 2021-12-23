@@ -34,11 +34,9 @@ function fullScreen()
     {
         var afterEnterFullscreen = function()
         {
-            $('#kanbanContainer').addClass('scrollbar-hover');
-            $('.regionActions').hide();
+            $('#kanbanContainer').addClass('fullscreen')
+                .on('scroll', tryUpdateKanbanAffix);
             $('.actions').hide();
-            $('.action').hide();
-            $('.kanban-group-header').hide();
             $.cookie('isFullScreen', 1);
         };
 
@@ -74,11 +72,9 @@ function fullScreen()
  */
 function exitFullScreen()
 {
-    $('#mainContent').removeClass('scrollbar-hover');
-    $('.action').show();
-    $('.regionActions').show();
+    $('#kanbanContainer').removeClass('fullscreen')
+        .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
-    $('.kanban-group-header').show();
     $.cookie('isFullScreen', 0);
 }
 
@@ -217,7 +213,7 @@ function renderUsersAvatar(users, itemID, size)
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
-        return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
+        return $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
     }
 
     var assignees = [];
@@ -488,7 +484,7 @@ function openAddTaskForm($element)
  */
 function resetLaneHeight()
 {
-    var maxHeight = '360px';
+    var maxHeight = '500px';
     if(laneCount < 2)
     {
         var windowHeight = $(window).height();
@@ -888,11 +884,15 @@ $(function()
 
     /* Init sortable */
     var sortType = '';
-    var cards    = null;
+    var $cards   = null;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane',
         trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        container: function($ele)
+        {
+            return $ele.parent();
+        },
         targetSelector: function($ele)
         {
             /* Sort regions */
@@ -915,7 +915,6 @@ $(function()
                 sortType = 'lane';
                 $cards   = $ele.find('.kanban-item');
 
-                $cards.hide();
                 return $ele.parent().children('.kanban-lane');
             }
 

@@ -635,7 +635,7 @@ class gitlabModel extends model
      *
      * @param  int $gitlabID
      * @access public
-     * @return array 
+     * @return array
      */
     public function apiGetProjects($gitlabID)
     {
@@ -1462,15 +1462,63 @@ class gitlabModel extends model
     /**
      * Get project repository tags by api.
      *
-     * @param  int $gitlabID
-     * @param  int $projectID
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  string $keyword
+     * @param  object $pager
      * @access public
      * @return object
      */
-    public function apiGetTags($gitlabID, $projectID)
+    public function apiGetTags($gitlabID, $projectID, $orderBy = '', $keyword = '', $pager = null)
     {
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/tags");
-        return json_decode(commonModel::http($url));
+        $apiRoot = $this->getApiRoot($gitlabID);
+
+        /* Parse order string. */
+        if($orderBy)
+        {
+            list($order, $sort) = explode('_', $orderBy);
+            $apiRoot .= "&order_by={$order}&sort={$sort}";
+        }
+
+        if($keyword) $apiRoot .= "&search={$keyword}";
+
+        if(!$pager)
+        {
+            $url = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
+            return json_decode(commonModel::http($url));
+        }
+        else
+        {
+            $apiRoot .= "&per_page={$pager->recPerPage}&page={$pager->pageID}";
+            $url      = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
+            $result   = commonModel::httpWithHeader($url);
+
+            $header = $result['header'];
+            $pager->setRecTotal($header['X-Total']);
+            $pager->setPageTotal();
+            if($pager->pageID > $pager->pageTotal) $pager->setPageID($pager->pageTotal);
+
+            return json_decode($result['body']);
+        }
+    }
+
+    /**
+     * Delete a gitab tag by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tagName
+     * @access public
+     * @return object
+     */
+    public function apiDeleteTag($gitlabID, $projectID, $tagName = '')
+    {
+        if(!(int)$gitlabID or !(int)$projectID or empty($tagName)) return false;
+
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/tags/{$tagName}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 
     /**
@@ -2460,7 +2508,7 @@ class gitlabModel extends model
         if(is_array($accessLevels))
         {
             $levels = array();
-            foreach($accessLevels as $level) 
+            foreach($accessLevels as $level)
             {
                 if(is_array($level)) $level = (object)$level;
                 $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
@@ -2469,5 +2517,53 @@ class gitlabModel extends model
             if(in_array($developerAccess, $levels)) return $developerAccess;
         }
         return $maintainerAccess;
+    }
+
+    /**
+     * Get single branch by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleTag($gitlabID, $projectID, $tag)
+    {
+        if(empty($gitlabID)) return false;
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/repository/tags/$tag");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Create gitlab tag.
+     *
+     * @param  int $gitlabID
+     * @param  int $projectID
+     * @access public
+     * @return bool
+     */
+    public function createTag($gitlabID, $projectID)
+    {
+        if(empty($gitlabID)) return false;
+
+        $tag = fixer::input('post')->get();
+        if(empty($tag->tag_name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->emptyNameError;
+        if(empty($tag->ref))  dao::$errors['ref'][] = $this->lang->gitlab->tag->emptyRefError;
+
+        $singleBranch = $this->apiGetSingleTag($gitlabID, $projectID, $tag->tag_name);
+        if(!empty($singleBranch->name)) dao::$errors['tag_name'][] = $this->lang->gitlab->tag->issetNameError;
+        if(dao::isError()) return false;
+
+        $url      = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/repository/tags');
+        $response = json_decode(commonModel::http($url, $tag));
+
+        if(!empty($response->name))
+        {
+            $this->loadModel('action')->create('gitlabtag', 0, 'created', '', $response->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
     }
 }

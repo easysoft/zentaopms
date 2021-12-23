@@ -847,6 +847,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `jobID` mediumint(8) unsigned NOT NULL,
   `compileID` mediumint(8) unsigned NOT NULL,
   `compileStatus` char(30) NOT NULL,
+  `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_mrapproval`;

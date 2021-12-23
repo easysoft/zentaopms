@@ -1386,7 +1386,7 @@ class bugModel extends model
     {
         $productIdList = array();
         foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
-        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 0, $params = '');
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = '');
 
         /* Process the openedBuild and resolvedBuild fields. */
         foreach($bugs as $key => $bug)
@@ -1401,7 +1401,6 @@ class bugModel extends model
             $bug->openedBuild   = rtrim($openedBuild, ',');
             $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
         }
-
         return $bugs;
     }
 

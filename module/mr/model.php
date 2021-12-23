@@ -87,6 +87,7 @@ class mrModel extends model
         $MR = fixer::input('post')
             ->setDefault('jobID', 0)
             ->setDefault('repoID', 0)
+            ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
@@ -114,11 +115,12 @@ class mrModel extends model
         $MRID = $this->dao->lastInsertId();
 
         $MRObject = new stdclass;
-        $MRObject->target_project_id = $MR->targetProject;
-        $MRObject->source_branch     = $MR->sourceBranch;
-        $MRObject->target_branch     = $MR->targetBranch;
-        $MRObject->title             = $MR->title;
-        $MRObject->description       = $MR->description;
+        $MRObject->target_project_id    = $MR->targetProject;
+        $MRObject->source_branch        = $MR->sourceBranch;
+        $MRObject->target_branch        = $MR->targetBranch;
+        $MRObject->title                = $MR->title;
+        $MRObject->description          = $MR->description;
+        $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
         if($MR->assignee)
         {
             $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->gitlabID, $MR->assignee);
@@ -177,6 +179,77 @@ class mrModel extends model
     }
 
     /**
+     * Create MR function by api.
+     *
+     * @access public
+     * @return int|bool|object
+     */
+    public function apiCreate()
+    {
+        $postData = fixer::input('post')->get();
+        $postData = (object)$postData->data;
+
+        $repo = $this->loadModel('repo')->getRepoByUrl($postData->RepoUrl);
+        if(empty($repo['data']))
+        {
+            dao::$errors[] = $repo['message'];
+            return false;
+        }
+        $repo = $repo['data'];
+
+        /* Process and insert mr data. */
+        $MR = new stdClass();
+        $MR->gitlabID       = $repo->client;
+        $MR->sourceProject  = $repo->path;
+        $MR->sourceBranch   = $postData->RepoSrcBranch;
+        $MR->targetProject  = $repo->path;
+        $MR->targetBranch   = $postData->RepoDistBranch;
+        $MR->diffs          = $this->post->data['DiffMsg'];
+        $MR->title          = $this->lang->mr->common . ' ' . $postData->RepoSrcBranch . $this->lang->mr->to . $postData->RepoDistBranch ;
+        $MR->repoID         = $repo->id;
+        $MR->jobID          = isset($repo->job->id) ? $repo->job->id : 0;
+        $MR->synced         = '0';
+        $MR->needCI         = '1';
+        $MR->approvalStatus = 'approved';
+        $MR->hasNoConflict  = $postData->MergeStatus ? '0' : '1';
+        $MR->mergeStatus    = $postData->MergeStatus ? 'can_be_merged' : 'cannot_be_merged';
+        $MR->createdBy      = $this->app->user->account;
+        $MR->createdDate    = date('Y-m-d H:i:s');
+
+        $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
+            ->batchCheck($this->config->mr->apicreate->requiredFields, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        /* Exec Job */
+        if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
+        {
+            $MRID     = $this->dao->lastInsertId();
+            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+            $newMR    = new stdClass();
+            if(!empty($pipeline->queue))
+            {
+                $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
+                $newMR->compileID     = $compile->id;
+                $newMR->compileStatus = $compile->status;
+            }
+            else
+            {
+                $newMR->compileStatus = $pipeline->status;
+            }
+
+            /* Update MR in Zentao database. */
+            $this->dao->update(TABLE_MR)->data($newMR)
+                ->where('id')->eq($MRID)
+                ->autoCheck()
+                ->exec();
+            if(dao::isError()) return false;
+        }
+        return true;
+    }
+
+    /**
      * Edit MR function.
      *
      * @access public
@@ -187,6 +260,7 @@ class mrModel extends model
         $MR = fixer::input('post')
             ->setDefault('jobID', 0)
             ->setDefault('repoID', 0)
+            ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
             ->setDefault('editedBy', $this->app->user->account)
             ->setDefault('editedDate', helper::now())
@@ -212,9 +286,10 @@ class mrModel extends model
 
         /* Update MR in GitLab. */
         $newMR = new stdclass;
-        $newMR->title         = $MR->title;
-        $newMR->description   = $MR->description;
-        $newMR->target_branch = $MR->targetBranch;
+        $newMR->title                = $MR->title;
+        $newMR->description          = $MR->description;
+        $newMR->target_branch        = $MR->targetBranch;
+        $newMR->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
         if($MR->assignee)
         {
             $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->gitlabID, $MR->assignee);
@@ -563,8 +638,10 @@ class mrModel extends model
      */
     public function getDiffs($MR, $encoding = '')
     {
-        $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        $gitlab       = $this->gitlab->getByID($MR->gitlabID);
+        $diffVersions = array();
+        if($MR->synced) $diffVersions = $this->apiGetDiffVersions($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
+        $gitlab = $this->gitlab->getByID($MR->gitlabID);
 
         $this->loadModel('repo');
         $repo = new stdclass;
@@ -579,10 +656,11 @@ class mrModel extends model
 
         $lines      = array();
         $commitList = array();
-        foreach ($diffVersions as $diffVersion)
+        foreach($diffVersions as $diffVersion)
         {
             $singleDiff = $this->apiGetSingleDiffVersion($MR->gitlabID, $MR->targetProject, $MR->mriid, $diffVersion->id);
             if($singleDiff->state == 'empty') continue;
+
             $commits = $singleDiff->commits;
             $diffs   = $singleDiff->diffs;
             foreach($diffs as $index => $diff)
@@ -600,6 +678,12 @@ class mrModel extends model
                 $diffLines = explode("\n", $diff->diff);
                 foreach($diffLines as $diffLine) $lines[] = $diffLine;
             }
+        }
+
+        if(empty($MR->synced))
+        {
+            $diffs = preg_replace('/^\s*$\n?\r?/m', '', $MR->diffs);
+            $lines = explode("\n", $diffs);
         }
 
         $scm = $this->app->loadClass('scm');

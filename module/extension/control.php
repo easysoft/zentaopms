@@ -430,8 +430,13 @@ class extension extends control
 
             $tmpName   = $_FILES['file']['tmp_name'];
             $fileName  = $_FILES['file']['name'];
-            $dest      = $this->app->getTmpRoot() . "/extension/$fileName";
-            move_uploaded_file($tmpName, $dest);
+            $dest      = $this->app->getTmpRoot() . "extension/$fileName";
+            if(!move_uploaded_file($tmpName, $dest))
+            {
+                $downloadPath = $this->app->getTmpRoot() . 'extension/';
+                $errorMessage = strip_tags(sprintf($this->lang->extension->errorDownloadPathNotWritable, $downloadPath, $downloadPath));
+                die(js::alert($errorMessage));
+            }
 
             $extension = basename($fileName, '.zip');
             $return    = $this->extension->extractPackage($extension);

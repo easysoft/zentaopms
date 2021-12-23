@@ -118,15 +118,17 @@ class repoModel extends model
      * Get repo list.
      *
      * @param  int    $projectID
+     * @param  string $SCM  Subversion|Git|Gitlab
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($projectID = 0, $orderBy = 'id_desc', $pager = null)
+    public function getList($projectID = 0, $SCM = '', $orderBy = 'id_desc', $pager = null)
     {
         $repos = $this->dao->select('*')->from(TABLE_REPO)
             ->where('deleted')->eq('0')
+            ->beginIF($SCM)->andWhere('SCM')->eq($SCM)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -394,6 +396,84 @@ class repoModel extends model
         if(strtolower($repo->SCM) == 'gitlab') $repo = $this->processGitlab($repo);
         $repo->acl = json_decode($repo->acl);
         return $repo;
+    }
+
+    /**
+     * Get repo by url.
+     *
+     * @param  string $url
+     * @access public
+     * @return array
+     */
+    public function getRepoByUrl($url)
+    {
+        if(empty($url)) return array('result' => 'fail', 'message' => 'Url is empty.');
+
+        $parsedUrl = parse_url($url);
+
+        $isSSH   = $parsedUrl['scheme'] == 'ssh';
+        $baseURL = $parsedUrl['scheme'] . '://' . $parsedUrl['host'] . (isset($parsedUrl['port']) ? ":{$parsedUrl['port']}" : '');
+
+        /* Get gitlabs by URL. */
+        $gitlabs = $this->dao->select('*')->from(TABLE_PIPELINE)->where('type')->eq('gitlab')
+            ->beginIF($isSSH)->andWhere('url')->like("%{$parsedUrl['host']}%")->fi()
+            ->beginIF(!$isSSH)->andWhere('url')->eq($baseURL)->fi()
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll('id');
+
+        /* Convert to id by url. */
+        $this->loadModel('gitlab');
+        $url     = strtolower($url);
+        $matches = array();
+        foreach($gitlabs as $gitlabID => $gitlab)
+        {
+            $matched = new stdclass();
+            $matched->gitlab  = 0;
+            $matched->project = 0;
+
+            $projects = $this->gitlab->apiGetProjects($gitlabID);
+            foreach($projects as $project)
+            {
+                if((!$isSSH and strtolower($project->http_url_to_repo) == $url) or ($isSSH and strtolower($project->ssh_url_to_repo) == $url))
+                {
+                    $matched->gitlab  = $gitlabID;
+                    $matched->project = $project->id;
+
+                    $matches[] = $matched;
+                }
+            }
+        }
+        if(empty($matches)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
+
+        $conditions = array();
+        foreach($matches as $matched) $conditions[] = "(`client`='$matched->gitlab' and `path`='$matched->project')";
+        $conditions = '(' . join(' OR ', $conditions). ')';
+
+        $matchedRepos = $this->dao->select('*')->from(TABLE_REPO)->where('SCM')->eq('Gitlab')
+            ->andWhere($conditions)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('id_desc')
+            ->fetchAll();
+        if(empty($matchedRepos)) return array('result' => 'fail', 'message' => 'No matched gitlab.');
+
+        $matchedRepo = '';
+        foreach($matchedRepos as $repo)
+        {
+            if(!empty($repo->preMerge))
+            {
+                $matchedRepo = $repo;
+                break;
+            }
+        }
+        if(empty($matchedRepo)) return array('result' => 'fail', 'message' => 'Matched gitlab is not open pre merge.');
+        if(empty($matchedRepo->job)) return array('result' => 'fail', 'message' => 'No linked job.');
+
+        $job = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($matchedRepo->job)->andWhere('deleted')->eq(0)->fetch();
+        if(empty($job)) return array('result' => 'fail', 'message' => 'Linked job is not exists.');
+
+        $matchedRepo->job = $job;
+        return array('result' => 'success', 'data' => $matchedRepo);
     }
 
     /**

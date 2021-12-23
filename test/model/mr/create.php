@@ -23,15 +23,16 @@ $_POST['repoID']   = 0;
 $result = $mrModel->create();
 r($result) && p('message[gitlabID]:0') && e('『GitLab』不能为空。'); //使用空的repoID, gitlabID。创建mr。
 
-$_POST['gitlabID']      = 1;
-$_POST['sourceProject'] = 42;
-$_POST['sourceBranch']  = 'branch-08';
-$_POST['targetProject'] = 42;
-$_POST['targetBranch']  = 'branch-09';
-$_POST['title']         = 'test_create';
-$_POST['description']   = 'test_create';
-$_POST['repoID']        = 1;
-$_POST['assignee']      = '';
+$_POST['gitlabID']           = 1;
+$_POST['sourceProject']      = 42;
+$_POST['sourceBranch']       = 'branch-08';
+$_POST['targetProject']      = 42;
+$_POST['targetBranch']       = 'branch-09';
+$_POST['title']              = 'test_create';
+$_POST['description']        = 'test_create';
+$_POST['repoID']             = 1;
+$_POST['assignee']           = '';
+$_POST['removeSourceBranch'] = '1';
 $result = $mrModel->create();
 if($result['result'] == 'success') $result = 'success';
 $result = preg_match('/通过API创建合并请求失败，失败原因：存在另外一个同样的合并请求在源项目分支中: !([0-9]+)/', $result['message'], $matches); //检查错误原因是否是已存在一样的mr请求

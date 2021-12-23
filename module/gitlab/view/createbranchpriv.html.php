@@ -22,7 +22,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->branch->name;?></th>
-            <td><?php echo html::select('name', $branches, $branchPriv->name, "class='form-control chosen' data-placeholder='{$lang->gitlab->branch->placeholderSelect}' " . ($branch ? 'disabled' : ''));?></td>
+            <td><?php echo html::select('name', $branches, $branchPriv->name, "class='form-control chosen' " . ($branch ? 'disabled' : ''));?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->branch->mergeAllowed;?></th>

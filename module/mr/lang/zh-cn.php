@@ -3,6 +3,7 @@ $lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
 $lang->mr->overview     = "概况";
 $lang->mr->create       = "创建{$lang->mr->common}";
+$lang->mr->apiCreate    = "接口：创建{$lang->mr->common}";
 $lang->mr->browse       = "浏览{$lang->mr->common}";
 $lang->mr->list         = $lang->mr->browse;
 $lang->mr->edit         = "编辑{$lang->mr->common}";
@@ -56,8 +57,9 @@ $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通过';
 $lang->mr->approvalResultList['reject']  = '拒绝';
 
-$lang->mr->needApproved = '需要通过评审才能合并';
-$lang->mr->needCI       = '需要通过构建才能合并';
+$lang->mr->needApproved       = '需要通过评审才能合并';
+$lang->mr->needCI             = '需要通过构建才能合并';
+$lang->mr->removeSourceBranch = '合并后删除源分支';
 
 $lang->mr->repeatedOperation = '请勿重复操作';
 
@@ -78,9 +80,10 @@ $lang->mr->statusList['merged'] = '已合并';
 $lang->mr->statusList['closed'] = '已关闭';
 
 $lang->mr->mergeStatusList = array();
-$lang->mr->mergeStatusList['checking']         = '检查中';
-$lang->mr->mergeStatusList['can_be_merged']    = '可合并';
-$lang->mr->mergeStatusList['cannot_be_merged'] = '不可自动合并';
+$lang->mr->mergeStatusList['checking']             = '检查中';
+$lang->mr->mergeStatusList['can_be_merged']        = '可合并';
+$lang->mr->mergeStatusList['cannot_be_merged']     = '不可自动合并';
+$lang->mr->mergeStatusList['cannot_merge_by_fail'] = '不可合并,检查未通过';
 
 $lang->mr->description       = '描述';
 $lang->mr->confirmDelete     = '确认删除该合并请求吗？';

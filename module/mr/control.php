@@ -85,6 +85,30 @@ class mr extends control
     }
 
     /**
+     * Create MR function by api.
+     *
+     * @access public
+     * @return void
+     */
+    public function apiCreate()
+    {
+        if($_POST)
+        {
+            $this->mr->apiCreate();
+
+            $response['result']  = 'success';
+            $response['message'] = '';
+            if(dao::isError())
+            {
+                $response['result']  = 'fail';
+                $response['message'] = dao::getError();
+            }
+
+            return $this->send($response);
+        }
+    }
+
+    /**
      * Edit MR function.
      *
      * @access public
@@ -183,7 +207,7 @@ class mr extends control
         $MR = $this->mr->getByID($id);
         if(!$MR) die(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
-        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
+        if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
         $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
         $this->loadModel('gitlab');
@@ -199,7 +223,7 @@ class mr extends control
 
         /* Those variables are used to render $lang->mr->commandDocument. */
         $this->view->httpRepoURL = $sourceProject->http_url_to_repo;
-        $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $rawMR->source_branch;
+        $this->view->branchPath  = $sourceProject->path_with_namespace . '-' . $MR->sourceBranch;
 
         /* Get mr linked list. */
         $this->app->loadLang('productplan');
@@ -310,11 +334,16 @@ class mr extends control
         $encoding = strtolower(str_replace('_', '-', $encoding)); /* Revert $config->requestFix in $encoding. */
 
         $MR = $this->mr->getByID($MRID);
-        if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         $this->view->title = $this->lang->mr->viewDiff;
         $this->view->MR    = $MR;
+
+        $rawMR = null;
+        if($MR->synced)
+        {
+            $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+            if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
+        }
         $this->view->rawMR = $rawMR;
-        if(!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR)) return $this->display();
 
         $diffs   = $this->mr->getDiffs($MR, $encoding);
         $arrange = $this->cookie->arrange ? $this->cookie->arrange : 'inline';

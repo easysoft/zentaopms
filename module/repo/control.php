@@ -83,7 +83,7 @@ class repo extends control
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList = $this->repo->getList(0, $orderBy);
+        $repoList = $this->repo->getList(0, '', $orderBy);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1177,4 +1177,41 @@ class repo extends control
         echo html::select('product', array('') + $productPairs, key($productPairs), "class='form-control chosen'");
     }
 
+    /**
+     * API: get repo by url.
+     *
+     * @param  string $type  gitlab
+     * @access public
+     * @return void
+     */
+    public function apiGetRepoByUrl()
+    {
+        $url    = urldecode($this->post->repoUrl);
+        $result = $this->repo->getRepoByUrl($url);
+        if($result['result'] == 'fail') return $this->send($result);
+
+        $repo = $result['data'];
+        $fileServer = new stdclass();
+        $fileServer->fileServerUrl      = $repo->fileServerUrl;
+        $fileServer->fileServerAccount  = $repo->fileServerAccount;
+        $fileServer->fileServerPassword = $repo->fileServerPassword;
+        return $this->send($fileServer);
+    }
+
+    /**
+     * API: get rules.
+     *
+     * @access public
+     * @return void
+     */
+    public function ajaxGetRules()
+    {
+        $regRules = $this->repo->processRules();
+        $rawRules = $this->config->repo->rules;
+
+        $data = array();
+        $data['reg'] = $regRules;
+        $data['raw'] = $rawRules;
+        return $this->send(array('status' => 'success', 'rules' => json_encode($data)));
+    }
 }

@@ -11,7 +11,7 @@
   </div>
 </div>
 <?php /* If this mr is deleted in GitLab, then show this part to user. */?>
-<?php elseif(empty($rawMR) or !isset($rawMR->id)): ?>
+<?php elseif($MR->synced and (empty($rawMR) or !isset($rawMR->id))): ?>
 <div id='mainContent'>
   <div class="table-empty-tip">
     <p>
@@ -28,7 +28,9 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $MR->id ?></span>
       <span class="text" title='<?php echo $MR->title; ?>'><?php echo  $MR->title; ?></span>
+      <?php if($MR->synced):?>
       <span class="text" title='<?php echo $MR->title; ?>' style='color: blue'><?php echo html::a($rawMR->web_url, $lang->mr->viewInGitlab, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
+      <?php endif;?>
     </div>
   </div>
 </div>
@@ -52,7 +54,8 @@
                 <thead>
                   <tr>
                     <th colspan='2'>
-                      <span><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
+                      <?php $sourceDisabled = ($MR->status == 'merged' and $MR->removeSourceBranch == '1') ? 'disabled' : '';?>
+                      <span><?php echo $lang->mr->from . html::a($sourceProjectURL, $sourceProjectName . ":" . $MR->sourceBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue' $sourceDisabled") . $lang->mr->to . html::a($targetProjectURL, $targetProjectName . ":" . $MR->targetBranch, "_blank", "class='btn btn-link btn-active-text' style='color: blue'"); ?></span>
                     </th>
                   </tr>
                 </thead>
@@ -63,7 +66,7 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->mr->mergeStatus; ?></th>
-                    <?php if(empty($rawMR->changes_count)):?>
+                    <?php if($MR->synced and empty($rawMR->changes_count)):?>
                     <td>
                       <?php echo $lang->mr->cantMerge; ?>
                       <code class=''><?php echo $lang->mr->noChanges;?></code>
@@ -74,7 +77,8 @@
                    </tr>
                    <tr>
                      <th><?php echo $lang->mr->MRHasConflicts; ?></th>
-                     <td><?php echo ($rawMR->has_conflicts ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
+                     <?php $hasNoConflict = $MR->synced === '1' ? $rawMR->has_conflicts : (bool)$MR->hasNoConflict; ?>
+                     <td><?php echo ($hasNoConflict ? $lang->mr->hasConflicts : $lang->mr->hasNoConflict);?></td>
                   </tr>
                    <tr>
                      <th><?php echo $lang->mr->description;?></th>
@@ -89,17 +93,17 @@
           </div>
         </div>
 
-        <?php if($rawMR->state == 'opened'): ?>
+        <?php if($MR->synced and $rawMR->state == 'opened'): ?>
         <div class="cell"><?php echo sprintf($lang->mr->commandDocument, $httpRepoURL, $MR->sourceBranch, $branchPath, $MR->targetBranch, $branchPath, $MR->targetBranch); ?></div>
         <?php endif; ?>
 
         <div class='main-actions'>
           <div class="btn-toolbar">
             <?php common::printBack(inlink('browse', '')); ?>
-            <?php $acceptDisabled = ($MR->approvalStatus != 'approved' or ($MR->compileID !=0 and $MR->compileStatus != 'success')) ? ' disabled' : ''; ?>
-            <?php if($rawMR->state == 'opened' and !$rawMR->has_conflicts) common::printIcon('mr', 'accept', "mr=$MR->id", $MR, 'button', 'flow', 'hiddenwin', 'mergeButton btn', false, $acceptDisabled, $lang->mr->acceptMR);?>
-            <?php if($rawMR->state == 'opened'): ?>
-              <?php if($rawMR->has_conflicts or ($MR->compileID !=0 and $MR->compileStatus != 'success') or $MR->approvalStatus == 'approved'):?>
+            <?php $acceptDisabled = ($MR->approvalStatus != 'approved' or ($MR->compileID != 0 and $MR->compileStatus != 'success')) ? ' disabled' : ''; ?>
+            <?php if($MR->synced and $rawMR->state == 'opened' and !$rawMR->has_conflicts) common::printIcon('mr', 'accept', "mr=$MR->id", $MR, 'button', 'flow', 'hiddenwin', 'mergeButton btn', false, $acceptDisabled, $lang->mr->acceptMR);?>
+            <?php if($MR->synced and $rawMR->state == 'opened'): ?>
+              <?php if($rawMR->has_conflicts or ($MR->compileID != 0 and $MR->compileStatus != 'success') or $MR->approvalStatus == 'approved'):?>
               <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton', true, 'disabled', $lang->mr->approve);?>
               <?php else:?>
               <?php common::printIcon('mr', 'approval', "mr=$MR->id&action=approve", $MR, 'button', 'ok', 'hiddenwin', 'mergeButton btn iframe showinonlybody', true, '', $lang->mr->approve);?>
@@ -108,7 +112,7 @@
               <?php common::printIcon('mr', 'close', "mr=$MR->id", $MR, 'button', 'off', 'hiddenwin', 'mergeButton');?>
               <?php common::printIcon('mr', 'edit', "mr=$MR->id", $MR, 'button', 'edit');?>
             <?php endif;?>
-            <?php if($rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
+            <?php if($MR->synced and $rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
             <?php common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
           </div>
         </div>

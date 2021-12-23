@@ -3,6 +3,7 @@ $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
 $lang->mr->overview     = "Survey";
 $lang->mr->create       = "Create";
+$lang->mr->apiCreate    = "Interface: Create";
 $lang->mr->browse       = "Browse";
 $lang->mr->list         = "List";
 $lang->mr->edit         = "Edit";
@@ -56,8 +57,9 @@ $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = 'Approve';
 $lang->mr->approvalResultList['reject']  = 'Reject';
 
-$lang->mr->needApproved = 'This MR should be approved before merge';
-$lang->mr->needCI       = 'This MR should be passed CI before merge';
+$lang->mr->needApproved       = 'This MR should be approved before merge';
+$lang->mr->needCI             = 'Merge only after passing CI';
+$lang->mr->removeSourceBranch = 'Delete source branch after merge';
 
 $lang->mr->repeatedOperation = 'Do not repeat operations';
 
@@ -78,9 +80,10 @@ $lang->mr->statusList['merged'] = 'merged';
 $lang->mr->statusList['closed'] = 'closed';
 
 $lang->mr->mergeStatusList = array();
-$lang->mr->mergeStatusList['checking']         = 'checking';
-$lang->mr->mergeStatusList['can_be_merged']    = 'can be merged';
-$lang->mr->mergeStatusList['cannot_be_merged'] = 'cannot be merged';
+$lang->mr->mergeStatusList['checking']             = 'checking';
+$lang->mr->mergeStatusList['can_be_merged']        = 'can be merged';
+$lang->mr->mergeStatusList['cannot_be_merged']     = 'cannot be merged';
+$lang->mr->mergeStatusList['cannot_merge_by_fail'] = 'Cannot be merged, check failed';
 
 $lang->mr->description       = 'Description';
 $lang->mr->confirmDelete     = 'Are you sure to delete this merge request?';
