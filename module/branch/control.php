@@ -328,4 +328,18 @@ class branch extends control
 
         return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
     }
+
+    /**
+     * AJAX: Get target branches for merge branch.
+     *
+     * @param  int    $productID
+     * @param  string $mergedBranches
+     * @access public
+     * @return string
+     */
+    public function ajaxGetTargetBranches($productID, $mergedBranches = '')
+    {
+        $branchPairs = $this->branch->getPairs($productID, 'active', 0, $mergedBranches);
+        return print(html::select('targetBranch', $branchPairs, '', "class='form-control chosen'"));
+    }
 }
