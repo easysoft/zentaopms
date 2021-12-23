@@ -311,15 +311,15 @@ function renderKanbanItem(item, $item)
         var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
         if(item.end == '0000-00-00' && item.begin != '0000-00-00')
         {
-            $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +kanbancardLang.beginAB).show();
+            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + ' ' +kanbancardLang.beginAB).show();
         }
         else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
         {
-            $time.text($.zui.formatDate(end, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
+            $time.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
         }
         else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
         {
-            $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + ' ' +  kanbancardLang.to + ' ' +  $.zui.formatDate(end, 'yyyy-MM-dd')).show();
+            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM/dd')).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + kanbancardLang.to + $.zui.formatDate(end, 'yyyy/MM/dd')).show();
         }
 
         if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
