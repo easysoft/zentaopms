@@ -73,7 +73,6 @@ $lang->kanban->closedBy       = 'Closed By';
 $lang->kanban->closedDate     = 'Closed Date';
 $lang->kanban->empty          = 'No Kanban';
 $lang->kanban->teamSumCount   = '%s people in total';
-$lang->kanban->deleted        = 'Deleted';
 
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
