@@ -37,6 +37,9 @@ function fullScreen()
             $('#kanbanContainer').addClass('fullscreen')
                 .on('scroll', tryUpdateKanbanAffix);
             $('.actions').hide();
+            $('.action').hide();
+            $('.kanban-group-header').hide();
+            $(".title").attr("disabled", true).css("pointer-events", "none");
             $.cookie('isFullScreen', 1);
         };
 
@@ -75,6 +78,8 @@ function exitFullScreen()
     $('#kanbanContainer').removeClass('fullscreen')
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
+    $('.kanban-group-header').show();
+    $(".title").attr("disabled", false).css("pointer-events", "auto");
     $.cookie('isFullScreen', 0);
 }
 

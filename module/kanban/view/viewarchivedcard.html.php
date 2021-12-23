@@ -75,7 +75,7 @@
             <?php 
             foreach($assignedToList as $index => $account)
             {
-                if(!isset($users[$account]))
+                if(!isset($users[$account]) or !isset($usersAvatar[$account]))
                 {
                     unset($assignedToList[$index]);
                     continue;
@@ -104,9 +104,9 @@
         $canRestore = commonModel::hasPriv('kanban', 'restoreCard');
         $canDelete  = commonModel::hasPriv('kanban', 'deleteCard');
 
-        if($canRestore) echo html::a(inlink('restoreCard', "cardID={$card->id}", '',true), $lang->kanban->restore, '', "class='btn btn-xs btn-primary' target='hiddenwin'");
+        if($canRestore) echo html::a(inlink('restoreCard', "cardID={$card->id}"), $lang->kanban->restore, '', "class='btn btn-xs btn-primary' target='hiddenwin'");
 
-        if($canDelete) echo html::a($this->createLink('kanban', 'deleteCard', "cardID=$card->id", '', true), $lang->delete, '', "class='btn btn-xs delete-card' target='hiddenwin'");
+        if($canDelete) echo html::a($this->createLink('kanban', 'deleteCard', "cardID=$card->id"), $lang->delete, '', "class='btn btn-xs delete-card' target='hiddenwin'");
         ?>
       </div>
     </div>
