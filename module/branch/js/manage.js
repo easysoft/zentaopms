@@ -126,7 +126,7 @@ $(function()
         }
 
         var branchNames = Object.values(branchPairs);
-        if(isChecked && branchNames.includes($('#name').val()) !== -1)
+        if(isChecked && branchNames.indexOf($('#name').val()) !== -1)
         {
             alert(branchLang.existName);
             return false;
