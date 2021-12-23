@@ -42,8 +42,14 @@
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>
             <?php if($card->estimate and $card->estimate != 0) echo "<span class='text-gray'>{$card->estimate}h</span>";?>
-            <?php if($card->end and $card->end != '0000-00-00'):?>
-            <span class="time label label-light"><?php echo $card->end;?></span>
+            <?php if(helper::isZeroDate($card->end) and !helper::isZeroDate($card->begin)):?>
+            <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . $lang->kanbancard->beginAB;?></span>
+            <?php endif;?>
+            <?php if(helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end)):?>
+            <span class="time label label-light"><?php echo date("m/d", strtotime($card->end)) . $lang->kanbancard->deadlineAB;?></span>
+            <?php endif;?>
+            <?php if(!helper::isZeroDate($card->begin) and !helper::isZeroDate($card->end)):?>
+            <span class="time label label-light"><?php echo date("m/d", strtotime($card->begin)) . ' ~ ' . date("m/d", strtotime($card->end));?></span>
             <?php endif;?>
             <?php
             $assignedToList = explode(',', $card->assignedTo);

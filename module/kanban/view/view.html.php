@@ -64,7 +64,7 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
           <span>
             <?php $canViewArchivedCard   = commonModel::hasPriv('kanban', 'viewArchivedCard');?>
             <?php $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');?>
-            <?php if($canViewArchivedCard or $canViewArchivedColumn):?>
+            <?php if(($canViewArchivedCard or $canViewArchivedColumn) and $kanban->archived):?>
             <span>
               <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
                 <span><?php echo $this->lang->kanban->archived;?></span>

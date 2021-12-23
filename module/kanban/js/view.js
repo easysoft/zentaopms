@@ -320,6 +320,7 @@ function renderKanbanItem(item, $item)
 
         if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
         if($item.hasClass('has-color') && needRemind)  $time.css('background-color', 'rgba(255, 255, 255, 0.3)');
+        if(!needRemind) $time.css('background-color', 'rgba(0, 0, 0, 0.15)');
     }
 
     /* Display avatars of assignedTo. */
