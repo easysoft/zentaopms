@@ -49,9 +49,10 @@
           </div>
         </div>
         <div class='spaceActions pull-right'>
+          <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
           <?php common::printLink('kanban', 'create', "spaceID={$space->id}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
           <?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?>
-          <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe'", '', true);?>
+          <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe {$class}'", '', true);?>
           <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
         </div>
       </div>
@@ -82,14 +83,15 @@
                     }
                     if(common::hasPriv('kanban','close'))
                     {
-                        echo '<li>';
-                        common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe' data-width='75%'", '', true);
+                        $class = $kanban->status == 'closed' ? 'disabled' : '';
+                        echo "<li class='{$class}'>";
+                        common::printLink('kanban', 'close',  "kanbanID={$kanban->id}", '<i class="icon icon-off"></i> ' . $lang->kanban->close, '', "class='iframe {$class}' data-width='75%'", '', true);
                         echo '</li>';
                     }
                     if(common::hasPriv('kanban','delete'))
                     {
                         echo '<li>';
-                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin', '', '', true);
+                        common::printLink('kanban', 'delete', "kanbanID={$kanban->id}", '<i class="icon icon-trash"></i> ' . $lang->kanban->delete, 'hiddenwin');
                         echo '</li>';
                     }
                     ?>
