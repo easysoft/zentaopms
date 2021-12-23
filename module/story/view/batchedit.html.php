@@ -72,8 +72,8 @@ foreach(explode(',', $showFields) as $field)
           <?php if($branchProduct):?>
           <td class='text-left<?php echo zget($visibleFields, 'branch', ' hidden')?>'>
             <?php $disabled = $products[$story->product]->type == 'normal' ? "disabled='disabled'" : '';?>
-            <?php if($products[$story->product]->type == 'normal') $branches[$story->product] = array();?>
-            <?php echo html::select("branches[$storyID]", $branches[$story->product], $story->branch, "class='form-control chosen' onchange='loadBranches($story->product, this.value, $storyID);' $disabled");?>
+            <?php if($products[$story->product]->type == 'normal') $branchTagOption[$story->product] = array();?>
+            <?php echo html::select("branches[$storyID]", $branchTagOption[$story->product], $story->branch, "class='form-control chosen' onchange='loadBranches($story->product, this.value, $storyID);' $disabled");?>
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>

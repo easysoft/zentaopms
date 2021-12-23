@@ -76,14 +76,19 @@
           if(!empty($this->config->user->moreLink)) $this->config->moreLinks["assignedTos[$bugID]"] = $this->config->user->moreLink;
           if(!$productID)
           {
-              $product   = $this->product->getByID($bug->product);
-              $plans     = $this->loadModel('productplan')->getPairs($bug->product, $branch);
-              $branches  = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getPairs($product->id);
+              $branchTagOption = array();
+              $product         = $this->product->getByID($bug->product);
+              $plans           = $this->loadModel('productplan')->getPairs($bug->product, $branch);
+              $branches        = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getList($product->id, 0 ,'all');;
+              foreach($branches as $branchInfo)
+              {
+                  $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+              }
 
               $modules[$bug->product][0] = $this->tree->getOptionMenu($bug->product, 'bug');
               if($product->type != 'normal')
               {
-                  foreach($branches as $branchID => $branchName) $branches[$branchID] = '/' . $product->name . '/' . $branchName;
+                  foreach($branchTagOption as $branchID => $branchName) $branchTagOption[$branchID] = '/' . $product->name . '/' . $branchName;
                   $modules[$bug->product][$bug->branch] = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
               }
           }
@@ -111,7 +116,7 @@
             <td style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $product->id;?>
               <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$bugID]", $branches, $bug->branch, "class='form-control chosen' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
+              <?php echo html::select("branches[$bugID]", $branchTagOption, $bug->branch, "class='form-control chosen' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
             </td>
             <?php endif;?>
             <td><?php echo html::select("modules[$bugID]", $modules[$bug->product][$bug->branch], $bug->module, "class='form-control chosen'");?></td>

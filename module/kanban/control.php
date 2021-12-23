@@ -1069,15 +1069,18 @@ class kanban extends control
     public function ajaxGetKanbanMenu($kanbanID, $moduleName, $methodName)
     {
         $kanbanIdList = $this->kanban->getCanViewObjects();
+        $spacePairs   = $this->kanban->getSpacePairs('all');
+
         $this->view->kanbanList = $this->dao->select('*')->from(TABLE_KANBAN)
             ->where('deleted')->eq('0')
             ->andWhere('id')->in($kanbanIdList)
+            ->andWhere('space')->in(array_keys($spacePairs))
             ->fetchGroup('space');
 
-        $this->view->kanbanID   = $kanbanID;
-        $this->view->spaceList  = $this->kanban->getSpacePairs('all');
-        $this->view->module     = $moduleName;
-        $this->view->method     = $methodName;
+        $this->view->kanbanID  = $kanbanID;
+        $this->view->spaceList = $spacePairs;
+        $this->view->module    = $moduleName;
+        $this->view->method    = $methodName;
         $this->display();
     }
 }

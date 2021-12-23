@@ -189,36 +189,47 @@ class testcase extends control
         /* Display of branch label. */
         $showBranch = $this->loadModel('branch')->showBranch($productID);
 
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
         $product = $this->product->getById($productID);
 
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
-        $this->view->title         = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
-        $this->view->position[]    = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-        $this->view->position[]    = $this->lang->testcase->common;
-        $this->view->projectID     = $projectID;
-        $this->view->productID     = $productID;
-        $this->view->product       = $product;
-        $this->view->productName   = $this->products[$productID];
-        $this->view->modules       = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
-        $this->view->moduleTree    = $moduleTree;
-        $this->view->moduleName    = $moduleID ? $tree->name : $this->lang->tree->all;
-        $this->view->moduleID      = $moduleID;
-        $this->view->projectType   = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
-        $this->view->summary       = $this->testcase->summary($cases);
-        $this->view->pager         = $pager;
-        $this->view->users         = $this->user->getPairs('noletter');
-        $this->view->orderBy       = $orderBy;
-        $this->view->browseType    = $browseType;
-        $this->view->param         = $param;
-        $this->view->cases         = $cases;
-        $this->view->branch        = $branch;
-        $this->view->branches      = $this->loadModel('branch')->getPairs($productID);
-        $this->view->suiteList     = $this->loadModel('testsuite')->getSuites($productID);
-        $this->view->suiteID       = $suiteID;
-        $this->view->setModule     = true;
-        $this->view->modulePairs   = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
-        $this->view->showBranch    = $showBranch;
+        $this->view->title           = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->common;
+        $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+        $this->view->position[]      = $this->lang->testcase->common;
+        $this->view->projectID       = $projectID;
+        $this->view->productID       = $productID;
+        $this->view->product         = $product;
+        $this->view->productName     = $this->products[$productID];
+        $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch);
+        $this->view->moduleTree      = $moduleTree;
+        $this->view->moduleName      = $moduleID ? $tree->name : $this->lang->tree->all;
+        $this->view->moduleID        = $moduleID;
+        $this->view->projectType     = !empty($projectID) ? $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($projectID)->fetch('model') : '';
+        $this->view->summary         = $this->testcase->summary($cases);
+        $this->view->pager           = $pager;
+        $this->view->users           = $this->user->getPairs('noletter');
+        $this->view->orderBy         = $orderBy;
+        $this->view->browseType      = $browseType;
+        $this->view->param           = $param;
+        $this->view->cases           = $cases;
+        $this->view->branch          = $branch;
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->suiteList       = $this->loadModel('testsuite')->getSuites($productID);
+        $this->view->suiteID         = $suiteID;
+        $this->view->setModule       = true;
+        $this->view->modulePairs     = $showModule ? $this->tree->getModulePairs($productID, 'case', $showModule) : array();
+        $this->view->showBranch      = $showBranch;
 
         $this->display();
     }
@@ -864,18 +875,19 @@ class testcase extends control
             $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
             {
-                $objectID        = $this->app->tab == 'project' ? $case->project : $executionID;
-                $productBranches = (isset($product->type) and $product->type != 'normal') ? $this->execution->getBranchByProduct($productID, $objectID, 'all') : array();
-                $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
-            }
-            else
-            {
-                $branches = (isset($product->type) and $product->type != 'normal') ? $this->loadModel('branch')->getPairs($productID) : array();
+                $objectID = $this->app->tab == 'project' ? $case->project : $executionID;
             }
 
+            /* Display status of branch. */
+            $branches = $this->loadModel('branch')->getList($productID, isset($objectID) ? $objectID : 0, 'all');
+            $branchTagOption = array();
+            foreach($branches as $branchInfo)
+            {
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
             $this->view->productID        = $productID;
             $this->view->product          = $product;
-            $this->view->branches         = $branches;
+            $this->view->branchTagOption  = $branchTagOption;
             $this->view->productName      = $this->products[$productID];
             $this->view->moduleOptionMenu = $moduleOptionMenu;
             $this->view->stories          = $this->story->getProductStoryPairs($productID, $case->branch);
@@ -959,28 +971,32 @@ class testcase extends control
                 if($product->type != 'normal') $branchProduct = true;
 
                 /* Set branches and modules. */
-                $branches = array();
+                $branches        = array();
+                $branchTagOption = array();
                 $modules  = array();
                 if($product->type != 'normal')
                 {
-                    $branches = $this->loadModel('branch')->getPairs($productID);
-
+                    $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+                    foreach($branches as $branchInfo)
+                    {
+                        $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                    }
                     if($this->app->tab == 'project')
                     {
-                        $branches = $this->loadModel('branch')->getPairsByProjectProduct($this->session->project, $productID);
+                        $branchTagOption = $this->loadModel('branch')->getPairsByProjectProduct($this->session->project, $productID);
                     }
-                    foreach($branches as $branchID => $branchName) $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
+                    foreach($branchTagOption as $branchID => $branchName) $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'case', 0, $branchID);
                 }
                 else
                 {
                     $modules[$productID][BRANCH_MAIN] = $this->tree->getOptionMenu($productID, 'case');
                 }
 
-                $this->view->branches   = $branches;
-                $this->view->modules    = $modules;
-                $this->view->position[] = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
-                $this->view->title      = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
-                $this->view->product    = $product;
+                $this->view->branchTagOption = $branchTagOption;
+                $this->view->modules         = $modules;
+                $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
+                $this->view->title           = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
+                $this->view->product         = $product;
             }
         }
         else

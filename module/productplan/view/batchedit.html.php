@@ -46,7 +46,7 @@
           <?php if($branchProduct):?>
           <td class='text-left'>
             <?php $disabled = $plan->parent == '-1' ? "disabled='disabled'" : '';?>
-            <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branches, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
+            <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
           </td>
           <?php endif;?>
           <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control'")?></td>

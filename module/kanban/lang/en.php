@@ -285,7 +285,7 @@ $lang->kanbancard->lblHour         = 'h';
 $lang->kanbancard->noAssigned      = 'No Assigned';
 $lang->kanbancard->deadlineAB      = 'DL';
 $lang->kanbancard->beginAB         = 'Begin';
-$lang->kanbancard->to              = 'to';
+$lang->kanbancard->to              = '~';
 
 $lang->kanbancard->confirmArchive    = 'Are you sure to archive this card? After archiving the card, it will be hidden from the column and you can view it in the Region - Archived.';
 $lang->kanbancard->confirmDelete     = 'Are you sure to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';

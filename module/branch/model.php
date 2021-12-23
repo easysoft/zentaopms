@@ -85,6 +85,8 @@ class branchModel extends model
         $mainBranch->desc        = sprintf($this->lang->branch->mainBranch, $this->lang->product->branchName[$product->type]);
         $mainBranch->order       = 0;
 
+        if($productID) $product = $this->loadModel('product')->getById($productID);
+        if(isset($product) and $product->type == 'normal') return $branchList;
         return array($mainBranch) + $branchList;
     }
 
@@ -94,10 +96,11 @@ class branchModel extends model
      * @param  int    $productID
      * @param  string $params
      * @param  int    $executionID
+     * @param  string $mergedBranches
      * @access public
      * @return array
      */
-    public function getPairs($productID, $params = '', $executionID = 0)
+    public function getPairs($productID, $params = '', $executionID = 0, $mergedBranches = '')
     {
         $executionBranches = array();
         if($executionID)
@@ -114,6 +117,7 @@ class branchModel extends model
             ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
             ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
             ->beginIF(strpos($params, 'active') !== false)->andWhere('status')->eq('active')->fi()
+            ->beginIF(!empty($mergedBranches))->andWhere('id')->notIN($mergedBranches)->fi()
             ->orderBy('`order`')
             ->fetchPairs('id', 'name');
         foreach($branches as $branchID => $branchName) $branches[$branchID] = htmlspecialchars_decode($branchName);
@@ -596,10 +600,10 @@ class branchModel extends model
     /**
      * Merge multiple branches into one branch.
      *
-     * @param  int    $productID
-     * @param  string $mergedBranches
+     * @param  int       $productID
+     * @param  string    $mergedBranches
      * @access public
-     * @return int
+     * @return int|bool
      */
     public function mergeBranch($productID, $mergedBranches)
     {
@@ -607,7 +611,6 @@ class branchModel extends model
 
         /* Get the target branch. */
         $targetBranch = $data->createBranch ? $this->create($productID, true) : $data->targetBranch;
-        if(!$targetBranch and $targetBranch != BRANCH_MAIN) return false;
         if($data->createBranch) $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
 
         /* Branch. */

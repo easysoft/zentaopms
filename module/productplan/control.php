@@ -31,10 +31,20 @@ class productplan extends control
         $this->product->setMenu($productID, $branch);
         $this->session->set('currentProductType', $product->type);
 
-        $this->view->product  = $product;
-        $this->view->branch   = $branch;
-        $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
+        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
+        $this->view->product         = $product;
+        $this->view->branch          = $branch;
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->position[]      = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
     }
 
     /**
