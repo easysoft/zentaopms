@@ -11,7 +11,7 @@
 
 .scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
 
-.region {border: 1px solid #dcdcdc; margin-bottom: 20px;}
+.region {border: 1px solid #dcdcdc; margin-bottom: 20px; background-color: #fff;}
 .region .region-header {padding: 10px;}
 .region .region-header span {font-size: 14px; color: #999EAB}
 .region .region-header label {color: #999; background: transparent; border: 1px solid #ddd; margin-left: 10px; margin-right: 10px}
@@ -48,8 +48,6 @@
 .region .kanban-lane.sort > .kanban-lane-name {cursor: move;}
 
 .region .kanban-lane-col {max-height: unset !important; overflow: auto!important; position: relative;}
-.region .kanban-lane-col.drop-to {outline: 3px solid rgba(255, 190, 57, 0.5)!important; background-color: rgba(255, 190, 57, .1);}
-.region .kanban-lane-col.can-drop-here {outline: none; background-color: rgba(61, 198, 253, .075);}
 .region .kanban-lane-col.has-scrollbar > .kanban-lane-actions {position: absolute; background-color: inherit; bottom: 0; left: 0; right: 0;}
 
 .region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
