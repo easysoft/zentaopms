@@ -181,6 +181,9 @@ class bug extends control
         /* Process bug for check story changed. */
         $bugs = $this->loadModel('story')->checkNeedConfirm($bugs);
 
+        /* Process the openedBuild and resolvedBuild fields. */
+        $bugs = $this->bug->processBuildForBugs($bugs);
+
         /* Get story and task id list. */
         $storyIdList = $taskIdList = array();
         foreach($bugs as $bug)

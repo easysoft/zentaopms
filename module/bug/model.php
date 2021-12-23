@@ -1376,6 +1376,35 @@ class bugModel extends model
     }
 
     /**
+     * Process the openedBuild and resolvedBuild fields for bugs.
+     *
+     * @param  array  $bugs
+     * @access public
+     * @return array
+     */
+    public function processBuildForBugs($bugs)
+    {
+        $productIdList = array();
+        foreach($bugs as $bug) $productIdList[$bug->id] = $bug->product;
+        $builds = $this->loadModel('build')->getBuildPairs(array_unique($productIdList), 'all', $params = '');
+
+        /* Process the openedBuild and resolvedBuild fields. */
+        foreach($bugs as $key => $bug)
+        {
+            $openBuildIdList = explode(',', $bug->openedBuild);
+            $openedBuild = '';
+            foreach($openBuildIdList as $buildID)
+            {
+                $openedBuild .= isset($builds[$buildID]) ? $builds[$buildID] : $buildID;
+                $openedBuild .= ',';
+            }
+            $bug->openedBuild   = rtrim($openedBuild, ',');
+            $bug->resolvedBuild = isset($builds[$bug->resolvedBuild]) ? $builds[$bug->resolvedBuild] : $bug->resolvedBuild;
+        }
+        return $bugs;
+    }
+
+    /**
      * Extract accounts from some bugs.
      *
      * @param  int    $bugs
