@@ -21,7 +21,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->branch->name;?></th>
-            <td><?php echo html::input('branch', '', "class='form-control' placeholder='{$lang->gitlab->branch->name}'");?></td>
+            <td><?php echo html::input('branch', '', "class='form-control'");?></td>
             <td></td>
           </tr>
           <tr>

@@ -132,7 +132,7 @@ class deptModel extends model
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootDeptID = 0, $userFunc, $param = 0)
+    public function getTreeMenu($rootDeptID = 0, $userFunc = '', $param = 0)
     {
         $deptMenu = array();
         $stmt = $this->dbh->query($this->buildMenuQuery($rootDeptID));
@@ -376,7 +376,7 @@ class deptModel extends model
      * @access public
      * @return array
      */
-    public function getUsers($browseType = 'inside', $deptID, $pager = null, $orderBy = 'id')
+    public function getUsers($browseType = 'inside', $deptID = 0, $pager = null, $orderBy = 'id')
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)

@@ -118,7 +118,8 @@ $routes['/doclibs/:id']  = 'docs';
 $routes['/docs']         = 'docs';
 $routes['/docs/:id']     = 'doc';
 
-$routes['/repos'] = 'repos';
+$routes['/repos']       = 'repos';
+$routes['/repos/rules'] = 'reporules';
 
 $routes['/reports'] = 'reports';
 

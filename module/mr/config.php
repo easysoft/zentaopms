@@ -12,6 +12,9 @@ $config->mr->edit->requiredFields = 'gitlabID,sourceProject,sourceBranch,targetP
 $config->mr->editor = new stdclass();
 $config->mr->editor->diff = array('id' => 'commentText', 'tools' => 'simpleTools');
 
+$config->mr->apicreate = new stdclass();
+$config->mr->apicreate->requiredFields = 'repoID,sourceBranch,targetBranch,mergeStatus,jobID';
+
 $config->mr->maps = new stdclass;
 $config->mr->maps->sync = array();
 $config->mr->maps->sync['title']         = 'title|field|';

@@ -1122,20 +1122,21 @@ $lang->resource->automation->browse = 'browse';
 
 $lang->automation->methodOrder[0] = 'browse';
 
-$lang->resource->repo                 = new stdclass();
-$lang->resource->repo->browse         = 'browseAction';
-$lang->resource->repo->view           = 'view';
-$lang->resource->repo->log            = 'log';
-$lang->resource->repo->revision       = 'revisionAction';
-$lang->resource->repo->blame          = 'blameAction';
-$lang->resource->repo->create         = 'createAction';
-$lang->resource->repo->edit           = 'editAction';
-$lang->resource->repo->delete         = 'delete';
-$lang->resource->repo->showSyncCommit = 'showSyncCommit';
-$lang->resource->repo->diff           = 'diffAction';
-$lang->resource->repo->download       = 'downloadAction';
-$lang->resource->repo->maintain       = 'maintain';
-$lang->resource->repo->setRules       = 'setRules';
+$lang->resource->repo                  = new stdclass();
+$lang->resource->repo->browse          = 'browseAction';
+$lang->resource->repo->view            = 'view';
+$lang->resource->repo->log             = 'log';
+$lang->resource->repo->revision        = 'revisionAction';
+$lang->resource->repo->blame           = 'blameAction';
+$lang->resource->repo->create          = 'createAction';
+$lang->resource->repo->edit            = 'editAction';
+$lang->resource->repo->delete          = 'delete';
+$lang->resource->repo->showSyncCommit  = 'showSyncCommit';
+$lang->resource->repo->diff            = 'diffAction';
+$lang->resource->repo->download        = 'downloadAction';
+$lang->resource->repo->maintain        = 'maintain';
+$lang->resource->repo->setRules        = 'setRules';
+$lang->resource->repo->apiGetRepoByUrl = 'apiGetRepoByUrl';
 
 $lang->repo->methodOrder[5]  = 'create';
 $lang->repo->methodOrder[10] = 'edit';
@@ -1150,6 +1151,7 @@ $lang->repo->methodOrder[50] = 'revision';
 $lang->repo->methodOrder[55] = 'blame';
 $lang->repo->methodOrder[60] = 'download';
 $lang->repo->methodOrder[65] = 'setRules';
+$lang->repo->methodOrder[70] = 'apiGetRepoByUrl';
 
 $lang->resource->ci = new stdclass();
 $lang->resource->ci->commitResult       = 'commitResult';
@@ -1333,6 +1335,9 @@ $lang->resource->gitlab->browseBranchPriv     = 'browseBranchPriv';
 $lang->resource->gitlab->createBranchPriv     = 'createBranchPriv';
 $lang->resource->gitlab->editBranchPriv       = 'editBranchPriv';
 $lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
+$lang->resource->gitlab->browseTag            = 'browseTag';
+$lang->resource->gitlab->createTag            = 'createTag';
+$lang->resource->gitlab->deleteTag            = 'deleteTag';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';
@@ -1359,10 +1364,12 @@ $lang->gitlab->methodOrder[115] = 'browseBranch';
 $lang->gitlab->methodOrder[120] = 'webhook';
 $lang->gitlab->methodOrder[125] = 'createWebhook';
 $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
+$lang->gitlab->methodOrder[135] = 'browseTag';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
 $lang->resource->mr->create    = 'create';
+$lang->resource->mr->apiCreate = 'apiCreate';
 $lang->resource->mr->browse    = 'browse';
 $lang->resource->mr->edit      = 'edit';
 $lang->resource->mr->delete    = 'delete';

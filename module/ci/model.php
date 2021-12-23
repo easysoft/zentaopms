@@ -199,6 +199,50 @@ class ciModel extends model
     {
         $this->dao->update(TABLE_COMPILE)->set('status')->eq($status)->where('id')->eq($build->id)->exec();
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq(helper::now())->set('lastStatus')->eq($status)->where('id')->eq($build->job)->exec();
+
+        if($status == 'building') return;
+        $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($build->id)->fetch();
+        if(isset($relateMR->synced) and $relateMR->synced == '0' and $status == 'success')
+        {
+            $newMR              = new stdclass();
+            $newMR->mergeStatus = 'can_be_merged';
+
+            /* Create a gitlab mr. */
+            $MRObject                       = new stdclass();
+            $MRObject->target_project_id    = $relateMR->targetProject;
+            $MRObject->source_branch        = $relateMR->sourceBranch;
+            $MRObject->target_branch        = $relateMR->targetBranch;
+            $MRObject->title                = $relateMR->title;
+            $MRObject->description          = $relateMR->description;
+            $MRObject->remove_source_branch = $relateMR->removeSourceBranch == '1' ? true : false;
+            if($relateMR->assignee)
+            {
+                $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($relateMR->gitlabID, $relateMR->assignee);
+                if($gitlabAssignee) $MRObject->assignee_ids = $gitlabAssignee;
+            }
+
+            $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->gitlabID, $relateMR->sourceProject, $MRObject);
+
+            if(!empty($rawMR->iid))
+            {
+                $newMR->mriid  = $rawMR->iid;
+                $newMR->status = $rawMR->state;
+                $newMR->synced = '1';
+            }
+
+            $this->dao->update(TABLE_MR)->data($newMR)
+                    ->where('id')->eq($relateMR->id)
+                    ->exec();
+        }
+        else
+        {
+            $newMR              = new stdclass();
+            $newMR->mergeStatus = 'cannot_merge_by_fail';
+
+            $this->dao->update(TABLE_MR)->data($newMR)
+                    ->where('id')->eq($relateMR->id)
+                    ->exec();
+        }
     }
 
     /**
