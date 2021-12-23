@@ -33,3 +33,5 @@
 .kanbans .kanban-members > span:after {right: -4px;}
 .kanbans .kanban-members-total {display: inline-block; margin-left: 6px; position: relative; top: 3px}
 .kanbans .kanbanAcl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
+
+a.disabled {pointer-events: none;}
