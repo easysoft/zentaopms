@@ -17,9 +17,6 @@
     <div class="page-title">
       <span class="label label-id"><?php echo $card->id?></span>
       <span class="text" title='<?php echo $card->name;?>'><?php echo $card->name;?></span>
-      <?php if($card->deleted):?>
-      <span class='label label-danger'><?php echo $lang->kanban->deleted;?></span>
-      <?php endif;?>
     </div>
   </div>
 </div>

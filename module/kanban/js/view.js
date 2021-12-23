@@ -78,6 +78,7 @@ function exitFullScreen()
     $('#kanbanContainer').removeClass('fullscreen')
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
+    $('.action').show();
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
     $.cookie('isFullScreen', 0);
