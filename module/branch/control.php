@@ -27,8 +27,9 @@ class branch extends control
     {
         $this->loadModel('product')->setMenu($productID);
         $this->session->set('branchManage', $this->app->getURI(true), 'product');
+        $this->branch->changeBranchLanguage($productID);
 
-        $branchList = $this->branch->getList($productID, $browseType, $orderBy);
+        $branchList = $this->branch->getList($productID, 0, $browseType, $orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -37,13 +38,14 @@ class branch extends control
         $pager      = new pager($recTotal, $recPerPage, $pageID);
         $branchList = array_chunk($branchList, $pager->recPerPage);
 
-        $this->view->title      = $this->lang->branch->manage;
-        $this->view->branchList = empty($branchList) ? $branchList : $branchList[$pageID - 1];
-        $this->view->productID  = $productID;
-        $this->view->browseType = $browseType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->pager      = $pager;
-        $this->view->product    = $this->product->getById($productID);
+        $this->view->title       = $this->lang->branch->manage;
+        $this->view->branchList  = empty($branchList) ? $branchList : $branchList[$pageID - 1];
+        $this->view->productID   = $productID;
+        $this->view->browseType  = $browseType;
+        $this->view->orderBy     = $orderBy;
+        $this->view->pager       = $pager;
+        $this->view->product     = $this->product->getById($productID);
+        $this->view->branchPairs = $this->branch->getPairs($productID, 'active');
 
         $this->display();
     }
@@ -117,7 +119,7 @@ class branch extends control
             die(js::locate($this->session->branchManage, 'parent'));
         }
 
-        $branchList   = $this->branch->getList($productID, 'all');
+        $branchList   = $this->branch->getList($productID, 0, 'all');
         $branchIDList = $this->post->branchIDList;
         if(empty($branchIDList)) die(js::locate($this->session->branchManage, 'parent'));
 
@@ -256,22 +258,19 @@ class branch extends control
      */
     public function ajaxGetBranches($productID, $oldBranch = 0, $param = '', $projectID = 0)
     {
+        $param   = $param ? $param : 'all';
         $product = $this->loadModel('product')->getById($productID);
         if(empty($product) or $product->type == 'normal') die();
 
-        $branches = $this->branch->getPairs($productID, $param);
-
-        /* Remove unlinked branches of the project. */
-        if($projectID)
+        $branches = $this->loadModel('branch')->getList($productID, $projectID, $param);
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
         {
-            $projectProducts = $this->loadModel('project')->getBranchesByProject($projectID);
-            foreach($branches as $branchID => $branchName)
-            {
-                if(!isset($projectProducts[$productID][$branchID])) unset($branches[$branchID]);
-            }
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
-
-        die(html::select('branch', $branches, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
+        die(html::select('branch', strpos($param, 'active') !== false ? $branchOption : $branchTagOption, $oldBranch, "class='form-control' onchange='loadBranch(this)'"));
     }
 
     /**
@@ -297,5 +296,33 @@ class branch extends control
         $this->loadModel('action')->create('branch', $branchID, 'SetDefaultBranch', '', $productID);
 
         die(js::reload('parent'));
+    }
+
+    /**
+     * Merge multiple branches into one branch.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function mergeBranch($productID)
+    {
+        /* Filter out the main branch and target branch. */
+        $mergedBranches = array_filter($_POST['mergedBranchIDList'], function($branch)
+        {
+            $mergeToBranch  = $_POST['createBranch'] ? '' : $_POST['targetBranch'];
+            return $branch != 0 and $branch != $mergeToBranch;
+        });
+
+        $mergedBranchIDList = implode(',', $mergedBranches);
+        $mergedBranches     = $this->dao->select('id,name')->from(TABLE_BRANCH)->where('id')->in($mergedBranchIDList)->fetchPairs();
+
+        $targetBranch = $this->branch->mergeBranch($productID, $mergedBranchIDList);
+
+        $this->loadModel('action')->create('branch', $targetBranch, 'MergedBranch', '', implode(',', $mergedBranches));
+
+        if(dao::isError()) return $this->send(array('message' => dao::getError(), 'result' => 'fail'));
+
+        return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success'));
     }
 }

@@ -348,11 +348,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                 {
-                  $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
+                  $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');
                 }
             }?>
             <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $story, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table');?>
             <?php endif;?>
           </tr>
           <?php if(!empty($story->children)):?>
@@ -368,11 +368,11 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             {
                 if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                 {
-                  $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
+                  $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);
                 }
             }?>
             <?php else:?>
-            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branches, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
+            <?php foreach($setting as $key => $value) $this->story->printCell($value, $child, $users, $branchOption, $storyStages, $modulePairs, $storyTasks, $storyBugs, $storyCases, $useDatatable ? 'datatable' : 'table', $storyType);?>
             <?php endif;?>
           </tr>
           <?php $i ++;?>
@@ -447,12 +447,12 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 
               if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID)
               {
-                  $withSearch = count($branches) > 8;
+                  $withSearch = count($branchTagOption) > 8;
                   echo "<li class='dropdown-submenu'>";
                   echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
                   echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                   echo "<ul class='dropdown-list'>";
-                  foreach($branches as $id => $branchName)
+                  foreach($branchTagOption as $id => $branchName)
                   {
                       $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id");
                       echo "<li class='option' data-key='$id'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";

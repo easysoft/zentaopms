@@ -26,18 +26,18 @@ form {display: block; margin-top: 0em; margin-block-end: 1em;}
 <?php js::set('dateDetails', $dateDetails);?>
 <?php js::set('module', $app->rawModule);?>
 <?php js::set('method', $app->rawMethod);?>
-
 <div id='mainContent' class='main-content load-indicator' data-loading='<?php echo $lang->programplan->exporting;?>'>
-<form class="main-form form-ajax">
-  <div class="example">
-  <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
-  <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
-  <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
-  </div>
-</form>
+  <form class="main-form form-ajax">
+    <div class="example">
+    <?php echo html::commonButton($lang->programplan->full, 'id="fullScreenBtn"', 'btn btn-primary btn-sm')?>
+    <?php if($app->rawModule == 'review' and $app->rawMethod == 'assess') unset($lang->programplan->stageCustom->date); ?>
+    <?php echo html::checkbox('stageCustom', $lang->programplan->stageCustom, $selectCustom);?>
+    </div>
+  </form>
   <div id='ganttContainer'>
     <div class='gantt' id='ganttView'></div>
   </div>
+  <a id='ganttDownload' download='gantt-export-<?php echo $projectID;?>.png'></a>
 </div>
 <script>
 var scriptLoadedMap   = {};
@@ -164,7 +164,7 @@ function drawGanttToCanvas(exportType, successCallback, errorCallback)
 function exportGantt(exportType)
 {
     var $mainContent = $('#mainContent');
-    $mainContent.addClass('loading').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - $('#mainMenu').outerHeight() - 38)));
+    $mainContent.addClass('loading').css('height', Math.max(200, Math.floor($(window).height() - $('#footer').outerHeight() - $('#header').outerHeight() - 38)));
     $('#ganttExportDate').text(new Date().format('yyyy-MM-dd hh:mm:ss'));
     var afterFinish = function(url)
     {

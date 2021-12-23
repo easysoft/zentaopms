@@ -169,29 +169,23 @@ class build extends control
             $productGroups[$build->product] = $product;
         }
 
-        $branchGroups = $this->loadModel('project')->getBranchesByProject($build->execution);
-        $branchPairs  = $this->loadModel('branch')->getPairs($build->product);
-        $products     = array();
-        $branches     = array();
-
-        /* Set branches and products. */
-        if($productGroups[$build->product]->type != 'normal' and isset($branchGroups[$build->product]))
+        /* Display status of branch. */
+        $branches = $this->loadModel('branch')->getList($build->product, $build->execution, 'all');
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
         {
-            foreach($branchGroups[$build->product] as $branchID => $branch)
-            {
-                $branches[$branchID] = $branchPairs[$branchID];
-            }
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
         foreach($productGroups as $product) $products[$product->id] = $product->name;
 
-        $this->view->title      = $execution->name . $this->lang->colon . $this->lang->build->edit;
-        $this->view->position[] = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $execution->name);
-        $this->view->position[] = $this->lang->build->edit;
-        $this->view->product    = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
-        $this->view->branches   = $branches;
-        $this->view->executions = $executions;
-        $this->view->orderBy    = $orderBy;
+        $this->view->title           = $execution->name . $this->lang->colon . $this->lang->build->edit;
+        $this->view->position[]      = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $execution->name);
+        $this->view->position[]      = $this->lang->build->edit;
+        $this->view->product         = isset($productGroups[$build->product]) ? $productGroups[$build->product] : '';
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->executions      = $executions;
+        $this->view->orderBy         = $orderBy;
 
         $this->view->productGroups = $productGroups;
         $this->view->products      = $products;

@@ -171,9 +171,9 @@ class storyModel extends model
     {
         return $this->dao->select('id,title')->from(TABLE_STORY)
            ->where('deleted')->eq(0)
-           ->andWhere('status')->notIN('draft,closed')
            ->andWhere('product')->eq($productID)
            ->andWhere('type')->eq('requirement')
+           ->andWhere('status')->notIN('draft,closed')
            ->fetchPairs();
     }
 
@@ -1186,7 +1186,7 @@ class storyModel extends model
                 $story->version        = $story->title == $oldStory->title ? $oldStory->version : $oldStory->version + 1;
                 if($story->stage != $oldStory->stage) $story->stagedBy = (strpos('tested|verified|released|closed', $story->stage) !== false) ? $this->app->user->account : '';
 
-                if($story->title != $oldStory->title and $story->status != draft)    $story->status     = 'changed';
+                if($story->title != $oldStory->title and $story->status != 'draft')    $story->status     = 'changed';
                 if($story->closedBy     != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
                 if($story->closedReason != false  and $oldStory->closedDate == '')   $story->closedDate = $now;
                 if($story->closedBy     != false  or  $story->closedReason != false) $story->status     = 'closed';
@@ -1288,7 +1288,10 @@ class storyModel extends model
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
-        $this->dao->update(TABLE_STORY)->data($story, 'closedReason')
+        $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+        $skipFields      = $isSuperReviewer !== false ? '' : 'closedReason';
+
+        $this->dao->update(TABLE_STORY)->data($story, $skipFields)
             ->autoCheck()
             ->batchCheck($this->config->story->review->requiredFields, 'notempty')
             ->checkIF($this->post->result == 'reject', 'closedReason', 'notempty')
@@ -1312,7 +1315,7 @@ class storyModel extends model
         }
         if($this->post->result != 'reject') $this->setStage($storyID);
 
-        if(isset($story->closedReason)) unset($story->closedReason);
+        if(isset($story->closedReason) and $isSuperReviewer === false) unset($story->closedReason);
         return common::createChanges($oldStory, $story);
     }
 
@@ -1320,10 +1323,12 @@ class storyModel extends model
      * Batch review stories.
      *
      * @param  array   $storyIdList
+     * @param  string  $result
+     * @param  string  $reason
      * @access public
      * @return array
      */
-    function batchReview($storyIdList, $result, $reason)
+    public function batchReview($storyIdList, $result, $reason)
     {
         $now     = helper::now();
         $actions = array();
@@ -1335,8 +1340,10 @@ class storyModel extends model
         foreach($storyIdList as $storyID)
         {
             $oldStory = $oldStories[$storyID];
+            $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+
             if($oldStory->status != 'draft' and $oldStory->status != 'changed') continue;
-            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID]))) continue;
+            if(!in_array($this->app->user->account, array_keys($reviewerList[$storyID])) and $isSuperReviewer === false) continue;
             if(isset($hasResult[$storyID]) and $hasResult[$storyID]->version == $oldStories[$storyID]->version) continue;
 
             $story = new stdClass();
@@ -1350,6 +1357,10 @@ class storyModel extends model
 
             /* Update the story status by review rules. */
             $reviewedBy = explode(',', trim($story->reviewedBy, ','));
+            if($isSuperReviewer !== false)
+            {
+                $story = $this->superReview($storyID, $oldStory, $story, $result, $reason);
+            }
             if(!array_diff(array_keys($reviewerList[$storyID]), $reviewedBy))
             {
                 $reviewerPairs = array();
@@ -2029,11 +2040,11 @@ class storyModel extends model
         /* Search related tasks. */
         $tasks = $this->dao->select('type,execution,status')->from(TABLE_TASK)
             ->where('execution')->in(array_keys($executions))
-            ->andWhere('story')->eq($storyID)
             ->andWhere('type')->in('devel,test')
+            ->andWhere('story')->eq($storyID)
+            ->andWhere('deleted')->eq(0)
             ->andWhere('status')->ne('cancel')
             ->andWhere('closedReason')->ne('cancel')
-            ->andWhere('deleted')->eq(0)
             ->fetchGroup('type');
 
         /* No tasks, then the stage is projected. */
@@ -2223,8 +2234,8 @@ class storyModel extends model
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('deleted')->eq(0)
             ->andWhere('type')->eq($type)
+            ->andWhere('deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2256,8 +2267,8 @@ class storyModel extends model
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$hasParent)->andWhere('t1.parent')->ge(0)->fi()
             ->beginIF($status and $status != 'all')->andWhere('t1.status')->in($status)->fi()
-            ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
+            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($order)
             ->fetchAll();
         if(!$stories) return array();
@@ -2310,6 +2321,24 @@ class storyModel extends model
     public function getByReviewedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
     {
         return $this->getByField($productID, $branch, $modules, 'reviewedBy', $account, $type, $orderBy, $pager, 'include');
+    }
+
+    /**
+     * Get stories which need to review.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @param  string $modules
+     * @param  string $account
+     * @param  string $type    requirement|story
+     * @param  string $orderBy
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getByReviewBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
+    {
+        return $this->getByField($productID, $branch, $modules, 'reviewBy', $account, $type, $orderBy, $pager);
     }
 
     /**
@@ -2378,15 +2407,23 @@ class storyModel extends model
      */
     public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $type = 'story', $orderBy, $pager, $operator = 'equal')
     {
-        if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName)) return array();
-        $stories = $this->dao->select('*')->from(TABLE_STORY)
-            ->where('product')->in($productID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq($type)
-            ->beginIF($branch != 'all')->andWhere("branch")->eq($branch)->fi()
-            ->beginIF($modules)->andWhere("module")->in($modules)->fi()
-            ->beginIF($operator == 'equal')->andWhere($fieldName)->eq($fieldValue)->fi()
-            ->beginIF($operator == 'include')->andWhere($fieldName)->like("%$fieldValue%")->fi()
+        if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy') return array();
+
+        $sql = $this->dao->select('t1.*')->from(TABLE_STORY)->alias('t1');
+        if($fieldName == 'reviewBy') $sql = $sql->leftJoin(TABLE_STORYREVIEW)->alias('t2')->on('t1.id = t2.story and t1.version = t2.version');
+
+        $stories = $sql->where('t1.product')->in($productID)
+            ->andWhere('t1.deleted')->eq(0)
+            ->andWhere('t1.type')->eq($type)
+            ->beginIF($branch != 'all')->andWhere("t1.branch")->eq($branch)->fi()
+            ->beginIF($modules)->andWhere("t1.module")->in($modules)->fi()
+            ->beginIF($operator == 'equal' and $fieldName != 'reviewBy')->andWhere('t1.' . $fieldName)->eq($fieldValue)->fi()
+            ->beginIF($operator == 'include' and $fieldName != 'reviewBy')->andWhere('t1.' . $fieldName)->like("%$fieldValue%")->fi()
+            ->beginIF($fieldName == 'reviewBy')
+            ->andWhere('t2.reviewer')->eq($this->app->user->account)
+            ->andWhere('t2.result')->eq('')
+            ->andWhere('t1.status')->in('draft,changed')
+            ->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2790,9 +2827,9 @@ class storyModel extends model
             ->andWhere('parent')->le(0)
             ->andWhere('type')->eq('story')
             ->andWhere('stage')->eq('wait')
-            ->andWhere('plan')->in('0,')
             ->andWhere('status')->notin('closed,draft')
             ->andWhere('product')->eq($productID)
+            ->andWhere('plan')->in('0,')
             ->beginIF($append)->orWhere('id')->in($append)->fi()
             ->fetchPairs();
         return array(0 => '') + $stories ;
@@ -2809,7 +2846,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story')
+    public function getUserStories($account, $type = 'assignedTo', $orderBy = 'id_desc', $pager = null, $storyType = 'story', $includeLibStories = true)
     {
         $sql = $this->dao->select('t1.*, t2.name as productTitle')->from(TABLE_STORY)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id');
@@ -2825,6 +2862,7 @@ class storyModel extends model
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
             ->fi()
+            ->beginIF($includeLibStories == false and isset($this->config->maxVersion))->andWhere('t1.lib')->eq('0')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -3460,13 +3498,15 @@ class storyModel extends model
 
         if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change') return false;
 
-        global $app;
+        global $app, $config;
 
         $story->reviewer  = isset($story->reviewer)  ? $story->reviewer  : array();
         $story->notReview = isset($story->notReview) ? $story->notReview : array();
 
-        if($action == 'change')     return (count($story->reviewer) == 0 || count($story->notReview) == 0) and $story->status != 'closed';
-        if($action == 'review')     return in_array($app->user->account, $story->notReview) and ($story->status == 'draft' or $story->status == 'changed');
+        $isSuperReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
+
+        if($action == 'change')     return ($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status != 'closed';
+        if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and ($story->status == 'draft' or $story->status == 'changed'));
         if($action == 'recall')     return empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer);
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
@@ -3507,10 +3547,10 @@ class storyModel extends model
         if($type == 'requirement')
         {
             $relations = $this->dao->select('DISTINCT AID, BID')->from(TABLE_RELATION)
-              ->where('AID')->in(array_keys($stories))
-              ->andWhere('AType')->eq('requirement')
+              ->where('AType')->eq('requirement')
               ->andWhere('BType')->eq('story')
               ->andWhere('relation')->eq('subdivideinto')
+              ->andWhere('AID')->in(array_keys($stories))
               ->fetchAll();
 
             $group = array();
@@ -4566,11 +4606,20 @@ class storyModel extends model
      */
     public function recordReviewAction($story, $result = '', $reason = '')
     {
+        $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+
+        $comment = isset($_POST['comment']) ? $this->post->comment : '';
+
+        if($isSuperReviewer !== false and $this->app->rawMethod != 'edit')
+        {
+            $actionID = $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . '|superReviewer');
+            return $actionID;
+        }
+
         $reasonParam = $result == 'reject' ? ',' . $reason : '';
         $reviewers   = $this->getReviewerPairs($story->id, $story->version);
         $reviewedBy  = explode(',', trim($story->reviewedBy, ','));
 
-        $comment  = isset($_POST['comment']) ? $this->post->comment : '';
         $actionID = !empty($result) ? $this->loadModel('action')->create('story', $story->id, 'Reviewed', $comment, ucfirst($result) . $reasonParam) : '';
 
         if($result != 'revert')
@@ -4594,6 +4643,9 @@ class storyModel extends model
      */
     public function updateStoryByReview($storyID, $oldStory, $story)
     {
+        $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
+        if($isSuperReviewer !== false) return $this->superReview($storyID, $oldStory, $story);
+
         $now          = helper::now();
         $reviewerList = $this->getReviewerPairs($storyID, $oldStory->version);
         $reviewedBy   = explode(',', trim($story->reviewedBy, ','));
@@ -4611,6 +4663,48 @@ class storyModel extends model
                 if($this->post->closedReason == 'done') $story->stage = 'released';
             }
         }
+
+        return $story;
+    }
+
+    /**
+     * To review for super reviewer.
+     *
+     * @param  int     $storyID
+     * @param  object  $oldStory
+     * @param  object  $story
+     * @param  string  $result
+     * @param  string  $reason
+     * @access public
+     * @return object
+     */
+    public function superReview($storyID, $oldStory, $story, $result = '', $reason = '')
+    {
+        $now    = helper::now();
+        $status = '';
+        $result = isset($_POST['result']) ? $this->post->result : $result;
+        if(strpos('revert,pass', $result) !== false) $status = 'active';
+        if($result == 'reject')  $status = 'closed';
+        if($result == 'clarify' or empty($status)) $status = $oldStory->status;
+
+        $story->status = $status;
+
+        if($story->status == 'closed')
+        {
+            $story->closedBy     = $this->app->user->account;
+            $story->closedDate   = $now;
+            $story->assignedTo   = 'closed';
+            $story->assignedDate = $now;
+            $story->stage        = 'closed';
+            $story->closedReason = isset($_POST['closedReason']) ? $_POST['closedReason'] : $reason;
+            if($_POST['closedReason'] == 'done') $story->stage = 'released';
+        }
+
+        $this->dao->delete()->from(TABLE_STORYREVIEW)
+            ->where('story')->eq($storyID)
+            ->andWhere('version')->eq($oldStory->version)
+            ->andWhere('result')->eq('')
+            ->exec();
 
         return $story;
     }

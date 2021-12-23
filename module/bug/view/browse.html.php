@@ -302,11 +302,11 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
               {
                   if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
                   {
-                    $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');
+                    $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');
                   }
               }?>
             <?php else:?>
-            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branches, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
+            <?php foreach($setting as $value) $this->bug->printCell($value, $bug, $users, $builds, $branchOption, $modulePairs, $executions, $plans, $stories, $tasks, $useDatatable ? 'datatable' : 'table');?>
             <?php endif;?>
           </tr>
           <?php endforeach;?>
@@ -385,7 +385,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php if($canBatchChangeBranch and $this->session->currentProductType != 'normal'):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->product->branchName[$this->session->currentProductType];?> <span class="caret"></span></button>
-            <?php $withSearch = count($branches) > 6;?>
+            <?php $withSearch = count($branchTagOption) > 6;?>
             <?php if($withSearch):?>
             <div class="dropdown-menu search-list search-box-sink" data-ride="searchList">
               <div class="input-control search-box has-icon-left has-icon-right search-example">
@@ -393,13 +393,13 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
                 <label for="userSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
                 <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
               </div>
-            <?php $branchsPinYin = common::convert2Pinyin($branches);?>
+            <?php $branchsPinYin = common::convert2Pinyin($branchTagOption);?>
             <?php else:?>
             <div class="dropdown-menu search-list">
             <?php endif;?>
               <div class="list-group">
                 <?php
-                foreach($branches as $branchID => $branchName)
+                foreach($branchTagOption as $branchID => $branchName)
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($branchsPinYin, $branchName, '') . '"') : '';
                     $actionLink = $this->createLink('bug', 'batchChangeBranch', "branchID=$branchID");

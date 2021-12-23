@@ -1,0 +1,7 @@
+.c-nameTitle {width: 66px;}
+.c-WIPTitle {width: 80px; padding-left: 15px !important; padding-right: 0px !important;}
+.c-color {width: 320px;}
+.c-WIPCount {width: 240px;}
+td.required:after {right: -1px;}
+.c-action {width: 80px;}
+.c-action > a {padding-top: 10px;}

@@ -501,10 +501,11 @@ class productplanModel extends model
         foreach($data->id as $planID)
         {
             $plan = new stdclass();
-            $plan->title = $data->title[$planID];
-            $plan->desc  = $purifier->purify($data->desc[$planID]);
-            $plan->begin = $data->begin[$planID];
-            $plan->end   = $data->end[$planID];
+            $plan->branch = $data->branch[$planID];
+            $plan->title  = $data->title[$planID];
+            $plan->desc   = $purifier->purify($data->desc[$planID]);
+            $plan->begin  = $data->begin[$planID];
+            $plan->end    = $data->end[$planID];
 
             if(empty($plan->title))die(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
             if(empty($plan->begin))die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));

@@ -51,7 +51,7 @@
       <li value='<?php echo $i ++;?>'>
         <?php
         $action->actor = zget($users, $action->actor);
-        if($action->action == 'assigned') $action->extra = zget($users, $action->extra);
+        if($action->action == 'assigned' or $action->action == 'toaudit') $action->extra = zget($users, $action->extra);
         if(strpos($action->actor, ':') !== false) $action->actor = substr($action->actor, strpos($action->actor, ':') + 1);
         ?>
         <?php $this->action->printAction($action);?>

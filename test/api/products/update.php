@@ -8,6 +8,8 @@ title=测试修改产品信息;
 cid=1
 pid=1
 
+调用成功，返回200 >> 200
+
 */
 global $token;
 $header = array('Token' => $token->token);

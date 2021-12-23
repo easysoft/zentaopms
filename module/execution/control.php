@@ -42,7 +42,7 @@ class execution extends control
 
         if(defined('IN_UPGRADE') and IN_UPGRADE) return false;
         $this->executions = $this->execution->getPairs(0, 'all', 'nocode');
-        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers');
+        $skipCreateStep   = array('computeburn', 'ajaxgetdropmenu', 'executionkanban', 'ajaxgetteammembers', 'all');
         if(!in_array($this->methodName, $skipCreateStep) and $this->app->tab == 'execution')
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
@@ -1987,7 +1987,7 @@ class execution extends control
         $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
         if(empty($kanbanGroup))
         {
-            $this->kanban->createLanes($executionID, $browseType, $groupBy);
+            $this->kanban->createExecutionLane($executionID, $browseType, $groupBy);
             $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
         }
 

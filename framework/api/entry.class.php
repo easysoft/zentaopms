@@ -275,6 +275,7 @@ class baseEntry
             global $app;
             $app->setModuleName($moduleName);
             $app->setMethodName($methodName);
+            $app->viewType = 'json';
 
             /* Check user permission. */
             $this->checkPriv();

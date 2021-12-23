@@ -23,6 +23,7 @@ $lang->api->createRelease    = 'Publish';
 $lang->api->createLib        = 'Create API Library';
 $lang->api->createApi        = 'Create API Document';
 $lang->api->createAB         = 'Create';
+$lang->api->createDemo       = 'Import ZenTao Library';
 $lang->api->edit             = 'Edit';
 $lang->api->delete           = 'Delete';
 $lang->api->position         = 'Position';
@@ -58,6 +59,7 @@ $lang->api->confirmDelete    = "Do you want to delete this API?";
 $lang->api->confirmDeleteLib = "Do you want to delete this interface library?";
 $lang->api->filterStruct     = "use struct";
 $lang->api->defaultVersion   = "Current Version";
+$lang->api->zentaoAPI        = "Zentao API v1";
 
 /* Common access control lang. */
 $lang->api->whiteList          = 'Whitelist';

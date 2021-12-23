@@ -228,6 +228,37 @@ class helper extends baseHelper
 			$version
 		);
 	}
+
+    /**
+     * Request API.
+     *
+     * @param  string    $url
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function requestAPI($url)
+    {
+        global $config;
+
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . $config->sessionVar . '=' . session_id();
+        if(isset($_SESSION['user'])) $url .= '&account=' . $_SESSION['user']->account;
+        $response = common::http($url);
+        $jsonDecode = json_decode($response);
+        if(empty($jsonDecode)) return $response;
+        return $jsonDecode;
+    }
+
+    /**
+     * 代替 die、exit 函数终止并输出
+     *
+     * @param string $content
+     * @return void
+     */
+    public static function end($content)
+    {
+        throw EndResponseException::create($content);
+    }
 }
 
 /**
@@ -261,8 +292,8 @@ function formatTime($time, $format = '')
 
 /**
  * Fix for session error.
- * 
- * @param  int    $class 
+ *
+ * @param  int    $class
  * @access protected
  * @return void
  */

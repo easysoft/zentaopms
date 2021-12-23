@@ -179,6 +179,7 @@ $lang->design->ADS        = '接口设计';
 $lang->stage->common      = '阶段';
 $lang->stage->list        = '阶段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
+$lang->kanban->common     = '看板';
 
 $lang->personnel->common     = '人员';
 $lang->personnel->invest     = '投入人员';
@@ -312,17 +313,19 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
-$lang->createObjects['todo']      = '待办';
-$lang->createObjects['effort']    = '日志';
-$lang->createObjects['bug']       = 'Bug';
-$lang->createObjects['story']     = '需求';
-$lang->createObjects['task']      = '任务';
-$lang->createObjects['testcase']  = '用例';
-$lang->createObjects['execution'] = $lang->execution->common;
-$lang->createObjects['project']   = '项目';
-$lang->createObjects['product']   = '产品';
-$lang->createObjects['program']   = '项目集';
-$lang->createObjects['doc']       = '文档';
+$lang->createObjects['todo']        = '待办';
+$lang->createObjects['effort']      = '日志';
+$lang->createObjects['bug']         = 'Bug';
+$lang->createObjects['story']       = '需求';
+$lang->createObjects['task']        = '任务';
+$lang->createObjects['testcase']    = '用例';
+$lang->createObjects['execution']   = $lang->execution->common;
+$lang->createObjects['project']     = '项目';
+$lang->createObjects['product']     = '产品';
+$lang->createObjects['program']     = '项目集';
+$lang->createObjects['doc']         = '文档';
+$lang->createObjects['kanbanspace'] = '空间';
+$lang->createObjects['kanban']      = '看板';
 
 /* 语言 */
 $lang->lang    = 'Language';

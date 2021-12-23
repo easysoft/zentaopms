@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <style>#dropMenu{z-index:99999;}</style>
 <?php js::set('browseType', $type);?>
-<div id='mainContent' class='main-table'>
+<div class='main-table'>
   <?php if(empty($plans)):?>
   <div class="table-empty-tip">
     <p>

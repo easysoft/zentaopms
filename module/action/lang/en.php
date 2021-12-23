@@ -11,27 +11,29 @@
  */
 global $config;
 
-$lang->action->common      = 'Log';
-$lang->action->id          = 'ID';
-$lang->action->product     = $lang->productCommon;
-$lang->action->project     = 'Project';
-$lang->action->execution   = $lang->execution->common;
-$lang->action->objectType  = 'Object Type';
-$lang->action->objectID    = 'ID';
-$lang->action->objectName  = 'Object Name';
-$lang->action->actor       = 'User';
-$lang->action->action      = 'Action';
-$lang->action->actionID    = 'Action ID';
-$lang->action->date        = 'Date';
-$lang->action->extra       = 'Extra';
-$lang->action->system      = 'System';
-$lang->action->url         = 'URL';
-$lang->action->contentType = 'Content Type';
-$lang->action->data        = 'Data';
-$lang->action->result      = 'Result';
-$lang->action->modified    = 'Modified';
-$lang->action->old         = 'Old';
-$lang->action->new         = 'New';
+$lang->action->common        = 'Log';
+$lang->action->id            = 'ID';
+$lang->action->product       = $lang->productCommon;
+$lang->action->project       = 'Project';
+$lang->action->execution     = $lang->execution->common;
+$lang->action->objectType    = 'Object Type';
+$lang->action->objectID      = 'ID';
+$lang->action->objectName    = 'Object Name';
+$lang->action->actor         = 'User';
+$lang->action->action        = 'Action';
+$lang->action->actionID      = 'Action ID';
+$lang->action->date          = 'Date';
+$lang->action->extra         = 'Extra';
+$lang->action->system        = 'System';
+$lang->action->url           = 'URL';
+$lang->action->contentType   = 'Content Type';
+$lang->action->data          = 'Data';
+$lang->action->result        = 'Result';
+$lang->action->modified      = 'Modified';
+$lang->action->old           = 'Old';
+$lang->action->new           = 'New';
+$lang->action->to            = 'To';
+$lang->action->superReviewer = 'Super Reviewer';
 
 $lang->action->trash       = 'Recycle';
 $lang->action->undelete    = 'Restore';
@@ -123,6 +125,12 @@ $lang->action->objectTypes['gitlabuser']       = 'GitLab User';
 $lang->action->objectTypes['gitlabgroup']      = 'GitLab Group';
 $lang->action->objectTypes['gitlabbranch']     = 'GitLab Branch';
 $lang->action->objectTypes['gitlabbranchpriv'] = 'GitLab Protected Branches';
+$lang->action->objectTypes['kanbanspace']      = 'Kanban Space';
+$lang->action->objectTypes['kanban']           = 'Kanban';
+$lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
+$lang->action->objectTypes['kanbanlane']       = 'Kanban Lane';
+$lang->action->objectTypes['kanbancolumn']     = 'Kanban Column';
+$lang->action->objectTypes['kanbancard']       = 'Kanban Card';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -177,6 +185,8 @@ $lang->action->desc->syncprogram      = '$date, started by <strong>$actor</stron
 $lang->action->desc->syncproject      = '$date, starting the execution sets the project status as Ongoing.' . "\n";
 $lang->action->desc->syncexecution    = '$date, starting the task sets the execution status as Ongoing.' . "\n";
 $lang->action->desc->importfromgitlab = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->archived         = '$date, archived by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->restore          = '$date, restore by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -307,6 +317,9 @@ $lang->action->label->reopen                = 'Reopen';
 $lang->action->label->approve               = 'Passed';
 $lang->action->label->reject                = 'Rejected';
 $lang->action->label->importfromgitlab      = 'Issue associate created';
+$lang->action->label->archived              = 'Archived';
+$lang->action->label->restore               = 'Restore';
+$lang->action->label->mergedbranch          = 'Merge Branch';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -345,6 +358,7 @@ $lang->action->dynamicAction->branch['edited']           = 'Edit Branch';
 $lang->action->dynamicAction->branch['closed']           = 'Close Branch';
 $lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
+$lang->action->dynamicAction->branch['mergebranch']      = 'Merge Branch';
 
 $lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
 $lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';
@@ -391,9 +405,22 @@ $lang->action->dynamicAction->execution['undeleted'] = 'Restore ' . $lang->execu
 $lang->action->dynamicAction->execution['hidden']    = 'Hide ' . $lang->executionCommon;
 $lang->action->dynamicAction->execution['moved']     = 'Improt Task';
 
+$lang->action->dynamicAction->kanban['create'] = 'Create Kanban';
+$lang->action->dynamicAction->kanban['edited'] = 'Kanban Settings';
+
+$lang->action->dynamicAction->kanbanspace['create'] = 'Create Space';
+$lang->action->dynamicAction->kanbanspace['edited'] = 'Space Settings';
+$lang->action->dynamicAction->kanbanspace['closed'] = 'Close Kanban';
+
+$lang->action->dynamicAction->kanbancolumn['create'] = 'Create Column';
 $lang->action->dynamicAction->kanbancolumn['edited'] = 'Column Settings';
+
+$lang->action->dynamicAction->kanbanlane['created']  = 'Create Swimlane';
 $lang->action->dynamicAction->kanbanlane['edited']   = 'Swimlane Settings';
 $lang->action->dynamicAction->kanbanlane['moved']    = 'Move Swimlane';
+
+$lang->action->dynamicAction->kanbancard['create'] = 'Create Card';
+$lang->action->dynamicAction->kanbancard['edited'] = 'Edit card';
 
 $lang->action->dynamicAction->team['managedTeam'] = 'Manage Team';
 
@@ -548,8 +575,12 @@ $lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design       = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->kanbancolumn = 'Kanban column|execution|kanban|execution=%s';
+$lang->action->label->kanbanspace  = 'Kanban Space|kanban|space|browseType=all';
+$lang->action->label->kanbanregion = 'Kanban Region|kanban|view|kanbanID=%s';
+$lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
+$lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
+$lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
 
 /* Object type. */

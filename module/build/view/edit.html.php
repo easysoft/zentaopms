@@ -35,7 +35,7 @@
               <?php
               if($build->productType != 'normal')
               {
-                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branches, $build->branch, "class='form-control chosen' $disabled");
+                  echo "<span class='input-group-addon fix-padding fix-border'></span>" . html::select('branch', $branchTagOption, $build->branch, "class='form-control chosen' $disabled");
               }
               ?>
             </div>

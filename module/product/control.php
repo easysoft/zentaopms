@@ -31,7 +31,7 @@ class product extends control
 
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode|all');
-        if(empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,kanban', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
+        if($this->app->viewType != 'json' and empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,kanban,all', $this->methodName) === false and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
@@ -134,7 +134,8 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branch    = ($this->cookie->preBranch !== '' and $branch === '') ? $this->cookie->preBranch : $branch;
+        $branches  = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+        $branch    = ($this->cookie->preBranch !== '' and $branch === '' and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
         $branchID  = $branch;
 
         /* Set menu. */
@@ -224,18 +225,12 @@ class product extends control
 
         $product = $this->product->getById($productID);
 
-        /* Get stories and branches. */
+        /* Get stories. */
         if($this->app->rawModule == 'projectstory')
         {
             $showBranch = $this->loadModel('branch')->showBranch($productID, 0, $projectID);
 
-            $branches = array();
-            if(!empty($product))
-            {
-                $this->session->set('currentProductType', $product->type);
-                $productBranches = $product->type != 'normal' ? $this->loadModel('execution')->getBranchByProduct($product->id, $projectID) : array();
-                $branches        = isset($productBranches[$product->id]) ? $productBranches[$product->id] : array();
-            }
+            if(!empty($product)) $this->session->set('currentProductType', $product->type);
 
             $this->products  = $this->product->getProducts($projectID, 'all', '', false);
             $projectProducts = $this->product->getProducts($projectID);
@@ -246,8 +241,16 @@ class product extends control
         }
         else
         {
-            $branches = $this->loadModel('branch')->getPairs($productID);
-            $stories  = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+            $stories = $this->product->getStories($productID, $branchID, $browseType, $queryID, $moduleID, $storyType, $sort, $pager);
+        }
+
+        /* Display status of branch. */
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -316,7 +319,8 @@ class product extends control
         $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
-        $this->view->branches        = $branches;
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
         $this->view->showBranch      = $showBranch;
         $this->view->storyStages     = $this->product->batchGetStoryStage($stories);
         $this->view->setModule       = true;

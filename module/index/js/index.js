@@ -125,6 +125,7 @@
         }
         if(moduleName === 'issue' || moduleName === 'risk' || moduleName === 'opportunity' || moduleName === 'pssp' || moduleName === 'auditplan' || moduleName === 'meeting' || moduleName === 'nc')
         {
+            if(link.params.$2 == 'my' || link.params.from == 'my') return 'my';
             if(link.params.$2 == 'project' || link.params.from == 'project') return 'project';
             if(link.params.$2 == 'execution' || link.params.from == 'execution') return 'execution';
         }

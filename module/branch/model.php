@@ -39,17 +39,29 @@ class branchModel extends model
      * Get branch list.
      *
      * @param  int    $productID
+     * @param  int    $executionID
      * @param  string $browseType
      * @param  string $orderBy
      * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($productID, $browseType = 'active', $orderBy = 'order', $pager = null)
+    public function getList($productID, $executionID = 0, $browseType = 'active', $orderBy = 'order', $pager = null)
     {
+        $executionBranches = array();
+        if($executionID)
+        {
+            $executionBranches = $this->dao->select('branch')->from(TABLE_PROJECTPRODUCT)
+                ->where('project')->eq($executionID)
+                ->andWhere('product')->eq($productID)
+                ->fetchAll('branch');
+            if(empty($executionBranches)) return array();
+        }
+
         $branchList = $this->dao->select('*')->from(TABLE_BRANCH)
             ->where('deleted')->eq(0)
-            ->andWhere('product')->eq($productID)
+            ->beginIF($productID)->andWhere('product')->eq($productID)->fi()
+            ->beginIF($productID and $executionID)->andWhere('id')->in(array_keys($executionBranches))->fi()
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
@@ -73,6 +85,8 @@ class branchModel extends model
         $mainBranch->desc        = sprintf($this->lang->branch->mainBranch, $this->lang->product->branchName[$product->type]);
         $mainBranch->order       = 0;
 
+        if($productID) $product = $this->loadModel('product')->getById($productID);
+        if(isset($product) and $product->type == 'normal') return $branchList;
         return array($mainBranch) + $branchList;
     }
 
@@ -158,15 +172,17 @@ class branchModel extends model
      * Create a branch.
      *
      * @param  int    $productID
+     * @param  bool   $withMerge
      * @access public
      * @return int|bool
      */
-    public function create($productID)
+    public function create($productID, $withMerge = false)
     {
         $branch = fixer::input('post')
             ->add('product', $productID)
             ->add('createdDate', helper::today())
             ->add('status', 'active')
+            ->removeIF($withMerge, 'createBranch,mergedBranchIDList,targetBranch')
             ->get();
 
         $lastOrder = (int)$this->dao->select('`order`')->from(TABLE_BRANCH)->where('product')->eq($productID)->orderBy('order_desc')->limit(1)->fetch('order');
@@ -544,5 +560,111 @@ class branchModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Change branch language.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return void
+     */
+    public function changeBranchLanguage($productID)
+    {
+        $product = $this->loadModel('product')->getByID($productID);
+        if($product->type == 'normal') return;
+
+        $productType = $product->type;
+
+        $this->lang->branch->create      = sprintf($this->lang->branch->create, $this->lang->product->branchName[$productType]);
+        $this->lang->branch->edit        = sprintf($this->lang->branch->edit, $this->lang->product->branchName[$productType]);
+        $this->lang->branch->name        = sprintf($this->lang->branch->name, $this->lang->product->branchName[$productType]);
+        $this->lang->branch->desc        = sprintf($this->lang->branch->desc, $this->lang->product->branchName[$productType]);
+        $this->lang->branch->manageTitle = sprintf($this->lang->branch->manageTitle, $this->lang->product->branchName[$productType]);
+        $this->lang->branch->mainBranch  = sprintf($this->lang->branch->mainBranch, $this->lang->product->branchName[$productType]);
+
+        $this->lang->branch->mergeTo           = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->mergeTo);
+        $this->lang->branch->mergeBranch       = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->mergeBranch);
+        $this->lang->branch->confirmDelete     = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmDelete);
+        $this->lang->branch->confirmSetDefault = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmSetDefault);
+        $this->lang->branch->canNotDelete      = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->canNotDelete);
+        $this->lang->branch->confirmClose      = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmClose);
+        $this->lang->branch->confirmActivate   = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->confirmActivate);
+        $this->lang->branch->existName         = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->existName);
+        $this->lang->branch->mergeTips         = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->mergeTips);
+        $this->lang->branch->targetBranchTips  = str_replace('@branch@', $this->lang->product->branchName[$productType], $this->lang->branch->targetBranchTips);
+    }
+
+    /**
+     * Merge multiple branches into one branch.
+     *
+     * @param  int    $productID
+     * @param  string $mergedBranches
+     * @access public
+     * @return int
+     */
+    public function mergeBranch($productID, $mergedBranches)
+    {
+        $data = fixer::input('post')->get();
+
+        /* Get the target branch. */
+        $targetBranch = $data->createBranch ? $this->create($productID, true) : $data->targetBranch;
+        if(!$targetBranch and $targetBranch != BRANCH_MAIN) return false;
+        if($data->createBranch) $this->loadModel('action')->create('branch', $targetBranch, 'Opened');
+
+        /* Branch. */
+        $this->dao->delete()->from(TABLE_BRANCH)->where('id')->in($mergedBranches)->exec();
+
+        /* Release. */
+        $this->dao->update(TABLE_RELEASE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
+        /* Plan. */
+        $this->dao->update(TABLE_PRODUCTPLAN)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
+        /* Module. */
+        $this->dao->update(TABLE_MODULE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
+        /* Story. */
+        $this->dao->update(TABLE_STORY)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+        $this->dao->update(TABLE_PROJECTSTORY)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
+        /* Bug. */
+        $this->dao->update(TABLE_BUG)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
+        /* Case. */
+        $this->dao->update(TABLE_CASE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
+        /* Linked project or execution. */
+        $linkedProject = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+            ->where('branch')->in($mergedBranches . ",$targetBranch")
+            ->andWhere('product')->eq($productID)
+            ->fetchGroup('project');
+
+        $this->dao->delete()->from(TABLE_PROJECTPRODUCT)->where('branch')->in($mergedBranches . ",$targetBranch")->exec();
+        foreach($linkedProject as $projectID => $projectProducts)
+        {
+            $plan = 0;
+            if(!$data->createBranch)
+            {
+                /* Get the linked plan of the target branch. */
+                foreach($projectProducts as $projectProduct)
+                {
+                    if($projectProduct->branch == $targetBranch)
+                    {
+                        $plan = $projectProduct->plan;
+                        break;
+                    }
+                }
+            }
+
+            $projectProduct = new stdClass();
+            $projectProduct->project = $projectID;
+            $projectProduct->product = $productID;
+            $projectProduct->branch  = $targetBranch;
+            $projectProduct->plan    = $plan;
+            $this->dao->insert(TABLE_PROJECTPRODUCT)->data($projectProduct)->autoCheck()->exec();
+        }
+
+        return $targetBranch;
     }
 }

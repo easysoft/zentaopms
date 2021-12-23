@@ -505,10 +505,12 @@ class commonModel extends model
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
 
             $createMethod = 'create';
+            $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
-            if(strpos('bug|execution', $objectType) !== false) $needPrintDivider = true;
+            if($objectType == 'kanbanspace') $createMethod = 'createSpace';
+            if(strpos('|bug|execution|kanbanspace|', "|$objectType|") !== false) $needPrintDivider = true;
 
-            if(common::hasPriv($objectType, $createMethod))
+            if(common::hasPriv($module, $createMethod))
             {
                 if($objectType == 'doc' and !common::hasPriv('doc', 'tableContents')) continue;
 
@@ -566,9 +568,17 @@ class commonModel extends model
                     case 'program':
                         $params = "parentProgramID=0&extra=from=global";
                         break;
+                    case 'kanbanspace':
+                        $isOnlyBody = true;
+                        $attr       = "class='iframe' data-width='75%'";
+                        break;
+                    case 'kanban':
+                        $isOnlyBody = true;
+                        $attr       = "class='iframe' data-width='75%'";
+                        break;
                 }
 
-                $html .= '<li>' . html::a(helper::createLink($objectType, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $attr) . '</li>';
+                $html .= '<li>' . html::a(helper::createLink($module, $createMethod, $params, '', $isOnlyBody), "<i class='icon icon-$objectIcon'></i> " . $lang->createObjects[$objectType], '', $attr) . '</li>';
             }
         }
 
@@ -1546,7 +1556,7 @@ EOD;
         if(empty($object)) return;
 
         $executionPairs = array();
-        $userCondition  = !$app->user->admin ? " AND `id` IN ({$app->user->view->sprints}) " : '';
+        $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
         $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
@@ -2110,6 +2120,8 @@ EOD;
 
         if(isset($this->app->user))
         {
+            if(in_array($module, $this->config->programPriv->waterfall)) return true;
+
             $this->app->user = $this->session->user;
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
@@ -2144,13 +2156,6 @@ EOD;
         /* If is the program admin, have all program privs. */
         $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
         if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
-
-        /* If module is project and method is execution, check for all execution privilege. */
-        if($module == 'project' and $method == 'execution')
-        {
-            $module = 'execution';
-            $method = 'all';
-        }
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
@@ -2198,11 +2203,10 @@ EOD;
             ->where('t1.project')->eq($program->id)
             ->andWhere('t2.account')->eq($this->app->user->account)
             ->fetchAll();
-        if(empty($programRights)) return;
 
         /* Group priv by module the same as rights. */
         $programRightGroup = array();
-        foreach($programRights as $programRight) $programRightGroup[$programRight->module][$programRight->method] = 1;
+        foreach($programRights as $programRight) $programRightGroup[strtolower($programRight->module)][strtolower($programRight->method)] = 1;
 
         /* Reset priv by program privway. */
         $rights = $this->app->user->rights['rights'];
@@ -2943,12 +2947,8 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('parsedown', true);
-        return parsedown::instance()
-            ->setSafeMode(true)
-            ->setBreaksEnabled(true)
-            ->setMarkupEscaped(true)
-            ->text($markdown);
+        $app->loadClass('htmlup');
+        return new htmlup($markdown);
     }
 }
 

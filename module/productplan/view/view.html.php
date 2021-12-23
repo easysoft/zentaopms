@@ -27,7 +27,7 @@
     <div class='page-title'>
       <span class='label label-id'><?php echo $plan->id;?></span>
       <span title='<?php echo $plan->title;?>' class='text'><?php echo $plan->title;?></span>
-      <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branches[$branch] . '</span>';?>
+      <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branchOption[$branch] . '</span>';?>
       <span class='label label-info label-badge'>
         <?php echo ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
       </span>
@@ -52,14 +52,12 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <?php if($this->app->getViewType() == 'xhtml'):?>
-    <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>    
-    <?php if($this->app->getViewType() == 'xhtml'):?>
+    <div class="plan-title"><?php echo $product->name . ' ' . $plan->title ?></div>
     <div class="linkButton" onclick="handleLinkButtonClick()">
       <span title="<?php echo $lang->viewDetails;?>">
         <i class="icon icon-import icon-rotate-270"></i>
       </span>
     </div>
-    <?php endif;?>
     <div class='tab-btn-container'>
     <?php endif;?>
     <ul class='nav nav-tabs'>
@@ -293,12 +291,12 @@
 
                   if($canBatchChangeBranch and $this->session->currentProductType != 'normal')
                   {
-                      $withSearch = count($branches) > 8;
+                      $withSearch = count($branchTagOption) > 8;
                       echo "<li class='dropdown-submenu'>";
                       echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
                       echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
                       echo '<ul class="dropdown-list">';
-                      foreach($branches as $branchID => $branchName)
+                      foreach($branchTagOption as $branchID => $branchName)
                       {
                           $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID");
                           echo "<li class='option' data-key='$branchID'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', this)\"") . "</li>";
@@ -571,7 +569,7 @@
                 <?php if($product->type != 'normal'):?>
                 <tr>
                   <th><?php echo $lang->product->branch;?></th>
-                  <td><?php echo $branches[$plan->branch];?></td>
+                  <td><?php echo $branchOption[$plan->branch];?></td>
                 </tr>
                 <?php endif;?>
                 <tr>
@@ -611,11 +609,25 @@
 <?php js::set('planID', $plan->id)?>
 <?php js::set('orderBy', $orderBy)?>
 <?php js::set('type', $type)?>
+<?php if($this->app->getViewType() == 'xhtml'):?>
 <script>
 function handleLinkButtonClick()
 {
-  var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
-  window.open(xxcUrl);
+    var xxcUrl = "xxc:openInApp/zentao-integrated/" + encodeURIComponent(window.location.href.replace(/.display=card/, '').replace(/\.xhtml/, '.html'));
+    window.open(xxcUrl, '_blank');
 }
+
+$(function()
+{
+    function handleClientReady()
+    {
+        if(!window.adjustXXCViewHeight) return;
+        window.adjustXXCViewHeight(null, true);
+        $('#mainContent').on('show.zui.tab', function(){window.adjustXXCViewHeight(null, true);});
+    }
+    if(window.xuanReady) handleClientReady();
+    else $(window).on('xuan-ready', handleClientReady);
+});
 </script>
+<?php endif; ?>
 <?php include '../../common/view/footer.html.php';?>

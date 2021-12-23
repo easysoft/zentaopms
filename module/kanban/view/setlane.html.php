@@ -15,7 +15,7 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2>
-        <?php echo "<span title='$title'>" . $title . '</span>';?>
+        <?php echo $lang->kanban->setLane;?>
       </h2>
     </div>
     <form class="load-indicator main-form form-ajax" method='post' target='hiddenwin'>
@@ -27,12 +27,14 @@
           </td>
           <td></td>
         </tr>
+        <?php if($from != 'kanban'):?>
         <tr>
           <th><?php echo $lang->kanban->WIPType;?></th>
           <td colspan='2'>
             <?php echo html::input('type', zget($lang->kanban->laneTypeList, $lane->type), "class='form-control' disabled");?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->kanban->laneColor;?></th>
           <td colspan='3'>

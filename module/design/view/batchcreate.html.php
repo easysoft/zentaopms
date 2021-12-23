@@ -22,6 +22,7 @@
           <th class='w-200px'><?php echo $lang->design->story;?></th>
           <th class='w-200px required'><?php echo $lang->design->type;?></th>
           <th class='required'><?php echo $lang->design->name;?></th>
+          <th><?php echo $lang->design->desc;?></th>
         </tr>
       </thead>
       <tbody>
@@ -31,10 +32,11 @@
           <td><?php echo html::select("story[$i]", $stories, '', "class='form-control chosen'");?></td>
           <td><?php echo html::select("type[$i]", $lang->design->typeList, '', "class='form-control chosen'");?></td>
           <td><?php echo html::input("name[$i]", '', "class='form-control'");?></td>
+          <td><?php echo html::textarea("desc[$i]", '', "class='form-control autosize'");?></td>
         </tr>
         <?php endfor;?>
         <tr>
-          <td colspan='4' class='form-actions text-center'>
+          <td colspan='5' class='form-actions text-center'>
             <?php echo html::submitButton() . html::backButton();?>
           </td>
         </tr>

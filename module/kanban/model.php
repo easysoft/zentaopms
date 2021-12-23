@@ -14,6 +14,663 @@
 class kanbanModel extends model
 {
     /**
+     * Create a kanban group.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @access public
+     * @return int
+     */
+    public function createGroup($kanbanID, $regionID)
+    {
+        $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANGROUP)
+            ->where('region')->eq($regionID)
+            ->fetch('maxOrder');
+
+        $order = $maxOrder ? $maxOrder + 1 : 1;
+
+        $group = new stdclass();
+        $group->kanban = $kanbanID;
+        $group->region = $regionID;
+        $group->order  = $order;
+
+        $this->dao->insert(TABLE_KANBANGROUP)->data($group)->autoCheck()->exec();
+        if(dao::isError()) return false;
+
+        return $this->dao->lastInsertID();
+    }
+
+    /**
+     * Create a default kanban region.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return int
+     */
+    public function createDefaultRegion($kanban)
+    {
+        $region = new stdclass();
+        $region->name           = $this->lang->kanbanregion->default;
+        $region->kanban         = $kanban->id;
+        $region->space          = $kanban->space;
+        $region->createdBy      = $this->app->user->account;
+        $region->createdDate    = helper::today();
+
+        return $this->createRegion($kanban, $region);
+    }
+
+    /**
+     * Create a new region.
+     *
+     * @param  object $kanban
+     * @param  object $region
+     * @param  int    $copyRegionID
+     * @access public
+     * @return int
+     */
+    public function createRegion($kanban, $region = null, $copyRegionID = 0)
+    {
+        $account = $this->app->user->account;
+        $order   = 1;
+
+        if(!$region)
+        {
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANREGION)
+                ->where('kanban')->eq($kanban->id)
+                ->fetch('maxOrder');
+
+            $order  = $maxOrder ? $maxOrder + 1 : 1;
+            $region = fixer::input('post')
+                ->add('kanban', $kanban->id)
+                ->add('space', $kanban->space)
+                ->add('createdBy', $account)
+                ->add('createdDate', helper::now())
+                ->trim('name')
+                ->get();
+        }
+
+        $region->order = $order;
+        $this->dao->insert(TABLE_KANBANREGION)->data($region)
+            ->batchCheck($this->config->kanban->require->createregion, 'notempty')
+            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0'")
+            ->autoCheck()
+            ->exec();
+
+        $regionID = $this->dao->lastInsertID();
+        if(dao::isError()) return false;
+
+        $this->loadModel('action')->create('kanbanRegion', $regionID, 'Created');
+
+        if($copyRegionID)
+        {
+            /* Gets the groups, lanes and columns of the replication region. */
+            $copyGroups      = $this->getGroupGroupByRegions($copyRegionID);
+            $copyLaneGroup   = $this->getLaneGroupByRegions($copyRegionID);
+            $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID);
+
+            /* Create groups, lanes, and columns. */
+            foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
+            {
+                $newGroupID = $this->createGroup($kanban->id, $regionID);
+                if(dao::isError()) return false;
+
+                $copyLanes   = $copyLaneGroup[$copyGroupID];
+                $copyColumns = $copyColumnGroup[$copyGroupID];
+                foreach($copyLanes as $copyLane)
+                {
+                    unset($copyLane->id);
+                    unset($copyLane->actions);
+                    $copyLane->region         = $regionID;
+                    $copyLane->group          = $newGroupID;
+                    $copyLane->lastEditedTime = helper::now();
+                    $this->createLane($kanban->id, $regionID, $copyLane);
+                    if(dao::isError()) return false;
+                }
+
+                foreach($copyColumns as $copyColumn)
+                {
+                    unset($copyColumn->id);
+                    unset($copyColumn->actions);
+                    $copyColumn->region         = $regionID;
+                    $copyColumn->group          = $newGroupID;
+                    $this->createColumn($regionID, $copyColumn);
+                    if(dao::isError()) return false;
+                }
+            }
+        }
+        else
+        {
+            $groupID = $this->createGroup($kanban->id, $regionID);
+            if(dao::isError()) return false;
+
+            $this->createDefaultLane($kanban, $regionID, $groupID);
+            if(dao::isError()) return false;
+
+            $this->createDefaultColumns($kanban, $regionID, $groupID);
+            if(dao::isError()) return false;
+        }
+
+
+        return $regionID;
+    }
+
+    /**
+     * Create default lane.
+     *
+     * @param  object $kanban
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @access public
+     * @return int
+     */
+    public function createDefaultLane($kanban, $regionID, $groupID)
+    {
+        $lane = new stdclass();
+        $lane->name           = $this->lang->kanbanlane->default;
+        $lane->group          = $groupID;
+        $lane->region         = $regionID;
+        $lane->type           = 'common';
+        $lane->lastEditedTime = helper::now();
+        $lane->color          = '#7ec5ff';
+        $lane->order          = 1;
+
+        $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
+        $laneID = $this->dao->lastInsertId();
+
+        return $laneID;
+    }
+
+    /**
+     * Create default kanban columns.
+     *
+     * @param  object $kanban
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @access public
+     * @return void
+     */
+    public function createDefaultColumns($kanban, $regionID, $groupID)
+    {
+        $order = 1;
+        foreach($this->lang->kanban->defaultColumn as $columnName)
+        {
+            $column = new stdclass();
+            $column->region = $regionID;
+            $column->group  = $groupID;
+            $column->name   = $columnName;
+            $column->order  = $order;
+            $column->limit  = -1;
+            $column->color  = '#333';
+
+            $this->createColumn($regionID, $column);
+            $order ++;
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Create a column.
+     *
+     * @param  int    $regionID
+     * @param  object $column
+     * @param  int    $order
+     * @param  int    $parent
+     * @access public
+     * @return int
+     */
+    public function createColumn($regionID, $column = null, $order = 0, $parent = 0)
+    {
+        if(empty($column))
+        {
+            $column = fixer::input('post')
+                ->add('region', $regionID)
+                ->setIF($parent > 0, 'parent', $parent)
+                ->setIF($order, 'order', $order)
+                ->setDefault('color', '#333')
+                ->trim('name')
+                ->remove('WIPCount,noLimit')
+                ->get();
+
+            if(!$order)
+            {
+                $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)
+                    ->where('`group`')->eq($column->group)
+                    ->fetch('maxOrder');
+                $column->order = $maxOrder ? $maxOrder + 1 : 1;
+            }
+
+            if(!$column->limit && empty($_POST['noLimit'])) dao::$errors['limit'][] = sprintf($this->lang->error->notempty, $this->lang->kanban->WIP);
+            if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+                return false;
+            }
+            if(dao::isError()) return false;
+        }
+
+        $column->limit = (int)$column->limit;
+
+        $limit = $column->limit;
+        if(isset($column->parent) and $column->parent > 0)
+        {
+            /* Create a child column. */
+            $parentColumn = $this->getColumnByID($column->parent);
+            if($parentColumn->limit != -1)
+            {
+                /* The WIP of the child column is infinite or greater than the WIP of the parent column. */
+                $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($column->parent)->andWhere('deleted')->eq(0)->fetch('sumChildLimit');
+                if($limit == -1 or (($limit + $sumChildLimit) > $parentColumn->limit))
+                {
+                    dao::$errors['limit'][] = $this->lang->kanban->error->parentLimitNote;
+                    return false;
+                }
+
+                $childColumns = $this->getColumnsByObject('parent', $column->parent);
+                foreach($childColumns as $childColumn)
+                {
+                    $limit += (int)$childColumn->limit;
+                    if($limit > $parentColumn->limit and $parentColumn->limit != -1)
+                    {
+                        /* The total WIP of the child columns is greater than the WIP of the parent column. */
+                        dao::$errors['limit'][] = $this->lang->kanban->error->childLimitNote;
+                        return false;
+                    }
+                }
+            }
+        }
+
+        if($order)
+        {
+            /* It means copy a column or insert a column before or after a column. */
+            $this->dao->update(TABLE_KANBANCOLUMN)
+                ->set('`order` = `order` + 1')
+                ->where('`group`')->eq($column->group)
+                ->andWhere('`order`')->ge($order)
+                ->exec();
+        }
+
+        $this->dao->insert(TABLE_KANBANCOLUMN)->data($column, 'noLimit,position,copyItems')
+            ->batchCheck($this->config->kanban->require->createcolumn, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $columnID = $this->dao->lastInsertID();
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
+
+        return $columnID;
+    }
+
+    /**
+     * Split column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function splitColumn($columnID)
+    {
+        $this->loadModel('action');
+        $data            = fixer::input('post')->get();
+        $column          = $this->getColumnByID($columnID);
+        $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
+        $order           = $maxOrder ? $maxOrder + 1 : 1;
+        $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
+
+        $childrenColumn  = array();
+        foreach($data->name as $i => $name)
+        {
+            $childColumn = new stdclass();
+            $childColumn->lane   = $column->lane;
+            $childColumn->parent = $column->id;
+            $childColumn->region = $column->region;
+            $childColumn->group  = $column->group;
+            $childColumn->name   = $name;
+            $childColumn->color  = $data->color[$i];
+            $childColumn->limit  = isset($data->noLimit[$i]) ? -1 : $data->WIPCount[$i];
+            $childColumn->order  = $order;
+
+            if(!preg_match("/^-?\d+$/", $childColumn->limit) or (!isset($data->noLimit[$i]) and $childColumn->limit <= 0))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
+                return false;
+            }
+
+            if(empty($childColumn->name))
+            {
+                dao::$errors['name'] = sprintf($this->lang->error->notempty, $this->lang->kanbancolumn->name);
+                return false;
+            }
+
+            $sumChildLimit += $childColumn->limit;
+            if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
+            {
+                dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                return false;
+            }
+
+            $order ++;
+            $childrenColumn[$i] = $childColumn;
+        }
+
+        foreach($childrenColumn as $i => $childColumn)
+        {
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($childColumn)
+                ->autoCheck()
+                ->batchCheck($this->config->kanban->splitcolumn->requiredFields, 'notempty')
+                ->exec();
+
+            if(dao::isError()) return false;
+            if(!dao::isError())
+            {
+                $childColumnID = $this->dao->lastInsertID();
+                if($i == 1) $this->dao->update(TABLE_KANBANCARD)->set('`column`')->eq($childColumnID)->where('`column`')->eq($columnID)->exec();
+                $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
+                $this->action->create('kanbanColumn', $childColumnID, 'created');
+            }
+        }
+
+        $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($columnID)->exec();
+    }
+
+    /**
+     * Create a kanban card.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $laneID
+     * @param  int $columnID
+     * @access public
+     * @return void
+     */
+    public function createCard($kanbanID, $regionID, $groupID, $laneID, $columnID)
+    {
+        if($this->post->estimate < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+            return false;
+        }
+
+        if($this->post->end && $this->post->begin > $this->post->end)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+            return false;
+        }
+
+        $now  = helper::now();
+        $card = fixer::input('post')
+            ->add('kanban', $kanbanID)
+            ->add('region', $regionID)
+            ->add('group', $groupID)
+            ->add('lane', $laneID)
+            ->add('column', $columnID)
+            ->add('createdBy', $this->app->user->account)
+            ->add('createdDate', $now)
+            ->add('assignedDate', $now)
+            ->add('color', '#fff')
+            ->trim('name')
+            ->setDefault('estimate', 0)
+            ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
+            ->join('assignedTo', ',')
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->remove('uid')
+            ->get();
+
+        $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
+
+        $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
+            ->checkIF($card->estimate != '', 'estimate', 'float')
+            ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $cardID = $this->dao->lastInsertID();
+            $this->file->saveUpload('kanbancard', $cardID);
+            $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+
+            return $cardID;
+        }
+
+        return false;
+    }
+
+    /**
+     * Get kanban by id.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return object
+     */
+    public function getByID($kanbanID)
+    {
+        $kanban = $this->dao->findByID($kanbanID)->from(TABLE_KANBAN)->fetch();
+        $kanban = $this->loadModel('file')->replaceImgURL($kanban, 'desc');
+
+        return $kanban;
+    }
+
+    /**
+     * Get kanban data.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function getKanbanData($kanbanID)
+    {
+        $kanbanData  = array();
+        $actions     = array('sortGroup');
+        $regions     = $this->getRegionPairs($kanbanID);
+        $groupGroup  = $this->getGroupGroupByRegions(array_keys($regions));
+        $laneGroup   = $this->getLaneGroupByRegions(array_keys($regions));
+        $columnGroup = $this->getColumnGroupByRegions(array_keys($regions));
+        $cardGroup   = $this->getCardGroupByKanban($kanbanID);
+
+        foreach($regions as $regionID => $regionName)
+        {
+            $region = new stdclass();
+            $region->id        = $regionID;
+            $region->name      = $regionName;
+            $region->laneCount = 0;
+
+            $groups = zget($groupGroup, $regionID, array());
+            foreach($groups as $group)
+            {
+                $lanes = zget($laneGroup, $group->id, array());
+                if(!$lanes) continue;
+
+                foreach($lanes as $lane) $lane->items = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
+
+                $group->columns = zget($columnGroup, $group->id, array());
+                $group->lanes   = $lanes;
+                $group->actions = array();
+
+                foreach($actions as $action)
+                {
+                    if(commonModel::hasPriv('kanban', $action)) $group->actions[] = $action;
+                }
+
+                $region->groups[]   = $group;
+                $region->laneCount += count($lanes);
+            }
+
+            $kanbanData[$regionID] = $region;
+        }
+
+        return $kanbanData;
+    }
+
+    /**
+     * Get region by id.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return object
+     */
+    public function getRegionByID($regionID)
+    {
+        return $this->dao->findByID($regionID)->from(TABLE_KANBANREGION)->fetch();
+    }
+
+    /**
+     * Get ordered region pairs.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    public function getRegionPairs($kanbanID)
+    {
+        return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('deleted')->eq('0')
+            ->orderBy('order_asc')
+            ->fetchPairs();
+    }
+
+    /**
+     * Get kanban group by regions.
+     *
+     * @param  array $regions
+     * @access public
+     * @return array
+     */
+    public function getGroupGroupByRegions($regions)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANGROUP)
+            ->where('region')->in($regions)
+            ->orderBy('order')
+            ->fetchGroup('region', 'id');
+    }
+
+    /**
+     * Get lane group by regions.
+     *
+     * @param  array $regions
+     * @access public
+     * @return array
+     */
+    public function getLaneGroupByRegions($regions)
+    {
+        $laneGroup = $this->dao->select('*')->from(TABLE_KANBANLANE)
+            ->where('deleted')->eq('0')
+            ->andWhere('region')->in($regions)
+            ->orderBy('order')
+            ->fetchGroup('group');
+
+        $actions = array('setLane', 'sortLane', 'deleteLane');
+        foreach($laneGroup as $lanes)
+        {
+            foreach($lanes as $lane)
+            {
+                $lane->actions = array();
+                foreach($actions as $action)
+                {
+                    if($this->isClickable($lane, $action)) $lane->actions[] = $action;
+                }
+            }
+        }
+
+        return $laneGroup;
+    }
+
+    /**
+     * Get column group by regions.
+     *
+     * @param  array $regions
+     * @access public
+     * @return array
+     */
+    public function getColumnGroupByRegions($regions)
+    {
+        $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
+            ->where('deleted')->eq('0')
+            ->andWhere('archived')->eq('0')
+            ->andWhere('region')->in($regions)
+            ->orderBy('order')
+            ->fetchGroup('group');
+
+        $actions = array('createColumn', 'editColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+
+        /* Group by parent. */
+        $parentColumnGroup = array();
+        foreach($columnGroup as $group => $columns)
+        {
+            foreach($columns as $column)
+            {
+                $column->actions = array();
+                /* Judge column action priv. */
+                foreach($actions as $action)
+                {
+                    if($this->isClickable($column, $action)) $column->actions[] = $action;
+                }
+
+                if($column->parent and $column->parent != -1) continue;
+
+                $parentColumnGroup[$group][] = $column;
+            }
+        }
+
+        $columnData = array();
+        foreach($parentColumnGroup as $group => $parentColumns)
+        {
+            foreach($parentColumns as $parentColumn)
+            {
+                $columnData[$group][] = $parentColumn;
+                foreach($columnGroup[$group] as $column)
+                {
+                    if($column->parent == $parentColumn->id)
+                    {
+                        $parentColumn->asParent = true;
+
+                        $column->parentType = 'column' . $column->parent;
+
+                        $columnData[$group][] = $column;
+                    }
+                }
+            }
+        }
+
+        return $columnData;
+    }
+
+    /**
+     * Get card group by kanban id.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    public function getCardGroupByKanban($kanbanID)
+    {
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('archived')->eq(0)
+            ->andWhere('kanban')->eq($kanbanID)
+            //->orderBy('`order` asc')
+            ->fetchAll('id');
+
+        $actions = array('editCard', 'archiveCard', 'copyCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
+        $cardGroup = array();
+        foreach($cards as $card)
+        {
+            $card->actions = array();
+            foreach($actions as $action)
+            {
+                if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+            }
+
+            $cardGroup[$card->lane]['column' . $card->column][] = $card;
+        }
+
+        return $cardGroup;
+    }
+
+    /**
      * Get Kanban by execution id.
      *
      * @param  int    $executionID
@@ -140,6 +797,403 @@ class kanbanModel extends model
     }
 
     /**
+     * Get space list.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @param  object $pager
+     * @access public
+     * @return array
+     */
+    public function getSpaceList($browseType, $pager)
+    {
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+        $spaceList   = $this->dao->select('*')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->page($pager)
+            ->fetchAll('id');
+
+        $kanbanIdList = $this->getCanViewObjects();
+        $kanbanGroup  = $this->getGroupBySpaceList(array_keys($spaceList), $kanbanIdList);
+        foreach($spaceList as $spaceID => $space)
+        {
+            if(isset($kanbanGroup[$spaceID])) $space->kanbans = $kanbanGroup[$spaceID];
+        }
+
+        return $spaceList;
+    }
+
+    /**
+     * Get space pairs.
+     *
+     * @param  string $browseType all|my|other|closed
+     * @access public
+     * @return array
+     */
+    public function getSpacePairs($browseType = 'all')
+    {
+        $account     = $this->app->user->account;
+        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+
+        return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
+            ->where('deleted')->eq(0)
+            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
+    }
+
+    /**
+     * Get can view objects.
+     *
+     * @param  string $objectType kanbanspace|kanban
+     * @access public
+     * @return array
+     */
+    public function getCanViewObjects($objectType = 'kanban')
+    {
+        $table     = $this->config->objectTables[$objectType];
+        $objects   = $this->dao->select('*')->from($table)->fetchAll('id');
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+
+        if($this->app->user->admin) return array_keys($objects);
+
+        $account = $this->app->user->account;
+        foreach($objects as $objectID => $object)
+        {
+            if($object->acl == 'private' or $object->acl == 'extend')
+            {
+                $remove = true;
+                if($object->owner == $account) $remove = false;
+                if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
+                if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
+                if($objectType == 'kanban')
+                {
+                    $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                    $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
+                    $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
+                    if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
+                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
+                }
+
+                if($remove) unset($objects[$objectID]);
+            }
+        }
+
+        return array_keys($objects);
+    }
+
+    /**
+     * Create a space.
+     *
+     * @access public
+     * @return int
+     */
+    public function createSpace()
+    {
+        $account = $this->app->user->account;
+        $space   = fixer::input('post')
+            ->setDefault('createdBy', $account)
+            ->setDefault('createdDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->trim('name')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
+
+         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->createspace['id'], $this->post->uid);
+
+        $this->dao->insert(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->createspace->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $spaceID = $this->dao->lastInsertID();
+            $this->dao->update(TABLE_KANBANSPACE)->set('`order`')->eq($spaceID)->where('id')->eq($spaceID)->exec();
+            $this->file->saveUpload('kanbanspace', $spaceID);
+            $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+
+            return $spaceID;
+        }
+    }
+
+    /**
+     * Update a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function updateSpace($spaceID)
+    {
+        $spaceID  = (int)$spaceID;
+        $oldSpace = $this->getSpaceById($spaceID);
+        $space    = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->trim('name')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        $space->whitelist = $space->acl == 'open' ? '' : $space->whitelist;
+
+        $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
+            ->where('id')->eq($spaceID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->saveUpload('kanbanspace', $spaceID);
+            $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
+            return common::createChanges($oldSpace, $space);
+        }
+    }
+
+    /**
+     * Close a space.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    function closeSpace($spaceID)
+    {
+        $spaceID  = (int)$spaceID;
+        $oldSpace = $this->getSpaceById($spaceID);
+        $now      = helper::now();
+        $account  = $this->app->user->account;
+        $space    = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_KANBANSPACE)->data($space)
+            ->autoCheck()
+            ->where('id')->eq($spaceID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldSpace, $space);
+    }
+
+    /**
+     * Get lane pairs by region id.
+     *
+     * @param  array  $regionID
+     * @access public
+     * @return array
+     */
+    public function getLanePairsByRegion($regionID)
+    {
+        return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
+            ->where('deleted')->eq('0')
+            ->andWhere('region')->eq($regionID)
+            ->fetchPairs();
+    }
+
+    /**
+     * Create a lane.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  object $lane
+     * @access public
+     * @return int
+     */
+    public function createLane($kanbanID, $regionID, $lane = null)
+    {
+        if(empty($lane))
+        {
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANLANE)
+                ->where('region')->eq($regionID)
+                ->fetch('maxOrder');
+            $lane = fixer::input('post')
+                ->add('region', $regionID)
+                ->add('order', $maxOrder ? $maxOrder + 1 : 1)
+                ->add('lastEditedTime', helper::now())
+                ->add('type', 'common')
+                ->trim('name')
+                ->setDefault('color', '#7ec5ff')
+                ->get();
+
+            $mode = zget($lane, 'mode', '');
+            if($mode == 'sameAsOther')
+            {
+                $otherLane = zget($lane, 'otherLane', 0);
+                if($otherLane) $lane->group = $this->dao->select('`group`')->from(TABLE_KANBANLANE)->where('id')->eq($otherLane)->fetch('group');
+            }
+            elseif($mode == 'independent')
+            {
+                $groupID = $this->createGroup($kanbanID, $regionID);
+                $kanban  = $this->getByID($kanbanID);
+                $this->createDefaultColumns($kanban, $regionID, $groupID);
+
+                $lane->group = $groupID;
+            }
+        }
+
+        $this->dao->insert(TABLE_KANBANLANE)->data($lane, $skip = 'mode,otherLane')
+            ->batchCheck($this->config->kanban->require->createlane, 'notempty')
+            ->autoCheck()
+            ->exec();
+        if(dao::isError()) return false;
+
+        $laneID = $this->dao->lastInsertID();
+        return $laneID;
+    }
+
+    /*
+     * Create a kanban.
+     *
+     * @access public
+     * @return int
+     */
+    public function create()
+    {
+        $account = $this->app->user->account;
+        $kanban  = fixer::input('post')
+            ->setDefault('createdBy', $account)
+            ->setDefault('createdDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->trim('name')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
+
+         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
+
+        if(!empty($kanban->space))
+        {
+            $maxOrder = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBAN)
+                ->where('space')->eq($kanban->space)
+                ->fetch('maxOrder');
+            $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+
+            if($kanban->acl == 'extend')
+            {
+                $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+                $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
+            }
+        }
+
+
+        $this->dao->insert(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $kanbanID = $this->dao->lastInsertID();
+            $kanban   = $this->getByID($kanbanID);
+
+            $this->createDefaultRegion($kanban);
+            $this->file->saveUpload('kanban', $kanbanID);
+            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+            return $kanbanID;
+        }
+    }
+
+    /**
+     * Update a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    public function update($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $account   = $this->app->user->account;
+        $oldKanban = $this->getByID($kanbanID);
+        $kanban    = fixer::input('post')
+            ->setDefault('lastEditedBy', $account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->join('whitelist', ',')
+            ->join('team', ',')
+            ->trim('name')
+            ->remove('uid,contactListMenu')
+            ->get();
+
+        if($kanban->acl == 'extend')
+        {
+            $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
+            $kanban->acl       = $spaceAcl == 'open' ? 'open' : 'extend';
+            $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
+        }
+
+
+        $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->batchCheck($this->config->kanban->edit->requiredFields, 'notempty')
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->saveUpload('kanban', $kanbanID);
+            $this->file->updateObjectID($this->post->uid, $kanbanID, 'kanban');
+
+            return common::createChanges($oldKanban, $kanban);
+        }
+    }
+
+    /**
+     * Close a kanban.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return array
+     */
+    function close($kanbanID)
+    {
+        $kanbanID  = (int)$kanbanID;
+        $oldKanban = $this->getByID($kanbanID);
+        $now       = helper::now();
+        $kanban    = fixer::input('post')
+            ->setDefault('status', 'closed')
+            ->setDefault('closedBy', $this->app->user->account)
+            ->setDefault('closedDate', $now)
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', $now)
+            ->remove('comment')
+            ->get();
+
+        $this->dao->update(TABLE_KANBAN)->data($kanban)
+            ->autoCheck()
+            ->where('id')->eq($kanbanID)
+            ->exec();
+
+        if(!dao::isError()) return common::createChanges($oldKanban, $kanban);
+    }
+
+    /**
      * Add execution Kanban lanes and columns.
      *
      * @param  int    $executionID
@@ -148,7 +1202,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createLanes($executionID, $type = 'all', $groupBy = 'default')
+    public function createExecutionLane($executionID, $type = 'all', $groupBy = 'default')
     {
         if($groupBy == 'default' or $type == 'all')
         {
@@ -159,7 +1213,7 @@ class kanbanModel extends model
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
                 $laneID = $this->dao->lastInsertId();
-                $this->createColumns($laneID, $type, $executionID);
+                $this->createExecutionColumns($laneID, $type, $executionID);
             }
         }
         else
@@ -208,7 +1262,7 @@ class kanbanModel extends model
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
                 $laneID = $this->dao->lastInsertId();
-                $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
+                $this->createExecutionColumns($laneID, $type, $executionID, $groupBy, $groupKey);
             }
         }
     }
@@ -224,7 +1278,7 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function createColumns($laneID, $type, $executionID, $groupBy = '', $groupValue = '')
+    public function createExecutionColumns($laneID, $type, $executionID, $groupBy = '', $groupValue = '')
     {
         $objects = array();
 
@@ -338,10 +1392,38 @@ class kanbanModel extends model
     }
 
     /**
+     * Update a region.
+     *
+     * @param  int    $regionID
+     * @access public
+     * @return array
+     */
+    public function updateRegion($regionID)
+    {
+        $region    = fixer::input('post')
+            ->setDefault('lastEditedBy', $this->app->user->account)
+            ->setDefault('lastEditedDate', helper::now())
+            ->trim('name')
+            ->get();
+        $oldRegion = $this->getRegionById($regionID);
+
+        $this->dao->update(TABLE_KANBANREGION)->data($region)
+            ->autoCheck()
+            ->batchcheck($this->config->kanban->editregion->requiredFields, 'notempty')
+            ->where('id')->eq($regionID)
+            ->exec();
+
+        if(dao::isError()) return;
+
+        $changes = common::createChanges($oldRegion, $region);
+        return $changes;
+    }
+
+    /**
      * Update kanban lane.
-     * 
-     * @param  int    $executionID 
-     * @param  string $laneType 
+     *
+     * @param  int    $executionID
+     * @param  string $laneType
      * @access public
      * @return void
      */
@@ -349,7 +1431,7 @@ class kanbanModel extends model
     {
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
-            ->andWhere('type')->eq($laneType)              
+            ->andWhere('type')->eq($laneType)
             ->fetchAll('id');
 
         foreach($lanes as $lane) $this->updateCards($lane);
@@ -378,6 +1460,11 @@ class kanbanModel extends model
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
                 {
+                    if($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
+                    }
+
                     if(strpos(',ready,develop,test,', $colType) !== false) continue;
 
                     if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
@@ -388,13 +1475,9 @@ class kanbanModel extends model
                     {
                         $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
                     }
-                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
+                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false and $colType != 'backlog')
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
-                    }
-                    elseif($story->stage != $stage and strpos($cardPairs[$colType], ",$storyID,") !== false)
-                    {
-                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
@@ -406,33 +1489,42 @@ class kanbanModel extends model
             {
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
                 {
-                    if(strpos(',resolving,fixing,test,testing,tested,', $colType) !== false) continue;
+                    if($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
+                    {
+                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
+                    }
+
+                    if(strpos(',resolving,test,testing,tested,', $colType) !== false) continue;
 
                     if($lane->groupby and $bug->{$lane->groupby} != $lane->extra)
                     {
                         $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
-                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['unconfirmed'] = empty($cardPairs['unconfirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['unconfirmed'];
                         if(strpos($cardPairs['closed'], ",$bugID,") !== false) $cardPairs['closed'] = str_replace(",$bugID,", ',', $cardPairs['closed']);
                     }
-                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    elseif($colType == 'confirmed' and $bug->status == $status and $bug->confirmed == 1 and strpos($cardPairs['confirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['confirmed'] = empty($cardPairs['confirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['confirmed'];
+                        if(strpos($cardPairs['unconfirmed'], ",$bugID,") !== false) $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
+                    }
+                    elseif($colType == 'fixing' and $bug->status == $status and $bug->activatedCount > 0 and strpos($cardPairs['fixing'], ",$bugID,") === false)
+                    {
+                        $cardPairs['fixing'] = empty($cardPairs['fixing']) ? ",$bugID," : ",$bugID" . $cardPairs['fixing'];
+                        if(strpos($cardPairs['confirmed'], ",$bugID,") !== false)   $cardPairs['confirmed']   = str_replace(",$bugID,", ',', $cardPairs['confirmed']);
                         if(strpos($cardPairs['unconfirmed'], ",$bugID,") !== false) $cardPairs['unconfirmed'] = str_replace(",$bugID,", ',', $cardPairs['unconfirmed']);
                     }
                     elseif($colType == 'fixed' and $bug->status == $status and strpos($cardPairs['fixed'], ",$bugID,") === false and strpos($cardPairs['testing'], ",$bugID,") === false and strpos($cardPairs['tested'], ",$bugID,") === false)
                     {
                         $cardPairs['fixed'] = empty($cardPairs['fixed']) ? ",$bugID," : ",$bugID" . $cardPairs['fixed'];
+                        if(strpos($cardPairs['testing'], ",$bugID,") !== false) $cardPairs['testing'] = str_replace(",$bugID,", ',', $cardPairs['testing']);
+                        if(strpos($cardPairs['tested'], ",$bugID,") !== false)  $cardPairs['tested']  = str_replace(",$bugID,", ',', $cardPairs['tested']);
                     }
                     elseif($colType == 'closed' and $bug->status == 'closed' and strpos($cardPairs[$colType], ",$bugID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$bugID," : ",$bugID". $cardPairs[$colType];
-                    }
-                    elseif($bug->status != $status and strpos($cardPairs[$colType], ",$bugID,") !== false)
-                    {
-                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
                     }
                 }
             }
@@ -557,7 +1649,7 @@ class kanbanModel extends model
             $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
 
             $laneID = $this->dao->lastInsertId();
-            $this->createColumns($laneID, $type, $executionID, $groupBy, $groupKey);
+            $this->createExecutionColumns($laneID, $type, $executionID, $groupBy, $groupKey);
         }
 
         $this->resetLaneOrder($executionID, $type, $groupBy);
@@ -573,7 +1665,7 @@ class kanbanModel extends model
      */
     public function updateLaneColumn($columnID, $column)
     {
-        $data = fixer::input('post')->get();
+        $data = fixer::input('post')->trim('name')->get();
 
         $this->dao->update(TABLE_KANBANCOLUMN)->data($data)
             ->autoCheck()
@@ -616,6 +1708,61 @@ class kanbanModel extends model
     }
 
     /**
+     * Update a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function updateCard($cardID)
+    {
+        if($this->post->estimate < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+            return false;
+        }
+
+        if($this->post->end && ($this->post->begin > $this->post->end))
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+            return false;
+        }
+
+        $cardID  = (int)$cardID;
+        $oldCard = $this->getCardByID($cardID);
+
+        $now  = helper::now();
+        $card = fixer::input('post')
+            ->add('lastEditedBy', $this->app->user->account)
+            ->add('lastEditedDate', $now)
+            ->trim('name')
+            ->setDefault('estimate', $oldCard->estimate)
+            ->setIF(!empty($this->post->assignedTo) and $oldCard->assignedTo != $this->post->assignedTo, 'assignedDate', $now)
+            ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
+            ->stripTags($this->config->kanban->editor->editcard['id'], $this->config->allowedTags)
+            ->join('assignedTo', ',')
+            ->remove('uid')
+            ->get();
+
+        $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->editcard['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_KANBANCARD)->data($card)
+            ->autoCheck()
+            ->checkIF($card->estimate != '', 'estimate', 'float')
+            ->batchcheck($this->config->kanban->editcard->requiredFields, 'notempty')
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        if(!dao::isError())
+        {
+            $this->file->saveUpload('kanbancard', $cardID);
+            $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+
+            return common::createChanges($oldCard, $card);
+        }
+    }
+
+    /**
      * Set WIP limit.
      *
      * @param  int    $columnID
@@ -626,7 +1773,7 @@ class kanbanModel extends model
     {
         $oldColumn = $this->getColumnById($columnID);
         $column    = fixer::input('post')->remove('WIPCount,noLimit')->get();
-        if(!preg_match("/^-?\d+$/", $column->limit))
+        if(!preg_match("/^-?\d+$/", $column->limit) or (!isset($_POST['noLimit']) and $column->limit <= 0))
         {
             dao::$errors['limit'] = $this->lang->kanban->error->mustBeInt;
             return false;
@@ -637,7 +1784,7 @@ class kanbanModel extends model
         $sumChildLimit = 0;
         if($oldColumn->parent == -1 and $column->limit != -1)
         {
-            $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetchAll();
+            $childColumns = $this->dao->select('id,`limit`')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->andWhere('deleted')->eq(0)->fetchAll();
             foreach($childColumns as $childColumn)
             {
                 if($childColumn->limit == -1)
@@ -694,7 +1841,7 @@ class kanbanModel extends model
      */
     public function setLane($laneID)
     {
-        $lane = fixer::input('post')->get();
+        $lane = fixer::input('post')->trim('name')->get();
 
         $this->dao->update(TABLE_KANBANLANE)->data($lane)
             ->autoCheck()
@@ -703,6 +1850,120 @@ class kanbanModel extends model
             ->exec();
 
         return dao::isError();
+    }
+
+    /**
+     * Set kanban headerActions.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return void
+     */
+    public function setHeaderActions($kanban)
+    {
+        $actions  = '';
+        $actions .= "<div class='btn-group'>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+        if($printSettingBtn)
+        {
+            $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+            $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
+            if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+
+            $kanbanActions  = '';
+            if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
+            if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
+            if($kanbanActions)
+            {
+                $actions .= common::hasPriv('kanban', 'createRegion') ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+            }
+            $actions .= "</ul>";
+        }
+
+        $actions .= "</div>";
+
+        $this->lang->headerActions = $actions;
+    }
+
+    /**
+     * Set switcher menu.
+     *
+     * @param  object $kanban
+     * @access public
+     * @return void
+     */
+    public function setSwitcher($kanban)
+    {
+        $currentModule = $this->app->getModuleName();
+        $currentMethod = $this->app->getMethodName();
+
+        $kanbanLink = helper::createLink('kanban', 'ajaxGetKanbanMenu', "objectID=$kanban->id&module=$currentModule&method=$currentMethod");
+
+        $switcher  = "<div class='btn-group header-btn' id='swapper'><button data-toggle='dropdown' type='button' class='btn' id='currentItem' title='{$kanban->name}'><span class='text'>{$kanban->name}</span> <span class='caret'></span></button><div id='dropMenu' class='dropdown-menu search-list' data-ride='searchList' data-url='$kanbanLink'>";
+        $switcher .= '<div class="input-control search-box has-icon-left has-icon-right search-example"><input type="search" class="form-control search-input" /><label class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label><a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a></div>';
+        $switcher .= "</div></div>";
+
+        $this->lang->switcherMenu = $switcher;
+    }
+
+    /**
+     * Sort kanban group.
+     *
+     * @param  int    $region
+     * @param  array  $groups
+     * @access public
+     * @return bool
+     */
+    public function sortGroup($region, $groups)
+    {
+        $this->loadModel('action');
+
+        $groupList = $this->getGroupList($region);
+
+        $order = 1;
+        foreach($groups as $groupID)
+        {
+            if(!$groupID) continue;
+            if(!isset($groupList[$groupID])) continue;
+
+            $this->dao->update(TABLE_KANBANGROUP)->set('`order`')->eq($order)->where('id')->eq($groupID)->exec();
+
+            $order++;
+        }
+
+        return !dao::isError();
+    }
+
+    /**
+     * Move a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $toColID
+     * @param  int    $toLaneID
+     * @access public
+     * @return void
+     */
+    public function moveCard($cardID, $toColID, $toLaneID)
+    {
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('column')->eq($toColID)
+            ->beginIF($toLaneID)->set('lane')->eq($toLaneID)->fi()
+            ->where('id')->eq($cardID)->exec();
+    }
+
+    /**
+     * Update a card's color.
+     *
+     * @param  int    $cardID
+     * @param  int    $color
+     * @access public
+     * @return void
+     */
+    public function updateCardColor($cardID, $color)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('`color`')->eq('#' . $color)->where('id')->eq($cardID)->exec();
     }
 
     /**
@@ -742,13 +2003,135 @@ class kanbanModel extends model
     }
 
     /**
+     * Archive a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function archiveColumn($columnID)
+    {
+        $this->dao->update(TABLE_KANBANCOLUMN)
+            ->set('archived')->eq(1)
+            ->where('id')->eq($columnID)
+            ->exec();
+    }
+
+    /**
+     * Restore a column.
+     *
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function restoreColumn($columnID)
+    {
+        $this->dao->update(TABLE_KANBANCOLUMN)
+            ->set('archived')->eq(0)
+            ->where('id')->eq($columnID)
+            ->exec();
+    }
+
+    /**
+     * Archive a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function archiveCard($cardID)
+    {
+        $oldCard = $this->getCardByID($cardID);
+
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('archived')->eq(1)
+            ->set('archivedBy')->eq($this->app->user->account)
+            ->set('archivedDate')->eq(helper::now())
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        $card = $this->getCardByID($cardID);
+
+        if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
+     * Restore a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function restoreCard($cardID)
+    {
+        $oldCard = $this->getCardByID($cardID);
+
+        $this->dao->update(TABLE_KANBANCARD)
+            ->set('archived')->eq(0)
+            ->set('archivedBy')->eq('')
+            ->set('archivedDate')->eq('')
+            ->where('id')->eq($cardID)
+            ->exec();
+
+        $card = $this->getCardByID($cardID);
+
+        if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
+     * Get space by id.
+     *
+     * @param  int    $spaceID
+     * @access public
+     * @return array
+     */
+    public function getSpaceById($spaceID)
+    {
+        $space = $this->dao->findById($spaceID)->from(TABLE_KANBANSPACE)->fetch();
+        $space = $this->loadModel('file')->replaceImgURL($space, 'desc');
+        return $space;
+    }
+
+    /**
+     * Get kanban group by space id list.
+     *
+     * @param  array|string $spaceIdList
+     * @param  array|string $kanbanIdList
+     * @access public
+     * @return array
+     */
+    public function getGroupBySpaceList($spaceIdList, $kanbanIdList = '')
+    {
+        return $this->dao->select('*')->from(TABLE_KANBAN)
+            ->where('deleted')->eq(0)
+            ->andWhere('space')->in($spaceIdList)
+            ->beginIF($kanbanIdList)->andWhere('id')->in($kanbanIdList)->fi()
+            ->fetchGroup('space', 'id');
+    }
+
+    /**
+     * Get group list by region.
+     *
+     * @param  int    $region
+     * @access public
+     * @return array
+     */
+    public function getGroupList($region)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANGROUP)
+            ->where('region')->eq($region)
+            ->orderBy('order')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get column by id.
      *
      * @param  int    $columnID
      * @access public
      * @return object
      */
-    public function getColumnById($columnID)
+    public function getColumnByID($columnID)
     {
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
             ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
@@ -778,6 +2161,26 @@ class kanbanModel extends model
             ->fetch();
     }
 
+    /**
+     * Get columns by object id.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $archived
+     * @param  string $deleted
+     * @access public
+     * @return array
+     */
+    public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
+            ->where(true)
+            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
+            ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
+            ->orderBy('order')
+            ->fetchAll('id');
+    }
 
     /**
      * Get lane by id.
@@ -839,6 +2242,42 @@ class kanbanModel extends model
     }
 
     /**
+     * Get card by id.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return object
+     */
+    public function getCardByID($cardID)
+    {
+        $card = $this->dao->select('*')->from(TABLE_KANBANCARD)->where('id')->eq($cardID)->fetch();
+        $card = $this->loadModel('file')->replaceImgURL($card, 'desc');
+
+        return $card;
+    }
+
+    /**
+     * Get cards by object id.
+     *
+     * @param  string $objectType
+     * @param  int    $objectID
+     * @param  string $archived
+     * @param  string $deleted
+     * @access public
+     * @return array
+     */
+    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where(true)
+            ->beginIF($objectType)->andWhere($objectType)->eq($objectID)->fi()
+            ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
+            ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
+            ->orderBy('order')
+            ->fetchAll('id');
+    }
+
+    /**
      * Get Kanban cards menus by execution id.
      *
      * @param  int    $executionID
@@ -849,6 +2288,8 @@ class kanbanModel extends model
      */
     public function getKanbanCardMenu($executionID, $objects, $objecType)
     {
+        $this->app->loadLang('execution');
+
         $menus = array();
         switch ($objecType)
         {
@@ -911,5 +2352,79 @@ class kanbanModel extends model
                 break;
         }
         return $menus;
+    }
+
+    /**
+     * Check if user can execute an action.
+     *
+     * @param  object $object
+     * @param  string $action
+     * @access public
+     * @return bool
+     */
+    public function isClickable($object, $action)
+    {
+        $action    = strtolower($action);
+        $clickable = commonModel::hasPriv('kanban', $action);
+        if(!$clickable) return false;
+
+        switch($action)
+        {
+            case 'sortlane' :
+            case 'deletelane' :
+                if($object->deleted != '0') return false;
+
+                $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANLANE)
+                    ->where('deleted')->eq('0')
+                    ->andWhere('region')->eq($object->region)
+                    ->beginIF($action == 'sortlane')->andWhere('`group`')->eq($object->group)->fi()
+                    ->fetch('count');
+                return $count > 1;
+            case 'createColumn' :
+            case 'copyColumn' :
+            case 'splitcolumn' :
+                if($object->parent) return false;   // The current column is a child column.
+
+                $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
+                    ->where('parent')->eq($object->id)
+                    ->andWhere('deleted')->eq('0')
+                    //->andWhere('archived')->eq('0')
+                    ->fetch('count');
+                return $count == 0;     // The column has child columns.
+            case 'restoreColumn' :
+                if($object->parent)
+                {
+                    $parent = $this->getColumnByID($object->parent);
+                    if($parent->deleted == '1' || $parent->archived == '1') return false;
+                }
+                return $object->archived == '1';
+            case 'archivecolumn' :
+                //if($object->archived != '0') return false;    // The column has been archived.
+            case 'deletecolumn' :
+                if($object->deleted != '0') return false;
+
+                if($object->parent)
+                {
+                    $childrenCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
+                        ->where('parent')->eq($object->parent)
+                        ->andWhere('deleted')->eq('0')
+                        //->andWhere('archived')->eq('0')
+                        ->fetch('count');
+
+                    return $childrenCount > 2;
+                }
+
+                $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
+                    ->where('region')->eq($object->region)
+                    ->andWhere('parent')->eq(0)
+                    ->andWhere('`group`')->eq($object->group)
+                    ->andWhere('deleted')->eq('0')
+                    //->andWhere('archived')->eq('0')
+                    ->fetch('count');
+
+                return $count > 1;
+        }
+
+        return true;
     }
 }

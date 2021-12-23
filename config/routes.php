@@ -6,6 +6,8 @@ $routes = array();
 
 $routes['/tokens']   = 'tokens';
 $routes['/langs']    = 'langs';
+$routes['/views']    = 'views';
+$routes['/groups']   = 'groups';
 $routes['/ping']     = 'ping';
 $routes['/comments'] = 'comments';
 

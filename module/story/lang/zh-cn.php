@@ -280,7 +280,8 @@ $lang->story->moveChildrenTips      = "修改父{$lang->SRCommon}的所属产品
 $lang->story->changeTips            = '该软件需求关联的用户需求有变更，点击“不变更”忽略此条变更，点击“变更”来进行该软件需求的变更。';
 $lang->story->estimateMustBeNumber  = '估算值必须是数字';
 $lang->story->estimateMustBePlus    = '估算值不能是负数';
-$lang->story->confirmChangeBranch  = $lang->SRCommon . '%s已关联在之前所属分支的计划中，调整分支后，' . $lang->SRCommon . '将从之前所属分支的计划中移除，请确认是否继续修改上述' . $lang->SRCommon . '的分支。';
+$lang->story->confirmChangeBranch   = $lang->SRCommon . '%s已关联在之前所属分支的计划中，调整分支后，' . $lang->SRCommon . '将从之前所属分支的计划中移除，请确认是否继续修改上述' . $lang->SRCommon . '的分支。';
+$lang->story->confirmChangePlan     = $lang->SRCommon . '%s已关联在之前计划的所属分支中，调整分支后，' . $lang->SRCommon . '将会从计划中移除，请确认是否继续修改计划的所属分支。';
 
 $lang->story->form = new stdclass();
 $lang->story->form->area     = "该{$lang->SRCommon}所属范围";

@@ -83,7 +83,7 @@
                   <div class='input-group'>
                     <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
                     <span class='input-group-addon fix-border fix-padding'></span>
-                    <?php if($product->type != 'normal') echo html::select('branch', $branches, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
+                    <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
                   </div>
                 </td>
               </tr>
@@ -91,7 +91,7 @@
               <tr>
                 <th class='thWidth'><?php echo $lang->product->branch = sprintf($lang->product->branch, $lang->product->branchName['branch']);?></th>
                 <td>
-                  <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branches, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
+                  <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
                 </td>
               </tr>
               <?php endif;?>
@@ -157,11 +157,11 @@
                 <th><?php echo $lang->story->stage;?></th>
                 <td>
                 <?php
-                if($story->stages and $branches)
+                if($story->stages and $branchTagOption)
                 {
                     foreach($story->stages as $branch => $stage)
                     {
-                        if(isset($branches[$branch])) echo '<p>' . $branches[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
+                        if(isset($branchTagOption[$branch])) echo '<p>' . $branchTagOption[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
                     }
                 }
                 else

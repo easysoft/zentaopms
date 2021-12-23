@@ -1409,6 +1409,37 @@ class baseRouter
     }
 
     /**
+     * Check for API extend.
+     *
+     * @access public
+     * @return bool
+     */
+    public function checkAPIFile()
+    {
+        $moduleExtPaths = $this->getModuleExtPath('', $this->moduleName, 'control');
+
+        /* 如果扩展目录为空，不包含任何扩展文件。If there's no ext paths return false.*/
+        if(empty($moduleExtPaths)) return false;
+
+        /* 如果extensionLevel == 2，且扩展文件存在，返回该站点扩展文件。If extensionLevel == 2 and site extensionFile exists, return it. */
+        if($this->config->framework->extensionLevel == 2 and !empty( $moduleExtPaths['site']))
+        {
+            $locateFile  = $moduleExtPaths['site'] . $this->methodName . '.302';
+            if(file_exists($locateFile)) $this->sendAPI($locateFile);
+            $requestFile = $moduleExtPaths['site'] . $this->methodName . '.api';
+            if(file_exists($requestFile)) $this->sendAPI($requestFile);
+        }
+
+        /* 然后再尝试寻找公共扩展文件。Then try to find the common extension file. */
+        $locateFile  = $moduleExtPaths['common'] . $this->methodName . '.302';
+        if(file_exists($locateFile)) $this->sendAPI($locateFile);
+        $requestFile = $moduleExtPaths['common'] . $this->methodName . '.api';
+        if(file_exists($requestFile)) $this->sendAPI($requestFile);
+
+        return false;
+    }
+
+    /**
      * 设置一个模块的model文件，如果存在model扩展，一起合并。
      * Set the model file of one module. If there's an extension file, merge it with the main model file.
      *
@@ -1429,6 +1460,7 @@ class baseRouter
         /* 计算扩展的文件和hook文件。Compute the extension files and hook files. */
         $hookFiles     = array();
         $extFiles      = array();
+        $apiFiles      = array();
         $siteExtended  = false;
 
         $modelExtPaths = $this->getModuleExtPath($appName, $moduleName, 'model');
@@ -1438,14 +1470,16 @@ class baseRouter
 
             $tmpHookFiles = helper::ls($modelExtPath . 'hook/', '.php');
             $tmpExtFiles  = helper::ls($modelExtPath, '.php');
+            $tmpAPIFiles  = helper::ls($modelExtPath, '.api');
             $hookFiles    = array_merge($hookFiles, $tmpHookFiles);
             $extFiles     = array_merge($extFiles,  $tmpExtFiles);
+            $apiFiles     = array_merge($apiFiles,  $tmpAPIFiles);
 
-            if($extType == 'site' and (!empty($tmpHookFiles) or !empty($tmpExtFiles))) $siteExtended = true;
+            if($extType == 'site' and (!empty($tmpHookFiles) or !empty($tmpExtFiles) or !empty($tmpAPIFiles))) $siteExtended = true;
         }
 
         /* 如果没有扩展文件，返回主文件。 If no extension or hook files, return the main file directly. */
-        if(empty($extFiles) and empty($hookFiles)) return $mainModelFile;
+        if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainModelFile;
 
         /* 计算合并之后的modelFile路径。Compute the merged model file path. */
         $extModelPrefix  = ($siteExtended and !empty($this->siteCode)) ? $this->siteCode[0] . DS . $this->siteCode : '';
@@ -1454,11 +1488,11 @@ class baseRouter
         if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
 
         /* 判断生成的缓存文件是否需要更新。 Judge whether the merged model file needed update or not. */
-        if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
+        if(!$this->needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)) return $mergedModelFile;
 
         /* 合并扩展和hook文件。Merge the extension and hook files. */
         $modelLines = $this->mergeModelExtFiles($moduleName, $mainModelFile, $extFiles, $mergedModelDir);
-        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile);
+        $this->mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles);
 
         return $mergedModelFile;
     }
@@ -1466,20 +1500,22 @@ class baseRouter
     /**
      * 检查合并之后的model文件是否需要更新。Check whether the merged model file need update or not.
      *
-     * @param  string    $mainModelFile
      * @param  string    $mergedModelFile
-     * @param  string    $modelExtPaths
      * @param  array     $extFiles
      * @param  array     $hookFiles
+     * @param  array     $apiFiles
+     * @param  string    $modelExtPaths
+     * @param  string    $mainModelFile
      * @access public
      * @return bool
      */
-    public function needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $modelExtPaths, $mainModelFile)
+    public function needModelFileUpdate($mergedModelFile, $extFiles, $hookFiles, $apiFiles, $modelExtPaths, $mainModelFile)
     {
         $lastTime = file_exists($mergedModelFile) ? filemtime($mergedModelFile) : 0;
 
         foreach($extFiles  as $extFile)  if(filemtime($extFile)  > $lastTime) return true;
         foreach($hookFiles as $hookFile) if(filemtime($hookFile) > $lastTime) return true;
+        foreach($apiFiles  as $apiFile)  if(filemtime($apiFile)  > $lastTime) return true;
 
         $modelExtPath  = $modelExtPaths['common'];
         $modelHookPath = $modelExtPaths['common'] . 'hook/';
@@ -1547,7 +1583,7 @@ class baseRouter
      * @access public
      * @return void
      */
-    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile)
+    public function mergeModelHookFiles($moduleName, $mainModelFile, $modelLines, $hookFiles, $mergedModelDir, $mergedModelFile, $apiFiles)
     {
         /* 定义相关变量。Init vars. */
         $modelClass    = $moduleName . 'Model';
@@ -1558,6 +1594,15 @@ class baseRouter
 
         /* 读取hook文件。Get hook codes need to merge. */
         $hookCodes = array();
+        foreach($apiFiles as $apiFile)
+        {
+            /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
+            $fileName = baseName($apiFile);
+            list($method) = explode('.', $fileName);
+
+            $url = self::extractAPIURL($apiFile);
+            if($url) $hookCodes[$method][] = "return helper::requestAPI('$url');";
+        }
         foreach($hookFiles as $hookFile)
         {
             /* 通过文件名获得其对应的方法名。Get methods according it's filename. */
@@ -1609,6 +1654,92 @@ class baseRouter
         if(strpos($code, '<?php') === 0)     $code = ltrim($code, '<?php');
         if(strrpos($code, '?' . '>')   !== false) $code = rtrim($code, '?' . '>');
         return trim($code);
+    }
+
+    /**
+     * Extract API url from api file.
+     *
+     * @param  string    $fileName
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function extractAPIURL($fileName)
+    {
+        global $config;
+
+        $url   = '';
+        $lines = file($fileName);
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+
+            if(empty($line)) continue;
+            if(preg_match('/^https?\:\/\//', $line))
+            {
+                $url = $line;
+                break;
+            }
+        }
+        if(empty($url)) return false;
+        return $url;
+    }
+
+    /**
+     * Send API.
+     *
+     * @param  string    $apiFile
+     * @access public
+     * @return void
+     */
+    public function sendAPI($apiFile)
+    {
+        $extension = substr($apiFile, strrpos($apiFile, '.') + 1);
+        if($extension != '302' and $extension != 'api') return false;
+
+        $lines = file($apiFile);
+        $url   = '';
+        foreach($lines as $line)
+        {
+            $line = trim($line);
+
+            if(empty($line)) continue;
+            if(preg_match('/^https?\:\/\//', $line))
+            {
+                $url = $line;
+                break;
+            }
+        }
+        if(empty($url)) return false;
+
+        $url .= (strpos($url, '?') !== false ? '&' : '?') . $this->config->sessionVar . '=' . session_id() . '&account=' . $_SESSION['user']->account;
+        if($extension == '302')
+        {
+            header("location: $url");
+            exit;
+        }
+
+        if($extension == 'api')
+        {
+            $response = common::http($url);
+            $headFile = $this->moduleRoot . 'common/view/header.html.php';
+            $footFile = $this->moduleRoot . 'common/view/footer.html.php';
+
+            $obLevel = ob_get_level();
+            for($i = 0; $i < $obLevel; $i++) ob_end_clean();
+
+            $viewFiles = $this->control->setViewFile($this->moduleName, $this->methodName);
+
+            if($css) $this->control->view->pageCSS = $css;
+            if($js)  $this->control->view->pageJS  = $js;
+
+            $output  = '';
+            $output .= $this->control->printViewFile($headFile);
+            $output .= $response;
+            if(isset($viewFiles['hookFiles'])) foreach($viewFiles['hookFiles'] as $hookFile) $output .= $this->control->printViewFile($hookFile);
+            $output .= $this->control->printViewFile($footFile);
+            die($output);
+        }
     }
 
     //-------------------- 路由相关方法(Routing related methods) --------------------//
@@ -1700,87 +1831,100 @@ class baseRouter
      */
     public function loadModule()
     {
-        $appName    = $this->appName;
-        $moduleName = $this->moduleName;
-        $methodName = $this->methodName;
+        try {
+            $appName    = $this->appName;
+            $moduleName = $this->moduleName;
+            $methodName = $this->methodName;
 
-        /*
-         * 引入该模块的control文件。
-         * Include the control file of the module.
-         **/
-        $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
-        chdir(dirname($file2Included));
-        helper::import($file2Included);
+            /*
+            * 引入该模块的control文件。
+            * Include the control file of the module.
+            **/
+            $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
+            chdir(dirname($file2Included));
+            helper::import($file2Included);
 
-        /*
-         * 设置control的类名。
-         * Set the class name of the control.
-         **/
-        $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
-        if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
+            /*
+            * 设置control的类名。
+            * Set the class name of the control.
+            **/
+            $className = class_exists("my$moduleName") ? "my$moduleName" : $moduleName;
+            if(!class_exists($className)) $this->triggerError("the control $className not found", __FILE__, __LINE__, $exit = true);
 
-        /*
-         * 创建control类的实例。
-         * Create a instance of the control.
-         **/
-        $module = new $className();
-        if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
-        $this->control = $module;
+            /*
+            * 创建control类的实例。
+            * Create a instance of the control.
+            **/
+            $module = new $className();
+            if(!method_exists($module, $methodName)) $this->triggerError("the module $moduleName has no $methodName method", __FILE__, __LINE__, $exit = true);
+            $this->control = $module;
 
-        /* include default value for module*/
-        $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
-        if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
+            /* include default value for module*/
+            $defaultValueFiles = glob($this->getTmpRoot() . "defaultvalue/*.php");
+            if($defaultValueFiles) foreach($defaultValueFiles as $file) include $file;
 
-        /*
-         * 使用反射机制获取函数参数的默认值。
-         * Get the default settings of the method to be called using the reflecting.
-         *
-         * */
-        $defaultParams = array();
-        $methodReflect = new reflectionMethod($className, $methodName);
-        foreach($methodReflect->getParameters() as $param)
-        {
-            $name = $param->getName();
-
-            $default = '_NOT_SET';
-            if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+            /*
+            * 使用反射机制获取函数参数的默认值。
+            * Get the default settings of the method to be called using the reflecting.
+            *
+            * */
+            $defaultParams = array();
+            $methodReflect = new reflectionMethod($className, $methodName);
+            foreach($methodReflect->getParameters() as $param)
             {
-                $default = $paramDefaultValue[$appName][$className][$methodName][$name];
-            }
-            elseif(isset($paramDefaultValue[$className][$methodName][$name]))
-            {
-                $default = $paramDefaultValue[$className][$methodName][$name];
-            }
-            elseif($param->isDefaultValueAvailable())
-            {
-                $default = $param->getDefaultValue();
+                $name = $param->getName();
+
+                $default = '_NOT_SET';
+                if(isset($paramDefaultValue[$appName][$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$appName][$className][$methodName][$name];
+                }
+                elseif(isset($paramDefaultValue[$className][$methodName][$name]))
+                {
+                    $default = $paramDefaultValue[$className][$methodName][$name];
+                }
+                elseif($param->isDefaultValueAvailable())
+                {
+                    $default = $param->getDefaultValue();
+                }
+
+                $defaultParams[$name] = $default;
             }
 
-            $defaultParams[$name] = $default;
+            /**
+             * 根据PATH_INFO或者GET方式设置请求的参数。
+             * Set params according PATH_INFO or GET.
+             */
+            if($this->config->requestType != 'GET')
+            {
+                $this->setParamsByPathInfo($defaultParams);
+            }
+            else
+            {
+                $this->setParamsByGET($defaultParams);
+            }
+
+            if($this->config->framework->filterParam == 2)
+            {
+                $_GET     = validater::filterParam($_GET, 'get');
+                $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
+            }
+
+            /* 调用该方法   Call the method. */
+            call_user_func_array(array($module, $methodName), $this->params);
+            $this->checkAPIFile();
+            return $module;
+        } catch (EndResponseException $endResponseException) {
+            echo $endResponseException->getContent();
         }
-
-        /**
-         * 根据PATH_INFO或者GET方式设置请求的参数。
-         * Set params according PATH_INFO or GET.
-         */
-        if($this->config->requestType != 'GET')
+        if (isset($module))
         {
-            $this->setParamsByPathInfo($defaultParams);
+            return $module;
         }
         else
         {
-            $this->setParamsByGET($defaultParams);
+            return false;
         }
-
-        if($this->config->framework->filterParam == 2)
-        {
-            $_GET     = validater::filterParam($_GET, 'get');
-            $_COOKIE  = validater::filterParam($_COOKIE, 'cookie');
-        }
-
-        /* 调用该方法   Call the method. */
-        call_user_func_array(array($module, $methodName), $this->params);
-        return $module;
     }
 
     /**
@@ -2634,5 +2778,37 @@ class super
         if($this->scope == 'session') a($_SESSION);
         if($this->scope == 'env')     a($_ENV);
         if($this->scope == 'global')  a($GLOBALS);
+    }
+}
+
+class EndResponseException extends \Exception
+{
+    /**
+     * 响应内容
+     *
+     * @var string
+     */
+    private $content;
+
+    /**
+     * @param string $content
+     * 
+     * @return sellf
+     */
+    public static function create($content = '')
+    {
+        $exception = new self;
+        $exception->content = $content;
+        return $exception;
+    }
+
+    /**
+     * Get 响应内容
+     *
+     * @return string
+     */
+    public function getContent()
+    {
+        return $this->content;
     }
 }

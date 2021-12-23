@@ -1,22 +1,27 @@
-title: project
+title: program
 author: Zhu Jinyong
 version: "1.0"
 fields:
   - field: project
     range: 0
   - field: model
-    range: scrum
+    range: ""
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: "项目集"
+    - field: name2
+      range: 1-10000
   - field: type
-    range: project
+    range: program
   - field: status
     range: wait
-  - field: percent
+  - field: parent
     range: 0
-  - field: auth
-    range: extend,reset
   - field: desc
     range: 1-10000
-    prefix: "项目描述"
+    prefix: "项目集描述"
   - field: acl
     range: open{4},private{4}
   - field: whitelist

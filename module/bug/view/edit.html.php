@@ -95,7 +95,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                   <td>
                     <div class='input-group'>
                       <?php echo html::select('product', $products, $productID, "onchange='loadAll(this.value)' class='form-control chosen'");?>
-                      <?php if($product->type != 'normal') echo html::select('branch', $branches, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
+                      <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $bug->branch, "onchange='loadBranch();' class='form-control'");?>
                     </div>
                   </td>
                 </tr>

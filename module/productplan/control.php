@@ -31,10 +31,20 @@ class productplan extends control
         $this->product->setMenu($productID, $branch);
         $this->session->set('currentProductType', $product->type);
 
-        $this->view->product  = $product;
-        $this->view->branch   = $branch;
-        $this->view->branches = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID);
-        $this->view->position[] = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
+        $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
+        $branchOption    = array();
+        $branchTagOption = array();
+        foreach($branches as $branchInfo)
+        {
+            $branchOption[$branchInfo->id]    = $branchInfo->name;
+            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+        }
+
+        $this->view->product         = $product;
+        $this->view->branch          = $branch;
+        $this->view->branchOption    = $branchOption;
+        $this->view->branchTagOption = $branchTagOption;
+        $this->view->position[]      = html::a($this->createLink('product', 'browse', "productID={$productID}&branch=$branch"), $product->name);
     }
 
     /**
@@ -102,6 +112,8 @@ class productplan extends control
         if(!empty($_POST))
         {
             $changes = $this->productplan->update($planID);
+            $change[$planID] = $changes;
+            $this->syncStory($change);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
@@ -113,9 +125,12 @@ class productplan extends control
         }
 
         $plan = $this->productplan->getByID($planID);
+        $oldBranch = array($planID => $plan->branch);
+
         $this->commonAction($plan->product, $plan->branch);
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
+        $this->view->oldBranch  = $oldBranch;
         $this->view->plan = $plan;
         $this->display();
     }
@@ -138,12 +153,20 @@ class productplan extends control
             $this->view->position[] = html::a(inlink('browse', "productID=$productID&branch=$branch"), $this->lang->productplan->common);
             $this->view->position[] = $this->lang->productplan->batchEdit;
 
-            $this->view->plans = $this->productplan->getByIDList($this->post->planIDList);
+            $plans     = $this->productplan->getByIDList($this->post->planIDList);
+            $product   = $this->loadModel('product')->getById($productID);
+            $oldBranch = array();
+            foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
+
+            $this->view->plans         = $plans;
+            $this->view->oldBranch     = $oldBranch;
+            $this->view->branchProduct = $product->type == 'normal' ? false : true;
             die($this->display());
         }
         elseif($_POST)
         {
             $changes = $this->productplan->batchUpdate($productID);
+            $this->syncStory($changes);
             $this->loadModel('action');
             foreach($changes as $planID => $change)
             {
@@ -651,6 +674,62 @@ class productplan extends control
         die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
     }
 
+    /**
+     * Synchronize story when edit plan.
+     * @param  int    $planID
+     * @param  int    $oldBranch
+     * @access public
+     * @return void
+     */
+    public function syncStory($changes)
+    {
+        foreach($changes as $planID => $changes)
+        {
+            $oldBranch = '';
+            $newBranch = '';
+            foreach($changes as $changeId => $change)
+            {
+                if($change['field'] == 'branch')
+                {
+                    $oldBranch = $change['old'];
+                    $newBranch = $change['new'];
+                    break;
+                }
+            }
+            $planStories = $this->loadModel('story')->getPlanStories($planID, 'all');
+            if($oldBranch)
+            {
+                foreach($planStories as $storyID => $story)
+                {
+                    if($story->branch and $story->branch != $newBranch) $this->productplan->unlinkStory($storyID, $planID);
+                }
+            }
+        }
+    }
+
+    /**
+     * AJAX: Get conflict story.
+     *
+     * @param  int    $planID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetConflictStory($planID, $newBranch)
+    {
+        $plan                = $this->productplan->getByID($planID);
+        $oldBranch           = $plan->branch;
+        $planStories         = $this->loadModel('story')->getPlanStories($planID, 'all');
+        $conflictStoryIdList = '';
+        if($oldBranch)
+        {
+            foreach($planStories as $storyID => $story)
+            {
+                if($story->branch and $story->branch != $newBranch) $conflictStoryIdList .= '[' . $storyID . ']';
+            }
+        }
+        if($conflictStoryIdList != '') printf($this->lang->story->confirmChangePlan, $conflictStoryIdList);
+    }
 
     /**
      * AJAX: Get last plan.

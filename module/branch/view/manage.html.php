@@ -13,6 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('orderBy', $orderBy)?>
+<?php js::set('branchLang', $lang->branch);?>
+<?php js::set('productID', $productID);?>
 <?php $canCreate      = common::hasPriv('branch', 'create');?>
 <?php $canOrder       = common::hasPriv('branch', 'sort');?>
 <?php $canBatchEdit   = common::hasPriv('branch', 'batchEdit');?>
@@ -29,7 +31,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if($canCreate) common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . sprintf($lang->branch->create, $lang->product->branchName[$product->type]), '', "class='btn btn-primary iframe'", true, true);?>
+    <?php if($canCreate) common::printLink('branch', 'create', "productID=$productID", "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-primary iframe'", true, true);?>
   </div>
 </div>
 <div id="mainContent">
@@ -37,7 +39,7 @@
   <div class="table-empty-tip">
     <p>
       <span class="text-muted"><?php echo $lang->branch->noData;?></span>
-      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . sprintf($lang->branch->create, $lang->product->branchName[$product->type]), '', "class='btn btn-info iframe'");?>
+      <?php if($canCreate) echo html::a($this->createLink('branch', 'create', "productID=$productID", '', true), "<i class='icon icon-plus'></i> " . $lang->branch->create, '', "class='btn btn-info iframe'");?>
     </p>
   </div>
   <?php else:?>
@@ -54,18 +56,18 @@
           <?php if($canOrder):?>
           <th class='c-order sort-default'><?php echo $lang->branch->order;?></th>
           <?php endif;?>
-          <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, sprintf($lang->branch->name, $lang->product->branchName[$product->type]));?></th>
+          <th class='text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->branch->name);?></th>
           <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->branch->status);?></th>
           <th class='c-date'><?php common::printOrderLink('createdDate', $orderBy, $vars, $lang->branch->createdDate);?></th>
           <th class='c-date'><?php common::printOrderLink('closedDate', $orderBy, $vars, $lang->branch->closedDate);?></th>
-          <th class='c-desc'><?php echo sprintf($lang->branch->desc, $lang->product->branchName[$product->type]);?></th>
+          <th class='c-desc'><?php echo $lang->branch->desc;?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody id='branchTableList'>
         <?php foreach($branchList as $branch):?>
         <?php $isMain = $branch->id == BRANCH_MAIN;?>
-        <tr data-id='<?php echo $branch->id;?>'>
+        <tr data-id='<?php echo $branch->id;?>' data-status='<?php echo $branch->status;?>'>
           <?php if($canBatchAction):?>
           <td class='cell-id'>
             <?php echo html::checkbox('branchIDList', array($branch->id => ''));?>
@@ -99,7 +101,7 @@
           <td class='c-actions'>
           <?php
             $disabled = $isMain ? 'disabled' : '';
-            common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', "$disabled iframe", true, '', sprintf($lang->branch->edit, $lang->product->branchName[$product->type]));
+            common::printIcon('branch', 'edit', "branchID=$branch->id&productID=$productID", $branch, 'list', '', '', "$disabled iframe", true, '', $lang->branch->edit);
             if($branch->status == 'active')
             {
                 common::printIcon('branch', 'close', "branchID=$branch->id", $branch, 'list', 'off', 'hiddenwin', $disabled);
@@ -124,6 +126,7 @@
         <?php
         $batchEditLink = $this->createLink('branch', 'batchEdit', "productID=$productID");
         echo html::submitButton($lang->edit, "data-form-action='$batchEditLink'", 'btn');
+        if($browseType != 'closed') echo html::a('#mergeBranch', $lang->branch->merge, '', "data-toggle='modal' class='btn'");
         ?>
       </div>
       <?php endif;?>
@@ -132,5 +135,44 @@
     </div>
   </form>
   <?php endif;?>
+</div>
+
+<div class="modal fade" id="mergeBranch">
+  <div class="modal-dialog mw-700px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <span class="modal-title"><?php echo $lang->branch->mergeBranch;?></span>
+        <small> <?php echo $lang->branch->mergeTips;?></small>
+      </div>
+      <div class="modal-body">
+        <form method='post' enctype='multipart/form-data' class="form-ajax">
+          <table class='table table-form'>
+            <tr>
+              <th class='thWidth'><?php echo $lang->branch->mergeTo;?></th>
+              <td>
+                <div class="input-group">
+                  <?php echo html::select('targetBranch', $branchPairs, '', "class='form-control chosen'");?>
+                  <span class='input-group-addon'>
+                    <?php echo html::checkbox('createBranch', $lang->branch->create, '', "id='createBranch'")?>
+                  </span>
+                </div>
+              </td>
+              <td></td>
+            </tr>
+            <tr>
+              <td colspan="3"><span><?php echo $lang->branch->targetBranchTips;?></span></td>
+            </tr>
+            <tr>
+              <td colspan='3' class='text-center form-actions'>
+                <?php echo html::commonButton($lang->save, "id='saveButton'", 'btn btn-primary btn-wide');?>
+                <?php echo html::linkButton($lang->goback, $this->createLink('branch', 'manage', "productID=$productID"), 'self', '', 'btn btn-wide');?>
+              </td>
+            </tr>
+          </table>
+        </form>
+      </div>
+    </div>
+  </div>
 </div>
 <?php include '../../common/view/footer.html.php';?>

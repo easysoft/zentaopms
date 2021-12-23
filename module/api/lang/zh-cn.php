@@ -23,6 +23,7 @@ $lang->api->createRelease    = '发布接口';
 $lang->api->createLib        = '创建接口库';
 $lang->api->createApi        = '创建接口';
 $lang->api->createAB         = '创建';
+$lang->api->createDemo       = '导入禅道API';
 $lang->api->edit             = '编辑接口';
 $lang->api->delete           = '删除接口';
 $lang->api->position         = '位置';
@@ -58,6 +59,7 @@ $lang->api->confirmDelete    = "您确定删除该接口吗？";
 $lang->api->confirmDeleteLib = "您确定删除该接口库吗？";
 $lang->api->filterStruct     = "使用数据结构填充";
 $lang->api->defaultVersion   = "当前版本";
+$lang->api->zentaoAPI        = "禅道API文档v1";
 
 /* Common access control lang. */
 $lang->api->whiteList          = '白名单';

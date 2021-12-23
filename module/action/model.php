@@ -636,6 +636,7 @@ class actionModel extends model
                 if(isset($objectNames['jenkins'][$trash->objectID])) $objectType = 'jenkins';
                 $trash->objectType = $objectType;
             }
+
             $trash->objectName = isset($objectNames[$objectType][$trash->objectID]) ? $objectNames[$objectType][$trash->objectID] : '';
         }
         return $trashes;
@@ -735,7 +736,14 @@ class actionModel extends model
             if(is_array($desc))
             {
                 if($key == 'extra') continue;
-                $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                if($action->objectType == 'story' and $action->action = 'reviewed' and strpos($action->extra, '|') !== false and $key == 'actor')
+                {
+                    $desc['main'] = str_replace('$actor', $this->lang->action->superReviewer . ' ' . $value, $desc['main']);
+                }
+                else
+                {
+                    $desc['main'] = str_replace('$' . $key, $value, $desc['main']);
+                }
             }
             else
             {
@@ -761,11 +769,20 @@ class actionModel extends model
                 $actionDesc = str_replace('$extra', $action->extra, $desc['main']);
             }
 
-            if($action->objectType == 'story' and $action->action == 'reviewed' and strpos($action->extra, ',') !== false)
+            if($action->objectType == 'story' and $action->action == 'reviewed')
             {
-                list($extra, $reason) = explode(',', $extra);
-                $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
-                $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+                if(strpos($action->extra, ',') !== false)
+                {
+                    list($extra, $reason) = explode(',', $extra);
+                    $desc['reason'] = $this->lang->$objectType->{$desc['reason']};
+                    $actionDesc = str_replace(array('$extra', '$reason'), array($desc['extra'][$extra], $desc['reason'][$reason]), $desc['main']);
+                }
+
+                if(strpos($action->extra, '|') !== false)
+                {
+                    list($extra, $isSuperReviewer) = explode('|', $extra);
+                    $actionDesc = str_replace('$extra', $desc['extra'][$extra], $desc['main']);
+                }
             }
             echo $actionDesc;
         }
@@ -981,6 +998,7 @@ class actionModel extends model
     {
         $this->app->loadLang('todo');
         $this->app->loadLang('stakeholder');
+        $this->app->loadLang('branch');
 
         /* Get commiters and the same department users. */
         $commiters = $this->loadModel('user')->getCommiters();
@@ -1000,6 +1018,12 @@ class actionModel extends model
             if($action->objectType =='program' and strpos('syncexecution,syncproject,syncprogram', $action->action) !==false)
             {
                 $action->objectName .= $this->lang->action->label->startProgram;
+            }
+
+            if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+            {
+                if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
+                $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
             }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
@@ -1083,6 +1107,14 @@ class actionModel extends model
                     {
                         $objectName[$object->id] = $object->title;
                         if($object->type == 'requirement') $requirements[$object->id] = $object->id;
+                    }
+                }
+                elseif($objectType == 'reviewcl')
+                {
+                    $objectInfo = $this->dao->select('id,title')->from($table)->where('id')->in($objectIdList)->fetchAll();
+                    foreach($objectInfo as $object)
+                    {
+                        $objectName[$object->id] = $object->title;
                     }
                 }
                 elseif($objectType == 'team')
@@ -1273,6 +1305,30 @@ class actionModel extends model
             $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
         }
 
+        if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
+        {
+            $table    = $this->config->objectTables[$action->objectType];
+            $kanbanID = $this->dao->select('kanban')->from($table)->where('id')->eq($action->objectID)->fetch('kanban');
+
+            $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
+        }
+
+        if(strpos(',kanbanlane,kanbancolumn,', ",{$action->objectType},") !== false and empty($action->extra))
+        {
+            $table    = $this->config->objectTables[$action->objectType];
+            $kanbanID = $this->dao->select('t2.kanban')->from($table)->alias('t1')
+                ->leftJoin(TABLE_KANBANREGION)->alias('t2')->on('t1.region=t2.id')
+                ->where('t1.id')->eq($action->objectID)
+                ->fetch('kanban');
+
+            $action->objectLink = helper::createLink('kanban', 'view', "kanbanID=$kanbanID");
+        }
+
+        if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+        {
+            $action->objectLink = 'javascript:void(0)';
+        }
+
         return $action;
     }
 
@@ -1384,7 +1440,7 @@ class actionModel extends model
         {
             $module     = $this->dao->select('*')->from(TABLE_MODULE)->where('id')->eq($action->objectID)->fetch();
             $repeatName = $this->loadModel('tree')->checkUnique($module);
-            if($repeatName) die(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
+            if($repeatName) return print(js::alert(sprintf($this->lang->tree->repeatName, $repeatName)));
         }
 
         /* Update deleted field in object table. */

@@ -82,8 +82,10 @@ class api extends router
 
         $this->httpMethod  = strtolower($_SERVER['REQUEST_METHOD']);
 
-        $fileName   = ltrim(substr($_SERVER['SCRIPT_FILENAME'], strlen($_SERVER['DOCUMENT_ROOT'])), '/');
-        $this->path = substr(ltrim($_SERVER['REQUEST_URI'], '/'), strlen($fileName) + 1);
+        $documentRoot = zget($_SERVER, 'CONTEXT_DOCUMENT_ROOT', $_SERVER['DOCUMENT_ROOT']);
+        $fileName     = ltrim(substr($_SERVER['SCRIPT_FILENAME'], strlen($documentRoot)), '/');
+        $webRoot      = ltrim($this->config->webRoot, '/');
+        $this->path   = substr(ltrim($_SERVER['REQUEST_URI'], '/'), strlen($webRoot . $fileName) + 1);
         if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
         $subPos = $this->path ? strpos($this->path, '/') : false;
