@@ -217,7 +217,7 @@ function renderUsersAvatar(users, itemID, size)
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
-        return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
+        return $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
     }
 
     var assignees = [];
@@ -488,7 +488,7 @@ function openAddTaskForm($element)
  */
 function resetLaneHeight()
 {
-    var maxHeight = '360px';
+    var maxHeight = '500px';
     if(laneCount < 2)
     {
         var windowHeight = $(window).height();
