@@ -884,7 +884,7 @@ $(function()
 
     /* Init sortable */
     var sortType = '';
-    var cards    = null;
+    var $cards   = null;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane',
