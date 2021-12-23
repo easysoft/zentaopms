@@ -62,7 +62,13 @@
                 <tbody>
                   <tr>
                     <th class="w-100px"><?php echo $lang->mr->status;?></th>
-                    <td><?php echo zget($lang->mr->statusList, $MR->status);?></td>
+                    <td>
+                    <?php if(!empty($MR->syncError) and $MR->synced === '0'):?>
+                      <span class="text-danger"><?php echo $MR->syncError;?></span>
+                    <?php else:?>
+                      <?php echo zget($lang->mr->statusList, $MR->status);?>
+                    <?php endif;?>
+                    </td>
                   </tr>
                   <tr>
                     <th><?php echo $lang->mr->mergeStatus; ?></th>
@@ -72,7 +78,7 @@
                       <?php if($MR->synced) echo '<code>' . $lang->mr->noChanges . '</code>';?>
                     </td>
                     <?php else:?>
-                    <td><?php echo zget($lang->mr->mergeStatusList, $rawMR->merge_status);?></td>
+                    <td><?php echo zget($lang->mr->mergeStatusList, !empty($rawMR->merge_status) ? $rawMR->merge_status : $MR->mergeStatus);?></td>
                     <?php endif;?>
                    </tr>
                    <tr>

@@ -366,12 +366,12 @@ class jobModel extends model
     /**
      * Exec job.
      *
-     * @param  int    $id
-     * @param  object $reference
+     * @param  int   $id
+     * @param  array $extraParam
      * @access public
      * @return string|bool
      */
-    public function exec($id)
+    public function exec($id, $extraParam = array())
     {
         $job = $this->dao->select('t1.id,t1.name,t1.product,t1.repo,t1.server,t1.pipeline,t1.triggerType,t1.atTime,t1.customParam,t1.engine,t2.name as jenkinsName,t2.url,t2.account,t2.token,t2.password')
             ->from(TABLE_JOB)->alias('t1')
@@ -408,7 +408,7 @@ class jobModel extends model
         $this->dao->insert(TABLE_COMPILE)->data($build)->exec();
         $compileID = $this->dao->lastInsertId();
 
-        if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID);
+        if($job->engine == 'jenkins') $compile = $this->execJenkinsPipeline($job, $repo, $compileID, $extraParam);
         if($job->engine == 'gitlab')  $compile = $this->execGitlabPipeline($job);
 
         $this->dao->update(TABLE_COMPILE)->data($compile)->where('id')->eq($compileID)->exec();
@@ -428,10 +428,11 @@ class jobModel extends model
      * @param  object    $job
      * @param  object    $repo
      * @param  int       $compileID
+     * @param  array     $extraParam
      * @access public
      * @return object
      */
-    public function execJenkinsPipeline($job, $repo, $compileID)
+    public function execJenkinsPipeline($job, $repo, $compileID, $extraParam = array())
     {
         $pipeline = new stdclass();
         $pipeline->PARAM_TAG   = '';
@@ -447,6 +448,11 @@ class jobModel extends model
             $paramValue = str_replace('$zentao_repopath', $repo->path, $paramValue);
 
             $pipeline->$paramName = $paramValue;
+        }
+
+        foreach($extraParam as $paramName => $paramValue)
+        {
+            if(!isset($pipeline->$paramName)) $pipeline->$paramName = $paramValue;
         }
 
         $url = $this->loadModel('compile')->getBuildUrl($job);
