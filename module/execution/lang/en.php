@@ -15,6 +15,7 @@ $lang->execution->allExecutionAB   = 'Execution List';
 $lang->execution->id               = $lang->executionCommon . ' ID';
 $lang->execution->type             = $lang->executionCommon . 'Type';
 $lang->execution->name             = $lang->executionCommon . 'Name';
+$lang->execution->projectName      = 'Project';
 $lang->execution->code             = $lang->executionCommon . 'Code';
 $lang->execution->project          = 'Project';
 $lang->execution->execName         = 'Execution Name';
