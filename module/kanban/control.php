@@ -675,8 +675,7 @@ class kanban extends control
 
         $this->view->card     = $this->kanban->getCardByID($cardID);
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed');
-        $this->view->allUsers = $this->loadModel('user')->getPairs();
+        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
         $this->display();
     }
@@ -698,7 +697,7 @@ class kanban extends control
 
         $this->view->card        = $card;
         $this->view->actions     = $this->action->getList('kanbancard', $cardID);
-        $this->view->users       = $this->loadModel('user')->getPairs('noletter');
+        $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->space       = $space;
         $this->view->kanban      = $kanban;
         $this->view->usersAvatar = $this->user->getAvatarPairs();

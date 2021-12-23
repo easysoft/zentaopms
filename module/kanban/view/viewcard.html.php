@@ -63,6 +63,12 @@
                   <th><?php echo $lang->kanbancard->assignedTo;?></th>
                   <td>
                   <?php $assignedToPairs = array_filter(explode(',', $card->assignedTo));?>
+                  <?php
+                  foreach($assignedToPairs as $index => $assignedTo)
+                  {
+                      if(!isset($users[$assignedTo])) unset($assignedToPairs[$index]);
+                  }
+                  ?>
                   <?php if(!empty($assignedToPairs)):?>
                     <div class='kanban-members pull-left'>
                       <?php foreach($assignedToPairs as $member):?>
