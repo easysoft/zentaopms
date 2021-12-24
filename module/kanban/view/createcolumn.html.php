@@ -11,7 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php js::set('colorList',$config->kanban->laneColorList);?>
+<?php js::set('colorList',$config->kanban->columnColorList);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -45,7 +45,7 @@
           <th><?php echo $lang->kanbancolumn->color;?></th>
           <td>
             <div id='color-picker'></div>
-            <?php echo html::input('color', '#7ec5ff', "class='hidden'");?>
+            <?php echo html::input('color', '#333', "class='hidden'");?>
           </td>
         </tr>
         <tr>
