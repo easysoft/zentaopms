@@ -222,11 +222,12 @@ class mrModel extends model
             ->exec();
         if(dao::isError()) return false;
 
+        $MRID = $this->dao->lastInsertId();
+        $this->loadModel('action')->create('mr', $MRID, 'opened');
+
         /* Exec Job */
         if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
         {
-            $MRID = $this->dao->lastInsertId();
-
             $extraParam = array();
             if(!empty($repo->fileServerUrl)) $extraParam = array('ZENTAO_REPOPATH' => $repo->fileServerUrl);
 
