@@ -217,3 +217,4 @@ $lang->gitlab->tag->emptyNameError    = "标签名不能为空";
 $lang->gitlab->tag->emptyRefError     = "创建自不能为空";
 $lang->gitlab->tag->issetNameError    = "已存在该标签";
 $lang->gitlab->tag->confirmDelete     = '确认删除该GitLab标签吗？';
+$lang->gitlab->tag->protected         = '受保护';
