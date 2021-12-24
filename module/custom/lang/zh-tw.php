@@ -48,6 +48,7 @@ $lang->custom->reviewRule           = "評審規則";
 $lang->custom->switch               = "切換";
 $lang->custom->oneUnit              = "一個{$lang->hourCommon}";
 $lang->custom->convertRelationTitle = "請先設置{$lang->hourCommon}轉換為%s的換算係數";
+$lang->custom->superReviewers       = "超級評審人";
 
 if($config->systemMode == 'new') $lang->custom->execution = '執行';
 if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->execution = $lang->executionCommon;

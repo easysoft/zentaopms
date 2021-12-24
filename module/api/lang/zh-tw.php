@@ -23,6 +23,7 @@ $lang->api->createRelease    = '發佈介面';
 $lang->api->createLib        = '創建介面庫';
 $lang->api->createApi        = '創建介面';
 $lang->api->createAB         = '創建';
+$lang->api->createDemo       = '導入禪道API';
 $lang->api->edit             = '編輯介面';
 $lang->api->delete           = '刪除介面';
 $lang->api->position         = '位置';
@@ -41,7 +42,7 @@ $lang->api->noUniqueName     = '介面庫名已存在。';
 $lang->api->noUniqueVersion  = '版本已存在。';
 $lang->api->version          = '版本';
 $lang->api->createStruct     = '創建資料結構';
-$lang->api->editStruct       = '修改資料結構';
+$lang->api->editStruct       = '編輯資料結構';
 $lang->api->deleteStruct     = '刪除資料結構';
 $lang->api->create           = '創建介面';
 $lang->api->title            = '介面名稱';
@@ -58,6 +59,7 @@ $lang->api->confirmDelete    = "您確定刪除該介面嗎？";
 $lang->api->confirmDeleteLib = "您確定刪除該介面庫嗎？";
 $lang->api->filterStruct     = "使用資料結構填充";
 $lang->api->defaultVersion   = "當前版本";
+$lang->api->zentaoAPI        = "禪道API文檔v1";
 
 /* Common access control lang. */
 $lang->api->whiteList          = '白名單';

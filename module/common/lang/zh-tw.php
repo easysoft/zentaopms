@@ -77,6 +77,7 @@ $lang->whitelist      = '訪問白名單';
 $lang->globalSetting  = '全局設置';
 $lang->waterfallModel = '瀑布模型';
 $lang->all            = '所有';
+$lang->viewDetails    = '查看詳情';
 
 $lang->actions         = '操作';
 $lang->restore         = '恢復預設';
@@ -178,6 +179,7 @@ $lang->design->ADS        = '介面設計';
 $lang->stage->common      = '階段';
 $lang->stage->list        = '階段列表';
 $lang->execution->list    = "{$lang->executionCommon}列表";
+$lang->kanban->common     = '看板';
 
 $lang->personnel->common     = '人員';
 $lang->personnel->invest     = '投入人員';
@@ -311,17 +313,19 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = '全部記錄';
 $lang->exportTypeList['selected'] = '選中記錄';
 
-$lang->createObjects['todo']      = '待辦';
-$lang->createObjects['effort']    = '日誌';
-$lang->createObjects['bug']       = 'Bug';
-$lang->createObjects['story']     = '需求';
-$lang->createObjects['task']      = '任務';
-$lang->createObjects['testcase']  = '用例';
-$lang->createObjects['execution'] = $lang->execution->common;
-$lang->createObjects['project']   = '項目';
-$lang->createObjects['product']   = '產品';
-$lang->createObjects['program']   = '項目集';
-$lang->createObjects['doc']       = '文檔';
+$lang->createObjects['todo']        = '待辦';
+$lang->createObjects['effort']      = '日誌';
+$lang->createObjects['bug']         = 'Bug';
+$lang->createObjects['story']       = '需求';
+$lang->createObjects['task']        = '任務';
+$lang->createObjects['testcase']    = '用例';
+$lang->createObjects['execution']   = $lang->execution->common;
+$lang->createObjects['project']     = '項目';
+$lang->createObjects['product']     = '產品';
+$lang->createObjects['program']     = '項目集';
+$lang->createObjects['doc']         = '文檔';
+$lang->createObjects['kanbanspace'] = '空間';
+$lang->createObjects['kanban']      = '看板';
 
 /* 語言 */
 $lang->lang    = 'Language';

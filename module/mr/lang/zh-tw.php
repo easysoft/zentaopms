@@ -3,6 +3,7 @@ $lang->mr = new stdclass;
 $lang->mr->common       = "合併請求";
 $lang->mr->overview     = "概況";
 $lang->mr->create       = "創建{$lang->mr->common}";
+$lang->mr->apiCreate    = "介面：創建{$lang->mr->common}";
 $lang->mr->browse       = "瀏覽{$lang->mr->common}";
 $lang->mr->list         = $lang->mr->browse;
 $lang->mr->edit         = "編輯{$lang->mr->common}";
@@ -21,7 +22,7 @@ $lang->mr->linkStory = '關聯需求';
 $lang->mr->linkBug   = '關聯Bug';
 $lang->mr->linkTask  = '關聯任務';
 $lang->mr->unlink    = '取消關聯需求、Bug、任務';
-$lang->mr->addBug    = '添加評審';
+$lang->mr->addReview = '添加評審';
 
 $lang->mr->id          = 'ID';
 $lang->mr->mriid       = "MR原始ID";
@@ -46,13 +47,19 @@ $lang->mr->reject   = '拒絶';
 $lang->mr->close    = '關閉';
 $lang->mr->reopen   = '重新打開';
 
-$lang->mr->approvalResult = '評審意見';
+$lang->mr->reviewType     = '評審類型';
+$lang->mr->reviewTypeList = array();
+$lang->mr->reviewTypeList['bug']  = 'Bug';
+$lang->mr->reviewTypeList['task'] = '任務';
+
+$lang->mr->approvalResult     = '評審意見';
 $lang->mr->approvalResultList = array();
 $lang->mr->approvalResultList['approve'] = '通過';
 $lang->mr->approvalResultList['reject']  = '拒絶';
 
-$lang->mr->needApproved = '需要通過評審才能合併';
-$lang->mr->needCI       = '需要通過構建才能合併';
+$lang->mr->needApproved       = '需要通過評審才能合併';
+$lang->mr->needCI             = '需要通過構建才能合併';
+$lang->mr->removeSourceBranch = '合併後刪除源分支';
 
 $lang->mr->repeatedOperation = '請勿重複操作';
 
@@ -73,9 +80,10 @@ $lang->mr->statusList['merged'] = '已合併';
 $lang->mr->statusList['closed'] = '已關閉';
 
 $lang->mr->mergeStatusList = array();
-$lang->mr->mergeStatusList['checking']         = '檢查中';
-$lang->mr->mergeStatusList['can_be_merged']    = '可合併';
-$lang->mr->mergeStatusList['cannot_be_merged'] = '不可自動合併';
+$lang->mr->mergeStatusList['checking']             = '檢查中';
+$lang->mr->mergeStatusList['can_be_merged']        = '可合併';
+$lang->mr->mergeStatusList['cannot_be_merged']     = '不可自動合併';
+$lang->mr->mergeStatusList['cannot_merge_by_fail'] = '不可合併,檢查未通過';
 
 $lang->mr->description       = '描述';
 $lang->mr->confirmDelete     = '確認刪除該合併請求嗎？';
@@ -90,6 +98,7 @@ $lang->mr->notFound          = "此{$lang->mr->common}不存在。";
 $lang->mr->toCreatedMessage  = "您提交的合併請求：<a href='%s'>%s</a> 構建任務執行通過。";
 $lang->mr->toReviewerMessage = "有一個合併請求：<a href='%s'>%s</a> 待審核。";
 $lang->mr->failMessage       = "您提交的合併請求：<a href='%s'>%s</a> 構建任務執行失敗，查看執行結果。";
+$lang->mr->storySummary      = "本頁共 <strong>%s</strong> 個" . $lang->SRCommon;
 
 $lang->mr->apiError = new stdclass;
 $lang->mr->apiError->createMR = "通過API創建合併請求失敗，失敗原因：%s";
@@ -99,6 +108,12 @@ $lang->mr->createFailedFromAPI = "創建合併請求失敗。";
 $lang->mr->accessGitlabFailed  = "當前無法連接到GitLab伺服器。";
 $lang->mr->reopenSuccess       = "已重新打開合併請求。";
 $lang->mr->closeSuccess        = "已關閉合併請求。";
+
+$lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
+$lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
+
+$lang->mr->errorLang[1] = '源項目分支與目標項目分支不能相同';
+$lang->mr->errorLang[2] = '存在另外一個同樣的合併請求在源項目分支中: !%u';
 
 $lang->mr->from = "從";
 $lang->mr->to   = "合併到";
