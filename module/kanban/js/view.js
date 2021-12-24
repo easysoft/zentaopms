@@ -393,6 +393,15 @@ function moveCard(cardID, toColID, toLaneID, kanbanID, regionID)
         {
             regions = data;
             updateRegion(regionID, data[regionID]);
+
+            /* Disable related operations in full screen mode. */
+            if($.cookie('isFullScreen') == 1)
+            {
+                $('.actions').hide();
+                $('.action').hide();
+                $('.kanban-group-header').hide();
+                $(".title").attr("disabled", true).css("pointer-events", "none");
+            }
         },
         error: function(xhr, status, error)
         {
