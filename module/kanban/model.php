@@ -859,6 +859,7 @@ class kanbanModel extends model
             ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF($browseType == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
