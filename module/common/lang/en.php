@@ -24,6 +24,7 @@ $lang->null      = 'Null';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
+$lang->and       = 'and';
 
 $lang->zentaoPMS      = 'ZenTao';
 $lang->pmsName        = 'ALM';
@@ -113,6 +114,8 @@ $lang->levelExceeded   = 'The level has exceeded the display range. For more inf
 
 $lang->serviceAgreement = "Service Agreement";
 $lang->privacyPolicy    = "Privacy Policy";
+$lang->needAgreePrivacy = "Please read the service agreement and privacy policy first";
+$lang->iAgreedPrivacy   = "I have read and agree";
 
 $lang->preShortcutKey    = '[Shortcut:←]';
 $lang->nextShortcutKey   = '[Shortcut:→]';
