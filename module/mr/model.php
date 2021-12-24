@@ -210,7 +210,6 @@ class mrModel extends model
         $MR->jobID          = isset($repo->job->id) ? $repo->job->id : 0;
         $MR->synced         = '0';
         $MR->needCI         = '1';
-        $MR->approvalStatus = 'approved';
         $MR->hasNoConflict  = $postData->MergeStatus ? '0' : '1';
         $MR->mergeStatus    = $postData->MergeStatus ? 'can_be_merged' : 'cannot_be_merged';
         $MR->createdBy      = $this->app->user->account;
