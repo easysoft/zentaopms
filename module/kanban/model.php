@@ -608,7 +608,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'editColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -2188,7 +2188,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = 0)
+    public function getColumnsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
             ->where(true)
