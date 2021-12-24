@@ -45,6 +45,11 @@
     <button type="button" class="close" aria-hidden="true">×</button>
   </div>
   <div class='panel-body'>
+    <?php if(empty($columns)):?>
+    <div class="table-empty-tip">
+      <p><span class="text-muted"><?php echo $lang->kanbancard->empty;?></span></p>
+    </div>
+    <?php else:?>
     <?php foreach($cards as $card):?>
     <div class='card-item' data-card='<?php echo $card->id;?>'>
       <div class='col-xs-10'>
@@ -113,6 +118,7 @@
       </div>
     </div>
     <?php endforeach;?>
+    <?php endif;?>
   </div>
 </div>
 <script>

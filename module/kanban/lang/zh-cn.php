@@ -288,6 +288,7 @@ $lang->kanbancard->deadlineAB      = '截止';
 $lang->kanbancard->beginAB         = '开始';
 $lang->kanbancard->to              = '~';
 $lang->kanbancard->archived        = '已归档';
+$lang->kanbancard->empty           = '暂时没有卡片';
 
 $lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
 $lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';

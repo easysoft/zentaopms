@@ -26,7 +26,7 @@
     <button type="button" class="close" aria-hidden="true">×</button>
   </div>
   <div class='panel-body'>
-  <?php if(empty($columns)):?>
+    <?php if(empty($columns)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->kanbancolumn->empty;?></span></p>
     </div>

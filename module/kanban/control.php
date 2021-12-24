@@ -583,17 +583,17 @@ class kanban extends control
      */
     public function viewArchivedColumn($regionID)
     {
-        $columns     = $this->kanban->getColumnsByObject('region', $regionID, '', '');
+        $columns     = $this->kanban->getColumnsByObject('region', $regionID, '');
         $columnsData = array();
         foreach($columns as $column)
         {
             if($column->archived == 0) continue;
-            if($column->parent > 0)
+            if($column->parent > 0 and isset($columns[$column->parent]))
             {
                 if(empty($columnsData[$column->parent])) $columnsData[$column->parent] = $columns[$column->parent];
                 $columnsData[$column->parent]->child[$column->id] = $column;
             }
-            else
+            elseif($column->parent <= 0)
             {
                 if(empty($columnsData[$column->id])) $columnsData[$column->id] = $column;
             }
