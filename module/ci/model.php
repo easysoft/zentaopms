@@ -204,8 +204,9 @@ class ciModel extends model
         $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($build->id)->fetch();
         if(isset($relateMR->synced) and $relateMR->synced == '0' and $status == 'success')
         {
-            $newMR              = new stdclass();
-            $newMR->mergeStatus = 'can_be_merged';
+            $newMR = new stdclass();
+            $newMR->mergeStatus   = 'can_be_merged';
+            $newMR->compileStatus = $status;
 
             /* Create a gitlab mr. */
             $MRObject                       = new stdclass();
@@ -263,8 +264,9 @@ class ciModel extends model
         }
         else
         {
-            $newMR              = new stdclass();
-            $newMR->mergeStatus = 'cannot_merge_by_fail';
+            $newMR = new stdclass();
+            $newMR->mergeStatus   = 'cannot_merge_by_fail';
+            $newMR->compileStatus = $status;
 
             $this->dao->update(TABLE_MR)->data($newMR)
                     ->where('id')->eq($relateMR->id)

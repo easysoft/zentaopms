@@ -72,7 +72,7 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->mr->mergeStatus; ?></th>
-                    <?php if(empty($rawMR->changes_count)):?>
+                    <?php if($MR->synced and empty($rawMR->changes_count)):?>
                     <td>
                       <?php echo $lang->mr->cantMerge; ?>
                       <?php if($MR->synced) echo '<code>' . $lang->mr->noChanges . '</code>';?>
