@@ -735,16 +735,19 @@ class apiModel extends model
     /**
      * Create demo data.
      *
+     * @param  string  $name
+     * @param  string  $baseUrl
+     * @param  string  $version
      * @access public
      * @return int
      */
-    public function createDemoData()
+    public function createDemoData($name, $baseUrl, $version)
     {
         /* Insert doclib. */
         $lib = new stdclass();
         $lib->type    = 'api';
-        $lib->name    = $this->post->name;
-        $lib->baseUrl = $this->post->baseUrl;
+        $lib->name    = $name;
+        $lib->baseUrl = $baseUrl;
         $lib->acl     = 'private';
         $lib->users   = ',' . $this->app->user->account . ',';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
@@ -753,7 +756,7 @@ class apiModel extends model
 
         /* Insert struct. */
         $structMap = array();
-        $structs   = $this->getDemoData('apistruct');
+        $structs   = $this->getDemoData('apistruct', $version);
         foreach($structs as $struct)
         {
             $oldID = $struct->id;
@@ -772,7 +775,7 @@ class apiModel extends model
         }
 
         /* Insert struct spec. */
-        $specs = $this->getDemoData('apistruct_spec');
+        $specs = $this->getDemoData('apistruct_spec', $version);
         foreach($specs as $spec)
         {
             unset($spec->id);
@@ -784,7 +787,7 @@ class apiModel extends model
         }
 
         /* Insert module. */
-        $modules = $this->getDemoData('module');
+        $modules = $this->getDemoData('module', $version);
         foreach($modules as $module)
         {
             if($module->type != 'api') continue;
@@ -804,7 +807,7 @@ class apiModel extends model
         /* Insert api. */
         $this->loadModel('action');
         $apiMap = array();
-        $apis   = $this->getDemoData('api');
+        $apis   = $this->getDemoData('api', $version);
         foreach($apis as $api)
         {
             $oldID = $api->id;
@@ -826,7 +829,7 @@ class apiModel extends model
         }
 
         /* Insert api spec. */
-        $specs = $this->getDemoData('apispec');
+        $specs = $this->getDemoData('apispec', $version);
         foreach($specs as $spec)
         {
             unset($spec->id);
@@ -844,15 +847,16 @@ class apiModel extends model
     }
 
     /**
-     * Get demo data
+     * Get demo data.
      *
-     * @param  string $table
+     * @param  string   $table
+     * @param  stirng   $version
      * @access private
      * @return array
      */
-    private function getDemoData($table)
+    private function getDemoData($table, $version)
     {
-        $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $table;
+        $file = $this->app->getAppRoot() . 'db' . DS . 'api' . DS . $version . DS . $table;
         return unserialize(file_get_contents($file));
     }
 }

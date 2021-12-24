@@ -736,6 +736,11 @@ class upgradeModel extends model
             $this->updateProjectStories();
             $this->updateProjectLinkedBranch();
             $this->appendExec('15_7_1');
+        case '16_0_beta1':
+            $this->saveLogs('Execute 16_0_beta1');
+            $this->execSQL($this->getUpgradeFile('16.0.beta1'));
+            $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
+            $this->appendExec('16_0_beta1');
         }
 
         $this->deletePatch();
