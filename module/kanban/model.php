@@ -114,8 +114,8 @@ class kanbanModel extends model
                 $newGroupID = $this->createGroup($kanban->id, $regionID);
                 if(dao::isError()) return false;
 
-                $copyLanes   = $copyLaneGroup[$copyGroupID];
-                $copyColumns = $copyColumnGroup[$copyGroupID];
+                $copyLanes   = isset($copyLaneGroup[$copyGroupID]) ? $copyLaneGroup[$copyGroupID] : array();
+                $copyColumns = isset($copyColumnGroup[$copyGroupID]) ? $copyColumnGroup[$copyGroupID] : array();
                 foreach($copyLanes as $copyLane)
                 {
                     unset($copyLane->id);
