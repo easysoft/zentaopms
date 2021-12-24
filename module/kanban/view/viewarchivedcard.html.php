@@ -95,12 +95,12 @@
             <?php
             foreach($assignedToList as $account)
             {
-                if($count > 4) continue;
+                if($count > 2) continue;
                 echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account));
                 $count ++;
             }
             ?>
-            <?php if($count > 4) echo "<span>...</span>";?>
+            <?php if($count > 2) echo "<span>...</span>";?>
             </div>
             <?php endif;?>
           </div>
