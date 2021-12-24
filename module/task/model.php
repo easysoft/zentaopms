@@ -2146,9 +2146,9 @@ class taskModel extends model
         if(!$this->loadModel('common')->checkField(TABLE_TASK, $type)) return array();
         $tasks = $this->dao->select('t1.*, t2.id as executionID, t2.name as executionName, t3.id as storyID, t3.title as storyTitle, t3.status AS storyStatus, t3.version AS latestStoryVersion')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.execution = t2.id and (t2.type = 'stage' or t2.type = 'sprint')")
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_STORY)->alias('t3')->on('t1.story = t3.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id and t4.type = 'project'")
+            ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
             ->where('t1.deleted')->eq(0)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
@@ -2157,7 +2157,7 @@ class taskModel extends model
             ->orWhere('t1.finishedList')->like("%,{$account},%")
             ->markRight(1)
             ->fi()
-            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('t2.status')->ne('suspended')->andWhere('t4.status')->ne('suspended')->fi()
+            ->beginIF($this->app->rawModule == 'my' or $this->app->rawModule == 'block')->andWhere('t2.status')->ne('suspended')->orWhere('t4.status')->ne('suspended')->fi()
             ->beginIF($type != 'all' and $type != 'finishedBy')->andWhere("t1.`$type`")->eq($account)->fi()
             ->orderBy($orderBy)
             ->beginIF($limit > 0)->limit($limit)->fi()
@@ -2220,15 +2220,15 @@ class taskModel extends model
     {
         $tasks = $this->dao->select('t1.*')
             ->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.execution = t2.id and (t2.type = 'sprint' or t2.type = 'stage')")
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t1.project = t3.id and t3.type = 'project'")
+            ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t1.project = t3.id")
             ->where('t1.assignedTo')->eq($this->app->user->account)
             ->andWhere('(t2.status')->eq('suspended')
             ->orWhere('t3.status')->eq('suspended')
             ->markRight(1)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t3.deleted')->eq(0)
+            ->beginIF($this->config->systemMode == 'new')->andWhere('t3.deleted')->eq(0)->fi()
             ->fetchAll('id');
         return $tasks;
     }
