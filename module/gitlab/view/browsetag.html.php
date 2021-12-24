@@ -57,7 +57,12 @@
       <tbody>
         <?php foreach ($gitlabTagList as $id => $gitlabTag): ?>
         <tr class='text'>
-          <td class='text-c-name' title='<?php echo $gitlabTag->name;?>'><?php echo $gitlabTag->name;?></td>
+          <td class='text-c-name' title='<?php echo $gitlabTag->name;?>'>
+            <div class='has-prefix has-suffix'>
+              <span class='tag-name text-ellipsis'><?php echo $gitlabTag->name;?></span>
+              <?php if($gitlabTag->protected) echo '<span class="label label-badge label-info">' . $lang->gitlab->tag->protected . '</span>';?>
+            </div>
+          </td>
           <td class='text'><?php echo $gitlabTag->lastCommitter;?></td>
           <td class='text'><?php echo $gitlabTag->updated?></td>
           <td class='c-actions text-left'>
