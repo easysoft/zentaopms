@@ -43,6 +43,7 @@ function loadBranches(product, branch, caseID)
 $(function()
 {
     removeDitto();  //Remove 'ditto' in first row.
+    if($('th.c-title').width() < 150) $('th.c-title').width(150);
     $('#subNavbar li[data-id="testcase"]').addClass('active');
     if(hasStory)
     {
