@@ -240,7 +240,7 @@ class branchModel extends model
     public function batchUpdate($productID)
     {
         $data = fixer::input('post')->get();
-        $oldBranchList = $this->getList($productID, 'all');
+        $oldBranchList = $this->getList($productID, 0, 'all');
         $branchIDList  = array_keys($this->post->IDList);
 
         $this->app->loadLang('product');
@@ -264,7 +264,6 @@ class branchModel extends model
                 $branch->status     = $data->status[$branchID];
                 $branch->default    = (isset($data->default) and $branchID == $data->default) ? 1 : 0;
                 $branch->closedDate = $branch->status == 'closed' ? helper::today() : '';
-
 
                 $this->dao->update(TABLE_BRANCH)->data($branch)
                     ->batchCheck($this->config->branch->create->requiredFields, 'notempty')
