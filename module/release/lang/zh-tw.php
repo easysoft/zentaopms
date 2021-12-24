@@ -24,6 +24,7 @@ $lang->release->batchUnlinkStory = "批量移除{$lang->SRCommon}";
 $lang->release->batchUnlinkBug   = "批量移除Bug";
 
 $lang->release->confirmDelete      = "您確認刪除該發佈嗎？";
+$lang->release->confirmLink        = "是否將版本中完成的{$lang->SRCommon}和已解決的bug關聯到發佈下？";
 $lang->release->confirmUnlinkStory = "您確認移除該{$lang->SRCommon}嗎？";
 $lang->release->confirmUnlinkBug   = "您確認移除該Bug嗎？";
 $lang->release->existBuild         = '『版本』已經有『%s』這條記錄了。您可以更改『發佈名稱』或者選擇一個『版本』。';

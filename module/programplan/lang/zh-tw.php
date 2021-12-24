@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 $lang->programplan->common        = '項目階段';
-$lang->programplan->browse        = '瀏覽階段計劃';
+$lang->programplan->browse        = '瀏覽甘特圖';
 $lang->programplan->gantt         = '甘特圖';
 $lang->programplan->list          = '階段列表';
 $lang->programplan->create        = '設置階段';

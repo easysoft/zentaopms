@@ -91,6 +91,7 @@ $lang->block->refresh            = '刷新';
 $lang->block->nbsp               = '';
 $lang->block->hidden             = '隱藏';
 $lang->block->dynamicInfo        = "<span class='timeline-tag'>%s</span> <span class='timeline-text'>%s <em>%s</em> %s <a href='%s' title='%s'>%s</a></span>";
+$lang->block->noLinkDynamic      = "<span class='timeline-tag'>%s</span> <span class='timeline-text' title='%s'>%s <em>%s</em> %s %s</span>";
 $lang->block->cannotPlaceInLeft  = '此區塊無法放置在左側。';
 $lang->block->cannotPlaceInRight = '此區塊無法放置在右側。';
 

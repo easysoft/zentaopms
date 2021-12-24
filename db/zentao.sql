@@ -759,10 +759,10 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `lane` mediumint(8) NOT NULL DEFAULT '0',
-  `group` mediumint(8) NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
+  `group` mediumint(8) NOT NULL DEFAULT '0',
   `name` varchar(255) NOT NULL DEFAULT '',
   `color` char(30) NOT NULL,
   `limit` smallint(6) NOT NULL DEFAULT '-1',
