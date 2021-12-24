@@ -227,14 +227,14 @@ class userModel extends model
     /**
      * Get users by sql.
      *
-     * @param  varchar $browseType inside|outside|all
-     * @param  int     $query
+     * @param  string  $browseType inside|outside|all
+     * @param  string  $query
      * @param  object  $pager
-     * @param  varchar $orderBy
+     * @param  string  $orderBy
      * @access public
-     * @return void
+     * @return array
      */
-    public function getByQuery($browseType = 'inside', $query, $pager = null, $orderBy = 'id')
+    public function getByQuery($browseType = 'inside', $query = '', $pager = null, $orderBy = 'id')
     {
         return $this->dao->select('*')->from(TABLE_USER)
             ->where('deleted')->eq(0)
