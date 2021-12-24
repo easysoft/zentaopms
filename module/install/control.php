@@ -208,6 +208,7 @@ class install extends control
             $this->loadModel('setting')->setItem('system.common.safe.mode', '1');
             $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
             $this->loadModel('setting')->setItem('system.common.global.cron', 1);
+            $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
             die(js::locate(inlink('step6'), 'parent'));
         }
 
