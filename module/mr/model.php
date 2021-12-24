@@ -113,6 +113,7 @@ class mrModel extends model
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
         $MRID = $this->dao->lastInsertId();
+        $this->loadModel('action')->create('mr', $MRID, 'opened');
 
         $MRObject = new stdclass;
         $MRObject->target_project_id    = $MR->targetProject;
