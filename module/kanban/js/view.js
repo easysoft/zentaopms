@@ -800,7 +800,13 @@ function initKanban($kanban)
             finish:       handleFinishDrop,
             mouseButton: 'left'
         }
-    }).on('click', '.action-cancel', hideKanbanAction);
+    });
+
+    $kanban.on('click', '.action-cancel', hideKanbanAction);
+    $kanban.on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 }
 
 /**
