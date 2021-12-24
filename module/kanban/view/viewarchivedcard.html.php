@@ -24,8 +24,9 @@
 #archivedCards .card-actions > .btn {display: block;}
 #archivedCards .card-actions > .btn + .btn {margin-top: 10px;}
 #archivedCards .info > .time {background-color: rgba(0, 0, 0, 0.15);}
-#archivedCards .info > .users > span:before {left: -4px;}
-#archivedCards .info > .users > span:after {right: -4px;}
+#archivedCards .info > .users > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position:sticky; top: 3px; margin: 0 7px; border-radius: 50%; line-height: 32px;}
+#archivedCards .info > .users > span:before {left: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
+#archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users .avatar {display: inline-block; position: relative; border-radius: 50%; top: -5px; margin:  5px; right: -7px; margin-left: -4px;}
 #archivedCards .cardName {word-wrap: break-word;}
 #archivedCards .card-item .red {background-color: #b10b0b;}
@@ -94,6 +95,7 @@
                 $count ++;
             }
             ?>
+            <?php if($count > 4) echo "<span>...</span>";?>
             </div>
             <?php endif;?>
           </div>
