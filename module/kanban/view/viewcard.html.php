@@ -34,10 +34,10 @@
     </div>
     <div class='main-actions'>
       <div class="btn-toolbar">
-        <?php if(!$card->deleted):?>
+        <?php if(!$card->deleted and !$card->archived):?>
         <?php
         //common::printLink('kanban', 'assigntoCard', "cardID=$card->id", "<i class='icon icon-hand-right'></i><span class='text'>{$lang->kanbancard->assign}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->assign}'", true, true);
-        if(!$card->archived)
+        if($kanban->archived)
         {
             common::printLink('kanban', 'archiveCard',  "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archive}</span>", 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->archive}'", true, true);
 
