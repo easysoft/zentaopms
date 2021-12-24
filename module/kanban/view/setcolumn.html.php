@@ -32,7 +32,7 @@
           <td colspan='3'>
             <?php echo html::hidden('color', $column->color, "class='form-control'");?>
             <ul>
-            <?php foreach($config->kanban->laneColorList as $color):?>
+            <?php foreach($config->kanban->columnColorList as $color):?>
             <li>
               <a href='javascript:setColor("<?php echo $color;?>");' class='cp-tile <?php echo $color == $column->color ? 'active' : '';?>' data-color='<?php echo $color;?>' style='color: #FFF; background: <?php echo $color;?>; border-color: transparent;'></a>
             </li>
