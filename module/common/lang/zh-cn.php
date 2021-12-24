@@ -24,6 +24,7 @@ $lang->null      = '空';
 $lang->ellipsis  = '…';
 $lang->percent   = '%';
 $lang->dash      = '-';
+$lang->and       = '和';
 
 $lang->zentaoPMS      = '禅道';
 $lang->pmsName        = '开源版';
@@ -113,6 +114,8 @@ $lang->levelExceeded   = '层级已超过显示范围，更多信息请前往网
 
 $lang->serviceAgreement = "服务协议";
 $lang->privacyPolicy    = "隐私政策";
+$lang->needAgreePrivacy = "请先阅读《服务协议》和《隐私政策》";
+$lang->iAgreedPrivacy   = "我已阅读并同意";
 
 $lang->preShortcutKey    = '[快捷键:←]';
 $lang->nextShortcutKey   = '[快捷键:→]';
