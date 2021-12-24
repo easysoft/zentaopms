@@ -849,6 +849,7 @@ CREATE TABLE IF NOT EXISTS `zt_mr` (
   `compileStatus` char(30) NOT NULL,
   `removeSourceBranch` enum('0','1') NOT NULL DEFAULT '0',
   `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '1',
+  `syncError` varchar(255) NOT NULL,
   `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0',
   `diffs` longtext COLLATE 'utf8_general_ci' NULL,
   PRIMARY KEY (`id`)

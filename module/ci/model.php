@@ -57,7 +57,7 @@ class ciModel extends model
         /* Max retry times is: 3. */
         if($compile->times >= 3)
         {
-            $this->dao->update(TABLE_COMPILE)->set('status')->eq('failure')->where('id')->eq($compile->id)->exec();
+            $this->updateBuildStatus($compile, 'failure');
             return false;
         }
 
@@ -222,6 +222,33 @@ class ciModel extends model
             }
 
             $rawMR = $this->loadModel('mr')->apiCreateMR($relateMR->gitlabID, $relateMR->sourceProject, $MRObject);
+
+            /**
+            * Another open merge request already exists for this source branch.
+            * The type of variable `$rawMR->message` is array.
+            */
+            if(isset($rawMR->message) and !isset($rawMR->iid))
+            {
+                foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+                {
+                    if(strpos($errorMsg, '/') === 0)
+                    {
+                        $result = preg_match($errorMsg, $rawMR->message[0], $matches);
+                        if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+                    }
+                    else
+                    {
+                        if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
+                    }
+
+                    if(isset($errorMessage)) break;
+                }
+                $newMR->syncError = sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]);
+            }
+            elseif(!isset($rawMR->iid))
+            {
+                $newMR->syncError = $this->lang->mr->createFailedFromAPI;
+            }
 
             if(!empty($rawMR->iid))
             {

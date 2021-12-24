@@ -225,8 +225,12 @@ class mrModel extends model
         /* Exec Job */
         if($MR->hasNoConflict == '0' && $MR->mergeStatus == 'can_be_merged' && $MR->jobID)
         {
-            $MRID     = $this->dao->lastInsertId();
-            $pipeline = $this->loadModel('job')->exec($MR->jobID);
+            $MRID = $this->dao->lastInsertId();
+
+            $extraParam = array();
+            if(!empty($repo->fileServerUrl)) $extraParam = array('ZENTAO_REPOPATH' => $repo->fileServerUrl);
+
+            $pipeline = $this->loadModel('job')->exec($MR->jobID, $extraParam);
             $newMR    = new stdClass();
             if(!empty($pipeline->queue))
             {

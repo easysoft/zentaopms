@@ -121,6 +121,7 @@ ALTER TABLE `zt_mr` ADD `synced` enum('0','1') COLLATE 'utf8_general_ci' NOT NUL
 ALTER TABLE `zt_mr` ADD `hasNoConflict` enum('0','1') COLLATE 'utf8_general_ci' NOT NULL DEFAULT '0';
 ALTER TABLE `zt_mr` ADD `diffs` longtext COLLATE 'utf8_general_ci' NULL AFTER `synced`;
 ALTER TABLE `zt_mr` ADD `removeSourceBranch` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `compileStatus`;
+ALTER TABLE `zt_mr` ADD `syncError` VARCHAR(255) NOT NULL AFTER `synced`;
 
 ALTER TABLE zt_repo ADD `fileServerUrl` text COLLATE 'utf8_general_ci' NULL AFTER `job`;
 ALTER TABLE zt_repo ADD `fileServerAccount` varchar(40) NOT NULL default '' AFTER `fileServerUrl`;
