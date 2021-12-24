@@ -167,8 +167,8 @@ class blockModel extends model
         $data = array();
 
         $tasks = $this->dao->select('t1.id')->from(TABLE_TASK)->alias('t1')
-            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-            ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t1.execution=t3.id')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on("t1.project = t2.id and t2.type = 'project'")
+            ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t1.execution = t3.id and (t3.type = 'sprint' or t3.type = 'stage')")
             ->where('t1.assignedTo')->eq($this->app->user->account)
             ->andWhere('t2.status')->ne('suspended')
             ->andWhere('t3.status')->ne('suspended')
