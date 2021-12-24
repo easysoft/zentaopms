@@ -46,7 +46,7 @@ $lang->branch->confirmClose      = 'Do you want to close this @branch@？';
 $lang->branch->confirmActivate   = 'Do you want to activate this @branch@？';
 $lang->branch->existName         = '@branch@ name already exists.';
 $lang->branch->mergedMain        = 'Trunk does not support being merged.';
-$lang->branch->mergeTips         = 'After the branch is merged, the corresponding releases, plans, modules, requirements, bugs, and cases under the branch will be merged into the new branch';
+$lang->branch->mergeTips         = 'After the branch is merged, the corresponding releases, plans, modules, requirements, bugs, and cases under the branch will be merged into the new branch.';
 $lang->branch->targetBranchTips  = 'You can merge it into an existing branch, merge it into the trunk, or create a new branch.';
 $lang->branch->confirmMerge      = 'The data of "mergedBranch" will be merged into "targetBranch", please confirm whether you want to perform the branch merge operation, the data will not be restored after the merge!';
 
