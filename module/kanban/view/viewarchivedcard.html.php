@@ -45,7 +45,7 @@
     <button type="button" class="close" aria-hidden="true">×</button>
   </div>
   <div class='panel-body'>
-    <?php if(empty($columns)):?>
+    <?php if(empty($cards)):?>
     <div class="table-empty-tip">
       <p><span class="text-muted"><?php echo $lang->kanbancard->empty;?></span></p>
     </div>
@@ -78,7 +78,7 @@
             $count          = 0;
             $members        = '';
             ?>
-            <?php 
+            <?php
             foreach($assignedToList as $index => $account)
             {
                 if(!isset($users[$account]) or !isset($usersAvatar[$account]))

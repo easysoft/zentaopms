@@ -1,3 +1,4 @@
 .pri-selector .br-0 {padding-bottom: 5px;}
 .required:after {left: 226px; z-index: 2;}
 .pri-selector {z-index: 3;}
+.input-group > #name {padding-right: 16px;}
