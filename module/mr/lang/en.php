@@ -113,7 +113,7 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
-$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: !%u';
+$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

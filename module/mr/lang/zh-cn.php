@@ -113,7 +113,7 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 
 $lang->mr->errorLang[1] = '源项目分支与目标项目分支不能相同';
-$lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: !%u';
+$lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: ID%u';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
