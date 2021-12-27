@@ -743,13 +743,16 @@ class apiModel extends model
      */
     public function createDemoData($name, $baseUrl, $version)
     {
+        $firstAccount   = $this->dao->select('account')->from(TABLE_USER)->orderBy('id_asc')->limit(1)->fetch('account');
+        $currentAccount = isset($this->app->user->account) ? $this->app->user->account : $firstAccount;
+
         /* Insert doclib. */
         $lib = new stdclass();
         $lib->type    = 'api';
         $lib->name    = $name;
         $lib->baseUrl = $baseUrl;
         $lib->acl     = 'private';
-        $lib->users   = ',' . $this->app->user->account . ',';
+        $lib->users   = ',' . $currentAccount . ',';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
         $libID = $this->dao->lastInsertID();
@@ -763,9 +766,9 @@ class apiModel extends model
             unset($struct->id);
 
             $struct->lib        = $libID;
-            $struct->addedBy    = $this->app->user->account;
+            $struct->addedBy    = $currentAccount;
             $struct->addedDate  = helper::now();
-            $struct->editedBy   = $this->app->user->account;
+            $struct->editedBy   = $currentAccount;
             $struct->editedDate = helper::now();
 
             $this->dao->insert(TABLE_APISTRUCT)->data($struct)->exec();
@@ -780,7 +783,7 @@ class apiModel extends model
         {
             unset($spec->id);
 
-            $spec->addedBy   = $this->app->user->account;
+            $spec->addedBy   = $currentAccount;
             $spec->addedDate = helper::now();
 
             $this->dao->insert(TABLE_APISTRUCT_SPEC)->data($spec)->exec();
@@ -815,15 +818,15 @@ class apiModel extends model
 
             $api->lib        = $libID;
             $api->module     = $moduleMap[$api->module];
-            $api->addedBy    = $this->app->user->account;
+            $api->addedBy    = $currentAccount;
             $api->addedDate  = helper::now();
-            $api->editedBy   = $this->app->user->account;
+            $api->editedBy   = $currentAccount;
             $api->editedDate = helper::now();
 
             $this->dao->insert(TABLE_API)->data($api)->exec();
             $newID = $this->dao->lastInsertID();
 
-            $this->action->create('api', $newID, 'Created');
+            $this->action->create('api', $newID, 'Created', '', '', $currentAccount);
 
             $apiMap[$oldID] = $newID;
         }
@@ -836,8 +839,8 @@ class apiModel extends model
 
             $spec->doc       = $apiMap[$spec->doc];
             $spec->module    = zget($moduleMap, $spec->module, 0);
-            $spec->owner     = $this->app->user->account;
-            $spec->addedBy   = $this->app->user->account;
+            $spec->owner     = $currentAccount;
+            $spec->addedBy   = $currentAccount;
             $spec->addedDate = helper::now();
 
             $this->dao->insert(TABLE_API_SPEC)->data($spec)->exec();
