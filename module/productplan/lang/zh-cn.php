@@ -89,6 +89,8 @@ $lang->productplan->endGreaterParent  = "父计划的完成日期：%s，完成�
 $lang->productplan->noLinkedProject   = "当前产品还未关联项目，请进入产品的项目列表关联或创建一个项目";
 $lang->productplan->enterProjectList  = "进入产品的项目列表";
 
-$lang->productplan->featureBar['browse']['all']       = '全部';
-$lang->productplan->featureBar['browse']['unexpired'] = '未过期';
-$lang->productplan->featureBar['browse']['overdue']   = '已过期';
+$lang->productplan->featureBar['browse']['all']    = '所有';
+$lang->productplan->featureBar['browse']['wait']   = '未开始';
+$lang->productplan->featureBar['browse']['doing']  = '进行中';
+$lang->productplan->featureBar['browse']['done']   = '已完成';
+$lang->productplan->featureBar['browse']['closed'] = '已关闭';
