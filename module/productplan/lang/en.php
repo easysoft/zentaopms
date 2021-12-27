@@ -89,6 +89,8 @@ $lang->productplan->endGreaterParent  = "The completion date of the parent plan:
 $lang->productplan->noLinkedProject   = "The current product has not been linked with a project. Please enter the list of the product to link or create a project.";
 $lang->productplan->enterProjectList  = "Enter the list of the product";
 
-$lang->productplan->featureBar['browse']['all']       = 'All';
-$lang->productplan->featureBar['browse']['unexpired'] = 'Unexpired';
-$lang->productplan->featureBar['browse']['overdue']   = 'Expired';
+$lang->productplan->featureBar['browse']['all']    = 'All';
+$lang->productplan->featureBar['browse']['wait']   = 'Waiting';
+$lang->productplan->featureBar['browse']['doing']  = 'Doing';
+$lang->productplan->featureBar['browse']['done']   = 'Done';
+$lang->productplan->featureBar['browse']['closed'] = 'Closed';
