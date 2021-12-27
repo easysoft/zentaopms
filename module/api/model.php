@@ -741,7 +741,7 @@ class apiModel extends model
      * @access public
      * @return int
      */
-    public function createDemoData($name, $baseUrl, $version)
+    public function createDemoData($name, $baseUrl, $version = '16.0')
     {
         $firstAccount   = $this->dao->select('account')->from(TABLE_USER)->orderBy('id_asc')->limit(1)->fetch('account');
         $currentAccount = isset($this->app->user->account) ? $this->app->user->account : $firstAccount;
