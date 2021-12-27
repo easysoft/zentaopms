@@ -21,6 +21,7 @@ $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
 $lang->productplan->project    = 'Project';
 $lang->productplan->plan       = 'Plan';
+$lang->productplan->allAB      = 'All';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
 $lang->productplan->unlinkAB         = "Unlink";
@@ -33,6 +34,8 @@ $lang->productplan->unlinkedStories  = 'Unlinked Stories';
 $lang->productplan->updateOrder      = 'Order';
 $lang->productplan->createChildren   = "Create Child Plans";
 $lang->productplan->createExecution  = "Create {$lang->execution->common}";
+$lang->productplan->list             = 'List';
+$lang->productplan->kanban           = 'Kanban';
 
 $lang->productplan->linkBug          = "Link Bug";
 $lang->productplan->unlinkBug        = "Unlink Bug";

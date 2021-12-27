@@ -246,15 +246,22 @@ class productplan extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
+        $planType = $this->cookie->planType ? $this->cookie->planType : 'bylist';
+
         $this->commonAction($productID, $branch);
         $product     = $this->product->getById($productID);
         $productName = empty($product) ? '' : $product->name;
+        if($product->type != 'normal' and $planType == 'bykanban')
+        {
+            $this->view->branches = array('all' => $this->lang->productplan->allAB) + $this->loadModel('branch')->getPairs($productID);
+        }
 
         $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
         $this->view->position[] = $this->lang->productplan->browse;
         $this->view->productID  = $productID;
         $this->view->branch     = $branch;
         $this->view->browseType = $browseType;
+        $this->view->planType   = $planType;
         $this->view->orderBy    = $orderBy;
         $this->view->plans      = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
         $this->view->pager      = $pager;

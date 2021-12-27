@@ -21,6 +21,7 @@ $lang->productplan->basicInfo  = '基本信息';
 $lang->productplan->batchEdit  = '批量编辑';
 $lang->productplan->project    = '项目';
 $lang->productplan->plan       = '计划';
+$lang->productplan->allAB      = '所有';
 
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->unlinkAB         = "移除";
@@ -33,6 +34,8 @@ $lang->productplan->unlinkedStories  = "未关联{$lang->SRCommon}";
 $lang->productplan->updateOrder      = '排序';
 $lang->productplan->createChildren   = "创建子计划";
 $lang->productplan->createExecution  = "创建{$lang->execution->common}";
+$lang->productplan->list             = '列表';
+$lang->productplan->kanban           = '看板';
 
 $lang->productplan->linkBug          = "关联Bug";
 $lang->productplan->unlinkBug        = "移除Bug";

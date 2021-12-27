@@ -36,6 +36,13 @@ $(function()
         }
         $('#projects').modal('hide');
     });
+
+    $('[id="switchButton"]').click(function()
+    {
+        var planType = $(this).attr('data-type');
+        $.cookie('planType', planType, {expires:config.cookieLife, path:config.webRoot});
+        window.location.reload();
+    });
 });
 
 $(document).on('click', 'td.content .more', function(e)
