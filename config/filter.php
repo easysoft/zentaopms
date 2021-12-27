@@ -270,7 +270,7 @@ $filter->story->export->cookie['checkedItem']       = 'reg::checked';
 $filter->story->track->cookie['preBranch']          = 'reg::word';
 $filter->story->track->cookie['preProductID']       = 'int';
 
-$filter->productplan->browse->cookie['planType'] = 'code';
+$filter->productplan->browse->cookie['viewType'] = 'code';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';

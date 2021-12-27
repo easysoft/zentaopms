@@ -39,8 +39,8 @@ $(function()
 
     $('[id="switchButton"]').click(function()
     {
-        var planType = $(this).attr('data-type');
-        $.cookie('planType', planType, {expires:config.cookieLife, path:config.webRoot});
+        var viewType = $(this).attr('data-type');
+        $.cookie('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
     });
 });
