@@ -39,7 +39,7 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" href="' + link + '"/>').avatar({user: user});
+    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.account + '" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
