@@ -321,7 +321,7 @@ class api extends control
         {
             if($type == 'demo')
             {
-                $libID = $this->api->createDemoData();
+                $libID = $this->api->createDemoData($this->post->name, $this->post->baseUrl);
                 return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
             }
 
