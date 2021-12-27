@@ -64,9 +64,9 @@ foreach($kanbanList as $spaceID => $spaceKanbans)
     {
         $spaceName = zget($spaceList, $spaceID);
 
-        if($kanbanCounts[$spaceID]['myKanban']) $myKanbansHtml  .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $spaceName . '">' . $spaceName . '</a> <label class="label">' . $lang->kanbanspace->common . '</label></div><ul>';
-        if($kanbanCounts[$spaceID]['others']) $normalKanbansHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $spaceName . '">' . $spaceName . '</a> <label class="label">' . $lang->kanbanspace->common . '</label></div><ul>';
-        if($kanbanCounts[$spaceID]['closed']) $closedKanbansHtml .= '<li><div class="hide-in-search"><a class="text-muted" title="' . $spaceName . '">' . $spaceName . '</a> <label class="label">' . $lang->kanbanspace->common . '</label></div><ul>';
+        if($kanbanCounts[$spaceID]['myKanban']) $myKanbansHtml  .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $spaceName . '">' . $spaceName . '</a> <label class="label">' . $lang->kanbanspace->common . '</label></div><ul>';
+        if($kanbanCounts[$spaceID]['others']) $normalKanbansHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $spaceName . '">' . $spaceName . '</a> <label class="label">' . $lang->kanbanspace->common . '</label></div><ul>';
+        if($kanbanCounts[$spaceID]['closed']) $closedKanbansHtml .= '<li><div class="hide-in-search"><a class="text-muted not-list-item" title="' . $spaceName . '">' . $spaceName . '</a> <label class="label">' . $lang->kanbanspace->common . '</label></div><ul>';
     }
 
     foreach($spaceKanbans as $index => $kanban)
