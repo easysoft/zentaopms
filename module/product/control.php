@@ -30,9 +30,9 @@ class product extends control
         $this->loadModel('user');
 
         /* Get all products, if no, goto the create page. */
-        $this->products = $this->product->getPairs('nocode|all');
+        $this->products = $this->product->getPairs('nocode');
         $isAPI = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
-        if(empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,kanban', $this->methodName) === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,kanban,all', $this->methodName) === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
