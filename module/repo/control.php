@@ -1206,12 +1206,6 @@ class repo extends control
      */
     public function ajaxGetRules()
     {
-        $regRules = $this->repo->processRules();
-        $rawRules = $this->config->repo->rules;
-
-        $data = array();
-        $data['reg'] = $regRules;
-        $data['raw'] = $rawRules;
-        return $this->send(array('status' => 'success', 'rules' => json_encode($data)));
+        return $this->send(array('status' => 'success', 'rules' => $this->config->repo->rules));
     }
 }
