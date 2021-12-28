@@ -1905,13 +1905,15 @@ class docModel extends model
      */
     public function buildCreateButton4Doc($objectType, $objectID, $libID)
     {
+        if(!common::hasPriv('doc', 'create') and !common::hasPriv('doc', 'createLib')) return;
+
         if($objectType == 'book')
         {
             $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createBook, '', 'class="btn btn-secondary iframe"');
         }
         elseif($libID)
         {
-            $html = "<div class='dropdown' id='createDropdown'>";
+            $html  = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu pull-right'>";
 
@@ -2583,7 +2585,7 @@ EOT;
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
 
-        $this->lang->TRActions = $this->buildCollectButton4Doc();
+        $this->lang->TRActions  = $this->buildCollectButton4Doc();
         $this->lang->TRActions .= $this->buildCreateButton4Doc($type, $objectID, $libID);
 
         return array($libs, $libID, $object, $objectID);

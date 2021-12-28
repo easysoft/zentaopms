@@ -599,7 +599,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       </div>
       <div class="modal-body">
         <div class='input-group'>
-          <?php echo html::select('plan', isset($productPlans[$productID]) ? $productPlans[$productID] : '', '', "class='form-control chosen' id='plan'");?>
+          <?php echo html::select('plan', zget($productPlans, $productID, ''), '', "class='form-control chosen' id='plan'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toTaskButton'", 'btn btn-primary');?></span>
         </div>
       </div>
