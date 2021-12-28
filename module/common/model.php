@@ -2721,7 +2721,7 @@ EOD;
         global $lang, $app;
         if(!extension_loaded('curl'))
         {
-             if($dataType == 'json') die($this->lang->error->noCurlExt);
+             if($dataType == 'json') die($lang->error->noCurlExt);
              return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
         }
 
