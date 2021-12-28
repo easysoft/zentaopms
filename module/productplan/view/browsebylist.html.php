@@ -69,7 +69,7 @@
         $extendFields = $this->productplan->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
         ?>
-        <th class='c-actions-6 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions-9 text-center'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>
@@ -108,8 +108,12 @@
         </td>
         <td class='c-title text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
           <?php
+          $suffix = '';
+          if($plan->end < helper::now()) $suffix = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
+          if($plan->parent == '-1') $suffix .= '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+          if(!empty($suffix)) echo '<div class="plan-name has-prefix has-suffix">';
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
-          if($plan->parent == '-1') echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+          if(!empty($suffix)) echo $suffix . '</div>';
           ?>
         </td>
         <?php if($this->session->currentProductType != 'normal'):?>
