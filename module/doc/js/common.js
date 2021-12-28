@@ -24,11 +24,18 @@ function toggleAcl(acl, type)
     if(acl == 'custom')
     {
         $('#whiteListBox').removeClass('hidden');
+        $('#groupWhiteListBox').removeClass('hidden');
+    }
+    else if(acl == 'private')
+    {
+        $('#whiteListBox').removeClass('hidden');
+        $('#groupWhiteListBox').addClass('hidden');
     }
     else
     {
         $('#whiteListBox').addClass('hidden');
     }
+
     if(type == 'lib')
     {
         var libType = $('input[name="type"]:checked').val();

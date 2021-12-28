@@ -177,8 +177,7 @@ class docModel extends model
             $lib->project = $execution->project;
         }
 
-        if($lib->acl == 'private') $lib->users = $this->app->user->account;
-        if($lib->acl == 'custom')
+        if($lib->acl == 'custom' or $lib->acl == 'private')
         {
             $trimedUsers = ',' . trim($lib->users, ',') . ',';
             if(strpos($trimedUsers, ',' . $this->app->user->account . ',') === false) $lib->users .= ',' . $this->app->user->account;
@@ -911,6 +910,7 @@ class docModel extends model
             $project         = $this->loadModel('project')->getById($object->project);
             $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, '', $projectTeams, array_flip(explode(",", $project->whitelist)));
+            if(strpos(",{$object->users},", $account) !== false) return true;
             if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
         }
 
