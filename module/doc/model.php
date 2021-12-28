@@ -906,7 +906,7 @@ class docModel extends model
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
 
-        if($object->project and $object->main)
+        if($object->project and $object->acl == 'private')
         {
             $project         = $this->loadModel('project')->getById($object->project);
             $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
@@ -1317,6 +1317,15 @@ class docModel extends model
 
             /* Sort project. */
             $orderedProjects = array();
+
+            /* Project permissions for DocLib whitelist */
+            if($this->app->tab == 'doc')
+            {
+                $myObjects = $this->dao->select('t2.id, t2.name')->from(TABLE_DOCLIB)->alias('t1')
+                    ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where("CONCAT(',', t1.users, ',')")->like("%,{$this->app->user->account},%")
+                    ->fetchPairs();
+            }
 
             $objects = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')

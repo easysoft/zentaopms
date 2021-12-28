@@ -874,9 +874,25 @@ class projectModel extends model
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
+            $authorizedUsers = array();
 
-            $authorizedUsers = $project->whitelist . ',' . $project->PM . ',' . $project->openedBy . ',';
-            $authorizedUsers = array_unique(explode(',', trim($authorizedUsers, ',')));
+            if($project->parent and $project->acl == 'program')
+            {
+                $stakeHolders     = $this->loadModel('stakeholder')->getStakeHolderPairs($project->parent);
+                foreach($stakeHolders as $stakeHolder) $authorizedUsers[$stakeHolder] = $stakeHolder;
+
+                foreach(explode(',', $project->whitelist) as $white)
+                {
+                    if(empty($white)) continue;
+                    $authorizedUsers[$white] = $white;
+                }
+
+                $authorizedUsers[$project->PM]       = $project->PM;
+                $authorizedUsers[$project->openedBy] = $project->openedBy;
+                $authorizedUsers[$program->PM]       = $program->PM;
+                $authorizedUsers[$program->openedBy] = $program->openedBy;
+
+            }
 
             $lib = new stdclass();
             $lib->project = $projectID;
@@ -884,7 +900,7 @@ class projectModel extends model
             $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
-            if($project->acl == 'private') $lib->users = ',' . implode(',', $authorizedUsers) . ',';
+            $lib->users   = ',' . implode(',', $authorizedUsers) . ',';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
