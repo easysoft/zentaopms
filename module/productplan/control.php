@@ -236,7 +236,7 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = 'all', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = 0, $browseType = 'doing', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -349,6 +349,129 @@ class productplan extends control
             unset($this->view->bugPager);
         }
         $this->display();
+    }
+
+    /**
+     * Start a plan.
+     *
+     * @param  int    $planID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function start($planID, $confirm = 'no')
+    {
+        $plan = $this->productplan->getByID($planID);
+        if(!isonlybody())
+        {
+            if($confirm == 'no')
+            {
+                die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
+            }
+            else
+            {
+                $changes = $this->productplan->updateStatus($planID, 'doing');
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
+                $this->action->logHistory($actionID, $changes);
+
+                die(js::reload('parent'));
+            }
+        }
+        else
+        {
+            if(!empty($_POST))
+            {
+                $changes = $this->productplan->updateStatus($planID, 'doing');
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
+                $this->action->logHistory($actionID, $changes);
+
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess,'locate' => 'parent'));
+            }
+            $this->view->plan = $plan;
+            $this->display();
+        }
+    }
+
+    /**
+     * Finish a plan.
+     *
+     * @param  int    $planID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function finish($planID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes")));
+        }
+        else
+        {
+            $changes = $this->productplan->updateStatus($planID, 'done');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'finished');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * Close a plan.
+     *
+     * @param  int    $planID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function close($planID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->productplan->confirmClose, $this->createLink('productplan', 'close', "planID=$planID&confirm=yes")));
+        }
+        else
+        {
+            $changes = $this->productplan->updateStatus($planID, 'closed');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'closed');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
+     * Activate a plan.
+     *
+     * @param  int    $planID
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function activate($planID, $confirm = 'no')
+    {
+        if($confirm == 'no')
+        {
+            die(js::confirm($this->lang->productplan->confirmActivate, $this->createLink('productplan', 'activate', "planID=$planID&confirm=yes")));
+        }
+        else
+        {
+            $changes = $this->productplan->updateStatus($planID, 'doing');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'activated');
+            $this->action->logHistory($actionID, $changes);
+
+            die(js::reload('parent'));
+        }
     }
 
     /**

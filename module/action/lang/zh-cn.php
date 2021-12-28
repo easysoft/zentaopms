@@ -361,8 +361,12 @@ $lang->action->dynamicAction->branch['activated']        = '激活分支';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = '设置默认分支';
 $lang->action->dynamicAction->branch['mergebranch']      = '合并分支';
 
-$lang->action->dynamicAction->productplan['opened'] = "创建计划";
-$lang->action->dynamicAction->productplan['edited'] = "编辑计划";
+$lang->action->dynamicAction->productplan['opened']    = "创建计划";
+$lang->action->dynamicAction->productplan['edited']    = "编辑计划";
+$lang->action->dynamicAction->productplan['started']   = "开始计划";
+$lang->action->dynamicAction->productplan['finished']  = "完成计划";
+$lang->action->dynamicAction->productplan['closed']    = "关闭计划";
+$lang->action->dynamicAction->productplan['activated'] = "激活计划";
 
 $lang->action->dynamicAction->release['opened']       = '创建发布';
 $lang->action->dynamicAction->release['edited']       = '编辑发布';

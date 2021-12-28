@@ -77,14 +77,13 @@ class productplanModel extends model
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'all', $pager = null, $orderBy = 'begin_desc')
+    public function getList($product = 0, $branch = 0, $browseType = 'doing', $pager = null, $orderBy = 'begin_desc')
     {
         $date  = date('Y-m-d');
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
-            ->beginIF($browseType == 'unexpired')->andWhere('end')->ge($date)->fi()
-            ->beginIF($browseType == 'overdue')->andWhere('end')->lt($date)->fi()
+            ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -477,6 +476,53 @@ class productplanModel extends model
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
             return common::createChanges($oldPlan, $plan);
         }
+    }
+
+    /**
+     * Update a plan's status.
+     *
+     * @param  int    $planID
+     * @param  string $status
+     * @access public
+     * @return string
+     */
+    public function updateStatus($planID, $status = '')
+    {
+        $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+
+        if($status == 'doing' and $_POST)
+        {
+            $plan = fixer::input('post')->add('status', $status)->get();
+            if(strpos($this->config->productplan->start->requiredFields, 'begin') !== false and empty($_POST['begin']))
+            {
+                dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
+            }
+            if(strpos($this->config->productplan->start->requiredFields, 'end') !== false and empty($_POST['end']))
+            {
+                dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
+            }
+            if(dao::isError()) return false;
+
+            $this->dao->update(TABLE_PRODUCTPLAN)
+                ->data($plan)
+                ->autoCheck()
+                ->batchCheck($this->config->productplan->start->requiredFields, 'notempty')
+                ->checkIF(!empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
+                ->where('id')->eq((int)$planID)
+                ->exec();
+
+        }
+        else
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)
+                ->set('`status`')->eq($status)
+                ->where('id')->eq((int)$planID)
+                ->exec();
+
+            $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        }
+
+        if(!dao::isError())return common::createChanges($oldPlan, $plan);
     }
 
     /**
