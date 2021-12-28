@@ -947,7 +947,7 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getUserRuns($taskID, $user, $modules = '', $orderBy, $pager = null)
+    public function getUserRuns($taskID, $user, $modules = '', $orderBy = 'id_desc', $pager = null)
     {
         /* Select the table for these special fields. */
         $specialFields = ',assignedTo,status,lastRunResult,lastRunner,lastRunDate,';

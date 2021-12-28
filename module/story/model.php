@@ -2440,7 +2440,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy, $pager)
+    public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy = '', $pager = null)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)

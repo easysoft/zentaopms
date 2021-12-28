@@ -60,7 +60,7 @@ class testcaseModel extends model
         if(!empty($case->lib))$param = "lib={$case->lib}";
         if(!empty($case->product))$param = "product={$case->product}";
         $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
-        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
