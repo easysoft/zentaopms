@@ -52,7 +52,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->project->name);?></th>
           <th class='text-left'></th>
           <th class='text-left'><?php echo $lang->gitlab->lastUpdate;?></th>
-          <th class='c-actions-5'><?php echo $lang->actions;?></th>
+          <th class='c-actions-6'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -70,6 +70,7 @@
             common::printLink('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-treemap'></i> ", '', "title='{$lang->gitlab->browseBranch}' class='btn btn-primary'");
             common::printLink('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-branch-lock'></i> ", '', "title='{$lang->gitlab->branch->accessLevel}' class='btn btn-primary'");
             common::printLink('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag'></i> ", '', "title='{$lang->gitlab->browseTag}' class='btn btn-primary'");
+            common::printLink('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag-lock'></i> ", '', "title='{$lang->gitlab->browseTagPriv}' class='btn btn-primary'");
             common::printLink('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->project->edit}' class='btn btn-primary'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteProject}' class='btn'");
             ?>
