@@ -54,6 +54,7 @@ $lang->productplan->unlinkedBugs     = '未关联Bug';
 $lang->productplan->unexpired        = "未过期计划";
 $lang->productplan->all              = "所有计划";
 $lang->productplan->setDate          = "设置计划起止时间";
+$lang->productplan->expired          = "已过期";
 
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
