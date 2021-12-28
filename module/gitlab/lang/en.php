@@ -32,6 +32,7 @@ $lang->gitlab->browseUser           = "User List";
 $lang->gitlab->browseGroup          = "Group List";
 $lang->gitlab->browseBranch         = "GitLab Branch List";
 $lang->gitlab->browseTag            = "GitLab Tag List";
+$lang->gitlab->browseTagPriv        = "GitLab Tag protected List";
 $lang->gitlab->gitlabIssue          = "GitLab Issue";
 $lang->gitlab->zentaoProduct        = 'Zentao Product';
 $lang->gitlab->objectType           = 'Type'; // task, bug, story

@@ -32,6 +32,7 @@ $lang->gitlab->browseUser           = "用户列表";
 $lang->gitlab->browseGroup          = "群组列表";
 $lang->gitlab->browseBranch         = "GitLab分支列表";
 $lang->gitlab->browseTag            = "GitLab标签列表";
+$lang->gitlab->browseTagPriv        = "GitLab标签保护列表";
 $lang->gitlab->gitlabIssue          = "{$lang->gitlab->common} issue";
 $lang->gitlab->zentaoProduct        = '禅道产品';
 $lang->gitlab->objectType           = '类型'; // task, bug, story
