@@ -305,7 +305,7 @@ class story extends control
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
-        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -469,7 +469,7 @@ class story extends control
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
-        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Init vars. */
         $planID   = $plan;
@@ -685,7 +685,7 @@ class story extends control
 
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
-        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         $this->story->replaceURLang($story->type);
 
@@ -937,7 +937,7 @@ class story extends control
 
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
-        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;

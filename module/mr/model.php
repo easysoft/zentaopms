@@ -1325,7 +1325,7 @@ class mrModel extends model
         $commits = array();
         foreach($DiffCommits as $DiffCommit)
         {
-            $commits[] = substr($DiffCommit->id, 0, 10);
+            if(isset($DiffCommit->id)) $commits[] = substr($DiffCommit->id, 0, 10);
         }
 
         return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
