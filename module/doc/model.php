@@ -1905,7 +1905,7 @@ class docModel extends model
      */
     public function buildCreateButton4Doc($objectType, $objectID, $libID)
     {
-        if(!common::hasPriv('doc', 'create') and !common::hasPriv('doc', 'createLib')) return;
+        if(!common::hasPriv('doc', 'create') and !common::hasPriv('doc', 'createLib')) return '';
 
         if($objectType == 'book')
         {
