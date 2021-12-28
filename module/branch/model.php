@@ -618,6 +618,9 @@ class branchModel extends model
         /* Release. */
         $this->dao->update(TABLE_RELEASE)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
 
+        /* Build. */
+        $this->dao->update(TABLE_BUILD)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
+
         /* Plan. */
         $this->dao->update(TABLE_PRODUCTPLAN)->set('branch')->eq($targetBranch)->where('branch')->in($mergedBranches)->exec();
 
