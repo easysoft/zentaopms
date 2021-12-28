@@ -259,16 +259,11 @@ class productplan extends control
             $branches    = array();
             $branchPairs = array();
             $planCount   = 0;
-            if($product->type == 'normal')
-            {
-                $branches = array(BRANCH_MAIN => $this->lang->branch->main);
-            }
-            else
-            {
-                $branches = $this->branch->getPairs($product->id);
-            }
+            $planGroup   = $this->productplan->getGroupByProduct($product->id, 'skipParent', 'object');
 
-            $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', 'object');
+            if($product->type == 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+            if($product->type != 'normal') $branches = $this->branch->getPairs($product->id);
+
             foreach($branches as $id => $name)
             {
                 $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
