@@ -617,6 +617,7 @@ class gitlab
 
         $param = new stdclass();
         $param->path     = urldecode($path);
+        $param->ref_name = $this->branch;
 
         $fromDate = $this->getCommittedDate($fromRevision);
         $toDate   = $this->getCommittedDate($toRevision);

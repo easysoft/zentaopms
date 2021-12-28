@@ -164,6 +164,7 @@ $lang->bug->labelConfirmed = '已确认';
 $lang->bug->labelPostponed = '被延期';
 $lang->bug->changed        = '已变动';
 $lang->bug->storyChanged   = '需求变动';
+$lang->bug->linkMR         = '相关合并请求';
 
 /* 页面标签。*/
 $lang->bug->lblAssignedTo = '当前指派';

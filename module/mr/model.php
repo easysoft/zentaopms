@@ -1253,6 +1253,23 @@ class mrModel extends model
     }
 
     /**
+     * Get linked MR pairs.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getLinkedMRPairs($objectID, $objectType = 'story')
+    {
+        return $this->dao->select("t2.id,t2.title")->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t1.AType')->eq('mr')
+            ->andWhere('t1.BID')->eq($objectID)
+            ->fetchPairs();
+    }
+
+    /**
      * Create an mr link.
      *
      * @param int    $MRID
@@ -1325,7 +1342,7 @@ class mrModel extends model
         $commits = array();
         foreach($DiffCommits as $DiffCommit)
         {
-            $commits[] = substr($DiffCommit->id, 0, 10);
+            if(isset($DiffCommit->id)) $commits[] = substr($DiffCommit->id, 0, 10);
         }
 
         return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
