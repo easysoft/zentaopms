@@ -289,7 +289,7 @@
                   <td>
                     <?php
                     if($bug->story) echo html::a($this->createLink('story', 'view', "storyID=$bug->story", '', true), "#$bug->story $bug->storyTitle", '', "class='iframe' data-width='80%'");
-                    if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion)
+                    if($bug->storyStatus == 'active' and $bug->latestStoryVersion > $bug->storyVersion and common::hasPriv('bug', 'confirmStoryChange'))
                     {
                         echo "(<span class='warning'>{$lang->story->changed}</span> ";
                         echo html::a($this->createLink('bug', 'confirmStoryChange', "bugID=$bug->id"), $lang->confirm, 'hiddenwin');

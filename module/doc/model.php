@@ -1905,28 +1905,34 @@ class docModel extends model
      */
     public function buildCreateButton4Doc($objectType, $objectID, $libID)
     {
+        if(!common::hasPriv('doc', 'create') and !common::hasPriv('doc', 'createLib')) return '';
+
         if($objectType == 'book')
         {
             $html = html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $this->lang->doc->createBook, '', 'class="btn btn-secondary iframe"');
         }
         elseif($libID)
         {
-            $html = "<div class='dropdown' id='createDropdown'>";
+            $html  = "<div class='dropdown' id='createDropdown'>";
             $html .= "<button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> " . $this->lang->doc->createAB . " <span class='caret'></span></button>";
             $html .= "<ul class='dropdown-menu pull-right'>";
-            foreach($this->lang->doc->typeList as $typeKey => $typeName)
+
+            if(common::hasPriv('doc', 'create'))
             {
-                $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
-                $icon  = zget($this->config->doc->iconList, $typeKey);
-                $html  .= "<li>";
-                $html  .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
-                $html  .= "</li>";
-                if($typeKey == 'url') $html .= '<li class="divider"></li>';
+                foreach($this->lang->doc->typeList as $typeKey => $typeName)
+                {
+                    $class = strpos($this->config->doc->officeTypes, $typeKey) !== false ? 'iframe' : '';
+                    $icon  = zget($this->config->doc->iconList, $typeKey);
+                    $html  .= "<li>";
+                    $html  .= html::a(helper::createLink('doc', 'create', "objectType=$objectType&objectID=$objectID&libID=$libID&moduleID=0&type=$typeKey", '', $class ? true : false), "<i class='icon-$icon icon'></i> " . $typeName, '', "class='$class' data-app='{$this->app->tab}'");
+                    $html  .= "</li>";
+                    if($typeKey == 'url') $html .= '<li class="divider"></li>';
+                }
             }
 
             if(common::hasPriv('doc', 'createLib'))
             {
-                $html .= '<li class="divider"></li>';
+                if(common::hasPriv('doc', 'create')) $html .= '<li class="divider"></li>';
                 $html .= '<li>' . html::a(helper::createLink('doc', 'createLib', "type=$objectType&objectID=$objectID"), "<i class='icon-doc-lib icon'></i> " . $this->lang->doc->createLib, '', "class='iframe' data-width='70%'") . '</li>';
             }
             $html .= "</ul></div>";
@@ -2579,8 +2585,8 @@ EOT;
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
         if($tab != 'doc') $this->loadModel($tab)->setMenu($objectID);
 
-        $this->lang->TRActions = $this->buildCollectButton4Doc();
-        $this->lang->TRActions .= common::hasPriv('doc', 'create') ? $this->buildCreateButton4Doc($type, $objectID, $libID) : '';
+        $this->lang->TRActions  = $this->buildCollectButton4Doc();
+        $this->lang->TRActions .= $this->buildCreateButton4Doc($type, $objectID, $libID);
 
         return array($libs, $libID, $object, $objectID);
     }

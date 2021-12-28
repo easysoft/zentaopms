@@ -1325,6 +1325,8 @@ class testtask extends control
      */
     public function results($runID, $caseID = 0, $version = 0)
     {
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
+
         if($runID)
         {
             $case    = $this->testtask->getRunById($runID)->case;

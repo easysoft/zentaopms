@@ -120,7 +120,7 @@
                     <?php endif; endif; $childId++;?>
                   </tr>
                   <?php endforeach;?>
-                  <?php if($result->caseResult == 'fail'):?>
+                  <?php if($result->caseResult == 'fail' and common::hasPriv('testcase', 'createBug')):?>
                   <tr>
                     <td></td><td></td><td></td><td></td><td></td><td></td>
                     <td><?php echo html::commonButton($lang->testcase->createBug, "onclick='createBug(this)'", "btn btn-primary createBtn");?></td>

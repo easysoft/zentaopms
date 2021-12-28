@@ -25,10 +25,12 @@
         <th><?php echo $lang->group->desc;?></th>
         <td><?php echo html::textarea('desc', '', "rows=5 class=form-control");?></td>
       </tr>
+      <?php if($this->app->tab != 'project'):?>
       <tr>
         <th><?php echo $lang->group->limited;?></th>
         <td><?php echo html::checkbox('limited', '');?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='2' class='text-center'><?php echo html::submitButton();?></td>
       </tr>
