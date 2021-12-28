@@ -205,7 +205,7 @@ class branch extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($productID, $branch = 0, $module, $method, $extra = '')
+    public function ajaxGetDropMenu($productID, $branch, $module, $method, $extra = '')
     {
         parse_str($extra, $output);
         $branches   = $this->branch->getPairs($productID, 'all', isset($output['projectID']) ? $output['projectID'] : 0);
