@@ -749,7 +749,6 @@ class bugModel extends model
                 $bug->type           = $data->types[$bugID];
                 $bug->severity       = $data->severities[$bugID];
                 $bug->pri            = $data->pris[$bugID];
-                $bug->status         = $data->statuses[$bugID];
                 $bug->color          = $data->colors[$bugID];
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
@@ -764,15 +763,15 @@ class bugModel extends model
                 $bug->resolution     = $data->resolutions[$bugID];
                 $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
-                if($bug->assignedTo  != $oldBug->assignedTo)           $bug->assignedDate = $now;
-                if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'resolved' and $bug->status != 'closed') $bug->resolvedDate = $now;
-                if($bug->resolution  != '' and $bug->resolvedBy == '') $bug->resolvedBy   = $this->app->user->account;
-                if($bug->resolution  != '' and $bug->status != 'closed')
+                if($bug->assignedTo  != $oldBug->assignedTo) $bug->assignedDate = $now;
+                if($bug->resolution  != '') $bug->confirmed = 1;
+                if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'closed')
                 {
-                    $bug->status    = 'resolved';
-                    $bug->confirmed = 1;
+                    $bug->resolvedDate = $now;
+                    $bug->status       = 'resolved';
                 }
-                if($bug->resolution  != '' and $bug->assignedTo == '')
+                if($bug->resolution != '' and $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
+                if($bug->resolution != '' and $bug->assignedTo == '')
                 {
                     $bug->assignedTo   = $oldBug->openedBy;
                     $bug->assignedDate = $now;
