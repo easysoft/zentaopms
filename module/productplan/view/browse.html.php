@@ -17,6 +17,7 @@
 <?php js::set('noLinkedProject', $lang->productplan->noLinkedProject);?>
 <?php js::set('enterProjectList', $lang->productplan->enterProjectList);?>
 <?php js::set('projectNotEmpty', $lang->productplan->projectNotEmpty)?>
+<?php js::set('viewType', $viewType);?>
 <?php
 if($viewType == 'bykanban')
 {

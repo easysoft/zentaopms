@@ -236,8 +236,11 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function browse($productID = 0, $branch = 0, $browseType = 'all', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
+    public function browse($productID = 0, $branch = '', $browseType = 'all', $orderBy = 'begin_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1 )
     {
+        $branchID = $branch === '' ? 'all' : $branch;
+        if(!$branch) $branch = 0;
+
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -251,9 +254,32 @@ class productplan extends control
         $this->commonAction($productID, $branch);
         $product     = $this->product->getById($productID);
         $productName = empty($product) ? '' : $product->name;
-        if($product->type != 'normal' and $viewType == 'bykanban')
+        if($viewType == 'bykanban')
         {
-            $this->view->branches = array('all' => $this->lang->productplan->allAB) + $this->loadModel('branch')->getPairs($productID);
+            $branches    = array();
+            $branchPairs = array();
+            $planCount   = 0;
+            if($product->type == 'normal')
+            {
+                $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+            }
+            else
+            {
+                $branches = $this->branch->getPairs($product->id);
+            }
+
+            $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', 'object');
+            foreach($branches as $id => $name)
+            {
+                $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
+                $branchPairs[$id] = $name . ' ' . count($plans);
+                $planCount += count($plans);
+            }
+
+            $this->view->branches   = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
+            $this->view->branchID   = $branchID;
+            $this->view->planCount  = $planCount;
+            $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $orderBy);
         }
 
         $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;

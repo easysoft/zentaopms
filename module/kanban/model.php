@@ -518,6 +518,85 @@ class kanbanModel extends model
     }
 
     /**
+     * Get plan kanban.
+     *
+     * @param  object $product
+     * @param  int    $branchID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getPlanKanban($product, $branchID = 0, $orderBy = 'id_desc')
+    {
+        $this->loadModel('branch');
+        $this->loadModel('productplan');
+
+        $kanbanData = new stdclass();
+        $lanes      = array();
+        $columns    = array();
+        $branches   = array();
+        $colorIndex = 0;
+        $laneOrder  = 1;
+        $planGroup  = $this->productplan->getGroupByProduct($product->id, 'skipParent', 'object');
+
+        if($product->type == 'normal' or $branchID == BRANCH_MAIN)
+        {
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+        }
+        elseif($branchID == 'all')
+        {
+            $branches = $this->branch->getPairs($product->id);
+        }
+        elseif($branchID)
+        {
+            $branchName = $this->branch->getById($branchID);
+            $branches   = array($branchID => $branchName);
+        }
+
+        foreach($branches as $branchID => $branchName)
+        {
+            $plans    = isset($planGroup[$product->id][$branchID]) ? array_filter($planGroup[$product->id][$branchID]) : array();
+            $planList = array();
+
+            foreach($plans as $planID => $plan)
+            {
+                if(empty($plan)) continue;
+                if(!isset($planList[$plan->status])) $planList[$plan->status] = array();
+                $planList[$plan->status][] = $plan;
+            }
+
+            $lane = new stdclass();
+            $lane->id    = $branchID;
+            $lane->type  = 'branch';
+            $lane->name  = $branchName;
+            $lane->color = $this->config->productplan->laneColorList[$colorIndex];
+            $lane->order = $laneOrder;
+            $lane->items = $planList;
+
+            $lanes[]     = $lane;
+            $laneOrder  += 1;
+            $colorIndex += 1;
+            if($colorIndex == count($this->config->productplan->laneColorList) + 1) $colorIndex = 0;
+        }
+
+        foreach($this->lang->kanban->defaultColumn as $columnType => $columnName)
+        {
+            $column = new stdclass();
+            $column->id   = $columnType;
+            $column->type = $columnType;
+            $column->name = $columnName;
+
+            $columns[] = $column;
+        }
+
+        $kanbanData->id      = 'plans';
+        $kanbanData->lanes   = $lanes;
+        $kanbanData->columns = $columns;
+
+        return $kanbanData;
+    }
+
+    /**
      * Get region by id.
      *
      * @param  int    $regionID
