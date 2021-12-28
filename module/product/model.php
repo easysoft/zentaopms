@@ -852,7 +852,7 @@ class productModel extends model
      * @access public
      * @return array
      */
-    public function getStories($productID, $branch, $browseType, $queryID, $moduleID, $type = 'story', $sort, $pager)
+    public function getStories($productID, $branch, $browseType, $queryID, $moduleID, $type = 'story', $sort = 'id_desc', $pager = null)
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 

@@ -93,6 +93,9 @@ class mrModel extends model
             ->add('createdDate', helper::now())
             ->get();
 
+        $result = $this->hasOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
+        if($result['result'] == 'fail') return $result;
+
         /* Exec Job */
         if(isset($MR->jobID) && $MR->jobID)
         {
@@ -1397,5 +1400,34 @@ class mrModel extends model
         {
             $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
         }
+    }
+
+    /**
+     * Check has opened mr
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $sourceBranch
+     * @access public
+     * @return array
+     */
+    public function hasOpened($gitlabID, $projectID, $sourceBranch)
+    {
+        if(empty($sourceBranch)) return array('result' => 'success');
+
+        $dbOpenedCount = $this->dao->select('count(*) as count')->from(TABLE_MR)
+            ->where('gitlabID')->eq($gitlabID)
+            ->andWhere('sourceProject')->eq($projectID)
+            ->andWhere('sourceBranch')->eq($sourceBranch)
+            ->andWhere('status')->eq('opened')
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        if($dbOpenedCount > 0) return array('result' => 'fail', 'message' => $this->lang->mr->hasOpenedMR);
+
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/$projectID/merge_requests") . "&view=simple&state=opened&source_branch={$sourceBranch}";
+        $response = json_decode(commonModel::http($url));
+        if(!empty($response)) return array('result' => 'fail', 'message' => $this->lang->mr->hasOpenedMR);
+
+        return array('result' => 'success');
     }
 }

@@ -44,6 +44,25 @@ $(function()
         });
     });
 
+    $('#sourceBranch').change(function()
+    {
+        var gitlabID = $('#gitlabID').val();
+        var sourceProject = $('#sourceProject').val();
+        repoUrl = createLink('mr', 'ajaxCheckOpened', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+
+        var sourceBranch = $(this).val();
+        $.post(repoUrl, {"sourceBranch": sourceBranch}, function(response)
+        {
+            response = $.parseJSON(response);
+            if(response.result == 'fail')
+            {
+                alert(response.message);
+                $('#sourceBranch').val('').trigger('chosen:updated');
+                return false;
+            }
+        });
+    });
+
     /*
     $('#targetProject').change(function()
     {

@@ -937,4 +937,19 @@ class mr extends control
         foreach($compileList as $compile) $options .= "<option value='{$compile->id}' data-name='{$compile->name}'>[{$compile->id}] [{$this->lang->compile->statusList[$compile->status]}] {$compile->name}</option>";
         $this->send($options);
    }
+
+   /**
+    * Ajax check opened mr.
+    *
+    * @param  int    $gitlabID
+    * @param  int    $projectID
+    * @access public
+    * @return void
+    */
+   public function ajaxCheckOpened($gitlabID, $projectID)
+   {
+       $sourceBranch = $this->post->sourceBranch;
+       $result       = $this->mr->hasOpened($gitlabID, $projectID, $sourceBranch);
+       die(json_encode($result));
+   }
 }
