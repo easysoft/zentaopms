@@ -2079,8 +2079,8 @@ class projectModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
 
         /* Reset project priv. */
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
 
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
