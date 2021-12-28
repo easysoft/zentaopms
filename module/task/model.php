@@ -22,7 +22,7 @@ class taskModel extends model
      */
     public function create($executionID)
     {
-        if($this->post->estimate < 0)
+        if((float)$this->post->estimate < 0)
         {
             dao::$errors[] = $this->lang->task->error->recordMinus;
             return false;

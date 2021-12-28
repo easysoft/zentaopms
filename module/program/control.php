@@ -656,7 +656,7 @@ class program extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($programID = 0, $module, $method)
+    public function ajaxGetDropMenu($programID, $module, $method)
     {
         $this->view->programID = $programID;
         $this->view->module    = $module;
