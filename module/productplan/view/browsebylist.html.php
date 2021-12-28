@@ -128,6 +128,23 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
+          if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
+          {
+              $class = 'iframe';
+              $attr  = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+              $isOnlyBody = true;
+          }
+          else
+          {
+              $attr = "target='hiddenwin'";
+              $isOnlyBody = false;
+          }
+          $class = $plan->status == 'wait' ? $class : 'disabled';
+          common::printLink('productplan', 'start', "planID=$plan->id", '<i class="icon-play"></i>', '', "class='btn {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody);
+          $class = $plan->status == 'doing' ? '' : 'disabled';
+          common::printLink('productplan', 'finish', "planID=$plan->id", '<i class="icon-checked"></i>', '', "class='btn {$class}' target='hiddenwin' title='{$lang->productplan->finish}'");
+          $class = $plan->status == 'done' ? '' : 'disabled';
+          common::printLink('productplan', 'close', "planID=$plan->id", '<i class="icon-off"></i>', '', "class='btn {$class}' target='hiddenwin' title='{$lang->productplan->close}'");
           $attr = $plan->expired ? "disabled='disabled'" : '';
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
