@@ -140,21 +140,8 @@ class mrModel extends model
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-            foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
-            {
-                if(strpos($errorMsg, '/') === 0)
-                {
-                    $result = preg_match($errorMsg, $rawMR->message[0], $matches);
-                    if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
-                }
-                else
-                {
-                    if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
-                }
-
-                if(isset($errorMessage)) break;
-            }
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]));
+            $errorMessage = $this->convertApiError($rawMR->message);
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
         }
 
         /* Create MR failed. */
@@ -218,6 +205,13 @@ class mrModel extends model
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
 
+        $result = $this->hasOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
+        if($result['result'] == 'fail')
+        {
+            dao::$errors[] = $result['message'];
+            return false;
+        }
+
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->apicreate->requiredFields, 'notempty')
             ->autoCheck()
@@ -274,6 +268,7 @@ class mrModel extends model
             ->get();
         $oldMR = $this->getByID($MRID);
 
+
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -304,6 +299,11 @@ class mrModel extends model
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
+        if(!isset($rawMR->id) and isset($rawMR->message))
+        {
+            $errorMessage = $this->convertApiError($rawMR->message);
+            return array('result' => 'fail', 'message' => $errorMessage);
+        }
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)
@@ -1429,5 +1429,32 @@ class mrModel extends model
         if(!empty($response)) return array('result' => 'fail', 'message' => $this->lang->mr->hasOpenedMR);
 
         return array('result' => 'success');
+    }
+
+    /**
+     * Convert API error.
+     *
+     * @param  array  $message
+     * @access public
+     * @return string
+     */
+    public function convertApiError($message)
+    {
+        foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+        {
+            if(strpos($errorMsg, '/') === 0)
+            {
+                $result = preg_match($errorMsg, $message[0], $matches);
+                if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+            }
+            else
+            {
+                if($message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $message[0]);
+            }
+
+            if(isset($errorMessage)) break;
+        }
+
+        return isset($errorMessage) ? $errorMessage : $message[0];
     }
 }
