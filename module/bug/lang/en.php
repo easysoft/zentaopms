@@ -164,6 +164,7 @@ $lang->bug->labelConfirmed = 'Confirmed';
 $lang->bug->labelPostponed = 'Postponed';
 $lang->bug->changed        = 'Changed';
 $lang->bug->storyChanged   = 'Story Changed';
+$lang->bug->linkMR         = 'Related MRs';
 
 /* Page tags. */
 $lang->bug->lblAssignedTo = 'AssignTo';

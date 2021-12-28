@@ -1253,6 +1253,23 @@ class mrModel extends model
     }
 
     /**
+     * Get linked MR pairs.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getLinkedMRPairs($objectID, $objectType = 'story')
+    {
+        return $this->dao->select("t2.id,t2.title")->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t1.AType')->eq('mr')
+            ->andWhere('t1.BID')->eq($objectID)
+            ->fetchPairs();
+    }
+
+    /**
      * Create an mr link.
      *
      * @param int    $MRID

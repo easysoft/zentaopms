@@ -374,7 +374,7 @@
             <table class="table table-data">
               <tbody>
                 <tr class='text-top'>
-                  <th class='w-80px'><?php echo $lang->bug->linkBug;?></th>
+                  <th class='w-90px'><?php echo $lang->bug->linkBug;?></th>
                   <td>
                     <?php
                     if(isset($bug->linkBugTitles))
@@ -389,7 +389,7 @@
                 </tr>
                 <?php if($bug->case):?>
                 <tr>
-                  <th class='w-60px'><?php echo $lang->bug->fromCase;?></th>
+                  <th><?php echo $lang->bug->fromCase;?></th>
                   <td><?php echo html::a($this->createLink('testcase', 'view', "caseID=$bug->case&caseVersion=" . ($bug->testtask ? "&from=testtask&taskID={$bug->testtask}" : ''), '', true), "#$bug->case $bug->caseTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
@@ -418,6 +418,17 @@
                   <td><?php echo html::a($this->createLink('task', 'view', "taskID=$bug->toTask", '', true), "#$bug->toTask $bug->toTaskTitle", '', "class='iframe' data-width='80%'");?></td>
                 </tr>
                 <?php endif;?>
+                <tr>
+                  <th><?php echo $lang->bug->linkMR;?></th>
+                  <td>
+                    <?php
+                    foreach($bug->linkMRTitles as $MRID => $linkMRTitle)
+                    {
+                        echo html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") . '<br />';
+                    }
+                    ?>
+                  </td>
+                </tr>
               </tbody>
             </table>
           </div>
