@@ -502,7 +502,7 @@
               <tbody>
                 <?php if(!empty($fromBug)):?>
                 <tr>
-                  <th class='thWidth'><?php echo $lang->story->legendFromBug;?></th>
+                  <th class='w-90px'><?php echo $lang->story->legendFromBug;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php echo "<li title='#$fromBug->id $fromBug->title'>" . html::a($this->createLink('bug', 'view', "bugID=$fromBug->id", '', true), "#$fromBug->id $fromBug->title", '', "class='iframe' data-width='80%'") . '</li>';?>
@@ -511,7 +511,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='thWidth'><?php echo $lang->story->legendBugs;?></th>
+                  <th class='w-90px'><?php echo $lang->story->legendBugs;?></th>
                   <td class='pd-0'>
                     <ul class='list-unstyled'>
                     <?php
@@ -533,6 +533,27 @@
                     foreach($cases as $case)
                     {
                         echo "<li title='[C]$case->id $case->title'>" . html::a($this->createLink('testcase', 'view', "caseID=$case->id", '', true), "[C] #$case->id $case->title", '', $misc) . '</li>';
+                    }
+                    ?>
+                    </ul>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->story->linkMR;?></th>
+                  <td class='pd-0'>
+                    <ul class='list-unstyled'>
+                    <?php
+                    $mrPriv = common::hasPriv('mr', 'view');
+                    foreach($linkedMRs as $MRID => $linkMRTitle)
+                    {
+                        if($mrPriv)
+                        {
+                            echo "<li title='#$MRID $linkMRTitle'>" . html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") . '</li>';
+                        }
+                        else
+                        {
+                            echo "<li title='#$MRID $linkMRTitle'>" . "#$MRID $linkMRTitle" . '</li>';
+                        }
                     }
                     ?>
                     </ul>
