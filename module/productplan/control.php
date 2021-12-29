@@ -249,12 +249,12 @@ class productplan extends control
         $sort = $this->loadModel('common')->appendOrder($orderBy);
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
-        $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'bylist';
+        $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
         $this->commonAction($productID, $branch);
         $product     = $this->product->getById($productID);
         $productName = empty($product) ? '' : $product->name;
-        if($viewType == 'bykanban')
+        if($viewType == 'kanban')
         {
             $branches    = array();
             $branchPairs = array();

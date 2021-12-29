@@ -42,6 +42,7 @@ $(function()
         var viewType = $(this).attr('data-type');
         $.cookie('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
+        if(viewType == 'kanban') initKanban();
     });
 
     $('#branch').change(function()
@@ -51,30 +52,35 @@ $(function()
         location.href = link;
     });
 
-    if(viewType == 'bykanban')
+    if(viewType == 'kanban')
     {
         $('#branch_chosen .chosen-single span').prepend('<i class="icon-delay"></i>');
-        $('#kanban').kanban(
-        {
-            data:          kanbanData,
-            minColWidth:   290,
-            maxColWidth:   290,
-            itemRender:    renderKanbanItem,
-            virtualize:    true,
-            droppable:
-            {
-                target:       findDropColumns,
-                finish:       handleFinishDrop,
-                mouseButton: 'left'
-            }
-        });
-
-        $('#kanban').on('scroll', function()
-        {
-            $.zui.ContextMenu.hide();
-        });
+        initKanban();
     }
 });
+
+function initKanban()
+{
+    $('#kanban').kanban(
+    {
+        data:          kanbanData,
+        minColWidth:   290,
+        maxColWidth:   290,
+        itemRender:    renderKanbanItem,
+        virtualize:    true,
+        droppable:
+        {
+            target:       findDropColumns,
+            finish:       handleFinishDrop,
+            mouseButton: 'left'
+        }
+    });
+
+    $('#kanban').on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
+}
 
 $(document).on('click', 'td.content .more', function(e)
 {
