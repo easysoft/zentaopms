@@ -112,9 +112,9 @@ class productplan extends control
         if(!empty($_POST))
         {
             $changes = $this->productplan->update($planID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $change[$planID] = $changes;
             $this->syncStory($change);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'edited');
