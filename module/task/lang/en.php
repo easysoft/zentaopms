@@ -160,6 +160,7 @@ $lang->task->noFinished        = 'Unfinished';
 $lang->task->noClosed          = 'Unclosed';
 $lang->task->yesterdayFinished = 'Task Finished Yesterday';
 $lang->task->allTasks          = 'Task';
+$lang->task->linkMR            = 'Related MRs';
 
 $lang->task->statusList['']        = '';
 $lang->task->statusList['wait']    = 'Waiting';
@@ -199,6 +200,7 @@ $lang->task->legendEffort = 'Effort';
 $lang->task->legendLife   = 'Task Life';
 $lang->task->legendDesc   = 'Task Description';
 $lang->task->legendDetail = 'Task Detail';
+$lang->task->legendMisc   = 'Misc.';
 
 $lang->task->confirmDelete          = "Do you want to delete this task?";
 $lang->task->confirmDeleteEstimate  = "Do you want to delete it?";

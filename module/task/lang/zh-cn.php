@@ -160,6 +160,7 @@ $lang->task->noFinished        = '未完成';
 $lang->task->noClosed          = '未关闭';
 $lang->task->yesterdayFinished = '昨日完成任务数';
 $lang->task->allTasks          = '总任务';
+$lang->task->linkMR            = '相关合并请求';
 
 $lang->task->statusList['']       = '';
 $lang->task->statusList['wait']   = '未开始';
@@ -199,6 +200,7 @@ $lang->task->legendEffort = '工时信息';
 $lang->task->legendLife   = '任务的一生';
 $lang->task->legendDesc   = '任务描述';
 $lang->task->legendDetail = '任务详情';
+$lang->task->legendMisc   = '其他相关';
 
 $lang->task->confirmDelete          = "您确定要删除这个任务吗？";
 $lang->task->confirmDeleteEstimate  = "您确定要删除这个记录吗？";
