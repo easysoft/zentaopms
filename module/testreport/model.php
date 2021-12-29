@@ -141,6 +141,7 @@ class testreportModel extends model
         $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
         $legacyBugs    = array();
+        $activatedBugs = array();
         $byCaseNum     = 0;
         $buildIdList   = array_keys($builds);
         $taskIdList    = array_keys($tasks);
@@ -216,6 +217,7 @@ class testreportModel extends model
         }
 
         $resolvedBugs   = 0;
+        $this->loadModel('action');
         foreach($foundBugs as $bug)
         {
             $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
@@ -227,10 +229,23 @@ class testreportModel extends model
             if($bug->resolvedBy) $resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
             if($bug->resolution) $resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
             if($bug->status == 'resolved' or $bug->status == 'closed') $resolvedBugs ++;
+
+            /* Determine if the bug has been reactivated in the testreport. */
+            $actions = $this->action->getList('bug', $bug->id);
+            foreach($actions as $action)
+            {
+                if($action->action == 'activated' and $action->date >= $begin and $action->date <= $end . '23:59:59')
+                {
+                    $activatedBugs[$bug->id] = $bug;
+                    break;
+                }
+            }
+
         }
 
         $bugInfo['foundBugs']           = count($foundBugs);
         $bugInfo['legacyBugs']          = $legacyBugs;
+        $bugInfo['activatedBugs']       = $activatedBugs;
         $bugInfo['countBugByTask']      = $byCaseNum;
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
