@@ -1267,6 +1267,7 @@ class mrModel extends model
         return $this->dao->select("t2.id,t2.title")->from(TABLE_RELATION)->alias('t1')
             ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
             ->where('t1.AType')->eq('mr')
+            ->andWhere('t1.BType')->eq($objectType)
             ->andWhere('t1.BID')->eq($objectID)
             ->fetchPairs();
     }
