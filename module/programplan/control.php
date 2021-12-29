@@ -145,6 +145,7 @@ class programplan extends control
         $this->view->plans       = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
         $this->view->planID      = $planID;
         $this->view->type        = 'lists';
+        $this->view->PMUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
 
         $this->display();
     }

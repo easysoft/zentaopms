@@ -1078,6 +1078,7 @@ class my extends control
         $this->session->set('opportunityLibList', $uri, 'assetlib');
         $this->session->set('practiceLibList',    $uri, 'assetlib');
         $this->session->set('componentLibList',   $uri, 'assetlib');
+        $this->session->set('opportunityList',    $uri, 'project');
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
