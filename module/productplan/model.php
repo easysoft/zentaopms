@@ -74,16 +74,18 @@ class productplanModel extends model
      * @param  string $browseType
      * @param  object $pager
      * @param  string $orderBy
+     * @param  string $param skipparent
      * @access public
      * @return object
      */
-    public function getList($product = 0, $branch = 0, $browseType = 'doing', $pager = null, $orderBy = 'begin_desc')
+    public function getList($product = 0, $branch = 0, $browseType = 'doing', $pager = null, $orderBy = 'begin_desc', $param = '')
     {
         $date  = date('Y-m-d');
         $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('product')->eq($product)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!empty($branch))->andWhere('branch')->eq($branch)->fi()
             ->beginIF($browseType != 'all')->andWhere('status')->eq($browseType)->fi()
+            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -282,11 +284,12 @@ class productplanModel extends model
      *
      * @param  string|array $products
      * @param  string       $param skipParent|unexpired
-     * @param  string       $returnType pairs|object
+     * @param  string       $field name
+     * @param  string       $orderBy id_desc|begin_desc
      * @access public
      * @return array
      */
-    public function getGroupByProduct($products = '', $param = '', $returnType = 'pairs')
+    public function getGroupByProduct($products = '', $param = '', $field = 'name', $orderBy = 'id_desc')
     {
         $date  = date('Y-m-d');
         $param = strtolower($param);
@@ -295,10 +298,10 @@ class productplanModel extends model
             ->beginIF($products)->andWhere('product')->in($products)->fi()
             ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
-            ->orderBy('id_desc')
+            ->orderBy($orderBy)
             ->fetchAll('id');
 
-        if(!empty($plans) and $returnType != 'object') $plans = $this->reorder4Children($plans);
+        if(!empty($plans) and $field == 'name') $plans = $this->reorder4Children($plans);
 
         $parentTitle = array();
         $planGroup   = array();
@@ -306,16 +309,16 @@ class productplanModel extends model
         {
             if(!isset($planGroup[$plan->product][$plan->branch])) $planGroup[$plan->product][$plan->branch] = array('' => '');
 
-            if($returnType == 'object')
-            {
-                $planGroup[$plan->product][$plan->branch][$plan->id] = $plan;
-            }
-            else
+            if($field == 'name')
             {
                 if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
                 if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
                 $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
                 if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            }
+            else
+            {
+                $planGroup[$plan->product][$plan->branch][$plan->id] = $plan;
             }
         }
         return $planGroup;

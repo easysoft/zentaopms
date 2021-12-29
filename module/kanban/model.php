@@ -522,11 +522,11 @@ class kanbanModel extends model
      *
      * @param  object $product
      * @param  int    $branchID
-     * @param  string $orderBy
+     * @param  array  $planGroup
      * @access public
      * @return array
      */
-    public function getPlanKanban($product, $branchID = 0, $orderBy = 'id_desc')
+    public function getPlanKanban($product, $branchID = 0, $planGroup = '')
     {
         $this->loadModel('branch');
         $this->loadModel('productplan');
@@ -537,15 +537,18 @@ class kanbanModel extends model
         $branches   = array();
         $colorIndex = 0;
         $laneOrder  = 1;
-        $planGroup  = $this->productplan->getGroupByProduct($product->id, 'skipParent', 'object');
 
-        if($product->type == 'normal' or $branchID == BRANCH_MAIN)
+        if($product->type == 'normal')
         {
-            $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+            $branches = array('all' => $this->lang->productplan->allAB);
         }
         elseif($branchID == 'all')
         {
             $branches = $this->branch->getPairs($product->id);
+        }
+        elseif($branchID == BRANCH_MAIN)
+        {
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main);
         }
         elseif($branchID)
         {
@@ -553,22 +556,23 @@ class kanbanModel extends model
             $branches   = array($branchID => $branchName);
         }
 
-        foreach($branches as $branchID => $branchName)
+        foreach($branches as $id => $name)
         {
-            $plans    = isset($planGroup[$product->id][$branchID]) ? array_filter($planGroup[$product->id][$branchID]) : array();
+            if($product->type != 'normal') $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
+            if($product->type == 'normal') $plans = $planGroup;
             $planList = array();
 
             foreach($plans as $planID => $plan)
             {
-                if(empty($plan)) continue;
+                if(empty($plan) or $plan->parent == -1) continue;
                 if(!isset($planList[$plan->status])) $planList[$plan->status] = array();
                 $planList[$plan->status][] = $plan;
             }
 
             $lane = new stdclass();
-            $lane->id    = $branchID;
+            $lane->id    = $id;
             $lane->type  = 'branch';
-            $lane->name  = $branchName;
+            $lane->name  = $name;
             $lane->color = $this->config->productplan->laneColorList[$colorIndex];
             $lane->order = $laneOrder;
             $lane->items = $planList;
