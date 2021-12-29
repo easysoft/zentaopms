@@ -507,6 +507,9 @@ class productplanModel extends model
         {
             $plan = fixer::input('post')->add('status', $status)->get();
 
+            $this->checkDate4Plan($oldPlan, $plan->begin, $plan->end);
+            if(dao::isError()) return false;
+
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->data($plan)
                 ->autoCheck()
