@@ -104,6 +104,8 @@ $lang->productplan->errorNoEnd        = 'ID %s end time should not be empty.';
 $lang->productplan->beginGeEnd        = 'ID %s begin time should not be >= end time.';
 $lang->productplan->beginLetterParent = "The start date of the parent plan: %s, the start date cannot be less than the start date of the parent plan.";
 $lang->productplan->endGreaterParent  = "The completion date of the parent plan: %s, the completion date cannot be greater than the completion date of the parent plan.";
+$lang->productplan->beginGreaterChild = "The start date of the child plan: %s, the start date cannot be greater than the start date of the child plan.";
+$lang->productplan->endLetterChild    = "The completion date of the child plan: %s, the completion date cannot be less than the completion date of the child plan.";
 $lang->productplan->noLinkedProject   = "The current product has not been linked with a project. Please enter the list of the product to link or create a project.";
 $lang->productplan->enterProjectList  = "Enter the list of the product";
 

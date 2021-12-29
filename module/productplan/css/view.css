@@ -25,5 +25,5 @@ ol, ul {padding-left: 20px;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 .body-modal #mainContent {min-height: 240px;}
 
-.btn.disabled{color: #9e54ae; background-color: transparent; border-color:transparent;}
+#mainMenu .btn-link[disabled] {color: #9e54ae; background: transparent; border-color:transparent;}
 #mainMenu .icon-checked, #mainMenu .icon-off, #mainMenu .icon-play, #mainMenu .icon-magic {margin-right: 3px;}

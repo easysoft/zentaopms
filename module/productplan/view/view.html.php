@@ -42,24 +42,22 @@
     {
         echo $this->buildOperateMenu($plan, 'view');
 
-        $attr       = "target='hiddenwin'";
-        $isOnlyBody = false;
-        $class      = '';
-        if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
+        if($plan->parent >= 0)
         {
-            $class      = 'iframe';
-            $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
-            $isOnlyBody = true;
+            $attr       = "target='hiddenwin'";
+            $isOnlyBody = false;
+            $class      = '';
+            if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
+            {
+                $class      = 'iframe';
+                $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+                $isOnlyBody = true;
+            }
+            common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody, $plan);
+            common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
+            common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link' target='hiddenwin' title='{$lang->productplan->close}'", '', false, $plan);
+            common::printLink('productplan', 'activate', "planID=$plan->id", "<i class='icon-magic'></i>{$lang->productplan->activateAB}", '', "class='btn btn-link' target='hiddenwin' title='{$lang->productplan->activate}'", '', false, $plan);
         }
-
-        $class = $plan->status == 'wait' ? $class : 'disabled';
-        common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody);
-        $class = $plan->status == 'doing' ? '' : 'disabled';
-        common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'");
-        $class = $plan->status == 'done' ? '' : 'disabled';
-        common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->close}'");
-        $class = $plan->status == 'closed' ? '' : 'disabled';
-        common::printLink('productplan', 'activate', "planID=$plan->id", "<i class='icon-magic'></i>{$lang->productplan->activateAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->activate}'");
 
         if(common::hasPriv('productplan', 'create', $plan) and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-split'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
         if(common::hasPriv('productplan', 'edit', $plan)) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");

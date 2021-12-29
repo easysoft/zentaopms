@@ -499,9 +499,11 @@ class productplanModel extends model
      */
     public function updateStatus($planID, $status = '')
     {
-        $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
+        $planID  = (int)$planID;
+        $oldPlan = $this->getByID($planID);
+        if($oldPlan->parent > 0) $parentPlan = $this->getByID($oldPlan->parent);
 
-        if($status == 'doing' and $_POST)
+        if($status == 'doing' and !empty($_POST))
         {
             $plan = fixer::input('post')->add('status', $status)->get();
 
@@ -510,21 +512,65 @@ class productplanModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->productplan->start->requiredFields, 'notempty')
                 ->checkIF(!empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
-                ->where('id')->eq((int)$planID)
+                ->where('id')->eq($planID)
+                ->beginIF(isset($parentPlan))->orWhere('id')->eq($oldPlan->parent)->fi()
                 ->exec();
-
-            if(dao::isError()) return false;
+        }
+        elseif($status == 'doing' and isset($parentPlan) and $parentPlan->status != 'doing')
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)
+                ->set('`status`')->eq($status)
+                ->where('id')->eq($planID)
+                ->orWhere('id')->eq($oldPlan->parent)
+                ->exec();
+        }
+        elseif($status == 'done' and isset($parentPlan))
+        {
+            $parentDone   = true;
+            $childPlans   = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($oldPlan->parent)->andWhere('deleted')->eq(0)->fetchAll();
+            foreach($childPlans as $childPlan )
+            {
+                if(in_array($childPlan->status, array('wait', 'doing')) and $planID != $childPlan->id)
+                {
+                    $parentDone = false;
+                    break;
+                }
+            }
+            $this->dao->update(TABLE_PRODUCTPLAN)
+                ->set('`status`')->eq($status)
+                ->where('id')->eq($planID)
+                ->beginIF($parentDone)->orWhere('id')->eq($oldPlan->parent)->fi()
+                ->exec();
+        }
+        elseif($status == 'closed' and isset($parentPlan))
+        {
+            $parentClosed = true;
+            $childPlans   = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($oldPlan->parent)->andWhere('deleted')->eq(0)->fetchAll();
+            foreach($childPlans as $childPlan)
+            {
+                if(in_array($childPlan->status, array('wait', 'doing', 'done')) and $planID != $childPlan->id)
+                {
+                    $parentClosed = false;
+                    break;
+                }
+            }
+            $this->dao->update(TABLE_PRODUCTPLAN)
+                ->set('`status`')->eq($status)
+                ->where('id')->eq($planID)
+                ->beginIF($parentClosed)->orWhere('id')->eq($oldPlan->parent)->fi()
+                ->exec();
         }
         else
         {
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->set('`status`')->eq($status)
-                ->where('id')->eq((int)$planID)
+                ->where('id')->eq($planID)
                 ->exec();
-
-            $plan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         }
 
+        if(dao::isError()) return false;
+
+        if(!isset($plan)) $plan = $this->getByID($planID);
         if(!dao::isError())return common::createChanges($oldPlan, $plan);
     }
 
@@ -587,6 +633,38 @@ class productplanModel extends model
         }
 
         return $changes;
+    }
+
+    /**
+     * Check date for plan.
+     *
+     * @param  object $plan
+     * @param  string $begin
+     * @param  string $end
+     * @access public
+     * @return void
+     */
+    public function checkDate4Plan($plan, $begin, $end)
+    {
+        if($plan->parent == -1)
+        {
+            $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($plan->id)->andWhere('deleted')->eq(0)->fetchAll();
+            $minBegin   = $begin;
+            $maxEnd     = $end;
+            foreach($childPlans as $childPlan)
+            {
+                if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
+            }
+            if($minBegin < $begin) dao::$errors['begin'] = sprintf($this->lang->beginGreaterChild, $minBegin);
+            if($maxEnd > $end) dao::$errors['end'] = sprintf($this->lang->endLetterChild, $maxEnd);
+        }
+        elseif($plan->parent > 0)
+        {
+            $parentPlan = $this->getByID($plan->parent);
+            if($begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+            if($end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+        }
     }
 
     /**
@@ -787,5 +865,38 @@ class productplanModel extends model
         }
 
         return $plans;
+    }
+
+    /**
+     * Judge an action is clickable or not.
+     *
+     * @param  object $plan
+     * @param  string $action
+     * @access public
+     * @return void
+     */
+    public static function isClickable($plan, $action)
+    {
+        $action = strtolower($action);
+        $clickable = commonModel::hasPriv('productplan', $action);
+        if(!$clickable) return false;
+
+        switch($action)
+        {
+            case 'start' :
+                if($plan->status != 'wait' or $plan->parent < 0) return false;
+                break;
+            case 'finish' :
+                if($plan->status != 'doing' or $plan->parent < 0) return false;
+                break;
+            case 'close' :
+                if($plan->status != 'done' or $plan->parent < 0) return false;
+                break;
+            case 'activate' :
+                if($plan->status != 'closed' or $plan->parent < 0) return false;
+                break;
+        }
+
+        return true;
     }
 }

@@ -1366,6 +1366,17 @@ class commonModel extends model
         global $app;
         if(strpos($misc, 'data-app') === false) $misc .= ' data-app="' . $app->tab . '"';
 
+        /* Judge the $method of $module clickable or not, default is clickable. */
+        if(is_object($object))
+        {
+            if($app->getModuleName() != $module) $app->control->loadModel($module);
+            $modelClass = class_exists("ext{$module}Model") ? "ext{$module}Model" : $module . "Model";
+            if(class_exists($modelClass) and is_callable(array($modelClass, 'isClickable')))
+            {
+                if(!call_user_func_array(array($modelClass, 'isClickable'), array($object, $method))) $misc .= 'disabled="disabled"';
+            }
+        }
+
         if(!commonModel::hasPriv($module, $method, $object)) return false;
         echo html::a(helper::createLink($module, $method, $vars, '', $onlyBody), $label, $target, $misc, $newline);
         return true;

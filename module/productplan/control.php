@@ -400,7 +400,7 @@ class productplan extends control
             else
             {
                 $changes = $this->productplan->updateStatus($planID, 'doing');
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(dao::isError()) die(js::error(dao::getError()));
 
                 $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
                 $this->action->logHistory($actionID, $changes);
@@ -442,7 +442,7 @@ class productplan extends control
         else
         {
             $changes = $this->productplan->updateStatus($planID, 'done');
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) die(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('productplan', $planID, 'finished');
             $this->action->logHistory($actionID, $changes);
@@ -468,7 +468,7 @@ class productplan extends control
         else
         {
             $changes = $this->productplan->updateStatus($planID, 'closed');
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) die(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('productplan', $planID, 'closed');
             $this->action->logHistory($actionID, $changes);
@@ -494,7 +494,7 @@ class productplan extends control
         else
         {
             $changes = $this->productplan->updateStatus($planID, 'doing');
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            if(dao::isError()) die(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('productplan', $planID, 'activated');
             $this->action->logHistory($actionID, $changes);
