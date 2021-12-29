@@ -31,6 +31,7 @@ $lang->productplan->batchEdit  = '批量编辑';
 $lang->productplan->project    = '项目';
 $lang->productplan->plan       = '计划';
 $lang->productplan->allAB      = '所有';
+$lang->productplan->to         = '至';
 
 $lang->productplan->batchUnlink      = "批量移除";
 $lang->productplan->unlinkAB         = "移除";

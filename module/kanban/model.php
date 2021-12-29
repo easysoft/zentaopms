@@ -531,12 +531,13 @@ class kanbanModel extends model
         $this->loadModel('branch');
         $this->loadModel('productplan');
 
-        $kanbanData = new stdclass();
-        $lanes      = array();
-        $columns    = array();
-        $branches   = array();
-        $colorIndex = 0;
-        $laneOrder  = 1;
+        $kanbanData  = new stdclass();
+        $lanes       = array();
+        $columns     = array();
+        $branches    = array();
+        $colorIndex  = 0;
+        $laneOrder   = 1;
+        $cardActions = array('view');
 
         if($product->type == 'normal')
         {
@@ -566,6 +567,14 @@ class kanbanModel extends model
             {
                 if(empty($plan) or $plan->parent == -1) continue;
                 if(!isset($planList[$plan->status])) $planList[$plan->status] = array();
+
+                $plan->title   = htmlspecialchars_decode($plan->title);
+                $plan->desc    = strip_tags(htmlspecialchars_decode($plan->desc));
+                $plan->actions = array();
+                foreach($cardActions as $action)
+                {
+                    if(common::hasPriv('productplan', $action)) $plan->actions[] = $action;
+                }
                 $planList[$plan->status][] = $plan;
             }
 

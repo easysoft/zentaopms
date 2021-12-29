@@ -18,8 +18,16 @@
 #branchBox {width: 120px;}
 #branch_chosen .icon-delay {padding-right: 10px; font-size: 15px;}
 #kanbanContainer {padding-bottom: 0; margin-bottom: 0;}
+.kanban-card {height: 80px !important;}
+.kanban-card .titleBox {width: 100%; display: flex;}
+.kanban-card .titleBox > span {flex: none;}
+.kanban-card .title {white-space: nowrap; overflow: hidden;}
+.kanban-card .expired {margin-left: 2px;}
+.kanban-card .dateBox {padding-top: 5px;}
+.kanban-card .desc {overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #838a9d; padding-top: 5px;}
 </style>
 <?php js::set('kanbanData', $kanbanData);?>
+<?php js::set('productplanLang', $lang->productplan);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
   <?php if($product->type == 'normal'):?>
