@@ -534,7 +534,7 @@ class tree extends control
      * @access public
      * @return string the html select string.
      */
-    public function ajaxGetModules($productID, $viewType = 'story', $branchID, $number, $currentModuleID = 0)
+    public function ajaxGetModules($productID, $viewType = 'story', $branchID = 0, $number = 0, $currentModuleID = 0)
     {
         $currentModule   = $this->tree->getById($currentModuleID);
         $currentModuleID = (isset($currentModule->branch) and $currentModule->branch == 0) ? $currentModuleID : 0;
