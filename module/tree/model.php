@@ -448,7 +448,7 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  int    $userFunc
+     * @param  string $userFunc
      * @param  string $extra
      * @access public
      * @return void
@@ -630,7 +630,7 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  int    $userFunc
+     * @param  string $userFunc
      * @param  string $extra
      * @access public
      * @return void
@@ -704,7 +704,7 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  int    $userFunc
+     * @param  string $userFunc
      * @param  string $extra
      * @access public
      * @return void
@@ -787,7 +787,7 @@ class treeModel extends model
      *
      * @param  int    $rootID
      * @param  int    $startModule
-     * @param  array  $userFunc
+     * @param  string $userFunc
      * @access public
      * @return string
      */
@@ -856,7 +856,7 @@ class treeModel extends model
      * @param  & $&treeMenu
      * @param  object $module
      * @param  string $type
-     * @param  array  $userFunc
+     * @param  string $userFunc
      * @param  array  $extra
      * @param  int    $branch
      * @access public
