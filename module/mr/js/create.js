@@ -2,7 +2,7 @@ $(function()
 {
     $('#gitlabID').change(function()
     {
-        var gitlabID = $('#gitlabID').val();
+        gitlabID = $('#gitlabID').val();
         if(gitlabID == '') return false;
 
         var url = createLink('repo', 'ajaxgetgitlabprojects', "gitlabID=" + gitlabID);
