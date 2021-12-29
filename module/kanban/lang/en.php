@@ -155,7 +155,11 @@ $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
 $lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
 $lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 
-$lang->kanban->defaultColumn = array('wait', 'doing', 'done', 'close');
+$lang->kanban->defaultColumn = array();
+$lang->kanban->defaultColumn['wait']   = 'wait';
+$lang->kanban->defaultColumn['doing']  = 'doing';
+$lang->kanban->defaultColumn['done']   = 'done';
+$lang->kanban->defaultColumn['closed'] = 'close';
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;

@@ -950,6 +950,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `branch` mediumint(8) unsigned NOT NULL,
   `parent` mediumint(9) NOT NULL DEFAULT '0',
   `title` varchar(90) NOT NULL,
+  `status` enum('wait','doing','done','closed') NOT NULL default 'wait',
   `desc` text NOT NULL,
   `begin` date NOT NULL,
   `end` date NOT NULL,
