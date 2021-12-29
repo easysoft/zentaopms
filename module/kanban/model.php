@@ -760,7 +760,7 @@ class kanbanModel extends model
             //->orderBy('`order` asc')
             ->fetchAll('id');
 
-        $actions = array('editCard', 'archiveCard', 'copyCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
+        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
         $cardGroup = array();
         foreach($cards as $card)
         {
