@@ -1267,7 +1267,7 @@ class execution extends control
      * Create a execution.
      *
      * @param string $projectID
-     * @param string $executionID
+     * @param int    $executionID
      * @param string $copyExecutionID
      * @param int    $planID
      * @param string $confirm
@@ -1277,7 +1277,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function create($projectID = '', $executionID = '', $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
+    public function create($projectID = '', $executionID = 0, $copyExecutionID = '', $planID = 0, $confirm = 'no', $productID = 0, $extra = '')
     {
         /* Set menu. */
         if($this->app->tab == 'project')

@@ -589,7 +589,7 @@ class programModel extends model
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)

@@ -840,7 +840,7 @@ class baseControl
          * Call the method and use ob function to get the output.
          */
         ob_start();
-        call_user_func_array(array($module, $methodName), $params);
+        call_user_func_array(array($module, $methodName), array_values($params));
         $output = ob_get_contents();
         ob_end_clean();
 

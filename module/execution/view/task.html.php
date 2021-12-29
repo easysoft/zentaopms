@@ -182,7 +182,8 @@ body {margin-bottom: 25px;}
 <?php if($this->app->getViewType() == 'xhtml'):?>
 <div id="xx-title">
   <strong>
-  <?php echo ($this->project->getById($execution->project)->name . ' / ' . $this->execution->getByID($execution->id)->name) ?>
+  <?php $projectName = $this->config->systemMode == 'new' ? $this->project->getById($execution->project)->name . ' / ' : '';?>
+  <?php echo ($projectName . $this->execution->getByID($execution->id)->name);?>
   </strong>
   <div class="linkButton" onclick="handleLinkButtonClick()">
     <span title="<?php echo $lang->viewDetails;?>">
