@@ -150,21 +150,19 @@ class mr extends control
         $this->loadModel('job');
         $this->loadModel('compile');
 
-        $repoList = array();
+        $repoList    = array();
         $rawRepoList = $this->repo->getGitLabRepoList($MR->gitlabID, $MR->sourceProject);
         foreach($rawRepoList as $rawRepo) $repoList[$rawRepo->id] = "[$rawRepo->id] $rawRepo->name";
 
         $jobList = array();
-        $rawJobList = $this->job->getListByRepoID($MR->repoID);
-        foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+        if($MR->repoID)
+        {
+            $rawJobList = $this->job->getListByRepoID($MR->repoID);
+            foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+        }
 
-        $compileList = array();
-        $rawCompileList = $this->compile->getListByJobID($MR->jobID);
-        foreach($rawCompileList as $rawCompile) $compileList[$rawCompile->id] = "[$rawCompile->id] [{$this->lang->compile->statusList[$rawCompile->status]}] $rawCompile->name";
-
-        $this->view->repoList         = $repoList;
-        $this->view->jobList          = !empty($MR->repoID) ? $jobList : array();
-        $this->view->compileList      = !empty($MR->jobID)  ? $compileList : array();
+        $this->view->repoList = $repoList;
+        $this->view->jobList  = !empty($MR->repoID) ? $jobList : array();
 
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
