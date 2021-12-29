@@ -56,6 +56,9 @@
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
         <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+        <?php if($browseType == 'all'):?>
+        <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
+        <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
         <?php endif;?>
@@ -117,6 +120,9 @@
           if(!empty($suffix)) echo $suffix . '</div>';
           ?>
         </td>
+        <?php if($browseType == 'all'):?>
+        <td><?php echo zget($statusList, $plan->status)?></td>
+        <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
         <td class='c-branch' title='<?php echo $branchOption[$plan->branch];?>'><?php if($plan->parent != '-1') echo $branchOption[$plan->branch];?></td>
         <?php endif;?>
@@ -144,9 +150,9 @@
                   $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
                   $isOnlyBody = true;
               }
-              common::printLink('productplan', 'start', "planID=$plan->id", '<i class="icon-play"></i>', '', "class='btn {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody, $plan);
-              common::printLink('productplan', 'finish', "planID=$plan->id", '<i class="icon-checked"></i>', '', "class='btn' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
-              common::printLink('productplan', 'close', "planID=$plan->id", '<i class="icon-off"></i>', '', "class='btn' target='hiddenwin' title='{$lang->productplan->close}'", '', false, $plan);
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr, $lang->productplan->start);
+              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr, $lang->productplan->finish);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr, $lang->productplan->close);
           }
 
           $attr = $plan->expired ? "disabled='disabled'" : '';

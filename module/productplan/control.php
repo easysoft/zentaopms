@@ -295,6 +295,7 @@ class productplan extends control
         $this->view->plans      = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
         $this->view->pager      = $pager;
         $this->view->projects   = $this->product->getProjectPairsByProduct($productID, $branch);
+        $this->view->statusList = $this->lang->productplan->featureBar['browse'];
         $this->display();
     }
 
