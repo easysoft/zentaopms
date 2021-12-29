@@ -608,7 +608,7 @@ class gitlabModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy, $pager)
+    public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy = 'id_desc', $pager = null)
     {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return array();

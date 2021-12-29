@@ -93,7 +93,7 @@ class mrModel extends model
             ->add('createdDate', helper::now())
             ->get();
 
-        $result = $this->hasOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
+        $result = $this->hasSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
         if($result['result'] == 'fail') return $result;
 
         /* Exec Job */
@@ -205,7 +205,7 @@ class mrModel extends model
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
 
-        $result = $this->hasOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
+        $result = $this->hasSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
         if($result['result'] == 'fail')
         {
             dao::$errors[] = $result['message'];
@@ -267,7 +267,6 @@ class mrModel extends model
             ->setIF($this->post->needCI == 0, 'jobID', 0)
             ->get();
         $oldMR = $this->getByID($MRID);
-
 
         $this->dao->update(TABLE_MR)->data($MR)->checkIF($MR->needCI, 'jobID',  'notempty');
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
@@ -1403,7 +1402,7 @@ class mrModel extends model
     }
 
     /**
-     * Check has opened mr
+     * Has same opened mr for source branch.
      *
      * @param  int    $gitlabID
      * @param  int    $projectID
@@ -1411,7 +1410,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function hasOpened($gitlabID, $projectID, $sourceBranch)
+    public function hasSameOpened($gitlabID, $projectID, $sourceBranch)
     {
         if(empty($sourceBranch)) return array('result' => 'success');
 
@@ -1422,11 +1421,11 @@ class mrModel extends model
             ->andWhere('status')->eq('opened')
             ->andWhere('deleted')->eq('0')
             ->fetch('count');
-        if($dbOpenedCount > 0) return array('result' => 'fail', 'message' => $this->lang->mr->hasOpenedMR);
+        if($dbOpenedCount > 0) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
 
         $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/$projectID/merge_requests") . "&view=simple&state=opened&source_branch={$sourceBranch}";
         $response = json_decode(commonModel::http($url));
-        if(!empty($response)) return array('result' => 'fail', 'message' => $this->lang->mr->hasOpenedMR);
+        if(!empty($response)) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
 
         return array('result' => 'success');
     }

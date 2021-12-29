@@ -937,17 +937,17 @@ class mr extends control
    }
 
    /**
-    * Ajax check opened mr.
+    * Ajax check same opened mr for source branch.
     *
     * @param  int    $gitlabID
     * @param  int    $projectID
     * @access public
     * @return void
     */
-   public function ajaxCheckOpened($gitlabID, $projectID)
+   public function ajaxCheckSameOpened($gitlabID, $projectID)
    {
        $sourceBranch = $this->post->sourceBranch;
-       $result       = $this->mr->hasOpened($gitlabID, $projectID, $sourceBranch);
+       $result       = $this->mr->hasSameOpened($gitlabID, $projectID, $sourceBranch);
        die(json_encode($result));
    }
 }
