@@ -42,18 +42,17 @@
     {
         echo $this->buildOperateMenu($plan, 'view');
 
+        $attr       = "target='hiddenwin'";
+        $isOnlyBody = false;
+        $class      = '';
         if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
         {
-            $class = 'iframe';
-            $attr  = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+            $class      = 'iframe';
+            $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
             $isOnlyBody = true;
         }
-        else
-        {
-            $attr = "target='hiddenwin'";
-            $isOnlyBody = false;
-        }
-        $class = $plan->status == 'wait' ? (isset($class) ? $class : '' ) : 'disabled';
+
+        $class = $plan->status == 'wait' ? $class : 'disabled';
         common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody);
         $class = $plan->status == 'doing' ? '' : 'disabled';
         common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'");

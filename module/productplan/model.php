@@ -504,15 +504,6 @@ class productplanModel extends model
         if($status == 'doing' and $_POST)
         {
             $plan = fixer::input('post')->add('status', $status)->get();
-            if(strpos($this->config->productplan->start->requiredFields, 'begin') !== false and empty($_POST['begin']))
-            {
-                dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
-            }
-            if(strpos($this->config->productplan->start->requiredFields, 'end') !== false and empty($_POST['end']))
-            {
-                dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
-            }
-            if(dao::isError()) return false;
 
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->data($plan)
@@ -522,6 +513,7 @@ class productplanModel extends model
                 ->where('id')->eq((int)$planID)
                 ->exec();
 
+            if(dao::isError()) return false;
         }
         else
         {

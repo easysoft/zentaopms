@@ -10,6 +10,9 @@
  * @link        https://www.zentao.net
  */
 ?>
+<style>
+.c-actions {width: 240px;}
+</style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -22,8 +25,8 @@
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
-      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->productplan->list}' id='switchButton' data-type='bylist'");?>
-      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->productplan->kanban}' id='switchButton' data-type='bykanban'");?>
+      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->list}' data-type='bylist'");?>
+      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->kanban}' data-type='bykanban'");?>
     </div>
     <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
@@ -69,7 +72,7 @@
         $extendFields = $this->productplan->getFlowExtendFields();
         foreach($extendFields as $extendField) echo "<th>{$extendField->name}</th>";
         ?>
-        <th class='c-actions-9 text-center'><?php echo $lang->actions;?></th>
+        <th class='c-actions text-center'><?php echo $lang->actions;?></th>
       </tr>
       </thead>
       <tbody>
@@ -132,17 +135,16 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
+          $attr       = "target='hiddenwin'";
+          $isOnlyBody = false;
+          $class      = '';
           if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
           {
-              $class = 'iframe';
-              $attr  = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+              $class      = 'iframe';
+              $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
               $isOnlyBody = true;
           }
-          else
-          {
-              $attr = "target='hiddenwin'";
-              $isOnlyBody = false;
-          }
+
           $class = $plan->status == 'wait' ? $class : 'disabled';
           common::printLink('productplan', 'start', "planID=$plan->id", '<i class="icon-play"></i>', '', "class='btn {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody);
           $class = $plan->status == 'doing' ? '' : 'disabled';

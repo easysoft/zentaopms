@@ -35,8 +35,8 @@
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
-      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon' title='{$lang->productplan->list}' id='switchButton' data-type='bylist'");?>
-      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary' title='{$lang->productplan->kanban}' id='switchButton' data-type='bykanban'");?>
+      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->list}' data-type='bylist'");?>
+      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->kanban}' data-type='bykanban'");?>
     </div>
     <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>

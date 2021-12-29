@@ -26,4 +26,4 @@ ol, ul {padding-left: 20px;}
 .body-modal #mainContent {min-height: 240px;}
 
 .btn.disabled{color: #9e54ae; background-color: transparent; border-color:transparent;}
-.pull-right > .btn-link > .icon-checked, .pull-right > .btn-link > .icon-off, .pull-right > .btn-link > .icon-play, .pull-right > .btn-link > .icon-magic {margin-right: 3px;}
+#mainMenu .icon-checked, #mainMenu .icon-off, #mainMenu .icon-play, #mainMenu .icon-magic {margin-right: 3px;}

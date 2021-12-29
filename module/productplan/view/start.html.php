@@ -12,7 +12,7 @@
 ?>
 <style>
 .table-form {margin-top: 90px;}
-.form-actions {height:150px;}
+.form-actions {height:160px;}
 </style>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>

@@ -37,7 +37,7 @@ $(function()
         $('#projects').modal('hide');
     });
 
-    $('[id="switchButton"]').click(function()
+    $('.switchButton').click(function()
     {
         var viewType = $(this).attr('data-type');
         $.cookie('viewType', viewType, {expires:config.cookieLife, path:config.webRoot});

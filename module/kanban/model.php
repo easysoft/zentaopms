@@ -578,8 +578,8 @@ class kanbanModel extends model
             $lane->items = $planList;
 
             $lanes[]     = $lane;
-            $laneOrder  += 1;
-            $colorIndex += 1;
+            $laneOrder ++;
+            $colorIndex ++;
             if($colorIndex == count($this->config->productplan->laneColorList) + 1) $colorIndex = 0;
         }
 
