@@ -717,6 +717,7 @@ class task extends control
 
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
+        $task->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));

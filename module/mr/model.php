@@ -198,6 +198,7 @@ class mrModel extends model
         $MR->title          = $this->lang->mr->common . ' ' . $postData->RepoSrcBranch . $this->lang->mr->to . $postData->RepoDistBranch ;
         $MR->repoID         = $repo->id;
         $MR->jobID          = isset($repo->job->id) ? $repo->job->id : 0;
+        $MR->status         = 'opened';
         $MR->synced         = '0';
         $MR->needCI         = '1';
         $MR->hasNoConflict  = $postData->MergeStatus ? '0' : '1';
