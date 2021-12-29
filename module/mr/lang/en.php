@@ -105,6 +105,7 @@ $lang->mr->apiError->createMR = "Failed to create a merge request through API. R
 $lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
+$lang->mr->hasSameOpenedMR     = "There are other unclosed merge requests in the current source branch.";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
@@ -119,11 +120,11 @@ $lang->mr->from = "from";
 $lang->mr->to   = "to";
 $lang->mr->at   = "at";
 
-$lang->mr->pipeline        = "Pipeline";
-$lang->mr->pipelineSuccess = "Success";
-$lang->mr->pipelineFailed  = "Failed";
+$lang->mr->pipeline         = "Pipeline";
+$lang->mr->pipelineSuccess  = "Success";
+$lang->mr->pipelineFailed   = "Failed";
 $lang->mr->pipelineCanceled = "Canceled";
-$lang->mr->pipelineUnknown = "Unknown";
+$lang->mr->pipelineUnknown  = "Unknown";
 
 $lang->mr->pipelineStatus = array();
 $lang->mr->pipelineStatus['success']  = "success";

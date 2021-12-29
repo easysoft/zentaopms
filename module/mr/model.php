@@ -93,6 +93,9 @@ class mrModel extends model
             ->add('createdDate', helper::now())
             ->get();
 
+        $result = $this->hasSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
+        if($result['result'] == 'fail') return $result;
+
         /* Exec Job */
         if(isset($MR->jobID) && $MR->jobID)
         {
@@ -137,21 +140,8 @@ class mrModel extends model
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-            foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
-            {
-                if(strpos($errorMsg, '/') === 0)
-                {
-                    $result = preg_match($errorMsg, $rawMR->message[0], $matches);
-                    if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
-                }
-                else
-                {
-                    if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
-                }
-
-                if(isset($errorMessage)) break;
-            }
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]));
+            $errorMessage = $this->convertApiError($rawMR->message);
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
         }
 
         /* Create MR failed. */
@@ -214,6 +204,13 @@ class mrModel extends model
         $MR->mergeStatus    = $postData->MergeStatus ? 'can_be_merged' : 'cannot_be_merged';
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
+
+        $result = $this->hasSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
+        if($result['result'] == 'fail')
+        {
+            dao::$errors[] = $result['message'];
+            return false;
+        }
 
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->apicreate->requiredFields, 'notempty')
@@ -301,6 +298,11 @@ class mrModel extends model
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
+        if(!isset($rawMR->id) and isset($rawMR->message))
+        {
+            $errorMessage = $this->convertApiError($rawMR->message);
+            return array('result' => 'fail', 'message' => $errorMessage);
+        }
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)
@@ -1414,5 +1416,61 @@ class mrModel extends model
         {
             $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
         }
+    }
+
+    /**
+     * Has same opened mr for source branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $sourceBranch
+     * @access public
+     * @return array
+     */
+    public function hasSameOpened($gitlabID, $projectID, $sourceBranch)
+    {
+        if(empty($sourceBranch)) return array('result' => 'success');
+
+        $dbOpenedCount = $this->dao->select('count(*) as count')->from(TABLE_MR)
+            ->where('gitlabID')->eq($gitlabID)
+            ->andWhere('sourceProject')->eq($projectID)
+            ->andWhere('sourceBranch')->eq($sourceBranch)
+            ->andWhere('status')->eq('opened')
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        if($dbOpenedCount > 0) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
+
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/projects/$projectID/merge_requests") . "&view=simple&state=opened&source_branch={$sourceBranch}";
+        $response = json_decode(commonModel::http($url));
+        if(!empty($response)) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
+
+        return array('result' => 'success');
+    }
+
+    /**
+     * Convert API error.
+     *
+     * @param  array  $message
+     * @access public
+     * @return string
+     */
+    public function convertApiError($message)
+    {
+        foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+        {
+            if(strpos($errorMsg, '/') === 0)
+            {
+                $result = preg_match($errorMsg, $message[0], $matches);
+                if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+            }
+            else
+            {
+                if($message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $message[0]);
+            }
+
+            if(isset($errorMessage)) break;
+        }
+
+        return isset($errorMessage) ? $errorMessage : $message[0];
     }
 }
