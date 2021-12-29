@@ -18,8 +18,16 @@
 #branchBox {width: 120px;}
 #branch_chosen .icon-delay {padding-right: 10px; font-size: 15px;}
 #kanbanContainer {padding-bottom: 0; margin-bottom: 0;}
+.kanban-card {height: 80px !important;}
+.kanban-card .titleBox {width: 100%; display: flex;}
+.kanban-card .titleBox > span {flex: none;}
+.kanban-card .title {white-space: nowrap; overflow: hidden;}
+.kanban-card .expired {margin-left: 2px;}
+.kanban-card .dateBox {padding-top: 5px;}
+.kanban-card .desc {overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #838a9d; padding-top: 5px;}
 </style>
 <?php js::set('kanbanData', $kanbanData);?>
+<?php js::set('productplanLang', $lang->productplan);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
   <?php if($product->type == 'normal'):?>
@@ -35,8 +43,8 @@
   </div>
   <div class="btn-toolbar pull-right">
     <div class="btn-group panel-actions">
-      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->list}' data-type='bylist'");?>
-      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->kanban}' data-type='bykanban'");?>
+      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->list}' data-type='list'");?>
+      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->kanban}' data-type='kanban'");?>
     </div>
     <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>

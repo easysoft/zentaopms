@@ -19,7 +19,7 @@
 <?php js::set('projectNotEmpty', $lang->productplan->projectNotEmpty)?>
 <?php js::set('viewType', $viewType);?>
 <?php
-if($viewType == 'bykanban')
+if($viewType == 'kanban')
 {
     include 'browsebykanban.html.php';
 }

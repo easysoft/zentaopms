@@ -51,7 +51,7 @@ $(function()
         location.href = link;
     });
 
-    if(viewType == 'bykanban')
+    if(viewType == 'kanban')
     {
         $('#branch_chosen .chosen-single span').prepend('<i class="icon-delay"></i>');
         $('#kanban').kanban(
@@ -59,6 +59,8 @@ $(function()
             data:          kanbanData,
             minColWidth:   290,
             maxColWidth:   290,
+            maxColHeight:  460,
+            minColHeight:  190,
             itemRender:    renderKanbanItem,
             virtualize:    true,
             droppable:
@@ -165,7 +167,63 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
  */
 function renderKanbanItem(item, $item)
 {
-    var $title = $item.children('.title');
+    var privs     = item.actions;
+    var $titleBox = $item.children('.titleBox');
+
+    /* Output header information. */
+    if(!$titleBox.length) $titleBox = $(
+    [
+        '<div class="titleBox">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    /* Print plan name. */
+    var $title = $titleBox.children('.title');
+    if(!$title.length)
+    {
+        if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink('productplan', 'view', 'cardID=' + item.id));
+        if(!privs.includes('view')) $title = $('<p class="title"></p>').appendTo($titleBox);
+    }
+    $title.text(item.title).attr('title', item.title);
+
+    /* Determine whether to print an expired label. */
+    var today = new Date();
+    var begin = $.zui.createDate(item.begin);
+    var end   = $.zui.createDate(item.end);
+    if(end.toLocaleDateString() < today.toLocaleDateString())
+    {
+        $expired = $titleBox.children('.expired');
+        if(!$expired.length)
+        {
+            $('<span class="expired label label-danger label-badge">' + productplanLang.expired + '</span>').appendTo($titleBox);
+        }
+    }
+
+    /* Output plan date information. */
+    var $dateBox = $item.children('.dateBox');
+    if(!$dateBox.length) $dateBox = $(
+    [
+        '<div class="dateBox">',
+          '<span class="time label label-outline"></span>',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $time = $dateBox.children('.time');
+    if(item.begin != '2030-01-01' && item.end != '2030-01-01')
+    {
+        $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + productplanLang.to + $.zui.formatDate(end, 'yyyy-MM-dd')).show();
+    }
+    else
+    {
+        $time.text(productplanLang.future).attr('title', productplanLang.future).show();
+    }
+
+    /* Output plan desc information. */
+    var $desc = $item.children('.desc');
+    if(!$desc.length)
+    {
+        $("<div class='desc c-name'"+ " title='" + item.desc + "'>" + item.desc + '</div>').appendTo($item);
+    }
 }
 
 /**

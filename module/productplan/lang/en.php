@@ -30,6 +30,7 @@ $lang->productplan->batchEdit  = 'Batch Edit';
 $lang->productplan->project    = 'Project';
 $lang->productplan->plan       = 'Plan';
 $lang->productplan->allAB      = 'All';
+$lang->productplan->to         = 'To';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
 $lang->productplan->unlinkAB         = "Unlink";
