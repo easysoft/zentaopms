@@ -243,7 +243,7 @@ class treeModel extends model
     {
         /* If createdVersion <= 4.1, go to getOptionMenu(). */
         $products       = $this->loadModel('product')->getProductPairsByProject($rootID);
-        $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products));
+        $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
 
         if(!$this->isMergeModule($rootID, 'task') or !$products) return $this->getOptionMenu($rootID, 'task', $startModule);
 
@@ -281,6 +281,7 @@ class treeModel extends model
                 {
                     $modules = $this->dao->select('*')->from(TABLE_MODULE)->where("((root = '" . (int)$rootID . "' and type = 'task' and parent != 0) OR (root = $id and type = 'story'))")
                         ->beginIF($startModulePath)->andWhere('path')->like($startModulePath)->fi()
+                        ->andWhere('branch')->in(array_keys($branchGroups[$id]))
                         ->andWhere('deleted')->eq(0)
                         ->orderBy('grade desc, branch, `order`, type')
                         ->fetchAll('id');
