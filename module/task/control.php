@@ -717,7 +717,6 @@ class task extends control
 
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
-        $task->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
@@ -761,15 +760,16 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->view;
 
-        $this->view->title      = $title;
-        $this->view->position   = $position;
-        $this->view->execution  = $execution;
-        $this->view->task       = $task;
-        $this->view->actions    = $this->loadModel('action')->getList('task', $taskID);
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->preAndNext = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
-        $this->view->product    = $this->tree->getProduct($task->module);
-        $this->view->modulePath = $this->tree->getParents($task->module);
+        $this->view->title        = $title;
+        $this->view->position     = $position;
+        $this->view->execution    = $execution;
+        $this->view->task         = $task;
+        $this->view->actions      = $this->loadModel('action')->getList('task', $taskID);
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->preAndNext   = $this->loadModel('common')->getPreAndNextObject('task', $taskID);
+        $this->view->product      = $this->tree->getProduct($task->module);
+        $this->view->modulePath   = $this->tree->getParents($task->module);
+        $this->view->linkMRTitles = $this->loadModel('mr')->getLinkedMRPairs($taskID, 'task');
         $this->display();
     }
 
