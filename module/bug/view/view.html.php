@@ -425,7 +425,7 @@
                     $canViewMR = common::hasPriv('mr', 'view');
                     foreach($bug->linkMRTitles as $MRID => $linkMRTitle)
                     {
-                        echo ($canViewMR ? html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") : "#$MRID $linkMRTitle"). '<br />';
+                        echo ($canViewMR ? html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") : "#$MRID $linkMRTitle") . '<br />';
                     }
                     ?>
                   </td>
