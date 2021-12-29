@@ -11,6 +11,7 @@ function changeView(view)
  */
 function renderUserAvatar(user, objectType, objectID, size)
 {
+    var title = user;
     var avatarSizeClass = 'avatar-' + (size || 'sm');
     var $noPrivAndNoAssigned = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
     if(objectType == 'task')
@@ -39,7 +40,7 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.account + '" href="' + link + '"/>').avatar({user: user});
+    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + title + '" href="' + link + '"/>').avatar({user: user});
 }
 
 /**
