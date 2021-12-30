@@ -974,6 +974,7 @@ class my extends control
      */
     public function buildContactLists($dropdownName = 'mailto')
     {
+        var_dump($dropdownName);
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
         $this->view->dropdownName = $dropdownName;
         $this->display();
