@@ -32,7 +32,6 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
-
     if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
 
     var $noPrivAvatar = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" />').avatar({user: user});
