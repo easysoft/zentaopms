@@ -53,6 +53,7 @@ $lang->action->confirmHideAll = '您确定要全部隐藏这些记录吗？';
 $lang->action->needEdit       = '要还原%s的名称或代号已经存在，请编辑更改。';
 $lang->action->historyEdit    = '历史记录编辑不能为空。';
 $lang->action->noDynamic      = '暂时没有动态。';
+$lang->action->undeletedTips  = '该数据在版本升级过程中未参与数据归并流程，不支持还原。';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = '关联日志';
