@@ -2010,8 +2010,8 @@ class execution extends control
         }
 
         $userList = $this->dao->select('account, realname name, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
-        $userList['closed']['account'] = 'closed';
-        $userList['closed']['name']    = 'closed';
+        $userList['closed']['account'] = 'Closed';
+        $userList['closed']['name']    = 'Closed';
         $userList['closed']['avatar']  = '';
 
         $this->view->title         = $this->lang->execution->kanban;
