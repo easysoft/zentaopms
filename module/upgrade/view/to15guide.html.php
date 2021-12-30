@@ -46,6 +46,7 @@
       <hr/>
       <div class='panel-footer text-center'>
         <?php echo html::submitButton($lang->upgrade->start . (strpos($this->app->getClientLang(), 'zh') === false ? ' ' : '') . $lang->upgrade->common);?>
+        <div id='upgradeTips' class='text-danger hidden'><?php echo $lang->upgrade->upgradeTips;?></div>
       </div>
     </form>
   </div>
@@ -57,6 +58,7 @@ $(function()
     $('[name=mode]').change(function()
     {
         $('#selectedModeTips').html(selectedModeTips[$(this).val()]);
+        $(this).val() == 'new' ? $('#upgradeTips').removeClass('hidden') : $('#upgradeTips').addClass('hidden');
     })
 })
 </script>

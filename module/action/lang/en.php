@@ -53,6 +53,7 @@ $lang->action->confirmHideAll = 'Do you want to hide all the records?';
 $lang->action->needEdit       = '%s that you want to restore. Please edit it.';
 $lang->action->historyEdit    = 'The history EditBy cannot be empty.';
 $lang->action->noDynamic      = 'No dynamics. ';
+$lang->action->undeletedTips  = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Link';
