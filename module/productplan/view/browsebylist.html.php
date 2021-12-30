@@ -163,7 +163,7 @@
 
               if($product->type != 'normal')
               {
-                  $branchStatus = $this->branch->getByID($plan->branch, 0, 'status');
+                  $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
                   if($branchStatus == 'closed') $disabled = 'disabled';
               }
 
@@ -213,32 +213,4 @@
     </div>
   </form>
   <?php endif;?>
-</div>
-<div class="modal fade" id="projects">
-  <div class="modal-dialog mw-500px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><?php echo $lang->productplan->selectProjects;?></h4>
-      </div>
-      <div class="modal-body">
-        <table class='table table-form'>
-          <tr>
-            <th><?php echo $lang->productplan->project?></th>
-            <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
-          </tr>
-          <tr class='tips hidden'>
-            <th></th>
-            <td><span class='text-red'><?php echo $lang->productplan->noLinkedProject;?></span></td>
-          </tr>
-          <tr>
-            <td colspan='2' class='text-center'>
-              <?php echo html::hidden('planID', '');?>
-              <?php echo html::commonButton($lang->productplan->nextStep, "id='createExecutionButton'", 'btn btn-primary btn-wide');?>
-              <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-default btn-wide');?>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>

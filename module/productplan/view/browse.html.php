@@ -18,6 +18,9 @@
 <?php js::set('enterProjectList', $lang->productplan->enterProjectList);?>
 <?php js::set('projectNotEmpty', $lang->productplan->projectNotEmpty)?>
 <?php js::set('viewType', $viewType);?>
+<?php js::set('product', $product);?>
+<?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('branchStatusList', $branchStatusList);?>
 <?php
 if($viewType == 'kanban')
 {
@@ -28,4 +31,32 @@ else
     include 'browsebylist.html.php';
 }
 ?>
+<div class="modal fade" id="projects">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h4 class="modal-title"><?php echo $lang->productplan->selectProjects;?></h4>
+      </div>
+      <div class="modal-body">
+        <table class='table table-form'>
+          <tr>
+            <th><?php echo $lang->productplan->project?></th>
+            <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
+          </tr>
+          <tr class='tips hidden'>
+            <th></th>
+            <td><span class='text-red'><?php echo $lang->productplan->noLinkedProject;?></span></td>
+          </tr>
+          <tr>
+            <td colspan='2' class='text-center'>
+              <?php echo html::hidden('planID', '');?>
+              <?php echo html::commonButton($lang->productplan->nextStep, "id='createExecutionButton'", 'btn btn-primary btn-wide');?>
+              <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-default btn-wide');?>
+            </td>
+          </tr>
+        </table>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
