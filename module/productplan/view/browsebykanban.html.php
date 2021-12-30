@@ -30,6 +30,7 @@
 .kanban-card .dateBox {padding-top: 22px;}
 .kanban-card .desc {overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #838a9d; padding-top: 5px;}
 .kanban-card .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.dropdown-menu > li > .disabled {pointer-events: none; color: #838a9d;}
 </style>
 <?php js::set('kanbanData', $kanbanData);?>
 <?php js::set('productplanLang', $lang->productplan);?>

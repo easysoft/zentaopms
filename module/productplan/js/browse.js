@@ -75,8 +75,93 @@ $(function()
         {
             $.zui.ContextMenu.hide();
         });
+
+        /* Init contextmenu */
+        $('#kanban').on('click', '[data-contextmenu]', function(event)
+        {
+            var $trigger    = $(this);
+            var menuType    = $trigger.data('contextmenu');
+            var menuCreator = window.menuCreators[menuType];
+            if(!menuCreator) return;
+
+            var options = $.extend({event: event, $trigger: $trigger}, $trigger.data());
+            var items = menuCreator(options);
+            if(!items || !items.length) return;
+
+            $.zui.ContextMenu.show(items, items.$options || {event: event});
+        });
     }
 });
+
+/* Define menu creators */
+window.menuCreators =
+{
+    card: createCardMenu
+};
+
+/**
+ * Create card menu.
+ *
+ * @param  object $options
+ * @access public
+ * @return array
+ */
+function createCardMenu(options)
+{
+    var card  = options.$trigger.closest('.kanban-item').data('item');
+    var privs = card.actions;
+    if(!privs.length) return [];
+
+    var items = [];
+    if(privs.includes('createExecution'))
+    {
+        var className     = '';
+        var executionLink = systemMode == 'new' ? '#projects' : createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=" + card.id + "&confirm=no&productID=" + productID);
+        var today         = new Date();
+        var end           = $.zui.createDate(card.end);
+        if(end.toLocaleDateString() < today.toLocaleDateString() && (card.status == 'wait' || card.status == 'doing'))
+        {
+            className = 'disabled';
+        }
+        else if(product.type != 'normal')
+        {
+            var branchStatus = branchStatusList[card.branch];
+            if(branchStatus == 'closed') className = 'disabled';
+        }
+
+        if(systemMode == 'new')
+        {
+            items.push({label: productplanLang.createExecution, icon: 'plus', url: executionLink, className: className, attrs: {'data-toggle': 'modal', 'onclick': 'getPlanID(this,' + card.branch + ')', 'data-id': card.id}});
+        }
+        else
+        {
+            items.push({label: productplanLang.createExecution, icon: 'plus', url: executionLink, className: className});
+        }
+    }
+
+    if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink('productplan', 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});
+    if(privs.includes('linkBug')) items.push({label: productplanLang.linkBug, icon: 'bug', url: createLink('productplan', 'view', "planID=" + card.id + "&type=bug&orderBy=id_desc&link=true")});
+    if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink('productplan', 'edit', "planID=" + card.id)});
+    if(privs.includes('start'))
+    {
+        if(card.begin == '2030-01-01' || card.end == '2030-01-01')
+        {
+            items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-id': card.id, 'data-width': '550px'}});
+        }
+        else
+        {
+            items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+        }
+    }
+
+    if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('activate')) items.push({label: productplanLang.activate, icon: 'magic', url: createLink('productplan', 'activate', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+
+    var bounds = options.$trigger[0].getBoundingClientRect();
+    items.$options = {x: bounds.right, y: bounds.top};
+    return items;
+}
 
 $(document).on('click', 'td.content .more', function(e)
 {
@@ -168,7 +253,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
 function renderKanbanItem(item, $item)
 {
     var privs        = item.actions;
-    var printMoreBtn = privs.includes('view');
+    var printMoreBtn = (privs.includes('createExecution') || privs.includes('linkStory') || privs.includes('linkBug') || privs.includes('edit') || privs.includes('start') || privs.includes('finish') || privs.includes('close') || privs.includes('activate'));
 
     /* Output header information. */
     var $header = $item.children('.header');

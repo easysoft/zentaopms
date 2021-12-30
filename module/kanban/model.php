@@ -537,7 +537,7 @@ class kanbanModel extends model
         $branches    = array();
         $colorIndex  = 0;
         $laneOrder   = 1;
-        $cardActions = array('view');
+        $cardActions = array('view', 'createExecution', 'linkStory', 'linkBug', 'edit', 'start', 'finish', 'close', 'activate');
 
         if($product->type == 'normal')
         {
@@ -573,7 +573,12 @@ class kanbanModel extends model
                 $plan->actions = array();
                 foreach($cardActions as $action)
                 {
-                    if(common::hasPriv('productplan', $action)) $plan->actions[] = $action;
+                    if($action == 'createExecution')
+                    {
+                        if(common::hasPriv('execution', 'create')) $plan->actions[] = $action;
+                        continue;
+                    }
+                    if($this->productplan->isClickable($plan, $action)) $plan->actions[] = $action;
                 }
                 $planList[$plan->status][] = $plan;
             }

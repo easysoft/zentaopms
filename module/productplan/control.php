@@ -252,8 +252,12 @@ class productplan extends control
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
         $this->commonAction($productID, $branch);
-        $product     = $this->product->getById($productID);
-        $productName = empty($product) ? '' : $product->name;
+        $product          = $this->product->getById($productID);
+        $productName      = empty($product) ? '' : $product->name;
+        $branchList       = $this->branch->getList($productID, 0, 'all');
+        $branchStatusList = array();
+        foreach($branchList as $productBranch) $branchStatusList[$productBranch->id] = $productBranch->status;
+
         if($viewType == 'kanban')
         {
             $branches    = array();
@@ -285,17 +289,18 @@ class productplan extends control
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
         }
 
-        $this->view->title      = $productName . $this->lang->colon . $this->lang->productplan->browse;
-        $this->view->position[] = $this->lang->productplan->browse;
-        $this->view->productID  = $productID;
-        $this->view->branch     = $branch;
-        $this->view->browseType = $browseType;
-        $this->view->viewType   = $viewType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->plans      = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
-        $this->view->pager      = $pager;
-        $this->view->projects   = $this->product->getProjectPairsByProduct($productID, $branch);
-        $this->view->statusList = $this->lang->productplan->featureBar['browse'];
+        $this->view->title            = $productName . $this->lang->colon . $this->lang->productplan->browse;
+        $this->view->position[]       = $this->lang->productplan->browse;
+        $this->view->productID        = $productID;
+        $this->view->branch           = $branch;
+        $this->view->branchStatusList = $branchStatusList;
+        $this->view->browseType       = $browseType;
+        $this->view->viewType         = $viewType;
+        $this->view->orderBy          = $orderBy;
+        $this->view->plans            = $this->productplan->getList($productID, $branch, $browseType, $pager, $sort);
+        $this->view->pager            = $pager;
+        $this->view->projects         = $this->product->getProjectPairsByProduct($productID, $branch);
+        $this->view->statusList       = $this->lang->productplan->featureBar['browse'];
         $this->display();
     }
 
