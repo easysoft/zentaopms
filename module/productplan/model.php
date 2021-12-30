@@ -532,9 +532,13 @@ class productplanModel extends model
                 ->batchCheck($this->config->productplan->start->requiredFields, 'notempty')
                 ->checkIF(!empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
                 ->where('id')->eq($planID)
-                ->beginIF(isset($parentPlan))->orWhere('id')->eq($oldPlan->parent)->fi()
                 ->exec();
-            if($parentPlan->status != 'doing') $parentChange = true;
+
+            if(isset($parentPlan) and $parentPlan->status != 'doing')
+            {
+                $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($status)->where('id')->eq($oldPlan->parent)->exec();
+                $parentChange = true;
+            }
         }
         elseif($status == 'doing' and isset($parentPlan) and $parentPlan->status != 'doing')
         {
@@ -719,17 +723,17 @@ class productplanModel extends model
             $maxEnd     = $end;
             foreach($childPlans as $childPlan)
             {
-                if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
-                if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
+                if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
             }
-            if($minBegin < $begin) dao::$errors['begin'] = sprintf($this->lang->beginGreaterChild, $minBegin);
-            if($maxEnd > $end) dao::$errors['end'] = sprintf($this->lang->endLetterChild, $maxEnd);
+            if($minBegin < $begin and $begin != '2030-01-01') dao::$errors['begin'] = sprintf($this->lang->beginGreaterChild, $minBegin);
+            if($maxEnd > $end and $end != '2030-01-01') dao::$errors['end'] = sprintf($this->lang->endLetterChild, $maxEnd);
         }
         elseif($plan->parent > 0)
         {
             $parentPlan = $this->getByID($plan->parent);
-            if($begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
-            if($end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+            if($begin < $parentPlan->begin and $parentPlan->begin != '2030-01-01') dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+            if($end > $parentPlan->end and $parentPlan->end != '2030-01-01') dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
         }
     }
 
