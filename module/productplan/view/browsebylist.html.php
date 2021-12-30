@@ -57,7 +57,7 @@
         </th>
         <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
         <?php if($browseType == 'all'):?>
-        <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
+        <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
         <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
@@ -111,17 +111,22 @@
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>
         </td>
-        <td class='c-title text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
+        <td class='c-title text-left<?php if(isset($plan->children)) echo ' has-child';?>' title="<?php echo $plan->title?>">
           <?php
-          $prefix = '';
-          $suffix = '';
-          if($plan->parent > 0 and !isset($plans[$plan->parent])) $prefix = "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
-          if($plan->end < $today and in_array($plan->status, array('wait', 'doing'))) $suffix = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
-          if($plan->parent == '-1' and isset($plan->children)) $suffix .= '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
-          if(!empty($suffix)) echo '<div class="plan-name has-prefix has-suffix">';
-          if(!empty($prefix)) echo $prefix;
+          $class   = '';
+          $expired = '';
+          if($plan->end < $today and in_array($plan->status, array('wait', 'doing')))
+          {
+              $class  .= ' expired';
+              $expired = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
+          }
+
+          echo "<div class='plan-name has-prefix {$class}'>";
+          if($plan->parent > 0 and !isset($plans[$plan->parent])) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
-          if(!empty($suffix)) echo $suffix . '</div>';
+          if(!empty($expired)) echo $expired;
+          if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+          echo '</div>';
           ?>
         </td>
         <?php if($browseType == 'all'):?>
