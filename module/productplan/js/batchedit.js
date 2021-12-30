@@ -9,17 +9,17 @@ function changeDate(planID)
 {
     if($("#future"+planID).prop('checked'))
     {
-        $("input[name='begin["+planID+"]']").val('2030-01-01').removeClass('form-input-show').addClass('form-input-hidden');
-        $("input[name='end["+planID+"]']").val('2030-01-01').removeClass('form-input-show').addClass('form-input-hidden');
-        $("input[name='begin"+planID+"']").val('').removeClass('form-input-hidden').addClass('form-input-show');
-        $("input[name='end"+planID+"']").val('').removeClass('form-input-hidden').addClass('form-input-show');
+        $("input[name='begin[" + planID + "]']").val('2030-01-01').removeClass('form-input-show').addClass('form-input-hidden');
+        $("input[name='end[" + planID + "]']").val('2030-01-01').removeClass('form-input-show').addClass('form-input-hidden');
+        $("input[name='begin" + planID + "']").val('').removeClass('form-input-hidden').addClass('form-input-show');
+        $("input[name='end" + planID + "']").val('').removeClass('form-input-hidden').addClass('form-input-show');
     }
     else
     {
-        $("input[name='begin["+planID+"]']").val('').removeClass('form-input-hidden').addClass('form-input-show');
-        $("input[name='end["+planID+"]']").val('').removeClass('form-input-hidden').addClass('form-input-show');
-        $("input[name='begin"+planID+"']").removeClass('form-input-show').addClass('form-input-hidden');
-        $("input[name='end"+planID+"']").removeClass('form-input-show').addClass('form-input-hidden');
+        $("input[name='begin[" + planID + "]']").val('').removeClass('form-input-hidden').addClass('form-input-show');
+        $("input[name='end[" + planID + "]']").val('').removeClass('form-input-hidden').addClass('form-input-show');
+        $("input[name='begin" + planID + "']").removeClass('form-input-show').addClass('form-input-hidden');
+        $("input[name='end" + planID + "']").removeClass('form-input-show').addClass('form-input-hidden');
 
         $('.form-date').datetimepicker('update');
     }
@@ -37,19 +37,19 @@ function setPlanStatus(planID, status)
 {
     if(status != 'wait')
     {
-        $('#future'+planID).closest('div').addClass('hidden');
-        $("input[name='begin["+planID+"]']").closest('td').addClass('required');
-        $("input[name='end["+planID+"]']").closest('td').addClass('required');
-        $("input[name='begin"+planID+"']").removeAttr('disabled');
-        $("input[name='end"+planID+"']").removeAttr('disabled');
+        $('#future' + planID).closest('div').addClass('hidden');
+        $("input[name='begin[" + planID + "]']").closest('td').addClass('required');
+        $("input[name='end[" + planID + "]']").closest('td').addClass('required');
+        $("input[name='begin" + planID + "']").removeAttr('disabled');
+        $("input[name='end" + planID + "']").removeAttr('disabled');
     }
     else
     {
-        $('#future'+planID).closest('div').removeClass('hidden');
-        $("input[name='begin["+planID+"]']").closest('td').removeClass('required');
-        $("input[name='end["+planID+"]']").closest('td').removeClass('required');
-        $("input[name='begin"+planID+"']").attr('disabled', 'disabled');
-        $("input[name='end"+planID+"']").attr('disabled', 'disabled');
+        $('#future' + planID).closest('div').removeClass('hidden');
+        $("input[name='begin[" + planID + "]']").closest('td').removeClass('required');
+        $("input[name='end[" + planID + "]']").closest('td').removeClass('required');
+        $("input[name='begin" + planID + "']").attr('disabled', 'disabled');
+        $("input[name='end" + planID + "']").attr('disabled', 'disabled');
     }
 }
 

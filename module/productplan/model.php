@@ -455,7 +455,7 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
-        if($oldPlan->parent != 0 and $oldPlan->parent != -1) $parentPlan = $this->getByID($oldPlan->parent);
+        if($oldPlan->parent > 0) $parentPlan = $this->getByID($oldPlan->parent);
         if(!empty($parentPlan->begin))
         { 
             if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
@@ -520,7 +520,7 @@ class productplanModel extends model
             $plan->end    = $data->end[$planID] == '' ? '2030-01-01' : $data->end[$planID];
             $plan->status = $data->status[$planID];
             
-            if($oldPlans[$planID]->parent != 0 and $oldPlans[$planID]->parent != -1) $parentPlan = $this->getByID($oldPlans[$planID]->parent);
+            if($oldPlans[$planID]->parent > 0) $parentPlan = $this->getByID($oldPlans[$planID]->parent);
             if(!empty($parentPlan->begin))
             {
                 if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
