@@ -2009,13 +2009,7 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        $userList    = array();
-        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
-        foreach($avatarPairs as $account => $avatar)
-        {
-            if(!$avatar) continue;
-            $userList[$account]['avatar'] = $avatar;
-        }
+        $userList = $this->dao->select('account, realname name, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
 
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
