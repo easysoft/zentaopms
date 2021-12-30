@@ -99,9 +99,12 @@
         </tr>
         <tr class="<?php if($program->acl == 'open') echo 'hidden';?>" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
-          <td><?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple');?></td>
-          <td></td>
-          <td></td>
+          <td>
+            <div class='input-group'>
+              <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple');?>
+              <?php echo $this->fetch('my', 'buildContactLists', 'whitelist');?>
+            </div>
+          </td>
         </tr>
         <tr>
           <td colspan='4' class='text-center form-actions'>

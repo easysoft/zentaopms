@@ -772,7 +772,7 @@ class projectModel extends model
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,newProduct,productName,future')
+            ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu')
             ->get();
 
         $linkedProductsCount = 0;
@@ -985,7 +985,7 @@ class projectModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,future')
+            ->remove('products,branch,plans,delta,future,contactListMenu')
             ->get();
 
         if($project->parent)

@@ -1165,19 +1165,20 @@ class user extends control
      * AJAX: get users from a contact list.
      *
      * @param  int    $contactListID
+     * @param  string $dropdownName
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID)
+    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted', $list ? $list->userList : '', $this->config->maxCount);
-        if(isset($this->config->user->moreLink)) $this->config->moreLinks['mailto[]'] = $this->config->user->moreLink;
+        if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
-        if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        if(!$contactListID) return print(html::select($dropdownName . "[]", $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
 
-        return print(html::select('mailto[]', $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        return print(html::select($dropdownName . "[]", $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
     }
 
     /**
