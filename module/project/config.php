@@ -129,3 +129,37 @@ $config->project->removePriv['project']   = array('index', 'browse', 'kanban', '
 $config->project->removePriv['bug']       = array('batchChangePlan');
 $config->project->removePriv['doc']       = array('catalog', 'index');
 $config->project->removePriv['auditplan'] = array('delete');
+
+$config->project->checkList = new stdclass();
+
+$config->project->checkList->scrum                     = new stdclass();
+$config->project->checkList->scrum->execution          = defined('TABLE_EXECUTION') ? TABLE_EXECUTION : '';
+$config->project->checkList->scrum->bug                = defined('TABLE_BUG') ? TABLE_BUG : '';
+$config->project->checkList->scrum->case               = defined('TABLE_CASE') ? TABLE_CASE : '';
+$config->project->checkList->scrum->issue              = defined('TABLE_ISSUE') ? TABLE_ISSUE : '';
+$config->project->checkList->scrum->risk               = defined('TABLE_RISK') ? TABLE_RISK : '';
+$config->project->checkList->scrum->testtask           = defined('TABLE_TESTTASK') ? TABLE_TESTTASK : '';
+$config->project->checkList->scrum->doc                = defined('TABLE_DOC') ? TABLE_DOC : '';
+$config->project->checkList->scrum->build              = defined('TABLE_BUILD') ? TABLE_BUILD : '';
+$config->project->checkList->scrum->projectrelease     = defined('TABLE_RELEASE') ? TABLE_RELEASE : '';
+$config->project->checkList->scrum->meeting            = defined('TABLE_MEETING') ? TABLE_MEETING : '';
+
+$config->project->checkList->waterfall                 = new stdclass();
+$config->project->checkList->waterfall->stage          = defined('TABLE_EXECUTION') ? TABLE_EXECUTION : '';
+$config->project->checkList->waterfall->design         = defined('TABLE_DESIGN') ? TABLE_DESIGN : '';
+$config->project->checkList->waterfall->doc            = defined('TABLE_DOC') ? TABLE_DOC : '';
+$config->project->checkList->waterfall->bug            = defined('TABLE_BUG') ? TABLE_BUG : '';
+$config->project->checkList->waterfall->case           = defined('TABLE_CASE') ? TABLE_CASE : '';
+$config->project->checkList->waterfall->build          = defined('TABLE_BUILD') ? TABLE_BUILD : '';
+$config->project->checkList->waterfall->projectrelease = defined('TABLE_RELEASE') ? TABLE_RELEASE : '';
+$config->project->checkList->waterfall->testtask       = defined('TABLE_TESTTASK') ? TABLE_TESTTASK : '';
+
+$config->project->checkList->waterfall->review         = defined('TABLE_REVIEW') ? TABLE_REVIEW : '';
+$config->project->checkList->waterfall->build          = defined('TABLE_BUILD') ? TABLE_BUILD : '';
+$config->project->checkList->waterfall->researchplan   = defined('TABLE_RESEARCHPLAN') ? TABLE_RESEARCHPLAN : '';
+$config->project->checkList->waterfall->issue          = defined('TABLE_ISSUE') ? TABLE_ISSUE : '';
+$config->project->checkList->waterfall->risk           = defined('TABLE_RISK') ? TABLE_RISK : '';
+$config->project->checkList->waterfall->opportunity    = defined('TABLE_OPPORTUNITY') ? TABLE_OPPORTUNITY : '';
+$config->project->checkList->waterfall->auditplan      = defined('TABLE_AUDITPLAN') ? TABLE_AUDITPLAN : '';
+$config->project->checkList->waterfall->gapanalysis    = defined('TABLE_GAPANALYSIS') ? TABLE_GAPANALYSIS : '';
+$config->project->checkList->waterfall->meeting        = defined('TABLE_MEETING') ? TABLE_MEETING : '';

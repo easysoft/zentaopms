@@ -2086,4 +2086,54 @@ class projectModel extends model
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
         common::setMenuVars('project', $objectID);
     }
+
+    /**
+     * Check if the project model can be changed.
+     *
+     * @param  int    $projectID
+     * @param  string $model
+     * @access public
+     * @return bool
+     */
+    public function checkCanChangeModel($projectID, $model)
+    {
+        $checkList = $this->config->project->checkList->$model;
+        foreach($checkList as $table)
+        {
+            $object = '';
+            if($table == '') continue;
+            if($table == TABLE_EXECUTION and $model == 'scrum')
+            {
+                $object = $this->fetchByProject($table, $projectID, 'sprint');
+            }
+            elseif($table == TABLE_EXECUTION and $model == 'waterfall')
+            {
+                $object = $this->fetchByProject($table, $projectID, 'stage');
+            }
+            else
+            {
+                $object = $this->fetchByProject($table, $projectID);
+            }
+            if(!empty($object)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get the objects under the project.
+     *
+     * @param  constant $table
+     * @param  int      $projectID
+     * @param  string   $type
+     * @access public
+     * @return object
+     */
+    public function fetchByProject($table, $projectID, $type = '')
+    {
+        $result = $this->dao->select('*')->from($table)
+            ->where('project')->eq($projectID)
+            ->beginIF(!empty($type))->andWhere('type')->eq($type)->fi()
+            ->fetch();
+        return $result;
+    }
 }
