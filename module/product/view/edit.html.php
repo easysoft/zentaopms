@@ -90,7 +90,7 @@
             <td>
               <div class='input-group'>
                 <?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control chosen" multiple');?>
-                <?php echo $this->fetch('my', 'buildContactLists', 'whitelist');?>
+                <?php echo $this->fetch('my', 'buildContactLists', "dropdownName='whitelist'");?>
               </div>
             </td>
           </tr>
