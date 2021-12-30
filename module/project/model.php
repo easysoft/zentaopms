@@ -2100,21 +2100,18 @@ class projectModel extends model
         $checkList = $this->config->project->checkList->$model;
         foreach($checkList as $module)
         {
-            $object = '';
             if($module == '') continue;
-            $table = constant('TABLE_'. strtoupper($module));;
-            if($table == TABLE_EXECUTION and $model == 'scrum')
+
+            $type = '';
+            $table = constant('TABLE_'. strtoupper($module));
+            $object = new stdclass();
+
+            if($table == TABLE_EXECUTION)
             {
-                $object = $this->fetchByProject($table, $projectID, 'sprint');
+                $type = $model == 'scrum' ? 'sprint' : 'stage';
             }
-            elseif($table == TABLE_EXECUTION and $model == 'waterfall')
-            {
-                $object = $this->fetchByProject($table, $projectID, 'stage');
-            }
-            else
-            {
-                $object = $this->fetchByProject($table, $projectID);
-            }
+
+            $object = $this->getDataByProject($table, $projectID, $type);
             if(!empty($object)) return false;
         }
         return true;
@@ -2129,7 +2126,7 @@ class projectModel extends model
      * @access public
      * @return object
      */
-    public function fetchByProject($table, $projectID, $type = '')
+    public function getDataByProject($table, $projectID, $type = '')
     {
         $result = $this->dao->select('id')->from($table)
             ->where('project')->eq($projectID)
