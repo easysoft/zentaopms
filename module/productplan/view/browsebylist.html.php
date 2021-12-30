@@ -113,10 +113,13 @@
         </td>
         <td class='c-title text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
           <?php
+          $prefix = '';
           $suffix = '';
+          if($plan->parent > 0 and !isset($plans[$plan->parent])) $prefix = "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           if($plan->end < $today and in_array($plan->status, array('wait', 'doing'))) $suffix = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
           if($plan->parent == '-1' and isset($plan->children)) $suffix .= '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
           if(!empty($suffix)) echo '<div class="plan-name has-prefix has-suffix">';
+          if(!empty($prefix)) echo $prefix;
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if(!empty($suffix)) echo $suffix . '</div>';
           ?>
