@@ -409,8 +409,6 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
-        $attributes = array_values($attributes);
-        $milestone  = array_values($milestone);
         $datas      = array();
         foreach($names as $key => $name)
         {
@@ -431,6 +429,7 @@ class programplanModel extends model
             $plan->realEnd   = empty($realEnd[$key]) ? '0000-00-00' : $realEnd[$key];
             $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl       = empty($parentID) ? $acl[$key] : $parentACL;
+            $plan->PM        = empty($PM[$key]) ? '' : $PM[$key];
 
             $datas[] = $plan;
         }

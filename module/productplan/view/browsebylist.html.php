@@ -78,6 +78,7 @@
       </thead>
       <tbody>
       <?php $this->loadModel('file');?>
+      <?php $today = date('Y-m-d');?>
       <?php foreach($plans as $plan):?>
       <?php
       $canBeChanged = common::canBeChanged('plan', $plan);
@@ -112,10 +113,13 @@
         </td>
         <td class='c-title text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
           <?php
+          $prefix = '';
           $suffix = '';
-          if($plan->end < helper::now()) $suffix = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
-          if($plan->parent == '-1') $suffix .= '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+          if($plan->parent > 0 and !isset($plans[$plan->parent])) $prefix = "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
+          if($plan->end < $today and in_array($plan->status, array('wait', 'doing'))) $suffix = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
+          if($plan->parent == '-1' and isset($plan->children)) $suffix .= '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
           if(!empty($suffix)) echo '<div class="plan-name has-prefix has-suffix">';
+          if(!empty($prefix)) echo $prefix;
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if(!empty($suffix)) echo $suffix . '</div>';
           ?>
@@ -166,6 +170,7 @@
                   $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
                   if($branchStatus == 'closed') $disabled = 'disabled';
               }
+              if(in_array($plan->status, array('done', 'closed'))) $disabled = 'disabled';
 
               if($config->systemMode == 'new')
               {
@@ -181,8 +186,14 @@
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           if(common::hasPriv('productplan', 'create', $plan))
           {
-              if($plan->parent > '0') echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
-              if($plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
+              if($plan->parent > 0 or in_array($plan->status, array('done', 'closed')))
+              {
+                  echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
+              }
+              else
+              {
+                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
+              }
           }
 
           if(common::hasPriv('productplan', 'delete', $plan))

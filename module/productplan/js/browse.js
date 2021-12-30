@@ -125,7 +125,11 @@ function createCardMenu(options)
         var executionLink = systemMode == 'new' ? '#projects' : createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=" + card.id + "&confirm=no&productID=" + productID);
         var today         = new Date();
         var end           = $.zui.createDate(card.end);
-        if(end.toLocaleDateString() < today.toLocaleDateString() && (card.status == 'wait' || card.status == 'doing'))
+        if(end.toLocaleDateString() < today.toLocaleDateString())
+        {
+            className = 'disabled';
+        }
+        else if(card.status == 'done' || card.status == 'closed')
         {
             className = 'disabled';
         }
@@ -163,6 +167,7 @@ function createCardMenu(options)
     if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('activate')) items.push({label: productplanLang.activate, icon: 'magic', url: createLink('productplan', 'activate', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('delete')) items.push({label: productplanLang.delete, icon: 'trash', url: createLink('productplan', 'delete', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -302,7 +307,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
 function renderKanbanItem(item, $item)
 {
     var privs        = item.actions;
-    var printMoreBtn = (privs.includes('createExecution') || privs.includes('linkStory') || privs.includes('linkBug') || privs.includes('edit') || privs.includes('start') || privs.includes('finish') || privs.includes('close') || privs.includes('activate'));
+    var printMoreBtn = (privs.includes('createExecution') || privs.includes('linkStory') || privs.includes('linkBug') || privs.includes('edit') || privs.includes('start') || privs.includes('finish') || privs.includes('close') || privs.includes('activate') || privs.includes('delete'));
 
     /* Output header information. */
     var $header = $item.children('.header');
@@ -324,7 +329,7 @@ function renderKanbanItem(item, $item)
     if(!$title.length)
     {
         if(privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox).attr('href', createLink('productplan', 'view', 'cardID=' + item.id));
-        if(!privs.includes('view')) $title = $('<p class="title"></p>').appendTo($titleBox);
+        if(!privs.includes('view')) $title = $('<a class="title"></a>').appendTo($titleBox);
     }
     $title.text(item.title).attr('title', item.title);
 
@@ -334,7 +339,7 @@ function renderKanbanItem(item, $item)
     var end   = $.zui.createDate(item.end);
     if(end.toLocaleDateString() < today.toLocaleDateString() && (item.status == 'wait' || item.status == 'doing'))
     {
-        $expired = $('.titleBox').children('.expired');
+        $expired = $titleBox.children('.expired');
         if(!$expired.length)
         {
             $('<span class="expired label label-danger label-badge">' + productplanLang.expired + '</span>').appendTo($titleBox);

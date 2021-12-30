@@ -537,7 +537,7 @@ class kanbanModel extends model
         $branches    = array();
         $colorIndex  = 0;
         $laneOrder   = 1;
-        $cardActions = array('view', 'createExecution', 'linkStory', 'linkBug', 'edit', 'start', 'finish', 'close', 'activate');
+        $cardActions = array('view', 'createExecution', 'linkStory', 'linkBug', 'edit', 'start', 'finish', 'close', 'activate', 'delete');
 
         if($product->type == 'normal')
         {

@@ -45,6 +45,7 @@
       <thead>
         <tr class='text-center'>
           <th class='required'><?php echo $name;?></th>
+          <th class='w-110px'><?php echo $lang->programplan->PM;?></th>
           <th class='w-110px'>
             <?php echo $lang->programplan->percent;?>
             <?php if($planID):?>
@@ -69,20 +70,21 @@
         <?php if(empty($plans) and $planID == 0):?>
           <?php foreach($stages as $stage):?>
           <tr>
-            <td><input type='text' name='names[]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
+            <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='<?php echo $stage->name;?>' class='form-control' /></td>
+            <td><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen'");?></td>
             <td>
               <div class='input-group'>
-                <input type='text' name='percents[]' id='percent<?php echo $i;?>' value='<?php echo $stage->percent;?>' class='form-control'/>
+                <input type='text' name='percents[<?php echo $i;?>]' id='percent<?php echo $i;?>' value='<?php echo $stage->percent;?>' class='form-control'/>
                 <span class='input-group-addon'>%</span>
               </div>
             </td>
             <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $stage->type, "class='form-control'");?></td>
-            <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
+            <td><?php echo html::select("acl[$i]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
-            <td><input type='text' name='begin[]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
-            <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
-            <td><input type='text' name='realBegan[]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
-            <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <td><input type='text' name='begin[<?php echo $i;?>]' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <td><input type='text' name='realBegan[<?php echo $i;?>]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
+            <td><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <?php if(isset($this->config->qcVersion)):?>
             <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
             <?php endif;?>
@@ -98,22 +100,23 @@
         <?php if(!empty($plans)):?>
           <?php foreach($plans as $plan):?>
           <?php $disabled = $plan->setMilestone ? '' : "disabled='disabled'"?>
-          <?php echo html::hidden('planIDList[]', $plan->id);?>
+          <?php echo html::hidden("planIDList[$i]", $plan->id);?>
           <tr>
-            <td><input type='text' name="names[]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
+            <td><input type='text' name="names[<?php echo $i;?>]" id='names<?php echo $i;?>' value='<?php echo $plan->name;?>' class='form-control' /></td>
+            <td><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen'");?></td>
             <td>
               <div class='input-group'>
-                <input type='text' name='percents[]' id='percent<?php echo $i;?>' value='<?php echo $plan->percent;?>' class='form-control' />
+                <input type='text' name='percents[<?php echo $i;?>]' id='percent<?php echo $i;?>' value='<?php echo $plan->percent;?>' class='form-control' />
                 <span class='input-group-addon'>%</span>
               </div>
             </td>
             <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, $plan->attribute, "class='form-control'");?></td>
-            <td><?php echo html::select("acl[]", $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
+            <td><?php echo html::select("acl[$i]", $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
             <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, $plan->milestone, $disabled);?></td>
-            <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
-            <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
-            <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
-            <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
+            <td><input type='text' name='begin[<?php echo $i;?>] ' id='begin<?php echo $i;?>' value='<?php echo $plan->begin;?>' class='form-control form-date' /></td>
+            <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
+            <td><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
+            <td><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
             <?php if(isset($this->config->qcVersion)):?>
             <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
             <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control chosen' multiple");?></td>
@@ -128,20 +131,21 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
-          <td><input type='text' name='names[]' id='names<?php echo $i;?>' value='' class='form-control' /></td>
+          <td><input type='text' name='names[<?php echo $i;?>]' id='names<?php echo $i;?>' value='' class='form-control' /></td>
+          <td><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen'");?></td>
           <td>
             <div class='input-group'>
-              <input type='text' name='percents[]' id='percent<?php echo $i;?>' value='' class='form-control' />
+              <input type='text' name='percents[<?php echo $i;?>]' id='percent<?php echo $i;?>' value='' class='form-control' />
               <span class='input-group-addon'>%</span>
             </div>
           </td>
           <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
-          <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
+          <td><?php echo html::select("acl[$i]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
           <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
-          <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
-          <td><input type='text' name='end[]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
-          <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
-          <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <td><input type='text' name='begin[<?php echo $i;?>] ' id='begin<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <td><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
+          <td><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
           <?php if(isset($this->config->qcVersion)):?>
           <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
           <?php endif;?>
@@ -167,21 +171,22 @@
   <?php $i = '%i%';?>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
-      <td><input type='text' name='names[]' id='names<?php echo $i;?>' class='form-control' /></td>
-      <?php echo html::hidden('planIDList[]', 0);?>
+      <td><input type='text' name='<?php echo "names[$i]";?>' id='names<?php echo $i;?>' class='form-control' /></td>
+      <td><?php echo html::select("PM[$i]", $PMUsers, '', "class='form-control chosen' id='PM$i'");?></td>
+      <?php echo html::hidden("planIDList[$i]", 0);?>
       <td>
         <div class='input-group'>
-          <input type='text' name='percents[]' id='percent<?php echo $i;?>' class='form-control' />
+          <input type='text' name='<?php echo "percents[$i]";?>' id='percent<?php echo $i;?>' class='form-control' />
           <span class='input-group-addon'>%</span>
         </div>
       </td>
       <td class='<?php echo $hideAttribute?>'><?php echo html::select("attributes[$i]", $lang->stage->typeList, '', "class='form-control'");?></td>
-      <td><?php echo html::select("acl[]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
+      <td><?php echo html::select("acl[$i]", $lang->project->aclList, 'open', "class='form-control' $class");?></td>
       <td><?php echo html::radio("milestone[$i]", $lang->programplan->milestoneList, 0);?></td>
-      <td><input type='text' name='begin[] ' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
-      <td><input type='text' name='end[]' id='end<?php echo $i;?>' class='form-control form-date' /></td>
-      <td><input type='text' name='realBegan[] ' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
-      <td><input type='text' name='realEnd[]' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
+      <td><input type='text' name='<?php echo "begin[$i]";?>' id='begin<?php echo $i;?>' class='form-control form-date' /></td>
+      <td><input type='text' name='<?php echo "end[$i]";?>' id='end<?php echo $i;?>' class='form-control form-date' /></td>
+      <td><input type='text' name='<?php echo "realBegan[$i]";?>' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
+      <td><input type='text' name='<?php echo "realEnd[$i]";?>' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
       <?php if(isset($this->config->qcVersion)):?>
       <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen ' multiple");?></td>
       <?php endif;?>
