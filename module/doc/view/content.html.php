@@ -49,7 +49,7 @@ $sessionString .= session_name() . '=' . session_id();
             if($canImportToPracticeLib or $canImportToComponentLib)
             {
                 echo "<div class='btn-group' id='more'>";
-                echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
+                echo html::a('javascript:;', "<i class='icon icon-diamond'></i>", '', "data-toggle='dropdown' class='btn btn-link'");
                 echo "<ul class='dropdown-menu pull-right'>";
                 if($canImportToPracticeLib) echo '<li>' . html::a('#importToPracticeLib', $lang->doc->importToPracticeLib, '', 'data-toggle="modal"') . '</li>';
                 if($canImportToComponentLib) echo '<li>' . html::a('#importToComponentLib', $lang->doc->importToComponentLib, '', 'data-toggle="modal"') . '</li>';
