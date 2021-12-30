@@ -1341,6 +1341,7 @@ $lang->resource->gitlab->browseTag            = 'browseTag';
 $lang->resource->gitlab->createTag            = 'createTag';
 $lang->resource->gitlab->deleteTag            = 'deleteTag';
 $lang->resource->gitlab->browseTagPriv        = 'browseTagPriv';
+$lang->resource->gitlab->deleteTagPriv        = 'deleteTagPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';
@@ -1369,6 +1370,7 @@ $lang->gitlab->methodOrder[125] = 'createWebhook';
 $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
 $lang->gitlab->methodOrder[135] = 'browseTag';
 $lang->gitlab->methodOrder[140] = 'browseTagPriv';
+$lang->gitlab->methodOrder[145] = 'deleteTagPriv';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
