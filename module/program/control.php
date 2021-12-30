@@ -171,6 +171,7 @@ class program extends control
         $this->view->pmUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->poUsers        = $this->user->getPairs('noclosed|nodeleted|pofirst');
         $this->view->users          = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->userInfos      = $this->user->getUserDisplayInfos(array_keys($this->view->users));
         $this->view->parentProgram  = $parentProgram;
         $this->view->parents        = $this->program->getParentPairs();
         $this->view->programList    = $this->program->getList();
