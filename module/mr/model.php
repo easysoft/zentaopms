@@ -545,7 +545,7 @@ class mrModel extends model
     {
         if(empty($gitlabID) or empty($sourceProject) or empty($sourceBranch) or  empty($targetProject) or  empty($targetBranch)) return null;
 
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot((int)$gitlabID), "/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}&source_project_id={$sourceProject}&target_project_id={$targetProject}";
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot((int)$gitlabID), "/projects/{$sourceProject}/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}";
         $response = json_decode(commonModel::http($url));
 
         if($response)
