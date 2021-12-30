@@ -134,6 +134,10 @@ function createCardMenu(options)
             var branchStatus = branchStatusList[card.branch];
             if(branchStatus == 'closed') className = 'disabled';
         }
+        else if(card.status == 'done' || card.status == 'closed')
+        {
+            className = 'disabled';
+        }
 
         if(systemMode == 'new')
         {
@@ -291,7 +295,7 @@ function renderKanbanItem(item, $item)
     var end   = $.zui.createDate(item.end);
     if(end.toLocaleDateString() < today.toLocaleDateString() && (item.status == 'wait' || item.status == 'doing'))
     {
-        $expired = $('.titleBox').children('.expired');
+        $expired = $titleBox.children('.expired');
         if(!$expired.length)
         {
             $('<span class="expired label label-danger label-badge">' + productplanLang.expired + '</span>').appendTo($titleBox);
