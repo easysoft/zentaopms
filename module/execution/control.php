@@ -2010,6 +2010,9 @@ class execution extends control
         }
 
         $userList = $this->dao->select('account, realname name, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
+        $userList['closed']['account'] = 'closed';
+        $userList['closed']['name']    = 'closed';
+        $userList['closed']['avatar']  = '';
 
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
