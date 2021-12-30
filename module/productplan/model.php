@@ -521,10 +521,15 @@ class productplanModel extends model
 
         if($status == 'doing' and !empty($_POST))
         {
-            $plan = fixer::input('post')->add('status', $status)->get();
+            $plan = fixer::input('post')
+                ->add('status', $status)
+                ->stripTags($this->config->productplan->editor->start['id'], $this->config->allowedTags)
+                ->remove('uid')
+                ->get();
 
             $this->checkDate4Plan($oldPlan, $plan->begin, $plan->end);
             if(dao::isError()) return false;
+            $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->start['id'], $this->post->uid);
 
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->data($plan)
@@ -533,6 +538,8 @@ class productplanModel extends model
                 ->checkIF(!empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
                 ->where('id')->eq($planID)
                 ->exec();
+
+            $this->file->updateObjectID($this->post->uid, $planID, 'productplan');
 
             if(isset($parentPlan) and $parentPlan->status != 'doing')
             {
@@ -963,7 +970,11 @@ class productplanModel extends model
                 if($plan->status != 'done' or $plan->parent < 0) return false;
                 break;
             case 'activate' :
+<<<<<<< module/productplan/model.php
+                if(($plan->status != 'closed' and $plan->status != 'done') or $plan->parent < 0) return false;
+=======
                 if($plan->status == 'wait' or $plan == 'doing' or $plan->parent < 0) return false;
+>>>>>>> module/productplan/model.php
                 break;
         }
 

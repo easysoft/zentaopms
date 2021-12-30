@@ -420,6 +420,7 @@ class productplan extends control
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess,'locate' => 'parent'));
             }
+
             $this->view->plan = $plan;
             $this->display();
         }

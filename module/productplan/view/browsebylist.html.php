@@ -151,12 +151,12 @@
               if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
               {
                   $class      = 'iframe';
-                  $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+                  $attr       = "data-id='{$plan->id}' data-width='550px'";
                   $isOnlyBody = true;
               }
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr, $lang->productplan->start);
-              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr, $lang->productplan->finish);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr, $lang->productplan->close);
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody);
+              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
           }
 
           $attr = $plan->expired ? "disabled='disabled'" : '';
