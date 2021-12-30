@@ -136,7 +136,7 @@ function showMoreImage(obj)
  */
 function setMailto(mailto, contactListID)
 {
-    link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID);
+    link = createLink('user', 'ajaxGetContactUsers', 'listID=' + contactListID + '&dropdownName=' + mailto);
     $.get(link, function(users)
     {
         $('#' + mailto).replaceWith(users);

@@ -968,12 +968,14 @@ class my extends control
     /**
      * Build contact lists.
      *
+     * @param  dropdownName
      * @access public
      * @return void
      */
-    public function buildContactLists()
+    public function buildContactLists($dropdownName = 'mailto')
     {
         $this->view->contactLists = $this->user->getContactLists($this->app->user->account, 'withnote');
+        $this->view->dropdownName = $dropdownName;
         $this->display();
     }
 

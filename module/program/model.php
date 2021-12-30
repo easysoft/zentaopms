@@ -593,7 +593,7 @@ class programModel extends model
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
-            ->remove('delta,future')
+            ->remove('delta,future,contactListMenu')
             ->get();
 
         if($program->parent)
@@ -678,7 +678,7 @@ class programModel extends model
             ->setIF(!isset($this->post->budgetUnit), 'budgetUnit', $oldProgram->budgetUnit)
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,delta,future,syncPRJUnit,exchangeRate')
+            ->remove('uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
             ->get();
 
         $program  = $this->loadModel('file')->processImgURL($program, $this->config->program->editor->edit['id'], $this->post->uid);

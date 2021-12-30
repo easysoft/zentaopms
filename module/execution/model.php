@@ -329,7 +329,7 @@ class executionModel extends model
             ->join('whitelist', ',')
             ->add('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
-            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers')
+            ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu')
             ->get();
 
         /* Check the workload format and total. */
@@ -487,7 +487,7 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, syncStories')
+            ->remove('products, branch, uid, plans, syncStories, contactListMenu')
             ->get();
 
         if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
