@@ -950,7 +950,7 @@ class mr extends control
        $targetProject = $this->post->targetProject;
        $targetBranch  = $this->post->targetBranch;
 
-       $result = $this->mr->hasSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+       $result = $this->mr->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
        die(json_encode($result));
    }
 }

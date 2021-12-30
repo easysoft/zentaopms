@@ -93,7 +93,7 @@ class mrModel extends model
             ->add('createdDate', helper::now())
             ->get();
 
-        $result = $this->hasSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        $result = $this->checkSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail') return $result;
 
         /* Exec Job */
@@ -206,7 +206,7 @@ class mrModel extends model
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
 
-        $result = $this->hasSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        $result = $this->checkSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail')
         {
             dao::$errors[] = $result['message'];
@@ -547,13 +547,16 @@ class mrModel extends model
      */
     public function apiGetSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)
     {
-        $url = sprintf($this->loadModel('gitlab')->getApiRoot($gitlabID), "/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}&source_project_id={$sourceProject}&target_project_id={$targetProject}";
+        if(empty($gitlabID) or empty($sourceProject) or empty($sourceBranch) or  empty($targetProject) or  empty($targetBranch)) return null;
+
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot((int)$gitlabID), "/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}&source_project_id={$sourceProject}&target_project_id={$targetProject}";
         $response = json_decode(commonModel::http($url));
 
         if($response)
         {
             foreach($response as $mr)
             {
+                if(empty($mr->source_project_id) or empty($mr->target_project_id)) return null;
                 if($mr->source_project_id == $sourceProject and $mr->target_project_id == $targetProject) return $mr;
             }
         }
@@ -1447,7 +1450,7 @@ class mrModel extends model
     }
 
     /**
-     * Has same opened mr for source branch.
+     * Check same opened mr for source branch.
      *
      * @param  int    $gitlabID
      * @param  int    $sourceProject
@@ -1457,7 +1460,7 @@ class mrModel extends model
      * @access public
      * @return array
      */
-    public function hasSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)
+    public function checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)
     {
         if(empty($sourceProject) or empty($sourceBranch) or empty($targetProject) or empty($targetBranch)) return array('result' => 'success');
 
@@ -1485,20 +1488,22 @@ class mrModel extends model
      */
     public function convertApiError($message)
     {
+        if(is_array($message)) $message = $message[0];
+        if(!is_string($message)) return $message;
+
         foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
         {
             if(strpos($errorMsg, '/') === 0)
             {
-                $result = preg_match($errorMsg, $message[0], $matches);
+                $result = preg_match($errorMsg, $message, $matches);
                 if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
-                break;
             }
-            else
+            elseif($message == $errorMsg)
             {
-                if($message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $message[0]);
-                break;
+                $errorMessage = zget($this->lang->mr->errorLang, $key, $message);
             }
+            if(isset($errorMessage)) break;
         }
-        return isset($errorMessage) ? $errorMessage : $message[0];
+        return isset($errorMessage) ? $errorMessage : $message;
     }
 }

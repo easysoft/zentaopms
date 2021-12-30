@@ -1360,7 +1360,7 @@ class commonModel extends model
      * @access public
      * @return bool
      */
-    public static function printLink($module, $method, $vars = '', $label, $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
+    public static function printLink($module, $method, $vars = '', $label = '', $target = '', $misc = '', $newline = true, $onlyBody = false, $object = null)
     {
         /* Add data-app attribute. */
         global $app;
