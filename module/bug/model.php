@@ -2697,7 +2697,7 @@ class bugModel extends model
      * @access public
      * @return void
      */
-    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $executions = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable')
+    public function printCell($col, $bug, $users, $builds, $branches, $modulePairs, $executions = array(), $plans = array(), $stories = array(), $tasks = array(), $mode = 'datatable', $projectPairs = array())
     {
         /* Check the product is closed. */
         $canBeChanged = common::canBeChanged('bug', $bug);
@@ -2808,6 +2808,9 @@ class bugModel extends model
                 break;
             case 'branch':
                 echo zget($branches, $bug->branch, '');
+                break;
+            case 'project':
+                echo zget($projectPairs, $bug->project, '');
                 break;
             case 'execution':
                 echo zget($executions, $bug->execution, '');
