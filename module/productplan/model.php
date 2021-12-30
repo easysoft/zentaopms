@@ -464,11 +464,23 @@ class productplanModel extends model
             ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
             ->remove('delta,uid,future')
             ->get();
-        if(!$this->post->future and strpos($this->config->productplan->edit->requiredFields, 'begin') !== false and empty($_POST['begin']))
+
+        if($oldPlan->parent > 0) $parentPlan = $this->getByID($oldPlan->parent);
+        if(!empty($parentPlan->begin))
+        { 
+            if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+        }
+        if(!empty($parentPlan->end))
+        {
+            if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+        }
+
+        $requiredFields = $plan->status == 'wait' ? $this->config->productplan->edit->requiredFields : 'title, begin, end';
+        if(!$this->post->future and strpos($requiredFields, 'begin') !== false and empty($_POST['begin']))
         {
             dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
         }
-        if(!$this->post->future and strpos($this->config->productplan->edit->requiredFields, 'end') !== false and empty($_POST['end']))
+        if(!$this->post->future and strpos($requiredFields, 'end') !== false and empty($_POST['end']))
         {
             dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
         }
@@ -478,7 +490,7 @@ class productplanModel extends model
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
-            ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
+            ->batchCheck($requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
@@ -506,6 +518,9 @@ class productplanModel extends model
         if($status == 'doing' and !empty($_POST))
         {
             $plan = fixer::input('post')->add('status', $status)->get();
+
+            $this->checkDate4Plan($oldPlan, $plan->begin, $plan->end);
+            if(dao::isError()) return false;
 
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->data($plan)
@@ -590,7 +605,7 @@ class productplanModel extends model
         $config   = HTMLPurifier_Config::createDefault();
         $config->set('Cache.DefinitionImpl', null);
         $purifier = new HTMLPurifier($config);
-
+        
         $plans = array();
         $extendFields = $this->getFlowExtendFields();
         foreach($data->id as $planID)
@@ -599,13 +614,24 @@ class productplanModel extends model
             $plan->branch = $data->branch[$planID];
             $plan->title  = $data->title[$planID];
             $plan->desc   = $purifier->purify($data->desc[$planID]);
-            $plan->begin  = $data->begin[$planID];
-            $plan->end    = $data->end[$planID];
+            $plan->begin  = $data->begin[$planID] == '' ? '2030-01-01' : $data->begin[$planID];
+            $plan->end    = $data->end[$planID] == '' ? '2030-01-01' : $data->end[$planID];
+            $plan->status = $data->status[$planID];
+            
+            if($oldPlans[$planID]->parent > 0) $parentPlan = $this->getByID($oldPlans[$planID]->parent);
+            if(!empty($parentPlan->begin))
+            {
+                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+            }
+            if(!empty($parentPlan->end))
+            {
+                if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+            }
 
             if(empty($plan->title))die(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
-            if(empty($plan->begin))die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
-            if(empty($plan->end))  die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
-            if($plan->begin > $plan->end) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+            if($plan->begin == '2030-01-01' and $plan->status != 'wait') die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
+            if($plan->end   == '2030-01-01' and $plan->status != 'wait') die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
+            if($plan->begin > $plan->end and ($plan->begin != '2030-01-01' and $plan->end != '2030-01-01')) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
 
             foreach($extendFields as $extendField)
             {

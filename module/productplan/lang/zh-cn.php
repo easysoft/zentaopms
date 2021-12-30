@@ -89,7 +89,12 @@ $lang->productplan->childrenAB = "子";
 $lang->productplan->order      = "排序";
 $lang->productplan->deleted    = "已删除";
 $lang->productplan->mailto     = "抄送给";
-$lang->productplan->status     = '状态';
+$lang->productplan->status     = "计划状态";
+
+$lang->productplan->statusList['wait']   = '未开始';
+$lang->productplan->statusList['doing']  = '进行中';
+$lang->productplan->statusList['done']   = '已完成';
+$lang->productplan->statusList['closed'] = '已关闭';
 
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '两星期';

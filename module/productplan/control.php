@@ -131,7 +131,7 @@ class productplan extends control
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->edit;
         $this->view->position[] = $this->lang->productplan->edit;
         $this->view->oldBranch  = $oldBranch;
-        $this->view->plan = $plan;
+        $this->view->plan       = $plan;
         $this->display();
     }
 

@@ -27,6 +27,7 @@
           <?php endif;?>
           <th><?php echo $lang->productplan->title?></th>
           <th><?php echo $lang->productplan->desc?></th>
+          <th class='c-status'><?php echo $lang->productplan->status?></th>
           <th class='c-full-date'><?php echo $lang->productplan->begin?></th>
           <th class='c-full-date'><?php echo $lang->productplan->end?></th>
           <th class='c-future'><?php echo $lang->productplan->future?></th>
@@ -49,11 +50,19 @@
             <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
           </td>
           <?php endif;?>
-          <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control'")?></td>
+          <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control' required")?></td>
           <td><?php echo html::textarea("desc[$plan->id]", $plan->desc, "class='form-control' rows='1'")?></td>
-          <td><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date $hiddenInput'");echo html::input("begin$plan->id", '', "class='form-control $showInput' disabled='disabled'");?></td>
-          <td><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date $hiddenInput'");echo html::input("end$plan->id", '', "class='form-control $showInput' disabled='disabled'");?></td>
-          <td><div class='checkbox-primary'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future<?php echo $plan->id; ?>' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
+          <?php if($plan->parent != -1):?>
+          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus($plan->id, this.value)'");?></td>
+          <?php else:?>
+          <td><?php echo zget($lang->productplan->statusList, $plan->status);?></td>
+          <?php echo html::hidden("status[$plan->id]", $plan->status);?>
+          <?php endif;?>
+          <?php $required = $plan->status != 'wait' ? 'required' : '' ;?>
+          <td class=<?php echo $required;?>><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date $hiddenInput'");echo html::input("begin$plan->id", '', "class='form-control $showInput' disabled='disabled'");?></td>
+          <td class=<?php echo $required;?>><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date $hiddenInput'");echo html::input("end$plan->id", '', "class='form-control $showInput' disabled='disabled'");?></td>
+          <?php $hidden = $plan->status != 'wait' ? 'hidden' : '';?>
+          <td><div class='checkbox-primary <?php echo $hidden;?>'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future<?php echo $plan->id; ?>' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
           <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $plan, $extendField->field . "[{$plan->id}]") . "</td>";?>
         </tr>
         <?php endforeach;?>
