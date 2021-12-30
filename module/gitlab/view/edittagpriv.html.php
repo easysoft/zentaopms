@@ -20,7 +20,7 @@
       <form id='branchForm' method='post' class='form-ajax' enctype="multipart/form-data">
         <table class='table table-form'>
           <tr>
-            <th><?php echo $lang->gitlab->tag->name;?></th>
+            <th class='w-110px'><?php echo $lang->gitlab->tag->name;?></th>
             <td><?php echo html::input('tagName', $tag, "class='form-control' disabled");?></td>
             <td></td>
             <?php echo html::hidden('name', $tag);?>

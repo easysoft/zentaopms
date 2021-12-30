@@ -1341,6 +1341,8 @@ $lang->resource->gitlab->browseTag            = 'browseTag';
 $lang->resource->gitlab->createTag            = 'createTag';
 $lang->resource->gitlab->deleteTag            = 'deleteTag';
 $lang->resource->gitlab->browseTagPriv        = 'browseTagPriv';
+$lang->resource->gitlab->createTagPriv        = 'createTagPriv';
+$lang->resource->gitlab->editTagPriv          = 'editTagPriv';
 $lang->resource->gitlab->deleteTagPriv        = 'deleteTagPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
