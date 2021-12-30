@@ -2086,4 +2086,52 @@ class projectModel extends model
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);
         common::setMenuVars('project', $objectID);
     }
+
+    /**
+     * Check if the project model can be changed.
+     *
+     * @param  int    $projectID
+     * @param  string $model
+     * @access public
+     * @return bool
+     */
+    public function checkCanChangeModel($projectID, $model)
+    {
+        $checkList = $this->config->project->checkList->$model;
+        foreach($checkList as $module)
+        {
+            if($module == '') continue;
+
+            $type = '';
+            $table = constant('TABLE_'. strtoupper($module));
+            $object = new stdclass();
+
+            if($table == TABLE_EXECUTION)
+            {
+                $type = $model == 'scrum' ? 'sprint' : 'stage';
+            }
+
+            $object = $this->getDataByProject($table, $projectID, $type);
+            if(!empty($object)) return false;
+        }
+        return true;
+    }
+
+    /**
+     * Get the objects under the project.
+     *
+     * @param  constant $table
+     * @param  int      $projectID
+     * @param  string   $type
+     * @access public
+     * @return object
+     */
+    public function getDataByProject($table, $projectID, $type = '')
+    {
+        $result = $this->dao->select('id')->from($table)
+            ->where('project')->eq($projectID)
+            ->beginIF(!empty($type))->andWhere('type')->eq($type)->fi()
+            ->fetch();
+        return $result;
+    }
 }

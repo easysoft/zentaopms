@@ -35,6 +35,10 @@
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
         <tr>
+          <th><?php echo $lang->project->model;?></th>
+          <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
+        </tr>
+        <tr>
           <th class='w-120px'><?php echo $lang->program->parent;?></th>
           <?php
           $attr = '';
@@ -183,7 +187,6 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php
-              echo html::hidden('model', $project->model);
               echo html::submitButton();
               if(!isonlybody()) echo html::backButton();
             ?>
