@@ -201,7 +201,10 @@ class ciModel extends model
         $this->dao->update(TABLE_JOB)->set('lastExec')->eq(helper::now())->set('lastStatus')->eq($status)->where('id')->eq($build->job)->exec();
 
         if($status == 'building') return;
+
         $relateMR = $this->dao->select('*')->from(TABLE_MR)->where('compileID')->eq($build->id)->fetch();
+        if(empty($relateMR)) return;
+
         if(isset($relateMR->synced) and $relateMR->synced == '0' and $status == 'success')
         {
             $newMR = new stdclass();
@@ -253,7 +256,7 @@ class ciModel extends model
 
             $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
         }
-        else
+        elseif($status != 'success')
         {
             $newMR = new stdclass();
             $newMR->status        = 'closed';

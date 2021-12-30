@@ -23,7 +23,7 @@ pid=0
 */
 $mrModel = $tester->loadModel('mr');
 
-$gitlabID      = '2';
+$gitlabID      = '1';
 $sourceProject = '42';
 $sourceBranch  = 'branch-08';
 $targetProject = '42';
