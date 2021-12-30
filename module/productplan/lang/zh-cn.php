@@ -96,6 +96,11 @@ $lang->productplan->statusList['doing']  = '进行中';
 $lang->productplan->statusList['done']   = '已完成';
 $lang->productplan->statusList['closed'] = '已关闭';
 
+$lang->productplan->parentActionList['startedbychild']   = '系统判断由于子计划 <strong>开始</strong> ，将计划状态置为 <strong>进行中</strong> 。';
+$lang->productplan->parentActionList['finishedbychild']  = '系统判断由于子计划 <strong>全部完成</strong> ，将计划状态置为 <strong>已完成</strong> 。';
+$lang->productplan->parentActionList['closedbychild']    = '系统判断由于子计划 <strong>全部关闭</strong> ，将计划状态置为 <strong>已关闭</strong> 。';
+$lang->productplan->parentActionList['activatedbychild'] = '系统判断由于子计划 <strong>激活</strong> ，将计划状态置为 <strong>进行中</strong> 。';
+
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '两星期';
 $lang->productplan->endList[31]  = '一个月';
@@ -120,3 +125,6 @@ $lang->productplan->featureBar['browse']['wait']   = '未开始';
 $lang->productplan->featureBar['browse']['doing']  = '进行中';
 $lang->productplan->featureBar['browse']['done']   = '已完成';
 $lang->productplan->featureBar['browse']['closed'] = '已关闭';
+
+$lang->productplan->action = new stdclass();
+$lang->productplan->action->changebychild = array('main' => '$date, $extra', 'extra' => 'parentActionList');

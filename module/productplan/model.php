@@ -467,7 +467,7 @@ class productplanModel extends model
 
         if($oldPlan->parent > 0) $parentPlan = $this->getByID($oldPlan->parent);
         if(!empty($parentPlan->begin))
-        { 
+        {
             if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
         }
         if(!empty($parentPlan->end))
@@ -513,7 +513,11 @@ class productplanModel extends model
     {
         $planID  = (int)$planID;
         $oldPlan = $this->getByID($planID);
-        if($oldPlan->parent > 0) $parentPlan = $this->getByID($oldPlan->parent);
+        if($oldPlan->parent > 0)
+        {
+            $parentPlan   = $this->getByID($oldPlan->parent);
+            $parentChange = false;
+        }
 
         if($status == 'doing' and !empty($_POST))
         {
@@ -530,6 +534,7 @@ class productplanModel extends model
                 ->where('id')->eq($planID)
                 ->beginIF(isset($parentPlan))->orWhere('id')->eq($oldPlan->parent)->fi()
                 ->exec();
+            if($parentPlan->status != 'doing') $parentChange = true;
         }
         elseif($status == 'doing' and isset($parentPlan) and $parentPlan->status != 'doing')
         {
@@ -538,6 +543,7 @@ class productplanModel extends model
                 ->where('id')->eq($planID)
                 ->orWhere('id')->eq($oldPlan->parent)
                 ->exec();
+            if($parentPlan->status != 'doing') $parentChange = true;
         }
         elseif($status == 'done' and isset($parentPlan))
         {
@@ -551,6 +557,7 @@ class productplanModel extends model
                     break;
                 }
             }
+            if($parentDone) $parentChange = true;
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->set('`status`')->eq($status)
                 ->where('id')->eq($planID)
@@ -569,6 +576,7 @@ class productplanModel extends model
                     break;
                 }
             }
+            if($parentClosed) $parentChange = true;
             $this->dao->update(TABLE_PRODUCTPLAN)
                 ->set('`status`')->eq($status)
                 ->where('id')->eq($planID)
@@ -586,7 +594,43 @@ class productplanModel extends model
         if(dao::isError()) return false;
 
         if(!isset($plan)) $plan = $this->getByID($planID);
-        if(!dao::isError())return common::createChanges($oldPlan, $plan);
+        if(!dao::isError())
+        {
+            $method = $this->app->rawMethod;
+            if($method == 'start')
+            {
+                $action = 'started';
+                if($parentChange) $parentAction = 'startedbychild';
+            }
+            elseif($method == 'finish')
+            {
+                $action = 'finished';
+                if($parentChange) $parentAction = 'finishedbychild';
+            }
+            elseif($method == 'close')
+            {
+                $action = 'closed';
+                if($parentChange) $parentAction = 'closedbychild';
+            }
+            elseif($method == 'activate')
+            {
+                $action = 'activated';
+                if($parentChange) $parentAction = 'activatedbychild';
+            }
+
+            if(isset($action))
+            {
+                $changes = common::createChanges($oldPlan, $plan);
+                $actionID = $this->loadModel('action')->create('productplan', $planID, $action);
+                $this->action->loghistory($actionID, $changes);
+
+                if($parentChange)
+                {
+                    $parentChanges = array(array('field' => 'status', 'old' => $parentPlan->status, 'new' => $status, 'diff' => ''));
+                    $actionID      = $this->action->create('productplan', $oldPlan->parent, $parentAction, '', $parentAction);
+                }
+            }
+        }
     }
 
     /**
@@ -605,7 +649,7 @@ class productplanModel extends model
         $config   = HTMLPurifier_Config::createDefault();
         $config->set('Cache.DefinitionImpl', null);
         $purifier = new HTMLPurifier($config);
-        
+
         $plans = array();
         $extendFields = $this->getFlowExtendFields();
         foreach($data->id as $planID)
@@ -617,7 +661,7 @@ class productplanModel extends model
             $plan->begin  = $data->begin[$planID] == '' ? '2030-01-01' : $data->begin[$planID];
             $plan->end    = $data->end[$planID] == '' ? '2030-01-01' : $data->end[$planID];
             $plan->status = $data->status[$planID];
-            
+
             if($oldPlans[$planID]->parent > 0) $parentPlan = $this->getByID($oldPlans[$planID]->parent);
             if(!empty($parentPlan->begin))
             {
