@@ -50,9 +50,7 @@ function saveMembers()
  */
 function setRole(account, roleID)
 {
-    role    = roles[account];              // get role according the account.
-    roleOBJ = $('#roles[' + roleID + ']'); // get role object.
-    roleOBJ.val(role);                     // set the role.
+    $('#roles\\[' + roleID + '\\]').val(roles[account]);
 }
 
 /**
