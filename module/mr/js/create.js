@@ -2,7 +2,7 @@ $(function()
 {
     $('#gitlabID').change(function()
     {
-        gitlabID = $('#gitlabID').val();
+        var gitlabID = $('#gitlabID').val();
         if(gitlabID == '') return false;
 
         var url = createLink('repo', 'ajaxgetgitlabprojects', "gitlabID=" + gitlabID);
@@ -15,9 +15,10 @@ $(function()
 
     $('#sourceProject,#targetProject').change(function()
     {
+        var gitlabID      = $('#gitlabID').val();
         var sourceProject = $(this).val();
-        var branchSelect = $(this).parents('td').find('select[name*=Branch]');
-        var branchUrl = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        var branchSelect  = $(this).parents('td').find('select[name*=Branch]');
+        var branchUrl     = createLink('gitlab', 'ajaxgetprojectbranches', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
         $.get(branchUrl, function(response)
         {
             branchSelect.html('').append(response);
@@ -28,8 +29,9 @@ $(function()
 
     $('#sourceProject').change(function()
     {
+        var gitlabID      = $('#gitlabID').val();
         var sourceProject = $(this).val();
-        var projectUrl = createLink('mr', 'ajaxGetMRTargetProjects', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        var projectUrl    = createLink('mr', 'ajaxGetMRTargetProjects', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
         $.get(projectUrl, function(response)
         {
             $('#targetProject').html('').append(response);
@@ -44,20 +46,24 @@ $(function()
         });
     });
 
-    $('#sourceBranch').change(function()
+    $('#sourceBranch,#targetBranch').change(function()
     {
-        var gitlabID = $('#gitlabID').val();
         var sourceProject = $('#sourceProject').val();
-        var repoUrl = createLink('mr', 'ajaxCheckSameOpened', "gitlabID=" + gitlabID + "&projectID=" + sourceProject);
+        var sourceBranch  = $('#sourceBranch').val();
+        var targetProject = $('#targetProject').val();
+        var targetBranch  = $('#targetBranch').val();
+        if(!sourceProject || !sourceBranch || !targetProject || !targetBranch) return false;
 
-        var sourceBranch = $(this).val();
-        $.post(repoUrl, {"sourceBranch": sourceBranch}, function(response)
+        var $this    = $(this);
+        var gitlabID = $('#gitlabID').val();
+        var repoUrl  = createLink('mr', 'ajaxCheckSameOpened', "gitlabID=" + gitlabID);
+        $.post(repoUrl, {"sourceProject": sourceProject, "sourceBranch": sourceBranch, "targetProject": targetProject, "targetBranch": targetBranch}, function(response)
         {
             response = $.parseJSON(response);
             if(response.result == 'fail')
             {
                 alert(response.message);
-                $('#sourceBranch').val('').trigger('chosen:updated');
+                $this.val('').trigger('chosen:updated');
                 return false;
             }
         });
@@ -67,6 +73,7 @@ $(function()
     $('#targetProject').change(function()
     {
         targetProject = $(this).val();
+        var gitlabID = $('#gitlabID').val();
         var assignee = $("#assignee").parents('td').find('select[name*=assignee]');
         var reviewer = $("#reviewer").parents('td').find('select[name*=reviewer]');
         usersUrl = createLink('gitlab', 'ajaxgetmruserpairs', "gitlabID=" + gitlabID + "&projectID=" + targetProject);

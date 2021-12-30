@@ -15,7 +15,7 @@ class companyModel extends model
 {
     /**
      * Set menu.
-     * 
+     *
      * @param  int    $dept
      * @access public
      * @return void
@@ -31,7 +31,7 @@ class companyModel extends model
 
     /**
      * Get company list.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -42,7 +42,7 @@ class companyModel extends model
 
     /**
      * Get the first company.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -53,8 +53,8 @@ class companyModel extends model
 
     /**
      * Get company info by id.
-     * 
-     * @param  int    $companyID 
+     *
+     * @param  int    $companyID
      * @access public
      * @return object
      */
@@ -74,7 +74,7 @@ class companyModel extends model
      * @access public
      * @return array
      */
-    public function getUsers($browseType = 'inside', $type, $queryID, $deptID, $sort, $pager)
+    public function getUsers($browseType = 'inside', $type = '', $queryID = 0, $deptID = 0, $sort = '', $pager = null)
     {
         /* Get users. */
         if($type == 'bydept')
@@ -131,7 +131,7 @@ class companyModel extends model
 
     /**
      * Update a company.
-     * 
+     *
      * @access public
      * @return void
      */
