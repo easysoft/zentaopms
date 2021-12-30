@@ -155,7 +155,7 @@
               common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr, $lang->productplan->close);
           }
 
-          $attr = ($plan->expired or $plan->status ==='done' or $plan->status ==='closed') ? "disabled='disabled'" : '';
+          $attr = $plan->expired ? "disabled='disabled'" : '';
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
               $disabled      = '';
