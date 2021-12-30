@@ -13,14 +13,7 @@
 <?php 
 if($contactLists)
 {
-    if($dropdownName == 'mailto')
-    {
-        echo html::select('contactListMenu', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('mailto', this.value)\"");
-    }
-    else
-    {
-        echo html::select('contactListMenu', $contactLists, '', "class='form-control chosen' onchange=\"setMailto('whitelist', this.value)\"");
-    }
+    echo html::select('contactListMenu', $contactLists, '', "class='form-control chosen' onchange=\"setMailto($dropdownName, this.value)\"");
 }
 else
 {
