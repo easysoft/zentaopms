@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('gitlab', 'createTag')) common::printLink('gitlab', 'createTagPriv', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createTagPriv, '', "class='btn btn-primary'");?>
+    <?php common::printLink('gitlab', 'createTagPriv', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createTagPriv, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabTagList)):?>
