@@ -581,7 +581,11 @@ class repoModel extends model
         if($entry == '/' or empty($entry))$comments->page($pager, 't1.id');
         $comments = $comments->fetchAll('revision');
 
-        foreach($comments as $repoComment) $repoComment->comment = $this->replaceCommentLink($repoComment->comment);
+        foreach($comments as $repoComment)
+        {
+            $repoComment->originalComment = $repoComment->comment;
+            $repoComment->comment         = $this->replaceCommentLink($repoComment->comment);
+        }
         return $comments;
     }
 
