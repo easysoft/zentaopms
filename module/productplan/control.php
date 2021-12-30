@@ -408,9 +408,6 @@ class productplan extends control
                 $changes = $this->productplan->updateStatus($planID, 'doing');
                 if(dao::isError()) die(js::error(dao::getError()));
 
-                $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
-                $this->action->logHistory($actionID, $changes);
-
                 die(js::reload('parent'));
             }
         }
@@ -420,9 +417,6 @@ class productplan extends control
             {
                 $changes = $this->productplan->updateStatus($planID, 'doing');
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
-                $this->action->logHistory($actionID, $changes);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess,'locate' => 'parent'));
             }
@@ -450,9 +444,6 @@ class productplan extends control
             $changes = $this->productplan->updateStatus($planID, 'done');
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'finished');
-            $this->action->logHistory($actionID, $changes);
-
             die(js::reload('parent'));
         }
     }
@@ -476,9 +467,6 @@ class productplan extends control
             $changes = $this->productplan->updateStatus($planID, 'closed');
             if(dao::isError()) die(js::error(dao::getError()));
 
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'closed');
-            $this->action->logHistory($actionID, $changes);
-
             die(js::reload('parent'));
         }
     }
@@ -501,9 +489,6 @@ class productplan extends control
         {
             $changes = $this->productplan->updateStatus($planID, 'doing');
             if(dao::isError()) die(js::error(dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'activated');
-            $this->action->logHistory($actionID, $changes);
 
             die(js::reload('parent'));
         }

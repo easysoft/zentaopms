@@ -98,6 +98,11 @@ $lang->productplan->statusList['doing']  = 'Doing';
 $lang->productplan->statusList['done']   = 'Done';
 $lang->productplan->statusList['closed'] = 'Closed';
 
+$lang->productplan->parentActionList['startedbychild']   = '<strong>starting </strong>the productplan sets the plan status as <strong>Doing</strong>.';
+$lang->productplan->parentActionList['finishedbychild']  = '<strong>finishing </strong>all productplan sets the plan status as <strong>Done</strong>.';
+$lang->productplan->parentActionList['closedbychild']    = '<strong>closing </strong>all productplan sets the plan status as <strong>Closed</strong>.';
+$lang->productplan->parentActionList['activatedbychild'] = '<strong>activating </strong>the productplan sets the plan status as <strong>Doing</strong>.';
+
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';
 $lang->productplan->endList[31]   = '1 Month';
@@ -122,3 +127,6 @@ $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
+
+$lang->productplan->action = new stdclass();
+$lang->productplan->action->changebychild = array('main' => '$date, $extra', 'extra' => 'parentActionList');
