@@ -86,7 +86,71 @@ class my extends control
      */
     public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $this->showWorkCount($orderBy, $recTotal, $recPerPage, $pageID);
+
         echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+    }
+
+    /**
+     * Show to-do work count.
+     *
+     * @param string $orderBy
+     * @param int    $recTotal
+     * @param int    $recPerPage
+     * @param int    $pageID
+     * @access public
+     * @return void
+     */
+    public function showWorkCount($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        if($this->app->getViewType() == 'mhtml') $recPerPage = 10;
+        $pager = pager::init($recTotal, $recPerPage, $pageID);
+
+        /* append id for secend sort. */
+        $sort = $this->loadModel('common')->appendOrder($orderBy);
+
+        /* Get tasks. */
+        $tasks      = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager, $sort);
+        $tasksCount = $pager->recTotal;
+
+        /* Get stories. */
+        $assignedToStories      = $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', $sort, $pager, 'story', false);
+        $assignedToStoriesCount = $pager->recTotal;
+        $reviewByStories        = $this->loadModel('story')->getUserStories($this->app->user->account, 'reviewBy', $sort, $pager, 'story', false);
+        $reviewByStoriesCount   = $pager->recTotal;
+        $storiesCount = $assignedToStoriesCount + $reviewByStoriesCount;
+
+        /* Get requirements. */
+        $assignedRequirements      = $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', $sort, $pager, 'requirement');
+        $assignedRequirementsCount = $pager->recTotal;
+        $reviewByRequirements      = $this->loadModel('story')->getUserStories($this->app->user->account, 'reviewBy', $sort, $pager, 'requirement');
+        $reviewByRequirementsCount = $pager->recTotal;
+        $requirementsCount = $assignedRequirementsCount + $reviewByRequirementsCount;
+
+        /* Get bugs. */
+        $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, 'assignedTo', $sort, 0, $pager);
+        $bugsCount = $pager->recTotal;
+
+        /* Get cases. */
+        $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
+        $casesCount = $pager->recTotal;
+
+        /* Get test tasks. */
+        $testTasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, 'assignedTo');
+        $testTasksCount = $pager->recTotal;
+
+echo <<<EOF
+<script>
+var tasksCount        = $tasksCount;
+var reuqirementsCount = $requirementsCount;
+var storiesCount      = $storiesCount;
+var bugsCount         = $bugsCount;
+var casesCount        = $casesCount;
+var testTasksCount    = $testTasksCount;
+</script>
+EOF;
     }
 
     /**

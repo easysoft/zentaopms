@@ -3,7 +3,13 @@ $(function()
     if(typeof mode === 'string')
     {
         $('#subNavbar li[data-id=' + mode + ']').addClass('active');
-        if(typeof rawMethod === 'string' && rawMethod == 'work') $('#subNavbar li[data-id=' + mode + '] a').append('<span class="label label-light label-badge">' + total + '</span>');
+
+        $("#subNavbar li[data-id='task'] a").append('<span class="label label-light label-badge">' + tasksCount + '</span>');
+        $("#subNavbar li[data-id='requirement'] a").append('<span class="label label-light label-badge">' + reuqirementsCount + '</span>');
+        $("#subNavbar li[data-id='story'] a").append('<span class="label label-light label-badge">' + storiesCount + '</span>');
+        $("#subNavbar li[data-id='bug'] a").append('<span class="label label-light label-badge">' + bugsCount + '</span>');
+        $("#subNavbar li[data-id='testcase'] a").append('<span class="label label-light label-badge">' + casesCount + '</span>');
+        $("#subNavbar li[data-id='testtask'] a").append('<span class="label label-light label-badge">' + testTasksCount + '</span>');
     }
     var $scp  = $('[data-id="changePassword"] a');
     if($scp.length > 0)
