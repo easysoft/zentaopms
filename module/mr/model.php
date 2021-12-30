@@ -231,6 +231,7 @@ class mrModel extends model
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
                 $newMR->compileID     = $compile->id;
                 $newMR->compileStatus = $compile->status;
+                if($newMR->compileStatus == 'failure') $newMR->status = 'closed';
             }
             else
             {
