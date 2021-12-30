@@ -183,7 +183,7 @@
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           if(common::hasPriv('productplan', 'create', $plan))
           {
-              if($plan->parent > '0' or in_array($plan->status, array('done', 'closed')))
+              if($plan->parent > 0 or in_array($plan->status, array('done', 'closed')))
               {
                   echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
               }
