@@ -55,6 +55,9 @@ $lang->gitlab->editBranchPriv       = '编辑分支保护';
 $lang->gitlab->deleteBranchPriv     = '删除分支保护';
 $lang->gitlab->createTag            = '创建标签';
 $lang->gitlab->deleteTag            = '删除标签';
+$lang->gitlab->createTagPriv        = '添加标签保护';
+$lang->gitlab->editTagPriv          = '编辑标签保护';
+$lang->gitlab->deleteTagPriv        = '删除标签保护';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "{$lang->gitlab->common}名称";
@@ -219,3 +222,5 @@ $lang->gitlab->tag->emptyRefError     = "创建自不能为空";
 $lang->gitlab->tag->issetNameError    = "已存在该标签";
 $lang->gitlab->tag->confirmDelete     = '确认删除该GitLab标签吗？';
 $lang->gitlab->tag->protected         = '受保护';
+$lang->gitlab->tag->accessLevel       = '允许创建';
+$lang->gitlab->tag->protectConfirmDel = '确认删除该GitLab标签保护吗？';

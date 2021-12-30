@@ -1485,8 +1485,16 @@ class gitlabModel extends model
 
         if(!$pager)
         {
-            $url = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
-            return json_decode(commonModel::http($url));
+            $allResults = array();
+            $url        = sprintf($apiRoot, "/projects/{$projectID}/repository/tags");
+            for($page = 1; true; $page++)
+            {
+                $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+                if(!empty($results)) $allResults = array_merge($allResults, $results);
+                if(count($results)<100) break;
+            }
+
+            return $allResults;
         }
         else
         {
@@ -1518,6 +1526,47 @@ class gitlabModel extends model
 
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/tags/{$tagName}");
+        return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Get protect tags of one project.
+     *
+     * @param int $gitlabID
+     * @param int $projectID
+     * @access public
+     * @return array
+     */
+    public function apiGetTagPrivs($gitlabID, $projectID)
+    {
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_tags");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results)<100) break;
+        }
+
+        return $allResults;
+    }
+
+    /**
+     * Delete a gitab protect tag by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return object
+     */
+    public function apiDeleteTagPriv($gitlabID, $projectID, $tag)
+    {
+        if(empty($gitlabID)) return false;
+        $apiRoot = $this->getApiRoot($gitlabID);
+        $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_tags/{$tag}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
 

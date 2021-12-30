@@ -55,6 +55,9 @@ $lang->gitlab->editBranchPriv       = 'Edit branch protected';
 $lang->gitlab->deleteBranchPriv     = 'Delete branch protected';
 $lang->gitlab->createTag            = 'Create Tag';
 $lang->gitlab->deleteTag            = 'Delete tag';
+$lang->gitlab->createTagPriv        = 'Add tag protected';
+$lang->gitlab->editTagPriv          = 'Edit tag protected';
+$lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "GitLab Name";
@@ -219,3 +222,5 @@ $lang->gitlab->tag->emptyRefError     = "Create from cannot be empty.";
 $lang->gitlab->tag->issetNameError    = "The tag already exists";
 $lang->gitlab->tag->confirmDelete     = 'Do you want to delete this GitLab tag?';
 $lang->gitlab->tag->protected         = 'Protected';
+$lang->gitlab->tag->accessLevel       = 'Allow creation';
+$lang->gitlab->tag->protectConfirmDel = 'Do you want to delete this GitLab tag protected?';

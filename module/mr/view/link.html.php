@@ -230,7 +230,7 @@
                   <?php printf('%03d', $task->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', 'data-app="product"');?></td>
+                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
                 <td><?php echo zget($users, $task->finishedBy);?></td>
                 <td><?php echo zget($users, $task->assignedTo);?></td>
                 <td>
