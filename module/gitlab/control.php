@@ -845,6 +845,7 @@ class gitlab extends control
      */
     public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
+        if($branch) $branch = base64_decode($branch);
         if($_POST)
         {
             $this->gitlab->createBranchPriv($gitlabID, $projectID, $branch);
@@ -916,6 +917,7 @@ class gitlab extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
 
+        $branch  = base64_decode($branch);
         $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1041,6 +1043,73 @@ class gitlab extends control
         $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
         $this->view->gitlabTagList = empty($tagList) ? $tagList: $tagList[$pageID - 1];
         $this->view->orderBy       = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * Set a gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function createTagPriv($gitlabID, $projectID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->createTagPriv($gitlabID, $projectID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseTagPriv', "gitlabID=$gitlabID&projectID=$projectID")));
+        }
+
+        $gitlabTags   = $this->gitlab->apiGetTags($gitlabID, $projectID);
+        $protectTags  = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, '', 'name_asc');
+        $protectNames = array_keys($protectBranches);
+
+        $tags = array();
+        foreach($gitlabTags as $tag)
+        {
+            if(!in_array($tag->name, $protectNames)) $tags[$tag->name] = $tag->name;
+        }
+
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->createTagPriv;
+        $this->view->gitlabID   = $gitlabID;
+        $this->view->projectID  = $projectID;
+        $this->view->tags       = $tags;
+        $this->display();
+    }
+
+    /**
+     * Edit a gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return void
+     */
+    public function editTagPriv($gitlabID, $projectID, $tag = '')
+    {
+        $tag = base64_decode($tag);
+
+        if($_POST)
+        {
+            $this->gitlab->createTagPriv($gitlabID, $projectID, $tag);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseTagPriv', "gitlabID=$gitlabID&projectID=$projectID")));
+        }
+
+        $tagPriv = $this->gitlab->apiGetSingleTagPriv($gitlabID, $projectID, $tag);
+        $tagPriv->createAccessLevel = $this->gitlab->checkAccessLevel($tagPriv->create_access_levels);
+
+        $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->editTagPriv;
+        $this->view->gitlabID  = $gitlabID;
+        $this->view->projectID = $projectID;
+        $this->view->tagPriv   = $tagPriv;
+        $this->view->tag       = $tag;
         $this->display();
     }
 
@@ -1466,6 +1535,7 @@ class gitlab extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
 
+        $tagName = base64_decode($tagName);
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */

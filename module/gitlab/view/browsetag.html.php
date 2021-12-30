@@ -68,7 +68,7 @@
           <td class='c-actions text-left'>
             <?php
             $isDisabled = $gitlabTag->protected ? 'disabled' : '';
-            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name={$gitlabTag->name}", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn btn-primary' target='hiddenwin' $isDisabled");
+            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=" . urlencode(base64_encode($gitlabTag->name)), "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn btn-primary' target='hiddenwin' $isDisabled");
             ?>
           </td>
         </tr>
