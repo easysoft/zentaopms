@@ -71,6 +71,12 @@ $lang->productplan->childrenAB = "C";
 $lang->productplan->order      = "Order";
 $lang->productplan->deleted    = "Deleted";
 $lang->productplan->mailto     = "Mailto";
+$lang->productplan->status     = "Plan Status";
+
+$lang->productplan->statusList['wait']   = 'Wait';
+$lang->productplan->statusList['doing']  = 'Doing';
+$lang->productplan->statusList['done']   = 'Done';
+$lang->productplan->statusList['closed'] = 'Closed';
 
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';

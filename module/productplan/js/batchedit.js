@@ -26,6 +26,35 @@ function changeDate(planID)
 };
 
 /**
+ * Set plan status.
+ *
+ * @param int $planID
+ * @param $status
+ * @access public
+ * @return void
+ */
+function setPlanStatus(planID, status)
+{
+    if(status != 'wait')
+    {
+        $('#future'+planID).closest('div').addClass('hidden');
+        $("input[name='begin["+planID+"]']").closest('td').addClass('required');
+        $("input[name='end["+planID+"]']").closest('td').addClass('required');
+        $("input[name='begin"+planID+"']").removeAttr('disabled');
+        $("input[name='end"+planID+"']").removeAttr('disabled');
+    }
+    else
+    {
+        $('#future'+planID).closest('div').removeClass('hidden');
+        $("input[name='begin["+planID+"]']").closest('td').removeClass('required');
+        $("input[name='end["+planID+"]']").closest('td').removeClass('required');
+        $("input[name='begin"+planID+"']").attr('disabled', 'disabled');
+        $("input[name='end"+planID+"']").attr('disabled', 'disabled');
+    }
+}
+
+
+/**
  * Get conflict stories.
  *
  * @param  int    $planID

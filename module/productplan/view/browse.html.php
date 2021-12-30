@@ -130,7 +130,7 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
-          $attr = $plan->expired ? "disabled='disabled'" : '';
+          $attr = ($plan->expired or $plan->status === 'done' or $plan->status === 'closed')? "disabled='disabled'" : '';
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
               $disabled      = '';
