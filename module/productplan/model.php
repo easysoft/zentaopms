@@ -393,14 +393,18 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
-        if(!empty($plan->parentBegin))
+        if($plan->parent > 0)
         {
-            if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
+            if($plan->parentBegin != '2030-01-01')
+            {
+                if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
+            }
+            if($plan->parentEnd != '2030-01-01')
+            {
+                if($plan->end !=='2030-01-01' and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+            }
         }
-        if(!empty($plan->parentEnd))
-        {
-            if($plan->end !=='2030-01-01' and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
-        }
+
         unset($plan->parentBegin);
         unset($plan->parentEnd);
 
@@ -465,14 +469,17 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
-        if($oldPlan->parent > 0) $parentPlan = $this->getByID($oldPlan->parent);
-        if(!empty($parentPlan->begin))
+        if($oldPlan->parent > 0)
         {
-            if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
-        }
-        if(!empty($parentPlan->end))
-        {
-            if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+            $parentPlan = $this->getByID($oldPlan->parent);
+            if($parentPlan->begin != '2030-01-01')
+            {
+                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+            }
+            if($parentPlan->end != '2030-01-01')
+            {
+                if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+            }
         }
 
         $requiredFields = $plan->status == 'wait' ? $this->config->productplan->edit->requiredFields : 'title, begin, end';
@@ -668,15 +675,18 @@ class productplanModel extends model
             $plan->begin  = $data->begin[$planID] == '' ? '2030-01-01' : $data->begin[$planID];
             $plan->end    = $data->end[$planID] == '' ? '2030-01-01' : $data->end[$planID];
             $plan->status = $data->status[$planID];
-
-            if($oldPlans[$planID]->parent > 0) $parentPlan = $this->getByID($oldPlans[$planID]->parent);
-            if(!empty($parentPlan->begin))
+            
+            if($oldPlans[$planID]->parent > 0)
             {
-                if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
-            }
-            if(!empty($parentPlan->end))
-            {
-                if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                $parentPlan = $this->getByID($oldPlans[$planID]->parent);
+                if($parentPlan->begin != '2030-01-01')
+                {
+                    if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+                }
+                if($parentPlan->end != '2030-01-01')
+                {
+                    if($plan->end !='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                }
             }
 
             if(empty($plan->title))die(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
