@@ -2,6 +2,7 @@
 <?php js::set('projectID', $project->id);?>
 <?php js::set('roles', $roles);?>
 <?php js::set('deptID', $dept);?>
+<?php js::set('pickerUsers', $userInfos);?>
 <?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('oldAccountList', array_keys($currentMembers));?>
 <?php js::set('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);?>
@@ -75,7 +76,7 @@
         <?php foreach($members2Import as $member2Import):?>
         <?php if(!isset($users[$member2Import->account])) continue;?>
         <tr class='addedItem'>
-          <td><?php echo html::select("accounts[$i]", $users, $member2Import->account, "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><?php echo html::select("accounts[$i]", $users, $member2Import->account, "class='form-control user-picker' onchange='setRole(this.value, $i)'");?></td>
           <td><?php echo html::input("roles[$i]", $member2Import->role, "class='form-control'");?></td>
           <td><?php echo html::input("days[$i]", $project->days, "class='form-control'");?></td>
           <td><?php echo html::input("hours[$i]", $member2Import->hours, "class='form-control'");?></td>
@@ -91,7 +92,7 @@
 
         <?php for($j = 0; $j < 5; $j ++):?>
         <tr class='addedItem'>
-          <td><?php echo html::select("accounts[$i]", $users, '', "class='form-control chosen' onchange='setRole(this.value, $i)'");?></td>
+          <td><?php echo html::select("accounts[$i]", $users, '', "class='form-control user-picker' onchange='setRole(this.value, $i)'");?></td>
           <td><?php echo html::input("roles[$i]", '', "class='form-control'");?></td>
           <td><?php echo html::input("days[$i]", $project->days, "class='form-control'");?></td>
           <td><?php echo html::input("hours[$i]", $config->execution->defaultWorkhours, "class='form-control'");?></td>
