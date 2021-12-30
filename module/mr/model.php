@@ -160,10 +160,7 @@ class mrModel extends model
         $newMR->mergeStatus = $rawMR->merge_status;
 
         /* Update MR in Zentao database. */
-        $this->dao->update(TABLE_MR)->data($newMR)
-            ->where('id')->eq($MRID)
-            ->autoCheck()
-            ->exec();
+        $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
     }
@@ -238,13 +235,11 @@ class mrModel extends model
             else
             {
                 $newMR->compileStatus = $pipeline->status;
+                if($newMR->compileStatus == 'create_fail') $newMR->status = 'closed';
             }
 
             /* Update MR in Zentao database. */
-            $this->dao->update(TABLE_MR)->data($newMR)
-                ->where('id')->eq($MRID)
-                ->autoCheck()
-                ->exec();
+            $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
             if(dao::isError()) return false;
         }
         return true;
