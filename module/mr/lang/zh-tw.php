@@ -2,7 +2,6 @@
 $lang->mr = new stdclass;
 $lang->mr->common       = "合併請求";
 $lang->mr->view         = "概況";
-$lang->mr->overview     = "概況";
 $lang->mr->create       = "創建{$lang->mr->common}";
 $lang->mr->apiCreate    = "介面：創建{$lang->mr->common}";
 $lang->mr->browse       = "瀏覽{$lang->mr->common}";

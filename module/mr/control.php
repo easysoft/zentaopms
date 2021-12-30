@@ -230,7 +230,7 @@ class mr extends control
         $this->view->compile    = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
 
-        $this->view->title   = $this->lang->mr->overview;
+        $this->view->title   = $this->lang->mr->view;
         $this->view->MR      = $MR;
         $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;

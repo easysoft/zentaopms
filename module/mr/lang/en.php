@@ -2,7 +2,6 @@
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
 $lang->mr->view         = "Survey";
-$lang->mr->overview     = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->apiCreate    = "Interface: Create";
 $lang->mr->browse       = "Browse";

@@ -2,7 +2,6 @@
 $lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
 $lang->mr->view         = "概况";
-$lang->mr->overview     = "概况";
 $lang->mr->create       = "创建{$lang->mr->common}";
 $lang->mr->apiCreate    = "接口：创建{$lang->mr->common}";
 $lang->mr->browse       = "浏览{$lang->mr->common}";
