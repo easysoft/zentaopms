@@ -125,7 +125,11 @@ function createCardMenu(options)
         var executionLink = systemMode == 'new' ? '#projects' : createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=" + card.id + "&confirm=no&productID=" + productID);
         var today         = new Date();
         var end           = $.zui.createDate(card.end);
-        if(end.toLocaleDateString() < today.toLocaleDateString() && (card.status == 'wait' || card.status == 'doing'))
+        if(end.toLocaleDateString() < today.toLocaleDateString())
+        {
+            className = 'disabled';
+        }
+        else if(card.status == 'done' || card.status == 'closed')
         {
             className = 'disabled';
         }
@@ -133,10 +137,6 @@ function createCardMenu(options)
         {
             var branchStatus = branchStatusList[card.branch];
             if(branchStatus == 'closed') className = 'disabled';
-        }
-        else if(card.status == 'done' || card.status == 'closed')
-        {
-            className = 'disabled';
         }
 
         if(systemMode == 'new')
