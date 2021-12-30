@@ -26,6 +26,7 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 
 .c-title.has-child > .plan-name.has-suffix > a, .c-title.has-child > .plan-name.has-prefix > a {overflow:hidden; max-width: calc(100% - 70px);}
 .plan-name.has-suffix > a, .plan-name.has-prefix > a {overflow:hidden; max-width: calc(100% - 46px);}
+#productplanList .plan-name > .label.label-danger {margin-left:3px; }
 
 .switchButton {background: #fff !important;}
 .panel-actions {position: relative; padding: 0 0; padding-top: 1px;}

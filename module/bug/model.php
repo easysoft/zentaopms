@@ -429,7 +429,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getModuleBugs($productIDList, $branch = 0, $moduleIdList = 0, $executions, $orderBy = 'id_desc', $pager = null, $projectID)
+    public function getModuleBugs($productIDList, $branch = 0, $moduleIdList = 0, $executions = array(), $orderBy = 'id_desc', $pager = null, $projectID = 0)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->in($productIDList)
@@ -1304,7 +1304,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0)
     {
         if($browseType == 'bySearch')
         {
@@ -2221,7 +2221,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getAllBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID)
+    public function getAllBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID = 0)
     {
         $bugs = $this->dao->select('t1.*, t2.title as planTitle')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
@@ -2513,7 +2513,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productIDList, $branch = 0, $queryID, $orderBy, $excludeBugs = '', $pager = null, $projectID = 0)
+    public function getBySearch($productIDList, $branch = 0, $queryID = 0, $orderBy = '', $excludeBugs = '', $pager = null, $projectID = 0)
     {
         if($queryID)
         {

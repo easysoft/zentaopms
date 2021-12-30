@@ -10,9 +10,7 @@
  * @link        https://www.zentao.net
  */
 ?>
-<style>
-.c-actions {width: 240px;}
-</style>
+<style> .c-actions {width: 240px;} </style>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
     <?php foreach(customModel::getFeatureMenu($this->moduleName, $this->methodName) as $menuItem):?>
@@ -58,6 +56,9 @@
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
         <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
+        <?php if($browseType == 'all'):?>
+        <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
+        <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
         <?php endif;?>
@@ -119,6 +120,9 @@
           if(!empty($suffix)) echo $suffix . '</div>';
           ?>
         </td>
+        <?php if($browseType == 'all'):?>
+        <td><?php echo zget($statusList, $plan->status)?></td>
+        <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
         <td class='c-branch' title='<?php echo $branchOption[$plan->branch];?>'><?php if($plan->parent != '-1') echo $branchOption[$plan->branch];?></td>
         <?php endif;?>
@@ -135,22 +139,22 @@
         <?php foreach($extendFields as $extendField) echo "<td>" . $this->loadModel('flow')->getFieldValue($extendField, $plan) . "</td>";?>
         <td class='c-actions'>
           <?php
-          $attr       = "target='hiddenwin'";
-          $isOnlyBody = false;
-          $class      = '';
-          if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
+          if($plan->parent >= 0 )
           {
-              $class      = 'iframe';
-              $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
-              $isOnlyBody = true;
+              $attr       = "target='hiddenwin'";
+              $isOnlyBody = false;
+              $class      = '';
+              if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
+              {
+                  $class      = 'iframe';
+                  $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+                  $isOnlyBody = true;
+              }
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr, $lang->productplan->start);
+              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr, $lang->productplan->finish);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr, $lang->productplan->close);
           }
 
-          $class = $plan->status == 'wait' ? $class : 'disabled';
-          common::printLink('productplan', 'start', "planID=$plan->id", '<i class="icon-play"></i>', '', "class='btn {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody);
-          $class = $plan->status == 'doing' ? '' : 'disabled';
-          common::printLink('productplan', 'finish', "planID=$plan->id", '<i class="icon-checked"></i>', '', "class='btn {$class}' target='hiddenwin' title='{$lang->productplan->finish}'");
-          $class = $plan->status == 'done' ? '' : 'disabled';
-          common::printLink('productplan', 'close', "planID=$plan->id", '<i class="icon-off"></i>', '', "class='btn {$class}' target='hiddenwin' title='{$lang->productplan->close}'");
           $attr = $plan->expired ? "disabled='disabled'" : '';
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
