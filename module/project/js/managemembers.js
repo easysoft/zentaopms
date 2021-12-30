@@ -36,7 +36,7 @@ function saveMembers()
             $('#submit').removeClass('hidden');
             if(result) $('#removeExecution').val('yes');
             $('#submit').click();
-        })
+        });
     }
 }
 
@@ -50,9 +50,9 @@ function saveMembers()
  */
 function setRole(account, roleID)
 {
-    role    = roles[account];       // get role according the account.
-    roleOBJ = $(document.getElementById('roles[' + roleID + ']')); // get role object.
-    roleOBJ.val(role)               // set the role.
+    role    = roles[account];              // get role according the account.
+    roleOBJ = $('#roles[' + roleID + ']'); // get role object.
+    roleOBJ.val(role);                     // set the role.
 }
 
 /**
