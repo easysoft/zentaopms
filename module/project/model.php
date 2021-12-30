@@ -2098,10 +2098,11 @@ class projectModel extends model
     public function checkCanChangeModel($projectID, $model)
     {
         $checkList = $this->config->project->checkList->$model;
-        foreach($checkList as $table)
+        foreach($checkList as $module)
         {
             $object = '';
-            if($table == '') continue;
+            if($module == '') continue;
+            $table = constant('TABLE_'. strtoupper($module));;
             if($table == TABLE_EXECUTION and $model == 'scrum')
             {
                 $object = $this->fetchByProject($table, $projectID, 'sprint');
@@ -2130,7 +2131,7 @@ class projectModel extends model
      */
     public function fetchByProject($table, $projectID, $type = '')
     {
-        $result = $this->dao->select('*')->from($table)
+        $result = $this->dao->select('id')->from($table)
             ->where('project')->eq($projectID)
             ->beginIF(!empty($type))->andWhere('type')->eq($type)->fi()
             ->fetch();
