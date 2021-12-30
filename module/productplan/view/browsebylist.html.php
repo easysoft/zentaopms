@@ -57,7 +57,7 @@
         </th>
         <th class='c-title'><?php common::printOrderLink('title', $orderBy, $vars, $lang->productplan->title);?></th>
         <?php if($browseType == 'all'):?>
-        <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
+        <th class='c-status'><?php common::printOrderLink('status', $orderBy, $vars, $lang->productplan->status);?></th>
         <?php endif;?>
         <?php if($this->session->currentProductType != 'normal'):?>
         <th class='c-branch'><?php common::printOrderLink('branch',$orderBy, $vars, $lang->productplan->branch);?></th>
@@ -78,6 +78,7 @@
       </thead>
       <tbody>
       <?php $this->loadModel('file');?>
+      <?php $today = date('Y-m-d');?>
       <?php foreach($plans as $plan):?>
       <?php
       $canBeChanged = common::canBeChanged('plan', $plan);
@@ -110,14 +111,22 @@
           <?php echo sprintf('%03d', $plan->id);?>
           <?php endif;?>
         </td>
-        <td class='c-title text-left<?php if($plan->parent == '-1') echo ' has-child';?>' title="<?php echo $plan->title?>">
+        <td class='c-title text-left<?php if(isset($plan->children)) echo ' has-child';?>' title="<?php echo $plan->title?>">
           <?php
-          $suffix = '';
-          if($plan->end < helper::now()) $suffix = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
-          if($plan->parent == '-1') $suffix .= '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
-          if(!empty($suffix)) echo '<div class="plan-name has-prefix has-suffix">';
+          $class   = '';
+          $expired = '';
+          if($plan->end < $today and in_array($plan->status, array('wait', 'doing')))
+          {
+              $class  .= ' expired';
+              $expired = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
+          }
+
+          echo "<div class='plan-name has-prefix {$class}'>";
+          if($plan->parent > 0 and !isset($plans[$plan->parent])) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
-          if(!empty($suffix)) echo $suffix . '</div>';
+          if(!empty($expired)) echo $expired;
+          if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
+          echo '</div>';
           ?>
         </td>
         <?php if($browseType == 'all'):?>
@@ -147,12 +156,12 @@
               if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
               {
                   $class      = 'iframe';
-                  $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
+                  $attr       = "data-id='{$plan->id}' data-width='550px'";
                   $isOnlyBody = true;
               }
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr, $lang->productplan->start);
-              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr, $lang->productplan->finish);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr, $lang->productplan->close);
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody);
+              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
           }
 
           $attr = $plan->expired ? "disabled='disabled'" : '';
@@ -163,9 +172,10 @@
 
               if($product->type != 'normal')
               {
-                  $branchStatus = $this->branch->getByID($plan->branch, 0, 'status');
+                  $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
                   if($branchStatus == 'closed') $disabled = 'disabled';
               }
+              if(in_array($plan->status, array('done', 'closed'))) $disabled = 'disabled';
 
               if($config->systemMode == 'new')
               {
@@ -181,8 +191,14 @@
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           if(common::hasPriv('productplan', 'create', $plan))
           {
-              if($plan->parent > '0') echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
-              if($plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
+              if($plan->parent > 0 or in_array($plan->status, array('done', 'closed')))
+              {
+                  echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
+              }
+              else
+              {
+                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
+              }
           }
 
           if(common::hasPriv('productplan', 'delete', $plan))
@@ -213,32 +229,4 @@
     </div>
   </form>
   <?php endif;?>
-</div>
-<div class="modal fade" id="projects">
-  <div class="modal-dialog mw-500px">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h4 class="modal-title"><?php echo $lang->productplan->selectProjects;?></h4>
-      </div>
-      <div class="modal-body">
-        <table class='table table-form'>
-          <tr>
-            <th><?php echo $lang->productplan->project?></th>
-            <td><?php echo html::select('project', $projects, '', "class='form-control chosen'");?></td>
-          </tr>
-          <tr class='tips hidden'>
-            <th></th>
-            <td><span class='text-red'><?php echo $lang->productplan->noLinkedProject;?></span></td>
-          </tr>
-          <tr>
-            <td colspan='2' class='text-center'>
-              <?php echo html::hidden('planID', '');?>
-              <?php echo html::commonButton($lang->productplan->nextStep, "id='createExecutionButton'", 'btn btn-primary btn-wide');?>
-              <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-default btn-wide');?>
-            </td>
-          </tr>
-        </table>
-      </div>
-    </div>
-  </div>
 </div>

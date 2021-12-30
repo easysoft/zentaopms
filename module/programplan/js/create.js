@@ -5,6 +5,8 @@ function addItem(obj)
     var newItem = $('#names' + i).closest('tr');
     newItem.find('.form-date').datepicker();
     $("#output" + i).chosen();
+    $("#PM_i__chosen").remove();
+    $("#PM" + i).chosen();
     $("#output_i__chosen").remove();
     i ++;
 }

@@ -59,11 +59,12 @@
             common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
             $class = $plan->status == 'done' ? '' : 'disabled';
             common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->close}'", '', false, $plan);
-            $class = $plan->status == 'closed' ? '' : 'disabled';
+            $class = in_array($plan->status, array('closed', 'done')) ? '' : 'disabled';
             common::printLink('productplan', 'activate', "planID=$plan->id", "<i class='icon-magic'></i>{$lang->productplan->activateAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->activate}'", '', false, $plan);
         }
 
-        if(common::hasPriv('productplan', 'create', $plan) and $plan->parent <= '0') echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-split'></i> " . $this->lang->productplan->children , '', "class='btn btn-link' title='{$this->lang->productplan->children}'");
+        $class = in_array($plan->status, array('done', 'closed')) ? 'disabled' : '';
+        if(common::hasPriv('productplan', 'create', $plan) and $plan->parent <= 0) echo html::a($this->createLink('productplan', 'create', "product={$plan->product}&branch={$plan->branch}&parent={$plan->id}"), "<i class='icon-split'></i> " . $this->lang->productplan->children , '', "class='btn btn-link {$class}' title='{$this->lang->productplan->children}'");
         if(common::hasPriv('productplan', 'edit', $plan)) echo html::a($this->createLink('productplan', 'edit', "planID=$plan->id"), "<i class='icon-common-edit icon-edit'></i> " . $this->lang->edit, '', "class='btn btn-link' title='{$this->lang->edit}'");
         if(common::hasPriv('productplan', 'delete', $plan) and $plan->parent >= 0) echo html::a($this->createLink('productplan', 'delete', "planID=$plan->id"), "<i class='icon-common-delete icon-trash'></i> " . $this->lang->delete, '', "class='btn btn-link' title='{$this->lang->delete}' target='hiddenwin'");
     }

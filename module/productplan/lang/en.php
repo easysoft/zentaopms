@@ -18,12 +18,13 @@ $lang->productplan->delete     = "Delete Plan";
 $lang->productplan->start      = "Start Plan";
 $lang->productplan->finish     = "Finish Plan";
 $lang->productplan->close      = "Close Plan";
-$lang->productplan->activate   = "Activate Plan";
 $lang->productplan->startAB    = "Start";
 $lang->productplan->finishAB   = "Finish";
 $lang->productplan->closeAB    = "Close";
 $lang->productplan->activateAB = "Activate";
 $lang->productplan->view       = "Plan Detail";
+$lang->productplan->activate   = "Activate Plan";
+$lang->productplan->view       = "View";
 $lang->productplan->bugSummary = "Total <strong>%s</strong> Bugs on this page.";
 $lang->productplan->basicInfo  = 'Basic Info';
 $lang->productplan->batchEdit  = 'Batch Edit';
@@ -31,6 +32,7 @@ $lang->productplan->project    = 'Project';
 $lang->productplan->plan       = 'Plan';
 $lang->productplan->allAB      = 'All';
 $lang->productplan->to         = 'To';
+$lang->productplan->more       = 'More';
 
 $lang->productplan->batchUnlink      = "Batch Unlink";
 $lang->productplan->unlinkAB         = "Unlink";
@@ -96,6 +98,11 @@ $lang->productplan->statusList['doing']  = 'Doing';
 $lang->productplan->statusList['done']   = 'Done';
 $lang->productplan->statusList['closed'] = 'Closed';
 
+$lang->productplan->parentActionList['startedbychild']   = '<strong>starting </strong>the productplan sets the plan status as <strong>Doing</strong>.';
+$lang->productplan->parentActionList['finishedbychild']  = '<strong>finishing </strong>all productplan sets the plan status as <strong>Done</strong>.';
+$lang->productplan->parentActionList['closedbychild']    = '<strong>closing </strong>all productplan sets the plan status as <strong>Closed</strong>.';
+$lang->productplan->parentActionList['activatedbychild'] = '<strong>activating </strong>the productplan sets the plan status as <strong>Doing</strong>.';
+
 $lang->productplan->endList[7]    = '1 Week';
 $lang->productplan->endList[14]   = '2 Weeks';
 $lang->productplan->endList[31]   = '1 Month';
@@ -120,3 +127,6 @@ $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
+
+$lang->productplan->action = new stdclass();
+$lang->productplan->action->changebychild = array('main' => '$date, $extra', 'extra' => 'parentActionList');

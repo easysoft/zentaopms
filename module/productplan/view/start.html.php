@@ -10,11 +10,8 @@
  * @link        https://www.zentao.net
  */
 ?>
-<style>
-.table-form {margin-top: 90px;}
-.form-actions {height:160px;}
-</style>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -31,7 +28,11 @@
           <td colspan='2'><?php echo html::input('end', $plan->end != '2030-01-01' ? formatTime($plan->end) : '', 'class="form-control form-date"');?></td>
         </tr>
         <tr>
-          <td colspan='4' class='text-center form-actions'>
+          <th><?php echo $lang->productplan->desc;?></th>
+          <td colspan='4'><?php echo html::textarea('desc', $plan->desc, 'class="form-control"');?></td>
+        </tr>
+        <tr>
+          <td colspan='5' class='text-center form-actions'>
             <?php echo html::submitButton($lang->productplan->start);?>
             <?php echo html::commonButton($lang->cancel, "data-dismiss='modal'", 'btn btn-wide');?>
           </td>
