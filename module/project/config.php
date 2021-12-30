@@ -128,6 +128,7 @@ $config->project->datatable->fieldList['actions']['pri']      = '1';
 $config->project->removePriv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
 $config->project->removePriv['bug']        = array('browse', 'batchChangePlan', 'batchCreate', 'batchEdit', 'batchConfirm', 'batchResolve', 'batchClose', 'batchActivate', 'report', 'batchChangeModule', 'batchChangeBranch');
 $config->project->removePriv['testcase']   = array('browse', 'batchChangeModule', 'batchChangeBranch');
+$config->project->removePriv['testtask']   = array('browse', 'view', 'start', 'activate', 'block', 'close');
 $config->project->removePriv['doc']        = array('catalog', 'index');
 $config->project->removePriv['repo']       = array('edit', 'delete', 'maintain', 'setRules');
 $config->project->removePriv['testreport'] = array('browse');
