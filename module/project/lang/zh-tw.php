@@ -271,8 +271,6 @@ $lang->project->childLongTime          = "子項目中有長期項目，父項�
 $lang->project->readjustTime           = '重新調整項目起止時間';
 $lang->project->notAllowRemoveProducts = "該產品中的需求與項目進行了關聯或者項目下的{$lang->execution->common}關聯了該產品，請取消關聯後再操作。";
 $lang->project->ge                     = "『%s』應當不小於實際開始時間『%s』。";
-$lang->project->kanban                 = "看板";
-$lang->project->kanbanTitle            = "看板项目管理";
 
 $lang->project->programTitle['0']    = '不顯示';
 $lang->project->programTitle['base'] = '只顯示一級項目集';

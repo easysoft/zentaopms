@@ -29,13 +29,6 @@
             <p><?php echo $lang->project->waterfallTitle; ?></p>
           </div>
         </div>
-        <div class='col-xs-6'>
-          <div class='project-type text-center'>
-            <?php echo html::a($this->createLink("project", "create", "model=kanban&programID=$programID&copyProjectID=0&extra=productID=$productID,branchID=$branchID"), "<img class='project-type-img' data-type='waterfall' src='{$config->webRoot}theme/default/images/main/waterfall.png'>", '', "data-app='project' class='createButton'")?>
-            <h3><?php echo $lang->project->kanban; ?></h3>
-            <p><?php echo $lang->project->kanbanTitle; ?></p>
-          </div>
-        </div>
       </div>
     </div>
   </div>
