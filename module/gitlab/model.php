@@ -1525,6 +1525,7 @@ class gitlabModel extends model
         if(!(int)$gitlabID or !(int)$projectID or empty($tagName)) return false;
 
         $apiRoot = $this->getApiRoot($gitlabID);
+        $tagName = urlencode($tagName);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/repository/tags/{$tagName}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
@@ -1566,6 +1567,7 @@ class gitlabModel extends model
     {
         if(empty($gitlabID)) return false;
         $apiRoot = $this->getApiRoot($gitlabID);
+        $tag     = urlencode($tag);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_tags/{$tag}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
     }
@@ -2403,10 +2405,18 @@ class gitlabModel extends model
             {
                 foreach($response->message as $field => $fieldErrors)
                 {
-                    foreach($fieldErrors as $error)
+                    if(is_string($fieldErrors))
                     {
-                        $errorKey = array_search($error, $this->lang->gitlab->apiError);
-                        if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitlab->errorLang, $errorKey);
+                        $errorKey = array_search($fieldErrors, $this->lang->gitlab->apiError);
+                        if($fieldErrors) dao::$errors[$field][] = $errorKey === false ? $fieldErrors : zget($this->lang->gitlab->errorLang, $errorKey);
+                    }
+                    else
+                    {
+                        foreach($fieldErrors as $error)
+                        {
+                            $errorKey = array_search($error, $this->lang->gitlab->apiError);
+                            if($error) dao::$errors[$field][] = $errorKey === false ? $error : zget($this->lang->gitlab->errorLang, $errorKey);
+                        }
                     }
                 }
             }
@@ -2474,7 +2484,8 @@ class gitlabModel extends model
     public function apiGetSingleBranchPriv($gitlabID, $projectID, $branch)
     {
         if(empty($gitlabID)) return false;
-        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
+        $branch = urlencode($branch);
+        $url    = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_branches/$branch");
         return json_decode(commonModel::http($url));
     }
 
@@ -2540,6 +2551,70 @@ class gitlabModel extends model
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
+    }
+
+    /**
+     * Create gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return bool
+     */
+    public function createTagPriv($gitlabID, $projectID, $tag = '')
+    {
+        $priv = fixer::input('post')->get();
+        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
+        $singleTag = $this->apiGetSingleTagPriv($gitlabID, $projectID, $priv->name);
+        if(empty($tag) && !empty($singleTag->id)) dao::$errors['name'][] = $this->lang->gitlab->tag->issetPrivNameError;
+        if(dao::isError()) return false;
+        if(!empty($tag) && !empty($singleTag->name)) $this->apiDeleteTagPriv($gitlabID, $projectID, $tag);
+
+        $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
+
+        if(!empty($response->id))
+        {
+            $action = empty($tag) ? 'created' : 'edited';
+            $this->loadModel('action')->create('gitlabtagpriv', $response->id, $action, '', $response->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Get single protct tag by API.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return object
+     */
+    public function apiGetSingleTagPriv($gitlabID, $projectID, $tag)
+    {
+        if(empty($gitlabID)) return false;
+        $tag = urlencode($tag);
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/$projectID/protected_tags/$tag");
+        return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Create a gitab protect tag by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $priv
+     * @access public
+     * @return object
+     */
+    public function apiCreateTagPriv($gitlabID, $projectID, $priv)
+    {
+        if(empty($gitlabID)) return false;
+        if(empty($priv->name)) return false;
+        $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_tags');
+        return json_decode(commonModel::http($url, $priv));
     }
 
     /**
