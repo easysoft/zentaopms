@@ -624,11 +624,7 @@ class productplanModel extends model
                 $actionID = $this->loadModel('action')->create('productplan', $planID, $action);
                 $this->action->loghistory($actionID, $changes);
 
-                if($parentChange)
-                {
-                    $parentChanges = array(array('field' => 'status', 'old' => $parentPlan->status, 'new' => $status, 'diff' => ''));
-                    $actionID      = $this->action->create('productplan', $oldPlan->parent, $parentAction, '', $parentAction);
-                }
+                if($parentChange) $actionID = $this->action->create('productplan', $oldPlan->parent, $parentAction, '', $parentAction);
             }
         }
     }
