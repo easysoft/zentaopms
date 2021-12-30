@@ -234,7 +234,7 @@ class testreportModel extends model
             $actions = $this->action->getList('bug', $bug->id);
             foreach($actions as $action)
             {
-                if($action->action == 'activated' and $action->date >= $begin and $action->date <= $end . '23:59:59')
+                if($action->action == 'activated' and $action->date >= $begin and $action->date <= $end . ' 23:59:59')
                 {
                     $activatedBugs[$bug->id] = $bug;
                     break;
