@@ -167,6 +167,7 @@
                   $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
                   if($branchStatus == 'closed') $disabled = 'disabled';
               }
+              if(in_array($plan->status, array('done', 'closed'))) $disabled = 'disabled';
 
               if($config->systemMode == 'new')
               {
