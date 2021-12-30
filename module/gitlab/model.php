@@ -1535,7 +1535,7 @@ class gitlabModel extends model
      * @param int $gitlabID
      * @param int $projectID
      * @access public
-     * @return void
+     * @return array
      */
     public function apiGetTagPrivs($gitlabID, $projectID)
     {

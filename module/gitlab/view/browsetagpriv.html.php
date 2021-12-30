@@ -60,7 +60,7 @@
         <tr class='text'>
         <td class='text-c-name' title='<?php echo $gitlabTag->name;?>'><?php echo $gitlabTag->name;?></td>
           <td class='text'><?php echo $gitlabTag->lastCommitter;?></td>
-          <td class='text'><?php echo $levelLang[$gitlabTag->accessLevel];?></td>
+          <td class='text'><?php echo zget($lang->gitlab->branch->branchCreationLevelList, $gitlabTag->accessLevel);?></td>
           <td class='c-actions text-left'>
             <?php
             common::printLink('gitlab', 'editTagPriv', "gitlabID=$gitlabID&projectID=$projectID&tag_name={$gitlabTag->name}", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->editTagPriv} class='btn btn-primary'");

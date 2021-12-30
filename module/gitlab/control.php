@@ -1023,10 +1023,7 @@ class gitlab extends control
         /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
         $orderList = array();
-        foreach($tagList as $tag)
-        {
-            $orderList[] = $tag->$order;
-        }
+        foreach($tagList as $tag) $orderList[] = $tag->$order;
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $tagList);
 
         /* Pager. */
@@ -1035,16 +1032,15 @@ class gitlab extends control
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $tagList  = array_chunk($tagList, $pager->recPerPage);
 
-        $this->view->gitlab            = $this->gitlab->getByID($gitlabID);
-        $this->view->pager             = $pager;
-        $this->view->title             = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTagPriv;
-        $this->view->levelLang         = $this->lang->gitlab->branch->branchCreationLevelList;
-        $this->view->gitlabID          = $gitlabID;
-        $this->view->projectID         = $projectID;
-        $this->view->keyword           = $keyword;
-        $this->view->project           = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-        $this->view->gitlabTagList     = empty($tagList) ? $tagList: $tagList[$pageID - 1];
-        $this->view->orderBy           = $orderBy;
+        $this->view->gitlab        = $this->gitlab->getByID($gitlabID);
+        $this->view->pager         = $pager;
+        $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTagPriv;
+        $this->view->gitlabID      = $gitlabID;
+        $this->view->projectID     = $projectID;
+        $this->view->keyword       = $keyword;
+        $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->gitlabTagList = empty($tagList) ? $tagList: $tagList[$pageID - 1];
+        $this->view->orderBy       = $orderBy;
         $this->display();
     }
 
