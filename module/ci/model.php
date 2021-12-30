@@ -230,21 +230,13 @@ class ciModel extends model
             */
             if(isset($rawMR->message) and !isset($rawMR->iid))
             {
-                foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+                $errorMessage = $rawMR->message;
+                $rawMR        = $this->mr->apiGetSameOpened($relateMR->gitlabID, $relateMR->sourceProject, $MRObject->source_branch, $MRObject->target_project_id, $MRObject->target_branch);
+                if(empty($rawMR) or !isset($rawMR->iid))
                 {
-                    if(strpos($errorMsg, '/') === 0)
-                    {
-                        $result = preg_match($errorMsg, $rawMR->message[0], $matches);
-                        if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
-                    }
-                    else
-                    {
-                        if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
-                    }
-
-                    if(isset($errorMessage)) break;
+                    $errorMessage     = $this->mr->convertApiError($errorMessage);
+                    $newMR->syncError = sprintf($this->lang->mr->apiError->createMR, $errorMessage);
                 }
-                $newMR->syncError = sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]);
             }
             elseif(!isset($rawMR->iid))
             {
@@ -253,24 +245,22 @@ class ciModel extends model
 
             if(!empty($rawMR->iid))
             {
-                $newMR->mriid  = $rawMR->iid;
-                $newMR->status = $rawMR->state;
-                $newMR->synced = '1';
+                $newMR->mriid     = $rawMR->iid;
+                $newMR->status    = $rawMR->state;
+                $newMR->synced    = '1';
+                $newMR->syncError = '';
             }
 
-            $this->dao->update(TABLE_MR)->data($newMR)
-                    ->where('id')->eq($relateMR->id)
-                    ->exec();
+            $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
         }
         else
         {
             $newMR = new stdclass();
+            $newMR->status        = 'closed';
             $newMR->mergeStatus   = 'cannot_merge_by_fail';
             $newMR->compileStatus = $status;
 
-            $this->dao->update(TABLE_MR)->data($newMR)
-                    ->where('id')->eq($relateMR->id)
-                    ->exec();
+            $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($relateMR->id)->exec();
         }
     }
 
