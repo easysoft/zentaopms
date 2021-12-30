@@ -91,6 +91,12 @@ $(function()
             $.zui.ContextMenu.show(items, items.$options || {event: event});
         });
     }
+
+    /* Hide contextmenu when page scroll */
+    $(window).on('scroll', function()
+    {
+        $.zui.ContextMenu.hide();
+    });
 });
 
 /* Define menu creators */
