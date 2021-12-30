@@ -604,22 +604,22 @@ class productplanModel extends model
             if($method == 'start')
             {
                 $action = 'started';
-                if($parentChange) $parentAction = 'startedbychild';
+                if(isset($parentChange) and $parentChange) $parentAction = 'startedbychild';
             }
             elseif($method == 'finish')
             {
                 $action = 'finished';
-                if($parentChange) $parentAction = 'finishedbychild';
+                if(isset($parentChange) and $parentChange) $parentAction = 'finishedbychild';
             }
             elseif($method == 'close')
             {
                 $action = 'closed';
-                if($parentChange) $parentAction = 'closedbychild';
+                if(isset($parentChange) and $parentChange) $parentAction = 'closedbychild';
             }
             elseif($method == 'activate')
             {
                 $action = 'activated';
-                if($parentChange) $parentAction = 'activatedbychild';
+                if(isset($parentChange) and $parentChange) $parentAction = 'activatedbychild';
             }
 
             if(isset($action))
@@ -628,7 +628,7 @@ class productplanModel extends model
                 $actionID = $this->loadModel('action')->create('productplan', $planID, $action);
                 $this->action->loghistory($actionID, $changes);
 
-                if($parentChange) $actionID = $this->action->create('productplan', $oldPlan->parent, $parentAction, '', $parentAction);
+                if(isset($parentChange) and $parentChange) $actionID = $this->action->create('productplan', $oldPlan->parent, $parentAction, '', $parentAction);
             }
         }
     }
