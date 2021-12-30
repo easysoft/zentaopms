@@ -393,14 +393,18 @@ class productplanModel extends model
             ->remove('delta,uid,future')
             ->get();
 
-        if($plan->parentBegin != '2030-01-01')
+        if($plan->parent > 0)
         {
-            if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
+            if($plan->parentBegin != '2030-01-01')
+            {
+                if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
+            }
+            if($plan->parentEnd != '2030-01-01')
+            {
+                if($plan->end !=='2030-01-01' and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+            }
         }
-        if($plan->parentEnd != '2030-01-01')
-        {
-            if($plan->end !=='2030-01-01' and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
-        }
+
         unset($plan->parentBegin);
         unset($plan->parentEnd);
 
