@@ -845,7 +845,7 @@ class gitlab extends control
      */
     public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
-        if($branch) $branch = base64_decode($branch);
+        if($branch) $branch = helper::safe64Decode($branch);
         if($_POST)
         {
             $this->gitlab->createBranchPriv($gitlabID, $projectID, $branch);
@@ -915,9 +915,13 @@ class gitlab extends control
      */
     public function deleteBranchPriv($gitlabID, $projectID, $branch, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
+        if($confirm != 'yes')
+        {
+            $branch = urlencode($branch);
+            die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
+        }
 
-        $branch  = base64_decode($branch);
+        $branch  = helper::safe64Decode($branch);
         $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1092,7 +1096,7 @@ class gitlab extends control
      */
     public function editTagPriv($gitlabID, $projectID, $tag = '')
     {
-        $tag = base64_decode($tag);
+        $tag = helper::safe64Decode($tag);
 
         if($_POST)
         {
@@ -1124,7 +1128,7 @@ class gitlab extends control
      */
     public function deleteTagPriv($gitlabID, $projectID, $tag)
     {
-        $tag     = base64_decode($tag);
+        $tag     = helper::safe64Decode($tag);
         $reponse = $this->gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1533,9 +1537,13 @@ class gitlab extends control
      */
     public function deleteTag($gitlabID, $projectID, $tagName = '', $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
+        if($confirm != 'yes')
+        {
+            $tagName = urlencode($tagName);
+            die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
+        }
 
-        $tagName = base64_decode($tagName);
+        $tagName = helper::safe64Decode($tagName);
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
