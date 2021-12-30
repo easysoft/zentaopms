@@ -198,8 +198,7 @@ function findDropColumns($element, $root)
     var $col        = $element.closest('.kanban-col');
     var col         = $col.data();
     var lane        = $col.closest('.kanban-lane').data();
-    var kanbanID    = $root.data('id');
-    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane[data-id="' + lane.id + '"] .kanban-lane-col:not([data-type="project"],[data-type="' + col.type + '"])');
 
@@ -251,6 +250,50 @@ function handleFinishDrop(event)
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
     if(typeof card == 'undefined') return false;
+    var objectID   = card.id;
+    var privs      = card.actions;
+    var showIframe = false;
+    var link       = '';
+
+    if(toColType == 'doing')
+    {
+        if(fromColType == 'wait' && privs.includes('start'))
+        {
+            var link   = createLink('productplan', 'start', 'planID=' + objectID, '', true);
+            showIframe = true;
+        }
+        else if((fromColType == 'done' || fromColType == 'closed') && privs.includes('activate'))
+        {
+            var link   = createLink('productplan', 'activate', 'planID=' + objectID, '', true);
+            showIframe = false;
+        }
+    }
+    else if(toColType == 'done')
+    {
+        if(fromColType == 'doing')
+        {
+            var link   = createLink('productplan', 'finish', 'planID=' + objectID, '', true);
+            showIframe = false;
+        }
+    }
+    else if(toColType == 'closed')
+    {
+        if(fromColType == 'done')
+        {
+            var link   = createLink('productplan', 'close', 'planID=' + objectID);
+            showIframe = false;
+        }
+    }
+
+    if(showIframe)
+    {
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '50%', url: link});
+        modalTrigger.show();
+    }
+    else if(!showIframe && link)
+    {
+        hiddenwin.location.href = link;
+    }
 }
 
 /**
@@ -373,4 +416,15 @@ function getPlanID(obj, branch)
             $(".tips").addClass('hidden');
         }
     });
+}
+
+if(!window.kanbanDropRules)
+{
+    window.kanbanDropRules =
+    {    
+        wait: ['doing'],
+        doing: ['done'],
+        done: ['doing', 'closed'],
+        closed: ['doing']
+    }    
 }
