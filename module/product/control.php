@@ -32,7 +32,7 @@ class product extends control
         /* Get all products, if no, goto the create page. */
         $this->products = $this->product->getPairs('nocode');
         $isAPI = ($this->app->viewType == 'json' or (defined('RUN_MODE') and RUN_MODE == 'api'));
-        if(empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,kanban,all', $this->methodName) === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
+        if(empty($this->products) and strpos(',create,index,showerrornone,ajaxgetdropmenu,kanban,all,manageline', $this->methodName) === false and $this->app->getViewType() != 'mhtml' and !$isAPI) $this->locate($this->createLink('product', 'create'));
         $this->view->products = $this->products;
     }
 
@@ -1001,11 +1001,11 @@ class product extends control
      */
     public function ajaxGetPlans($productID, $branch = 0, $planID = 0, $fieldID = '', $needCreate = false, $expired = '', $param = '')
     {
-        $param      = strtolower($param);
-        $plans      = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
-        $field      = $fieldID ? "plans[$fieldID]" : 'plan';
-        $output     = '';
-        $output    .= html::select($field, $plans, $planID, "class='form-control chosen'");
+        $param   = strtolower($param);
+        $plans   = $this->loadModel('productplan')->getPairs($productID, $branch, $expired, strpos($param, 'skipparent') !== false);
+        $field   = $fieldID ? "plans[$fieldID]" : 'plan';
+        $output  = '';
+        $output .= html::select($field, $plans, $planID, "class='form-control chosen'");
         if(count($plans) == 1 and $needCreate and $needCreate !== 'false')
         {
             $output .= "<div class='input-group-btn'>";

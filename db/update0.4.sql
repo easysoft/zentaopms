@@ -104,10 +104,10 @@ DROP TABLE `zt_releation`;
 ALTER TABLE `zt_action` ADD `extra` VARCHAR( 255 ) NOT NULL;
 UPDATE zt_action SET extra = substr( ACTION , 13 ) , ACTION = 'Resolved' WHERE ACTION LIKE 'Resolved%';
 
---20100210 adjust the reviewedDate
-ALTER TABLE `zt_story` CHANGE `reviewedDate` `reviewedDate` DATE NOT NULL; 
+-- 20100210 adjust the reviewedDate
+ALTER TABLE `zt_story` CHANGE `reviewedDate` `reviewedDate` DATE NOT NULL;
 
---20100220 action: convert the date from timestamp to datetime
+-- 20100220 action: convert the date from timestamp to datetime
 ALTER TABLE `zt_action` ADD `datetmp` VARCHAR( 255 ) NOT NULL AFTER `date`;
 UPDATE zt_action SET datetmp = FROM_UNIXTIME( date ) ;
 ALTER TABLE `zt_action` DROP `date`;

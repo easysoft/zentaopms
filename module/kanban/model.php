@@ -518,6 +518,98 @@ class kanbanModel extends model
     }
 
     /**
+     * Get plan kanban.
+     *
+     * @param  object $product
+     * @param  int    $branchID
+     * @param  array  $planGroup
+     * @access public
+     * @return array
+     */
+    public function getPlanKanban($product, $branchID = 0, $planGroup = '')
+    {
+        $this->loadModel('branch');
+        $this->loadModel('productplan');
+
+        $kanbanData  = new stdclass();
+        $lanes       = array();
+        $columns     = array();
+        $branches    = array();
+        $colorIndex  = 0;
+        $laneOrder   = 1;
+        $cardActions = array('view');
+
+        if($product->type == 'normal')
+        {
+            $branches = array('all' => $this->lang->productplan->allAB);
+        }
+        elseif($branchID == 'all')
+        {
+            $branches = $this->branch->getPairs($product->id);
+        }
+        elseif($branchID == BRANCH_MAIN)
+        {
+            $branches = array(BRANCH_MAIN => $this->lang->branch->main);
+        }
+        elseif($branchID)
+        {
+            $branchName = $this->branch->getById($branchID);
+            $branches   = array($branchID => $branchName);
+        }
+
+        foreach($branches as $id => $name)
+        {
+            if($product->type != 'normal') $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
+            if($product->type == 'normal') $plans = $planGroup;
+            $planList = array();
+
+            foreach($plans as $planID => $plan)
+            {
+                if(empty($plan) or $plan->parent == -1) continue;
+                if(!isset($planList[$plan->status])) $planList[$plan->status] = array();
+
+                $plan->title   = htmlspecialchars_decode($plan->title);
+                $plan->desc    = strip_tags(htmlspecialchars_decode($plan->desc));
+                $plan->actions = array();
+                foreach($cardActions as $action)
+                {
+                    if(common::hasPriv('productplan', $action)) $plan->actions[] = $action;
+                }
+                $planList[$plan->status][] = $plan;
+            }
+
+            $lane = new stdclass();
+            $lane->id    = $id;
+            $lane->type  = 'branch';
+            $lane->name  = $name;
+            $lane->color = $this->config->productplan->laneColorList[$colorIndex];
+            $lane->order = $laneOrder;
+            $lane->items = $planList;
+
+            $lanes[]     = $lane;
+            $laneOrder ++;
+            $colorIndex ++;
+            if($colorIndex == count($this->config->productplan->laneColorList) + 1) $colorIndex = 0;
+        }
+
+        foreach($this->lang->kanban->defaultColumn as $columnType => $columnName)
+        {
+            $column = new stdclass();
+            $column->id   = $columnType;
+            $column->type = $columnType;
+            $column->name = $columnName;
+
+            $columns[] = $column;
+        }
+
+        $kanbanData->id      = 'plans';
+        $kanbanData->lanes   = $lanes;
+        $kanbanData->columns = $columns;
+
+        return $kanbanData;
+    }
+
+    /**
      * Get region by id.
      *
      * @param  int    $regionID
@@ -668,7 +760,7 @@ class kanbanModel extends model
             //->orderBy('`order` asc')
             ->fetchAll('id');
 
-        $actions = array('editCard', 'archiveCard', 'copyCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
+        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
         $cardGroup = array();
         foreach($cards as $card)
         {

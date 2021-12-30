@@ -64,6 +64,7 @@ $filter->gitlab       = new stdclass();
 $filter->mr           = new stdclass();
 $filter->ci           = new stdclass();
 $filter->tree         = new stdclass();
+$filter->productplan  = new stdclass();
 
 $filter->block->default           = new stdclass();
 $filter->block->main              = new stdclass();
@@ -156,6 +157,7 @@ $filter->mr->browse               = new stdclass();
 $filter->ci->checkCompileStatus   = new stdclass();
 $filter->execution->export        = new stdclass();
 $filter->tree->browse             = new stdclass();
+$filter->productplan->browse      = new stdclass();
 
 $filter->my->work->cookie['pagerMyTask']        = 'int';
 $filter->my->work->cookie['pagerMyRequirement'] = 'int';
@@ -267,6 +269,8 @@ $filter->story->batchcreate->cookie['preProductID'] = 'int';
 $filter->story->export->cookie['checkedItem']       = 'reg::checked';
 $filter->story->track->cookie['preBranch']          = 'reg::word';
 $filter->story->track->cookie['preProductID']       = 'int';
+
+$filter->productplan->browse->cookie['viewType'] = 'code';
 
 $filter->task->create->cookie['lastTaskModule'] = 'int';
 $filter->task->export->cookie['checkedItem']    = 'reg::checked';

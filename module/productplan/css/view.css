@@ -24,3 +24,6 @@ ol, ul {padding-left: 20px;}
 #tabsNav .tab-pane>.main-table {border-radius: 0;}
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 .body-modal #mainContent {min-height: 240px;}
+
+#mainMenu .btn-link.disabled {color: #9e54ae; background: transparent; border-color:transparent;}
+#mainMenu .icon-checked, #mainMenu .icon-off, #mainMenu .icon-play, #mainMenu .icon-magic {margin-right: 3px;}

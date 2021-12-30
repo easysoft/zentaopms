@@ -2286,7 +2286,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByAssignedTo($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
+    public function getByAssignedTo($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'assignedTo', $account, $type, $orderBy, $pager);
     }
@@ -2302,7 +2302,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByOpenedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
+    public function getByOpenedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'openedBy', $account, $type, $orderBy, $pager);
     }
@@ -2318,7 +2318,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByReviewedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
+    public function getByReviewedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'reviewedBy', $account, $type, $orderBy, $pager, 'include');
     }
@@ -2336,7 +2336,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByReviewBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
+    public function getByReviewBy($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'reviewBy', $account, $type, $orderBy, $pager);
     }
@@ -2351,7 +2351,7 @@ class storyModel extends model
      * @param  object $pager
      * @return array
      */
-    public function getByClosedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy, $pager)
+    public function getByClosedBy($productID, $branch, $modules, $account, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'closedBy', $account, $type, $orderBy, $pager);
     }
@@ -2367,7 +2367,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus($productID, $branch, $modules, $status, $type = 'story', $orderBy, $pager)
+    public function getByStatus($productID, $branch, $modules, $status, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'status', $status, $type, $orderBy, $pager);
     }
@@ -2385,7 +2385,7 @@ class storyModel extends model
      *
      * @return array
      */
-    public function getByPlan($productID, $branch, $modules, $plan, $type = 'story', $orderBy, $pager)
+    public function getByPlan($productID, $branch, $modules, $plan, $type = 'story', $orderBy = '', $pager = null)
     {
         return $this->getByField($productID, $branch, $modules, 'plan', $plan, $type, $orderBy, $pager);
     }
@@ -2405,7 +2405,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $type = 'story', $orderBy, $pager, $operator = 'equal')
+    public function getByField($productID, $branch, $modules, $fieldName, $fieldValue, $type = 'story', $orderBy = '', $pager = null, $operator = 'equal')
     {
         if(!$this->loadModel('common')->checkField(TABLE_STORY, $fieldName) and $fieldName != 'reviewBy') return array();
 
@@ -2440,7 +2440,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy, $pager)
+    public function get2BeClosed($productID, $branch, $modules, $type = 'story', $orderBy = '', $pager = null)
     {
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
@@ -2471,7 +2471,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productID, $branch = '', $queryID, $orderBy, $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
+    public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
         $executionID = empty($executionID) ? 0 : $executionID;
         $products    = $this->loadModel('product')->getProducts($executionID);

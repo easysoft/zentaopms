@@ -429,7 +429,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getModuleBugs($productIDList, $branch = 0, $moduleIdList = 0, $executions, $orderBy = 'id_desc', $pager = null, $projectID)
+    public function getModuleBugs($productIDList, $branch = 0, $moduleIdList = 0, $executions = array(), $orderBy = 'id_desc', $pager = null, $projectID = 0)
     {
         return $this->dao->select('*')->from(TABLE_BUG)
             ->where('product')->in($productIDList)
@@ -749,7 +749,6 @@ class bugModel extends model
                 $bug->type           = $data->types[$bugID];
                 $bug->severity       = $data->severities[$bugID];
                 $bug->pri            = $data->pris[$bugID];
-                $bug->status         = $data->statuses[$bugID];
                 $bug->color          = $data->colors[$bugID];
                 $bug->title          = $data->titles[$bugID];
                 $bug->plan           = empty($data->plans[$bugID]) ? 0 : $data->plans[$bugID];
@@ -764,15 +763,15 @@ class bugModel extends model
                 $bug->resolution     = $data->resolutions[$bugID];
                 $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
-                if($bug->assignedTo  != $oldBug->assignedTo)           $bug->assignedDate = $now;
-                if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'resolved' and $bug->status != 'closed') $bug->resolvedDate = $now;
-                if($bug->resolution  != '' and $bug->resolvedBy == '') $bug->resolvedBy   = $this->app->user->account;
-                if($bug->resolution  != '' and $bug->status != 'closed')
+                if($bug->assignedTo  != $oldBug->assignedTo) $bug->assignedDate = $now;
+                if($bug->resolution  != '') $bug->confirmed = 1;
+                if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'closed')
                 {
-                    $bug->status    = 'resolved';
-                    $bug->confirmed = 1;
+                    $bug->resolvedDate = $now;
+                    $bug->status       = 'resolved';
                 }
-                if($bug->resolution  != '' and $bug->assignedTo == '')
+                if($bug->resolution != '' and $bug->resolvedBy == '') $bug->resolvedBy = $this->app->user->account;
+                if($bug->resolution != '' and $bug->assignedTo == '')
                 {
                     $bug->assignedTo   = $oldBug->openedBy;
                     $bug->assignedDate = $now;
@@ -1305,7 +1304,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0)
     {
         if($browseType == 'bySearch')
         {
@@ -2222,7 +2221,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getAllBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID)
+    public function getAllBugs($productIDList, $branch, $modules, $executions, $orderBy, $pager = null, $projectID = 0)
     {
         $bugs = $this->dao->select('t1.*, t2.title as planTitle')->from(TABLE_BUG)->alias('t1')
             ->leftJoin(TABLE_PRODUCTPLAN)->alias('t2')->on('t1.plan = t2.id')
@@ -2514,7 +2513,7 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBySearch($productIDList, $branch = 0, $queryID, $orderBy, $excludeBugs = '', $pager = null, $projectID = 0)
+    public function getBySearch($productIDList, $branch = 0, $queryID = 0, $orderBy = '', $excludeBugs = '', $pager = null, $projectID = 0)
     {
         if($queryID)
         {

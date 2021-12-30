@@ -575,6 +575,10 @@ $lang->resource->productplan->linkBug          = 'linkBug';
 $lang->resource->productplan->unlinkBug        = 'unlinkBug';
 $lang->resource->productplan->batchUnlinkBug   = 'batchUnlinkBug';
 $lang->resource->productplan->batchEdit        = 'batchEdit';
+$lang->resource->productplan->start            = 'start';
+$lang->resource->productplan->finish           = 'finish';
+$lang->resource->productplan->close            = 'close';
+$lang->resource->productplan->activate         = 'activate';
 
 $lang->productplan->methodOrder[5]  = 'browse';
 $lang->productplan->methodOrder[10] = 'create';
@@ -588,6 +592,10 @@ $lang->productplan->methodOrder[45] = 'linkBug';
 $lang->productplan->methodOrder[50] = 'unlinkBug';
 $lang->productplan->methodOrder[55] = 'batchUnlinkBug';
 $lang->productplan->methodOrder[60] = 'batchEdit';
+$lang->productplan->methodOrder[65] = 'start';
+$lang->productplan->methodOrder[70] = 'finish';
+$lang->productplan->methodOrder[75] = 'close';
+$lang->productplan->methodOrder[80] = 'activate';
 
 /* Release. */
 $lang->resource->release = new stdclass();

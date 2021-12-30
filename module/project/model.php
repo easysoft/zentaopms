@@ -340,7 +340,7 @@ class projectModel extends model
      * @access public
      * @return int
      */
-    public function getTotalStoriesByProject($projectID = 0, $productIdList, $type = 'story', $status = 'all')
+    public function getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all')
     {
         return $this->dao->select('count(t2.id) as stories')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
@@ -698,7 +698,7 @@ class projectModel extends model
      * @access public
      * @return string
      */
-    public function getTreeMenu($projectID = 0, $userFunc, $param = 0)
+    public function getTreeMenu($projectID = 0, $userFunc = '', $param = 0)
     {
         $projectMenu = array();
         $stmt        = $this->dbh->query($this->buildMenuQuery($projectID));
@@ -763,7 +763,7 @@ class projectModel extends model
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
             ->setIF($this->post->acl   == 'open', 'whitelist', '')
-            ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', helper::now())
             ->setDefault('team', substr($this->post->name, 0, 30))

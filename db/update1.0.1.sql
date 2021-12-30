@@ -1,7 +1,7 @@
 -- 2010-07-01 task table.
 ALTER TABLE `zt_task` ADD `mailto` VARCHAR( 255 ) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' AFTER `statusCustom`;
 
---2010-07-05 userquery table.
+-- 2010-07-05 userquery table.
 CREATE TABLE IF NOT EXISTS `zt_userQuery` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `company` mediumint(8) unsigned NOT NULL default '0',

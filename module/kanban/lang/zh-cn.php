@@ -155,7 +155,11 @@ $lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
 $lang->kanban->error->parentLimitNote = '父列的在制品数量不能小于子列在制品数量之和';
 $lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量';
 
-$lang->kanban->defaultColumn = array('未开始', '进行中', '已完成', '已关闭');
+$lang->kanban->defaultColumn = array();
+$lang->kanban->defaultColumn['wait']   = '未开始';
+$lang->kanban->defaultColumn['doing']  = '进行中';
+$lang->kanban->defaultColumn['done']   = '已完成';
+$lang->kanban->defaultColumn['closed'] = '已关闭';
 
 $this->lang->kanban->laneTypeList = array();
 $this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;

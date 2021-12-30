@@ -386,7 +386,7 @@ class treeModel extends model
      * @access public
      * @return string
      */
-    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc, $extra = '', $branch = 0, $extraParams = '')
+    public function getTreeMenu($rootID, $type = 'root', $startModule = 0, $userFunc = '', $extra = '', $branch = 0, $extraParams = '')
     {
         if($type == 'line') $rootID = 0;
 
@@ -448,12 +448,12 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  int    $userFunc
+     * @param  string $userFunc
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
+    public function getTaskTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
     {
         $extra = array('executionID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
@@ -630,12 +630,12 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  int    $userFunc
+     * @param  string $userFunc
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function getBugTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
+    public function getBugTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
     {
         $extra = array('executionID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
@@ -704,12 +704,12 @@ class treeModel extends model
      * @param  int    $rootID
      * @param  int    $productID
      * @param  int    $startModule
-     * @param  int    $userFunc
+     * @param  string $userFunc
      * @param  string $extra
      * @access public
      * @return void
      */
-    public function getCaseTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc, $extra = '')
+    public function getCaseTreeMenu($rootID, $productID = 0, $startModule = 0, $userFunc = '', $extra = '')
     {
         $extra = array('projectID' => $rootID, 'productID' => $productID, 'tip' => true, 'extra' => $extra);
 
@@ -787,11 +787,11 @@ class treeModel extends model
      *
      * @param  int    $rootID
      * @param  int    $startModule
-     * @param  array  $userFunc
+     * @param  string $userFunc
      * @access public
      * @return string
      */
-    public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc)
+    public function getProjectStoryTreeMenu($rootID, $startModule = 0, $userFunc = '')
     {
         $this->app->loadLang('branch');
 
@@ -856,7 +856,7 @@ class treeModel extends model
      * @param  & $&treeMenu
      * @param  object $module
      * @param  string $type
-     * @param  array  $userFunc
+     * @param  string $userFunc
      * @param  array  $extra
      * @param  int    $branch
      * @access public

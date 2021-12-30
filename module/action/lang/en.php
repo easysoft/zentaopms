@@ -361,8 +361,12 @@ $lang->action->dynamicAction->branch['activated']        = 'Activate Branch';
 $lang->action->dynamicAction->branch['setdefaultbranch'] = 'Set Default Branch';
 $lang->action->dynamicAction->branch['mergebranch']      = 'Merge Branch';
 
-$lang->action->dynamicAction->productplan['opened'] = 'Create Plan';
-$lang->action->dynamicAction->productplan['edited'] = 'Edit Plan';
+$lang->action->dynamicAction->productplan['opened']    = 'Create Plan';
+$lang->action->dynamicAction->productplan['edited']    = 'Edit Plan';
+$lang->action->dynamicAction->productplan['started']   = "Start Plan";
+$lang->action->dynamicAction->productplan['finished']  = "Finish Plan";
+$lang->action->dynamicAction->productplan['closed']    = "Close Plan";
+$lang->action->dynamicAction->productplan['activated'] = "Activate Plan";
 
 $lang->action->dynamicAction->release['opened']       = 'Create Release';
 $lang->action->dynamicAction->release['edited']       = 'Edit Release';

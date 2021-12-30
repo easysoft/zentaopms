@@ -115,7 +115,7 @@ class project extends control
      * @access public
      * @return void
      */
-    public function ajaxGetDropMenu($projectID = 0, $module, $method)
+    public function ajaxGetDropMenu($projectID, $module, $method)
     {
         /* Load module. */
         $this->loadModel('program');

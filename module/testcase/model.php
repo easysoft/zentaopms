@@ -60,7 +60,7 @@ class testcaseModel extends model
         if(!empty($case->lib))$param = "lib={$case->lib}";
         if(!empty($case->product))$param = "product={$case->product}";
         $result = $this->loadModel('common')->removeDuplicate('case', $case, $param);
-        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         /* Value of story may be showmore. */
         $case->story = (int)$case->story;
@@ -353,7 +353,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getBySuite($productID, $branch = 0, $suiteID, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getBySuite($productID, $branch = 0, $suiteID = 0, $moduleIdList = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
         return $this->dao->select('t1.*, t2.title as storyTitle, t3.version as version')->from(TABLE_CASE)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
@@ -623,7 +623,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getByStatus($productID = 0, $branch, $type = 'all', $status = 'all', $moduleID = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
+    public function getByStatus($productID = 0, $branch = 0, $type = 'all', $status = 'all', $moduleID = 0, $orderBy = 'id_desc', $pager = null, $auto = 'no')
     {
         $modules = $moduleID ? $this->loadModel('tree')->getAllChildId($moduleID) : '0';
 
@@ -856,7 +856,7 @@ class testcaseModel extends model
      * @access public
      * @return array
      */
-    public function getCases2Link($caseID, $browseType = 'bySearch', $queryID)
+    public function getCases2Link($caseID, $browseType = 'bySearch', $queryID = 0)
     {
         if($browseType == 'bySearch')
         {

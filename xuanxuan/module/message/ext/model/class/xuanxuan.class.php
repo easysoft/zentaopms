@@ -25,7 +25,7 @@ class xuanxuanMessage extends messageModel
                 }
                 else
                 {
-                    $field = 'task.*';
+                    $field = 'obj.*';
                 }
                 $object = $this->dao->select($field)->from($this->config->objectTables[$objectType])->alias('obj')
                     ->beginIF($objectType == 'task')
@@ -88,6 +88,10 @@ class xuanxuanMessage extends messageModel
                     $subcontent->parent       = $object->$parentType;
                     $subcontent->parentURL    = "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink($parentType, 'browse', "id=$subcontent->parent", 'html'));
                     $subcontent->cardURL      = $url;
+                }
+                else
+                {
+                    $subcontent->parentType = $objectType;
                 }
 
                 $contentData = new stdclass();

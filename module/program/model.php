@@ -496,7 +496,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getStakeholders($programID = 0, $orderBy, $pager = null)
+    public function getStakeholders($programID = 0, $orderBy = '', $pager = null)
     {
         return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
@@ -589,7 +589,7 @@ class programModel extends model
             ->setDefault('openedDate', helper::now())
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
-            ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
+            ->setIF($this->post->budget != 0, 'budget', round((float)$this->post->budget, 2))
             ->add('type', 'program')
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->create['id'], $this->config->allowedTags)
