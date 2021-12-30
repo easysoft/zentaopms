@@ -1069,7 +1069,7 @@ class gitlab extends control
         }
 
         $gitlabTags   = $this->gitlab->apiGetTags($gitlabID, $projectID);
-        $protectTags  = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, '', 'name_asc');
+        $protectTags  = $this->gitlab->apiGetTagPrivs($gitlabID, $projectID, '', 'name_asc');
         $protectNames = array_keys($protectTags);
 
         $tags = array();

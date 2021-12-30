@@ -2566,11 +2566,13 @@ class gitlabModel extends model
     {
         $priv = fixer::input('post')->get();
         if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
+        if(dao::isError()) return false;
+
         $singleTag = $this->apiGetSingleTagPriv($gitlabID, $projectID, $priv->name);
         if(empty($tag) && !empty($singleTag->id)) dao::$errors['name'][] = $this->lang->gitlab->tag->issetPrivNameError;
         if(dao::isError()) return false;
-        if(!empty($tag) && !empty($singleTag->name)) $this->apiDeleteTagPriv($gitlabID, $projectID, $tag);
 
+        if(!empty($tag) && !empty($singleTag->name)) $this->apiDeleteTagPriv($gitlabID, $projectID, $tag);
         $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
 
         if(!empty($response->id))
