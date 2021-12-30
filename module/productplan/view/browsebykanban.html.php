@@ -18,13 +18,18 @@
 #branchBox {width: 120px;}
 #branch_chosen .icon-delay {padding-right: 10px; font-size: 15px;}
 #kanbanContainer {padding-bottom: 0; margin-bottom: 0;}
+.kanban-item:hover > .header > .actions {opacity: 1;}
 .kanban-card {height: 80px !important;}
-.kanban-card .titleBox {width: 100%; display: flex;}
-.kanban-card .titleBox > span {flex: none;}
+.kanban-card .header .titleBox {display: flex; width: 90%; float: left;}
+.kanban-card .header .titleBox > span {flex: none;}
+.kanban-card .header .actions {float: right; opacity: 0;}
+.kanban-card .header .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+.kanban-card:hover > .header > .actions {opacity: 1;}
 .kanban-card .title {white-space: nowrap; overflow: hidden;}
 .kanban-card .expired {margin-left: 2px;}
-.kanban-card .dateBox {padding-top: 5px;}
+.kanban-card .dateBox {padding-top: 22px;}
 .kanban-card .desc {overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: #838a9d; padding-top: 5px;}
+.kanban-card .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
 </style>
 <?php js::set('kanbanData', $kanbanData);?>
 <?php js::set('productplanLang', $lang->productplan);?>

@@ -167,15 +167,23 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
  */
 function renderKanbanItem(item, $item)
 {
-    var privs     = item.actions;
-    var $titleBox = $item.children('.titleBox');
+    var privs        = item.actions;
+    var printMoreBtn = privs.includes('view');
 
     /* Output header information. */
+    var $header = $item.children('.header');
+    if(!$header.length) $header = $(
+    [
+        '<div class="header">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $titleBox = $item.children('.titleBox');
     if(!$titleBox.length) $titleBox = $(
     [
         '<div class="titleBox">',
         '</div>'
-    ].join('')).appendTo($item);
+    ].join('')).appendTo($header);
 
     /* Print plan name. */
     var $title = $titleBox.children('.title');
@@ -190,13 +198,25 @@ function renderKanbanItem(item, $item)
     var today = new Date();
     var begin = $.zui.createDate(item.begin);
     var end   = $.zui.createDate(item.end);
-    if(end.toLocaleDateString() < today.toLocaleDateString())
+    if(end.toLocaleDateString() < today.toLocaleDateString() && (item.status == 'wait' || item.status == 'doing'))
     {
-        $expired = $titleBox.children('.expired');
+        $expired = $('.titleBox').children('.expired');
         if(!$expired.length)
         {
             $('<span class="expired label label-danger label-badge">' + productplanLang.expired + '</span>').appendTo($titleBox);
         }
+    }
+
+    if(printMoreBtn)
+    {
+        $(
+        [
+            '<div class="actions" title="' + productplanLang.more + '">',
+              '<a data-contextmenu="card" data-id="' + item.id + '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+              '</a>',
+            '</div>'
+        ].join('')).appendTo($header);
     }
 
     /* Output plan date information. */
