@@ -193,7 +193,7 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->execution->totalEstimate;?></th>
-                    <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>                   
+                    <td><?php echo (float)$workhour->totalEstimate . $lang->execution->workHour;?></td>
                     <th><?php echo $lang->execution->totalDays;?></th>
                     <td><?php echo $project->days;?></td>
                   </tr>
