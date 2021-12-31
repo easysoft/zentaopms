@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <?php include '../../common/view/chosen.html.php';?>
+<?php js::set('doclibID', $lib->id);?>
 <?php if($lib->type == 'product'):?>
 <style> .chosen-container .chosen-results {max-height: 180px;}</style>
 <?php else:?>

@@ -41,6 +41,16 @@ function toggleAcl(acl, type)
         var libType = $('input[name="type"]:checked').val();
         var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
         $('#noticeAcl').html(notice);
+
+        if(typeof(doclibID) != 'undefined')
+        {
+            link = createLink('doc', 'ajaxGetWhitelist', 'doclibID=' + doclibID);
+            $.get(link, function(users)
+            {   
+                $('#users').replaceWith(users);
+                $('#users' + '_chosen').remove();
+            })
+        }
     }
     else
     {
