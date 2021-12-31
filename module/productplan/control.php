@@ -263,15 +263,17 @@ class productplan extends control
             $branches    = array();
             $branchPairs = array();
             $planCount   = 0;
+            if(!in_array($orderBy, array_keys($this->lang->productplan->orderList))) $orderBy = key($this->lang->productplan->orderList);
+
             if($product->type == 'normal')
             {
-                $planGroup = $this->productplan->getList($product->id, 0, 'all', '', 'begin_desc', 'skipparent');
+                $planGroup = $this->productplan->getList($product->id, 0, 'all', '', $orderBy, 'skipparent');
 
                 $this->view->planCount  = count(array_filter($planGroup));
             }
             else
             {
-                $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', 'begin_desc');
+                $planGroup = $this->productplan->getGroupByProduct($product->id, 'skipParent', '', $orderBy);
                 $branches  = $this->branch->getPairs($product->id);
 
                 foreach($branches as $id => $name)
@@ -281,9 +283,8 @@ class productplan extends control
                     $planCount += count($plans);
                 }
 
-                $this->view->branches   = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
+                $this->view->branches = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
             }
-
 
             $this->view->branchID   = $branchID;
             $this->view->kanbanData = $this->loadModel('kanban')->getPlanKanban($product, $branchID, $planGroup);
