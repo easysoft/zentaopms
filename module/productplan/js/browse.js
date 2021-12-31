@@ -61,6 +61,7 @@ $(function()
             maxColWidth:   290,
             maxColHeight:  460,
             minColHeight:  190,
+            cardHeight:    80,
             itemRender:    renderKanbanItem,
             virtualize:    true,
             droppable:
