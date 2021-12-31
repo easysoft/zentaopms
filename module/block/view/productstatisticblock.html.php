@@ -168,7 +168,7 @@ $(function()
                       <td class='text-left'><?php echo empty($totalPlan) ? 0 : html::a($this->createLink('productplan', 'browse', "productID={$product->id}&branch=0&browseType=all"), $totalPlan);?></td>
                     </tr>
                     <tr>
-                      <td class='text-right'><?php echo $lang->productplan->featureBar['browse']['unexpired'];?> :</td>
+                      <td class='text-right'><?php echo $lang->productplan->unexpired;?> :</td>
                       <td class='text-left'><?php echo empty($unexpiredPlan) ? 0 : html::a($this->createLink('productplan', 'browse', "productID={$product->id}&branch=0&browseType=unexpired"), $unexpiredPlan);?></td>
                     </tr>
                   </table>
