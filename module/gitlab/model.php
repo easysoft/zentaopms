@@ -2568,7 +2568,7 @@ class gitlabModel extends model
     public function createTagPriv($gitlabID, $projectID, $tag = '')
     {
         $priv = fixer::input('post')->get();
-        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
+        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->tag->emptyPrivNameError;
         if(dao::isError()) return false;
 
         $singleTag = $this->apiGetSingleTagPriv($gitlabID, $projectID, $priv->name);
