@@ -321,6 +321,10 @@ $lang->action->label->importfromgitlab      = '从Gitlab关联创建了';
 $lang->action->label->archived              = '归档了';
 $lang->action->label->restore               = '还原了';
 $lang->action->label->mergedbranch          = '合并分支';
+$lang->action->label->startedbychild        = '开始了';
+$lang->action->label->finishedbychild       = '完成了';
+$lang->action->label->closedbychild         = '关闭了';
+$lang->action->label->activatedbychild      = '激活了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

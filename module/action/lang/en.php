@@ -321,6 +321,10 @@ $lang->action->label->importfromgitlab      = 'Issue associate created';
 $lang->action->label->archived              = 'Archived';
 $lang->action->label->restore               = 'Restore';
 $lang->action->label->mergedbranch          = 'Merge Branch';
+$lang->action->label->startedbychild        = 'started';
+$lang->action->label->finishedbychild       = 'finished';
+$lang->action->label->closedbychild         = 'closed';
+$lang->action->label->activatedbychild      = 'activated';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

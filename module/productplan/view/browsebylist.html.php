@@ -159,7 +159,7 @@
                   $attr       = "data-id='{$plan->id}' data-width='550px'";
                   $isOnlyBody = true;
               }
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody);
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr);
               common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr);
               common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
           }
