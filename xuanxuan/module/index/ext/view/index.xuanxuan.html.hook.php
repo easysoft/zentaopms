@@ -26,8 +26,20 @@ $(document).on('showapp', function(e, app)
     window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
 });
 </script>
-<?php endif; ?>
+<?php else: ?>
+<?php
+$this->loadModel('im');
 
+$xuanConfig      = new stdclass();
+$token           = $this->im->userGetAuthToken($this->app->user->id, 'zentaoweb');
+$clientUrl       = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/';
+
+$xuanConfig->clientUrl        =  $clientUrl;
+$xuanConfig->server           = $this->im->getServer('zentao');
+$xuanConfig->account          = $this->app->user->account;
+$xuanConfig->authKey          = $token->token;
+$xuanConfig->debug            = $this->config->debug;
+?>
 <?php if(isset($xuanConfig)): ?>
 <style>
 #chatBtn {padding: 3px; position: relative;}
@@ -94,4 +106,5 @@ $(document).on('click', function(e)
     window.xuan.hide();
 });
 </script>
+<?php endif; ?>
 <?php endif; ?>
