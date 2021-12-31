@@ -105,7 +105,7 @@ $lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原�
 $lang->mr->apiError->sudo     = "无法以当前用户绑定的GitLab账户进行操作，失败原因：%s";
 
 $lang->mr->createFailedFromAPI = "创建合并请求失败。";
-$lang->mr->hasSameOpenedMR     = "当前源分支存在其他未关闭的合并请求";
+$lang->mr->hasSameOpenedMR     = "存在重复并且未关闭的合并请求。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->reopenSuccess       = "已重新打开合并请求。";
 $lang->mr->closeSuccess        = "已关闭合并请求。";
