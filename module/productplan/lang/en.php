@@ -128,5 +128,10 @@ $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
 $lang->productplan->featureBar['browse']['closed'] = 'Closed';
 
+$lang->productplan->orderList['begin_desc'] = 'Begin Descend';
+$lang->productplan->orderList['begin_asc']  = 'Begin Ascend';
+$lang->productplan->orderList['title_desc'] = 'Title Descend';
+$lang->productplan->orderList['title_asc']  = 'Title Ascend';
+
 $lang->productplan->action = new stdclass();
 $lang->productplan->action->changebychild = array('main' => '$date, $extra', 'extra' => 'parentActionList');

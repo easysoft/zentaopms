@@ -127,5 +127,10 @@ $lang->productplan->featureBar['browse']['doing']  = '进行中';
 $lang->productplan->featureBar['browse']['done']   = '已完成';
 $lang->productplan->featureBar['browse']['closed'] = '已关闭';
 
+$lang->productplan->orderList['begin_desc'] = '计划开始时间倒序';
+$lang->productplan->orderList['begin_asc']  = '计划开始时间正序';
+$lang->productplan->orderList['title_desc'] = '计划名称倒序';
+$lang->productplan->orderList['title_asc']  = '计划名称正序';
+
 $lang->productplan->action = new stdclass();
 $lang->productplan->action->changebychild = array('main' => '$date, $extra', 'extra' => 'parentActionList');

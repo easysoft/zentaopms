@@ -47,9 +47,18 @@
   <?php endif;?>
   </div>
   <div class="btn-toolbar pull-right">
+    <div class='btn-group'>
+      <?php echo html::a('javascript:;', $lang->productplan->orderList[$orderBy] . ' <span class="caret"></span>', '', "class='btn btn-link' data-toggle='dropdown'");?>
+      <ul class='dropdown-menu' style='max-height:240px; max-width: 300px; overflow-y:auto'>
+      <?php foreach($lang->productplan->orderList as $order => $label):?>
+      <?php $active = $orderBy == $order ? 'active' : '';?>
+        <li class='<?php echo $active;?>'><?php echo html::a(inlink('browse', "productID=$productID&branch=$branch&browseType=$browseType&orderBy=$order"), $label);?></li>
+      <?php endforeach;?>
+      </ul>
+    </div>
     <div class="btn-group panel-actions">
-      <?php echo html::a('#',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->list}' data-type='list'");?>
-      <?php echo html::a('#',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->kanban}' data-type='kanban'");?>
+      <?php echo html::a('javascript:;',"<i class='icon-list'></i> &nbsp;", '', "class='btn btn-icon switchButton' title='{$lang->productplan->list}' data-type='list'");?>
+      <?php echo html::a('javascript:;',"<i class='icon-kanban'></i> &nbsp;", '', "class='btn btn-icon text-primary switchButton' title='{$lang->productplan->kanban}' data-type='kanban'");?>
     </div>
     <?php if(common::canModify('product', $product)):?>
     <?php common::printLink('productplan', 'create', "productID=$product->id&branch=$branch", "<i class='icon icon-plus'></i> {$lang->productplan->create}", '', "class='btn btn-primary'");?>
