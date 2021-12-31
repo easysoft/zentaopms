@@ -157,7 +157,7 @@ function createCardMenu(options)
     {
         if(card.begin == '2030-01-01' || card.end == '2030-01-01')
         {
-            items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-id': card.id, 'data-width': '550px'}});
+            items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-id': card.id, 'data-width': '70%'}});
         }
         else
         {
@@ -265,12 +265,13 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'wait' && privs.includes('start'))
         {
-            var link   = createLink('productplan', 'start', 'planID=' + objectID, '', true);
-            showIframe = true;
+            var isOnlyBody = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
+            var link       = createLink('productplan', 'start', 'planID=' + objectID, '', isOnlyBody);
+            showIframe     = isOnlyBody;
         }
         else if((fromColType == 'done' || fromColType == 'closed') && privs.includes('activate'))
         {
-            var link   = createLink('productplan', 'activate', 'planID=' + objectID, '', true);
+            var link   = createLink('productplan', 'activate', 'planID=' + objectID);
             showIframe = false;
         }
     }
@@ -278,7 +279,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'doing')
         {
-            var link   = createLink('productplan', 'finish', 'planID=' + objectID, '', true);
+            var link   = createLink('productplan', 'finish', 'planID=' + objectID);
             showIframe = false;
         }
     }
@@ -293,7 +294,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
 
     if(showIframe)
     {
-        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '50%', url: link});
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '70%', url: link});
         modalTrigger.show();
     }
     else if(!showIframe && link)
