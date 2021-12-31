@@ -494,6 +494,7 @@ class productplanModel extends model
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
+
         if(!dao::isError())
         {
             $this->file->updateObjectID($this->post->uid, $planID, 'plan');
@@ -502,100 +503,114 @@ class productplanModel extends model
     }
 
     /**
+     * Start a plan.
+     * 
+     * @param  int  $planID 
+     * @access public
+     * @return array 
+     */
+    public function start($planID)
+    {
+        $oldPlan = $this->getByID($planID);
+        $plan = fixer::input('post')
+            ->add('status', 'doing')
+            ->stripTags($this->config->productplan->editor->start['id'], $this->config->allowedTags)
+            ->remove('uid')
+            ->get();
+
+        $this->checkDate4Plan($oldPlan, $plan->begin, $plan->end);
+        if(dao::isError()) return false;
+
+        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->start['id'], $this->post->uid);
+
+        $this->dao->update(TABLE_PRODUCTPLAN)
+            ->data($plan)
+            ->autoCheck()
+            ->batchCheck($this->config->productplan->start->requiredFields, 'notempty')
+            ->checkIF(!empty($plan->begin) and !empty($plan->end), 'end', 'ge', $plan->begin)
+            ->where('id')->eq($planID)
+            ->exec();
+
+        if(dao::isError()) return false;
+
+        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent, 'started');
+        $this->file->updateObjectID($this->post->uid, $planID, 'productplan');
+
+        return common::createChanges($oldPlan, $plan);
+    }
+
+    /**
      * Update a plan's status.
      *
      * @param  int    $planID
      * @param  string $status doing|done|closed
+     * @param  string $action started|finished|closed|activated
      * @access public
      * @return array
      */
-    public function updateStatus($planID, $status = '')
+    public function updateStatus($planID, $status = '', $action = '')
     {
-        $planID  = (int)$planID;
         $oldPlan = $this->getByID($planID);
 
-        if($status == 'doing' and !empty($_POST))
-        {
-            $plan = fixer::input('post')
-                ->add('status', $status)
-                ->stripTags($this->config->productplan->editor->start['id'], $this->config->allowedTags)
-                ->remove('uid')
-                ->get();
+        $plan = new stdclass();
+        $plan->status = $status;
 
-            $this->checkDate4Plan($oldPlan, $plan->begin, $plan->end);
-            if(dao::isError()) return false;
-
-            $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->start['id'], $this->post->uid);
-
-            $this->dao->update(TABLE_PRODUCTPLAN)
-                ->data($plan)
-                ->autoCheck()
-                ->batchCheck($this->config->productplan->start->requiredFields, 'notempty')
-                ->checkIF(!empty($plan->begin) and !empty($plan->end), 'end', 'ge', $plan->begin)
-                ->where('id')->eq($planID)
-                ->exec();
-        }
-        else
-        {
-            $plan = new stdClass();
-            $plan->status = $status;
-            $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
-        }
+        $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
 
         if(dao::isError()) return false;
 
-        if(isset($this->post->uid)) $this->file->updateObjectID($this->post->uid, $planID, 'productplan');
-        return common::createChanges($oldPlan, $plan);
+        $changes  = common::createChanges($oldPlan, $plan);
+        $actionID = $this->loadModel('action')->create('productplan', $planID, $action);
+        $this->action->logHistory($actionID, $changes);
+
+        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent, $action);
+
+        return !dao::isError();
     }
 
     /**
      * Update a parent plan's status.
      *
      * @param  int    $parentID
+     * @param  string $action started|finished|closed|activated
      * @access public
      * @return void
      */
-    public function updateParentStatus($parentID)
+    public function updateParentStatus($parentID, $action)
     {
-        $method     = $this->app->rawMethod;
-        $needChange = true;
-        $parentPlan = $this->getByID($parentID);
-        $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs('status', 'status');
+        $parent      = $this->getByID($parentID);
+        $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
-        if(isset($childStatus['doing']))
+        switch($action)
         {
-            $parentStatus = 'doing';
-            if($parentPlan->status != $parentStatus and $method == 'start') $parentAction = 'startedbychild';
-            if($parentPlan->status != $parentStatus and $method == 'activate') $parentAction = 'activatedbychild';
-
-        }
-        elseif(isset($childStatus['wait']) and count($childStatus) == 1)
-        {
-            $parentStatus = 'wait';
-        }
-        elseif(isset($childStatus['wait']))
-        {
-            $parentStatus = 'doing';
-            if($parentPlan->status != $parentStatus and $method == 'start') $parentAction = 'startedbychild';
-        }
-        elseif(isset($childStatus['closed']) and count($childStatus) == 1)
-        {
-            $parentStatus = 'closed';
-            if($parentPlan->status != $parentStatus) $parentAction = 'closedbychild';
-        }
-        else
-        {
-            $parentStatus = 'done';
-            if($parentPlan->status != $parentStatus) $parentAction = 'finishedbychild';
+            case 'started':
+                $parentStatus = 'doing';
+                $parentAction = $parent->status != 'doing' ? 'startedbychild' : '';
+                break;
+            case 'finished':
+                if(count($childStatus) == 1 and $parent->status != 'done') 
+                {
+                    $parentStatus = 'done';
+                    $parentAction = 'finishedbychild';
+                }
+                break;
+            case 'closed':
+                if(count($childStatus) == 1 and $parent->status != 'closed') 
+                {
+                    $parentAction = 'closedbychild';
+                    $parentStatus = 'closed';
+                }
+                break;
+            case 'activated':
+                $parentStatus = 'doing';
+                $parentAction = $parent->status != 'doing' ? 'activatedbychild' : '';
+                break;
         }
 
-        if($parentPlan->status != $parentStatus)
-        {
-            $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
-            if(dao::isError()) return false;
+        if(isset($parentStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
+        if(isset($parentAction)) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
 
-            if(isset($parentAction)) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
-        }
+        return !dao::isError();
     }
 
     /**

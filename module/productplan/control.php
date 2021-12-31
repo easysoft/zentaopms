@@ -402,6 +402,18 @@ class productplan extends control
     public function start($planID, $confirm = 'no')
     {
         $plan = $this->productplan->getByID($planID);
+
+        if($_POST)
+        {
+            $changes = $this->productplan->start($planID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
         if(!isonlybody())
         {
             if($confirm == 'no')
@@ -410,35 +422,14 @@ class productplan extends control
             }
             else
             {
-                $changes = $this->productplan->updateStatus($planID, 'doing');
+                $this->productplan->updateStatus($planID, 'doing', 'started');
+
                 if(dao::isError()) die(js::error(dao::getError()));
-
-                $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
-                $this->action->logHistory($actionID, $changes);
-
-                if($plan->parent > 0) $this->productplan->updateParentStatus($plan->parent);
-                if(dao::isError()) die(js::error(dao::getError()));
-
                 die(js::reload('parent'));
             }
         }
         else
         {
-            if(!empty($_POST))
-            {
-                $_POST['status'] = 'doing';
-                $changes         = $this->productplan->updateStatus($planID, 'doing');
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
-                $this->action->logHistory($actionID, $changes);
-
-                if($plan->parent > 0) $this->productplan->updateParentStatus($plan->parent);
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess,'locate' => 'parent'));
-            }
-
             $this->view->plan = $plan;
             $this->display();
         }
@@ -460,16 +451,9 @@ class productplan extends control
         }
         else
         {
-            $changes = $this->productplan->updateStatus($planID, 'done');
+            $this->productplan->updateStatus($planID, 'done', 'finished');
+
             if(dao::isError()) die(js::error(dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'finished');
-            $this->action->logHistory($actionID, $changes);
-
-            $plan = $this->productplan->getByID($planID);
-            if($plan->parent > 0) $this->productplan->updateParentStatus($plan->parent);
-            if(dao::isError()) die(js::error(dao::getError()));
-
             die(js::reload('parent'));
         }
     }
@@ -490,16 +474,9 @@ class productplan extends control
         }
         else
         {
-            $changes = $this->productplan->updateStatus($planID, 'closed');
+            $this->productplan->updateStatus($planID, 'closed', 'closed');
+
             if(dao::isError()) die(js::error(dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'closed');
-            $this->action->logHistory($actionID, $changes);
-
-            $plan = $this->productplan->getByID($planID);
-            if($plan->parent > 0) $this->productplan->updateParentStatus($plan->parent);
-            if(dao::isError()) die(js::error(dao::getError()));
-
             die(js::reload('parent'));
         }
     }
@@ -520,16 +497,9 @@ class productplan extends control
         }
         else
         {
-            $changes = $this->productplan->updateStatus($planID, 'doing');
+            $this->productplan->updateStatus($planID, 'doing', 'activated');
+
             if(dao::isError()) die(js::error(dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'activated');
-            $this->action->logHistory($actionID, $changes);
-
-            $plan = $this->productplan->getByID($planID);
-            if($plan->parent > 0) $this->productplan->updateParentStatus($plan->parent);
-            if(dao::isError()) die(js::error(dao::getError()));
-
             die(js::reload('parent'));
         }
     }
