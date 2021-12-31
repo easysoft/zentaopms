@@ -1551,7 +1551,10 @@ class gitlabModel extends model
             if(count($results)<100) break;
         }
 
-        return $allResults;
+        $tags = array();
+        foreach($allResults as $tag) $tags[$tag->name] = $tag;
+
+        return $tags;
     }
 
     /**
