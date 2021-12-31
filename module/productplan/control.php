@@ -149,24 +149,7 @@ class productplan extends control
      */
     public function batchEdit($productID, $branch = 0)
     {
-        if(isset($_POST['planIDList']))
-        {
-            $this->commonAction($productID, $branch);
-            $this->view->title      = $this->lang->productplan->batchEdit;
-            $this->view->position[] = html::a(inlink('browse', "productID=$productID&branch=$branch"), $this->lang->productplan->common);
-            $this->view->position[] = $this->lang->productplan->batchEdit;
-
-            $plans     = $this->productplan->getByIDList($this->post->planIDList);
-            $product   = $this->loadModel('product')->getById($productID);
-            $oldBranch = array();
-            foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
-
-            $this->view->plans         = $plans;
-            $this->view->oldBranch     = $oldBranch;
-            $this->view->branchProduct = $product->type == 'normal' ? false : true;
-            die($this->display());
-        }
-        elseif($_POST)
+        if(!empty($_POST['title']))
         {
             $changes = $this->productplan->batchUpdate($productID);
             $this->syncStory($changes);
@@ -176,10 +159,26 @@ class productplan extends control
                 $actionID = $this->action->create('productplan', $planID, 'Edited');
                 $this->action->logHistory($actionID, $change);
             }
+
             $this->loadModel('score')->create('ajax', 'batchOther');
             die(js::locate(inlink('browse', "productID=$productID&branch=$branch"), 'parent'));
         }
-        die(js::locate('back'));
+
+        $planIDList = $this->post->planIDList ? $this->post->planIDList : die(js::locate($this->session->productPlanList, 'parent'));
+
+        $this->commonAction($productID, $branch);
+
+        $plans     = $this->productplan->getByIDList($planIDList);
+        $oldBranch = array();
+
+        foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
+
+        $this->view->title     = $this->lang->productplan->batchEdit;
+        $this->view->plans     = $plans;
+        $this->view->oldBranch = $oldBranch;
+        $this->view->product   = $this->loadModel('product')->getById($productID);;
+
+        $this->display();
     }
 
     /**
