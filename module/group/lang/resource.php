@@ -1348,6 +1348,10 @@ $lang->resource->gitlab->deleteBranchPriv     = 'deleteBranchPriv';
 $lang->resource->gitlab->browseTag            = 'browseTag';
 $lang->resource->gitlab->createTag            = 'createTag';
 $lang->resource->gitlab->deleteTag            = 'deleteTag';
+$lang->resource->gitlab->browseTagPriv        = 'browseTagPriv';
+$lang->resource->gitlab->createTagPriv        = 'createTagPriv';
+$lang->resource->gitlab->editTagPriv          = 'editTagPriv';
+$lang->resource->gitlab->deleteTagPriv        = 'deleteTagPriv';
 
 $lang->gitlab->methodOrder[5]   = 'browse';
 $lang->gitlab->methodOrder[10]  = 'create';
@@ -1375,6 +1379,8 @@ $lang->gitlab->methodOrder[120] = 'webhook';
 $lang->gitlab->methodOrder[125] = 'createWebhook';
 $lang->gitlab->methodOrder[130] = 'manageProjectMembers';
 $lang->gitlab->methodOrder[135] = 'browseTag';
+$lang->gitlab->methodOrder[140] = 'browseTagPriv';
+$lang->gitlab->methodOrder[145] = 'deleteTagPriv';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
@@ -1383,7 +1389,7 @@ $lang->resource->mr->apiCreate = 'apiCreate';
 $lang->resource->mr->browse    = 'browse';
 $lang->resource->mr->edit      = 'edit';
 $lang->resource->mr->delete    = 'delete';
-$lang->resource->mr->view      = 'overview';
+$lang->resource->mr->view      = 'view';
 $lang->resource->mr->accept    = 'accept';
 $lang->resource->mr->diff      = 'viewDiff';
 $lang->resource->mr->link      = 'linkList';

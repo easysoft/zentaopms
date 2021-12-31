@@ -845,6 +845,9 @@ class gitlab extends control
      */
     public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
+        /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
+        if($branch) $branch = str_replace('*', '-', $branch);
+
         if($_POST)
         {
             $this->gitlab->createBranchPriv($gitlabID, $projectID, $branch);
@@ -914,8 +917,14 @@ class gitlab extends control
      */
     public function deleteBranchPriv($gitlabID, $projectID, $branch, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
+        if($confirm != 'yes')
+        {
+            $branch = urlencode($branch);
+            die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
+        }
 
+        /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
+        $branch  = str_replace('*', '-', $branch);
         $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -972,6 +981,169 @@ class gitlab extends control
         $this->view->gitlabTagList = $tagList;
         $this->view->orderBy       = $orderBy;
         $this->display();
+    }
+
+    /**
+     * Browse gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseTagPriv($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    {
+        $this->session->set('gitlabTagPrivList', $this->app->getURI(true));
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+
+        $gitlabTags = array();
+        $allTags    = $this->gitlab->apiGetTags($gitlabID, $projectID);
+        foreach($allTags as $tag)
+        {
+            $gitlabTags[$tag->name] = $tag;
+        }
+
+        $tagList           = array();
+        $gitlabProtectTags = $this->gitlab->apiGetTagPrivs($gitlabID, $projectID);
+        foreach($gitlabProtectTags as $gitlabProtectTag)
+        {
+            $tag = new stdClass();
+            $tag->name          = $gitlabProtectTag->name;
+            $tag->lastCommitter = isset($gitlabTags[$tag->name]) ? $gitlabTags[$tag->name]->commit->committer_name : '';
+            $tag->accessLevels  = $gitlabProtectTag->create_access_levels;
+
+            $tagList[] = $tag;
+        }
+
+        /* Data search. */
+        if($keyword)
+        {
+            foreach($tagList as $key => $tag)
+            {
+                if(strpos($tag->name, $keyword) === false) unset($tagList[$key]);
+            }
+            $tagList = array_values($tagList);
+        }
+
+        /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($tagList as $tag) $orderList[] = $tag->$order;
+        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $tagList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($tagList);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $tagList  = array_chunk($tagList, $pager->recPerPage);
+
+        $this->view->gitlab        = $this->gitlab->getByID($gitlabID);
+        $this->view->pager         = $pager;
+        $this->view->title         = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseTagPriv;
+        $this->view->gitlabID      = $gitlabID;
+        $this->view->projectID     = $projectID;
+        $this->view->keyword       = $keyword;
+        $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->gitlabTagList = empty($tagList) ? $tagList: $tagList[$pageID - 1];
+        $this->view->orderBy       = $orderBy;
+        $this->display();
+    }
+
+    /**
+     * Set a gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @access public
+     * @return void
+     */
+    public function createTagPriv($gitlabID, $projectID)
+    {
+        if($_POST)
+        {
+            $this->gitlab->createTagPriv($gitlabID, $projectID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseTagPriv', "gitlabID=$gitlabID&projectID=$projectID")));
+        }
+
+        $gitlabTags   = $this->gitlab->apiGetTags($gitlabID, $projectID);
+        $protectTags  = $this->gitlab->apiGetTagPrivs($gitlabID, $projectID, '', 'name_asc');
+        $protectNames = array_keys($protectTags);
+
+        $tags = array();
+        foreach($gitlabTags as $tag)
+        {
+            if(!in_array($tag->name, $protectNames)) $tags[$tag->name] = $tag->name;
+        }
+
+        $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->createTagPriv;
+        $this->view->gitlabID   = $gitlabID;
+        $this->view->projectID  = $projectID;
+        $this->view->tags       = $tags;
+        $this->display();
+    }
+
+    /**
+     * Edit a gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return void
+     */
+    public function editTagPriv($gitlabID, $projectID, $tag = '')
+    {
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $tag = str_replace('*', '-', $tag);
+
+        if($_POST)
+        {
+            $this->gitlab->createTagPriv($gitlabID, $projectID, $tag);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseTagPriv', "gitlabID=$gitlabID&projectID=$projectID")));
+        }
+
+        $tagPriv = $this->gitlab->apiGetSingleTagPriv($gitlabID, $projectID, $tag);
+        $tagPriv->createAccessLevel = $this->gitlab->checkAccessLevel($tagPriv->create_access_levels);
+
+        $this->view->title     = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->editTagPriv;
+        $this->view->gitlabID  = $gitlabID;
+        $this->view->projectID = $projectID;
+        $this->view->tagPriv   = $tagPriv;
+        $this->view->tag       = $tag;
+        $this->display();
+    }
+
+    /**
+     * Delete a gitlab protect tag.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  string $tag
+     * @access public
+     * @return void
+     */
+    public function deleteTagPriv($gitlabID, $projectID, $tag)
+    {
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $tag     = str_replace('*', '-', $tag);
+        $reponse = $this->gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
+
+        /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
+        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        {
+            $this->loadModel('action')->create('gitlabtagpriv', 0, 'deleted', '', $tag);
+            die(js::reload('parent'));
+        }
+
+        die(js::alert($reponse->message));
     }
 
     /**
@@ -1372,6 +1544,8 @@ class gitlab extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
 
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $tagName = str_replace('*', '-', $tagName);
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */

@@ -29,7 +29,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('gitlab', 'createTag')) common::printLink('gitlab', 'createTag', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createTag, '', "class='btn btn-primary'");?>
+    <?php common::printLink('gitlab', 'createTagPriv', "gitlabID=$gitlabID&projectID=$projectID", "<i class='icon icon-plus'></i> " . $lang->gitlab->createTagPriv, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($gitlabTagList)):?>
@@ -37,7 +37,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
     <?php if(empty($keyword) and common::hasPriv('gitlab', 'createTag')):?>
-    <?php echo html::a($this->createLink('gitlab', 'createTag', "gitlabID=$gitlabID&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->createTag, '', "class='btn btn-info'");?>
+    <?php echo html::a($this->createLink('gitlab', 'createTagPriv', "gitlabID=$gitlabID&projectID=$projectID"), "<i class='icon icon-plus'></i> " . $lang->gitlab->createTagPriv, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
@@ -50,27 +50,23 @@
         <tr>
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->gitlab->tag->name);?></th>
           <th class='text-left'><?php echo $lang->gitlab->tag->lastCommitter;?></th>
-          <th class='text-left'><?php common::printOrderLink('updated', $orderBy, $vars, $lang->gitlab->tag->lastCommittedDate);?></th>
-          <th class='c-actions-1'><?php echo $lang->actions;?></th>
+          <th class='text-left'><?php common::printOrderLink('accessLevels', $orderBy, $vars, $lang->gitlab->tag->accessLevel);?></th>
+          <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($gitlabTagList as $id => $gitlabTag): ?>
+        <?php $gitlabTag->accessLevel  = $this->gitlab->checkAccessLevel($gitlabTag->accessLevels); ?>
         <tr class='text'>
-          <td class='text-c-name' title='<?php echo $gitlabTag->name;?>'>
-            <div class='has-prefix has-suffix'>
-              <span class='tag-name text-ellipsis'><?php echo $gitlabTag->name;?></span>
-              <?php if($gitlabTag->protected) echo '<span class="label label-badge label-info">' . $lang->gitlab->tag->protected . '</span>';?>
-            </div>
-          </td>
+        <td class='text-c-name' title='<?php echo $gitlabTag->name;?>'><?php echo $gitlabTag->name;?></td>
           <td class='text'><?php echo $gitlabTag->lastCommitter;?></td>
-          <td class='text'><?php echo $gitlabTag->updated?></td>
+          <td class='text'><?php echo zget($lang->gitlab->branch->branchCreationLevelList, $gitlabTag->accessLevel);?></td>
           <td class='c-actions text-left'>
             <?php
             /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
-            $tagName    = str_replace('-', '*', $gitlabTag->name);
-            $isDisabled = $gitlabTag->protected ? 'disabled' : '';
-            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=$tagName", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn btn-primary' target='hiddenwin' $isDisabled");
+            $tagName = str_replace('-', '*', $gitlabTag->name);
+            common::printLink('gitlab', 'editTagPriv', "gitlabID=$gitlabID&projectID=$projectID&tag_name=$tagName", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->editTagPriv} class='btn btn-primary'");
+            common::printLink('gitlab', 'deleteTagPriv', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=$tagName", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTagPriv}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->gitlab->tag->protectConfirmDel}\")==false) return false;'");
             ?>
           </td>
         </tr>

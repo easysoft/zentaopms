@@ -1,7 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "合并请求";
-$lang->mr->overview     = "概况";
+$lang->mr->view         = "概况";
 $lang->mr->create       = "创建{$lang->mr->common}";
 $lang->mr->apiCreate    = "接口：创建{$lang->mr->common}";
 $lang->mr->browse       = "浏览{$lang->mr->common}";
@@ -105,6 +105,7 @@ $lang->mr->apiError->createMR = "通过API创建合并请求失败，失败原�
 $lang->mr->apiError->sudo     = "无法以当前用户绑定的GitLab账户进行操作，失败原因：%s";
 
 $lang->mr->createFailedFromAPI = "创建合并请求失败。";
+$lang->mr->hasSameOpenedMR     = "存在重复并且未关闭的合并请求。";
 $lang->mr->accessGitlabFailed  = "当前无法连接到GitLab服务器。";
 $lang->mr->reopenSuccess       = "已重新打开合并请求。";
 $lang->mr->closeSuccess        = "已关闭合并请求。";
@@ -113,17 +114,17 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 
 $lang->mr->errorLang[1] = '源项目分支与目标项目分支不能相同';
-$lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: !%u';
+$lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: ID%u';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";
 $lang->mr->at   = "于";
 
-$lang->mr->pipeline        = "流水线";
-$lang->mr->pipelineSuccess = "已通过";
-$lang->mr->pipelineFailed  = "未通过";
+$lang->mr->pipeline         = "流水线";
+$lang->mr->pipelineSuccess  = "已通过";
+$lang->mr->pipelineFailed   = "未通过";
 $lang->mr->pipelineCanceled = "已取消";
-$lang->mr->pipelineUnknown = "未知";
+$lang->mr->pipelineUnknown  = "未知";
 
 $lang->mr->pipelineStatus = array();
 $lang->mr->pipelineStatus['success']  = "已通过";
@@ -135,6 +136,7 @@ $lang->mr->hasConflicts   = "存在冲突或等待提交";
 $lang->mr->hasNoConflict  = "可以合并";
 $lang->mr->acceptMR       = "合并";
 $lang->mr->mergeFailed    = "无法合并，请核对合并请求状态";
+$lang->mr->mergeSuccess   = "已成功合并";
 $lang->mr->mergeSuccess   = "已成功合并";
 
 $lang->mr->todomessage = "项目中指派给你了";

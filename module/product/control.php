@@ -1048,7 +1048,7 @@ class product extends control
         /* Get product reviewers. */
         $product          = $this->product->getByID($productID);
         $productReviewers = $product->reviewer;
-        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         $storyReviewers = '';
         if($storyID)

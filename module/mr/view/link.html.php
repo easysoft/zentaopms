@@ -37,7 +37,7 @@
 <div id='mainContent' class='main-content'>
   <div class='tabs' id='tabsNav'>
     <ul class='nav nav-tabs'>
-      <li><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->overview);?></li>
+      <li><?php echo html::a(inlink('view', "mr={$MR->id}"), $lang->mr->view);?></li>
       <li><?php echo html::a(inlink('diff', "mr={$MR->id}"), $lang->mr->viewDiff);?></li>
       <li class='<?php if($type == 'story') echo 'active'?>'><a href='#stories' data-toggle='tab'><?php echo  html::icon($lang->icons['story'], 'text-primary') . ' ' . $lang->productplan->linkedStories;?></a></li>
       <li class='<?php if($type == 'bug') echo 'active'?>'><a href='#bugs' data-toggle='tab'><?php echo  html::icon($lang->icons['bug'], 'text-red') . ' ' . $lang->productplan->linkedBugs;?></a></li>
@@ -168,7 +168,7 @@
                   <?php printf('%03d', $bug->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $bug->pri;?>' title='<?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri, $bug->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, '', 'data-app="product"');?></td>
+                <td class='text-left nobr' title='<?php echo $bug->title?>'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title);?></td>
                 <td><?php echo zget($users, $bug->openedBy);?></td>
                 <td><?php echo zget($users, $bug->assignedTo);?></td>
                 <td>
@@ -230,7 +230,7 @@
                   <?php printf('%03d', $task->id);?>
                 </td>
                 <td><span class='label-pri label-pri-<?php echo $task->pri;?>' title='<?php echo zget($lang->task->priList, $task->pri, $task->pri);?>'><?php echo zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
-                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name, '', 'data-app="product"');?></td>
+                <td class='text-left nobr' title='<?php echo $task->name?>'><?php echo html::a($this->createLink('task', 'view', "taskID=$task->id"), $task->name);?></td>
                 <td><?php echo zget($users, $task->finishedBy);?></td>
                 <td><?php echo zget($users, $task->assignedTo);?></td>
                 <td>

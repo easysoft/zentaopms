@@ -563,6 +563,7 @@ class repo extends control
         $this->commonAction($repoID, $objectID);
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
+        $log[0]->comment = $this->repo->replaceCommentLink($log[0]->comment);
 
         $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
         if($history)
@@ -1206,12 +1207,6 @@ class repo extends control
      */
     public function ajaxGetRules()
     {
-        $regRules = $this->repo->processRules();
-        $rawRules = $this->config->repo->rules;
-
-        $data = array();
-        $data['reg'] = $regRules;
-        $data['raw'] = $rawRules;
-        return $this->send(array('status' => 'success', 'rules' => json_encode($data)));
+        return $this->send(array('status' => 'success', 'rules' => $this->config->repo->rules));
     }
 }

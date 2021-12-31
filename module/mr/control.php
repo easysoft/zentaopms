@@ -97,11 +97,11 @@ class mr extends control
             $this->mr->apiCreate();
 
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
             if(dao::isError())
             {
                 $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                $response['message'] = join("\n", dao::getError());
             }
 
             return $this->send($response);
@@ -150,21 +150,19 @@ class mr extends control
         $this->loadModel('job');
         $this->loadModel('compile');
 
-        $repoList = array();
+        $repoList    = array();
         $rawRepoList = $this->repo->getGitLabRepoList($MR->gitlabID, $MR->sourceProject);
         foreach($rawRepoList as $rawRepo) $repoList[$rawRepo->id] = "[$rawRepo->id] $rawRepo->name";
 
         $jobList = array();
-        $rawJobList = $this->job->getListByRepoID($MR->repoID);
-        foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+        if($MR->repoID)
+        {
+            $rawJobList = $this->job->getListByRepoID($MR->repoID);
+            foreach($rawJobList as $rawJob) $jobList[$rawJob->id] = "[$rawJob->id] $rawJob->name";
+        }
 
-        $compileList = array();
-        $rawCompileList = $this->compile->getListByJobID($MR->jobID);
-        foreach($rawCompileList as $rawCompile) $compileList[$rawCompile->id] = "[$rawCompile->id] [{$this->lang->compile->statusList[$rawCompile->status]}] $rawCompile->name";
-
-        $this->view->repoList         = $repoList;
-        $this->view->jobList          = !empty($MR->repoID) ? $jobList : array();
-        $this->view->compileList      = !empty($MR->jobID)  ? $compileList : array();
+        $this->view->repoList = $repoList;
+        $this->view->jobList  = !empty($MR->repoID) ? $jobList : array();
 
         $this->view->title            = $this->lang->mr->edit;
         $this->view->MR               = $MR;
@@ -232,7 +230,7 @@ class mr extends control
         $this->view->compile    = $this->loadModel('compile')->getById($MR->compileID);
         $this->view->compileJob = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
 
-        $this->view->title   = $this->lang->mr->overview;
+        $this->view->title   = $this->lang->mr->view;
         $this->view->MR      = $MR;
         $this->view->rawMR   = isset($rawMR) ? $rawMR : false;
         $this->view->product = $product;
@@ -936,5 +934,23 @@ class mr extends control
         $options = "<option value=''></option>";
         foreach($compileList as $compile) $options .= "<option value='{$compile->id}' data-name='{$compile->name}'>[{$compile->id}] [{$this->lang->compile->statusList[$compile->status]}] {$compile->name}</option>";
         $this->send($options);
+   }
+
+   /**
+    * Ajax check same opened mr for source branch.
+    *
+    * @param  int    $gitlabID
+    * @access public
+    * @return void
+    */
+   public function ajaxCheckSameOpened($gitlabID)
+   {
+       $sourceProject = $this->post->sourceProject;
+       $sourceBranch  = $this->post->sourceBranch;
+       $targetProject = $this->post->targetProject;
+       $targetBranch  = $this->post->targetBranch;
+
+       $result = $this->mr->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+       die(json_encode($result));
    }
 }

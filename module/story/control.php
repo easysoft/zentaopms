@@ -305,7 +305,7 @@ class story extends control
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
-        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Set Custom. */
         foreach(explode(',', $this->config->story->list->customCreateFields) as $field) $customFields[$field] = $this->lang->story->$field;
@@ -469,7 +469,7 @@ class story extends control
 
         /* Get reviewers. */
         $reviewers = $product->reviewer;
-        if(!$reviewers) $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$reviewers and $product->acl != 'open') $reviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Init vars. */
         $planID   = $plan;
@@ -685,7 +685,7 @@ class story extends control
 
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
-        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         $this->story->replaceURLang($story->type);
 
@@ -937,7 +937,7 @@ class story extends control
 
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
-        if(!$productReviewers) $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
+        if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
         /* Assign. */
         $this->view->title            = $this->lang->story->change . "STORY" . $this->lang->colon . $this->view->story->title;
@@ -1014,6 +1014,7 @@ class story extends control
         $bugs         = $this->dao->select('id,title')->from(TABLE_BUG)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
         $fromBug      = $this->dao->select('id,title')->from(TABLE_BUG)->where('toStory')->eq($storyID)->fetch();
         $cases        = $this->dao->select('id,title')->from(TABLE_CASE)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->fetchAll();
+        $linkedMRs    = $this->loadModel('mr')->getLinkedMRPairs($storyID, 'story');
         $modulePath   = $this->tree->getParents($story->module);
         $storyModule  = empty($story->module) ? '' : $this->tree->getById($story->module);
 
@@ -1054,6 +1055,7 @@ class story extends control
         $this->view->fromBug            = $fromBug;
         $this->view->cases              = $cases;
         $this->view->story              = $story;
+        $this->view->linkedMRs          = $linkedMRs;
         $this->view->track              = $this->story->getTrackByID($story->id);
         $this->view->users              = $this->user->getPairs('noletter');
         $this->view->reviewers          = $reviewers;

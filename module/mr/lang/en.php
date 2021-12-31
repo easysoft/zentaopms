@@ -1,7 +1,7 @@
 <?php
 $lang->mr = new stdclass;
 $lang->mr->common       = "Merge Request";
-$lang->mr->overview     = "Survey";
+$lang->mr->view         = "Survey";
 $lang->mr->create       = "Create";
 $lang->mr->apiCreate    = "Interface: Create";
 $lang->mr->browse       = "Browse";
@@ -105,6 +105,7 @@ $lang->mr->apiError->createMR = "Failed to create a merge request through API. R
 $lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
+$lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests.";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
@@ -113,17 +114,17 @@ $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and ta
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
-$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: !%u';
+$lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";
 $lang->mr->at   = "at";
 
-$lang->mr->pipeline        = "Pipeline";
-$lang->mr->pipelineSuccess = "Success";
-$lang->mr->pipelineFailed  = "Failed";
+$lang->mr->pipeline         = "Pipeline";
+$lang->mr->pipelineSuccess  = "Success";
+$lang->mr->pipelineFailed   = "Failed";
 $lang->mr->pipelineCanceled = "Canceled";
-$lang->mr->pipelineUnknown = "Unknown";
+$lang->mr->pipelineUnknown  = "Unknown";
 
 $lang->mr->pipelineStatus = array();
 $lang->mr->pipelineStatus['success']  = "success";

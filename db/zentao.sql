@@ -933,7 +933,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `RD` varchar(30) NOT NULL,
   `acl` enum('open','private','custom') NOT NULL default 'open',
   `whitelist` text NOT NULL,
-  `reviewer` varchar(255) NOT NULL,
+  `reviewer` text NOT NULL,
   `createdBy` varchar(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `createdVersion` varchar(20) NOT NULL,

@@ -359,43 +359,64 @@
         </div>
       </div>
     </div>
-    <div class='cell'>
-      <details class="detail" open>
-        <summary class="detail-title"><?php echo $lang->task->legendEffort;?></summary>
-        <div class="detail-content">
-          <table class='table table-data'>
-            <tr>
-              <th class='effortThWidth'><?php echo $lang->task->estimate;?></th>
-              <td><?php echo $task->estimate . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->consumed;?></th>
-              <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->left;?></th>
-              <td><?php echo $task->left . $lang->workingHour;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->estStarted;?></th>
-              <td><?php echo $task->estStarted;?></td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->realStarted;?></th>
-              <td><?php echo helper::isZeroDate($task->realStarted) ? '' : $task->realStarted; ?> </td>
-            </tr>
-            <tr>
-              <th><?php echo $lang->task->deadline;?></th>
-              <td>
-                <?php
-                echo $task->deadline;
-                if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
-                ?>
-              </td>
-            </tr>
-          </table>
+    <div class="cell">
+      <div class='tabs'>
+        <ul class='nav nav-tabs'>
+          <li class='active'><a href='#legendEffort' data-toggle='tab'><?php echo $lang->task->legendEffort;?></a></li>
+          <li><a href='#legendMisc' data-toggle='tab'><?php echo $lang->task->legendMisc;?></a></li>
+        </ul>
+        <div class='tab-content'>
+          <div class='tab-pane active' id='legendEffort'>
+            <table class="table table-data">
+              <tr>
+                <th class='effortThWidth'><?php echo $lang->task->estimate;?></th>
+                <td><?php echo $task->estimate . $lang->workingHour;?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->consumed;?></th>
+                <td><?php echo round($task->consumed, 2) . $lang->workingHour;?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->left;?></th>
+                <td><?php echo $task->left . $lang->workingHour;?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->estStarted;?></th>
+                <td><?php echo $task->estStarted;?></td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->realStarted;?></th>
+                <td><?php echo helper::isZeroDate($task->realStarted) ? '' : $task->realStarted; ?> </td>
+              </tr>
+              <tr>
+                <th><?php echo $lang->task->deadline;?></th>
+                <td>
+                  <?php
+                  echo $task->deadline;
+                  if(isset($task->delay)) printf($lang->task->delayWarning, $task->delay);
+                  ?>
+                </td>
+              </tr>
+            </table>
+          </div>
+          <div class='tab-pane' id='legendMisc'>
+            <table class="table table-data">
+              <tr>
+                <th class='MRThWidth'><?php echo $lang->task->linkMR;?></th>
+                <td>
+                  <?php
+                  $canViewMR = common::hasPriv('mr', 'view');
+                  foreach($linkMRTitles as $MRID => $linkMRTitle)
+                  {
+                      echo ($canViewMR ? html::a($this->createLink('mr', 'view', "MRID=$MRID"), "#$MRID $linkMRTitle") : "#$MRID $linkMRTitle") . '<br />';
+                  }
+                  ?>
+                </td>
+              </tr>
+            </table>
+          </div>
         </div>
-      </details>
+      </div>
     </div>
     <?php $this->printExtendFields($task, 'div', "position=right&inForm=0&inCell=1");?>
   </div>

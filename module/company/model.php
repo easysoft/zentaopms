@@ -15,7 +15,7 @@ class companyModel extends model
 {
     /**
      * Set menu.
-     * 
+     *
      * @param  int    $dept
      * @access public
      * @return void
@@ -31,7 +31,7 @@ class companyModel extends model
 
     /**
      * Get company list.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -42,7 +42,7 @@ class companyModel extends model
 
     /**
      * Get the first company.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -53,8 +53,8 @@ class companyModel extends model
 
     /**
      * Get company info by id.
-     * 
-     * @param  int    $companyID 
+     *
+     * @param  int    $companyID
      * @access public
      * @return object
      */
@@ -131,7 +131,7 @@ class companyModel extends model
 
     /**
      * Update a company.
-     * 
+     *
      * @access public
      * @return void
      */

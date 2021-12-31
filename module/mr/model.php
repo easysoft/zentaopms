@@ -93,6 +93,9 @@ class mrModel extends model
             ->add('createdDate', helper::now())
             ->get();
 
+        $result = $this->checkSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        if($result['result'] == 'fail') return $result;
+
         /* Exec Job */
         if(isset($MR->jobID) && $MR->jobID)
         {
@@ -138,21 +141,8 @@ class mrModel extends model
         {
             $this->dao->delete()->from(TABLE_MR)->where('id')->eq($MRID)->exec();
 
-            foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
-            {
-                if(strpos($errorMsg, '/') === 0)
-                {
-                    $result = preg_match($errorMsg, $rawMR->message[0], $matches);
-                    if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
-                }
-                else
-                {
-                    if($rawMR->message[0] == $errorMsg) $errorMessage = zget($this->lang->mr->errorLang, $key, $rawMR->message[0]);
-                }
-
-                if(isset($errorMessage)) break;
-            }
-            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, isset($errorMessage) ? $errorMessage : $rawMR->message[0]));
+            $errorMessage = $this->convertApiError($rawMR->message);
+            return array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->createMR, $errorMessage));
         }
 
         /* Create MR failed. */
@@ -171,10 +161,7 @@ class mrModel extends model
         $newMR->mergeStatus = $rawMR->merge_status;
 
         /* Update MR in Zentao database. */
-        $this->dao->update(TABLE_MR)->data($newMR)
-            ->where('id')->eq($MRID)
-            ->autoCheck()
-            ->exec();
+        $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
         return array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('mr', 'browse'));
     }
@@ -209,12 +196,20 @@ class mrModel extends model
         $MR->title          = $this->lang->mr->common . ' ' . $postData->RepoSrcBranch . $this->lang->mr->to . $postData->RepoDistBranch ;
         $MR->repoID         = $repo->id;
         $MR->jobID          = isset($repo->job->id) ? $repo->job->id : 0;
+        $MR->status         = 'opened';
         $MR->synced         = '0';
         $MR->needCI         = '1';
         $MR->hasNoConflict  = $postData->MergeStatus ? '0' : '1';
         $MR->mergeStatus    = $postData->MergeStatus ? 'can_be_merged' : 'cannot_be_merged';
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
+
+        $result = $this->checkSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
+        if($result['result'] == 'fail')
+        {
+            dao::$errors[] = $result['message'];
+            return false;
+        }
 
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->apicreate->requiredFields, 'notempty')
@@ -238,17 +233,16 @@ class mrModel extends model
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
                 $newMR->compileID     = $compile->id;
                 $newMR->compileStatus = $compile->status;
+                if($newMR->compileStatus == 'failure') $newMR->status = 'closed';
             }
             else
             {
                 $newMR->compileStatus = $pipeline->status;
+                if($newMR->compileStatus == 'create_fail') $newMR->status = 'closed';
             }
 
             /* Update MR in Zentao database. */
-            $this->dao->update(TABLE_MR)->data($newMR)
-                ->where('id')->eq($MRID)
-                ->autoCheck()
-                ->exec();
+            $this->dao->update(TABLE_MR)->data($newMR)->where('id')->eq($MRID)->autoCheck()->exec();
             if(dao::isError()) return false;
         }
         return true;
@@ -303,6 +297,11 @@ class mrModel extends model
 
         /* Known issue: `reviewer_ids` takes no effect. */
         $rawMR = $this->apiUpdateMR($oldMR->gitlabID, $oldMR->targetProject, $oldMR->mriid, $newMR);
+        if(!isset($rawMR->id) and isset($rawMR->message))
+        {
+            $errorMessage = $this->convertApiError($rawMR->message);
+            return array('result' => 'fail', 'message' => $errorMessage);
+        }
 
         /* Update MR in Zentao database. */
         $this->dao->update(TABLE_MR)->data($MR, $this->config->mr->edit->skippedFields)
@@ -531,6 +530,35 @@ class mrModel extends model
     {
         $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests");
         return json_decode(commonModel::http($url));
+    }
+
+    /**
+     * Get same opened mr by api.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $sourceProject
+     * @param  string $sourceBranch
+     * @param  int    $targetProject
+     * @param  string $targetBranch
+     * @access public
+     * @return object
+     */
+    public function apiGetSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)
+    {
+        if(empty($gitlabID) or empty($sourceProject) or empty($sourceBranch) or  empty($targetProject) or  empty($targetBranch)) return null;
+
+        $url = sprintf($this->loadModel('gitlab')->getApiRoot((int)$gitlabID), "/projects/{$sourceProject}/merge_requests") . "&state=opened&source_branch={$sourceBranch}&target_branch={$targetBranch}";
+        $response = json_decode(commonModel::http($url));
+
+        if($response)
+        {
+            foreach($response as $mr)
+            {
+                if(empty($mr->source_project_id) or empty($mr->target_project_id)) return null;
+                if($mr->source_project_id == $sourceProject and $mr->target_project_id == $targetProject) return $mr;
+            }
+        }
+        return null;
     }
 
     /**
@@ -1255,6 +1283,24 @@ class mrModel extends model
     }
 
     /**
+     * Get linked MR pairs.
+     *
+     * @param  int    $objectID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function getLinkedMRPairs($objectID, $objectType = 'story')
+    {
+        return $this->dao->select("t2.id,t2.title")->from(TABLE_RELATION)->alias('t1')
+            ->leftJoin(TABLE_MR)->alias('t2')->on('t1.AID = t2.id')
+            ->where('t1.AType')->eq('mr')
+            ->andWhere('t1.BType')->eq($objectType)
+            ->andWhere('t1.BID')->eq($objectID)
+            ->fetchPairs();
+    }
+
+    /**
      * Create an mr link.
      *
      * @param int    $MRID
@@ -1327,7 +1373,7 @@ class mrModel extends model
         $commits = array();
         foreach($DiffCommits as $DiffCommit)
         {
-            $commits[] = substr($DiffCommit->id, 0, 10);
+            if(isset($DiffCommit->id)) $commits[] = substr($DiffCommit->id, 0, 10);
         }
 
         return $this->dao->select('objectID')->from(TABLE_ACTION)->where('objectType')->eq($type)->andWhere('extra')->in($commits)->fetchPairs('objectID');
@@ -1399,5 +1445,63 @@ class mrModel extends model
         {
             $this->action->create('task', $task->id, 'mergedmr', '', helper::createLink('mr', 'view', "mr={$MR->id}"));
         }
+    }
+
+    /**
+     * Check same opened mr for source branch.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $sourceProject
+     * @param  string $sourceBranch
+     * @param  int    $targetProject
+     * @param  string $targetBranch
+     * @access public
+     * @return array
+     */
+    public function checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)
+    {
+        if(empty($sourceProject) or empty($sourceBranch) or empty($targetProject) or empty($targetBranch)) return array('result' => 'success');
+
+        $dbOpenedCount = $this->dao->select('count(*) as count')->from(TABLE_MR)
+            ->where('gitlabID')->eq($gitlabID)
+            ->andWhere('sourceProject')->eq($sourceProject)
+            ->andWhere('sourceBranch')->eq($sourceBranch)
+            ->andWhere('targetProject')->eq($targetProject)
+            ->andWhere('targetBranch')->eq($targetBranch)
+            ->andWhere('status')->eq('opened')
+            ->andWhere('deleted')->eq('0')
+            ->fetch('count');
+        if($dbOpenedCount > 0) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
+
+        if($this->apiGetSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
+        return array('result' => 'success');
+    }
+
+    /**
+     * Convert API error.
+     *
+     * @param  array  $message
+     * @access public
+     * @return string
+     */
+    public function convertApiError($message)
+    {
+        if(is_array($message)) $message = $message[0];
+        if(!is_string($message)) return $message;
+
+        foreach($this->lang->mr->apiErrorMap as $key => $errorMsg)
+        {
+            if(strpos($errorMsg, '/') === 0)
+            {
+                $result = preg_match($errorMsg, $message, $matches);
+                if($result) $errorMessage = sprintf(zget($this->lang->mr->errorLang, $key), $matches[1]);
+            }
+            elseif($message == $errorMsg)
+            {
+                $errorMessage = zget($this->lang->mr->errorLang, $key, $message);
+            }
+            if(isset($errorMessage)) break;
+        }
+        return isset($errorMessage) ? $errorMessage : $message;
     }
 }

@@ -20,8 +20,8 @@ class gitlabWebhookEntry extends baseEntry
      */
     public function post()
     {
-        $repoID= $this->param('repoID');
-        if(empty($id)) return;
+        $repoID = $this->param('repoID');
+        if(empty($repoID)) return;
 
         $this->loadModel('repo');
 
