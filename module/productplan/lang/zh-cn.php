@@ -101,6 +101,7 @@ $lang->productplan->parentActionList['startedbychild']   = '系统判断由于�
 $lang->productplan->parentActionList['finishedbychild']  = '系统判断由于子计划 <strong>全部完成</strong> ，将计划状态置为 <strong>已完成</strong> 。';
 $lang->productplan->parentActionList['closedbychild']    = '系统判断由于子计划 <strong>全部关闭</strong> ，将计划状态置为 <strong>已关闭</strong> 。';
 $lang->productplan->parentActionList['activatedbychild'] = '系统判断由于子计划 <strong>激活</strong> ，将计划状态置为 <strong>进行中</strong> 。';
+$lang->productplan->parentActionList['createchild']      = '系统判断由于 <strong>创建</strong> 子计划 ，将计划状态置为 <strong>进行中</strong> 。';
 
 $lang->productplan->endList[7]   = '一星期';
 $lang->productplan->endList[14]  = '两星期';

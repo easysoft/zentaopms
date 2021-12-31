@@ -325,6 +325,7 @@ $lang->action->label->startedbychild        = 'started';
 $lang->action->label->finishedbychild       = 'finished';
 $lang->action->label->closedbychild         = 'closed';
 $lang->action->label->activatedbychild      = 'activated';
+$lang->action->label->createchild           = 'activated';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;

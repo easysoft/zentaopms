@@ -325,6 +325,7 @@ $lang->action->label->startedbychild        = '开始了';
 $lang->action->label->finishedbychild       = '完成了';
 $lang->action->label->closedbychild         = '关闭了';
 $lang->action->label->activatedbychild      = '激活了';
+$lang->action->label->createchild           = '激活了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
