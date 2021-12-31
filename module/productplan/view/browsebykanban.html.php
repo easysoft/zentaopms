@@ -19,7 +19,6 @@
 #branch_chosen .icon-delay {padding-right: 10px; font-size: 15px;}
 #kanbanContainer {padding-bottom: 0; margin-bottom: 0;}
 .kanban-item:hover > .header > .actions {opacity: 1;}
-.kanban-card {height: 80px !important;}
 .kanban-card .header .titleBox {display: flex; width: 90%; float: left;}
 .kanban-card .header .titleBox > span {flex: none;}
 .kanban-card .header .actions {float: right; opacity: 0;}
