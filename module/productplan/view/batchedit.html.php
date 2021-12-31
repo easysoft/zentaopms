@@ -25,7 +25,7 @@
           <?php if($product->type != 'normal'):?>
           <th class='c-branch'><?php echo $lang->productplan->branch;?></th>
           <?php endif;?>
-          <th><?php echo $lang->productplan->title?></th>
+          <th class='required'><?php echo $lang->productplan->title?></th>
           <th class='c-status'><?php echo $lang->productplan->status?></th>
           <th class='c-full-date'><?php echo $lang->productplan->begin?></th>
           <th class='c-full-date'><?php echo $lang->productplan->end?></th>
@@ -47,7 +47,7 @@
             <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
           </td>
           <?php endif;?>
-          <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control' required")?></td>
+          <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control'")?></td>
           <?php if($plan->parent != -1):?>
           <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus($plan->id, this.value)'");?></td>
           <?php else:?>
@@ -59,7 +59,7 @@
           <?php if($plan->end == '2030-01-01') $plan->end = '';?>
           <td class=<?php echo $required;?>><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date' $disabled");?></td>
           <td class=<?php echo $required;?>><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date' $disabled");?></td>
-          <?php $hidden = $plan->status != 'wait' ? 'hidden' : '';?>
+          <?php $hidden = ($plan->status != 'wait' and $plan->parent != -1) ? 'hidden' : '';?>
           <td><div class='checkbox-primary <?php echo $hidden;?>'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future[<?php echo $plan->id; ?>]' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
           <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $plan, $extendField->field . "[{$plan->id}]") . "</td>";?>
         </tr>

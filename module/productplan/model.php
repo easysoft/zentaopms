@@ -629,7 +629,7 @@ class productplanModel extends model
      */
     public function batchUpdate($productID)
     {
-        $data = fixer::input('post')->skipSpecial('desc')->get();
+        $data     = fixer::input('post')->skipSpecial('desc')->get();
         $oldPlans = $this->getByIDList($data->id);
 
         $this->app->loadClass('purifier', true);
@@ -641,35 +641,28 @@ class productplanModel extends model
         $extendFields = $this->getFlowExtendFields();
         foreach($data->id as $planID)
         {
-            $plan = new stdclass();
-            $plan->branch = $data->branch[$planID];
-            $plan->title  = $data->title[$planID];
-            $plan->desc   = $purifier->purify($data->desc[$planID]);
-            $plan->begin  = $data->begin[$planID] == '' ? '2030-01-01' : $data->begin[$planID];
-            $plan->end    = $data->end[$planID] == '' ? '2030-01-01' : $data->end[$planID];
-            $plan->status = $data->status[$planID];
-            
-            if($plan->status == 'wait' and !isset($data->future[$planID])) $data->future[$planID] = 'on'; 
-            $isFuture = isset($data->future[$planID]) ? 1 : 0;
+            $isFuture = isset($data->future[$planID]) ? true : false;
 
-            if($oldPlans[$planID]->parent > 0)
+            $plan = new stdclass();
+            $plan->title  = $data->title[$planID];
+            $plan->begin  = isset($data->begin[$planID]) ? $data->begin[$planID] : '';
+            $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
+            $plan->status = isset($data->status[$planID]) ? $data->status[$planID] : $oldPlans[$planID]->status;
+
+            if(empty($plan->title)) die(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+
+            if(!$isFuture and $plan->status != 'wait')
             {
-                $parentPlan = $this->getByID($oldPlans[$planID]->parent);
-                if($parentPlan->begin != '2030-01-01')
-                {
-                    if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
-                }
-                if($parentPlan->end != '2030-01-01')
-                {
-                    if($plan->end !='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
-                }
+                if($plan->begin == '') die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
+                if($plan->end == '') die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
+                if($plan->begin > $plan->end) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
             }
 
-            if(empty($plan->title))die(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
-            if(!$isFuture and $plan->begin == '2030-01-01') die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
-            if(!$isFuture and $plan->end == '2030-01-01') die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
-            if($plan->begin > $plan->end and ($plan->begin != '2030-01-01' and $plan->end != '2030-01-01')) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
-
+            if($plan->begin == '' or $plan->end == '')
+            {
+                $plan->begin = '2030-01-01';
+                $plan->end   = '2030-01-01';
+            }
 
             foreach($extendFields as $extendField)
             {
@@ -687,6 +680,36 @@ class productplanModel extends model
         $changes = array();
         foreach($plans as $planID => $plan)
         {
+            if($oldPlans[$planID]->parent > 0)
+            {
+                $parentID        = $oldPlans[$planID]->parent;
+                $parent          = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
+                $parentBeginDate = isset($plans[$parentID]->begin) ? $plans[$parentID]->begin : $parent->begin;
+                $parentEndDate   = isset($plans[$parentID]->end) ? $plans[$parentID] : $parent->end;
+
+                if($parentBeginDate != '2030-01-01' and $plan->begin < $parentBeginDate)
+                {
+                    die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parentBeginDate)));
+                }
+                elseif($parentEndDate != '2030-01-01' and $plan->end > $parentEndDate)
+                {
+                    die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parentEndDate)));
+                }
+            }
+            elseif($oldPlans[$planID]->parent == -1 and $plan->begin != '2030-01-01')
+            {
+                $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->andWhere('id')->notIN($data->id)->fetchAll('id');
+                $minBegin   = $plan->begin;
+                $maxEnd     = $plan->end;
+                foreach($childPlans as $childID => $childPlan)
+                {
+                    $childPlan = isset($plans[$childID]) ? $oldPlans[$childID] : $childPlan;
+                    if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
+                    if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
+                }
+                if($minBegin < $plan->begin) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
+                if($maxEnd > $plan->end) die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
+            }
             $change = common::createChanges($oldPlans[$planID], $plan);
             if($change)
             {

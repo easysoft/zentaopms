@@ -111,22 +111,26 @@ $lang->productplan->endList[93]   = '3 Months';
 $lang->productplan->endList[186]  = '6 Months';
 $lang->productplan->endList[365]  = '1 Year';
 
-$lang->productplan->errorNoTitle      = 'ID %s title should not be empty.';
-$lang->productplan->errorNoBegin      = 'ID %s begin time should not be empty.';
-$lang->productplan->errorNoEnd        = 'ID %s end time should not be empty.';
-$lang->productplan->beginGeEnd        = 'ID %s begin time should not be >= end time.';
-$lang->productplan->beginLetterParent = "The start date of the parent plan: %s, the start date cannot be less than the start date of the parent plan.";
-$lang->productplan->endGreaterParent  = "The completion date of the parent plan: %s, the completion date cannot be greater than the completion date of the parent plan.";
-$lang->productplan->beginGreaterChild = "The start date of the child plan: %s, the start date cannot be greater than the start date of the child plan.";
-$lang->productplan->endLetterChild    = "The completion date of the child plan: %s, the completion date cannot be less than the completion date of the child plan.";
-$lang->productplan->noLinkedProject   = "The current product has not been linked with a project. Please enter the list of the product to link or create a project.";
-$lang->productplan->enterProjectList  = "Enter the list of the product";
+$lang->productplan->errorNoTitle          = 'ID %s title should not be empty.';
+$lang->productplan->errorNoBegin          = 'ID %s begin time should not be empty.';
+$lang->productplan->errorNoEnd            = 'ID %s end time should not be empty.';
+$lang->productplan->beginGeEnd            = 'ID %s begin time should not be >= end time.';
+$lang->productplan->beginLetterParent     = "The start date of the parent plan: %s, the start date cannot be less than the start date of the parent plan.";
+$lang->productplan->endGreaterParent      = "The completion date of the parent plan: %s, the completion date cannot be greater than the completion date of the parent plan.";
+$lang->productplan->beginGreaterChild     = "The start date of the child plan: %s, the start date cannot be greater than the start date of the child plan.";
+$lang->productplan->endLetterChild        = "The completion date of the child plan: %s, the completion date cannot be less than the completion date of the child plan.";
+$lang->productplan->noLinkedProject       = "The current product has not been linked with a project. Please enter the list of the product to link or create a project.";
+$lang->productplan->enterProjectList      = "Enter the list of the product";
+$lang->productplan->beginGreaterChildTip  = "The start date of the parent plan[%s]: %s, cannot be greater than the start date of the child plan: %s.";
+$lang->productplan->endLetterChildTip     = "The completion date of the parent plan[%s]: %s, cannot be less than the completion date of the child plan: %s.", ;
+$lang->productplan->beginLetterParentTip  = "The start date of the child plan[%s]: %s, cannot be less than the start date of the parent plan: %s.";
+$lang->productplan->endGreaterParentTip   = "The completion date of the child plan[%s]: %s, cannot be greater than the completion date of the parent plan: %s.";
 
 $lang->productplan->featureBar['browse']['all']    = 'All';
 $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
+$lang->productplan->featureBar['browse']['closed'] = 'Closed';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
-$lang->productplan->featureBar['browse']['closed'] = 'Closed';
 
 $lang->productplan->orderList['begin_desc'] = 'Begin Descend';
 $lang->productplan->orderList['begin_asc']  = 'Begin Ascend';
