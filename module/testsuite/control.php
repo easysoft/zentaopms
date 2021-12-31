@@ -71,7 +71,7 @@ class testsuite extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $suites = $this->testsuite->getSuites($productID, $sort, $pager);
         if(empty($suites) and $pageID > 1)
@@ -169,7 +169,7 @@ class testsuite extends control
         $this->session->set('caseList', $this->app->getURI(true), 'qa');
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
