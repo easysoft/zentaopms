@@ -676,6 +676,9 @@ class productplanModel extends model
             $plan->end    = $data->end[$planID] == '' ? '2030-01-01' : $data->end[$planID];
             $plan->status = $data->status[$planID];
             
+            if($plan->status == 'wait' and !isset($data->future[$planID])) $data->future[$planID] = 'on'; 
+            $isFuture = isset($data->future[$planID]) ? 1 : 0;
+
             if($oldPlans[$planID]->parent > 0)
             {
                 $parentPlan = $this->getByID($oldPlans[$planID]->parent);
@@ -690,9 +693,10 @@ class productplanModel extends model
             }
 
             if(empty($plan->title))die(js::alert(sprintf($this->lang->productplan->errorNoTitle, $planID)));
-            if($plan->begin == '2030-01-01' and $plan->status != 'wait') die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
-            if($plan->end   == '2030-01-01' and $plan->status != 'wait') die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
+            if(!$isFuture and $plan->begin == '2030-01-01') die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
+            if(!$isFuture and $plan->end == '2030-01-01') die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
             if($plan->begin > $plan->end and ($plan->begin != '2030-01-01' and $plan->end != '2030-01-01')) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+
 
             foreach($extendFields as $extendField)
             {

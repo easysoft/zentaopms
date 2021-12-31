@@ -43,8 +43,7 @@
             <?php if($plan->parent != -1):?>
             <td><?php echo html::select('status', array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus()'");?></td>
             <?php else:?>
-            <td><?php echo zget($lang->productplan->statusList, $plan->status);?></td>
-            <?php echo html::hidden('status', $plan->status);?>
+            <td><?php echo html::select('status', array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled onchange='setPlanStatus()'");?></td>
             <?php endif;?>
           </tr>
           <tr>
