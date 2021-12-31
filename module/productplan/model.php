@@ -984,7 +984,7 @@ class productplanModel extends model
                 if($plan->status != 'done' or $plan->parent < 0) return false;
                 break;
             case 'activate' :
-                if($plan->status == 'wait' or $plan == 'doing' or $plan->parent < 0) return false;
+                if($plan->status == 'wait' or $plan->status == 'doing' or $plan->parent < 0) return false;
                 break;
         }
 
