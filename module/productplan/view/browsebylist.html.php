@@ -156,7 +156,7 @@
               if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
               {
                   $class      = 'iframe';
-                  $attr       = "data-id='{$plan->id}' data-width='550px'";
+                  $attr       = "data-id='{$plan->id}' data-width='70%'";
                   $isOnlyBody = true;
               }
               common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody);
