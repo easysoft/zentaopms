@@ -170,7 +170,7 @@ class programModel extends model
             ->fetchGroup('program');
 
         $productPairs = array();
-        foreach($productGroup as $programID => $products) 
+        foreach($productGroup as $programID => $products)
         {
             foreach($products as $product) $productPairs[$product->id] = $product->id;
         }
@@ -496,7 +496,7 @@ class programModel extends model
      * @access public
      * @return array
      */
-    public function getStakeholders($programID = 0, $orderBy, $pager = null)
+    public function getStakeholders($programID = 0, $orderBy = 'id_desc', $pager = null)
     {
         return $this->dao->select('t2.account,t2.realname,t2.role,t2.qq,t2.mobile,t2.phone,t2.weixin,t2.email,t1.id,t1.type,t1.from,t1.key')->from(TABLE_STAKEHOLDER)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')

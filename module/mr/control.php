@@ -97,11 +97,11 @@ class mr extends control
             $this->mr->apiCreate();
 
             $response['result']  = 'success';
-            $response['message'] = '';
+            $response['message'] = $this->lang->saveSuccess;
             if(dao::isError())
             {
                 $response['result']  = 'fail';
-                $response['message'] = dao::getError();
+                $response['message'] = join("\n", dao::getError());
             }
 
             return $this->send($response);
