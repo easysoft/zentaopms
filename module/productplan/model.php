@@ -590,16 +590,31 @@ class productplanModel extends model
 
         switch($action)
         {
+            case 'opened':
+                if($parent->status == 'done' or $parent->status == 'closed')
+                {
+                    $parentStatus = 'doing';
+                    $parentAction = 'createchild';
+                }
+
+                break;
             case 'started':
-                $parentStatus = 'doing';
-                $parentAction = $parent->status != 'doing' ? 'startedbychild' : '';
+                if($parent->status != 'doing')
+                {
+                    $parentStatus = 'doing';
+                    $parentAction = $parent->status != 'doing' ? 'startedbychild' : '';
+                }
+
                 break;
             case 'finished':
-                if(count($childStatus) == 1 and $parent->status != 'done') 
+                if(isset($childStatus['wait']) or isset($childStatus['doing'])) break;
+
+                if($parent->status != 'done') 
                 {
                     $parentStatus = 'done';
                     $parentAction = 'finishedbychild';
                 }
+
                 break;
             case 'closed':
                 if(count($childStatus) == 1 and $parent->status != 'closed') 
@@ -607,15 +622,20 @@ class productplanModel extends model
                     $parentAction = 'closedbychild';
                     $parentStatus = 'closed';
                 }
+
                 break;
             case 'activated':
-                $parentStatus = 'doing';
-                $parentAction = $parent->status != 'doing' ? 'activatedbychild' : '';
+                if($parent->status != 'doing')
+                {
+                    $parentStatus = 'doing';
+                    $parentAction = $parent->status != 'doing' ? 'activatedbychild' : '';
+                }
+
                 break;
         }
 
-        if(isset($parentStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
-        if(isset($parentAction)) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
+        if(!empty($parentStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
+        if(!empty($parentAction)) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
 
         return !dao::isError();
     }
