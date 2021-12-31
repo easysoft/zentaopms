@@ -265,9 +265,8 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'wait' && privs.includes('start'))
         {
-            var isOnlyBody = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
-            var link       = createLink('productplan', 'start', 'planID=' + objectID, '', isOnlyBody);
-            showIframe     = isOnlyBody;
+            var showIframe = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
+            var link       = createLink('productplan', 'start', 'planID=' + objectID, '', showIframe);
         }
         else if((fromColType == 'done' || fromColType == 'closed') && privs.includes('activate'))
         {
