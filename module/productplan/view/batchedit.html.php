@@ -22,11 +22,10 @@
       <thead>
         <tr class='text-center'>
           <th class='c-id'><?php echo $lang->productplan->id?></th>
-          <?php if($branchProduct):?>
+          <?php if($product->type != 'normal'):?>
           <th class='c-branch'><?php echo $lang->productplan->branch;?></th>
           <?php endif;?>
           <th><?php echo $lang->productplan->title?></th>
-          <th><?php echo $lang->productplan->desc?></th>
           <th class='c-status'><?php echo $lang->productplan->status?></th>
           <th class='c-full-date'><?php echo $lang->productplan->begin?></th>
           <th class='c-full-date'><?php echo $lang->productplan->end?></th>
@@ -42,14 +41,13 @@
         <?php $isChecked   = ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? 'checked="checked"' : '';?>
         <tr>
           <td class='text-center'><?php echo $plan->id . html::hidden("id[$plan->id]", $plan->id);?></td>
-          <?php if($branchProduct):?>
+          <?php if($product->type != 'normal'):?>
           <td class='text-left'>
             <?php $disabled = $plan->parent == '-1' ? "disabled='disabled'" : '';?>
             <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
           </td>
           <?php endif;?>
           <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control' required")?></td>
-          <td><?php echo html::textarea("desc[$plan->id]", $plan->desc, "class='form-control' rows='1'")?></td>
           <?php if($plan->parent != -1):?>
           <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus($plan->id, this.value)'");?></td>
           <?php else:?>
