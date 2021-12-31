@@ -63,8 +63,10 @@
           <td class='text'><?php echo zget($lang->gitlab->branch->branchCreationLevelList, $gitlabTag->accessLevel);?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('gitlab', 'editTagPriv', "gitlabID=$gitlabID&projectID=$projectID&tag_name=" . urlencode(helper::safe64Encode($gitlabTag->name)), "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->editTagPriv} class='btn btn-primary'");
-            common::printLink('gitlab', 'deleteTagPriv', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=" . urlencode(helper::safe64Encode($gitlabTag->name)), "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTagPriv}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->gitlab->tag->protectConfirmDel}\")==false) return false;'");
+            /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+            $tagName = str_replace('-', '*', $gitlabTag->name);
+            common::printLink('gitlab', 'editTagPriv', "gitlabID=$gitlabID&projectID=$projectID&tag_name=$tagName", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->editTagPriv} class='btn btn-primary'");
+            common::printLink('gitlab', 'deleteTagPriv', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=$tagName", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTagPriv}' class='btn btn-primary' target='hiddenwin' onclick='if(confirm(\"{$lang->gitlab->tag->protectConfirmDel}\")==false) return false;'");
             ?>
           </td>
         </tr>

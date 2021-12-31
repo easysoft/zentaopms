@@ -845,7 +845,9 @@ class gitlab extends control
      */
     public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
-        if($branch) $branch = helper::safe64Decode($branch);
+        /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
+        if($branch) $branch = str_replace('*', '-', $branch);
+
         if($_POST)
         {
             $this->gitlab->createBranchPriv($gitlabID, $projectID, $branch);
@@ -921,7 +923,8 @@ class gitlab extends control
             die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
         }
 
-        $branch  = helper::safe64Decode($branch);
+        /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
+        $branch  = str_replace('*', '-', $branch);
         $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1096,7 +1099,8 @@ class gitlab extends control
      */
     public function editTagPriv($gitlabID, $projectID, $tag = '')
     {
-        $tag = helper::safe64Decode($tag);
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $tag = str_replace('*', '-', $tag);
 
         if($_POST)
         {
@@ -1128,7 +1132,8 @@ class gitlab extends control
      */
     public function deleteTagPriv($gitlabID, $projectID, $tag)
     {
-        $tag     = helper::safe64Decode($tag);
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $tag     = str_replace('*', '-', $tag);
         $reponse = $this->gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1537,13 +1542,10 @@ class gitlab extends control
      */
     public function deleteTag($gitlabID, $projectID, $tagName = '', $confirm = 'no')
     {
-        if($confirm != 'yes')
-        {
-            $tagName = urlencode($tagName);
-            die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
-        }
+        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
 
-        $tagName = helper::safe64Decode($tagName);
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $tagName = str_replace('*', '-', $tagName);
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
