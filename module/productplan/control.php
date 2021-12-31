@@ -66,6 +66,9 @@ class productplan extends control
 
             $this->executeHooks($planID);
 
+            if($parent > 0) $this->productplan->updateParentStatus($parent);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => 'parent.refreshPlan()'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('productplan', 'browse', "productID=$productID&branch=$branchID&browseType=wait")));
@@ -358,6 +361,8 @@ class productplan extends control
         if($plan->parent > 0)     $this->view->parentPlan    = $this->productplan->getById($plan->parent);
         if($plan->parent == '-1') $this->view->childrenPlans = $this->productplan->getChildren($plan->id);
 
+        if($plan->branch > 0) $this->view->branchStatus = $this->loadModel('branch')->getById($plan->branch, $plan->product, 'status');
+
         $this->loadModel('datatable');
         $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
         $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
@@ -398,6 +403,18 @@ class productplan extends control
     public function start($planID, $confirm = 'no')
     {
         $plan = $this->productplan->getByID($planID);
+
+        if($_POST)
+        {
+            $changes = $this->productplan->start($planID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
+            $this->action->logHistory($actionID, $changes);
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
         if(!isonlybody())
         {
             if($confirm == 'no')
@@ -406,22 +423,14 @@ class productplan extends control
             }
             else
             {
-                $changes = $this->productplan->updateStatus($planID, 'doing');
-                if(dao::isError()) die(js::error(dao::getError()));
+                $this->productplan->updateStatus($planID, 'doing', 'started');
 
+                if(dao::isError()) die(js::error(dao::getError()));
                 die(js::reload('parent'));
             }
         }
         else
         {
-            if(!empty($_POST))
-            {
-                $changes = $this->productplan->updateStatus($planID, 'doing');
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess,'locate' => 'parent'));
-            }
-
             $this->view->plan = $plan;
             $this->display();
         }
@@ -443,9 +452,9 @@ class productplan extends control
         }
         else
         {
-            $changes = $this->productplan->updateStatus($planID, 'done');
-            if(dao::isError()) die(js::error(dao::getError()));
+            $this->productplan->updateStatus($planID, 'done', 'finished');
 
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::reload('parent'));
         }
     }
@@ -466,9 +475,9 @@ class productplan extends control
         }
         else
         {
-            $changes = $this->productplan->updateStatus($planID, 'closed');
-            if(dao::isError()) die(js::error(dao::getError()));
+            $this->productplan->updateStatus($planID, 'closed', 'closed');
 
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::reload('parent'));
         }
     }
@@ -489,9 +498,9 @@ class productplan extends control
         }
         else
         {
-            $changes = $this->productplan->updateStatus($planID, 'doing');
-            if(dao::isError()) die(js::error(dao::getError()));
+            $this->productplan->updateStatus($planID, 'doing', 'activated');
 
+            if(dao::isError()) die(js::error(dao::getError()));
             die(js::reload('parent'));
         }
     }

@@ -24,7 +24,8 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 .plan-name {position: relative; display: flex; align-items: center;}
 .plan-name > span {flex: none;}
 
-#productplanList .c-title.has-child > .plan-name.expired > a {overflow:hidden; max-width: calc(100% - 62px);}
+[lang^='zh-'] #productplanList .c-title.has-child > .plan-name.expired > a {overflow:hidden; max-width: calc(100% - 62px);}
+[lang^='en']  #productplanList .c-title.has-child > .plan-name.expired > a {overflow:hidden; max-width: calc(100% - 67px);}
 #productplanList .c-title.has-child > .plan-name > a {overflow:hidden; max-width: calc(100% - 16px);}
 #productplanList .c-title > .plan-name.expired > a {overflow:hidden; max-width: calc(100% - 46px);}
 #productplanList .plan-name.expired > .label.label-danger {margin-left:3px; }

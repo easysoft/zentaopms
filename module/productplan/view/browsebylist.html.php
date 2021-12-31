@@ -78,7 +78,6 @@
       </thead>
       <tbody>
       <?php $this->loadModel('file');?>
-      <?php $today = date('Y-m-d');?>
       <?php foreach($plans as $plan):?>
       <?php
       $canBeChanged = common::canBeChanged('plan', $plan);
@@ -115,7 +114,7 @@
           <?php
           $class   = '';
           $expired = '';
-          if($plan->end < $today and in_array($plan->status, array('wait', 'doing')))
+          if($plan->expired and in_array($plan->status, array('wait', 'doing')))
           {
               $class  .= ' expired';
               $expired = "<span class='label label-danger label-badge'>{$this->lang->productplan->expired}</span>";
@@ -159,12 +158,13 @@
                   $attr       = "data-id='{$plan->id}' data-width='550px'";
                   $isOnlyBody = true;
               }
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody);
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr);
               common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr);
               common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
           }
 
-          $attr = $plan->expired ? "disabled='disabled'" : '';
+          $attr     = $plan->expired ? "disabled='disabled'" : '';
+          $disabled = '';
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
               $disabled      = '';
@@ -191,13 +191,13 @@
           common::printIcon('productplan', 'edit', "planID=$plan->id", $plan, 'list');
           if(common::hasPriv('productplan', 'create', $plan))
           {
-              if($plan->parent > 0 or in_array($plan->status, array('done', 'closed')))
+              if($plan->parent > 0)
               {
                   echo "<button type='button' class='disabled btn'><i class='disabled icon-split' title='{$this->lang->productplan->children}'></i></button> ";
               }
               else
               {
-                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn' title='{$this->lang->productplan->children}'");
+                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn {$disabled}' title='{$this->lang->productplan->children}'");
               }
           }
 
