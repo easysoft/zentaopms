@@ -111,44 +111,90 @@ class my extends control
         /* append id for secend sort. */
         $sort = $this->loadModel('common')->appendOrder($orderBy);
 
-        /* Get tasks. */
-        $tasks      = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager, $sort);
-        $tasksCount = $pager->recTotal;
+        /* Get the number of tasks assigned to me. */
+        $tasks     = $this->loadModel('task')->getUserTasks($this->app->user->account, 'assignedTo', 0, $pager, $sort);
+        $taskCount = $pager->recTotal;
 
-        /* Get stories. */
-        $assignedToStories      = $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', $sort, $pager, 'story', false);
-        $assignedToStoriesCount = $pager->recTotal;
-        $reviewByStories        = $this->loadModel('story')->getUserStories($this->app->user->account, 'reviewBy', $sort, $pager, 'story', false);
-        $reviewByStoriesCount   = $pager->recTotal;
-        $storiesCount = $assignedToStoriesCount + $reviewByStoriesCount;
+        /* Get the number of stories assigned to me. */
+        $assignedToStories    = $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', $sort, $pager, 'story', false);
+        $assignedToStoryCount = $pager->recTotal;
+        $reviewByStories      = $this->loadModel('story')->getUserStories($this->app->user->account, 'reviewBy', $sort, $pager, 'story', false);
+        $reviewByStoryCount   = $pager->recTotal;
+        $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
 
-        /* Get requirements. */
-        $assignedRequirements      = $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', $sort, $pager, 'requirement');
-        $assignedRequirementsCount = $pager->recTotal;
-        $reviewByRequirements      = $this->loadModel('story')->getUserStories($this->app->user->account, 'reviewBy', $sort, $pager, 'requirement');
-        $reviewByRequirementsCount = $pager->recTotal;
-        $requirementsCount = $assignedRequirementsCount + $reviewByRequirementsCount;
+        $requirementCount = 0;
+        $isOpenedURAndSR  = $this->config->URAndSR;
+        if($isOpenedURAndSR)
+        {
+            /* Get the number of requirements assigned to me. */
+            $assignedRequirements     = $this->loadModel('story')->getUserStories($this->app->user->account, 'assignedTo', $sort, $pager, 'requirement');
+            $assignedRequirementCount = $pager->recTotal;
+            $reviewByRequirements     = $this->loadModel('story')->getUserStories($this->app->user->account, 'reviewBy', $sort, $pager, 'requirement');
+            $reviewByRequirementCount = $pager->recTotal;
+            $requirementCount         = $assignedRequirementCount + $reviewByRequirementCount;
+        }
 
-        /* Get bugs. */
-        $bugs = $this->loadModel('bug')->getUserBugs($this->app->user->account, 'assignedTo', $sort, 0, $pager);
-        $bugsCount = $pager->recTotal;
+        /* Get the number of bugs assigned to me. */
+        $bugs     = $this->loadModel('bug')->getUserBugs($this->app->user->account, 'assignedTo', $sort, 0, $pager);
+        $bugCount = $pager->recTotal;
 
-        /* Get cases. */
-        $cases = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
-        $casesCount = $pager->recTotal;
+        /* Get the number of testcases assigned to me. */
+        $cases     = $this->loadModel('testcase')->getByAssignedTo($this->app->user->account, $sort, $pager, 'skip');
+        $caseCount = $pager->recTotal;
 
-        /* Get test tasks. */
-        $testTasks = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, 'assignedTo');
-        $testTasksCount = $pager->recTotal;
+        /* Get the number of testtasks assigned to me. */
+        $testTasks     = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, 'assignedTo');
+        $testTaskCount = $pager->recTotal;
+
+        $issueCount   = 0;
+        $riskCount    = 0;
+        $reviewCount  = 0;
+        $ncCount      = 0;
+        $meetingCount = 0;
+        $isMaxVersion = isset($this->config->maxVersion) ? 1 : 0;
+        if($isMaxVersion)
+        {
+            /* Get the number of issues assigned to me. */
+            $issues     = $this->loadModel('issue')->getUserIssues('assignedTo', $this->app->user->account, $orderBy, $pager);
+            $issueCount = $pager->recTotal;
+
+            /* Get the number of risks assigned to me. */
+            $risks     = $this->loadModel('risk')->getUserRisks('assignedTo', $this->app->user->account, $orderBy, $pager);
+            $riskCount = $pager->recTotal;
+
+            /* Get the number of reviews assigned to me. */
+            $reviewList  = $this->loadModel('review')->getUserReviews('wait', $orderBy, $pager);
+            $reviewCount = $pager->recTotal;
+
+            /* Get the number of nc assigned to me. */
+            $ncList  = $this->my->getNcList('assignedToMe', $orderBy, $pager);
+            $ncCount = $pager->recTotal;
+
+            /* Get the number of meetings assigned to me. */
+            $meetings     = $this->loadModel('meeting')->getListByUser('futureMeeting', $orderBy, 0, $pager);
+            $meetingCount = $pager->recTotal;
+        }
 
 echo <<<EOF
 <script>
-var tasksCount        = $tasksCount;
-var reuqirementsCount = $requirementsCount;
-var storiesCount      = $storiesCount;
-var bugsCount         = $bugsCount;
-var casesCount        = $casesCount;
-var testTasksCount    = $testTasksCount;
+var taskCount     = $taskCount;
+var storyCount    = $storyCount;
+var bugCount      = $bugCount;
+var caseCount     = $caseCount;
+var testTaskCount = $testTaskCount;
+
+var isOpenedURAndSR = $isOpenedURAndSR;
+if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
+
+var isMaxVersion = $isMaxVersion;
+if(isMaxVersion !== 0)
+{
+    var issueCount   = $issueCount;
+    var riskCount    = $riskCount;
+    var reviewCount  = $reviewCount;
+    var ncCount      = $ncCount;
+    var meetingCount = $meetingCount;
+}
 </script>
 EOF;
     }
