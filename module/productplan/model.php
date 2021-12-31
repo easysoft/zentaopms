@@ -684,8 +684,8 @@ class productplanModel extends model
             {
                 $parentID        = $oldPlans[$planID]->parent;
                 $parent          = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
-                $parentBeginDate = isset($plans[$parentID]->begin) ? $plans[$parentID]->begin : $parent->begin;
-                $parentEndDate   = isset($plans[$parentID]->end) ? $plans[$parentID] : $parent->end;
+                $parentBeginDate = $parent->begin;
+                $parentEndDate   = $parent->end;
 
                 if($parentBeginDate != '2030-01-01' and $plan->begin < $parentBeginDate)
                 {
@@ -698,7 +698,7 @@ class productplanModel extends model
             }
             elseif($oldPlans[$planID]->parent == -1 and $plan->begin != '2030-01-01')
             {
-                $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->andWhere('id')->notIN($data->id)->fetchAll('id');
+                $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
                 $minBegin   = $plan->begin;
                 $maxEnd     = $plan->end;
                 foreach($childPlans as $childID => $childPlan)
