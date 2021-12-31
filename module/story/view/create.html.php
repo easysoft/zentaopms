@@ -20,6 +20,7 @@
 <?php js::set('blockID', $blockID); ?>
 <?php js::set('feedbackSource', $config->story->feedbackSource); ?>
 <?php js::set('storyType', $type);?>
+<?php js::set('pickerUsers', $userInfos);?>
 <?php if(common::checkNotCN()):?>
 <style> .sourceTd > .input-group > .input-group > .input-group-addon:first-child{padding: 5px 18px} </style>
 <?php endif;?>
@@ -106,7 +107,7 @@
             <td colspan='<?php echo $type == 'story' ? 4 : 2;?>' id='reviewerBox'>
               <div class="table-row">
                 <div class="table-col">
-                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control chosen' multiple");?>
+                  <?php echo html::select('reviewer[]', $reviewers, empty($needReview) ? $product->PO : '', "class='form-control' multiple");?>
                 </div>
                 <?php if(!$this->story->checkForceReview()):?>
                 <div class="table-col w-130px">
@@ -250,7 +251,7 @@
             <th><?php echo $lang->story->mailto;?></th>
             <td colspan="4">
               <div class="input-group">
-                <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+                <?php echo html::select('mailto[]', $users, str_replace(' ' , '', $mailto), "class='form-control user-picker' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
                 <?php echo $this->fetch('my', 'buildContactLists');?>
               </div>
             </td>

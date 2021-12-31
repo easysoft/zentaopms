@@ -36,7 +36,7 @@ function saveMembers()
             $('#submit').removeClass('hidden');
             if(result) $('#removeExecution').val('yes');
             $('#submit').click();
-        })
+        });
     }
 }
 
@@ -50,9 +50,7 @@ function saveMembers()
  */
 function setRole(account, roleID)
 {
-    role    = roles[account];       // get role according the account.
-    roleOBJ = $(document.getElementById('roles[' + roleID + ']')); // get role object.
-    roleOBJ.val(role)               // set the role.
+    $('#roles\\[' + roleID + '\\]').val(roles[account]);
 }
 
 /**
@@ -65,11 +63,11 @@ function setRole(account, roleID)
 function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
-    $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-    var accounts = $(obj).closest('tr').next('tr').find('select:first');
-    accounts.trigger('liszt:updated');
-    accounts.chosen();
-    i ++;
+    var $tr  = $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+    $tr.find('select:first')
+        .trigger('liszt:updated')
+        .picker({type: 'user'});
+    i++;
 }
 
 /**

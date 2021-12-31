@@ -23,6 +23,7 @@
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('selectedProductID', $productID);?>
 <?php js::set('selectedBranchID', $branchID);?>
+<?php js::set('pickerUsers', $userInfos);?>
 <?php $requiredFields = $config->project->create->requiredFields;?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -55,7 +56,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->project->PM;?></th>
-          <td><?php echo html::select('PM', $pmUsers, '', "class='form-control chosen'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
+          <td><?php echo html::select('PM', $pmUsers, '', "class='form-control user-picker'" . (strpos($requiredFields, 'PM') !== false ? ' required' : ''));?></td>
         </tr>
         <tr>
           <th><?php echo $lang->project->budget;?></th>
@@ -161,7 +162,7 @@
           <th><?php echo $lang->whitelist;?></th>
           <td colspan='2'>
             <div class='input-group'>
-              <?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?>
+              <?php echo html::select('whitelist[]', $users, '', 'class="form-control user-picker" multiple');?>
               <?php echo $this->fetch('my', 'buildContactLists', "dropdownName='whitelist'");?>
             </div>
           </td>

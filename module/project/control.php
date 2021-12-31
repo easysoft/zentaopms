@@ -479,6 +479,7 @@ class project extends control
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('project', 'browse') : '';
         $this->view->pmUsers             = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst');
         $this->view->users               = $this->user->getPairs('noclosed|nodeleted');
+        $this->view->userInfos           = $this->user->getUserDisplayInfos(array_keys($this->view->users));
         $this->view->copyProjects        = $this->project->getPairsByModel($model);
         $this->view->products            = $products;
         $this->view->allProducts         = array('0' => '') + $this->program->getProductPairs($programID, 'assign', 'noclosed');
@@ -1335,6 +1336,7 @@ class project extends control
         $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $userInfos = $this->user->getUserDisplayInfos(array_keys($users), $dept);
 
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
@@ -1345,6 +1347,7 @@ class project extends control
         $this->view->project        = $project;
         $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
+        $this->view->userInfos      = $userInfos;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();
