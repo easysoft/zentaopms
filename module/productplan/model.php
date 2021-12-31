@@ -634,8 +634,8 @@ class productplanModel extends model
                 break;
         }
 
-        if(isset($parentStatus) and $parentStatus) $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
-        if(isset($parentAction) and $parentAction) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
+        if(!empty($parentStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
+        if(!empty($parentAction)) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
 
         return !dao::isError();
     }
