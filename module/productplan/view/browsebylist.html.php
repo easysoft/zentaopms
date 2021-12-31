@@ -163,23 +163,23 @@
               common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
           }
 
-          $attr     = $plan->expired ? "disabled='disabled'" : '';
-          $disabled = '';
+          $attr  = $plan->expired ? "disabled='disabled'" : '';
+          $class = '';
+          if($product->type != 'normal')
+          {
+              $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
+              if($branchStatus == 'closed') $class = 'disabled';
+          }
           if(common::hasPriv('execution', 'create', $plan) and $plan->parent >= 0)
           {
               $disabled      = '';
               $executionLink = $config->systemMode == 'new' ? '#projects' : $this->createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=$plan->id&confirm=no&productID=$productID");
 
-              if($product->type != 'normal')
-              {
-                  $branchStatus = isset($branchStatusList[$plan->branch]) ? $branchStatusList[$plan->branch] : '';
-                  if($branchStatus == 'closed') $disabled = 'disabled';
-              }
               if(in_array($plan->status, array('done', 'closed'))) $disabled = 'disabled';
 
               if($config->systemMode == 'new')
               {
-                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn {$disabled}' title='{$lang->productplan->createExecution}' $attr");
+                  echo html::a($executionLink, '<i class="icon-plus"></i>', '', "data-toggle='modal' data-id='$plan->id' onclick='getPlanID(this, $plan->branch)' class='btn {$disabled} {$class}' title='{$lang->productplan->createExecution}' $attr");
               }
               else
               {
@@ -197,7 +197,7 @@
               }
               else
               {
-                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn {$disabled}' title='{$this->lang->productplan->children}'");
+                  echo html::a($this->createLink('productplan', 'create', "product=$productID&branch=$branch&parent={$plan->id}"), "<i class='icon-split'></i>", '', "class='btn {$class}' title='{$this->lang->productplan->children}'");
               }
           }
 
