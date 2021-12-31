@@ -2533,7 +2533,8 @@ class gitlabModel extends model
      */
     public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
     {
-        if(empty($gitlabID)) return false;
+        if(empty($gitlabID))   return false;
+        if(empty($projectID))  return false;
         if(empty($priv->name)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
         return json_decode(commonModel::http($url, $priv));
