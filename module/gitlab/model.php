@@ -1552,10 +1552,7 @@ class gitlabModel extends model
         }
 
         $tags = array();
-        foreach($allResults as $tag)
-        {
-            $tags[$tag->name] = $tag;
-        }
+        foreach($allResults as $tag) $tags[$tag->name] = $tag;
 
         return $tags;
     }
