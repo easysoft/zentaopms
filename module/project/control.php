@@ -823,7 +823,7 @@ class project extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -940,7 +940,7 @@ class project extends control
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $sort  = $this->loadModel('common')->appendOrder($orderBy);
+        $sort  = common::appendOrder($orderBy);
         $bugs  = $this->bug->getProjectBugs($projectID, $productID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 

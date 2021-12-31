@@ -99,7 +99,7 @@ class api extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort     = $this->loadModel('common')->appendOrder($orderBy);
+        $sort     = common::appendOrder($orderBy);
         $releases = $this->api->getReleaseByQuery($libID, $pager, $sort);
 
         $this->view->releases = $releases;
@@ -185,7 +185,7 @@ class api extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $structs = $this->api->getStructByQuery($libID, $pager, $sort);
 

@@ -1480,7 +1480,7 @@ class task extends control
             $taskLang = $this->lang->task;
 
             /* Create field lists. */
-            $sort   = $this->loadModel('common')->appendOrder($orderBy);
+            $sort   = common::appendOrder($orderBy);
             $fields = $this->post->exportFields ? $this->post->exportFields : explode(',', $allExportFields);
             foreach($fields as $key => $fieldName)
             {

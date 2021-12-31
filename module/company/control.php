@@ -63,7 +63,7 @@ class company extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* Build the search form. */
         $queryID   = $type == 'bydept' ? 0 : (int)$param;
@@ -205,7 +205,7 @@ class company extends control
 
         /* Append id for secend sort. */
         $order = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort  = $this->loadModel('common')->appendOrder($order);
+        $sort  = common::appendOrder($order);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $date    = empty($date) ? '' : date('Y-m-d', $date);

@@ -243,7 +243,7 @@ class productplan extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
         $this->session->set('productPlanList', $this->app->getURI(true), 'product');
 
         $this->commonAction($productID, $branch);
@@ -299,7 +299,7 @@ class productplan extends control
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $this->commonAction($plan->product, $plan->branch);
         $products = $this->product->getProductPairsByProject($this->session->project);

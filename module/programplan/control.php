@@ -88,7 +88,7 @@ class programplan extends control
 
         if($type == 'lists')
         {
-            $sort  = $this->loadModel('common')->appendOrder($orderBy);
+            $sort  = common::appendOrder($orderBy);
             $this->loadModel('datatable');
             $plans = $this->programplan->getPlans($projectID, $this->productID, $sort);
         }

@@ -4469,7 +4469,7 @@ class storyModel extends model
     public function sortStoriesOfPlan($planID, $sortIDList, $orderBy = 'id_desc', $pageID = 1, $recPerPage = 100)
     {
         /* Append id for secend sort. */
-        $orderBy = $this->loadModel('common')->appendOrder($orderBy);
+        $orderBy = common::appendOrder($orderBy);
 
         /* Get all stories by plan. */
         $stories     = $this->getPlanStories($planID, 'all', $orderBy);

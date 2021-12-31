@@ -2029,7 +2029,7 @@ EOD;
      * @access public
      * @return string
      */
-    public function appendOrder($orderBy, $append = 'id')
+    public static function appendOrder($orderBy, $append = 'id')
     {
         if(empty($orderBy)) return $append;
 
