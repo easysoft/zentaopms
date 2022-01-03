@@ -265,13 +265,12 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'wait' && privs.includes('start'))
         {
-            var isOnlyBody = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
-            var link       = createLink('productplan', 'start', 'planID=' + objectID, '', isOnlyBody);
-            showIframe     = isOnlyBody;
+            showIframe = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
+            link       = createLink('productplan', 'start', 'planID=' + objectID, '', showIframe);
         }
         else if((fromColType == 'done' || fromColType == 'closed') && privs.includes('activate'))
         {
-            var link   = createLink('productplan', 'activate', 'planID=' + objectID);
+            link       = createLink('productplan', 'activate', 'planID=' + objectID);
             showIframe = false;
         }
     }
@@ -279,7 +278,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'doing')
         {
-            var link   = createLink('productplan', 'finish', 'planID=' + objectID);
+            link       = createLink('productplan', 'finish', 'planID=' + objectID);
             showIframe = false;
         }
     }
@@ -287,7 +286,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'done')
         {
-            var link   = createLink('productplan', 'close', 'planID=' + objectID);
+            link       = createLink('productplan', 'close', 'planID=' + objectID);
             showIframe = false;
         }
     }

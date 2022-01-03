@@ -526,6 +526,7 @@ class gitlabModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results)<100) break;
         }
@@ -549,6 +550,7 @@ class gitlabModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results)<100) break;
         }
@@ -574,6 +576,7 @@ class gitlabModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results)<100 or $page > 10) break;
         }
@@ -649,6 +652,7 @@ class gitlabModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results)<100 or $page > 10) break;
         }
@@ -1490,6 +1494,7 @@ class gitlabModel extends model
             for($page = 1; true; $page++)
             {
                 $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+                if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
                 if(count($results)<100) break;
             }
@@ -1547,6 +1552,7 @@ class gitlabModel extends model
         for($page = 1; true; $page++)
         {
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results)<100) break;
         }
@@ -2533,7 +2539,8 @@ class gitlabModel extends model
      */
     public function apiCreateBranchPriv($gitlabID, $projectID, $priv)
     {
-        if(empty($gitlabID)) return false;
+        if(empty($gitlabID))   return false;
+        if(empty($projectID))  return false;
         if(empty($priv->name)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
         return json_decode(commonModel::http($url, $priv));
