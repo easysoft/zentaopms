@@ -664,6 +664,7 @@ class productplanModel extends model
             $isFuture = isset($data->future[$planID]) ? true : false;
 
             $plan = new stdclass();
+            $plan->branch = isset($data->branch[$planID]) ? $data->branch[$planID] : $oldPlans[$planID]->branch;
             $plan->title  = $data->title[$planID];
             $plan->begin  = isset($data->begin[$planID]) ? $data->begin[$planID] : '';
             $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
@@ -700,20 +701,18 @@ class productplanModel extends model
         $changes = array();
         foreach($plans as $planID => $plan)
         {
+            /*Determine whether the begin and end dates of the parent plan and the child plan are correct. */
             if($oldPlans[$planID]->parent > 0)
             {
                 $parentID        = $oldPlans[$planID]->parent;
                 $parent          = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
-                $parentBeginDate = $parent->begin;
-                $parentEndDate   = $parent->end;
-
-                if($parentBeginDate != '2030-01-01' and $plan->begin < $parentBeginDate)
+                if($parent->begin != '2030-01-01' and $plan->begin < $parent->begin)
                 {
-                    die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parentBeginDate)));
+                    die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
                 }
-                elseif($parentEndDate != '2030-01-01' and $plan->end > $parentEndDate)
+                elseif($parent->end != '2030-01-01' and $plan->end > $parent->end)
                 {
-                    die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parentEndDate)));
+                    die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
                 }
             }
             elseif($oldPlans[$planID]->parent == -1 and $plan->begin != '2030-01-01')
@@ -723,13 +722,14 @@ class productplanModel extends model
                 $maxEnd     = $plan->end;
                 foreach($childPlans as $childID => $childPlan)
                 {
-                    $childPlan = isset($plans[$childID]) ? $oldPlans[$childID] : $childPlan;
+                    $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
                     if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
                     if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
                 }
                 if($minBegin < $plan->begin) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
                 if($maxEnd > $plan->end) die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
             }
+
             $change = common::createChanges($oldPlans[$planID], $plan);
             if($change)
             {
