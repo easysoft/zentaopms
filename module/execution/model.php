@@ -1324,7 +1324,7 @@ class executionModel extends model
             $module = 'execution';
             $method = 'testcase';
         }
-        if($module == 'testtask' and ($method == 'view' || $method == 'create' || $method == 'edit'))
+        if($module == 'testtask' and ($method == 'view' || $method == 'create' || $method == 'edit' || $method == 'linkcase'))
         {
             $module = 'execution';
             $method = 'testtask';
