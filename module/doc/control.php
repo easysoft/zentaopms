@@ -779,6 +779,37 @@ class doc extends control
     }
 
     /**
+     * Ajax get doclib whitelist.
+     *
+     * @param  int    $doclibID
+     * @param  string $acl open|custom|private
+     * @access public
+     * @return string
+     */
+    public function ajaxGetWhitelist($doclibID, $acl)
+    {
+        $doclib = $this->doc->getLibById($doclibID);
+        $users  = $this->user->getPairs('noletter|noempty|noclosed');
+
+        if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
+        {
+            $project = $this->loadModel('project')->getById($doclib->project);
+
+            $userList     = array();
+            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($doclib->project);
+            $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
+            foreach($stakeholders as $stakeholder) $userList[$stakeholder] = $users[$stakeholder];
+
+            $userList += $projectTeams;
+            $whitelist = implode(',', array_keys($userList)) . $project->whitelist . ',' .$project->PM . ',' . $doclib->users;
+
+            return print(html::select('users[]', $users, $whitelist, "class='form-control chosen' multiple"));
+        }
+
+        return print(html::select('users[]', $users, $doclib->users, "class='form-control chosen' multiple"));
+    }
+
+    /**
      * Show files.
      *
      * @param string $type

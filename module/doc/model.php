@@ -177,8 +177,7 @@ class docModel extends model
             $lib->project = $execution->project;
         }
 
-        if($lib->acl == 'private') $lib->users = $this->app->user->account;
-        if($lib->acl == 'custom')
+        if($lib->acl == 'custom' or $lib->acl == 'private')
         {
             $trimedUsers = ',' . trim($lib->users, ',') . ',';
             if(strpos($trimedUsers, ',' . $this->app->user->account . ',') === false) $lib->users .= ',' . $this->app->user->account;
@@ -254,10 +253,20 @@ class docModel extends model
             ->join('groups', ',')
             ->join('users', ',')
             ->get();
-        if($lib->acl == 'private')
+
+        if($oldLib->type == 'project' or $oldLib->type == 'custom')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
-            $lib->users   = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
+
+            if($oldLib->type == 'custom')
+            {
+                if($lib->acl == 'private') $lib->users = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
+            }
+            else
+            {
+                $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
+                if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
+            }
         }
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.
@@ -906,11 +915,17 @@ class docModel extends model
         if(isset($object->addedBy) and $object->addedBy == $this->app->user->account) return true;
         if(isset($object->users) and strpos(",{$object->users},", $account) !== false) return true;
 
-        if($object->project and $object->main)
+        if($object->project and $object->acl == 'private')
         {
+            $stakeHolders    = array();
             $project         = $this->loadModel('project')->getById($object->project);
             $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
-            $authorizedUsers = $this->user->getProjectAuthedUsers($project, '', $projectTeams, array_flip(explode(",", $project->whitelist)));
+            $stakeHolderList = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
+            foreach($stakeHolderList as $stakeHolder) $stakeHolders[$stakeHolder] = $stakeHolder;
+
+            $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
+
+            if(strpos(",{$object->users},", $account) !== false) return true;
             if(array_key_exists($this->app->user->account, array_filter($authorizedUsers))) return true;
         }
 
@@ -1317,6 +1332,15 @@ class docModel extends model
 
             /* Sort project. */
             $orderedProjects = array();
+
+            /* Project permissions for DocLib whitelist */
+            if($this->app->tab == 'doc')
+            {
+                $myObjects = $this->dao->select('t2.id, t2.name')->from(TABLE_DOCLIB)->alias('t1')
+                    ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
+                    ->where("CONCAT(',', t1.users, ',')")->like("%,{$this->app->user->account},%")
+                    ->fetchPairs();
+            }
 
             $objects = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
