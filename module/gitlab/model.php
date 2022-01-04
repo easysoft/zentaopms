@@ -2623,7 +2623,7 @@ class gitlabModel extends model
      */
     public function apiCreateTagPriv($gitlabID, $projectID, $priv)
     {
-        if(empty($gitlabID)) return false;
+        if(empty($gitlabID) or empty($projectID)) return false;
         if(empty($priv->name)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_tags');
         return json_decode(commonModel::http($url, $priv));
