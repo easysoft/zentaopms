@@ -2473,8 +2473,9 @@ class storyModel extends model
      */
     public function getBySearch($productID, $branch = '', $queryID, $orderBy, $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
+        $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
-        $products    = $this->loadModel('product')->getProducts($executionID);
+        $products    = empty($executionID) ? $this->product->getList() : $this->product->getProducts($executionID);
 
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
