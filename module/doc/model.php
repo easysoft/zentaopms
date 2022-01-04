@@ -253,10 +253,20 @@ class docModel extends model
             ->join('groups', ',')
             ->join('users', ',')
             ->get();
-        if($lib->acl == 'private')
+
+        if($oldLib->type == 'project' or $oldLib->type == 'custom')
         {
             $libCreatedBy = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('doclib')->andWhere('objectID')->eq($libID)->andWhere('action')->eq('created')->fetch('actor');
-            $lib->users   = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
+
+            if($oldLib->type == 'custom')
+            {
+                if($lib->acl == 'private') $lib->users = $libCreatedBy ? $libCreatedBy : $this->app->user->account;
+            }
+            else
+            {
+                $openedBy = $this->dao->findById($oldLib->project)->from(TABLE_PROJECT)->fetch('openedBy');
+                if($lib->acl == 'private' and $lib->acl == 'custom') $lib->users .= ',' . $libCreatedBy ? $libCreatedBy : $openedBy;
+            }
         }
 
         $lib->name = trim($lib->name); //Temporary treatment: Code for bug #15528.

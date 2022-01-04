@@ -891,7 +891,6 @@ class projectModel extends model
                 $authorizedUsers[$project->openedBy] = $project->openedBy;
                 $authorizedUsers[$program->PM]       = $program->PM;
                 $authorizedUsers[$program->openedBy] = $program->openedBy;
-
             }
 
             $lib = new stdclass();
@@ -900,7 +899,7 @@ class projectModel extends model
             $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
-            $lib->users   = ',' . implode(',', $authorizedUsers) . ',';
+            $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
