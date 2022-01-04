@@ -24,16 +24,36 @@ function toggleAcl(acl, type)
     if(acl == 'custom')
     {
         $('#whiteListBox').removeClass('hidden');
+        $('#groupWhiteListBox').removeClass('hidden');
+    }
+    else if(acl == 'private')
+    {
+        $('#whiteListBox').removeClass('hidden');
+        $('#groupWhiteListBox').addClass('hidden');
     }
     else
     {
         $('#whiteListBox').addClass('hidden');
     }
+
     if(type == 'lib')
     {
         var libType = $('input[name="type"]:checked').val();
         var notice  = typeof(noticeAcl[libType][acl]) != 'undefined' ? noticeAcl[libType][acl] : '';
         $('#noticeAcl').html(notice);
+
+        if(libType == 'custom' && acl == 'private') $('#whiteListBox').addClass('hidden');
+
+        if(libType == 'project' && typeof(doclibID) != 'undefined')
+        {
+            link = createLink('doc', 'ajaxGetWhitelist', 'doclibID=' + doclibID + '&acl=' + acl);
+            $.get(link, function(users)
+            {   
+                $('#users').replaceWith(users);
+                $('#users_chosen').remove();
+                $('#users').chosen();
+            })
+        }
     }
     else
     {

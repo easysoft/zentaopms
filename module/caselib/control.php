@@ -203,7 +203,7 @@ class caselib extends control
         $this->caselib->buildSearchForm($libID, $libraries, $queryID, $actionURL);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* save session .*/
         $cases = $this->caselib->getLibCases($libID, $browseType, $queryID, $moduleID, $sort, $pager);

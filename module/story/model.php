@@ -2473,8 +2473,9 @@ class storyModel extends model
      */
     public function getBySearch($productID, $branch = '', $queryID = 0, $orderBy = '', $executionID = '', $type = 'story', $excludeStories = '', $pager = null)
     {
+        $this->loadModel('product');
         $executionID = empty($executionID) ? 0 : $executionID;
-        $products    = $this->loadModel('product')->getProducts($executionID);
+        $products    = empty($executionID) ? $this->product->getList() : $this->product->getProducts($executionID);
 
         $query = $queryID ? $this->loadModel('search')->getQuery($queryID) : '';
 
@@ -4469,7 +4470,7 @@ class storyModel extends model
     public function sortStoriesOfPlan($planID, $sortIDList, $orderBy = 'id_desc', $pageID = 1, $recPerPage = 100)
     {
         /* Append id for secend sort. */
-        $orderBy = $this->loadModel('common')->appendOrder($orderBy);
+        $orderBy = common::appendOrder($orderBy);
 
         /* Get all stories by plan. */
         $stories     = $this->getPlanStories($planID, 'all', $orderBy);

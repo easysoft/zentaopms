@@ -395,7 +395,7 @@ class upgrade extends control
                     $data->project = $_POST['projectType'] == 'execution' ? $projectList : $projectList[$projectProduct->project];
                     $data->product = $projectProduct->product;
                     $data->plan    = $projectProduct->plan;
-                    $data->branch  = $projectProduct->branch; 
+                    $data->branch  = $projectProduct->branch;
 
                     $this->dao->replace(TABLE_PROJECTPRODUCT)->data($data)->exec();
                 }
@@ -406,7 +406,7 @@ class upgrade extends control
 
         /* Get no merged product and project count. */
         $noMergedProductCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq(0)->fetch('count');
-        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->andWhere('type')->ne('program')->fetch('count');
+        $noMergedSprintCount  = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('grade')->eq(0)->andWhere('path')->eq('')->andWhere('type')->ne('program')->andWhere('deleted')->eq(0)->fetch('count');
 
         /* When all products and projects merged then finish and locate afterExec page. */
         if(empty($noMergedProductCount) and empty($noMergedSprintCount))
@@ -443,6 +443,7 @@ class upgrade extends control
             $noMergedSprints = $this->dao->select('t1.*')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
                 ->where('t1.project')->eq(0)
+                ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t1.type')->eq('sprint')
                 ->andWhere('t2.product')->in(array_keys($noMergedProducts))
                 ->orderBy('t1.id_desc')
@@ -487,6 +488,7 @@ class upgrade extends control
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t2.model')->eq('')
                 ->andWhere('t2.project')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
                 ->andWhere('t2.type')->eq('sprint')
                 ->fetchAll('id');
 
@@ -531,7 +533,13 @@ class upgrade extends control
         /* Get no merged projects than is not linked product. */
         if($type == 'sprint')
         {
-            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq(0)->andWhere('path')->eq('')->orderBy('id_desc')->fetchAll('id');
+            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('parent')->eq(0)
+                ->andWhere('path')->eq('')
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id_desc')
+                ->fetchAll('id');
+
             $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
             foreach($projectProducts as $sprintID => $products) unset($noMergedSprints[$sprintID]);
 
@@ -543,8 +551,16 @@ class upgrade extends control
         /* Get no merged projects that link more then two products. */
         if($type == 'moreLink')
         {
-            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('parent')->eq(0)->andWhere('path')->eq('')->orderBy('id_desc')->fetchAll('id');
-            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->where('project')->in(array_keys($noMergedSprints))->fetchGroup('project', 'product');
+            $noMergedSprints = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('parent')->eq(0)
+                ->andWhere('path')->eq('')
+                ->andWhere('deleted')->eq(0)
+                ->orderBy('id_desc')
+                ->fetchAll('id');
+
+            $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)
+                ->where('project')->in(array_keys($noMergedSprints))
+                ->fetchGroup('project', 'product');
 
             $productPairs = array();
             foreach($projectProducts as $sprintID => $products)
@@ -591,7 +607,7 @@ class upgrade extends control
      * Rename object in upgrade.
      *
      * @param  string $type  project|product|execution
-     * @param  string $duplicateList 
+     * @param  string $duplicateList
      * @access public
      * @return void
      */

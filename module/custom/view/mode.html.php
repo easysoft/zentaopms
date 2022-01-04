@@ -32,12 +32,12 @@
       </tr>
       <tr>
         <td></td>
-        <td><?php if($changedMode != 'yes') echo html::submitButton($lang->custom->switch);?></td>
+        <td>
+          <?php if($changedMode != 'yes') echo html::submitButton($lang->custom->switch);?>
+          <div id='changeModeTips' class='text-danger hidden'><?php echo $lang->custom->changeModeTips;?></div>
+        </td>
       </tr>
     </table>
   </form>
 </div>
-<script>
-$('#modeTab').addClass('btn-active-text');
-</script>
 <?php include '../../common/view/footer.html.php';?>

@@ -125,11 +125,16 @@ $config->project->datatable->fieldList['actions']['width']    = '180';
 $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
-$config->project->removePriv['project']   = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle');
-$config->project->removePriv['bug']       = array('batchChangePlan');
-$config->project->removePriv['doc']       = array('catalog', 'index');
-$config->project->removePriv['auditplan'] = array('delete');
-
 $config->project->checkList = new stdclass();
 $config->project->checkList->scrum     = array('bug', 'execution', 'meeting', 'release', 'build', 'doc', 'testtask', 'risk', 'issue', 'case');
 $config->project->checkList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
+
+$config->project->removePriv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
+$config->project->removePriv['bug']        = array('browse', 'batchChangePlan', 'batchCreate', 'batchEdit', 'batchConfirm', 'batchResolve', 'batchClose', 'batchActivate', 'report', 'batchChangeModule', 'batchChangeBranch');
+$config->project->removePriv['testcase']   = array('browse', 'batchChangeModule', 'batchChangeBranch');
+$config->project->removePriv['testtask']   = array('browse', 'view', 'start', 'activate', 'block', 'close');
+$config->project->removePriv['doc']        = array('catalog', 'index');
+$config->project->removePriv['repo']       = array('edit', 'delete', 'maintain', 'setRules');
+$config->project->removePriv['testreport'] = array('browse');
+$config->project->removePriv['auditplan']  = array('delete');
+if(!isset($config->maxVersion)) $config->project->removePriv['stakeholder'] = array('issue', 'viewIssue', 'userIssue');

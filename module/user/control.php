@@ -74,7 +74,7 @@ class user extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* Get user, totos. */
         $account = $user->account;
@@ -259,7 +259,7 @@ class user extends control
         $this->app->loadLang('testcase');
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $this->view->title      = $this->lang->user->common . $this->lang->colon . $this->lang->user->testTask;
         $this->view->position[] = $this->lang->user->testTask;
@@ -301,7 +301,7 @@ class user extends control
         $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $cases = array();
         if($type == 'case2Him')
@@ -1097,7 +1097,7 @@ class user extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
         $date    = empty($date) ? '' : date('Y-m-d', $date);
 
         $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', 'all', $date, $direction);
@@ -1165,19 +1165,20 @@ class user extends control
      * AJAX: get users from a contact list.
      *
      * @param  int    $contactListID
+     * @param  string $dropdownName
      * @access public
      * @return string
      */
-    public function ajaxGetContactUsers($contactListID)
+    public function ajaxGetContactUsers($contactListID, $dropdownName = 'mailto')
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
 
         $users = $this->user->getPairs('devfirst|nodeleted', $list ? $list->userList : '', $this->config->maxCount);
-        if(isset($this->config->user->moreLink)) $this->config->moreLinks['mailto[]'] = $this->config->user->moreLink;
+        if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
-        if(!$contactListID) return print(html::select('mailto[]', $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        if(!$contactListID) return print(html::select($dropdownName . "[]", $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
 
-        return print(html::select('mailto[]', $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        return print(html::select($dropdownName . "[]", $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
     }
 
     /**

@@ -39,12 +39,12 @@
           <?php echo $lang->upgrade->to15Desc;?>
           <?php $systemMode = isset($lang->upgrade->to15Mode['classic']) ? 'classic' : 'new';?>
           <?php echo html::radio('mode', $lang->upgrade->to15Mode, $systemMode);?>
-          <p> </p>
           <div id='selectedModeTips' class='text-info'><?php echo $lang->upgrade->selectedModeTips[$systemMode];?></div>
         </div>
       </div>
       <hr/>
       <div class='panel-footer text-center'>
+        <div id='upgradeTips' class='text-danger hidden'><?php echo $lang->upgrade->upgradeTips;?></div>
         <?php echo html::submitButton($lang->upgrade->start . (strpos($this->app->getClientLang(), 'zh') === false ? ' ' : '') . $lang->upgrade->common);?>
       </div>
     </form>
@@ -57,6 +57,7 @@ $(function()
     $('[name=mode]').change(function()
     {
         $('#selectedModeTips').html(selectedModeTips[$(this).val()]);
+        $(this).val() == 'new' ? $('#upgradeTips').removeClass('hidden') : $('#upgradeTips').addClass('hidden');
     })
 })
 </script>
