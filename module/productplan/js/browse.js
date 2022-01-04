@@ -126,7 +126,7 @@ function createCardMenu(options)
         var executionLink = systemMode == 'new' ? '#projects' : createLink('execution', 'create', "projectID=0&executionID=0&copyExecutionID=0&plan=" + card.id + "&confirm=no&productID=" + productID);
         var today         = new Date();
         var end           = $.zui.createDate(card.end);
-        if(end.toLocaleDateString() < today.toLocaleDateString())
+        if(end.getTime() < today.getTime())
         {
             className = 'disabled';
         }
@@ -338,7 +338,7 @@ function renderKanbanItem(item, $item)
     var today = new Date();
     var begin = $.zui.createDate(item.begin);
     var end   = $.zui.createDate(item.end);
-    if(end.toLocaleDateString() < today.toLocaleDateString() && (item.status == 'wait' || item.status == 'doing'))
+    if(end.getTime() < today.getTime() && (item.status == 'wait' || item.status == 'doing'))
     {
         $expired = $titleBox.children('.expired');
         if(!$expired.length)
