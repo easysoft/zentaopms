@@ -92,6 +92,7 @@ class api extends router
          */
 
         $this->path = trim(substr($_SERVER['REQUEST_URI'], strpos($_SERVER['REQUEST_URI'], 'api.php') + 7), '/');
+        if(strpos($this->path, '?') > 0) $this->path = strstr($this->path, '?', true);
 
         $subPos = $this->path ? strpos($this->path, '/') : false;
         $this->version = $subPos !== false ? substr($this->path, 0, $subPos) : '';
