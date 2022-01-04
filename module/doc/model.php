@@ -921,7 +921,7 @@ class docModel extends model
             $project         = $this->loadModel('project')->getById($object->project);
             $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
             $stakeHolderList = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
-            foreach($stakeHolderList as $stakeHolder)   $stakeHolders[$stakeHolder] = $stakeHolder;
+            foreach($stakeHolderList as $stakeHolder) $stakeHolders[$stakeHolder] = $stakeHolder;
 
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
 
