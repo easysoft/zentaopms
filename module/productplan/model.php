@@ -481,8 +481,22 @@ class productplanModel extends model
                 if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
+        elseif($oldPlan->parent == -1 and $plan->begin != '2030-01-01')
+        {
+            $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
+            $minBegin   = $plan->begin;
+            $maxEnd     = $plan->end;
+            foreach($childPlans as $childID => $childPlan)
+            {
+                $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
+                if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
+            }
+            if($minBegin < $plan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
+        }
 
-        $requiredFields = $plan->status == 'wait' ? $this->config->productplan->edit->requiredFields : 'title, begin, end';
+        $requiredFields = $oldPlan->status == 'wait' ? $this->config->productplan->edit->requiredFields : 'title, begin, end';
         if(!$this->post->future and strpos($requiredFields, 'begin') !== false and empty($_POST['begin']))
         {
             dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
@@ -662,6 +676,7 @@ class productplanModel extends model
         foreach($data->id as $planID)
         {
             $isFuture = isset($data->future[$planID]) ? true : false;
+            if($plan->status != 'wait') $isFuture = false;
 
             $plan = new stdclass();
             $plan->branch = isset($data->branch[$planID]) ? $data->branch[$planID] : $oldPlans[$planID]->branch;
