@@ -137,6 +137,7 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
+        $allBugs       = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll();
         $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
@@ -168,7 +169,35 @@ class testreportModel extends model
             $handleGroups['legacy'][$date]    = 0;
             $handleGroups['resolved'][$date]  = 0;
         }
-
+        /* Get the bugs reactivated during the testreport. */
+        $this->loadModel('action');
+        foreach($allBugs as $bug)
+        {
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            {
+                $actions       = $this->action->getList('bug', $bug->id);
+                $isOpenedBuild = false;
+                foreach($actions as $action)
+                {
+                    if($action->action == 'activated' and $action->date >= $begin and $action->date <= $end . ' 23:59:59')
+                    {
+                        foreach($action->history as $history)
+                        {
+                            if($history->field == 'openedBuild')
+                            {
+                                $isOpenedBuild = true;
+                                if(in_array($history->new, $buildIdList))
+                                {
+                                    $activatedBugs[$bug->id] = $bug;
+                                    break;
+                                }
+                            }
+                        }
+                    }
+                }
+                if(!$isOpenedBuild and $bug->openedDate >= $begin and $bug->openedDate <= $end . ' 23:59:59') $activatedBugs[$bug->id] = $bug;
+            }
+        }
         /* Get the resolved bug data. */
         foreach($resolvedBugs as $bug)
         {
@@ -229,18 +258,6 @@ class testreportModel extends model
             if($bug->resolvedBy) $resolvedByGroups[$bug->resolvedBy] = isset($resolvedByGroups[$bug->resolvedBy]) ? $resolvedByGroups[$bug->resolvedBy] + 1 : 1;
             if($bug->resolution) $resolutionGroups[$bug->resolution] = isset($resolutionGroups[$bug->resolution]) ? $resolutionGroups[$bug->resolution] + 1 : 1;
             if($bug->status == 'resolved' or $bug->status == 'closed') $resolvedBugs ++;
-
-            /* Determine if the bug has been reactivated in the testreport. */
-            $actions = $this->action->getList('bug', $bug->id);
-            foreach($actions as $action)
-            {
-                if($action->action == 'activated' and $action->date >= $begin and $action->date <= $end . ' 23:59:59')
-                {
-                    $activatedBugs[$bug->id] = $bug;
-                    break;
-                }
-            }
-
         }
 
         $bugInfo['foundBugs']           = count($foundBugs);
