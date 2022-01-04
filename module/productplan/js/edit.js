@@ -70,7 +70,7 @@ function setPlanStatus()
     var status = $('#status').val();
     if(status != 'wait')
     {
-        $('#checkBox').closest('div').addClass('hidden')
+        $('#checkBox').closest('div').addClass('hidden');
         $('#future').val(0);
         $('#begin').closest('td').addClass('required');
         $('#end').closest('td').addClass('required');
