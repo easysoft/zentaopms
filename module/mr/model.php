@@ -1504,4 +1504,18 @@ class mrModel extends model
         }
         return isset($errorMessage) ? $errorMessage : $message;
     }
+
+    /**
+     * Adjust the action clickable.
+     *
+     * @param  object $MR
+     * @param  string $action
+     * @access public
+     * @return void
+     */
+    public static function isClickable($MR, $action)
+    {
+        if($action == 'edit' and !$MR->synced) return false;
+        return true;
+    }
 }
