@@ -497,11 +497,11 @@ class productplanModel extends model
         }
 
         $requiredFields = $oldPlan->status == 'wait' ? $this->config->productplan->edit->requiredFields : 'title, begin, end';
-        if(!$this->post->future and strpos($requiredFields, 'begin') !== false and empty($_POST['begin']))
+        if($plan->status != 'wait' and $plan->begin == $this->config->productplan->future)
         {
             dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
         }
-        if(!$this->post->future and strpos($requiredFields, 'end') !== false and empty($_POST['end']))
+        if($plan->status != 'wait' and $plan->end == $this->config->productplan->future)
         {
             dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
         }
