@@ -44,6 +44,10 @@ function loadURL(url, type)
 
 $(function()
 {
+    /* Recalculate the maximum width of the title. */
+    var maxWidth = $('#mainMenu').width() - $('#actionsBox').width() - $('#mainMenu .btn-toolbar .page-title .label-info').width() - 177;
+    $('#mainMenu .btn-toolbar .page-title .text').css('max-width', maxWidth.toString() + 'px');
+
     if(link == 'true') showLink(planID, type, orderBy, param);
     var infoShowed = false;
     $('.nav.nav-tabs a[data-toggle="tab"]').on('shown.zui.tab', function(e)

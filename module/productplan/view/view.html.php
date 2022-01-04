@@ -36,7 +36,7 @@
       <?php endif; ?>
     </div>
   </div>
-  <div class='btn-toolbar pull-right'>
+  <div class='btn-toolbar pull-right' id='actionsBox'>
     <?php
     if(!$plan->deleted && !isonlybody())
     {

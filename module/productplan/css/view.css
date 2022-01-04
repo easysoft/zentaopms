@@ -27,3 +27,7 @@ ol, ul {padding-left: 20px;}
 
 #mainMenu .btn-link.disabled {color: #9e54ae; background: transparent; border-color:transparent;}
 #mainMenu .icon-checked, #mainMenu .icon-off, #mainMenu .icon-play, #mainMenu .icon-magic {margin-right: 3px;}
+
+#mainMenu .page-title {display: flex;}
+#mainMenu .btn-toolbar .page-title .label { top: 9px; margin-right: 10px; height: 16px;}
+#mainMenu .btn-toolbar .page-title .text {max-width: 434px; overflow: hidden; white-space:nowrap; margin-right: 6px;}
