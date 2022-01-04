@@ -59,7 +59,7 @@ class productplanModel extends model
             ->beginIF($parent <= 0)->andWhere('parent')->le((int)$parent)->fi()
             ->beginIF($parent > 0)->andWhere('parent')->eq((int)$parent)->fi()
             ->andWhere('product')->eq((int)$productID)
-            ->andWhere('end')->ne('2030-01-01')
+            ->andWhere('end')->ne($this->config->productplan->future)
             ->andWhere('branch')->eq($branch)
             ->orderBy('end desc')
             ->limit(1)
@@ -209,7 +209,7 @@ class productplanModel extends model
             if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             if($plan->productType != 'normal') $planPairs[$plan->id] = ($plan->branchName ? $plan->branchName : $this->lang->branch->main) . ' / ' . $planPairs[$plan->id];
         }
         return array('' => '') + $planPairs;
@@ -246,7 +246,7 @@ class productplanModel extends model
             if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-            if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+            if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
         }
 
         return array('' => '') + $planPairs;
@@ -314,7 +314,7 @@ class productplanModel extends model
                 if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
                 if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
                 $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
-                if($plan->begin == '2030-01-01' and $plan->end == '2030-01-01') $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
+                if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planGroup[$plan->product][$plan->branch][$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
             }
             else
             {
@@ -388,20 +388,20 @@ class productplanModel extends model
     public function create()
     {
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->create['id'], $this->config->allowedTags)
-            ->setIF($this->post->future || empty($_POST['begin']), 'begin', '2030-01-01')
-            ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
+            ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
+            ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
             ->remove('delta,uid,future')
             ->get();
 
         if($plan->parent > 0)
         {
-            if($plan->parentBegin != '2030-01-01')
+            if($plan->parentBegin != $this->config->productplan->future)
             {
                 if($plan->begin < $plan->parentBegin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $plan->parentBegin);
             }
-            if($plan->parentEnd != '2030-01-01')
+            if($plan->parentEnd != $this->config->productplan->future)
             {
-                if($plan->end !=='2030-01-01' and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+                if($plan->end !==$this->config->productplan->future and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
             }
         }
 
@@ -464,24 +464,24 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->future || empty($_POST['begin']), 'begin', '2030-01-01')
-            ->setIF($this->post->future || empty($_POST['end']), 'end', '2030-01-01')
+            ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
+            ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
             ->remove('delta,uid,future')
             ->get();
 
         if($oldPlan->parent > 0)
         {
             $parentPlan = $this->getByID($oldPlan->parent);
-            if($parentPlan->begin != '2030-01-01')
+            if($parentPlan->begin != $this->config->productplan->future)
             {
                 if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
             }
-            if($parentPlan->end != '2030-01-01')
+            if($parentPlan->end != $this->config->productplan->future)
             {
-                if($plan->end !=='2030-01-01' and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !==$this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
-        elseif($oldPlan->parent == -1 and $plan->begin != '2030-01-01')
+        elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
         {
             $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
             $minBegin   = $plan->begin;
@@ -489,8 +489,8 @@ class productplanModel extends model
             foreach($childPlans as $childID => $childPlan)
             {
                 $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
-                if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
-                if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
+                if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
             }
             if($minBegin < $plan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
             if($maxEnd > $plan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
@@ -696,8 +696,8 @@ class productplanModel extends model
 
             if($plan->begin == '' or $plan->end == '')
             {
-                $plan->begin = '2030-01-01';
-                $plan->end   = '2030-01-01';
+                $plan->begin = $this->config->productplan->future;
+                $plan->end   = $this->config->productplan->future;
             }
 
             foreach($extendFields as $extendField)
@@ -721,16 +721,16 @@ class productplanModel extends model
             {
                 $parentID = $oldPlans[$planID]->parent;
                 $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
-                if($parent->begin != '2030-01-01' and $plan->begin != '2030-01-01' and $plan->begin < $parent->begin)
+                if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
                 {
                     die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
                 }
-                elseif($parent->end != '2030-01-01' and $plan->end != '2030-01-01' and $plan->end > $parent->end)
+                elseif($parent->end != $this->config->productplan->future and $plan->end != $this->config->productplan->future and $plan->end > $parent->end)
                 {
                     die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
                 }
             }
-            elseif($oldPlans[$planID]->parent == -1 and $plan->begin != '2030-01-01')
+            elseif($oldPlans[$planID]->parent == -1 and $plan->begin != $this->config->productplan->future)
             {
                 $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
                 $minBegin   = $plan->begin;
@@ -738,11 +738,11 @@ class productplanModel extends model
                 foreach($childPlans as $childID => $childPlan)
                 {
                     $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
-                    if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
-                    if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
+                    if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
+                    if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
                 }
-                if($minBegin < $plan->begin and $minBegin != '2030-01-01' ) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
-                if($maxEnd > $plan->end and $maxEnd != '2030-01-01') die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
+                if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
+                if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
             }
 
             $change = common::createChanges($oldPlans[$planID], $plan);
@@ -775,17 +775,17 @@ class productplanModel extends model
             $maxEnd     = $end;
             foreach($childPlans as $childPlan)
             {
-                if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
-                if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
+                if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
             }
-            if($minBegin < $begin and $begin != '2030-01-01') dao::$errors['begin'] = sprintf($this->lang->beginGreaterChild, $minBegin);
-            if($maxEnd > $end and $end != '2030-01-01') dao::$errors['end'] = sprintf($this->lang->endLetterChild, $maxEnd);
+            if($minBegin < $begin and $begin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->beginGreaterChild, $minBegin);
+            if($maxEnd > $end and $end != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->endLetterChild, $maxEnd);
         }
         elseif($plan->parent > 0)
         {
             $parentPlan = $this->getByID($plan->parent);
-            if($begin < $parentPlan->begin and $parentPlan->begin != '2030-01-01') dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
-            if($end > $parentPlan->end and $parentPlan->end != '2030-01-01') dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+            if($begin < $parentPlan->begin and $parentPlan->begin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
+            if($end > $parentPlan->end and $parentPlan->end != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
         }
     }
 
