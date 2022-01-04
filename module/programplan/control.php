@@ -140,11 +140,12 @@ class programplan extends control
         $visibleFields  = array();
         $requiredFields = array();
         foreach(explode(',', $this->config->programplan->customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
-        $showFields   = $this->config->programplan->custom->createFields;
+        $showFields = $this->config->programplan->custom->createFields;
         foreach(explode(',', $showFields) as $field)
         {
-            if($field)$visibleFields[$field] = '';
+            if($field) $visibleFields[$field] = '';
         }
+
         foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
         {
             if($field)
@@ -168,7 +169,6 @@ class programplan extends control
         $this->view->visibleFields  = $visibleFields;
         $this->view->requiredFields = $requiredFields;
         $this->view->colspan        = count($visibleFields) + 3;
-
 
         $this->display();
     }
