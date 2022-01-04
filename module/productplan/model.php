@@ -676,7 +676,7 @@ class productplanModel extends model
         foreach($data->id as $planID)
         {
             $isFuture = isset($data->future[$planID]) ? true : false;
-            if($plan->status != 'wait') $isFuture = false;
+            if($data->status[$planID] != 'wait') $isFuture = false;
 
             $plan = new stdclass();
             $plan->branch = isset($data->branch[$planID]) ? $data->branch[$planID] : $oldPlans[$planID]->branch;
