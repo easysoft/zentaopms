@@ -193,6 +193,11 @@ class testreportModel extends model
                                 }
                             }
                         }
+                        if(!$isOpenedBuild)
+                        {
+                            $isOpenedBuild = true;
+                            $activatedBugs[$bug->id] = $bug;
+                        }
                     }
                 }
                 if(!$isOpenedBuild and $bug->openedDate >= $begin and $bug->openedDate <= $end . ' 23:59:59') $activatedBugs[$bug->id] = $bug;
