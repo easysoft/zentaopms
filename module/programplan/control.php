@@ -137,15 +137,38 @@ class programplan extends control
         $this->view->position[] = html::a($this->createLink('programplan', 'browse', "projectID=$projectID"), $project->name);
         $this->view->position[] = $this->lang->programplan->create;
 
-        $this->view->productList = $productList;
-        $this->view->project     = $project;
-        $this->view->productID   = $productID ? $productID : key($productList);
-        $this->view->stages      = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
-        $this->view->programPlan = $this->project->getById($planID, 'stage');
-        $this->view->plans       = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
-        $this->view->planID      = $planID;
-        $this->view->type        = 'lists';
-        $this->view->PMUsers     = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $visibleFields  = array();
+        $requiredFields = array();
+        foreach(explode(',', $this->config->programplan->customCreateFields) as $field) $customFields[$field] = $this->lang->programplan->$field;
+        $showFields   = $this->config->programplan->custom->createFields;
+        foreach(explode(',', $showFields) as $field)
+        {
+            if($field)$visibleFields[$field] = '';
+        }
+        foreach(explode(',', $this->config->programplan->create->requiredFields) as $field)
+        {
+            if($field)
+            {
+                $requiredFields[$field] = '';
+                if(strpos(",{$this->config->programplan->customCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
+            }
+        }
+
+        $this->view->productList    = $productList;
+        $this->view->project        = $project;
+        $this->view->productID      = $productID ? $productID : key($productList);
+        $this->view->stages         = empty($planID) ? $this->loadModel('stage')->getStages('id_asc') : array();
+        $this->view->programPlan    = $this->project->getById($planID, 'stage');
+        $this->view->plans          = $this->programplan->getStage($planID ? $planID : $projectID, $this->productID, 'parent');
+        $this->view->planID         = $planID;
+        $this->view->type           = 'lists';
+        $this->view->PMUsers        = $this->loadModel('user')->getPairs('noclosed|nodeleted|pmfirst',  $project->PM);
+        $this->view->customFields   = $customFields;
+        $this->view->showFields     = $showFields;
+        $this->view->visibleFields  = $visibleFields;
+        $this->view->requiredFields = $requiredFields;
+        $this->view->colspan        = count($visibleFields) + 3;
+
 
         $this->display();
     }
