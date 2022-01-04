@@ -649,7 +649,7 @@ class productplanModel extends model
      */
     public function batchUpdate($productID)
     {
-        $data     = fixer::input('post')->skipSpecial('desc')->get();
+        $data     = fixer::input('post')->get();
         $oldPlans = $this->getByIDList($data->id);
 
         $this->app->loadClass('purifier', true);
@@ -704,8 +704,8 @@ class productplanModel extends model
             /*Determine whether the begin and end dates of the parent plan and the child plan are correct. */
             if($oldPlans[$planID]->parent > 0)
             {
-                $parentID        = $oldPlans[$planID]->parent;
-                $parent          = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
+                $parentID = $oldPlans[$planID]->parent;
+                $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
                 if($parent->begin != '2030-01-01' and $plan->begin < $parent->begin)
                 {
                     die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
