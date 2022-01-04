@@ -721,11 +721,11 @@ class productplanModel extends model
             {
                 $parentID = $oldPlans[$planID]->parent;
                 $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
-                if($parent->begin != '2030-01-01' and $plan->begin < $parent->begin)
+                if($parent->begin != '2030-01-01' and $plan->begin != '2030-01-01' and $plan->begin < $parent->begin)
                 {
                     die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
                 }
-                elseif($parent->end != '2030-01-01' and $plan->end > $parent->end)
+                elseif($parent->end != '2030-01-01' and $plan->end != '2030-01-01' and $plan->end > $parent->end)
                 {
                     die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
                 }
@@ -741,8 +741,8 @@ class productplanModel extends model
                     if($childPlan->begin < $minBegin and $minBegin != '2030-01-01') $minBegin = $childPlan->begin;
                     if($childPlan->end > $maxEnd and $maxEnd != '2030-01-01') $maxEnd = $childPlan->end;
                 }
-                if($minBegin < $plan->begin) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
-                if($maxEnd > $plan->end) die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
+                if($minBegin < $plan->begin and $minBegin != '2030-01-01' ) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
+                if($maxEnd > $plan->end and $maxEnd != '2030-01-01') die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
             }
 
             $change = common::createChanges($oldPlans[$planID], $plan);
