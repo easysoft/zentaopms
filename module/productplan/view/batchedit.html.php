@@ -59,7 +59,7 @@
           <?php if($plan->end == '2030-01-01') $plan->end = '';?>
           <td class=<?php echo $required;?>><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date' $disabled");?></td>
           <td class=<?php echo $required;?>><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date' $disabled");?></td>
-          <?php $hidden = ($plan->status != 'wait' and $plan->parent != -1) ? 'hidden' : '';?>
+          <?php $hidden = ($plan->status != 'wait') ? 'hidden' : '';?>
           <td><div class='checkbox-primary <?php echo $hidden;?>'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future[<?php echo $plan->id; ?>]' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
           <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $plan, $extendField->field . "[{$plan->id}]") . "</td>";?>
         </tr>
