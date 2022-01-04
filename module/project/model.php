@@ -878,7 +878,7 @@ class projectModel extends model
 
             if($project->parent and $project->acl == 'program')
             {
-                $stakeHolders     = $this->loadModel('stakeholder')->getStakeHolderPairs($project->parent);
+                $stakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($project->parent);
                 foreach($stakeHolders as $stakeHolder) $authorizedUsers[$stakeHolder] = $stakeHolder;
 
                 foreach(explode(',', $project->whitelist) as $white)

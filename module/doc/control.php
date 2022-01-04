@@ -788,9 +788,8 @@ class doc extends control
      */
     public function ajaxGetWhitelist($doclibID, $acl)
     {
-        $account = $this->app->user->account;
-        $doclib  = $this->doc->getLibById($doclibID);
-        $users   = $this->user->getPairs('noletter|noempty|noclosed');
+        $doclib = $this->doc->getLibById($doclibID);
+        $users  = $this->user->getPairs('noletter|noempty|noclosed');
 
         if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
         {
