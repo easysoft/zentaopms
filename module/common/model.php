@@ -305,6 +305,7 @@ class commonModel extends model
         if($this->loadModel('user')->isLogon() or ($this->app->company->guest and $this->app->user->account == 'guest'))
         {
             if(stripos($method, 'ajax') !== false) return true;
+            if($module == 'block') return true;
             if($module == 'my' and $method == 'guidechangetheme') return true;
             if($module == 'misc' and $method == 'downloadclient') return true;
             if($module == 'misc' and $method == 'changelog')  return true;
@@ -312,14 +313,6 @@ class commonModel extends model
             if($module == 'tutorial' and $method == 'index')  return true;
             if($module == 'tutorial' and $method == 'quit')   return true;
             if($module == 'tutorial' and $method == 'wizard') return true;
-            if($module == 'block' and $method == 'admin') return true;
-            if($module == 'block' and $method == 'set') return true;
-            if($module == 'block' and $method == 'sort') return true;
-            if($module == 'block' and $method == 'resize') return true;
-            if($module == 'block' and $method == 'dashboard') return true;
-            if($module == 'block' and $method == 'printblock') return true;
-            if($module == 'block' and $method == 'main') return true;
-            if($module == 'block' and $method == 'delete') return true;
             if($module == 'product' and $method == 'showerrornone') return true;
         }
         return false;
