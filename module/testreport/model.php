@@ -137,7 +137,6 @@ class testreportModel extends model
      */
     public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
     {
-        $allBugs       = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll();
         $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
@@ -170,34 +169,41 @@ class testreportModel extends model
             $handleGroups['resolved'][$date]  = 0;
         }
         /* Get the bugs reactivated during the testreport. */
-        $this->loadModel('action');
+        $allBugs   = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+        $buildBugs = array();
         foreach($allBugs as $bug)
         {
-            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList))
+            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList)) $buildBugs[$bug->id] = $bug;
+        }
+        $actions   = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('activated')->andWhere('objectID')->in(array_keys($buildBugs))->fetchAll('id');
+        $histories = $this->loadModel('action')->getHistory(array_keys($actions));
+        foreach($actions as $actionID => $action)
+        {
+            $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
+        }
+        foreach($buildBugs as $bug)
+        {
+            $isOpenedBuild = false;
+            foreach($actions as $action)
             {
-                $actions       = $this->action->getList('bug', $bug->id);
-                $isOpenedBuild = false;
-                foreach($actions as $action)
+                if($action->objectID == $bug->id and $action->date >= $begin and $action->date <= $end . ' 23:59:59')
                 {
-                    if($action->action == 'activated' and $action->date >= $begin and $action->date <= $end . ' 23:59:59')
+                    foreach($action->history as $history)
                     {
-                        foreach($action->history as $history)
-                        {
-                            if($history->field == 'openedBuild')
-                            {
-                                $isOpenedBuild = true;
-                                if(in_array($history->new, $buildIdList))
-                                {
-                                    $activatedBugs[$bug->id] = $bug;
-                                    break;
-                                }
-                            }
-                        }
-                        if(!$isOpenedBuild)
+                        if(!$isOpenedBuild and $history->field == 'openedBuild')
                         {
                             $isOpenedBuild = true;
-                            $activatedBugs[$bug->id] = $bug;
+                            if(in_array($history->new, $buildIdList))
+                            {
+                                $activatedBugs[$bug->id] = $bug;
+                                break;
+                            }
                         }
+                    }
+                    if(!$isOpenedBuild)
+                    {
+                        $isOpenedBuild = true;
+                        $activatedBugs[$bug->id] = $bug;
                     }
                 }
             }
