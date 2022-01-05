@@ -54,5 +54,6 @@ $config->programplan->datatable->fieldList['actions']['required'] = 'yes';
 $config->programplan->datatable->fieldList['actions']['sort']     = 'no';
 
 $config->programplan->customCreateFields = 'PM,percent,attribute,acl,milestone,realBegan,realEnd';
+
 $config->programplan->custom = new stdclass();
 $config->programplan->custom->createFields = 'PM,percent,attribute,acl,milestone';

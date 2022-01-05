@@ -1,3 +1,10 @@
+/**
+ * Add item to create view of programplan.
+ *
+ * @param  obj    obj
+ * @access public
+ * @return void
+ */
 function addItem(obj)
 {
     var item = $('#addItem').html().replace(/%i%/g, i);
@@ -11,6 +18,13 @@ function addItem(obj)
     i ++;
 }
 
+/**
+ * Delete item.
+ *
+ * @param  obj    obj
+ * @access public
+ * @return void
+ */
 function deleteItem(obj)
 {
     if($('#planForm .table tbody').children().length < 2) return false;
