@@ -112,9 +112,11 @@ $lang->mr->closeSuccess        = "Merge request closed.";
 
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
+$lang->mr->apiErrorMap[3] = "401 Unauthorized";
 
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
+$lang->mr->errorLang[3] = "Unauthorized";
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";
