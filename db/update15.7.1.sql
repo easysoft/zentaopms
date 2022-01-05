@@ -136,7 +136,7 @@ REPLACE INTO `zt_stage` (`name`,`percent`,`type`,`createdBy`,`createdDate`,`edit
 ('发布','10','release','admin','2020-02-08 21:08:30','admin','2020-02-12 13:50:27','0'),
 ('总结评审','5','review','admin','2020-02-08 21:08:45','admin','2020-02-12 13:50:27','0');
 
-INSERT INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
+REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all','stage','typeList','request','需求', '1'),
 ('all','stage','typeList','design','设计', '1'),
 ('all','stage','typeList','dev','开发', '1'),
