@@ -275,7 +275,7 @@ class mrModel extends model
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
 
-            if(!empty($pipeline->queue) && $MR->jobID != $oldMR->jobID)
+            if(!empty($pipeline->queue))
             {
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
                 $MR->compileID = $compile->id;
