@@ -66,7 +66,7 @@ class productplan extends control
 
             $this->executeHooks($planID);
 
-            if($parent > 0) $this->productplan->updateParentStatus($parent, 'opened');
+            if($parent > 0) $this->productplan->updateParentStatus($parent);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $planID));
