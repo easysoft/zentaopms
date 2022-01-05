@@ -200,7 +200,7 @@ class testreportModel extends model
 
         foreach($buildBugs as $bug)
         {
-            $bugActions    = zget($actions, $bug->id, array());
+            $bugActions = zget($actions, $bug->id, array());
             foreach($bugActions as $action)
             {
                 foreach($action->history as $history)
