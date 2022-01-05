@@ -171,13 +171,9 @@ class testreportModel extends model
         /* Get the bugs reactivated during the testreport. */
         $allBugs   = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
         $buildBugs = array();
-        foreach($allBugs as $bug)
-        {
-            if(array_intersect(explode(',', $bug->openedBuild), $buildIdList)) $buildBugs[$bug->id] = $bug;
-        }
+        foreach($allBugs as $bug) if(array_intersect(explode(',', $bug->openedBuild), $buildIdList)) $buildBugs[$bug->id] = $bug;
         $actions   = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('activated')->andWhere('objectID')->in(array_keys($buildBugs))->fetchGroup('objectID', 'id');
         $histories = $this->loadModel('action')->getHistory(array_keys($actions));
-        a($actions);
         foreach($actions as $objectID => $action)
         {
             foreach($action as $actionID => $action)
