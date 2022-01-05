@@ -2732,35 +2732,42 @@ class bugModel extends model
         {
             $class = "c-$id";
             $title = '';
-            if($id == 'id')     $class .= ' cell-id';
-            if($id == 'status')
+            switch($id)
             {
-                $class .= ' bug-' . $bug->status;
-                $title  = "title='" . $this->processStatus('bug', $bug) . "'";
+                case 'id':
+                    $class .= ' cell-id';
+                    break;
+                case 'status':
+                    $class .= ' bug-' . $bug->status;
+                    $title  = "title='" . $this->processStatus('bug', $bug) . "'";
+                    break;
+                case 'confirmed':
+                    $class .= ' text-center';
+                    break;
+                case 'title':
+                    $class .= ' text-left';
+                    $title  = "title='{$bug->title}'";
+                    break;
+                case 'type':
+                    $title  = "title='" . zget($this->lang->bug->typeList, $bug->type) . "'";
+                    break;
+                case 'assignedTo':
+                    $class .= ' has-btn text-left';
+                    if($bug->assignedTo == $account) $class .= ' red';
+                    break;
+                case 'resolvedBy':
+                    $class .= ' c-user';
+                    $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
+                    break;
+                case 'project':
+                    $title = "title='" . zget($projectPairs, $bug->project, '') . "'";
+                    break;
+                case 'resolvedBuild':
+                    $class .= ' text-ellipsis';
+                    $title  = "title='" . $bug->resolvedBuild . "'";
+                    break;
             }
-            if($id == 'confirmed')
-            {
-                $class .= ' text-center';
-            }
-            if($id == 'title')
-            {
-                $class .= ' text-left';
-                $title  = "title='{$bug->title}'";
-            }
-            if($id == 'type')
-            {
-                $title  = "title='" . zget($this->lang->bug->typeList, $bug->type) . "'";
-            }
-            if($id == 'assignedTo')
-            {
-                $class .= ' has-btn text-left';
-                if($bug->assignedTo == $account) $class .= ' red';
-            }
-            if($id == 'resolvedBy')
-            {
-                $class .= ' c-user';
-                $title  = "title='" . zget($users, $bug->resolvedBy) . "'";
-            }
+
             if($id == 'deadline' && isset($bug->delay) && $bug->status == 'active') $class .= ' delayed';
             if(strpos(',type,execution,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
