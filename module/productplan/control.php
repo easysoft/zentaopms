@@ -280,9 +280,9 @@ class productplan extends control
 
                 foreach($branches as $id => $name)
                 {
-                    $plans = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
+                    $plans            = isset($planGroup[$product->id][$id]) ? array_filter($planGroup[$product->id][$id]) : array();
                     $branchPairs[$id] = $name . ' ' . count($plans);
-                    $planCount += count($plans);
+                    $planCount       += count($plans);
                 }
 
                 $this->view->branches = array('all' => $this->lang->productplan->allAB . ' ' . $planCount) + $branchPairs;
