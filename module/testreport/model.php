@@ -168,47 +168,50 @@ class testreportModel extends model
             $handleGroups['legacy'][$date]    = 0;
             $handleGroups['resolved'][$date]  = 0;
         }
+
         /* Get the bugs reactivated during the testreport. */
-        $allBugs   = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
         $buildBugs = array();
-        foreach($allBugs as $bug) if(array_intersect(explode(',', $bug->openedBuild), $buildIdList)) $buildBugs[$bug->id] = $bug;
-        $actions   = $this->dao->select('*')->from(TABLE_ACTION)->where('objectType')->eq('bug')->andWhere('action')->eq('activated')->andWhere('objectID')->in(array_keys($buildBugs))->fetchGroup('objectID', 'id');
-        $histories = $this->loadModel('action')->getHistory(array_keys($actions));
-        foreach($actions as $objectID => $action)
+        $allBugs   = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        foreach($allBugs as $bug)
         {
-            foreach($action as $actionID => $action)
+            if(!empty(array_intersect(explode(',', $bug->openedBuild), $buildIdList))) $buildBugs[$bug->id] = $bug;
+        }
+
+        /* Get bug reactivated actions during the testreport. */
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+                        ->where('objectType')->eq('bug')
+                        ->andWhere('action')->eq('activated')
+                        ->andWhere('date')->ge($begin)
+                        ->andWhere('date')->le($end . ' 23:59:59')
+                        ->andWhere('objectID')->in(array_keys($buildBugs))
+                        ->fetchGroup('objectID', 'id');
+
+        $actionIdList = array();
+        foreach($actions as $bugID => $action) $actionIdList = array_merge($actionIdList, array_keys($action));
+
+        $histories = $this->loadModel('action')->getHistory($actionIdList);
+        foreach($actions as $bugID => $actionList)
+        {
+            foreach($actionList as $actionID => $action)
             {
-                $action->history = isset($histories[$actionID]) ? $histories[$actionID] : array();
+                $action->history = zget($histories, $actionID, array());
             }
         }
+
         foreach($buildBugs as $bug)
         {
-            $isOpenedBuild = false;
-            $bugActions = isset($actions[$bug->id]) ? $actions[$bug->id] : array();
+            $bugActions    = zget($actions, $bug->id, array());
             foreach($bugActions as $action)
             {
-                if($action->objectID == $bug->id and $action->date >= $begin and $action->date <= $end . ' 23:59:59')
+                foreach($action->history as $history)
                 {
-                    foreach($action->history as $history)
-                    {
-                        if(!$isOpenedBuild and $history->field == 'openedBuild')
-                        {
-                            $isOpenedBuild = true;
-                            if(in_array($history->new, $buildIdList))
-                            {
-                                $activatedBugs[$bug->id] = $bug;
-                                break;
-                            }
-                        }
-                    }
-                    if(!$isOpenedBuild)
-                    {
-                        $isOpenedBuild = true;
-                        $activatedBugs[$bug->id] = $bug;
-                    }
+                    if($history->field == 'openedBuild' and !in_array($history->new, $buildIdList)) continue;
+                    $activatedBugs[$bug->id] = $bug;
                 }
             }
         }
+
         /* Get the resolved bug data. */
         foreach($resolvedBugs as $bug)
         {
