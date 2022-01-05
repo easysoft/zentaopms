@@ -169,7 +169,6 @@ class testreportModel extends model
             $handleGroups['resolved'][$date]  = 0;
         }
 
-        /* Get the bugs reactivated during the testreport. */
         $buildBugs = array();
         $allBugs   = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
 
@@ -180,12 +179,12 @@ class testreportModel extends model
 
         /* Get bug reactivated actions during the testreport. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-                        ->where('objectType')->eq('bug')
-                        ->andWhere('action')->eq('activated')
-                        ->andWhere('date')->ge($begin)
-                        ->andWhere('date')->le($end . ' 23:59:59')
-                        ->andWhere('objectID')->in(array_keys($buildBugs))
-                        ->fetchGroup('objectID', 'id');
+            ->where('objectType')->eq('bug')
+            ->andWhere('action')->eq('activated')
+            ->andWhere('date')->ge($begin)
+            ->andWhere('date')->le($end . ' 23:59:59')
+            ->andWhere('objectID')->in(array_keys($buildBugs))
+            ->fetchGroup('objectID', 'id');
 
         $actionIdList = array();
         foreach($actions as $bugID => $action) $actionIdList = array_merge($actionIdList, array_keys($action));
