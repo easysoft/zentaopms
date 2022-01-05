@@ -40,9 +40,11 @@
 <?php $class = $planID == 0 ? '' : "disabled='disabled'"?>
 <?php $name = $planID == 0 ? $lang->programplan->name : $lang->programplan->subStageName;?>
 <div id='mainContent' class='main-content'>
-  <div class="pull-right btn-toolbar">
-    <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=custom&key=createFields')?>
-    <?php include '../../common/view/customfield.html.php';?>
+  <div class='main-header'>
+    <div class="btn-toolbar pull-right">
+      <?php $customLink = $this->createLink('custom', 'ajaxSaveCustomFields', 'module=programplan&section=custom&key=createFields')?>
+      <?php include '../../common/view/customfield.html.php';?>
+    </div>
   </div>
   <form class='main-form form-ajax' method='post' id='planForm' enctype='multipart/form-data'>
     <div class='table-responsive'>
