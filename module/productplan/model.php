@@ -401,7 +401,7 @@ class productplanModel extends model
             }
             if($plan->parentEnd != $this->config->productplan->future)
             {
-                if($plan->end !==$this->config->productplan->future and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+                if($plan->end !== $this->config->productplan->future and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
             }
         }
 
@@ -464,8 +464,8 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
-            ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
+            ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
             ->remove('delta,uid,future')
             ->get();
 
@@ -478,7 +478,7 @@ class productplanModel extends model
             }
             if($parentPlan->end != $this->config->productplan->future)
             {
-                if($plan->end !==$this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
         elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
@@ -525,10 +525,10 @@ class productplanModel extends model
 
     /**
      * Start a plan.
-     * 
-     * @param  int  $planID 
+     *
+     * @param  int  $planID
      * @access public
-     * @return array 
+     * @return array
      */
     public function start($planID)
     {
@@ -623,7 +623,7 @@ class productplanModel extends model
             case 'finished':
                 if(isset($childStatus['wait']) or isset($childStatus['doing'])) break;
 
-                if($parent->status != 'done') 
+                if($parent->status != 'done')
                 {
                     $parentStatus = 'done';
                     $parentAction = 'finishedbychild';
@@ -631,7 +631,7 @@ class productplanModel extends model
 
                 break;
             case 'closed':
-                if(count($childStatus) == 1 and $parent->status != 'closed') 
+                if(count($childStatus) == 1 and $parent->status != 'closed')
                 {
                     $parentAction = 'closedbychild';
                     $parentStatus = 'closed';
@@ -716,7 +716,7 @@ class productplanModel extends model
         $changes = array();
         foreach($plans as $planID => $plan)
         {
-            /*Determine whether the begin and end dates of the parent plan and the child plan are correct. */
+            /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
             if($oldPlans[$planID]->parent > 0)
             {
                 $parentID = $oldPlans[$planID]->parent;
@@ -999,7 +999,7 @@ class productplanModel extends model
      */
     public static function isClickable($plan, $action)
     {
-        $action = strtolower($action);
+        $action    = strtolower($action);
         $clickable = commonModel::hasPriv('productplan', $action);
         if(!$clickable) return false;
 
