@@ -238,7 +238,7 @@ function handleFinishDrop(event)
     var $dragCol = $card.closest('.kanban-lane-col');
     var $dropCol = $(event.target);
 
-    /* Get d-n-d(drag and drop) info. */
+    /* Get d-n-d(drag and drop) infos. */
     var card        = $card.data('item');
     var fromColType = $dragCol.data('type');
     var toColType   = $dropCol.data('type');
