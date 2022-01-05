@@ -2767,6 +2767,7 @@ class bugModel extends model
                     $title  = "title='" . $bug->resolvedBuild . "'";
                     break;
             }
+
             if($id == 'deadline' && isset($bug->delay) && $bug->status == 'active') $class .= ' delayed';
             if(strpos(',type,execution,story,plan,task,openedBuild,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
