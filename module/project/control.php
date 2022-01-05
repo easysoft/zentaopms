@@ -30,25 +30,6 @@ class project extends control
     }
 
     /**
-     * Update children user view.
-     *
-     * @param  int    $projectID
-     * @param  array  $account
-     * @access public
-     * @return void
-     */
-    public function updateChildUserView($projectID = 0, $account = array())
-    {
-        $childPrograms = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->eq('project')->fetchPairs();
-        $childProjects = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$projectID,%")->andWhere('type')->eq('project')->fetchPairs();
-        $childProducts = $this->dao->select('id')->from(TABLE_PRODUCT)->where('project')->eq($projectID)->fetchPairs();
-
-        if(!empty($childPrograms)) $this->user->updateUserView($childPrograms, 'project',  array($account));
-        if(!empty($childProjects)) $this->user->updateUserView($childProjects, 'project',  array($account));
-        if(!empty($childProducts)) $this->user->updateUserView($childProducts, 'product', array($account));
-    }
-
-    /**
      * Export project.
      *
      * @param  string $status

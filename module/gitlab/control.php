@@ -232,10 +232,10 @@ class gitlab extends control
     /**
      * Check post token has admin permissions.
      *
-     * @access public
+     * @access protected
      * @return void
      */
-    public function checkToken()
+    protected function checkToken()
     {
         $gitlabURL = trim($this->post->url);
         $token     = trim($this->post->token);

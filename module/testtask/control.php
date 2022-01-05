@@ -69,17 +69,6 @@ class testtask extends control
     }
 
     /**
-     * Index page, header to browse.
-     *
-     * @access public
-     * @return void
-     */
-    public function index()
-    {
-        $this->locate($this->createLink('testtask', 'browse'));
-    }
-
-    /**
      * Browse test tasks.
      *
      * @param  int         $productID

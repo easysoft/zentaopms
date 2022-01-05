@@ -838,10 +838,10 @@ class productplan extends control
      * Synchronize story when edit plan.
      * @param  int    $planID
      * @param  int    $oldBranch
-     * @access public
+     * @access protected
      * @return void
      */
-    public function syncStory($changes)
+    protected function syncStory($changes)
     {
         foreach($changes as $planID => $changes)
         {

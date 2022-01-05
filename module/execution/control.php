@@ -51,29 +51,6 @@ class execution extends control
     }
 
     /**
-     * The index page.
-     *
-     * @param  string $locate     yes|no locate to the browse page or not.
-     * @param  string $status     the executions status, if locate is no, then get executions by the $status.
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function index($locate = 'auto', $executionID = 0)
-    {
-        if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
-
-        $this->commonAction($executionID);
-
-        if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
-
-        $this->view->title      = $this->lang->execution->index;
-        $this->view->position[] = $this->lang->execution->index;
-
-        $this->display();
-    }
-
-    /**
      * Browse a execution.
      *
      * @param  int    $executionID
@@ -860,20 +837,6 @@ class execution extends control
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
 
-        $this->display();
-    }
-
-    /**
-     * Execution qa dashboard.
-     *
-     * @param  int $executionID
-     * @access public
-     * @return void
-     */
-    public function qa($executionID = 0)
-    {
-        $this->commonAction($executionID);
-        $this->view->title = $this->lang->execution->qa;
         $this->display();
     }
 

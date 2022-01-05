@@ -663,10 +663,10 @@ class doc extends control
      * Sort doc lib.
      *
      * @param string $type
-     * @access public
+     * @access protected
      * @return void
      */
-    public function sort($type = '')
+    protected function sort($type = '')
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {

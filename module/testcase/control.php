@@ -71,17 +71,6 @@ class testcase extends control
     }
 
     /**
-     * Index page.
-     *
-     * @access public
-     * @return void
-     */
-    public function index()
-    {
-        $this->locate($this->createLink('testcase', 'browse'));
-    }
-
-    /**
      * Browse cases.
      *
      * @param  int        $productID

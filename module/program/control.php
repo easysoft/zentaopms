@@ -581,10 +581,10 @@ class program extends control
      *
      * @param  int    $programID
      * @param  array  $account
-     * @access public
+     * @access protected
      * @return void
      */
-    public function updateChildUserView($programID = 0, $account = array())
+    protected function updateChildUserView($programID = 0, $account = array())
     {
         $childPGMList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('program')->fetchPairs();
         $childPRJList  = $this->dao->select('id')->from(TABLE_PROJECT)->where('path')->like("%,$programID,%")->andWhere('type')->eq('project')->fetchPairs();

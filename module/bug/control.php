@@ -71,17 +71,6 @@ class bug extends control
     }
 
     /**
-     * The index page, locate to browse.
-     *
-     * @access public
-     * @return void
-     */
-    public function index()
-    {
-        $this->locate($this->createLink('bug', 'browse'));
-    }
-
-    /**
      * Browse bugs.
      *
      * @param  int    $productID
