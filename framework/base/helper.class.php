@@ -557,7 +557,7 @@ class baseHelper
      */
     static public function isZeroDate($date)
     {
-        return substr($date, 0, 4) == '0000';
+        return (empty($date) or substr($date, 0, 4) == '0000');
     }
 
     /**
