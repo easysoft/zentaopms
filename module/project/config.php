@@ -132,7 +132,7 @@ $config->project->maxCheckList = new stdclass();
 $config->project->maxCheckList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case', 'issue', 'risk', 'meeting');
 $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
 
-$config->project->excludedPrivv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
+$config->project->excludedPriv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
 $config->project->excludedPriv['bug']        = array('browse', 'batchChangePlan', 'batchCreate', 'batchEdit', 'batchConfirm', 'batchResolve', 'batchClose', 'batchActivate', 'report', 'batchChangeModule', 'batchChangeBranch');
 $config->project->excludedPriv['testcase']   = array('browse', 'batchChangeModule', 'batchChangeBranch');
 $config->project->excludedPriv['testtask']   = array('browse', 'view', 'start', 'activate', 'block', 'close');
