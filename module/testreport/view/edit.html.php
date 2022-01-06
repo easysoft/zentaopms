@@ -71,7 +71,7 @@
             <?php
             echo '<p>' . $storySummary . '</p>';
             echo '<p>' . sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary . '</p>';
-            echo '<p>' . sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), count($bugSummary['activatedBugs']), $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%') . '</p>';
+            echo '<p>' . sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), $bugSummary['activatedBugs'], $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%') . '</p>';
             ?>
             </td>
             <td></td>

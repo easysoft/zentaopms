@@ -83,7 +83,7 @@
               <?php
               echo '<div>' . $storySummary . '</div>';
               echo '<div>' . sprintf($lang->testreport->buildSummary, empty($builds) ? 1 : count($builds)) . $caseSummary . '</div>';
-              echo '<div>' . sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), count($bugSummary['activatedBugs']),  $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%') . '</div>';
+              echo '<div>' . sprintf($lang->testreport->bugSummary, $bugSummary['foundBugs'], count($legacyBugs), $bugSummary['activatedBugs'],  $bugSummary['countBugByTask'], $bugSummary['bugConfirmedRate'] . '%', $bugSummary['bugCreateByCaseRate'] . '%') . '</div>';
               ?>
               </td>
               <td></td>
