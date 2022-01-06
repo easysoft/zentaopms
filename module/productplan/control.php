@@ -164,7 +164,7 @@ class productplan extends control
             return print(js::locate($this->session->productPlanList, 'parent'));
         }
 
-        $planIDList = $this->post->planIDList ? $this->post->planIDList : return print(js::locate($this->session->productPlanList, 'parent'));
+        $planIDList = $this->post->planIDList ? $this->post->planIDList : print(js::locate($this->session->productPlanList, 'parent'));
 
         $this->commonAction($productID, $branch);
 
