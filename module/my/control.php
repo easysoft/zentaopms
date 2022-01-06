@@ -146,7 +146,7 @@ class my extends control
         $caseCount = $pager->recTotal;
 
         /* Get the number of testtasks assigned to me. */
-        $testTasks     = $this->testtask->getByUser($this->app->user->account, $pager, $orderBy, 'assignedTo');
+        $testTasks     = $this->testtask->getByUser($this->app->user->account, $pager, $orderBy, 'wait');
         $testTaskCount = $pager->recTotal;
 
         $issueCount   = 0;
@@ -545,8 +545,8 @@ EOF;
         $this->view->type       = $type;
         $this->view->pager      = $pager;
         $this->view->mode       = 'testtask';
-        $this->display();
 
+        $this->display();
     }
 
     /**
