@@ -401,37 +401,16 @@ class productplan extends control
      */
     public function start($planID, $confirm = 'no')
     {
-        $plan = $this->productplan->getByID($planID);
-
-        if($_POST)
+        if($confirm == 'no')
         {
-            $changes = $this->productplan->start($planID);
-            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-            $actionID = $this->loadModel('action')->create('productplan', $planID, 'started');
-            $this->action->logHistory($actionID, $changes);
-
-            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
-        }
-
-        if(!isonlybody())
-        {
-            if($confirm == 'no')
-            {
-                die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
-            }
-            else
-            {
-                $this->productplan->updateStatus($planID, 'doing', 'started');
-
-                if(dao::isError()) die(js::error(dao::getError()));
-                die(js::reload('parent'));
-            }
+            die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
         }
         else
         {
-            $this->view->plan = $plan;
-            $this->display();
+            $this->productplan->updateStatus($planID, 'doing', 'started');
+
+            if(dao::isError()) die(js::error(dao::getError()));
+            die(js::reload('parent'));
         }
     }
 

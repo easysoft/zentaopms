@@ -149,18 +149,10 @@
           <?php
           if($plan->parent >= 0 )
           {
-              $attr       = "target='hiddenwin'";
-              $isOnlyBody = false;
-              $class      = '';
-              if($plan->begin == $config->productplan->future or $plan->end == $config->productplan->future)
-              {
-                  $class      = 'iframe';
-                  $attr       = "data-id='{$plan->id}' data-width='70%'";
-                  $isOnlyBody = true;
-              }
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr);
-              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
+              $attr = "target='hiddenwin'";
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', '', false, $attr);
+              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', '', false, $attr);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', '', false, $attr);
           }
 
           $attr  = $plan->expired ? "disabled='disabled'" : '';
