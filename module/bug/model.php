@@ -764,8 +764,8 @@ class bugModel extends model
                 $bug->resolution     = $data->resolutions[$bugID];
                 $bug->duplicateBug   = $data->duplicateBugs[$bugID] ? $data->duplicateBugs[$bugID] : $oldBug->duplicateBug;
 
-                if($bug->assignedTo  != $oldBug->assignedTo) $bug->assignedDate = $now;
-                if($bug->resolution  != '') $bug->confirmed = 1;
+                if($bug->assignedTo != $oldBug->assignedTo) $bug->assignedDate = $now;
+                if($bug->resolution != '') $bug->confirmed = 1;
                 if(($bug->resolvedBy != '' or $bug->resolution != '') and $oldBug->status != 'closed')
                 {
                     $bug->resolvedDate = $now;
@@ -2694,6 +2694,8 @@ class bugModel extends model
      * @param  array  $stories
      * @param  array  $tasks
      * @param  string $mode
+     * @param  array  $projectPairs
+     *
      * @access public
      * @return void
      */
