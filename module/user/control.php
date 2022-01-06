@@ -1173,25 +1173,28 @@ class user extends control
     {
         $list = $contactListID ? $this->user->getContactListByID($contactListID) : '';
 
+        $class = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
+
         $users = $this->user->getPairs('devfirst|nodeleted', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
-        if(!$contactListID) return print(html::select($dropdownName . "[]", $users, '', "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        if(!$contactListID) return print(html::select($dropdownName . "[]", $users, '', "class='form-control chosen' multiple $class"));
 
-        return print(html::select($dropdownName . "[]", $users, $list->userList, "class='form-control chosen' multiple data-placeholder='{$this->lang->chooseUsersToMail}'"));
+        return print(html::select($dropdownName . "[]", $users, $list->userList, "class='form-control chosen' multiple $class"));
     }
 
     /**
      * Ajax get contact list.
      *
+     * @param  $dropdownName mailto|whitelist
      * @access public
      * @return string
      */
-    public function ajaxGetContactList()
+    public function ajaxGetContactList($dropdownName = 'mailto')
     {
         $contactList = $this->user->getContactLists($this->app->user->account, 'withnote');
         if(empty($contactList)) return false;
-        return print(html::select('', $contactList, '', "class='form-control' onchange=\"setMailto('mailto', this.value)\""));
+        return print(html::select('', $contactList, '', "class='form-control' onchange=\"setMailto('$dropdownName', this.value)\""));
     }
 
     /**
