@@ -1,3 +1,5 @@
 td.title {overflow: hidden; white-space: nowrap; text-overflow: ellipsis;}
 .main-table .table-header {box-shadow: none;}
 .c-version, .c-result {width: 80px;}
+
+#bysearchTab .icon-search {margin-right:3px;}
