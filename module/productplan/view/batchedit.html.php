@@ -38,7 +38,7 @@
       </thead>
       <tbody>
         <?php foreach($plans as $plan):?>
-        <?php $isChecked = ($plan->begin == '2030-01-01' or $plan->end == '2030-01-01') ? 'checked="checked"' : '';?>
+        <?php $isChecked = ($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) ? 'checked="checked"' : '';?>
         <tr>
           <td class='text-center'><?php echo $plan->id . html::hidden("id[$plan->id]", $plan->id);?></td>
           <?php if($product->type != 'normal'):?>
@@ -53,10 +53,10 @@
           <?php else:?>
           <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled onchange='setPlanStatus($plan->id, this.value, $plan->parent)'");?></td>
           <?php endif;?>
-          <?php $disabled = (($plan->begin == '2030-01-01' or $plan->end == '2030-01-01') and $plan->status == 'wait') ? 'disabled="disabled"' : '';?>
-          <?php if($plan->parent == -1 and ($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')) $disabled = 'disabled="disabled"';?>
-          <?php if($plan->begin == '2030-01-01') $plan->begin = '';?>
-          <?php if($plan->end == '2030-01-01') $plan->end = '';?>
+          <?php $disabled = (($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) and $plan->status == 'wait') ? 'disabled="disabled"' : '';?>
+          <?php if($plan->parent == -1 and ($plan->begin == $this->config->productplan->future or $plan->end == $this->config->productplan->future)) $disabled = 'disabled="disabled"';?>
+          <?php if($plan->begin == $this->config->productplan->future) $plan->begin = '';?>
+          <?php if($plan->end == $this->config->productplan->future) $plan->end = '';?>
           <td><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date' $disabled");?></td>
           <td><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date' $disabled");?></td>
           <?php $hidden = ($plan->status != 'wait' and $plan->parent != -1) ? 'hidden' : '';?>
