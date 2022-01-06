@@ -604,7 +604,11 @@ class productplanModel extends model
         $parent      = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
-        if(count($childStatus) == 1 and isset($childStatus['closed']))
+        if(count($childStatus) == 1 and isset($childStatus['wait']))
+        {
+            return;
+        }
+        elseif(count($childStatus) == 1 and isset($childStatus['closed']))
         {
             if($parent->status != 'closed')
             {
