@@ -87,7 +87,7 @@
           </tr>
           <tr class="<?php if($product->acl == 'open') echo 'hidden';?>" id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>
-            <td colspan='1'>
+            <td>
               <div class='input-group'>
                 <?php echo html::select('whitelist[]', $users, $product->whitelist, 'class="form-control chosen" multiple');?>
                 <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
