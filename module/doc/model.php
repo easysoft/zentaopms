@@ -2561,8 +2561,8 @@ EOT;
     {
         if(empty($type))
         {
-            $doclib = $this->getLibById($libID);
-            $type   = $doclib->type == 'execution' ? 'project' : $doclib->type;
+            $doclib   = $this->getLibById($libID);
+            $type     = $doclib->type == 'execution' ? 'project' : $doclib->type;
             $objectID = $type == 'custom' or $type == 'book' ? 0 : $doclib->$type;
         }
 
