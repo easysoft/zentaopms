@@ -302,6 +302,7 @@ class testreport extends control
         $cases = $this->testreport->getTaskCases($tasks, $begin, $end);
 
         list($bugInfo, $bugSummary) = $this->testreport->getBug4Report($tasks, $productIdList, $begin, $end, $builds);
+
         $this->view->begin   = $begin;
         $this->view->end     = $end;
         $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
