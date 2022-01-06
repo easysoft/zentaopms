@@ -78,7 +78,7 @@ $lang->testreport->exportNotice    = "Exported By <a href='https://www.zentao.ne
 $lang->testreport->noReport        = "No report has been generated. Please check it later.";
 $lang->testreport->foundBugTip     = "Bugs found in this build period and the affected build is in this test period.";
 $lang->testreport->legacyBugTip    = "Active bugs, or bugs that are not resolved in the test period.";
-$lang->testreport->activatedBugTip = "Reactive bugs in the test period.";
+$lang->testreport->activatedBugTip = "Reactived bugs during the testtask.";
 $lang->testreport->fromCaseBugTip  = "Bugs found from the running of cases in the test period.";
 $lang->testreport->errorTrunk      = "You cannot create a Testing report for the trunk. Please modify the linked build!";
 $lang->testreport->noTestTask      = "No test requests for this {$lang->productCommon}, so no reports can be generated. Please go to {$lang->productCommon} which has test requests and then generate the report.";

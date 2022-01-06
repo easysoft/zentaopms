@@ -245,8 +245,8 @@ define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
 define('TABLE_KANBANGROUP',  '`' . $config->db->prefix . 'kanbangroup`');
 define('TABLE_KANBANCARD',   '`' . $config->db->prefix . 'kanbancard`');
-if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
-if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
+if(!defined('TABLE_LANG'))        define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');

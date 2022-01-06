@@ -162,13 +162,14 @@ function setMailto(mailto, contactListID)
 /**
  * Ajax get contacts.
  *
- * @param  obj $obj
+ * @param  object $obj
+ * @param  string $dropdownName mailto|whitelist
  * @access public
  * @return void
  */
-function ajaxGetContacts(obj)
+function ajaxGetContacts(obj, dropdownName = 'mailto')
 {
-    link = createLink('user', 'ajaxGetContactList');
+    link = createLink('user', 'ajaxGetContactList', 'dropdownName=' + dropdownName);
     $.get(link, function(contacts)
     {
         if(!contacts) return false;

@@ -125,7 +125,7 @@ class testreportModel extends model
     }
 
     /**
-     * Get bug info.
+     * Get bug info and summary.
      *
      * @param  array  $tasks
      * @param  array  $productIdList
@@ -135,7 +135,7 @@ class testreportModel extends model
      * @access public
      * @return array
      */
-    public function getBugInfo($tasks, $productIdList, $begin, $end, $builds)
+    public function getBug4Report($tasks, $productIdList, $begin, $end, $builds)
     {
         $generatedBugs = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('openedDate')->ge($begin)->andWhere('openedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
@@ -259,7 +259,6 @@ class testreportModel extends model
         }
 
         $resolvedBugs   = 0;
-        $this->loadModel('action');
         foreach($foundBugs as $bug)
         {
             $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
@@ -273,14 +272,14 @@ class testreportModel extends model
             if($bug->status == 'resolved' or $bug->status == 'closed') $resolvedBugs ++;
         }
 
-        $bugInfo['foundBugs']           = count($foundBugs);
-        $bugInfo['legacyBugs']          = $legacyBugs;
-        $bugInfo['activatedBugs']       = $activatedBugs;
-        $bugInfo['countBugByTask']      = $byCaseNum;
-        $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
-        $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
-        $bugInfo['bugStageGroups']      = $isEmptyStage ? array() : $stageGroups;
-        $bugInfo['bugHandleGroups']     = $isEmptyHandle ? array() : $handleGroups;
+        $bugSummary['foundBugs']           = count($foundBugs);
+        $bugSummary['legacyBugs']          = $legacyBugs;
+        $bugSummary['activatedBugs']       = count($activatedBugs);
+        $bugSummary['countBugByTask']      = $byCaseNum;
+        $bugSummary['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
+        $bugSummary['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);
+        $bugInfo['bugStageGroups']         = $isEmptyStage ? array() : $stageGroups;
+        $bugInfo['bugHandleGroups']        = $isEmptyHandle ? array() : $handleGroups;
 
         $this->app->loadLang('bug');
         $users = $this->loadModel('user')->getPairs('noclosed|noletter|nodeleted');
@@ -351,7 +350,7 @@ class testreportModel extends model
         }
         $bugInfo['bugResolvedByGroups'] = $data;
 
-        return $bugInfo;
+        return array($bugInfo, $bugSummary);
     }
 
     /**

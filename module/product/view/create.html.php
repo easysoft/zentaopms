@@ -104,10 +104,10 @@
           </tr>
           <tr id="whitelistBox">
             <th><?php echo $lang->whitelist;?></th>
-            <td colspan='2'>
+            <td colspan='1'>
               <div class='input-group'>
                 <?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?>
-                <?php echo $this->fetch('my', 'buildContactLists', "dropdownName='whitelist'");?>
+                <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
               </div>
             </td>
           </tr>

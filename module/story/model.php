@@ -2436,7 +2436,7 @@ class storyModel extends model
      * @param  int    $productID
      * @param  string $type requirement|story
      * @param  string $orderBy
-     * @param  string $pager
+     * @param  object $pager
      * @access public
      * @return array
      */
@@ -2735,7 +2735,7 @@ class storyModel extends model
      * @access public
      * @return array
      */
-    public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 0, $moduleIdList = 0, $type = 'full', $status = 'all')
+    public function getExecutionStoryPairs($executionID = 0, $productID = 0, $branch = 'all', $moduleIdList = 0, $type = 'full', $status = 'all')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getExecutionStoryPairs();
         $stories = $this->dao->select('t2.id, t2.title, t2.module, t2.pri, t2.estimate, t3.name AS product')

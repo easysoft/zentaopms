@@ -2793,7 +2793,7 @@ class EndResponseException extends \Exception
     /**
      * @param string $content
      *
-     * @return sellf
+     * @return self
      */
     public static function create($content = '')
     {

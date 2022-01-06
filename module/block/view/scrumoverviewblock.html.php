@@ -31,7 +31,7 @@
       <th><?php echo $lang->block->totalStory . ':';?></th>
       <td><?php echo $totalData[$projectID]->allStories;?></td>
       <th><?php echo $lang->block->totalPeople . ':';?></th>
-      <td><?php echo  $totalData[$projectID]->teamCount ? html::a($this->createLink('project', 'team', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?></td>
+      <td><?php echo $totalData[$projectID]->teamCount ? html::a($this->createLink('project', 'team', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?></td>
       <th><?php echo $lang->block->estimatedHours . ':';?></th>
       <td><?php echo $totalData[$projectID]->estimate . $lang->execution->workHour;?></td>
       <th><?php echo $lang->block->totalBug. ':';?></th>

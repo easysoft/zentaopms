@@ -594,7 +594,11 @@ class productplanModel extends model
         $parent      = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
-        if(count($childStatus) == 1 and isset($childStatus['closed']))
+        if(count($childStatus) == 1 and isset($childStatus['wait']))
+        {
+            return;
+        }
+        elseif(count($childStatus) == 1 and isset($childStatus['closed']))
         {
             if($parent->status != 'closed')
             {
@@ -649,7 +653,7 @@ class productplanModel extends model
         foreach($data->id as $planID)
         {
             $isFuture = isset($data->future[$planID]) ? true : false;
-            if($data->status[$planID] != 'wait') $isFuture = false;
+            if(isset($data->status[$planID]) and $data->status[$planID] != 'wait') $isFuture = false;
 
             $plan = new stdclass();
             $plan->branch = isset($data->branch[$planID]) ? $data->branch[$planID] : $oldPlans[$planID]->branch;

@@ -161,10 +161,10 @@ class productplan extends control
             }
 
             $this->loadModel('score')->create('ajax', 'batchOther');
-            die(js::locate($this->session->productPlanList, 'parent'));
+            return print(js::locate($this->session->productPlanList, 'parent'));
         }
 
-        $planIDList = $this->post->planIDList ? $this->post->planIDList : die(js::locate($this->session->productPlanList, 'parent'));
+        $planIDList = $this->post->planIDList ? $this->post->planIDList : return print(js::locate($this->session->productPlanList, 'parent'));
 
         $this->commonAction($productID, $branch);
 

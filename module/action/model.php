@@ -1230,13 +1230,16 @@ class actionModel extends model
 
             if(isset($this->config->maxVersion)
                and strpos($this->config->action->assetType, $action->objectType) !== false
-               and empty($action->project) and empty($action->product) and empty($action->execution))
+               and empty($action->project) and empty(trim($action->product, ',')) and empty($action->execution))
             {
-                $method = $this->config->action->assetViewMethod[$action->objectType];
                 if($action->objectType == 'doc')
                 {
                     $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
                     $method       = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
+                }
+                else
+                {
+                    $method = $this->config->action->assetViewMethod[$action->objectType];
                 }
 
                 $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
@@ -1430,7 +1433,7 @@ class actionModel extends model
         $action = $this->getById($actionID);
         if($action->action != 'deleted') return;
 
-        if($action->objectType == 'execution')
+        if($this->config->systemMode == 'new' and $action->objectType == 'execution')
         {
             $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
             if($execution->deleted and empty($execution->project)) return print(js::error($this->lang->action->undeletedTips));
