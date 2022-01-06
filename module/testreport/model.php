@@ -125,7 +125,7 @@ class testreportModel extends model
     }
 
     /**
-     * Get bug report.
+     * Get bug info and summary.
      *
      * @param  array  $tasks
      * @param  array  $productIdList
