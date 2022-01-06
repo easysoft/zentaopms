@@ -269,8 +269,8 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'wait' && privs.includes('start'))
         {
-            showIframe = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
-            link       = createLink('productplan', 'start', 'planID=' + objectID, '', showIframe);
+            link = createLink('productplan', 'start', 'planID=' + objectID);
+            showIframe = false;
         }
         else if((fromColType == 'done' || fromColType == 'closed') && privs.includes('activate'))
         {
