@@ -1227,10 +1227,11 @@ class actionModel extends model
             if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout) return false;
 
             $action->objectLabel = $objectLabel;
+            $action->product     = trim($action->product, ',');
 
             if(isset($this->config->maxVersion)
                and strpos($this->config->action->assetType, $action->objectType) !== false
-               and empty($action->project) and empty(trim($action->product, ',')) and empty($action->execution))
+               and empty($action->project) and empty($action->product) and empty($action->execution))
             {
                 if($action->objectType == 'doc')
                 {
