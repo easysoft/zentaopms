@@ -299,8 +299,8 @@ class testreport extends control
             $this->view->reportTitle = date('Y-m-d') . " EXECUTION#{$execution->id} {$execution->name} {$this->lang->testreport->common}";
         }
 
-        $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
-        $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
+        $cases                      = $this->testreport->getTaskCases($tasks, $begin, $end);
+        list($bugInfo, $bugSummary) = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
         $this->view->begin   = $begin;
         $this->view->end     = $end;
         $this->view->members = $this->dao->select('DISTINCT lastRunner')->from(TABLE_TESTRUN)->where('task')->in(array_keys($tasks))->fetchPairs('lastRunner', 'lastRunner');
@@ -329,19 +329,7 @@ class testreport extends control
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
-        $this->view->legacyBugs = $bugInfo['legacyBugs'];
-
-        $bugSummary['foundBugs']           = $bugInfo['foundBugs'];
-        $bugSummary['activatedBugs']       = count($bugInfo['activatedBugs']);
-        $bugSummary['countBugByTask']      = $bugInfo['countBugByTask'];
-        $bugSummary['bugConfirmedRate']    = $bugInfo['bugConfirmedRate'];
-        $bugSummary['bugCreateByCaseRate'] = $bugInfo['bugCreateByCaseRate'];
-        unset($bugInfo['foundBugs']);
-        unset($bugInfo['legacyBugs']);
-        unset($bugInfo['activatedBugs']);
-        unset($bugInfo['countBugByTask']);
-        unset($bugInfo['bugConfirmedRate']);
-        unset($bugInfo['bugCreateByCaseRate']);
+        $this->view->legacyBugs = $bugSummary['legacyBugs'];
         $this->view->bugInfo    = $bugInfo;
         $this->view->bugSummary = $bugSummary;
 
@@ -444,8 +432,8 @@ class testreport extends control
             $bugs    = $this->testreport->getBugs4Test($builds, $productIdList, $begin, $end, 'execution');
         }
 
-        $cases   = $this->testreport->getTaskCases($tasks, $begin, $end);
-        $bugInfo = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
+        $cases                      = $this->testreport->getTaskCases($tasks, $begin, $end);
+        list($bugInfo, $bugSummary) = $this->testreport->getBugInfo($tasks, $productIdList, $begin, $end, $builds);
 
         $this->view->title = $report->title . $this->lang->testreport->edit;
 
@@ -470,19 +458,7 @@ class testreport extends control
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
-        $this->view->legacyBugs = $bugInfo['legacyBugs'];
-
-        $bugSummary['foundBugs']           = $bugInfo['foundBugs'];
-        $bugSummary['activatedBugs']       = count($bugInfo['activatedBugs']);
-        $bugSummary['countBugByTask']      = $bugInfo['countBugByTask'];
-        $bugSummary['bugConfirmedRate']    = $bugInfo['bugConfirmedRate'];
-        $bugSummary['bugCreateByCaseRate'] = $bugInfo['bugCreateByCaseRate'];
-        unset($bugInfo['foundBugs']);
-        unset($bugInfo['legacyBugs']);
-        unset($bugInfo['activatedBugs']);
-        unset($bugInfo['countBugByTask']);
-        unset($bugInfo['bugConfirmedRate']);
-        unset($bugInfo['bugCreateByCaseRate']);
+        $this->view->legacyBugs = $bugSummary['legacyBugs'];
         $this->view->bugInfo    = $bugInfo;
         $this->view->bugSummary = $bugSummary;
 
@@ -553,7 +529,7 @@ class testreport extends control
         $tasks   = $report->tasks ? $this->testtask->getByList($report->tasks) : array();;
         $builds  = $report->builds ? $this->build->getByList($report->builds) : array();
         $cases   = $this->testreport->getTaskCases($tasks, $report->begin, $report->end);
-        $bugInfo = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
+        list($bugInfo, $bugSummary) = $this->testreport->getBugInfo($tasks, $report->product, $report->begin, $report->end, $builds);
 
         /* save session .*/
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'testcase', false);
@@ -590,19 +566,7 @@ class testreport extends control
         $this->view->datas['testTaskPerRunResult'] = $this->loadModel('report')->computePercent($perCaseResult);
         $this->view->datas['testTaskPerRunner']    = $this->report->computePercent($perCaseRunner);
 
-        $this->view->legacyBugs = $bugInfo['legacyBugs'];
-
-        $bugSummary['foundBugs']           = $bugInfo['foundBugs'];
-        $bugSummary['activatedBugs']       = count($bugInfo['activatedBugs']);
-        $bugSummary['countBugByTask']      = $bugInfo['countBugByTask'];
-        $bugSummary['bugConfirmedRate']    = $bugInfo['bugConfirmedRate'];
-        $bugSummary['bugCreateByCaseRate'] = $bugInfo['bugCreateByCaseRate'];
-        unset($bugInfo['foundBugs']);
-        unset($bugInfo['legacyBugs']);
-        unset($bugInfo['activatedBugs']);
-        unset($bugInfo['countBugByTask']);
-        unset($bugInfo['bugConfirmedRate']);
-        unset($bugInfo['bugCreateByCaseRate']);
+        $this->view->legacyBugs = $bugSummary['legacyBugs'];
         $this->view->bugInfo    = $bugInfo;
         $this->view->bugSummary = $bugSummary;
 

@@ -350,7 +350,14 @@ class testreportModel extends model
         }
         $bugInfo['bugResolvedByGroups'] = $data;
 
-        return $bugInfo;
+        $bugSummary = $bugInfo;
+        unset($bugInfo['foundBugs']);
+        unset($bugInfo['legacyBugs']);
+        unset($bugInfo['activatedBugs']);
+        unset($bugInfo['countBugByTask']);
+        unset($bugInfo['bugConfirmedRate']);
+        unset($bugInfo['bugCreateByCaseRate']);
+        return array($bugInfo, $bugSummary);
     }
 
     /**
