@@ -59,7 +59,7 @@
             <tr id='whiteListBox' class='hidden'>
               <th><?php echo $lang->doc->whiteList;?></th>
               <td>
-                <div id='groupWhiteListBox' class='input-group'>
+                <div id='groupBox' class='input-group'>
                   <span class='input-group-addon groups-addon'><?php echo $lang->doclib->group?></span>
                   <?php echo html::select('groups[]', $groups, '', "class='form-control chosen' multiple")?>
                 </div>
