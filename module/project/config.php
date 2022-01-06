@@ -126,7 +126,7 @@ $config->project->datatable->fieldList['actions']['required'] = 'yes';
 $config->project->datatable->fieldList['actions']['pri']      = '1';
 
 $config->project->checkList = new stdclass();
-$config->project->checkList->scrum     = array('bug', 'execution', 'meeting', 'release', 'build', 'doc', 'testtask', 'risk', 'issue', 'case');
+$config->project->checkList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
 $config->project->checkList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
 
 $config->project->removePriv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
