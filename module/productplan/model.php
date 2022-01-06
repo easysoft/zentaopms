@@ -686,7 +686,6 @@ class productplanModel extends model
             /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
             if($parentID > 0)
             {
-                $parentID = $parentID;
                 $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
                 if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
                 {
