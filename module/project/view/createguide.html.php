@@ -36,7 +36,6 @@
 <script>
 $('.createButton').on('click', function()
 {
-    $('#guideDialog').modal('hide');
-    window.location.reload();
+    $.closeModal();
 });
 </script>

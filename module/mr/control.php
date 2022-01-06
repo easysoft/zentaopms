@@ -310,7 +310,11 @@ class mr extends control
         }
 
         /* The type of variable `$rawMR->message` is string. This is different with apiCreateMR. */
-        if(isset($rawMR->message)) return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $rawMR->message), 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+        if(isset($rawMR->message))
+        {
+            $errorMessage = $this->mr->convertApiError($rawMR->message);
+            return $this->send(array('result' => 'fail', 'message' => sprintf($this->lang->mr->apiError->sudo, $errorMessage), 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
+        }
 
         return $this->send(array('result' => 'fail', 'message' => $this->lang->mr->mergeFailed, 'locate' => helper::createLink('mr', 'view', "mr={$MRID}")));
     }

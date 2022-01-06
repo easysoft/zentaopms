@@ -31,7 +31,7 @@
           <tr>
             <th></th>
             <td class='text-center form-actions'>
-              <?php echo html::submitButton($lang->gitlab->branch->create);?>
+              <?php echo html::submitButton();?>
               <?php $backLink = $this->session->gitlabBranchList ? $this->session->gitlabBranchList : inlink('browseBranch', "gitlibID=$gitlabID&projectID=$projectID");?>
               <?php if(!isonlybody()) echo html::a($backLink, $lang->goback, '', 'class="btn btn-wide"');?>
             </td>

@@ -409,7 +409,7 @@ class programplanModel extends model
             $parentACL       = $parentStage->acl;
         }
 
-        $datas      = array();
+        $datas = array();
         foreach($names as $key => $name)
         {
             if(empty($name)) continue;

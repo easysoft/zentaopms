@@ -105,16 +105,18 @@ $lang->mr->apiError->createMR = "Failed to create a merge request through API. R
 $lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
-$lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests.";
+$lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests: ID%u";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
 
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
+$lang->mr->apiErrorMap[3] = "401 Unauthorized";
 
 $lang->mr->errorLang[1] = 'The source project branch cannot be the same as the target project branch';
 $lang->mr->errorLang[2] = 'Another open merge request already exists for this source branch: ID%u';
+$lang->mr->errorLang[3] = "Unauthorized";
 
 $lang->mr->from = "from";
 $lang->mr->to   = "to";

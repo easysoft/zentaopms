@@ -245,11 +245,13 @@ define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
 define('TABLE_KANBANGROUP',  '`' . $config->db->prefix . 'kanbangroup`');
 define('TABLE_KANBANCARD',   '`' . $config->db->prefix . 'kanbancard`');
-if(!defined('TABLE_LANG'))               define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
-if(!defined('TABLE_PROJECTSPEC'))        define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
+if(!defined('TABLE_LANG'))        define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
+if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 
 if(!defined('TABLE_SEARCHINDEX')) define('TABLE_SEARCHINDEX', $config->db->prefix . 'searchindex');
 if(!defined('TABLE_SEARCHDICT'))  define('TABLE_SEARCHDICT',  $config->db->prefix . 'searchdict');
+
+if(!defined('TABLE_MEETING'))     define('TABLE_MEETING', '`' . $config->db->prefix . 'meeting`');
 
 $config->objectTables['product']      = TABLE_PRODUCT;
 $config->objectTables['productplan']  = TABLE_PRODUCTPLAN;
@@ -296,5 +298,5 @@ $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'caselib', 'doc', 'repo', 'meeting', 'stakeholder');
+$config->programPriv->scrum     = array('projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));

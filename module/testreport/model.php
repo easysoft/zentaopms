@@ -141,6 +141,7 @@ class testreportModel extends model
         $resolvedBugs  = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('resolvedDate')->ge($begin)->andWhere('resolvedDate')->le("$end 23:59:59")->andWhere('deleted')->eq(0)->fetchAll();
         $foundBugs     = array();
         $legacyBugs    = array();
+        $activatedBugs = array();
         $byCaseNum     = 0;
         $buildIdList   = array_keys($builds);
         $taskIdList    = array_keys($tasks);
@@ -166,6 +167,48 @@ class testreportModel extends model
             $handleGroups['generated'][$date] = 0;
             $handleGroups['legacy'][$date]    = 0;
             $handleGroups['resolved'][$date]  = 0;
+        }
+
+        $buildBugs = array();
+        $allBugs   = $this->dao->select('*')->from(TABLE_BUG)->where('product')->in($productIdList)->andWhere('deleted')->eq(0)->fetchAll('id');
+
+        foreach($allBugs as $bug)
+        {
+            if(!empty(array_intersect(explode(',', $bug->openedBuild), $buildIdList))) $buildBugs[$bug->id] = $bug;
+        }
+
+        /* Get bug reactivated actions during the testreport. */
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)
+            ->where('objectType')->eq('bug')
+            ->andWhere('action')->eq('activated')
+            ->andWhere('date')->ge($begin)
+            ->andWhere('date')->le($end . ' 23:59:59')
+            ->andWhere('objectID')->in(array_keys($buildBugs))
+            ->fetchGroup('objectID', 'id');
+
+        $actionIdList = array();
+        foreach($actions as $bugID => $action) $actionIdList = array_merge($actionIdList, array_keys($action));
+
+        $histories = $this->loadModel('action')->getHistory($actionIdList);
+        foreach($actions as $bugID => $actionList)
+        {
+            foreach($actionList as $actionID => $action)
+            {
+                $action->history = zget($histories, $actionID, array());
+            }
+        }
+
+        foreach($buildBugs as $bug)
+        {
+            $bugActions = zget($actions, $bug->id, array());
+            foreach($bugActions as $action)
+            {
+                foreach($action->history as $history)
+                {
+                    if($history->field == 'openedBuild' and !in_array($history->new, $buildIdList)) continue;
+                    $activatedBugs[$bug->id] = $bug;
+                }
+            }
         }
 
         /* Get the resolved bug data. */
@@ -216,6 +259,7 @@ class testreportModel extends model
         }
 
         $resolvedBugs   = 0;
+        $this->loadModel('action');
         foreach($foundBugs as $bug)
         {
             $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
@@ -231,6 +275,7 @@ class testreportModel extends model
 
         $bugInfo['foundBugs']           = count($foundBugs);
         $bugInfo['legacyBugs']          = $legacyBugs;
+        $bugInfo['activatedBugs']       = $activatedBugs;
         $bugInfo['countBugByTask']      = $byCaseNum;
         $bugInfo['bugConfirmedRate']    = empty($resolvedBugs) ? 0 : round((zget($resolutionGroups, 'fixed', 0) + zget($resolutionGroups, 'postponed', 0)) / $resolvedBugs * 100, 2);
         $bugInfo['bugCreateByCaseRate'] = empty($byCaseNum) ? 0 : round($byCaseNum / count($foundBugs) * 100, 2);

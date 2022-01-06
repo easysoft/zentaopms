@@ -401,7 +401,7 @@ class productplanModel extends model
             }
             if($plan->parentEnd != $this->config->productplan->future)
             {
-                if($plan->end !==$this->config->productplan->future and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
+                if($plan->end !== $this->config->productplan->future and $plan->end > $plan->parentEnd) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $plan->parentEnd);
             }
         }
 
@@ -454,7 +454,7 @@ class productplanModel extends model
     }
 
     /**
-     * Update a plan
+     * Update a plan.
      *
      * @param  int    $planID
      * @access public
@@ -464,21 +464,21 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->future || empty($_POST['begin']), 'begin', $this->config->productplan->future)
-            ->setIF($this->post->future || empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
+            ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
             ->remove('delta,uid,future')
             ->get();
 
         if($oldPlan->parent > 0)
         {
             $parentPlan = $this->getByID($oldPlan->parent);
-            if($parentPlan->begin != $this->config->productplan->future)
+            if($parentPlan->begin !== $this->config->productplan->future)
             {
                 if($plan->begin < $parentPlan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginLetterParent, $parentPlan->begin);
             }
-            if($parentPlan->end != $this->config->productplan->future)
+            if($parentPlan->end !== $this->config->productplan->future)
             {
-                if($plan->end !==$this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
+                if($plan->end !== $this->config->productplan->future and $plan->end > $parentPlan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endGreaterParent, $parentPlan->end);
             }
         }
         elseif($oldPlan->parent == -1 and $plan->begin != $this->config->productplan->future)
@@ -489,32 +489,25 @@ class productplanModel extends model
             foreach($childPlans as $childID => $childPlan)
             {
                 $childPlan = isset($plans[$childID]) ? $plans[$childID] : $childPlan;
-                if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
-                if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
+                if($childPlan->begin < $minBegin) $minBegin = $childPlan->begin;
+                if($childPlan->end > $maxEnd) $maxEnd = $childPlan->end;
             }
-            if($minBegin < $plan->begin) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
-            if($maxEnd > $plan->end) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
+            if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) dao::$errors['begin'] = sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin);
+            if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) dao::$errors['end'] = sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd);
         }
 
-        $requiredFields = $oldPlan->status == 'wait' ? $this->config->productplan->edit->requiredFields : 'title, begin, end';
-        if(!$this->post->future and strpos($requiredFields, 'begin') !== false and empty($_POST['begin']))
-        {
-            dao::$errors['begin'] = sprintf($this->lang->error->notempty, $this->lang->productplan->begin);
-        }
-        if(!$this->post->future and strpos($requiredFields, 'end') !== false and empty($_POST['end']))
-        {
-            dao::$errors['end'] = sprintf($this->lang->error->notempty, $this->lang->productplan->end);
-        }
         if(dao::isError()) return false;
-
         $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->edit['id'], $this->post->uid);
         $this->dao->update(TABLE_PRODUCTPLAN)
             ->data($plan)
             ->autoCheck()
-            ->batchCheck($requiredFields, 'notempty')
+            ->batchCheck($this->config->productplan->edit->requiredFields, 'notempty')
             ->checkIF(!$this->post->future && !empty($_POST['begin']) && !empty($_POST['end']), 'end', 'ge', $plan->begin)
             ->where('id')->eq((int)$planID)
             ->exec();
+        if(dao::isError()) return false;
+
+        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
 
         if(!dao::isError())
         {
@@ -525,10 +518,10 @@ class productplanModel extends model
 
     /**
      * Start a plan.
-     * 
-     * @param  int  $planID 
+     *
+     * @param  int  $planID
      * @access public
-     * @return array 
+     * @return array
      */
     public function start($planID)
     {
@@ -554,7 +547,7 @@ class productplanModel extends model
 
         if(dao::isError()) return false;
 
-        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent, 'started');
+        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
         $this->file->updateObjectID($this->post->uid, $planID, 'productplan');
 
         return common::createChanges($oldPlan, $plan);
@@ -567,7 +560,7 @@ class productplanModel extends model
      * @param  string $status doing|done|closed
      * @param  string $action started|finished|closed|activated
      * @access public
-     * @return array
+     * @return bool
      */
     public function updateStatus($planID, $status = '', $action = '')
     {
@@ -584,7 +577,7 @@ class productplanModel extends model
         $actionID = $this->loadModel('action')->create('productplan', $planID, $action);
         $this->action->logHistory($actionID, $changes);
 
-        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent, $action);
+        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
 
         return !dao::isError();
     }
@@ -593,64 +586,48 @@ class productplanModel extends model
      * Update a parent plan's status.
      *
      * @param  int    $parentID
-     * @param  string $action started|finished|closed|activated
      * @access public
-     * @return void
+     * @return bool
      */
-    public function updateParentStatus($parentID, $action)
+    public function updateParentStatus($parentID)
     {
         $parent      = $this->getByID($parentID);
         $childStatus = $this->dao->select('status')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($parentID)->andWhere('deleted')->eq(0)->fetchPairs();
 
-        switch($action)
+        if(count($childStatus) == 1 and isset($childStatus['wait']))
         {
-            case 'opened':
-                if($parent->status == 'done' or $parent->status == 'closed')
-                {
-                    $parentStatus = 'doing';
-                    $parentAction = 'createchild';
-                }
-
-                break;
-            case 'started':
-                if($parent->status != 'doing')
-                {
-                    $parentStatus = 'doing';
-                    $parentAction = $parent->status != 'doing' ? 'startedbychild' : '';
-                }
-
-                break;
-            case 'finished':
-                if(isset($childStatus['wait']) or isset($childStatus['doing'])) break;
-
-                if($parent->status != 'done') 
-                {
-                    $parentStatus = 'done';
-                    $parentAction = 'finishedbychild';
-                }
-
-                break;
-            case 'closed':
-                if(count($childStatus) == 1 and $parent->status != 'closed') 
-                {
-                    $parentAction = 'closedbychild';
-                    $parentStatus = 'closed';
-                }
-
-                break;
-            case 'activated':
-                if($parent->status != 'doing')
-                {
-                    $parentStatus = 'doing';
-                    $parentAction = $parent->status != 'doing' ? 'activatedbychild' : '';
-                }
-
-                break;
+            return;
+        }
+        elseif(count($childStatus) == 1 and isset($childStatus['closed']))
+        {
+            if($parent->status != 'closed')
+            {
+                $parentStatus = 'closed';
+                $parentAction = 'closedbychild';
+            }
+        }
+        elseif(!isset($childStatus['wait']) and !isset($childStatus['doing']))
+        {
+            if($parent->status != 'done')
+            {
+                $parentStatus = 'done';
+                $parentAction = 'finishedbychild';
+            }
+        }
+        else
+        {
+            if($parent->status != 'doing')
+            {
+                $parentStatus = 'doing';
+                $parentAction = $this->app->rawMethod == 'create' ? 'createchild' : 'activatedbychild';
+            }
         }
 
-        if(!empty($parentStatus)) $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
-        if(!empty($parentAction)) $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
-
+        if(isset($parentStatus))
+        {
+            $this->dao->update(TABLE_PRODUCTPLAN)->set('status')->eq($parentStatus)->where('id')->eq($parentID)->exec();
+            $this->loadModel('action')->create('productplan', $parentID, $parentAction, '', $parentAction);
+        }
         return !dao::isError();
     }
 
@@ -676,7 +653,7 @@ class productplanModel extends model
         foreach($data->id as $planID)
         {
             $isFuture = isset($data->future[$planID]) ? true : false;
-            if($plan->status != 'wait') $isFuture = false;
+            if($data->status[$planID] != 'wait') $isFuture = false;
 
             $plan = new stdclass();
             $plan->branch = isset($data->branch[$planID]) ? $data->branch[$planID] : $oldPlans[$planID]->branch;
@@ -684,21 +661,13 @@ class productplanModel extends model
             $plan->begin  = isset($data->begin[$planID]) ? $data->begin[$planID] : '';
             $plan->end    = isset($data->end[$planID]) ? $data->end[$planID] : '';
             $plan->status = isset($data->status[$planID]) ? $data->status[$planID] : $oldPlans[$planID]->status;
+            $plan->parent = $oldPlans[$planID]->parent;
 
             if(empty($plan->title)) die(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+            if($plan->begin > $plan->end and !empty($plan->end)) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
 
-            if(!$isFuture and $plan->status != 'wait')
-            {
-                if($plan->begin == '') die(js::alert(sprintf($this->lang->productplan->errorNoBegin, $planID)));
-                if($plan->end == '') die(js::alert(sprintf($this->lang->productplan->errorNoEnd, $planID)));
-                if($plan->begin > $plan->end) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
-            }
-
-            if($plan->begin == '' or $plan->end == '')
-            {
-                $plan->begin = $this->config->productplan->future;
-                $plan->end   = $this->config->productplan->future;
-            }
+            if($plan->begin == '') $plan->begin = $this->config->productplan->future;
+            if($plan->end   == '') $plan->end   = $this->config->productplan->future;
 
             foreach($extendFields as $extendField)
             {
@@ -714,12 +683,13 @@ class productplanModel extends model
         }
 
         $changes = array();
+        $parents = array();
         foreach($plans as $planID => $plan)
         {
-            /*Determine whether the begin and end dates of the parent plan and the child plan are correct. */
-            if($oldPlans[$planID]->parent > 0)
+            $parentID = $oldPlans[$planID]->parent;
+            /* Determine whether the begin and end dates of the parent plan and the child plan are correct. */
+            if($parentID > 0)
             {
-                $parentID = $oldPlans[$planID]->parent;
                 $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
                 if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
                 {
@@ -730,7 +700,7 @@ class productplanModel extends model
                     die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
                 }
             }
-            elseif($oldPlans[$planID]->parent == -1 and $plan->begin != $this->config->productplan->future)
+            elseif($parentID == -1 and $plan->begin != $this->config->productplan->future)
             {
                 $childPlans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('parent')->eq($planID)->andWhere('deleted')->eq(0)->fetchAll('id');
                 $minBegin   = $plan->begin;
@@ -748,11 +718,14 @@ class productplanModel extends model
             $change = common::createChanges($oldPlans[$planID], $plan);
             if($change)
             {
+                if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
                 $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq($planID)->exec();
                 if(dao::isError()) die(js::error(dao::getError()));
                 $changes[$planID] = $change;
             }
         }
+
+        foreach($parents as $parent) $this->updateParentStatus($parent);
 
         return $changes;
     }
@@ -999,7 +972,7 @@ class productplanModel extends model
      */
     public static function isClickable($plan, $action)
     {
-        $action = strtolower($action);
+        $action    = strtolower($action);
         $clickable = commonModel::hasPriv('productplan', $action);
         if(!$clickable) return false;
 

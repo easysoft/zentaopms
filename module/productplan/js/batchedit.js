@@ -33,12 +33,8 @@ function setPlanStatus(planID, status)
     if(status != 'wait')
     {
         $('#future' + planID).closest('div').addClass('hidden');
-        
-        $("input[name='begin[" + planID + "]']").closest('td').addClass('required');
-        $("input[name='end[" + planID + "]']").closest('td').addClass('required');
         $("input[name='begin[" + planID + "]']").removeAttr('disabled');
         $("input[name='end[" + planID + "]']").removeAttr('disabled');
-        
         $('.form-date').datetimepicker('update');
     }
     else
@@ -46,15 +42,12 @@ function setPlanStatus(planID, status)
         var isFuture = $('#future' + planID).prop('checked');
 
         $('#future' + planID).closest('div').removeClass('hidden');
-        $("input[name='begin[" + planID + "]']").closest('td').removeClass('required');
-        $("input[name='end[" + planID + "]']").closest('td').removeClass('required');
 
         if(isFuture)
         {
             $("input[name='begin[" + planID + "]']").attr('disabled', 'disabled');
             $("input[name='end[" + planID + "]']").attr('disabled', 'disabled');
         }
-
     }
 }
 

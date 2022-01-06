@@ -189,6 +189,11 @@ $config->bug->datatable->fieldList['type']['fixed']    = 'no';
 $config->bug->datatable->fieldList['type']['width']    = '90';
 $config->bug->datatable->fieldList['type']['required'] = 'no';
 
+$config->bug->datatable->fieldList['project']['title']    = 'project';
+$config->bug->datatable->fieldList['project']['fixed']    = 'no';
+$config->bug->datatable->fieldList['project']['width']    = '120';
+$config->bug->datatable->fieldList['project']['required'] = 'no';
+
 $config->bug->datatable->fieldList['execution']['title']    = 'execution';
 $config->bug->datatable->fieldList['execution']['fixed']    = 'no';
 $config->bug->datatable->fieldList['execution']['width']    = '120';

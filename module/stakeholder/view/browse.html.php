@@ -14,7 +14,7 @@
 <?php js::set('confirmDelete', $lang->stakeholder->confirmDelete);?>
 <div id="mainMenu" class="clearfix">
   <div class="btn-toolbar pull-left">
-    <?php echo html::a($this->createLink('stakeholder', 'browse', 'browseType=all'), '<span class="text">' . $lang->stakeholder->browse . '</span>', '', 'class="btn btn-link btn-active-text"');?>
+    <?php echo html::a($this->createLink('stakeholder', 'browse', "projectID=$projectID"), '<span class="text">' . $lang->stakeholder->browse . '</span>', '', 'class="btn btn-link btn-active-text"');?>
   </div>
   <div class="btn-toolbar pull-right">
     <?php if(common::hasPriv('stakeholder', 'batchcreate') and common::hasPriv('stakeholder', 'create')):?>

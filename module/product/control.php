@@ -214,7 +214,7 @@ class product extends control
         setcookie('productStoryOrder', $orderBy, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -843,7 +843,7 @@ class product extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);

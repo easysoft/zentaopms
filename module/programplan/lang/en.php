@@ -22,6 +22,7 @@ $lang->programplan->parent           = 'Parent Stage';
 $lang->programplan->emptyParent      = 'N/A';
 $lang->programplan->name             = 'Stage Name';
 $lang->programplan->PM               = 'Stage Manager';
+$lang->programplan->acl              = 'Access Control';
 $lang->programplan->subStageName     = 'Sub Stage Name';
 $lang->programplan->percent          = 'Workload Ratio';
 $lang->programplan->percentAB        = 'Ratio';

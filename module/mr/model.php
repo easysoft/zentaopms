@@ -275,7 +275,7 @@ class mrModel extends model
         {
             $pipeline = $this->loadModel('job')->exec($MR->jobID);
 
-            if(!empty($pipeline->queue) && $MR->jobID != $oldMR->jobID)
+            if(!empty($pipeline->queue))
             {
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
                 $MR->compileID = $compile->id;
@@ -1462,7 +1462,7 @@ class mrModel extends model
     {
         if(empty($sourceProject) or empty($sourceBranch) or empty($targetProject) or empty($targetBranch)) return array('result' => 'success');
 
-        $dbOpenedCount = $this->dao->select('count(*) as count')->from(TABLE_MR)
+        $dbOpenedID = $this->dao->select('id')->from(TABLE_MR)
             ->where('gitlabID')->eq($gitlabID)
             ->andWhere('sourceProject')->eq($sourceProject)
             ->andWhere('sourceBranch')->eq($sourceBranch)
@@ -1470,10 +1470,11 @@ class mrModel extends model
             ->andWhere('targetBranch')->eq($targetBranch)
             ->andWhere('status')->eq('opened')
             ->andWhere('deleted')->eq('0')
-            ->fetch('count');
-        if($dbOpenedCount > 0) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
+            ->fetch('id');
+        if(!empty($dbOpenedID)) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->hasSameOpenedMR, $dbOpenedID));
 
-        if($this->apiGetSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch)) return array('result' => 'fail', 'message' => $this->lang->mr->hasSameOpenedMR);
+        $mr = $this->apiGetSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
+        if($mr) return array('result' => 'fail', 'message' => sprintf($this->lang->mr->errorLang[2], $mr->iid));
         return array('result' => 'success');
     }
 
@@ -1503,5 +1504,19 @@ class mrModel extends model
             if(isset($errorMessage)) break;
         }
         return isset($errorMessage) ? $errorMessage : $message;
+    }
+
+    /**
+     * Adjust the action clickable.
+     *
+     * @param  object $MR
+     * @param  string $action
+     * @access public
+     * @return void
+     */
+    public static function isClickable($MR, $action)
+    {
+        if($action == 'edit' and !$MR->synced) return false;
+        return true;
     }
 }

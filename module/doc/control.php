@@ -92,7 +92,7 @@ class doc extends control
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         if($browseType == 'collectedbyme')
         {
@@ -663,10 +663,10 @@ class doc extends control
      * Sort doc lib.
      *
      * @param string $type
-     * @access public
+     * @access protected
      * @return void
      */
-    public function sort($type = '')
+    protected function sort($type = '')
     {
         if($_SERVER['REQUEST_METHOD'] == 'POST')
         {
@@ -776,6 +776,37 @@ class doc extends control
     public function ajaxSaveDraft($docID)
     {
         $this->doc->saveDraft($docID);
+    }
+
+    /**
+     * Ajax get doclib whitelist.
+     *
+     * @param  int    $doclibID
+     * @param  string $acl open|custom|private
+     * @access public
+     * @return string
+     */
+    public function ajaxGetWhitelist($doclibID, $acl)
+    {
+        $doclib = $this->doc->getLibById($doclibID);
+        $users  = $this->user->getPairs('noletter|noempty|noclosed');
+
+        if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
+        {
+            $project = $this->loadModel('project')->getById($doclib->project);
+
+            $userList     = array();
+            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($doclib->project);
+            $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
+            foreach($stakeholders as $stakeholder) $userList[$stakeholder] = $users[$stakeholder];
+
+            $userList += $projectTeams;
+            $whitelist = implode(',', array_keys($userList)) . $project->whitelist . ',' .$project->PM . ',' . $doclib->users;
+
+            return print(html::select('users[]', $users, $whitelist, "class='form-control chosen' multiple"));
+        }
+
+        return print(html::select('users[]', $users, $doclib->users, "class='form-control chosen' multiple"));
     }
 
     /**

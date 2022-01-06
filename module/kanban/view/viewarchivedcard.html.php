@@ -91,7 +91,7 @@
             $userCount = count($assignedToList);
             ?>
             <?php if($userCount > 0):?>
-            <div class='users pull-right' title="<?php echo $members;?>">
+            <div class='users pull-right' title="<?php echo trim($members, ',');?>">
             <?php
             foreach($assignedToList as $account)
             {

@@ -159,9 +159,12 @@
         </tr>
         <tr class="hidden" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
-          <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
-          <td></td>
-          <td></td>
+          <td colspan='2'>
+            <div class='input-group'>
+              <?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?>
+              <?php echo $this->fetch('my', 'buildContactLists', "dropdownName='whitelist'");?>
+            </div>
+          </td>
         </tr>
         <tr>
           <th><?php echo $lang->project->auth;?></th>

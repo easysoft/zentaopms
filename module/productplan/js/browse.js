@@ -56,18 +56,18 @@ $(function()
         $('#branch_chosen .chosen-single span').prepend('<i class="icon-delay"></i>');
         $('#kanban').kanban(
         {
-            data:          kanbanData,
-            minColWidth:   290,
-            maxColWidth:   290,
-            maxColHeight:  460,
-            minColHeight:  190,
-            cardHeight:    80,
-            itemRender:    renderKanbanItem,
-            virtualize:    true,
+            data:         kanbanData,
+            minColWidth:  290,
+            maxColWidth:  290,
+            maxColHeight: 460,
+            minColHeight: 190,
+            cardHeight:   80,
+            itemRender:   renderKanbanItem,
+            virtualize:   true,
             droppable:
             {
-                target:       findDropColumns,
-                finish:       handleFinishDrop,
+                target:      findDropColumns,
+                finish:      handleFinishDrop,
                 mouseButton: 'left'
             }
         });
@@ -77,7 +77,7 @@ $(function()
             $.zui.ContextMenu.hide();
         });
 
-        /* Init contextmenu */
+        /* Init contextmenu. */
         $('#kanban').on('click', '[data-contextmenu]', function(event)
         {
             var $trigger    = $(this);
@@ -86,30 +86,27 @@ $(function()
             if(!menuCreator) return;
 
             var options = $.extend({event: event, $trigger: $trigger}, $trigger.data());
-            var items = menuCreator(options);
+            var items   = menuCreator(options);
             if(!items || !items.length) return;
 
             $.zui.ContextMenu.show(items, items.$options || {event: event});
         });
     }
 
-    /* Hide contextmenu when page scroll */
+    /* Hide contextmenu when page scroll. */
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
     });
 });
 
-/* Define menu creators */
-window.menuCreators =
-{
-    card: createCardMenu
-};
+/* Define menu creators. */
+window.menuCreators = {card: createCardMenu};
 
 /**
  * Create card menu.
  *
- * @param  object $options
+ * @param  object options
  * @access public
  * @return array
  */
@@ -194,11 +191,14 @@ $(document).on('click', 'td.content .more', function(e)
     }
 });
 
-/*
-* Find drop columns
-* @param {JQuery} $element Drag element
-* @param {JQuery} $root Dnd root element
-*/
+/**
+ * Find drop columns.
+ *
+ * @param  object $element Drag element
+ * @param  object $root Dnd root element
+ * @access public
+ * @return object|bool
+ */
 function findDropColumns($element, $root)
 {
     var $col        = $element.closest('.kanban-col');
@@ -216,42 +216,46 @@ function findDropColumns($element, $root)
         if(colRules === true) return true;
 
         var $newCol = $(this);
-        var newCol = $newCol.data();
+        var newCol  = $newCol.data();
         if(newCol.id === col.id) return false;
 
         var $newLane = $newCol.closest('.kanban-lane');
-        var newLane = $newLane.data('lane');
+        var newLane  = $newLane.data('lane');
         return colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
     });
 }
 
 /**
- * Handle finish drop task
- * @param {Object} event Event object
- * @returns {void}
+ * Handle finish drop card.
+ *
+ * @param  object event
+ * @access public
+ * @return void
  */
 function handleFinishDrop(event)
 {
-    var $card = $(event.element); // The drag card
+    var $card    = $(event.element); // The drag card.
     var $dragCol = $card.closest('.kanban-lane-col');
     var $dropCol = $(event.target);
 
-    /* Get d-n-d(drag and drop) infos  获取拖放操作相关信息 */
-    var card = $card.data('item');
+    /* Get d-n-d(drag and drop) infos. */
+    var card        = $card.data('item');
     var fromColType = $dragCol.data('type');
-    var toColType = $dropCol.data('type');
-    var kanbanID = $card.closest('.kanban').data('id');
+    var toColType   = $dropCol.data('type');
+    var kanbanID    = $card.closest('.kanban').data('id');
 
     changeCardColType(card, fromColType, toColType, kanbanID);
 }
 
 /**
- * Change column type for a card
-
- * @param {Object} card        Card object
- * @param {String} fromColType The column type before change
- * @param {String} toColType   The column type after change
- * @param {String} kanbanID    Kanban ID
+ * Change column type for a card.
+ *
+ * @param  object card
+ * @param  string fromColType The column type before change
+ * @param  string toColType The column type after change
+ * @param  int    kanbanID
+ * @access public
+ * @return void
  */
 function changeCardColType(card, fromColType, toColType, kanbanID)
 {
@@ -303,7 +307,12 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
 }
 
 /**
- * The function for rendering kanban item
+ * The function for rendering kanban item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
  */
 function renderKanbanItem(item, $item)
 {
@@ -387,10 +396,10 @@ function renderKanbanItem(item, $item)
 }
 
 /**
- * Get planID
+ * Get planID.
  *
- * @param  object $obj
- * @param  int    $branch
+ * @param  object obj
+ * @param  int    branch
  * @access public
  * @return void
  */
@@ -428,9 +437,9 @@ if(!window.kanbanDropRules)
 {
     window.kanbanDropRules =
     {    
-        wait: ['doing'],
-        doing: ['done'],
-        done: ['doing', 'closed'],
+        wait:   ['doing'],
+        doing:  ['done'],
+        done:   ['doing', 'closed'],
         closed: ['doing']
     }    
 }

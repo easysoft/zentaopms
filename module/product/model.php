@@ -577,7 +577,7 @@ class productModel extends model
             ->stripTags($this->config->product->editor->create['id'], $this->config->allowedTags)
             ->join('whitelist', ',')
             ->join('reviewer', ',')
-            ->remove('uid,newLine,lineName')
+            ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
         if(!empty($_POST['lineName']))
@@ -653,7 +653,7 @@ class productModel extends model
             ->join('whitelist', ',')
             ->join('reviewer', ',')
             ->stripTags($this->config->product->editor->edit['id'], $this->config->allowedTags)
-            ->remove('uid,changeProjects')
+            ->remove('uid,changeProjects,contactListMenu')
             ->get();
 
         if($this->config->systemMode == 'new')

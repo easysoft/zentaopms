@@ -2510,12 +2510,20 @@ class gitlabModel extends model
     public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
         $priv = fixer::input('post')->get();
-        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
-        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
-        if(empty($branch) && !empty($singleBranch->id)) dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
-        if(dao::isError()) return false;
-        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
+        if(empty($priv->name))
+        {
+            dao::$errors['name'][] = $this->lang->gitlab->branch->emptyPrivNameError;
+            return false;
+        }
 
+        $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
+        if(empty($branch) && !empty($singleBranch->id))
+        {
+            dao::$errors['name'][] = $this->lang->gitlab->branch->issetPrivNameError;
+            return false;
+        }
+
+        if(!empty($branch) && !empty($singleBranch->id)) $this->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
         $response = $this->apiCreateBranchPriv($gitlabID, $projectID, $priv);
 
         if(!empty($response->id))
@@ -2575,12 +2583,18 @@ class gitlabModel extends model
     public function createTagPriv($gitlabID, $projectID, $tag = '')
     {
         $priv = fixer::input('post')->get();
-        if(empty($priv->name)) dao::$errors['name'][] = $this->lang->gitlab->tag->emptyPrivNameError;
-        if(dao::isError()) return false;
+        if(empty($priv->name))
+        {
+            dao::$errors['name'][] = $this->lang->gitlab->tag->emptyPrivNameError;
+            return false;
+        }
 
         $singleTag = $this->apiGetSingleTagPriv($gitlabID, $projectID, $priv->name);
-        if(empty($tag) && !empty($singleTag->id)) dao::$errors['name'][] = $this->lang->gitlab->tag->issetPrivNameError;
-        if(dao::isError()) return false;
+        if(empty($tag) && !empty($singleTag->id))
+        {
+            dao::$errors['name'][] = $this->lang->gitlab->tag->issetPrivNameError;
+            return false;
+        }
 
         if(!empty($tag) && !empty($singleTag->name)) $this->apiDeleteTagPriv($gitlabID, $projectID, $tag);
         $response = $this->apiCreateTagPriv($gitlabID, $projectID, $priv);
@@ -2623,7 +2637,7 @@ class gitlabModel extends model
      */
     public function apiCreateTagPriv($gitlabID, $projectID, $priv)
     {
-        if(empty($gitlabID)) return false;
+        if(empty($gitlabID) or empty($projectID)) return false;
         if(empty($priv->name)) return false;
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_tags');
         return json_decode(commonModel::http($url, $priv));

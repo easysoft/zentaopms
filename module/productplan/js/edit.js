@@ -70,10 +70,8 @@ function setPlanStatus()
     var status = $('#status').val();
     if(status != 'wait')
     {
-        $('#checkBox').closest('div').addClass('hidden')
+        $('#checkBox').closest('div').addClass('hidden');
         $('#future').val(0);
-        $('#begin').closest('td').addClass('required');
-        $('#end').closest('td').addClass('required');
         $('#begin').removeAttr('disabled');
         $('#end').parents('tr').show();
     }
@@ -82,12 +80,10 @@ function setPlanStatus()
         var isFuture = $('#future').prop('checked');
 
         $('#checkBox').closest('div').removeClass('hidden');
-        $('#begin').closest('td').removeClass('required');
-        $('#end').closest('td').removeClass('required');
         if(isFuture)
         {
             $('#begin').attr('disabled', 'disabled');
-            $('#end').val('').parents('tr').hide();
+            $('#end').parents('tr').hide();
         }
     }
 }

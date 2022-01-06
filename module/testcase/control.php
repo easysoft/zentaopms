@@ -71,17 +71,6 @@ class testcase extends control
     }
 
     /**
-     * Index page.
-     *
-     * @access public
-     * @return void
-     */
-    public function index()
-    {
-        $this->locate($this->createLink('testcase', 'browse'));
-    }
-
-    /**
      * Browse cases.
      *
      * @param  int        $productID
@@ -148,7 +137,7 @@ class testcase extends control
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $sort  = $this->loadModel('common')->appendOrder($orderBy);
+        $sort  = common::appendOrder($orderBy);
 
         /* Get test cases. */
         $cases = $this->testcase->getTestCases($productID, $branch, $browseType, $browseType == 'bysearch' ? $queryID : $suiteID, $moduleID, $sort, $pager);
@@ -491,7 +480,7 @@ class testcase extends control
         $this->view->executionID      = $executionID;
         $this->view->productInfo      = $productInfo;
         $this->view->productName      = $this->products[$productID];
-        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
+        $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'case', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
         $this->view->currentModuleID  = $currentModuleID;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('testcase', 'browse', "productID=$productID") : '';
         $this->view->stories          = $stories;

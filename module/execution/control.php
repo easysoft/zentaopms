@@ -51,29 +51,6 @@ class execution extends control
     }
 
     /**
-     * The index page.
-     *
-     * @param  string $locate     yes|no locate to the browse page or not.
-     * @param  string $status     the executions status, if locate is no, then get executions by the $status.
-     * @param  int    $executionID
-     * @access public
-     * @return void
-     */
-    public function index($locate = 'auto', $executionID = 0)
-    {
-        if($locate == 'yes') $this->locate($this->createLink('execution', 'task'));
-
-        $this->commonAction($executionID);
-
-        if(common::hasPriv('execution', 'create')) $this->lang->TRActions = html::a($this->createLink('execution', 'create'), "<i class='icon icon-sm icon-plus'></i> " . $this->lang->execution->create, '', "class='btn btn-primary'");
-
-        $this->view->title      = $this->lang->execution->index;
-        $this->view->position[] = $this->lang->execution->index;
-
-        $this->display();
-    }
-
-    /**
      * Browse a execution.
      *
      * @param  int    $executionID
@@ -198,7 +175,7 @@ class execution extends control
         setcookie('executionTaskOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* Header and position. */
         $this->view->title      = $execution->name . $this->lang->colon . $this->lang->execution->task;
@@ -291,7 +268,7 @@ class execution extends control
         /* Get tasks and group them. */
         if(empty($groupBy))$groupBy = 'story';
         if(($groupBy == 'story') and ($execution->type == 'ops'))$groupBy = 'status';
-        $sort        = $this->loadModel('common')->appendOrder($groupBy);
+        $sort        = common::appendOrder($groupBy);
         $tasks       = $this->loadModel('task')->getExecutionTasks($executionID, $productID = 0, $status = 'all', $modules = 0, $sort);
         $groupBy     = str_replace('`', '', $groupBy);
         $taskLang    = $this->lang->task;
@@ -753,7 +730,7 @@ class execution extends control
         setcookie('executionStoryOrder', $orderBy, 0, $this->config->webRoot, '', false, true);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $queryID     = ($type == 'bysearch') ? $param : 0;
         $execution   = $this->commonAction($executionID);
@@ -864,20 +841,6 @@ class execution extends control
     }
 
     /**
-     * Execution qa dashboard.
-     *
-     * @param  int $executionID
-     * @access public
-     * @return void
-     */
-    public function qa($executionID = 0)
-    {
-        $this->commonAction($executionID);
-        $this->view->title = $this->lang->execution->qa;
-        $this->display();
-    }
-
-    /**
      * Browse bugs of a execution.
      *
      * @param  int    $executionID
@@ -922,7 +885,7 @@ class execution extends control
         $this->app->loadClass('pager', $static = true);
         if($this->app->getViewType() == 'xhtml') $recPerPage = 10;
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $sort  = $this->loadModel('common')->appendOrder($orderBy);
+        $sort  = common::appendOrder($orderBy);
         $bugs  = $this->bug->getExecutionBugs($executionID, $productID, $build, $type, $param, $sort, '', $pager);
         $bugs  = $this->bug->checkDelayedBugs($bugs);
         $users = $this->user->getPairs('noletter');
@@ -2009,13 +1972,10 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        $userList    = array();
-        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
-        foreach($avatarPairs as $account => $avatar)
-        {
-            if(!$avatar) continue;
-            $userList[$account]['avatar'] = $avatar;
-        }
+        $userList = $this->dao->select('account, realname name, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
+        $userList['closed']['account'] = 'Closed';
+        $userList['closed']['name']    = 'Closed';
+        $userList['closed']['avatar']  = '';
 
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -2780,7 +2740,7 @@ class execution extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);

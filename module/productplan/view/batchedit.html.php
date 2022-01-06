@@ -38,27 +38,27 @@
       </thead>
       <tbody>
         <?php foreach($plans as $plan):?>
-        <?php $isChecked   = ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? 'checked="checked"' : '';?>
+        <?php $isChecked = ($plan->begin == '2030-01-01' or $plan->end == '2030-01-01') ? 'checked="checked"' : '';?>
         <tr>
           <td class='text-center'><?php echo $plan->id . html::hidden("id[$plan->id]", $plan->id);?></td>
           <?php if($product->type != 'normal'):?>
           <td class='text-left'>
-            <?php $disabled = $plan->parent == '-1' ? "disabled='disabled'" : '';?>
+            <?php $disabled = $plan->parent != -1 ? "disabled='disabled'" : '';?>
             <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
           </td>
           <?php endif;?>
           <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control'")?></td>
           <?php if($plan->parent != -1):?>
-          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus($plan->id, this.value)'");?></td>
+          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus($plan->id, this.value, $plan->parent)'");?></td>
           <?php else:?>
-          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled onchange='setPlanStatus($plan->id, this.value)'");?></td>
+          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled onchange='setPlanStatus($plan->id, this.value, $plan->parent)'");?></td>
           <?php endif;?>
-          <?php $required = $plan->status != 'wait' ? 'required' : '' ;?>
-          <?php $disabled = ($plan->begin == '2030-01-01' || $plan->end == '2030-01-01') ? 'disabled="disabled"' : '';?>
+          <?php $disabled = (($plan->begin == '2030-01-01' or $plan->end == '2030-01-01') and $plan->status == 'wait') ? 'disabled="disabled"' : '';?>
+          <?php if($plan->parent == -1 and ($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')) $disabled = 'disabled="disabled"';?>
           <?php if($plan->begin == '2030-01-01') $plan->begin = '';?>
           <?php if($plan->end == '2030-01-01') $plan->end = '';?>
-          <td class=<?php echo $required;?>><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date' $disabled");?></td>
-          <td class=<?php echo $required;?>><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date' $disabled");?></td>
+          <td><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date' $disabled");?></td>
+          <td><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date' $disabled");?></td>
           <?php $hidden = ($plan->status != 'wait' and $plan->parent != -1) ? 'hidden' : '';?>
           <td><div class='checkbox-primary <?php echo $hidden;?>'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future[<?php echo $plan->id; ?>]' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
           <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $plan, $extendField->field . "[{$plan->id}]") . "</td>";?>
