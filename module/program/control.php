@@ -650,9 +650,9 @@ class program extends control
     /**
      * Ajax get program drop menu.
      *
-     * @param  int     $programID
-     * @param  string  $module
-     * @param  string  $method
+     * @param  int    $programID
+     * @param  string $module
+     * @param  string $method
      * @access public
      * @return void
      */

@@ -1333,7 +1333,7 @@ class docModel extends model
             /* Sort project. */
             $orderedProjects = array();
 
-            /* Project permissions for DocLib whitelist */
+            /* Project permissions for DocLib whitelist. */
             if($this->app->tab == 'doc')
             {
                 $myObjects = $this->dao->select('t2.id, t2.name')->from(TABLE_DOCLIB)->alias('t1')
