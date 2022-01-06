@@ -239,6 +239,7 @@ class execution extends control
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
+        $this->view->projectName  = $this->config->systemMode == 'new' ? $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name : $execution->name;
 
         $this->display();
     }

@@ -24,12 +24,12 @@ function toggleAcl(acl, type)
     if(acl == 'custom')
     {
         $('#whiteListBox').removeClass('hidden');
-        $('#groupWhiteListBox').removeClass('hidden');
+        $('#groupBox').removeClass('hidden');
     }
     else if(acl == 'private')
     {
         $('#whiteListBox').removeClass('hidden');
-        $('#groupWhiteListBox').addClass('hidden');
+        $('#groupBox').addClass('hidden');
     }
     else
     {
@@ -48,7 +48,7 @@ function toggleAcl(acl, type)
         {
             link = createLink('doc', 'ajaxGetWhitelist', 'doclibID=' + doclibID + '&acl=' + acl);
             $.get(link, function(users)
-            {   
+            {
                 $('#users').replaceWith(users);
                 $('#users_chosen').remove();
                 $('#users').chosen();
