@@ -92,7 +92,7 @@ $('#future').on('change', function()
 {
     if($(this).prop('checked'))
     {
-        $('#begin').attr('disabled', 'disabled');
+        $('#begin').attr('disabled', 'disabled').val('');
         $('#end').parents('tr').hide();
     }
     else

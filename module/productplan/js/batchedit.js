@@ -7,10 +7,10 @@
  */
 function changeDate(planID)
 {
-    if($("#future"+planID).prop('checked'))
+    if($("#future" + planID).prop('checked'))
     {
-        $("input[name='begin[" + planID + "]']").attr('disabled', 'disabled');
-        $("input[name='end[" + planID + "]']").attr('disabled', 'disabled');
+        $("input[name='begin[" + planID + "]']").attr('disabled', 'disabled').val('');
+        $("input[name='end[" + planID + "]']").attr('disabled', 'disabled').val('');
     }
     else
     {
