@@ -259,7 +259,6 @@ class testreportModel extends model
         }
 
         $resolvedBugs   = 0;
-        $this->loadModel('action');
         foreach($foundBugs as $bug)
         {
             $severityGroups[$bug->severity] = isset($severityGroups[$bug->severity]) ? $severityGroups[$bug->severity] + 1 : 1;
