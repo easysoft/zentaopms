@@ -2098,6 +2098,7 @@ class projectModel extends model
     public function checkCanChangeModel($projectID, $model)
     {
         $checkList = $this->config->project->checkList->$model;
+        if($this->config->maxVersion) $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
         {
             if($module == '') continue;
