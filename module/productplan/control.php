@@ -164,11 +164,11 @@ class productplan extends control
             return print(js::locate($this->session->productPlanList, 'parent'));
         }
 
-        $planIDList = $this->post->planIDList ? $this->post->planIDList : return print(js::locate($this->session->productPlanList, 'parent'));
+        if(!$this->post->planIDList) return print(js::locate($this->session->productPlanList, 'parent'));
 
         $this->commonAction($productID, $branch);
 
-        $plans     = $this->productplan->getByIDList($planIDList);
+        $plans     = $this->productplan->getByIDList($this->post->planIDList);
         $oldBranch = array();
 
         foreach($plans as $plan) $oldBranch[$plan->id] = $plan->branch;
