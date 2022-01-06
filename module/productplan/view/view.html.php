@@ -29,7 +29,7 @@
       <span title='<?php echo $plan->title;?>' class='text'><?php echo $plan->title;?></span>
       <?php if($product->type !== 'normal') echo "<span title='{$lang->product->branchName[$product->type]}' class='label label-branch label-badge'>" . $branchOption[$branch] . '</span>';?>
       <span class='label label-info label-badge'>
-        <?php echo ($plan->begin == $this->config->productplan->future || $plan->end == $this->config->productplan->future) ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
+        <?php echo ($plan->begin == $config->productplan->future || $plan->end == $config->productplan->future) ? $lang->productplan->future : $plan->begin . '~' . $plan->end;?>
       </span>
       <?php if($plan->deleted):?>
       <span class='label label-danger'><?php echo $lang->product->deleted;?></span>
@@ -47,7 +47,7 @@
             $attr       = "target='hiddenwin'";
             $isOnlyBody = false;
             $class      = '';
-            if($plan->begin == $this->config->productplan->future or $plan->end == $this->config->productplan->future)
+            if($plan->begin == $config->productplan->future or $plan->end == $config->productplan->future)
             {
                 $class      = 'iframe';
                 $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
@@ -596,11 +596,11 @@
                 <?php endif;?>
                 <tr>
                   <th><?php echo $lang->productplan->begin;?></th>
-                  <td><?php echo $plan->begin == $this->config->productplan->future ? $lang->productplan->future : $plan->begin;?></td>
+                  <td><?php echo $plan->begin == $config->productplan->future ? $lang->productplan->future : $plan->begin;?></td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->productplan->end;?></th>
-                  <td><?php echo $plan->end == $this->config->productplan->future ? $lang->productplan->future : $plan->end;?></td>
+                  <td><?php echo $plan->end == $config->productplan->future ? $lang->productplan->future : $plan->end;?></td>
                 </tr>
                 <?php if($plan->parent == '-1'):?>
                 <tr>
