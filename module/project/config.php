@@ -131,5 +131,5 @@ $config->project->removePriv['doc']       = array('catalog', 'index');
 $config->project->removePriv['auditplan'] = array('delete');
 
 $config->project->checkList = new stdclass();
-$config->project->checkList->scrum     = array('bug', 'execution', 'build', 'doc', 'case');
+$config->project->checkList->scrum     = array('bug', 'execution', 'build', 'doc', 'release', 'testtask', 'case');
 $config->project->checkList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
