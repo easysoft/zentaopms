@@ -1217,11 +1217,11 @@ class project extends control
                 }
                 else
                 {
-                    if($project->model == 'scrum' and $module == 'projectstory') $this->config->project->removePriv[$module][] = 'track';
+                    if($project->model == 'scrum' and $module == 'projectstory') $this->config->project->excludedPriv[$module][] = 'track';
 
                     foreach($methods as $method => $label)
                     {
-                        if(isset($this->config->project->removePriv[$module]) and in_array($method, $this->config->project->removePriv[$module])) unset($this->lang->resource->$module->$method);
+                        if(isset($this->config->project->excludedPriv[$module]) and in_array($method, $this->config->project->excludedPriv[$module])) unset($this->lang->resource->$module->$method);
                     }
                 }
             }
@@ -1317,11 +1317,11 @@ class project extends control
             return $this->send(array('message' => $this->lang->saveSuccess, 'result' => 'success', 'locate' => $link));
         }
 
-        $project   = $this->project->getById($projectID);
-        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
-        $roles     = $this->user->getUserRoles(array_keys($users));
-        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-        $userInfos = $this->user->getUserDisplayInfos(array_keys($users), $dept);
+        $project      = $this->project->getById($projectID);
+        $users        = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $roles        = $this->user->getUserRoles(array_keys($users));
+        $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $userInfoList = $this->user->getUserDisplayInfos(array_keys($users), $dept);
 
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
@@ -1332,7 +1332,7 @@ class project extends control
         $this->view->project        = $project;
         $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
-        $this->view->userInfos      = $userInfos;
+        $this->view->userInfoList   = $userInfoList;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();

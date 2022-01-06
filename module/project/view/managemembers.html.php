@@ -2,7 +2,7 @@
 <?php js::set('projectID', $project->id);?>
 <?php js::set('roles', $roles);?>
 <?php js::set('deptID', $dept);?>
-<?php js::set('pickerUsers', $userInfos);?>
+<?php js::set('pickerUsers', $userInfoList);?>
 <?php js::set('copyProjectID', $copyProjectID);?>
 <?php js::set('oldAccountList', array_keys($currentMembers));?>
 <?php js::set('unlinkExecutionMembers', $lang->project->unlinkExecutionMembers);?>

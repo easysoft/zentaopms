@@ -805,8 +805,10 @@ class doc extends control
 
             return print(html::select('users[]', $users, $whitelist, "class='form-control chosen' multiple"));
         }
-
-        return print(html::select('users[]', $users, $doclib->users, "class='form-control chosen' multiple"));
+        else
+        {
+            return print(html::select('users[]', $users, $doclib->users, "class='form-control chosen' multiple"));
+        }
     }
 
     /**
