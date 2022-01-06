@@ -220,6 +220,7 @@ $lang->custom->menuTip          = 'Click to show/hide the menu. Drag to switch d
 $lang->custom->saveFail         = 'Failed to save!';
 $lang->custom->page             = ' Page';
 $lang->custom->changeClassicTip = 'The Program module will be hidden, if you switch to the classic mode.';
+$lang->custom->changeModeTips   = 'Historical deleted data does not participate in the data merging process. After switching the mode, it will not support restoration. Please know.';
 
 $lang->custom->scoreStatus[1] = 'On';
 $lang->custom->scoreStatus[0] = 'Off';

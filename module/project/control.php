@@ -808,7 +808,7 @@ class project extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -925,7 +925,7 @@ class project extends control
         /* Load pager and get bugs, user. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
-        $sort  = $this->loadModel('common')->appendOrder($orderBy);
+        $sort  = common::appendOrder($orderBy);
         $bugs  = $this->bug->getProjectBugs($projectID, $productID, $build, $type, $param, $sort, '', $pager);
         $users = $this->user->getPairs('noletter');
 
@@ -1321,6 +1321,7 @@ class project extends control
         $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
+        $userInfos = $this->user->getUserDisplayInfos(array_keys($users), $dept);
 
         $currentMembers = $this->project->getTeamMembers($projectID);
         $members2Import = $this->project->getMembers2Import($copyProjectID, array_keys($currentMembers));
@@ -1331,6 +1332,7 @@ class project extends control
         $this->view->project        = $project;
         $this->view->users          = $users;
         $this->view->deptUsers      = $deptUsers;
+        $this->view->userInfos      = $userInfos;
         $this->view->roles          = $roles;
         $this->view->dept           = $dept;
         $this->view->depts          = array('' => '') + $this->dept->getOptionMenu();

@@ -772,7 +772,7 @@ class projectModel extends model
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,newProduct,productName,future')
+            ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu')
             ->get();
 
         $linkedProductsCount = 0;
@@ -874,9 +874,24 @@ class projectModel extends model
 
             /* Create doc lib. */
             $this->app->loadLang('doc');
+            $authorizedUsers = array();
 
-            $authorizedUsers = $project->whitelist . ',' . $project->PM . ',' . $project->openedBy . ',';
-            $authorizedUsers = array_unique(explode(',', trim($authorizedUsers, ',')));
+            if($project->parent and $project->acl == 'program')
+            {
+                $stakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($project->parent);
+                foreach($stakeHolders as $stakeHolder) $authorizedUsers[$stakeHolder] = $stakeHolder;
+
+                foreach(explode(',', $project->whitelist) as $white)
+                {
+                    if(empty($white)) continue;
+                    $authorizedUsers[$white] = $white;
+                }
+
+                $authorizedUsers[$project->PM]       = $project->PM;
+                $authorizedUsers[$project->openedBy] = $project->openedBy;
+                $authorizedUsers[$program->PM]       = $program->PM;
+                $authorizedUsers[$program->openedBy] = $program->openedBy;
+            }
 
             $lib = new stdclass();
             $lib->project = $projectID;
@@ -884,7 +899,7 @@ class projectModel extends model
             $lib->type    = 'project';
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
-            if($project->acl == 'private') $lib->users = ',' . implode(',', $authorizedUsers) . ',';
+            $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -985,7 +1000,7 @@ class projectModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,future')
+            ->remove('products,branch,plans,delta,future,contactListMenu')
             ->get();
 
         if($project->parent)
@@ -2079,8 +2094,8 @@ class projectModel extends model
         $this->lang->switcherMenu = $this->getSwitcher($objectID, $this->app->rawModule, $this->app->rawMethod);
 
         /* Reset project priv. */
-        $moduleName = $this->app->getModuleName();
-        $methodName = $this->app->getMethodName();
+        $moduleName = $this->app->rawModule;
+        $methodName = $this->app->rawMethod;
 
         $this->loadModel('common')->resetProjectPriv($objectID);
         if(!$this->common->isOpenMethod($moduleName, $methodName) and !commonModel::hasPriv($moduleName, $methodName)) $this->common->deny($moduleName, $methodName, false);

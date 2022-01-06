@@ -106,7 +106,7 @@ class testtask extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         /* Get tasks. */
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
@@ -178,7 +178,7 @@ class testtask extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy);
+        $sort = common::appendOrder($orderBy);
 
         $this->view->title       = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
         $this->view->position[]  = html::a($this->createLink('testtask', 'browseUnits', "productID=$productID"), $this->products[$productID]);
@@ -503,7 +503,7 @@ class testtask extends control
         }
 
         /* Append id for secend sort. */
-        $sort = $this->loadModel('common')->appendOrder($orderBy, 't2.id');
+        $sort = common::appendOrder($orderBy, 't2.id');
 
         /* Get test cases. */
         $runs = $this->testtask->getTaskCases($productID, $browseType, $queryID, $moduleID, $sort, $pager, $task);
@@ -1314,6 +1314,8 @@ class testtask extends control
      */
     public function results($runID, $caseID = 0, $version = 0)
     {
+        if($this->app->tab == 'project') $this->loadModel('project')->setMenu($this->session->project);
+
         if($runID)
         {
             $case    = $this->testtask->getRunById($runID)->case;

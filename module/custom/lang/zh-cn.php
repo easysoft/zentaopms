@@ -220,6 +220,7 @@ $lang->custom->menuTip          = '点击显示或隐藏导航条目，拖拽来
 $lang->custom->saveFail         = '保存失败！';
 $lang->custom->page             = '页面';
 $lang->custom->changeClassicTip = '切换为老版本的习惯后，系统将取消项目集功能。';
+$lang->custom->changeModeTips   = '历史删除数据不参与数据归并流程，切换模式后将不支持还原，请知悉';
 
 $lang->custom->scoreStatus[1] = '开启';
 $lang->custom->scoreStatus[0] = '关闭';

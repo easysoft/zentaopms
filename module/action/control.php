@@ -60,7 +60,7 @@ class action extends control
         $pager = pager::init($recTotal, $recPerPage, $pageID);
 
         /* Append id for secend sort. */
-        $sort    = $this->loadModel('common')->appendOrder($orderBy);
+        $sort    = common::appendOrder($orderBy);
         $trashes = $this->action->getTrashes($type, $sort, $pager);
 
         /* Title and position. */

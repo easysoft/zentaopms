@@ -404,6 +404,7 @@ class control extends baseControl
             foreach(explode(',', $requiredFields) as $requiredField)
             {
                 if(empty($requiredField)) continue;
+                if(!isset($fields[$requiredField])) continue;
                 if(isset($_POST[$requiredField]) and $_POST[$requiredField] === '')
                 {
                     $message[$requiredField][] = sprintf($this->lang->error->notempty, $fields[$requiredField]->name);

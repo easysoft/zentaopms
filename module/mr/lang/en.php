@@ -105,7 +105,7 @@ $lang->mr->apiError->createMR = "Failed to create a merge request through API. R
 $lang->mr->apiError->sudo     = "Unable to operate with the GitLab account bound to the current user. Reason: %s";
 
 $lang->mr->createFailedFromAPI = "Failed to create Merge Request.";
-$lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests.";
+$lang->mr->hasSameOpenedMR     = "There are duplicate and unclosed merge requests: ID%u";
 $lang->mr->accessGitlabFailed  = "Unable to connect to the GitLab server.";
 $lang->mr->reopenSuccess       = "The merge request was reopened.";
 $lang->mr->closeSuccess        = "Merge request closed.";
