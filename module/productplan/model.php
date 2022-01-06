@@ -464,8 +464,8 @@ class productplanModel extends model
     {
         $oldPlan = $this->dao->findByID((int)$planID)->from(TABLE_PRODUCTPLAN)->fetch();
         $plan = fixer::input('post')->stripTags($this->config->productplan->editor->edit['id'], $this->config->allowedTags)
-            ->setIF($this->post->future and empty($_POST['begin']), 'begin', $this->config->productplan->future)
-            ->setIF($this->post->future and empty($_POST['end']), 'end', $this->config->productplan->future)
+            ->setIF($this->post->future or empty($_POST['begin']), 'begin', $this->config->productplan->future)
+            ->setIF($this->post->future or empty($_POST['end']), 'end', $this->config->productplan->future)
             ->remove('delta,uid,future')
             ->get();
 
