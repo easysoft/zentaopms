@@ -146,7 +146,6 @@ $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = 'Nhánh';
 $lang->product->branchName['platform'] = 'Platform';
 
-$lang->product->statusList[''] = '';
 $lang->product->statusList['normal'] = 'Bình thường';
 $lang->product->statusList['closed'] = 'Đã đóng';
 

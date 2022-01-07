@@ -146,7 +146,6 @@ $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = 'Branche';
 $lang->product->branchName['platform'] = 'Plateforme';
 
-$lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = 'Normal';
 $lang->product->statusList['closed'] = 'Fermé';
 
