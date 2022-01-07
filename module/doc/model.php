@@ -917,11 +917,10 @@ class docModel extends model
 
         if($object->project and $object->acl == 'private')
         {
-            $stakeHolders    = array();
-            $project         = $this->loadModel('project')->getById($object->project);
-            $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
-            $stakeHolderList = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
-            foreach($stakeHolderList as $stakeHolder) $stakeHolders[$stakeHolder] = $stakeHolder;
+            $stakeHolders = array();
+            $project      = $this->loadModel('project')->getById($object->project);
+            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($object->project);
+            $stakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
 
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
 

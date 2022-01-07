@@ -272,10 +272,10 @@ class stakeholderModel extends model
     public function getStakeHolderPairs($projectID)
     {
         $stakeholders = $this->dao->select('t1.user, t2.realname')->from(TABLE_STAKEHOLDER)->alias('t1')
-            ->leftjoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
-            ->where('deleted')->eq('0')
-            ->andWhere('objectID')->eq($projectID)
-            ->orderBy('id_desc')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.objectID')->eq($projectID)
+            ->orderBy('t1.id_desc')
             ->fetchPairs();
 
         return $stakeholders;
