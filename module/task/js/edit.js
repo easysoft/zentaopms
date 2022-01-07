@@ -98,11 +98,13 @@ $(document).ready(function()
             $('#parent').val('');
             $('#parent').trigger('chosen:updated');
             $('#parent').closest('tr').addClass('hidden');
+            $('#estimate').attr('disabled', 'disabled');
         }
         else
         {
             $('#teamTr').addClass('hidden');
             $('#parent').closest('tr').removeClass('hidden');
+            $('#estimate').removeAttr('disabled');
         }
     });
 
