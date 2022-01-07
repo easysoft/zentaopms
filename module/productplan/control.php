@@ -403,7 +403,7 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
+            die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes"), 'parent'));
         }
         else
         {
@@ -426,7 +426,7 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes")));
+            die(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes"), 'parent'));
         }
         else
         {
@@ -449,7 +449,7 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmClose, $this->createLink('productplan', 'close', "planID=$planID&confirm=yes")));
+            die(js::confirm($this->lang->productplan->confirmClose, $this->createLink('productplan', 'close', "planID=$planID&confirm=yes"), 'parent'));
         }
         else
         {
@@ -472,7 +472,7 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmActivate, $this->createLink('productplan', 'activate', "planID=$planID&confirm=yes")));
+            die(js::confirm($this->lang->productplan->confirmActivate, $this->createLink('productplan', 'activate', "planID=$planID&confirm=yes"), 'parent'));
         }
         else
         {
