@@ -192,7 +192,7 @@ class stakeholderModel extends model
     /**
      * Edit a stakeholder.
      *
-     * @param  int $stakeholder
+     * @param  int $stakeholderID
      * @access public
      * @return void
      */
@@ -266,18 +266,16 @@ class stakeholderModel extends model
      * Get stakeholder pairs.
      *
      * @param  int    $projectID
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @param  object $pager
      * @access public
      * @return array
      */
     public function getStakeHolderPairs($projectID)
     {
-        $stakeholders = $this->dao->select('id, user')->from(TABLE_STAKEHOLDER)
-            ->where('deleted')->eq('0')
-            ->andWhere('objectID')->eq($projectID)
-            ->orderBy('id_desc')
+        $stakeholders = $this->dao->select('t1.user, t2.realname')->from(TABLE_STAKEHOLDER)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.user=t2.account')
+            ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.objectID')->eq($projectID)
+            ->orderBy('t1.id_desc')
             ->fetchPairs();
 
         return $stakeholders;
@@ -287,7 +285,6 @@ class stakeholderModel extends model
      * Get self stakeholders by object id list.
      *
      * @param  array  $objectIdList
-     * @param  string $objectType
      * @access public
      * @return array
      */
@@ -308,7 +305,6 @@ class stakeholderModel extends model
      * Get parent stakeholder group by object id list.
      *
      * @param  array  $objectIdList
-     * @param  string $objectType
      * @access public
      * @return array
      */
@@ -346,9 +342,6 @@ class stakeholderModel extends model
     /**
      * Get stakeholder group by type.
      *
-     * @param  string $browseType
-     * @param  string $orderBy
-     * @param  object $pager
      * @access public
      * @return array
      */
@@ -366,7 +359,7 @@ class stakeholderModel extends model
     /**
      * Get stakeholder by id.
      *
-     * @param  int    $stakeholderID
+     * @param  int    $userID
      * @access public
      * @return array
      */
@@ -436,7 +429,7 @@ class stakeholderModel extends model
         return $this->dao->select('*')->from(TABLE_ISSUE)
             ->where('deleted')->eq(0)
             ->andWhere('project')->eq($this->session->project)
-            ->andWhere('owner')->in(array_values($stakeholders))
+            ->andWhere('owner')->in(array_keys($stakeholders))
             ->orWhere('activity')->ne('')
             ->orderBy('id_desc')
             ->fetchAll('id');
@@ -477,8 +470,7 @@ class stakeholderModel extends model
      *
      * @param  int    $userID
      * @access public
-     * @return void
-     * @return int
+     * @return void|int
      */
     public function expect($userID)
     {
@@ -554,6 +546,7 @@ class stakeholderModel extends model
      * Delete expect.
      *
      * @param  int    $expectID
+     * @param  object $null
      * @access public
      * @return void
      */
