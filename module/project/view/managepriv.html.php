@@ -29,42 +29,6 @@ td.menus + td {border-left: 0;}
 .menus a {margin-left: 10px;}
 </style>
 
-<?php if($group->role == 'limited'):?>
-<div id='mainMenu' class='clearfix'>
-  <div class='btn-toolbar pull-left'>
-    <a href='javascript:;' class='btn btn-link btn-active-text'><span class='text'><?php echo $group->name;?></span></a>
-  </div>
-</div>
-<div id='mainContent' class='main-content'>
-  <form class="load-indicator main-form form-ajax" id="managePrivForm" method="post" target='hiddenwin'>
-    <table class='table table-hover table-striped table-bordered'>
-      <thead>
-        <tr class='text-center'>
-          <th><?php echo $lang->group->module;?></th>
-          <th><?php echo $lang->group->method;?></th>
-        </tr>
-      </thead>
-      <tr class='<?php echo cycle('even, bg-gray');?>'>
-        <th class='text-right thWidth'><?php echo $lang->my->common;?></th>
-        <td id='my' class='pv-10px'>
-          <div class='checkbox-primary'>
-            <input type='checkbox' name='actions[my][]' value='limited' <?php if(isset($groupPrivs['my']['limited'])) echo "checked";?> />
-            <label class='priv' id="my-limited"><?php echo $lang->my->limited;?></label>
-          </div>
-        </td>
-      </tr>
-      <tr>
-        <th class='text-right'></th>
-        <td class='form-actions'>
-          <?php echo html::submitButton('', "onclick='setNoChecked()'");?>
-          <?php echo html::backButton();?>
-          <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
-        </td>
-      </tr>
-    </table>
-  </form>
-</div>
-<?php else:?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
   <span id='groupName'><i class='icon-lock'></i> <?php echo $group->name;?> <i class="icon icon-chevron-right"></i></span>
@@ -134,7 +98,7 @@ td.menus + td {border-left: 0;}
           </div>
         </th>
         <td class='form-actions' colspan='2'>
-          <?php echo html::submitButton('', "onclick='setNoChecked()'", 'btn btn-wide btn-primary');?>
+          <?php echo html::submitButton();?>
           <?php echo html::backButton();?>
           <?php echo html::hidden('noChecked'); // Save the value of no checked.?>
         </td>
@@ -142,7 +106,6 @@ td.menus + td {border-left: 0;}
     </table>
   </form>
 </div>
-<?php endif;?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('menu', $menu);?>
 <script>
