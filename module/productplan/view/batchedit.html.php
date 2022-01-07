@@ -43,7 +43,7 @@
           <td class='text-center'><?php echo $plan->id . html::hidden("id[$plan->id]", $plan->id);?></td>
           <?php if($product->type != 'normal'):?>
           <td class='text-left'>
-            <?php $disabled = $plan->parent != -1 ? "disabled='disabled'" : '';?>
+            <?php $disabled = $plan->parent == -1 ? "disabled='disabled'" : '';?>
             <?php echo html::select("branch[$plan->id]", $plan->parent == '-1' ? '' : $branchTagOption, $plan->branch, "onchange='getConflictStories($plan->id, this.value); 'class='form-control chosen' $disabled");?>
           </td>
           <?php endif;?>
