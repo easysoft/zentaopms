@@ -99,10 +99,10 @@
         </tr>
         <tr class="<?php if($program->acl == 'open') echo 'hidden';?>" id="whitelistBox">
           <th><?php echo $lang->whitelist;?></th>
-          <td>
+          <td colspan='2'>
             <div class='input-group'>
               <?php echo html::select('whitelist[]', $users, $program->whitelist, 'class="form-control chosen" multiple');?>
-              <?php echo $this->fetch('my', 'buildContactLists', "dropdownName='whitelist'");?>
+              <?php echo $this->fetch('my', 'buildContactLists', "dropdownName=whitelist");?>
             </div>
           </td>
         </tr>

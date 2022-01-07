@@ -1227,16 +1227,20 @@ class actionModel extends model
             if(!common::hasPriv($moduleName, $methodName) and !$isLoginOrLogout) return false;
 
             $action->objectLabel = $objectLabel;
+            $action->product     = trim($action->product, ',');
 
             if(isset($this->config->maxVersion)
                and strpos($this->config->action->assetType, $action->objectType) !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
-                $method = $this->config->action->assetViewMethod[$action->objectType];
                 if($action->objectType == 'doc')
                 {
                     $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
                     $method       = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
+                }
+                else
+                {
+                    $method = $this->config->action->assetViewMethod[$action->objectType];
                 }
 
                 $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));

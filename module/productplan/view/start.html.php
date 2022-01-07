@@ -21,11 +21,11 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->productplan->begin;?></th>
-          <td colspan='2'><?php echo html::input('begin', $plan->begin != '2030-01-01' ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
+          <td colspan='2'><?php echo html::input('begin', $plan->begin != $config->productplan->future ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->productplan->end;?></th>
-          <td colspan='2'><?php echo html::input('end', $plan->end != '2030-01-01' ? formatTime($plan->end) : '', 'class="form-control form-date"');?></td>
+          <td colspan='2'><?php echo html::input('end', $plan->end != $config->productplan->future ? formatTime($plan->end) : '', 'class="form-control form-date"');?></td>
         </tr>
         <tr>
           <th><?php echo $lang->productplan->desc;?></th>

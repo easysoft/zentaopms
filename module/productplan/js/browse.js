@@ -150,18 +150,7 @@ function createCardMenu(options)
     if(privs.includes('linkStory')) items.push({label: productplanLang.linkStory, icon: 'link', url: createLink('productplan', 'view', "planID=" + card.id + "&type=story&orderBy=id_desc&link=true")});
     if(privs.includes('linkBug')) items.push({label: productplanLang.linkBug, icon: 'bug', url: createLink('productplan', 'view', "planID=" + card.id + "&type=bug&orderBy=id_desc&link=true")});
     if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink('productplan', 'edit', "planID=" + card.id)});
-    if(privs.includes('start'))
-    {
-        if(card.begin == '2030-01-01' || card.end == '2030-01-01')
-        {
-            items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-id': card.id, 'data-width': '70%'}});
-        }
-        else
-        {
-            items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
-        }
-    }
-
+    if(privs.includes('start')) items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('activate')) items.push({label: productplanLang.activate, icon: 'magic', url: createLink('productplan', 'activate', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
@@ -269,8 +258,8 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     {
         if(fromColType == 'wait' && privs.includes('start'))
         {
-            showIframe = (card.begin == '2030-01-01' || card.end == '2030-01-01') ? true : false;
-            link       = createLink('productplan', 'start', 'planID=' + objectID, '', showIframe);
+            link = createLink('productplan', 'start', 'planID=' + objectID);
+            showIframe = false;
         }
         else if((fromColType == 'done' || fromColType == 'closed') && privs.includes('activate'))
         {

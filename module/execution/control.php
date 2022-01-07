@@ -239,6 +239,7 @@ class execution extends control
         $this->view->setModule    = true;
         $this->view->canBeChanged = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch   = $showBranch;
+        $this->view->projectName  = $this->config->systemMode == 'new' ? $this->loadModel('project')->getById($execution->project)->name . ' / ' . $execution->name : $execution->name;
 
         $this->display();
     }
@@ -1972,10 +1973,10 @@ class execution extends control
             foreach($plans as $plan) $allPlans += $plan;
         }
 
-        $userList = $this->dao->select('account, realname name, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
-        $userList['closed']['account'] = 'Closed';
-        $userList['closed']['name']    = 'Closed';
-        $userList['closed']['avatar']  = '';
+        $userList = $this->dao->select('account, realname, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchAll('account');
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
 
         $this->view->title         = $this->lang->execution->kanban;
         $this->view->position[]    = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);

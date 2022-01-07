@@ -517,43 +517,6 @@ class productplanModel extends model
     }
 
     /**
-     * Start a plan.
-     *
-     * @param  int  $planID
-     * @access public
-     * @return array
-     */
-    public function start($planID)
-    {
-        $oldPlan = $this->getByID($planID);
-        $plan = fixer::input('post')
-            ->add('status', 'doing')
-            ->stripTags($this->config->productplan->editor->start['id'], $this->config->allowedTags)
-            ->remove('uid')
-            ->get();
-
-        $this->checkDate4Plan($oldPlan, $plan->begin, $plan->end);
-        if(dao::isError()) return false;
-
-        $plan = $this->loadModel('file')->processImgURL($plan, $this->config->productplan->editor->start['id'], $this->post->uid);
-
-        $this->dao->update(TABLE_PRODUCTPLAN)
-            ->data($plan)
-            ->autoCheck()
-            ->batchCheck($this->config->productplan->start->requiredFields, 'notempty')
-            ->checkIF(!empty($plan->begin) and !empty($plan->end), 'end', 'ge', $plan->begin)
-            ->where('id')->eq($planID)
-            ->exec();
-
-        if(dao::isError()) return false;
-
-        if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
-        $this->file->updateObjectID($this->post->uid, $planID, 'productplan');
-
-        return common::createChanges($oldPlan, $plan);
-    }
-
-    /**
      * Update a plan's status.
      *
      * @param  int    $planID

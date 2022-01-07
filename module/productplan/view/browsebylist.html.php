@@ -134,8 +134,8 @@
         <?php if($this->session->currentProductType != 'normal'):?>
         <td class='c-branch' title='<?php echo $branchOption[$plan->branch];?>'><?php if($plan->parent != '-1') echo $branchOption[$plan->branch];?></td>
         <?php endif;?>
-        <td><?php echo $plan->begin == '2030-01-01' ? $lang->productplan->future : $plan->begin;?></td>
-        <td><?php echo $plan->end == '2030-01-01' ? $lang->productplan->future : $plan->end;?></td>
+        <td><?php echo $plan->begin == $config->productplan->future ? $lang->productplan->future : $plan->begin;?></td>
+        <td><?php echo $plan->end == $config->productplan->future ? $lang->productplan->future : $plan->end;?></td>
         <td class='text-center'><?php echo $plan->stories;?></td>
         <td class='text-center'><?php echo $plan->bugs;?></td>
         <td class='text-center'><?php echo $plan->hour;?></td>
@@ -149,18 +149,10 @@
           <?php
           if($plan->parent >= 0 )
           {
-              $attr       = "target='hiddenwin'";
-              $isOnlyBody = false;
-              $class      = '';
-              if($plan->begin == '2030-01-01' or $plan->end == '2030-01-01')
-              {
-                  $class      = 'iframe';
-                  $attr       = "data-id='{$plan->id}' data-width='70%'";
-                  $isOnlyBody = true;
-              }
-              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', $class, $isOnlyBody, $attr);
-              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', $class, false, $attr);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', $class, false, $attr);
+              $attr = "target='hiddenwin'";
+              common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', '', false, $attr);
+              common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', '', false, $attr);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', '', false, $attr);
           }
 
           $attr  = $plan->expired ? "disabled='disabled'" : '';
