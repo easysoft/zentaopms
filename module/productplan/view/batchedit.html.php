@@ -49,18 +49,17 @@
           <?php endif;?>
           <td title='<?php echo $plan->title?>'><?php echo html::input("title[$plan->id]", $plan->title, "class='form-control'")?></td>
           <?php if($plan->parent != -1):?>
-          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus($plan->id, this.value, $plan->parent)'");?></td>
+          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen'");?></td>
           <?php else:?>
-          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled onchange='setPlanStatus($plan->id, this.value, $plan->parent)'");?></td>
+          <td><?php echo html::select("status[$plan->id]", array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled ");?></td>
           <?php endif;?>
-          <?php $disabled = (($plan->begin == $config->productplan->future and $plan->end == $config->productplan->future) and $plan->status == 'wait') ? 'disabled="disabled"' : '';?>
+          <?php $disabled = (($plan->begin == $config->productplan->future and $plan->end == $config->productplan->future)) ? 'disabled="disabled"' : '';?>
           <?php if($plan->parent == -1 and ($plan->begin == $config->productplan->future and $plan->end == $config->productplan->future)) $disabled = 'disabled="disabled"';?>
           <?php if($plan->begin == $config->productplan->future) $plan->begin = '';?>
           <?php if($plan->end == $config->productplan->future) $plan->end = '';?>
           <td><?php echo html::input("begin[$plan->id]", $plan->begin, "class='form-control form-date' $disabled");?></td>
           <td><?php echo html::input("end[$plan->id]", $plan->end, "class='form-control form-date' $disabled");?></td>
-          <?php $hidden = ($plan->status != 'wait' and $plan->parent != -1) ? 'hidden' : '';?>
-          <td><div class='checkbox-primary <?php echo $hidden;?>'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future[<?php echo $plan->id; ?>]' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
+          <td><div class='checkbox-primary'><input type='checkbox' id="future<?php echo $plan->id; ?>" name='future[<?php echo $plan->id; ?>]' <?php echo $isChecked;?> onclick="changeDate(<?php echo $plan->id;?>);"/><label for='future<?php echo $plan->id; ?>'><?php echo $lang->productplan->future;?></label></div></td>
           <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, $plan, $extendField->field . "[{$plan->id}]") . "</td>";?>
         </tr>
         <?php endforeach;?>

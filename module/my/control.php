@@ -154,10 +154,9 @@ class my extends control
         $reviewCount  = 0;
         $ncCount      = 0;
         $meetingCount = 0;
-        $isMaxVersion = isset($this->config->maxVersion) ? 1 : 0;
-        if($isMaxVersion)
+        $isMax = isset($this->config->maxVersion) ? 1 : 0;
+        if($isMax)
         {
-
             $this->loadModel('issue');
             $this->loadModel('risk');
             $this->loadModel('review');
@@ -195,8 +194,8 @@ var testTaskCount = $testTaskCount;
 var isOpenedURAndSR = $isOpenedURAndSR;
 if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
 
-var isMaxVersion = $isMaxVersion;
-if(isMaxVersion !== 0)
+var isMax = $isMax;
+if(isMax !== 0)
 {
     var issueCount   = $issueCount;
     var riskCount    = $riskCount;
