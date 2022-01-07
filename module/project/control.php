@@ -542,15 +542,16 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $linkedBranches  = array();
-        $productPlans    = array(0 => '');
-        $allProducts     = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts  = $this->loadModel('product')->getProducts($projectID);
-        $parentProject   = $this->program->getByID($project->parent);
-        $branches        = $this->project->getBranchesByProject($projectID);
-        $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
-        $projectStories  = $this->project->getStoriesByProject($projectID);
-        $projectBranches = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $linkedBranches   = array();
+        $linkedBranchList = array();
+        $productPlans     = array(0 => '');
+        $allProducts      = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts   = $this->loadModel('product')->getProducts($projectID);
+        $parentProject    = $this->program->getByID($project->parent);
+        $branches         = $this->project->getBranchesByProject($projectID);
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $projectStories   = $this->project->getStoriesByProject($projectID);
+        $projectBranches  = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts     = array();
@@ -561,6 +562,7 @@ class project extends control
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
                 if($branch != BRANCH_MAIN) $productPlans[$productID][$branchID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
                 $productPlans[$productID][$branchID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
@@ -595,7 +597,7 @@ class project extends control
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed');
+        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed', $linkedBranchList);
         $this->view->URSRPairs                = $this->custom->getURSRPairs();
         $this->view->parentProject            = $parentProject;
         $this->view->parentProgram            = $this->program->getByID($project->parent);

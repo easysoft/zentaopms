@@ -1674,15 +1674,16 @@ class executionModel extends model
     /**
      * Get branch pairs by product id list.
      *
-     * @param  array  $products
-     * @param  int    $projectID
-     * @param  string $param
+     * @param  array        $products
+     * @param  int          $projectID
+     * @param  string       $param
+     * @param  string|array $appendBranch
      * @access public
      * @return array
      */
-    public function getBranchByProduct($products, $projectID = 0, $param = 'noclosed')
+    public function getBranchByProduct($products, $projectID = 0, $param = 'noclosed', $appendBranch = '')
     {
-        $branchGroups = $this->loadModel('branch')->getByProducts($products, $param);
+        $branchGroups = $this->loadModel('branch')->getByProducts($products, $param, $appendBranch);
 
         if($projectID)
         {
