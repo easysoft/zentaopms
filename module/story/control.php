@@ -26,8 +26,6 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
-
-        if($this->app->tab == 'project') $this->app->rawModule = 'projectstory';
     }
 
     /**
@@ -1028,7 +1026,7 @@ class story extends control
         }
         elseif($from == 'project')
         {
-            $this->loadModel('project')->setMenu($param);
+            $this->loadModel('project')->setMenu($this->session->project);
         }
         elseif($from == 'qa')
         {
