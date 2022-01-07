@@ -794,10 +794,9 @@ class doc extends control
         if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
         {
             $project      = $this->loadModel('project')->getById($doclib->project);
-
             $projectTeams = $this->loadModel('user')->getTeamMemberPairs($doclib->project);
             $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
-            $whitelist    = implode(',', array_keys($projectTeams + $stakeholders)) . $project->whitelist . ',' .$project->PM . ',' . $doclib->users;
+            $whitelist    = implode(',', array_keys($projectTeams + $stakeholders)) . $project->whitelist . ',' . $project->PM . ',' . $doclib->users;
 
             return print(html::select('users[]', $users, $whitelist, "class='form-control chosen' multiple"));
         }
