@@ -59,35 +59,6 @@ function computeEndDate(delta)
     $('#end').val(endDate).datetimepicker('update');
 }
 
-/**
- * Set plan status.
- *
- * @access public
- * @return void
- */
-function setPlanStatus()
-{
-    var status = $('#status').val();
-    if(status != 'wait')
-    {
-        $('#checkBox').closest('div').addClass('hidden');
-        $('#future').val(0);
-        $('#begin').removeAttr('disabled');
-        $('#end').parents('tr').show();
-    }
-    else
-    {
-        var isFuture = $('#future').prop('checked');
-
-        $('#checkBox').closest('div').removeClass('hidden');
-        if(isFuture)
-        {
-            $('#begin').attr('disabled', 'disabled');
-            $('#end').parents('tr').hide();
-        }
-    }
-}
-
 $('#future').on('change', function()
 {
     if($(this).prop('checked'))

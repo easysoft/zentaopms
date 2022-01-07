@@ -21,38 +21,6 @@ function changeDate(planID)
 };
 
 /**
- * Set plan status.
- *
- * @param int $planID
- * @param $status
- * @access public
- * @return void
- */
-function setPlanStatus(planID, status)
-{
-    if(status != 'wait')
-    {
-        $('#future' + planID).closest('div').addClass('hidden');
-        $("input[name='begin[" + planID + "]']").removeAttr('disabled');
-        $("input[name='end[" + planID + "]']").removeAttr('disabled');
-        $('.form-date').datetimepicker('update');
-    }
-    else
-    {
-        var isFuture = $('#future' + planID).prop('checked');
-
-        $('#future' + planID).closest('div').removeClass('hidden');
-
-        if(isFuture)
-        {
-            $("input[name='begin[" + planID + "]']").attr('disabled', 'disabled');
-            $("input[name='end[" + planID + "]']").attr('disabled', 'disabled');
-        }
-    }
-}
-
-
-/**
  * Get conflict stories.
  *
  * @param  int    $planID
