@@ -1086,7 +1086,7 @@ EOF;
     /**
      * Build contact lists.
      *
-     * @param  dropdownName
+     * @param  string $dropdownName
      * @access public
      * @return void
      */
