@@ -893,6 +893,7 @@ class testtaskModel extends model
             if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
 
+            $task = $this->getById($taskID);
             /* When the cases linked the testtask, the cases link to the project. */
             if($this->app->tab != 'qa')
             {
@@ -906,7 +907,7 @@ class testtaskModel extends model
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
-                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
+                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $task->name);
             }
         }
     }
@@ -1591,7 +1592,7 @@ class testtaskModel extends model
         if(empty($file))
         {
             dao::$errors[] = $this->lang->testtask->unitXMLFormat;
-            die(js::error(dao::getError()));
+            return print(js::error(dao::getError()));
         }
 
         $file     = $file[0];
@@ -1600,7 +1601,7 @@ class testtaskModel extends model
         if(simplexml_load_file($fileName) === false)
         {
             dao::$errors[] = $this->lang->testtask->cannotBeParsed;
-            die(js::error(dao::getError()));
+            return print(js::error(dao::getError()));
         }
 
         $frame = $this->post->frame;
@@ -1636,7 +1637,7 @@ class testtaskModel extends model
      */
     public function processAutoResult($testtaskID, $productID, $suites, $cases, $results, $suiteNames = array(), $caseTitles = array(), $auto = 'unit')
     {
-        if(empty($cases)) die(js::alert($this->lang->testtask->noImportData));
+        if(empty($cases)) return print(js::alert($this->lang->testtask->noImportData));
 
         /* Import cases and link task and insert result. */
         $this->loadModel('action');

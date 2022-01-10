@@ -133,10 +133,11 @@ $config->project->maxCheckList->scrum     = array('bug', 'execution', 'build', '
 $config->project->maxCheckList->waterfall = array('execution', 'design', 'doc', 'bug', 'case', 'build', 'release', 'testtask', 'review', 'build', 'researchplan', 'issue', 'risk', 'opportunity', 'auditplan', 'gapanalysis', 'meeting');
 
 $config->project->excludedPriv['project']    = array('index', 'browse', 'kanban', 'create', 'batchEdit', 'qa', 'updateOrder', 'createGuide', 'programTitle', 'export');
+$config->project->excludedPriv['story']      = array('report', 'linkStory', 'batchChangeBranch', 'batchChangeModule', 'batchToTask', 'processStoryChange', 'track', 'tasks', 'bugs', 'cases');
 $config->project->excludedPriv['bug']        = array('browse', 'batchChangePlan', 'batchCreate', 'batchEdit', 'batchConfirm', 'batchResolve', 'batchClose', 'batchActivate', 'report', 'batchChangeModule', 'batchChangeBranch');
 $config->project->excludedPriv['testcase']   = array('browse', 'batchChangeModule', 'batchChangeBranch');
 $config->project->excludedPriv['testtask']   = array('browse', 'view', 'start', 'activate', 'block', 'close');
-$config->project->excludedPriv['doc']        = array('catalog', 'index');
+$config->project->excludedPriv['doc']        = array('browse', 'view', 'catalog', 'index');
 $config->project->excludedPriv['repo']       = array('edit', 'delete', 'maintain', 'setRules');
 $config->project->excludedPriv['testreport'] = array('browse');
 $config->project->excludedPriv['auditplan']  = array('delete');

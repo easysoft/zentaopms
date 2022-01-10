@@ -95,7 +95,7 @@ class holiday extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->holiday->confirmDelete, inLink('delete', "id=$id&confirm=yes")));
+            return print(js::confirm($this->lang->holiday->confirmDelete, inLink('delete', "id=$id&confirm=yes")));
         }
         else
         {
@@ -111,7 +111,7 @@ class holiday extends control
             $this->holiday->updateTaskRealDuration($holidayInformation->begin, $holidayInformation->end);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 }

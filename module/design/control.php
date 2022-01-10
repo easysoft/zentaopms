@@ -298,7 +298,7 @@ class design extends control
         $repos  = $this->loadModel('repo')->getRepoPairs('project', $design->project);
         $repoID = $repoID ? $repoID : key($repos);
 
-        if(empty($repoID)) die(js::locate(helper::createLink('repo', 'create', "objectID=$design->project")));
+        if(empty($repoID)) return print(js::locate(helper::createLink('repo', 'create', "objectID=$design->project")));
 
         $repo      = $this->loadModel('repo')->getRepoByID($repoID);
         $revisions = $this->repo->getCommits($repo, '', 'HEAD', '', '', $begin, $end);
@@ -360,13 +360,13 @@ class design extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->design->confirmUnlink, inlink('unlinkCommit', "designID=$designID&commitID=$commitID&confirm=yes")));
+            return print(js::confirm($this->lang->design->confirmUnlink, inlink('unlinkCommit', "designID=$designID&commitID=$commitID&confirm=yes")));
         }
         else
         {
             $this->design->unlinkCommit($designID, $commitID);
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -446,7 +446,7 @@ class design extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->design->confirmDelete, inlink('delete', "designID=$designID&confirm=yes")));
+            return print(js::confirm($this->lang->design->confirmDelete, inlink('delete', "designID=$designID&confirm=yes")));
         }
         else
         {
@@ -454,7 +454,7 @@ class design extends control
             $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('design')->andWhere('AID')->eq($designID)->andWhere('Btype')->eq('commit')->andwhere('relation')->eq('completedin')->exec();
             $this->dao->delete()->from(TABLE_RELATION)->where('Atype')->eq('commit')->andWhere('BID')->eq($designID)->andWhere('Btype')->eq('design')->andwhere('relation')->eq('completedfrom')->exec();
 
-            die(js::locate($this->session->designList, 'parent'));
+            return print(js::locate($this->session->designList, 'parent'));
         }
     }
 
@@ -470,7 +470,7 @@ class design extends control
         if($_POST)
         {
             $changes = $this->design->assign($designID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('action');
             if(!empty($changes))
@@ -479,8 +479,8 @@ class design extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('design', 'browse'), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('design', 'browse'), 'parent'));
         }
 
         $design = $this->design->getByID($designID);

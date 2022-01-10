@@ -1525,6 +1525,7 @@ class execution extends control
         $this->loadModel('productplan');
         $productPlans     = array(0 => '');
         $linkedBranches   = array();
+        $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
@@ -1538,6 +1539,7 @@ class execution extends control
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
                 $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
                 if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID][$branchID] += $plans[$productID][BRANCH_MAIN];
@@ -1581,7 +1583,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->display();
     }
 

@@ -45,7 +45,7 @@ class projectrelease extends control
 
         /* Get product and product list by project. */
         $this->products = $this->product->getProductPairsByProject($projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
+        if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
         if(!$productID) $productID = key($this->products);
         $product = $this->product->getById($productID);
 
@@ -223,7 +223,7 @@ class projectrelease extends control
         if(!$release)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            return print(js::error($this->lang->notFound) . js::locate('back'));
         }
 
         $storyPager = new pager($type == 'story' ? $recTotal : 0, $recPerPage, $type == 'story' ? $pageID : 1);
@@ -318,7 +318,7 @@ class projectrelease extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->release->confirmDelete, $this->createLink('projectrelease', 'delete', "releaseID=$releaseID&confirm=yes")));
+            return print(js::confirm($this->lang->release->confirmDelete, $this->createLink('projectrelease', 'delete', "releaseID=$releaseID&confirm=yes")));
         }
         else
         {
@@ -347,7 +347,7 @@ class projectrelease extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->session->releaseList, 'parent'));
+            return print(js::locate($this->session->releaseList, 'parent'));
         }
     }
 
@@ -454,7 +454,7 @@ class projectrelease extends control
             }
 
             $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
-            die($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
+            return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
         }
 
         $this->display();
@@ -477,7 +477,7 @@ class projectrelease extends control
         if(!empty($_POST['stories']))
         {
             $this->projectrelease->linkStory($releaseID);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
+            return print(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), $this->app->tab);
 
@@ -563,7 +563,7 @@ class projectrelease extends control
             }
             return $this->send($response);
         }
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -576,7 +576,7 @@ class projectrelease extends control
     public function batchUnlinkStory($releaseID)
     {
         $this->loadModel('release')->batchUnlinkStory($releaseID);
-        die(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story"), 'parent'));
+        return print(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=story"), 'parent'));
     }
 
     /**
@@ -597,7 +597,7 @@ class projectrelease extends control
         if(!empty($_POST['bugs']))
         {
             $this->projectrelease->linkBug($releaseID, $type);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
+            return print(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
@@ -694,7 +694,7 @@ class projectrelease extends control
             }
             return $this->send($response);
         }
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -708,7 +708,7 @@ class projectrelease extends control
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
         $this->loadModel('release')->batchUnlinkBug($releaseID, $type);
-        die(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+        return print(js::locate($this->createLink('projectrelease', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
     }
 
     /**
@@ -722,8 +722,8 @@ class projectrelease extends control
     public function changeStatus($releaseID, $status)
     {
         $this->loadModel('release')->changeStatus($releaseID, $status);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 }

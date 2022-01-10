@@ -268,7 +268,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
               <tbody>
                 <tr class='text-top'>
                   <th class='thWidth'><?php echo $lang->bug->linkBug;?></th>
-                  <td><?php echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
+                  <td><?php if(common::hasPriv('bug', 'linkBugs')) echo html::a($this->createLink('bug', 'linkBugs', "bugID=$bug->id", '', true), $lang->bug->linkBugs, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");?></td>
                 </tr>
                 <tr>
                   <th></th>

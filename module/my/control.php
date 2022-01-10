@@ -154,10 +154,9 @@ class my extends control
         $reviewCount  = 0;
         $ncCount      = 0;
         $meetingCount = 0;
-        $isMaxVersion = isset($this->config->maxVersion) ? 1 : 0;
-        if($isMaxVersion)
+        $isMax = isset($this->config->maxVersion) ? 1 : 0;
+        if($isMax)
         {
-
             $this->loadModel('issue');
             $this->loadModel('risk');
             $this->loadModel('review');
@@ -195,8 +194,8 @@ var testTaskCount = $testTaskCount;
 var isOpenedURAndSR = $isOpenedURAndSR;
 if(isOpenedURAndSR !== 0) var requirementCount = $requirementCount;
 
-var isMaxVersion = $isMaxVersion;
-if(isMaxVersion !== 0)
+var isMax = $isMax;
+if(isMax !== 0)
 {
     var issueCount   = $issueCount;
     var riskCount    = $riskCount;
@@ -973,13 +972,13 @@ EOF;
      */
     public function changePassword()
     {
-        if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
+        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
         if(!empty($_POST))
         {
             $this->user->updatePassword($this->app->user->id);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('my', 'index'), 'parent.parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('my', 'index'), 'parent.parent'));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->changePassword;
@@ -1007,14 +1006,14 @@ EOF;
             {
                 $listID = $this->user->createContactList($data->newList, $data->users);
                 $this->user->setGlobalContacts($listID, isset($data->share));
-                if(isonlybody()) die(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
-                die(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
+                if(isonlybody()) return print(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
+                return print(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
             }
             elseif($data->mode == 'edit')
             {
                 $this->user->updateContactList($data->listID, $data->listName, $data->users);
                 $this->user->setGlobalContacts($data->listID, isset($data->share));
-                die(js::locate(inlink('manageContacts', "listID={$data->listID}"), 'parent'));
+                return print(js::locate(inlink('manageContacts', "listID={$data->listID}"), 'parent'));
             }
         }
 
@@ -1075,19 +1074,19 @@ EOF;
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes")));
+            return print(js::confirm($this->lang->user->contacts->confirmDelete, inlink('deleteContacts', "listID=$listID&confirm=yes")));
         }
         else
         {
             $this->user->deleteContactList($listID);
-            die(js::locate(inlink('manageContacts'), 'parent'));
+            return print(js::locate(inlink('manageContacts'), 'parent'));
         }
     }
 
     /**
      * Build contact lists.
      *
-     * @param  dropdownName
+     * @param  string $dropdownName
      * @access public
      * @return void
      */
@@ -1106,7 +1105,7 @@ EOF;
      */
     public function profile()
     {
-        if($this->app->user->account == 'guest') die(js::alert('guest') . js::locate('back'));
+        if($this->app->user->account == 'guest') return print(js::alert('guest') . js::locate('back'));
 
         $this->app->loadConfig('user');
         $this->app->loadLang('user');
@@ -1136,9 +1135,9 @@ EOF;
             foreach($_POST as $key => $value) $this->setting->setItem("{$this->app->user->account}.common.$key", $value);
 
             $this->setting->setItem("{$this->app->user->account}.common.preferenceSetted", 1);
-            if(isOnlybody()) die(js::closeModal('parent.parent'));
+            if(isOnlybody()) return print(js::closeModal('parent.parent'));
 
-            die(js::locate($this->createLink('my', 'index'), 'parent'));
+            return print(js::locate($this->createLink('my', 'index'), 'parent'));
         }
 
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->preference;
@@ -1254,12 +1253,12 @@ EOF;
         $this->loadModel('user');
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->user->confirmUnbind, $this->createLink('my', 'unbind', "confirm=yes")));
+            return print(js::confirm($this->lang->user->confirmUnbind, $this->createLink('my', 'unbind', "confirm=yes")));
         }
         else
         {
             $this->user->unbind($this->app->user->account);
-            die(js::locate($this->createLink('my', 'profile'), 'parent'));
+            return print(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
     }
 }
