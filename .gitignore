@@ -12,6 +12,10 @@ tmp/log/*
 tmp/model/*
 tmp/cache/*
 tmp/extension/*
+extension/pro/*
+extension/biz/*
+extension/max/*
+extension/custom/*
 test/data/sql/
 .gitkeep
 .bak
