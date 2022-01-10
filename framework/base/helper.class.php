@@ -203,6 +203,21 @@ class baseHelper
     }
 
     /**
+     * 使用helper::importControl()来引入Control文件，不要直接使用include或者require.
+     * Using helper::importControl() to import a file, instead of include or require.
+     *
+     * @param string    $moduleName.
+     * @static
+     * @access public
+     * @return bool
+     */
+    static public function importControl($moduleName)
+    {
+        global $app;
+        return helper::import($app->getModulePath($moduleName) . 'control.php');
+    }
+
+    /**
      * 将数组或者列表转化成 IN( 'a', 'b') 的形式。
      * Convert a list to  IN('a', 'b') string.
      *

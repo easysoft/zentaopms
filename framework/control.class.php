@@ -173,18 +173,43 @@ class control extends baseControl
         if(!empty($viewExtPath))
         {
             $commonExtViewFile = $viewExtPath['common'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $visionExtViewFile = $viewExtPath['vision'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $customExtViewFile = $viewExtPath['custom'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $siteExtViewFile   = empty($viewExtPath['site']) ? '' : $viewExtPath['site'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
 
-            $viewFile = file_exists($commonExtViewFile) ? $commonExtViewFile : $mainViewFile;
-            $viewFile = (!empty($siteExtViewFile) and file_exists($siteExtViewFile)) ? $siteExtViewFile : $viewFile;
-            if(!is_file($viewFile))
+            /* Get ext files, site > custom > vision > common. */
+            if(!empty($siteExtViewFile) and file_exists($siteExtViewFile))
             {
-                die(js::error($this->lang->notPage) . js::locate('back'));
+                $viewFile = $siteExtViewFile;
+            }
+            else if(file_exists($customExtViewFile))
+            {
+                $viewFile = $customExtViewFile;
+            }
+            else if(!empty($viewExtPath['vision']) and file_exists($visionExtViewFile))
+            {
+                $viewFile = $visionExtViewFile;
+            }
+            else if(file_exists($commonExtViewFile))
+            {
+                $viewFile = $commonExtViewFile;
             }
 
-            $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            $siteExtHookFiles   = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            $extHookFiles       = array_merge((array) $commonExtHookFiles, (array) $siteExtHookFiles);
+            if(!is_file($viewFile)) die(js::error($this->lang->notPage) . js::locate('back'));
+
+            /* Get ext hook files. */
+            if(empty($viewExtPath['vision']))
+            {
+                $commonExtHookFiles = glob($viewExtPath['common'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            }
+            else
+            {
+                $commonExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            }
+            $customExtHookFiles = glob($viewExtPath['custom'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+
+            $siteExtHookFiles = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
+            $extHookFiles     = array_merge((array)$commonExtHookFiles, (array)$customExtHookFiles, (array)$siteExtHookFiles);
         }
 
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);

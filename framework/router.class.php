@@ -301,6 +301,7 @@ class router extends baseRouter
         /* 初始化数组。Init the variables. */
         $extConfigFiles       = array();
         $commonExtConfigFiles = array();
+        $visionExtConfigFiles = array();
         $siteExtConfigFiles   = array();
 
         /* 先获得模块的主配置文件。Get the main config file for current module first. */
@@ -308,9 +309,13 @@ class router extends baseRouter
 
         /* 查找扩展配置文件。Get extension config files. */
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
-        if($config->framework->extensionLevel >= 1 and !empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+        if($config->framework->extensionLevel >= 1)
+        {
+            if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+            if(!empty($extConfigPath['vision'])) $visionExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['common'], '.php'));
+        }
         if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site']))   $siteExtConfigFiles   = helper::ls($extConfigPath['site'], '.php');
-        $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
+        $extConfigFiles = array_merge($commonExtConfigFiles, $visionExtConfigFiles, $siteExtConfigFiles);
 
         /* 将主配置文件和扩展配置文件合并在一起。Put the main config file and extension config files together. */
         $configFiles = array_merge(array($mainConfigFile), $extConfigFiles);

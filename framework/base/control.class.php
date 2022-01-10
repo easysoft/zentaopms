@@ -479,20 +479,14 @@ class baseControl
 
         if(!empty($cssExtPath))
         {
-            $cssMethodExt = $cssExtPath['common'] . $methodName . DS;
-            $cssCommonExt = $cssExtPath['common'] . 'common' . DS;
-
-            $cssExtFiles = glob($cssCommonExt . $devicePrefix . '*.css');
-            if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
-
-            $cssExtFiles = glob($cssMethodExt . $devicePrefix . '*.css');
-            if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
-
-            if(!empty($cssExtPath['site']))
+            foreach($cssExtPath as $cssPath)
             {
-                $cssMethodExt = $cssExtPath['site'] . $methodName . DS;
-                $cssCommonExt = $cssExtPath['site'] . 'common' . DS;
-                $cssExtFiles  = glob($cssCommonExt . $devicePrefix . '*.css');
+                if(empty($cssPath)) continue;
+
+                $cssMethodExt = $cssPath . $methodName . DS;
+                $cssCommonExt = $cssPath . 'common' . DS;
+
+                $cssExtFiles = glob($cssCommonExt . $devicePrefix . '*.css');
                 if(!empty($cssExtFiles) and is_array($cssExtFiles)) $css .= $this->getExtCSS($cssExtFiles);
 
                 $cssExtFiles = glob($cssMethodExt . $devicePrefix . '*.css');
@@ -579,19 +573,12 @@ class baseControl
 
         if(!empty($jsExtPath))
         {
-            $jsMethodExt = $jsExtPath['common'] . $methodName . DS;
-            $jsCommonExt = $jsExtPath['common'] . 'common' . DS;
-
-            $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
-            if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-
-            $jsExtFiles = glob($jsMethodExt . $this->devicePrefix . '*.js');
-            if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
-
-            if(!empty($jsExtPath['site']))
+            foreach($jsExtPath as $jsPath)
             {
-                $jsMethodExt = $jsExtPath['site'] . $methodName . DS;
-                $jsCommonExt = $jsExtPath['site'] . 'common' . DS;
+                if(empty($jsPath)) continue;
+
+                $jsMethodExt = $jsPath . $methodName . DS;
+                $jsCommonExt = $jsPath . 'common' . DS;
 
                 $jsExtFiles = glob($jsCommonExt . $this->devicePrefix . '*.js');
                 if(!empty($jsExtFiles) and is_array($jsExtFiles)) foreach($jsExtFiles as $jsFile) $js .= file_get_contents($jsFile);
