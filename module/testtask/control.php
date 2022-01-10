@@ -59,7 +59,7 @@ class testtask extends control
             {
                 $products = $this->product->getPairs();
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testtask&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) helper::end($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testtask&objectID=$objectID")));
         }
         else
         {
@@ -281,7 +281,7 @@ class testtask extends control
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
 
         /* When the session changes, you need to query the related products again. */
@@ -458,7 +458,7 @@ class testtask extends control
 
         /* Get task and product info, set menu. */
         $task = $this->testtask->getById($taskID);
-        if(!$task) die(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
+        if(!$task) return print(js::error($this->lang->testtask->checkLinked) . js::locate('back'));
 
         $productID = $task->product;
         if($this->app->tab == 'project')
@@ -638,7 +638,7 @@ class testtask extends control
         /* Get task and product info, set menu. */
         $groupBy = empty($groupBy) ? 'story' : $groupBy;
         $task    = $this->testtask->getById($taskID);
-        if(!$task) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$task) return print(js::error($this->lang->notFound) . js::locate('back'));
         $productID = $task->product;
         if($this->app->tab == 'project')
         {
@@ -950,7 +950,7 @@ class testtask extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testtask->confirmDelete, inlink('delete', "taskID=$taskID&confirm=yes")));
+            return print(js::confirm($this->lang->testtask->confirmDelete, inlink('delete', "taskID=$taskID&confirm=yes")));
         }
         else
         {
@@ -979,7 +979,7 @@ class testtask extends control
             if($this->app->tab == 'execution') $browseList = $this->createLink('execution', 'testtask', "executionID=$task->execution");
             if($this->app->tab == 'project')   $browseList = $this->createLink('project', 'testtask', "projectID=$task->project");
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($browseList, 'parent'));
+            return print(js::locate($browseList, 'parent'));
         }
     }
 
@@ -1079,7 +1079,7 @@ class testtask extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testtask->confirmUnlinkCase, $this->createLink('testtask', 'unlinkCase', "rowID=$rowID&confirm=yes")));
+            return print(js::confirm($this->lang->testtask->confirmUnlinkCase, $this->createLink('testtask', 'unlinkCase', "rowID=$rowID&confirm=yes")));
         }
         else
         {
@@ -1118,7 +1118,7 @@ $rowID)->fetch();
             foreach($_POST['caseIDList'] as $caseID) $this->action->create('case', $caseID, 'unlinkedfromtesttask', '', $taskID);
         }
 
-        die(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID")));
+        return print(js::locate($this->createLink('testtask', 'cases', "taskID=$taskID")));
     }
 
     /**
@@ -1146,7 +1146,7 @@ $rowID)->fetch();
         if(!empty($_POST))
         {
             $caseResult = $this->testtask->createResult($runID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $taskID = empty($run->task) ? 0 : $run->task;
             $this->loadModel('action')->create('case', $caseID, 'run', '', $taskID);
@@ -1227,11 +1227,11 @@ $rowID)->fetch();
             $this->testtask->batchRun($from, $taskID);
             $this->loadModel('action');
             foreach(array_keys($this->post->results) as $caseID) $this->action->create('case', $caseID, 'run', '', $taskID);
-            die(js::locate($url, 'parent'));
+            return print(js::locate($url, 'parent'));
         }
 
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($url, 'parent'));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($url, 'parent'));
+        $caseIDList = array_unique($this->post->caseIDList);
 
         /* The case of tasks of qa. */
         if($productID or ($this->app->tab == 'project' and empty($productID)))
@@ -1339,7 +1339,7 @@ $rowID)->fetch();
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($case->product, $branch = 0, $params = '');
         $this->view->users   = $this->loadModel('user')->getPairs('noclosed, noletter');
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -1358,7 +1358,7 @@ $rowID)->fetch();
             ->exec();
         $this->loadModel('action');
         foreach($this->post->caseIDList as $caseID) $this->action->create('case', $caseID, 'assigned', '', $this->post->assignedTo);
-        die(js::locate($this->session->caseList, 'parent'));
+        return print(js::locate($this->session->caseList, 'parent'));
     }
 
     /**
@@ -1373,10 +1373,10 @@ $rowID)->fetch();
         if($_POST)
         {
             $taskID = $this->testtask->importUnitResult($productID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('action')->create('testtask', $taskID, 'opened');
-            die(js::locate($this->createLink('testtask', 'unitCases', "taskID=$taskID"), 'parent'));
+            return print(js::locate($this->createLink('testtask', 'unitCases', "taskID=$taskID"), 'parent'));
         }
 
         /* Set menu. */
@@ -1436,8 +1436,8 @@ $rowID)->fetch();
 
         $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
 
-        if($id) die(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));
-        die(html::select('testtask', $testTasks, '', 'class=form-control'));
+        if($id) return print(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));
+        return print(html::select('testtask', $testTasks, '', 'class=form-control'));
     }
 
     /**
@@ -1451,7 +1451,7 @@ $rowID)->fetch();
     public function ajaxGetTestTasks($productID, $executionID = 0)
     {
         $pairs = $this->testtask->getPairs($productID, $executionID);
-        die(html::select('testtask', $pairs, '', "class='form-control chosen'"));
+        return print(html::select('testtask', $pairs, '', "class='form-control chosen'"));
     }
 
     /**
@@ -1465,6 +1465,6 @@ $rowID)->fetch();
     {
         /* Testreport list. */
         $pairs = $this->testtask->getTestReportPairsByBuild($buildID);
-        die(html::select('testreport', $pairs, '', "class='form-control chosen'"));
+        return print(html::select('testreport', $pairs, '', "class='form-control chosen'"));
     }
 }
