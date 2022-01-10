@@ -155,6 +155,7 @@ $lang->project->etc                = " , etc";
 $lang->project->product            = 'Product';
 $lang->project->branch             = 'Branch';
 $lang->project->plan               = 'Plan';
+$lang->project->kanban             = 'Kanban';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
@@ -271,6 +272,7 @@ $lang->project->childLongTime          = "If a child as long-term projects, the 
 $lang->project->readjustTime           = 'Change the project begin&end date.';
 $lang->project->notAllowRemoveProducts = "Stories of this product are linked to projects or {$lang->execution->common} of this project is linked to this product. Please unlink it and try again.";
 $lang->project->ge                     = "『%s』should be >= actual begin『%s』.";
+$lang->project->kanbanTitle            = 'Kanban Project Management';
 
 $lang->project->programTitle['0']    = 'Hidden';
 $lang->project->programTitle['base'] = 'Base-level project only';

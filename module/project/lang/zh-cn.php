@@ -155,6 +155,7 @@ $lang->project->etc                = "等";
 $lang->project->product            = '所属产品';
 $lang->project->branch             = '所属分支';
 $lang->project->plan               = '所属计划';
+$lang->project->kanban             = '看板';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
@@ -271,6 +272,7 @@ $lang->project->childLongTime          = "子项目中有长期项目，父项�
 $lang->project->readjustTime           = '重新调整项目起止时间';
 $lang->project->notAllowRemoveProducts = "该产品中的需求与项目进行了关联或者项目下的{$lang->execution->common}关联了该产品，请取消关联后再操作。";
 $lang->project->ge                     = "『%s』应当不小于实际开始时间『%s』。";
+$lang->project->kanbanTitle            = '专业研发看板项目管理';
 
 $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';
