@@ -253,6 +253,10 @@ $lang->project->endList[186] = '半年';
 $lang->project->endList[365] = '一年';
 $lang->project->endList[999] = '长期';
 
+$lang->project->scrumTitle     = '敏捷开发全流程项目管理';
+$lang->project->waterfallTitle = '瀑布式项目管理';
+$lang->project->kanbanTitle    = '专业研发看板项目管理';
+
 $lang->project->empty                  = '暂时没有项目';
 $lang->project->nextStep               = '下一步';
 $lang->project->hoursUnit              = '%s 工时';
@@ -261,7 +265,6 @@ $lang->project->lastIteration          = "近期{$lang->executionCommon}";
 $lang->project->ongoingStage           = '进行中的阶段';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = '瀑布';
-$lang->project->waterfallTitle         = '瀑布式项目管理';
 $lang->project->cannotCreateChild      = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->project->confirmDelete          = "您确定要删除吗？";
 $lang->project->emptyPM                = '暂无';
@@ -272,7 +275,6 @@ $lang->project->childLongTime          = "子项目中有长期项目，父项�
 $lang->project->readjustTime           = '重新调整项目起止时间';
 $lang->project->notAllowRemoveProducts = "该产品中的需求与项目进行了关联或者项目下的{$lang->execution->common}关联了该产品，请取消关联后再操作。";
 $lang->project->ge                     = "『%s』应当不小于实际开始时间『%s』。";
-$lang->project->kanbanTitle            = '专业研发看板项目管理';
 
 $lang->project->programTitle['0']    = '不显示';
 $lang->project->programTitle['base'] = '只显示一级项目集';
@@ -280,7 +282,6 @@ $lang->project->programTitle['end']  = '只显示最后一级项目集';
 
 $lang->project->accessDenied        = '您无权访问该项目！';
 $lang->project->chooseProgramType   = '选择项目管理方式';
-$lang->project->scrumTitle          = '敏捷开发全流程项目管理';
 $lang->project->cannotCreateChild   = '该项目已经有实际的内容，无法直接添加子项目。您可以为当前项目创建一个父项目，然后在新的父项目下面添加子项目。';
 $lang->project->hasChildren         = '该项目有子项目存在，不能删除。';
 $lang->project->confirmDelete       = "您确定删除项目[%s]吗？";
