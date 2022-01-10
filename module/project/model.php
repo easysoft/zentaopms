@@ -632,7 +632,7 @@ class projectModel extends model
     /**
      * Get project pairs by model and project.
      *
-     * @param  string $model all|scrum|waterfall
+     * @param  string $model all|scrum|waterfall|kanban
      * @param  int    $programID
      * @access public
      * @return array
