@@ -13,3 +13,5 @@ CREATE TABLE `zt_cardgroup` (
 ALTER TABLE `zt_kanban` ADD `displayCards` smallint(6) NOT NULL AFTER `order`;
 ALTER TABLE `zt_kanbancard` DROP COLUMN `lane`;
 ALTER TABLE `zt_kanbancard` DROP COLUMN `column`;
+
+UPDATE `zt_grouppriv` SET `method` = 'taskKanban' WHERE `module` = 'execution' AND `method` = 'kanban';

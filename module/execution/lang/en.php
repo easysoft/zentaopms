@@ -247,6 +247,8 @@ $lang->execution->iteration         = 'Iterations';
 $lang->execution->iterationInfo     = '%s Iterations';
 $lang->execution->viewAll           = 'View All';
 $lang->execution->testreport        = 'Test Report';
+$lang->execution->taskKanban        = 'Task Kanban';
+$lang->execution->RDKanban          = 'Research & Development Kanban';
 
 /* Group browsing. */
 $lang->execution->allTasks     = 'All';

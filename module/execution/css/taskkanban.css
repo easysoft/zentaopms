@@ -1,0 +1,58 @@
+#main {padding-bottom: 10px;}
+#main > .container {max-width: 1960px!important; padding: 0 10px}
+
+.kanban + .kanban {margin-top: 15px}
+.kanban-card > .title {display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis}
+.kanban-card > .infos {position: relative; margin-top: 5px}
+.kanban-card > .infos > .info + .info {margin-left: 8px}
+.kanban-card > .infos > .info-id,
+.kanban-card > .infos > .info-deadline,
+.kanban-card > .infos > .info-estimate {font-size: 12px; position: relative; top: 2px}
+.kanban-card > .infos > .label-pri {min-width: 16px; line-height: 14px; height: 16px; padding: 0}
+.kanban-card > .infos > .label-severity {transform: scale(.75)}
+.kanban-card > .infos > .avatar {position: absolute; right: 0; top: 0}
+.kanban-card > .actions {position: absolute; top: 4px; right: 4px; opacity: 0;}
+.kanban-card:hover > .actions {opacity: 1;}
+.kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+
+.kanban-header-col > .actions {padding-top: 22px}
+.kanban-header-parent-col .kanban-header-col > .actions {padding-top: 6px; padding-right: 2px;}
+.kanban-header-col > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.kanban-header-col > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+
+.kanban-lane-name > .actions {position: absolute; top: 0; left: 0; right: 0; opacity: 0;}
+.kanban-lane-name:hover > .actions {opacity: 1;}
+.kanban-lane-name > .actions > a {display: block; width: 20px; height: 20px; line-height: 20px; text-align: center; opacity: .7; color: #fff;}
+.kanban-lane-name > .actions > a:hover {background-color: rgba(0,0,0,.2); opacity: 1;}
+
+.kanban-affixed .kanban-header-col > .title > .text,
+.kanban-affixed .kanban-header-col > .title > .count {color: #fff!important;}
+
+#kanbanContainer {margin: 0;}
+#kanbanContainer > .panel-body {overflow: auto;}
+#kanbans .kanban {min-height: initial;}
+#kanbans .kanban-lane {min-height: 150px; margin-top: 2px;}
+#kanbans .kanban-affixed > .kanban-header {top: 100px;}
+#kanbans .kanban-card[data-scale-size="4"] {padding: 8px;}
+#kanbans .kanban-card[data-scale-size="3"] {padding: 3px 4px;}
+#kanbans .kanban-card[data-scale-size="3"] > .title {white-space: normal; max-height: 100%;}
+#kanbans .kanban-card[data-scale-size="2"] {padding: 3px 4px; overflow: hidden;}
+#kanbans .kanban-card[data-scale-size="2"] > .title {display: inline; line-height: 18px; white-space: normal; max-height: 100%; word-break: break-all;}
+#kanbans .kanban-card[data-scale-size="2"] > .infos {display: inline-block; height: 18px; vertical-align: top; margin: 0;}
+#kanbans .kanban-card[data-scale-size="2"] > .infos > .info-pri {transform: scale(.8); vertical-align: top;}
+#kanbans .kanban-card[data-scale-size="2"] > .infos > .avatar {display: inline-block; transform: scale(.8); position: relative; top: -2px; vertical-align: top; margin-right: -1px;}
+
+#kanbanScaleControl {width: 100px;}
+#kanbanScaleControl .input-group-addon {background: #fff; padding: 5px;}
+#kanbanScaleControl > .input-group-btn:first-child > .btn {border-radius: 16px 0 0 16px; border-right-color: transparent;}
+#kanbanScaleControl > .input-group-btn:last-child > .btn {border-radius: 0 16px 16px 0; border-left-color: transparent;}
+#kanbanScaleControl > .input-group-btn > .btn:hover {border-color: #b8bfce;}
+
+#type_chosen .icon-kanban {padding-right: 10px; font-size: 15px;}
+
+.dropdown-menu a {text-align: left;}
+.scrollbar-hover {max-height: 2000px; overflow: scroll !important;}
+.c-type {width: 150px !important; overflow: unset;}
+.c-group {width: 190px !important; overflow: unset;}
+.c-type {margin-left: 0px !important;}

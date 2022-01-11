@@ -247,6 +247,8 @@ $lang->execution->iteration         = '版本迭代';
 $lang->execution->iterationInfo     = '迭代%s次';
 $lang->execution->viewAll           = '查看所有';
 $lang->execution->testreport        = '测试报告';
+$lang->execution->taskKanban        = '任务看板';
+$lang->execution->RDKanban          = '研发看板';
 
 /* 分组浏览。*/
 $lang->execution->allTasks     = '所有';
