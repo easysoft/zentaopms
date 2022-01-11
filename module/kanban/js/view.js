@@ -1012,4 +1012,20 @@ $(function()
             if(sortType == 'lane') $cards.show();
         }
     });
+
+    if(Object.keys(regions).length == 1)
+    {
+        var regionID = Object.keys(regions)[0];
+        var region   = regions[regionID].groups;
+        if(Object.keys(region).length == 1)
+        {
+            var group = region[0];
+            if(Object.keys(group.lanes).length == 1)
+            {
+                var windowHeight = $(window).height();
+                $('.region').css('height', windowHeight -132);
+                $('.kanban-lane').css('height', windowHeight - 222);
+            }
+        }
+    }
 });
