@@ -1392,6 +1392,15 @@ class execution extends control
                 }
             }
 
+            if(!empty($projectID) and $project->model == 'kanban')
+            {
+                $execution = $this->execution->getById($executionID);
+                $this->loadModel('kanban')->createRDKanban($execution);
+
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+            }
+
             if(!empty($planID))
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
@@ -1950,6 +1959,21 @@ class execution extends control
     /**
      * Kanban.
      *
+     * @param int     $executionID
+     * @param string  $browseType
+     * @param string  $orderBy
+     * @param string  $group
+     * @access public
+     * @return void
+     */
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $group = 'all')
+    {
+        $this->display();
+    }
+
+    /**
+     * Task kanban.
+     *
      * @param  int    $executionID
      * @param  string $browseType story|bug|task|all
      * @param  string $orderBy
@@ -1957,7 +1981,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
+    public function taskKanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
         if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->{'kanbanGroupBy' . $browseType} ? $this->session->{'kanbanGroupBy' . $browseType} : 'default';

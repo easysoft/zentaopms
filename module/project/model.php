@@ -1834,7 +1834,7 @@ class projectModel extends model
                     ->fetchPairs();
             }
 
-            $executions = $this->dao->select('t1.*,t2.name projectName')->from(TABLE_EXECUTION)->alias('t1')
+            $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.type')->in('sprint,stage')
                 ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
@@ -1849,7 +1849,7 @@ class projectModel extends model
         }
         else
         {
-            $executions = $this->dao->select('t2.*,t3.name projectName')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            $executions = $this->dao->select('t2.*,t3.name projectName, t3.model as projectModel')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
                 ->leftJoin(TABLE_PROJECT)->alias('t3')->on('t2.project=t3.id')
                 ->where('t1.product')->eq($productID)

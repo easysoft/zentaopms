@@ -1504,6 +1504,124 @@ class kanbanModel extends model
     }
 
     /**
+     * Create a default RD kanban.
+     *
+     * @param  object $execution
+     * @access public
+     * @return void
+     */
+    public function createRDKanban($execution)
+    {
+        $regionID =  $this->createRDRegion($execution);
+        if(dao::isError()) return false;
+
+        $groupID = $this->createGroup($execution->id, $regionID);
+        if(dao::isError()) return false;
+
+        $this->createRDLane($execution->id, $regionID);
+        if(dao::isError()) return false;
+    }
+
+    /**
+     * Create a default RD region.
+     *
+     * @param  object $execution
+     *
+     * @access public
+     * @return int|bool
+     */
+    public function createRDRegion($execution)
+    {
+        $region = new stdclass();
+        $region->name        = $this->lang->kanbanregion->default;
+        $region->kanban      = $execution->id;
+        $region->createdBy   = $this->app->user->account;
+        $region->createdDate = helper::today();
+        $region->order       = 1;
+
+        $this->dao->insert(TABLE_KANBANREGION)->data($region)
+            ->check('name', 'unique', "kanban={$execution->id} AND deleted='0'")
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertId();
+    }
+
+    /**
+     * Create default RD lanes.
+     *
+     * @param  int    $executionID
+     * @param  int    $regionID
+     *
+     * @access public
+     * @return bool
+     */
+    public function createRDLane($executionID, $regionID)
+    {
+        $laneIndex = 0;
+        foreach($this->lang->kanban->laneTypeList as $type => $name)
+        {
+            $groupID = $this->createGroup($executionID, $regionID);
+            if(dao::isError()) return false;
+
+            $lane = new stdclass();
+            $lane->execution = $executionID;
+            $lane->type      = $type;
+            $lane->region    = $regionID;
+            $lane->group     = $groupID;
+            $lane->name      = $name;
+            $lane->color     = $this->config->kanban->laneColorList[$laneIndex];
+            $lane->order     = ++ $laneIndex * 5;
+
+            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->autoCheck()->exec();
+            if(dao::isError()) return false;
+
+            $this->createRDColumn($regionID, $groupID, $this->dao->lastInsertId(), $type);
+        }
+    }
+
+    /**
+     * Create default RD columns.
+     *
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $laneID
+     * @param  string $laneType
+     *
+     * @access public
+     * @return bool
+     */
+    public function createRDColumn($regionID, $groupID, $laneID, $laneType)
+    {
+        $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        if($laneType == 'story') $columnList = $this->lang->kanban->storyColumn;
+        if($laneType == 'bug') $columnList = $this->lang->kanban->bugColumn;
+        if($laneType == 'task') $columnList = $this->lang->kanban->taskColumn;
+
+        foreach($columnList as $type => $name)
+        {
+            $data = new stdClass();
+            $data->lane  = $laneID;
+            $data->name  = $name;
+            $data->color = '#333';
+            $data->type  = $type;
+
+            if(strpos(',developing,developed,', $type) !== false) $data->parent = $devColumnID;
+            if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumnID;
+            if(strpos(',fixing,fixed,', $type) !== false) $data->parent = $resolvingColumnID;
+            if(strpos(',develop,test,resolving,', $type) !== false) $data->parent = -1;
+
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+            if(dao::isError()) return false;
+
+            if($type == 'develop') $devColumnID  = $this->dao->lastInsertId();
+            if($type == 'test')    $testColumnID = $this->dao->lastInsertId();
+            if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
+        }
+    }
+
+    /**
      * Update a region.
      *
      * @param  int    $regionID
