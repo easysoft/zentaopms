@@ -21,7 +21,7 @@
     <?php endforeach;?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(!empty($noClosedSpace)) common::printLink('kanban', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', 'class="btn btn-secondary iframe" data-width="75%"', '', true);?>
+    <?php if(!empty($unclosedSpace)) common::printLink('kanban', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', 'class="btn btn-secondary iframe" data-width="75%"', '', true);?>
     <?php common::printLink('kanban', 'createSpace', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->createSpace, '', 'class="btn btn-primary iframe" data-width="75%"', '', true);?>
   </div>
 </div>
