@@ -915,7 +915,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getSpaceList($browseType, $pager)
+    public function getSpaceList($browseType, $pager = null)
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
@@ -966,13 +966,18 @@ class kanbanModel extends model
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
+     * @param  string $param      noclosed
      * @access public
      * @return array
      */
-    public function getCanViewObjects($objectType = 'kanban')
+    public function getCanViewObjects($objectType = 'kanban', $param = '')
     {
-        $table     = $this->config->objectTables[$objectType];
-        $objects   = $this->dao->select('*')->from($table)->fetchAll('id');
+        $table   = $this->config->objectTables[$objectType];
+        $objects = $this->dao->select('*')->from($table)
+            ->where('deleted')->eq(0)
+            ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
+            ->fetchAll('id');
+
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
