@@ -1010,6 +1010,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'common',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),
