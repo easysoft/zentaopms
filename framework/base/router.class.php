@@ -1477,6 +1477,7 @@ class baseRouter
 
         /* 4. 最后尝试寻找公共扩展文件。Finally, try to find the common extension file. */
         $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
+        if(empty($moduleExtPaths['common'])) return false;
         return file_exists($this->extActionFile);
     }
 
