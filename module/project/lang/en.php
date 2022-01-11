@@ -155,7 +155,6 @@ $lang->project->etc                = " , etc";
 $lang->project->product            = 'Product';
 $lang->project->branch             = 'Branch';
 $lang->project->plan               = 'Plan';
-$lang->project->kanban             = 'Kanban';
 
 /* Project Kanban. */
 $lang->project->typeList = array();
@@ -254,10 +253,6 @@ $lang->project->endList[186] = 'Half yearly';
 $lang->project->endList[365] = 'One year';
 $lang->project->endList[999] = 'Longtime';
 
-$lang->project->scrumTitle     = 'Agile Development Management';
-$lang->project->waterfallTitle = 'Waterfall Project Management';
-$lang->project->kanbanTitle    = 'Kanban Project Management';
-
 $lang->project->empty                  = 'No project.';
 $lang->project->nextStep               = 'Next step';
 $lang->project->hoursUnit              = '%s hours';
@@ -266,6 +261,7 @@ $lang->project->lastIteration          = "Recent {$lang->executionCommon}";
 $lang->project->ongoingStage           = 'Ongoing stage';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'Waterfall';
+$lang->project->waterfallTitle         = 'Waterfall Project Management';
 $lang->project->cannotCreateChild      = 'It is not empty, so you cannot add a child. You can add a parent for it, and then create a child.';
 $lang->project->confirmDelete          = "Do you want to delete [%s]?";
 $lang->project->emptyPM                = 'No manager';
@@ -283,6 +279,7 @@ $lang->project->programTitle['end']  = 'End-level project only';
 
 $lang->project->accessDenied        = 'Access denied to this project';
 $lang->project->chooseProgramType   = 'Select management type';
+$lang->project->scrumTitle          = 'Agile Development Management';
 $lang->project->cannotCreateChild   = 'The project has contents, so you cannot add a child project. You can create a parent project for this one and then add a child project for the parent project.';
 $lang->project->hasChildren         = 'This project has a child project, so it cannot be deleted.';
 $lang->project->confirmDelete       = 'Do you want to delete this project?';
