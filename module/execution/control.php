@@ -1282,7 +1282,7 @@ class execution extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $this->app->loadlang('program');
+        $this->app->loadLang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         if($executionID)
