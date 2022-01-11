@@ -2,6 +2,8 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+su('admin');
+
 /**
 
 title=测试 userModel::getById();

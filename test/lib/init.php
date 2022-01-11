@@ -175,3 +175,18 @@ function zdImport($table, $yaml, $count = 10)
     $command = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
     system($command);
 }
+
+/**
+ * Switch user.
+ *
+ * @param  string $account
+ * @access public
+ * @return bool
+ */
+function su($account)
+{
+    $userModel = new userModel();
+    $user = $userModel->identify($account, '123qwe!@#');
+    if($user) return $userModel->login($user);
+    return false;
+}
