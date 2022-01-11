@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include $this->app->getModuleRoot() . '/common/view/header.html.php';?>
-<?php include $this->app->getModuleRoot() . '/common/view/kindeditor.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('model', $model);?>
 <?php js::set('programID', $programID);?>
@@ -145,7 +145,4 @@
 <div id='projectAcl' class='hidden'>
   <?php echo nl2br(html::radio('acl', $lang->project->aclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
 </div>
-<div id='programAcl' class='hidden'>
-  <?php echo nl2br(html::radio('acl', $lang->project->subAclList, $acl, "onclick='setWhite(this.value);'", 'block'));?>
-</div>
-<?php include $this->app->getModuleRoot() . '/common/view/footer.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/footer.html.php';?>
