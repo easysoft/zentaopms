@@ -528,7 +528,7 @@ class commonModel extends model
                         $attr         = "class='iframe' data-width='650px'";
                         break;
                     case 'project':
-                        if(!defined('TUTORIAL'))
+                        if(isset($config->maxVersion) and!defined('TUTORIAL'))
                         {
                             $params       = "programID=0&copyProjectID=0&extra=from=global";
                             $createMethod = 'createGuide';
