@@ -2479,6 +2479,23 @@ class executionModel extends model
     }
 
     /**
+     * Get members by execution id list.
+     * 
+     * @param  array $executionIdList
+     * @access public
+     * @return void
+     */
+    public function getMembersByIdList($executionIdList)
+    {
+        return $this->dao->select("t1.root, t1.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->in($executionIdList)
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchGroup('root');
+    }
+
+    /**
      * Get the skip members of the team.
      *
      * @param  array  $teams
