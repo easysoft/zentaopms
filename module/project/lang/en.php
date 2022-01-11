@@ -156,6 +156,7 @@ $lang->project->product            = 'Product';
 $lang->project->branch             = 'Branch';
 $lang->project->plan               = 'Plan';
 $lang->project->kanban             = 'Kanban';
+$lang->project->createKanban       = 'Create Kanban';
 
 /* Project Kanban. */
 $lang->project->typeList = array();

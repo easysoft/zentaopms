@@ -707,6 +707,8 @@ CREATE TABLE `zt_kanbancard` (
   `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
   `group` mediumint(8) unsigned NOT NULL,
+  `lane` mediumint(8) unsigned NOT NULL,
+  `column` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `pri` mediumint(8) unsigned NOT NULL,
   `assignedTo` text NOT NULL,
@@ -731,7 +733,7 @@ CREATE TABLE `zt_kanbancard` (
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbancardgroup`;
-CREATE TABLE `zt_cardgroup` (
+CREATE TABLE `zt_kanbancardgroup` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `kanban` mediumint(8) NOT NULL,
   `objectType` char(30) NOT NULL,

@@ -72,9 +72,12 @@ foreach($projects as $programID => $programProjects)
 
     foreach($programProjects as $index => $project)
     {
-        $selected    = $project->id == $projectID ? 'selected' : '';
-        $link        = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
-        $projectName = $project->model == 'scrum' ? '<i class="icon icon-sprint"></i> ' . $project->name : '<i class="icon icon-waterfall"></i> ' . $project->name;
+        $selected = $project->id == $projectID ? 'selected' : '';
+        $link     = helper::createLink('project', 'index', "projectID=%s", '', '', $project->id);
+        $icon     = '<i class="icon icon-sprint"></i> ';
+
+        if($project->model != 'scrum') $icon = "<i class='icon icon-{$project->model}'></i> ";
+        $projectName = $icon . $project->name;
 
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {

@@ -1,4 +1,4 @@
-CREATE TABLE `zt_cardgroup` (
+CREATE TABLE `zt_kanbancardgroup` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `kanban` mediumint(8) NOT NULL,
   `objectType` char(30) NOT NULL,

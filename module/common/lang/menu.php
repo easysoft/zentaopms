@@ -289,6 +289,11 @@ $lang->waterfall->menu->design['subMenu']->dbds     = array('link' => "{$lang->d
 $lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
+/* Kanban project menu. */
+$lang->kanban->menu        = new stdclass();
+$lang->kanban->menuOrder   = array();
+$lang->kanban->dividerMenu = '';
+
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();
 $lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'batchedit');

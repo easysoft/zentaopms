@@ -222,10 +222,11 @@ class project extends control
      * Project index view.
      *
      * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function index($projectID = 0)
+    public function index($projectID = 0, $browseType = 'all')
     {
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
@@ -239,6 +240,15 @@ class project extends control
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        if($project->model == 'kanban')
+        {
+            $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
+            $this->view->kanbanList  = $kanbanList;
+            $this->view->browseType  = $browseType;
+            $this->view->memberGroup = $this->execution->getMembersByIdList(array_keys($kanbanList));
+            $this->view->usersAvatar = $this->loadModel('user')->getAvatarPairs();
+        }
 
         $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
         $this->view->position[] = $this->lang->project->index;

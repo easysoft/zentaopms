@@ -1776,7 +1776,7 @@ class projectModel extends model
         $type = 'project';
         if($this->config->systemMode == 'new')
         {
-            if($project->type == 'sprint' or $project->type == 'stage') $type = 'execution';
+            if($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') $type = 'execution';
         }
 
         $members = $this->dao->select("t1.account, if(t2.deleted='0', t2.realname, t1.account) as realname")->from(TABLE_TEAM)->alias('t1')
