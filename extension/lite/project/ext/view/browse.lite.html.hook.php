@@ -2,6 +2,8 @@
 $('#sidebarHeader').remove();
 $('#sidebar').remove();
 $('.panel-actions').remove();
+$('.project-name').removeClass('has-prefix');
+$('.project-type-label').remove();
 $('.icon-project-manageProducts.icon-link').parent().remove();
 $(function()
 {
