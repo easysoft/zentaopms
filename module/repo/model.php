@@ -424,7 +424,7 @@ class repoModel extends model
 
         /* Convert to id by url. */
         $this->loadModel('gitlab');
-        $url     = strtolower($url);
+        $url     = str_replace('https://', 'http://', strtolower($url));
         $matches = array();
         foreach($gitlabs as $gitlabID => $gitlab)
         {
@@ -435,7 +435,8 @@ class repoModel extends model
             $projects = $this->gitlab->apiGetProjects($gitlabID);
             foreach($projects as $project)
             {
-                if((!$isSSH and strtolower($project->http_url_to_repo) == $url) or ($isSSH and strtolower($project->ssh_url_to_repo) == $url))
+                $urlToRepo = str_replace('https://', 'http://', strtolower($project->http_url_to_repo));
+                if((!$isSSH and $urlToRepo == $url) or ($isSSH and strtolower($project->ssh_url_to_repo) == $url))
                 {
                     $matched->gitlab  = $gitlabID;
                     $matched->project = $project->id;
