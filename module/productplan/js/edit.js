@@ -68,9 +68,6 @@ $('#future').on('change', function()
     }
     else
     {
-        var begin = $('#begin').val();
-        if(begin == '') $('#begin').val(today);
-
         $('#begin').removeAttr('disabled');
         $('#end').parents('tr').show();
     }

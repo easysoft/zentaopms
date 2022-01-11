@@ -44,7 +44,7 @@
             <td><?php echo html::select('status', array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' $disabled");?></td>
           </tr>
           <tr>
-            <?php $checked = $plan->begin  == $config->productplan->future and $plan->end == $config->productplan->future ? "checked='checked'" : '';?>
+            <?php $checked = ($plan->begin  == $config->productplan->future and $plan->end == $config->productplan->future) ? "checked='checked'" : '';?>
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo html::input('begin', $plan->begin != $config->productplan->future ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
             <td>
