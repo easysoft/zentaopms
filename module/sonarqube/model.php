@@ -27,4 +27,19 @@ class sonarqubeModel extends model
 
         return $sonarqubeList;
     }
+
+    /**
+     * check sonarqube valid
+     *
+     * @param string $host
+     * @param string $token
+     * @access public
+     * @return array
+     */
+    public function apiValidate($host, $token)
+    {
+        $url    = rtrim($host, '/') . "/api/authentication/validate";
+        $header = 'Authorization: Basic ' . $token;
+        return json_decode(commonModel::http($url, null, array(), $header));
+    }
 }
