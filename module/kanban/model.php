@@ -910,7 +910,7 @@ class kanbanModel extends model
     /**
      * Get space list.
      *
-     * @param  string $browseType all|my|other|closed
+     * @param  string $browseType all|my|other|closed|noclosed
      * @param  object $pager
      * @access public
      * @return array
