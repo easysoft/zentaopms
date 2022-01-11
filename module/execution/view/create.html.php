@@ -88,7 +88,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
-        <?php if(!empty($project) and $project->model != 'kanban'):?>
+        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
