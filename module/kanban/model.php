@@ -2162,14 +2162,14 @@ class kanbanModel extends model
         $printSetHeight = false;
         if(common::hasPriv('kanban', 'setLaneHeight'))
         {
-            $lanes = $this->dao->select('t2.id')->from(TABLE_KANBANREGION)->alias('t1')
+            $laneCount = $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
                 ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
                 ->where('t1.kanban')->eq($kanban->id)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
-                ->fetchPairs();
+                ->fetch('count');
 
-            if(count($lanes) > 1) $printSetHeight = true;
+            if($laneCount > 1) $printSetHeight = true;
         }
 
         $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));

@@ -826,6 +826,7 @@ $(function()
         $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
+        resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
     });
 
     $('.region-header').on('click', '.action', hideKanbanAction);
@@ -1013,6 +1014,18 @@ $(function()
         }
     });
 
+    resetRegionHeight('open');
+});
+
+/**
+ * Reset region height according to window height.
+ *
+ * @param  string fold
+ * @access public
+ * @return void
+ */
+function resetRegionHeight(fold)
+{
     if(Object.keys(regions).length == 1)
     {
         var regionID = Object.keys(regions)[0];
@@ -1022,10 +1035,25 @@ $(function()
             var group = region[0];
             if(Object.keys(group.lanes).length == 1)
             {
-                var windowHeight = $(window).height();
-                $('.region').css('height', windowHeight -132);
-                $('.kanban-lane').css('height', windowHeight - 222);
+                var regionHeaderHeight = $('.region-header').outerHeight();
+                if(fold == 'open')
+                {
+                    var windowHeight  = $(window).height();
+                    var headerHeight  = $('#mainHeader').height();
+                    var mainPadding   = $('#main').css('padding-top');
+                    var bodyPadding   = $('.panel-body').css('padding-top');
+                    var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - 5;
+                    var regionPadding = $('.kanban').css('padding-bottom');
+                    var columnHeight  = $('.kanban-header').outerHeight();
+
+                    $('.region').css('height', height);
+                    $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
+                }
+                else
+                {
+                    $('.region').css('height', regionHeaderHeight);
+                }
             }
         }
     }
-});
+}
