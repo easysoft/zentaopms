@@ -1406,6 +1406,7 @@ class kanbanModel extends model
             }
         }
 
+        $cards = '';
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($type == 'story')
         {
@@ -1416,25 +1417,26 @@ class kanbanModel extends model
                 $data->name  = $name;
                 $data->color = '#333';
                 $data->type  = $colType;
-                $data->cards = '';
 
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',develop,test,', $colType) !== false) $data->parent = -1;
+
+                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+
+                $colID = $this->dao->lastInsertId();
+                if($colType == 'develop') $devColumnID  = $colID;
+                if($colType == 'test')    $testColumnID = $colID;
+
                 if(strpos(',ready,develop,test,', $colType) === false)
                 {
                     $storyStatus = $this->config->kanban->storyColumnStatusList[$colType];
                     $storyStage  = $this->config->kanban->storyColumnStageList[$colType];
                     foreach($objects as $storyID => $story)
                     {
-                        if($story->status == $storyStatus and $story->stage == $storyStage) $data->cards .= $storyID . ',';
+                        if($story->status == $storyStatus and $story->stage == $storyStage) $cards .= $storyID . ',';
                     }
-                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
                 }
-
-                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($colType == 'develop') $devColumnID  = $this->dao->lastInsertId();
-                if($colType == 'test')    $testColumnID = $this->dao->lastInsertId();
             }
         }
         elseif($type == 'bug')
@@ -1446,10 +1448,16 @@ class kanbanModel extends model
                 $data->name  = $name;
                 $data->color = '#333';
                 $data->type  = $colType;
-                $data->cards = '';
                 if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
+
+                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+
+                $colID = $this->dao->lastInsertId();
+                if($colType == 'resolving') $resolvingColumnID = $colID;
+                if($colType == 'test')      $testColumnID      = $colID;
+
                 if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
                 {
                     $bugStatus = $this->config->kanban->bugColumnStatusList[$colType];
@@ -1457,22 +1465,18 @@ class kanbanModel extends model
                     {
                         if($colType == 'unconfirmed' and $bug->status == $bugStatus and $bug->confirmed == 0)
                         {
-                            $data->cards .= $bugID . ',';
+                            $cards .= $bugID . ',';
                         }
                         elseif($colType == 'confirmed' and $bug->status == $bugStatus and $bug->confirmed == 1)
                         {
-                            $data->cards .= $bugID . ',';
+                            $cards .= $bugID . ',';
                         }
                         elseif(strpos(',unconfirmed,confirmed,', $colType) === false and $bug->status == $bugStatus)
                         {
-                            $data->cards .= $bugID . ',';
+                            $cards .= $bugID . ',';
                         }
                     }
-                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
                 }
-                $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
-                if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
             }
         }
         elseif($type == 'task')
@@ -1484,23 +1488,51 @@ class kanbanModel extends model
                 $data->name  = $name;
                 $data->color = '#333';
                 $data->type  = $colType;
-                $data->cards = '';
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if($colType == 'develop') $data->parent = -1;
-                if(strpos(',develop,', $colType) === false)
-                {
-                    $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
-                    foreach($objects as $taskID => $task)
-                    {
-                        if($task->status == $taskStatus) $data->cards .= $taskID . ',';
 
-                    }
-                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
-                }
                 $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
+
+                $colID = $this->dao->lastInsertId();
+                if($colType == 'develop') $devColumnID = $colID;
+            }
+
+            if(strpos(',develop,', $colType) === false)
+            {
+                $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
+                foreach($objects as $taskID => $task)
+                {
+                    if($task->status == $taskStatus) $cards .= $taskID . ',';
+                }
             }
         }
+
+        if(!empty($cards)) $this->parkCards($executionID, $laneID, $colID, $cards, $type);
+    }
+
+    /**
+     * Park cards into kanban cell.
+     * 
+     * @param  int    $kanbanID 
+     * @param  int    $laneID 
+     * @param  int    $colID 
+     * @param  string $cards 
+     * @param  string $type 
+     * @access public
+     * @return void
+     */
+    public function parkCards($kanbanID, $laneID, $colID, $cards, $type)
+    {
+        $cards = ',' . $cards;
+
+        $cardGroup = new stdclass();
+        $cardGroup->kanban = $executionID;
+        $cardGroup->lane   = $laneID;
+        $cardGroup->column = $colID;
+        $cardGroup->type   = $type;
+        $cardGroup->cards  = $cards;
+
+        $this->dao->insert(TABLE_KANBANCELL)->data($cardGroup)->exec();
     }
 
     /**
