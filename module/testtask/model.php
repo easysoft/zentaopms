@@ -893,7 +893,6 @@ class testtaskModel extends model
             if($type == 'bybuild') $row->assignedTo = zget($assignedToPairs, $caseID, '');
             $this->dao->replace(TABLE_TESTRUN)->data($row)->exec();
 
-            $task = $this->getById($taskID);
             /* When the cases linked the testtask, the cases link to the project. */
             if($this->app->tab != 'qa')
             {
@@ -907,7 +906,7 @@ class testtaskModel extends model
                 $data->version = 1;
                 $data->order   = ++ $lastOrder;
                 $this->dao->replace(TABLE_PROJECTCASE)->data($data)->exec();
-                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $task->name);
+                $this->loadModel('action')->create('case', $caseID, 'linked2testtask', '', $taskID);
             }
         }
     }

@@ -1086,15 +1086,14 @@ class testtask extends control
             $response['result']  = 'success';
             $response['message'] = '';
 
-            $testRun = $this->dao->select('task, `case`, t2.name')->from(TABLE_TESTRUN)->alias('t1')->LeftJoin(TABLE_TESTTASK)->alias('t2')->on('t1.task = t2.id')->where('t1.id')->eq((int)
-$rowID)->fetch();
+            $testRun = $this->dao->select('task,`case`')->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->fetch();
             $this->dao->delete()->from(TABLE_TESTRUN)->where('id')->eq((int)$rowID)->exec();
             if(dao::isError())
             {
                 $response['result']  = 'fail';
                 $response['message'] = dao::getError();
             }
-            $this->loadModel('action')->create('case' ,$testRun->case, 'unlinkedfromtesttask', '', $testRun->name);
+            $this->loadModel('action')->create('case' ,$testRun->case, 'unlinkedfromtesttask', '', $testRun->task);
             return $this->send($response);
         }
     }
