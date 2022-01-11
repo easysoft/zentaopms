@@ -128,9 +128,9 @@ $lang->productplan->endGreaterParentTip  = "The completion date of the child pla
 
 $lang->productplan->featureBar['browse']['all']    = 'All';
 $lang->productplan->featureBar['browse']['wait']   = 'Waiting';
-$lang->productplan->featureBar['browse']['closed'] = 'Closed';
 $lang->productplan->featureBar['browse']['doing']  = 'Doing';
 $lang->productplan->featureBar['browse']['done']   = 'Done';
+$lang->productplan->featureBar['browse']['closed'] = 'Closed';
 
 $lang->productplan->orderList['begin_desc'] = 'Begin Descend';
 $lang->productplan->orderList['begin_asc']  = 'Begin Ascend';

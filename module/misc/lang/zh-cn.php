@@ -94,6 +94,7 @@ $lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
 $lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
 
+$lang->misc->releaseDate['16.1']        = '2022-01-11';
 $lang->misc->releaseDate['16.0']        = '2021-12-24';
 $lang->misc->releaseDate['16.0.beta1']  = '2021-12-06';
 $lang->misc->releaseDate['15.7.1']      = '2021-11-02';
@@ -164,6 +165,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['16.1'][]       = array('title' => '计划增加状态管理和看板视图，升级流程优化，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['16.0'][]       = array('title' => '新增通用看板，完善分支管理，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['16.0.beta1'][] = array('title' => '新增瀑布模型项目，新增任务看板，完善分支管理和细节，修复Bug。', 'desc' => '');
 $lang->misc->feature->all['15.7.1'][]     = array('title' => '修复Bug。', 'desc' => '');

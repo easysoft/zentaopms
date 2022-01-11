@@ -741,6 +741,10 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('16.0.beta1'));
             $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
             $this->appendExec('16_0_beta1');
+        case '16_0':
+            $this->saveLogs('Execute 16_0');
+            $this->execSQL($this->getUpgradeFile('16.0'));
+            $this->appendExec('16_0');
         }
 
         $this->deletePatch();
@@ -948,6 +952,7 @@ class upgradeModel extends model
             case '15_7': $confirmContent .= file_get_contents($this->getUpgradeFile('15.7'));
             case '15_7_1': $confirmContent .= file_get_contents($this->getUpgradeFile('15.7.1'));
             case '16_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0.beta1'));
+            case '16_0': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
