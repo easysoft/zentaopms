@@ -88,6 +88,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php if(!empty($project) and $project->model != 'kanban'):?>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
@@ -104,6 +105,7 @@
           </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
+        <?php endif;?>
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>

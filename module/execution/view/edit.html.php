@@ -66,6 +66,7 @@
             </div>
           </td>
         </tr>
+        <?php if($project->model != 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
@@ -81,6 +82,7 @@
           ?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->execution->teamname;?></th>
           <td><?php echo html::input('team', $execution->team, "class='form-control'");?></td>

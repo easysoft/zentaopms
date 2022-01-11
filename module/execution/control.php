@@ -1264,10 +1264,25 @@ class execution extends control
 
         $project = $this->project->getByID($projectID);
 
+        if(!empty($projectID) and $project->model == 'kanban')
+        {
+            $this->lang->execution->createExec  = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->createExec);
+            $this->lang->execution->execName    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execName);
+            $this->lang->execution->execCode    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execCode);
+            $this->lang->execution->execDesc    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execDesc);
+            $this->lang->execution->copyExec    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyExec);
+            $this->lang->execution->copy        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->copy);
+            $this->lang->execution->PM          = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->PM);
+            $this->lang->execution->name        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->name);
+            $this->lang->execution->code        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->code);
+            $this->lang->execution->desc        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->desc);
+            $this->lang->execution->copyTeamTip = str_replace(array($this->lang->execution->common, $this->lang->executionCommon), $this->lang->execution->kanban, $this->lang->execution->copyTeamTip);
+        }
+
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        $this->app->loadLang('program');
+        $this->app->loadlang('program');
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         if($executionID)
@@ -1289,6 +1304,7 @@ class execution extends control
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
             $this->view->projectID   = $projectID;
+            $this->view->project     = $project;
             $this->display();
             exit;
         }
@@ -1430,6 +1446,7 @@ class execution extends control
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->project             = $project;
         $this->display();
     }
 
@@ -1512,6 +1529,16 @@ class execution extends control
         $execution  = $this->execution->getById($executionID);
         $managers   = $this->execution->getDefaultManagers($executionID);
 
+        $project = $this->project->getByID($execution->project);
+        if($project->model == 'kanban')
+        {
+            $this->lang->execution->edit   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->edit);
+            $this->lang->execution->name   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->name);
+            $this->lang->execution->code   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->code);
+            $this->lang->execution->desc   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->desc);
+            $this->lang->execution->status = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->status);
+            $this->lang->execution->PM     = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->PM);
+        }
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -1584,6 +1611,7 @@ class execution extends control
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
+        $this->view->project              = $project;
         $this->display();
     }
 
