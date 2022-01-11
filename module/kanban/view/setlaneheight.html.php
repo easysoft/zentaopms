@@ -20,7 +20,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->kanban->laneHeight;?></th>
-          <td><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, 'custom', "onclick='setCardCount(this.value);'"));?></td>
+          <td><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
         </tr>
         <tr class="hidden" id='cardBox'>
           <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>

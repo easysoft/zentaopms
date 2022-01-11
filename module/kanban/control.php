@@ -479,7 +479,9 @@ class kanban extends control
 
         if($from == 'execution') $this->loadModel('execution');
 
-        $this->view->kanban = $this->$from->getByID($kanbanID);
+        $kanban = $this->$from->getByID($kanbanID);
+
+        $this->view->heightType = $kanban->displayCards > 2 ? 'custom' : 'auto';
 
         $this->display();
     }
