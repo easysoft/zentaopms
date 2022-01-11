@@ -42,15 +42,12 @@
         <?php foreach ($sonarqubeList as $id => $sonarqube): ?>
         <tr class='text'>
           <td class='text-center'><?php echo $id;?></td>
-          <td class='text-c-name' title='<?php echo $sonarqube->name;?>'><a class="iframe" href="<?php echo $this->createLink('sonarqube', 'view', "id=$id", '', true); ?>"><?php echo $sonarqube->name;?></a></td>
+          <td class='text-c-name' title='<?php echo $sonarqube->name;?>'><?php echo $sonarqube->name;?></td>
           <td class='text' title='<?php echo $sonarqube->url;?>'><?php echo $sonarqube->url;?></td>
           <td class='c-actions text-left'>
             <?php
             common::printLink('sonarqube', 'browseProject', "sonarqubeID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->sonarqube->browseProject}' class='btn btn-primary'");
-            common::printLink('sonarqube', 'browseGroup', "sonarqubeID=$id", "<i class='icon icon-groups'></i> ", '', "title='{$lang->sonarqube->browseGroup}'  class='btn btn-primary'");
             common::printLink('sonarqube', 'edit', "sonarqubeID=$id", "<i class='icon icon-edit'></i> ", '',"title='{$lang->sonarqube->edit}' class='btn btn-primary'");
-            common::printLink('sonarqube', 'browseUser', "sonarqubeID=$id", "<i class='icon icon-person'></i> ", '', "title='{$lang->sonarqube->browseUser}'  class='btn' ,'disabled'");
-            common::printLink('sonarqube', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title='{$lang->sonarqube->bindUser}'  class='btn' ,'disabled'");
             if(common::hasPriv('sonarqube', 'delete')) echo html::a($this->createLink('sonarqube', 'delete', "sonarqubeID=$id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->sonarqube->delete}' class='btn'");
             ?>
           </td>
