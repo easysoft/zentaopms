@@ -2,16 +2,15 @@
 /**
  * The create view file of sonarqube module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Gang Liu <liugang@cnezsoft.com>
+ * @author      Gang Zeng <zenggang@cnezsoft.com>
  * @package     sonarqube
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::import($jsRoot . 'misc/base64.js');?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
