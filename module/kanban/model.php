@@ -910,7 +910,7 @@ class kanbanModel extends model
     /**
      * Get space list.
      *
-     * @param  string $browseType all|my|other|closed|noclosed
+     * @param  string $browseType all|my|other|closed
      * @param  object $pager
      * @access public
      * @return array
@@ -924,7 +924,6 @@ class kanbanModel extends model
             ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
             ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
-            ->beginIF($browseType == 'noclosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->page($pager)
@@ -967,6 +966,7 @@ class kanbanModel extends model
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
+     * @param  string $param      noclosed
      * @access public
      * @return array
      */
