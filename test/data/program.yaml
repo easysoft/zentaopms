@@ -5,7 +5,7 @@ fields:
   - field: project
     range: 0
   - field: model
-    range: ""
+    range: []
   - field: name
     note: "名称"
     fields:
@@ -19,6 +19,9 @@ fields:
     range: wait
   - field: parent
     range: 0
+  - field: code
+    range: 1-10000
+    prefix: "program"
   - field: desc
     range: 1-10000
     prefix: "项目集描述"
