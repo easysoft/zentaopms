@@ -221,7 +221,6 @@ $lang->project->currencySymbol['SGD'] = 'S$';
 
 $lang->project->modelList['scrum']     = "Scrum";
 $lang->project->modelList['waterfall'] = "瀑布";
-$lang->project->modelList['kanban']    = "看板";
 
 $lang->project->featureBar['all']       = '所有';
 $lang->project->featureBar['doing']     = '进行中';
