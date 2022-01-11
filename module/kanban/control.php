@@ -30,6 +30,7 @@ class kanban extends control
 
         $this->view->title       = $this->lang->kanbanspace->common;
         $this->view->spaceList   = $this->kanban->getSpaceList($browseType, $pager);
+        $this->view->allSpace    = $this->kanban->getSpaceList('noclosed');
         $this->view->browseType  = $browseType;
         $this->view->pager       = $pager;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');

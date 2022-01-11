@@ -497,6 +497,12 @@ class commonModel extends model
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
 
+            if($objectType == 'kanban')
+            {
+                $allSpace = $app->control->loadModel('kanban')->getSpaceList('noclosed');
+                if(empty($allSpace)) continue;
+            }
+
             $createMethod = 'create';
             $module       = $objectType == 'kanbanspace' ? 'kanban' : $objectType;
             if($objectType == 'effort') $createMethod = 'batchCreate';
