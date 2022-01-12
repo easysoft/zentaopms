@@ -65,10 +65,11 @@ class kanbanModel extends model
      * @param  object $kanban
      * @param  object $region
      * @param  int    $copyRegionID
+     * @param  string $from kanban|execution
      * @access public
      * @return int
      */
-    public function createRegion($kanban, $region = null, $copyRegionID = 0)
+    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -82,11 +83,11 @@ class kanbanModel extends model
             $order  = $maxOrder ? $maxOrder + 1 : 1;
             $region = fixer::input('post')
                 ->add('kanban', $kanban->id)
-                ->add('space', $kanban->space)
                 ->add('createdBy', $account)
                 ->add('createdDate', helper::now())
                 ->trim('name')
                 ->get();
+            if($from == 'kanban') $region->space = $kanban->space;
         }
 
         $region->order = $order;
@@ -151,7 +152,7 @@ class kanbanModel extends model
                 }
             }
         }
-        else
+        elseif($from == 'kanban')
         {
             $groupID = $this->createGroup($kanban->id, $regionID);
             if(dao::isError()) return false;

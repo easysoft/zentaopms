@@ -293,18 +293,19 @@ class kanban extends control
      * Create a region.
      *
      * @param  int    $kanbanID
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
-    public function createRegion($kanbanID)
+    public function createRegion($kanbanID, $from = 'kanban')
     {
         if(!empty($_POST))
         {
-            $kanban       = $this->kanban->getByID($kanbanID);
+            $kanban       = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
             $copyRegionID = (int)$_POST['region'];
             unset($_POST['region']);
 
-            $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID);
+            $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID, $from);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));

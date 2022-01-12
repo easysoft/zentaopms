@@ -862,7 +862,7 @@ class actionModel extends model
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where(1)
+            ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
