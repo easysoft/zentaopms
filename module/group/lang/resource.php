@@ -1384,15 +1384,17 @@ $lang->gitlab->methodOrder[145] = 'deleteTagPriv';
 
 /* SonarQube. */
 $lang->resource->sonarqube = new stdclass();
-$lang->resource->sonarqube->browse = 'browse';
-$lang->resource->sonarqube->create = 'create';
-$lang->resource->sonarqube->edit   = 'edit';
-$lang->resource->sonarqube->delete = 'delete';
+$lang->resource->sonarqube->browse        = 'browse';
+$lang->resource->sonarqube->create        = 'create';
+$lang->resource->sonarqube->edit          = 'edit';
+$lang->resource->sonarqube->delete        = 'delete';
+$lang->resource->sonarqube->browseProject = 'browseProject';
 
 $lang->sonarqube->methodOrder[5]   = 'browse';
 $lang->sonarqube->methodOrder[10]  = 'create';
 $lang->sonarqube->methodOrder[15]  = 'edit';
 $lang->sonarqube->methodOrder[20]  = 'delete';
+$lang->sonarqube->methodOrder[25]  = 'browseProject';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
