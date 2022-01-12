@@ -714,6 +714,16 @@ var kanbanActionHandlers =
     dropItem: handleDropTask
 };
 
+/**
+ * Handle kanban action.
+ * 
+ * @param  string $action 
+ * @param  object $element 
+ * @param  object $event 
+ * @param  object $kanban 
+ * @access public
+ * @return void
+ */
 function handleKanbanAction(action, $element, event, kanban)
 {
     $('.kanban').attr('data-action-enabled', action);
