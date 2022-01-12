@@ -27,4 +27,15 @@ class sonarqubeModel extends model
 
         return $sonarqubeList;
     }
+
+    /**
+     * Get sonarqube pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairs()
+    {
+        return $this->loadModel('pipeline')->getPairs('sonarqube');
+    }
 }

@@ -120,7 +120,8 @@ class job extends control
         $this->view->repoTypes   = $repoTypes;
         $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
-        $this->view->jenkinsServerList = array('' => '') + $this->loadModel('jenkins')->getPairs();
+        $this->view->jenkinsServerList   = array('' => '') + $this->loadModel('jenkins')->getPairs();
+        $this->view->sonarqubeServerList = array('' => '') + $this->loadModel('sonarqube')->getPairs();
 
         $this->display();
     }
@@ -189,17 +190,18 @@ class job extends control
             if($jobProduct and $jobProduct->deleted == 0) $products += array($job->product => $jobProduct->name);
         }
 
-        $this->view->title             = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[]        = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]        = $this->lang->job->edit;
-        $this->view->repoPairs         = $repoPairs;
-        $this->view->gitlabRepos       = $gitlabRepos;
-        $this->view->repoTypes         = $repoTypes;
-        $this->view->repoType          = zget($repoTypes, $job->repo, 'Git');
-        $this->view->job               = $job;
-        $this->view->products          = array(0 => '') + $products;
-        $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
-        $this->view->pipelines         = $this->jenkins->getTasks($job->server);
+        $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
+        $this->view->position[]          = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[]          = $this->lang->job->edit;
+        $this->view->repoPairs           = $repoPairs;
+        $this->view->gitlabRepos         = $gitlabRepos;
+        $this->view->repoTypes           = $repoTypes;
+        $this->view->repoType            = zget($repoTypes, $job->repo, 'Git');
+        $this->view->job                 = $job;
+        $this->view->products            = array(0 => '') + $products;
+        $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
+        $this->view->sonarqubeServerList = array('' => '') + $this->loadModel('sonarqube')->getPairs();
+        $this->view->pipelines           = $this->jenkins->getTasks($job->server);
 
         $this->display();
     }
@@ -414,4 +416,21 @@ class job extends control
         $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
     }
 
+    /**
+     * Ajax check SonarQube linked by repoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
+    {
+        $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID);
+        if(!empty($repo)) 
+        {
+            $message = sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
+            $this->send(array('result' => 'fail', 'message' => $message));
+        }
+        $this->send(array('result' => 'success', 'message' => ''));
+    }
 }
