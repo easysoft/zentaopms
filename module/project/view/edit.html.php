@@ -34,10 +34,12 @@
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
+        <?php if($project->model != 'kanban'):?>
         <tr>
           <th><?php echo $lang->project->model;?></th>
           <td><?php echo html::select('model', $lang->project->modelList, $model, "class='form-control chosen' required $disableModel");?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $lang->program->parent;?></th>
           <?php

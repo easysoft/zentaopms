@@ -586,8 +586,7 @@ class project extends control
             }
         }
 
-        $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
-        $disableModel = $canChangeModel == true ? '' : 'disabled';
+        if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
@@ -614,7 +613,7 @@ class project extends control
         $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
-        $this->view->disableModel             = $disableModel;
+        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel == true) ? '' : 'disabled';
 
         $this->display();
     }
