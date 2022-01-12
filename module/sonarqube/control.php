@@ -53,4 +53,63 @@ class sonarqube extends control
         }
         echo html::select('projectKey', $projectPairs, '', "class='form-control chosen' required");
     }
+    
+    /**
+     * create a sonarqube.
+     *
+     * @access public
+     * @return void
+     */
+    public function create()
+    {
+        if($_POST)
+        {
+            $this->checkToken();
+            $sonarqubeID = $this->loadModel('pipeline')->create('sonarqube');
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            $actionID = $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->title = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createServer;
+
+        $this->display();
+    }
+
+    /**
+     * Check post info.
+     *
+     * @access protected
+     * @return void
+     */
+    protected function checkToken()
+    {
+        $sonarqube = fixer::input('post')->get();
+        $this->dao->update('sonarqube')->data($sonarqube)->batchCheck($this->config->sonarqube->create->requiredFields, 'notempty');
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        if(strpos($sonarqube->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->sonarqube->hostError))));
+
+        /* Check name and url unique. */
+        $isExist = $this->dao->select('*')->from(TABLE_PIPELINE)->where("name='{$sonarqube->name}' or url='{$sonarqube->url}'")->fetch();
+        if($isExist) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->repeatError));
+
+        $token  = base64_encode("{$sonarqube->account}:{$sonarqube->password}");
+        $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
+
+        if(!isset($result->valid) or !$result->valid) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->sonarqube->validError))));
+        $this->post->set('token', $token);
+    }
+
+    /**
+     * Exec job.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function execJob($jobID)
+    {
+        echo $this->fetch('job', 'exec', "jobID=$jobID");
+    }
 }
