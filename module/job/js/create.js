@@ -8,10 +8,10 @@ $(document).ready(function()
     {
         $('#frameBox .input-group').empty();
         $('#frameBox .input-group').append("<div class='load-indicator loading'></div>");
-        html = "<select id='frame' name='frame' class='form-control chosen'>";
-        for(code in frameList)
+        var html = "<select id='frame' name='frame' class='form-control chosen'>";
+        for(frame in frameList)
         {
-            if(engine == 'jenkins' || code != 'sonarqube') html += "<option value='" + code + "'>" + frameList[code] + "</option>";
+            if(engine == 'jenkins' || frame != 'sonarqube') html += "<option value='" + frame + "'>" + frameList[frame] + "</option>";
         }
         html += '</select>';
 
@@ -186,6 +186,7 @@ $(document).ready(function()
 
             $('#jenkinsServerTR #jkTask').chosen({drop_direction: 'auto'});
         })
+
         /* There has been a problem with handling the prompt label. */
         $('#jkTaskLabel').remove();
     })
@@ -216,7 +217,6 @@ $(document).ready(function()
         {
             $('#sonarProject .loading').remove();
             $('#sonarProject .input-group').append(html);
-
             $('#sonarProject #projectKey').chosen({drop_direction: 'auto'});
         })
     })

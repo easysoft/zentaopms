@@ -12,19 +12,6 @@
 class sonarqube extends control
 {
     /**
-     * The sonarqube constructor.
-     * @param string $moduleName
-     * @param string $methodName
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        /* Optional: common::setMenuVars('devops', $this->session->projectID); */
-        $this->loadModel('ci')->setMenu();
-    }
-
-    /**
      * Browse sonarqube.
      *
      * @param  string $orderBy

@@ -590,9 +590,7 @@ class jobModel extends model
             ->where('deleted')->eq('0')
             ->andWhere('frame')->eq('sonarqube')
             ->andWhere('repo')->in($repoIDList)
-            ->beginIF($jobID > 0)
-            ->andWhere('id')->ne($jobID)
-            ->fi()
+            ->beginIF($jobID > 0)->andWhere('id')->ne($jobID)->fi()
             ->fetchAll('repo');
     }
 }
