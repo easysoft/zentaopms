@@ -68,7 +68,7 @@ class sonarqube extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
-        $this->view->title = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->lblCreate;
+        $this->view->title = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createServer;
 
         $this->display();
     }

@@ -15,7 +15,7 @@
   <div class='main-col main-content'>
     <div class='center-block'>
       <div class='main-header'>
-        <h2><?php echo $lang->sonarqube->lblCreate;?></h2>
+        <h2><?php echo $lang->sonarqube->createServer;?></h2>
       </div>
       <form id='sonarqubeForm' method='post' class='form-ajax'>
         <table class='table table-form'>

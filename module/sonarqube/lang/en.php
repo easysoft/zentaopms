@@ -18,7 +18,7 @@ $lang->sonarqube->token          = 'Token';
 $lang->sonarqube->defaultProject = 'Default Project';
 $lang->sonarqube->private        = 'MD5 Verify';
 
-$lang->sonarqube->lblCreate     = 'Create SonarQube Server';
+$lang->sonarqube->createServer  = 'Create SonarQube Server';
 $lang->sonarqube->desc          = 'Description';
 $lang->sonarqube->createSuccess = 'Create success';
 

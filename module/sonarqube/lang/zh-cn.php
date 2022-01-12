@@ -18,7 +18,7 @@ $lang->sonarqube->token          = 'Token';
 $lang->sonarqube->defaultProject = '默认项目';
 $lang->sonarqube->private        = 'MD5验证';
 
-$lang->sonarqube->lblCreate     = '添加SonarQube服务器';
+$lang->sonarqube->createServer  = '添加SonarQube服务器';
 $lang->sonarqube->desc          = '描述';
 $lang->sonarqube->createSuccess = "创建成功";
 
