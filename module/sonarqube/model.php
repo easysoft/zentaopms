@@ -27,4 +27,37 @@ class sonarqubeModel extends model
 
         return $sonarqubeList;
     }
+
+    /**
+     * Get sonarqube api base url and header by id.
+     *
+     * @param  int $id
+     * @access public
+     * @return array
+     */
+    public function getApiBase($id)
+    {
+        $sonarqube = $this->loadModel('pipeline')->getByID($id);
+        if(!$sonarqube) return '';
+
+        $url      = rtrim($sonarqube->url, '/') . '/api/%s';
+        $header[] = 'Authorization: Basic ' . $sonarqube->token;
+
+        return array($url, $header);
+    }
+
+    /**
+     * check sonarqube valid
+     *
+     * @param string $host
+     * @param string $token
+     * @access public
+     * @return array
+     */
+    public function apiValidate($host, $token)
+    {
+        $url    = rtrim($host, '/') . "/api/authentication/validate";
+        $header = 'Authorization: Basic ' . $token;
+        return json_decode(commonModel::http($url, null, array(), $header));
+    }
 }
