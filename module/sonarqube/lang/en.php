@@ -8,7 +8,6 @@ $lang->sonarqube->edit          = 'Edit SonarQube';
 $lang->sonarqube->delete        = 'Delete SonarQube';
 $lang->sonarqube->confirmDelete = 'Do you want to delete this SonarQube server?';
 $lang->sonarqube->serverFail    = 'Connect to SonarQube server failed, please check the SonarQube server.';
-
 $lang->sonarqube->browseProject = "SonarQube Project List";
 
 $lang->sonarqube->id             = 'ID';

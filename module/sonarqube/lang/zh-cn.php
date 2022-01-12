@@ -8,7 +8,6 @@ $lang->sonarqube->edit          = '编辑SonarQube';
 $lang->sonarqube->delete        = '删除SonarQube';
 $lang->sonarqube->confirmDelete = '确认删除该SonarQube吗？';
 $lang->sonarqube->serverFail    = '连接SonarQube服务器异常，请检查SonarQube服务器。';
-
 $lang->sonarqube->browseProject  = "SonarQube项目列表";
 
 $lang->sonarqube->id             = 'ID';
