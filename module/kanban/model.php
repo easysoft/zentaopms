@@ -649,7 +649,7 @@ class kanbanModel extends model
                 $lanes = zget($laneGroup, $group->id, array());
                 if(!$lanes) continue;
 
-                foreach($lanes as $lane) $lane->items =  array();
+                foreach($lanes as $lane) $lane->items = array();
 
                 $group->columns = zget($columnGroup, $group->id, array());
                 $group->lanes   = $lanes;
@@ -913,18 +913,10 @@ class kanbanModel extends model
      */
     public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
     {
-        $cards = $this->dao->select("id, title, pri, type, severity, assignedTo, '' as estimate, deadline")->from(TABLE_BUG)
-            ->where('deleted')->eq(0)
-            ->andWhere('execution')->eq($executionID)
-            ->fetchAll('id');
-/*
-        $cards .= $this->dao->select("id, name, pri, '' as severity, assignedTo, deadline")->from(TABLE_TASK)
-            ->where('deleted')->eq(0)
-            ->andWhere('execution')->eq($executionID)
-           ->fetchAll('id');
- */
-
-        $planList = $this->loadModel('execution')->getById($executionID);
+        $cards = array();
+        if($browseType == 'all' or $browseType == 'story') $cards['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, $orderBy);
+        if($browseType == 'all' or $browseType == 'bug')   $cards['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID, 0, 0, '', 0, $orderBy);
+        if($browseType == 'all' or $browseType == 'task')  $cards['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, $orderBy);
 
         return $cards;
     }
@@ -1660,12 +1652,12 @@ class kanbanModel extends model
 
     /**
      * Park cards into kanban cell.
-     * 
-     * @param  int    $kanbanID 
-     * @param  int    $laneID 
-     * @param  int    $colID 
-     * @param  string $cards 
-     * @param  string $type 
+     *
+     * @param  int    $kanbanID
+     * @param  int    $laneID
+     * @param  int    $colID
+     * @param  string $cards
+     * @param  string $type
      * @access public
      * @return void
      */
