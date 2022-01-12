@@ -35,7 +35,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php $hasHeading = ($block->block != 'welcome');?>
         <?php if($hasHeading):?>
         <div class='panel-heading'>
-          <div class='panel-title'><?php echo zget($lang->block->titleList,$block->block);?></div>
+          <div class='panel-title'><?php echo zget($lang->block->titleList, $block->block);?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
             <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>'; ?>
@@ -70,7 +70,7 @@ $useGuest = $this->app->user->account == 'guest';
         <?php $hasHeading = ($block->block != 'welcome');?>
         <?php if($hasHeading):?>
         <div class='panel-heading'>
-          <div class='panel-title'><?php echo zget($lang->block->titleList,$block->block);?></div>
+          <div class='panel-title'><?php echo zget($lang->block->titleList, $block->block);?></div>
         <?php endif;?>
           <nav class='panel-actions nav nav-default'>
             <?php if(!empty($block->moreLink)) echo '<li>' . html::a($block->moreLink, '<i class="icon icon-more"></i>', '', "title='{$lang->more}'") . '</li>';?>
