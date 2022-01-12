@@ -1652,7 +1652,7 @@ class kanbanModel extends model
         }
         else
         {
-            $cell->cards = $cell->cards ? $cell->cards . "$carID," : ",$carID,";
+            $cell->cards = $cell->cards ? $cell->cards . "$cardID," : ",$cardID,";
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
         }
     }
