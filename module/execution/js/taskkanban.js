@@ -512,21 +512,27 @@ function findDropColumns($element, $root)
 }
 
 /**
- * Change column type for a card
- * @param {Object} card        Card object
- * @param {String} fromColType The column type before change
- * @param {String} toColType   The column type after change
- * @param {String} kanbanID    Kanban ID
+ * changeCardColType 
+ * 
+ * @param  int    $cardID 
+ * @param  int    $fromColID 
+ * @param  int    $toColID 
+ * @param  int    $fromLaneID 
+ * @param  int    $toLaneID 
+ * @param  string $cardType 
+ * @param  string $fromColType 
+ * @param  string $toColType 
+ * @access public
+ * @return void
  */
-function changeCardColType(card, fromColType, toColType, kanbanID)
+function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, cardType, fromColType, toColType)
 {
-    if(typeof card == 'undefined') return false;
-    var objectID   = card.id;
+    var objectID   = cardID;
     var showIframe = false;
     var moveCard   = false;
 
     /* Task lane. */
-    if(kanbanID == 'task')
+    if(cardType == 'task')
     {
         if(toColType == 'developed')
         {
@@ -576,7 +582,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     }
 
     /* Bug lane. */
-    if(kanbanID == 'bug')
+    if(cardType == 'bug')
     {
         if(toColType == 'confirmed')
         {
@@ -622,8 +628,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
 
         if(moveCard)
         {
-            var colID = card.$col.columnID;
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&colID=' + colID + '&toColType=' + toColType + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
             $.get(link, function(data)
             {
                 if(data)
@@ -643,12 +648,11 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     }
 
     /* Story lane. */
-    if(kanbanID == 'story')
+    if(cardType == 'story')
     {
         if(toColType == 'ready' || toColType == 'backlog')
         {
-            var colID = card.$col.columnID;
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&colID=' + colID + '&toColType=' + toColType + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
             $.get(link, function(data)
             {
                 if(data)
@@ -675,24 +679,65 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
 }
 
 /**
+ * Handle drop task.
+ * 
+ * @param  object $element 
+ * @param  object $event 
+ * @param  object $kanban 
+ * @access public
+ * @return void
+ */
+function handleDropTask($element, event, kanban)
+{
+    if(!event.target || !event.isNew) return;
+
+    var $card    = $element;
+    var $oldCol  = $card.closest('.kanban-col');
+    var $newCol  = $(event.target).closest('.kanban-col');
+    var oldCol   = $oldCol.data();
+    var newCol   = $newCol.data();
+    var oldLane  = $oldCol.closest('.kanban-lane').data('lane');
+    var newLane  = $newCol.closest('.kanban-lane').data('lane');
+    var cardType = $card.find('.kanban-card').data('type');
+
+    if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
+
+    var cardID      = $card.data().id;
+    var fromColType = $oldCol.data('type');
+    var toColType   = $newCol.data('type');
+
+    changeCardColType(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, cardType, fromColType, toColType);
+}
+
+var kanbanActionHandlers =
+{
+    dropItem: handleDropTask
+};
+
+/**
+ * Handle kanban action.
+ * 
+ * @param  string $action 
+ * @param  object $element 
+ * @param  object $event 
+ * @param  object $kanban 
+ * @access public
+ * @return void
+ */
+function handleKanbanAction(action, $element, event, kanban)
+{
+    $('.kanban').attr('data-action-enabled', action);
+    var handler = kanbanActionHandlers[action];
+    if(handler) handler($element, event, kanban);
+}
+
+/**
  * Handle finish drop task
  * @param {Object} event Event object
  * @returns {void}
  */
 function handleFinishDrop(event)
 {
-    var $card = $(event.element); // The drag card
-    var $dragCol = $card.closest('.kanban-lane-col');
-    var $dropCol = $(event.target);
-
-    /* Get d-n-d(drag and drop) infos */
-    var card = $card.data('item');
-    var fromColType = $dragCol.data('type');
-    var toColType = $dropCol.data('type');
-    var kanbanID = $card.closest('.kanban').data('id');
-
-    changeCardColType(card, fromColType, toColType, kanbanID);
-
     $('#kanbans').find('.can-drop-here').removeClass('can-drop-here');
 }
 
@@ -926,6 +971,7 @@ $(function()
         fluidBoardWidth:      false,
         cardsPerRow:          window.kanbanScaleSize,
         virtualize:           true,
+        onAction:             handleKanbanAction,
         virtualRenderOptions: {container: '#kanbanContainer>.panel-body'},
         droppable:
         {
