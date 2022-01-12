@@ -106,15 +106,15 @@ $lang->block->spent           = '已花费';
 $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
-$lang->block->language['flowchart']     = '流程图';
-$lang->block->language['statistic']     = '项目统计'; 
-$lang->block->language['recentproject'] = '我近期参与的项目';
-$lang->block->language['assigntome']    = '待处理';
-$lang->block->language['projectteam']   = '项目人力投入'; 
-$lang->block->language['project']       = '项目列表';
-$lang->block->language['dynamic']       = '最新动态';
-$lang->block->language['list']          = '我的待办';
-$lang->block->language['contribute']    = '我的贡献';
+$lang->block->titleList['flowchart']     = '流程图';
+$lang->block->titleList['statistic']     = '项目统计'; 
+$lang->block->titleList['recentproject'] = '我近期参与的项目';
+$lang->block->titleList['assigntome']    = '待处理';
+$lang->block->titleList['projectteam']   = '项目人力投入'; 
+$lang->block->titleList['project']       = '项目列表';
+$lang->block->titleList['dynamic']       = '最新动态';
+$lang->block->titleList['list']          = '我的待办';
+$lang->block->titleList['contribute']    = '我的贡献';
 
 $lang->block->default['waterfall']['project']['3']['title']  = "项目计划";
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
