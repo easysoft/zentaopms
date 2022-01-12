@@ -1836,7 +1836,7 @@ class projectModel extends model
 
             $executions = $this->dao->select('t1.*,t2.name projectName, t2.model as projectModel')->from(TABLE_EXECUTION)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-                ->where('t1.type')->in('sprint,stage')
+                ->where('t1.type')->in('sprint,stage,kanban')
                 ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
                 ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()

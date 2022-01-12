@@ -24,7 +24,7 @@
         </tr>
         <tr class="hidden" id='cardBox'>
           <th class='c-count'><?php echo $lang->kanban->cardCount;?></th>
-          <td><?php echo html::input('displayCards', '', "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
+          <td><?php echo html::input('displayCards', $displayCards, "class='form-control' required placeholder='{$lang->kanban->cardCountTip}'  autocomplete='off'");?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center form-actions'>

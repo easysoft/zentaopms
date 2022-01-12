@@ -108,3 +108,4 @@
 #kanbanScaleControl > .input-group-btn:first-child > .btn {border-radius: 16px 0 0 16px; border-right-color: transparent;}
 #kanbanScaleControl > .input-group-btn:last-child > .btn {border-radius: 0 16px 16px 0; border-left-color: transparent;}
 #kanbanScaleControl > .input-group-btn > .btn:hover {border-color: #b8bfce;}
+#kanbanActionMenu {top: 24px; right: 28px;}
