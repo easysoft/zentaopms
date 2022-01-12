@@ -314,7 +314,7 @@ class kanbanModel extends model
         $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
         /* Add kanban cell. */
-        $lanes = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
+        $lanes    = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
         $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
         foreach($lanes as $laneID) $this->addKanbanCell($kanbanID, $laneID, $columnID, 'card');
 
