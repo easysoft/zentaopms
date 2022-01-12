@@ -22,7 +22,7 @@
   </div>
   <div class="btn-toolbar pull-left">
     <div>
-      <form id='sonarqubeprojectForm' method='post'>
+      <form id='sonarqubeProjectForm' method='post'>
       <?php echo html::input('keyword', $keyword, "class='form-control' placeholder='{$lang->sonarqube->placeholderSearch}' style='display: inline-block;width:auto;margin:0 10px'");?>
       <a id="projectSearch" class="btn btn-primary"><?php echo $lang->sonarqube->search?></a>
       </form>

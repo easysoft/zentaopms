@@ -18,5 +18,5 @@ $(document).ready(function()
  */
 function triggerSearch()
 {
-    $("#sonarqubeprojectForm").submit();
+    $("#sonarqubeProjectForm").submit();
 }
