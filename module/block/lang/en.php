@@ -116,6 +116,7 @@ $lang->block->language['dynamic']       = 'Dynamic';
 $lang->block->language['list']          = 'List';
 $lang->block->language['contribute']    = 'Contribute';
 
+$lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
 $lang->block->default['waterfall']['project']['3']['grid']   = 8;
