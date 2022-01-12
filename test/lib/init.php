@@ -80,6 +80,29 @@ function p($keys = '', $delimiter = ',')
     /* Print $_result. */
     if(!$keys or !is_array($_result) and !is_object($_result)) return print(">> " . (string) $_result . "\n");
 
+    $parts  = explode(';', $keys);
+    $values = array();
+    foreach($parts as $part)
+    {
+        $values[] = implode($delimiter, getValues($_result, $part, $delimiter));
+    }
+
+    echo ">> " . implode(';', $values) . "\n";
+
+    return true;
+}
+
+/**
+ * Get values
+ *
+ * @param mixed  $value
+ * @param string $keys
+ * @param string $delimiter
+ * @access public
+ * @return void
+ */
+function getValues($value, $keys, $delimiter)
+{
     $object = '';
     $index  = -1;
     $pos    = strpos($keys, ':');
@@ -101,7 +124,6 @@ function p($keys = '', $delimiter = ',')
     }
     $keys = explode($delimiter, $keys);
 
-    $value = $_result;
     if($object)
     {
         if(is_array($value))
@@ -139,9 +161,7 @@ function p($keys = '', $delimiter = ',')
     $values = array();
     foreach($keys as $key) $values[] = zget($value, $key, '');
 
-    echo ">> " . implode($delimiter, $values) . "\n";
-
-    return true;
+    return $values;
 }
 
 /**
