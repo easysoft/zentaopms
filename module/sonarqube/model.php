@@ -71,16 +71,4 @@ class sonarqubeModel extends model
         $header = 'Authorization: Basic ' . $token;
         return json_decode(commonModel::http($url, null, array(), $header));
     }
-
-    /**
-     * Get a sonarqube by id.
-     *
-     * @param  int $sonarqubeID
-     * @access public
-     * @return object
-     */
-    public function getByID($sonarqubeID)
-    {
-        return $this->loadModel('pipeline')->getByID($sonarqubeID);
-    }
 }
