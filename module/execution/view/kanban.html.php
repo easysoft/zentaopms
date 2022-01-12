@@ -59,6 +59,39 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <button class='btn btn-icon' type='button' data-type='+'><i class='icon icon-plus-solid-circle text-muted'></i></button>
     </span>
   </div>
+  <div class='btn-toolbar pull-right'>
+    <?php
+    echo html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->kanban->fullScreen, '', "class='btn btn-link'");
+    $actions = '';
+    $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or (common::hasPriv('kanban', 'setLaneHeight')) or common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'close') or common::hasPriv('execution', 'delete') or !empty($executionActions));
+
+    if($printSettingBtn)
+    {
+        $actions .= html::a('javascript:;', "<i class='icon icon-cog-outline'></i>" . $lang->kanban->setting, '', "data-toggle='dropdown' class='btn btn-link'");
+        $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu pull-right'>";
+        $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
+        if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$execution->id", '', true), '<i class="icon icon-plus"></i>' . $lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+        if(common::hasPriv('kanban', 'setLaneHeight')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$execution->id&from=execution", '', true), '<i class="icon icon-size-height"></i>' . $lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width=$width") . '</li>';
+        $kanbanActions = '';
+        if(common::hasPriv('execution', 'edit')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'edit', "executionID=$execution->id", '', true), '<i class="icon icon-edit"></i>' . $lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
+        if(in_array('start', $executionActions)) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'start', "executionID=$execution->id", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(in_array('putoff', $executionActions)) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'putoff', "executionID=$execution->id", '', true), '<i class="icon icon-calendar"></i>' . $lang->execution->putoff, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(in_array('suspend', $executionActions)) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'suspend', "executionID=$execution->id", '', true), '<i class="icon icon-pause"></i>' . $lang->execution->suspend, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(in_array('close', $executionActions)) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'close', "executionID=$execution->id", '', true), '<i class="icon icon-off"></i>' . $lang->execution->close, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(in_array('activate', $executionActions)) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'activate', "executionID=$execution->id", '', true), '<i class="icon icon-magic"></i>' . $lang->execution->activate, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+        if(common::hasPriv('execution', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('execution', 'delete', "executionID=$execution->id"), '<i class="icon icon-trash"></i>' . $lang->delete, 'hiddenwin', "class='btn btn-link text-left'") . '</li>';
+        if($kanbanActions)
+        {
+            $actions .= ((common::hasPriv('kanban', 'createRegion') or common::hasPriv('kanban', 'setLaneHeight')) and (common::hasPriv('execution', 'edit') or common::hasPriv('execution', 'delete') or !empty($executionActions))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+        }
+        $actions .= "</ul>";
+    }
+
+    $actions .= "</div>";
+
+    echo $actions;
+    ?>
+  </div>
 </div>
 <div class='panel' id='kanbanContainer'>
   <div class='panel-body'>

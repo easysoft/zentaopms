@@ -1397,7 +1397,8 @@ class execution extends control
                 $this->loadModel('kanban')->createRDKanban($execution);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID") . '#app=execution'));
+                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
             }
 
             if(!empty($planID))
@@ -1476,6 +1477,7 @@ class execution extends control
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
+        $execution           = $this->execution->getById($executionID);
 
         if(!empty($_POST))
         {
@@ -1527,6 +1529,7 @@ class execution extends control
 
             $this->executeHooks($executionID);
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
+            if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
@@ -1534,7 +1537,6 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         $executions = array('' => '') + $this->executions;
-        $execution  = $this->execution->getById($executionID);
         $managers   = $this->execution->getDefaultManagers($executionID);
 
         $project = $this->project->getByID($execution->project);
@@ -1721,6 +1723,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1793,6 +1796,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1828,6 +1832,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1870,6 +1875,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1968,8 +1974,14 @@ class execution extends control
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'all')
     {
         $this->lang->execution->menu = new stdclass();
-        $execution  = $this->commonAction($executionID);
-        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, $groupBy);
+        $execution        = $this->commonAction($executionID);
+        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, $groupBy);
+        $executionActions = array();
+
+        foreach($this->config->execution->statusActions as $action)
+        {
+            if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
+        }
 
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
@@ -1980,14 +1992,15 @@ class execution extends control
             $userList[$account]['avatar'] = $avatar;
         }
 
-        $this->view->title      = $this->lang->kanban->view;
-        $this->view->users      = $users;
-        $this->view->regions    = $kanbanData;
-        $this->view->execution  = $execution;
-        $this->view->userList   = $userList;
-        $this->view->browseType = $browseType;
-        $this->view->orderBy    = $orderBy;
-        $this->view->groupBy    = $groupBy;
+        $this->view->title            = $this->lang->kanban->view;
+        $this->view->users            = $users;
+        $this->view->regions          = $kanbanData;
+        $this->view->execution        = $execution;
+        $this->view->userList         = $userList;
+        $this->view->browseType       = $browseType;
+        $this->view->orderBy          = $orderBy;
+        $this->view->groupBy          = $groupBy;
+        $this->view->executionActions = $executionActions;
         $this->display();
     }
 
@@ -2382,6 +2395,7 @@ class execution extends control
         else
         {
             /* Delete execution. */
+            $execution = $this->execution->getByID($executionID);
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
             $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
@@ -2390,7 +2404,8 @@ class execution extends control
             $this->executeHooks($executionID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::reload('parent'));
+            if($execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'all'), 'parent'));
+            return print(js::reload('parent'));
         }
     }
 

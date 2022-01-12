@@ -3038,7 +3038,9 @@ class executionModel extends model
      */
     public static function isClickable($execution, $action)
     {
-        $action = strtolower($action);
+        $action    = strtolower($action);
+        $clickable = commonModel::hasPriv('execution', $action);
+        if(!$clickable) return false;
 
         if($action == 'start')    return $execution->status == 'wait';
         if($action == 'close')    return $execution->status != 'closed';
