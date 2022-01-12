@@ -1967,13 +1967,12 @@ class execution extends control
      */
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'all')
     {
-        unset($this->lang->execution->menu);
-
-        $users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->lang->execution->menu = new stdclass();
+        $execution  = $this->commonAction($executionID);
         $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, $groupBy);
-        $execution  = $this->execution->getById($executionID);
 
         $userList    = array();
+        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
         foreach($avatarPairs as $account => $avatar)
         {
@@ -2945,7 +2944,7 @@ class execution extends control
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->in('sprint,stage')
+            ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in(array_keys($projects))->fi()
             ->orderBy('id_desc')

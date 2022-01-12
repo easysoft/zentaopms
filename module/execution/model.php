@@ -65,7 +65,7 @@ class executionModel extends model
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) die(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID);
@@ -1054,7 +1054,7 @@ class executionModel extends model
         /* Order by status's content whether or not done */
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint')->fi()
+            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID and $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all' and $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
@@ -1319,7 +1319,7 @@ class executionModel extends model
             $module = 'execution';
             $method = 'task';
         }
-        if($module == 'testcase' and ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
+        if($module == 'testcase' and ($method == 'view' or $method == 'edit' or $method == 'batchedit'))
         {
             $module = 'execution';
             $method = 'testcase';
@@ -1329,7 +1329,7 @@ class executionModel extends model
             $module = 'execution';
             $method = 'testtask';
         }
-        if($module == 'build' and ($method == 'edit' || $method= 'view'))
+        if($module == 'build' and ($method == 'edit' or $method == 'view'))
         {
             $module = 'execution';
             $method = 'build';

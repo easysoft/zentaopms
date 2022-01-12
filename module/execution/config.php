@@ -11,6 +11,7 @@ $config->execution->list->exportFields = 'id,name,projectName,code,PM,end,status
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
+$config->execution->modelList['kanban']    = 'kanban';
 
 global $lang, $app;
 $app->loadLang('task');
