@@ -75,8 +75,8 @@ foreach($executions as $projectID => $projectExecutions)
         $selected = $execution->id == $executionID ? 'selected' : '';
         if($execution->status != 'done' and $execution->status != 'closed' and ($execution->PM == $this->app->user->account or isset($execution->teams[$this->app->user->account])))
         {
-            $kanbanLink = "/execution-kanban-%s.html";
-            $taskLink   = "/execution-task-%s.html";
+            $kanbanLink = $this->createLink('execution', 'kanban', "executionID=%s");
+            $taskLink   = $this->createLink('execution', 'task', "executionID=%s");
             if($execution->type != 'kanban' and $link == $kanbanLink) $link = $taskLink;
             if($execution->type == 'kanban' and $link != $kanbanLink) $link = $kanbanLink;
 
