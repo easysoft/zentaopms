@@ -2,17 +2,15 @@
 /**
  * The browse view file of sonarqube module of ZenTaoPMS.
  *
- * @copyright   Copyright 2009-2017 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
+ * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
- * @author      Gang Liu <liugang@cnezsoft.com>
+ * @author      Gang Zeng <liugang@cnezsoft.com>
  * @package     sonarqube
  * @version     $Id$
  * @link        http://www.zentao.net
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php js::set('vars', "keyword=%s&orderBy=id_desc&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID=1")?>
-<?php js::set('sonarqubeID', $sonarqubeID)?>
 <div id="mainMenu" class="clearfix">
   <div class='pull-left'>
     <?php echo html::a($this->createLink('sonarqube', 'browse'), "<i class='icon icon-back icon-sm'></i> " . $lang->goback, '', "class='btn btn-secondary'");?>
