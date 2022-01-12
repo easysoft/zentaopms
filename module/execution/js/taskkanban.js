@@ -678,6 +678,15 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     }
 }
 
+/**
+ * Handle drop task.
+ * 
+ * @param  object $element 
+ * @param  object $event 
+ * @param  object $kanban 
+ * @access public
+ * @return void
+ */
 function handleDropTask($element, event, kanban)
 {
     if(!event.target || !event.isNew) return;
