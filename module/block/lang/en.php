@@ -106,6 +106,16 @@ $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
 $lang->block->left            = 'Residuals';
 
+$lang->block->titleList['flowchart']     = 'Flowchart';
+$lang->block->titleList['statistic']     = 'Statistic';
+$lang->block->titleList['recentproject'] = 'Recentproject';
+$lang->block->titleList['assigntome']    = 'Assigntome';
+$lang->block->titleList['projectteam']   = 'Projectteam';
+$lang->block->titleList['project']       = 'Project';
+$lang->block->titleList['dynamic']       = 'Dynamic';
+$lang->block->titleList['list']          = 'List';
+$lang->block->titleList['contribute']    = 'Contribute';
+
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
 $lang->block->default['waterfall']['project']['3']['source'] = 'project';
