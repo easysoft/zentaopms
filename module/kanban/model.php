@@ -633,8 +633,8 @@ class kanbanModel extends model
         $regionIDList = array_keys($regions);
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
-        $columnGroup  = $this->getColumnGroupByExecutions($regionIDList, array_keys($laneGroup));
-        $cardGroup    = $this->getCardGroupByExecutions($executionID, $browseType, $orderBy);
+        $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
+        $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy);
 
         foreach($regions as $regionID => $regionName)
         {
@@ -668,7 +668,6 @@ class kanbanModel extends model
         }
 
         return $kanbanData;
-
     }
 
     /**
@@ -841,14 +840,14 @@ class kanbanModel extends model
     }
 
     /**
-     * Get column group by regions.
+     * Get RD column group by regions.
      *
      * @param  array  $regions
      * @param  array  $groupIDList
      * @access public
      * @return array
      */
-    public function getColumnGroupByExecutions($regions, $groupIDList = array())
+    public function getRDColumnGroupByRegions($regions, $groupIDList = array())
     {
         $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
             ->where('deleted')->eq('0')
@@ -907,10 +906,12 @@ class kanbanModel extends model
      * Get card group by execution id.
      *
      * @param  int    $kanbanID
+     * @param  string $browseType all|task|bug|story
+     * @param  string $orderBy
      * @access public
      * @return array
      */
-    public function getCardGroupByExecutions($executionID)
+    public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
     {
         $cards = $this->dao->select("id, title, pri, type, severity, assignedTo, '' as estimate, deadline")->from(TABLE_BUG)
             ->where('deleted')->eq(0)
