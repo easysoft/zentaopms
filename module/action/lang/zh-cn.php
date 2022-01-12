@@ -134,6 +134,7 @@ $lang->action->objectTypes['kanbanregion']     = '看板区域';
 $lang->action->objectTypes['kanbanlane']       = '看板泳道';
 $lang->action->objectTypes['kanbancolumn']     = '看板列';
 $lang->action->objectTypes['kanbancard']       = '看板卡片';
+$lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
