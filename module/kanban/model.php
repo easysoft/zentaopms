@@ -615,6 +615,62 @@ class kanbanModel extends model
     }
 
     /**
+     * Get a RD kanban data.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType all|story|task|bug
+     * @param  string $orderBy
+     * @param  string $groupBy
+     *
+     * @access public
+     * @return array
+     */
+    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $groupBy = 'all')
+    {
+        $kanbanData   = array();
+        $actions      = array('sortGroup');
+        $regions      = $this->getRegionPairs($executionID);
+        $regionIDList = array_keys($regions);
+        $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
+        $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
+        $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
+        $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy);
+
+        foreach($regions as $regionID => $regionName)
+        {
+            $region = new stdclass();
+            $region->id        = $regionID;
+            $region->name      = $regionName;
+            $region->laneCount = 0;
+
+            $groups = zget($groupGroup, $regionID, array());
+            foreach($groups as $group)
+            {
+                $lanes = zget($laneGroup, $group->id, array());
+                if(!$lanes) continue;
+
+                foreach($lanes as $lane) $lane->items =  array();
+
+                $group->columns = zget($columnGroup, $group->id, array());
+                $group->lanes   = $lanes;
+                $group->actions = array();
+
+                foreach($actions as $action)
+                {
+                    if(commonModel::hasPriv('kanban', $action)) $group->actions[] = $action;
+                }
+
+                $region->groups[]   = $group;
+                $region->laneCount += count($lanes);
+            }
+
+            $kanbanData[$regionID] = $region;
+        }
+
+        return $kanbanData;
+    }
+
+    /**
      * Get region by id.
      *
      * @param  int    $regionID
@@ -660,15 +716,17 @@ class kanbanModel extends model
     /**
      * Get lane group by regions.
      *
-     * @param  array $regions
+     * @param  array  $regions
+     * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getLaneGroupByRegions($regions)
+    public function getLaneGroupByRegions($regions, $browseType = 'all')
     {
         $laneGroup = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
+            ->beginIf($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
             ->orderBy('order')
             ->fetchGroup('group');
 
@@ -779,6 +837,96 @@ class kanbanModel extends model
         }
 
         return $cardGroup;
+    }
+
+    /**
+     * Get RD column group by regions.
+     *
+     * @param  array  $regions
+     * @param  array  $groupIDList
+     * @access public
+     * @return array
+     */
+    public function getRDColumnGroupByRegions($regions, $groupIDList = array())
+    {
+        $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
+            ->where('deleted')->eq('0')
+            ->andWhere('region')->in($regions)
+            ->beginIF(!empty($groupIDList))->andWhere('`group`')->in($groupIDList)->fi()
+            ->orderBy('id_asc')
+            ->fetchGroup('group');
+
+        $actions = array('setColumn', 'setWIP', 'deleteColumn');
+
+        /* Group by parent. */
+        $parentColumnGroup = array();
+        foreach($columnGroup as $group => $columns)
+        {
+            foreach($columns as $column)
+            {
+                $column->actions = array();
+                /* Judge column action priv. */
+                foreach($actions as $action)
+                {
+                    if($this->isClickable($column, $action)) $column->actions[] = $action;
+                }
+
+                if($column->parent > 0) continue;
+
+                $parentColumnGroup[$group][] = $column;
+            }
+        }
+
+        $columnData = array();
+        foreach($parentColumnGroup as $group => $parentColumns)
+        {
+            foreach($parentColumns as $parentColumn)
+            {
+                $columnData[$group][] = $parentColumn;
+                foreach($columnGroup[$group] as $column)
+                {
+                    if($column->parent == $parentColumn->id)
+                    {
+                        $parentColumn->asParent = true;
+
+                        if(strpos(',developing,developed,', $column->type) !== false) $column->parentType = 'develop';
+                        if(strpos(',testing,tested,',       $column->type) !== false) $column->parentType = 'test';
+                        if(strpos(',fixing,fixed,',         $column->type) !== false) $column->parentType = 'resolving';
+
+                        $columnData[$group][] = $column;
+                    }
+                }
+            }
+        }
+
+        return $columnData;
+    }
+
+    /**
+     * Get card group by execution id.
+     *
+     * @param  int    $kanbanID
+     * @param  string $browseType all|task|bug|story
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+    {
+        $cards = $this->dao->select("id, title, pri, type, severity, assignedTo, '' as estimate, deadline")->from(TABLE_BUG)
+            ->where('deleted')->eq(0)
+            ->andWhere('execution')->eq($executionID)
+            ->fetchAll('id');
+/*
+        $cards .= $this->dao->select("id, name, pri, '' as severity, assignedTo, deadline")->from(TABLE_TASK)
+            ->where('deleted')->eq(0)
+            ->andWhere('execution')->eq($executionID)
+           ->fetchAll('id');
+ */
+
+        $planList = $this->loadModel('execution')->getById($executionID);
+
+        return $cards;
     }
 
     /**
@@ -1634,10 +1782,12 @@ class kanbanModel extends model
         foreach($columnList as $type => $name)
         {
             $data = new stdClass();
-            $data->lane  = $laneID;
-            $data->name  = $name;
-            $data->color = '#333';
-            $data->type  = $type;
+            $data->lane   = $laneID;
+            $data->name   = $name;
+            $data->color  = '#333';
+            $data->type   = $type;
+            $data->group  = $groupID;
+            $data->region = $regionID;
 
             if(strpos(',developing,developed,', $type) !== false) $data->parent = $devColumnID;
             if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumnID;
