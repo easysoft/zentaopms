@@ -112,4 +112,26 @@ class sonarqube extends control
     {
         echo $this->fetch('job', 'exec', "jobID=$jobID");
     }
+
+    /**
+     * Delete a sonarqube.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return void
+     */
+    public function delete($sonarqubeID, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "id=$sonarqubeID&confirm=yes")));
+
+        $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $this->loadModel('action');
+        $this->sonarqube->delete(TABLE_PIPELINE, $sonarqubeID);
+
+        $sonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $actionID  = $this->action->create('sonarqube', $sonarqubeID, 'deleted');
+        $changes   = common::createChanges($oldSonarQube, $sonarQube);
+        $this->action->logHistory($actionID, $changes);
+        echo js::reload('parent');
+    }
 }

@@ -42,13 +42,13 @@ class sonarqubeModel extends model
     /**
      * Get sonarqube api base url and header by id.
      *
-     * @param  int $id
+     * @param  int $sonarqubeID
      * @access public
      * @return array
      */
-    public function getApiBase($id)
+    public function getApiBase($sonarqubeID)
     {
-        $sonarqube = $this->loadModel('pipeline')->getByID($id);
+        $sonarqube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         if(!$sonarqube) return '';
 
         $url      = rtrim($sonarqube->url, '/') . '/api/%s';
