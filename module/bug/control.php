@@ -226,7 +226,7 @@ class bug extends control
         $this->view->param           = $param;
         $this->view->orderBy         = $orderBy;
         $this->view->moduleID        = $moduleID;
-        $this->view->memberPairs     = $this->user->getPairs('noletter|nodeleted');
+        $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
         $this->view->branch          = $branch;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
@@ -750,7 +750,7 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
-        $this->view->users            = $this->user->getPairs('devfirst|nodeleted');
+        $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
@@ -993,7 +993,7 @@ class bug extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->users            = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -1129,7 +1129,7 @@ class bug extends control
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
         }
-        $users = $this->user->getPairs('devfirst|nodeleted', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst|noclosed', $appendUsers, $this->config->maxCount);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
@@ -1190,7 +1190,7 @@ class bug extends control
         }
         else
         {
-            $users = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+            $users = $this->user->getPairs('noclosed|nofeedback', $bug->assignedTo);
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
@@ -1372,7 +1372,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->confirmBug;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->assignedTo);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
@@ -1523,7 +1523,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->activate;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted', $bug->resolvedBy);
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty');
         $this->view->actions = $this->action->getList('bug', $bugID);
 
