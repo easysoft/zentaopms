@@ -61,66 +61,6 @@ function createLaneMenu(options)
     return items;
 }
 
-/**
- * Create card menu.
- *
- * @param  object $options
- * @access public
- * @return array
- */
-function createCardMenu(options)
-{
-    var card  = options.$trigger.closest('.kanban-item').data('item');
-    var privs = card.actions;
-    if(!privs.length) return [];
-
-    var items = [];
-    if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('moveCard'))
-    {
-        var moveCardItems = [];
-        var moveColumns   = [];
-        var parentColumns = [];
-        var regionGroups   = regions[options.$trigger.closest('.region').data('id')].groups;
-        for(let i = 0; i < regionGroups.length ; i ++ )
-        {
-            if(regionGroups[i].id == options.$trigger.closest('.kanban-board').data('id'))
-            {
-                moveColumns = regionGroups[i].columns;
-                break;
-            }
-        }
-        for(let i = moveColumns.length-1 ; i >= 0 ; i -- )
-        {
-            if(moveColumns[i].parent > 0) parentColumns.push(moveColumns[i].parent);
-            if(moveColumns[i].id == card.column || $.inArray(moveColumns[i].id, parentColumns) >= 0) continue;
-            moveCardItems.push({label: moveColumns[i].name, onClick: function(){moveCard(card.id, moveColumns[i].id, card.lane, card.kanban, card.region);}});
-        }
-        moveCardItems = moveCardItems.reverse();
-        items.push({label: kanbanLang.moveCard, icon: 'move', items: moveCardItems});
-    }
-    if(privs.includes('setCardColor'))
-    {
-        var cardColoritems = [];
-        if(!card.color) color = "#fff";
-        for(let i = 0 ; i < colorList.length ; i ++ )
-        {
-            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
-            var border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
-            cardColoritems.push({label: "<div class='cardcolor' style='background:" + colorList[i] + ";" + border + "'></div>" + colorListLang[colorList[i]]  + attr ,
-                onClick: function(){setCardColor(card.id, colorList[i], card.kanban, card.region);}, html: true, attrs: {id: 'cardcolormenu'}, className: 'color' + i});
-        };
-        items.push({label: kanbanLang.cardColor, icon: 'color', items: cardColoritems});
-    }
-
-    var bounds = options.$trigger[0].getBoundingClientRect();
-    items.$options = {x: bounds.right, y: bounds.top};
-    return items;
-}
-
 function createColumnMenu(options)
 {
     var column = options.$trigger.closest('.kanban-col').data('col');
@@ -130,14 +70,6 @@ function createColumnMenu(options)
     var items = [];
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
-    if(privs.includes('splitColumn')) items.push({label: kanbanLang.splitColumn, icon: 'col-split', url: createLink('kanban', 'splitColumn', 'columnID=' + column.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('createColumn'))
-    {
-        items.push({label: kanbanLang.createColumnOnLeft, icon: 'col-add-left', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=left'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-        items.push({label: kanbanLang.createColumnOnRight, icon: 'col-add-right', url: createLink('kanban', 'createColumn', 'columnID=' + column.id + '&position=right'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    }
-    if(privs.includes('copyColumn')) items.push({label: kanbanLang.copyColumn, icon: 'copy', url: createLink('kanban', 'copyColumn', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('archiveColumn') && kanban.archived == '1' && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.archiveColumn, icon: 'card-archive', url: createLink('kanban', 'archiveColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('deleteColumn') && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
@@ -145,6 +77,35 @@ function createColumnMenu(options)
     return items;
 }
 
+/**
+ * Create column create button menu
+ * @returns {Object[]}
+ */
+function createColumnCreateMenu(options)
+{
+    var $col  = options.$trigger.closest('.kanban-col');
+    var col   = $col.data('col');
+    var items = [];
+
+    if(col.type == 'backlog')
+    {
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID)});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID)});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID)});
+        if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
+    }
+    else if(col.type == 'unconfirmed')
+    {
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID)});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID)});
+    }
+    else if(col.type == 'wait')
+    {
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    }
+    return items;
+}
 
 /**
  * Hide kanban action
@@ -235,6 +196,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
+    var $actions = $('<div class="actions" />');
 
     if(privs.includes('sortGroup'))
     {
@@ -255,26 +217,22 @@ function renderHeaderCol($column, column, $header, kanbanData)
     var groupID      = $column.closest('.kanban-board').data('id');
     var laneID       = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
     var columnID     = $column.closest('.kanban-col').data('id');
-    var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('createColumn') || columnPrivs.includes('copyColumn') || columnPrivs.includes('archiveColumn') || columnPrivs.includes('deleteColumn') || columnPrivs.includes('splitColumn'));
+    var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('deleteColumn'));
 
     /* Render more menu. */
-    if(columnPrivs.includes('createCard') || printMoreBtn)
+    if((column.type == 'backlog' && hasStoryButton) || (column.type == 'wait' && hasTaskButton) || (column.type == 'unconfirmed' && hasBugButton))
     {
-        var addItemBtn = '';
-        var moreAction = '';
-
-        if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
-        var $actions = $column.children('.actions');
-
-        if(columnPrivs.includes('createCard') && column.parent != -1)
-        {
-            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
-            addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
-        }
-
-        var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
-        $actions.html(addItemBtn + moreAction);
+        $actions.append([
+                '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary">',
+                '<i class="icon icon-expand-alt"></i>',
+                '</a>'
+        ].join(''));
     }
+    if(printMoreBtn)
+    {
+        $actions.append(' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>');
+    }
+    $actions.appendTo($column);
 }
 
 /**
@@ -307,6 +265,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
         ].join('')).appendTo($lane);
     }
 }
+
 /**
  * Adjust add button postion in column
  */
@@ -328,6 +287,7 @@ function adjustAddBtnPosition($kanban)
         $col.toggleClass('has-scrollbar', items.scrollHeight > items.clientHeight);
     });
 }
+
 /**
  * Handle kanban action
  */
@@ -355,6 +315,7 @@ function processMinusBtn()
         $('#splitTable .btn-plus').hide();
     }
 }
+
 /**
  * The function for rendering kanban item
  */
@@ -446,9 +407,9 @@ function renderKanbanItem(item, $item)
 /* Define menu creators */
 window.menuCreators =
 {
-    card: createCardMenu,
-    lane: createLaneMenu,
-    column: createColumnMenu
+    lane:         createLaneMenu,
+    column:       createColumnMenu,
+    columnCreate: createColumnCreateMenu
 };
 
 /**

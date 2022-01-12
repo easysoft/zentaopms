@@ -1981,6 +1981,18 @@ class execution extends control
             $userList[$account]['avatar'] = $avatar;
         }
 
+        /* Get execution's product. */
+        $productID = 0;
+        $products  = $this->loadModel('product')->getProducts($execution->project);
+        if($products) $productID = key($products);
+
+        $plans    = $this->execution->getPlans($products);
+        $allPlans = array('' => '');
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
         $this->view->title      = $this->lang->kanban->view;
         $this->view->users      = $users;
         $this->view->regions    = $kanbanData;
@@ -1989,6 +2001,8 @@ class execution extends control
         $this->view->browseType = $browseType;
         $this->view->orderBy    = $orderBy;
         $this->view->groupBy    = $groupBy;
+        $this->view->productID  = $productID;
+        $this->view->allPlans   = $allPlans;
         $this->display();
     }
 
