@@ -24,7 +24,7 @@
           <table class='table table-form'>
             <tr>
               <th><?php echo $lang->api->version?></th>
-              <td style="width: 80%"><?php echo html::input('version', '', "class='form-control'")?></td>
+              <td style="width: 100%"><?php echo html::input('version', '', "class='form-control'")?></td>
             </tr>
             <tr>
               <th><?php echo $lang->api->desc;?></th>
