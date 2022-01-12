@@ -82,11 +82,7 @@ class sonarqube extends control
     protected function checkToken()
     {
         $sonarqube = fixer::input('post')->get();
-        $this->dao->update('sonarqube')->data($sonarqube)
-            ->check('name', 'notempty')
-            ->check('url', 'notempty')
-            ->check('account', 'notempty')
-            ->check('password', 'notempty');
+        $this->dao->update('sonarqube')->data($sonarqube)->batchCheck($this->config->sonarqube->create->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if(strpos($sonarqube->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->sonarqube->hostError))));
 

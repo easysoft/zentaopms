@@ -21,20 +21,20 @@
         <table class='table table-form'>
           <tr>
             <th class='c-name'><?php echo $lang->sonarqube->name;?></th>
-            <td class='required'><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->sonarqube->placeholder->name}'");?></td>
+            <td><?php echo html::input('name', '', "class='form-control' placeholder='{$lang->sonarqube->placeholder->name}'");?></td>
             <td class="tips-git"></td>
           </tr>
           <tr>
             <th><?php echo $lang->sonarqube->url;?></th>
-            <td class='required'><?php echo html::input('url', '', "class='form-control' placeholder='{$lang->sonarqube->placeholder->url}'");?></td>
+            <td><?php echo html::input('url', '', "class='form-control' placeholder='{$lang->sonarqube->placeholder->url}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->sonarqube->account;?></th>
-            <td class='required'><?php echo html::input('account', '', "class='form-control'");?></td>
+            <td><?php echo html::input('account', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->sonarqube->password;?></th>
-            <td class='required'><?php echo html::password('password', '', "class='form-control'");?></td>
+            <td><?php echo html::password('password', '', "class='form-control'");?></td>
           </tr>
           <tr>
             <th></th>
