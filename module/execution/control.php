@@ -1263,8 +1263,7 @@ class execution extends control
         }
 
         $project = $this->project->getByID($projectID);
-
-        if(!empty($projectID) and $project->model == 'kanban')
+        if(!empty($project) and $project->model == 'kanban')
         {
             $this->lang->execution->createExec  = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->createExec);
             $this->lang->execution->execName    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execName);
@@ -1962,12 +1961,34 @@ class execution extends control
      * @param int     $executionID
      * @param string  $browseType
      * @param string  $orderBy
-     * @param string  $group
+     * @param string  $groupBy
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $group = 'all')
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'all')
     {
+        unset($this->lang->execution->menu);
+
+        $users      = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, $groupBy);
+        $execution  = $this->execution->getById($executionID);
+
+        $userList    = array();
+        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!$avatar) continue;
+            $userList[$account]['avatar'] = $avatar;
+        }
+
+        $this->view->title      = $this->lang->kanban->view;
+        $this->view->users      = $users;
+        $this->view->regions    = $kanbanData;
+        $this->view->execution  = $execution;
+        $this->view->userList   = $userList;
+        $this->view->browseType = $browseType;
+        $this->view->orderBy    = $orderBy;
+        $this->view->groupBy    = $groupBy;
         $this->display();
     }
 

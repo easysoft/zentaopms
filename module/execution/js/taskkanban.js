@@ -1,6 +1,6 @@
 function changeView(view)
 {
-    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + view);
+    var link = createLink('execution', 'taskKanban', "executionID=" + executionID + '&type=' + view);
     location.href = link;
 }
 
@@ -597,7 +597,7 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
         }
         else if(toColType == 'fixed')
         {
-            if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed') 
+            if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
                 var link = createLink('bug', 'resolve', 'bugID=' + objectID, '', true);
                 showIframe = true;
@@ -1055,7 +1055,7 @@ $('#type').change(function()
         })
     }
 
-    var link = createLink('execution', 'kanban', "executionID=" + executionID + '&type=' + type);
+    var link = createLink('execution', 'taskKanban', "executionID=" + executionID + '&type=' + type);
     location.href = link;
 });
 
@@ -1065,6 +1065,6 @@ $('.c-group').change(function()
 
     var type  = $('#type').val();
     var group = $('#group').val();
-    var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
+    var link  = createLink('execution', 'taskKanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
     location.href = link;
 });

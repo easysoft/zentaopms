@@ -1,11 +1,11 @@
 <?php
 /**
- * The kanban view file of execution module of ZenTaoPMS.
+ * The task kanban view file of execution module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2012 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
  * @author      Wang Yidong, Zhu Jinyong
  * @package     execution
- * @version     $Id: kanban.html.php $
+ * @version     $Id: taskkanban.html.php $
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
