@@ -458,6 +458,33 @@ class kanban extends control
     }
 
     /**
+     * Set lane height.
+     *
+     * @param  int    $kanbanID
+     * @param  string $from     kanban|execution
+     * @access public
+     * @return void
+     */
+    public function setLaneHeight($kanbanID, $from = 'kanban')
+    {
+        if(!empty($_POST))
+        {
+            $this->kanban->setLaneHeight($kanbanID, $from);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+        }
+
+        $kanban = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
+
+        $this->view->heightType = $kanban->displayCards > 2 ? 'custom' : 'auto';
+
+        $this->display();
+    }
+
+    /**
      * Delete a lane.
      *
      * @param  int    $laneID

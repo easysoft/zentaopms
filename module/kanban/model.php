@@ -2118,6 +2118,36 @@ class kanbanModel extends model
     }
 
     /**
+     * Set lane height.
+     *
+     * @param  int    $kanbanID
+     * @param  string $from     kanban|execution
+     * @access public
+     * @return bool
+     */
+    public function setLaneHeight($kanbanID, $from = 'kanban')
+    {
+        $kanbanID = (int)$kanbanID;
+        $kanban   = fixer::input('post')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->get();
+
+        if($kanban->heightType == 'custom')
+        {
+            if(!preg_match("/^-?\d+$/", $kanban->displayCards) or $kanban->displayCards < 3)
+            {
+                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+                return false;
+            }
+        }
+
+        $table = $this->config->objectTables[$from];
+        $this->dao->update($table)->set('displayCards')->eq((int)$kanban->displayCards)->where('id')->eq($kanbanID)->exec();
+
+        if(dao::isError()) return false;
+    }
+
+    /**
      * Set kanban headerActions.
      *
      * @param  object $kanban
@@ -2126,24 +2156,45 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
+        $printSetHeight = false;
+        if(common::hasPriv('kanban', 'setLaneHeight'))
+        {
+            $laneCount = $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
+                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+                ->where('t1.kanban')->eq($kanban->id)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetch('count');
+
+            if($laneCount > 1) $printSetHeight = true;
+        }
+
         $actions  = '';
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+
         if($printSettingBtn)
         {
             $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            if($printSetHeight)
+            {
+                $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
+                $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
-            $kanbanActions  = '';
-            $attr           = $kanban->status == 'closed' ? "disabled='disabled'" : '';
+            }
+
+            $kanbanActions = '';
+            $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
             if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
             if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link' $attr") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= common::hasPriv('kanban', 'createRegion') ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }

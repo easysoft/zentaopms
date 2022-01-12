@@ -18,6 +18,8 @@ $lang->kanban->deleteRegion        = '删除区域';
 $lang->kanban->createLane          = '创建泳道';
 $lang->kanban->editLane            = '泳道设置';
 $lang->kanban->sortLane            = '泳道排序';
+$lang->kanban->laneHeight          = '泳道高度';
+$lang->kanban->setLaneHeight       = '设置泳道高度';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
 $lang->kanban->editColumn          = '编辑看板列';
@@ -73,12 +75,14 @@ $lang->kanban->closedBy       = '由谁关闭';
 $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
+$lang->kanban->cardCount      = '卡片数量';
 
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 
 $lang->kanban->accessDenied  = '您无权访问该看板';
 $lang->kanban->confirmDelete = '您确认删除吗？';
+$lang->kanban->cardCountTip  = '请输入卡片数量';
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';
@@ -249,6 +253,12 @@ $lang->kanbanlane->confirmDelete = '您确认删除该泳道吗？删除泳道�
 
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
+
+$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度自适应）';
+$lang->kanbanlane->heightTypeList['custom'] = '自定义（根据卡片数量自定义泳道高度）';
+
+$lang->kanbanlane->error = new stdclass();
+$lang->kanbanlane->error->mustBeInt = '卡片数量必须是大于2的正整数。';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';
