@@ -1039,10 +1039,11 @@ function resetRegionHeight(fold)
                 if(fold == 'open')
                 {
                     var windowHeight  = $(window).height();
-                    var headerHeight  = $('#mainHeader').height();
+                    var headerHeight  = $('#mainHeader').outerHeight();
                     var mainPadding   = $('#main').css('padding-top');
+                    var panelBorder   = $('.panel').css('border-top-width');
                     var bodyPadding   = $('.panel-body').css('padding-top');
-                    var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - 5;
+                    var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
                     var regionPadding = $('.kanban').css('padding-bottom');
                     var columnHeight  = $('.kanban-header').outerHeight();
 
