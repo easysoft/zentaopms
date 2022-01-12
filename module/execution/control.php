@@ -1397,7 +1397,7 @@ class execution extends control
                 $this->loadModel('kanban')->createRDKanban($execution);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID") . '#app=execution'));
             }
 
             if(!empty($planID))
