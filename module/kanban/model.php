@@ -966,14 +966,6 @@ class kanbanModel extends model
             ->orderBy('id_asc')
             ->fetchGroup('lane', 'id');
 
-        /* Get parent column type pairs. */
-        $parentTypes = $this->dao->select('t2.id, t2.type')->from(TABLE_KANBANCELL)->alias('t1')
-            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
-            ->where('t2.deleted')->eq(0)
-            ->andWhere('t1.lane')->in(array_keys($lanes))
-            ->andWhere('t2.parent')->eq(-1)
-            ->fetchPairs('id', 'type');
-
         /* Get group objects. */
         if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
         if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
@@ -992,7 +984,7 @@ class kanbanModel extends model
             $columnData = array();
             $laneType   = $groupBy == 'default' ? $lane->type : $lane->groupby;
 
-            $laneData['id']              = $groupBy == 'default' ? $lane->type : $lane->groupby . '-' . $lane->extra;
+            $laneData['id']              = $laneID;
             $laneData['laneID']          = $laneID;
             $laneData['name']            = $lane->name;
             $laneData['color']           = $lane->color;
@@ -1001,18 +993,20 @@ class kanbanModel extends model
 
             foreach($columns[$laneID] as $columnID => $column)
             {
-                $columnData[$column->id]['id']         = $laneType . '-' . $column->type;
-                $columnData[$column->id]['columnID']   = $columnID;
+                $columnData[$column->id]['id']         = $columnID;
                 $columnData[$column->id]['type']       = $column->type;
                 $columnData[$column->id]['name']       = $column->name;
                 $columnData[$column->id]['color']      = $column->color;
                 $columnData[$column->id]['limit']      = $column->limit;
                 $columnData[$column->id]['laneType']   = $lane->type;
                 $columnData[$column->id]['asParent']   = $column->parent == -1 ? true : false;
+                $columnData[$column->id]['parent']     = $column->parent;
 
                 if($column->parent > 0)
                 {
-                    $columnData[$column->id]['parentType'] = zget($parentTypes, $column->parent, '');
+                    if($column->type == 'developing' or $column->type == 'developed') $columnData[$column->id]['parentType'] = 'develop';
+                    if($column->type == 'testing' or $column->type == 'tested') $columnData[$column->id]['parentType'] = 'test';
+                    if($column->type == 'fixing' or $column->type == 'fixed') $columnData[$column->id]['parentType'] = 'resolving';
                 }
 
                 $cardOrder  = 1;
@@ -1052,7 +1046,7 @@ class kanbanModel extends model
                 if(!isset($laneData['cards'][$column->type])) $laneData['cards'][$column->type] = array();
             }
 
-            $kanbanGroup[$laneType]['id']              = $laneType;
+            $kanbanGroup[$laneType]['id']              = $laneID;
             $kanbanGroup[$laneType]['columns']         = array_values($columnData);
             $kanbanGroup[$laneType]['lanes'][]         = $laneData;
             $kanbanGroup[$laneType]['defaultCardType'] = $lane->type;
@@ -1581,7 +1575,7 @@ class kanbanModel extends model
                 if($colType == 'develop') $devColumnID  = $colID;
                 if($colType == 'test')    $testColumnID = $colID;
 
-                if(strpos(',develop,test,', $colType) === false) $this->addKanbanCell($executionID, $laneID, $colID, 'story');
+                $this->addKanbanCell($executionID, $laneID, $colID, 'story');
             }
         }
         elseif($type == 'bug')
@@ -1603,7 +1597,7 @@ class kanbanModel extends model
                 if($colType == 'resolving') $resolvingColumnID = $colID;
                 if($colType == 'test')      $testColumnID      = $colID;
 
-                if(strpos(',resolving,test,', $colType) === false) $this->addKanbanCell($executionID, $laneID, $colID, 'bug');
+                $this->addKanbanCell($executionID, $laneID, $colID, 'bug');
             }
         }
         elseif($type == 'task')
@@ -1622,7 +1616,7 @@ class kanbanModel extends model
 
                 $colID = $this->dao->lastInsertId();
                 if($colType == 'develop') $devColumnID = $colID;
-                if($colType != 'develop') $this->addKanbanCell($executionID, $laneID, $colID, 'task');
+                $this->addKanbanCell($executionID, $laneID, $colID, 'task');
             }
         }
     }
