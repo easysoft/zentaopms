@@ -84,7 +84,7 @@ class repo extends control
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
         $repoList      = $this->repo->getList(0, '', $orderBy);
-        $sonarRepoList = $this->loadModel('sonarqube')->getSonarqubeByRepo(array_keys($repoList));
+        $sonarRepoList = $this->loadModel('job')->getSonarqubeByRepo(array_keys($repoList));
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
