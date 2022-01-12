@@ -2156,9 +2156,6 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
-        $actions        = '';
-        $actions       .= "<div class='btn-group'>";
-        $actions       .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
         $printSetHeight = false;
         if(common::hasPriv('kanban', 'setLaneHeight'))
         {
@@ -2171,6 +2168,10 @@ class kanbanModel extends model
 
             if($laneCount > 1) $printSetHeight = true;
         }
+
+        $actions  = '';
+        $actions .= "<div class='btn-group'>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
 
