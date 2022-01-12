@@ -53,7 +53,7 @@ class sonarqube extends control
         }
         echo html::select('projectKey', $projectPairs, '', "class='form-control chosen' required");
     }
-    
+
     /**
      * create a sonarqube.
      *
@@ -111,5 +111,46 @@ class sonarqube extends control
     public function execJob($jobID)
     {
         echo $this->fetch('job', 'exec', "jobID=$jobID");
+    }
+
+    /**
+     * Browse sonarqube project.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+
+        $sonarqubeProjectList = $this->sonarqube->apiGetProjects($sonarqubeID, $keyword);
+        foreach($sonarqubeProjectList as $key => $sonarqubeProject) !isset($sonarqubeProject->lastAnalysisDate) ? $sonarqubeProject->lastAnalysisDate = '' : '';
+
+         /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($sonarqubeProjectList as $sonarqubeProject) $orderList[] = $sonarqubeProject->$order;
+        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeProjectList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($sonarqubeProjectList);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
+
+        $this->view->sonarqube            = $this->sonarqube->getByID($sonarqubeID);
+        $this->view->keyword              = urldecode(urldecode($keyword));
+        $this->view->pager                = $pager;
+        $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
+        $this->view->sonarqubeID          = $sonarqubeID;
+        $this->view->sonarqubeProjectList = empty($sonarqubeProjectList) ? $sonarqubeProjectList: $sonarqubeProjectList[$pageID - 1];
+        $this->view->orderBy              = $orderBy;
+        $this->display();
     }
 }
