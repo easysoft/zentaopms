@@ -29,6 +29,17 @@ class sonarqubeModel extends model
     }
 
     /**
+     * Get sonarqube pairs.
+     *
+     * @access public
+     * @return array
+     */
+    public function getPairs()
+    {
+        return $this->loadModel('pipeline')->getPairs('sonarqube');
+    }
+
+    /**
      * Get sonarqube api base url and header by id.
      *
      * @param  int $id

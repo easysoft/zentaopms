@@ -1389,12 +1389,14 @@ $lang->resource->sonarqube->create        = 'create';
 $lang->resource->sonarqube->edit          = 'edit';
 $lang->resource->sonarqube->delete        = 'delete';
 $lang->resource->sonarqube->browseProject = 'browseProject';
+$lang->resource->sonarqube->execJob       = 'execJob';
 
-$lang->sonarqube->methodOrder[5]   = 'browse';
-$lang->sonarqube->methodOrder[10]  = 'create';
-$lang->sonarqube->methodOrder[15]  = 'edit';
-$lang->sonarqube->methodOrder[20]  = 'delete';
-$lang->sonarqube->methodOrder[25]  = 'browseProject';
+$lang->sonarqube->methodOrder[5]  = 'browse';
+$lang->sonarqube->methodOrder[10] = 'create';
+$lang->sonarqube->methodOrder[15] = 'edit';
+$lang->sonarqube->methodOrder[20] = 'delete';
+$lang->sonarqube->methodOrder[25] = 'browseProject';
+$lang->sonarqube->methodOrder[30] = 'execJob';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();
@@ -1740,12 +1742,12 @@ $lang->backup->methodOrder[25] = 'setting';
 $lang->backup->methodOrder[30] = 'rmPHPHeader';
 
 $lang->resource->cron = new stdclass();
-$lang->resource->cron->index   = 'index';
-$lang->resource->cron->turnon  = 'turnon';
-$lang->resource->cron->create  = 'createAction';
-$lang->resource->cron->edit    = 'edit';
-$lang->resource->cron->toggle  = 'toggle';
-$lang->resource->cron->delete  = 'delete';
+$lang->resource->cron->index       = 'index';
+$lang->resource->cron->turnon      = 'turnon';
+$lang->resource->cron->create      = 'createAction';
+$lang->resource->cron->edit        = 'edit';
+$lang->resource->cron->toggle      = 'toggle';
+$lang->resource->cron->delete      = 'delete';
 $lang->resource->cron->openProcess = 'restart';
 
 $lang->cron->methodOrder[5]  = 'index';

@@ -12,19 +12,6 @@
 class sonarqube extends control
 {
     /**
-     * The sonarqube constructor.
-     * @param string $moduleName
-     * @param string $methodName
-     */
-    public function __construct($moduleName = '', $methodName = '')
-    {
-        parent::__construct($moduleName, $methodName);
-
-        /* Optional: common::setMenuVars('devops', $this->session->repoID); */
-        $this->loadModel('ci')->setMenu();
-    }
-
-    /**
      * Browse sonarqube.
      *
      * @param  string $orderBy
@@ -50,6 +37,24 @@ class sonarqube extends control
     }
 
     /**
+     * Ajax get project list.
+     *
+     * @param  int    $engine
+     * @access public
+     * @return void
+     */
+    public function ajaxGetProjectList($sonarqubeID)
+    {
+        $projectList  = $this->loadModel('sonarqube')->getList($sonarqubeID);
+        $projectPairs = array(0 => '');
+        foreach($projectList as $project)
+        {
+            $projectPairs[$project->id] = $project->name;
+        }
+        echo html::select('projectKey', $projectPairs, '', "class='form-control chosen' required");
+    }
+    
+    /**
      * create a sonarqube.
      *
      * @access public
@@ -63,8 +68,7 @@ class sonarqube extends control
             $sonarqubeID = $this->loadModel('pipeline')->create('sonarqube');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action');
-            $actionID = $this->action->create('sonarqube', $sonarqubeID, 'created');
+            $actionID = $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -95,5 +99,17 @@ class sonarqube extends control
 
         if(!isset($result->valid) or !$result->valid) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->sonarqube->validError))));
         $this->post->set('token', $token);
+    }
+
+    /**
+     * Exec job.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function execJob($jobID)
+    {
+        echo $this->fetch('job', 'exec', "jobID=$jobID");
     }
 }
