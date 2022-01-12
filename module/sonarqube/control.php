@@ -63,8 +63,7 @@ class sonarqube extends control
             $sonarqubeID = $this->loadModel('pipeline')->create('sonarqube');
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-            $this->loadModel('action');
-            $actionID = $this->action->create('sonarqube', $sonarqubeID, 'created');
+            $actionID = $this->loadModel('action')->create('sonarqube', $sonarqubeID, 'created');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -95,5 +94,17 @@ class sonarqube extends control
 
         if(!isset($result->valid) or !$result->valid) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->sonarqube->validError))));
         $this->post->set('token', $token);
+    }
+
+    /**
+     * Exec job.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function execJob($jobID)
+    {
+        echo $this->fetch('job', 'exec', "jobID=$jobID");
     }
 }

@@ -83,7 +83,8 @@ class repo extends control
         $repoID = $this->repo->saveState(0, $objectID);
         if($this->viewType !== 'json') $this->commonAction($repoID, $objectID);
 
-        $repoList = $this->repo->getList(0, '', $orderBy);
+        $repoList      = $this->repo->getList(0, '', $orderBy);
+        //$sonarRepoList = $this->loadModel('sonarqube')->getSonarqubeByRepo(array_keys($repoList));
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
@@ -95,11 +96,12 @@ class repo extends control
         $this->view->position[] = $this->lang->repo->common;
         $this->view->position[] = $this->lang->repo->browse;
 
-        $this->view->orderBy  = $orderBy;
-        $this->view->objectID = $objectID;
-        $this->view->pager    = $pager;
-        $this->view->repoList = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
-        $this->view->products = $this->loadModel('product')->getPairs();
+        $this->view->orderBy       = $orderBy;
+        $this->view->objectID      = $objectID;
+        $this->view->pager         = $pager;
+        $this->view->repoList      = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
+        $this->view->products      = $this->loadModel('product')->getPairs();
+        //$this->view->sonarRepoList = $sonarRepoList;
 
         $this->display();
     }
