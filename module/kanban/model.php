@@ -313,6 +313,11 @@ class kanbanModel extends model
 
         $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
+        /* Add kanban cell. */
+        $lanes    = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
+        $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
+        foreach($lanes as $laneID) $this->addKanbanCell($kanbanID, $laneID, $columnID, 'card');
+
         return $columnID;
     }
 
@@ -418,8 +423,6 @@ class kanbanModel extends model
             ->add('kanban', $kanbanID)
             ->add('region', $regionID)
             ->add('group', $groupID)
-            ->add('lane', $laneID)
-            ->add('column', $columnID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
@@ -444,6 +447,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+            $this->addKanbanCell($kanbanID, $laneID, $columnID, 'card', $cardID);
 
             return $cardID;
         }
@@ -953,19 +957,21 @@ class kanbanModel extends model
 
         if(empty($lanes)) return array();
 
-        foreach($lanes as $lane) $this->updateCards($lane);
+        foreach($lanes as $lane) $this->refreshCards($lane);
 
-        $columns = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('deleted')->eq(0)
-            ->andWhere('lane')->in(array_keys($lanes))
+        $columns = $this->dao->select('t1.cards, t1.lane, t2.id, t2.type, t2.name, t2.color, t2.limit, t2.parent')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.lane')->in(array_keys($lanes))
             ->orderBy('id_asc')
             ->fetchGroup('lane', 'id');
 
         /* Get parent column type pairs. */
-        $parentTypes = $this->dao->select('id, type')->from(TABLE_KANBANCOLUMN)
-            ->where('deleted')->eq(0)
-            ->andWhere('lane')->in(array_keys($lanes))
-            ->andWhere('parent')->eq(-1)
+        $parentTypes = $this->dao->select('t2.id, t2.type')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.lane')->in(array_keys($lanes))
+            ->andWhere('t2.parent')->eq(-1)
             ->fetchPairs('id', 'type');
 
         /* Get group objects. */
@@ -1554,7 +1560,6 @@ class kanbanModel extends model
             }
         }
 
-        $cards = '';
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($type == 'story')
         {
@@ -1576,15 +1581,7 @@ class kanbanModel extends model
                 if($colType == 'develop') $devColumnID  = $colID;
                 if($colType == 'test')    $testColumnID = $colID;
 
-                if(strpos(',ready,develop,test,', $colType) === false)
-                {
-                    $storyStatus = $this->config->kanban->storyColumnStatusList[$colType];
-                    $storyStage  = $this->config->kanban->storyColumnStageList[$colType];
-                    foreach($objects as $storyID => $story)
-                    {
-                        if($story->status == $storyStatus and $story->stage == $storyStage) $cards .= $storyID . ',';
-                    }
-                }
+                if(strpos(',develop,test,', $colType) === false) $this->addKanbanCell($executionID, $laneID, $colID, 'story');
             }
         }
         elseif($type == 'bug')
@@ -1606,25 +1603,7 @@ class kanbanModel extends model
                 if($colType == 'resolving') $resolvingColumnID = $colID;
                 if($colType == 'test')      $testColumnID      = $colID;
 
-                if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
-                {
-                    $bugStatus = $this->config->kanban->bugColumnStatusList[$colType];
-                    foreach($objects as $bugID => $bug)
-                    {
-                        if($colType == 'unconfirmed' and $bug->status == $bugStatus and $bug->confirmed == 0)
-                        {
-                            $cards .= $bugID . ',';
-                        }
-                        elseif($colType == 'confirmed' and $bug->status == $bugStatus and $bug->confirmed == 1)
-                        {
-                            $cards .= $bugID . ',';
-                        }
-                        elseif(strpos(',unconfirmed,confirmed,', $colType) === false and $bug->status == $bugStatus)
-                        {
-                            $cards .= $bugID . ',';
-                        }
-                    }
-                }
+                if(strpos(',resolving,test,', $colType) === false) $this->addKanbanCell($executionID, $laneID, $colID, 'bug');
             }
         }
         elseif($type == 'task')
@@ -1643,45 +1622,47 @@ class kanbanModel extends model
 
                 $colID = $this->dao->lastInsertId();
                 if($colType == 'develop') $devColumnID = $colID;
-            }
-
-            if(strpos(',develop,', $colType) === false)
-            {
-                $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
-                foreach($objects as $taskID => $task)
-                {
-                    if($task->status == $taskStatus) $cards .= $taskID . ',';
-                }
+                if($colType != 'develop') $this->addKanbanCell($executionID, $laneID, $colID, 'task');
             }
         }
-
-        if(!empty($cards)) $this->parkCards($executionID, $laneID, $colID, $cards, $type);
     }
 
     /**
-     * Park cards into kanban cell.
+     * Add kanban cell for new lane.
      * 
      * @param  int    $kanbanID 
      * @param  int    $laneID 
      * @param  int    $colID 
-     * @param  string $cards 
-     * @param  string $type 
+     * @param  string $type story|task|bug|card
      * @access public
      * @return void
      */
-    public function parkCards($kanbanID, $laneID, $colID, $cards, $type)
+    public function addKanbanCell($kanbanID, $laneID, $colID, $type, $cardID = 0)
     {
-        $cards = ',' . $cards;
+        $cell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('lane')->eq($laneID)
+            ->andWhere('`column`')->eq($colID)
+            ->andWhere('type')->eq($type)
+            ->fetch();
 
-        $cardGroup = new stdclass();
-        $cardGroup->kanban = $executionID;
-        $cardGroup->lane   = $laneID;
-        $cardGroup->column = $colID;
-        $cardGroup->type   = $type;
-        $cardGroup->cards  = $cards;
+        if(empty($cell))
+        {
+            $cell = new stdclass();
+            $cell->kanban = $kanbanID;
+            $cell->lane   = $laneID;
+            $cell->column = $colID;
+            $cell->type   = $type;
 
-        $this->dao->insert(TABLE_KANBANCELL)->data($cardGroup)->exec();
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+        }
+        else
+        {
+            $cell->cards = $cell->cards ? $cell->cards . "$carID," : ",$carID,";
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
+        }
     }
+
 
     /**
      * Create a default RD kanban.
@@ -1846,24 +1827,25 @@ class kanbanModel extends model
             ->andWhere('type')->eq($laneType)
             ->fetchAll('id');
 
-        foreach($lanes as $lane) $this->updateCards($lane);
+        foreach($lanes as $lane) $this->refreshCards($lane);
     }
 
     /**
-     * Update column cards.
+     * Refresh column cards.
      *
      * @param  object $lane
      * @access public
      * @return void
      */
-    public function updateCards($lane)
+    public function refreshCards($lane)
     {
         $laneType    = $lane->type;
         $executionID = $lane->execution;
-        $cardPairs = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('deleted')->eq(0)
-            ->andWhere('lane')->eq($lane->id)
-            ->fetchPairs('type' ,'cards');
+        $cardPairs   = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere('t1.lane')->eq($lane->id)
+            ->fetchPairs();
 
         if($laneType == 'story')
         {
@@ -1877,21 +1859,23 @@ class kanbanModel extends model
                         $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                     }
 
-                    if(strpos(',ready,develop,test,', $colType) !== false) continue;
+                    if(strpos(',ready,backlog,develop,test,', $colType) !== false) continue;
 
                     if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
                     {
                         $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                     }
-                    elseif($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
-                    {
-                        $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
-                    }
-                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false and $colType != 'backlog')
+                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
                 }
+
+                if($story->stage == 'projected' and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
+                {
+                    $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
+                }
+
             }
         }
         elseif($laneType == 'bug')
@@ -1966,9 +1950,16 @@ class kanbanModel extends model
             }
         }
 
+        $colPairs = $this->dao->select('t2.type, t2.id')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere('t1.lane')->eq($lane->id)
+            ->fetchPairs();
+
         foreach($cardPairs as $colType => $cards)
         {
-            $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('type')->eq($colType)->exec();
+            if(!isset($colPairs[$colType])) continue;
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('`column`')->eq($colPairs[$colType])->exec();
         }
 
         $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane->id)->exec();
@@ -2031,7 +2022,7 @@ class kanbanModel extends model
                 }
 
                 $this->dao->update(TABLE_KANBANLANE)->set('name')->eq($laneName)->where('id')->eq($laneID)->exec();
-                $this->updateCards($lane);
+                $this->refreshCards($lane);
 
                 $colorIndex += 1;
                 if($colorIndex == count($this->config->kanban->laneColorList)) $colorIndex = 0;
