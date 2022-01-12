@@ -26,39 +26,9 @@ $startTime = getTime();
 /* Instance the app. */
 $app = router::createApp('pms', dirname(__DIR__), 'router');
 
-// $_GET[$app->config->moduleVar] = 'cron';
-// $_GET[$app->config->methodVar] = 'ajaxExec';
-// $_SERVER['REQUEST_METHOD'] = 'GET';
-// $_SERVER['REQUEST_URI'] = '/';
-// $_GET['once'] = true;
-
-// $app->moduleName = 'cron';
-// $app->methodName = 'ajaxExec';
-
 /* Run the app. */
 $common = $app->loadCommon();
 
-// var_dump(1);
-/* Check entry. */
-// $common->checkEntry();
-// var_dump(2);
-// $common->loadConfigFromDB();
-// var_dump(3);
-
-/* Set default params. */
-// if(!$app->version) $config->requestType = 'GET';
-// $config->default->view = 'json';
-
-// $app->parseRequest();
-
-// /* Old version need check priv here, new version check priv in entry. */
-// if(!$app->version) $common->checkPriv();
-
-// $app->moduleName = 'cron';
-// $app->methodName = 'ajaxExec';
-
-// $app->parseRequest();
-// $common->checkPriv();
 $app->moduleName = 'cron';
 $app->methodName = 'ajaxExec';
 $app->setControlFile();
