@@ -19,8 +19,13 @@ foreach($regions as $region) $laneCount += $region->laneCount;
 
 js::set('regions', $regions);
 js::set('execution', $execution);
+js::set('productID', $productID);
 js::set('kanbanLang', $lang->kanban);
 js::set('kanbanlaneLang', $lang->kanbanlane);
+js::set('storyLang', $lang->story);
+js::set('executionLang', $lang->execution);
+js::set('bugLang', $lang->bug);
+js::set('taskLang', $lang->task);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('executionID', $execution->id);
@@ -35,6 +40,33 @@ $canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($region
 $canEditRegion   = commonModel::hasPriv('kanban', 'editRegion');
 $canDeleteRegion = commonModel::hasPriv('kanban', 'deleteRegion');
 $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
+$canCreateTask       = common::hasPriv('task',  'create');
+$canBatchCreateTask  = common::hasPriv('task',  'batchCreate');
+$canCreateBug        = common::hasPriv('bug',   'create');
+$canBatchCreateBug   = common::hasPriv('bug',   'batchCreate');
+$canCreateStory      = ($productID and common::hasPriv('story', 'create'));
+$canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
+$canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
+$canLinkStoryByPlane = ($productID and common::hasPriv('execution', 'importplanstories'));
+$hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane);
+$hasTaskButton       = ($canCreateTask or $canBatchCreateTask);
+$hasBugButton        = ($canCreateBug or $canBatchCreateBug);
+
+js::set('priv',
+    array(
+        'canCreateTask'       => $canCreateTask,
+        'canBatchCreateTask'  => $canBatchCreateTask,
+        'canCreateBug'        => $canCreateBug,
+        'canBatchCreateBug'   => $canBatchCreateBug,
+        'canCreateStory'      => $canCreateStory,
+        'canBatchCreateStory' => $canBatchCreateStory,
+        'canLinkStory'        => $canLinkStory,
+        'canLinkStoryByPlane' => $canLinkStoryByPlane,
+    )
+);
+js::set('hasStoryButton', $hasStoryButton);
+js::set('hasBugButton', $hasBugButton);
+js::set('hasTaskButton', $hasTaskButton);
 ?>
 
 <div id='mainMenu' class='clearfix'>
@@ -119,6 +151,20 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
     </div>
   </div>
 </div>
-<div id='archivedCards'></div>
-<div id='archivedColumns'></div>
+<div class="modal fade" id="linkStoryByPlan">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo '(' . $lang->execution->linkStoryByPlanTips . ')';?>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
+          <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toStoryButton'", 'btn btn-primary');?></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
 <?php include '../../common/view/footer.html.php';?>
