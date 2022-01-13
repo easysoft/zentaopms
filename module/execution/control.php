@@ -1271,6 +1271,7 @@ class execution extends control
             $this->lang->execution->execCode    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execCode);
             $this->lang->execution->execDesc    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execDesc);
             $this->lang->execution->copyExec    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyExec);
+            $this->lang->execution->create      = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->create);
             $this->lang->execution->copy        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->copy);
             $this->lang->execution->PM          = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->PM);
             $this->lang->execution->name        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->name);
