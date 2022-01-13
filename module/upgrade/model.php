@@ -741,6 +741,11 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('16.0.beta1'));
             $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
             $this->appendExec('16_0_beta1');
+        case '16_1':
+            $this->saveLogs('Execute 16_1');
+            $this->execSQL($this->getUpgradeFile('16.1'));
+            $this->moveKanbanData();
+            $this->appendExec('16_0_beta1');
         }
 
         $this->deletePatch();
@@ -5358,6 +5363,47 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Move kanban card data to kanbancell table. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function moveKanbanData()
+    {
+        $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
+
+        foreach($cards as $cardID => $card)
+        {
+            $oldCell = $this->dao->select('id,kanban,`column`,lane,card')->from(TABLE_KANBANCELL)
+                ->where('kanban')->eq($card->kanban)
+                ->andWhere('lane')->eq($card->lane)
+                ->andWhere('`column`')->eq($card->column)
+                ->fetch();
+
+            if(!empty($oldCell))
+            {
+                $oldCell->cards = $oldCell->cards . "$cardID,";
+                $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($oldCell->cards)->where('id')->eq($oldCell->id)->exec();
+            }
+            else
+            {
+                $cell = new stdclass();
+                $cell->kanban = $card->kanban;
+                $cell->lane   = $card->lane;
+                $cell->column = $card->column;
+                $cell->type   = 'card';
+                $cell->cards  = ",$cardID,";
+
+                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+            }
+        }
+
+        $lanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->gt(0)->fetchPairs();
+        $this->dao->delete()->from(TABLE_KANBANLANE)->where('execution')->gt(0)->exec();
+        $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($lanePairs)->exec();
     }
 
     /**
