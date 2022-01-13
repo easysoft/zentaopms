@@ -60,7 +60,7 @@ class sonarqube extends control
      */
     public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $projectList = $this->loadModel('sonarqube')->getAllProjectList($sonarqubeID);
+        $projectList = $this->loadModel('sonarqube')->apiGetProjects($sonarqubeID);
 
         $projectPairs = array('' => '');
         foreach($projectList as $project) $projectPairs[$project->key] = $project->name;
