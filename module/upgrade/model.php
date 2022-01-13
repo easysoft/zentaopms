@@ -741,6 +741,11 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('16.0.beta1'));
             $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
             $this->appendExec('16_0_beta1');
+        case '16_1':
+            $this->saveLogs('Execute 16_1');
+            $this->execSQL($this->getUpgradeFile('16.1'));
+            $this->moveKanbanData();
+            $this->appendExec('16_1');
         }
 
         $this->deletePatch();
@@ -5358,6 +5363,47 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Move kanban card data to kanbancell table. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function moveKanbanData()
+    {
+        $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
+
+        $cellGroup = array();
+        foreach($cards as $cardID => $card)
+        {
+            $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
+            $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
+            $cellGroup[$key] = $cards;
+        }
+
+        foreach($cellGroup as $key => $cards)
+        {
+            $key = explode('-', $key);
+            if(!is_array($key)) continue;
+
+            $cell = new stdclass();
+            $cell->kanban = $key[0];
+            $cell->lane   = $key[1];
+            $cell->column = $key[2];
+            $cell->type   = 'card';
+            $cell->cards  = $cards;
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+        }
+
+        $lanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->gt(0)->fetchPairs();
+        $this->dao->delete()->from(TABLE_KANBANLANE)->where('execution')->gt(0)->exec();
+        $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($lanePairs)->exec();
+
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `lane`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
     }
 
     /**
