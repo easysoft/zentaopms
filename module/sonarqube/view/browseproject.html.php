@@ -58,7 +58,9 @@
           <td class='text' title='<?php echo substr($sonarqubeProject->lastAnalysisDate, 0, 10);?>'><?php echo substr($sonarqubeProject->lastAnalysisDate, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            if(common::hasPriv('sonarqube', 'deleteProject')) echo html::a($this->createLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$sonarqubeProject->key"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn'");
+            /* Fix error when request type is PATH_INFO and the project key contains '-'.*/
+            $projectKey = str_replace('-', '*', $sonarqubeProject->key);
+            if(common::hasPriv('sonarqube', 'deleteProject')) echo html::a($this->createLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$projectKey"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn'");
             ?>
           </td>
         </tr>

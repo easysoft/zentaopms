@@ -189,7 +189,9 @@ class sonarqube extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDeleteProject, inlink('deleteProject', "sonarqubeID=$sonarqubeID&projectKey=$projectKey&confirm=yes")));
 
-        $reponse = $this->sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $projectKey = str_replace('*', '-', $projectKey);
+        $reponse    = $this->sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
 
         if(isset($reponse->errors)) return print(js::alert($reponse->errors[0]->msg));
 
