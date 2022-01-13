@@ -1277,7 +1277,6 @@ class execution extends control
             $this->lang->execution->code        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->code);
             $this->lang->execution->desc        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->desc);
             $this->lang->execution->copyTeamTip = str_replace(array($this->lang->execution->common, $this->lang->executionCommon), $this->lang->execution->kanban, $this->lang->execution->copyTeamTip);
-
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
