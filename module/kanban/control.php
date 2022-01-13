@@ -503,7 +503,10 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbanlane->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+            $laneType   = $this->kanban->getLaneById($laneID)->type;
+            $confirmTip = in_array($laneType, array('story', 'task', 'bug')) ? sprintf($this->lang->kanbanlane->confirmDeleteTip, $this->lang->{$laneType}->common) : $this->lang->kanbanlane->confirmDelete;
+
+            die(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
         }
         else
         {

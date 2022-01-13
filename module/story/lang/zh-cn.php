@@ -86,7 +86,6 @@ $lang->story->batchToTaskTips = "此操作会创建与所选{$lang->SRCommon}同
 $lang->story->successToTask   = '批量转任务成功';
 $lang->story->storyRound      = '第 %s 轮估算';
 
-$lang->story->common         = $lang->SRCommon;
 $lang->story->id             = '编号';
 $lang->story->parent         = '父需求';
 $lang->story->product        = "所属{$lang->productCommon}";
