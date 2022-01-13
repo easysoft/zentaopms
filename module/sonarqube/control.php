@@ -51,7 +51,7 @@ class sonarqube extends control
         $projectPairs = array('' => '');
         foreach($projectList as $project) $projectPairs[$project->key] = $project->name;
 
-        echo html::select('projectKey', $projectPairs, base64_decode($projectKey), "class='form-control chosen' required");
+        echo html::select('projectKey', $projectPairs, base64_decode($projectKey), "class='form-control chosen'");
     }
     
     /**
