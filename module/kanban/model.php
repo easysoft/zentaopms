@@ -1373,7 +1373,7 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
-        if($lane->type != 'common' and $mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type);
+        if($lane->type != 'common' and $mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
         return $laneID;
     }
 
@@ -1830,7 +1830,7 @@ class kanbanModel extends model
             if($type == 'test')    $testColumnID = $this->dao->lastInsertId();
             if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
 
-            $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
+            if($this->app->rawMethod == 'createRDKanban') $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
         }
     }
 

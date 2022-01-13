@@ -1290,6 +1290,12 @@ class actionModel extends model
                 }
                 $action->objectLink = helper::createLink($moduleName, $methodName, $params);
 
+                if($action->objectType == 'execution')
+                {
+                    $execution = $this->loadModel('execution')->getById($action->objectID);
+                    if($execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                }
+
                 if($action->objectType == 'doclib')
                 {
                     $docLib             = $this->dao->select('type,product,project,execution,deleted')->from(TABLE_DOCLIB)->where('id')->eq($action->objectID)->fetch();
