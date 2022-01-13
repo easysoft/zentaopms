@@ -71,4 +71,28 @@ class sonarqubeModel extends model
         $header = 'Authorization: Basic ' . $token;
         return json_decode(commonModel::http($url, null, array(), $header));
     }
+
+    /**
+     * Get all project list.
+     * 
+     * @param  int    $sonarqubeID 
+     * @access public
+     * @return array 
+     */
+    public function getAllProjectList($sonarqubeID)
+    {
+        list($url, $header) = $this->getApiBase($sonarqubeID);
+        $url    = sprintf($url, 'projects/search?ps=500&p=1');
+        $result = json_decode(commonModel::http($url, null, array(), $header[0]));
+
+        $projectList = zget($result, 'components', array());
+        $total       = isset($result->paging->total) ? $result->paging->total : 0;
+        for($i = 2; $i <= $total; $i++)
+        {
+            $url          = sprintf($url, 'projects/search?ps=500&p=' . $i);
+            $pageData     = json_decode(commonModel::http($url, null, array(), $header[0]));
+            $projectList += zget($pageData, 'components', array());
+        }
+        return (array)$projectList;
+    }
 }

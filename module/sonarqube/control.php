@@ -37,21 +37,21 @@ class sonarqube extends control
     }
 
     /**
-     * Ajax get project list.
+     * Ajax get project select.
      *
-     * @param  int    $engine
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
      * @access public
      * @return void
      */
-    public function ajaxGetProjectList($sonarqubeID)
+    public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $projectList  = $this->loadModel('sonarqube')->getList($sonarqubeID);
-        $projectPairs = array(0 => '');
-        foreach($projectList as $project)
-        {
-            $projectPairs[$project->id] = $project->name;
-        }
-        echo html::select('projectKey', $projectPairs, '', "class='form-control chosen' required");
+        $projectList = $this->loadModel('sonarqube')->getAllProjectList($sonarqubeID);
+
+        $projectPairs = array('' => '');
+        foreach($projectList as $project) $projectPairs[$project->key] = $project->name;
+
+        echo html::select('projectKey', $projectPairs, base64_decode($projectKey), "class='form-control chosen' required");
     }
     
     /**
