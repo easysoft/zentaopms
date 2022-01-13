@@ -901,6 +901,7 @@ class projectModel extends model
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
             $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
+            $lib->vision  = zget($project, 'vision', 'common');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -918,6 +919,7 @@ class projectModel extends model
                 $product->createdDate    = helper::now();
                 $product->status         = 'normal';
                 $product->createdVersion = $this->config->version;
+                $product->vision         = zget($project, 'vision', 'common');
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();

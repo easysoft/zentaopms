@@ -398,7 +398,7 @@ class story extends control
         if($storyID)
         {
             $story = $this->story->getById($storyID);
-            if($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) die(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if(($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) and $this->config->vision != 'lite') die(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         if(!empty($_POST))

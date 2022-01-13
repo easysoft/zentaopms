@@ -7,7 +7,6 @@ $lang->mainNav->menuOrder[35] = 'doc';
 $lang->mainNav->menuOrder[45] = 'system';
 $lang->mainNav->menuOrder[65] = 'admin';
 
-
 /* My menu. */
 $lang->my->menu           = new stdclass();
 $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
@@ -50,3 +49,6 @@ $lang->scrum->menu->settings['subMenu']              = new stdclass();
 $lang->scrum->menu->settings['subMenu']->view        = array('link' => "$lang->overview|project|view|project=%s", 'alias' => 'edit');
 $lang->scrum->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
+
+$lang->URCommon = '目标';
+$lang->SRCommon = '目标';

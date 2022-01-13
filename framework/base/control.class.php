@@ -780,8 +780,22 @@ class baseControl
              * 设置公共扩展。
              * set common extension.
              */
-            $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
-            $file2Included       = file_exists($commonActionExtFile) ? $commonActionExtFile : $moduleControlFile;
+            $file2Included = $moduleControlFile;
+
+            $commonActionExtFile = $actionExtPath['custom'] . strtolower($methodName) . '.php';
+            if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+
+            if(!empty($actionExtPath['vision']))
+            {
+                $commonActionExtFile = $actionExtPath['vision'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
+
+            if(!empty($actionExtPath['common']))
+            {
+                $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
 
             if(!empty($actionExtPath['site']))
             {

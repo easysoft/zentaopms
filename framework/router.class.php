@@ -139,6 +139,9 @@ class router extends baseRouter
      */
     public function setCommonLang()
     {
+        if(defined('COMMONLANGSETTED')) return true;
+        define('COMMONLANGSETTED', true);
+
         if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
         if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
         if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);

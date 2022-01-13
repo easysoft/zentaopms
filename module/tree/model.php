@@ -405,18 +405,16 @@ class treeModel extends model
 
         $manage  = $userFunc[1] == 'createManageLink' ? true : false;
         $product = $this->loadModel('product')->getById($rootID);
+
+        $onlyGetLinked = ($projectID and $this->config->vision != 'lite');
         if(strpos('story|bug|case', $type) !== false and $branch === 'all' and empty($projectID))
         {
             if($product->type != 'normal') $branches = array(BRANCH_MAIN => $this->lang->branch->main) + $this->loadModel('branch')->getPairs($rootID, 'noempty');
         }
         elseif(($type == 'story' and $this->app->rawModule == 'projectstory') or ($type == 'case' and $this->app->tab == 'project'))
         {
-            if($product->type != 'normal' and $projectID)
-            {
-                $branches += $this->branch->getPairs($product->id, 'noempty', $projectID);
-            }
-
-            $executionModules = $this->getTaskTreeModules($projectID, true, $type);
+            if($product->type != 'normal' and $projectID) $branches += $this->branch->getPairs($product->id, 'noempty', $projectID);
+            if($onlyGetLinked) $executionModules = $this->getTaskTreeModules($projectID, true, $type);
         }
 
         /* Add for task #1945. check the module has case or no. */
@@ -427,7 +425,7 @@ class treeModel extends model
         $stmt     = $this->dbh->query($this->buildMenuQuery($rootID, $type, $startModule, $branch));
         while($module = $stmt->fetch())
         {
-            if(!$projectID)
+            if(!$onlyGetLinked)
             {
                 $this->buildTree($treeMenu, $module, $type, $userFunc, $extra, $branch);
             }
