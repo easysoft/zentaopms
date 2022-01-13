@@ -11,7 +11,7 @@
  */
 ?>
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
-<?php include $app->getBasePath() . 'extension/biz/common/ext/view/calendar.html.php';?>
+<?php include $app->getExtensionRoot() . 'biz/common/ext/view/calendar.html.php';?>
 <style>
 #todoLists .todo-item[data-type="todo"] {padding-left: 5px;}
 </style>

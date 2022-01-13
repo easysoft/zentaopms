@@ -13,11 +13,15 @@ $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
 
+global $config;
+if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志|effort|calendar|', 'exclude' => 'my-todo');
+
 /* My menu order. */
 $lang->my->menuOrder     = array();
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-$lang->my->menuOrder[15] = 'task';
+if($config->edition != 'open') $lang->my->menuOrder[15] = 'effort';
+$lang->my->menuOrder[20] = 'task';
 
 $lang->my->dividerMenu = ',calendar,';
 
