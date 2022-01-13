@@ -12,6 +12,20 @@
 class sonarqube extends control
 {
     /**
+     * The mr constructor.
+     * @param string $moduleName
+     * @param string $methodName
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        /* Optional: common::setMenuVars('devops', $this->session->repoID); */
+        $this->loadModel('ci')->setMenu();
+    }
+
+    /**
      * Browse sonarqube.
      *
      * @param  string $orderBy
