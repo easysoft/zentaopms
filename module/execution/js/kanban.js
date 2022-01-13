@@ -221,7 +221,7 @@ function renderUserAvatar(user, objectType, objectID, size)
         var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
     }
 
-    if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
+    if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '" data-toggle="modal" data-width="80%"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
     if(!user.avatar && window.userList && window.userList[user.account]) user = {avatar: userList[user.account].avatar, account: user.account};
