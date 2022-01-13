@@ -1,11 +1,3 @@
-server:
-  command: "php psr-worker.php"
-
-http:
-  address: 0.0.0.0:8080
-  pool:
-    num_workers: 4
-
 service:
   cron:
     command: php cron-worker.php
