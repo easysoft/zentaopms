@@ -110,14 +110,13 @@ class sonarqube extends control
      */
     public function delete($sonarqubeID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "id=$sonarqubeID&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
 
         $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
         $this->loadModel('action');
-        $this->sonarqube->delete(TABLE_PIPELINE, $sonarqubeID);
+        $actionID = $this->loadModel('pipeline')->delete($sonarqubeID, 'sonarqube');
 
         $sonarQube = $this->sonarqube->getByID($sonarqubeID);
-        $actionID  = $this->action->create('sonarqube', $sonarqubeID, 'deleted');
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
         echo js::reload('parent');
