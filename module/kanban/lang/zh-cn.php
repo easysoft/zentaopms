@@ -86,6 +86,7 @@ $lang->kanban->cardCountTip  = '请输入卡片数量';
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';
+$lang->kanban->aclGroup['extend']  = '继承空间';
 
 $lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';

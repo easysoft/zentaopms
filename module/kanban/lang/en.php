@@ -86,6 +86,7 @@ $lang->kanban->cardCountTip  = 'Please enter the number of cards';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
+$lang->kanban->aclGroup['extend']  = 'Extend';
 
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
@@ -253,8 +254,8 @@ $lang->kanbanlane->WIPType   = 'Lane WIP Type';
 $lang->kanbanlane->confirmDelete    = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
 $lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After deleting the lane, all %s in the lane will be hidden.';
 
-$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
-$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
+$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column';
+$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 
 $lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive according to the card height)';
 $lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height based on number of cards)';

@@ -84,10 +84,8 @@
     <div class="table-empty-tip">
       <p>
         <span class="text-muted"><?php echo $lang->project->empty;?></span>
-        <?php if(isset($this->config->maxVersion) and !defined('TUTORIAL')):?>
+        <?php if(!defined('TUTORIAL')):?>
         <?php common::printLink('project', 'createGuide', "programID=$programID", '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info" data-toggle="modal" data-target="#guideDialog"');?>
-        <?php elseif($this->config->systemMode == 'new'):?>
-        <?php common::printLink('project', 'create', 'mode=scrum', '<i class="icon icon-plus"></i> ' . $lang->project->create, '', 'class="btn btn-info"');?>
         <?php else:?>
         <?php common::printLink('execution', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->execution->create, '', 'class="btn btn-info"');?>
         <?php endif;?>
@@ -102,9 +100,11 @@
           <span class="label label-<?php echo $status;?>"><?php echo $lang->project->statusList[$status];?></span>
         </div>
         <div class='panel-heading'>
-          <?php if(isset($config->maxVersion) and $project->model === 'waterfall'):?>
+          <?php if($project->model === 'waterfall'):?>
           <span class='project-type-label label label-warning label-outline'><i class='icon icon-waterfall'></i></span>
-          <?php elseif(isset($config->maxVersion)):?>
+          <?php elseif($project->model === 'kanban'):?>
+          <span class='project-type-label label label-info label-outline'><i class='icon icon-kanban'></i></span>
+          <?php else:?>
           <span class='project-type-label label label-info label-outline'><i class='icon icon-sprint'></i></span>
           <?php endif;?>
           <strong class='project-name' title='<?php echo $project->name;?>'><?php echo html::a(helper::createLink('project', 'index', "projectID=$projectID"), $project->name);?></strong>
@@ -174,7 +174,9 @@
                 <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
                 <ul class='dropdown-menu pull-right'>
                   <?php
-                  common::printIcon('project', 'edit',     "projectID=$project->id", $project, 'list', 'edit',  '', 'btn-action');
+                  $iframe   = $project->model == 'kanban' ? ' iframe' : '';
+                  $onlyBody = $project->model == 'kanban' ? true : '';
+                  common::printIcon('project', 'edit',     "projectID=$project->id", $project, 'list', 'edit',  '', 'btn-action' . $iframe, $onlyBody);
                   common::printIcon('project', 'start',    "projectID=$project->id", $project, 'list', 'play',  '', 'iframe btn-action', true);
                   common::printIcon('project', 'suspend',  "projectID=$project->id", $project, 'list', 'pause', '', 'iframe btn-action', true);
                   common::printIcon('project', 'close',    "projectID=$project->id", $project, 'list', 'off',   '', 'iframe btn-action', true);
