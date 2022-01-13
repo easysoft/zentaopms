@@ -198,10 +198,11 @@ $(document).ready(function()
     $(document).on('change', '#sonarqubeServer', function()
     {
         var sonarqubeID = $(this).val();
+        var projectKey  = sonarqubeID == job.sonarqubeServer ? job.projectKey.replace(/-/g, '*') : '';
         $('#sonarProject #projectKey').remove();
         $('#sonarProject #projectKey_chosen').remove();
         $('#sonarProject .input-group').append("<div class='load-indicator loading'></div>");
-        $.getJSON(createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(html)
+        $.get(createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID + '&projectKey=' + projectKey), function(html)
         {
             $('#sonarProject .loading').remove();
             $('#sonarProject .input-group').append(html);
@@ -253,6 +254,6 @@ $(document).ready(function()
     $('#engine').change();
     $('#jkServer').change();
     $('#frame').change();
-
+    $('#sonarqubeServer').change();
     $('#triggerType').change();
 });

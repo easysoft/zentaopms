@@ -32,7 +32,7 @@
       <thead>
         <tr>
           <?php $vars = "orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
-          <th class='c-id'><?php common::printOrderLink('id', $orderBy, $vars, $lang->sonarqube->id);?></th>
+          <th class='c-id text-center'><?php common::printOrderLink('id', $orderBy, $vars, $lang->sonarqube->id);?></th>
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->name);?></th>
           <th class='text-left'><?php common::printOrderLink('url', $orderBy, $vars, $lang->sonarqube->url);?></th>
           <th class='c-actions-3'><?php echo $lang->actions;?></th>

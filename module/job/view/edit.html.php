@@ -101,9 +101,9 @@
           </tr>
           <tr id='sonarProject' class='sonarqube hide'>
             <th><?php echo $lang->job->projectKey;?></th>
-            <td>
+            <td class="required">
               <div class='input-group'>
-                <?php echo html::select('projectKey', array('' => ''), '', "class='form-control chosen' required");?>
+                <?php echo html::select('projectKey', array('' => ''), '', "class='form-control chosen'");?>
               </div>
             </td>
             <td colspan="2"></td>

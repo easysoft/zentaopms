@@ -12,6 +12,20 @@
 class sonarqube extends control
 {
     /**
+     * The mr constructor.
+     * @param string $moduleName
+     * @param string $methodName
+     */
+    public function __construct($moduleName = '', $methodName = '')
+    {
+        parent::__construct($moduleName, $methodName);
+
+        /* This is essential when changing tab(menu) from gitlab to repo. */
+        /* Optional: common::setMenuVars('devops', $this->session->repoID); */
+        $this->loadModel('ci')->setMenu();
+    }
+
+    /**
      * Browse sonarqube.
      *
      * @param  string $orderBy
@@ -37,21 +51,21 @@ class sonarqube extends control
     }
 
     /**
-     * Ajax get project list.
+     * Ajax get project select.
      *
-     * @param  int    $engine
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
      * @access public
      * @return void
      */
-    public function ajaxGetProjectList($sonarqubeID)
+    public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $projectList  = $this->loadModel('sonarqube')->getList($sonarqubeID);
-        $projectPairs = array(0 => '');
-        foreach($projectList as $project)
-        {
-            $projectPairs[$project->id] = $project->name;
-        }
-        echo html::select('projectKey', $projectPairs, '', "class='form-control chosen' required");
+        $projectList = $this->loadModel('sonarqube')->apiGetProjects($sonarqubeID);
+
+        $projectPairs = array('' => '');
+        foreach($projectList as $project) $projectPairs[$project->key] = $project->name;
+
+        echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
     }
 
     /**
@@ -110,14 +124,13 @@ class sonarqube extends control
      */
     public function delete($sonarqubeID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "id=$sonarqubeID&confirm=yes")));
+        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
 
         $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
         $this->loadModel('action');
-        $this->sonarqube->delete(TABLE_PIPELINE, $sonarqubeID);
+        $actionID = $this->loadModel('pipeline')->delete($sonarqubeID, 'sonarqube');
 
         $sonarQube = $this->sonarqube->getByID($sonarqubeID);
-        $actionID  = $this->action->create('sonarqube', $sonarqubeID, 'deleted');
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
         echo js::reload('parent');

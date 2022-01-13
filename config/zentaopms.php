@@ -291,6 +291,9 @@ $config->objectTables['kanbanlane']   = TABLE_KANBANLANE;
 $config->objectTables['kanbanorder']  = TABLE_KANBANORDER;
 $config->objectTables['kanbangroup']  = TABLE_KANBANGROUP;
 $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
+$config->objectTables['sonarqube']    = TABLE_PIPELINE;
+$config->objectTables['gitlab']       = TABLE_PIPELINE;
+$config->objectTables['jebkins']      = TABLE_PIPELINE;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 
