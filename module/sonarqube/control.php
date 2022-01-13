@@ -67,7 +67,7 @@ class sonarqube extends control
 
         echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
     }
-    
+
     /**
      * create a sonarqube.
      *
@@ -116,6 +116,27 @@ class sonarqube extends control
     }
 
     /**
+     * Delete a sonarqube.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return void
+     */
+    public function delete($sonarqubeID, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
+
+        $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $this->loadModel('action');
+        $actionID = $this->loadModel('pipeline')->delete($sonarqubeID, 'sonarqube');
+
+        $sonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $changes   = common::createChanges($oldSonarQube, $sonarQube);
+        $this->action->logHistory($actionID, $changes);
+        echo js::reload('parent');
+    }
+
+    /**
      * Exec job.
      *
      * @param  int    $jobID
@@ -128,24 +149,43 @@ class sonarqube extends control
     }
 
     /**
-     * Delete a sonarqube.
+     * Browse sonarqube project.
      *
      * @param  int    $sonarqubeID
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
-    public function delete($sonarqubeID, $confirm = 'no')
+    public function browseProject($sonarqubeID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "id=$sonarqubeID&confirm=yes")));
+        $this->app->loadClass('pager', $static = true);
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
-        $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
-        $this->loadModel('action');
-        $this->sonarqube->delete(TABLE_PIPELINE, $sonarqubeID);
+        $sonarqubeProjectList = $this->sonarqube->apiGetProjects($sonarqubeID, $keyword);
+        foreach($sonarqubeProjectList as $key => $sonarqubeProject) !isset($sonarqubeProject->lastAnalysisDate) ? $sonarqubeProject->lastAnalysisDate = '' : '';
 
-        $sonarQube = $this->sonarqube->getByID($sonarqubeID);
-        $actionID  = $this->action->create('sonarqube', $sonarqubeID, 'deleted');
-        $changes   = common::createChanges($oldSonarQube, $sonarQube);
-        $this->action->logHistory($actionID, $changes);
-        echo js::reload('parent');
+         /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($sonarqubeProjectList as $sonarqubeProject) $orderList[] = $sonarqubeProject->$order;
+        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeProjectList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($sonarqubeProjectList);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
+
+        $this->view->sonarqube            = $this->sonarqube->getByID($sonarqubeID);
+        $this->view->keyword              = urldecode(urldecode($keyword));
+        $this->view->pager                = $pager;
+        $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
+        $this->view->sonarqubeID          = $sonarqubeID;
+        $this->view->sonarqubeProjectList = empty($sonarqubeProjectList) ? $sonarqubeProjectList: $sonarqubeProjectList[$pageID - 1];
+        $this->view->orderBy              = $orderBy;
+        $this->display();
     }
 }
