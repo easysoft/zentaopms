@@ -35,7 +35,7 @@
     <div class='kanban-cards'>
       <?php foreach($executionStats as $index => $execution):?>
         <?php $executionStatus = $this->processStatus('execution', $execution);?>
-        <div id="execution-<?php echo $execution->id;?>" class='kanban-card col' data-url='<?php echo $this->createLink('execution', 'view', "executionID=$execution->id");?>'>
+        <div id="execution-<?php echo $execution->id;?>" class='kanban-card col' data-url='<?php echo $this->createLink('execution', 'kanban', "executionID=$execution->id");?>'>
           <div class="panel">
             <div class="panel-heading">
               <span class="label execution-status-<?php echo $execution->status;?>"><?php echo $executionStatus;?></span>
