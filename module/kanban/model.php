@@ -1815,7 +1815,6 @@ class kanbanModel extends model
         foreach($columnList as $type => $name)
         {
             $data = new stdClass();
-            $data->lane   = $laneID;
             $data->name   = $name;
             $data->color  = '#333';
             $data->type   = $type;
