@@ -35,7 +35,7 @@
     <div class='kanban-cards'>
       <?php foreach($executionStats as $index => $execution):?>
         <?php $executionStatus = $this->processStatus('execution', $execution);?>
-        <div id="execution-<?php echo $execution->id;?>" class='kanban-card col'>
+        <div id="execution-<?php echo $execution->id;?>" class='kanban-card col' data-url='<?php echo $this->createLink('execution', 'view', "executionID=$execution->id");?>'>
           <div class="panel">
             <div class="panel-heading">
               <span class="label execution-status-<?php echo $execution->status;?>"><?php echo $executionStatus;?></span>
@@ -117,6 +117,14 @@
 .kanban-card .execution-acl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
 </style>
 <script>
+/* Make cards clickable. */
+$('.kanban-cards').on('click', '.kanban-card', function(e)
+{
+    if(!$(e.target).closest('.kanban-actions').length)
+    {
+        window.location.href = $(this).data('url');
+    }
+});
 $('execution-status-doing').addClass('label-success');
 $('execution-status-suspended').addClass('label-warning');
 </script>
