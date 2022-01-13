@@ -36,7 +36,7 @@
         </th>
         <th class='c-id-sm'><?php echo $lang->idAB;?></th>
         <th class='c-pri'>  <?php echo $lang->priAB;?></th>
-        <th><?php echo $lang->testcase->title;?></th>
+        <th class='c-title text-left'><?php echo $lang->testcase->title;?></th>
         <th class='c-type'> <?php echo $lang->typeAB;?></th>
         <th class='c-user'> <?php echo $lang->testtask->lastRunAccount;?></th>
         <th class='c-date'><?php echo $lang->testtask->lastRunTime;?></th>
