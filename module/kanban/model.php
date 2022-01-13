@@ -1830,7 +1830,7 @@ class kanbanModel extends model
             if($type == 'test')    $testColumnID = $this->dao->lastInsertId();
             if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
 
-            if($this->app->rawMethod == 'createRDKanban') $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
+            $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
         }
     }
 
