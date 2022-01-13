@@ -2277,6 +2277,7 @@ class executionModel extends model
      */
     public function linkStory($executionID, $stories = array(), $products = array())
     {
+        if(empty($executionID)) return false;
         if(empty($stories)) $stories = $this->post->stories;
         if(empty($stories)) return false;
         if(empty($products)) $products = $this->post->products;
