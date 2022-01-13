@@ -12,6 +12,17 @@
 
 class sonarqubeModel extends model
 {
+   /**
+     * Get a sonarqube by id.
+     *
+     * @param  int $id
+     * @access public
+     * @return object
+     */
+    public function getByID($id)
+    {
+        return $this->loadModel('pipeline')->getByID($id);
+    }
 
     /**
      * Get sonarqube list.
@@ -48,7 +59,7 @@ class sonarqubeModel extends model
      */
     public function getApiBase($sonarqubeID)
     {
-        $sonarqube = $this->loadModel('pipeline')->getByID($sonarqubeID);
+        $sonarqube = $this->getByID($sonarqubeID);
         if(!$sonarqube) return '';
 
         $url      = rtrim($sonarqube->url, '/') . '/api/%s';
@@ -70,5 +81,32 @@ class sonarqubeModel extends model
         $url    = rtrim($host, '/') . "/api/authentication/validate";
         $header = 'Authorization: Basic ' . $token;
         return json_decode(commonModel::http($url, null, array(), $header));
+    }
+
+    /**
+     * Get projects of one sonarqube.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $keyword
+     * @access public
+     * @return array
+     */
+    public function apiGetProjects($sonarqubeID, $keyword = '')
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return array();
+
+        $url = sprintf($apiRoot, "projects/search");
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $result = json_decode(commonModel::http($url. "?p={$page}&ps=500" . ($keyword ? "&q={$keyword}" : ''), null, array(), $header));
+            if(!isset($result->components)) break;
+            if(!empty($result->components)) $allResults = array_merge($allResults, $result->components);
+            if(count($result->components) < 500) break;
+        }
+
+        return $allResults;
     }
 }
