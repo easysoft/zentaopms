@@ -1953,9 +1953,9 @@ class testtaskModel extends model
                     {
                         $result->stepResults[0]['real'] = (string)$matchNode->$failure;
                     }
-                    elseif(isset($matchNode->$failure[0]))
+                    elseif(isset($matchNode->{$failure}[0]))
                     {
-                        $result->stepResults[0]['real'] = (string)$matchNode->$failure[0];
+                        $result->stepResults[0]['real'] = (string)$matchNode->{$failure}[0];
                     }
                     else
                     {

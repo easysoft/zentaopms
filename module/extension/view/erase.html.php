@@ -26,7 +26,7 @@
         <h3><?php echo $title;?></h3>
         <?php if($removeCommands):?>
         <p><strong><?php echo $lang->extension->unremovedFiles;?></strong></p>
-        <p><?php echo join($removeCommands, '<br />');?></p>
+        <p><?php echo join('<br />', $removeCommands);?></p>
         <?php endif;?>
         <p class='text-center'><?php echo html::commonButton($lang->extension->viewAvailable, 'onclick=parent.location.href="' . inlink('browse', 'type=available') . '"');?></p>
       </div>
