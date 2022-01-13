@@ -1,4 +1,3 @@
-
 /** Change kanban scale size */
 function changeKanbanScaleSize(newScaleSize)
 {
@@ -94,15 +93,15 @@ function createColumnCreateMenu(options)
 
     if(col.type == 'backlog')
     {
-        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID)});
-        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID)});
-        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + 'objectType=kanban'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+        if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID)});
-        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID)});
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
     }
     else if(col.type == 'wait')
     {
@@ -559,6 +558,42 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 }
 
 /**
+ * Handle drop task.
+ *
+ * @param  object $element
+ * @param  object $event
+ * @param  object $kanban
+ * @access public
+ * @return void
+ */
+function handleDropTask($element, event, kanban)
+{
+    if(!event.target || !event.isNew) return;
+
+    var $card    = $element;
+    var $oldCol  = $card.closest('.kanban-col');
+    var $newCol  = $(event.target).closest('.kanban-col');
+    var oldCol   = $oldCol.data();
+    var newCol   = $newCol.data();
+    var oldLane  = $oldCol.closest('.kanban-lane').data('lane');
+    var newLane  = $newCol.closest('.kanban-lane').data('lane');
+    var cardType = $card.find('.kanban-card').data('type');
+
+    if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
+
+    var cardID      = $card.data().id;
+    var fromColType = $oldCol.data('type');
+    var toColType   = $newCol.data('type');
+
+    changeCardColType(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, cardType, fromColType, toColType);
+}
+
+var kanbanActionHandlers =
+{
+    dropItem: handleDropTask
+};
+
+/**
  * Handle kanban action
  */
 function handleKanbanAction(action, $element, event, kanban)
@@ -566,6 +601,173 @@ function handleKanbanAction(action, $element, event, kanban)
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
+}
+
+/**
+ * changeCardColType
+ *
+ * @param  int    $cardID
+ * @param  int    $fromColID
+ * @param  int    $toColID
+ * @param  int    $fromLaneID
+ * @param  int    $toLaneID
+ * @param  string $cardType
+ * @param  string $fromColType
+ * @param  string $toColType
+ * @access public
+ * @return void
+ */
+function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, cardType, fromColType, toColType)
+{
+    var objectID   = cardID;
+    var showIframe = false;
+    var moveCard   = false;
+
+    /* Task lane. */
+    if(cardType == 'task')
+    {
+        if(toColType == 'developed')
+        {
+            if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
+            {
+                var link   = createLink('task', 'finish', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'pause')
+        {
+            if(fromColType == 'developing' && priv.canPauseTask)
+            {
+                var link = createLink('task', 'pause', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'developing')
+        {
+            if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            {
+                var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+            if(fromColType == 'wait' && priv.canStartTask)
+            {
+                var link = createLink('task', 'start', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'canceled')
+        {
+            if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
+            {
+                var link = createLink('task', 'cancel', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'closed')
+        {
+            if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
+            {
+                var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+    }
+
+    /* Bug lane. */
+    if(cardType == 'bug')
+    {
+        if(toColType == 'confirmed')
+        {
+            if(fromColType == 'unconfirmed' && priv.canConfirmBug)
+            {
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'fixing')
+        {
+            if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
+            if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
+            {
+                var link = createLink('bug', 'activate', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'fixed')
+        {
+            if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
+            {
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+        else if(toColType == 'testing')
+        {
+            if(fromColType == 'fixed') moveCard = true;
+        }
+        else if(toColType == 'tested')
+        {
+            if(fromColType == 'fixed' || fromColType == 'testing') moveCard = true;
+        }
+        else if(toColType == 'closed')
+        {
+            if(fromColType == 'testing' || fromColType == 'tested')
+            {
+                var link = createLink('bug', 'close', 'bugID=' + objectID, '', true);
+                showIframe = true;
+            }
+        }
+
+        if(moveCard)
+        {
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            $.get(link, function(data)
+            {
+                if(data)
+                {
+                    kanbanGroup = $.parseJSON(data);
+                    if(groupBy == 'default')
+                    {
+                        updateKanban('bug', kanbanGroup.bug);
+                    }
+                    else
+                    {
+                        updateKanban(browseType, kanbanGroup[groupBy]);
+                    }
+                }
+            })
+        }
+    }
+
+    /* Story lane. */
+    if(cardType == 'story')
+    {
+        if(toColType == 'ready' || toColType == 'backlog')
+        {
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
+            $.get(link, function(data)
+            {
+                if(data)
+                {
+                    kanbanGroup = $.parseJSON(data);
+                    if(groupBy == 'default')
+                    {
+                        updateKanban('story', kanbanGroup.story);
+                    }
+                    else
+                    {
+                        updateKanban(browseType, kanbanGroup[groupBy]);
+                    }
+                }
+            })
+        }
+    }
+
+    if(showIframe)
+    {
+        var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
+        modalTrigger.show();
+    }
 }
 
 function processMinusBtn()
@@ -697,6 +899,16 @@ $(function()
     $(window).on('scroll', function()
     {
         $.zui.ContextMenu.hide();
+    });
+
+    $('#toStoryButton').on('click', function()
+    {
+        var planID = $('#plan').val();
+        if(planID)
+        {
+            location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban');
+            $.closeModal();
+        }
     });
 
     $(document).on('click', '#splitTable .btn-plus', function()
