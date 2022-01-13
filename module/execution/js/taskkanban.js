@@ -689,7 +689,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
  */
 function handleDropTask($element, event, kanban)
 {
-    if(!event.target || !event.isNew) return;
+    if(!event.target) return;
 
     var $card    = $element;
     var $oldCol  = $card.closest('.kanban-col');
@@ -984,6 +984,8 @@ $(function()
         onRenderLaneName:  renderLaneName,
         onRenderCount:     renderColumnCount
     };
+
+    if(groupBy != 'default') commonOptions.droppable = false;
 
     /* Create kanban */
     if(groupBy == 'default')

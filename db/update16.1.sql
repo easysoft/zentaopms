@@ -11,8 +11,5 @@ CREATE TABLE `zt_kanbancell` (
 
 ALTER TABLE `zt_kanban` ADD `displayCards` smallint(6) NOT NULL default '0' AFTER `order`;
 ALTER TABLE `zt_project` ADD `displayCards` smallint(6) NOT NULL default '0' AFTER `order`;
-ALTER TABLE `zt_kanbancard` DROP COLUMN `lane`;
-ALTER TABLE `zt_kanbancard` DROP COLUMN `column`;
-ALTER TABLE `zt_kanbancolumn` DROP `lane`;
 
 UPDATE `zt_grouppriv` SET `method` = 'taskKanban' WHERE `module` = 'execution' AND `method` = 'kanban';
