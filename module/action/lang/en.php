@@ -134,6 +134,7 @@ $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
 $lang->action->objectTypes['kanbanlane']       = 'Kanban Lane';
 $lang->action->objectTypes['kanbancolumn']     = 'Kanban Column';
 $lang->action->objectTypes['kanbancard']       = 'Kanban Card';
+$lang->action->objectTypes['sonarqube']        = 'SonarQube Server';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
