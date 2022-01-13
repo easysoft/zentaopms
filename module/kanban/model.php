@@ -1850,21 +1850,23 @@ class kanbanModel extends model
                         $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                     }
 
-                    if(strpos(',ready,develop,test,', $colType) !== false) continue;
+                    if(strpos(',ready,backlog,develop,test,', $colType) !== false) continue;
 
                     if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
                     {
                         $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                    }
-                    elseif($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
-                    {
-                        $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
                     }
                     elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
                 }
+
+                if($story->stage == 'projected' and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
+                {
+                    $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
+                }
+
             }
         }
         elseif($laneType == 'bug')
