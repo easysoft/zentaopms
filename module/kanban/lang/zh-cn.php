@@ -250,7 +250,8 @@ $lang->kanbanlane->otherlane = '选择共享看板列的泳道';
 $lang->kanbanlane->color     = '泳道颜色';
 $lang->kanbanlane->WIPType   = '泳道在制品类型';
 
-$lang->kanbanlane->confirmDelete = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
+$lang->kanbanlane->confirmDelete    = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
+$lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳道后，该泳道中所有的%s将被隐藏。';
 
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';

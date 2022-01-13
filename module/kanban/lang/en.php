@@ -250,7 +250,8 @@ $lang->kanbanlane->otherlane = 'Select Existed Lane';
 $lang->kanbanlane->color     = 'Lane Color';
 $lang->kanbanlane->WIPType   = 'Lane WIP Type';
 
-$lang->kanbanlane->confirmDelete = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
+$lang->kanbanlane->confirmDelete    = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
+$lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After deleting the lane, all %s in the lane will be hidden.';
 
 $lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
 $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
