@@ -18,7 +18,7 @@
     <?php
       foreach($lang->project->featureBar as $label => $labelName)
       {
-          $active = $browseType == $label ? 'btn-active-text' : ''; 
+          $active = $browseType == $label ? 'btn-active-text' : '';
           echo html::a($this->createLink('project', 'index', "projectID=$project->id&browseType=" . $label), '<span class="text">' . $labelName . '</span> ' . ($browseType == $label ? "<span class='label label-light label-badge'>0</span>" : ''), '', "class='btn btn-link $active'");
       }
     ?>
@@ -31,12 +31,13 @@
   <div class="row cell" id='cards'>
     <?php if(empty($kanbanList)):?>
     <div class="table-empty-tip">
-      <p> 
+      <p>
         <span class="text-muted"><?php echo $lang->noData;?></span>
         <?php common::printLink('execution', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i> ' . $lang->project->createKanban, '', 'class="btn btn-info"');?>
       </p>
     </div>
     <?php else:?>
+    <?php $kanbanCount = 0;?>
     <?php foreach ($kanbanList as $kanbanID => $kanban):?>
     <div class='col' data-id='<?php echo $kanbanID?>'>
       <div class='panel'>
@@ -45,6 +46,33 @@
              <span class="label label-closed"><?php echo zget($lang->execution->statusList, $kanban->status);?></span>
              <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
            </div>
+           <?php
+           $canActions = (common::hasPriv('project','edit') or !empty($executionActions[$kanbanID]));
+           $kanbanCount ++;
+           ?>
+           <?php if($canActions):?>
+           <div class='kanban-actions kanban-actions<?php echo $kanbanID;?>'>
+             <div class='dropdown'>
+               <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
+               <ul class='dropdown-menu <?php echo $kanbanCount % 4 == 0 ? 'pull-left' : 'pull-right';?>'>
+                 <?php
+                 if(common::hasPriv('project','edit'))
+                 {
+                     $this->app->loadLang('kanban');
+                     echo '<li>';
+                     common::printLink('project', 'edit',   "projectID={$project->id}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
+                     echo '</li>';
+                 }
+                 if(in_array('start', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'start', "executionID=$kanbanID", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                 if(in_array('putoff', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'putoff', "executionID=$kanbanID", '', true), '<i class="icon icon-calendar"></i>' . $lang->execution->putoff, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                 if(in_array('suspend', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'suspend', "executionID=$kanbanID", '', true), '<i class="icon icon-pause"></i>' . $lang->execution->suspend, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                 if(in_array('close', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'close', "executionID=$kanbanID", '', true), '<i class="icon icon-off"></i>' . $lang->execution->close, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                 if(in_array('activate', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'activate', "executionID=$kanbanID", '', true), '<i class="icon icon-magic"></i>' . $lang->execution->activate, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                 ?>
+               </ul>
+             </div>
+           </div>
+           <?php endif;?>
         </div>
         <div class='panel-body'>
           <div class='kanban-desc' title="<?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?>"><?php echo strip_tags(htmlspecialchars_decode($kanban->desc));?></div>

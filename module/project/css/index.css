@@ -22,3 +22,7 @@
 #cards .kanban-members > span:after {right: -4px;}
 #cards .kanban-members-total {display: inline-block; margin-left: 6px; position: relative; top: 3px}
 #cards .kanbanAcl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
+
+.kanbans .kanban-actions {float: right; visibility: hidden;}
+.kanbans .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
+.kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
