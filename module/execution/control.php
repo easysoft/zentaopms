@@ -1979,13 +1979,6 @@ class execution extends control
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, $groupBy);
         $executionActions = array();
 
-        /* Save to session. */
-        $uri = $this->app->getURI(true);
-        $this->app->session->set('taskList', $uri, 'execution');
-        $this->app->session->set('bugList',  $uri, 'qa');
-        $this->app->session->set('kanbanType', $browseType, 'execution');
-        $this->app->session->set('kanbanGroupBy' . $browseType, $groupBy, 'execution');
-
         foreach($this->config->execution->statusActions as $action)
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
@@ -2734,8 +2727,6 @@ class execution extends control
         $this->view->title      = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
         $this->view->position[] = html::a($browseLink, $object->name);
         $this->view->position[] = $this->lang->execution->linkStory;
-
-        a($allStories);
 
         $this->view->object       = $object;
         $this->view->products     = $products;

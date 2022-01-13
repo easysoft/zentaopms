@@ -739,7 +739,6 @@ class bug extends control
         }
 
         $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
-        a($projectID);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
