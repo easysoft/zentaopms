@@ -1026,35 +1026,52 @@ $(function()
  */
 function resetRegionHeight(fold)
 {
-    if(Object.keys(regions).length == 1)
+    var regionCount = 0;
+    if($.isEmptyObject(regions)) return false;
+    for(var i in regions)
     {
-        var regionID = Object.keys(regions)[0];
-        var region   = regions[regionID].groups;
-        if(Object.keys(region).length == 1)
-        {
-            var group = region[0];
-            if(Object.keys(group.lanes).length == 1)
-            {
-                var regionHeaderHeight = $('.region-header').outerHeight();
-                if(fold == 'open')
-                {
-                    var windowHeight  = $(window).height();
-                    var headerHeight  = $('#mainHeader').outerHeight();
-                    var mainPadding   = $('#main').css('padding-top');
-                    var panelBorder   = $('.panel').css('border-top-width');
-                    var bodyPadding   = $('.panel-body').css('padding-top');
-                    var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
-                    var regionPadding = $('.kanban').css('padding-bottom');
-                    var columnHeight  = $('.kanban-header').outerHeight();
+        regionCount += 1;
+        if(regionCount > 1) return false;
+    }
 
-                    $('.region').css('height', height);
-                    $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
-                }
-                else
-                {
-                    $('.region').css('height', regionHeaderHeight);
-                }
-            }
-        }
+    var regionID   = Object.keys(regions)[0];
+    var region     = regions[regionID].groups;
+    var groupCount = 0;
+
+    if($.isEmptyObject(region)) return false;
+    for(var j in region)
+    {
+        groupCount += 1;
+        if(groupCount > 1) return false;
+    }
+
+    var group     = region[0];
+    var laneCount = 0;
+
+    if($.isEmptyObject(group.lanes)) return false;
+    for(var h in group.lanes)
+    {
+        laneCount += 1;
+        if(laneCount > 1) return false;
+    }
+
+    var regionHeaderHeight = $('.region-header').outerHeight();
+    if(fold == 'open')
+    {
+        var windowHeight  = $(window).height();
+        var headerHeight  = $('#mainHeader').outerHeight();
+        var mainPadding   = $('#main').css('padding-top');
+        var panelBorder   = $('.panel').css('border-top-width');
+        var bodyPadding   = $('.panel-body').css('padding-top');
+        var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
+        var regionPadding = $('.kanban').css('padding-bottom');
+        var columnHeight  = $('.kanban-header').outerHeight();
+
+        $('.region').css('height', height);
+        $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
+    }
+    else
+    {
+        $('.region').css('height', regionHeaderHeight);
     }
 }

@@ -248,6 +248,7 @@ $lang->kanbanlane->default   = 'Default Lane';
 $lang->kanbanlane->column    = 'Lane Kanban Column';
 $lang->kanbanlane->otherlane = 'Select Existed Lane';
 $lang->kanbanlane->color     = 'Lane Color';
+$lang->kanbanlane->WIPType   = 'Lane WIP Type';
 
 $lang->kanbanlane->confirmDelete = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
 
