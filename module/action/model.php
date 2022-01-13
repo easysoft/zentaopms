@@ -1039,6 +1039,11 @@ class actionModel extends model
                 if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
                 $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
             }
+            if($action->objectType == 'user')
+            {
+                $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
+                if($user) $action->objectName = $user->realname;
+            }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 
