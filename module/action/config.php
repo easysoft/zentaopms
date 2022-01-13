@@ -40,6 +40,7 @@ $config->action->objectNameFields['kanbanspace']  = 'name';
 $config->action->objectNameFields['kanbanregion'] = 'name';
 $config->action->objectNameFields['kanban']       = 'name';
 $config->action->objectNameFields['kanbancard']   = 'name';
+$config->action->objectNameFields['sonarqube']    = 'name';
 
 $config->action->commonImgSize = 870;
 
