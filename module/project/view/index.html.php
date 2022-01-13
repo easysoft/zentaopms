@@ -24,7 +24,7 @@
     ?>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php echo html::a($this->createLink('execution', 'create', "projectID=$project->id"), "<i class='icon icon-sm icon-plus'></i> " . $lang->project->createKanban, '', "class='btn btn-primary create-execution-btn'");?>
+    <?php common::printLink('execution', 'create', "projectID=$project->id", '<i class="icon icon-plus"></i> ' . $lang->project->createKanban, '', 'class="btn btn-primary"');?>
   </div>
 </div>
 <div id="mainContent">
@@ -60,7 +60,7 @@
                  {
                      $this->app->loadLang('kanban');
                      echo '<li>';
-                     common::printLink('project', 'edit',   "projectID={$project->id}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
+                     common::printLink('execution', 'edit', "executionID={$kanbanID}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
                      echo '</li>';
                  }
                  if(in_array('start', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'start', "executionID=$kanbanID", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';

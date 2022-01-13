@@ -1293,7 +1293,7 @@ class actionModel extends model
                 if($action->objectType == 'execution')
                 {
                     $execution = $this->loadModel('execution')->getById($action->objectID);
-                    if($execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                    if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
                 }
 
                 if($action->objectType == 'doclib')
