@@ -14,7 +14,7 @@
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? ' <span class="label label-light label-badge">' . count($executionStats) . '</span>' : ''), '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
+    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>" . ($status == $key ? ' <span class="label label-light label-badge">' . count($executionStats) . '</span>' : ''), '', "class='btn btn-link" . ($status == $key ? ' btn-active-text' : '') . "' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
   </div>
   <div class='btn-toolbar pull-right'>
@@ -116,4 +116,8 @@
 .kanban-card .execution-members-count {display: inline-block; margin-left: 6px; position: relative; top: 3px}
 .kanban-card .execution-acl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
 </style>
+<script>
+$('execution-status-doing').addClass('label-success');
+$('execution-status-suspended').addClass('label-warning');
+</script>
 <?php include $this->app->getModuleRoot() . '/common/view/footer.html.php';?>
