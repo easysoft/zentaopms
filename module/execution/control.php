@@ -2033,15 +2033,13 @@ class execution extends control
     public function taskKanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
-        if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->{'kanbanGroupBy' . $browseType} ? $this->session->{'kanbanGroupBy' . $browseType} : 'default';
-        if(empty($groupBy) and $browseType == 'all') $groupBy = 'default';
+        if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
         $this->app->session->set('kanbanType', $browseType, 'execution');
-        $this->app->session->set('kanbanGroupBy' . $browseType, $groupBy, 'execution');
 
         /* Load language. */
         $this->app->loadLang('story');

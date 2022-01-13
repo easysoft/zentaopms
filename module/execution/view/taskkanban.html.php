@@ -172,4 +172,5 @@ js::set('priv',
 <?php js::set('noAssigned', $lang->task->noAssigned);?>
 <?php js::set('userList', $userList);?>
 <?php js::set('entertime', time());?>
+<?php js::set('displayCards', $execution->displayCards);?>
 <?php include '../../common/view/footer.html.php';?>

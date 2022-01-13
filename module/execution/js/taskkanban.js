@@ -110,7 +110,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus.length)
+        if(!$actions.length && item.menus && item.menus.length)
         {
             $actions = $([
                 '<div class="actions">',
@@ -174,7 +174,7 @@ function renderBugItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus.length)
+        if(!$actions.length && item.menus && item.menus.length)
         {
             $actions = $([
                 '<div class="actions">',
@@ -238,7 +238,7 @@ function renderTaskItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus.length)
+        if(!$actions.length && item.menus && item.menus.length)
         {
             $actions = $([
                 '<div class="actions">',
@@ -726,6 +726,7 @@ var kanbanActionHandlers =
  */
 function handleKanbanAction(action, $element, event, kanban)
 {
+    if(groupBy && groupBy != 'default') return false;
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
