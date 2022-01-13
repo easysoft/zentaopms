@@ -114,7 +114,7 @@ class sonarqube extends control
 
         $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
         $this->loadModel('action');
-        $this->loadModel('pipeline')->delete($sonarqubeID, 'sonarqube');
+        $actionID = $this->loadModel('pipeline')->delete($sonarqubeID, 'sonarqube');
 
         $sonarQube = $this->sonarqube->getByID($sonarqubeID);
         $changes   = common::createChanges($oldSonarQube, $sonarQube);

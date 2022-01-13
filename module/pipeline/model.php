@@ -129,13 +129,14 @@ class pipelineModel extends model
      * @param  string $id     the id to be deleted
      * @param  string $object the action object 
      * @access public
-     * @return bool
+     * @return int 
      */
     public function delete($id, $object = 'gitlab')
     {
         $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
         $this->loadModel('action')->create($object, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
-        return true;
+        $actionID = $this->dao->lastInsertID();
+        return $actionID;
     }
 }
