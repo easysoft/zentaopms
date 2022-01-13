@@ -7,7 +7,7 @@ fields:
     range: 1-1000
   - field: program
     note: "所属项目集"
-    range: 1-10
+    range: 0-10
   - field: name
     note: "产品名称"
     fields:

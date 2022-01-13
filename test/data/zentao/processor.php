@@ -156,6 +156,27 @@ class Processor
      */
     private function initExecution()
     {
+        /* Add relationship of projectproduct. */
+        $projectProducts = $this->dao->select('*')->from(TABLE_PROJECTPRODUCT)->fetchAll();
+        $productsInProject = array();
+        foreach($projectProducts as $relation)
+        {
+            if(!isset($productsInProject[$relation->project])) $productsInProject[$relation->project] = array();
+            $productsInProject[$relation->project][] = $relation->product;
+        }
+
+        $executions = $this->dao->select('*')->from(TABLE_PROJECT)->where('type')->in('sprint,kanban,stage')->fetchAll();
+        foreach($executions as $execution)
+        {
+            $products = $productsInProject[$execution->project];
+            foreach($products as $product)
+            {
+                $data = new stdclass();
+                $data->project = $execution->id;
+                $data->product = $product;
+                $this->dao->insert(TABLE_PROJECTPRODUCT)->data($data)->exec();
+            }
+        }
     }
 
     /**

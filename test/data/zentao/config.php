@@ -14,6 +14,8 @@ $builder->productplan    = array('rows' => 360, 'extends' => array('productplan'
 $builder->branch         = array('rows' => 240, 'extends' => array('branch'));
 $builder->projectproduct = array('rows' => 200, 'extends' => array('projectproduct'));
 
+$builder->team = array('rows' => 400, 'extends' => array('team'));
+
 $builder->build   = array('rows' => 8, 'extends' => array('build'));
 $builder->release = array('rows' => 8, 'extends' => array('release'));
 
