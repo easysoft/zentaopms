@@ -183,13 +183,13 @@ class jobModel extends model
         unset($job->gitlabRepo);
 
         /* SonarQube tool is only used if the engine is JenKins. */
-        if($job->engine != 'jenkins' and $job->frame == 'sonarqube') 
+        if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
         {
             dao::$errors[]['frame'] = $this->lang->job->mustUseJenkins;
             return false;
         }
 
-        if($job->repo > 0 and $job->frame == 'sonarqube') 
+        if($job->repo > 0 and $job->frame == 'sonarqube')
         {
             $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo));
             if(!empty($sonarqubeJob))
@@ -289,13 +289,13 @@ class jobModel extends model
         unset($job->gitlabRepo);
 
         /* SonarQube tool is only used if the engine is JenKins. */
-        if($job->engine != 'jenkins' and $job->frame == 'sonarqube') 
+        if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
         {
             dao::$errors[] = $this->lang->job->mustUseJenkins;
             return false;
         }
 
-        if($job->repo > 0 and $job->frame == 'sonarqube') 
+        if($job->repo > 0 and $job->frame == 'sonarqube')
         {
             $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo), $id);
             if(!empty($sonarqubeJob))
