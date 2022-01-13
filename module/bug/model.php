@@ -1901,7 +1901,7 @@ class bugModel extends model
         {
             $data->name  = isset($executions[$executionID]) ? $executions[$executionID] : $this->lang->report->undefined;
             $data->title = $data->name;
-            if(mb_strlen($data->name) > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength) . '...';
+            if(mb_strlen($data->name, 'UTF-8') > $maxLength) $data->name = mb_substr($data->name, 0, $maxLength, 'UTF-8') . '...';
         }
         return $datas;
     }
