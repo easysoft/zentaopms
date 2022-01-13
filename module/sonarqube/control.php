@@ -92,14 +92,10 @@ class sonarqube extends control
         if(strpos($sonarqube->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->sonarqube->hostError))));
 
         /* Check name and url unique. */
-        if(empty($sonarqubeID))
-        {
-            $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)->where("type='sonarqube' and (name='{$sonarqube->name}' or url='{$sonarqube->url}')")->fetch();
-        }
-        else
-        {
-            $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)->where("id!={$sonarqubeID} and type='sonarqube' and (name='{$sonarqube->name}' or url='{$sonarqube->url}')")->fetch();
-        }
+        $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)
+            ->where("type='sonarqube' and (name='{$sonarqube->name}' or url='{$sonarqube->url}')")
+            ->beginIF(!empty($sonarqubeID))->andWhere('id')->ne($sonarqubeID)->fi()
+            ->fetch();
         if(isset($existSonarQube->name) and $existSonarQube->name == $sonarqube->name) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->nameRepeatError));
         if(isset($existSonarQube->url) and $existSonarQube->url== $sonarqube->url) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->urlRepeatError));
 
