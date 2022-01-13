@@ -80,25 +80,65 @@ class sonarqube extends control
     /**
      * Check post info.
      *
+     * @param  int    $sonarqubeID
      * @access protected
      * @return void
      */
-    protected function checkToken()
+    protected function checkToken($sonarqubeID = 0)
     {
         $sonarqube = fixer::input('post')->get();
-        $this->dao->update('sonarqube')->data($sonarqube)->batchCheck($this->config->sonarqube->create->requiredFields, 'notempty');
+        $this->dao->update('sonarqube')->data($sonarqube)->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if(strpos($sonarqube->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->sonarqube->hostError))));
 
         /* Check name and url unique. */
-        $isExist = $this->dao->select('*')->from(TABLE_PIPELINE)->where("name='{$sonarqube->name}' or url='{$sonarqube->url}'")->fetch();
-        if($isExist) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->repeatError));
+        if(empty($sonarqubeID))
+        {
+            $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)->where("type='sonarqube' and (name='{$sonarqube->name}' or url='{$sonarqube->url}')")->fetch();
+        }
+        else
+        {
+            $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)->where("id!={$sonarqubeID} and type='sonarqube' and (name='{$sonarqube->name}' or url='{$sonarqube->url}')")->fetch();
+        }
+        if(isset($existSonarQube->name) and $existSonarQube->name == $sonarqube->name) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->nameRepeatError));
+        if(isset($existSonarQube->url) and $existSonarQube->url== $sonarqube->url) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->urlRepeatError));
 
         $token  = base64_encode("{$sonarqube->account}:{$sonarqube->password}");
         $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
 
         if(!isset($result->valid) or !$result->valid) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->sonarqube->validError))));
         $this->post->set('token', $token);
+    }
+
+    /**
+     * Edit a sonarqube.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return void
+     */
+    public function edit($sonarqubeID)
+    {
+        $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
+
+        if($_POST)
+        {
+            $this->checkToken($sonarqubeID);
+            $this->loadModel('pipeline')->update($sonarqubeID);
+            $sonarqube = $this->sonarqube->getByID($sonarqubeID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            $this->loadModel('action');
+            $actionID = $this->action->create('sonarqube', $sonarqubeID, 'edited');
+            $changes  = common::createChanges($oldSonarQube, $sonarqube);
+            $this->action->logHistory($actionID, $changes);
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
+        }
+
+        $this->view->title     = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->editServer;
+        $this->view->sonarqube = $oldSonarQube;
+
+        $this->display();
     }
 
     /**
