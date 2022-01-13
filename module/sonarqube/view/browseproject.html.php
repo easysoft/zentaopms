@@ -60,7 +60,7 @@
           <td class='text' title='<?php echo substr($sonarqubeProject->lastAnalysisDate, 0, 10);?>'><?php echo substr($sonarqubeProject->lastAnalysisDate, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            if(common::hasPriv('sonarqube', 'deleteProject')) echo html::a($this->createLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$sonarqubeProject->key"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn'");
+            common::printLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$sonarqubeProject->key", "<i class='icon icon-trash'></i> ", 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn btn-primary'");
             ?>
           </td>
         </tr>
