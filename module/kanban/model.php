@@ -3072,14 +3072,15 @@ class kanbanModel extends model
                 if(in_array($columnID, array('developing', 'developed'))) $parentColumn = 'develop';
                 if(in_array($columnID, array('testing', 'tested'))) $parentColumn = 'test';
                 if(in_array($columnID, array('fixing', 'fixed'))) $parentColumn = 'resolving';
-                $columnData[$columnID]['id']         = $columnID;
-                $columnData[$columnID]['type']       = $columnID;
-                $columnData[$columnID]['name']       = $columnName;
-                $columnData[$columnID]['color']      = '#333';
-                $columnData[$columnID]['limit']      = -1;
-                $columnData[$columnID]['laneType']   = $groupBy . $laneID;
-                $columnData[$columnID]['asParent']   = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
-                $columnData[$columnID]['parent']     = $parentColumn ? $parentColumn : 0;
+
+                $columnData[$columnID]['id']       = $columnID;
+                $columnData[$columnID]['type']     = $columnID;
+                $columnData[$columnID]['name']     = $columnName;
+                $columnData[$columnID]['color']    = '#333';
+                $columnData[$columnID]['limit']    = -1;
+                $columnData[$columnID]['laneType'] = $groupBy . $laneID;
+                $columnData[$columnID]['asParent'] = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
+                $columnData[$columnID]['parent']   = $parentColumn ? $parentColumn : 0;
                 if($parentColumn) $columnData[$columnID]['parentType'] = $parentColumn;
 
                 $cardOrder = 1;
