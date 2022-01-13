@@ -2638,7 +2638,7 @@ class execution extends control
         $this->loadModel('product');
 
         /* Get projects, executions and products. */
-        $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage');
+        $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
 

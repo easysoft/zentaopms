@@ -312,6 +312,12 @@ class executionModel extends model
                 return false;
             }
 
+            if($type == 'kanban' and empty($this->post->products[0]))
+            {
+                dao::$errors['message'][] = $this->lang->execution->kanbanNoLinkProduct;
+                return false;
+            }
+
             $this->config->execution->create->requiredFields .= ',project';
         }
 
