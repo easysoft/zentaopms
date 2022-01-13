@@ -1265,6 +1265,7 @@ class execution extends control
         $project = $this->project->getByID($projectID);
         if(!empty($project) and $project->model == 'kanban')
         {
+            $this->lang->execution->menu = new stdclass();
             $this->lang->execution->createExec  = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->createExec);
             $this->lang->execution->execName    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execName);
             $this->lang->execution->execCode    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execCode);
@@ -1276,6 +1277,7 @@ class execution extends control
             $this->lang->execution->code        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->code);
             $this->lang->execution->desc        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->desc);
             $this->lang->execution->copyTeamTip = str_replace(array($this->lang->execution->common, $this->lang->executionCommon), $this->lang->execution->kanban, $this->lang->execution->copyTeamTip);
+
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
