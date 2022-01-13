@@ -424,6 +424,7 @@ $lang->printKanban->typeList['increment'] = 'Increment';
 $lang->execution->typeList['']       = '';
 $lang->execution->typeList['stage']  = 'Stage';
 $lang->execution->typeList['sprint'] = $lang->executionCommon;
+$lang->execution->typeList['kanban'] = 'Kanban';
 
 $lang->execution->featureBar['task']['all']          = $lang->execution->allTasks;
 $lang->execution->featureBar['task']['unclosed']     = $lang->execution->unclosed;
