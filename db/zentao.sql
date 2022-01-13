@@ -1370,6 +1370,7 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lines` varchar(10) NOT NULL,
   `v1` varchar(40) NOT NULL,
   `v2` varchar(40) NOT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'common',
   `deleted` enum('0','1') NOT NULL default '0',
    PRIMARY KEY (`id`),
   KEY `execution` (`execution`),

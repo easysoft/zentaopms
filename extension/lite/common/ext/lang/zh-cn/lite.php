@@ -11,7 +11,7 @@ $lang->mainNav->menuOrder[65] = 'admin';
 $lang->my->menu           = new stdclass();
 $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
-$lang->my->menu->task     = array('link' => "{$lang->task->common}|my|task|", 'subModule' => 'task');
+$lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
 
 /* My menu order. */
 $lang->my->menuOrder     = array();

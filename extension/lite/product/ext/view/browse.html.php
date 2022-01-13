@@ -10,14 +10,6 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php
-if(empty($productID))
-{
-    $productID   = key($projectProducts);
-    $product     = $projectProducts[$productID];
-    $productName = $product->name;
-}
-?>
 <?php include $this->app->getModuleRoot() . '/common/view/header.html.php';?>
 <?php include $this->app->getModuleRoot() . '/common/view/datatable.fix.html.php';?>
 <style>
@@ -357,9 +349,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               $misc = $canBatchClose ? "onclick=\"setFormAction('$actionLink', '', '#productStoryForm')\"" : '';
               echo "<li $class>" . html::a('#', $lang->close, '', $misc) . "</li>";
 
-              $class = $canBatchUnlink ? '' : "class='disabled'";
-              echo "<li $class>" . html::a('#', $lang->story->unlink, '', "id='batchUnlinkStory'") . "</li>";
-
               if($canBatchReview)
               {
                   echo "<li class='dropdown-submenu'>";
@@ -401,22 +390,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
-              if($canBatchChangeBranch and $this->session->currentProductType and $this->session->currentProductType != 'normal' and $productID)
-              {
-                  $withSearch = count($branchTagOption) > 8;
-                  echo "<li class='dropdown-submenu'>";
-                  echo html::a('javascript:;', $lang->product->branchName[$this->session->currentProductType], '', "id='branchItem'");
-                  echo "<div class='dropdown-menu" . ($withSearch ? ' with-search':'') . "'>";
-                  echo "<ul class='dropdown-list'>";
-                  foreach($branchTagOption as $id => $branchName)
-                  {
-                      $actionLink = $this->createLink('story', 'batchChangeBranch', "branchID=$id");
-                      echo "<li class='option' data-key='$id'>" . html::a('#', $branchName, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
-                  }
-                  echo '</ul>';
-                  if($withSearch) echo "<div class='menu-search'><div class='input-group input-group-sm'><input type='text' class='form-control' placeholder=''><span class='input-group-addon'><i class='icon-search'></i></span></div></div>";
-                  echo '</div></li>';
-              }
 
               if($storyType == 'story')
               {
@@ -466,38 +439,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
                     echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
-                }
-                ?>
-              </div>
-            </div>
-          </div>
-          <?php endif;?>
-          <?php if($canBatchChangePlan and $storyType == 'story'):?>
-          <div class="btn-group dropup">
-            <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->planAB;?> <span class="caret"></span></button>
-            <?php
-            unset($plans['']);
-            $plans      = array(0 => $lang->null) + $plans;
-            $withSearch = count($plans) > 8;
-            ?>
-            <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
-              <?php if($withSearch):?>
-              <div class="input-control search-box has-icon-left has-icon-right search-example">
-                <input id="planSearchBox" type="search" autocomplete="off" class="form-control search-input">
-                <label for="planSearchBox" class="input-control-icon-left search-icon"><i class="icon icon-search"></i></label>
-                <a class="input-control-icon-right search-clear-btn"><i class="icon icon-close icon-sm"></i></a>
-              </div>
-              <?php $plansPinYin = common::convert2Pinyin($plans);?>
-              <?php endif;?>
-              <div class="list-group">
-                <?php
-                foreach($plans as $planID => $plan)
-                {
-                    $position   = stripos($plan, '/');
-                    $planLabel  = $position === false ? $plan : ('<span class="label label-outline label-badge">' . substr($plan, 0, $position) . '</span>' . substr($plan, $position + 1));
-                    $searchKey  = $withSearch ? ('data-key="' . zget($plansPinYin, $plan, '') . '"') : '';
-                    $actionLink = $this->createLink('story', 'batchChangePlan', "planID=$planID");
-                    echo html::a('#', $planLabel, '', "$searchKey title='{$plan}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\" onmouseover=\"setBadgeStyle(this, true);\" onmouseout=\"setBadgeStyle(this, false)\"");
                 }
                 ?>
               </div>
