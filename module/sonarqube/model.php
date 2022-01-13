@@ -90,7 +90,7 @@ class sonarqubeModel extends model
         for($i = 2; $i <= $total; $i++)
         {
             $url          = sprintf($url, 'projects/search?ps=500&p=' . $i);
-            $pageData     = json_decode(commonModel::http($url, null, array(), $header[0]));
+            $pageData     = json_decode(commonModel::http($url, null, array(), $header));
             $projectList += zget($pageData, 'components', array());
         }
         return (array)$projectList;

@@ -198,7 +198,7 @@ $(document).ready(function()
     $(document).on('change', '#sonarqubeServer', function()
     {
         var sonarqubeID = $(this).val();
-        var projectKey  = sonarqubeID == job.sonarqubeServer ? btoa(job.projectKey) : '';
+        var projectKey  = sonarqubeID == job.sonarqubeServer ? job.projectKey.replace(/-/g, '*') : '';
         $('#sonarProject #projectKey').remove();
         $('#sonarProject #projectKey_chosen').remove();
         $('#sonarProject .input-group').append("<div class='load-indicator loading'></div>");
