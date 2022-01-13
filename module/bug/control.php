@@ -693,8 +693,9 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
-            $stories = $this->story->getExecutionStoryPairs($executionID);
+            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
+            $stories   = $this->story->getExecutionStoryPairs($executionID);
+            $execution = $this->loadModel('execution')->getById($executionID);
         }
         else
         {
@@ -737,7 +738,8 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
+        a($projectID);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;

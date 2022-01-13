@@ -1234,7 +1234,7 @@ class executionModel extends model
         $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('type')->in('stage,sprint')
+            ->where('type')->in('stage,sprint,kanban')
             ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
