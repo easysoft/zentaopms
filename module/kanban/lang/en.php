@@ -86,6 +86,7 @@ $lang->kanban->cardCountTip  = 'Please enter the number of cards';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
+$lang->kanban->aclGroup['extend']  = 'Extend';
 
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
