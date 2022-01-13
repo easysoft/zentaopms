@@ -745,7 +745,7 @@ class upgradeModel extends model
             $this->saveLogs('Execute 16_1');
             $this->execSQL($this->getUpgradeFile('16.1'));
             $this->moveKanbanData();
-            $this->appendExec('16_0_beta1');
+            $this->appendExec('16_1');
         }
 
         $this->deletePatch();
@@ -5375,35 +5375,35 @@ class upgradeModel extends model
     {
         $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
 
+        $cellGroup = array();
         foreach($cards as $cardID => $card)
         {
-            $oldCell = $this->dao->select('id,kanban,`column`,lane,card')->from(TABLE_KANBANCELL)
-                ->where('kanban')->eq($card->kanban)
-                ->andWhere('lane')->eq($card->lane)
-                ->andWhere('`column`')->eq($card->column)
-                ->fetch();
+            $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
+            $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
+            $cellGroup[$key] = $cards;
+        }
 
-            if(!empty($oldCell))
-            {
-                $oldCell->cards = $oldCell->cards . "$cardID,";
-                $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($oldCell->cards)->where('id')->eq($oldCell->id)->exec();
-            }
-            else
-            {
-                $cell = new stdclass();
-                $cell->kanban = $card->kanban;
-                $cell->lane   = $card->lane;
-                $cell->column = $card->column;
-                $cell->type   = 'card';
-                $cell->cards  = ",$cardID,";
+        foreach($cellGroup as $key => $cards)
+        {
+            $key = explode('-', $key);
+            if(!is_array($key)) continue;
 
-                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
-            }
+            $cell = new stdclass();
+            $cell->kanban = $key[0];
+            $cell->lane   = $key[1];
+            $cell->column = $key[2];
+            $cell->type   = 'card';
+            $cell->cards  = $cards;
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
         }
 
         $lanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->gt(0)->fetchPairs();
         $this->dao->delete()->from(TABLE_KANBANLANE)->where('execution')->gt(0)->exec();
         $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($lanePairs)->exec();
+
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `lane`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
     }
 
     /**
