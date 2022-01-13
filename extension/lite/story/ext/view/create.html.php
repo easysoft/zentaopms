@@ -11,6 +11,7 @@
  */
 ?>
 <?php include $this->app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <?php js::set('page', 'create');?>
 <?php js::set('holders', $lang->story->placeholder); ?>
 <?php js::set('blockID', $blockID); ?>
@@ -180,22 +181,14 @@ $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');}
 
 function loadProductModules(productID)
 {
-    branch = 0;
-
+    var branch        = 0;
     var currentModule = 0;
-    if(rawMethod == 'edit')
-    {
-        currentModule = $('#module').val();
-    }
-
-    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModule);
-    var $moduleIDBox = $('#moduleIdBox');
+    var moduleLink    = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModule);
+    var $moduleIDBox  = $('#moduleIdBox');
     $moduleIDBox.load(moduleLink, function()
     {
         $moduleIDBox.find('#module').chosen();
-        $moduleIDBox.fixInputGroup();
     });
 }
-
 </script>
 <?php include $this->app->getModuleRoot() . '/common/view/footer.html.php';?>

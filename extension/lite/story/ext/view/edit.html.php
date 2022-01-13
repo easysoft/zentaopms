@@ -10,7 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include './header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/header.html.php';?>
+<?php include $this->app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
 <?php js::set('page', 'edit')?>
 <?php js::set('oldProductID', $story->product);?>
 <?php js::set('parentStory', !empty($story->children));?>
@@ -49,10 +50,6 @@
             <div class='detail-title'><?php echo $lang->story->legendSpec;?></div>
             <div class='detail-content article-content'><?php echo $story->spec;?></div>
           </div>
-          <div class='detail'>
-            <div class='detail-title'><?php echo $lang->story->verify;?></div>
-            <div class='detail-content article-content'><?php echo $story->verify;?></div>
-          </div>
           <?php $this->printExtendFields($story, 'div', 'position=left');?>
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->comment;?></div>
@@ -63,12 +60,13 @@
           <div class='actions form-actions text-center'>
             <?php
             echo html::hidden('lastEditedDate', $story->lastEditedDate);
+            echo html::hidden('product', $story->product);
             echo html::submitButton($lang->save);
             if(!isonlybody()) echo html::backButton();
             ?>
           </div>
           <hr class='small' />
-          <?php include '../../common/view/action.html.php';?>
+          <?php include $this->app->getModuleRoot() . 'common/view/action.html.php';?>
         </div>
       </div>
       <div class='side-col col-4'>
@@ -76,25 +74,6 @@
           <div class='detail'>
             <div class='detail-title'><?php echo $lang->story->legendBasicInfo;?></div>
             <table class='table table-form'>
-              <?php if($story->parent <= 0):?>
-              <tr>
-                <th class='thWidth'><?php echo $lang->story->product;?></th>
-                <td>
-                  <div class='input-group'>
-                    <?php echo html::select('product', $products, $story->product, "onchange='loadProduct(this.value);' class='form-control chosen control-product'");?>
-                    <span class='input-group-addon fix-border fix-padding'></span>
-                    <?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?>
-                  </div>
-                </td>
-              </tr>
-              <?php elseif($product->type != 'normal'):?>
-              <tr>
-                <th class='thWidth'><?php echo $lang->product->branch = sprintf($lang->product->branch, $lang->product->branchName['branch']);?></th>
-                <td>
-                  <div class='input-group'><?php if($product->type != 'normal') echo html::select('branch', $branchTagOption, $story->branch, "onchange='loadBranch();' class='form-control chosen control-branch'");?></div>
-                </td>
-              </tr>
-              <?php endif;?>
               <tr>
                 <th class='thWidth'><?php echo $lang->story->module;?></th>
                 <td>
@@ -118,33 +97,7 @@
                 <th><?php echo $lang->story->parent;?></th>
                 <td><?php echo html::select('parent', $stories, $story->parent, "class='form-control chosen'");?></td>
               </tr>
-              <tr>
-                <th><?php echo $lang->story->plan;?></th>
-                <td>
-                  <div class='input-group' id='planIdBox'>
-                  <?php $multiple = ($this->session->currentProductType != 'normal' and empty($story->branch)) ? true : false;?>
-                  <?php echo html::select($multiple ? 'plan[]' : 'plan', $plans, $story->plan, "class='form-control chosen'" . ($multiple ? ' multiple' : ''));
-                  if(count($plans) == 1)
-                  {
-                      echo "<span class='input-group-addon'>";
-                      echo html::a($this->createLink('productplan', 'create', "productID=$story->product&branch=$story->branch", '', true), $lang->productplan->create, '', "class='text-primary' data-toggle='modal' data-type='iframe' data-width='95%'");
-                      echo html::a("javascript:void(0)", $lang->refresh, '', "class='refresh' onclick='loadProductPlans($story->product)'");
-                      echo '</span>';
-                  }
-                  ?>
-                  </div>
-                </td>
-              </tr>
               <?php endif;?>
-              <tr>
-                <th><?php echo $lang->story->source;?></th>
-                <td><?php echo html::select('source', $lang->story->sourceList, $story->source, "class='form-control chosen'");?></td>
-              </tr>
-              <tr>
-                <th id='sourceNoteBox'><?php echo $lang->story->sourceNote;?></th>
-                <td><?php echo html::input('sourceNote', $story->sourceNote, "class='form-control'");?>
-              </td>
-              </tr>
               <tr>
                 <th><?php echo $lang->story->status;?></th>
                 <td>
@@ -172,10 +125,6 @@
                 </td>
               </tr>
               <?php endif;?>
-              <tr>
-                <th><?php echo $lang->story->category;?></th>
-                <td><?php echo html::select('category', $lang->story->categoryList, $story->category, "class='form-control chosen'");?></td>
-              </tr>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
                 <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
@@ -289,4 +238,17 @@
 </div>
 <?php js::set('storyType', $story->type);?>
 <?php js::set('executionID', isset($objectID) ? $objectID : 0);?>
-<?php include '../../common/view/footer.html.php';?>
+<script>
+function loadProductModules(productID)
+{
+    var branch        = 0;
+    var currentModule = $('#module').val();
+    var moduleLink    = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=story&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true&extra=&currentModuleID=' + currentModule);
+    var $moduleIDBox  = $('#moduleIdBox');
+    $moduleIDBox.load(moduleLink, function()
+    {
+        $moduleIDBox.find('#module').chosen();
+    });
+}
+</script>
+<?php include $this->app->getModuleRoot() . 'common/view/footer.html.php';?>
