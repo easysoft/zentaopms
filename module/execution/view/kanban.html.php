@@ -62,6 +62,17 @@ js::set('priv',
         'canBatchCreateStory' => $canBatchCreateStory,
         'canLinkStory'        => $canLinkStory,
         'canLinkStoryByPlane' => $canLinkStoryByPlane,
+        'canAssignTask'       => common::hasPriv('task', 'assignto'),
+        'canAssignStory'      => common::hasPriv('story', 'assignto'),
+        'canFinishTask'       => common::hasPriv('task', 'finish'),
+        'canPauseTask'        => common::hasPriv('task', 'pause'),
+        'canCancelTask'       => common::hasPriv('task', 'cancel'),
+        'canCloseTask'        => common::hasPriv('task', 'close'),
+        'canActivateTask'     => common::hasPriv('task', 'activate'),
+        'canStartTask'        => common::hasPriv('task', 'start'),
+        'canAssignBug'        => common::hasPriv('bug', 'assignto'),
+        'canConfirmBug'       => common::hasPriv('bug', 'confirmBug'),
+        'canActivateBug'      => common::hasPriv('bug', 'activate')
     )
 );
 js::set('hasStoryButton', $hasStoryButton);
@@ -118,8 +129,6 @@ js::set('hasTaskButton', $hasTaskButton);
         }
         $actions .= "</ul>";
     }
-
-    $actions .= "</div>";
 
     echo $actions;
     ?>

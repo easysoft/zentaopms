@@ -11,7 +11,7 @@ function changeKanbanScaleSize(newScaleSize)
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', newScaleSize >= 4 ? 'disabled' : null);
     $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', newScaleSize <= 1 ? 'disabled' : null);
 
-    $('#kanbans').children('.kanban').each(function()
+    $('#kanban').children('.region').children("div[id^='kanban']").each(function()
     {
         var kanban = $(this).data('zui.kanban');
         if(!kanban) return;
@@ -19,6 +19,12 @@ function changeKanbanScaleSize(newScaleSize)
     });
 
     return newScaleSize;
+}
+
+/** Get card height */
+function getCardHeight()
+{
+    return [59, 59, 62, 62, 47][window.kanbanScaleSize];
 }
 
 $('#type').change(function()
@@ -70,7 +76,6 @@ function createColumnMenu(options)
     var items = [];
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
-    if(privs.includes('deleteColumn') && column.$kanbanData.columns.length > 1) items.push({label: kanbanLang.deleteColumn, icon: 'trash', url: createLink('kanban', 'deleteColumn', 'columnID=' + column.id), attrs: {'target': 'hiddenwin'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -126,34 +131,326 @@ function handleFinishDrop()
     $('.kanban').find('.can-drop-here').removeClass('can-drop-here');
 }
 
-/**
+/* Define drag and drop rules */
+if(!window.kanbanDropRules)
+{
+    window.kanbanDropRules =
+    {
+        story:
+        {
+            backlog: ['ready'],
+            ready: ['backlog'],
+        },
+        bug:
+        {
+            'unconfirmed': ['confirmed', 'fixing', 'fixed'],
+            'confirmed': ['fixing', 'fixed'],
+            'fixing': ['fixed'],
+            'fixed': ['testing', 'tested', 'fixing'],
+            'testing': ['tested', 'closed', 'fixing'],
+            'tested': ['closed', 'fixing'],
+            'closed': ['fixing'],
+        },
+        task:
+        {
+            'wait': ['developing', 'developed', 'canceled', 'closed'],
+            'developing': ['developed', 'pause'],
+            'developed': ['canceled', 'closed'],
+            'pause': ['developing'],
+            'canceled': ['developing'],
+            'closed': ['developing'],
+        }
+    }
+}
+
+/*
  * Find drop columns
  * @param {JQuery} $element Drag element
  * @param {JQuery} $root Dnd root element
  */
 function findDropColumns($element, $root)
 {
-    var $task  = $element;
-    var task   = $task.data('task');
-    //var status = task.status;
-    var $col   = $task.closest('.kanban-col');
-    var col    = $col.data();
-    var lane   = $col.closest('.kanban-lane').data('lane');
-    var allStatusCanChange = statusChangeMap[status];
+    var $col        = $element.closest('.kanban-col');
+    var col         = $col.data();
+    var kanbanID    = $root.data('id');
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
 
-    hideKanbanAction();
+    if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
 
-    return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
+    var colRules = kanbanRules[col.type];
+    var lane     = $col.closest('.kanban-lane').data('lane');
+    return $root.find('.kanban-lane-col').filter(function()
     {
+        if(!colRules) return false;
+        if(colRules === true) return true;
+
         var $newCol = $(this);
         var newCol = $newCol.data();
+        if(newCol.id === col.id) return false;
+
         var $newLane = $newCol.closest('.kanban-lane');
         var newLane = $newLane.data('lane');
-
-        $newCol.addClass('can-drop-here');
-        return true;
+        var canDropHere = colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
+        if(canDropHere) $newCol.addClass('can-drop-here');
+        return canDropHere;
     });
 }
+
+/**
+ * Render user avatar
+ * @param {String|{account: string, avatar: string}} user User account or user object
+ * @returns {string}
+ */
+function renderUserAvatar(user, objectType, objectID, size)
+{
+    var avatarSizeClass = 'avatar-' + (size || 'sm');
+    var $noPrivAndNoAssigned = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" title="' + noAssigned + '" style="background: #ccc"><i class="icon icon-person"></i></div>');
+    if(objectType == 'task')
+    {
+        if(!priv.canAssignTask && !user) return $noPrivAndNoAssigned;
+        var link = createLink('task', 'assignto', 'executionID=' + executionID + '&id=' + objectID, '', true);
+    }
+    if(objectType == 'story')
+    {
+        if(!priv.canAssignStory && !user) return $noPrivAndNoAssigned;
+        var link = createLink('story', 'assignto', 'id=' + objectID, '', true);
+    }
+    if(objectType == 'bug')
+    {
+        if(!priv.canAssignBug && !user) return $noPrivAndNoAssigned;
+        var link = createLink('bug', 'assignto', 'id=' + objectID, '', true);
+    }
+
+    if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '"><i class="icon icon-person"></i></a>');
+
+    if(typeof user === 'string') user = {account: user};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = {avatar: userList[user.account].avatar, account: user.account};
+
+    var $noPrivAvatar = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" />').avatar({user: user});
+    if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
+    if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
+    if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
+
+    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.account + '" href="' + link + '"/>').avatar({user: user}).attr('data-toggle', 'modal').attr('data-width', '80%');
+}
+
+/**
+ * Render deadline
+ * @param {String|Date} deadline Deadline
+ * @returns {JQuery}
+ */
+function renderDeadline(deadline)
+{
+    if(deadline == '0000-00-00') return;
+
+    var date = $.zui.createDate(deadline);
+    var now  = new Date();
+    now.setHours(0);
+    now.setMinutes(0);
+    now.setSeconds(0);
+    now.setMilliseconds(0);
+    var isEarlyThanToday = date.getTime() < now.getTime();
+    var deadlineDate     = $.zui.formatDate(date, 'MM-dd');
+
+    return $('<span class="info info-deadline"/>').text(deadlineLang + ' ' + deadlineDate).addClass(isEarlyThanToday ? 'text-red' : 'text-muted');
+}
+
+/**
+ * Render story item
+ * @param {Object} item  Story item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderStoryItem(item, $item, col)
+{
+    var scaleSize = window.kanbanScaleSize;
+    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
+
+    if(scaleSize <= 3)
+    {
+        var $title = $item.find('.title');
+        if(!$title.length)
+        {
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-lightbulb text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('story', 'view', 'storyID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
+            $title.appendTo($item);
+        }
+        $title.attr('title', item.title).find('.text').text(item.title);
+    }
+
+    if(scaleSize <= 2)
+    {
+        var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
+        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var avatarHtml = renderUserAvatar(item.assignedTo, 'story', item.id);
+        var $infos = $item.find('.infos');
+        if(!$infos.length) $infos = $('<div class="infos"></div>');
+        $infos.html([idHtml, priHtml, hoursHtml].join(''));
+
+        $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
+        if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
+        else $infos.prependTo($item.find('.title'));
+    }
+    else if(scaleSize === 4)
+    {
+        $item.html(renderUserAvatar(item.assignedTo, 'story', item.id, 'md'));
+    }
+
+    if(scaleSize <= 1)
+    {
+        var $actions = $item.find('.actions');
+        if(!$actions.length && item.menus && item.menus.length)
+        {
+            $actions = $([
+                '<div class="actions">',
+                    '<a data-contextmenu="story" data-col="' + col.type + '">',
+                        '<i class="icon icon-ellipsis-v"></i>',
+                    '</a>',
+                '</div>'
+            ].join('')).appendTo($item);
+        }
+    }
+
+    return $item.attr('data-type', 'story').addClass('kanban-item-story');
+}
+
+/**
+ * Render bug item
+ * @param {Object} item  Bug item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderBugItem(item, $item, col)
+{
+    var scaleSize = window.kanbanScaleSize;
+    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
+
+    if(scaleSize <= 3)
+    {
+        var $title = $item.find('.title');
+        if(!$title.length)
+        {
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-bug text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('bug', 'view', 'bugID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
+            $title.appendTo($item);
+        }
+        $title.attr('title', item.title).find('.text').text(item.title);
+    }
+
+    if(scaleSize <= 2)
+    {
+        var idHtml       = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
+        var severityHtml = scaleSize <= 1 ? ('<span class="info info-severity label-severity" data-severity="' + item.severity + '" title="' + item.severity + '"></span>') : '';
+        var priHtml      = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var avatarHtml   = renderUserAvatar(item.assignedTo, 'bug', item.id);
+
+        var $infos = $item.find('.infos');
+        if(!$infos.length) $infos = $('<div class="infos"></div>');
+        $infos.html([idHtml, severityHtml, priHtml].join(''));
+        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
+        $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
+
+        if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
+        else $infos.prependTo($item.find('.title'));
+    }
+    else if(scaleSize === 4)
+    {
+        $item.html(renderUserAvatar(item.assignedTo, 'bug', item.id, 'md'));
+    }
+
+    if(scaleSize <= 1)
+    {
+        var $actions = $item.find('.actions');
+        if(!$actions.length && item.menus && item.menus.length)
+        {
+            $actions = $([
+                '<div class="actions">',
+                    '<a data-contextmenu="bug" data-col="' + col.type + '">',
+                        '<i class="icon icon-ellipsis-v"></i>',
+                    '</a>',
+                '</div>'
+            ].join('')).appendTo($item);
+        }
+    }
+
+    return $item.attr('data-type', 'bug').addClass('kanban-item-bug');
+}
+
+/**
+ * Render task item
+ * @param {Object} item  Task item object
+ * @param {JQuery} $item Kanban item element
+ * @param {Object} col   Column object
+ * @returns {JQuery} $item Kanban item element
+ */
+function renderTaskItem(item, $item, col)
+{
+    var scaleSize = window.kanbanScaleSize;
+    if(+$item.attr('data-scale-size') !== scaleSize)  $item.empty().attr('data-scale-size', scaleSize);
+
+    if(scaleSize <= 3)
+    {
+        var $title = $item.find('.title');
+        if(!$title.length)
+        {
+            $title = $('<a class="title iframe" data-width="95%">' + (scaleSize <= 1 ? '<i class="icon icon-checked text-muted"></i> ' : '') + '<span class="text"></span></a>')
+                    .attr('href', $.createLink('task', 'view', 'taskID=' + item.id, '', true)).attr('data-toggle', 'modal').attr('data-width', '80%');
+            $title.appendTo($item);
+        }
+        $title.attr('title', item.name).find('.text').text(item.name);
+    }
+
+    if(scaleSize <= 2)
+    {
+        var idHtml     = scaleSize <= 1 ? ('<span class="info info-id text-muted">#' + item.id + '</span>') : '';
+        var priHtml    = '<span class="info info-pri label-pri label-pri-' + item.pri + '" title="' + item.pri + '">' + item.pri + '</span>';
+        var hoursHtml  = (item.estimate && scaleSize <= 1) ? ('<span class="info info-estimate text-muted">' + item.estimate + 'h</span>') : '';
+        var avatarHtml = renderUserAvatar(item.assignedTo, 'task', item.id);
+
+        var $infos = $item.find('.infos');
+        if(!$infos.length) $infos = $('<div class="infos"></div>');
+        $infos.html([idHtml, priHtml, hoursHtml].join(''));
+        if(item.deadline && scaleSize <= 1) $infos.append(renderDeadline(item.deadline));
+        $infos[scaleSize <= 1 ? 'append' : 'prepend'](avatarHtml);
+
+        if(scaleSize <= 1) $infos.appendTo($item);
+        else if(scaleSize === 2) $infos.prependTo($item);
+        else $infos.prependTo($item.find('.title'));
+    }
+    else if(scaleSize === 4)
+    {
+        $item.html(renderUserAvatar(item.assignedTo, 'task', item.id, 'md'));
+    }
+
+    if(scaleSize <= 1)
+    {
+        var $actions = $item.find('.actions');
+        if(!$actions.length && item.menus && item.menus.length)
+        {
+            $actions = $([
+                '<div class="actions">',
+                    '<a data-contextmenu="task" data-col="' + col.type + '">',
+                        '<i class="icon icon-ellipsis-v"></i>',
+                    '</a>',
+                '</div>'
+            ].join('')).appendTo($item);
+        }
+    }
+
+    $item.attr('data-type', 'task').addClass('kanban-item-task');
+
+    return $item;
+}
+
+/* Add column renderer */
+addColumnRenderer('story', renderStoryItem);
+addColumnRenderer('bug',   renderBugItem);
+addColumnRenderer('task',  renderTaskItem);
 
 /**
  * Render items count of a column.
@@ -196,7 +493,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
-    var $actions = $('<div class="actions" />');
+    var $actions    = $column.children('.actions');
 
     if(privs.includes('sortGroup'))
     {
@@ -213,14 +510,10 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
     }
 
-    var regionID     = $column.closest('.kanban').data('id');
-    var groupID      = $column.closest('.kanban-board').data('id');
-    var laneID       = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
-    var columnID     = $column.closest('.kanban-col').data('id');
-    var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('deleteColumn'));
+    var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP'));
 
     /* Render more menu. */
-    if((column.type == 'backlog' && hasStoryButton) || (column.type == 'wait' && hasTaskButton) || (column.type == 'unconfirmed' && hasBugButton))
+    if(((column.type == 'backlog' && hasStoryButton) || (column.type == 'wait' && hasTaskButton) || (column.type == 'unconfirmed' && hasBugButton)) && $actions.children('.text-primary').length == 0)
     {
         $actions.append([
                 '<a data-contextmenu="columnCreate" data-type="' + column.type + '" data-kanban="' + kanban.id + '" data-parent="' + (column.parentType || '') +  '" class="text-primary">',
@@ -228,11 +521,10 @@ function renderHeaderCol($column, column, $header, kanbanData)
                 '</a>'
         ].join(''));
     }
-    if(printMoreBtn)
+    if(printMoreBtn && $actions.children('.btn').length == 0)
     {
         $actions.append(' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>');
     }
-    $actions.appendTo($column);
 }
 
 /**
@@ -267,28 +559,6 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 }
 
 /**
- * Adjust add button postion in column
- */
-function adjustAddBtnPosition($kanban)
-{
-    if(!$kanban)
-    {
-        $('.kanban').children('.kanban-board').each(function()
-        {
-            adjustAddBtnPosition($(this));
-        });
-        return;
-    }
-
-    $kanban.find('.kanban-lane-col:not([data-type="EMPTY"])').each(function()
-    {
-        var $col = $(this);
-        var items = $col.children('.kanban-lane-items')[0];
-        $col.toggleClass('has-scrollbar', items.scrollHeight > items.clientHeight);
-    });
-}
-
-/**
  * Handle kanban action
  */
 function handleKanbanAction(action, $element, event, kanban)
@@ -316,94 +586,6 @@ function processMinusBtn()
     }
 }
 
-/**
- * The function for rendering kanban item
- */
-function renderKanbanItem(item, $item)
-{
-    var $title       = $item.children('.title');
-    var privs        = item.actions;
-    var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
-    if(!$title.length)
-    {
-        if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
-        if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
-    }
-
-    $title.text(item.name).attr('title', item.name);
-
-    if(printMoreBtn)
-    {
-        $(
-        [
-            '<div class="actions" title="' + kanbanLang.more + '">',
-              '<a data-contextmenu="card" data-id="' + item.id + '">',
-                '<i class="icon icon-ellipsis-v"></i>',
-              '</a>',
-            '</div>'
-        ].join('')).appendTo($item);
-    }
-
-    var $info = $item.children('.info');
-    if(!$info.length) $info = $(
-    [
-        '<div class="info">',
-            '<span class="pri"></span>',
-            '<span class="estimate label label-light"></span>',
-            '<span class="time label label-light"></span>',
-            '<div class="user"></div>',
-        '</div>'
-    ].join('')).appendTo($item);
-
-    $item.data('card', item);
-
-    $info.children('.estimate').text(item.estimate + kanbancardLang.lblHour);
-    if(item.estimate == 0) $info.children('.estimate').hide();
-
-    $info.children('.pri')
-        .attr('class', 'pri label-pri label-pri-' + item.pri)
-        .text(item.pri);
-
-    $item.css('background-color', item.color);
-    $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
-    $item.find('.info > .label-light').css('background-color', item.color);
-
-    var $time = $info.children('.time');
-    if(item.end == '0000-00-00' && item.begin == '0000-00-00')
-    {
-        $time.hide();
-    }
-    else
-    {
-        var today = new Date();
-        var begin = $.zui.createDate(item.begin);
-        var end   = $.zui.createDate(item.end);
-        var needRemind    = (begin.toLocaleDateString() == today.toLocaleDateString() || end.toLocaleDateString() == today.toLocaleDateString());
-        if(item.end == '0000-00-00' && item.begin != '0000-00-00')
-        {
-            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' + kanbancardLang.beginAB).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + ' ' +kanbancardLang.beginAB).show();
-        }
-        else if(item.begin == '0000-00-00' && item.end != '0000-00-00')
-        {
-            $time.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
-        }
-        else if(item.begin != '0000-00-00' && item.end != '0000-00-00')
-        {
-            $time.text($.zui.formatDate(begin, 'MM/dd') + ' ' +  kanbancardLang.to + ' ' + $.zui.formatDate(end, 'MM/dd')).attr('title', $.zui.formatDate(begin, 'yyyy/MM/dd') + kanbancardLang.to + $.zui.formatDate(end, 'yyyy/MM/dd')).show();
-        }
-
-        if(!$item.hasClass('has-color') && needRemind) $time.css('background-color', 'rgba(210, 50, 61, 0.3)');
-        if($item.hasClass('has-color') && needRemind)  $time.css('background-color', 'rgba(255, 255, 255, 0.3)');
-        if(!needRemind) $time.css('background-color', 'rgba(0, 0, 0, 0.15)');
-    }
-
-    /* Display avatars of assignedTo. */
-    var assignedTo = item.assignedTo.split(',');
-    var $user = $info.children('.user');
-    var title = [];
-    for(i = 0; i < assignedTo.length; i++) title.push(users[assignedTo[i]]);
-    $user.html(renderUsersAvatar(assignedTo, item.id)).attr('title', title);
-}
 /* Define menu creators */
 window.menuCreators =
 {
@@ -429,9 +611,9 @@ function initKanban($kanban)
         maxColWidth:       300,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
-        itemRender:        renderKanbanItem,
+        cardHeight:        getCardHeight(),
+        cardsPerRow:       window.kanbanScaleSize,
         onAction:          handleKanbanAction,
-        onRenderKanban:    adjustAddBtnPosition,
         onRenderLaneName:  renderLaneName,
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
@@ -510,13 +692,6 @@ $(function()
 
         $.zui.ContextMenu.show(items, items.$options || {event: event});
     });
-
-    /* Adjust the add button position on window resize */
-    $(window).on('resize', function(a)
-    {
-        adjustAddBtnPosition();
-    });
-
 
     /* Hide contextmenu when page scroll */
     $(window).on('scroll', function()
