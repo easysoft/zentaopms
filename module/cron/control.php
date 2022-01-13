@@ -134,9 +134,12 @@ class cron extends control
      */
     public function ajaxExec($restart = false)
     {
-        ignore_user_abort(true);
-        set_time_limit(0);
-        session_write_close();
+        if ('cli' !== PHP_SAPI)
+        {
+            ignore_user_abort(true);
+            set_time_limit(0);
+            session_write_close();
+        }
         /* Check cron turnon. */
         if(empty($this->config->global->cron)) die();
 
@@ -183,11 +186,21 @@ class cron extends control
                 /* Skip cron that status is running and run time is less than max. */
                 if($cronInfo->status == 'running' and (time() - strtotime($cronInfo->lastTime)) < $this->config->cron->maxRunTime) continue;
                 /* Skip cron that last time is more than this cron time. */
-                if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) die();
+                if ('cli' === PHP_SAPI)
+                {
+                    if($cronInfo->lastTime >= $cron['time']->format(DT_DATETIME1)) continue;
+                }
+                else
+                {
+                    if($cronInfo->lastTime > $cron['time']->format(DT_DATETIME1)) die();
+                }
 
                 if($now > $cron['time'])
                 {
-                    $this->cron->changeStatus($id, 'running');
+                    if (!$this->cron->changeStatusRunning($id, $cronInfo->lastTime))
+                    {
+                        continue;
+                    }
                     $parsedCrons[$id]['time'] = $cron['cron']->getNextRunDate();
 
                     /* Execution command. */
@@ -239,11 +252,12 @@ class cron extends control
             sleep($sleepTime);
 
             /* Break while. */
-            if(connection_status() != CONNECTION_NORMAL) break;
+            if('cli' !== PHP_SAPI && connection_status() != CONNECTION_NORMAL) break;
             if(((time() - $startedTime) / 3600 / 24) >= $this->config->cron->maxRunDays) break;
         }
 
         /* Revert cron status to stop. */
         $this->cron->markCronStatus('stop', $configID);
     }
+
 }
