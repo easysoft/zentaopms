@@ -244,10 +244,21 @@ class project extends control
         if($project->model == 'kanban')
         {
             $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
-            $this->view->kanbanList  = $kanbanList;
-            $this->view->browseType  = $browseType;
-            $this->view->memberGroup = $this->execution->getMembersByIdList(array_keys($kanbanList));
-            $this->view->usersAvatar = $this->loadModel('user')->getAvatarPairs();
+
+            $executionActions = array();
+            foreach($kanbanList as $kanbanID => $kanban)
+            {
+                foreach($this->config->execution->statusActions as $action)
+                {
+                    if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
+                }
+            }
+
+            $this->view->kanbanList       = $kanbanList;
+            $this->view->browseType       = $browseType;
+            $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
+            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+            $this->view->executionActions = $executionActions;
         }
 
         $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
