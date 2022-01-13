@@ -145,7 +145,7 @@ class kanbanModel extends model
                         $copyColumn->parent = $parentColumns[$copyColumn->parent];
                     }
 
-                    $parentColumnID = $this->createColumn($regionID, $copyColumn);
+                    $parentColumnID = $this->createColumn($regionID, $copyColumn, 0, 0, $from);
 
                     if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
                     if(dao::isError()) return false;
@@ -230,10 +230,11 @@ class kanbanModel extends model
      * @param  object $column
      * @param  int    $order
      * @param  int    $parent
+     * @param  string $from kanban|execution
      * @access public
      * @return int
      */
-    public function createColumn($regionID, $column = null, $order = 0, $parent = 0)
+    public function createColumn($regionID, $column = null, $order = 0, $parent = 0, $from = 'kanban')
     {
         if(empty($column))
         {
@@ -312,7 +313,7 @@ class kanbanModel extends model
 
         $columnID = $this->dao->lastInsertID();
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
+        if($from == 'kanban') $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
         /* Add kanban cell. */
         $lanes    = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
@@ -1254,14 +1255,16 @@ class kanbanModel extends model
      * Get lane pairs by region id.
      *
      * @param  array  $regionID
+     * @param  string $type all|story|task|bug|common
      * @access public
      * @return array
      */
-    public function getLanePairsByRegion($regionID)
+    public function getLanePairsByRegion($regionID, $type = 'all')
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
             ->andWhere('region')->eq($regionID)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
     }
 
@@ -1285,10 +1288,13 @@ class kanbanModel extends model
                 ->add('region', $regionID)
                 ->add('order', $maxOrder ? $maxOrder + 1 : 1)
                 ->add('lastEditedTime', helper::now())
-                ->add('type', 'common')
+                ->setIF(isset($this->post->laneType), 'execution', $kanbanID)
                 ->trim('name')
                 ->setDefault('color', '#7ec5ff')
+                ->remove('laneType')
                 ->get();
+
+            $lane->type = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
 
             $mode = zget($lane, 'mode', '');
             if($mode == 'sameAsOther')
@@ -1298,11 +1304,12 @@ class kanbanModel extends model
             }
             elseif($mode == 'independent')
             {
-                $groupID = $this->createGroup($kanbanID, $regionID);
-                $kanban  = $this->getByID($kanbanID);
-                $this->createDefaultColumns($kanban, $regionID, $groupID);
-
-                $lane->group = $groupID;
+                $lane->group = $this->createGroup($kanbanID, $regionID);
+                if($lane->type == 'common')
+                {
+                    $kanban = $this->getByID($kanbanID);
+                    $this->createDefaultColumns($kanban, $regionID, $lane->group);
+                }
             }
         }
 
@@ -1313,6 +1320,7 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
+        if($lane->type != 'common' and $mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type);
         return $laneID;
     }
 

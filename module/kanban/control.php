@@ -417,10 +417,11 @@ class kanban extends control
      *
      * @param  int    $kanbanID
      * @param  int    $regionID
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
-    public function createLane($kanbanID, $regionID)
+    public function createLane($kanbanID, $regionID, $from = 'kanban')
     {
         if(!empty($_POST))
         {
@@ -431,8 +432,12 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
-        $this->display();
+        $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $from == 'kanban' ? 'all' : 'story');
+        $this->view->from     = $from;
+        $this->view->regionID = $regionID;
+
+        if($from == 'kanban') $this->display();
+        if($from == 'execution') $this->display('kanban', 'createexeclane');
     }
 
     /**
@@ -1131,5 +1136,21 @@ class kanban extends control
         $this->view->module    = $moduleName;
         $this->view->method    = $methodName;
         $this->display();
+    }
+
+    /**
+     * Ajax get lanes by region id.
+     *
+     * @param  int    $regionID
+     * @param  string $type all|story|task|bug
+     * @access public
+     * @return string
+     */
+    public function ajaxGetLanes($regionID, $type = 'all')
+    {
+        $lanes = $this->kanban->getLanePairsByRegion($regionID, $type);
+
+        if(empty($lanes)) return;
+        return print(html::select('otherLane', $lanes, '', "class='form-control'"));
     }
 }

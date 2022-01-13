@@ -248,6 +248,7 @@ $lang->kanbanlane->default   = '默认泳道';
 $lang->kanbanlane->column    = '泳道看板列';
 $lang->kanbanlane->otherlane = '选择共享看板列的泳道';
 $lang->kanbanlane->color     = '泳道颜色';
+$lang->kanbanlane->WIPType   = '泳道在制品类型';
 
 $lang->kanbanlane->confirmDelete = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
 

@@ -139,7 +139,7 @@ js::set('hasTaskButton', $hasTaskButton);
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
             <ul class="dropdown-menu pull-right">
               <?php if($canEditRegion) echo '<li>' . html::a(helper::createLink('kanban', 'editRegion', "regionID={$region->id}", '', 1), '<i class="icon icon-edit"></i>' . $this->lang->kanban->editRegion, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
-              <?php if($canCreateLane) echo '<li>' . html::a(helper::createLink('kanban', 'createLane', "executionID={$execution->id}&regionID={$region->id}", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
+              <?php if($canCreateLane) echo '<li>' . html::a(helper::createLink('kanban', 'createLane', "executionID={$execution->id}&regionID={$region->id}&from=execution", '', 1), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createLane, '', "class='iframe'") . '</li>';?>
               <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(helper::createLink('kanban', 'deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
             </ul>
             <?php endif;?>
