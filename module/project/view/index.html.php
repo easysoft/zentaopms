@@ -97,7 +97,15 @@
                 </div>
                 <?php endif;?>
               </div>
+              <div class='kanban-members-total pull-left'><?php echo sprintf($lang->project->teamSumCount, count($members));?></div>
               <?php endif;?>
+              <div class='kanbanAcl'>
+                <?php $icon = 'unlock';?>
+                <?php if($kanban->acl == 'private') $icon = 'lock';?>
+                <?php if($kanban->acl == 'extend')  $icon = 'inherit-space';?>
+                <i class="<?php echo 'icon-' . $icon;?>"></i>
+                <?php echo zget($lang->execution->kanbanAclList, $kanban->acl, '');?>
+              </div>
             </div>
           </div>
         </div>

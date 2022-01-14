@@ -172,6 +172,9 @@ else
     $lang->execution->aclList['open']    = "公开（有{$lang->executionCommon}视图权限即可访问）";
 }
 
+$lang->execution->kanbanAclList['private'] = '私有';
+$lang->execution->kanbanAclList['open']    = '继承项目';
+
 $lang->execution->storyPoint = '故事点';
 
 $lang->execution->burnByList['left']       = '按剩余工时查看';

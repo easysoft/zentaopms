@@ -463,6 +463,7 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     $region.data('zui.kanban').render(regionData.groups);
+    resetRegionHeight('open');
     return true;
 }
 
