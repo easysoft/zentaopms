@@ -318,7 +318,7 @@ class kanbanModel extends model
         /* Add kanban cell. */
         $lanes    = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
         $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
-        foreach($lanes as $laneID) $this->addKanbanCell($kanbanID, $laneID, $columnID, 'card');
+        foreach($lanes as $laneID) $this->addKanbanCell($kanbanID, $laneID, $columnID, 'common');
 
         return $columnID;
     }
@@ -449,7 +449,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, $laneID, $columnID, 'card', $cardID);
+            $this->addKanbanCell($kanbanID, $laneID, $columnID, 'common', $cardID);
 
             return $cardID;
         }
@@ -1561,17 +1561,12 @@ class kanbanModel extends model
         $laneID = $this->dao->lastInsertID();
         if($lane->type != 'common' and isset($mode) and $mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
 
-        if(isset($mode) and $mode == 'sameAsOther')
+        if(isset($mode) and ($mode == 'sameAsOther' or ($lane->type == 'common' and $mode == 'independent')))
         {
             $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
             foreach($columnIDList as $columnID)
             {
-                $data = new stdclass();
-                $data->kanban = $kanbanID;
-                $data->lane   = $laneID;
-                $data->column = $columnID;
-                $data->type   = $lane->type;
-                $this->dao->insert(TABLE_KANBANCELL)->data($data)->exec();
+                $this->addKanbanCell($kanbanID, $laneID, $columnID, $lane->type);
 
                 if(dao::isError()) return false;
             }
