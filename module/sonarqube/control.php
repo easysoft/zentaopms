@@ -101,17 +101,20 @@ class sonarqube extends control
     protected function checkToken($sonarqubeID = 0)
     {
         $sonarqube = fixer::input('post')->get();
-        $this->dao->update('sonarqube')->data($sonarqube)->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty');
+        $this->dao->update('sonarqube')->data($sonarqube)
+            ->batchCheck(empty($sonarqubeID) ? $this->config->sonarqube->create->requiredFields : $this->config->sonarqube->edit->requiredFields, 'notempty')
+            ->batchCheck("url", 'URL');
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         if(strpos($sonarqube->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->sonarqube->hostError))));
 
         /* Check name and url unique. */
         $existSonarQube = $this->dao->select('*')->from(TABLE_PIPELINE)
             ->where("type='sonarqube' and (name='{$sonarqube->name}' or url='{$sonarqube->url}')")
+            ->andWhere('deleted')->eq('0')
             ->beginIF(!empty($sonarqubeID))->andWhere('id')->ne($sonarqubeID)->fi()
             ->fetch();
         if(isset($existSonarQube->name) and $existSonarQube->name == $sonarqube->name) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->nameRepeatError));
-        if(isset($existSonarQube->url) and $existSonarQube->url== $sonarqube->url) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->urlRepeatError));
+        if(isset($existSonarQube->url) and $existSonarQube->url == $sonarqube->url) return $this->send(array('result' => 'fail', 'message' => $this->lang->sonarqube->urlRepeatError));
 
         $token  = base64_encode("{$sonarqube->account}:{$sonarqube->password}");
         $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
@@ -225,7 +228,7 @@ class sonarqube extends control
         $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
-        $this->view->sonarqubeProjectList = empty($sonarqubeProjectList) ? $sonarqubeProjectList: $sonarqubeProjectList[$pageID - 1];
+        $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
         $this->view->projectJobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
         $this->view->orderBy              = $orderBy;
         $this->display();
