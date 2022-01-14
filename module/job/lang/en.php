@@ -57,6 +57,7 @@ $lang->job->sendExec       = 'Send execute request success.';
 $lang->job->inputName      = 'Please enter parameter name.';
 $lang->job->invalidName    = 'The parameter name should be letters, numbers or underlines.';
 $lang->job->repoExists     = 'This repository has a build task associated with it『%s』';
+$lang->job->projectExists  = 'This SonarQube Project has a build task associated with it『%s』';
 $lang->job->mustUseJenkins = 'SonarQube frame is only used if the build engine is JenKins.';
 
 $lang->job->buildTypeList['build']          = 'Only Build';

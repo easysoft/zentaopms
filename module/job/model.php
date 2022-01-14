@@ -194,8 +194,19 @@ class jobModel extends model
             $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo));
             if(!empty($sonarqubeJob))
             {
-                $message = sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
+                $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
                 dao::$errors[]['repo'] = $message;
+                return false;
+            }
+        }
+
+        if(!empty($job->projectKey) and $job->frame == 'sonarqube')
+        {
+            $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
+            if(!empty($projectList))
+            {
+                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
+                dao::$errors[]['projectKey'] = $message;
                 return false;
             }
         }
@@ -300,8 +311,19 @@ class jobModel extends model
             $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo), $id);
             if(!empty($sonarqubeJob))
             {
-                $message = sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
+                $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
                 dao::$errors[]['repo'] = $message;
+                return false;
+            }
+        }
+
+        if(!empty($job->projectKey) and $job->frame == 'sonarqube')
+        {
+            $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
+            if(!empty($projectList) && $projectList[$job->projectKey]->id != $id)
+            {
+                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
+                dao::$errors[]['projectKey'] = $message;
                 return false;
             }
         }
@@ -599,16 +621,17 @@ class jobModel extends model
      *
      * @param  int    $sonarqubeID
      * @param  array  $projectKeys
+     * @param  bool   $emptyShowAll
      * @access public
      * @return array
      */
-    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array())
+    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array(), $emptyShowAll = false)
     {
         return $this->dao->select('projectKey,id')->from(TABLE_JOB)
             ->where('deleted')->eq(0)
             ->andWhere('frame')->eq('sonarqube')
             ->andWhere('sonarqubeServer')->eq($sonarqubeID)
-            ->andWhere('projectKey')->in($projectKeys)
+            ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
     }
 }
