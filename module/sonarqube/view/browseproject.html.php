@@ -26,7 +26,7 @@
       </form>
     </div>
   </div>
-  <div class="btn-toolbar pull-right">
+  <div class="btn-toolbar pull-right hide">
     <?php if(common::hasPriv('sonarqube', 'createProject')) common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
   </div>
 </div>
@@ -35,7 +35,7 @@
   <p>
     <span class="text-muted"><?php echo $lang->noData;?></span>
     <?php if(empty($keyword) and common::hasPriv('sonarqube', 'createProject')):?>
-    <?php echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
+    <?php //echo html::a($this->createLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID"), "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-info'");?>
     <?php endif;?>
   </p>
 </div>
