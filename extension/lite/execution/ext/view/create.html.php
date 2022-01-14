@@ -97,6 +97,7 @@
         <tr>
           <td colspan='4' class='text-center form-actions'>
             <?php echo html::submitButton();?>
+            <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
             <?php echo html::hidden('lifetime', key($lang->execution->lifeTimeList));?>
             <?php echo html::hidden("products[]", key($allProducts));?>
             <?php echo html::hidden("PO", '');?>

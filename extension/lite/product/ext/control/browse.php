@@ -15,6 +15,7 @@ class product extends control
         $this->products = array();
         foreach($projectProducts as $productID => $product) $this->products[$productID] = $product->name;
 
+        reset($projectProducts);
         $productID = key($projectProducts);
         $product   = $projectProducts[$productID];
 
