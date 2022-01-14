@@ -19,7 +19,7 @@
       foreach($lang->project->featureBar as $label => $labelName)
       {
           $active = $browseType == $label ? 'btn-active-text' : '';
-          echo html::a($this->createLink('project', 'index', "projectID=$project->id&browseType=" . $label), '<span class="text">' . $labelName . '</span> ' . ($browseType == $label ? "<span class='label label-light label-badge'>0</span>" : ''), '', "class='btn btn-link $active'");
+          echo html::a($this->createLink('project', 'index', "projectID=$project->id&browseType=" . $label), '<span class="text">' . $labelName . '</span> ' . ($browseType == $label ? "<span class='label label-light label-badge'>" . (int)count($kanbanList) . '</span>' : ''), '', "class='btn btn-link $active'");
       }
     ?>
   </div>
@@ -40,10 +40,10 @@
     <?php $kanbanCount = 0;?>
     <?php foreach ($kanbanList as $kanbanID => $kanban):?>
     <div class='col' data-id='<?php echo $kanbanID?>'>
-      <div class='panel'>
+      <div class='panel' data-url='<?php echo $this->createLink('execution', 'kanban', "kanbanID=$kanbanID");?>'>
         <div class='panel-heading'>
            <div class='kanban-name'>
-             <span class="label label-closed"><?php echo zget($lang->execution->statusList, $kanban->status);?></span>
+             <span class="label label-<?php echo $kanban->status;?>"><?php echo zget($lang->execution->statusList, $kanban->status);?></span>
              <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
            </div>
            <?php

@@ -1,6 +1,5 @@
 /* Make cards clickable. */
-var $kanbans = $('.kanbans');
-$kanbans.on('click', '.panel', function(e)
+$('#cards').on('click', '.panel', function(e)
 {
     if(!$(e.target).closest('.kanban-actions').length)
     {
