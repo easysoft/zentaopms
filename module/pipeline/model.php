@@ -76,7 +76,7 @@ class pipelineModel extends model
             ->add('private',md5(rand(10,113450)))
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->trim('token')
+            ->trim('url,token,account,password')
             ->skipSpecial('url,token,account,password')
             ->get();
         if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
@@ -105,7 +105,7 @@ class pipelineModel extends model
         $pipeline = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->trim('token')
+            ->trim('url,token,account,password')
             ->skipSpecial('url,token,account,password')
             ->get();
 
@@ -127,9 +127,9 @@ class pipelineModel extends model
      * Delete one record.
      *
      * @param  string $id     the id to be deleted
-     * @param  string $object the action object 
+     * @param  string $object the action object
      * @access public
-     * @return int 
+     * @return int
      */
     public function delete($id, $object = 'gitlab')
     {
