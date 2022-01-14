@@ -161,7 +161,7 @@ $(function()
         }
     })
 
-    $('#tabContent [data-ride="tree"]').tree('expand');
+    $('#swapper [data-ride="tree"]').tree('expand');
 
     $('#swapper #dropMenu .search-box').on('onSearchChange', function(event, value)
     {
