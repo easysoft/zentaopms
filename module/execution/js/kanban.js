@@ -1,3 +1,88 @@
+/**
+ * Display the kanban in full screen.
+ *
+ * @access public
+ * @return void
+ */
+function fullScreen()
+{
+    var element       = document.getElementById('kanbanContainer');
+    var requestMethod = element.requestFullScreen || element.webkitRequestFullScreen || element.mozRequestFullScreen || element.msRequestFullscreen;
+
+    if(requestMethod)
+    {
+        var afterEnterFullscreen = function()
+        {
+            $('#kanbanContainer').addClass('fullscreen')
+                .on('scroll', tryUpdateKanbanAffix);
+            $('.actions').hide();
+            $('.action').hide();
+            $('.kanban-group-header').hide();
+            $(".title").attr("disabled", true).css("pointer-events", "none");
+            $.cookie('isFullScreen', 1);
+        };
+
+        var whenFailEnterFullscreen = function(error)
+        {
+            exitFullScreen();
+        };
+
+        try
+        {
+            var result = requestMethod.call(element);
+            if(result && (typeof result.then === 'function' || result instanceof window.Promise))
+            {
+                result.then(afterEnterFullscreen).catch(whenFailEnterFullscreen);
+            }
+            else
+            {
+                afterEnterFullscreen();
+            }
+        }
+        catch (error)
+        {
+            whenFailEnterFullscreen(error);
+        }
+    }
+}
+
+/**
+ * Exit full screen.
+ *
+ * @access public
+ * @return void
+ */
+function exitFullScreen()
+{
+    $('#kanbanContainer').removeClass('fullscreen')
+        .off('scroll', tryUpdateKanbanAffix);
+    $('.actions').show();
+    $('.action').show();
+    $('.kanban-group-header').show();
+    $(".title").attr("disabled", false).css("pointer-events", "auto");
+    $.cookie('isFullScreen', 0);
+}
+
+document.addEventListener('fullscreenchange', function (e)
+{
+    if(!document.fullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('webkitfullscreenchange', function (e)
+{
+    if(!document.webkitFullscreenElement) exitFullScreen();
+});
+
+document.addEventListener('mozfullscreenchange', function (e)
+{
+    if(!document.mozFullScreenElement) exitFullScreen();
+});
+
+document.addEventListener('msfullscreenChange', function (e)
+{
+    if(!document.msfullscreenElement) exitFullScreen();
+});
+
 /** Change kanban scale size */
 function changeKanbanScaleSize(newScaleSize)
 {
