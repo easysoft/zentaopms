@@ -830,7 +830,7 @@ class kanbanModel extends model
         $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
             ->where('deleted')->eq(0)
-            ->andWhere("INSTR(t2.cards,CONCAT(',',t1.id,','))")->gt(0)
+            ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
             ->andWhere('archived')->eq(0)
             ->andWhere('t2.kanban')->eq($kanbanID)
             //->orderBy('`order` asc')
