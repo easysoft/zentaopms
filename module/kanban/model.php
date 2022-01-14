@@ -830,7 +830,7 @@ class kanbanModel extends model
         $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
             ->where('deleted')->eq(0)
-            ->andWhere("instr(t2.cards,t1.id)")->gt(0)
+            ->andWhere("INSTR(t2.cards,CONCAT(',',t1.id,','))")->gt(0)
             ->andWhere('archived')->eq(0)
             ->andWhere('t2.kanban')->eq($kanbanID)
             //->orderBy('`order` asc')
@@ -2482,8 +2482,8 @@ class kanbanModel extends model
         $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
 
-        $fromCardList = str_replace(",$cardID,", '', $fromCellCards);
-        $toCardList   = $toCellCards . "$cardID,";
+        $fromCardList = str_replace("$cardID,", '', $fromCellCards);
+        $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
 
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
