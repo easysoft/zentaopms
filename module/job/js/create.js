@@ -18,6 +18,8 @@ $(document).ready(function()
         $('#frameBox .loading').remove();
         $('#frameBox .input-group').append(html);
         $('#frameBox #frame').chosen();
+        
+        $('#frame').change();
     }
     getFrameSelect('');
 
@@ -241,10 +243,10 @@ $(document).ready(function()
             $('tr.gitlabRepo').hide();
             $('tr.commonRepo').show();
         }
+
         getFrameSelect(engine);
     });
 
     $('#engine').change();
-
     $('#triggerType').change();
 });
