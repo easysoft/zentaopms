@@ -5373,6 +5373,7 @@ class upgradeModel extends model
      */
     public function moveKanbanData()
     {
+        /* Move common kanban data. */
         $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
 
         $cellGroup = array();
@@ -5398,13 +5399,37 @@ class upgradeModel extends model
             $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
         }
 
-        $lanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('execution')->gt(0)->fetchPairs();
-        $this->dao->delete()->from(TABLE_KANBANLANE)->where('execution')->gt(0)->exec();
-        $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($lanePairs)->exec();
+        /* Drop group kanban data. */
+        $groupLanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`groupby`')->ne('')->fetchPairs();
+        $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->in($groupLanePairs)->exec();
+        $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($groupLanePairs)->exec();
 
+        /* Move execution kanban data. */
+        $executionKanban = $this->dao->select('t1.id as `lane`, t1.execution, t1.type, t2.id as `column`, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id = t2.lane')
+            ->where('t1.execution')->gt(0)
+            ->fetchGroup('lane');
+
+        foreach($executionKanban as $laneID => $laneGroup)
+        {
+            foreach($laneGroup as $colData)
+            {
+                $cell = new stdclass();
+                $cell->kanban = $colData->execution;
+                $cell->lane   = $laneID;
+                $cell->column = $colData->column;
+                $cell->type   = $colData->type;
+                $cell->cards  = $colData->cards;
+
+                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+            }
+        }
+
+        /* Drop unused field. */
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `lane`;");
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `lane`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `cards`;");
     }
 
     /**

@@ -125,7 +125,9 @@ class execution extends control
         $browseType = strtolower($status);
 
         /* Get products by execution. */
-        $execution   = $this->commonAction($executionID, $status);
+        $execution = $this->commonAction($executionID, $status);
+        if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+
         $executionID = $execution->id;
         $products    = $this->product->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
@@ -1973,9 +1975,10 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = '')
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
-        if($groupBy == '') $groupBy = 'default';
+        if(empty($groupBy)) $groupBy = 'default';
+
         $this->lang->execution->menu = new stdclass();
         $execution        = $this->commonAction($executionID);
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy);
