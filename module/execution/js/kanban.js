@@ -308,14 +308,14 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '" data-toggle="modal" data-width="80%"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
-    if(!user.avatar && window.userList && window.userList[user.account]) user = {avatar: userList[user.account].avatar, account: user.account};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = {avatar: userList[user.account].avatar, account: user.account, realname: users[user.account]};
 
     var $noPrivAvatar = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" />').avatar({user: user});
     if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
     if(objectType == 'story' && !priv.canAssignStory) return $noPrivAvatar;
     if(objectType == 'bug'   && !priv.canAssignBug)   return $noPrivAvatar;
 
-    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.account + '" href="' + link + '"/>').avatar({user: user}).attr('data-toggle', 'modal').attr('data-width', '80%');
+    return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + user.realname + '" href="' + link + '"/>').avatar({user: user}).attr('data-toggle', 'modal').attr('data-width', '80%');
 }
 
 /**
@@ -924,8 +924,6 @@ function initKanban($kanban)
  */
 $(function()
 {
-    if($.cookie('isFullScreen') == 1) fullScreen();
-
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);

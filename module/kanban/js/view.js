@@ -834,8 +834,6 @@ function initKanban($kanban)
  */
 $(function()
 {
-    if($.cookie('isFullScreen') == 1) fullScreen();
-
     window.isMultiLanes = laneCount > 1;
 
     /* Init first kanban */
