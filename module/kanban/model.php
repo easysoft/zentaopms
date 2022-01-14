@@ -1163,7 +1163,7 @@ class kanbanModel extends model
                 $columnData[$columnID]['name']       = $columnName;
                 $columnData[$columnID]['color']      = '#333';
                 $columnData[$columnID]['limit']      = -1;
-                $columnData[$columnID]['laneType']   = $groupBy . $laneID;
+                $columnData[$columnID]['laneType']   = $browseType;
                 $columnData[$columnID]['asParent']   = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
                 $columnData[$columnID]['parentType'] = $parentColumn;
 
@@ -1270,7 +1270,7 @@ class kanbanModel extends model
 
             $lane = new stdclass();
             $lane->id        = $groupBy . $objectID;
-            $lane->type      = $groupBy . $objectID;
+            $lane->type      = $browseType;
             $lane->execution = $executionID;
             $lane->name      = $objectName;
             $lane->order     = $order;
