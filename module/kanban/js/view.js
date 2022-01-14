@@ -762,6 +762,18 @@ function createColumnMenu(options)
     return items;
 }
 
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight, kanban)
+{
+    if(!isMultiLanes) return 0;
+
+    var options      = kanban.options;
+    var displayCards = +(options.displayCards || 2);
+
+    if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
+    return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -782,9 +794,12 @@ function initKanban($kanban)
     {
         data:              region.groups,
         maxColHeight:      510,
+        calcColHeight:     calcColHeight,
         fluidBoardWidth:   false,
         minColWidth:       300,
         maxColWidth:       300,
+        cardHeight:        60,
+        displayCards:      window.displayCards || 2,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         itemRender:        renderKanbanItem,
@@ -814,6 +829,8 @@ function initKanban($kanban)
 $(function()
 {
     if($.cookie('isFullScreen') == 1) fullScreen();
+
+    window.isMultiLanes = $('#kanban .kanban').length > 1 || $('#kanban .kanban-lane').length > 1;
 
     /* Init first kanban */
     $('.kanban').each(function()
