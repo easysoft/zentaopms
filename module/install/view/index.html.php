@@ -38,6 +38,7 @@
             <?php endif;?>
           </td>
         </tr> 
+<!--
         <tr>
           <td colspan='2'>
             <h5><?php echo $lang->install->promotion?></h5>
@@ -56,6 +57,7 @@
             </div>
           </td>
         </tr>
+-->
       </table>
     </div>
     <div class='modal-footer'>
