@@ -746,15 +746,17 @@ class kanban extends control
      * Move a card.
      *
      * @param  int    $cardID
+     * @param  int    $fromColID
      * @param  int    $toColID
+     * @param  int    $fromLaneID
      * @param  int    $toLaneID
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $toColID, $toLaneID, $kanbanID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID)
     {
-        $this->kanban->moveCard($cardID, $toColID, $toLaneID);
+        $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         die(json_encode($kanbanGroup));

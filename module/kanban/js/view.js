@@ -374,16 +374,19 @@ function showErrorMessager(message)
  * Move a card.
  *
  * @param  int    $cardID
+ * @param  int    $fromColID
  * @param  int    $toColID
+ * @param  int    $fromLaneID
+ * @param  int    $toLaneID
  * @param  int    $kanbanID
  * @param  int    $regionID
  * @access public
  * @return string
  */
-function moveCard(cardID, toColID, toLaneID, kanbanID, regionID)
+function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, regionID)
 {
     if(!cardID) return false;
-    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&toColID=' + toColID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
+    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&fromColID='+ fromColID + '&toColID=' + toColID + '&fromLaneID='+ fromLaneID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
     return $.ajax(
     {
         method:   'post',
@@ -586,7 +589,7 @@ function handleDropTask($element, event, kanban)
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID = $card.data().id;
-    moveCard(cardID, newCol.id, newLane.id, kanbanID, regionID);
+    moveCard(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, kanbanID, regionID);
 }
 
 /**
