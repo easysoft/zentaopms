@@ -884,18 +884,29 @@ window.menuCreators =
 /**
  * init Kanban
  */
+/**
+ * Init kanban.
+ *
+ * @param  object $kanban
+ * @access public
+ * @return void
+ */
 function initKanban($kanban)
 {
-    var id = $kanban.data('id');
-    var region = regions[id];
+    var id           = $kanban.data('id');
+    var region       = regions[id];
+    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
 
     $kanban.kanban(
     {
         data:              region.groups,
         maxColHeight:      510,
+        calcColHeight:     calcColHeight,
         fluidBoardWidth:   false,
         minColWidth:       300,
         maxColWidth:       300,
+        cardHeight:        60,
+        displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         cardHeight:        getCardHeight(),
@@ -1135,3 +1146,15 @@ $(function()
         }
     });
 });
+
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight, kanban)
+{
+    var options = kanban.options;
+    if(!options.displayCards) return 0;
+
+    var displayCards = +(options.displayCards || 2);
+
+    if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
+    return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
+}
