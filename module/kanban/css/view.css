@@ -83,7 +83,7 @@
 .region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
-.kanban-card {height: auto !important; padding: 8px 14px !important}
+.kanban-card {height: auto !important; padding: 8px 14px !important; min-height: 60px;}
 .kanban-card > .title {word-break: break-all;}
 .kanban-card > .info {position: relative; margin-top: 5px}
 .kanban-card > .info > .info + .info {margin-left: 8px}

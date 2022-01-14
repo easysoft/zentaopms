@@ -770,7 +770,9 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
 {
     if(!isMultiLanes) return 0;
 
-    var options      = kanban.options;
+    var options = kanban.options;
+
+    if(!options.displayCards) return 0;
     var displayCards = +(options.displayCards || 2);
 
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
@@ -790,8 +792,9 @@ window.menuCreators =
  */
 function initKanban($kanban)
 {
-    var id = $kanban.data('id');
-    var region = regions[id];
+    var id           = $kanban.data('id');
+    var region       = regions[id];
+    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
 
     $kanban.kanban(
     {
@@ -802,7 +805,7 @@ function initKanban($kanban)
         minColWidth:       287,
         maxColWidth:       287,
         cardHeight:        60,
-        displayCards:      window.displayCards || 2,
+        displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         itemRender:        renderKanbanItem,
@@ -833,7 +836,7 @@ $(function()
 {
     if($.cookie('isFullScreen') == 1) fullScreen();
 
-    window.isMultiLanes = $('#kanban .kanban').length > 1 || $('#kanban .kanban-lane').length > 1;
+    window.isMultiLanes = laneCount > 1;
 
     /* Init first kanban */
     $('.kanban').each(function()
