@@ -33,9 +33,6 @@
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->execution->create;?></h2>
-      <div class="pull-right btn-toolbar">
-        <button type='button' class='btn btn-link' data-toggle='modal' data-target='#copyProjectModal'><?php echo html::icon($lang->icons['copy'], 'muted') . ' ' . ((($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->copyExec : $lang->execution->copy);?></button>
-      </div>
     </div>
     <form class='form-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
       <table class='table table-form'>
@@ -48,12 +45,13 @@
         <?php endif;?>
         <tr>
           <th class='w-120px'><?php echo $lang->execution->name;?></th>
-          <td class="col-main"><?php echo html::input('name', $name, "class='form-control' required");?></td>
-          <td colspan='2'>
+          <td class="col-main">
+            <?php echo html::input('name', $name, "class='form-control' required");?>
             <?php echo html::hidden('begin', date('Y-m-d'));?>
             <?php echo html::hidden('end', date('Y-m-d'));?>
             <?php echo html::hidden('days', '1');?>
           </td>
+          <td colspan='2'></td>
         </tr>
         <tr>
           <th><?php echo $lang->execution->code;?></th>
@@ -109,34 +107,6 @@
         </tr>
       </table>
     </form>
-  </div>
-</div>
-<div class='modal fade modal-scroll-inside' id='copyProjectModal'>
-  <div class='modal-dialog mw-900px'>
-    <div class='modal-header'>
-      <button type='button' class='close' data-dismiss='modal'><i class="icon icon-close"></i></button>
-      <h4 class='modal-title' id='myModalLabel'><?php echo $lang->execution->copyTitle;?></h4>
-    </div>
-    <div class='modal-body'>
-      <?php if(count($executions) == 1):?>
-      <div class='alert with-icon'>
-        <i class='icon-exclamation-sign'></i>
-        <div class='content'><?php echo $lang->execution->copyNoExecution;?></div>
-      </div>
-      <?php else:?>
-      <div id='copyProjects' class='row'>
-      <?php foreach ($executions as $id => $execution):?>
-      <?php if(empty($id)):?>
-      <?php if($copyExecutionID != 0):?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='' class='cancel'><?php echo html::icon($lang->icons['cancel']) . ' ' . $lang->execution->cancelCopy;?></a></div>
-      <?php endif;?>
-      <?php else: ?>
-      <div class='col-md-4 col-sm-6'><a href='javascript:;' data-id='<?php echo $id;?>' class='nobr <?php echo ($copyExecutionID == $id) ? ' active' : '';?>'><?php echo html::icon($lang->icons[$execution->type], 'text-muted') . ' ' . $execution->name;?></a></div>
-      <?php endif; ?>
-      <?php endforeach;?>
-      </div>
-      <?php endif;?>
-    </div>
   </div>
 </div>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
