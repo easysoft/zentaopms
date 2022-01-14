@@ -443,6 +443,7 @@ EOF;
         $this->view->tasks      = $tasks;
         $this->view->summary    = $this->loadModel('execution')->summary($tasks);
         $this->view->type       = $type;
+        $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
         $this->view->recTotal   = $recTotal;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
