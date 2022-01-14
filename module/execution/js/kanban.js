@@ -222,8 +222,8 @@ if(!window.kanbanDropRules)
     {
         story:
         {
-            backlog: ['ready'],
-            ready: ['backlog'],
+            backlog: ['ready', 'backlog'],
+            ready: ['backlog', 'ready'],
         },
         bug:
         {
@@ -237,12 +237,12 @@ if(!window.kanbanDropRules)
         },
         task:
         {
-            'wait': ['developing', 'developed', 'canceled', 'closed'],
-            'developing': ['developed', 'pause'],
-            'developed': ['canceled', 'closed'],
-            'pause': ['developing'],
-            'canceled': ['developing'],
-            'closed': ['developing'],
+            'wait': ['wait', 'developing', 'developed', 'canceled', 'closed'],
+            'developing': ['developing', 'developed', 'pause'],
+            'developed': ['developed', 'canceled', 'closed'],
+            'pause': ['pause', 'developing'],
+            'canceled': ['canceled', 'developing'],
+            'closed': ['closed', 'developing'],
         }
     }
 }
@@ -256,13 +256,13 @@ function findDropColumns($element, $root)
 {
     var $col        = $element.closest('.kanban-col');
     var col         = $col.data();
-    var kanbanID    = $root.data('id');
-    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[kanbanID] : null;
+    var laneType    = $element.closest('.kanban-lane').data().lane.type;
+    var kanbanRules = window.kanbanDropRules ? window.kanbanDropRules[laneType] : null;
 
     if(!kanbanRules) return $root.find('.kanban-lane-col:not([data-type="' + col.type + '"])');
 
     var colRules = kanbanRules[col.type];
-    var lane     = $col.closest('.kanban-lane').data('lane');
+    var groupID  = $col.closest('.kanban-board').data().id;
     return $root.find('.kanban-lane-col').filter(function()
     {
         if(!colRules) return false;
@@ -270,11 +270,9 @@ function findDropColumns($element, $root)
 
         var $newCol = $(this);
         var newCol = $newCol.data();
-        if(newCol.id === col.id) return false;
+        var newGroupID =  $newCol.closest('.kanban-board').data().id;
 
-        var $newLane = $newCol.closest('.kanban-lane');
-        var newLane = $newLane.data('lane');
-        var canDropHere = colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
+        var canDropHere = colRules.indexOf(newCol.type) > -1 && newGroupID.id === groupID.id;
         if(canDropHere) $newCol.addClass('can-drop-here');
         return canDropHere;
     });
@@ -643,6 +641,27 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 }
 
 /**
+ * Update a region.
+ *
+ * @param  int      regionID
+ * @param  array    regionData
+ * @access public
+ * @return boolean
+ */
+function updateRegion(regionID, regionData = [])
+{
+    if(!regionID) return false;
+
+    var $region = $('#kanban'+ regionID).kanban();
+
+    if(!$region.length) return false;
+    if(!regionData) regionData = regions[regionID];
+
+    $region.data('zui.kanban').render(regionData.groups);
+    return true;
+}
+
+/**
  * Handle drop task.
  *
  * @param  object $element
@@ -669,8 +688,9 @@ function handleDropTask($element, event, kanban)
     var cardID      = $card.data().id;
     var fromColType = $oldCol.data('type');
     var toColType   = $newCol.data('type');
+    var regionID    = $card.closest('.region').data().id;
 
-    changeCardColType(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, cardType, fromColType, toColType);
+    changeCardColType(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, cardType, fromColType, toColType, regionID);
 }
 
 var kanbanActionHandlers =
@@ -691,18 +711,19 @@ function handleKanbanAction(action, $element, event, kanban)
 /**
  * changeCardColType
  *
- * @param  int    $cardID
- * @param  int    $fromColID
- * @param  int    $toColID
- * @param  int    $fromLaneID
- * @param  int    $toLaneID
- * @param  string $cardType
- * @param  string $fromColType
- * @param  string $toColType
+ * @param  int    cardID
+ * @param  int    fromColID
+ * @param  int    toColID
+ * @param  int    fromLaneID
+ * @param  int    toLaneID
+ * @param  string cardType
+ * @param  string fromColType
+ * @param  string toColType
+ * @param  int    regionID
  * @access public
  * @return void
  */
-function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, cardType, fromColType, toColType)
+function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, cardType, fromColType, toColType, regionID = 0)
 {
     var objectID   = cardID;
     var showIframe = false;
@@ -805,22 +826,21 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
 
         if(moveCard)
         {
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
-            $.get(link, function(data)
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
+            $.ajax(
             {
-                if(data)
+                method:   'post',
+                dataType: 'json',
+                url:       link,
+                success: function(data)
                 {
-                    kanbanGroup = $.parseJSON(data);
-                    if(groupBy == 'default')
-                    {
-                        updateKanban('bug', kanbanGroup.bug);
-                    }
-                    else
-                    {
-                        updateKanban(browseType, kanbanGroup[groupBy]);
-                    }
+                    updateRegion(regionID, data[regionID]);
+                },
+                error: function(xhr, status, error)
+                {
+                    showErrorMessager(error || lang.timeout);
                 }
-            })
+            });
         }
     }
 
@@ -829,22 +849,21 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     {
         if(toColType == 'ready' || toColType == 'backlog')
         {
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy);
-            $.get(link, function(data)
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID+ '&orderBy=' + orderBy );
+            $.ajax(
             {
-                if(data)
+                method:   'post',
+                dataType: 'json',
+                url:       link,
+                success: function(data)
                 {
-                    kanbanGroup = $.parseJSON(data);
-                    if(groupBy == 'default')
-                    {
-                        updateKanban('story', kanbanGroup.story);
-                    }
-                    else
-                    {
-                        updateKanban(browseType, kanbanGroup[groupBy]);
-                    }
+                    updateRegion(regionID, data[regionID]);
+                },
+                error: function(xhr, status, error)
+                {
+                    showErrorMessager(error || lang.timeout);
                 }
-            })
+            });
         }
     }
 

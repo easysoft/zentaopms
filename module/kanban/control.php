@@ -1027,19 +1027,21 @@ class kanban extends control
 
     /**
      * Ajax move card.
-     * 
-     * @param  int    $cardID 
-     * @param  int    $fromColID 
-     * @param  int    $toColID 
-     * @param  int    $fromLaneID 
-     * @param  int    $toLaneID 
-     * @param  int    $executionID 
-     * @param  string $browseType 
-     * @param  string $groupBy 
+     *
+     * @param  int    $cardID
+     * @param  int    $fromColID
+     * @param  int    $toColID
+     * @param  int    $fromLaneID
+     * @param  int    $toLaneID
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @param  int    $regionID
+     * @param  string $orderBy
      * @access public
      * @return void
      */
-    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColID = 0, $fromLaneID = 0, $toLaneID = 0, $executionID = 0, $browseType = 'all', $groupBy = '')
+    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColID = 0, $fromLaneID = 0, $toLaneID = 0, $executionID = 0, $browseType = 'all', $groupBy = '', $regionID = 0, $orderBy)
     {
         $fromCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($executionID)
@@ -1069,7 +1071,7 @@ class kanban extends control
             ->andWhere('`column`')->eq($toColID)
             ->exec();
 
-        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $groupBy, $regionID);
         die(json_encode($kanbanGroup));
     }
 

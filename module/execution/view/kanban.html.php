@@ -18,6 +18,9 @@ $laneCount = 0;
 foreach($regions as $region) $laneCount += $region->laneCount;
 
 js::set('regions', $regions);
+js::set('browseType', $browseType);
+js::set('orderBy', $orderBy);
+js::set('groupBy', $groupBy);
 js::set('execution', $execution);
 js::set('productID', $productID);
 js::set('kanbanLang', $lang->kanban);
