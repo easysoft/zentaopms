@@ -63,6 +63,11 @@
             /* Fix error when request type is PATH_INFO and the project key contains '-'.*/
             $projectKey = str_replace('-', '*', $sonarqubeProject->key);
             common::printLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$projectKey", "<i class='icon icon-trash'></i> ", 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn btn-primary'");
+            if(isset($projectJobPairs[$sonarqubeProject->key]))
+            {
+                $jobID = $projectJobPairs[$sonarqubeProject->key];
+                common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin');
+            }
             ?>
           </td>
         </tr>

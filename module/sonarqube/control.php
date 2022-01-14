@@ -201,7 +201,12 @@ class sonarqube extends control
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
         $sonarqubeProjectList = $this->sonarqube->apiGetProjects($sonarqubeID, $keyword);
-        foreach($sonarqubeProjectList as $key => $sonarqubeProject) !isset($sonarqubeProject->lastAnalysisDate) ? $sonarqubeProject->lastAnalysisDate = '' : '';
+        $projectKeyList       = array();
+        foreach($sonarqubeProjectList as $key => $sonarqubeProject)
+        {
+            if(!isset($sonarqubeProject->lastAnalysisDate)) $sonarqubeProject->lastAnalysisDate = '';
+            $projectKeyList[] = $sonarqubeProject->key;
+        }
 
          /* Data sort. */
         list($order, $sort) = explode('_', $orderBy);
@@ -221,6 +226,7 @@ class sonarqube extends control
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = empty($sonarqubeProjectList) ? $sonarqubeProjectList: $sonarqubeProjectList[$pageID - 1];
+        $this->view->projectJobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
         $this->view->orderBy              = $orderBy;
         $this->display();
     }
