@@ -88,15 +88,6 @@ class executionModel extends model
             unset($this->lang->execution->menu->build);
         }
 
-        /* Hide story and qa menu when execution is story or design type. */
-        /*
-        if($execution and ($execution->attribute == 'story' or $execution->attribute == 'design'))
-        {
-            unset($this->lang->execution->menu->story);
-            unset($this->lang->execution->menu->qa);
-        }
-         */
-
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
         $moduleName = $this->app->getModuleName();

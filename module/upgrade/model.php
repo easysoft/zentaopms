@@ -5404,6 +5404,7 @@ class upgradeModel extends model
 
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `lane`;");
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `lane`;");
     }
 
     /**
