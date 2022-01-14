@@ -571,6 +571,14 @@ $lang->action->dynamicAction->user['loginxuanxuan'] = 'Login Desktop';
 $lang->action->dynamicAction->entry['created'] = 'Add Application';
 $lang->action->dynamicAction->entry['edited']  = 'Edit Application';
 
+$lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
+$lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
+$lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
+
+$lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
+$lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
+$lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';

@@ -213,7 +213,7 @@ $(document).ready(function()
         $('#sonarProject #projectKey').remove();
         $('#sonarProject #projectKey_chosen').remove();
         $('#sonarProject .input-group').append("<div class='load-indicator loading'></div>");
-        $.getJSON(createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(html)
+        $.get(createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(html)
         {
             $('#sonarProject .loading').remove();
             $('#sonarProject .input-group').append(html);

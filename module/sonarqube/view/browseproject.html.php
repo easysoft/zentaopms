@@ -46,6 +46,7 @@
       <?php $vars = "sonarqubeID={$sonarqubeID}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
+          <th class='c-key text-left'><?php common::printOrderLink('key', $orderBy, $vars, $lang->sonarqube->projectKey);?></th>
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->projectName);?></th>
           <th class='text-left'><?php common::printOrderLink('lastAnalysisDate', $orderBy, $vars, $lang->sonarqube->projectlastAnalysis);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
@@ -54,13 +55,14 @@
       <tbody>
         <?php foreach ($sonarqubeProjectList as $id => $sonarqubeProject): ?>
         <tr class='text'>
+          <td class='text' title='<?php echo $sonarqubeProject->key;?>'><?php echo $sonarqubeProject->key;?></td>
           <td class='text-c-name' title='<?php echo $sonarqubeProject->name;?>'><?php echo $sonarqubeProject->name;?></td>
           <td class='text' title='<?php echo substr($sonarqubeProject->lastAnalysisDate, 0, 10);?>'><?php echo substr($sonarqubeProject->lastAnalysisDate, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
             /* Fix error when request type is PATH_INFO and the project key contains '-'.*/
             $projectKey = str_replace('-', '*', $sonarqubeProject->key);
-            if(common::hasPriv('sonarqube', 'deleteProject')) echo html::a($this->createLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$projectKey"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn'");
+            common::printLink('sonarqube', 'deleteProject', "sonarqubeID=$sonarqubeID&project=$projectKey", "<i class='icon icon-trash'></i> ", 'hiddenwin', "title='{$lang->sonarqube->deleteProject}' class='btn btn-primary'");
             ?>
           </td>
         </tr>
