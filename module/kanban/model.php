@@ -316,9 +316,9 @@ class kanbanModel extends model
         if($from == 'kanban') $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
 
         /* Add kanban cell. */
-        $lanes    = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
+        $lanes    = $this->dao->select('id,type')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
         $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
-        foreach($lanes as $laneID) $this->addKanbanCell($kanbanID, $laneID, $columnID, 'common');
+        foreach($lanes as $laneID => $laneType) $this->addKanbanCell($kanbanID, $laneID, $columnID, $laneType);
 
         return $columnID;
     }
@@ -2096,6 +2096,8 @@ class kanbanModel extends model
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.lane')->eq($lane->id)
             ->fetchPairs();
+
+        if(empty($cardPairs)) return;
 
         if($laneType == 'story')
         {
