@@ -102,6 +102,7 @@
             <?php echo html::hidden("PO", '');?>
             <?php echo html::hidden("QD", '');?>
             <?php echo html::hidden("RD", '');?>
+            <?php echo html::hidden("type", 'kanban');?>
             <?php echo html::hidden("vision", 'lite');?>
           </td>
         </tr>

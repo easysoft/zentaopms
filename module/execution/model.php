@@ -327,7 +327,7 @@ class executionModel extends model
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
-            ->add('type', $type)
+            ->setDefault('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu')
             ->get();
