@@ -593,4 +593,22 @@ class jobModel extends model
             ->beginIF($jobID > 0)->andWhere('id')->ne($jobID)->fi()
             ->fetchAll('repo');
     }
+
+    /**
+     * Get job pairs by sonarqube projectkeys.
+     *
+     * @param  int    $sonarqubeID
+     * @param  array  $projectKeys
+     * @access public
+     * @return array
+     */
+    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array())
+    {
+        return $this->dao->select('projectKey,id')->from(TABLE_JOB)
+            ->where('deleted')->eq(0)
+            ->andWhere('frame')->eq('sonarqube')
+            ->andWhere('sonarqubeServer')->eq($sonarqubeID)
+            ->andWhere('projectKey')->in($projectKeys)
+            ->fetchPairs();
+    }
 }
