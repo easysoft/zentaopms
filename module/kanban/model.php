@@ -1139,9 +1139,9 @@ class kanbanModel extends model
         $kanbanGroup = array();
         foreach($lanes as $laneID => $lane)
         {
-            $laneData    = array();
-            $columnData  = array();
-            $columnList  = $this->lang->kanban->{$browseType . 'Column'};
+            $laneData   = array();
+            $columnData = array();
+            $columnList = $this->lang->kanban->{$browseType . 'Column'};
 
             $laneData['id']              = $groupBy . $laneID;
             $laneData['laneID']          = $groupBy . $laneID;
@@ -1216,7 +1216,8 @@ class kanbanModel extends model
      * @param  int    $executionID
      * @param  string $browseType
      * @param  string $groupBy
-     * @return void
+     * @param  array  $cardList
+     * @return array
      */
     public function getLanes4Group($executionID, $browseType, $groupBy, $cardList)
     {
@@ -1228,7 +1229,7 @@ class kanbanModel extends model
             if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
         }
 
-        if(in_array($groupBy, array('module', 'story', 'pri', 'severity')))       $objectPairs[0]  = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0]  = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
         if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source'))) $objectPairs[''] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
 
         if(in_array($groupBy, array('module', 'story', 'assignedTo')))
