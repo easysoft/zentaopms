@@ -1973,7 +1973,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = '')
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
         if(empty($groupBy)) $groupBy = 'default';
 
