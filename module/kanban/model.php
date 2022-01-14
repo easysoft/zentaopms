@@ -626,17 +626,17 @@ class kanbanModel extends model
      * @param  int    $executionID
      * @param  string $browseType all|story|task|bug
      * @param  string $orderBy
-     * @param  string $groupBy
+     * @param  int    $regionID
      *
      * @access public
      * @return array
      */
-    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $groupBy = 'all')
+    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0)
     {
         $kanbanData   = array();
         $actions      = array('sortGroup');
         $regions      = $this->getRegionPairs($executionID);
-        $regionIDList = array_keys($regions);
+        $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
         $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
@@ -999,7 +999,6 @@ class kanbanModel extends model
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->beginIF($groupBy == 'default')->andWhere('groupby')->eq('')->fi()
             ->orderBy('order_asc')
             ->fetchAll('id');
 
@@ -1114,9 +1113,10 @@ class kanbanModel extends model
     public function getKanban4Group($executionID, $browseType, $groupBy)
     {
         /* Get card  data. */
-        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID);
-        if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+        $cardList = array();
+        if($browseType == 'story') $cardList .= $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'bug')   $cardList .= $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'task')  $cardList .= $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
@@ -1213,7 +1213,7 @@ class kanbanModel extends model
 
     /**
      * Build lane data for group kanban.
-     * 
+     *
      * @access public
      * @param  int    $executionID
      * @param  string $browseType

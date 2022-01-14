@@ -1973,11 +1973,12 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'all')
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = '')
     {
+        if($groupBy == '') $groupBy = 'default';
         $this->lang->execution->menu = new stdclass();
         $execution        = $this->commonAction($executionID);
-        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, $groupBy);
+        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy);
         $executionActions = array();
 
         foreach($this->config->execution->statusActions as $action)
