@@ -88,6 +88,8 @@ class job extends control
                 }
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
+
+            $this->loadModel('action')->create('job', $jobID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -163,6 +165,8 @@ class job extends control
                 }
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
+
+            $this->loadModel('action')->create('job', $id, 'edited');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -427,7 +431,7 @@ class job extends control
     public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
     {
         $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID);
-        if(!empty($repo)) 
+        if(!empty($repo))
         {
             $message = sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
             $this->send(array('result' => 'fail', 'message' => $message));

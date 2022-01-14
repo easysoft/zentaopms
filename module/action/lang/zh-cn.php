@@ -571,6 +571,12 @@ $lang->action->dynamicAction->user['loginxuanxuan'] = '登录客户端';
 $lang->action->dynamicAction->entry['created'] = '添加应用';
 $lang->action->dynamicAction->entry['edited']  = '编辑应用';
 
+$lang->action->dynamicAction->job['created']   = '创建构建任务';
+$lang->action->dynamicAction->job['edited']    = '编辑构建任务';
+$lang->action->dynamicAction->job['executed']  = '执行构建任务';
+$lang->action->dynamicAction->job['deleted']   = '删除构建任务';
+$lang->action->dynamicAction->job['undeleted'] = '还原构建任务';
+
 $lang->action->dynamicAction->sonarqube['created'] = '创建SonarQube服务器';
 $lang->action->dynamicAction->sonarqube['edited']  = '设置SonarQube服务器';
 $lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
