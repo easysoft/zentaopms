@@ -6,7 +6,6 @@ $lang->sonarqube->search            = '搜索';
 $lang->sonarqube->create            = '添加SonarQube';
 $lang->sonarqube->edit              = '编辑SonarQube';
 $lang->sonarqube->delete            = '删除SonarQube';
-$lang->sonarqube->confirmDelete     = '确认删除该SonarQube吗？';
 $lang->sonarqube->serverFail        = '连接SonarQube服务器异常，请检查SonarQube服务器。';
 $lang->sonarqube->browseProject     = "SonarQube项目列表";
 $lang->sonarqube->createProject     = "创建SonarQube项目";
@@ -32,10 +31,12 @@ $lang->sonarqube->placeholder = new stdclass;
 $lang->sonarqube->placeholder->name = '';
 $lang->sonarqube->placeholder->url  = "请填写SonarQube Server首页的访问地址，如：https://sonarqube.zentao.net。";
 
-$lang->sonarqube->nameRepeatError = "服务器名称已存在！";
-$lang->sonarqube->urlRepeatError  = "服务器地址已存在！";
-$lang->sonarqube->validError      = "SonarQube 用户权限认证失败！";
-$lang->sonarqube->hostError       = "无效的SonarQube服务器地址。";
+$lang->sonarqube->nameRepeatError      = "服务器名称已存在！";
+$lang->sonarqube->urlRepeatError       = "服务器地址已存在！";
+$lang->sonarqube->validError           = "SonarQube 用户权限认证失败！";
+$lang->sonarqube->hostError            = "无效的SonarQube服务地址。";
+$lang->sonarqube->confirmDelete        = '确认删除该SonarQube吗？';
+$lang->sonarqube->confirmDeleteProject = '确认删除该SonarQube项目吗？';
 
 $lang->sonarqube->projectKey          = '项目标识';
 $lang->sonarqube->projectName         = '项目名称';

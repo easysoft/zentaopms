@@ -224,4 +224,27 @@ class sonarqube extends control
         $this->view->orderBy              = $orderBy;
         $this->display();
     }
+
+    /**
+     * Delete project.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @param  string $confirm
+     * @access public
+     * @return void
+     */
+    public function deleteProject($sonarqubeID, $projectKey, $confirm = 'no')
+    {
+        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDeleteProject, inlink('deleteProject', "sonarqubeID=$sonarqubeID&projectKey=$projectKey&confirm=yes")));
+
+        /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
+        $projectKey = str_replace('*', '-', $projectKey);
+        $reponse    = $this->sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
+
+        if(isset($reponse->errors)) return print(js::alert($reponse->errors[0]->msg));
+
+        $this->loadModel('action')->create('sonarqubeproject', 0, 'deleted', '', $projectKey);
+        return print(js::reload('parent'));
+    }
 }

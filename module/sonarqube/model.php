@@ -109,4 +109,22 @@ class sonarqubeModel extends model
 
         return $allResults;
     }
+
+    /**
+     * Delete sonarqube project by api.
+     *
+     * @param  int    $sonarqubeID
+     * @param  int    $projectKey
+     * @access public
+     * @return bool|object
+     */
+    public function apiDeleteProject($sonarqubeID, $projectKey)
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return false;
+
+        $url    = sprintf($apiRoot, "projects/delete?project=$projectKey");
+        $result = json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
+        return $result;
+    }
 }
