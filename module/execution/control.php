@@ -24,7 +24,7 @@ class execution extends control
      * @var string
      * @access public
      */
-    public $objectType;
+    public $objectType = 'execution';
 
     /**
      * Construct function, Set executions.
@@ -47,7 +47,6 @@ class execution extends control
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
-        $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'execution';
     }
 
     /**
