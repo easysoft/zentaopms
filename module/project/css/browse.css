@@ -16,3 +16,4 @@ th.c-name {width: 360px !important;}
 {
     th.c-name {width: auto;}
 }
+[lang^='en'] #projectTableList .project-name > .label-warning {width: 55px;}

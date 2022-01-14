@@ -350,11 +350,12 @@ function updateKanban(kanbanID, data)
  */
 function createKanban(kanbanID, data, options)
 {
-    var $kanban = $('#kanban-' + kanbanID);
+    var $kanban      = $('#kanban-' + kanbanID);
+    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
     if($kanban.length) return updateKanban(kanbanID, data);
 
     $kanban = $('<div id="kanban-' + kanbanID + '" data-id="' + kanbanID + '"></div>').appendTo('#kanbans');
-    $kanban.kanban($.extend({data: data}, options));
+    $kanban.kanban($.extend({data: data, calcColHeight: calcColHeight, displayCards: displayCards}, options));
 }
 
 function fullScreen()
@@ -1117,3 +1118,15 @@ $('.c-group').change(function()
     var link  = createLink('execution', 'taskKanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=order_asc' + '&groupBy=' + group);
     location.href = link;
 });
+
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight, kanban)
+{
+    var options = kanban.options;
+    if(!options.displayCards) return 0;
+
+    var displayCards = +(options.displayCards || 2);
+
+    if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
+    return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
+}
