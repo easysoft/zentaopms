@@ -621,6 +621,7 @@ class actionModel extends model
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
+            if(!isset($this->config->action->objectNameFields[$objectType])) continue;
 
             $objectIdList = array_unique($objectIdList);
             $table        = $this->config->objectTables[$objectType];
