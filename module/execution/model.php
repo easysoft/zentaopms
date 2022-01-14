@@ -72,6 +72,7 @@ class executionModel extends model
 
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
+        if($execution and $execution->type == 'kanban') $this->lang->execution->menu = new stdclass();
 
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
         {

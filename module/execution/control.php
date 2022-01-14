@@ -125,7 +125,9 @@ class execution extends control
         $browseType = strtolower($status);
 
         /* Get products by execution. */
-        $execution   = $this->commonAction($executionID, $status);
+        $execution = $this->commonAction($executionID, $status);
+        if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+
         $executionID = $execution->id;
         $products    = $this->product->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);

@@ -26,3 +26,5 @@
 .kanbans .kanban-actions {float: right; visibility: hidden;}
 .kanbans .kanban-actions .dropdown-menu.pull-right {top:31px; right: -84px; left: auto;}
 .kanbans .kanban-actions .dropdown-menu.pull-left {top:31px; right:-1px; left: auto;}
+
+.label-doing {background: #ff5d5d}
