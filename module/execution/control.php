@@ -2374,6 +2374,7 @@ class execution extends control
      *
      * @param  int    $executionID
      * @param  string $confirm   yes|no
+     * @param  string $kanban    yes|no
      * @access public
      * @return void
      */
