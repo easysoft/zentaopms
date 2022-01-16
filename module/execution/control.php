@@ -2377,7 +2377,7 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function delete($executionID, $confirm = 'no')
+    public function delete($executionID, $confirm = 'no', $kanban = 'no')
     {
         if($confirm == 'no')
         {
@@ -2407,7 +2407,8 @@ class execution extends control
                 $this->lang->execution->confirmDelete = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->confirmDelete);
             }
 
-            echo js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));
+            $confirmDelete = $kanban == 'no' ? $this->lang->execution->confirmDelete : $this->app->loadLang('kanban')->confirmDelete;
+            echo js::confirm($tips . sprintf($confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));
             exit;
         }
         else
