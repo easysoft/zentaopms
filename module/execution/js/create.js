@@ -1,6 +1,6 @@
 function setCopyProject(executionID)
 {
-    location.href = createLink('execution', 'create', 'projectID=&executionID=0&copyExecutionID=' + executionID);
+    location.href = createLink('execution', 'create', 'projectID=' + projectID + '&executionID=0&copyExecutionID=' + executionID);
 }
 
 $(function()
