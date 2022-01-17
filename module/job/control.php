@@ -88,6 +88,8 @@ class job extends control
                 }
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
+
+            $this->loadModel('action')->create('job', $jobID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -163,6 +165,8 @@ class job extends control
                 }
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
+
+            $this->loadModel('action')->create('job', $id, 'edited');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 

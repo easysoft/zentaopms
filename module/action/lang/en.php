@@ -571,6 +571,12 @@ $lang->action->dynamicAction->user['loginxuanxuan'] = 'Login Desktop';
 $lang->action->dynamicAction->entry['created'] = 'Add Application';
 $lang->action->dynamicAction->entry['edited']  = 'Edit Application';
 
+$lang->action->dynamicAction->job['created']   = 'Create Job';
+$lang->action->dynamicAction->job['edited']    = 'Edit Job';
+$lang->action->dynamicAction->job['executed']  = 'Execute Job';
+$lang->action->dynamicAction->job['deleted']   = 'Delete Job';
+$lang->action->dynamicAction->job['undeleted'] = 'Undelete Job';
+
 $lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
 $lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
 $lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
