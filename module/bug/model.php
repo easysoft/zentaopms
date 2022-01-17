@@ -49,11 +49,15 @@ class bugModel extends model
      * Create a bug.
      *
      * @param  string $from   object that is transfered to bug.
+     * @param  string $extras.
      * @access public
      * @return array|bool
      */
-    public function create($from = '')
+    public function create($from = '', $extras = '')
     {
+        $extras = str_replace(array(',', ' '), array('&', ''), $extras);
+        parse_str($extras, $output);
+
         $now = helper::now();
         $bug = fixer::input('post')
             ->setDefault('openedBy', $this->app->user->account)
@@ -100,7 +104,12 @@ class bugModel extends model
             $this->file->saveUpload('bug', $bugID);
             empty($bug->case) ? $this->loadModel('score')->create('bug', 'create', $bugID) : $this->loadModel('score')->create('bug', 'createFormCase', $bug->case);
 
-            if($bug->execution) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
+            if($bug->execution)
+            {
+                $this->loadModel('kanban');
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
+                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($bug->execution, 'bug');
+            }
 
             /* Callback the callable method to process the related data for object that is transfered to bug. */
             if($from && is_callable(array($this, $this->config->bug->fromObjects[$from]['callback']))) call_user_func(array($this, $this->config->bug->fromObjects[$from]['callback']), $bugID);
@@ -115,13 +124,18 @@ class bugModel extends model
      *
      * @param  int    $productID
      * @param  int    $branch
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $branch = 0)
+    public function batchCreate($productID, $branch = 0, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         /* Load module and init vars. */
         $this->loadModel('action');
+        $this->loadModel('kanban');
         $branch    = (int)$branch;
         $productID = (int)$productID;
         $now       = helper::now();
@@ -257,8 +271,13 @@ class bugModel extends model
             $bugID = $this->dao->lastInsertID();
 
             $this->executeHooks($bugID);
-            if($bug->execution) $this->loadModel('kanban')->updateLane($bug->execution, 'bug');
 
+            if($bug->execution)
+            {
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
+                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($bug->execution, 'bug');
+
+            }
             /* When the bug is created by uploading the image, add the image to the file of the bug. */
             $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
@@ -907,11 +926,15 @@ class bugModel extends model
      * Confirm a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function confirm($bugID)
+    public function confirm($bugID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
 
@@ -929,7 +952,12 @@ class bugModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'confirmBug', $oldBug);
-            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
+            if($oldBug->execution)
+            {
+                $this->loadModel('kanban');
+                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
+                if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            }
             return common::createChanges($oldBug, $bug);
         }
     }
@@ -964,11 +992,15 @@ class bugModel extends model
      * Resolve a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function resolve($bugID)
+    public function resolve($bugID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
@@ -1042,7 +1074,12 @@ class bugModel extends model
         if(!dao::isError())
         {
             $this->loadModel('score')->create('bug', 'resolve', $oldBug);
-            if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
+            if($oldBug->execution)
+            {
+                $this->loadModel('kanban');
+                if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
+                if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            }
 
             /* Link bug to build and release. */
             $this->linkBugToBuild($bugID, $bug->resolvedBuild);
@@ -1218,11 +1255,15 @@ class bugModel extends model
      * Activate a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function activate($bugID)
+    public function activate($bugID, $extra)
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $bugID      = (int)$bugID;
         $oldBug     = $this->getById($bugID);
         $solveBuild = $this->dao->select('id')
@@ -1262,7 +1303,12 @@ class bugModel extends model
             $this->dao->update(TABLE_BUILD)->set('bugs')->eq($build->bugs)->where('id')->eq((int)$solveBuild)->exec();
         }
 
-        if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
+        if($oldBug->execution)
+        {
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
+            if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        }
         $bug->activatedCount += 1;
         return common::createChanges($oldBug, $bug);
     }
@@ -1271,11 +1317,15 @@ class bugModel extends model
      * Close a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($bugID)
+    public function close($bugID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $now    = helper::now();
         $oldBug = $this->getById($bugID);
         $bug    = fixer::input('post')
@@ -1291,7 +1341,12 @@ class bugModel extends model
             ->get();
 
         $this->dao->update(TABLE_BUG)->data($bug)->autoCheck()->where('id')->eq((int)$bugID)->exec();
-        if($oldBug->execution) $this->loadModel('kanban')->updateLane($oldBug->execution, 'bug');
+        if($oldBug->execution)
+        {
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldBug->execution, 'bug', $bugID);
+            if(isset($output['toColID'])) $this->kanban->moveCard($bugID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        }
 
         return common::createChanges($oldBug, $bug);
     }

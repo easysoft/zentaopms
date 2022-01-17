@@ -239,6 +239,7 @@ class taskModel extends model
     {
         /* Load module and init vars. */
         $this->loadModel('action');
+        $this->loadModel('kanban');
         $now       = helper::now();
         $mails     = array();
         $storyIDs  = array();
@@ -403,7 +404,6 @@ class taskModel extends model
 
             $this->executeHooks($taskID);
 
-            $this->loadModel('kanban');
             if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');

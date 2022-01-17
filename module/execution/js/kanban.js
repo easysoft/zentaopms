@@ -150,6 +150,16 @@ $('#type').change(function()
     location.href = link;
 });
 
+$('.c-group').change(function()
+{
+    $('.c-group').show();
+
+    var type  = $('#type').val();
+    var group = $('#group').val();
+    var link  = createLink('execution', 'kanban', 'executionID=' + executionID + '&type=' + type + '&orderBy=id_asc' + '&groupBy=' + group);
+    location.href = link;
+});
+
 /**
  * Create lane menu.
  *
@@ -207,8 +217,8 @@ function createColumnCreateMenu(options)
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
     }
     else if(col.type == 'wait')
     {
@@ -725,6 +735,8 @@ var kanbanActionHandlers =
  */
 function handleKanbanAction(action, $element, event, kanban)
 {
+    if(groupBy && groupBy != 'default') return false;
+
     $('.kanban').attr('data-action-enabled', action);
     var handler = kanbanActionHandlers[action];
     if(handler) handler($element, event, kanban);
@@ -808,7 +820,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -817,7 +829,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -825,7 +837,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
-                var link = createLink('bug', 'resolve', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -841,7 +853,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'testing' || fromColType == 'tested')
             {
-                var link = createLink('bug', 'close', 'bugID=' + objectID, '', true);
+                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -940,7 +952,7 @@ function initKanban($kanban)
 
     $kanban.kanban(
     {
-        data:              region.groups,
+        data:              groupBy == 'default' ? region.groups : kanbanData[groupBy],
         maxColHeight:      510,
         calcColHeight:     calcColHeight,
         fluidBoardWidth:   false,

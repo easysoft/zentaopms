@@ -627,12 +627,15 @@ class kanbanModel extends model
      * @param  string $browseType all|story|task|bug
      * @param  string $orderBy
      * @param  int    $regionID
+     * @param  string $groupBy
      *
      * @access public
      * @return array
      */
-    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0)
+    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default')
     {
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy);
+
         $kanbanData   = array();
         $actions      = array('sortGroup');
         $regions      = $this->getRegionPairs($executionID);

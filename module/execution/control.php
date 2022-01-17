@@ -1968,7 +1968,7 @@ class execution extends control
 
         $this->lang->execution->menu = new stdclass();
         $execution        = $this->commonAction($executionID);
-        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy);
+        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
 
         foreach($this->config->execution->statusActions as $action)
@@ -2007,6 +2007,7 @@ class execution extends control
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
         $this->view->allPlans         = $allPlans;
+        $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
         $this->display();
     }
