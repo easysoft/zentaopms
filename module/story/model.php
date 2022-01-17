@@ -1983,6 +1983,8 @@ class storyModel extends model
      */
     public function setStage($storyID)
     {
+        $this->loadModel('kanban');
+
         $storyID = (int)$storyID;
         $account = $this->app->user->account;
 
@@ -2014,7 +2016,11 @@ class storyModel extends model
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
             foreach($stages as $branch => $stage) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
-            foreach($executions as $execution => $branch) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+            foreach($executions as $execution => $branch)
+            {
+                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+                $this->kanban->updateLane($execution, 'story');
+            }
             return false;
         }
 
@@ -2165,6 +2171,21 @@ class storyModel extends model
         else
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq(current($stages))->where('id')->eq($storyID)->exec();
+        }
+
+        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if($story->stage != $currentStory->stage)
+        {
+            $executionIdList = $this->dao->select('t1.id')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_PROJECTSTORY)->alias('t2')->on('t1.id=t2.project')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.type')->in('sprint,stage,kanban')
+                ->andWhere('t2.story')->eq($story)
+                ->fetchPairs();
+            foreach($executionIdList as $executionID)
+            {
+                $this->kanban->updateLane($executionID, 'story');
+            }
         }
 
         return;

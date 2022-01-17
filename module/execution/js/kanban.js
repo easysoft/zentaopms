@@ -964,7 +964,6 @@ function initKanban($kanban)
         displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
-        cardHeight:        getCardHeight(),
         cardsPerRow:       window.kanbanScaleSize,
         onAction:          handleKanbanAction,
         onRenderLaneName:  renderLaneName,
