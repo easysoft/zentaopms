@@ -15,10 +15,14 @@
 
 <?php
 $laneCount = 0;
-foreach($regions as $region) $laneCount += $region->laneCount;
+if($groupBy == 'default')
+{
+    foreach($regions as $region) $laneCount += $region->laneCount;
+}
 
 js::set('regions', $regions);
 js::set('browseType', $browseType);
+js::set('kanbanData', $kanbanData);
 js::set('orderBy', $orderBy);
 js::set('groupBy', $groupBy);
 js::set('execution', $execution);
@@ -156,6 +160,7 @@ js::set('hasTaskButton', $hasTaskButton);
     <?php endif;?>
   </div>
 </div>
+<?php if($groupBy == 'default'):?>
 <div class='panel' id='kanbanContainer'>
   <div class='panel-body'>
     <div id="kanban" data-id='<?php echo $execution->id;?>'>
@@ -182,6 +187,13 @@ js::set('hasTaskButton', $hasTaskButton);
     </div>
   </div>
 </div>
+<?php else:?>
+<div class='panel' id='kanbanContainer'>
+  <div class='panel-body'>
+    <div id='kanbans'></div>
+  </div>
+</div>
+<?php endif;?>
 <div class="modal fade" id="linkStoryByPlan">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">

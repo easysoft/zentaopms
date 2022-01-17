@@ -2284,6 +2284,7 @@ class executionModel extends model
         if(empty($products)) $products = $this->post->products;
 
         $this->loadModel('action');
+        $this->loadModel('kanban');
         $versions      = $this->loadModel('story')->getVersions($stories);
         $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
@@ -2298,18 +2299,7 @@ class executionModel extends model
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            if($execution->type == 'kanban')
-            {
-                if(isset($output['laneID']) and isset($output['columnID']))
-                {
-                    $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                }
-                else
-                {
-                    $cell = $this->dao->select('lane,`column`')->from(TABLE_KANBANCELL)->where('type')->eq('story')->andWhere('kanban')->eq($executionID)->fetch();
-                    $this->loadModel('kanban')->addKanbanCell($executionID, $cell->lane, $cell->column, 'story', $storyID);
-                }
-            }
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
 
             $data = new stdclass();
             $data->project = $executionID;
@@ -2326,6 +2316,8 @@ class executionModel extends model
             $action = $executionID == $this->session->project ? 'linked2project' : 'linked2execution';
             $this->action->create('story', $storyID, $action, '', $executionID);
         }
+
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
     }
 
     /**

@@ -284,9 +284,10 @@ class storyModel extends model
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
+
                 $this->loadModel('kanban');
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($kanbanID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'story');
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
+                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
