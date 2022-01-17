@@ -155,7 +155,7 @@ $lang->project->etc                = "等";
 $lang->project->product            = '所属产品';
 $lang->project->branch             = '所属分支';
 $lang->project->plan               = '所属计划';
-$lang->project->createKanban       = '创建看板';
+$lang->project->createKanban       = '添加看板';
 $lang->project->kanban             = '看板';
 
 /* Project Kanban. */
