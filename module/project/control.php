@@ -374,6 +374,8 @@ class project extends control
         $this->loadModel('execution');
         $this->loadModel('product');
 
+        if($model == 'kanban') unset($this->lang->project->authList['reset']);
+
         if($_POST)
         {
             $projectID = $this->project->create();
