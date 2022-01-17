@@ -1526,7 +1526,7 @@ class kanbanModel extends model
                 ->add('region', $regionID)
                 ->add('order', $maxOrder ? $maxOrder + 1 : 1)
                 ->add('lastEditedTime', helper::now())
-                ->setIF(isset($this->post->laneType), 'execution', $kanbanID)
+                ->setIF(isset($_POST['laneType']), 'execution', $kanbanID)
                 ->trim('name')
                 ->setDefault('color', '#7ec5ff')
                 ->remove('laneType')
