@@ -2303,7 +2303,7 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') && $project->acl == 'private')
+        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') and $project->acl == 'private' and $this->config->systemModel == 'new')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($parent)) return false;
