@@ -472,10 +472,6 @@ class executionModel extends model
             return false;
         }
 
-        /* Get team and language item. */
-        $team = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
-        $this->lang->execution->team = $this->lang->execution->teamname;
-
         /* Get the data from the post. */
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -526,6 +522,12 @@ class executionModel extends model
             ->where('id')->eq($executionID)
             ->limit(1)
             ->exec();
+
+        if($oldExecution->type == 'kanban') $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->exec();
+
+        /* Get team and language item. */
+        $this->lang->execution->team = $this->lang->execution->teamname;
+        $team = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
 
         $changedAccounts = array();
         $teamMembers     = array();
