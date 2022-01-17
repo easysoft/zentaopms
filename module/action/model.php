@@ -1033,14 +1033,13 @@ class actionModel extends model
             {
                 $action->objectName .= $this->lang->action->label->startProgram;
             }
-
             elseif($action->objectType == 'branch' and $action->action == 'mergedbranch')
             {
                 if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
                 $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
             }
             elseif($action->objectType == 'user')
-            ({
+            {
                 $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
                 if($user) $action->objectName = $user->realname;
             }
