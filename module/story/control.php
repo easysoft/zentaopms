@@ -105,6 +105,9 @@ class story extends control
 
             $storyID   = $storyResult['id'];
             $productID = $this->post->product ? $this->post->product : $productID;
+
+            if(isset($output['executionID']) and isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($output['executionID'], $output['laneID'], $output['columnID'], 'story', $storyID);
+
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
@@ -355,10 +358,11 @@ class story extends control
      * @param  int    $executionID
      * @param  int    $plan
      * @param  string $type requirement|story
+     * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
@@ -412,7 +416,7 @@ class story extends control
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products, $extra);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 

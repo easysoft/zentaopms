@@ -437,7 +437,7 @@ class storyModel extends model
         foreach($stories->title as $i => $title)
         {
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
-            $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
+            $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : 0;
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
             $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
             $stories->module[$i] = (int)$module;
