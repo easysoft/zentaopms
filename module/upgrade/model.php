@@ -5385,6 +5385,8 @@ class upgradeModel extends model
         $cellGroup = array();
         foreach($cards as $cardID => $card)
         {
+            if(!$card->lane or !$card->column) continue;
+
             $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
             $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
             $cellGroup[$key] = $cards;
@@ -5420,6 +5422,8 @@ class upgradeModel extends model
         {
             foreach($laneGroup as $colData)
             {
+                if(!$laneID or !$colData->column) continue;
+
                 $cell = new stdclass();
                 $cell->kanban = $colData->execution;
                 $cell->lane   = $laneID;
