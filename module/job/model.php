@@ -603,15 +603,17 @@ class jobModel extends model
      * Get sonarqube by RepoID.
      *
      * @param  array  $repoIDList
+     * @param  int    $jobID
+     * @param  bool   $showDeleted
      * @access public
      * @return array
      */
-    public function getSonarqubeByRepo($repoIDList, $jobID = 0)
+    public function getSonarqubeByRepo($repoIDList, $jobID = 0, $showDeleted = false)
     {
-        return $this->dao->select('id,name,repo')->from(TABLE_JOB)
-            ->where('deleted')->eq('0')
-            ->andWhere('frame')->eq('sonarqube')
+        return $this->dao->select('id,name,repo,deleted')->from(TABLE_JOB)
+            ->where('frame')->eq('sonarqube')
             ->andWhere('repo')->in($repoIDList)
+            ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
             ->beginIF($jobID > 0)->andWhere('id')->ne($jobID)->fi()
             ->fetchAll('repo');
     }

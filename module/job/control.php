@@ -426,10 +426,10 @@ class job extends control
      */
     public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
     {
-        $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID);
+        $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID, true);
         if(!empty($repo)) 
         {
-            $message = sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
+            $message = $repo[$repoID]->deleted ? $this->lang->job->jobIsDeleted : sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
             $this->send(array('result' => 'fail', 'message' => $message));
         }
         $this->send(array('result' => 'success', 'message' => ''));
