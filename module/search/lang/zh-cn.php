@@ -98,5 +98,6 @@ $lang->search->objectTypeList['story']            = $lang->SRCommon;
 $lang->search->objectTypeList['requirement']      = $lang->URCommon;
 $lang->search->objectTypeList['stage']            = '阶段';
 $lang->search->objectTypeList['sprint']           = $lang->executionCommon;
+$lang->search->objectTypeList['kanban']           = '看板';
 $lang->search->objectTypeList['commonIssue']      = '问题';
 $lang->search->objectTypeList['stakeholderIssue'] = '干系人问题';

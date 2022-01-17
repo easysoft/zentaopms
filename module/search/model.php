@@ -609,9 +609,16 @@ class searchModel extends model
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, $issue->project);
                 $record->extraType = empty($issue->owner) ? 'commonIssue' : 'stakeholderIssue';
             }
+            elseif($module == 'project')
+            {
+                $projectModel = $this->dao->select('model')->from(TABLE_PROJECT)->where('id')->eq($record->objectID)->fetch('model');
+                $method       = $projectModel == 'kanban' ? 'index' : 'view';
+                $record->url  = helper::createLink('project', $method, "id={$record->objectID}");
+            }
             elseif($module == 'execution')
             {
                 $execution         = $this->dao->select('id,type,project')->from(TABLE_EXECUTION)->where('id')->eq($record->objectID)->fetch();
+                $method            = $execution->type == 'kanban' ? 'kanban' : $method;
                 $record->url       = helper::createLink('execution', $method, "id={$record->objectID}");
                 $record->extraType = empty($execution->type) ? '' : $execution->type;
             }
@@ -1015,7 +1022,7 @@ class searchModel extends model
                 ->where('1')
                 ->beginIF($type == 'program')->andWhere('type')->eq('program')->fi()
                 ->beginIF($type == 'project')->andWhere('type')->eq('project')->fi()
-                ->beginIF($type == 'execution')->andWhere('type')->in('stage,sprint')->fi()
+                ->beginIF($type == 'execution')->andWhere('type')->in('stage,sprint,kanban')->fi()
                 ->beginIF(isset($data->deleted))->andWhere('t1.deleted')->eq(0)->fi();
         }
         return $query;
