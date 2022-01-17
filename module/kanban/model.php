@@ -2071,15 +2071,42 @@ class kanbanModel extends model
      *
      * @param  int    $executionID
      * @param  string $laneType
+     * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function updateLane($executionID, $laneType)
+    public function updateLane($executionID, $laneType, $cardID = 0)
     {
-        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
-            ->andWhere('type')->eq($laneType)
-            ->fetchAll('id');
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if($execution->type == 'kanban')
+        {
+            $regionIdList = $this->dao->select('id')->from(TABLE_KANBANREGION)
+                ->where('deleted')->eq(0)
+                ->andWhere('kanban')->eq($executionID)
+                ->fetchPairs();
+
+            $lanes = $this->dao->select('t1.*')->from(TABLE_KANBANLANE)->alias('t1')
+                ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.execution')->eq($executionID)
+                ->andWhere('t1.type')->eq($laneType)
+                ->andWhere('t1.region')->in($regionIdList)
+                ->beginIF(!empty($cardID))->andWhere('t2.cards')->like("%,$cardID,%")->fi()
+                ->orderBy('t1.`order` asc')
+                ->fetchAll('id');
+
+            if(count($lanes) > 1)
+            {
+                $lanes = array_slice($lanes, 0, 1);
+            }
+        }
+        else
+        {
+            $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
+                ->where('execution')->eq($executionID)
+                ->andWhere('type')->eq($laneType)
+                ->fetchAll('id');
+        }
 
         foreach($lanes as $lane) $this->refreshCards($lane);
     }
@@ -2103,9 +2130,11 @@ class kanbanModel extends model
             ->andWhere('t1.execution')->eq($executionID)
             ->andWhere('t2.`type`')->eq($lane->type)
             ->fetchPairs();
+
         foreach($lanes as $cardIDList)
         {
-            if(!empty($cardIDList)) $otherCardList .= $cardIDList;
+            $cardIDList = trim($cardIDList, ',');
+            if(!empty($cardIDList)) $otherCardList .= ',' . $cardIDList;
         }
 
         $cardPairs = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
