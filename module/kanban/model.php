@@ -2095,10 +2095,7 @@ class kanbanModel extends model
                 ->orderBy('t1.`order` asc')
                 ->fetchAll('id');
 
-            if(count($lanes) > 1)
-            {
-                $lanes = array_slice($lanes, 0, 1);
-            }
+            if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 1);
         }
         else
         {
@@ -2123,7 +2120,7 @@ class kanbanModel extends model
         $laneType      = $lane->type;
         $executionID   = $lane->execution;
         $otherCardList = '';
-        $lanes         = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+        $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
             ->where('t1.deleted')->eq(0)
             ->andWhere('t1.id')->ne($lane->id)
@@ -2131,7 +2128,7 @@ class kanbanModel extends model
             ->andWhere('t2.`type`')->eq($lane->type)
             ->fetchPairs();
 
-        foreach($lanes as $cardIDList)
+        foreach($otherLanes as $cardIDList)
         {
             $cardIDList = trim($cardIDList, ',');
             if(!empty($cardIDList)) $otherCardList .= ',' . $cardIDList;

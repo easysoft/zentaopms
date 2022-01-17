@@ -403,7 +403,8 @@ class taskModel extends model
 
             $this->executeHooks($taskID);
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            $this->loadModel('kanban');
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
@@ -456,6 +457,8 @@ class taskModel extends model
             $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
+
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'task');
         return $mails;
     }
 
@@ -1015,7 +1018,6 @@ class taskModel extends model
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
             if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
-
             $this->loadModel('action');
             $changed = $task->parent != $oldTask->parent;
             if($oldTask->parent > 0)
@@ -1475,8 +1477,8 @@ class taskModel extends model
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
         $this->loadModel('kanban');
-        if(!isset($output['fromColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['fromColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1744,8 +1746,8 @@ class taskModel extends model
             $this->loadModel('score')->create('task', 'finish', $taskID);
 
             $this->loadModel('kanban');
-            if(!isset($output['fromColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-            if(isset($output['fromColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+            if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1777,8 +1779,8 @@ class taskModel extends model
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
 
         $this->loadModel('kanban');
-        if(!isset($output['fromColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['fromColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1819,8 +1821,8 @@ class taskModel extends model
             $this->loadModel('score')->create('task', 'close', $taskID);
 
             $this->loadModel('kanban');
-            if(!isset($output['fromColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-            if(isset($output['fromColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+            if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
             return common::createChanges($oldTask, $task);
         }
@@ -1865,8 +1867,8 @@ class taskModel extends model
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');
-        if(!isset($output['fromColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['fromColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1937,8 +1939,8 @@ class taskModel extends model
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');
-        if(!isset($output['fromColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['fromColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
