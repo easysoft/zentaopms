@@ -77,8 +77,12 @@ function p($keys = '', $delimiter = ',')
 {
     global $_result;
 
+    if(empty($_result)) return print(">> 0\n");
+
     /* Print $_result. */
     if(!$keys or !is_array($_result) and !is_object($_result)) return print(">> " . (string) $_result . "\n");
+
+    if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print(">> " . (string) $_result['message'] . "\n");
 
     $parts  = explode(';', $keys);
     $values = array();
@@ -173,6 +177,35 @@ function getValues($value, $keys, $delimiter)
  */
 function e($expect)
 {
+}
+
+/**
+ * Check order
+ *
+ * @param array  $objs
+ * @param string $orderBy
+ * @access public
+ * @return bool
+ */
+function checkOrder($objs, $orderBy)
+{
+    if(empty($objs)) return true;
+
+    list($field, $sort) = explode('_', $orderBy);
+    $last = current($objs)->$field;
+    foreach($objs as $obj)
+    {
+        if($sort == 'desc')
+        {
+            if($obj->$field > $last) return false;
+        }
+        else
+        {
+            if($obj->$field < $last) return false;
+        }
+    }
+
+    return true;
 }
 
 /**

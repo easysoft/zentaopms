@@ -53,7 +53,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projects = $this->project->getInfoList($status, 30, $orderBy, null);
+            $projects = $this->project->getInfoList($status, $orderBy);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');

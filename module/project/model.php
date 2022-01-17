@@ -37,7 +37,7 @@ class projectModel extends model
         echo(js::alert($this->lang->project->accessDenied));
         $this->session->set('project', '');
 
-        die(js::locate(helper::createLink('project', 'index')));
+        return print(js::locate(helper::createLink('project', 'index')));
     }
 
     /**
@@ -189,13 +189,12 @@ class projectModel extends model
      * Get project info.
      *
      * @param  string    $status
-     * @param  int       $itemCounts
      * @param  string    $orderBy
      * @param  int       $pager
      * @access public
      * @return array
      */
-    public function getInfoList($status = 'undone', $itemCounts = 30, $orderBy = 'order_desc', $pager = null)
+    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null)
     {
         /* Init vars. */
         $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, 1);
