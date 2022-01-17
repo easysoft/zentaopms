@@ -1015,7 +1015,7 @@ $(function()
         $.zui.ContextMenu.hide();
     });
 
-    $('#toStoryButton').on('click', function(e)
+    $('#toStoryButton').on('click', function()
     {
         var planID = $('#plan').val();
         if(planID)
