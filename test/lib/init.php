@@ -180,6 +180,35 @@ function e($expect)
 }
 
 /**
+ * Check order
+ *
+ * @param array  $objs
+ * @param string $orderBy
+ * @access public
+ * @return bool
+ */
+function checkOrder($objs, $orderBy)
+{
+    if(empty($objs)) return true;
+
+    list($field, $sort) = explode('_', $orderBy);
+    $last = current($objs)->$field;
+    foreach($objs as $obj)
+    {
+        if($sort == 'desc')
+        {
+            if($obj->$field > $last) return false;
+        }
+        else
+        {
+            if($obj->$field < $last) return false;
+        }
+    }
+
+    return true;
+}
+
+/**
  * Import data create by zendata to one table.
  *
  * @param  string    $table

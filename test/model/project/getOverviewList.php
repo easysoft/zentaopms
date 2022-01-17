@@ -2,63 +2,48 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
-/**
-
-title=测试 projectModel::getOverviewList;
-cid=1
-pid=1
-
-*/
-
-function checkDataCount($dataList = '', $countNum = 0, $field = '', $fieldValue = '')
+class Tester
 {
-    $result = array();
-    if(!is_array($dataList) and !is_object($dataList))
+    public function __construct($user)
     {
-        $result['code']    = 'fail';
-        $result['message'] = 'No Array or Object';
+        global $tester;
 
-        return $result;
+        su($user);
+        $this->project = $tester->loadModel('project');
     }
 
-    if($countNum != count($dataList))
+    public function getBystatus($status)
     {
-        $result['code']    = 'fail';
-        $result['message'] = 'Count error';
-
-        return $result;
-    }
-
-    if(!empty($field))
-    {
-        foreach($dataList as $data)
+        $projects = $this->project->getOverviewList('byStatus', $status);
+        if(!$projects) return 0;
+        foreach($projects as $project)
         {
-            if(strpos(',' . $fieldValue . ',', $data->$field) === false)
-            {
-                $result['code']    = 'fail';
-                $result['message'] = 'Have error data';
-
-                return $result;
-            }
+            if($project->status != $status) return 0;
         }
+        return count($projects);
     }
 
-    return $dataList;
+    public function getListByOrder($orderBy)
+    {
+        $projects = $this->project->getOverviewList('byStatus', 'wait', $orderBy);
+        return checkOrder($projects, $orderBy);
+    }
+
+    public function getByID($projectID)
+    {
+        return $this->project->getOverviewList('byID', $projectID);
+    }
 }
 
-su('admin');
-$projectModel = $tester->loadModel('project');
+$t = new Tester('admin');
 
-$defaultProject = $projectModel->getOverviewList();
-$undoneProject  = $projectModel->getOverviewList('byStatus', 'undone');
-$waitProject    = $projectModel->getOverviewList('byStatus', 'wait');
-$projectByID    = $projectModel->getOverviewList('byID', 11);
-$orderProject   = $projectModel->getOverviewList('byStatus', 'wait', 'id_asc');
-$query5Project  = $projectModel->getOverviewList('byStatus', 'suspended', 'id_asc', 5);
+/* GetOverviewList('byStatus'). */
+r($t->getByStatus('wait')) && p('') && e('15'); // 获取未开始的项目
 
-r(checkDataCount($defaultProject, 15))                                  && p('100:type;99:name')     && e('project;项目89'); // 默认查找15条项目
-r(checkDataCount($undoneProject, 15, 'status', 'wait,doing,suspended')) && p('100:status;99:status') && e('wait;wait');      // 查找15条状态不为done和closed的项目
-r(checkDataCount($waitProject, 15, 'status', 'wait'))                   && p('100:status;99:status') && e('wait;wait');      // 查找15条状态为wait的项目
-r(checkDataCount($projectByID, 1))                                      && p('11:name')              && e('项目1');          // 通过ID查找项目
-r(checkDataCount($orderProject, 15, 'status', 'wait'))                  && p('12:name')              && e('项目2');          // 按ID升序查找15条状态为wait的项目
-r(checkDataCount($query5Project, 5, 'status', 'suspended'))             && p('17:name')              && e('项目7');          // 按ID升序查找5条状态为suspended的项目
+/* GetOverviewList('byID', $id). */
+r($t->getByID(11))    && p('11:id') && e('11'); // 根据项目ID获取项目详情
+r($t->getByID(10000)) && p('id')    && e('');   // 获取不存在的项目
+
+/* GetOverviewList('byStatus', 'wait', $orderBy). */
+r($t->getListByOrder('id_asc'))    && p() && e('true'); // 按照ID正序获取项目列表
+r($t->getListByOrder('name_desc')) && p() && e('true'); // 按照项目名称倒序获取项目列表
