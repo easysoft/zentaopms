@@ -146,7 +146,7 @@ class task extends control
             /* Locate the browser. */
             if($this->app->getViewType() == 'xhtml')
             {
-                $taskLink  = $this->createLink('task', 'view', "taskID=$taskID");
+                $taskLink  = $this->createLink('task', 'view', "taskID=$taskID", 'html');
                 $response['locate'] = $taskLink;
                 return $this->send($response);
             }
