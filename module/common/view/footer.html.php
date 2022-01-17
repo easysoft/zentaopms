@@ -60,10 +60,19 @@ if($this->loadModel('cron')->runable()) js::execute('startCron()');
 if(isset($pageJS)) js::execute($pageJS);  // load the js for current page.
 
 /* Load hook files for current page. */
-$extPath      = $this->app->getModuleRoot() . '/common/ext/view/';
-$extHookRule  = $extPath . 'footer.*.hook.php';
-$extHookFiles = glob($extHookRule);
-if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+$extensionRoot = $this->app->getExtensionRoot();
+if($this->config->vision != 'open')
+{
+    $extHookRule  = $extensionRoot . $this->config->edition . '/common/ext/view/footer.*.hook.php';
+    $extHookFiles = glob($extHookRule);
+    if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+}
+if($this->config->vision == 'lite')
+{
+    $extHookRule  = $extensionRoot . $this->config->vision . '/common/ext/view/footer.*.hook.php';
+    $extHookFiles = glob($extHookRule);
+    if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+}
 ?>
 </body>
 </html>

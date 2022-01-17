@@ -1845,6 +1845,7 @@ class projectModel extends model
                 ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+                ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1861,6 +1862,7 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');

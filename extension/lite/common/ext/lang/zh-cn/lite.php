@@ -30,7 +30,7 @@ $lang->project->target = '目标';
 /* Scrum menu. */
 $lang->scrum->menu            = new stdclass();
 $lang->scrum->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->scrum->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution', 'exclude' => 'execution-testreport');
+$lang->scrum->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'kanban');
 $lang->scrum->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->scrum->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->scrum->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -46,6 +46,14 @@ $lang->scrum->menuOrder[15] = 'story';
 $lang->scrum->menuOrder[20] = 'doc';
 $lang->scrum->menuOrder[25] = 'dynamic';
 $lang->scrum->menuOrder[30] = 'settings';
+
+$lang->execution->menu           = new stdclass();
+$lang->execution->menu->kanban   = array('link' => "看板|execution|kanban|executionID=%s");
+$lang->execution->menu->list     = array('link' => "列表|execution|task|executionID=%s");
+$lang->execution->menu->calendar = array('link' => "日历|execution|calendar|executionID=%s");
+$lang->execution->menu->gantt    = array('link' => "甘特图|execution|gantt|executionID=%s");
+$lang->execution->menu->tree     = array('link' => "树状图|execution|tree|executionID=%s");
+$lang->execution->menu->group    = array('link' => "分组视图|execution|groupTask|executionID=%s");
 
 $lang->scrum->menu->doc['subMenu'] = new stdclass();
 

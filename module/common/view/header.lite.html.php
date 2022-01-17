@@ -64,10 +64,19 @@ $onlybody     = zget($_GET, 'onlybody', 'no');
 <![endif]-->
 <?php
 /* Load hook files for current page. */
-$extPath      = $this->app->getModuleRoot() . '/common/ext/view/';
-$extHookRule  = $extPath . 'header.*.hook.php';
-$extHookFiles = glob($extHookRule);
-if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+$extensionRoot = $this->app->getExtensionRoot();
+if($this->config->vision != 'open')
+{
+    $extHookRule  = $extensionRoot . $this->config->edition . '/common/ext/view/header.*.hook.php';
+    $extHookFiles = glob($extHookRule);
+    if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+}
+if($this->config->vision == 'lite')
+{
+    $extHookRule  = $extensionRoot . $this->config->vision . '/common/ext/view/header.*.hook.php';
+    $extHookFiles = glob($extHookRule);
+    if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
+}
 ?>
 </head>
 <?php $singleClass = $this->app->getViewType() == 'xhtml' ? 'allow-self-open' : '';?>

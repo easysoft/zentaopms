@@ -971,36 +971,49 @@ class kanbanModel extends model
      */
     public function getCanViewObjects($objectType = 'kanban')
     {
-        $table     = $this->config->objectTables[$objectType];
-        $objects   = $this->dao->select('*')->from($table)->fetchAll('id');
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
-
+        $table   = $this->config->objectTables[$objectType];
+        $objects = $this->dao->select('*')->from($table)->fetchAll('id');
         if($this->app->user->admin) return array_keys($objects);
 
-        $account = $this->app->user->account;
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $account   = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'private' or $object->acl == 'extend')
-            {
-                $remove = true;
-                if($object->owner == $account) $remove = false;
-                if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
-                if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
-                if($objectType == 'kanban')
-                {
-                    $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
-                    $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
-                    $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
-                    if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
-                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
-                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
-                }
-
-                if($remove) unset($objects[$objectID]);
-            }
+            if(!$this->checkKanbanPriv($object, $objectType, $spaceList)) unset($objects[$objectID]);
         }
 
         return array_keys($objects);
+    }
+
+    /**
+     * Check kanban priv.
+     *
+     * @param  object   $object
+     * @param  string   $objectType
+     * @param  array    $spaceList
+     * @access public
+     * @return bool
+     */
+    public function checkKanbanPriv($object, $objectType, $spaceList)
+    {
+        $account = $this->app->user->account;
+        if($object->acl == 'private' or $object->acl == 'extend')
+        {
+            if($object->owner == $account) return true;
+            if(strpos(",{$object->team},", ",$account,") !== false) return true;
+            if(strpos(",{$object->whitelist},", ",$account,") !== false) return true;
+            if($objectType == 'kanban')
+            {
+                $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
+                $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
+                if(strpos(",$spaceOwner,", ",$account,") !== false) return true;
+                if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') return true;
+                if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') return true;
+            }
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -1210,7 +1223,6 @@ class kanbanModel extends model
                 $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
             }
         }
-
 
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
