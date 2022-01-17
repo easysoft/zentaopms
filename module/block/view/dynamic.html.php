@@ -13,6 +13,7 @@
     {
         $user = zget($users, $action->actor);
         if($action->action == 'login' or $action->action == 'logout') $action->objectName = $action->objectLabel = '';
+        if($action->objectType == 'sonarqubeproject') $action->objectName = $action->extra;
         $class = $action->major ? "class='active'" : '';
         echo "<li $class><div>";
         if($action->objectLink) printf($lang->block->dynamicInfo, $action->date, $user, $action->actionLabel, $action->objectLabel, $action->objectLink, $action->objectName, $action->objectName);

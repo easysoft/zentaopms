@@ -581,6 +581,8 @@ $lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
 $lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
 $lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
 
+$lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Project';
+
 $lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
 $lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
 $lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';

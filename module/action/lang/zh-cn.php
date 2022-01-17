@@ -581,6 +581,8 @@ $lang->action->dynamicAction->sonarqube['created'] = '创建SonarQube服务器';
 $lang->action->dynamicAction->sonarqube['edited']  = '设置SonarQube服务器';
 $lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
 
+$lang->action->dynamicAction->sonarqubeproject['deleted'] = '删除SonarQube项目';
+
 $lang->action->dynamicAction->gitlab['created'] = '创建GitLab服务器';
 $lang->action->dynamicAction->gitlab['edited']  = '设置GitLab服务器';
 $lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
