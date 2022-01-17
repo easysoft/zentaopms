@@ -615,17 +615,18 @@ $lang->navGroup->testtask   = 'qa';
 $lang->navGroup->testsuite  = 'qa';
 $lang->navGroup->caselib    = 'qa';
 
-$lang->navGroup->devops    = 'devops';
-$lang->navGroup->repo      = 'devops';
-$lang->navGroup->job       = 'devops';
-$lang->navGroup->jenkins   = 'devops';
-$lang->navGroup->mr        = 'devops';
-$lang->navGroup->gitlab    = 'devops';
-$lang->navGroup->sonarqube = 'devops';
-$lang->navGroup->compile   = 'devops';
-$lang->navGroup->ci        = 'devops';
-$lang->navGroup->svn       = 'devops';
-$lang->navGroup->git       = 'devops';
+$lang->navGroup->devops           = 'devops';
+$lang->navGroup->repo             = 'devops';
+$lang->navGroup->job              = 'devops';
+$lang->navGroup->jenkins          = 'devops';
+$lang->navGroup->mr               = 'devops';
+$lang->navGroup->gitlab           = 'devops';
+$lang->navGroup->sonarqube        = 'devops';
+$lang->navGroup->sonarqubeproject = 'devops';
+$lang->navGroup->compile          = 'devops';
+$lang->navGroup->ci               = 'devops';
+$lang->navGroup->svn              = 'devops';
+$lang->navGroup->git              = 'devops';
 
 $lang->navGroup->company = 'system';
 
