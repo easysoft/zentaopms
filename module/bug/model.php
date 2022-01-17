@@ -272,9 +272,12 @@ class bugModel extends model
 
             $this->executeHooks($bugID);
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
-            if($bug->execution and (!isset($output['laneID']) or !isset($output['columnID']))) $this->kanban->updateLane($bug->execution, 'bug');
+            if($bug->execution)
+            {
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
+                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($bug->execution, 'bug');
 
+            }
             /* When the bug is created by uploading the image, add the image to the file of the bug. */
             $this->loadModel('score')->create('bug', 'create', $bugID);
             if(!empty($data->uploadImage[$i]) and !empty($file))
