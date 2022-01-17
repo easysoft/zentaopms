@@ -40,7 +40,7 @@ class sonarqube extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $sonarqubeList = $this->sonarqube->getList($orderBy, $pager);
+        $sonarqubeList = $this->loadModel('pipeline')->getList('sonarqube', $orderBy, $pager);
 
         $this->view->title         = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browse;
         $this->view->sonarqubeList = $sonarqubeList;
@@ -60,7 +60,7 @@ class sonarqube extends control
      */
     public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true);
+        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true, true);
         $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
 
         $projectList = $this->sonarqube->apiGetProjects($sonarqubeID);
@@ -138,13 +138,13 @@ class sonarqube extends control
      */
     public function edit($sonarqubeID)
     {
-        $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
 
         if($_POST)
         {
             $this->checkToken($sonarqubeID);
-            $this->loadModel('pipeline')->update($sonarqubeID);
-            $sonarqube = $this->sonarqube->getByID($sonarqubeID);
+            $this->pipeline->update($sonarqubeID);
+            $sonarqube = $this->pipeline->getByID($sonarqubeID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action');
@@ -171,11 +171,11 @@ class sonarqube extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
 
-        $oldSonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->loadModel('action');
-        $actionID = $this->loadModel('pipeline')->delete($sonarqubeID, 'sonarqube');
+        $actionID = $this->pipeline->delete($sonarqubeID, 'sonarqube');
 
-        $sonarQube = $this->sonarqube->getByID($sonarqubeID);
+        $sonarQube = $this->pipeline->getByID($sonarqubeID);
         $changes   = common::createChanges($oldSonarQube, $sonarQube);
         $this->action->logHistory($actionID, $changes);
         echo js::reload('parent');
@@ -229,7 +229,7 @@ class sonarqube extends control
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
 
-        $this->view->sonarqube            = $this->sonarqube->getByID($sonarqubeID);
+        $this->view->sonarqube            = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->view->keyword              = urldecode(urldecode($keyword));
         $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
