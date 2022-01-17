@@ -15,3 +15,4 @@ html, body, #main, .container { height: 100%;}
 .linkButton i {font-size: 17px !important;}
 .linkButton span {line-height: 34px; display: block;}
 .btn-toolbar {width: calc(100% - 30px);}
+.modal-header .close {font-size: 32px !important};

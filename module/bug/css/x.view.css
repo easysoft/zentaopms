@@ -11,3 +11,4 @@ html, body, #main, .container { height: 100%;}
 .linkButton {float: right; padding-right: 10px; cursor: pointer;}
 .linkButton i {font-size: 17px !important;}
 .linkButton span {line-height: 34px; display: block;}
+.modal-header .close {font-size: 32px !important};
