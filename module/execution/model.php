@@ -523,7 +523,7 @@ class executionModel extends model
             ->limit(1)
             ->exec();
 
-        if($oldExecution->type == 'kanban') $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->exec();
+        if($oldExecution->type == 'kanban') $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq('execution')->exec();
 
         /* Get team and language item. */
         $this->lang->execution->team = $this->lang->execution->teamname;
