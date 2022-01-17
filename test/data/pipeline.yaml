@@ -5,7 +5,7 @@ fields:
   - field: id
     range: 1-2
   - field: type
-    range: gitlabi,sonarqube
+    range: gitlab,sonarqube
   - field: name
     range: gitlab服务器,sonarqube服务器
   - field: url

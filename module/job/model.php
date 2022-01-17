@@ -624,15 +624,16 @@ class jobModel extends model
      * @param  int    $sonarqubeID
      * @param  array  $projectKeys
      * @param  bool   $emptyShowAll
+     * @param  bool   $showDeleted
      * @access public
      * @return array
      */
-    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array(), $emptyShowAll = false)
+    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array(), $emptyShowAll = false, $showDeleted = false)
     {
         return $this->dao->select('projectKey,id')->from(TABLE_JOB)
-            ->where('deleted')->eq(0)
-            ->andWhere('frame')->eq('sonarqube')
+            ->where('frame')->eq('sonarqube')
             ->andWhere('sonarqubeServer')->eq($sonarqubeID)
+            ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
             ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
             ->fetchPairs();
     }
