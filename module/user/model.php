@@ -2194,16 +2194,6 @@ class userModel extends model
         /* Get parent project stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
-        /* Get parent project PMs. */
-        $PMGroups = array();
-        $stmt = $this->dao->select('Id, PM')->from(TABLE_PROJECT)
-            ->where('type')->eq('project')
-            ->andWhere('acl')->eq('private')
-            ->andWhere('id')->in($parentIdList)
-            ->query();
-
-        while($PM = $stmt->fetch()) $PMGroups[$PM->Id][$PM->PM] = $PM->PM;
-
         /* Get auth users. */
         $authedUsers = array();
         if(!empty($users)) $authedUsers = $users;
@@ -2215,9 +2205,8 @@ class userModel extends model
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $parentTeams  = zget($teamGroups, $sprint->project, array());
                 $whiteList    = zget($whiteListGroup, $sprint->project, array());
-                $PMs          = zget($PMGroups, $sprint->project, array());
 
-                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams, $PMs), $whiteList);
+                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
 
                 /* If you have parent stage view permissions, you have child stage permissions. */
                 if($sprint->type == 'stage' && $sprint->grade == 2)
