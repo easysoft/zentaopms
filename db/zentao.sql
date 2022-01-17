@@ -677,6 +677,7 @@ CREATE TABLE `zt_kanban` (
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `status` enum('active','closed') NOT NULL default 'active',
   `order` mediumint(8) NOT NULL DEFAULT '0',
+  `displayCards` smallint(6) NOT NULL default '0',
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,
@@ -706,8 +707,6 @@ CREATE TABLE `zt_kanbancard` (
   `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
   `group` mediumint(8) unsigned NOT NULL,
-  `lane` mediumint(8) unsigned NOT NULL,
-  `column` mediumint(8) unsigned NOT NULL,
   `name` varchar(255) NOT NULL,
   `pri` mediumint(8) unsigned NOT NULL,
   `assignedTo` text NOT NULL,
@@ -730,6 +729,17 @@ CREATE TABLE `zt_kanbancard` (
   `assignedDate` datetime NOT NULL,
   `deleted` enum('0', '1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+-- DROP TABLE IF EXISTS `zt_kanbancell`;
+CREATE TABLE `zt_kanbancell` (
+  `id` int(8) NOT NULL AUTO_INCREMENT,
+  `kanban` mediumint(8) NOT NULL,
+  `lane` mediumint(8) NOT NULL,
+  `column` mediumint(8) NOT NULL,
+  `type` char(30) NOT NULL,
+  `cards` text NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `card_group` (`kanban`,`type`,`lane`,`column`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_kanbangroup`;
 CREATE TABLE `zt_kanbangroup` (
@@ -1010,6 +1020,7 @@ CREATE TABLE IF NOT EXISTS `zt_project` (
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
+  `displayCards` smallint(6) NOT NULL default '0',
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
   KEY `parent` (`parent`),

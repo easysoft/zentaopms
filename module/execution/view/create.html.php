@@ -42,6 +42,7 @@
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('projectID', $projectID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -88,6 +89,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
@@ -104,6 +106,7 @@
           </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
+        <?php endif;?>
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>

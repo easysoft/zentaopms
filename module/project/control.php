@@ -222,10 +222,11 @@ class project extends control
      * Project index view.
      *
      * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function index($projectID = 0)
+    public function index($projectID = 0, $browseType = 'all')
     {
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
@@ -239,6 +240,27 @@ class project extends control
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        if($project->model == 'kanban')
+        {
+            $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
+
+            $executionActions = array();
+            foreach($kanbanList as $kanbanID => $kanban)
+            {
+                foreach($this->config->execution->statusActions as $action)
+                {
+                    if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
+                }
+                if($this->execution->isClickable($kanban, 'delete')) $executionActions[$kanbanID][] = 'delete';
+            }
+
+            $this->view->kanbanList       = $kanbanList;
+            $this->view->browseType       = $browseType;
+            $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
+            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+            $this->view->executionActions = $executionActions;
+        }
 
         $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
         $this->view->position[] = $this->lang->project->index;
@@ -351,6 +373,8 @@ class project extends control
     {
         $this->loadModel('execution');
         $this->loadModel('product');
+
+        if($model == 'kanban') unset($this->lang->project->authList['reset']);
 
         if($_POST)
         {
@@ -576,8 +600,7 @@ class project extends control
             }
         }
 
-        $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
-        $disableModel = $canChangeModel == true ? '' : 'disabled';
+        if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
@@ -604,7 +627,7 @@ class project extends control
         $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
-        $this->view->disableModel             = $disableModel;
+        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel == true) ? '' : 'disabled';
 
         $this->display();
     }

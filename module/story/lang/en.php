@@ -86,7 +86,6 @@ $lang->story->batchToTaskTips = "This action will create a task with the same na
 $lang->story->successToTask   = "Converted to task.";
 $lang->story->storyRound      = '%s time estimation';
 
-$lang->story->common         = 'Story';
 $lang->story->id             = 'ID';
 $lang->story->parent         = 'Parent';
 $lang->story->product        = $lang->productCommon;

@@ -905,7 +905,7 @@ class block extends control
 
         foreach($projects as $projectID => $project)
         {
-            if($project->model == 'scrum')
+            if($project->model == 'scrum' or $project->model == 'kanban')
             {
                 $this->app->loadClass('pager', $static = true);
                 $pager = pager::init(0, 3, 1);

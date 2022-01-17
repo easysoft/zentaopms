@@ -65,13 +65,14 @@ class executionModel extends model
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) die(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
-        $executions = $this->loadModel('execution')->getPairs(0, 'all', 'nocode');
+        $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
         if(!$executionID or !in_array($executionID, array_keys($executions))) $executionID = key($executions);
         $this->session->set('execution', $executionID);
 
         /* Unset story, bug, build and testtask if type is ops. */
         $execution = $this->getByID($executionID);
+        if($execution and $execution->type == 'kanban') $this->lang->execution->menu = new stdclass();
 
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
         {
@@ -87,15 +88,6 @@ class executionModel extends model
             unset($this->lang->execution->menu->qa);
             unset($this->lang->execution->menu->build);
         }
-
-        /* Hide story and qa menu when execution is story or design type. */
-        /*
-        if($execution and ($execution->attribute == 'story' or $execution->attribute == 'design'))
-        {
-            unset($this->lang->execution->menu->story);
-            unset($this->lang->execution->menu->qa);
-        }
-         */
 
         if($executions and (!isset($executions[$executionID]) or !$this->checkPriv($executionID))) $this->accessDenied();
 
@@ -312,6 +304,12 @@ class executionModel extends model
                 return false;
             }
 
+            if($type == 'kanban' and empty($this->post->products[0]))
+            {
+                dao::$errors['message'][] = $this->lang->execution->kanbanNoLinkProduct;
+                return false;
+            }
+
             $this->config->execution->create->requiredFields .= ',project';
         }
 
@@ -381,7 +379,7 @@ class executionModel extends model
             $creatorExists = false;
             $teamMembers   = array();
 
-            $this->loadModel('kanban')->createExecutionLane($executionID);
+            if((isset($project) and $project->model != 'kanban') or empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
 
             /* Save order. */
             $this->dao->update(TABLE_EXECUTION)->set('`order`')->eq($executionID * 5)->where('id')->eq($executionID)->exec();
@@ -1054,7 +1052,7 @@ class executionModel extends model
         /* Order by status's content whether or not done */
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint')->fi()
+            ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID and $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all' and $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
             ->beginIF(strpos($mode, 'withdelete') === false)->andWhere('deleted')->eq(0)->fi()
@@ -1202,7 +1200,7 @@ class executionModel extends model
     public function getIdList($projectID, $status = 'all')
     {
         return $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('type')->in('sprint,stage')
+            ->where('type')->in('sprint,stage,kanban')
             ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
@@ -1228,7 +1226,7 @@ class executionModel extends model
         $orderBy = (isset($project->model) and $project->model == 'waterfall') ? 'begin_asc,id_asc' : 'begin_desc,id_desc';
 
         $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
-            ->where('type')->in('stage,sprint')
+            ->where('type')->in('stage,sprint,kanban')
             ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq((int)$projectID)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -1319,7 +1317,7 @@ class executionModel extends model
             $module = 'execution';
             $method = 'task';
         }
-        if($module == 'testcase' and ($method == 'view' || $method == 'edit' || $method == 'batchedit'))
+        if($module == 'testcase' and ($method == 'view' or $method == 'edit' or $method == 'batchedit'))
         {
             $module = 'execution';
             $method = 'testcase';
@@ -1329,7 +1327,7 @@ class executionModel extends model
             $module = 'execution';
             $method = 'testtask';
         }
-        if($module == 'build' and ($method == 'edit' || $method= 'view'))
+        if($module == 'build' and ($method == 'edit' or $method == 'view'))
         {
             $module = 'execution';
             $method = 'build';
@@ -2480,6 +2478,23 @@ class executionModel extends model
     }
 
     /**
+     * Get members by execution id list.
+     *
+     * @param  array $executionIdList
+     * @access public
+     * @return void
+     */
+    public function getMembersByIdList($executionIdList)
+    {
+        return $this->dao->select("t1.root, t1.account, t2.realname")->from(TABLE_TEAM)->alias('t1')
+            ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account = t2.account')
+            ->where('t1.root')->in($executionIdList)
+            ->andWhere('t1.type')->eq('execution')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchGroup('root');
+    }
+
+    /**
      * Get the skip members of the team.
      *
      * @param  array  $teams
@@ -3022,13 +3037,16 @@ class executionModel extends model
      */
     public static function isClickable($execution, $action)
     {
-        $action = strtolower($action);
+        $action    = strtolower($action);
+        $clickable = commonModel::hasPriv('execution', $action);
+        if(!$clickable) return false;
 
         if($action == 'start')    return $execution->status == 'wait';
         if($action == 'close')    return $execution->status != 'closed';
         if($action == 'suspend')  return $execution->status == 'wait' or $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' or $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' or $execution->status == 'closed';
+        if($action == 'delete')   return $execution->status == 'wait' or $execution->status == 'doing';
 
         return true;
     }

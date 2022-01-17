@@ -294,18 +294,19 @@ class kanban extends control
      * Create a region.
      *
      * @param  int    $kanbanID
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
-    public function createRegion($kanbanID)
+    public function createRegion($kanbanID, $from = 'kanban')
     {
         if(!empty($_POST))
         {
-            $kanban       = $this->kanban->getByID($kanbanID);
+            $kanban       = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
             $copyRegionID = (int)$_POST['region'];
             unset($_POST['region']);
 
-            $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID);
+            $regionID = $this->kanban->createRegion($kanban, '', $copyRegionID, $from);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
@@ -417,10 +418,11 @@ class kanban extends control
      *
      * @param  int    $kanbanID
      * @param  int    $regionID
+     * @param  string $from kanban|execution
      * @access public
      * @return void
      */
-    public function createLane($kanbanID, $regionID)
+    public function createLane($kanbanID, $regionID, $from = 'kanban')
     {
         if(!empty($_POST))
         {
@@ -431,8 +433,12 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->lanes = $this->kanban->getLanePairsByRegion($regionID);
-        $this->display();
+        $this->view->lanes    = $this->kanban->getLanePairsByRegion($regionID, $from == 'kanban' ? 'all' : 'story');
+        $this->view->from     = $from;
+        $this->view->regionID = $regionID;
+
+        if($from == 'kanban') $this->display();
+        if($from == 'execution') $this->display('kanban', 'createexeclane');
     }
 
     /**
@@ -459,6 +465,34 @@ class kanban extends control
     }
 
     /**
+     * Set lane height.
+     *
+     * @param  int    $kanbanID
+     * @param  string $from     kanban|execution
+     * @access public
+     * @return void
+     */
+    public function setLaneHeight($kanbanID, $from = 'kanban')
+    {
+        if(!empty($_POST))
+        {
+            $this->kanban->setLaneHeight($kanbanID, $from);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+        }
+
+        $kanban = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
+
+        $this->view->heightType   = $kanban->displayCards > 2 ? 'custom' : 'auto';
+        $this->view->displayCards = $kanban->displayCards ? $kanban->displayCards : '';
+
+        $this->display();
+    }
+
+    /**
      * Delete a lane.
      *
      * @param  int    $laneID
@@ -470,7 +504,10 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbanlane->confirmDelete, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+            $laneType   = $this->kanban->getLaneById($laneID)->type;
+            $confirmTip = in_array($laneType, array('story', 'task', 'bug')) ? sprintf($this->lang->kanbanlane->confirmDeleteTip, $this->lang->{$laneType}->common) : $this->lang->kanbanlane->confirmDelete;
+
+            die(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
         }
         else
         {
@@ -710,15 +747,17 @@ class kanban extends control
      * Move a card.
      *
      * @param  int    $cardID
+     * @param  int    $fromColID
      * @param  int    $toColID
+     * @param  int    $fromLaneID
      * @param  int    $toLaneID
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $toColID, $toLaneID, $kanbanID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID)
     {
-        $this->kanban->moveCard($cardID, $toColID, $toLaneID);
+        $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         die(json_encode($kanbanGroup));
@@ -992,26 +1031,48 @@ class kanban extends control
      *
      * @param  int    $cardID
      * @param  int    $fromColID
-     * @param  string $toColType
+     * @param  int    $toColID
+     * @param  int    $fromLaneID
+     * @param  int    $toLaneID
      * @param  int    $executionID
      * @param  string $browseType
-     * @param  string $browseType
+     * @param  string $groupBy
+     * @param  int    $regionID
+     * @param  string $orderBy
      * @access public
-     * @return json
+     * @return void
      */
-    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColType = 'ready', $executionID = 0, $browseType = 'all', $groupBy = '')
+    public function ajaxMoveCard($cardID = 0, $fromColID = 0, $toColID = 0, $fromLaneID = 0, $toLaneID = 0, $executionID = 0, $browseType = 'all', $groupBy = '', $regionID = 0, $orderBy = '')
     {
-        $fromColumn = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($fromColID)->fetch();
-        $toColumn   = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('type')->eq($toColType)->andWhere('lane')->eq($fromColumn->lane)->fetch();
+        $fromCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($fromLaneID)
+            ->andWhere('`column`')->eq($fromColID)
+            ->fetch();
 
-        $fromCards = str_replace(",$cardID,", ',', $fromColumn->cards);
+        $toCell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($toLaneID)
+            ->andWhere('`column`')->eq($toColID)
+            ->fetch();
+
+        $fromCards = str_replace(",$cardID,", ',', $fromCell->cards);
         $fromCards = $fromCards == ',' ? '' : $fromCards;
-        $toCards   = ",$cardID," . ltrim($toColumn->cards, ',');
+        $toCards   = ",$cardID," . ltrim($toCell->cards, ',');
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($fromCards)->where('id')->eq($fromColumn->id)->exec();
-        $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($toCards)->where('id')->eq($toColumn->id)->exec();
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCards)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($fromLaneID)
+            ->andWhere('`column`')->eq($fromColID)
+            ->exec();
 
-        $kanbanGroup = $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy);
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCards)
+            ->where('kanban')->eq($executionID)
+            ->andWhere('lane')->eq($toLaneID)
+            ->andWhere('`column`')->eq($toColID)
+            ->exec();
+
+        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $groupBy, $regionID);
         die(json_encode($kanbanGroup));
     }
 
@@ -1083,5 +1144,21 @@ class kanban extends control
         $this->view->module    = $moduleName;
         $this->view->method    = $methodName;
         $this->display();
+    }
+
+    /**
+     * Ajax get lanes by region id.
+     *
+     * @param  int    $regionID
+     * @param  string $type all|story|task|bug
+     * @access public
+     * @return string
+     */
+    public function ajaxGetLanes($regionID, $type = 'all')
+    {
+        $lanes = $this->kanban->getLanePairsByRegion($regionID, $type);
+
+        if(empty($lanes)) return;
+        return print(html::select('otherLane', $lanes, '', "class='form-control'"));
     }
 }

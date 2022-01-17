@@ -205,7 +205,7 @@ class programModel extends model
 
         /* Get doing executions. */
         $doingExecutions = $this->dao->select('id, project, name, end')->from(TABLE_EXECUTION)
-            ->where('type')->in('sprint,stage')
+            ->where('type')->in('sprint,stage,kanban')
             ->andWhere('status')->eq('doing')
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
@@ -1254,7 +1254,7 @@ class programModel extends model
         $executions = $this->dao->select('id')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
             ->andWhere('project')->in($projectKeys)
-            ->andWhere('type')->in('sprint,stage')
+            ->andWhere('type')->in('sprint,stage,kanban')
             ->fetchAll('id');
 
         /* Get all tasks and compute totalEstimate, totalConsumed, totalLeft, progress according to them. */

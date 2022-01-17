@@ -18,6 +18,8 @@ $lang->kanban->deleteRegion        = '删除区域';
 $lang->kanban->createLane          = '创建泳道';
 $lang->kanban->editLane            = '泳道设置';
 $lang->kanban->sortLane            = '泳道排序';
+$lang->kanban->laneHeight          = '泳道高度';
+$lang->kanban->setLaneHeight       = '设置泳道高度';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
 $lang->kanban->editColumn          = '编辑看板列';
@@ -73,15 +75,18 @@ $lang->kanban->closedBy       = '由谁关闭';
 $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
+$lang->kanban->cardCount      = '卡片数量';
 
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 
 $lang->kanban->accessDenied  = '您无权访问该看板';
 $lang->kanban->confirmDelete = '您确认删除吗？';
+$lang->kanban->cardCountTip  = '请输入卡片数量';
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';
+$lang->kanban->aclGroup['extend']  = '继承空间';
 
 $lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
@@ -244,11 +249,19 @@ $lang->kanbanlane->default   = '默认泳道';
 $lang->kanbanlane->column    = '泳道看板列';
 $lang->kanbanlane->otherlane = '选择共享看板列的泳道';
 $lang->kanbanlane->color     = '泳道颜色';
+$lang->kanbanlane->WIPType   = '泳道在制品类型';
 
-$lang->kanbanlane->confirmDelete = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
+$lang->kanbanlane->confirmDelete    = '您确认删除该泳道吗？删除泳道后，该泳道中所有数据（列、卡片）也会被删除。';
+$lang->kanbanlane->confirmDeleteTip = '您确认删除该泳道吗？删除泳道后，该泳道中所有的%s将被隐藏。';
 
 $lang->kanbanlane->modeList['sameAsOther'] = '与其他泳道使用相同看板列';
 $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
+
+$lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度自适应）';
+$lang->kanbanlane->heightTypeList['custom'] = '自定义（根据卡片数量自定义泳道高度）';
+
+$lang->kanbanlane->error = new stdclass();
+$lang->kanbanlane->error->mustBeInt = '卡片数量必须是大于2的正整数。';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = '区域名称';

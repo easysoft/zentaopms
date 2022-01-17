@@ -7,4 +7,3 @@ $(document).ready(function()
         $('#otherLane').parents('tr').toggle($(this).val() == 'sameAsOther');
     });
 })
-

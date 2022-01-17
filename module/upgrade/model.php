@@ -745,6 +745,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 16_0');
             $this->execSQL($this->getUpgradeFile('16.0'));
             $this->appendExec('16_0');
+        case '16_1':
+            $this->saveLogs('Execute 16_1');
+            $this->execSQL($this->getUpgradeFile('16.1'));
+            $this->moveKanbanData();
+            $this->appendExec('16_1');
         }
 
         $this->deletePatch();
@@ -4285,7 +4290,7 @@ class upgradeModel extends model
             }
         }
 
-        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage')->fetchAll('id', 'id');
+        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id', 'id');
         foreach($userViews as $account => $userView)
         {
             $projects = zget($accountProjects, $account, array());
@@ -4856,7 +4861,7 @@ class upgradeModel extends model
             $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
-        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
+        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
         $whitelistACL  = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customSprints))->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
         foreach($customSprints as $sprint)
         {
@@ -5363,6 +5368,73 @@ class upgradeModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Move kanban card data to kanbancell table. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function moveKanbanData()
+    {
+        /* Move common kanban data. */
+        $cards = $this->dao->select('id,kanban,`column`,lane')->from(TABLE_KANBANCARD)->fetchAll('id');
+
+        $cellGroup = array();
+        foreach($cards as $cardID => $card)
+        {
+            $key   = $card->kanban . '-' . $card->lane . '-' . $card->column;
+            $cards = isset($cellGroup[$key]) ? $cellGroup[$key] . "$cardID," : ",$cardID,";
+            $cellGroup[$key] = $cards;
+        }
+
+        foreach($cellGroup as $key => $cards)
+        {
+            $key = explode('-', $key);
+            if(!is_array($key)) continue;
+
+            $cell = new stdclass();
+            $cell->kanban = $key[0];
+            $cell->lane   = $key[1];
+            $cell->column = $key[2];
+            $cell->type   = 'card';
+            $cell->cards  = $cards;
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+        }
+
+        /* Drop group kanban data. */
+        $groupLanePairs = $this->dao->select('id')->from(TABLE_KANBANLANE)->where('`groupby`')->ne('')->fetchPairs();
+        $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->in($groupLanePairs)->exec();
+        $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->in($groupLanePairs)->exec();
+
+        /* Move execution kanban data. */
+        $executionKanban = $this->dao->select('t1.id as `lane`, t1.execution, t1.type, t2.id as `column`, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.id = t2.lane')
+            ->where('t1.execution')->gt(0)
+            ->fetchGroup('lane');
+
+        foreach($executionKanban as $laneID => $laneGroup)
+        {
+            foreach($laneGroup as $colData)
+            {
+                $cell = new stdclass();
+                $cell->kanban = $colData->execution;
+                $cell->lane   = $laneID;
+                $cell->column = $colData->column;
+                $cell->type   = $colData->type;
+                $cell->cards  = $colData->cards;
+
+                $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+            }
+        }
+
+        /* Drop unused field. */
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `lane`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `lane`;");
+        $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `cards`;");
     }
 
     /**

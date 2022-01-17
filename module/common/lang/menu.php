@@ -289,6 +289,11 @@ $lang->waterfall->menu->design['subMenu']->dbds     = array('link' => "{$lang->d
 $lang->waterfall->menu->design['subMenu']->ads      = array('link' => "{$lang->design->ADS}|design|browse|projectID=%s&productID=0&browseType=ADS");
 $lang->waterfall->menu->design['subMenu']->bysearch = array('link' => '<a href="javascript:;" class="querybox-toggle"><i class="icon-search icon"></i> ' . $lang->searchAB . '</a>');
 
+/* Kanban project menu. */
+$lang->kanban->menu        = new stdclass();
+$lang->kanban->menuOrder   = array();
+$lang->kanban->dividerMenu = '';
+
 /* Execution menu. */
 $lang->execution->homeMenu      = new stdclass();
 $lang->execution->homeMenu->all = array('link' => "{$lang->execution->all}|execution|all|", 'alias' => 'batchedit');
@@ -296,7 +301,7 @@ if($config->systemMode == 'new') $lang->execution->homeMenu->executionkanban = a
 
 $lang->execution->menu           = new stdclass();
 $lang->execution->menu->task     = array('link' => "{$lang->task->common}|execution|task|executionID=%s", 'subModule' => 'task,tree', 'alias' => 'importtask,importbug');
-$lang->execution->menu->kanban   = array('link' => "$lang->executionKanban|execution|kanban|executionID=%s");
+$lang->execution->menu->kanban   = array('link' => "$lang->executionKanban|execution|taskkanban|executionID=%s");
 $lang->execution->menu->burn     = array('link' => "$lang->burn|execution|burn|executionID=%s");
 $lang->execution->menu->view     = array('link' => "$lang->view|execution|grouptask|executionID=%s", 'alias' => 'grouptask,tree,taskeffort,gantt,calendar,relation,maintainrelation');
 $lang->execution->menu->story    = array('link' => "$lang->SRCommon|execution|story|executionID=%s", 'subModule' => 'story', 'alias' => 'batchcreate,linkstory,storykanban');
