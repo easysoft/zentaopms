@@ -604,6 +604,7 @@ function renderCount($count, count, column)
  */
 function renderHeaderCol($column, column, $header, kanbanData)
 {
+    if(groupBy != 'default') return;
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
@@ -654,6 +655,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
  */
 function renderLaneName($lane, lane, $kanban, columns, kanban)
 {
+    if(groupBy != 'default') return;
     var canSet    = lane.actions.includes('setLane');
     var canSort   = lane.actions.includes('sortLane') && kanban.lanes.length > 1;
     var canDelete = lane.actions.includes('deleteLane');
