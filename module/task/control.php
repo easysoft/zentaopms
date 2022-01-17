@@ -106,6 +106,8 @@ class task extends control
                 return $this->send($response);
             }
 
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+
             /* if the count of tasksID is 1 then check exists. */
             if(count($tasksID) == 1)
             {
