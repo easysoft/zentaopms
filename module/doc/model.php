@@ -1377,7 +1377,7 @@ class docModel extends model
 
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
-                ->andWhere('type')->in('sprint,stage')
+                ->andWhere('type')->in('sprint,stage,kanban')
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');

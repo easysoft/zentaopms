@@ -49,7 +49,7 @@ class projectstoryModel extends model
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story=t2.id')
             ->leftJoin(TABLE_EXECUTION)->alias('t3')->on('t1.project=t3.id')
             ->where('t1.story')->in($storyIdList)
-            ->andWhere('t3.type')->in('sprint,stage')
+            ->andWhere('t3.type')->in('sprint,stage,kanban')
             ->andWhere('t3.project')->eq($projectID)
             ->andWhere('t3.deleted')->eq(0)
             ->fetchAll('id');

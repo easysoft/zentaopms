@@ -1092,7 +1092,7 @@ class userModel extends model
      */
     public function getObjects($account, $type = 'execution', $status = 'all', $orderBy = 'id_desc', $pager = null)
     {
-        $objectType    = $type == 'execution' ? 'sprint,stage' : $type;
+        $objectType    = $type == 'execution' ? 'sprint,stage,kanban' : $type;
         $myObjectsList = $this->dao->select('t1.*,t2.*')->from(TABLE_TEAM)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.root = t2.id')
             ->where('t1.type')->eq($type)
