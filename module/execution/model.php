@@ -2288,6 +2288,7 @@ class executionModel extends model
         $linkedStories = $this->dao->select('*')->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->orderBy('order_desc')->fetchPairs('story', 'order');
         $lastOrder     = reset($linkedStories);
         $storyList     = $this->dao->select('id, status, branch')->from(TABLE_STORY)->where('id')->in(array_values($stories))->fetchAll('id');
+        $execution     = $this->getById($executionID);
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -2297,7 +2298,18 @@ class executionModel extends model
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
+            if($execution->type == 'kanban')
+            {
+                if(isset($output['laneID']) and isset($output['columnID']))
+                {
+                    $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
+                }
+                else
+                {
+                    $cell = $this->dao->select('lane,`column`')->from(TABLE_KANBANCELL)->where('type')->eq('story')->andWhere('kanban')->eq($executionID)->fetch();
+                    $this->loadModel('kanban')->addKanbanCell($executionID, $cell->lane, $cell->column, 'story', $storyID);
+                }
+            }
 
             $data = new stdclass();
             $data->project = $executionID;
