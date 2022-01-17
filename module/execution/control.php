@@ -1267,19 +1267,12 @@ class execution extends control
         $project = $this->project->getByID($projectID);
         if(!empty($project) and $project->model == 'kanban')
         {
-            $this->lang->execution->menu = new stdclass();
-            $this->lang->execution->createExec  = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->createExec);
-            $this->lang->execution->execName    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execName);
-            $this->lang->execution->execCode    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execCode);
-            $this->lang->execution->execDesc    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->execDesc);
-            $this->lang->execution->copyExec    = str_replace($this->lang->execution->common, $this->lang->execution->kanban, $this->lang->execution->copyExec);
-            $this->lang->execution->create      = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->create);
-            $this->lang->execution->copy        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->copy);
-            $this->lang->execution->PM          = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->PM);
-            $this->lang->execution->name        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->name);
-            $this->lang->execution->code        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->code);
-            $this->lang->execution->desc        = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->desc);
-            $this->lang->execution->copyTeamTip = str_replace(array($this->lang->execution->common, $this->lang->executionCommon), $this->lang->execution->kanban, $this->lang->execution->copyTeamTip);
+            global $lang;
+            $executionLang           = $lang->execution->common;
+            $lang->executionCommon   = $lang->execution->kanban;
+            $lang->execution->common = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+            $lang->execution->common = $executionLang;
         }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
@@ -1483,6 +1476,13 @@ class execution extends control
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
         $execution           = $this->execution->getById($executionID);
 
+        if($execution->type == 'kanban')
+        {
+            global $lang;
+            $lang->executionCommon = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+
         if(!empty($_POST))
         {
             $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
@@ -1542,17 +1542,6 @@ class execution extends control
 
         $executions = array('' => '') + $this->executions;
         $managers   = $this->execution->getDefaultManagers($executionID);
-
-        $project = $this->project->getByID($execution->project);
-        if($project->model == 'kanban')
-        {
-            $this->lang->execution->edit   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->edit);
-            $this->lang->execution->name   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->name);
-            $this->lang->execution->code   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->code);
-            $this->lang->execution->desc   = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->desc);
-            $this->lang->execution->status = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->status);
-            $this->lang->execution->PM     = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->PM);
-        }
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -1625,7 +1614,6 @@ class execution extends control
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
-        $this->view->project              = $project;
         $this->display();
     }
 
@@ -2405,6 +2393,12 @@ class execution extends control
             {
                 if($tips) $tips = str_replace($this->lang->executionCommon, $this->lang->project->stage, $tips);
                 $this->lang->execution->confirmDelete = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->confirmDelete);
+            }
+            elseif($type == 'kanban')
+            {
+                global $lang;
+                $lang->executionCommon   = $lang->execution->kanban;
+                include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
             echo js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));

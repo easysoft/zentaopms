@@ -252,6 +252,7 @@ class project extends control
                 {
                     if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
                 }
+                if($this->execution->isClickable($kanban, 'delete')) $executionActions[$kanbanID][] = 'delete';
             }
 
             $this->view->kanbanList       = $kanbanList;

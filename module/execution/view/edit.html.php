@@ -66,7 +66,7 @@
             </div>
           </td>
         </tr>
-        <?php if($project->model != 'kanban'):?>
+        <?php if($execution->type != 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->type;?></th>
           <td>
