@@ -1028,6 +1028,7 @@ class story extends control
         }
         elseif($from == 'project')
         {
+            if(empty($param)) $param = $this->session->project;
             $this->loadModel('project')->setMenu($param);
         }
         elseif($from == 'qa')
