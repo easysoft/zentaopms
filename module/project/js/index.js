@@ -3,7 +3,7 @@ $('#cards').on('click', '.panel', function(e)
 {
     if(!$(e.target).closest('.kanban-actions').length)
     {
-        window.location.href = $(this).data('url');
+        $.apps.open($(this).data('url'));
     }
 });
 
