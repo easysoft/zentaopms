@@ -60,10 +60,16 @@ class sonarqube extends control
      */
     public function ajaxGetProjectList($sonarqubeID, $projectKey = '')
     {
-        $projectList = $this->loadModel('sonarqube')->apiGetProjects($sonarqubeID);
+        $jobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, array(), true);
+        $existsProject = array_diff(array_keys($jobPairs), array($projectKey));
+
+        $projectList = $this->sonarqube->apiGetProjects($sonarqubeID);
 
         $projectPairs = array('' => '');
-        foreach($projectList as $project) $projectPairs[$project->key] = $project->name;
+        foreach($projectList as $project)
+        {
+            if(!empty($project) and !in_array($project->key, $existsProject)) $projectPairs[$project->key] = $project->name;
+        }
 
         echo html::select('projectKey', $projectPairs, str_replace('*', '-', $projectKey), "class='form-control chosen'");
     }

@@ -123,7 +123,7 @@ class job extends control
         $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
         $this->view->jenkinsServerList   = array('' => '') + $this->loadModel('jenkins')->getPairs();
-        $this->view->sonarqubeServerList = array('' => '') + $this->loadModel('sonarqube')->getPairs();
+        $this->view->sonarqubeServerList = array('') + $this->loadModel('sonarqube')->getPairs();
 
         $this->display();
     }
@@ -202,9 +202,9 @@ class job extends control
         $this->view->repoTypes           = $repoTypes;
         $this->view->repoType            = zget($repoTypes, $job->repo, 'Git');
         $this->view->job                 = $job;
-        $this->view->products            = array(0 => '') + $products;
+        $this->view->products            = array('') + $products;
         $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
-        $this->view->sonarqubeServerList = array('' => '') + $this->loadModel('sonarqube')->getPairs();
+        $this->view->sonarqubeServerList = array('') + $this->loadModel('sonarqube')->getPairs();
         $this->view->pipelines           = $this->jenkins->getTasks($job->server);
 
         $this->display();
@@ -430,10 +430,10 @@ class job extends control
      */
     public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
     {
-        $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID);
-        if(!empty($repo))
+        $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID, true);
+        if(!empty($repo)) 
         {
-            $message = sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
+            $message = $repo[$repoID]->deleted ? $this->lang->job->jobIsDeleted : sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
             $this->send(array('result' => 'fail', 'message' => $message));
         }
         $this->send(array('result' => 'success', 'message' => ''));

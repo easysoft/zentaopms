@@ -60,7 +60,7 @@ class sonarqubeModel extends model
     public function getApiBase($sonarqubeID)
     {
         $sonarqube = $this->getByID($sonarqubeID);
-        if(!$sonarqube) return '';
+        if(!$sonarqube) return array('', array()); 
 
         $url      = rtrim($sonarqube->url, '/') . '/api/%s';
         $header[] = 'Authorization: Basic ' . $sonarqube->token;
