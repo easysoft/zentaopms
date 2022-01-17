@@ -17,6 +17,17 @@ function fullScreen()
                 .on('scroll', tryUpdateKanbanAffix);
             $('.actions').hide();
             $('.action').hide();
+            $('.avatar').removeAttr('data-toggle');
+            $('#kanbanContainer a.iframe').each(function()
+            {
+                if($(this).hasClass('iframe'))
+                {
+                    var href = $(this).attr('href');
+                    $(this).removeClass('iframe');
+                    $(this).attr('href', 'javascript:void(0)');
+                    $(this).attr('href-bak', href);
+                }
+            })
             $('.kanban-group-header').hide();
             $(".title").attr("disabled", true).css("pointer-events", "none");
             $.cookie('isFullScreen', 1);
@@ -58,6 +69,16 @@ function exitFullScreen()
         .off('scroll', tryUpdateKanbanAffix);
     $('.actions').show();
     $('.action').show();
+    $('.avatar').attr('data-toggle', 'modal');
+    $('#kanbanContainer a').each(function()
+    {
+        var hrefBak = $(this).attr('href-bak');
+        if(hrefBak)
+        {
+            $(this).addClass('iframe');
+            $(this).attr('href', hrefBak);
+        }
+    })
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
     $.cookie('isFullScreen', 0);
