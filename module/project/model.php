@@ -1841,6 +1841,7 @@ class projectModel extends model
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.type')->in('sprint,stage')
                 ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
+                ->beginIF($projectID == 0 && $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()

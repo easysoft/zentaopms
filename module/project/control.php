@@ -110,6 +110,7 @@ class project extends control
 
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->andWhere('deleted')->eq(0)
             ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
