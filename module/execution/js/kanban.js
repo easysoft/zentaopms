@@ -249,21 +249,21 @@ if(!window.kanbanDropRules)
         },
         bug:
         {
-            'unconfirmed': ['confirmed', 'fixing', 'fixed'],
-            'confirmed': ['fixing', 'fixed'],
-            'fixing': ['fixed'],
-            'fixed': ['testing', 'tested', 'fixing'],
-            'testing': ['tested', 'closed', 'fixing'],
-            'tested': ['closed', 'fixing'],
-            'closed': ['fixing'],
+            'unconfirmed': ['unconfirmed', 'confirmed', 'fixing', 'fixed'],
+            'confirmed': ['confirmed', 'fixing', 'fixed'],
+            'fixing': ['fixing', 'fixed'],
+            'fixed': ['fixed', 'testing', 'tested', 'fixing'],
+            'testing': ['testing', 'tested', 'closed', 'fixing'],
+            'tested': ['tested', 'closed', 'fixing'],
+            'closed': ['closed', 'fixing'],
         },
         task:
         {
-            'wait': ['wait', 'developing', 'developed', 'canceled', 'closed'],
-            'developing': ['developing', 'developed', 'pause'],
-            'developed': ['developed', 'canceled', 'closed'],
-            'pause': ['pause', 'developing'],
-            'canceled': ['canceled', 'developing'],
+            'wait': ['wait', 'developing', 'developed', 'canceled'],
+            'developing': ['developing', 'developed', 'pause', 'canceled'],
+            'developed': ['developed', 'developing', 'closed'],
+            'pause': ['pause', 'developing', 'developed', 'canceled'],
+            'canceled': ['canceled', 'developing', 'closed'],
             'closed': ['closed', 'developing'],
         }
     }
@@ -294,7 +294,7 @@ function findDropColumns($element, $root)
         var newCol = $newCol.data();
         var newGroupID =  $newCol.closest('.kanban-board').data().id;
 
-        var canDropHere = colRules.indexOf(newCol.type) > -1 && newGroupID.id === groupID.id;
+        var canDropHere = colRules.indexOf(newCol.type) > -1 && newGroupID === groupID;
         if(canDropHere) $newCol.addClass('can-drop-here');
         return canDropHere;
     });
