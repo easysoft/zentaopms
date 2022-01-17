@@ -33,7 +33,7 @@ $lang->sonarqube->placeholder->url  = "Please fill in the access address of the 
 
 $lang->sonarqube->nameRepeatError      = "Server name  already exists!";
 $lang->sonarqube->urlRepeatError       = 'Server address already exists!';
-$lang->sonarqube->validError           = 'Sonarqube user authority authentication failed!';
+$lang->sonarqube->validError           = 'SonarQube user authority authentication failed!';
 $lang->sonarqube->hostError            = "Invalid SonarQube service address.";
 $lang->sonarqube->confirmDelete        = 'Do you want to delete this SonarQube server?';
 $lang->sonarqube->confirmDeleteProject = 'Do you want to delete this SonarQube project?';
