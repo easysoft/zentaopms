@@ -2194,6 +2194,16 @@ class userModel extends model
         /* Get parent project stakeholders. */
         $stakeholderGroup = $this->loadModel('stakeholder')->getStakeholderGroup($projectIdList);
 
+        /* Get parent project PMs. */
+        $PMGroups = array();
+        $stmt = $this->dao->select('Id, PM')->from(TABLE_PROJECT)
+            ->where('type')->eq('project')
+            ->andWhere('acl')->eq('private')
+            ->andWhere('id')->in($parentIdList)
+            ->query();
+
+        while($PM = $stmt->fetch()) $PMGroups[$PM->Id][$PM->PM] = $PM->PM;
+
         /* Get auth users. */
         $authedUsers = array();
         if(!empty($users)) $authedUsers = $users;
@@ -2205,8 +2215,9 @@ class userModel extends model
                 $teams        = zget($teamGroups, $sprint->id, array());
                 $parentTeams  = zget($teamGroups, $sprint->project, array());
                 $whiteList    = zget($whiteListGroup, $sprint->project, array());
+                $PMs          = zget($PMGroups, $sprint->project, array());
 
-                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams), $whiteList);
+                $authedUsers += $this->getSprintAuthedUsers($sprint, $stakeholders, array_merge($teams, $parentTeams, $PMs), $whiteList);
 
                 /* If you have parent stage view permissions, you have child stage permissions. */
                 if($sprint->type == 'stage' && $sprint->grade == 2)
@@ -2303,11 +2314,11 @@ class userModel extends model
         }
 
         /* Judge sprint auth. */
-        if(($project->type == 'sprint' || $project->type == 'stage') && $project->acl == 'private')
+        if(($project->type == 'sprint' or $project->type == 'stage' or $project->type == 'kanban') && $project->acl == 'private')
         {
             $parent = $this->dao->select('openedBy,PM')->from(TABLE_PROJECT)->where('id')->eq($project->project)->fetch();
             if(empty($parent)) return false;
-            if($parent->PM == $account || $parent->openedBy == $account) return true;
+            if($parent->PM == $account or $parent->openedBy == $account) return true;
         }
 
         return false;

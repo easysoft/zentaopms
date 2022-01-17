@@ -47,7 +47,7 @@
              <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
            </div>
            <?php
-           $canActions = (common::hasPriv('project','edit') or !empty($executionActions[$kanbanID]));
+           $canActions = (common::hasPriv('execution','edit') or (!empty($executionActions) and isset($executionActions[$kanbanID])));
            $kanbanCount ++;
            ?>
            <?php if($canActions):?>
@@ -56,20 +56,22 @@
                <?php echo html::a('javascript:;', "<i class='icon icon-ellipsis-v'></i>", '', "data-toggle='dropdown' class='btn btn-link'");?>
                <ul class='dropdown-menu <?php echo $kanbanCount % 4 == 0 ? 'pull-left' : 'pull-right';?>'>
                  <?php
-                 if(common::hasPriv('project','edit'))
+                 if(common::hasPriv('execution','edit'))
                  {
                      $this->app->loadLang('kanban');
                      echo '<li>';
                      common::printLink('execution', 'edit', "executionID={$kanbanID}", '<i class="icon icon-edit"></i> ' . $lang->kanban->edit, '', "class='iframe' data-width='75%'", '', true);
                      echo '</li>';
                  }
-                 if(in_array('start', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'start', "executionID=$kanbanID", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
-                 if(in_array('putoff', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'putoff', "executionID=$kanbanID", '', true), '<i class="icon icon-calendar"></i>' . $lang->execution->putoff, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
-                 if(in_array('suspend', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'suspend', "executionID=$kanbanID", '', true), '<i class="icon icon-pause"></i>' . $lang->execution->suspend, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
-                 if(in_array('close', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'close', "executionID=$kanbanID", '', true), '<i class="icon icon-off"></i>' . $lang->execution->close, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
-                 if(in_array('activate', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'activate', "executionID=$kanbanID", '', true), '<i class="icon icon-magic"></i>' . $lang->execution->activate, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
-                 if(in_array('delete', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'delete', "executionID=$kanbanID&confirm=no&kanban=yes", '', true), '<i class="icon icon-trash"></i>' . $lang->kanban->delete, '', "target='hiddenwin'") . '</li>';
-                 ?>
+                 if(!empty($executionActions[$kanbanID]))
+                 {
+                     if(in_array('start', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'start', "executionID=$kanbanID", '', true), '<i class="icon icon-play"></i>' . $lang->execution->start, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                     if(in_array('putoff', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'putoff', "executionID=$kanbanID", '', true), '<i class="icon icon-calendar"></i>' . $lang->execution->putoff, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                     if(in_array('suspend', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'suspend', "executionID=$kanbanID", '', true), '<i class="icon icon-pause"></i>' . $lang->execution->suspend, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                     if(in_array('close', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'close', "executionID=$kanbanID", '', true), '<i class="icon icon-off"></i>' . $lang->execution->close, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                     if(in_array('activate', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'activate', "executionID=$kanbanID", '', true), '<i class="icon icon-magic"></i>' . $lang->execution->activate, '', "class='iframe btn btn-link text-left' data-width='75%'") . '</li>';
+                     if(in_array('delete', $executionActions[$kanbanID])) echo '<li>' . html::a(helper::createLink('execution', 'delete', "executionID=$kanbanID&confirm=no&kanban=yes", '', true), '<i class="icon icon-trash"></i>' . $lang->kanban->delete, '', "target='hiddenwin'") . '</li>';
+                 }?>
                </ul>
              </div>
            </div>
