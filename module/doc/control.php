@@ -791,6 +791,7 @@ class doc extends control
         $doclib = $this->doc->getLibById($doclibID);
         $users  = $this->user->getPairs('noletter|noempty|noclosed');
 
+        $selectedUser = $doclib->users;
         if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
         {
             $project      = $this->loadModel('project')->getById($doclib->project);
@@ -798,12 +799,10 @@ class doc extends control
             $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
             $whitelist    = implode(',', array_keys($projectTeams + $stakeholders)) . $project->whitelist . ',' . $project->PM . ',' . $doclib->users;
 
-            return print(html::select('users[]', $users, $whitelist, "class='form-control chosen' multiple"));
+            $selectedUser = $whitelist;
         }
-        else
-        {
-            return print(html::select('users[]', $users, $doclib->users, "class='form-control chosen' multiple"));
-        }
+
+        return print(html::select('users[]', $users, $selectedUser, "class='form-control chosen' multiple"));
     }
 
     /**
