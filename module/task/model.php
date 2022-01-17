@@ -137,8 +137,6 @@ class taskModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
-            $this->loadModel('kanban')->updateLane($executionID, 'task');
-
             if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
             if($this->post->selectTestStory)
             {
@@ -233,10 +231,11 @@ class taskModel extends model
      * Create a batch task.
      *
      * @param  int    $executionID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchCreate($executionID)
+    public function batchCreate($executionID, $extra = '')
     {
         /* Load module and init vars. */
         $this->loadModel('action');
@@ -246,6 +245,9 @@ class taskModel extends model
         $taskNames = array();
         $preStory  = 0;
         $tasks     = fixer::input('post')->get();
+
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
 
         /* Judge whether the current task is a parent. */
         $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
@@ -400,6 +402,8 @@ class taskModel extends model
             if($story) $this->story->setStage($task->story);
 
             $this->executeHooks($taskID);
+
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);

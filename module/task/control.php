@@ -106,8 +106,6 @@ class task extends control
                 return $this->send($response);
             }
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
-
             /* if the count of tasksID is 1 then check exists. */
             if(count($tasksID) == 1)
             {
@@ -130,6 +128,11 @@ class task extends control
                 $taskID   = $taskID['id'];
                 $this->action->create('task', $taskID, 'Opened', '');
             }
+
+            $this->loadModel('kanban');
+            $kanbanID = $execution->type == 'kanban' ? $executionID : $_POST['execution'];
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($kanbanID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'task');
 
             if($todoID > 0)
             {
@@ -248,15 +251,16 @@ class task extends control
     /**
      * Batch create task.
      *
-     * @param int $executionID
-     * @param int $storyID
-     * @param int $iframe
-     * @param int $taskID
+     * @param int    $executionID
+     * @param int    $storyID
+     * @param int    $iframe
+     * @param int    $taskID
+     * @param string $extra
      *
      * @access public
      * @return void
      */
-    public function batchCreate($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0)
+    public function batchCreate($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0, $extra = '')
     {
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -295,7 +299,7 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $mails = $this->task->batchCreate($executionID);
+            $mails = $this->task->batchCreate($executionID, $extra);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $taskIDList = array();
