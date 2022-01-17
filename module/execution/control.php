@@ -2626,10 +2626,11 @@ class execution extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '')
     {
         $this->loadModel('story');
         $this->loadModel('product');
@@ -2650,7 +2651,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->execution->linkStory($objectID);
+            $this->execution->linkStory($objectID, array(), array(), $extra);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
 
             if(isonlybody()) die(js::reload('parent'));
@@ -3382,10 +3383,11 @@ class execution extends control
      * @param  int    $planID
      * @param  int    $productID
      * @param  string $fromMethod
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story')
+    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -3408,7 +3410,7 @@ class execution extends control
             $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
 
-            $this->execution->linkStory($executionID, $planStories, $planProducts);
+            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
             if($this->config->systemMode == 'new' and $executionID != $projectID) $this->execution->linkStory($projectID, $planStories, $planProducts);
         }
 
@@ -3419,7 +3421,14 @@ class execution extends control
             $moduleName = 'projectstory';
             $param      = "projectID=$executionID";
         }
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
+
+        if($execution->type == 'kanban')
+        {
+            global $lang;
+            $lang->executionCommon = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, $execution->type == 'sprint' ? 'story' : 'kanban', $param));
         die(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 

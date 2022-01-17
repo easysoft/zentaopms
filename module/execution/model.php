@@ -2268,14 +2268,15 @@ class executionModel extends model
     /**
      * Link story.
      *
-     * @param int   $executionID
-     * @param array $stories
-     * @param array $products
+     * @param int    $executionID
+     * @param array  $stories
+     * @param array  $products
+     * @param string $extra
      *
      * @access public
      * @return bool
      */
-    public function linkStory($executionID, $stories = array(), $products = array())
+    public function linkStory($executionID, $stories = array(), $products = array(), $extra = '')
     {
         if(empty($executionID)) return false;
         if(empty($stories)) $stories = $this->post->stories;
@@ -2292,6 +2293,10 @@ class executionModel extends model
             $notAllowedStatus = $this->app->rawMethod == 'batchcreate' ? 'closed' : 'draft,closed';
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
+
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
 
             $data = new stdclass();
             $data->project = $executionID;
