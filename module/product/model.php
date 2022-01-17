@@ -1465,7 +1465,7 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t2.type')->in('sprint,stage')
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
             ->fetch();
 
         $product->stories    = $stories;

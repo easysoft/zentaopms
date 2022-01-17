@@ -4285,7 +4285,7 @@ class upgradeModel extends model
             }
         }
 
-        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage')->fetchAll('id', 'id');
+        $executionPairs = $this->dao->select('id')->from(TABLE_PROJECT)->where('id')->in($projectIdList)->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id', 'id');
         foreach($userViews as $account => $userView)
         {
             $projects = zget($accountProjects, $account, array());
@@ -4856,7 +4856,7 @@ class upgradeModel extends model
             $this->personnel->updateWhitelist($whitelist, 'product', $product->id, 'whitelist', 'upgrade', 'increase');
         }
 
-        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage')->fetchAll('id');
+        $customSprints = $this->dao->select('*')->from(TABLE_PROJECT)->where('whitelist')->ne('')->andWhere('type')->in('sprint,stage,kanban')->fetchAll('id');
         $whitelistACL  = $this->dao->select('account')->from(TABLE_ACL)->where('objectID')->in(array_keys($customSprints))->andWhere('objectType')->eq('sprint')->andWhere('type')->eq('whitelist')->fetchPairs('account');
         foreach($customSprints as $sprint)
         {

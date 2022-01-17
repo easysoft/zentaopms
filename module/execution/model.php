@@ -1200,7 +1200,7 @@ class executionModel extends model
     public function getIdList($projectID, $status = 'all')
     {
         return $this->dao->select('id')->from(TABLE_EXECUTION)
-            ->where('type')->in('sprint,stage')
+            ->where('type')->in('sprint,stage,kanban')
             ->andWhere('deleted')->eq('0')
             ->beginIF($projectID)->andWhere('project')->eq($projectID)->fi()
             ->beginIF($status == 'undone')->andWhere('status')->notIN('done,closed')->fi()
