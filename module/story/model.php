@@ -183,11 +183,15 @@ class storyModel extends model
      * @param  int    $executionID
      * @param  int    $bugID
      * @param  string $from
+     * @param  string $extra
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
-    public function create($executionID = 0, $bugID = 0, $from = '')
+    public function create($executionID = 0, $bugID = 0, $from = '', $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
@@ -280,7 +284,9 @@ class storyModel extends model
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
-                $this->loadModel('kanban')->updateLane($executionID, 'story');
+                $this->loadModel('kanban');
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($kanbanID, $output['laneID'], $output['columnID'], 'story', $storyID);
+                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'story');
             }
 
             if(is_array($this->post->URS))

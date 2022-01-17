@@ -3238,13 +3238,14 @@ class executionModel extends model
     /**
      * Get Kanban tasks
      *
-     * @param  int    $executionID
-     * @param  string $orderBy
-     * @param  object $pager
+     * @param  int          $executionID
+     * @param  string       $orderBy
+     * @param  object       $pager
+     * @param  array|string $excludeTasks
      * @access public
      * @return void
      */
-    public function getKanbanTasks($executionID, $orderBy = 'status_asc, id_desc', $pager = null)
+    public function getKanbanTasks($executionID, $orderBy = 'status_asc, id_desc', $pager = null, $excludeTasks = '')
     {
         $tasks = $this->dao->select('t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
             ->from(TABLE_TASK)->alias('t1')
@@ -3253,6 +3254,7 @@ class executionModel extends model
             ->where('t1.execution')->eq((int)$executionID)
             ->andWhere('t1.deleted')->eq(0)
             ->andWhere('t1.parent')->ge(0)
+            ->beginIF($excludeTasks)->andWhere('t1.id')->notIN($excludeTasks)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');

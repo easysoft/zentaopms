@@ -1912,7 +1912,7 @@ class kanbanModel extends model
         }
         else
         {
-            $cell->cards = $cell->cards ? $cell->cards . "$cardID," : ",$cardID,";
+            $cell->cards = $cell->cards ? ",$cardID" . $cell->cards : ",$cardID,";
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
         }
     }
@@ -2071,15 +2071,39 @@ class kanbanModel extends model
      *
      * @param  int    $executionID
      * @param  string $laneType
+     * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function updateLane($executionID, $laneType)
+    public function updateLane($executionID, $laneType, $cardID = 0)
     {
-        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
-            ->andWhere('type')->eq($laneType)
-            ->fetchAll('id');
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if($execution->type == 'kanban')
+        {
+            $regionIdList = $this->dao->select('id')->from(TABLE_KANBANREGION)
+                ->where('deleted')->eq(0)
+                ->andWhere('kanban')->eq($executionID)
+                ->fetchPairs();
+
+            $lanes = $this->dao->select('t1.*')->from(TABLE_KANBANLANE)->alias('t1')
+                ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.execution')->eq($executionID)
+                ->andWhere('t1.type')->eq($laneType)
+                ->andWhere('t1.region')->in($regionIdList)
+                ->beginIF(!empty($cardID))->andWhere('t2.cards')->like("%,$cardID,%")->fi()
+                ->orderBy('t1.`order` asc')
+                ->fetchAll('id');
+
+            if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 1);
+        }
+        else
+        {
+            $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
+                ->where('execution')->eq($executionID)
+                ->andWhere('type')->eq($laneType)
+                ->fetchAll('id');
+        }
 
         foreach($lanes as $lane) $this->refreshCards($lane);
     }
@@ -2093,9 +2117,24 @@ class kanbanModel extends model
      */
     public function refreshCards($lane)
     {
-        $laneType    = $lane->type;
-        $executionID = $lane->execution;
-        $cardPairs   = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
+        $laneType      = $lane->type;
+        $executionID   = $lane->execution;
+        $otherCardList = '';
+        $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.id')->ne($lane->id)
+            ->andWhere('t1.execution')->eq($executionID)
+            ->andWhere('t2.`type`')->eq($lane->type)
+            ->fetchPairs();
+
+        foreach($otherLanes as $cardIDList)
+        {
+            $cardIDList = trim($cardIDList, ',');
+            if(!empty($cardIDList)) $otherCardList .= ',' . $cardIDList;
+        }
+
+        $cardPairs = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.lane')->eq($lane->id)
@@ -2105,7 +2144,7 @@ class kanbanModel extends model
 
         if($laneType == 'story')
         {
-            $stories = $this->loadModel('story')->getExecutionStories($executionID);
+            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'byModule', 0, 'story', $otherCardList);
             foreach($stories as $storyID => $story)
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
@@ -2132,7 +2171,7 @@ class kanbanModel extends model
         }
         elseif($laneType == 'bug')
         {
-            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID);
+            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID, 0, 0, '', 0, 'id_desc', $otherCardList);
             foreach($bugs as $bugID => $bug)
             {
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
@@ -2175,7 +2214,7 @@ class kanbanModel extends model
         }
         elseif($laneType == 'task')
         {
-            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID);
+            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID, 'status_asc, id_desc', null, $otherCardList);
             foreach($tasks as $taskID => $task)
             {
                 foreach($this->config->kanban->taskColumnStatusList as $colType => $status)

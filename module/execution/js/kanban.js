@@ -192,7 +192,7 @@ function createColumnCreateMenu(options)
     else if(col.type == 'wait')
     {
         if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&iframe=0&extra=laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     }
     return items;
 }
@@ -737,7 +737,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
             {
-                var link   = createLink('task', 'finish', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -745,7 +745,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'developing' && priv.canPauseTask)
             {
-                var link = createLink('task', 'pause', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -753,12 +753,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
-                var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
             {
-                var link = createLink('task', 'start', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -766,7 +766,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
             {
-                var link = createLink('task', 'cancel', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }
@@ -774,7 +774,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
             {
-                var link = createLink('task', 'close', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
             }
         }

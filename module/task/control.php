@@ -106,8 +106,6 @@ class task extends control
                 return $this->send($response);
             }
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->loadModel('kanban')->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
-
             /* if the count of tasksID is 1 then check exists. */
             if(count($tasksID) == 1)
             {
@@ -130,6 +128,11 @@ class task extends control
                 $taskID   = $taskID['id'];
                 $this->action->create('task', $taskID, 'Opened', '');
             }
+
+            $this->loadModel('kanban');
+            $kanbanID = $execution->type == 'kanban' ? $executionID : $_POST['execution'];
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($kanbanID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'task');
 
             if($todoID > 0)
             {
@@ -248,15 +251,16 @@ class task extends control
     /**
      * Batch create task.
      *
-     * @param int $executionID
-     * @param int $storyID
-     * @param int $iframe
-     * @param int $taskID
+     * @param int    $executionID
+     * @param int    $storyID
+     * @param int    $iframe
+     * @param int    $taskID
+     * @param string $extra
      *
      * @access public
      * @return void
      */
-    public function batchCreate($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0)
+    public function batchCreate($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0, $extra = '')
     {
         $this->execution->getLimitedExecution();
         $limitedExecutions = !empty($_SESSION['limitedExecutions']) ? $_SESSION['limitedExecutions'] : '';
@@ -295,7 +299,7 @@ class task extends control
 
         if(!empty($_POST))
         {
-            $mails = $this->task->batchCreate($executionID);
+            $mails = $this->task->batchCreate($executionID, $extra);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $taskIDList = array();
@@ -797,10 +801,11 @@ class task extends control
      * Start a task.
      *
      * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function start($taskID)
+    public function start($taskID, $extra = '')
     {
         $this->commonAction($taskID);
 
@@ -809,7 +814,7 @@ class task extends control
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->start($taskID);
+            $changes = $this->task->start($taskID, $extra);
 
             if(dao::isError())
             {
@@ -963,17 +968,18 @@ class task extends control
      * Finish a task.
      *
      * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function finish($taskID)
+    public function finish($taskID, $extra = '')
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->finish($taskID);
+            $changes = $this->task->finish($taskID, $extra);
             if(dao::isError())
             {
                 if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -1049,17 +1055,18 @@ class task extends control
      * Pause task.
      *
      * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function pause($taskID)
+    public function pause($taskID, $extra = '')
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->pause($taskID);
+            $changes = $this->task->pause($taskID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -1125,18 +1132,19 @@ class task extends control
     /**
      * Close a task.
      *
-     * @param  int      $taskID
+     * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($taskID)
+    public function close($taskID, $extra = '')
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->close($taskID);
+            $changes = $this->task->close($taskID, $extra);
 
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -1257,17 +1265,18 @@ class task extends control
      * Cancel a task.
      *
      * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function cancel($taskID)
+    public function cancel($taskID, $extra = '')
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->cancel($taskID);
+            $changes = $this->task->cancel($taskID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
@@ -1293,17 +1302,18 @@ class task extends control
      * Activate a task.
      *
      * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function activate($taskID)
+    public function activate($taskID, $extra = '')
     {
         $this->commonAction($taskID);
 
         if(!empty($_POST))
         {
             $this->loadModel('action');
-            $changes = $this->task->activate($taskID);
+            $changes = $this->task->activate($taskID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
