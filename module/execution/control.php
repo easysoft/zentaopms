@@ -2415,7 +2415,6 @@ class execution extends control
             $this->executeHooks($executionID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            if($execution->type == 'kanban') return print(js::locate($this->createLink('execution', 'all'), 'parent'));
             return print(js::reload('parent'));
         }
     }

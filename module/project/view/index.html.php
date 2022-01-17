@@ -84,13 +84,13 @@
               <div class='kanban-members pull-left'>
                 <?php $count = 0;?>
                 <?php foreach($members as $member):?>
-                <?php if($count > 2) break;?>
+                <?php if($count > 1) break;?>
                 <?php $count ++;?>
                 <div title="<?php echo $member->realname;?>">
                   <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member->account], 'account' => $member->account)); ?>
                 </div>
                 <?php endforeach;?>
-                <?php if(count($members) > 4):?>
+                <?php if(count($members) > 3):?>
                 <?php echo '<span>…</span>';?>
                 <?php $lastMember = end($members);?>
                 <div title="<?php echo $lastMember->realname;?>">

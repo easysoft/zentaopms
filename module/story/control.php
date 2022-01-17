@@ -115,8 +115,7 @@ class story extends control
                 }
                 else
                 {
-                    $cell = $this->dao->select('lane,`column`')->from(TABLE_KANBANCELL)->where('type')->eq('story')->andWhere('kanban')->eq($objectID)->fetch();
-                    $this->loadModel('kanban')->addKanbanCell($objectID, $cell->lane, $cell->column, 'story', $storyID);
+                    $this->loadModel('kanban')->updateLane($objectID, 'story');
                 }
             }
             if($storyResult['status'] == 'exists')

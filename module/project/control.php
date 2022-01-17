@@ -530,6 +530,7 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
         $this->project->setMenu($projectID);
+        if($project->model == 'kanban') unset($this->lang->project->authList['reset']);
 
         if($_POST)
         {
