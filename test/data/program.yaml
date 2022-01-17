@@ -19,6 +19,8 @@ fields:
     range: wait
   - field: parent
     range: 0
+  - field: grade
+    range: 1
   - field: code
     range: 1-10000
     prefix: "program"
