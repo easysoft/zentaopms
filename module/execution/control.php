@@ -1981,8 +1981,8 @@ class execution extends control
         $avatarPairs = $this->user->getAvatarPairs();
         foreach($avatarPairs as $account => $avatar)
         {
-            if(!$avatar) continue;
-            $userList[$account]['avatar'] = $avatar;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
         }
 
         /* Get execution's product. */
