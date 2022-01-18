@@ -41,7 +41,7 @@ r($result) && p() && e('return false'); //使用正确的gitlabID、标签信息
 dao::$errors = array();
 $projectID   = 1555;
 
-/* Delete branches with the same name. */
+/* Delete tags with the same name. */
 $gitlab->apiDeleteTagPriv($gitlabID, $projectID, $_POST['tag_name']);
 $gitlab->apiDeleteTag($gitlabID, $projectID, $_POST['tag_name']);
 
