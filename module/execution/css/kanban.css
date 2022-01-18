@@ -103,3 +103,5 @@
 #kanban .kanban-card[data-scale-size="2"] > .infos {display: inline-block; height: 18px; vertical-align: top; margin: 0;}
 #kanban .kanban-card[data-scale-size="2"] > .infos > .info-pri {transform: scale(.8); vertical-align: top;}
 #kanban .kanban-card[data-scale-size="2"] > .infos > .avatar {display: inline-block; transform: scale(.8); position: relative; top: -2px; vertical-align: top; margin-right: -1px;}
+
+#mainMenu .divider {margin: 10px}
