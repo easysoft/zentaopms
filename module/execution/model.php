@@ -63,6 +63,13 @@ class executionModel extends model
      */
     public function setMenu($executionID, $buildID = 0, $extra = '')
     {
+        $execution = $this->getByID($executionID);
+        if($execution and $execution->type == 'kanban')
+        {
+            $this->lang->execution->menu         = new stdclass();
+            $this->lang->execution->accessDenied = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
+        }
+
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) die(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
         $executions = $this->getPairs(0, 'all', 'nocode');
@@ -71,9 +78,6 @@ class executionModel extends model
         $this->session->set('execution', $executionID);
 
         /* Unset story, bug, build and testtask if type is ops. */
-        $execution = $this->getByID($executionID);
-        if($execution and $execution->type == 'kanban') $this->lang->execution->menu = new stdclass();
-
         if($execution and $execution->type == 'stage' and $this->config->systemMode == 'new')
         {
             global $lang;
