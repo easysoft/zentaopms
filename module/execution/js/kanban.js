@@ -868,7 +868,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             }
         }
 
-        if(moveCard)
+        if(moveCard || (fromLaneID != toLaneID && fromColID == toColID))
         {
             var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
             $.ajax(
