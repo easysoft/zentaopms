@@ -1116,6 +1116,7 @@ class kanbanModel extends model
     public function getKanban4Group($executionID, $browseType, $groupBy)
     {
         /* Get card  data. */
+        $cardList = array();
         if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID);
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");

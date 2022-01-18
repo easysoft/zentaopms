@@ -1072,7 +1072,7 @@ class kanban extends control
             ->andWhere('`column`')->eq($toColID)
             ->exec();
 
-        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $groupBy, $regionID);
+        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
         die(json_encode($kanbanGroup));
     }
 

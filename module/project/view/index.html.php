@@ -43,7 +43,11 @@
       <div class='panel' data-url='<?php echo $this->createLink('execution', 'kanban', "kanbanID=$kanbanID");?>'>
         <div class='panel-heading'>
            <div class='kanban-name'>
+             <?php if(!helper::isZeroDate($kanban->end) && $kanban->end < helper::today()):?>
+             <span class="label label-doing"><?php echo $lang->project->statusList['delay'];?></span>
+             <?php else:?>
              <span class="label label-<?php echo $kanban->status;?>"><?php echo zget($lang->execution->statusList, $kanban->status);?></span>
+             <?php endif;?>
              <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
            </div>
            <?php
