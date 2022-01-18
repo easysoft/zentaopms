@@ -64,6 +64,10 @@
               {
                   echo '#' . $action->objectID;
               }
+              elseif(empty($action->objectID) and $action->extra)
+              {
+                  echo $action->extra;
+              }
               elseif(empty($action->objectLink))
               {
                   echo $action->objectName;
@@ -73,7 +77,9 @@
                   echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
+              <?php if($action->objectID):?>
               <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php endif;?>
               <?php endif;?>
             </span>
           </div>
