@@ -11,6 +11,9 @@ $config->execution->list->exportFields = 'id,name,projectName,code,PM,end,status
 
 $config->execution->modelList['scrum']     = 'sprint';
 $config->execution->modelList['waterfall'] = 'stage';
+$config->execution->modelList['kanban']    = 'kanban';
+
+$config->execution->statusActions = array('start', 'putoff', 'suspend', 'close', 'activate');
 
 global $lang, $app;
 $app->loadLang('task');

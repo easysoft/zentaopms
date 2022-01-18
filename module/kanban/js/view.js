@@ -374,16 +374,19 @@ function showErrorMessager(message)
  * Move a card.
  *
  * @param  int    $cardID
+ * @param  int    $fromColID
  * @param  int    $toColID
+ * @param  int    $fromLaneID
+ * @param  int    $toLaneID
  * @param  int    $kanbanID
  * @param  int    $regionID
  * @access public
  * @return string
  */
-function moveCard(cardID, toColID, toLaneID, kanbanID, regionID)
+function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, regionID)
 {
     if(!cardID) return false;
-    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&toColID=' + toColID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
+    var url = createLink('kanban', 'moveCard', 'cardID=' + cardID + '&fromColID='+ fromColID + '&toColID=' + toColID + '&fromLaneID='+ fromLaneID + '&toLaneID=' + toLaneID + '&kanbanID=' + kanbanID);
     return $.ajax(
     {
         method:   'post',
@@ -460,6 +463,7 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     $region.data('zui.kanban').render(regionData.groups);
+    resetRegionHeight('open');
     return true;
 }
 
@@ -586,7 +590,7 @@ function handleDropTask($element, event, kanban)
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID = $card.data().id;
-    moveCard(cardID, newCol.id, newLane.id, kanbanID, regionID);
+    moveCard(cardID, oldCol.id, newCol.id, oldLane.id, newLane.id, kanbanID, regionID);
 }
 
 /**
@@ -762,6 +766,20 @@ function createColumnMenu(options)
     return items;
 }
 
+/** Calculate column height */
+function calcColHeight(col, lane, colCards, colHeight, kanban)
+{
+    if(!isMultiLanes) return 0;
+
+    var options = kanban.options;
+
+    if(!options.displayCards) return 0;
+    var displayCards = +(options.displayCards || 2);
+
+    if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
+    return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -775,16 +793,20 @@ window.menuCreators =
  */
 function initKanban($kanban)
 {
-    var id = $kanban.data('id');
-    var region = regions[id];
+    var id           = $kanban.data('id');
+    var region       = regions[id];
+    var displayCards = window.displayCards == 'undefined' ? 2 : window.displayCards;
 
     $kanban.kanban(
     {
         data:              region.groups,
         maxColHeight:      510,
+        calcColHeight:     calcColHeight,
         fluidBoardWidth:   false,
-        minColWidth:       300,
-        maxColWidth:       300,
+        minColWidth:       285,
+        maxColWidth:       285,
+        cardHeight:        60,
+        displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
         itemRender:        renderKanbanItem,
@@ -813,7 +835,7 @@ function initKanban($kanban)
  */
 $(function()
 {
-    if($.cookie('isFullScreen') == 1) fullScreen();
+    window.isMultiLanes = laneCount > 1;
 
     /* Init first kanban */
     $('.kanban').each(function()
@@ -826,6 +848,7 @@ $(function()
         $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
+        resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
     });
 
     $('.region-header').on('click', '.action', hideKanbanAction);
@@ -1012,4 +1035,65 @@ $(function()
             if(sortType == 'lane') $cards.show();
         }
     });
+
+    resetRegionHeight('open');
 });
+
+/**
+ * Reset region height according to window height.
+ *
+ * @param  string fold
+ * @access public
+ * @return void
+ */
+function resetRegionHeight(fold)
+{
+    var regionCount = 0;
+    if($.isEmptyObject(regions)) return false;
+    for(var i in regions)
+    {
+        regionCount += 1;
+        if(regionCount > 1) return false;
+    }
+
+    var regionID   = Object.keys(regions)[0];
+    var region     = regions[regionID].groups;
+    var groupCount = 0;
+
+    if($.isEmptyObject(region)) return false;
+    for(var j in region)
+    {
+        groupCount += 1;
+        if(groupCount > 1) return false;
+    }
+
+    var group     = region[0];
+    var laneCount = 0;
+
+    if($.isEmptyObject(group.lanes)) return false;
+    for(var h in group.lanes)
+    {
+        laneCount += 1;
+        if(laneCount > 1) return false;
+    }
+
+    var regionHeaderHeight = $('.region-header').outerHeight();
+    if(fold == 'open')
+    {
+        var windowHeight  = $(window).height();
+        var headerHeight  = $('#mainHeader').outerHeight();
+        var mainPadding   = $('#main').css('padding-top');
+        var panelBorder   = $('.panel').css('border-top-width');
+        var bodyPadding   = $('.panel-body').css('padding-top');
+        var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
+        var regionPadding = $('.kanban').css('padding-bottom');
+        var columnHeight  = $('.kanban-header').outerHeight();
+
+        $('.region').css('height', height);
+        $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
+    }
+    else
+    {
+        $('.region').css('height', regionHeaderHeight);
+    }
+}

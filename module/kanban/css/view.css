@@ -58,8 +58,9 @@
 .region .kanban-lane-items {overflow: auto; padding-bottom: 10px;}
 
 .region .kanban-item {position: relative}
+.region .kanban-item > .kanban-card > .title {line-height: 18px;}
 .region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
-.region .kanban-item > .kanban-card > .info {margin-top: 5px; position: relative;}
+.region .kanban-item > .kanban-card > .info {margin-top: 4px; position: relative;}
 .region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
 .region .kanban-item > .kanban-card > .info > .estimate{margin-left: 4px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
 .region .kanban-item > .kanban-card > .info > .time {margin-left: 4px; font-size: 12px; background: rgb(242, 242, 242)}
@@ -82,7 +83,7 @@
 .region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
-.kanban-card {height: auto !important; padding: 8px 14px !important}
+.kanban-card {height: auto !important; padding: 8px 14px !important; min-height: 60px;}
 .kanban-card > .title {word-break: break-all;}
 .kanban-card > .info {position: relative; margin-top: 5px}
 .kanban-card > .info > .info + .info {margin-left: 8px}

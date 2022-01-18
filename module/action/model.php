@@ -863,7 +863,7 @@ class actionModel extends model
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where(1)
+            ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
@@ -1290,6 +1290,12 @@ class actionModel extends model
                     $params = sprintf($vars, $action->objectID);
                 }
                 $action->objectLink = helper::createLink($moduleName, $methodName, $params);
+
+                if($action->objectType == 'execution')
+                {
+                    $execution = $this->loadModel('execution')->getById($action->objectID);
+                    if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                }
 
                 if($action->objectType == 'doclib')
                 {

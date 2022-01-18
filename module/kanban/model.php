@@ -65,10 +65,11 @@ class kanbanModel extends model
      * @param  object $kanban
      * @param  object $region
      * @param  int    $copyRegionID
+     * @param  string $from kanban|execution
      * @access public
      * @return int
      */
-    public function createRegion($kanban, $region = null, $copyRegionID = 0)
+    public function createRegion($kanban, $region = null, $copyRegionID = 0, $from = 'kanban')
     {
         $account = $this->app->user->account;
         $order   = 1;
@@ -82,11 +83,11 @@ class kanbanModel extends model
             $order  = $maxOrder ? $maxOrder + 1 : 1;
             $region = fixer::input('post')
                 ->add('kanban', $kanban->id)
-                ->add('space', $kanban->space)
                 ->add('createdBy', $account)
                 ->add('createdDate', helper::now())
                 ->trim('name')
                 ->get();
+            if($from == 'kanban') $region->space = $kanban->space;
         }
 
         $region->order = $order;
@@ -144,14 +145,14 @@ class kanbanModel extends model
                         $copyColumn->parent = $parentColumns[$copyColumn->parent];
                     }
 
-                    $parentColumnID = $this->createColumn($regionID, $copyColumn);
+                    $parentColumnID = $this->createColumn($regionID, $copyColumn, 0, 0, $from);
 
                     if($copyColumn->parent < 0) $parentColumns[$copyColumnID] = $parentColumnID;
                     if(dao::isError()) return false;
                 }
             }
         }
-        else
+        elseif($from == 'kanban')
         {
             $groupID = $this->createGroup($kanban->id, $regionID);
             if(dao::isError()) return false;
@@ -229,10 +230,11 @@ class kanbanModel extends model
      * @param  object $column
      * @param  int    $order
      * @param  int    $parent
+     * @param  string $from kanban|execution
      * @access public
      * @return int
      */
-    public function createColumn($regionID, $column = null, $order = 0, $parent = 0)
+    public function createColumn($regionID, $column = null, $order = 0, $parent = 0, $from = 'kanban')
     {
         if(empty($column))
         {
@@ -311,7 +313,12 @@ class kanbanModel extends model
 
         $columnID = $this->dao->lastInsertID();
 
-        $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
+        if($from == 'kanban') $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$columnID}")->where('id')->eq($columnID)->exec();
+
+        /* Add kanban cell. */
+        $lanes    = $this->dao->select('id,type')->from(TABLE_KANBANLANE)->where('`group`')->eq($column->group)->fetchPairs();
+        $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
+        foreach($lanes as $laneID => $laneType) $this->addKanbanCell($kanbanID, $laneID, $columnID, $laneType);
 
         return $columnID;
     }
@@ -418,8 +425,6 @@ class kanbanModel extends model
             ->add('kanban', $kanbanID)
             ->add('region', $regionID)
             ->add('group', $groupID)
-            ->add('lane', $laneID)
-            ->add('column', $columnID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
@@ -444,6 +449,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
+            $this->addKanbanCell($kanbanID, $laneID, $columnID, 'common', $cardID);
 
             return $cardID;
         }
@@ -615,6 +621,70 @@ class kanbanModel extends model
     }
 
     /**
+     * Get a RD kanban data.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType all|story|task|bug
+     * @param  string $orderBy
+     * @param  int    $regionID
+     * @param  string $groupBy
+     *
+     * @access public
+     * @return array
+     */
+    public function getRDKanban($executionID, $browseType = 'all', $orderBy = 'id_desc', $regionID = 0, $groupBy = 'default')
+    {
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy);
+
+        $kanbanData   = array();
+        $actions      = array('sortGroup');
+        $regions      = $this->getRegionPairs($executionID);
+        $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
+        $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
+        $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
+        $columnGroup  = $this->getRDColumnGroupByRegions($regionIDList, array_keys($laneGroup));
+        $cardGroup    = $this->getCardGroupByExecution($executionID, $browseType, $orderBy);
+
+        foreach($regions as $regionID => $regionName)
+        {
+            $region = new stdclass();
+            $region->id        = $regionID;
+            $region->name      = $regionName;
+            $region->laneCount = 0;
+
+            $groups = zget($groupGroup, $regionID, array());
+            foreach($groups as $group)
+            {
+                $lanes = zget($laneGroup, $group->id, array());
+                if(!$lanes) continue;
+
+                foreach($lanes as $lane)
+                {
+                    $this->refreshCards($lane);
+                    $lane->items           = isset($cardGroup[$lane->id]) ? $cardGroup[$lane->id] : array();
+                    $lane->defaultCardType = $lane->type;
+                }
+
+                $group->columns = zget($columnGroup, $group->id, array());
+                $group->lanes   = $lanes;
+                $group->actions = array();
+
+                foreach($actions as $action)
+                {
+                    if(commonModel::hasPriv('kanban', $action)) $group->actions[] = $action;
+                }
+
+                $region->groups[]   = $group;
+                $region->laneCount += count($lanes);
+            }
+
+            $kanbanData[$regionID] = $region;
+        }
+
+        return $kanbanData;
+    }
+
+    /**
      * Get region by id.
      *
      * @param  int    $regionID
@@ -660,15 +730,17 @@ class kanbanModel extends model
     /**
      * Get lane group by regions.
      *
-     * @param  array $regions
+     * @param  array  $regions
+     * @param  string $browseType
      * @access public
      * @return array
      */
-    public function getLaneGroupByRegions($regions)
+    public function getLaneGroupByRegions($regions, $browseType = 'all')
     {
         $laneGroup = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
             ->andWhere('region')->in($regions)
+            ->beginIf($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
             ->orderBy('order')
             ->fetchGroup('group');
 
@@ -758,10 +830,12 @@ class kanbanModel extends model
      */
     public function getCardGroupByKanban($kanbanID)
     {
-        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
+        $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
+            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
             ->where('deleted')->eq(0)
+            ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
             ->andWhere('archived')->eq(0)
-            ->andWhere('kanban')->eq($kanbanID)
+            ->andWhere('t2.kanban')->eq($kanbanID)
             //->orderBy('`order` asc')
             ->fetchAll('id');
 
@@ -782,6 +856,136 @@ class kanbanModel extends model
     }
 
     /**
+     * Get RD column group by regions.
+     *
+     * @param  array  $regions
+     * @param  array  $groupIDList
+     * @access public
+     * @return array
+     */
+    public function getRDColumnGroupByRegions($regions, $groupIDList = array())
+    {
+        $columnGroup = $this->dao->select("*")->from(TABLE_KANBANCOLUMN)
+            ->where('deleted')->eq('0')
+            ->andWhere('region')->in($regions)
+            ->beginIF(!empty($groupIDList))->andWhere('`group`')->in($groupIDList)->fi()
+            ->orderBy('id_asc')
+            ->fetchGroup('group');
+
+        $actions = array('setColumn', 'setWIP', 'deleteColumn');
+
+        /* Group by parent. */
+        $parentColumnGroup = array();
+        foreach($columnGroup as $group => $columns)
+        {
+            foreach($columns as $column)
+            {
+                $column->actions = array();
+                /* Judge column action priv. */
+                foreach($actions as $action)
+                {
+                    if($this->isClickable($column, $action)) $column->actions[] = $action;
+                }
+
+                if($column->parent > 0) continue;
+
+                $parentColumnGroup[$group][] = $column;
+            }
+        }
+
+        $columnData = array();
+        foreach($parentColumnGroup as $group => $parentColumns)
+        {
+            foreach($parentColumns as $parentColumn)
+            {
+                $columnData[$group][] = $parentColumn;
+                foreach($columnGroup[$group] as $column)
+                {
+                    if($column->parent == $parentColumn->id)
+                    {
+                        $parentColumn->asParent = true;
+
+                        if(strpos(',developing,developed,', $column->type) !== false) $column->parentType = 'develop';
+                        if(strpos(',testing,tested,',       $column->type) !== false) $column->parentType = 'test';
+                        if(strpos(',fixing,fixed,',         $column->type) !== false) $column->parentType = 'resolving';
+
+                        $columnData[$group][] = $column;
+                    }
+                }
+            }
+        }
+
+        return $columnData;
+    }
+
+    /**
+     * Get card group by execution id.
+     *
+     * @param  int    $kanbanID
+     * @param  string $browseType all|task|bug|story
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+    {
+        $cards = $this->dao->select('t1.*, t2.type as columnType')
+            ->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->beginIF($browseType != 'all')->andWhere('t1.type')->eq($browseType)->fi()
+            ->orderby($orderBy)
+            ->fetchgroup('lane', 'column');
+
+        /* Get group objects. */
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+
+        $cardGroup = array();
+
+        foreach($cards as $laneID => $cells)
+        {
+            foreach($cells as $columnID => $cell)
+            {
+                $cardIdList = array_filter(explode(',', $cell->cards));
+                $cardOrder  = 1;
+                foreach($cardIdList as $cardID)
+                {
+                    $cardData = array();
+                    $objects  = zget($objectGroup, $cell->type, array());
+                    $object   = zget($objects, $cardID, array());
+
+                    if(empty($object)) continue;
+
+                    $cardData['id']         = $object->id;
+                    $cardData['order']      = $cardOrder++;
+                    $cardData['pri']        = $object->pri ? $object->pri : '';
+                    $cardData['estimate']   = $cell->type == 'bug' ? '' : $object->estimate;
+                    $cardData['assignedTo'] = $object->assignedTo;
+                    $cardData['deadline']   = $cell->type == 'story' ? '' : $object->deadline;
+                    $cardData['severity']   = $cell->type == 'bug' ? $object->severity : '';
+                    $cardData['acl']        = 'open';
+                    $cardData['lane']       = $laneID;
+                    $cardData['column']     = $cell->column;
+
+                    if($cell->type == 'task')
+                    {
+                        $cardData['name'] = $object->name;
+                    }
+                    else
+                    {
+                        $cardData['title'] = $object->title;
+                    }
+                    $cardGroup[$laneID][$cell->columnType][] = $cardData;
+                }
+            }
+        }
+
+        return $cardGroup;
+    }
+
+    /**
      * Get Kanban by execution id.
      *
      * @param  int    $executionID
@@ -792,36 +996,28 @@ class kanbanModel extends model
      */
     public function getExecutionKanban($executionID, $browseType = 'all', $groupBy = 'default')
     {
-        if($browseType != 'all' and $groupBy != 'default') $this->updateGroupLanes($executionID, $browseType, $groupBy);
+        if($groupBy != 'default') return $this->getKanban4Group($executionID, $browseType, $groupBy);
 
         $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
             ->where('execution')->eq($executionID)
             ->andWhere('deleted')->eq(0)
             ->beginIF($browseType != 'all')->andWhere('type')->eq($browseType)->fi()
-            ->beginIF($groupBy == 'default')->andWhere('groupby')->eq('')->fi()
-            ->beginIF($groupBy != 'default')->andWhere('groupby')->eq($groupBy)->fi()
             ->orderBy('order_asc')
             ->fetchAll('id');
 
         if(empty($lanes)) return array();
 
-        foreach($lanes as $lane) $this->updateCards($lane);
+        foreach($lanes as $lane) $this->refreshCards($lane);
 
-        $columns = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('deleted')->eq(0)
-            ->andWhere('lane')->in(array_keys($lanes))
+        $columns = $this->dao->select('t1.cards, t1.lane, t2.id, t2.type, t2.name, t2.color, t2.limit, t2.parent')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t2.deleted')->eq(0)
+            ->andWhere('t1.lane')->in(array_keys($lanes))
             ->orderBy('id_asc')
             ->fetchGroup('lane', 'id');
 
-        /* Get parent column type pairs. */
-        $parentTypes = $this->dao->select('id, type')->from(TABLE_KANBANCOLUMN)
-            ->where('deleted')->eq(0)
-            ->andWhere('lane')->in(array_keys($lanes))
-            ->andWhere('parent')->eq(-1)
-            ->fetchPairs('id', 'type');
-
         /* Get group objects. */
-        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -836,9 +1032,8 @@ class kanbanModel extends model
         {
             $laneData   = array();
             $columnData = array();
-            $laneType   = $groupBy == 'default' ? $lane->type : $lane->groupby;
 
-            $laneData['id']              = $groupBy == 'default' ? $lane->type : $lane->groupby . '-' . $lane->extra;
+            $laneData['id']              = $laneID;
             $laneData['laneID']          = $laneID;
             $laneData['name']            = $lane->name;
             $laneData['color']           = $lane->color;
@@ -847,18 +1042,20 @@ class kanbanModel extends model
 
             foreach($columns[$laneID] as $columnID => $column)
             {
-                $columnData[$column->id]['id']         = $laneType . '-' . $column->type;
-                $columnData[$column->id]['columnID']   = $columnID;
+                $columnData[$column->id]['id']         = $columnID;
                 $columnData[$column->id]['type']       = $column->type;
                 $columnData[$column->id]['name']       = $column->name;
                 $columnData[$column->id]['color']      = $column->color;
                 $columnData[$column->id]['limit']      = $column->limit;
                 $columnData[$column->id]['laneType']   = $lane->type;
                 $columnData[$column->id]['asParent']   = $column->parent == -1 ? true : false;
+                $columnData[$column->id]['parent']     = $column->parent;
 
                 if($column->parent > 0)
                 {
-                    $columnData[$column->id]['parentType'] = zget($parentTypes, $column->parent, '');
+                    if($column->type == 'developing' or $column->type == 'developed') $columnData[$column->id]['parentType'] = 'develop';
+                    if($column->type == 'testing' or $column->type == 'tested') $columnData[$column->id]['parentType'] = 'test';
+                    if($column->type == 'fixing' or $column->type == 'fixed') $columnData[$column->id]['parentType'] = 'resolving';
                 }
 
                 $cardOrder  = 1;
@@ -898,13 +1095,200 @@ class kanbanModel extends model
                 if(!isset($laneData['cards'][$column->type])) $laneData['cards'][$column->type] = array();
             }
 
-            $kanbanGroup[$laneType]['id']              = $laneType;
-            $kanbanGroup[$laneType]['columns']         = array_values($columnData);
-            $kanbanGroup[$laneType]['lanes'][]         = $laneData;
-            $kanbanGroup[$laneType]['defaultCardType'] = $lane->type;
+            $kanbanGroup[$lane->type]['id']              = $laneID;
+            $kanbanGroup[$lane->type]['columns']         = array_values($columnData);
+            $kanbanGroup[$lane->type]['lanes'][]         = $laneData;
+            $kanbanGroup[$lane->type]['defaultCardType'] = $lane->type;
         }
 
         return $kanbanGroup;
+    }
+
+    /**
+     * Get kanban for group view.
+     *
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @access public
+     * @return array
+     */
+    public function getKanban4Group($executionID, $browseType, $groupBy)
+    {
+        /* Get card  data. */
+        $cardList = array();
+        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
+        if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
+        if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+
+        $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
+        if(empty($lanes)) return array();
+
+        $columns = $this->dao->select('t1.*, t2.`type` as columnType')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere('t1.`type`')->eq($browseType)
+            ->fetchAll();
+
+        $cardGroup = array();
+        foreach($columns as $column)
+        {
+            if(empty($column->cards)) continue;
+            foreach($cardList as $card)
+            {
+                if(strpos($column->cards, ",$card->id,") !== false) $cardGroup[$column->columnType][$card->id] = $card;
+            }
+        }
+
+        /* Build kanban group data. */
+        $kanbanGroup = array();
+        foreach($lanes as $laneID => $lane)
+        {
+            $laneData   = array();
+            $columnData = array();
+            $columnList = $this->lang->kanban->{$browseType . 'Column'};
+
+            $laneData['id']              = $groupBy . $laneID;
+            $laneData['laneID']          = $groupBy . $laneID;
+            $laneData['name']            = (($groupBy == 'pri' or $groupBy == 'severity') and $laneID) ? $this->lang->$browseType->$groupBy . ':' . $lane->name : $lane->name;
+            $laneData['color']           = $lane->color;
+            $laneData['order']           = $lane->order;
+            $laneData['defaultCardType'] = $browseType;
+
+            /* Construct kanban column data. */
+            foreach($columnList as $columnID => $columnName)
+            {
+                $parentColumn = '';
+                if(in_array($columnID, array('developing', 'developed'))) $parentColumn = 'develop';
+                if(in_array($columnID, array('testing', 'tested')))       $parentColumn = 'test';
+                if(in_array($columnID, array('fixing', 'fixed')))         $parentColumn = 'resolving';
+
+                $columnData[$columnID]['id']         = $columnID;
+                $columnData[$columnID]['type']       = $columnID;
+                $columnData[$columnID]['name']       = $columnName;
+                $columnData[$columnID]['color']      = '#333';
+                $columnData[$columnID]['limit']      = -1;
+                $columnData[$columnID]['laneType']   = $browseType;
+                $columnData[$columnID]['asParent']   = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
+                $columnData[$columnID]['parentType'] = $parentColumn;
+
+                $cardOrder = 1;
+                $objects   = zget($cardGroup, $columnID, array());
+                foreach($objects as $object)
+                {
+                    if(empty($object)) continue;
+
+                    $cardData = array();
+                    if(in_array($groupBy, array('module', 'story', 'pri', 'severity')) and (int)$object->$groupBy !== $laneID) continue;
+                    if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source')) and $object->$groupBy != $laneID) continue;
+
+                    $cardData['id']         = $object->id;
+                    $cardData['order']      = $cardOrder;
+                    $cardData['pri']        = $object->pri ? $object->pri : '';
+                    $cardData['estimate']   = $browseType == 'bug' ? '' : $object->estimate;
+                    $cardData['assignedTo'] = $object->assignedTo;
+                    $cardData['deadline']   = $browseType == 'story' ? '' : $object->deadline;
+                    $cardData['severity']   = $browseType == 'bug' ? $object->severity : '';
+
+                    if($browseType == 'task')
+                    {
+                        $cardData['name'] = $object->name;
+                    }
+                    else
+                    {
+                        $cardData['title'] = $object->title;
+                    }
+
+                    $laneData['cards'][$columnID][] = $cardData;
+                    $cardOrder ++;
+                }
+                if(!isset($laneData['cards'][$columnID])) $laneData['cards'][$columnID] = array();
+            }
+
+            $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;
+            $kanbanGroup[$groupBy]['columns']         = array_values($columnData);
+            $kanbanGroup[$groupBy]['lanes'][]         = $laneData;
+            $kanbanGroup[$groupBy]['defaultCardType'] = $browseType;
+        }
+
+        return $kanbanGroup;
+    }
+
+    /**
+     * Build lane data for group kanban.
+     *
+     * @access public
+     * @param  int    $executionID
+     * @param  string $browseType
+     * @param  string $groupBy
+     * @param  array  $cardList
+     * @return array
+     */
+    public function getLanes4Group($executionID, $browseType, $groupBy, $cardList)
+    {
+        $lanes       = array();
+        $groupByList = array();
+        $objectPairs = array();
+        foreach($cardList as $item)
+        {
+            if(!isset($groupByList[$item->$groupBy])) $groupByList[$item->$groupBy] = $item->$groupBy;
+        }
+
+        if(in_array($groupBy, array('module', 'story', 'pri', 'severity'))) $objectPairs[0]  = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+        if(in_array($groupBy, array('assignedTo', 'type', 'category', 'source'))) $objectPairs[''] = $this->lang->$browseType->$groupBy . ': ' . $this->lang->kanban->noGroup;
+
+        if(in_array($groupBy, array('module', 'story', 'assignedTo')))
+        {
+            if($groupBy == 'module')
+            {
+                $objectPairs += $this->dao->select('id,name')->from(TABLE_MODULE)
+                    ->where('type')->in('story,task,bug')
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('id')->in($groupByList)
+                    ->fetchPairs();
+            }
+            elseif($groupBy == 'story')
+            {
+                $objectPairs += $this->dao->select('id,title')->from(TABLE_STORY)
+                    ->where('deleted')->eq(0)
+                    ->andWhere('id')->in($groupByList)
+                    ->fetchPairs();
+            }
+            else
+            {
+                $objectPairs += $this->dao->select('account,realname')->from(TABLE_USER)
+                    ->where('account')->in($groupByList)
+                    ->fetchPairs();
+
+                if(isset($groupByList['closed'])) $objectPairs['closed'] = 'Closed';
+            }
+        }
+        else
+        {
+            $objectPairs += $this->lang->$browseType->{$groupBy . 'List'};
+        }
+
+        $laneColor = 0;
+        $order     = 1;
+        foreach($objectPairs as $objectID => $objectName)
+        {
+            if(!isset($groupByList[$objectID]) and $objectID) continue;
+
+            $lane = new stdclass();
+            $lane->id        = $groupBy . $objectID;
+            $lane->type      = $browseType;
+            $lane->execution = $executionID;
+            $lane->name      = $objectName;
+            $lane->order     = $order;
+            $lane->color     = $this->config->kanban->laneColorList[$laneColor];
+
+            $order     += 1;
+            $laneColor += 1;
+            if($laneColor == count($this->config->kanban->laneColorList)) $laneColor = 0;
+            $lanes[$objectID] = $lane;
+        }
+
+        return $lanes;
     }
 
     /**
@@ -1118,14 +1502,16 @@ class kanbanModel extends model
      * Get lane pairs by region id.
      *
      * @param  array  $regionID
+     * @param  string $type all|story|task|bug|common
      * @access public
      * @return array
      */
-    public function getLanePairsByRegion($regionID)
+    public function getLanePairsByRegion($regionID, $type = 'all')
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
             ->andWhere('region')->eq($regionID)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
     }
 
@@ -1149,10 +1535,13 @@ class kanbanModel extends model
                 ->add('region', $regionID)
                 ->add('order', $maxOrder ? $maxOrder + 1 : 1)
                 ->add('lastEditedTime', helper::now())
-                ->add('type', 'common')
+                ->setIF(isset($_POST['laneType']), 'execution', $kanbanID)
                 ->trim('name')
                 ->setDefault('color', '#7ec5ff')
+                ->remove('laneType')
                 ->get();
+
+            $lane->type = isset($_POST['laneType']) ? $_POST['laneType'] : 'common';
 
             $mode = zget($lane, 'mode', '');
             if($mode == 'sameAsOther')
@@ -1162,11 +1551,12 @@ class kanbanModel extends model
             }
             elseif($mode == 'independent')
             {
-                $groupID = $this->createGroup($kanbanID, $regionID);
-                $kanban  = $this->getByID($kanbanID);
-                $this->createDefaultColumns($kanban, $regionID, $groupID);
-
-                $lane->group = $groupID;
+                $lane->group = $this->createGroup($kanbanID, $regionID);
+                if($lane->type == 'common')
+                {
+                    $kanban = $this->getByID($kanbanID);
+                    $this->createDefaultColumns($kanban, $regionID, $lane->group);
+                }
             }
         }
 
@@ -1177,6 +1567,18 @@ class kanbanModel extends model
         if(dao::isError()) return false;
 
         $laneID = $this->dao->lastInsertID();
+        if($lane->type != 'common' and isset($mode) and $mode == 'independent') $this->createRDColumn($regionID, $lane->group, $laneID, $lane->type, $kanbanID);
+
+        if(isset($mode) and ($mode == 'sameAsOther' or ($lane->type == 'common' and $mode == 'independent')))
+        {
+            $columnIDList = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)->where('deleted')->eq(0)->andWhere('archived')->eq(0)->andWhere('`group`')->eq($lane->group)->fetchPairs();
+            foreach($columnIDList as $columnID)
+            {
+                $this->addKanbanCell($kanbanID, $laneID, $columnID, $lane->type);
+
+                if(dao::isError()) return false;
+            }
+        }
         return $laneID;
     }
 
@@ -1385,61 +1787,46 @@ class kanbanModel extends model
     }
 
     /**
-     * createColumn
+     * Create execution columns.
      *
-     * @param  int    $laneID
-     * @param  string $type story|bug|task
-     * @param  int    $executionID
-     * @param  string $groupBy
-     * @param  string $groupValue
+     * @param  int|array   $laneID
+     * @param  string      $type story|bug|task
+     * @param  int         $executionID
+     * @param  string      $groupBy
+     * @param  string      $groupValue
      * @access public
      * @return void
      */
-    public function createExecutionColumns($laneID, $type, $executionID, $groupBy = '', $groupValue = '')
+    public function createExecutionColumns($laneID, $type, $executionID)
     {
-        $objects = array();
-
-        if($type == 'story') $objects = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't2.id_desc');
-        if($type == 'bug')   $objects = $this->loadModel('bug')->getExecutionBugs($executionID);
-        if($type == 'task')  $objects = $this->loadModel('execution')->getKanbanTasks($executionID);
-
-        if(!empty($groupBy))
-        {
-            foreach($objects as $objectID => $object)
-            {
-                if($object->$groupBy != $groupValue) unset($objects[$objectID]);
-            }
-        }
-
         $devColumnID = $testColumnID = $resolvingColumnID = 0;
         if($type == 'story')
         {
             foreach($this->lang->kanban->storyColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->lane  = $laneID;
                 $data->name  = $name;
                 $data->color = '#333';
                 $data->type  = $colType;
-                $data->cards = '';
 
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
-                if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
-                if(strpos(',develop,test,', $colType) !== false) $data->parent = -1;
-                if(strpos(',ready,develop,test,', $colType) === false)
-                {
-                    $storyStatus = $this->config->kanban->storyColumnStatusList[$colType];
-                    $storyStage  = $this->config->kanban->storyColumnStageList[$colType];
-                    foreach($objects as $storyID => $story)
-                    {
-                        if($story->status == $storyStatus and $story->stage == $storyStage) $data->cards .= $storyID . ',';
-                    }
-                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
-                }
+                if(strpos(',testing,tested,', $colType) !== false)       $data->parent = $testColumnID;
+                if(strpos(',develop,test,', $colType) !== false)         $data->parent = -1;
 
                 $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($colType == 'develop') $devColumnID  = $this->dao->lastInsertId();
-                if($colType == 'test')    $testColumnID = $this->dao->lastInsertId();
+
+                $colID = $this->dao->lastInsertId();
+                if($colType == 'develop') $devColumnID  = $colID;
+                if($colType == 'test')    $testColumnID = $colID;
+
+                if(is_array($laneID))
+                {
+                    foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, 'story');
+                }
+                else
+                {
+                    $this->addKanbanCell($executionID, $laneID, $colID, 'story');
+                }
             }
         }
         elseif($type == 'bug')
@@ -1447,37 +1834,27 @@ class kanbanModel extends model
             foreach($this->lang->kanban->bugColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->lane  = $laneID;
                 $data->name  = $name;
                 $data->color = '#333';
                 $data->type  = $colType;
-                $data->cards = '';
-                if(strpos(',fixing,fixed,', $colType) !== false) $data->parent = $resolvingColumnID;
+                if(strpos(',fixing,fixed,', $colType) !== false)   $data->parent = $resolvingColumnID;
                 if(strpos(',testing,tested,', $colType) !== false) $data->parent = $testColumnID;
                 if(strpos(',resolving,test,', $colType) !== false) $data->parent = -1;
-                if(strpos(',resolving,fixing,test,testing,tested,', $colType) === false)
-                {
-                    $bugStatus = $this->config->kanban->bugColumnStatusList[$colType];
-                    foreach($objects as $bugID => $bug)
-                    {
-                        if($colType == 'unconfirmed' and $bug->status == $bugStatus and $bug->confirmed == 0)
-                        {
-                            $data->cards .= $bugID . ',';
-                        }
-                        elseif($colType == 'confirmed' and $bug->status == $bugStatus and $bug->confirmed == 1)
-                        {
-                            $data->cards .= $bugID . ',';
-                        }
-                        elseif(strpos(',unconfirmed,confirmed,', $colType) === false and $bug->status == $bugStatus)
-                        {
-                            $data->cards .= $bugID . ',';
-                        }
-                    }
-                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
-                }
+
                 $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($colType == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
-                if($colType == 'test')      $testColumnID      = $this->dao->lastInsertId();
+
+                $colID = $this->dao->lastInsertId();
+                if($colType == 'resolving') $resolvingColumnID = $colID;
+                if($colType == 'test')      $testColumnID      = $colID;
+
+                if(is_array($laneID))
+                {
+                    foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, 'bug');
+                }
+                else
+                {
+                    $this->addKanbanCell($executionID, $laneID, $colID, 'bug');
+                }
             }
         }
         elseif($type == 'task')
@@ -1485,26 +1862,183 @@ class kanbanModel extends model
             foreach($this->lang->kanban->taskColumn as $colType => $name)
             {
                 $data = new stdClass();
-                $data->lane  = $laneID;
                 $data->name  = $name;
                 $data->color = '#333';
                 $data->type  = $colType;
-                $data->cards = '';
                 if(strpos(',developing,developed,', $colType) !== false) $data->parent = $devColumnID;
                 if($colType == 'develop') $data->parent = -1;
-                if(strpos(',develop,', $colType) === false)
-                {
-                    $taskStatus = $this->config->kanban->taskColumnStatusList[$colType];
-                    foreach($objects as $taskID => $task)
-                    {
-                        if($task->status == $taskStatus) $data->cards .= $taskID . ',';
 
-                    }
-                    if(!empty($data->cards)) $data->cards = ',' . $data->cards;
-                }
                 $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
-                if($colType == 'develop') $devColumnID = $this->dao->lastInsertId();
+
+                $colID = $this->dao->lastInsertId();
+                if($colType == 'develop') $devColumnID = $colID;
+
+                if(is_array($laneID))
+                {
+                    foreach($laneID as $id) $this->addKanbanCell($executionID, $id, $colID, 'task');
+                }
+                else
+                {
+                    $this->addKanbanCell($executionID, $laneID, $colID, 'task');
+                }
             }
+        }
+    }
+
+    /**
+     * Add kanban cell for new lane.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $laneID
+     * @param  int    $colID
+     * @param  string $type story|task|bug|card
+     * @access public
+     * @return void
+     */
+    public function addKanbanCell($kanbanID, $laneID, $colID, $type, $cardID = 0)
+    {
+        $cell = $this->dao->select('id, cards')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('lane')->eq($laneID)
+            ->andWhere('`column`')->eq($colID)
+            ->andWhere('type')->eq($type)
+            ->fetch();
+
+        if(empty($cell))
+        {
+            $cell = new stdclass();
+            $cell->kanban = $kanbanID;
+            $cell->lane   = $laneID;
+            $cell->column = $colID;
+            $cell->type   = $type;
+
+            $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
+        }
+        else
+        {
+            $cell->cards = $cell->cards ? ",$cardID" . $cell->cards : ",$cardID,";
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
+        }
+    }
+
+    /**
+     * Create a default RD kanban.
+     *
+     * @param  object $execution
+     * @access public
+     * @return void
+     */
+    public function createRDKanban($execution)
+    {
+        $regionID =  $this->createRDRegion($execution);
+        if(dao::isError()) return false;
+
+        $groupID = $this->createGroup($execution->id, $regionID);
+        if(dao::isError()) return false;
+
+        $this->createRDLane($execution->id, $regionID);
+        if(dao::isError()) return false;
+    }
+
+    /**
+     * Create a default RD region.
+     *
+     * @param  object $execution
+     *
+     * @access public
+     * @return int|bool
+     */
+    public function createRDRegion($execution)
+    {
+        $region = new stdclass();
+        $region->name        = $this->lang->kanbanregion->default;
+        $region->kanban      = $execution->id;
+        $region->createdBy   = $this->app->user->account;
+        $region->createdDate = helper::today();
+        $region->order       = 1;
+
+        $this->dao->insert(TABLE_KANBANREGION)->data($region)
+            ->check('name', 'unique', "kanban={$execution->id} AND deleted='0'")
+            ->autoCheck()
+            ->exec();
+
+        if(dao::isError()) return false;
+        return $this->dao->lastInsertId();
+    }
+
+    /**
+     * Create default RD lanes.
+     *
+     * @param  int    $executionID
+     * @param  int    $regionID
+     *
+     * @access public
+     * @return bool
+     */
+    public function createRDLane($executionID, $regionID)
+    {
+        $laneIndex = 0;
+        foreach($this->lang->kanban->laneTypeList as $type => $name)
+        {
+            $groupID = $this->createGroup($executionID, $regionID);
+            if(dao::isError()) return false;
+
+            $lane = new stdclass();
+            $lane->execution = $executionID;
+            $lane->type      = $type;
+            $lane->region    = $regionID;
+            $lane->group     = $groupID;
+            $lane->name      = $name;
+            $lane->color     = $this->config->kanban->laneColorList[$laneIndex];
+            $lane->order     = ++ $laneIndex * 5;
+
+            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->autoCheck()->exec();
+            if(dao::isError()) return false;
+
+            $this->createRDColumn($regionID, $groupID, $this->dao->lastInsertId(), $type, $executionID);
+        }
+    }
+
+    /**
+     * Create default RD columns.
+     *
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $laneID
+     * @param  string $laneType
+     *
+     * @access public
+     * @return bool
+     */
+    public function createRDColumn($regionID, $groupID, $laneID, $laneType, $executionID)
+    {
+        $devColumnID = $testColumnID = $resolvingColumnID = 0;
+        if($laneType == 'story') $columnList = $this->lang->kanban->storyColumn;
+        if($laneType == 'bug') $columnList = $this->lang->kanban->bugColumn;
+        if($laneType == 'task') $columnList = $this->lang->kanban->taskColumn;
+
+        foreach($columnList as $type => $name)
+        {
+            $data = new stdClass();
+            $data->name   = $name;
+            $data->color  = '#333';
+            $data->type   = $type;
+            $data->group  = $groupID;
+            $data->region = $regionID;
+
+            if(strpos(',developing,developed,', $type) !== false) $data->parent = $devColumnID;
+            if(strpos(',testing,tested,', $type) !== false) $data->parent = $testColumnID;
+            if(strpos(',fixing,fixed,', $type) !== false) $data->parent = $resolvingColumnID;
+            if(strpos(',develop,test,resolving,', $type) !== false) $data->parent = -1;
+
+            $this->dao->insert(TABLE_KANBANCOLUMN)->data($data)->exec();
+            if(dao::isError()) return false;
+
+            if($type == 'develop') $devColumnID  = $this->dao->lastInsertId();
+            if($type == 'test')    $testColumnID = $this->dao->lastInsertId();
+            if($type == 'resolving') $resolvingColumnID = $this->dao->lastInsertId();
+
+            $this->addKanbanCell($executionID, $laneID, $this->dao->lastInsertId(), $laneType);
         }
     }
 
@@ -1541,38 +2075,80 @@ class kanbanModel extends model
      *
      * @param  int    $executionID
      * @param  string $laneType
+     * @param  int    $cardID
      * @access public
      * @return void
      */
-    public function updateLane($executionID, $laneType)
+    public function updateLane($executionID, $laneType, $cardID = 0)
     {
-        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
-            ->andWhere('type')->eq($laneType)
-            ->fetchAll('id');
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if($execution->type == 'kanban')
+        {
+            $regionIdList = $this->dao->select('id')->from(TABLE_KANBANREGION)
+                ->where('deleted')->eq(0)
+                ->andWhere('kanban')->eq($executionID)
+                ->fetchPairs();
 
-        foreach($lanes as $lane) $this->updateCards($lane);
+            $lanes = $this->dao->select('t1.*')->from(TABLE_KANBANLANE)->alias('t1')
+                ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+                ->where('t1.deleted')->eq(0)
+                ->andWhere('t1.execution')->eq($executionID)
+                ->andWhere('t1.type')->eq($laneType)
+                ->andWhere('t1.region')->in($regionIdList)
+                ->beginIF(!empty($cardID))->andWhere('t2.cards')->like("%,$cardID,%")->fi()
+                ->orderBy('t1.`order` asc')
+                ->fetchAll('id');
+
+            if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 1);
+        }
+        else
+        {
+            $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
+                ->where('execution')->eq($executionID)
+                ->andWhere('type')->eq($laneType)
+                ->fetchAll('id');
+        }
+
+        foreach($lanes as $lane) $this->refreshCards($lane);
     }
 
     /**
-     * Update column cards.
+     * Refresh column cards.
      *
      * @param  object $lane
      * @access public
      * @return void
      */
-    public function updateCards($lane)
+    public function refreshCards($lane)
     {
-        $laneType    = $lane->type;
-        $executionID = $lane->execution;
-        $cardPairs = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)
-            ->where('deleted')->eq(0)
-            ->andWhere('lane')->eq($lane->id)
-            ->fetchPairs('type' ,'cards');
+        $laneType      = $lane->type;
+        $executionID   = $lane->execution;
+        $otherCardList = '';
+        $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
+            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+            ->where('t1.deleted')->eq(0)
+            ->andWhere('t1.id')->ne($lane->id)
+            ->andWhere('t1.execution')->eq($executionID)
+            ->andWhere('t2.`type`')->eq($lane->type)
+            ->fetchPairs();
+
+        foreach($otherLanes as $cardIDList)
+        {
+            $cardIDList = trim($cardIDList, ',');
+            if(!empty($cardIDList)) $otherCardList .= ',' . $cardIDList;
+        }
+
+        $cardPairs = $this->dao->select('t2.type, t1.cards')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere('t1.lane')->eq($lane->id)
+            ->fetchPairs();
+
+        if(empty($cardPairs)) return;
 
         if($laneType == 'story')
         {
-            $stories = $this->loadModel('story')->getExecutionStories($executionID);
+            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory', 0, 'story', $otherCardList);
             foreach($stories as $storyID => $story)
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
@@ -1582,26 +2158,24 @@ class kanbanModel extends model
                         $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
                     }
 
-                    if(strpos(',ready,develop,test,', $colType) !== false) continue;
+                    if(strpos(',ready,backlog,develop,test,', $colType) !== false) continue;
 
-                    if($lane->groupby and $story->{$lane->groupby} != $lane->extra)
-                    {
-                        $cardPairs[$colType] = str_replace(",$storyID,", ',', $cardPairs[$colType]);
-                    }
-                    elseif($colType == 'backlog' and $story->stage == $stage and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
-                    {
-                        $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
-                    }
-                    elseif($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false and $colType != 'backlog')
+                    if($story->stage == $stage and strpos($cardPairs[$colType], ",$storyID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$storyID," : ",$storyID" . $cardPairs[$colType];
                     }
                 }
+
+                if($story->stage == 'projected' and strpos($cardPairs['ready'], ",$storyID,") === false and strpos($cardPairs['backlog'], ",$storyID,") === false)
+                {
+                    $cardPairs['backlog'] = empty($cardPairs['backlog']) ? ",$storyID," : ",$storyID" . $cardPairs['backlog'];
+                }
+
             }
         }
         elseif($laneType == 'bug')
         {
-            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID);
+            $bugs = $this->loadModel('bug')->getExecutionBugs($executionID, 0, 0, '', 0, 'id_desc', $otherCardList);
             foreach($bugs as $bugID => $bug)
             {
                 foreach($this->config->kanban->bugColumnStatusList as $colType => $status)
@@ -1613,11 +2187,7 @@ class kanbanModel extends model
 
                     if(strpos(',resolving,test,testing,tested,', $colType) !== false) continue;
 
-                    if($lane->groupby and $bug->{$lane->groupby} != $lane->extra)
-                    {
-                        $cardPairs[$colType] = str_replace(",$bugID,", ',', $cardPairs[$colType]);
-                    }
-                    elseif($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
+                    if($colType == 'unconfirmed' and $bug->status == $status and $bug->confirmed == 0 and strpos($cardPairs['unconfirmed'], ",$bugID,") === false and strpos($cardPairs['fixing'], ",$bugID,") === false and $bug->activatedCount == 0)
                     {
                         $cardPairs['unconfirmed'] = empty($cardPairs['unconfirmed']) ? ",$bugID," : ",$bugID" . $cardPairs['unconfirmed'];
                         if(strpos($cardPairs['closed'], ",$bugID,") !== false) $cardPairs['closed'] = str_replace(",$bugID,", ',', $cardPairs['closed']);
@@ -1648,18 +2218,14 @@ class kanbanModel extends model
         }
         elseif($laneType == 'task')
         {
-            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID);
+            $tasks = $this->loadModel('execution')->getKanbanTasks($executionID, 'status_asc, id_desc', null, $otherCardList);
             foreach($tasks as $taskID => $task)
             {
                 foreach($this->config->kanban->taskColumnStatusList as $colType => $status)
                 {
                     if($colType == 'develop') continue;
 
-                    if($lane->groupby and $task->{$lane->groupby} != $lane->extra)
-                    {
-                        $cardPairs[$colType] = str_replace(",$taskID,", ',', $cardPairs[$colType]);
-                    }
-                    elseif($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
+                    if($task->status == $status and strpos($cardPairs[$colType], ",$taskID,") === false)
                     {
                         $cardPairs[$colType] = empty($cardPairs[$colType]) ? ",$taskID," : ",$taskID". $cardPairs[$colType];
                     }
@@ -1671,105 +2237,19 @@ class kanbanModel extends model
             }
         }
 
+        $colPairs = $this->dao->select('t2.type, t2.id')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere('t1.lane')->eq($lane->id)
+            ->fetchPairs();
+
         foreach($cardPairs as $colType => $cards)
         {
-            $this->dao->update(TABLE_KANBANCOLUMN)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('type')->eq($colType)->exec();
+            if(!isset($colPairs[$colType])) continue;
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)->where('lane')->eq($lane->id)->andWhere('`column`')->eq($colPairs[$colType])->exec();
         }
 
         $this->dao->update(TABLE_KANBANLANE)->set('lastEditedTime')->eq(helper::now())->where('id')->eq($lane->id)->exec();
-    }
-
-    /**
-     * Update group lanes.
-     *
-     * @param  int    $executionID
-     * @param  string $type
-     * @param  string $groupBy
-     * @access public
-     * @return array
-     */
-    public function updateGroupLanes($executionID, $type, $groupBy)
-    {
-        $this->loadModel($type);
-
-        $lanes = $this->dao->select('*')->from(TABLE_KANBANLANE)
-            ->where('execution')->eq($executionID)
-            ->andWhere('deleted')->eq(0)
-            ->andWhere('type')->eq($type)->fi()
-            ->andWhere('groupby')->eq($groupBy)->fi()
-            ->orderBy('order_asc')
-            ->fetchAll('id');
-
-        /* Get old group list of kanban lane. */
-        $oldGroupList = array();
-        foreach($lanes as $lane) $oldGroupList[] = $lane->extra;
-
-        /* Get new group list of kanban lane. */
-        $groupList = $this->getObjectGroup($executionID, $type, $groupBy);
-
-        $removeGroupList = array_diff($oldGroupList, $groupList);
-        $addGroupList    = array_diff($groupList, $oldGroupList);
-
-        $objectPairs = array();
-        if($groupBy == 'module')     $objectPairs = $this->dao->select('id,name')->from(TABLE_MODULE)->where('type')->in('story,bug,task')->andWhere('deleted')->eq('0')->fetchPairs();
-        if($groupBy == 'story')      $objectPairs = $this->dao->select('id,title')->from(TABLE_STORY)->where('deleted')->eq(0)->fetchPairs();
-        if($groupBy == 'assignedTo') $objectPairs = $this->loadModel('user')->getPairs('noletter');
-
-        $colorIndex = 0;
-
-        foreach($lanes as $laneID => $lane)
-        {
-            if(in_array($lane->extra, $removeGroupList))
-            {
-                /* Remove lane and cloumns by laneID. */
-                $this->dao->delete()->from(TABLE_KANBANLANE)->where('id')->eq($laneID)->exec();
-                $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('lane')->eq($laneID)->exec();
-            }
-            else
-            {
-                /* Update kanban lanes by group. */
-                $laneName = $this->lang->$type->$groupBy . ': ' . $this->lang->kanban->noGroup;
-                if($lane->extra)
-                {
-                    $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
-                    $laneName  = $this->lang->$type->$groupBy . ': ' . zget($namePairs, $lane->extra);
-                }
-
-                $this->dao->update(TABLE_KANBANLANE)->set('name')->eq($laneName)->where('id')->eq($laneID)->exec();
-                $this->updateCards($lane);
-
-                $colorIndex += 1;
-                if($colorIndex == count($this->config->kanban->laneColorList)) $colorIndex = 0;
-            }
-        }
-
-        /* Add new lanes by group. */
-        foreach($addGroupList as $groupKey)
-        {
-            $laneName = $this->lang->kanban->noGroup;
-            if($groupKey)
-            {
-                $namePairs = strpos('module,story,assignedTo', $groupBy) !== false ? $objectPairs : $this->lang->$type->{$groupBy . 'List'};
-                $laneName  = zget($namePairs, $groupKey);
-            }
-
-            $lane = new stdClass();
-            $lane->execution = $executionID;
-            $lane->type      = $type;
-            $lane->groupby   = $groupBy;
-            $lane->extra     = $groupKey;
-            $lane->name      = $this->lang->$type->$groupBy . ": " . $laneName;
-            $lane->color     = $this->config->kanban->laneColorList[$colorIndex];
-
-            $colorIndex += 1;
-            if($colorIndex == count($this->config->kanban->laneColorList)) $colorIndex = 0;
-            $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-
-            $laneID = $this->dao->lastInsertId();
-            $this->createExecutionColumns($laneID, $type, $executionID, $groupBy, $groupKey);
-        }
-
-        $this->resetLaneOrder($executionID, $type, $groupBy);
     }
 
     /**
@@ -1973,6 +2453,36 @@ class kanbanModel extends model
     }
 
     /**
+     * Set lane height.
+     *
+     * @param  int    $kanbanID
+     * @param  string $from     kanban|execution
+     * @access public
+     * @return bool
+     */
+    public function setLaneHeight($kanbanID, $from = 'kanban')
+    {
+        $kanbanID = (int)$kanbanID;
+        $kanban   = fixer::input('post')
+            ->setIF($this->post->heightType == 'auto', 'displayCards', 0)
+            ->get();
+
+        if($kanban->heightType == 'custom')
+        {
+            if(!preg_match("/^-?\d+$/", $kanban->displayCards) or $kanban->displayCards < 3)
+            {
+                dao::$errors['displayCards'] = $this->lang->kanbanlane->error->mustBeInt;
+                return false;
+            }
+        }
+
+        $table = $this->config->objectTables[$from];
+        $this->dao->update($table)->set('displayCards')->eq((int)$kanban->displayCards)->where('id')->eq($kanbanID)->exec();
+
+        if(dao::isError()) return false;
+    }
+
+    /**
      * Set kanban headerActions.
      *
      * @param  object $kanban
@@ -1981,24 +2491,45 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
+        $printSetHeight = false;
+        if(common::hasPriv('kanban', 'setLaneHeight'))
+        {
+            $laneCount = $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
+                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+                ->where('t1.kanban')->eq($kanban->id)
+                ->andWhere('t1.deleted')->eq(0)
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetch('count');
+
+            if($laneCount > 1) $printSetHeight = true;
+        }
+
         $actions  = '';
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+
         if($printSettingBtn)
         {
             $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            if($printSetHeight)
+            {
+                $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
+                $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
-            $kanbanActions  = '';
-            $attr           = $kanban->status == 'closed' ? "disabled='disabled'" : '';
+            }
+
+            $kanbanActions = '';
+            $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
             if(common::hasPriv('kanban', 'edit'))  $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'edit', "kanbanID=$kanban->id", '', true), '<i class="icon icon-edit"></i>' . $this->lang->kanban->edit, '', "class='iframe btn btn-link' data-width='75%'") . '</li>';
             if(common::hasPriv('kanban', 'close')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'close', "kanbanID=$kanban->id", '', true), '<i class="icon icon-off"></i>' . $this->lang->kanban->close, '', "class='iframe btn btn-link' $attr") . '</li>';
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= common::hasPriv('kanban', 'createRegion') ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }
@@ -2061,17 +2592,23 @@ class kanbanModel extends model
      * Move a card.
      *
      * @param  int    $cardID
+     * @param  int    $fromColID
      * @param  int    $toColID
+     * @param  int    $fromLaneID
      * @param  int    $toLaneID
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $toColID, $toLaneID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID)
     {
-        $this->dao->update(TABLE_KANBANCARD)
-            ->set('column')->eq($toColID)
-            ->beginIF($toLaneID)->set('lane')->eq($toLaneID)->fi()
-            ->where('id')->eq($cardID)->exec();
+        $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
+        $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+
+        $fromCardList = str_replace("$cardID,", '', $fromCellCards);
+        $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
+
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }
 
     /**
@@ -2255,7 +2792,7 @@ class kanbanModel extends model
     public function getColumnByID($columnID)
     {
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
-            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane=t2.id')
+            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.group=t2.id')
             ->where('t1.id')->eq($columnID)
             ->fetch();
 

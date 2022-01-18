@@ -10,6 +10,7 @@ $builder->project = array('rows' => 90, 'extends' => array('project', 'project')
 $builder->sprint  = array('rows' => 600, 'extends' => array('project', 'execution'));
 
 $builder->product        = array('rows' => 100, 'extends' => array('product'));
+$builder->productline    = array('rows' => 20,  'extends' => array('module', 'productline'));
 $builder->productplan    = array('rows' => 360, 'extends' => array('productplan'));
 $builder->branch         = array('rows' => 240, 'extends' => array('branch'));
 $builder->projectproduct = array('rows' => 200, 'extends' => array('projectproduct'));

@@ -361,7 +361,7 @@ class bug extends control
 
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
+            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extras);
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -662,14 +662,15 @@ class bug extends control
      * @param  int    $productID
      * @param  int    $executionID
      * @param  int    $moduleID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $branch = '', $executionID = 0, $moduleID = 0)
+    public function batchCreate($productID, $branch = '', $executionID = 0, $moduleID = 0, $extra = '')
     {
         if(!empty($_POST))
         {
-            $actions = $this->bug->batchCreate($productID, $branch);
+            $actions = $this->bug->batchCreate($productID, $branch, $extra);
 
             /* Return bug id list when call the API. */
             if($this->viewType == 'json')
@@ -693,8 +694,9 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
-            $stories = $this->story->getExecutionStoryPairs($executionID);
+            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
+            $stories   = $this->story->getExecutionStoryPairs($executionID);
+            $execution = $this->loadModel('execution')->getById($executionID);
         }
         else
         {
@@ -737,7 +739,7 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -1344,14 +1346,15 @@ class bug extends control
      * confirm a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function confirmBug($bugID)
+    public function confirmBug($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->confirm($bugID);
+            $changes = $this->bug->confirm($bugID, $extra);
             if(dao::isError()) return print(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
@@ -1399,14 +1402,15 @@ class bug extends control
      * Resolve a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function resolve($bugID)
+    public function resolve($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->resolve($bugID);
+            $changes = $this->bug->resolve($bugID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
@@ -1492,14 +1496,15 @@ class bug extends control
      * Activate a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function activate($bugID)
+    public function activate($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->activate($bugID);
+            $changes = $this->bug->activate($bugID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
@@ -1534,14 +1539,15 @@ class bug extends control
      * Close a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($bugID)
+    public function close($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->close($bugID);
+            $changes = $this->bug->close($bugID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);

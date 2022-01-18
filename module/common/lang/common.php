@@ -117,6 +117,7 @@ $lang->icons['mail']      = 'envelope';
 $lang->icons['trash']     = 'trash';
 $lang->icons['extension'] = 'th-large';
 $lang->icons['app']       = 'th-large';
+$lang->icons['kanban']    = 'kanban';
 
 $lang->icons['results']            = 'list-alt';
 $lang->icons['create']             = 'plus';

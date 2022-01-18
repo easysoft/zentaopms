@@ -95,7 +95,7 @@ class story extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
+            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
             if(!$storyResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -105,6 +105,19 @@ class story extends control
 
             $storyID   = $storyResult['id'];
             $productID = $this->post->product ? $this->post->product : $productID;
+            $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
+
+            if(!empty($execution) and $execution->type == 'kanban')
+            {
+                if(isset($output['laneID']) and isset($output['columnID']))
+                {
+                    $this->loadModel('kanban')->addKanbanCell($objectID, $output['laneID'], $output['columnID'], 'story', $storyID);
+                }
+                else
+                {
+                    $this->loadModel('kanban')->updateLane($objectID, 'story');
+                }
+            }
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
@@ -355,10 +368,11 @@ class story extends control
      * @param  int    $executionID
      * @param  int    $plan
      * @param  string $type requirement|story
+     * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
@@ -412,7 +426,7 @@ class story extends control
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products, $extra);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 

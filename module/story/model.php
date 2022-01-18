@@ -44,7 +44,7 @@ class storyModel extends model
         $story->executions = $this->dao->select('t1.project, t2.name, t2.status')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq($storyID)
-            ->andWhere('t2.type')->in('sprint,stage')
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
             ->orderBy('t1.`order` DESC')
             ->fetchAll('project');
         $story->tasks  = $this->dao->select('id, name, assignedTo, execution, status, consumed, `left`,type')->from(TABLE_TASK)->where('story')->eq($storyID)->andWhere('deleted')->eq(0)->orderBy('id DESC')->fetchGroup('execution');
@@ -183,11 +183,15 @@ class storyModel extends model
      * @param  int    $executionID
      * @param  int    $bugID
      * @param  string $from
+     * @param  string $extra
      * @access public
      * @return int|bool the id of the created story or false when error.
      */
-    public function create($executionID = 0, $bugID = 0, $from = '')
+    public function create($executionID = 0, $bugID = 0, $from = '', $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(isset($_POST['reviewer'])) $_POST['reviewer'] = array_filter($_POST['reviewer']);
         if(!$this->post->needNotReview and empty($_POST['reviewer']))
         {
@@ -280,7 +284,10 @@ class storyModel extends model
             {
                 $this->linkStory($executionID, $this->post->product, $storyID);
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
-                $this->loadModel('kanban')->updateLane($executionID, 'story');
+
+                $this->loadModel('kanban');
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
+                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
@@ -437,7 +444,7 @@ class storyModel extends model
         foreach($stories->title as $i => $title)
         {
             $module = $stories->module[$i] == 'ditto' ? $module : $stories->module[$i];
-            $plan   = $stories->plan[$i]   == 'ditto' ? $plan   : $stories->plan[$i];
+            $plan   = isset($stories->plan[$i]) ? ($stories->plan[$i] == 'ditto' ? $plan : $stories->plan[$i]) : 0;
             $pri    = $stories->pri[$i]    == 'ditto' ? $pri    : $stories->pri[$i];
             $source = $stories->source[$i] == 'ditto' ? $source : $stories->source[$i];
             $stories->module[$i] = (int)$module;
@@ -1976,6 +1983,8 @@ class storyModel extends model
      */
     public function setStage($storyID)
     {
+        $this->loadModel('kanban');
+
         $storyID = (int)$storyID;
         $account = $this->app->user->account;
 
@@ -2007,7 +2016,11 @@ class storyModel extends model
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
             foreach($stages as $branch => $stage) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
-            foreach($executions as $execution => $branch) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+            foreach($executions as $execution => $branch)
+            {
+                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+                $this->kanban->updateLane($execution, 'story', $storyID);
+            }
             return false;
         }
 
@@ -2158,6 +2171,15 @@ class storyModel extends model
         else
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq(current($stages))->where('id')->eq($storyID)->exec();
+        }
+
+        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if($story->stage != $currentStory->stage)
+        {
+            foreach($executions as $executionID => $branch)
+            {
+                $this->kanban->updateLane($executionID, 'story', $storyID);
+            }
         }
 
         return;
