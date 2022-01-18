@@ -786,7 +786,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         }
         else if(toColType == 'developing')
         {
-            if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
                 var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
