@@ -17,6 +17,14 @@ $(function()
         $("input:radio[name='delta']").attr("checked", false);
     })
 
+    if(projectModel == 'kanban' || projectModel == 'waterfall')
+    {
+        if($('#productsBox .input-group').length == 1)
+        {
+            $('#productsBox .input-group').addClass('required');
+        }
+    }
+
     if(typeof(currentPlanID) == 'undefined')
     {
         $('#productsBox select[id^="products"]').each(function()

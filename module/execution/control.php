@@ -1604,6 +1604,7 @@ class execution extends control
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
         $this->view->allProjects          = $this->project->getPairsByModel('all', 0, 'noclosed');
+        $this->view->project              = $this->project->getById($execution->project);
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;

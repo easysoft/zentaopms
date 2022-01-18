@@ -64,6 +64,15 @@ $(function()
         }
     });
 
+    if(projectModel == 'kanban' || projectModel == 'waterfall')
+    {
+        $('#productsBox .input-group').each(function()
+        {
+            $(this).addClass('required');
+            return false;
+        } );
+    }
+
     oldProject = $("#project").val();
     $('#project').change(function()
     {

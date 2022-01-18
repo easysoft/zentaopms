@@ -166,6 +166,15 @@ function loadBranches(product)
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
+    if(projectModel == 'kanban' || projectModel == 'waterfall')
+    {
+        $('#productsBox .input-group').removeClass('required');
+        $('#productsBox .input-group').each(function()
+        {
+            $(this).addClass('required');
+            return false;
+        } );
+    }
 }
 
 /**
