@@ -611,6 +611,12 @@ function renderHeaderCol($column, column, $header, kanbanData)
     var columnPrivs = kanbanData.columns[0].actions;
     var $actions    = $column.children('.actions');
 
+    if(column.parent == -1)
+    {
+        $column.append('<div class="actions"></div>');
+        $actions = $column.children('.actions');
+    }
+
     if(privs.includes('sortGroup'))
     {
         var groups = regions[column.region].groups;
