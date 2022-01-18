@@ -343,7 +343,6 @@ class kanbanModel extends model
         foreach($data->name as $i => $name)
         {
             $childColumn = new stdclass();
-            $childColumn->lane   = $column->lane;
             $childColumn->parent = $column->id;
             $childColumn->region = $column->region;
             $childColumn->group  = $column->group;
@@ -389,6 +388,11 @@ class kanbanModel extends model
                 if($i == 1) $this->dao->update(TABLE_KANBANCARD)->set('`column`')->eq($childColumnID)->where('`column`')->eq($columnID)->exec();
                 $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
                 $this->action->create('kanbanColumn', $childColumnID, 'created');
+                $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($column->id)->fetchAll();
+                foreach($cellList as $cell)
+                {
+                    $this->addKanbanCell($cell->kanban, $cell->lane, $childColumnID, 'common');
+                }
             }
         }
 
