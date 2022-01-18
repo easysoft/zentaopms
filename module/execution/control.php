@@ -125,7 +125,7 @@ class execution extends control
 
         /* Get products by execution. */
         $execution = $this->commonAction($executionID, $status);
-        if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$execution->id"));
 
         $executionID = $execution->id;
         $products    = $this->product->getProductPairsByProject($executionID);
