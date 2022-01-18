@@ -333,13 +333,13 @@ class kanbanModel extends model
     public function splitColumn($columnID)
     {
         $this->loadModel('action');
-        $data            = fixer::input('post')->get();
-        $column          = $this->getColumnByID($columnID);
-        $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
-        $order           = $maxOrder ? $maxOrder + 1 : 1;
-        $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
+        $data          = fixer::input('post')->get();
+        $column        = $this->getColumnByID($columnID);
+        $maxOrder      = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
+        $order         = $maxOrder ? $maxOrder + 1 : 1;
+        $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
 
-        $childrenColumn  = array();
+        $childrenColumn = array();
         foreach($data->name as $i => $name)
         {
             $childColumn = new stdclass();
@@ -385,13 +385,21 @@ class kanbanModel extends model
             if(!dao::isError())
             {
                 $childColumnID = $this->dao->lastInsertID();
-                if($i == 1) $this->dao->update(TABLE_KANBANCARD)->set('`column`')->eq($childColumnID)->where('`column`')->eq($columnID)->exec();
                 $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
                 $this->action->create('kanbanColumn', $childColumnID, 'created');
+
                 $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($column->id)->fetchAll();
                 foreach($cellList as $cell)
                 {
-                    $this->addKanbanCell($cell->kanban, $cell->lane, $childColumnID, 'common');
+                    $newCell = new stdclass();
+                    $newCell->kanban = $cell->kanban;
+                    $newCell->lane   = $cell->lane;
+                    $newCell->column = $childColumnID;
+                    $newCell->type   = 'common';
+                    $newCell->cards  = $i == 1 ? $cell->cards : '';
+
+                    $this->dao->insert(TABLE_KANBANCELL)->data($newCell)->exec();
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('id')->eq($cell->id)->exec();
                 }
             }
         }
