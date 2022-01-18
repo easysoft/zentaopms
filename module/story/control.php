@@ -105,19 +105,7 @@ class story extends control
 
             $storyID   = $storyResult['id'];
             $productID = $this->post->product ? $this->post->product : $productID;
-            $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
 
-            if(!empty($execution) and $execution->type == 'kanban')
-            {
-                if(isset($output['laneID']) and isset($output['columnID']))
-                {
-                    $this->loadModel('kanban')->addKanbanCell($objectID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                }
-                else
-                {
-                    $this->loadModel('kanban')->updateLane($objectID, 'story');
-                }
-            }
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
