@@ -352,14 +352,18 @@ class actionModel extends model
             }
             elseif($actionName == 'linked2execution')
             {
-                $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = common::hasPriv('execution', 'view') ? html::a(helper::createLink('execution', 'view', "executionID=$action->execution"), $name) : $name;
+                $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
+                $name      = $execution->name;
+                $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
+                if($name) $action->extra = common::hasPriv('execution', $method) ? html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name) : $name;
             }
             elseif($actionName == 'linked2project')
             {
-                $name      = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                $project   = $this->dao->select('name,model')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
                 $productID = trim($action->product, ',');
-                if($name) $action->extra = common::hasPriv('project', 'view') ? html::a(helper::createLink('project', 'view', "projectID=$action->project"), $name) : $name;
+                $name      = $project->name;
+                $method    = $project->model == 'kanban' ? 'index' : 'view';
+                if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
             }
             elseif($actionName == 'linked2plan')
             {
