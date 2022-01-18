@@ -1845,7 +1845,7 @@ class storyModel extends model
 
             $task = new stdclass();
             $task->execution    = $executionID;
-            $task->project      = $projectID;
+            $task->project      = $projectID ? $projectID : 0;
             $task->name         = $story->title;
             $task->story        = $story->id;
             $task->type         = $data->type;
@@ -2081,7 +2081,7 @@ class storyModel extends model
 
         /* Get current stage and set as default value. */
         $currentStage = $story->stage;
-        $stage = $currentStage;
+        $stage        = $currentStage;
 
         /* Cycle all tasks, get counts of every type and every status. */
         $branchStatusList = array();

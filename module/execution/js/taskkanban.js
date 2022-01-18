@@ -470,7 +470,7 @@ if(!window.kanbanDropRules)
         task:
         {
             'wait': ['developing', 'developed', 'canceled', 'closed'],
-            'developing': ['developed', 'pause'],
+            'developing': ['developed', 'pause', 'canceled'],
             'developed': ['canceled', 'closed'],
             'pause': ['developing'],
             'canceled': ['developing'],
@@ -553,7 +553,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         }
         else if(toColType == 'developing')
         {
-            if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
                 var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
                 showIframe = true;
