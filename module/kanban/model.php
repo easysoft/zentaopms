@@ -2106,7 +2106,7 @@ class kanbanModel extends model
                 ->andWhere('t2.execution')->eq($executionID)
                 ->andWhere('t2.type')->eq($laneType)
                 ->beginIF(!empty($cardID))->andWhere('t3.cards')->like("%,$cardID,%")->fi()
-                ->orderBy('t1.`order` asc')
+                ->orderBy('t1.`order` asc, t2.`order` asc')
                 ->fetchAll('id');
 
             if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 1);
