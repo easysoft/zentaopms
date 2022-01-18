@@ -69,7 +69,7 @@ class todo extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
-            if($this->viewType == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID"), 'parent'));
+            if($this->viewType == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
             if(isonlybody()) die(js::closeModal('parent.parent'));
             die(js::locate($this->createLink('my', 'todo', "type=all&userID=&status=all&orderBy=id_desc"), 'parent'));
         }
