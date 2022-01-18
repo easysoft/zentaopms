@@ -343,7 +343,6 @@ class kanbanModel extends model
         foreach($data->name as $i => $name)
         {
             $childColumn = new stdclass();
-            $childColumn->lane   = $column->lane;
             $childColumn->parent = $column->id;
             $childColumn->region = $column->region;
             $childColumn->group  = $column->group;
@@ -2751,23 +2750,6 @@ class kanbanModel extends model
         if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
 
         return $column;
-    }
-
-    /**
-     * Get Column by column name.
-     *
-     * @param  string $name
-     * @param  int    $laneID
-     * @access public
-     * @return object
-     */
-    public function getColumnByName($name, $laneID)
-    {
-        return $this->dao->select('*')
-            ->from(TABLE_KANBANCOLUMN)
-            ->where('name')->eq($name)
-            ->andWhere('lane')->eq($laneID)
-            ->fetch();
     }
 
     /**

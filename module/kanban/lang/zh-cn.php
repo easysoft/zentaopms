@@ -140,7 +140,6 @@ $lang->kanban->laneColor          = '泳道颜色';
 $lang->kanban->setColumn          = '看板列设置';
 $lang->kanban->columnName         = '看板列名称';
 $lang->kanban->columnColor        = '看板列颜色';
-$lang->kanban->noColumnUniqueName = '看板列名称已存在';
 $lang->kanban->moveUp             = '泳道上移';
 $lang->kanban->moveDown           = '泳道下移';
 $lang->kanban->laneMove           = '泳道移动';
