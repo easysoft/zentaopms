@@ -21,6 +21,14 @@ class Tester
         $this->project = $tester->loadModel('project');
     }
 
+    /**
+     * getByIdList 
+     * 
+     * @param  array  $projectIdList 
+     * @param  int    $count 
+     * @access public
+     * @return array
+     */
     public function getByIdList($projectIdList, $count)
     {
         $projectList = $this->project->getByIdList($projectIdList);
@@ -32,4 +40,5 @@ class Tester
 $t = new Tester('admin');
 $projectIdList = array(11,12,13);
 
+/* GetByIdList($projectIdList). */
 r(($t->getByIdList($projectIdList, 3))) && p('11:name;12:name;13:name') && e('项目1;项目2;项目3'); //获取projectIdList对应的项目名称

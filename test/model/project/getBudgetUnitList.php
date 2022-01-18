@@ -19,6 +19,14 @@ class Tester
         su($user);
         $this->project = $tester->loadModel('project');
     }
+
+    /**
+     * checkBudgetUnitList 
+     * 
+     * @param  string $checkList 
+     * @access public
+     * @return bool
+     */
     public function checkBudgetUnitList($checkList = array('CNY' => '人民币', 'USD' => '美元'))
     {
         $budgetList = $this->project->getBudgetUnitList();
@@ -32,4 +40,5 @@ class Tester
 
 $t = new Tester('admin');
 
+/* GetBudgetUnitList(). */
 r($t->checkBudgetUnitList()) && p() && e('1'); //检查翻译

@@ -20,6 +20,13 @@ class Tester
         $this->project = $tester->loadModel('project');
     }
 
+    /**
+     * getParentName 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getParentName($projectID)
     {
         $program = $this->project->getParentName($projectID);
@@ -30,6 +37,7 @@ class Tester
 
 $t = new Tester('admin');
 
+/* GetParentName($projectID). */
 r($t->getParentName(11))  && p('name') && e('项目集1'); //获取id为11的项目父项目名字
 r($t->getParentName(1))   && p('name') && e('项目集1'); //获取id为1的项目父项目名字
 r($t->getParentName(0))   && p('name') && e('0');       //获取id为0的项目父项目名字

@@ -20,6 +20,13 @@ class Tester
         $this->project = $tester->loadModel('project');
     }
 
+    /**
+     * getByStatus 
+     * 
+     * @param  string $status 
+     * @access public
+     * @return int
+     */
     public function getByStatus($status)
     {
         $executions = $this->project->getStats(0, $status);
@@ -34,6 +41,13 @@ class Tester
         return count($executions);
     }
 
+    /**
+     * getByProject 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return int
+     */
     public function getByProject($projectID)
     {
         $executions = $this->project->getStats($projectID, 'all');
@@ -45,6 +59,13 @@ class Tester
         return count($executions);
     }
 
+    /**
+     * getListByOrder 
+     * 
+     * @param  string $orderBy 
+     * @access public
+     * @return bool
+     */
     public function getListByOrder($orderBy)
     {
         $executions = $this->project->getStats(0, 'all', 0, 0, 30, $orderBy);

@@ -20,6 +20,13 @@ class Tester
         $this->project = $tester->loadModel('project');
     }
 
+    /**
+     * checkHasChildren 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return bool
+     */
     public function checkHasChildren($projectID)
     {
         return $this->project->checkHasChildren($projectID);
@@ -28,5 +35,6 @@ class Tester
 
 $t = new Tester('admin');
 
+/* CheckHasChildren($projectID). */
 r($t->checkHasChildren(1))   && p() && e('1'); //获取id为1的项目是否有子项目
 r($t->checkHasChildren(101)) && p() && e('0'); //获取id为101的项目是否有子项目

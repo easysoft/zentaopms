@@ -20,6 +20,14 @@ class Tester
         $this->project = $tester->loadModel('project');
     }
 
+    /**
+     * getExecutionData 
+     * 
+     * @param  int    $projectID 
+     * @param  int    $type 
+     * @access public
+     * @return array
+     */
     public function getExecutionData($projectID, $type) 
     {
         $result = $this->project->getDataByProject(TABLE_EXECUTION, $projectID, $type);
@@ -27,6 +35,13 @@ class Tester
         return $result;
     }        
 
+    /**
+     * getBuildData 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getBuildData($projectID)
     {
         $result = $this->project->getDataByProject(TABLE_BUILD, $projectID);
@@ -34,6 +49,13 @@ class Tester
         return $result;
     }      
 
+    /**
+     * getRealseData 
+     * 
+     * @param  int    $projectID 
+     * @access public
+     * @return array
+     */
     public function getRealseData($projectID)
     {
         $result = $this->project->getDataByProject(TABLE_RELEASE, $projectID);

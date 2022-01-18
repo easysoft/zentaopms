@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 projectModel::close();
+title=测试 projectModel::activate();
 cid=1
 pid=1
 
@@ -33,12 +33,12 @@ class Tester
     public function checkStatus($projectID)
     {
         $oldProject = $this->project->getById($projectID);
-        if($oldProject->status == 'suspended' or $oldProject->status == 'closed') return false;
+        if($oldProject->status != 'closed') return false;
 
-        $change = $this->project->close($projectID);
+        $change = $this->project->activate($projectID);
 
         $project = $this->project->getById($projectID);
-        if($project->status != 'closed') return false;
+        if($project->status != 'doing') return false;
 
         return true;
     }
@@ -46,7 +46,6 @@ class Tester
 
 $t = new Tester('admin');
 
-/* Close($projectID). */
-r($t->checkStatus(20)) && p() && e('1'); //关闭id为20状态不是closed的项目
-r($t->checkStatus(26)) && p() && e('0'); //关闭id为26状态是closed的项目
-r($t->checkStatus(41)) && p() && e('0'); //关闭id为41状态是suspended的项目
+/* Activate($projectID). */
+r($t->checkStatus(66)) && p() && e('1'); //开始id为66状态不是closed的项目
+r($t->checkStatus(67)) && p() && e('0'); //开始id为67状态是closed的项目

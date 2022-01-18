@@ -23,6 +23,14 @@ class Tester
         $this->project = $tester->loadModel('project');
     }
 
+    /**
+     * checkMembers 
+     * 
+     * @param  array  $members 
+     * @param  array  $users 
+     * @access public
+     * @return bool
+     */
     public function checkMembers($members, $users)
     {
         foreach($users as $user)
@@ -32,6 +40,15 @@ class Tester
         return true;
     }
 
+    /**
+     * getTeamMembers 
+     * 
+     * @param  int    $projectID 
+     * @param  array  $users 
+     * @param  bool   $tutorial 
+     * @access public
+     * @return int
+     */
     public function getTeamMembers($projectID, $users, $tutorial = false)
     {
         if($tutorial) define('TUTORIAL', true);
@@ -44,5 +61,6 @@ class Tester
 
 $t = new Tester('admin');
 
+/* GetTeamMembers($projectID). */
 r($t->getTeamMembers(11, array('admin', 'pm92'))) && p() && e('2'); //获取id为11的项目团队成员个数
 r($t->getTeamMembers(11, array('admin'), true))   && p() && e('1'); //获取id为11的项目团队成员个数，开启新手引导
