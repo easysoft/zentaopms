@@ -221,6 +221,9 @@ $(document).ready(function()
             $('#sonarProject .input-group').append(html);
             $('#sonarProject #projectKey').chosen({drop_direction: 'auto'});
         })
+
+        /* There has been a problem with handling the prompt label. */
+        $('#projectKeyLabel').remove();
     })
 
     var scheduleOption = "<option value='schedule'>" + $('#triggerType').find('[value=schedule]').text() + "</option>";
