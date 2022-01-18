@@ -532,7 +532,7 @@ class commonModel extends model
                         {
                             $params       = "programID=0&copyProjectID=0&extra=from=global";
                             $createMethod = 'createGuide';
-                            $attr         = 'data-toggle="modal" data-target="#guideDialog"';
+                            $attr         = 'data-toggle="modal"';
                         }
                         else
                         {
