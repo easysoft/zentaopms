@@ -64,14 +64,7 @@ $(function()
         }
     });
 
-    if(projectModel == 'kanban' || projectModel == 'waterfall')
-    {
-        $('#productsBox .input-group').each(function()
-        {
-            $(this).addClass('required');
-            return false;
-        } );
-    }
+    if(projectModel == 'kanban' || projectModel == 'waterfall') addProductsRequiredClass();
 
     oldProject = $("#project").val();
     $('#project').change(function()

@@ -1,3 +1,19 @@
+/**
+ * Add link products required class.
+ *
+ * @access public
+ * @return void
+ */
+function addProductsRequiredClass()
+{
+    $('#productsBox .input-group').removeClass('required');
+    $('#productsBox .input-group').each(function()
+    {
+        $(this).addClass('required');
+        return false;
+    } );
+}
+
 function switchStatus(projectID, status)
 {
   if(status) location.href = createLink('project', 'task', 'project=' + projectID + '&type=' + status);
@@ -166,15 +182,7 @@ function loadBranches(product)
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
-    if(projectModel == 'kanban' || projectModel == 'waterfall')
-    {
-        $('#productsBox .input-group').removeClass('required');
-        $('#productsBox .input-group').each(function()
-        {
-            $(this).addClass('required');
-            return false;
-        } );
-    }
+    if(projectModel == 'kanban' || projectModel == 'waterfall') addProductsRequiredClass();
 }
 
 /**
