@@ -1262,4 +1262,18 @@ EOF;
             die(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
     }
+
+    /**
+     * Switch vision by ajax.
+     *
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function ajaxSwitchVision($vision)
+    {
+        $_SESSION['vision'] = $vision;
+        $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
+        echo js::locate($this->createLink('my', 'index'), 'parent');
+    }
 }

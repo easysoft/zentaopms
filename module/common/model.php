@@ -406,6 +406,10 @@ class commonModel extends model
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
+
+                $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
+                echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchTo, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
+
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
                 if(!commonModel::isTutorialMode())
