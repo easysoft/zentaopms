@@ -458,7 +458,7 @@ class taskModel extends model
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'task');
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'task');
         return $mails;
     }
 
