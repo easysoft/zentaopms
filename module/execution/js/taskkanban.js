@@ -499,6 +499,7 @@ function findDropColumns($element, $root)
     {
         if(!colRules) return false;
         if(colRules === true) return true;
+        if($.cookie('isFullScreen') == 1) return false;
 
         var $newCol = $(this);
         var newCol = $newCol.data();
