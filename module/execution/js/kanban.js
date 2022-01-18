@@ -605,6 +605,7 @@ function renderCount($count, count, column)
 function renderHeaderCol($column, column, $header, kanbanData)
 {
     if(groupBy != 'default') return;
+
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
