@@ -938,7 +938,7 @@ class kanbanModel extends model
             ->fetchgroup('lane', 'column');
 
         /* Get group objects. */
-        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -1017,7 +1017,7 @@ class kanbanModel extends model
             ->fetchGroup('lane', 'id');
 
         /* Get group objects. */
-        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -1117,7 +1117,7 @@ class kanbanModel extends model
     {
         /* Get card  data. */
         $cardList = array();
-        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -2148,7 +2148,7 @@ class kanbanModel extends model
 
         if($laneType == 'story')
         {
-            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'byModule', 0, 'story', $otherCardList);
+            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory', 0, 'story', $otherCardList);
             foreach($stories as $storyID => $story)
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
