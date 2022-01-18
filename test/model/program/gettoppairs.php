@@ -2,13 +2,21 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+/**
+
+title=测试 programModel::getTopPairs();
+cid=1
+pid=1
+
+*/
+
 class Tester
 {
     public function __construct($user)
     {   
         global $tester;
 
-        su('admin');
+        su($user);
         $this->program = $tester->loadModel('program');
     }   
 
@@ -21,14 +29,9 @@ class Tester
 
 $t = new Tester('admin');
 
-/**
-
-title=测试 programModel::getTopPairs();
-cid=1
-pid=1
-
-*/
-
-r($t->getTopPairs('count')) && p()    && e('10'); // 查看父项目集的个数
+/* getTopPairs(). */
 r($t->getTopPairs())        && p('1') && e('项目集1'); // 查看id=1的父项目集
+
+/* Count(). */
+r($t->getTopPairs('count')) && p()    && e('10'); // 查看父项目集的个数
 

@@ -10,6 +10,30 @@ pid=1
 
 */
 
-$program = $tester->loadModel('program');
-a($program->getTopByID(1));
-r($program->getTopByID(1)) && p() && e(''); // 
+class Tester
+{
+    public function __construct($user)
+    {
+        global $tester;
+
+        su($user);
+        $this->program = $tester->loadModel('program');
+    }
+
+    public function getById($programID = 0)
+    {
+        if(empty($this->program->getTopById($programID)))
+        {
+            return array('code' => 'fail', 'message' => 'Not Found');
+        }
+        else
+        {
+            return $this->program->getByTopId($programID);
+        }
+    }
+}
+
+$t = new Tester('admin');
+
+/* GetTopById($programID). */
+r($t->getByID(1)) && p('message') && e('Not Found'); // 获取项目集1最上级的项目集id

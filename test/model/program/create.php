@@ -2,13 +2,21 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+/**
+
+title=测试 programModel::create();
+cid=1
+pid=1
+
+ */
+
 class Tester
 {
     public function __construct($user)
     {
         global $tester;
 
-        su('admin');
+        su($user);
         $this->program = $tester->loadModel('program');
     }
     
@@ -71,13 +79,6 @@ class Tester
 
 $t = new Tester('admin');
 
-/**
-
-title=测试 programModel::create();
-cid=1
-pid=1
-
- */
 r($t->createData(1)) && p('name')                      && e('测试新增项目集一'); // 创建新项目集
 r($t->createData(2)) && p('message[name]:0')           && e('『项目集名称』不能为空。'); // 项目集名称为空时
 r($t->createData(3)) && p('message[begin]:0')          && e('『计划开始』不能为空。'); // 项目集的开始时间为空

@@ -2,13 +2,21 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+/**
+
+title=测试 programModel::getProductPairs();
+cid=1
+pid=1
+
+*/
+
 class Tester
 {
     public function __construct($user)
     {   
         global $tester;
 
-        su('admin');
+        su($user);
         $this->program = $tester->loadModel('program');
     }   
 
@@ -19,7 +27,7 @@ class Tester
         return $this->program->getProductPairs($programID, 'assign', 'all');
     }
 
-    public function getProductPairsByMode($mode = 'assign')
+    public function getProductPairsByMod($mode = 'assign')
     {
         return $this->program->getProductPairs(1, $mode, 'noclosed');
     }
@@ -37,20 +45,16 @@ class Tester
 
 $t = new Tester('admin');
 
-/**
-
-title=测试 programModel::getProductPairs();
-cid=1
-pid=1
-
-
-*/
-
+/* GetProductPairs($programID). */
 r($t->getProductPairsByID('1'))       && p('23')      && e('已关闭的正常产品23'); //根据项目或项目集ID获取关联产品详情
 r($t->getProductPairsByID('1000'))    && p('message') && e('Not Found'); //获取不存在的项目或项目集
-r($t->getProductPairsByMode(all))     && p('1')       && e('正常产品1'); // 根据项目或项目集指派情况获取关联产品详情
+
+/* GetProductPairs('all', $mode, 'noclosed'). */
+r($t->getProductPairsByMod('all'))     && p('1')       && e('正常产品1'); // 根据项目或项目集指派情况获取关联产品详情
+
+/* GetProductPairs('all', 'assign', $status). */
 r($t->getProductPairsByStatus('all')) && p('100')     && e('多平台产品100'); //根据项目或项目集状态获取关联产品详情
 
+/* Count().*/
 r($t->getCount('1', 'assign', 'all'))      && p() && e('10'); //查看ID=1，有指派，所有状态的关联产品数量
 r($t->getCount('1', 'assign', 'noclosed')) && p() && e('6'); //查看ID=1，有指派，未关闭的关联产品数量
-

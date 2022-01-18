@@ -2,7 +2,14 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
-su('admin');
+/**
+
+title=测试 programModel::getList();
+cid=1
+pid=1
+
+*/
+
 class Tester
 {
     public function __construct($user)
@@ -33,15 +40,6 @@ class Tester
 }
 
 $t = new Tester('admin');
-
-/**
-
-title=测试 programModel::getList();
-cid=1
-pid=1
-
-
-*/
 
 /* GetList($status). */
 r($t->getListByStatus('all'))       && p() && e('100'); // 查看所有项目和项目集的个数

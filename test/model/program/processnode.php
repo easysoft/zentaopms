@@ -10,5 +10,18 @@ pid=1
 
 */
 
+class Tester
+{
+    public function __construct($user)
+    {
+        global $tester;
+
+        su($user);
+        $this->program = $tester->loadModel('program');
+    }
+}
+
+$t = new Tester('admin');
+
 $program = $tester->loadModel('program');
 r($program->processNode(1, 0, 1, 1)) && p() && e(''); // 

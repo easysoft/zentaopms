@@ -2,13 +2,21 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+/**
+
+title=测试 programModel::update($programID);
+cid=1
+pid=1
+
+*/
+
 class Tester
 {
     public function __construct($user)
     {
         global $tester;
 
-        su('admin');
+        su($user);
         $this->program = $tester->loadModel('program');
     }
 
@@ -61,14 +69,6 @@ class Tester
 }
 
 $t = new Tester('admin');
-
-/**
-
-title=测试 programModel::update($programID);
-cid=1
-pid=1
-
- */
 
 r($t->updateProgram(10))    && p('0:new')                     && e('测试更新项目集十');// 更新id为10的项目集信息
 r($t->updateProgram(10, 2)) && p('message[begin]:0')          && e('『计划开始』不能为空。');// 当计划开始为空时更新项目集信息

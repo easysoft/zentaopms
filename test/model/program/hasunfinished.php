@@ -8,8 +8,27 @@ title=测试 programModel::hasUnfinished();
 cid=1
 pid=1
 
-*/
+ */
 
-$program     = $tester->loadModel('program');
-$programInfo = $program->getById(1); 
-r($program->hasUnfinished($programInfo)) && p() && e(''); // 通过id字段获取存在的项目集
+class Tester
+{
+    public function __construct($user)
+    {
+        global $tester;
+
+        su($user);
+        $this->program = $tester->loadModel('program');
+    }
+
+    public function getUnfinished($programID)
+    {
+        $program = $this->program->getById($programID);
+
+        return $this->program->hasUnfinished($program);
+    }
+}
+
+$t = new Tester('admin');
+
+/* HasUnfinished($program). */
+r($t->getUnfinished(1)) && p() && e('88'); // 获取项目集1下未完成的项目和项目集

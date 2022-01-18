@@ -2,6 +2,14 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+/**
+
+title=测试 programModel::getProjectList();
+cid=1
+pid=1
+
+*/
+
 class Tester
 {
     public function __construct($user)
@@ -18,7 +26,7 @@ class Tester
         return count($this->program->getProjectList($programID));
     }
 
-    public function getListByBrowseType($browseType = 'all')
+    public function getListByStatus($browseType = 'all')
     {
         $projects = $this->program->getProjectList('0', $browseType);
         
@@ -55,25 +63,19 @@ class Tester
 
 $t = new Tester('admin');
 
-/**
-
-title=测试 programModel::getProjectList($programID = 0, $browseType = 'all', $queryID = 0, $orderBy = 'id_desc', $pager = null, $programTitle = 0, $involved = 0, $queryAll = false);
-cid=1
-pid=1
-
-*/
-
 /* GetProjectList($programID). */
-r($t->getListByProgramID(0)) && p() && e('90'); // 查看所有项目的个数
+r($t->getListByProgramID(0)) && p() && e('90'); // 查看当前项目集下所有项目的个数
 
 /* GetProjectList(0, $browseType). */
-r($t->getListByBrowseType(doing)) && p() && e('44'); // 查看所有项目的个数
+r($t->getListByStatus('doing')) && p() && e('44'); // 查看当前项目集下所有状态为进行中的项目的个数
 
 /* GetProjectList(0, 'all', 0, $orderBy). */
-r($t->getListByOrder('name_desc')) && p() && e('1'); // 查看所有项目的个数
-r($t->getListByOrder('id_desc'))   && p() && e('1'); // 查看所有项目的个数
+r($t->getListByOrder('name_desc')) && p() && e('1'); // 根据name倒序查看所有项目
+r($t->getListByOrder('id_desc'))   && p() && e('1'); // 根据id倒序查看所有项目的个数
 
-r($t->getListAddProgramTitle(0))   && p('11:name') && e('项目1'); // 查看所有项目的个数
+/* GetProjectList(0, 'all', 0, 'id_desc', '', $programTitle). */
+r($t->getListAddProgramTitle(0))   && p('11:name') && e('项目1'); // 查看所有项目（包含所属项目集名称）
 
-r($t->getListByInvolved(1))   && p('11:name') && e('项目1'); // 查看所有项目的个数
-r($t->getListByInvolved(1, 'count'))   && p() && e('1'); // 查看所有项目的个数
+/* GetProjectList(0, 'all', 0, 'id_desc', '', 0, $involved). */
+r($t->getListByInvolved(1))   && p('11:name') && e('项目1'); // 查看当前用户参与的项目
+r($t->getListByInvolved(1, 'count'))   && p() && e('1'); // 查看当前用户参与的项目的个数
