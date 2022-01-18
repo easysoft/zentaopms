@@ -1335,9 +1335,9 @@ class docModel extends model
             /* Project permissions for DocLib whitelist. */
             if($this->app->tab == 'doc')
             {
-                $myObjects = $this->dao->select('t2.id, t2.name')->from(TABLE_DOCLIB)->alias('t1')
-                    ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where("CONCAT(',', t1.users, ',')")->like("%,{$this->app->user->account},%")
+                $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+                    ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+                    ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->fetchPairs();
             }
 
