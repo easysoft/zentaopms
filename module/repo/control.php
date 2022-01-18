@@ -405,8 +405,6 @@ class repo extends control
         /* Cache infos. */
         if($refresh or !$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->repo->cacheTime)
         {
-            $this->repo->syncCommit($repoID, $branchID);
-
             /* Get cache infos. */
             $infos = $this->scm->ls($path, $revision);
 
