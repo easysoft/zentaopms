@@ -356,7 +356,7 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
-            ->fetchAll();
+            ->fetchAll('id');
 
         $products = array();
         foreach($projectProducts as $product)
