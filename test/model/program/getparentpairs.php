@@ -2,7 +2,28 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
-su('admin');
+class Tester
+{
+    public function __construct($user)
+    {   
+        global $tester;
+
+        su('admin');
+        $this->program = $tester->loadModel('program');
+    }   
+
+    public function getParentPairs()
+    {
+        return $this->program->getParentPairs();
+    }
+
+    public function getCount()
+    {
+        return count($this->program->getParentPairs());
+    }
+}
+
+$t = new Tester('admin');
 
 /**
 
@@ -12,5 +33,5 @@ pid=1
 
 */
 
-$program = $tester->loadModel('program');
-r($program->getParentPairs()) && p('1') && e(''); // 获取父项目集
+r($t->getParentPairs()) && p('1') && e(''); // 获取父项目集的id/name关联数组
+r($t->getCount())       && p()    && e('11'); //

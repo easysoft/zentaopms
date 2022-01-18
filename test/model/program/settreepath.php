@@ -2,6 +2,32 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
+class Tester
+{
+    public function __construct($user)
+    {
+        global $tester;
+
+        su('admin');
+        $this->program = $tester->loadModel('program');
+    }
+
+    public function setTreePath($programID)
+    {
+        $programPath = $this->program->setTreePath($programID);
+        if($programPath)
+        {
+            return $this->program->getById($programID);
+        }
+        else
+        {
+            return 0;
+        }
+    }
+}
+
+$t = new Tester('admin');
+
 /**
 
 title=测试 programModel::setTreePath();
@@ -10,6 +36,5 @@ pid=1
 
 */
 
-$program = $tester->loadModel('program');
-r($program->setTreePath(11)) && p() && e('1'); // 设置id=11的项目集的path
-r($program->getById(11)) && p('path') && e('11,'); // 查找id=11的项目集的path
+r($t->setTreePath(12)) && p('path') && e('12,'); // 查找id=11的项目集的path
+r($t->setTreePath(1000)) && p('path') && e('0'); // 查找不存在的id=1000的项目集的path

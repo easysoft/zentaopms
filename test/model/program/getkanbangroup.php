@@ -15,5 +15,6 @@ pid=1
 $program = $tester->loadModel('program');
 
 $result = 'Not Found';
+r($program->getKanbanGroup()) && p() && e('');
 if(empty($program->getKanbanGroup()['my'])) r($result) && p() && e($result); // 获取我的看板组
 if(empty($program->getKanbanGroup()['other'])) r($result) && p() && e($result); // 获取其他看板组

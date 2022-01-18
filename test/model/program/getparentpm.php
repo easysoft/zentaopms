@@ -2,7 +2,23 @@
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 
-su('admin');
+class Tester
+{
+    public function __construct($user)
+    {   
+        global $tester;
+
+        su('admin');
+        $this->program = $tester->loadModel('program');
+    }
+
+    public function getParentPM($programIdList)
+    {
+        return $this->program->getParentPM($programIdList);
+    }
+}
+
+$t = new Tester('admin');
 
 /**
 
@@ -12,5 +28,4 @@ pid=1
 
 */
 
-$program = $tester->loadModel('program');
-r($program->getParentPM()) && p() && e(''); // 
+r($t->getParentPM('1')) && p() && e('0'); // 

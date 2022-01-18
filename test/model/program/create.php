@@ -21,7 +21,7 @@ class Tester
 
         $programID = $this->program->create();
 
-        if(dao::isError()) return array('code' => 'fail','message' => dao::getError());
+        if(dao::isError()) return array('message' => dao::getError());
 
         $program = $this->program->getById($programID);
 
