@@ -840,6 +840,7 @@ class kanbanModel extends model
             ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
             ->andWhere('archived')->eq(0)
             ->andWhere('t2.kanban')->eq($kanbanID)
+            ->andWhere('t2.type')->eq('common')
             //->orderBy('`order` asc')
             ->fetchAll('id');
 

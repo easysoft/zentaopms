@@ -5401,7 +5401,7 @@ class upgradeModel extends model
             $cell->kanban = $key[0];
             $cell->lane   = $key[1];
             $cell->column = $key[2];
-            $cell->type   = 'card';
+            $cell->type   = 'common';
             $cell->cards  = $cards;
 
             $this->dao->insert(TABLE_KANBANCELL)->data($cell)->exec();
