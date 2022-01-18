@@ -599,6 +599,8 @@ class bug extends control
         /* Get executions. */
         $executions = array(0 => '');
         if(isset($projects[$projectID]) or $this->config->systemMode == 'classic') $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $execution  = $executionID ? $this->execution->getByID($executionID) : '';
+        $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
@@ -609,8 +611,6 @@ class bug extends control
             $this->config->bug->create->requiredFields = str_replace(',project,', ',execution,', ",{$this->config->bug->create->requiredFields},");
             $this->config->bug->create->requiredFields = trim($this->config->bug->create->requiredFields, ',');
         }
-
-        $execution = $executionID ? $this->execution->getByID($executionID) : '';
 
         $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $customFields;
@@ -623,7 +623,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
         $this->view->projects         = $projects;
-        $this->view->executions       = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
+        $this->view->executions       = $executions;
         $this->view->builds           = $builds;
         $this->view->moduleID         = (int)$moduleID;
         $this->view->projectID        = $projectID;
