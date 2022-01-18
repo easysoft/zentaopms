@@ -263,7 +263,6 @@ $lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height bas
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'The number of cards must be a positive integer greater than 2.';
 
-
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';
 $lang->kanbanregion->default = 'Default Region';
