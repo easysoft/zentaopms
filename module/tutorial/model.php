@@ -154,6 +154,8 @@ class tutorialModel extends model
         $project->PO        = $this->app->user->account;
         $project->QD        = $this->app->user->account;
         $project->RD        = $this->app->user->account;
+        $project->openedBy  = 'admin';
+        $project->whitelist = '';
         $project->budget    = 0;
         $project->deleted   = '0';
 
