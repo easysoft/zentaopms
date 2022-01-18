@@ -25,16 +25,16 @@ class xuanxuanIm extends imModel
         $products    = empty($products) ? array() : array_keys($products);
         $executions  = empty($executions) ? array() : array_keys($executions);
         $libIdList   = array_keys($this->loadModel('doc')->getLibs('all'));
-        $productID   = isset($products[0])   ? $products[0]   : -1;
-        $executionID = isset($executions[0]) ? $executions[0] : -1;
+        $productID   = isset($products[0])   ? $products[0]   : 0;
+        $executionID = isset($executions[0]) ? $executions[0] : 0;
         $libID       = isset($libIdList[0])  ? $libIdList[0]  : 1;
 
         $actions = new stdclass();
-        if(common::hasPriv('bug',   'create'))  $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('story', 'create'))  $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('task',  'create'))  $actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "execution=$executionID", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('doc',   'create'))  $actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "objectType=&objectID=0&libID=0", 'xhtml')), 'height' => "600px", 'width' => "800px");
-        if(common::hasPriv('todo',  'create'))  $actions->createTodo  = array('title' => $this->lang->im->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "800px");
+        if(common::hasPriv('bug',   'create'))  $actions->createBug   = array('title' => $this->lang->im->createBug,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('bug', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('story', 'create'))  $actions->createStory = array('title' => $this->lang->im->createStory, 'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('story', 'create', "product=$productID", 'xhtml')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('task',  'create'))  $actions->createTask  = array('title' => $this->lang->im->createTask,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('task', 'create', "execution=$executionID", 'xhtml')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('doc',   'create'))  $actions->createDoc   = array('title' => $this->lang->im->createDoc,   'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('doc', 'create', "objectType=&objectID=0&libID=0", 'xhtml')), 'height' => "600px", 'width' => "1200px");
+        if(common::hasPriv('todo',  'create'))  $actions->createTodo  = array('title' => $this->lang->im->createTodo,  'url' => $baseURL . str_replace('/x.php', '/index.php', helper::createLink('todo', 'create', '', 'xhtml')), 'height' => "600px", 'width' => "1200px");
         $urls = array();
         foreach($this->config->im->cards as $moduleName => $methods)
         {
