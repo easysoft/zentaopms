@@ -2088,18 +2088,15 @@ class kanbanModel extends model
         $execution = $this->loadModel('execution')->getByID($executionID);
         if($execution->type == 'kanban')
         {
-            $regionIdList = $this->dao->select('id')->from(TABLE_KANBANREGION)
-                ->where('deleted')->eq(0)
-                ->andWhere('kanban')->eq($executionID)
-                ->fetchPairs();
-
-            $lanes = $this->dao->select('t1.*')->from(TABLE_KANBANLANE)->alias('t1')
-                ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+            $lanes = $this->dao->select('t2.*')->from(TABLE_KANBANREGION)->alias('t1')
+                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+                ->leftJoin(TABLE_KANBANCELL)->alias('t3')->on('t2.id=t3.lane')
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.execution')->eq($executionID)
-                ->andWhere('t1.type')->eq($laneType)
-                ->andWhere('t1.region')->in($regionIdList)
-                ->beginIF(!empty($cardID))->andWhere('t2.cards')->like("%,$cardID,%")->fi()
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.kanban')->eq($executionID)
+                ->andWhere('t2.execution')->eq($executionID)
+                ->andWhere('t2.type')->eq($laneType)
+                ->beginIF(!empty($cardID))->andWhere('t3.cards')->like("%,$cardID,%")->fi()
                 ->orderBy('t1.`order` asc')
                 ->fetchAll('id');
 
