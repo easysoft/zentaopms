@@ -610,6 +610,8 @@ class bug extends control
             $this->config->bug->create->requiredFields = trim($this->config->bug->create->requiredFields, ',');
         }
 
+        $execution = $executionID ? $this->execution->getByID($executionID) : '';
+
         $this->view->title        = isset($this->products[$productID]) ? $this->products[$productID] . $this->lang->colon . $this->lang->bug->create : $this->lang->bug->create;
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->bug->custom->createFields;
@@ -621,7 +623,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
         $this->view->projects         = $projects;
-        $this->view->executions       = $executions;
+        $this->view->executions       = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
         $this->view->builds           = $builds;
         $this->view->moduleID         = (int)$moduleID;
         $this->view->projectID        = $projectID;
