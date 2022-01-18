@@ -103,8 +103,14 @@ $(function()
     oldOpenedBuild         = '';
     oldTaskID              = $('#oldTaskID').val() || 0;
 
-    loadExecutionRelated($('#execution').val());
-    if(parseInt($('#project').val()) && !parseInt($('#execution').val())) loadProjectTeamMembers($('#project').val());
+    if(parseInt($('#execution').val()))
+    {
+        loadExecutionRelated($('#execution').val());
+    }
+    else
+    {
+        if(parseInt($('#project').val())) loadProjectTeamMembers($('#project').val());
+    }
 
     if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
