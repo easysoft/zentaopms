@@ -24,7 +24,7 @@ class Tester
     }
 
     /**
-     * checkStatus 
+     * Check project status after suspend a project.
      * 
      * @param  int    $projectID 
      * @access public

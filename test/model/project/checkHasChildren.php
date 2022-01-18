@@ -21,7 +21,7 @@ class Tester
     }
 
     /**
-     * checkHasChildren 
+     * Check has children project. 
      * 
      * @param  int    $projectID 
      * @access public

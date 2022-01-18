@@ -24,7 +24,7 @@ class Tester
     }
 
     /**
-     * checkMembers 
+     * Check members. 
      * 
      * @param  array  $members 
      * @param  array  $users 
@@ -41,7 +41,7 @@ class Tester
     }
 
     /**
-     * getTeamMembers 
+     * Get team memberm.
      * 
      * @param  int    $projectID 
      * @param  array  $users 

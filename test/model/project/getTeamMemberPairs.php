@@ -24,7 +24,7 @@ class Tester
     }
 
     /**
-     * getTeamMemberPairs 
+     * Get team member pairs. 
      * 
      * @param  int    $projectID 
      * @access public

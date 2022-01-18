@@ -21,7 +21,7 @@ class Tester
     }
 
     /**
-     * getByStatus 
+     * Get executions by status. 
      * 
      * @param  string $status 
      * @access public
@@ -42,7 +42,7 @@ class Tester
     }
 
     /**
-     * getByProject 
+     * Get executions by project. 
      * 
      * @param  int    $projectID 
      * @access public
@@ -60,7 +60,7 @@ class Tester
     }
 
     /**
-     * getListByOrder 
+     * Get executions by order.
      * 
      * @param  string $orderBy 
      * @access public

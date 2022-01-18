@@ -21,7 +21,7 @@ class Tester
     }
 
     /**
-     * getExecutionData 
+     * Get executions from getDataByProject.
      * 
      * @param  int    $projectID 
      * @param  int    $type 
@@ -30,13 +30,13 @@ class Tester
      */
     public function getExecutionData($projectID, $type) 
     {
-        $result = $this->project->getDataByProject(TABLE_EXECUTION, $projectID, $type);
-        if(empty($result)) return false;
-        return $result;
+        $executions = $this->project->getDataByProject(TABLE_EXECUTION, $projectID, $type);
+        if(empty($executions)) return false;
+        return $executions;
     }        
 
     /**
-     * getBuildData 
+     * Get builds from getDataByProject.
      * 
      * @param  int    $projectID 
      * @access public
@@ -44,27 +44,27 @@ class Tester
      */
     public function getBuildData($projectID)
     {
-        $result = $this->project->getDataByProject(TABLE_BUILD, $projectID);
-        if(empty($result)) return false;
-        return $result;
+        $builds = $this->project->getDataByProject(TABLE_BUILD, $projectID);
+        if(empty($builds)) return false;
+        return $builds;
     }      
 
     /**
-     * getRealseData 
+     * Get releases from getDataByProject.
      * 
      * @param  int    $projectID 
      * @access public
      * @return array
      */
-    public function getRealseData($projectID)
+    public function getReleaseData($projectID)
     {
-        $result = $this->project->getDataByProject(TABLE_RELEASE, $projectID);
-        if(empty($result)) return false;
-        return $result;
+        $releases = $this->project->getDataByProject(TABLE_RELEASE, $projectID);
+        if(empty($releases)) return false;
+        return $releases;
     } 
 }
 
-/* 还有case bug testtask doc表 */
+/* 还有case bug testtask doc表要写，暂时表中没数据 */
 $t = new Tester();
 
 /* GetDataByProject(TABLE_EXECUTION, $projectID, $type). */
@@ -78,9 +78,9 @@ r($t->getBuildData(131))              && p('id') && e('1'); //获取parent为131
 r($t->getBuildData(132))              && p('id') && e('6'); //获取parent为132的首个版本的id
 r($t->getBuildData(10000))            && p('id') && e('0'); //获取parent为10000的首个版本的id
 
-/* GetDataByProject(TABLE_EXECUTION, $projectID, $type). */
-r($t->getRealseData(131))             && p('id') && e('1'); //获取parent为132的首个发布的id
-r($t->getRealseData(132))             && p('id') && e('6'); //获取parent为132的首个发布的id
-r($t->getRealseData(10000))           && p('id') && e('0'); //获取parent为10000的首个发布的id
+/* GetDataByProject(TABLE_RELEASE, $projectID, $type). */
+r($t->getReleaseData(131))             && p('id') && e('1'); //获取parent为132的首个发布的id
+r($t->getReleaseData(132))             && p('id') && e('6'); //获取parent为132的首个发布的id
+r($t->getReleaseData(10000))           && p('id') && e('0'); //获取parent为10000的首个发布的id
 
 

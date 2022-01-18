@@ -21,7 +21,7 @@ class Tester
     }
 
     /**
-     * getParentName 
+     * Get parentName.
      * 
      * @param  int    $projectID 
      * @access public

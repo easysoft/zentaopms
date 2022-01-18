@@ -22,7 +22,7 @@ class Tester
     }
 
     /**
-     * getByIdList 
+     * Check projectList get from getByIdList.
      * 
      * @param  array  $projectIdList 
      * @param  int    $count 

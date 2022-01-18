@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 projectModel::activate();
+title=测试 projectModel::start();
 cid=1
 pid=1
 
@@ -24,7 +24,7 @@ class Tester
     }
 
     /**
-     * Check project status after activate a project. 
+     * Check project status after start a project.
      * 
      * @param  int    $projectID 
      * @access public
@@ -33,10 +33,10 @@ class Tester
     public function checkStatus($projectID)
     {
         $oldProject = $this->project->getById($projectID);
-        if($oldProject->status != 'closed') return false;
+        if($oldProject->status != 'suspended' and $oldProject->status != 'wait') return false;
 
-        $change = $this->project->activate($projectID);
-
+        $change = $this->project->start($projectID);
+ 
         $project = $this->project->getById($projectID);
         if($project->status != 'doing') return false;
 
@@ -46,6 +46,9 @@ class Tester
 
 $t = new Tester('admin');
 
-/* Activate($projectID). */
-r($t->checkStatus(66)) && p() && e('1'); //开始id为66状态不是closed的项目
-r($t->checkStatus(67)) && p() && e('0'); //开始id为67状态是closed的项目
+/* Start($projectID). */
+r($t->checkStatus(81)) && p() && e('1'); // 开始id为81状态是suspended的项目
+r($t->checkStatus(83)) && p() && e('1'); // 开始id为83状态是wait的项目
+r($t->checkStatus(82)) && p() && e('0'); // 开始id为82状态是closed的项目
+r($t->checkStatus(85)) && p() && e('0'); // 开始id为85状态是doing的项目
+

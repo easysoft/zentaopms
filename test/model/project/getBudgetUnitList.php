@@ -21,7 +21,7 @@ class Tester
     }
 
     /**
-     * checkBudgetUnitList 
+     * Check budget unit list.
      * 
      * @param  string $checkList 
      * @access public
