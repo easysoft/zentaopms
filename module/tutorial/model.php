@@ -293,6 +293,7 @@ class tutorialModel extends model
         $execution->totalLeft      = 0;
         $execution->totalHours     = 0;
         $execution->totalEstimate  = 0;
+        $execution->displayCards   = 0;
         return $execution;
     }
 
