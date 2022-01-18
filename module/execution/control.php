@@ -1978,7 +1978,7 @@ class execution extends control
 
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        $avatarPairs = $this->user->getAvatarPairs();
         foreach($avatarPairs as $account => $avatar)
         {
             if(!$avatar) continue;

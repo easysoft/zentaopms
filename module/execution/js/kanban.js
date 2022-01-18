@@ -338,7 +338,7 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '" data-toggle="modal" data-width="80%"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
-    if(!user.avatar && window.users && window.users[user.account]) user = {avatar: users[user.account].avatar, account: user.account, realname: users[user.account]};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = {avatar: userList[user.account].avatar, account: user.account, realname: userList[user.account]};
 
     var $noPrivAvatar = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" />').avatar({user: user});
     if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
