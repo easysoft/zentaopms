@@ -200,6 +200,9 @@ class install extends control
             $this->install->grantPriv();
             if(dao::isError()) die(js::error(dao::getError()));
 
+            $this->install->updateLang();
+            if(dao::isError()) die(js::error(dao::getError()));
+
             if($this->post->importDemoData) $this->install->importDemoData();
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
 
