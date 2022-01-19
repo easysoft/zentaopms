@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('acl', $kanban->acl);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->edit;?></h2>
@@ -31,6 +30,7 @@
         <th><?php echo $lang->kanban->archived;?></th>
         <td><?php echo html::radio('archived', $lang->kanban->enableArchived, $kanban->archived);?></td>
       </tr>
+      <?php if($type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanban->owner;?></th>
         <td><?php echo html::select('owner', $users, $kanban->owner, "class='form-control chosen' data-drop_direction='down'");?></td>
@@ -44,6 +44,7 @@
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->kanban->desc;?></th>
         <td colspan='2'>
@@ -51,14 +52,12 @@
           <?php echo html::textarea('desc', $kanban->desc, "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <tr>
-        <th><?php echo $lang->kanban->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanban->aclList, $kanban->acl == 'open' ? 'extend' : $kanban->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-      </tr>
+      <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, $kanban->whitelist, 'class="form-control chosen" multiple');?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>

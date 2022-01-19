@@ -57,6 +57,7 @@ $lang->kanban->restoreColumn       = 'Restore Column';
 $lang->kanban->restoreCard         = 'Restore Card';
 $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
+$lang->kanban->showClosed          = 'Closed';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -223,16 +224,17 @@ $lang->kanbanspace->lastEditedBy   = 'Edited By';
 $lang->kanbanspace->lastEditedDate = 'Edited Date';
 $lang->kanbanspace->closedBy       = 'Closed By';
 $lang->kanbanspace->closedDate     = 'Closed Date';
+$lang->kanbanspace->type           = 'Type';
 
 $lang->kanbanspace->empty = 'No Space';
 
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
 $lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
-$lang->kanbanspace->featureBar['all']    = 'All';
-$lang->kanbanspace->featureBar['my']     = 'My';
-$lang->kanbanspace->featureBar['other']  = 'Other';
-$lang->kanbanspace->featureBar['closed'] = 'Closed';
+$lang->kanbanspace->featureBar['private']     = 'Private Space';
+$lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
+$lang->kanbanspace->featureBar['public']      = 'Public Space';
+$lang->kanbanspace->featureBar['involved']    = 'Involved';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;
