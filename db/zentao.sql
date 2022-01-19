@@ -648,6 +648,7 @@ CREATE TABLE IF NOT EXISTS `zt_job` (
 CREATE TABLE `zt_kanbanspace` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(255) NOT NULL,
+  `type` varchar(50) NOT NULL,
   `owner` varchar(30) NOT NULL,
   `team` text NOT NULL,
   `desc` text NOT NULL,
