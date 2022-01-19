@@ -821,6 +821,25 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 showIframe = true;
             }
         }
+
+        if(fromLaneID != toLaneID && fromColID == toColID)
+        {
+            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
+            $.ajax(
+            {
+                method:   'post',
+                dataType: 'json',
+                url:       link,
+                success: function(data)
+                {
+                    updateRegion(regionID, data[regionID]);
+                },
+                error: function(xhr, status, error)
+                {
+                    showErrorMessager(error || lang.timeout);
+                }
+            });
+        }
     }
 
     /* Bug lane. */
