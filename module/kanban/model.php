@@ -413,12 +413,11 @@ class kanbanModel extends model
      * @param  int $kanbanID
      * @param  int $regionID
      * @param  int $groupID
-     * @param  int $laneID
      * @param  int $columnID
      * @access public
      * @return void
      */
-    public function createCard($kanbanID, $regionID, $groupID, $laneID, $columnID)
+    public function createCard($kanbanID, $regionID, $groupID, $columnID)
     {
         if($this->post->estimate < 0)
         {
@@ -446,7 +445,7 @@ class kanbanModel extends model
             ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
-            ->remove('uid')
+            ->remove('uid,lane')
             ->get();
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
@@ -461,7 +460,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, $laneID, $columnID, 'common', $cardID);
+            $this->addKanbanCell($kanbanID, $this->post->lane, $columnID, 'common', $cardID);
 
             return $cardID;
         }
@@ -770,6 +769,23 @@ class kanbanModel extends model
         }
 
         return $laneGroup;
+    }
+
+    /**
+     * Get kanban lane pairs by group id.
+     *
+     * @param  int    $groupID
+     * @param  string $orderBy
+     * @access public
+     * @return array
+     */
+    public function getLanePairsByGroup($groupID, $orderBy = '`order`_asc')
+    {
+        return $this->dao->select('id,name')->from(TABLE_KANBANLANE)
+            ->where('deleted')->eq(0)
+            ->andWhere('`group`')->eq($groupID)
+            ->orderBy($orderBy)
+            ->fetchPairs();
     }
 
     /**

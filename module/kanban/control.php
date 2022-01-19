@@ -678,14 +678,16 @@ class kanban extends control
     {
         if($_POST)
         {
-            $cardID = $this->kanban->createCard($kanbanID, $regionID, $groupID, $laneID, $columnID);
+            $cardID = $this->kanban->createCard($kanbanID, $regionID, $groupID, $columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             $this->loadModel('action')->create('kanbancard', $cardID, 'created');
 
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
+
         $this->display();
     }
 
