@@ -333,17 +333,16 @@ class kanbanModel extends model
     public function splitColumn($columnID)
     {
         $this->loadModel('action');
-        $data            = fixer::input('post')->get();
-        $column          = $this->getColumnByID($columnID);
-        $maxOrder        = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
-        $order           = $maxOrder ? $maxOrder + 1 : 1;
-        $sumChildLimit   = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
+        $data          = fixer::input('post')->get();
+        $column        = $this->getColumnByID($columnID);
+        $maxOrder      = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
+        $order         = $maxOrder ? $maxOrder + 1 : 1;
+        $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
 
-        $childrenColumn  = array();
+        $childrenColumn = array();
         foreach($data->name as $i => $name)
         {
             $childColumn = new stdclass();
-            $childColumn->lane   = $column->lane;
             $childColumn->parent = $column->id;
             $childColumn->region = $column->region;
             $childColumn->group  = $column->group;
@@ -386,9 +385,22 @@ class kanbanModel extends model
             if(!dao::isError())
             {
                 $childColumnID = $this->dao->lastInsertID();
-                if($i == 1) $this->dao->update(TABLE_KANBANCARD)->set('`column`')->eq($childColumnID)->where('`column`')->eq($columnID)->exec();
                 $this->dao->update(TABLE_KANBANCOLUMN)->set('type')->eq("column{$childColumnID}")->where('id')->eq($childColumnID)->exec();
                 $this->action->create('kanbanColumn', $childColumnID, 'created');
+
+                $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('`column`')->eq($column->id)->fetchAll();
+                foreach($cellList as $cell)
+                {
+                    $newCell = new stdclass();
+                    $newCell->kanban = $cell->kanban;
+                    $newCell->lane   = $cell->lane;
+                    $newCell->column = $childColumnID;
+                    $newCell->type   = 'common';
+                    $newCell->cards  = $i == 1 ? $cell->cards : '';
+
+                    $this->dao->insert(TABLE_KANBANCELL)->data($newCell)->exec();
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('id')->eq($cell->id)->exec();
+                }
             }
         }
 
@@ -836,6 +848,7 @@ class kanbanModel extends model
             ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
             ->andWhere('archived')->eq(0)
             ->andWhere('t2.kanban')->eq($kanbanID)
+            ->andWhere('t2.type')->eq('common')
             //->orderBy('`order` asc')
             ->fetchAll('id');
 
@@ -938,7 +951,7 @@ class kanbanModel extends model
             ->fetchgroup('lane', 'column');
 
         /* Get group objects. */
-        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -1017,7 +1030,7 @@ class kanbanModel extends model
             ->fetchGroup('lane', 'id');
 
         /* Get group objects. */
-        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID);
+        if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -1116,7 +1129,8 @@ class kanbanModel extends model
     public function getKanban4Group($executionID, $browseType, $groupBy)
     {
         /* Get card  data. */
-        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID);
+        $cardList = array();
+        if($browseType == 'story') $cardList = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
         if($browseType == 'bug')   $cardList = $this->loadModel('bug')->getExecutionBugs($executionID);
         if($browseType == 'task')  $cardList = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
 
@@ -2083,19 +2097,16 @@ class kanbanModel extends model
         $execution = $this->loadModel('execution')->getByID($executionID);
         if($execution->type == 'kanban')
         {
-            $regionIdList = $this->dao->select('id')->from(TABLE_KANBANREGION)
-                ->where('deleted')->eq(0)
-                ->andWhere('kanban')->eq($executionID)
-                ->fetchPairs();
-
-            $lanes = $this->dao->select('t1.*')->from(TABLE_KANBANLANE)->alias('t1')
-                ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
+            $lanes = $this->dao->select('t2.*')->from(TABLE_KANBANREGION)->alias('t1')
+                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+                ->leftJoin(TABLE_KANBANCELL)->alias('t3')->on('t2.id=t3.lane')
                 ->where('t1.deleted')->eq(0)
-                ->andWhere('t1.execution')->eq($executionID)
-                ->andWhere('t1.type')->eq($laneType)
-                ->andWhere('t1.region')->in($regionIdList)
-                ->beginIF(!empty($cardID))->andWhere('t2.cards')->like("%,$cardID,%")->fi()
-                ->orderBy('t1.`order` asc')
+                ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t1.kanban')->eq($executionID)
+                ->andWhere('t2.execution')->eq($executionID)
+                ->andWhere('t2.type')->eq($laneType)
+                ->beginIF(!empty($cardID))->andWhere('t3.cards')->like("%,$cardID,%")->fi()
+                ->orderBy('t1.`order` asc, t2.`order` asc')
                 ->fetchAll('id');
 
             if(count($lanes) > 1) $lanes = array_slice($lanes, 0, 1);
@@ -2147,7 +2158,7 @@ class kanbanModel extends model
 
         if($laneType == 'story')
         {
-            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'byModule', 0, 'story', $otherCardList);
+            $stories = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory', 0, 'story', $otherCardList);
             foreach($stories as $storyID => $story)
             {
                 foreach($this->config->kanban->storyColumnStageList as $colType => $stage)
@@ -2791,30 +2802,13 @@ class kanbanModel extends model
     public function getColumnByID($columnID)
     {
         $column = $this->dao->select('t1.*, t2.type as laneType')->from(TABLE_KANBANCOLUMN)->alias('t1')
-            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.group=t2.id')
+            ->leftjoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.column')
             ->where('t1.id')->eq($columnID)
             ->fetch();
 
         if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
 
         return $column;
-    }
-
-    /**
-     * Get Column by column name.
-     *
-     * @param  string $name
-     * @param  int    $laneID
-     * @access public
-     * @return object
-     */
-    public function getColumnByName($name, $laneID)
-    {
-        return $this->dao->select('*')
-            ->from(TABLE_KANBANCOLUMN)
-            ->where('name')->eq($name)
-            ->andWhere('lane')->eq($laneID)
-            ->fetch();
     }
 
     /**

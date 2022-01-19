@@ -105,19 +105,7 @@ class story extends control
 
             $storyID   = $storyResult['id'];
             $productID = $this->post->product ? $this->post->product : $productID;
-            $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
 
-            if(!empty($execution) and $execution->type == 'kanban')
-            {
-                if(isset($output['laneID']) and isset($output['columnID']))
-                {
-                    $this->loadModel('kanban')->addKanbanCell($objectID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                }
-                else
-                {
-                    $this->loadModel('kanban')->updateLane($objectID, 'story');
-                }
-            }
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
@@ -194,7 +182,7 @@ class story extends control
                 $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
-            if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+            if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID", 'html');
             return $this->send($response);
         }
 
@@ -795,7 +783,9 @@ class story extends control
 
                 $product         = $this->product->getByID($productID);
                 $branchProduct   = $product->type == 'normal' ? false : true;
-                $modules         = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
+                $modulePairs     = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches));
+                $branchModules   = $branchProduct ? $modulePairs : array('0' => $modulePairs);
+                $modules         = array($productID => $branchModules);
                 $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
                 $products        = array($productID => $product);
                 $branchTagOption = array($productID => $branchTagOption);

@@ -43,7 +43,11 @@
       <div class='panel' data-url='<?php echo $this->createLink('execution', 'kanban', "kanbanID=$kanbanID");?>'>
         <div class='panel-heading'>
            <div class='kanban-name'>
+             <?php if($kanban->end < helper::today() and $kanban->status != 'done' and $kanban->status != 'closed' and $kanban->status != 'suspended'):?>
+             <span class="label label-doing"><?php echo $lang->project->statusList['delay'];?></span>
+             <?php else:?>
              <span class="label label-<?php echo $kanban->status;?>"><?php echo zget($lang->execution->statusList, $kanban->status);?></span>
+             <?php endif;?>
              <strong title='<?php echo $kanban->name;?>'><?php echo $kanban->name;?></strong>
            </div>
            <?php
@@ -86,14 +90,16 @@
               <div class='kanban-members pull-left'>
                 <?php $count = 0;?>
                 <?php foreach($members as $member):?>
-                <?php if($count > 1) break;?>
+                <?php if($count > 2) break;?>
                 <?php $count ++;?>
                 <div title="<?php echo $member->realname;?>">
                   <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member->account], 'account' => $member->account)); ?>
                 </div>
                 <?php endforeach;?>
-                <?php if(count($members) > 3):?>
+                <?php if(count($members) > 4):?>
                 <?php echo '<span>…</span>';?>
+                <?php endif;?>
+                <?php if(count($members) > 3):?>
                 <?php $lastMember = end($members);?>
                 <div title="<?php echo $lastMember->realname;?>">
                   <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account)); ?>

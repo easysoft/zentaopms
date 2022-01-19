@@ -299,6 +299,7 @@ function findDropColumns($element, $root)
     {
         if(!colRules) return false;
         if(colRules === true) return true;
+        if($.cookie('isFullScreen') == 1) return false;
 
         var $newCol = $(this);
         var newCol = $newCol.data();
@@ -338,7 +339,7 @@ function renderUserAvatar(user, objectType, objectID, size)
     if(!user) return $('<a class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe" title="' + noAssigned + '" style="background: #ccc" href="' + link + '" data-toggle="modal" data-width="80%"><i class="icon icon-person"></i></a>');
 
     if(typeof user === 'string') user = {account: user};
-    if(!user.avatar && window.users && window.users[user.account]) user = {avatar: users[user.account].avatar, account: user.account, realname: users[user.account]};
+    if(!user.avatar && window.userList && window.userList[user.account]) user = {avatar: userList[user.account].avatar, account: user.account, realname: userList[user.account].realname};
 
     var $noPrivAvatar = $('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle" />').avatar({user: user});
     if(objectType == 'task'  && !priv.canAssignTask)  return $noPrivAvatar;
@@ -605,10 +606,17 @@ function renderCount($count, count, column)
 function renderHeaderCol($column, column, $header, kanbanData)
 {
     if(groupBy != 'default') return;
+
     /* Render group header. */
     var privs       = kanbanData.actions;
     var columnPrivs = kanbanData.columns[0].actions;
     var $actions    = $column.children('.actions');
+
+    if(column.parent == -1)
+    {
+        $column.append('<div class="actions"></div>');
+        $actions = $column.children('.actions');
+    }
 
     if(privs.includes('sortGroup'))
     {
@@ -786,7 +794,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         }
         else if(toColType == 'developing')
         {
-            if((fromColType == 'pause' || fromColType == 'cancel' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
                 var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
                 showIframe = true;
@@ -860,7 +868,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             }
         }
 
-        if(moveCard)
+        if(moveCard || (fromLaneID != toLaneID && fromColID == toColID))
         {
             var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
             $.ajax(
@@ -964,7 +972,6 @@ function initKanban($kanban)
         displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',
-        cardHeight:        getCardHeight(),
         cardsPerRow:       window.kanbanScaleSize,
         onAction:          handleKanbanAction,
         onRenderLaneName:  renderLaneName,

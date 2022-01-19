@@ -1845,7 +1845,7 @@ class storyModel extends model
 
             $task = new stdclass();
             $task->execution    = $executionID;
-            $task->project      = $projectID;
+            $task->project      = $projectID ? $projectID : 0;
             $task->name         = $story->title;
             $task->story        = $story->id;
             $task->type         = $data->type;
@@ -1983,6 +1983,8 @@ class storyModel extends model
      */
     public function setStage($storyID)
     {
+        $this->loadModel('kanban');
+
         $storyID = (int)$storyID;
         $account = $this->app->user->account;
 
@@ -2014,7 +2016,11 @@ class storyModel extends model
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq('closed')->where('id')->eq($storyID)->exec();
             foreach($stages as $branch => $stage) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
-            foreach($executions as $execution => $branch) $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+            foreach($executions as $execution => $branch)
+            {
+                $this->dao->replace(TABLE_STORYSTAGE)->set('story')->eq($storyID)->set('branch')->eq($branch)->set('stage')->eq('closed')->exec();
+                $this->kanban->updateLane($execution, 'story', $storyID);
+            }
             return false;
         }
 
@@ -2075,7 +2081,7 @@ class storyModel extends model
 
         /* Get current stage and set as default value. */
         $currentStage = $story->stage;
-        $stage = $currentStage;
+        $stage        = $currentStage;
 
         /* Cycle all tasks, get counts of every type and every status. */
         $branchStatusList = array();
@@ -2165,6 +2171,15 @@ class storyModel extends model
         else
         {
             $this->dao->update(TABLE_STORY)->set('stage')->eq(current($stages))->where('id')->eq($storyID)->exec();
+        }
+
+        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        if($story->stage != $currentStory->stage)
+        {
+            foreach($executions as $executionID => $branch)
+            {
+                $this->kanban->updateLane($executionID, 'story', $storyID);
+            }
         }
 
         return;

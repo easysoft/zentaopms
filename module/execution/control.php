@@ -123,12 +123,13 @@ class execution extends control
         /* Set browse type. */
         $browseType = strtolower($status);
 
-        /* Get products by execution. */
-        $execution = $this->commonAction($executionID, $status);
+        $execution   = $this->commonAction($executionID, $status);
+        $executionID = $execution->id;
+
         if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
-        $executionID = $execution->id;
-        $products    = $this->product->getProductPairsByProject($executionID);
+        /* Get products by execution. */
+        $products = $this->product->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Save the recently five executions visited in the cookie. */
@@ -1978,11 +1979,12 @@ class execution extends control
 
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
-        $avatarPairs = $this->dao->select('account, avatar')->from(TABLE_USER)->where('deleted')->eq(0)->fetchPairs();
+        $avatarPairs = $this->user->getAvatarPairs();
         foreach($avatarPairs as $account => $avatar)
         {
-            if(!$avatar) continue;
-            $userList[$account]['avatar'] = $avatar;
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
         }
 
         /* Get execution's product. */

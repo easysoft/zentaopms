@@ -23,9 +23,9 @@ class Tester
 
     /**
      * Check projectList get from getByIdList.
-     * 
-     * @param  array  $projectIdList 
-     * @param  int    $count 
+     *
+     * @param  array  $projectIdList
+     * @param  int    $count
      * @access public
      * @return array
      */

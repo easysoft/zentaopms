@@ -955,17 +955,10 @@ class kanban extends control
      */
     public function setColumn($columnID, $executionID = 0, $from = 'kanban')
     {
-        $column = $this->kanban->getColumnById($columnID);
+        $column = $this->kanban->getColumnByID($columnID);
 
         if($_POST)
         {
-            /* Check lane column name is unique. */
-            $exist = $this->kanban->getColumnByName($this->post->name, $column->lane);
-            if($exist and $exist->id != $columnID and $from != 'kanban')
-            {
-                return $this->sendError($this->lang->kanban->noColumnUniqueName);
-            }
-
             $changes = $this->kanban->updateLaneColumn($columnID, $column);
             if(dao::isError()) return $this->sendError(dao::getError());
             if($changes)
@@ -1072,7 +1065,7 @@ class kanban extends control
             ->andWhere('`column`')->eq($toColID)
             ->exec();
 
-        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $groupBy, $regionID);
+        $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
         die(json_encode($kanbanGroup));
     }
 

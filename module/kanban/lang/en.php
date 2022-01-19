@@ -140,7 +140,6 @@ $lang->kanban->laneColor          = 'Lane Color';
 $lang->kanban->setColumn          = 'Column Settings';
 $lang->kanban->columnName         = 'Column Name';
 $lang->kanban->columnColor        = 'Column Color';
-$lang->kanban->noColumnUniqueName = 'The Kanban column name already exists.';
 $lang->kanban->moveUp             = 'Swimlane Up';
 $lang->kanban->moveDown           = 'Swimlane Down';
 $lang->kanban->laneMove           = 'Swimlane Move';
@@ -262,7 +261,6 @@ $lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height bas
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'The number of cards must be a positive integer greater than 2.';
-
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';
