@@ -1,11 +1,12 @@
 /**
- * Refresh page.
+ * When type change.
  *
- * @param  string $type
+ * @oaram  int    spaceID
+ * @param  string type
  * @access public
  * @return void
  */
-function refreshPage(spaceID, type)
+function changeType(spaceID, type)
 {
     location.href = createLink('kanban', 'create', 'spaceID=' + spaceID + '&type=' + type);
 }

@@ -1309,21 +1309,18 @@ class kanbanModel extends model
      *
      * @param  string $browseType private|cooperation|public|involved
      * @param  object $pager
-     * @param  int    $closed 0|1
      * @access public
      * @return array
      */
-    public function getSpaceList($browseType, $pager = null, $closed = 0)
+    public function getSpaceList($browseType, $pager = null)
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
         $spaceList   = $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'private')->andWhere('type')->eq('private')->fi()
-            ->beginIF($browseType == 'cooperation')->andWhere('type')->eq('cooperation')->fi()
-            ->beginIF($browseType == 'public')->andWhere('type')->eq('public')->fi()
+            ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($closed == 0)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->page($pager)
@@ -1342,23 +1339,20 @@ class kanbanModel extends model
     /**
      * Get space pairs.
      *
-     * @param  string $browseType private|cooperation|public|involved|closed|noclosed
-     * @param  $closed 0|1
+     * @param  string $browseType private|cooperation|public|involved
      * @access public
      * @return array
      */
-    public function getSpacePairs($browseType = 'private', $closed = 0)
+    public function getSpacePairs($browseType = 'private')
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
 
         return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'private')->andWhere('type')->eq('private')->fi()
-            ->beginIF($browseType == 'cooperation')->andWhere('type')->eq('cooperation')->fi()
-            ->beginIF($browseType == 'public')->andWhere('type')->eq('public')->fi()
+            ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($closed == 0)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
@@ -1413,7 +1407,7 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function createSpace($type)
+    public function createSpace()
     {
         $account = $this->app->user->account;
         $space   = fixer::input('post')
@@ -1421,7 +1415,6 @@ class kanbanModel extends model
             ->setDefault('createdDate', helper::now())
             ->setdefault('team', '')
             ->setdefault('owner', $account)
-            ->setdefault('type', $type)
             ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')

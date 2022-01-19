@@ -407,4 +407,4 @@ $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';
 $filter->tree->browse->cookie['preProductID'] = 'int';
 $filter->tree->browse->cookie['preBranch']    = 'reg::word';
 
-$filter->kanban->space->cookie['showClosed']          = 'code';
+$filter->kanban->space->cookie['showClosed'] = 'code';

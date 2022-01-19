@@ -20,7 +20,7 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>
-        <td><?php echo html::select('type', $typeList, $type, "onchange='refreshPage(this.value)' class='form-control'");?></td>
+        <td><?php echo html::select('type', $typeList, $type, "onchange='changeType(this.value)' class='form-control'");?></td>
         <td></td>
       </tr>
       <tr>
