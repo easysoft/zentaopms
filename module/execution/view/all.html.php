@@ -32,7 +32,7 @@
     <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
     <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
-    <div class='input-control w-150px'>
+    <div class='input-control w-180px'>
       <?php echo html::select('project', $projects, $projectID, "class='form-control chosen' data-placeholder='{$lang->execution->selectProject}'");?>
     </div>
     <?php endif;?>
