@@ -1307,20 +1307,23 @@ class kanbanModel extends model
     /**
      * Get space list.
      *
-     * @param  string $browseType all|my|other|closed
+     * @param  string $browseType private|cooperation|public|involved
      * @param  object $pager
+     * @param  int    $closed 0|1
      * @access public
      * @return array
      */
-    public function getSpaceList($browseType, $pager = null)
+    public function getSpaceList($browseType, $pager = null, $closed = 0)
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
         $spaceList   = $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
-            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF($browseType == 'private')->andWhere('type')->eq('private')->fi()
+            ->beginIF($browseType == 'cooperation')->andWhere('type')->eq('cooperation')->fi()
+            ->beginIF($browseType == 'public')->andWhere('type')->eq('public')->fi()
+            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($closed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->page($pager)
@@ -1339,21 +1342,23 @@ class kanbanModel extends model
     /**
      * Get space pairs.
      *
-     * @param  string $browseType all|my|other|closed
+     * @param  string $browseType private|cooperation|public|involved|closed|noclosed
+     * @param  $closed 0|1
      * @access public
      * @return array
      */
-    public function getSpacePairs($browseType = 'all')
+    public function getSpacePairs($browseType = 'private', $closed = 0)
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
 
         return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
-            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
-            ->beginIF($browseType == 'noclosed')->andWhere('status')->ne('closed')->fi()
+            ->beginIF($browseType == 'private')->andWhere('type')->eq('private')->fi()
+            ->beginIF($browseType == 'cooperation')->andWhere('type')->eq('cooperation')->fi()
+            ->beginIF($browseType == 'public')->andWhere('type')->eq('public')->fi()
+            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($closed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
@@ -1382,24 +1387,21 @@ class kanbanModel extends model
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'private' or $object->acl == 'extend')
+            $remove = true;
+            if($object->owner == $account) $remove = false;
+            if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
+            if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
+            if($objectType == 'kanban')
             {
-                $remove = true;
-                if($object->owner == $account) $remove = false;
-                if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
-                if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
-                if($objectType == 'kanban')
-                {
-                    $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
-                    $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
-                    $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
-                    if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
-                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
-                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
-                }
-
-                if($remove) unset($objects[$objectID]);
+                $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
+                $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
+                if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                if(strpos(",$spaceTeam,", ",$account,") !== false) $remove = false;
+                if(strpos(",$spaceWhiteList,", ",$account,") !== false) $remove = false;
             }
+
+            if($remove) unset($objects[$objectID]);
         }
 
         return array_keys($objects);
@@ -1411,12 +1413,16 @@ class kanbanModel extends model
      * @access public
      * @return int
      */
-    public function createSpace()
+    public function createSpace($type)
     {
         $account = $this->app->user->account;
         $space   = fixer::input('post')
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
+            ->setdefault('team', '')
+            ->setdefault('owner', $account)
+            ->setdefault('type', $type)
+            ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
@@ -1462,8 +1468,6 @@ class kanbanModel extends model
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
-
-        $space->whitelist = $space->acl == 'open' ? '' : $space->whitelist;
 
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
@@ -1607,10 +1611,13 @@ class kanbanModel extends model
         $kanban  = fixer::input('post')
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
+            ->setdefault('owner', '')
+            ->setdefault('team', '')
+            ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu')
+            ->remove('uid,contactListMenu,type')
             ->get();
 
         if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
@@ -1623,12 +1630,6 @@ class kanbanModel extends model
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
-
-            if($kanban->acl == 'extend')
-            {
-                $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
-                $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
-            }
         }
 
 
@@ -1670,14 +1671,6 @@ class kanbanModel extends model
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
-
-        if($kanban->acl == 'extend')
-        {
-            $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
-            $kanban->acl       = $spaceAcl == 'open' ? 'open' : 'extend';
-            $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
-        }
-
 
         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
 
