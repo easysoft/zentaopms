@@ -821,6 +821,8 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 showIframe = true;
             }
         }
+
+        if(fromLaneID != toLaneID && fromColID == toColID) shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
     }
 
     /* Bug lane. */
@@ -868,24 +870,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             }
         }
 
-        if(moveCard || (fromLaneID != toLaneID && fromColID == toColID))
-        {
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
-            $.ajax(
-            {
-                method:   'post',
-                dataType: 'json',
-                url:       link,
-                success: function(data)
-                {
-                    updateRegion(regionID, data[regionID]);
-                },
-                error: function(xhr, status, error)
-                {
-                    showErrorMessager(error || lang.timeout);
-                }
-            });
-        }
+        if(moveCard || (fromLaneID != toLaneID && fromColID == toColID)) shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
     }
 
     /* Story lane. */
@@ -918,6 +903,43 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     }
 }
 
+/**
+ * Shift card.
+ *
+ * @param  int objectID
+ * @param  int fromColID
+ * @param  int toColID
+ * @param  int fromLaneID
+ * @param  int toLaneID
+ * @param  int regionID
+ * @access public
+ * @return void
+ */
+function shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
+{
+    var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
+    $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       link,
+        success: function(data)
+        {
+            updateRegion(regionID, data[regionID]);
+        },
+        error: function(xhr, status, error)
+        {
+            showErrorMessager(error || lang.timeout);
+        }
+    });
+}
+
+/**
+ * Process minus button.
+ *
+ * @access public
+ * @return void
+ */
 function processMinusBtn()
 {
     var columnCount = $('#splitTable .child-column').size();
