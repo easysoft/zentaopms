@@ -670,7 +670,6 @@ $lang->resource->kanban->deleteCard         = 'deleteCard';
 $lang->resource->kanban->moveCard           = 'moveCard';
 $lang->resource->kanban->setCardColor       = 'setCardColor';
 $lang->resource->kanban->laneMove           = 'laneMove';
-$lang->resource->kanban->cardsSort          = 'cardsSort';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
@@ -714,12 +713,11 @@ $lang->kanban->methodOrder[170] = 'assigntoCard';
 $lang->kanban->methodOrder[175] = 'moveCard';
 $lang->kanban->methodOrder[180] = 'setCardColor';
 $lang->kanban->methodOrder[185] = 'laneMove';
-$lang->kanban->methodorder[190] = 'cardsSort';
-$lang->kanban->methodOrder[195] = 'viewArchivedColumn';
-$lang->kanban->methodorder[200] = 'viewArchivedCard';
-$lang->kanban->methodorder[205] = 'archiveColumn';
-$lang->kanban->methodorder[210] = 'restoreCard';
-$lang->kanban->methodorder[215] = 'setLaneHeight';
+$lang->kanban->methodOrder[190] = 'viewArchivedColumn';
+$lang->kanban->methodorder[195] = 'viewArchivedCard';
+$lang->kanban->methodorder[200] = 'archiveColumn';
+$lang->kanban->methodorder[205] = 'restoreCard';
+$lang->kanban->methodorder[210] = 'setLaneHeight';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();

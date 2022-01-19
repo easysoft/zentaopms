@@ -460,7 +460,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, $this->post->lane, $columnID, 'common', $cardID);
+            $this->addKanbanCell($kanbanID, (int)$this->post->lane, $columnID, 'common', $cardID);
 
             return $cardID;
         }
@@ -858,27 +858,38 @@ class kanbanModel extends model
      */
     public function getCardGroupByKanban($kanbanID)
     {
-        $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
-            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
+        /* Get card data.*/
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
             ->where('deleted')->eq(0)
-            ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
+            ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
-            ->andWhere('t2.kanban')->eq($kanbanID)
-            ->andWhere('t2.type')->eq('common')
-            //->orderBy('`order` asc')
             ->fetchAll('id');
 
-        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
-        $cardGroup = array();
-        foreach($cards as $card)
-        {
-            $card->actions = array();
-            foreach($actions as $action)
-            {
-                if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
-            }
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('type')->eq('common')
+            ->fetchAll();
 
-            $cardGroup[$card->lane]['column' . $card->column][] = $card;
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+        $cardGroup = array();
+        foreach($cellList as $cell)
+        {
+            $cardIdList = array_filter(explode(',', $cell->cards));
+
+            if(empty($cardIdList)) continue;
+            foreach($cardIdList as $cardID)
+            {
+                if(!isset($cards[$cardID])) continue;
+
+                $card = zget($cards, $cardID);
+                $card->actions = array();
+                foreach($actions as $action)
+                {
+                    if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+                }
+
+                $cardGroup[$cell->lane]['column' . $cell->column][] = $card;
+            }
         }
 
         return $cardGroup;
