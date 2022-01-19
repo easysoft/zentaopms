@@ -858,17 +858,21 @@ class kanbanModel extends model
      */
     public function getCardGroupByKanban($kanbanID)
     {
-        $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
+        /* Get card data.*/
+        $sql = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
             ->where('deleted')->eq(0)
             ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
             ->andWhere('archived')->eq(0)
             ->andWhere('t2.kanban')->eq($kanbanID)
             ->andWhere('t2.type')->eq('common')
-            //->orderBy('`order` asc')
-            ->fetchAll('id');
+            ->get();
 
-        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
+        $sql    .= "ORDER BY FIND_IN_SET(t1.id, t2.cards)";
+        $stmt    = $this->dbh->query($sql);
+        $cards   = $stmt->fetchAll();
+        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+
         $cardGroup = array();
         foreach($cards as $card)
         {

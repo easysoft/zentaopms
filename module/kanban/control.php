@@ -782,6 +782,26 @@ class kanban extends control
     }
 
     /**
+     * Sort cards.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @param  string $cards
+     * @access public
+     * @return void
+     */
+    public function sortCard($kanbanID, $laneID, $columnID, $cards = '')
+    {
+        if(empty($cards)) return;
+
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq(",$cards,")->where('kanban')->eq($kanbanID)->andWhere('lane')->eq($laneID)->andWhere('`column`')->eq($columnID)->exec();
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
+
+    /**
      * Archive a card.
      *
      * @param  int    $cardID
