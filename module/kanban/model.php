@@ -2524,7 +2524,6 @@ class kanbanModel extends model
         $kanban = fixer::input('post')->get();
 
         $this->dao->update(TABLE_KANBAN)->set('performable')->eq($kanban->performable)->exec();
-
     }
 
     /**
