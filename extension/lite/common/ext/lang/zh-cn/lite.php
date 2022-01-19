@@ -64,3 +64,26 @@ $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->
 
 $lang->URCommon = '目标';
 $lang->SRCommon = '目标';
+
+/* Doc menu. */
+$lang->doc->menu            = new stdclass();
+$lang->doc->menu->dashboard = array('link' => "{$lang->dashboard}|doc|index");
+$lang->doc->menu->recent    = array('link' => "{$lang->doc->recent}|doc|browse|browseTyp=byediteddate", 'alias' => 'recent');
+$lang->doc->menu->my        = array('link' => "{$lang->doc->my}|doc|browse|browseTyp=openedbyme", 'alias' => 'my');
+$lang->doc->menu->collect   = array('link' => "{$lang->doc->favorite}|doc|browse|browseTyp=collectedbyme", 'alias' => 'collect');
+$lang->doc->menu->project   = array('link' => "{$lang->doc->project}|doc|tableContents|type=project", 'alias' => 'showfiles,project');
+$lang->doc->menu->custom    = array('link' => "{$lang->doc->custom}|doc|tableContents|type=custom", 'alias' => 'custom');
+
+$lang->doc->dividerMenu = ',project,';
+
+/* Doc menu order. */
+$lang->doc->menuOrder     = array();
+$lang->doc->menuOrder[5]  = 'dashboard';
+$lang->doc->menuOrder[10] = 'recent';
+$lang->doc->menuOrder[15] = 'my';
+$lang->doc->menuOrder[20] = 'collect';
+$lang->doc->menuOrder[25] = 'project';
+$lang->doc->menuOrder[30] = 'custom';
+
+$lang->doc->menu->project['subMenu'] = new stdclass();
+$lang->doc->menu->custom['subMenu']  = new stdclass();
