@@ -50,7 +50,6 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
         <div class="region-header dropdown">
           <span class="strong"><?php echo $region->name;?></span>
-          <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
           <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
           <span class='regionActions'>
             <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
