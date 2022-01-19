@@ -40,7 +40,13 @@ r($result) && p() && e('return false'); //使用正确的gitlabID、分支信息
 
 dao::$errors = array();
 $projectID   = 1555;
-$result      = $gitlab->createBranch($gitlabID, $projectID);
+
+/* Delete branches with the same name. */
+$apiRoot = $gitlab->getApiRoot($gitlabID);
+$url     = sprintf($apiRoot, "/projects/{$projectID}/repository/branches/{$_POST['branch']}");
+commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE'));
+
+$result = $gitlab->createBranch($gitlabID, $projectID);
 if($result === true) $result = 'return true';
 r($result) && p() && e('return true');  //通过gitlabID,projectID,分支对象正确创建GitLab分支
 

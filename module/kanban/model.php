@@ -460,7 +460,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, $this->post->lane, $columnID, 'common', $cardID);
+            $this->addKanbanCell($kanbanID, (int)$this->post->lane, $columnID, 'common', $cardID);
 
             return $cardID;
         }
@@ -858,27 +858,38 @@ class kanbanModel extends model
      */
     public function getCardGroupByKanban($kanbanID)
     {
-        $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
-            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
+        /* Get card data.*/
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
             ->where('deleted')->eq(0)
-            ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
+            ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
-            ->andWhere('t2.kanban')->eq($kanbanID)
-            ->andWhere('t2.type')->eq('common')
-            //->orderBy('`order` asc')
             ->fetchAll('id');
 
-        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
-        $cardGroup = array();
-        foreach($cards as $card)
-        {
-            $card->actions = array();
-            foreach($actions as $action)
-            {
-                if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
-            }
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('type')->eq('common')
+            ->fetchAll();
 
-            $cardGroup[$card->lane]['column' . $card->column][] = $card;
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+        $cardGroup = array();
+        foreach($cellList as $cell)
+        {
+            $cardIdList = array_filter(explode(',', $cell->cards));
+
+            if(empty($cardIdList)) continue;
+            foreach($cardIdList as $cardID)
+            {
+                if(!isset($cards[$cardID])) continue;
+
+                $card = zget($cards, $cardID);
+                $card->actions = array();
+                foreach($actions as $action)
+                {
+                    if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+                }
+
+                $cardGroup[$cell->lane]['column' . $cell->column][] = $card;
+            }
         }
 
         return $cardGroup;
@@ -2534,7 +2545,7 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
@@ -2547,6 +2558,7 @@ class kanbanModel extends model
                 $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
             }
+            if(common::hasPriv('kanban', 'setDoneFunction')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setDoneFunction', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link'") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
@@ -2555,7 +2567,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }

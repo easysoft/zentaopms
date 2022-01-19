@@ -669,12 +669,11 @@ class kanban extends control
      * @param  int    $kanbanID
      * @param  int    $regionID
      * @param  int    $groupID
-     * @param  int    $laneID
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function createCard($kanbanID = 0, $regionID = 0, $groupID = 0, $laneID = 0, $columnID = 0)
+    public function createCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
     {
         if($_POST)
         {
@@ -780,6 +779,26 @@ class kanban extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         die(json_encode($kanbanGroup));
+    }
+
+    /**
+     * Sort cards.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @param  string $cards
+     * @access public
+     * @return void
+     */
+    public function sortCard($kanbanID, $laneID, $columnID, $cards = '')
+    {
+        if(empty($cards)) return;
+
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq(",$cards,")->where('kanban')->eq($kanbanID)->andWhere('lane')->eq($laneID)->andWhere('`column`')->eq($columnID)->exec();
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
     }
 
     /**
@@ -974,6 +993,28 @@ class kanban extends control
 
         $this->view->column = $column;
         $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
+        $this->display();
+    }
+
+    /**
+     * Set done function.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function setDoneFunction($kanbanID)
+    {
+        if(!empty($_POST))
+        {
+            $this->dao->update(TABLE_KANBAN)->set('performable')->eq($_POST['performable'])->exec();
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->kanban = $this->kanban->getByID($kanbanID);
+
         $this->display();
     }
 

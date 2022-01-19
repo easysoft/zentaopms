@@ -145,7 +145,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(columnPrivs.includes('createCard') && column.parent != -1)
         {
-            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
             addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
         }
 
@@ -258,6 +258,8 @@ function renderKanbanItem(item, $item)
     var $title       = $item.children('.title');
     var privs        = item.actions;
     var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
+
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
     if(!$title.length)
     {
         if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
@@ -489,7 +491,7 @@ function openAddTaskForm($element)
     var laneID   = $element.closest('.kanban-lane').data('id');
     var columnID = $element.closest('.kanban-col').data('id');
     var status   = $element.closest('.kanban-col').data('type');
-    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
     $.zui.modalTrigger.show(
     {
         url: modalUrl,
@@ -930,29 +932,29 @@ $(function()
     var $cards   = null;
     $('#kanban').sortable(
     {
-        selector: '.region, .kanban-board, .kanban-lane',
-        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name',
+        selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort',
+        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort',
         container: function($ele)
         {
             return $ele.parent();
         },
         targetSelector: function($ele)
         {
-            /* Sort regions */
+            /* Sort regions. */
             if($ele.hasClass('region'))
             {
                 sortType = 'region';
                 return $ele.parent().children('.region');
             }
 
-            /* Sort boards */
+            /* Sort boards. */
             if($ele.hasClass('kanban-board'))
             {
                 sortType = 'board';
                 return $ele.parent().children('.kanban-board');
             }
 
-            /* Sort lanes */
+            /* Sort lanes. */
             if($ele.hasClass('kanban-lane'))
             {
                 sortType = 'lane';
@@ -961,10 +963,10 @@ $(function()
                 return $ele.parent().children('.kanban-lane');
             }
 
-            /* Sort lanes */
+            /* Sort cards. */
             if($ele.hasClass('kanban-item'))
             {
-                sortType = 'item';
+                sortType = 'card';
                 return $ele.parent().children('.kanban-item');
             }
         },
@@ -1015,9 +1017,11 @@ $(function()
                 var region = e.element.parent().parent().data('id');
                 url = createLink('kanban', 'sortLane', 'region=' + region + '&lanes=' + orders.join(','));
             }
-            if(sortType == 'item')
+            if(sortType == 'card')
             {
-                url = createLink('task', 'sort', 'kanbanID=' + kanbanID + '&tasks=' + orders.join(','));
+                var laneID   = e.element.closest('.kanban-lane').data('id');
+                var columnID = e.element.closest('.kanban-col').data('id');
+                url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + laneID + '&columnID=' + columnID + '&cards=' + orders.join(','));
             }
             if(!url) return true;
 

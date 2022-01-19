@@ -509,7 +509,6 @@ class installModel extends model
         $company->name   = $this->post->company;
         $company->admins = ",{$this->post->account},";
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name', 'notempty')->exec();
-
         if(!dao::isError())
         {
             /* Set admin. */
@@ -519,20 +518,29 @@ class installModel extends model
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
             $this->dao->replace(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
+        }
+    }
 
-            /* Update group name and desc on dafault lang. */
-            $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
-            foreach($groups as $group)
-            {
-                $data = zget($this->lang->install->groupList, $group->name, '');
-                if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
-            }
+    /**
+     * Update language for group and cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateLang()
+    {
+        /* Update group name and desc on dafault lang. */
+        $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+        foreach($groups as $group)
+        {
+            $data = zget($this->lang->install->groupList, $group->name, '');
+            if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
+        }
 
-            /* Update cron remark by lang. */
-            foreach($this->lang->install->cronList as $command => $remark)
-            {
-                $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
-            }
+        /* Update cron remark by lang. */
+        foreach($this->lang->install->cronList as $command => $remark)
+        {
+            $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
         }
     }
 

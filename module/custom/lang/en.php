@@ -55,7 +55,7 @@ if($config->systemMode == 'classic' || !$config->systemMode) $lang->custom->exec
 
 $lang->custom->unitList['efficiency'] = 'Working Hours/';
 $lang->custom->unitList['manhour']    = 'Man-hour/';
-$lang->custom->unitList['cost']       = 'Yuan/Hour';
+$lang->custom->unitList['cost']       = 'USD/Hour';
 $lang->custom->unitList['hours']      = 'Hours';
 $lang->custom->unitList['days']       = 'Days';
 $lang->custom->unitList['loc']        = 'KLOC';

@@ -20,6 +20,6 @@ $builder->team = array('rows' => 400, 'extends' => array('team'));
 $builder->build   = array('rows' => 8, 'extends' => array('build'));
 $builder->release = array('rows' => 8, 'extends' => array('release'));
 
-$builder->pipeline = array('rows' => 1, 'extends' => array('pipeline'));
+$builder->pipeline = array('rows' => 2, 'extends' => array('pipeline'));
 $builder->repo     = array('rows' => 1, 'extends' => array('repo'));
 $builder->mr       = array('rows' => 1, 'extends' => array('mr'));
