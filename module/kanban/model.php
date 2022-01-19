@@ -862,9 +862,13 @@ class kanbanModel extends model
         $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
+            ->andWhere('archived')->eq(0)
             ->fetchAll('id');
 
-        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($kanbanID)->fetchAll();
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('type')->eq('common')
+            ->fetchAll();
 
         $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
         $cardGroup = array();
@@ -875,6 +879,8 @@ class kanbanModel extends model
             if(empty($cardIdList)) continue;
             foreach($cardIdList as $cardID)
             {
+                if(!isset($cards[$cardID])) continue;
+
                 $card = zget($cards, $cardID);
                 $card->actions = array();
                 foreach($actions as $action)
