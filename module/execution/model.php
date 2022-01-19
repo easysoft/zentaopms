@@ -302,13 +302,14 @@ class executionModel extends model
             if($project) $type = zget($this->config->execution->modelList, $project->model, 'sprint');
 
             /* If the execution model is a stage, determine whether the product is linked. */
-            if($type == 'stage' and empty(array_filter($this->post->products)))
+            $products = array_filter($this->post->products);
+            if($type == 'stage' and empty($products))
             {
                 dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
                 return false;
             }
 
-            if($type == 'kanban' and empty(array_filter($this->post->products)))
+            if($type == 'kanban' and empty($products))
             {
                 dao::$errors['message'][] = $this->lang->execution->kanbanNoLinkProduct;
                 return false;
@@ -470,13 +471,14 @@ class executionModel extends model
             return false;
         }
 
-        if($oldExecution->type == 'stage' and empty(array_filter($this->post->products)))
+        $products = array_filter($this->post->products);
+        if($oldExecution->type == 'stage' and empty($products))
         {
             dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
             return false;
         }
 
-        if($oldExecution->type == 'kanban' and empty(array_filter($this->post->products)))
+        if($oldExecution->type == 'kanban' and empty($products))
         {
             dao::$errors['message'][] = $this->lang->execution->kanbanNoLinkProduct;
             return false;
