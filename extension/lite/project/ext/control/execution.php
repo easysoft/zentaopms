@@ -4,12 +4,28 @@ class project extends control
     public function execution($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
         $this->project->setMenu($projectID);
-        $this->app->loadLang('execution');
 
-        $this->view->projectID   = $projectID;
-        $this->view->status      = $status;
-        $this->view->kanbans     = $this->loadModel('kanban')->getKanbanByProject($projectID, $status == 'doing' ? 'active' : $status);
-        $this->view->usersAvatar = $this->loadModel('user')->getAvatarPairs();
+        $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $status);
+
+        $executionActions = array();
+        foreach($kanbanList as $kanbanID => $kanban)
+        {
+            foreach($this->config->execution->statusActions as $action)
+            {
+                if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
+            }
+            if($this->execution->isClickable($kanban, 'delete')) $executionActions[$kanbanID][] = 'delete';
+        }
+
+        $this->view->title            = $this->lang->project->kanban;
+
+        $this->view->kanbanList       = array_values($kanbanList);
+        $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
+        $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+        $this->view->projectID        = $projectID;
+        $this->view->status           = $status;
+        $this->view->executionActions = $executionActions;
+
         $this->display();
     }
 }

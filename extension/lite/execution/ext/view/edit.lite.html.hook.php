@@ -1,0 +1,10 @@
+<script>
+$('#begin').closest('tr').hide();
+$('#days').closest('tr').hide();
+$('#productsBox').closest('tr').hide();
+$('#plansBox').closest('tr').hide();
+$('#PO').closest('.input-group').hide();
+$('#QD').closest('.input-group').hide();
+$('#RD').closest('.input-group').hide();
+$('#PM').closest('.input-group').find('.input-group-addon').hide();
+</script>

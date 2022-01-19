@@ -107,10 +107,10 @@ $lang->block->budget          = '预算';
 $lang->block->left            = '剩余';
 
 $lang->block->titleList['flowchart']      = '流程图';
-$lang->block->titleList['statistic']      = '项目统计'; 
+$lang->block->titleList['statistic']      = '项目统计';
 $lang->block->titleList['recentproject']  = '我近期参与的项目';
 $lang->block->titleList['assigntome']     = '待处理';
-$lang->block->titleList['projectteam']    = '项目人力投入'; 
+$lang->block->titleList['projectteam']    = '项目人力投入';
 $lang->block->titleList['project']        = '项目列表';
 $lang->block->titleList['dynamic']        = '最新动态';
 $lang->block->titleList['list']           = '我的待办';
@@ -162,6 +162,7 @@ $lang->block->default['scrum']['project']['4']['grid']  = 4;
 $lang->block->default['scrum']['project']['5']['title'] = '最新动态';
 $lang->block->default['scrum']['project']['5']['block'] = 'projectdynamic';
 $lang->block->default['scrum']['project']['5']['grid']  = 4;
+$lang->block->default['kanban'] = $lang->block->default['scrum'];
 
 $lang->block->default['product']['1']['title'] = $lang->productCommon . '统计';
 $lang->block->default['product']['1']['block'] = 'statistic';

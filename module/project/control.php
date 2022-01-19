@@ -243,7 +243,7 @@ class project extends control
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
-        if($project->model == 'kanban')
+        if($project->model == 'kanban' and $this->config->vision != 'lite')
         {
             $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
 
@@ -703,7 +703,7 @@ class project extends control
         if(!defined('RUN_MODE') || RUN_MODE != 'api') $projectID = $this->project->saveState((int)$projectID, $this->project->getPairsByProgram());
 
         $project = $this->project->getById($projectID);
-        if(empty($project) || strpos('scrum,waterfall', $project->model) === false)
+        if(empty($project) || strpos('scrum,waterfall,kanban', $project->model) === false)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
             die(js::error($this->lang->notFound) . js::locate($this->createLink('project', 'browse')));
