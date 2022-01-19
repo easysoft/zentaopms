@@ -111,3 +111,40 @@ $lang->admin->menuOrder[20] = 'message';
 $lang->admin->menuOrder[25] = 'extension';
 $lang->admin->menuOrder[30] = 'dev';
 $lang->admin->menuOrder[35] = 'system';
+
+$lang->admin->menu->message['subMenu']          = new stdclass();
+$lang->admin->menu->message['subMenu']->message = new stdclass();
+$lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
+$lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
+$lang->admin->menu->message['subMenu']->browser = array('link' => "$lang->browser|message|browser");
+$lang->admin->menu->message['subMenu']->setting = array('link' => "$lang->settings|message|setting");
+
+$lang->admin->menu->message['menuOrder'][5]  = 'mail';
+$lang->admin->menu->message['menuOrder'][10] = 'webhook';
+$lang->admin->menu->message['menuOrder'][15] = 'browser';
+$lang->admin->menu->message['menuOrder'][20] = 'setting';
+
+$lang->admin->menu->company['subMenu']              = new stdclass();
+$lang->admin->menu->company['subMenu']->browseUser  = array('link' => "{$lang->user->common}|company|browse", 'subModule' => 'user');
+$lang->admin->menu->company['subMenu']->dept        = array('link' => "{$lang->dept->common}|dept|browse", 'subModule' => 'dept');
+$lang->admin->menu->company['subMenu']->browseGroup = array('link' => "{$lang->priv}|group|browse", 'subModule' => 'group');
+
+$lang->admin->menu->dev['subMenu']         = new stdclass();
+$lang->admin->menu->dev['subMenu']->api    = array('link' => "API|dev|api");
+$lang->admin->menu->dev['subMenu']->db     = array('link' => "$lang->db|dev|db");
+$lang->admin->menu->dev['subMenu']->editor = array('link' => "$lang->editor|dev|editor");
+$lang->admin->menu->dev['subMenu']->entry  = array('link' => "{$lang->admin->entry}|entry|browse", 'subModule' => 'entry');
+
+$lang->admin->menu->dev['menuOrder'][5]  = 'api';
+$lang->admin->menu->dev['menuOrder'][10] = 'db';
+$lang->admin->menu->dev['menuOrder'][15] = 'editor';
+$lang->admin->menu->dev['menuOrder'][20] = 'entry';
+
+$lang->admin->menu->system['subMenu']             = new stdclass();
+$lang->admin->menu->system['subMenu']->data       = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
+$lang->admin->menu->system['subMenu']->safe       = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
+$lang->admin->menu->system['subMenu']->cron       = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
+$lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->timezone|custom|timezone");
+$lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+
+$lang->admin->dividerMenu = ',company,message,system,';
