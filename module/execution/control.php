@@ -1965,6 +1965,8 @@ class execution extends control
      */
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
+        $this->app->loadLang('bug');
+        $this->app->loadLang('story');
         if(empty($groupBy)) $groupBy = 'default';
 
         $this->lang->execution->menu = new stdclass();
