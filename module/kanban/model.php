@@ -859,30 +859,31 @@ class kanbanModel extends model
     public function getCardGroupByKanban($kanbanID)
     {
         /* Get card data.*/
-        $sql = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
-            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
             ->where('deleted')->eq(0)
-            ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
-            ->andWhere('archived')->eq(0)
-            ->andWhere('t2.kanban')->eq($kanbanID)
-            ->andWhere('t2.type')->eq('common')
-            ->get();
+            ->andWhere('kanban')->eq($kanbanID)
+            ->fetchAll('id');
 
-        $sql    .= "ORDER BY FIND_IN_SET(t1.id, t2.cards)";
-        $stmt    = $this->dbh->query($sql);
-        $cards   = $stmt->fetchAll();
-        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('kanban')->eq($kanbanID)->fetchAll();
 
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
         $cardGroup = array();
-        foreach($cards as $card)
+        foreach($cellList as $cell)
         {
-            $card->actions = array();
-            foreach($actions as $action)
-            {
-                if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
-            }
+            $cardIdList = array_filter(explode(',', $cell->cards));
 
-            $cardGroup[$card->lane]['column' . $card->column][] = $card;
+            if(empty($cardIdList)) continue;
+            foreach($cardIdList as $cardID)
+            {
+                $card = zget($cards, $cardID);
+                $card->actions = array();
+                foreach($actions as $action)
+                {
+                    if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+                }
+
+                $cardGroup[$cell->lane]['column' . $cell->column][] = $card;
+            }
         }
 
         return $cardGroup;
