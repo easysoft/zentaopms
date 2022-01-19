@@ -11,7 +11,7 @@ pid=1
 使用空的gitlabID、projectID、分支对象创建GitLab分支       >> return false
 使用空的gitlabID、projectID，正确的分支对象创建GitLab分支 >> return null
 使用正确的gitlabID、分支信息，错误的projectID创建分支     >> 404 Project Not Found
-使用正确的gitlabID,projectID，分支对象创建GitLab分支      >> test_branch17
+使用正确的gitlabID,projectID，分支对象创建GitLab分支      >> 1
 使用重复的分支信息创建分支                                >> Branch already exists
 
 */
@@ -36,5 +36,8 @@ $gitlabID = 1;
 r($gitlab->apiCreateBranch($gitlabID, $projectID, $branch)) && p('message') && e('404 Project Not Found'); //使用正确的gitlabID、分支信息，错误的projectID创建分支
 
 $projectID = 1555;
-r($gitlab->apiCreateBranch($gitlabID, $projectID, $branch)) && p('name')    && e($branch->branch);         //通过gitlabID,projectID,分支对象正确创建GitLab分支
+$result = $gitlab->apiCreateBranch($gitlabID, $projectID, $branch);
+if(!empty($result->name) and $result->name == $branch->branch) $result = true;
+if(!empty($result->message) and $result->message == 'Branch already exists') $result = true;
+r($result) && p() && e(1);         //通过gitlabID,projectID,分支对象正确创建GitLab分支
 r($gitlab->apiCreateBranch($gitlabID, $projectID, $branch)) && p('message') && e('Branch already exists'); //使用重复的分支信息创建分支

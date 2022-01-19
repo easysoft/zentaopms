@@ -3,24 +3,24 @@ author: Zeng gang
 version: "1.0"
 fields:
   - field: id
-    range: 1
+    range: 1-2
   - field: type
-    range: gitlab
+    range: gitlab,sonarqube
   - field: name
-    range: gitlab服务器
+    range: gitlab服务器,sonarqube服务器
   - field: url
-    range: [http://192.168.1.161:51080]
+    range: [http://192.168.1.161:51080],[http://192.168.1.161:59001]
   - field: account
-    range: []
+    range: [],[admin]
   - field: password
-    range: []
+    range: [],[UDJzc3cwcmQ=]
   - field: token
-    range: x88fZokrp5hShia2jyBN
+    range: x88fZokrp5hShia2jyBN,YWRtaW46UDJzc3cwcmQ=
   - field: private
-    range: 08bcc98f75d7d40053dc80722bdc117b
+    range: 08bcc98f75d7d40053dc80722bdc117b,228b25587479f2fc7570428e8bcbabdc
   - field: createdBy
     range: admin
   - field: createdDate
-    range: [2021-12-09 11:23:35]
+    range: [2021-12-09 11:23:35],[2022-01-12 08:47:37]
   - field: deleted
     range: 0

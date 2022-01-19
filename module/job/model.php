@@ -156,7 +156,8 @@ class jobModel extends model
     public function create()
     {
         $job = fixer::input('post')
-            ->setDefault('atDay', '')
+            ->setDefault('atDay,projectKey', '')
+            ->setDefault('sonarqubeServer', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->remove('repoType,reference')
@@ -180,6 +181,35 @@ class jobModel extends model
         unset($job->jkServer);
         unset($job->jkTask);
         unset($job->gitlabRepo);
+
+        /* SonarQube tool is only used if the engine is JenKins. */
+        if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
+        {
+            dao::$errors[]['frame'] = $this->lang->job->mustUseJenkins;
+            return false;
+        }
+
+        if($job->repo > 0 and $job->frame == 'sonarqube')
+        {
+            $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo));
+            if(!empty($sonarqubeJob))
+            {
+                $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
+                dao::$errors[]['repo'] = $message;
+                return false;
+            }
+        }
+
+        if(!empty($job->projectKey) and $job->frame == 'sonarqube')
+        {
+            $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
+            if(!empty($projectList))
+            {
+                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
+                dao::$errors[]['projectKey'] = $message;
+                return false;
+            }
+        }
 
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
@@ -219,6 +249,7 @@ class jobModel extends model
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
+            ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->autoCheck()
             ->exec();
         if(dao::isError()) return false;
@@ -268,6 +299,35 @@ class jobModel extends model
         unset($job->jkTask);
         unset($job->gitlabRepo);
 
+        /* SonarQube tool is only used if the engine is JenKins. */
+        if($job->engine != 'jenkins' and $job->frame == 'sonarqube')
+        {
+            dao::$errors[] = $this->lang->job->mustUseJenkins;
+            return false;
+        }
+
+        if($job->repo > 0 and $job->frame == 'sonarqube')
+        {
+            $sonarqubeJob = $this->getSonarqubeByRepo(array($job->repo), $id);
+            if(!empty($sonarqubeJob))
+            {
+                $message = sprintf($this->lang->job->repoExists, $sonarqubeJob[$job->repo]->id . '-' . $sonarqubeJob[$job->repo]->name);
+                dao::$errors[]['repo'] = $message;
+                return false;
+            }
+        }
+
+        if(!empty($job->projectKey) and $job->frame == 'sonarqube')
+        {
+            $projectList = $this->getJobBySonarqubeProject($job->sonarqubeServer, array($job->projectKey));
+            if(!empty($projectList) && $projectList[$job->projectKey]->id != $id)
+            {
+                $message = sprintf($this->lang->job->projectExists, $projectList[$job->projectKey]->id);
+                dao::$errors[]['projectKey'] = $message;
+                return false;
+            }
+        }
+
         if($job->triggerType == 'schedule') $job->atDay = empty($_POST['atDay']) ? '' : join(',', $this->post->atDay);
 
         $job->svnDir = '';
@@ -304,11 +364,10 @@ class jobModel extends model
 
         $this->dao->update(TABLE_JOB)->data($job)
             ->batchCheck($this->config->job->edit->requiredFields, 'notempty')
-
             ->batchCheckIF($job->triggerType === 'schedule', "atDay,atTime", 'notempty')
             ->batchCheckIF($job->triggerType === 'commit', "comment", 'notempty')
             ->batchCheckIF(($this->post->repoType == 'Subversion' and $job->triggerType == 'tag'), "svnDir", 'notempty')
-
+            ->batchCheckIF($job->frame === 'sonarqube', "sonarqubeServer,projectKey", 'notempty')
             ->autoCheck()
             ->where('id')->eq($id)
             ->exec();
@@ -538,5 +597,44 @@ class jobModel extends model
         }
 
         return '';
+    }
+
+     /**
+     * Get sonarqube by RepoID.
+     *
+     * @param  array  $repoIDList
+     * @param  int    $jobID
+     * @param  bool   $showDeleted
+     * @access public
+     * @return array
+     */
+    public function getSonarqubeByRepo($repoIDList, $jobID = 0, $showDeleted = false)
+    {
+        return $this->dao->select('id,name,repo,deleted')->from(TABLE_JOB)
+            ->where('frame')->eq('sonarqube')
+            ->andWhere('repo')->in($repoIDList)
+            ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
+            ->beginIF($jobID > 0)->andWhere('id')->ne($jobID)->fi()
+            ->fetchAll('repo');
+    }
+
+    /**
+     * Get job pairs by sonarqube projectkeys.
+     *
+     * @param  int    $sonarqubeID
+     * @param  array  $projectKeys
+     * @param  bool   $emptyShowAll
+     * @param  bool   $showDeleted
+     * @access public
+     * @return array
+     */
+    public function getJobBySonarqubeProject($sonarqubeID, $projectKeys = array(), $emptyShowAll = false, $showDeleted = false)
+    {
+        return $this->dao->select('projectKey,id')->from(TABLE_JOB)
+            ->where('frame')->eq('sonarqube')
+            ->andWhere('sonarqubeServer')->eq($sonarqubeID)
+            ->beginIF(!$showDeleted)->andWhere('deleted')->eq('0')->fi()
+            ->beginIF(!empty($projectKeys) or !$emptyShowAll)->andWhere('projectKey')->in($projectKeys)->fi()
+            ->fetchPairs();
     }
 }

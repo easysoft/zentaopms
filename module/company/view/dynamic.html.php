@@ -66,9 +66,13 @@
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
               <?php
-              if(empty($action->objectName))
+              if(empty($action->objectName) and $action->objectID)
               {
                   echo '#' . $action->objectID;
+              }
+              elseif(empty($action->objectID) and $action->extra)
+              {
+                  echo $action->extra;
               }
               elseif(empty($action->objectLink))
               {
@@ -79,7 +83,9 @@
                   echo html::a($action->objectLink, $action->objectName, '', $tab);
               }
               ?>
+              <?php if($action->objectID):?>
               <span class="label label-id"><?php echo $action->objectID;?></span>
+              <?php endif;?>
               <?php endif;?>
             </span>
           </div>

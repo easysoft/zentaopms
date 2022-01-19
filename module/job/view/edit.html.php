@@ -18,6 +18,8 @@
 <?php js::set('dirChange', $lang->job->dirChange);?>
 <?php js::set('buildTag', $lang->job->buildTag);?>
 <?php js::set('jkTask', $job->pipeline);?>
+<?php js::set('job', $job);?>
+<?php js::set('frameList', $lang->job->frameList);?>
 
 <div id='mainContent' class='main-row'>
   <div class='main-content'>
@@ -28,7 +30,7 @@
       <form id='jobForm' method='post' class='form-ajax'>
         <table class='table table-form'>
           <tr>
-            <th class='w-120px'><?php echo $lang->job->name;?></th>
+            <th class='w-140px'><?php echo $lang->job->name;?></th>
             <td class='required'><?php echo html::input('name', $job->name, "class='form-control'");?></td>
             <td colspan="2" ></td>
           </tr>
@@ -50,9 +52,13 @@
             <th><?php echo $lang->job->product;?></th>
             <td><?php echo html::select('product', $products, $job->product, "class='form-control chosen'");?></td>
           </tr>
-          <tr>
+          <tr id="frameBox">
             <th><?php echo $lang->job->frame;?></th>
-            <td><?php echo html::select('frame', $lang->job->frameList, $job->frame, "class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <?php echo html::select('frame', array('' => ''), '', "class='form-control chosen'"); ?>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->job->triggerType;?></th>
@@ -87,6 +93,20 @@
                 ?>
               </div>
             </td>
+          </tr>
+          <tr class='sonarqube hide'>
+            <th><?php echo $lang->job->sonarqubeServer;?></th>
+            <td><?php echo html::select('sonarqubeServer', $sonarqubeServerList, $job->sonarqubeServer, "class='form-control chosen' required");?></td>
+            <td colspan="2"></td>
+          </tr>
+          <tr id='sonarProject' class='sonarqube hide'>
+            <th><?php echo $lang->job->projectKey;?></th>
+            <td class="required">
+              <div class='input-group'>
+                <?php echo html::select('projectKey', array('' => ''), '', "class='form-control chosen'");?>
+              </div>
+            </td>
+            <td colspan="2"></td>
           </tr>
           <tr class="comment-fields">
             <th><?php echo $lang->job->comment;?></th>
