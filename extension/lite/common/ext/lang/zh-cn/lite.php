@@ -160,6 +160,9 @@ $lang->searchObjects['execution'] = '看板';
 
 if($config->edition != 'open') $lang->searchObjects['feedback']  = '反馈';
 
+$lang->navGroup->task      = 'project';
+$lang->navGroup->execution = 'project';
+
 unset($lang->searchObjects['bug']);
 unset($lang->searchObjects['testcase']);
 unset($lang->searchObjects['product']);
