@@ -37,6 +37,8 @@ $lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
+$lang->kanban->setDoneFunction     = '设置完成功能';
+$lang->kanban->doneFunction        = '完成功能';
 $lang->kanban->splitColumn         = '新增子看板列';
 $lang->kanban->createColumnOnLeft  = '左侧新增看板列';
 $lang->kanban->createColumnOnRight = '右侧新增看板列';
@@ -93,6 +95,9 @@ $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、�
 
 $lang->kanban->enableArchived['0'] = '不启用';
 $lang->kanban->enableArchived['1'] = '启用';
+
+$lang->kanban->enableFinished['0'] = '不启用';
+$lang->kanban->enableFinished['1'] = '启用';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";

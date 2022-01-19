@@ -37,6 +37,8 @@ $lang->kanban->setCardColor        = 'Set Card Color';
 $lang->kanban->deleteCard          = 'Delete Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
+$lang->kanban->setDoneFunction     = 'Set done function';
+$lang->kanban->doneFunction        = 'Done function';
 $lang->kanban->splitColumn         = 'Split Column';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -93,6 +95,9 @@ $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist mem
 
 $lang->kanban->enableArchived['0'] = 'No Enable';
 $lang->kanban->enableArchived['1'] = 'Enable';
+
+$lang->kanban->enableFinished['0'] = 'No Enable';
+$lang->kanban->enableFinished['1'] = 'Enable';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
