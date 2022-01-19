@@ -1,19 +1,3 @@
-/**
- * Add link products required class.
- *
- * @access public
- * @return void
- */
-function addProductsRequiredClass()
-{
-    $('#productsBox .input-group').removeClass('required');
-    $('#productsBox .input-group').each(function()
-    {
-        $(this).addClass('required');
-        return false;
-    } );
-}
-
 function switchStatus(projectID, status)
 {
   if(status) location.href = createLink('project', 'task', 'project=' + projectID + '&type=' + status);
@@ -155,7 +139,7 @@ function loadBranches(product)
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
-        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');
+        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html().replace('required', '') + '</div>');
         if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
         $('#productsBox .input-group:last .chosen-container').remove();
         $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);
@@ -182,7 +166,6 @@ function loadBranches(product)
         var branchID = $('#branch' + index).val();
         loadPlans(product, branchID);
     });
-    if(projectModel == 'kanban' || projectModel == 'waterfall') addProductsRequiredClass();
 }
 
 /**
