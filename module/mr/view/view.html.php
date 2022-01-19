@@ -133,7 +133,8 @@
               <table class="table table-data">
                 <tbody>
                   <tr>
-                    <th class="w-90px"><?php echo $lang->job->common;?></th>
+                    <?php $class = in_array($this->app->getClientLang(), array('zh-cn','zh-tw')) ? 'w-90px' : 'w-100px'; ?>
+                    <th class="<?php echo $class; ?>"><?php echo $lang->job->common;?></th>
                     <td><?php echo $compile->name;?></td>
                   </tr>
                   <tr>
