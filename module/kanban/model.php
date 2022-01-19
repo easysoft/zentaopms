@@ -460,7 +460,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, $this->post->lane, $columnID, 'common', $cardID);
+            $this->addKanbanCell($kanbanID, (int)$this->post->lane, $columnID, 'common', $cardID);
 
             return $cardID;
         }

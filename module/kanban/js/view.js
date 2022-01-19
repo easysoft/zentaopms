@@ -145,7 +145,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(columnPrivs.includes('createCard') && column.parent != -1)
         {
-            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
             addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
         }
 
@@ -489,7 +489,7 @@ function openAddTaskForm($element)
     var laneID   = $element.closest('.kanban-lane').data('id');
     var columnID = $element.closest('.kanban-col').data('id');
     var status   = $element.closest('.kanban-col').data('type');
-    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
+    var modalUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
     $.zui.modalTrigger.show(
     {
         url: modalUrl,

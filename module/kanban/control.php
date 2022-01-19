@@ -669,12 +669,11 @@ class kanban extends control
      * @param  int    $kanbanID
      * @param  int    $regionID
      * @param  int    $groupID
-     * @param  int    $laneID
      * @param  int    $columnID
      * @access public
      * @return void
      */
-    public function createCard($kanbanID = 0, $regionID = 0, $groupID = 0, $laneID = 0, $columnID = 0)
+    public function createCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0)
     {
         if($_POST)
         {
