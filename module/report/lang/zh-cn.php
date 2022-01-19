@@ -18,6 +18,7 @@ $lang->report->undefined  = '未设定';
 $lang->report->query      = '查询';
 $lang->report->annual     = '年度总结';
 $lang->report->project    = '项目';
+$lang->report->PO         = 'PO';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';

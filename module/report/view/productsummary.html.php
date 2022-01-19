@@ -44,7 +44,7 @@
             <thead>
               <tr>
                 <th class='c-name'><?php echo $lang->product->name;?></th>
-                <th class='c-user'><?php echo $lang->product->PO;?></th>
+                <th class='c-user'><?php echo $lang->report->PO;?></th>
                 <th><?php echo $lang->productplan->common;?></th>
                 <th class="c-date"><?php echo $lang->productplan->begin;?></th>
                 <th class="c-date"><?php echo $lang->productplan->end;?></th>
