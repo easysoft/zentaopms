@@ -853,6 +853,8 @@ function changeSearchObject()
 
     if(searchObjectList.indexOf(',' + searchType + ',') == -1) var searchType = 'bug';
 
+    if(vision == 'lite') var searchType = 'story';
+
     if(searchType == 'program')    var searchType = 'program-product';
     if(searchType == 'deploystep') var searchType = 'deploy-viewstep';
 

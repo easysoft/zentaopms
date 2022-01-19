@@ -148,3 +148,26 @@ $lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->time
 $lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 
 $lang->admin->dividerMenu = ',company,message,system,';
+
+/* adjust items of search. */
+$lang->searchObjects['all']       = '全部';
+$lang->searchObjects['todo']      = '待办';
+$lang->searchObjects['story']     = '目标';
+$lang->searchObjects['task']      = '卡片';
+$lang->searchObjects['doc']       = '文档';
+$lang->searchObjects['project']   = '项目';
+$lang->searchObjects['execution'] = '看板';
+
+if($config->edition != 'open') $lang->searchObjects['feedback']  = '反馈';
+
+unset($lang->searchObjects['bug']);
+unset($lang->searchObjects['testcase']);
+unset($lang->searchObjects['product']);
+unset($lang->searchObjects['build']);
+unset($lang->searchObjects['release']);
+unset($lang->searchObjects['productplan']);
+unset($lang->searchObjects['testtask']);
+unset($lang->searchObjects['caselib']);
+unset($lang->searchObjects['testreport']);
+unset($lang->searchObjects['program']);
+unset($lang->searchObjects['user']);
