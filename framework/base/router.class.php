@@ -695,7 +695,7 @@ class baseRouter
     {
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
         $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
-        $this->config->vision = $vision ? $vision->value : 'common';
+        $this->config->vision = $vision ? $vision->value : 'rnd';
     }
 
     /**
@@ -1375,7 +1375,7 @@ class baseRouter
             }
 
             /* 3. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
-            if($this->config->vision != 'common')
+            if($this->config->vision != 'rnd')
             {
                 $modulePath = $this->getExtensionRoot() . $this->config->vision . DS . $moduleName . DS;
                 if(is_dir($modulePath)) return $modulePath;
@@ -1408,7 +1408,7 @@ class baseRouter
 
         /* When extensionLevel == 1. */
         $paths['common'] = $this->config->edition != 'open' ? $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS . 'ext' . DS . $ext . DS : '';
-        $paths['vision'] = $this->config->vision == 'common' ? '' : $this->basePath . 'extension' . DS . $this->config->vision . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
+        $paths['vision'] = $this->config->vision == 'rnd' ? '' : $this->basePath . 'extension' . DS . $this->config->vision . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         $paths['custom'] = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         if($this->config->framework->extensionLevel == 1) return $paths;
 

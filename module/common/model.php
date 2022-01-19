@@ -409,15 +409,20 @@ class commonModel extends model
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
                 echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
+                echo '<li class="divider"></li>';
 
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
-                if(!commonModel::isTutorialMode())
+                if($app->config->vision === 'rnd')
                 {
-                    echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    if(!commonModel::isTutorialMode())
+                    {
+                        echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    }
+
+                    echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 }
 
-                echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
 
                 echo "<li class='divider'></li>";
