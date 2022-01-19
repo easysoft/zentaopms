@@ -677,6 +677,8 @@ class baseRouter
      */
     public function setEdition()
     {
+        if(isset($this->config->edition)) return $this->config->edition;
+
         $edition = substr($this->config->version, 0, 3);
         if(in_array($edition, array('pro', 'biz', 'max'))) return $this->config->edition = $edition;
         $this->config->edition = 'open';
