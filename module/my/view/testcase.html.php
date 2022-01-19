@@ -58,7 +58,7 @@
           <th class='c-user'>     <?php common::printOrderLink('lastRunner',    $orderBy, $vars, $lang->testtask->lastRunAccount);?></th>
           <th class='c-full-date'><?php common::printOrderLink('lastRunDate',   $orderBy, $vars, $lang->testtask->lastRunTime);?></th>
           <th class='c-result'>   <?php common::printOrderLink('lastRunResult', $orderBy, $vars, $lang->testtask->lastRunResult);?></th>
-          <th class='c-status'>   <?php common::printOrderLink('status',        $orderBy, $vars, $lang->statusAB);?></th>
+          <th class='c-status'>   <?php echo $lang->statusAB;?></th>
           <th class='c-actions-5 text-center'> <?php echo $lang->actions;?></th>
         </tr>
       </thead>
