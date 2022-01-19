@@ -1007,10 +1007,9 @@ class kanban extends control
     {
         if(!empty($_POST))
         {
-            $this->kanban->setDoneFunction($kanbanID);
+            $this->dao->update(TABLE_KANBAN)->set('performable')->eq($_POST['performable'])->exec();
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 

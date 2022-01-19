@@ -2519,13 +2519,6 @@ class kanbanModel extends model
         if(dao::isError()) return false;
     }
 
-    public function setDoneFunction($kanbanID)
-    {
-        $kanban = fixer::input('post')->get();
-
-        $this->dao->update(TABLE_KANBAN)->set('performable')->eq($kanban->performable)->exec();
-    }
-
     /**
      * Set kanban headerActions.
      *
