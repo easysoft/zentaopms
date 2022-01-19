@@ -22,6 +22,7 @@
 #archivedCards .kanban-item > .info > .user {position: absolute; right: 0; top: 0}
 #archivedCards .card-actions {position: relative; padding: 15px 10px; padding-top: 0px;}
 #archivedCards .card-actions > .btn {display: block;}
+[lang^='en'] #archivedCards .card-actions > .btn {width: 55px;}
 #archivedCards .card-actions > .btn + .btn {margin-top: 10px;}
 #archivedCards .info > .time {background-color: rgba(0, 0, 0, 0.15);}
 #archivedCards .info > .users > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position:sticky; top: 3px; margin: 0 7px; border-radius: 50%; line-height: 32px;}

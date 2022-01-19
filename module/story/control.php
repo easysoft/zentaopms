@@ -26,8 +26,6 @@ class story extends control
         $this->loadModel('tree');
         $this->loadModel('user');
         $this->loadModel('action');
-
-        if($this->app->tab == 'project') $this->app->rawModule = 'projectstory';
     }
 
     /**
@@ -97,7 +95,7 @@ class story extends control
             $response['message'] = $this->lang->saveSuccess;
 
             setcookie('lastStoryModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
+            $storyResult = $this->story->create($objectID, $bugID, $from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extra);
             if(!$storyResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -107,6 +105,7 @@ class story extends control
 
             $storyID   = $storyResult['id'];
             $productID = $this->post->product ? $this->post->product : $productID;
+
             if($storyResult['status'] == 'exists')
             {
                 $response['message'] = sprintf($this->lang->duplicate, $this->lang->story->common);
@@ -183,7 +182,7 @@ class story extends control
                 $param              = $execution->type == 'project' ? "projectID=$objectID&productID=$productID" : "executionID=$objectID&orderBy=id_desc&browseType=unclosed";
                 $response['locate'] = $this->createLink($moduleName, 'story', $param);
             }
-            if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID");
+            if($this->app->getViewType() == 'xhtml') $response['locate'] = $this->createLink('story', 'view', "storyID=$storyID", 'html');
             return $this->send($response);
         }
 
@@ -357,10 +356,11 @@ class story extends control
      * @param  int    $executionID
      * @param  int    $plan
      * @param  string $type requirement|story
+     * @param  string $extra for example feedbackID=0
      * @access public
      * @return void
      */
-    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story')
+    public function batchCreate($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $executionID = 0, $plan = 0, $type = 'story', $extra = '')
     {
         $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
 
@@ -414,7 +414,7 @@ class story extends control
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products);
+                $this->execution->linkStory($executionID, $stories, $products, $extra);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 
@@ -783,7 +783,9 @@ class story extends control
 
                 $product         = $this->product->getByID($productID);
                 $branchProduct   = $product->type == 'normal' ? false : true;
-                $modules         = array($productID => $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches)));
+                $modulePairs     = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branches));
+                $branchModules   = $branchProduct ? $modulePairs : array('0' => $modulePairs);
+                $modules         = array($productID => $branchModules);
                 $plans           = array($productID => $this->productplan->getBranchPlanPairs($productID, '', true));
                 $products        = array($productID => $product);
                 $branchTagOption = array($productID => $branchTagOption);
@@ -1028,8 +1030,7 @@ class story extends control
         }
         elseif($from == 'project')
         {
-            if(empty($param)) $param = $this->session->project;
-            $this->loadModel('project')->setMenu($param);
+            $this->loadModel('project')->setMenu($this->session->project);
         }
         elseif($from == 'qa')
         {

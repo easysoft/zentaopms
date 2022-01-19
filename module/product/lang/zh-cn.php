@@ -170,7 +170,6 @@ $lang->product->branchName['normal']   = '';
 $lang->product->branchName['branch']   = '分支';
 $lang->product->branchName['platform'] = '平台';
 
-$lang->product->statusList['']       = '';
 $lang->product->statusList['normal'] = '正常';
 $lang->product->statusList['closed'] = '结束';
 

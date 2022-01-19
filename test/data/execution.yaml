@@ -1,0 +1,57 @@
+title: table zt_execution
+author: Zhu Jinyong
+version: "1.0"
+fields:
+  - field: name
+    note: "名称"
+    fields:
+    - field: name1
+      range: 迭代{30},阶段{30},看板{30}
+    - field: name2
+      range: 1-10000
+  - field: project
+    range: 11-100
+  - field: model
+    range: []
+  - field: type
+    range: sprint{30},stage{30},kanban{30}
+  - field: status
+    range: wait,doing
+  - field: percent
+    range: 0
+  - field: auth
+    range:
+  - field: desc
+    range: 1-10000
+    prefix: "迭代描述"
+  - field: grade
+    range: 1
+  - field: parent
+    range: 121-130{15},131-240{5}
+  - field: path
+    fields:
+     - field: grade1
+       prefix: ","
+       postfix: ","
+       range: 121-130{15},131-240{5}
+     - field: self
+       postfix: ","
+       range: 241-10000
+  - field: acl
+    range: open{4},private{4}
+  - field: whitelist
+    froms:
+      - from: common.user.v1.yaml
+        use: empty{8}
+      - from: common.user.v1.yaml
+        use: empty{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: one{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: two{8}
+        prefix: ","
+      - from: common.user.v1.yaml
+        use: three{8}
+        prefix: ","

@@ -53,7 +53,7 @@ class project extends control
                 unset($fields[$key]);
             }
 
-            $projects = $this->project->getInfoList($status, 30, $orderBy, null);
+            $projects = $this->project->getInfoList($status, $orderBy);
             $users    = $this->loadModel('user')->getPairs('noletter');
 
             $this->loadModel('product');
@@ -224,10 +224,11 @@ class project extends control
      * Project index view.
      *
      * @param  int    $projectID
+     * @param  string $browseType
      * @access public
      * @return void
      */
-    public function index($projectID = 0)
+    public function index($projectID = 0, $browseType = 'all')
     {
         $projectID = $this->project->saveState($projectID, $this->project->getPairsByProgram());
 
@@ -241,6 +242,27 @@ class project extends control
 
         if(!$projectID) $this->locate($this->createLink('project', 'browse'));
         setCookie("lastProject", $projectID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
+        if($project->model == 'kanban')
+        {
+            $kanbanList = $this->loadModel('execution')->getList($projectID, 'all', $browseType);
+
+            $executionActions = array();
+            foreach($kanbanList as $kanbanID => $kanban)
+            {
+                foreach($this->config->execution->statusActions as $action)
+                {
+                    if($this->execution->isClickable($kanban, $action)) $executionActions[$kanbanID][] = $action;
+                }
+                if($this->execution->isClickable($kanban, 'delete')) $executionActions[$kanbanID][] = 'delete';
+            }
+
+            $this->view->kanbanList       = $kanbanList;
+            $this->view->browseType       = $browseType;
+            $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
+            $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+            $this->view->executionActions = $executionActions;
+        }
 
         $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
         $this->view->position[] = $this->lang->project->index;
@@ -353,6 +375,8 @@ class project extends control
     {
         $this->loadModel('execution');
         $this->loadModel('product');
+
+        if($model == 'kanban') unset($this->lang->project->authList['reset']);
 
         if($_POST)
         {
@@ -508,6 +532,7 @@ class project extends control
         $project   = $this->project->getByID($projectID);
         $programID = $project->parent;
         $this->project->setMenu($projectID);
+        if($project->model == 'kanban') unset($this->lang->project->authList['reset']);
 
         if($_POST)
         {
@@ -544,15 +569,16 @@ class project extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locateLink));
         }
 
-        $linkedBranches  = array();
-        $productPlans    = array(0 => '');
-        $allProducts     = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts  = $this->loadModel('product')->getProducts($projectID);
-        $parentProject   = $this->program->getByID($project->parent);
-        $branches        = $this->project->getBranchesByProject($projectID);
-        $plans           = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
-        $projectStories  = $this->project->getStoriesByProject($projectID);
-        $projectBranches = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
+        $linkedBranches   = array();
+        $linkedBranchList = array();
+        $productPlans     = array(0 => '');
+        $allProducts      = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
+        $linkedProducts   = $this->loadModel('product')->getProducts($projectID);
+        $parentProject    = $this->program->getByID($project->parent);
+        $branches         = $this->project->getBranchesByProject($projectID);
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $projectStories   = $this->project->getStoriesByProject($projectID);
+        $projectBranches  = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
         /* If the story of the product which linked the project, you don't allow to remove the product. */
         $unmodifiableProducts     = array();
@@ -563,6 +589,7 @@ class project extends control
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
                 if($branch != BRANCH_MAIN) $productPlans[$productID][$branchID] = isset($plans[$productID][BRANCH_MAIN]) ? $plans[$productID][BRANCH_MAIN] : array();
                 $productPlans[$productID][$branchID] += isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
@@ -576,8 +603,7 @@ class project extends control
             }
         }
 
-        $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
-        $disableModel = $canChangeModel == true ? '' : 'disabled';
+        if($project->model != 'kanban') $canChangeModel = $this->project->checkCanChangeModel($projectID, $project->model);
 
         $this->view->title      = $this->lang->project->edit;
         $this->view->position[] = $this->lang->project->edit;
@@ -597,14 +623,14 @@ class project extends control
         $this->view->unmodifiableProducts     = $unmodifiableProducts;
         $this->view->unmodifiableBranches     = $unmodifiableBranches;
         $this->view->unmodifiableMainBranches = $unmodifiableMainBranches;
-        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed');
+        $this->view->branchGroups             = $this->loadModel('branch')->getByProducts(array_keys($linkedProducts), 'noclosed', $linkedBranchList);
         $this->view->URSRPairs                = $this->custom->getURSRPairs();
         $this->view->parentProject            = $parentProject;
         $this->view->parentProgram            = $this->program->getByID($project->parent);
         $this->view->availableBudget          = $this->program->getBudgetLeft($parentProject) + (float)$project->budget;
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
-        $this->view->disableModel             = $disableModel;
+        $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel == true) ? '' : 'disabled';
 
         $this->display();
     }

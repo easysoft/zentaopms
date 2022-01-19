@@ -128,7 +128,7 @@ class ci extends control
                 $productID = $this->dao->findById($firstCase->id)->from(TABLE_CASE)->fetch('product');
             }
         }
-        if(empty($productID)) die(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
+        if(empty($productID)) return print(json_encode(array('result' => 'fail', 'message' => 'productID is not found')));
 
         /* Get testtaskID or create testtask. */
         if(!empty($taskID))
@@ -179,6 +179,6 @@ class ci extends control
 
         $taskID = $this->testtask->processAutoResult($taskID, $productID, $data['suites'], $data['cases'], $data['results'], $data['suiteNames'], $data['caseTitles'], $testType);
 
-        die(json_encode(array('result' => 'success')));
+        return print(json_encode(array('result' => 'success')));
     }
 }

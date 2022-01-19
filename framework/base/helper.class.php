@@ -917,3 +917,39 @@ function htmlSpecialString($string, $flags = '', $encoding = 'UTF-8')
     if(!$flags) $flags = defined('ENT_SUBSTITUTE') ? ENT_QUOTES | ENT_SUBSTITUTE | ENT_HTML401 : ENT_QUOTES;
     return htmlspecialchars($string, $flags, $encoding);
 }
+
+if (!function_exists('array_column'))
+{
+    function array_column(array $input, $columnKey, $indexKey = null)
+    {
+        $output = array();
+
+        foreach ($input as $row) {
+            $key = $value = null;
+            $keySet = $valueSet = false;
+
+            if (null !== $indexKey && array_key_exists($indexKey, $row)) {
+                $keySet = true;
+                $key = (string) $row[$indexKey];
+            }
+
+            if (null === $columnKey) {
+                $valueSet = true;
+                $value = $row;
+            } elseif (\is_array($row) && \array_key_exists($columnKey, $row)) {
+                $valueSet = true;
+                $value = $row[$columnKey];
+            }
+
+            if ($valueSet) {
+                if ($keySet) {
+                    $output[$key] = $value;
+                } else {
+                    $output[] = $value;
+                }
+            }
+        }
+
+        return $output;
+    }
+}

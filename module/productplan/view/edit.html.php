@@ -40,24 +40,18 @@
           </tr>
           <tr>
             <th><?php echo $lang->productplan->status;?></th>
-            <?php if($plan->parent != -1):?>
-            <td><?php echo html::select('status', array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' onchange='setPlanStatus()'");?></td>
-            <?php else:?>
-            <td><?php echo html::select('status', array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' disabled onchange='setPlanStatus()'");?></td>
-            <?php endif;?>
+            <?php $disabled = $plan->parent == -1 ? "disabled='disabled'" : '' ;?>
+            <td><?php echo html::select('status', array_slice($lang->productplan->statusList,($plan->status == 'wait' ? 0 : 1)), $plan->status, "class='form-control chosen' $disabled");?></td>
           </tr>
           <tr>
-            <?php $hidden  = $plan->status != 'wait' ? 'hidden' : '';?>
-            <?php $checked = $plan->begin  == $config->productplan->future and $plan->end == $config->productplan->future ? "checked='checked'" : '';?>
+            <?php $checked = ($plan->begin  == $config->productplan->future and $plan->end == $config->productplan->future) ? "checked='checked'" : '';?>
             <th><?php echo $lang->productplan->begin;?></th>
             <td><?php echo html::input('begin', $plan->begin != $config->productplan->future ? formatTime($plan->begin) : '', "class='form-control form-date'");?></td>
             <td>
-              <?php if($plan->status == 'wait'):?>
-              <div class='checkbox-primary <?php echo $hidden;?>' id='checkBox'>
+              <div class='checkbox-primary' id='checkBox'>
                 <input type='checkbox' id='future' name='future' value='1' <?php echo $checked;?> />
                 <label for='future'><?php echo $lang->productplan->future;?></label>
               </div>
-              <?php endif;?>
             </td>
           </tr>
           <tr>

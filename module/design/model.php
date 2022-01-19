@@ -401,7 +401,7 @@ class designModel extends model
      * @access public
      * @return void
      */
-    public function setMenu($projectID = 0, $products, $productID = 0)
+    public function setMenu($projectID, $products, $productID = 0)
     {
         if($this->app->rawMethod != 'browse') unset($this->lang->waterfall->menu->design['subMenu']->bysearch);
         if(empty($products) || !$productID) return '';

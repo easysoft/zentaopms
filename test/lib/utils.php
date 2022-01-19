@@ -103,6 +103,7 @@ function zdRun()
 
         /* Generate SQL files. */
         $tables = array();
+        $count  = 1;
         foreach($builder as $key => $info)
         {
             /* Build ZenData. */
@@ -166,12 +167,13 @@ function zdRun()
 
             /* Create SQL files. */
             $tableName = $config->db->prefix . $tableName;
-            $command  = "$zdPath -c %s -d %s -n %s -o {$zdRoot}sql/%s.sql -table %s";
-            $execYaml = sprintf($command, $configYaml, $defaultFile, $info['rows'], $fileName, $tableName);
+            $command  = "$zdPath -c %s -d %s -n %s -o {$zdRoot}sql/%03d_%s.sql -table %s";
+            $execYaml = sprintf($command, $configYaml, $defaultFile, $info['rows'], $count, $fileName, $tableName);
             system($execYaml);
             // echo $execYaml . "\n";
 
             $tables[$tableName] = $tableName;
+            $count++;
         }
 
         /* Truncate tables. */

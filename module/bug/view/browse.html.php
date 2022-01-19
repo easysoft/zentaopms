@@ -121,8 +121,8 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
       }
       else
       {
-          $branch = $branch != 'all' ? $branch : 0;
-          $createBugLink = $this->createLink('bug', 'create', "productID=$productID&branch=$branch&extra=moduleID=$moduleID");
+          $selectedBranch = $branch != 'all' ? $branch : 0;
+          $createBugLink  = $this->createLink('bug', 'create', "productID=$productID&branch=$selectedBranch&extra=moduleID=$moduleID");
       }
       $batchCreateLink = $this->createLink('bug', 'batchCreate', "productID=$productID&branch=$branch&executionID=0&moduleID=$moduleID");
 

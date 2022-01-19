@@ -35,10 +35,12 @@
     ?>
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
+        <?php if($execution->type != 'kanban'):?>
         <tr>
           <th><?php echo $lang->task->execution;?></th>
           <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->type;?></th>
           <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td>

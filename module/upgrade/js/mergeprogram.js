@@ -818,6 +818,8 @@ function hiddenProject()
  */
 function setProgramByProduct(product)
 {
+    if(product.length == 0) return;
+
     var programID = product.attr('data-programid');
     $(':checkbox[data-productid]').each(function()
     {

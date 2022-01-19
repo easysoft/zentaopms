@@ -388,6 +388,19 @@ CREATE TABLE IF NOT EXISTS `zt_testPlan` (
   PRIMARY KEY  (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
+CREATE TABLE IF NOT EXISTS `zt_testTask` (
+  `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `name` char(90) NOT NULL,
+  `product` mediumint(8) unsigned NOT NULL,
+  `project` mediumint(8) unsigned NOT NULL default '0',
+  `build` char(30) NOT NULL,
+  `begin` date NOT NULL,
+  `end` date NOT NULL,
+  `desc` text NOT NULL,
+  `status` char(30) NOT NULL,
+  PRIMARY KEY  (`id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
 CREATE TABLE IF NOT EXISTS `zt_todo` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
   `account` char(30) NOT NULL,

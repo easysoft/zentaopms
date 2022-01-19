@@ -77,9 +77,36 @@ function p($keys = '', $delimiter = ',')
 {
     global $_result;
 
+    if(empty($_result)) return print(">> 0\n");
+
+    if(is_array($_result) and isset($_result['code']) and $_result['code'] == 'fail') return print(">> " . (string) $_result['message'] . "\n");
+
     /* Print $_result. */
     if(!$keys or !is_array($_result) and !is_object($_result)) return print(">> " . (string) $_result . "\n");
 
+    $parts  = explode(';', $keys);
+    $values = array();
+    foreach($parts as $part)
+    {
+        $values[] = implode($delimiter, getValues($_result, $part, $delimiter));
+    }
+
+    echo ">> " . implode(';', $values) . "\n";
+
+    return true;
+}
+
+/**
+ * Get values
+ *
+ * @param mixed  $value
+ * @param string $keys
+ * @param string $delimiter
+ * @access public
+ * @return void
+ */
+function getValues($value, $keys, $delimiter)
+{
     $object = '';
     $index  = -1;
     $pos    = strpos($keys, ':');
@@ -101,7 +128,6 @@ function p($keys = '', $delimiter = ',')
     }
     $keys = explode($delimiter, $keys);
 
-    $value = $_result;
     if($object)
     {
         if(is_array($value))
@@ -139,9 +165,7 @@ function p($keys = '', $delimiter = ',')
     $values = array();
     foreach($keys as $key) $values[] = zget($value, $key, '');
 
-    echo ">> " . implode($delimiter, $values) . "\n";
-
-    return true;
+    return $values;
 }
 
 /**
@@ -153,6 +177,35 @@ function p($keys = '', $delimiter = ',')
  */
 function e($expect)
 {
+}
+
+/**
+ * Check order
+ *
+ * @param array  $objs
+ * @param string $orderBy
+ * @access public
+ * @return bool
+ */
+function checkOrder($objs, $orderBy)
+{
+    if(empty($objs)) return true;
+
+    list($field, $sort) = explode('_', $orderBy);
+    $last = current($objs)->$field;
+    foreach($objs as $obj)
+    {
+        if($sort == 'desc')
+        {
+            if($obj->$field > $last) return false;
+        }
+        else
+        {
+            if($obj->$field < $last) return false;
+        }
+    }
+
+    return true;
 }
 
 /**
@@ -174,4 +227,19 @@ function zdImport($table, $yaml, $count = 10)
 
     $command = "$config->zdPath -c $yaml -t $table -T -dns $dns --clear -n $count";
     system($command);
+}
+
+/**
+ * Switch user.
+ *
+ * @param  string $account
+ * @access public
+ * @return bool
+ */
+function su($account)
+{
+    $userModel = new userModel();
+    $user = $userModel->identify($account, '123qwe!@#');
+    if($user) return $userModel->login($user);
+    return false;
 }

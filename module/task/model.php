@@ -137,8 +137,6 @@ class taskModel extends model
             $this->dao->insert(TABLE_TASKSPEC)->data($taskSpec)->autoCheck()->exec();
             if(dao::isError()) return false;
 
-            $this->loadModel('kanban')->updateLane($executionID, 'task');
-
             if($this->post->story) $this->loadModel('story')->setStage($this->post->story);
             if($this->post->selectTestStory)
             {
@@ -233,19 +231,24 @@ class taskModel extends model
      * Create a batch task.
      *
      * @param  int    $executionID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchCreate($executionID)
+    public function batchCreate($executionID, $extra = '')
     {
         /* Load module and init vars. */
         $this->loadModel('action');
+        $this->loadModel('kanban');
         $now       = helper::now();
         $mails     = array();
         $storyIDs  = array();
         $taskNames = array();
         $preStory  = 0;
         $tasks     = fixer::input('post')->get();
+
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
 
         /* Judge whether the current task is a parent. */
         $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
@@ -402,6 +405,8 @@ class taskModel extends model
 
             $this->executeHooks($taskID);
 
+            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
 
@@ -410,11 +415,7 @@ class taskModel extends model
             $mails[$i]->actionID = $actionID;
         }
 
-        if(!dao::isError())
-        {
-            $this->loadModel('score')->create('ajax', 'batchCreate');
-            $this->loadModel('kanban')->updateLane($executionID, 'task');
-        }
+        if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchCreate');
 
         if($parentID > 0 && !empty($taskID))
         {
@@ -457,6 +458,8 @@ class taskModel extends model
             $actionID      = $this->action->create('task', $parentID, 'createChildren', '', trim($childTasks, ','));
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
+
+        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'task');
         return $mails;
     }
 
@@ -1015,8 +1018,7 @@ class taskModel extends model
             if($this->post->story != false) $this->loadModel('story')->setStage($this->post->story);
             if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
             if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-            if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task');
-
+            if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
             $this->loadModel('action');
             $changed = $task->parent != $oldTask->parent;
             if($oldTask->parent > 0)
@@ -1294,7 +1296,7 @@ class taskModel extends model
 
                 if($task->status == 'done')   $this->loadModel('score')->create('task', 'finish', $taskID);
                 if($task->status == 'closed') $this->loadModel('score')->create('task', 'close', $taskID);
-                if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+                if($task->status != $oldTask->status) $this->loadModel('kanban')->updateLane($oldTask->execution, 'task', $oldTask->id);
                 $allChanges[$taskID] = common::createChanges($oldTask, $task);
             }
             else
@@ -1389,12 +1391,16 @@ class taskModel extends model
     /**
      * Start a task.
      *
-     * @param  int      $taskID
+     * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function start($taskID)
+    public function start($taskID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $oldTask = $this->getById($taskID);
         if($oldTask->status == 'doing') dao::$errors[] = $this->lang->task->error->alreadyStarted;
         if(!empty($oldTask->team))
@@ -1470,7 +1476,10 @@ class taskModel extends model
             $this->computeBeginAndEnd($oldTask->parent);
         }
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
-        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+
+        $this->loadModel('kanban');
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
@@ -1601,6 +1610,7 @@ class taskModel extends model
 
         if($task->parent > 0) $this->updateParentStatus($task->id);
         if($task->story)  $this->loadModel('story')->setStage($task->story);
+        if(isset($data->status) and $task->status != $data->status) $this->loadModel('kanban')->updateLane($task->execution, 'task', $taskID);
         if($task->status == 'done' and !dao::isError()) $this->loadModel('score')->create('task', 'finish', $taskID);
 
         return $changes;
@@ -1609,12 +1619,16 @@ class taskModel extends model
     /**
      * Finish a task.
      *
-     * @param  int      $taskID
+     * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function finish($taskID)
+    public function finish($taskID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $oldTask = $this->getById($taskID);
         $now     = helper::now();
         $today   = helper::today();
@@ -1732,7 +1746,10 @@ class taskModel extends model
         if($task->status == 'done' && !dao::isError())
         {
             $this->loadModel('score')->create('task', 'finish', $taskID);
-            $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+            if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         }
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1741,11 +1758,15 @@ class taskModel extends model
      * Pause task
      *
      * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function pause($taskID)
+    public function pause($taskID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $oldTask = $this->getById($taskID);
 
         $task = fixer::input('post')
@@ -1758,18 +1779,26 @@ class taskModel extends model
         $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('id')->eq((int)$taskID)->exec();
 
         if($oldTask->parent > 0) $this->updateParentStatus($taskID);
+
+        $this->loadModel('kanban');
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
     /**
      * Close a task.
      *
-     * @param  int      $taskID
+     * @param  int    $taskID
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function close($taskID)
+    public function close($taskID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $oldTask = $this->dao->select('*')->from(TABLE_TASK)->where('id')->eq($taskID)->fetch();
 
         $now  = helper::now();
@@ -1792,7 +1821,10 @@ class taskModel extends model
             if($oldTask->parent > 0) $this->updateParentStatus($taskID);
             if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
             $this->loadModel('score')->create('task', 'close', $taskID);
-            $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+
+            $this->loadModel('kanban');
+            if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+            if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
             return common::createChanges($oldTask, $task);
         }
@@ -1801,13 +1833,17 @@ class taskModel extends model
     /**
      * Cancel a task.
      *
-     * @param int $taskID
+     * @param int    $taskID
+     * @param string $extra
      *
      * @access public
      * @return array
      */
-    public function cancel($taskID)
+    public function cancel($taskID, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $oldTask = $this->getById($taskID);
 
         $now  = helper::now();
@@ -1832,7 +1868,9 @@ class taskModel extends model
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+        $this->loadModel('kanban');
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
@@ -1840,13 +1878,17 @@ class taskModel extends model
     /**
      * Activate a task.
      *
-     * @param int $taskID
+     * @param int    $taskID
+     * @param string $extra
      *
      * @access public
      * @return array
      */
-    public function activate($taskID)
+    public function activate($taskID, $extra)
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(strpos($this->config->task->activate->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
@@ -1898,7 +1940,9 @@ class taskModel extends model
             $this->computeWorkingHours($taskID);
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
-        $this->loadModel('kanban')->updateLane($oldTask->execution, 'task');
+        $this->loadModel('kanban');
+        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
 
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }

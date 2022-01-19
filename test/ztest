@@ -19,11 +19,11 @@ switch($argv[1])
     case 'control':
         ztfRun('control');
         break;
+    case 'program':
+        ztfRun('model/program');
+        break;
     case 'model':
         ztfRun('model');
-        break;
-    case 'api':
-        ztfRun('api');
         break;
     default:
         ztfExtract($argv[1]);

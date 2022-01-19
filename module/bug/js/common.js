@@ -421,6 +421,7 @@ function loadProjectBuilds(projectID)
             $('#openedBuild_chosen').remove();
             $('#openedBuild').next('.picker').remove();
             $("#openedBuild").chosen();
+            notice();
         })
     }
     else
@@ -617,13 +618,13 @@ function notice()
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
-        if($('#execution').length == 0 || $('#execution').val() == 0)
+        if(($('#execution').length == 0 || $('#execution').val() == 0) && ($('#project').length == 0 || $('#project').val() == 0))
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;
             var link = createLink('release', 'create', 'productID=' + $('#product').val() + '&branch=' + branch);
             if(config.onlybody != 'yes') link += config.requestType == 'GET' ? '&onlybody=yes' : '?onlybody=yes';
-            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createBuild + '</a> ';
+            html += '<a href="' + link + '" data-toggle="modal" data-type="iframe" style="padding-right:5px">' + createRelease + '</a> ';
             html += '<a href="javascript:loadProductBuilds(' + $('#product').val() + ')">' + refresh + '</a>';
         }
         else

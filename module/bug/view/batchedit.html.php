@@ -79,7 +79,7 @@
               $branchTagOption = array();
               $product         = $this->product->getByID($bug->product);
               $plans           = $this->loadModel('productplan')->getPairs($bug->product, $branch);
-              $branches        = $product->type == 'normal' ? array('' => '') : $this->loadModel('branch')->getList($product->id, 0 ,'all');;
+              $branches        = $product->type == 'normal' ? array() : $this->loadModel('branch')->getList($product->id, 0 ,'all');
               foreach($branches as $branchInfo)
               {
                   $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');

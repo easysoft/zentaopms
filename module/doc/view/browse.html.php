@@ -49,7 +49,11 @@
             <?php $star = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? 'icon-star text-yellow' : 'icon-star-empty';?>
             <?php $collectTitle = strpos($doc->collector, ',' . $this->app->user->account . ',') !== false ? $lang->doc->cancelCollection : $lang->doc->collect;?>
             <tr>
+              <?php if(common::hasPriv('doc', 'view')):?>
               <td class="c-name"><?php echo html::a($this->createLink('doc', 'view', "docID=$doc->id&version=0", '', true), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "title='{$doc->title}' class='iframe' data-width='90%'");?></td>
+              <?php else:?>
+              <td class='c-name' title='<?php echo $doc->title;?>'><?php echo "<i class='icon icon-file-text text-muted'></i> {$doc->title}";?></td>
+              <?php endif;?>
               <td class='c-name'>
                 <?php
                 if(!empty($doc->objectType))

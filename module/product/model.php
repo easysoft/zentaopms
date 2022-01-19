@@ -149,7 +149,7 @@ class productModel extends model
     public function saveState($productID, $products)
     {
         if($productID == 0 and $this->cookie->preProductID)   $productID = $this->cookie->preProductID;
-        if($productID == 0 and $this->session->product == '') $productID = key($products);
+        if(($productID == 0 and $this->session->product == '') or !isset($products[$productID])) $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
 
         if(!isset($products[$this->session->product]))
@@ -356,7 +356,7 @@ class productModel extends model
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
-            ->fetchAll();
+            ->fetchAll('id');
 
         $products = array();
         foreach($projectProducts as $product)
@@ -1465,7 +1465,7 @@ class productModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t2.deleted')->eq(0)
             ->andWhere('t1.product')->eq($productID)
-            ->andWhere('t2.type')->in('sprint,stage')
+            ->andWhere('t2.type')->in('sprint,stage,kanban')
             ->fetch();
 
         $product->stories    = $stories;

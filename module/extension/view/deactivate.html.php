@@ -23,7 +23,7 @@
       <?php if($removeCommands):?>
       <div class='container mw-500px'>
         <p><strong><?php echo $lang->extension->unremovedFiles;?></strong></p>
-        <code><?php echo join($removeCommands, '<br />');?></code>
+        <code><?php echo join('<br />', $removeCommands);?></code>
       </div>
       <?php endif;?>
       <hr>

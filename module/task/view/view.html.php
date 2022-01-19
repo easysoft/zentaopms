@@ -171,7 +171,7 @@
         <?php if(!isonlybody()) echo "<div class='divider'></div>";?>
         <?php if(!$task->deleted):?>
         <?php
-        if(empty($task->team) or empty($task->children)) common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'split', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
+        if((empty($task->team) or empty($task->children)) and $execution->type != 'kanban') common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", $task, 'button', 'split', '', '', '', "title='{$lang->task->children}'", $lang->task->children);
         common::printIcon('task', 'assignTo',       "executionID=$task->execution&taskID=$task->id", $task, 'button', '', '', 'iframe', true, '', empty($task->team) ? $lang->task->assignTo : $lang->task->transfer);
         common::printIcon('task', 'start',          "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('task', 'restart',        "taskID=$task->id", $task, 'button', '', '', 'iframe showinonlybody', true);

@@ -167,8 +167,10 @@ function setMailto(mailto, contactListID)
  * @access public
  * @return void
  */
-function ajaxGetContacts(obj, dropdownName = 'mailto')
+function ajaxGetContacts(obj, dropdownName)
 {
+    if(typeof(dropdownName) == 'undefined') dropdownName = 'mailto';
+
     link = createLink('user', 'ajaxGetContactList', 'dropdownName=' + dropdownName);
     $.get(link, function(contacts)
     {
