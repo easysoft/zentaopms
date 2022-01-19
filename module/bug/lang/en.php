@@ -419,7 +419,6 @@ $lang->bug->featureBar['browse']['resolvedbyme'] = $lang->bug->resolvedByMe;
 $lang->bug->featureBar['browse']['unresolved']   = $lang->bug->unResolved;
 $lang->bug->featureBar['browse']['more']         = $lang->more;
 
-$lang->bug->moreSelects['toclosed']      = $lang->bug->toClosed;
 $lang->bug->moreSelects['unconfirmed']   = $lang->bug->unconfirmed;
 $lang->bug->moreSelects['assigntonull']  = $lang->bug->assignToNull;
 $lang->bug->moreSelects['longlifebugs']  = $lang->bug->longLifeBugs;
