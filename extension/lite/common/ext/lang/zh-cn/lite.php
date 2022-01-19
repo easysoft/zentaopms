@@ -62,5 +62,9 @@ $lang->scrum->menu->settings['subMenu']->view        = array('link' => "$lang->o
 $lang->scrum->menu->settings['subMenu']->members     = array('link' => "{$lang->team->common}|project|team|project=%s", 'alias' => 'managemembers,team');
 $lang->scrum->menu->settings['subMenu']->whitelist   = array('link' => "{$lang->whitelist}|project|whitelist|project=%s", 'subModule' => 'personnel');
 
+unset($lang->doc->menu->product);
+unset($lang->doc->menu->api);
+unset($lang->doc->menu->execution);
+
 $lang->URCommon = '目标';
 $lang->SRCommon = '目标';
