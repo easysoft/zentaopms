@@ -245,6 +245,7 @@ define('TABLE_KANBANCOLUMN', '`' . $config->db->prefix . 'kanbancolumn`');
 define('TABLE_KANBANORDER',  '`' . $config->db->prefix . 'kanbanorder`');
 define('TABLE_KANBANGROUP',  '`' . $config->db->prefix . 'kanbangroup`');
 define('TABLE_KANBANCARD',   '`' . $config->db->prefix . 'kanbancard`');
+define('TABLE_KANBANCELL',   '`' . $config->db->prefix . 'kanbancell`');
 if(!defined('TABLE_LANG'))        define('TABLE_LANG', '`' . $config->db->prefix . 'lang`');
 if(!defined('TABLE_PROJECTSPEC')) define('TABLE_PROJECTSPEC', '`' . $config->db->prefix . 'projectspec`');
 
@@ -296,5 +297,5 @@ $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));

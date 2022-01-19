@@ -64,7 +64,11 @@
           <?php $stakeholder->name = $stakeholder->companyName ? $stakeholder->companyName . '/' . $stakeholder->name : $stakeholder->name;?>
           <?php $isKey = $stakeholder->key ? " <i class='icon icon-star-empty'></i>" : '';?>
           <?php $title = $stakeholder->key ? $stakeholder->name . '(' . $lang->stakeholder->isKey . ')' : $stakeholder->name;?>
-          <td><?php common::printLink('stakeholder', 'view', "id=$stakeholder->id", $stakeholder->name . $isKey, '', "title=$title");?></td>
+          <?php if(common::hasPriv('stakeholder', 'view')):?>
+          <td><?php echo html::a($this->createLink('stakeholder', 'view', "id=$stakeholder->id"), $stakeholder->name . $isKey, '', "title={$stakeholder->name}");?></td>
+          <?php else:?>
+          <td title='<?php echo $stakeholder->name;?>'><?php echo $stakeholder->name . $isKey;?></td>
+          <?php endif;?>
           <td title='<?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?>'><?php echo zget($lang->stakeholder->typeList, $stakeholder->type, '');?></td>
           <td title="<?php echo $stakeholder->phone;?>"><?php echo $stakeholder->phone;?></td>
           <td title="<?php echo $stakeholder->qq;?>"><?php echo $stakeholder->qq;?></td>

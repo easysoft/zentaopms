@@ -674,6 +674,7 @@ $lang->resource->kanban->cardsSort          = 'cardsSort';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
+$lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -718,6 +719,7 @@ $lang->kanban->methodOrder[195] = 'viewArchivedColumn';
 $lang->kanban->methodorder[200] = 'viewArchivedCard';
 $lang->kanban->methodorder[205] = 'archiveColumn';
 $lang->kanban->methodorder[210] = 'restoreCard';
+$lang->kanban->methodorder[215] = 'setLaneHeight';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
@@ -759,7 +761,7 @@ $lang->resource->execution->linkStory         = 'linkStory';
 $lang->resource->execution->unlinkStory       = 'unlinkStory';
 $lang->resource->execution->batchUnlinkStory  = 'batchUnlinkStory';
 $lang->resource->execution->updateOrder       = 'updateOrder';
-$lang->resource->execution->kanban            = 'kanban';
+$lang->resource->execution->taskKanban        = 'taskKanban';
 $lang->resource->execution->printKanban       = 'printKanbanAction';
 $lang->resource->execution->tree              = 'treeAction';
 $lang->resource->execution->treeTask          = 'treeOnlyTask';
@@ -775,6 +777,7 @@ $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->executionkanban   = 'kanbanAction';
+$lang->resource->execution->kanban            = 'RDKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -816,7 +819,7 @@ $lang->execution->methodOrder[170] = 'linkStory';
 $lang->execution->methodOrder[175] = 'unlinkStory';
 $lang->execution->methodOrder[180] = 'batchUnlinkStory';
 $lang->execution->methodOrder[185] = 'updateOrder';
-$lang->execution->methodOrder[190] = 'kanban';
+$lang->execution->methodOrder[190] = 'taskKanban';
 $lang->execution->methodOrder[195] = 'printKanban';
 $lang->execution->methodOrder[200] = 'kanbanHideCols';
 $lang->execution->methodOrder[205] = 'kanbanColsColor';
@@ -832,6 +835,7 @@ $lang->execution->methodOrder[250] = 'addWhitelist';
 $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[265] = 'executionkanban';
+$lang->execution->methodOrder[270] = 'kanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();

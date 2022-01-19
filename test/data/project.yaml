@@ -5,16 +5,18 @@ fields:
   - field: project
     range: 0
   - field: model
-    range: ""
+    range: scrum{30},waterfall{30},kanban{30}
   - field: name
     note: "名称"
     fields:
     - field: name1
       range: '项目'
     - field: name2
-      range: []{100000}
+      range: 1-10000
   - field: type
     range: project
+  - field: status
+    range: wait{2},doing{4},suspended,closed
   - field: lifetime
     range:
   - field: budget
@@ -36,7 +38,7 @@ fields:
     note: "Only project has auth"
     range:
   - field: parent
-    range: 1,2,3,4,2,1,[1-7]{2},[7-19]{3}
+    range: 1-10
   - field: grade
     range:
   - field: code

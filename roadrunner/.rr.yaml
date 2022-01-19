@@ -1,0 +1,7 @@
+service:
+  cron:
+    command: php cron-worker.php
+    process_num: 4
+    exec_timeout: 0
+    remain_after_exit: true
+    restart_sec: 1

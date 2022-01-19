@@ -61,7 +61,7 @@ class bug extends control
             {
                 $products = $this->product->getPairs('', 0, 'program_asc');
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
         }
         else
         {
@@ -226,7 +226,7 @@ class bug extends control
         $this->view->param           = $param;
         $this->view->orderBy         = $orderBy;
         $this->view->moduleID        = $moduleID;
-        $this->view->memberPairs     = $this->user->getPairs('noletter|nodeleted');
+        $this->view->memberPairs     = $this->user->getPairs('noletter|noclosed');
         $this->view->branch          = $branch;
         $this->view->branchOption    = $branchOption;
         $this->view->branchTagOption = $branchTagOption;
@@ -345,7 +345,7 @@ class bug extends control
         if(isset($fromObjectID))
         {
             $fromObject = $this->loadModel($fromObjectName)->getById($fromObjectID);
-            if(!$fromObject) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+            if(!$fromObject) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
 
             $this->view->$fromObjectIDKey = $fromObjectID;
             $this->view->$fromObjectName  = $fromObject;
@@ -361,7 +361,7 @@ class bug extends control
 
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '');
+            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extras);
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -428,7 +428,7 @@ class bug extends control
                 setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $location = $this->createLink('bug', 'browse', "productID={$this->post->product}&branch=$branch&browseType=byModule&param={$this->post->module}&orderBy=id_desc");
             }
-            if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID");
+            if($this->app->getViewType() == 'xhtml') $location = $this->createLink('bug', 'view', "bugID=$bugID", 'html');
             $response['locate'] = $location;
             return $this->send($response);
         }
@@ -550,7 +550,7 @@ class bug extends control
         }
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-        if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Get products and projects. */
         $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
@@ -599,6 +599,8 @@ class bug extends control
         /* Get executions. */
         $executions = array(0 => '');
         if(isset($projects[$projectID]) or $this->config->systemMode == 'classic') $executions += $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
+        $execution  = $executionID ? $this->loadModel('execution')->getByID($executionID) : '';
+        $executions = isset($executions[$executionID]) ? $executions : $executions + array($executionID => $execution->name);
 
         /* Set custom. */
         foreach(explode(',', $this->config->bug->list->customCreateFields) as $field) $customFields[$field] = $this->lang->bug->$field;
@@ -662,14 +664,15 @@ class bug extends control
      * @param  int    $productID
      * @param  int    $executionID
      * @param  int    $moduleID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function batchCreate($productID, $branch = '', $executionID = 0, $moduleID = 0)
+    public function batchCreate($productID, $branch = '', $executionID = 0, $moduleID = 0, $extra = '')
     {
         if(!empty($_POST))
         {
-            $actions = $this->bug->batchCreate($productID, $branch);
+            $actions = $this->bug->batchCreate($productID, $branch, $extra);
 
             /* Return bug id list when call the API. */
             if($this->viewType == 'json')
@@ -681,8 +684,8 @@ class bug extends control
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
             /* If link from no head then reload. */
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
         }
 
         /* Get product, then set menu. */
@@ -693,8 +696,9 @@ class bug extends control
         /* If executionID is setted, get builds and stories of this execution. */
         if($executionID)
         {
-            $builds  = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
-            $stories = $this->story->getExecutionStoryPairs($executionID);
+            $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
+            $stories   = $this->story->getExecutionStoryPairs($executionID);
+            $execution = $this->loadModel('execution')->getById($executionID);
         }
         else
         {
@@ -737,7 +741,7 @@ class bug extends control
             $showFields = trim($showFields, ',');
         }
 
-        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : 0;
+        $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
 
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
@@ -750,7 +754,7 @@ class bug extends control
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
         $this->view->builds           = $builds;
-        $this->view->users            = $this->user->getPairs('devfirst|nodeleted');
+        $this->view->users            = $this->user->getPairs('devfirst|noclosed');
         $this->view->executions       = array('' => '') + $this->product->getExecutionPairsByProduct($productID, $branch ? "0,$branch" : 0, 'id_desc', $projectID);
         $this->view->executionID      = $executionID;
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
@@ -773,7 +777,7 @@ class bug extends control
         /* Judge bug exits or not. */
         $bugID = (int)$bugID;
         $bug   = $this->bug->getById($bugID, true);
-        if(!$bug) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
@@ -856,7 +860,7 @@ class bug extends control
                     }
                     else
                     {
-                        die(js::error(dao::getError()));
+                        return print(js::error(dao::getError()));
                     }
                 }
                 $files = $this->loadModel('file')->saveUpload('bug', $bugID);
@@ -882,12 +886,12 @@ class bug extends control
                     {
                         $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                         $cancelURL  = $this->server->HTTP_REFERER;
-                        die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->Task), $confirmURL, $cancelURL, 'parent', 'parent'));
+                        return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->Task), $confirmURL, $cancelURL, 'parent', 'parent'));
                     }
                 }
             }
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
         /* Get the info of bug, current product and modue. */
@@ -993,7 +997,7 @@ class bug extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->users            = $this->user->getPairs('nodeleted', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->users            = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -1035,18 +1039,18 @@ class bug extends control
                         {
                             $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                             $cancelURL  = $this->server->HTTP_REFERER;
-                            die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->task), $confirmURL, $cancelURL, 'parent', 'parent'));
+                            return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->task), $confirmURL, $cancelURL, 'parent', 'parent'));
                         }
                     }
                 }
             }
-            die(js::locate($this->session->bugList, 'parent'));
+            return print(js::locate($this->session->bugList, 'parent'));
         }
 
-        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
-        $bugIDList = array_unique($bugIDList);
+        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
         /* Initialize vars.*/
-        $bugs = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
+        $bugIDList = array_unique($this->post->bugIDList);
+        $bugs      = $this->dao->select('*')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         /* The bugs of a product. */
         if($productID)
@@ -1129,7 +1133,7 @@ class bug extends control
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
         }
-        $users = $this->user->getPairs('devfirst|nodeleted', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst|noclosed', $appendUsers, $this->config->maxCount);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
@@ -1170,14 +1174,14 @@ class bug extends control
         {
             $this->loadModel('action');
             $changes = $this->bug->assign($bugID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent'));
-            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent'));
+            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
         if($this->app->tab == 'project')
@@ -1190,7 +1194,7 @@ class bug extends control
         }
         else
         {
-            $users = $this->user->getPairs('nodeleted|nofeedback', $bug->assignedTo);
+            $users = $this->user->getPairs('noclosed|nofeedback', $bug->assignedTo);
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
@@ -1243,7 +1247,7 @@ class bug extends control
             }
 
             $allChanges = $this->bug->batchChangeBranch($bugIDList, $branchID, $oldBugs);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {
                 $this->loadModel('action');
@@ -1252,7 +1256,7 @@ class bug extends control
             }
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->bugList, 'parent'));
+        return print(js::locate($this->session->bugList, 'parent'));
     }
 
     /**
@@ -1270,7 +1274,7 @@ class bug extends control
             $bugIDList = array_unique($bugIDList);
             unset($_POST['bugIDList']);
             $allChanges = $this->bug->batchChangeModule($bugIDList, $moduleID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {
                 $this->loadModel('action');
@@ -1279,7 +1283,7 @@ class bug extends control
             }
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->bugList, 'parent'));
+        return print(js::locate($this->session->bugList, 'parent'));
     }
 
     /**
@@ -1297,7 +1301,7 @@ class bug extends control
             $bugIDList = array_unique($bugIDList);
             unset($_POST['bugIDList']);
             $allChanges = $this->bug->batchChangePlan($bugIDList, $planID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $bugID => $changes)
             {
                 $this->loadModel('action');
@@ -1306,7 +1310,7 @@ class bug extends control
             }
         }
         $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->bugList, 'parent'));
+        return print(js::locate($this->session->bugList, 'parent'));
     }
 
     /**
@@ -1328,38 +1332,39 @@ class bug extends control
             {
                 $this->loadModel('action');
                 $changes = $this->bug->assign($bugID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
                 $actionID = $this->action->create('bug', $bugID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
         }
 
-        if($type == 'product' || $type == 'my') die(js::locate($this->session->bugList, 'parent'));
-        if($type == 'execution') die(js::locate($this->createLink('execution', 'bug', "executionID=$objectID")));
-        if($type == 'project')   die(js::locate($this->createLink('project', 'bug', "projectID=$objectID")));
+        if($type == 'product' || $type == 'my') return print(js::locate($this->session->bugList, 'parent'));
+        if($type == 'execution') return print(js::locate($this->createLink('execution', 'bug', "executionID=$objectID")));
+        if($type == 'project')   return print(js::locate($this->createLink('project', 'bug', "projectID=$objectID")));
     }
 
     /**
      * confirm a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function confirmBug($bugID)
+    public function confirmBug($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->confirm($bugID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            $changes = $this->bug->confirm($bugID, $extra);
+            if(dao::isError()) return print(js::error(dao::getError()));
             $actionID = $this->action->create('bug', $bugID, 'bugConfirmed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent'));
-            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent'));
+            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
         $bug       = $this->bug->getById($bugID);
@@ -1372,7 +1377,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->confirmBug;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted', $bug->assignedTo);
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->assignedTo);
         $this->view->actions = $this->action->getList('bug', $bugID);
         $this->display();
     }
@@ -1385,27 +1390,29 @@ class bug extends control
      */
     public function batchConfirm()
     {
-        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
-        $bugIDList = array_unique($bugIDList);
+        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
+
+        $bugIDList = array_unique($this->post->bugIDList);
         $this->bug->batchConfirm($bugIDList);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         foreach($bugIDList as $bugID) $this->action->create('bug', $bugID, 'bugConfirmed');
         $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->bugList, 'parent'));
+        return print(js::locate($this->session->bugList, 'parent'));
     }
 
     /**
      * Resolve a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function resolve($bugID)
+    public function resolve($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->resolve($bugID);
+            $changes = $this->bug->resolve($bugID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
@@ -1491,14 +1498,15 @@ class bug extends control
      * Activate a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function activate($bugID)
+    public function activate($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->activate($bugID);
+            $changes = $this->bug->activate($bugID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
@@ -1522,7 +1530,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->activate;
 
         $this->view->bug     = $bug;
-        $this->view->users   = $this->user->getPairs('nodeleted', $bug->resolvedBy);
+        $this->view->users   = $this->user->getPairs('noclosed', $bug->resolvedBy);
         $this->view->builds  = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'noempty');
         $this->view->actions = $this->action->getList('bug', $bugID);
 
@@ -1533,14 +1541,15 @@ class bug extends control
      * Close a bug.
      *
      * @param  int    $bugID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function close($bugID)
+    public function close($bugID, $extra = '')
     {
         if(!empty($_POST))
         {
-            $changes = $this->bug->close($bugID);
+            $changes = $this->bug->close($bugID, $extra);
             if(dao::isError()) die(js::error(dao::getError()));
 
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);

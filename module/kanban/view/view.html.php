@@ -30,6 +30,7 @@ js::set('noAssigned', $lang->kanbancard->noAssigned);
 js::set('users', $users);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
+js::set('displayCards', $kanban->displayCards);
 
 js::set('priv',
     array(

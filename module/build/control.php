@@ -62,7 +62,8 @@ class build extends control
         elseif($this->app->tab == 'qa')
         {
             $execution  = $this->execution->getByID($executionID);
-            $executions = $this->execution->getPairs($execution->project);
+            $projectID  = $execution ? $execution->project : 0;
+            $executions = $this->execution->getPairs($projectID);
         }
 
         $executionList = empty($executions) ? array() : $this->execution->getByIdList(array_keys($executions));

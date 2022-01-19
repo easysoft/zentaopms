@@ -24,7 +24,7 @@ class execution extends control
      * @var string
      * @access public
      */
-    public $objectType;
+    public $objectType = 'execution';
 
     /**
      * Construct function, Set executions.
@@ -47,7 +47,6 @@ class execution extends control
         {
             if(!$this->executions and $this->methodName != 'index' and $this->methodName != 'create' and $this->app->getViewType() != 'mhtml') $this->locate($this->createLink('execution', 'create'));
         }
-        $this->objectType = $this->config->systemMode == 'classic' ? 'project' : 'execution';
     }
 
     /**
@@ -124,10 +123,13 @@ class execution extends control
         /* Set browse type. */
         $browseType = strtolower($status);
 
-        /* Get products by execution. */
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
-        $products    = $this->product->getProductPairsByProject($executionID);
+
+        if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+
+        /* Get products by execution. */
+        $products = $this->product->getProductPairsByProject($executionID);
         setcookie('preExecutionID', $executionID, $this->config->cookieLife, $this->config->webRoot, '', false, true);
 
         /* Save the recently five executions visited in the cookie. */
@@ -1263,6 +1265,15 @@ class execution extends control
         }
 
         $project = $this->project->getByID($projectID);
+        if(!empty($project) and $project->model == 'kanban')
+        {
+            global $lang;
+            $executionLang           = $lang->execution->common;
+            $lang->executionCommon   = $lang->execution->kanban;
+            $lang->execution->common = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+            $lang->execution->common = $executionLang;
+        }
 
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -1289,6 +1300,7 @@ class execution extends control
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
             $this->view->projectID   = $projectID;
+            $this->view->project     = $project;
             $this->display();
             exit;
         }
@@ -1376,6 +1388,16 @@ class execution extends control
                 }
             }
 
+            if(!empty($projectID) and $project->model == 'kanban')
+            {
+                $execution = $this->execution->getById($executionID);
+                $this->loadModel('kanban')->createRDKanban($execution);
+
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+            }
+
             if(!empty($planID))
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
@@ -1430,6 +1452,7 @@ class execution extends control
         $this->view->copyExecution       = isset($copyExecution) ? $copyExecution : '';
         $this->view->from                = $this->app->tab;
         $this->view->isStage             = (isset($project->model) and $project->model == 'waterfall') ? true : false;
+        $this->view->project             = $project;
         $this->display();
     }
 
@@ -1451,6 +1474,14 @@ class execution extends control
         $this->app->loadLang('stage');
         $this->app->loadLang('programplan');
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
+        $execution           = $this->execution->getById($executionID);
+
+        if($execution->type == 'kanban')
+        {
+            global $lang;
+            $lang->executionCommon = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
 
         if(!empty($_POST))
         {
@@ -1502,6 +1533,7 @@ class execution extends control
 
             $this->executeHooks($executionID);
             if($_POST['status'] == 'doing') $this->loadModel('common')->syncPPEStatus($executionID);
+            if($execution->type == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('view', "executionID=$executionID")));
         }
 
@@ -1509,9 +1541,7 @@ class execution extends control
         $this->execution->setMenu($executionID);
 
         $executions = array('' => '') + $this->executions;
-        $execution  = $this->execution->getById($executionID);
         $managers   = $this->execution->getDefaultManagers($executionID);
-
 
         /* Remove current execution from the executions. */
         unset($executions[$executionID]);
@@ -1525,6 +1555,7 @@ class execution extends control
         $this->loadModel('productplan');
         $productPlans     = array(0 => '');
         $linkedBranches   = array();
+        $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
@@ -1538,6 +1569,7 @@ class execution extends control
             if(!isset($allProducts[$productID])) $allProducts[$productID] = $linkedProduct->name;
             foreach($branches[$productID] as $branchID => $branch)
             {
+                $linkedBranchList[$branchID]           = $branchID;
                 $linkedBranches[$productID][$branchID] = $branchID;
                 $productPlans[$productID][$branchID]   = isset($plans[$productID][$branchID]) ? $plans[$productID][$branchID] : array();
                 if($branchID != BRANCH_MAIN and isset($plans[$productID][BRANCH_MAIN])) $productPlans[$productID][$branchID] += $plans[$productID][BRANCH_MAIN];
@@ -1581,7 +1613,7 @@ class execution extends control
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->display();
     }
 
@@ -1683,6 +1715,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1755,6 +1788,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1790,6 +1824,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1832,6 +1867,7 @@ class execution extends control
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
+        if($execution->type == 'kanban') $this->lang->executionCommon = $this->lang->execution->kanban;
 
         if(!empty($_POST))
         {
@@ -1920,6 +1956,67 @@ class execution extends control
     /**
      * Kanban.
      *
+     * @param int     $executionID
+     * @param string  $browseType
+     * @param string  $orderBy
+     * @param string  $groupBy
+     * @access public
+     * @return void
+     */
+    public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
+    {
+        if(empty($groupBy)) $groupBy = 'default';
+
+        $this->lang->execution->menu = new stdclass();
+        $execution        = $this->commonAction($executionID);
+        $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
+        $executionActions = array();
+
+        foreach($this->config->execution->statusActions as $action)
+        {
+            if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
+        }
+
+        $userList    = array();
+        $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $avatarPairs = $this->user->getAvatarPairs();
+        foreach($avatarPairs as $account => $avatar)
+        {
+            if(!isset($users[$account])) continue;
+            $userList[$account]['realname'] = $users[$account];
+            $userList[$account]['avatar']   = $avatar;
+        }
+
+        /* Get execution's product. */
+        $productID = 0;
+        $products  = $this->loadModel('product')->getProducts($execution->project);
+        if($products) $productID = key($products);
+
+        $plans    = $this->execution->getPlans($products);
+        $allPlans = array('' => '');
+        if(!empty($plans))
+        {
+            foreach($plans as $plan) $allPlans += $plan;
+        }
+
+        $this->view->title            = $this->lang->kanban->view;
+        $this->view->users            = $users;
+        $this->view->regions          = $kanbanData;
+        $this->view->execution        = $execution;
+        $this->view->userList         = $userList;
+        $this->view->browseType       = $browseType;
+        $this->view->orderBy          = $orderBy;
+        $this->view->groupBy          = $groupBy;
+        $this->view->productID        = $productID;
+        $this->view->allPlans         = $allPlans;
+        $this->view->kanbanData       = $kanbanData;
+        $this->view->executionActions = $executionActions;
+        $this->display();
+    }
+
+    /**
+     * Task kanban.
+     *
      * @param  int    $executionID
      * @param  string $browseType story|bug|task|all
      * @param  string $orderBy
@@ -1927,18 +2024,16 @@ class execution extends control
      * @access public
      * @return void
      */
-    public function kanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
+    public function taskKanban($executionID, $browseType = '', $orderBy = 'order_asc', $groupBy = '')
     {
         if(empty($browseType)) $browseType = $this->session->kanbanType ? $this->session->kanbanType : 'all';
-        if(empty($groupBy) and $browseType != 'all') $groupBy = $this->session->{'kanbanGroupBy' . $browseType} ? $this->session->{'kanbanGroupBy' . $browseType} : 'default';
-        if(empty($groupBy) and $browseType == 'all') $groupBy = 'default';
+        if(empty($groupBy)) $groupBy = 'default';
 
         /* Save to session. */
         $uri = $this->app->getURI(true);
         $this->app->session->set('taskList', $uri, 'execution');
         $this->app->session->set('bugList',  $uri, 'qa');
         $this->app->session->set('kanbanType', $browseType, 'execution');
-        $this->app->session->set('kanbanGroupBy' . $browseType, $groupBy, 'execution');
 
         /* Load language. */
         $this->app->loadLang('story');
@@ -2301,6 +2396,12 @@ class execution extends control
                 if($tips) $tips = str_replace($this->lang->executionCommon, $this->lang->project->stage, $tips);
                 $this->lang->execution->confirmDelete = str_replace($this->lang->executionCommon, $this->lang->project->stage, $this->lang->execution->confirmDelete);
             }
+            elseif($type == 'kanban')
+            {
+                global $lang;
+                $lang->executionCommon   = $lang->execution->kanban;
+                include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+            }
 
             echo js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));
             exit;
@@ -2308,6 +2409,7 @@ class execution extends control
         else
         {
             /* Delete execution. */
+            $execution = $this->execution->getByID($executionID);
             $this->dao->update(TABLE_EXECUTION)->set('deleted')->eq(1)->where('id')->eq($executionID)->exec();
             $this->loadModel('action')->create('execution', $executionID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
             $this->execution->updateUserView($executionID);
@@ -2316,7 +2418,7 @@ class execution extends control
             $this->executeHooks($executionID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -2526,16 +2628,17 @@ class execution extends control
      * @param  int    $recTotal
      * @param  int    $recPerPage
      * @param  int    $pageID
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1)
+    public function linkStory($objectID = 0, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 50, $pageID = 1, $extra = '')
     {
         $this->loadModel('story');
         $this->loadModel('product');
 
         /* Get projects, executions and products. */
-        $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage');
+        $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
 
@@ -2550,7 +2653,7 @@ class execution extends control
 
         if(!empty($_POST))
         {
-            $this->execution->linkStory($objectID);
+            $this->execution->linkStory($objectID, array(), array(), $extra);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
 
             if(isonlybody()) die(js::reload('parent'));
@@ -2870,7 +2973,7 @@ class execution extends control
         $projects = $this->loadModel('program')->getProjectList(0, 'all', 0, 'order_asc', null, 0, 0, true);
         $executionGroups = $this->dao->select('*')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->in('sprint,stage')
+            ->andWhere('type')->in('sprint,stage,kanban')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('project')->in(array_keys($projects))->fi()
             ->orderBy('id_desc')
@@ -3282,10 +3385,11 @@ class execution extends control
      * @param  int    $planID
      * @param  int    $productID
      * @param  string $fromMethod
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story')
+    public function importPlanStories($executionID, $planID, $productID = 0, $fromMethod = 'story', $extra = '')
     {
         $planStories = $planProducts = array();
         $planStory   = $this->loadModel('story')->getPlanStories($planID);
@@ -3308,7 +3412,7 @@ class execution extends control
             $projectID   = $this->dao->findByID($executionID)->from(TABLE_EXECUTION)->fetch('project');
             $planStories = array_keys($planStory);
 
-            $this->execution->linkStory($executionID, $planStories, $planProducts);
+            $this->execution->linkStory($executionID, $planStories, $planProducts, $extra);
             if($this->config->systemMode == 'new' and $executionID != $projectID) $this->execution->linkStory($projectID, $planStories, $planProducts);
         }
 
@@ -3319,7 +3423,14 @@ class execution extends control
             $moduleName = 'projectstory';
             $param      = "projectID=$executionID";
         }
-        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, 'story', $param));
+
+        if($execution->type == 'kanban')
+        {
+            global $lang;
+            $lang->executionCommon = $lang->execution->kanban;
+            include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
+        }
+        if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, $execution->type == 'sprint' ? 'story' : 'kanban', $param));
         die(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 
@@ -3438,7 +3549,7 @@ class execution extends control
         $enterTime = date('Y-m-d H:i:s', $enterTime);
         $lastEditedTime = $this->dao->select("max(lastEditedTime) as lastEditedTime")->from(TABLE_KANBANLANE)->where('execution')->eq($executionID)->fetch('lastEditedTime');
 
-        if($lastEditedTime > $enterTime)
+        if($lastEditedTime > $enterTime or $groupBy != 'default')
         {
             $kanbanGroup = $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy);
             die(json_encode($kanbanGroup));

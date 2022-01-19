@@ -42,6 +42,7 @@
 <?php js::set('projectCommon', $lang->project->common);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('systemMode', $config->systemMode);?>
+<?php js::set('projectID', $projectID);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -88,6 +89,7 @@
             </div>
           </td><td></td><td></td>
         </tr>
+        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execType : $lang->execution->type;?></th>
           <td>
@@ -104,6 +106,7 @@
           </td>
           <td class='muted' colspan='2'><div id='lifeTimeTips'><?php echo $lang->execution->typeDesc;?></div></td>
         </tr>
+        <?php endif;?>
         <?php if($isStage):?>
         <tr>
           <th><?php echo $lang->stage->percent;?></th>
@@ -172,6 +175,7 @@
             </div>
           </td>
         </tr>
+        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->teamname;?></th>
           <td><?php echo html::input('team', $team, "class='form-control'");?></td>
@@ -181,6 +185,7 @@
           <th><?php echo $lang->execution->copyTeam;?></th>
           <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
           <td>
@@ -210,10 +215,12 @@
             </div>
           </td>
         </tr>
+        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>

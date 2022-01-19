@@ -309,7 +309,7 @@ class doc extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $docID));
             $objectID = zget($lib, $lib->type, '');
             $params   = "type={$lib->type}&objectID=$objectID&libID={$lib->id}&docID=" . $docResult['id'];
-            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params);
+            $link     = isonlybody() ? 'parent' : $this->createLink('doc', 'objectLibs', $params, 'html');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
         }
 
@@ -791,24 +791,18 @@ class doc extends control
         $doclib = $this->doc->getLibById($doclibID);
         $users  = $this->user->getPairs('noletter|noempty|noclosed');
 
+        $selectedUser = $doclib->users;
         if($doclib->acl != 'custom' and !empty($doclib->project) and $acl == 'custom')
         {
-            $project = $this->loadModel('project')->getById($doclib->project);
-
-            $userList     = array();
+            $project      = $this->loadModel('project')->getById($doclib->project);
             $projectTeams = $this->loadModel('user')->getTeamMemberPairs($doclib->project);
             $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($doclib->project);
-            foreach($stakeholders as $stakeholder) $userList[$stakeholder] = $users[$stakeholder];
+            $whitelist    = implode(',', array_keys($projectTeams + $stakeholders)) . $project->whitelist . ',' . $project->PM . ',' . $doclib->users;
 
-            $userList += $projectTeams;
-            $whitelist = implode(',', array_keys($userList)) . $project->whitelist . ',' .$project->PM . ',' . $doclib->users;
+            $selectedUser = $whitelist;
+        }
 
-            return print(html::select('users[]', $users, $whitelist, "class='form-control chosen' multiple"));
-        }
-        else
-        {
-            return print(html::select('users[]', $users, $doclib->users, "class='form-control chosen' multiple"));
-        }
+        return print(html::select('users[]', $users, $selectedUser, "class='form-control chosen' multiple"));
     }
 
     /**

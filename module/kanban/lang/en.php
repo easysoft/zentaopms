@@ -18,6 +18,8 @@ $lang->kanban->deleteRegion        = 'Delete Region';
 $lang->kanban->createLane          = 'Create Lane';
 $lang->kanban->editLane            = 'Edit Lane';
 $lang->kanban->sortLane            = 'Sort Lane';
+$lang->kanban->laneHeight          = 'Lane Height';
+$lang->kanban->setLaneHeight       = 'Set Lane Height';
 $lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
 $lang->kanban->editColumn          = 'Edit Column';
@@ -73,15 +75,18 @@ $lang->kanban->closedBy       = 'Closed By';
 $lang->kanban->closedDate     = 'Closed Date';
 $lang->kanban->empty          = 'No Kanban';
 $lang->kanban->teamSumCount   = '%s people in total';
+$lang->kanban->cardCount      = 'Card Count';
 
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
 
 $lang->kanban->accessDenied  = "You have no access to the kanban.";
 $lang->kanban->confirmDelete = 'Do you want to delete this?';
+$lang->kanban->cardCountTip  = 'Please enter the number of cards';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
+$lang->kanban->aclGroup['extend']  = 'Extend';
 
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
@@ -135,7 +140,6 @@ $lang->kanban->laneColor          = 'Lane Color';
 $lang->kanban->setColumn          = 'Column Settings';
 $lang->kanban->columnName         = 'Column Name';
 $lang->kanban->columnColor        = 'Column Color';
-$lang->kanban->noColumnUniqueName = 'The Kanban column name already exists.';
 $lang->kanban->moveUp             = 'Swimlane Up';
 $lang->kanban->moveDown           = 'Swimlane Down';
 $lang->kanban->laneMove           = 'Swimlane Move';
@@ -244,11 +248,19 @@ $lang->kanbanlane->default   = 'Default Lane';
 $lang->kanbanlane->column    = 'Lane Kanban Column';
 $lang->kanbanlane->otherlane = 'Select Existed Lane';
 $lang->kanbanlane->color     = 'Lane Color';
+$lang->kanbanlane->WIPType   = 'Lane WIP Type';
 
-$lang->kanbanlane->confirmDelete = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
+$lang->kanbanlane->confirmDelete    = 'Are you sure to delete this lane? After deleting the lane, all data (columns and cards) in the lane will also be deleted.';
+$lang->kanbanlane->confirmDeleteTip = 'Are you sure to delete this lane? After deleting the lane, all %s in the lane will be hidden.';
 
-$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column as other lanes';
-$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column is adopted';
+$lang->kanbanlane->modeList['sameAsOther'] = 'Use the same Kanban column';
+$lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
+
+$lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive according to the card height)';
+$lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height based on number of cards)';
+
+$lang->kanbanlane->error = new stdclass();
+$lang->kanbanlane->error->mustBeInt = 'The number of cards must be a positive integer greater than 2.';
 
 $lang->kanbanregion = new stdclass();
 $lang->kanbanregion->name    = 'Region Name';

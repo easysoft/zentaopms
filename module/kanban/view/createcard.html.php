@@ -36,7 +36,7 @@
               <div class='table-col w-120px'>
                 <div class="input-group">
                   <span class="input-group-addon fix-border br-0"><?php echo $lang->kanbancard->estimate;?></span>
-                  <input type="text" name="estimate" id="estimate" class="form-control" autocomplete="off" placeholder=<?php echo $lang->kanbancard->lblHour;?>>
+                  <?php echo html::input('estimate', '', "class='form-control' placeholder='{$lang->kanbancard->lblHour}' autocomplete='off'");?>
                 </div>
               </div>
             </div>

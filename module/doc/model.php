@@ -917,11 +917,10 @@ class docModel extends model
 
         if($object->project and $object->acl == 'private')
         {
-            $stakeHolders    = array();
-            $project         = $this->loadModel('project')->getById($object->project);
-            $projectTeams    = $this->loadModel('user')->getTeamMemberPairs($object->project);
-            $stakeHolderList = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
-            foreach($stakeHolderList as $stakeHolder) $stakeHolders[$stakeHolder] = $stakeHolder;
+            $stakeHolders = array();
+            $project      = $this->loadModel('project')->getById($object->project);
+            $projectTeams = $this->loadModel('user')->getTeamMemberPairs($object->project);
+            $stakeHolders = $this->loadModel('stakeholder')->getStakeHolderPairs($object->project);
 
             $authorizedUsers = $this->user->getProjectAuthedUsers($project, $stakeHolders, $projectTeams, array_flip(explode(",", $project->whitelist)));
 
@@ -1336,9 +1335,9 @@ class docModel extends model
             /* Project permissions for DocLib whitelist. */
             if($this->app->tab == 'doc')
             {
-                $myObjects = $this->dao->select('t2.id, t2.name')->from(TABLE_DOCLIB)->alias('t1')
-                    ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
-                    ->where("CONCAT(',', t1.users, ',')")->like("%,{$this->app->user->account},%")
+                $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
+                    ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
+                    ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
                     ->fetchPairs();
             }
 
@@ -1378,7 +1377,7 @@ class docModel extends model
 
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
-                ->andWhere('type')->in('sprint,stage')
+                ->andWhere('type')->in('sprint,stage,kanban')
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');

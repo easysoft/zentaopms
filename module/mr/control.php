@@ -207,8 +207,11 @@ class mr extends control
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
-        $MR = $this->mr->apiSyncMR($MR); /* Sync MR from GitLab to ZentaoPMS. */
         $this->loadModel('gitlab');
+        $this->loadModel('job');
+
+        /* Sync MR from GitLab to ZentaoPMS. */
+        $MR = $this->mr->apiSyncMR($MR);
         $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
         $targetProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->targetProject);
         $sourceBranch  = $this->gitlab->apiGetSingleBranch($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
@@ -228,7 +231,7 @@ class mr extends control
         $product  = $this->mr->getMRProduct($MR);
 
         $this->view->compile    = $this->loadModel('compile')->getById($MR->compileID);
-        $this->view->compileJob = $MR->jobID ? $this->loadModel('job')->getById($MR->jobID) : false;
+        $this->view->compileJob = $MR->jobID ? $this->job->getById($MR->jobID) : false;
 
         $this->view->title   = $this->lang->mr->view;
         $this->view->MR      = $MR;

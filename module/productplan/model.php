@@ -99,7 +99,7 @@ class productplanModel extends model
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project=t2.id')
                 ->where('t1.product')->eq($product)
                 ->andWhere('t1.plan')->in(array_keys($plans))
-                ->andWhere('t2.type')->in('sprint,stage')
+                ->andWhere('t2.type')->in('sprint,stage,kanban')
                 ->fetchPairs('plan', 'project');
 
             $storyCountInTable = $this->dao->select('plan,count(story) as count')->from(TABLE_PLANSTORY)->where('plan')->in($planIdList)->groupBy('plan')->fetchPairs('plan', 'count');

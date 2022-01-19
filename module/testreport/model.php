@@ -174,7 +174,8 @@ class testreportModel extends model
 
         foreach($allBugs as $bug)
         {
-            if(!empty(array_intersect(explode(',', $bug->openedBuild), $buildIdList))) $buildBugs[$bug->id] = $bug;
+            $intersect = array_intersect(explode(',', $bug->openedBuild), $buildIdList);
+            if(!empty($intersect)) $buildBugs[$bug->id] = $bug;
         }
 
         /* Get bug reactivated actions during the testreport. */

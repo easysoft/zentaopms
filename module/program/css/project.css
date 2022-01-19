@@ -1,0 +1,3 @@
+.project-type-label.label-outline {width: 50px; min-width: 50px;}
+.project-type-label.label {overflow: unset !important; text-overflow: unset !important; white-space: unset !important;}
+[lang^='en'] .project-name > .label-warning {width: 55px !important;}

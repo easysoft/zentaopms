@@ -352,14 +352,18 @@ class actionModel extends model
             }
             elseif($actionName == 'linked2execution')
             {
-                $name = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
-                if($name) $action->extra = common::hasPriv('execution', 'view') ? html::a(helper::createLink('execution', 'view', "executionID=$action->execution"), $name) : $name;
+                $execution = $this->dao->select('name,type')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
+                $name      = $execution->name;
+                $method    = $execution->type == 'kanban' ? 'kanban' : 'view';
+                if($name) $action->extra = common::hasPriv('execution', $method) ? html::a(helper::createLink('execution', $method, "executionID=$action->execution"), $name) : $name;
             }
             elseif($actionName == 'linked2project')
             {
-                $name      = $this->dao->select('name')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch('name');
+                $project   = $this->dao->select('name,model')->from(TABLE_PROJECT)->where('id')->eq($action->extra)->fetch();
                 $productID = trim($action->product, ',');
-                if($name) $action->extra = common::hasPriv('project', 'view') ? html::a(helper::createLink('project', 'view', "projectID=$action->project"), $name) : $name;
+                $name      = $project->name;
+                $method    = $project->model == 'kanban' ? 'index' : 'view';
+                if($name) $action->extra = common::hasPriv('project', $method) ? html::a(helper::createLink('project', $method, "projectID=$action->project"), $name) : $name;
             }
             elseif($actionName == 'linked2plan')
             {
@@ -380,6 +384,11 @@ class actionModel extends model
             {
                 $name = $this->dao->select('name')->from(TABLE_RELEASE)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('release', 'view') ? html::a(helper::createLink('release', 'view', "releaseID=$action->extra&type={$action->objectType}"), $name) : $name;
+            }
+            elseif($actionName == 'linked2testtask')
+            {
+                $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
             elseif($actionName == 'moved')
             {
@@ -415,6 +424,11 @@ class actionModel extends model
             {
                 $title = $this->dao->select('title')->from(TABLE_PRODUCTPLAN)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('productplan', 'view') ? html::a(helper::createLink('productplan', 'view', "planID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+            }
+            elseif($actionName == 'unlinkedfromtesttask')
+            {
+                $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
+                if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
             elseif($actionName == 'tostory')
             {
@@ -611,6 +625,7 @@ class actionModel extends model
         foreach($typeTrashes as $objectType => $objectIdList)
         {
             if(!isset($this->config->objectTables[$objectType])) continue;
+            if(!isset($this->config->action->objectNameFields[$objectType])) continue;
 
             $objectIdList = array_unique($objectIdList);
             $table        = $this->config->objectTables[$objectType];
@@ -852,7 +867,7 @@ class actionModel extends model
 
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
-            ->where(1)
+            ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
@@ -1023,11 +1038,15 @@ class actionModel extends model
             {
                 $action->objectName .= $this->lang->action->label->startProgram;
             }
-
-            if($action->objectType == 'branch' and $action->action == 'mergedbranch')
+            elseif($action->objectType == 'branch' and $action->action == 'mergedbranch')
             {
                 if($action->objectID == 0) $action->objectName = $this->lang->branch->main;
                 $action->objectName = '"' . $action->extra . ' "' . $this->lang->action->to . ' "' . $action->objectName . '"';
+            }
+            elseif($action->objectType == 'user')
+            {
+                $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
+                if($user) $action->objectName = $user->realname;
             }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
@@ -1279,6 +1298,12 @@ class actionModel extends model
                     $params = sprintf($vars, $action->objectID);
                 }
                 $action->objectLink = helper::createLink($moduleName, $methodName, $params);
+
+                if($action->objectType == 'execution')
+                {
+                    $execution = $this->loadModel('execution')->getById($action->objectID);
+                    if(!empty($execution) and $execution->type == 'kanban') $action->objectLink = helper::createLink('execution', 'kanban', "executionID={$action->objectID}");
+                }
 
                 if($action->objectType == 'doclib')
                 {

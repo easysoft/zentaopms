@@ -207,7 +207,8 @@ js::set('suiteID',        $suiteID);
             </div>
           </div>
           <?php endif;?>
-          <?php if($canBatchChangeModule and !empty($productID) and $branch !== 'all'):?>
+          <?php if($canBatchChangeModule and !empty($productID)):?>
+          <?php if($product->type == 'normal' or ($product->type != 'normal' and $branch !== 'all')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->moduleAB;?> <span class="caret"></span></button>
             <?php $withSearch = count($modules) > 6;?>
@@ -234,6 +235,7 @@ js::set('suiteID',        $suiteID);
               </div>
             </div>
           </div>
+          <?php endif;?>
           <?php endif;?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>

@@ -814,7 +814,7 @@ $(function()
         event.stopPropagation();
     });
 
-    $("#proLink").click(function(event)
+    $("#bizLink").click(function(event)
     {
         var $upgradeContent = $('#upgradeContent').toggle();
         if(!$upgradeContent.is(':hidden'))
