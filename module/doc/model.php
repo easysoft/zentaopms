@@ -1807,6 +1807,7 @@ class docModel extends model
             count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs,
             count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->fetch();
 
