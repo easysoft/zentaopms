@@ -820,7 +820,7 @@ class gitlab extends control
         $this->app->loadClass('pager', $static = true);
         $recTotal   = count($branches);
         $pager      = new pager($recTotal, $recPerPage, $pageID);
-        $branchList = array_chunk($branches, $pager->recPerPage);
+        $branchList = is_array($branches) ? array_chunk($branches, $pager->recPerPage) : array();
 
         $this->view->keyword    = $keyword;
         $this->view->pager      = $pager;
