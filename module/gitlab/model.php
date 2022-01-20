@@ -478,8 +478,8 @@ class gitlabModel extends model
         while(true)
         {
             /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
-            $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
-            $result   = json_decode(commonModel::http($url));
+            $url    = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
+            $result = json_decode(commonModel::http($url));
             if(!empty($result))
             {
                 $response = array_merge($response, $result);
