@@ -649,7 +649,7 @@ class kanbanModel extends model
 
         $kanbanData   = array();
         $actions      = array('sortGroup');
-        $regions      = $this->getRegionPairs($executionID);
+        $regions      = $this->getRegionPairs($executionID, $regionID);
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
@@ -711,14 +711,16 @@ class kanbanModel extends model
      * Get ordered region pairs.
      *
      * @param  int    $kanbanID
+     * @param  int    $regionID
      * @access public
      * @return array
      */
-    public function getRegionPairs($kanbanID)
+    public function getRegionPairs($kanbanID, $regionID = 0)
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('deleted')->eq('0')
+            ->beginIF($regionID)->andWhere('id')->eq($regionID)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
     }

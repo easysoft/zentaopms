@@ -780,7 +780,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
             {
-                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -901,6 +901,33 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
         modalTrigger.show();
     }
+}
+
+/**
+ * Close modal and update kanban data.
+ *
+ * @param  string kanbanData
+ * @param  int    regionID
+ * @access public
+ * @return void
+ */
+function updateKanban(kanbanData, regionID)
+{
+    setTimeout(function()
+    {
+        if(regionID)
+        {
+            updateRegion(regionID, kanbanData[regionID]);
+        }
+        else
+        {
+            $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+            {
+                var regionID = $(this).attr('data-id');
+                updateRegion(regionID, kanbanData[regionID]);
+            });
+        }
+    }, 200);
 }
 
 /**
