@@ -1315,10 +1315,11 @@ class kanbanModel extends model
     public function getSpaceList($browseType, $pager = null)
     {
         $account     = $this->app->user->account;
-        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+        $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
         $spaceList   = $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
             ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
+            ->beginIF($browseType == 'private')->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
@@ -1326,7 +1327,7 @@ class kanbanModel extends model
             ->page($pager)
             ->fetchAll('id');
 
-        $kanbanIdList = $this->getCanViewObjects();
+        $kanbanIdList = $this->getCanViewObjects('kanban', $browseType);
         $kanbanGroup  = $this->getGroupBySpaceList(array_keys($spaceList), $kanbanIdList);
         foreach($spaceList as $spaceID => $space)
         {
@@ -1362,7 +1363,7 @@ class kanbanModel extends model
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
-     * @param  string $param      noclosed
+     * @param  string $param      noclosed|private|cooperation|public|involved
      * @access public
      * @return array
      */
@@ -1374,7 +1375,7 @@ class kanbanModel extends model
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
 
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
@@ -1382,17 +1383,16 @@ class kanbanModel extends model
         foreach($objects as $objectID => $object)
         {
             $remove = true;
-            if($object->owner == $account) $remove = false;
+            if($param == 'public') continue;
+
+            if($object->owner == $account and $param != 'involved') $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
             if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
+
             if($objectType == 'kanban')
             {
-                $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
-                $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
-                $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
+                $spaceOwner = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
                 if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
-                if(strpos(",$spaceTeam,", ",$account,") !== false) $remove = false;
-                if(strpos(",$spaceWhiteList,", ",$account,") !== false) $remove = false;
             }
 
             if($remove) unset($objects[$objectID]);

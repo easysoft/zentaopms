@@ -156,6 +156,8 @@ class kanban extends control
      */
     public function create($spaceID = 0, $type = 'private')
     {
+        $type = $type == 'involved' ? 'private' : $type;
+
         if(!empty($_POST))
         {
             $kanbanID = $this->kanban->create();
