@@ -64,7 +64,15 @@ class gitlabModel extends model
     {
         $gitlab = $this->getByID($id);
         if(!$gitlab) return '';
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}";
+
+        $sudoParam = '';
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->getUserIDByZentaoAccount($id, $this->app->user->account);
+            if($openID) $sudoParam = "&sudo={$openID}";
+        }
+
+        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
     }
 
     /**
@@ -470,8 +478,8 @@ class gitlabModel extends model
         while(true)
         {
             /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
-            $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
-            $result   = json_decode(commonModel::http($url));
+            $url    = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
+            $result = json_decode(commonModel::http($url));
             if(!empty($result))
             {
                 $response = array_merge($response, $result);
@@ -498,10 +506,10 @@ class gitlabModel extends model
             $user->id             = $gitlabUser->id;
             $user->realname       = $gitlabUser->name;
             $user->account        = $gitlabUser->username;
-            $user->email          = $gitlabUser->email;
+            $user->email          = zget($gitlabUser, 'email', '');
             $user->avatar         = $gitlabUser->avatar_url;
-            $user->createdAt      = $gitlabUser->created_at;
-            $user->lastActivityOn = $gitlabUser->last_activity_on;
+            $user->createdAt      = zget($gitlabUser, 'created_at', '');
+            $user->lastActivityOn = zget($gitlabUser, 'last_activity_on', '');
 
             $users[] = $user;
         }
