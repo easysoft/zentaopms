@@ -923,18 +923,29 @@ class kanban extends control
      */
     public function setWIP($columnID, $executionID = 0, $from = 'kanban')
     {
+        $column = $this->kanban->getColumnById($columnID);
         if($_POST)
         {
             $this->kanban->setWIP($columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
+
+            if($from == 'RDKanban')
+            {
+                if(dao::isError()) return $this->sendError(dao::getError());
+                $regionID   = $column->region;
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, 'all', 'id_desc', $regionID);
+                $kanbanData = json_encode($kanbanData);
+
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
+            }
+
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
         $this->app->loadLang('story');
 
-        $column = $this->kanban->getColumnById($columnID);
         if(!$column) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
 
         $title  = isset($column->parentName) ? $column->parentName . '/' . $column->name : $column->name;
@@ -999,6 +1010,16 @@ class kanban extends control
             {
                 $actionID = $this->loadModel('action')->create('kanbancolumn', $columnID, 'Edited', '', $executionID);
                 $this->action->logHistory($actionID, $changes);
+            }
+
+            if($from == 'RDKanban')
+            {
+                if(dao::isError()) return $this->sendError(dao::getError());
+                $regionID   = $column->region;
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, 'all', 'id_desc', $regionID);
+                $kanbanData = json_encode($kanbanData);
+
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
             }
 
             return $this->sendSuccess(array('locate' => 'parent'));
