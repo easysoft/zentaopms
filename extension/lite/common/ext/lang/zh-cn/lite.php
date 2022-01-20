@@ -1,15 +1,14 @@
 <?php
 /* Main Navigation. */
-$lang->mainNav     = new stdclass();
-$lang->mainNav->my = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
-$lang->mainNav->product = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
-$lang->mainNav->project = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav            = new stdclass();
+$lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
+$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
-$lang->mainNav->kanban = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->doc    = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->report = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
-$lang->mainNav->system = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
-$lang->mainNav->admin  = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
+$lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
+$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
+$lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
+$lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
 $lang->mainNav->menuOrder     = array();
 $lang->mainNav->menuOrder[5]  = 'my';
