@@ -42,17 +42,35 @@ class mrModel extends model
      * @param  string   $param
      * @param  string   $orderBy
      * @param  object   $pager
+     * @param  array    $filterProjects
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array())
     {
+        $filterProjectSql = '';
+        if(!empty($filterProjects))
+        {
+            foreach($filterProjects as $gitlabID => $projects)
+            {
+                $projectIDs = array_keys($projects);
+                if(!empty($projectIDs)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject ".helper::dbIN($projectIDs).") or ";
+            }
+
+            if($filterProjectSql)
+            {
+                $filterProjectSql = substr($filterProjectSql, 0, -3); // Remove last or.
+                $filterProjectSql = '(' . $filterProjectSql . ')';
+            }
+        }
+
         $MRList = $this->dao->select('*')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
             ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
             ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
+            ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -74,6 +92,42 @@ class mrModel extends model
             ->andWhere('repoID')->eq($repoID)
             ->orderBy('id')->fetchPairs('id', 'title');
         return array('' => '') + $MR;
+    }
+
+    /**
+     * Get all gitlab server project,private projects that do not include guest permissions.
+     *
+     * @access public
+     * @return void
+     */
+    public function getAllGitlabProjects()
+    {
+        $gitlabIDs = $this->dao->select('distinct gitlabID')->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->fetchPairs('gitlabID');
+
+        $allProjects = array();
+        $gitlabUsers = $this->dao->select('openID,providerID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('account')->eq($this->app->user->account)
+            ->fetchPairs('providerID', 'openID');
+        foreach($gitlabIDs as $gitlabID)
+        {
+            if(!isset($gitlabUsers[$gitlabID])) continue;
+            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID);
+        }
+
+        $allProjectPairs = array();
+        foreach($allProjects as $gitlabID => $projects)
+        {
+            foreach($projects as $key => $project)
+            {
+                if(empty($project->permissions->project_access->access_level) or $project->permissions->project_access->access_level <= 10) continue;
+                $allProjectPairs[$gitlabID][$project->id] = $project;
+            }
+        }
+
+        return $allProjectPairs;
     }
 
     /**
