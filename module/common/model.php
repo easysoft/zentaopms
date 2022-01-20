@@ -553,7 +553,18 @@ class commonModel extends model
                         $params = "productID=$productID&branch=&extras=from=global";
                         break;
                     case 'story':
-                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        if(!$productID and $config->vision == 'lite')
+                        {
+                            $module       = 'project';
+                            $params       = "programID=0&copyProjectID=0&extra=from=global";
+                            $createMethod = 'createGuide';
+                            $attr         = 'data-toggle="modal"';
+                        }
+                        else
+                        {
+                            $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        }
+
                         break;
                     case 'task':
                         $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
