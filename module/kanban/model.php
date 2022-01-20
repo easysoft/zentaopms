@@ -1404,7 +1404,7 @@ class kanbanModel extends model
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
 
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
@@ -1421,7 +1421,9 @@ class kanbanModel extends model
             if($objectType == 'kanban')
             {
                 $spaceOwner = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                $spaceType  = isset($spaceList[$object->space]->type) ? $spaceList[$object->space]->type : '';
                 if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                if($spaceType == 'public') $remove = false;
             }
 
             if($remove) unset($objects[$objectID]);
