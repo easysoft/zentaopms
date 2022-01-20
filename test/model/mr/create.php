@@ -35,7 +35,7 @@ $_POST['assignee']           = '';
 $_POST['removeSourceBranch'] = '1';
 $result = $mrModel->create();
 if($result['result'] == 'success') $result = 'success';
-$result = preg_match('/通过API创建合并请求失败，失败原因：存在另外一个同样的合并请求在源项目分支中: !([0-9]+)/', $result['message'], $matches); //检查错误原因是否是已存在一样的mr请求
+$result = preg_match('/存在另外一个同样的合并请求在源项目分支中/', $result['message'], $matches); //检查错误原因是否是已存在一样的mr请求
 if($result) $result = 'success';
 r($result) && p() && e('success'); //使用正确的repoID, gitlabID。POST数据正确 或者错误原因为已存在一样的mr请求
 
