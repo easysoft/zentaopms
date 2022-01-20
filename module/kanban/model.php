@@ -2525,6 +2525,7 @@ class kanbanModel extends model
             $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
             if($printSetHeight)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
@@ -3075,5 +3076,20 @@ class kanbanModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Import.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function import($kanbanID)
+    {
+        $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
+        $importObjectList = implode(',', $importObjects);
+
+        $this->dao->update(TABLE_KANBAN)->set('importObject')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
     }
 }

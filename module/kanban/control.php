@@ -1154,4 +1154,30 @@ class kanban extends control
         if(empty($lanes)) return;
         return print(html::select('otherLane', $lanes, '', "class='form-control'"));
     }
+
+    /**
+     * Import.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function import($kanbanID)
+    {
+        if(!empty($_POST))
+        {
+            $this->kanban->import($kanbanID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $kanban = $this->kanban->getByID($kanbanID);
+
+        $this->view->enableImport  = empty($kanban->importObject) ? 'off' : 'on';
+        $this->view->importObjects = empty($kanban->importObject) ? array() : explode(',', $kanban->importObject);
+
+        $this->display();
+    }
 }

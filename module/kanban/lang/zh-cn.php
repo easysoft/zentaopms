@@ -55,6 +55,7 @@ $lang->kanban->restoreColumn       = '还原看板列';
 $lang->kanban->restoreCard         = '还原卡片';
 $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
+$lang->kanban->import              = '导入功能';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -155,9 +156,21 @@ $lang->kanban->my                 = '我的看板';
 $lang->kanban->other              = '其他';
 
 $lang->kanban->error = new stdclass();
-$lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
-$lang->kanban->error->parentLimitNote = '父列的在制品数量不能小于子列在制品数量之和';
-$lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量';
+$lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。';
+$lang->kanban->error->parentLimitNote   = '父列的在制品数量不能小于子列在制品数量之和';
+$lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大于父列的在制品数量';
+$lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
+
+$lang->kanban->importList = array();
+$lang->kanban->importList['off'] = '不启用导入功能';
+$lang->kanban->importList['on']  = '启用导入功能，只能导入自己有权限查看的内容';
+
+$lang->kanban->importObjectList = array();
+$lang->kanban->importObjectList['plan']      = '产品计划';
+$lang->kanban->importObjectList['release']   = '产品发布';
+$lang->kanban->importObjectList['build']     = '项目版本';
+$lang->kanban->importObjectList['execution'] = '项目执行';
+$lang->kanban->importObjectList['cards']     = '其他看板卡片';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = '未开始';

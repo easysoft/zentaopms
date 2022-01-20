@@ -55,6 +55,7 @@ $lang->kanban->restoreColumn       = 'Restore Column';
 $lang->kanban->restoreCard         = 'Restore Card';
 $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
+$lang->kanban->import              = 'Import';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -158,6 +159,18 @@ $lang->kanban->error = new stdclass();
 $lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
 $lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
 $lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
+$lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
+
+$lang->kanban->importList = array();
+$lang->kanban->importList['off'] = 'Import is not enabled';
+$lang->kanban->importList['on']  = 'Enable the import function, you can only import content that you have permission to view.';
+
+$lang->kanban->importObjectList = array();
+$lang->kanban->importObjectList['plan']      = 'Product Plan';
+$lang->kanban->importObjectList['release']   = 'Release';
+$lang->kanban->importObjectList['build']     = 'Build';
+$lang->kanban->importObjectList['execution'] = 'Execution';
+$lang->kanban->importObjectList['cards']     = 'Other Kanban Cards';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = 'wait';
@@ -308,7 +321,7 @@ $lang->kanbancard->empty           = 'No Card';
 
 $lang->kanbancard->confirmArchive    = 'Are you sure to archive this card? After archiving the card, it will be hidden from the column and you can view it in the Region - Archived.';
 $lang->kanbancard->confirmDelete     = 'Are you sure to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
-$lang->kanbancard->confirmRestore    = 'Are you sure you want to restore this card? After the card is restored, the card will be restored to the "%s" Kanban column.';
+$lang->kanbancard->confirmRestore    = "Are you sure you want to restore this card? After the card is restored, the card will be restored to the '%s' Kanban column.";
 $lang->kanbancard->confirmRestoreTip = "The card's column has been archived or deleted, please restore '%s' column first.";
 
 $lang->kanbancard->priList[1] = 1;
