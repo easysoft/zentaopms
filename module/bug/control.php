@@ -405,11 +405,11 @@ class bug extends control
             if(isset($output['laneID']) and isset($output['columnID']) and isset($output['executionID']) and isonlybody())
             {
                 $this->loadModel('kanban');
-                $regionID   = $this->kanban->getColumnByID($output['columnID'])->region;
-                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $regionID);
+                $column     = $this->kanban->getColumnByID($output['columnID']);
+                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $column->region);
                 $kanbanData = json_encode($kanbanData);
 
-                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
+                return $this->send(array('result' => 'success', 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $column->region)"));
             }
             if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
 
@@ -698,11 +698,11 @@ class bug extends control
             if(isset($output['laneID']) and isset($output['columnID']) and isonlybody())
             {
                 $this->loadModel('kanban');
-                $regionID   = $this->kanban->getColumnByID($output['columnID'])->region;
-                $kanbanData = $this->kanban->getRDKanban($executionID, 'all', 'id_desc', $regionID);
+                $column     = $this->kanban->getColumnByID($output['columnID']);
+                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $column->region);
                 $kanbanData = json_encode($kanbanData);
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $column->region)"));
             }
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::locate($this->createLink('bug', 'browse', "productID={$productID}&branch=$branch&browseType=unclosed&param=0&orderBy=id_desc"), 'parent'));
@@ -1388,11 +1388,11 @@ class bug extends control
             if(isset($output['fromLaneID']) and isset($output['fromColID']) and isset($output['executionID']) and isonlybody())
             {
                 $this->loadModel('kanban');
-                $regionID   = $this->kanban->getColumnByID($output['fromColID'])->region;
-                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $regionID);
+                $column     = $this->kanban->getColumnByID($output['fromColID']);
+                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $column->region);
                 $kanbanData = json_encode($kanbanData);
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $column->region)"));
             }
             if(isonlybody()) return print(js::closeModal('parent.parent'));
             return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
@@ -1473,11 +1473,11 @@ class bug extends control
             if(isset($output['fromLaneID']) and isset($output['fromColID']) and isset($output['executionID']) and isonlybody())
             {
                 $this->loadModel('kanban');
-                $regionID   = $this->kanban->getColumnByID($output['fromColID'])->region;
-                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $regionID);
+                $column     = $this->kanban->getColumnByID($output['fromColID']);
+                $kanbanData = $this->kanban->getRDKanban($output['executionID'], 'all', 'id_desc', $column->region);
                 $kanbanData = json_encode($kanbanData);
 
-                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $column->region)"));
             }
             if(isonlybody()) die(js::reload('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api')
