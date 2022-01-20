@@ -21,6 +21,8 @@ class jobModel extends model
     public function getByID($id)
     {
         $job = $this->dao->select('*')->from(TABLE_JOB)->where('id')->eq($id)->fetch();
+        if(empty($job)) return new stdClass();
+
         if(strtolower($job->engine) == 'gitlab')
         {
             $pipeline = json_decode($job->pipeline);
