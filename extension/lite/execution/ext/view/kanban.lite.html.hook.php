@@ -1,0 +1,3 @@
+<script>
+$('#mainMenu').remove();
+</script>
