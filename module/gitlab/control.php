@@ -41,12 +41,18 @@ class gitlab extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Admin user don't need bind. */
+        $isBindUser = (int)$this->app->user->admin;
         $gitlabList = $this->gitlab->getList($orderBy, $pager);
         foreach($gitlabList as $gitlab)
         {
             $token = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
             $gitlab->isAdminToken = (isset($token->is_admin) and $token->is_admin);
+
+            if(!$isBindUser) $isBindUser = (int)$this->gitlab->getUserIDByZentaoAccount($gitlab->id, $this->app->user->account);
+            $gitlab->isBindUser = $isBindUser;
         }
+
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
         $this->view->gitlabList = $gitlabList;
