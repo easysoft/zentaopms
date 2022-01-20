@@ -1375,7 +1375,7 @@ class kanbanModel extends model
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
 
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
@@ -1385,7 +1385,7 @@ class kanbanModel extends model
             $remove = true;
             if($param == 'public') continue;
 
-            if($object->owner == $account and $param != 'involved') $remove = false;
+            if($object->owner == $account) $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
             if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
 
