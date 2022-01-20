@@ -235,7 +235,7 @@ class task extends control
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'all', 0, true);
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'undone', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
