@@ -883,7 +883,10 @@ class kanbanModel extends model
             {
                 if(!isset($cards[$cardID])) continue;
 
-                $card = zget($cards, $cardID);
+                $card         = zget($cards, $cardID);
+                $card->column = $cell->column;
+                $card->lane   = $cell->lane;
+
                 $card->actions = array();
                 foreach($actions as $action)
                 {
