@@ -976,6 +976,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1010,7 +1013,25 @@ class task extends control
                     }
                 }
             }
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $this->loadModel('kanban');
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->kanban->getRDKanban($task->execution, 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                }
+            }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('result' => 'success', 'data' => $taskID));
