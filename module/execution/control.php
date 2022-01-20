@@ -1992,8 +1992,14 @@ class execution extends control
 
         /* Get execution's product. */
         $productID = 0;
-        $products  = $this->loadModel('product')->getProducts($execution->project);
-        if($products) $productID = key($products);
+        $branchID  = 0;
+        $products  = $this->loadModel('product')->getProducts($executionID);
+        if($products)
+        {
+            $productID = key($products);
+            $branches  = $this->loadModel('branch')->getPairs($productID, '', $executionID);
+            if($branches) $branchID = key($branches);
+        }
 
         $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
@@ -2011,6 +2017,7 @@ class execution extends control
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
+        $this->view->branchID         = $branchID;
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
