@@ -19,10 +19,15 @@
   <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
-        <th><?php echo $lang->kanbanspace->name;?></th>
-        <td><?php echo html::input('name', '', "class='form-control'");?></td>
+        <th><?php echo $lang->kanbanspace->type;?></th>
+        <td><?php echo html::select('type', $typeList, $type, "onchange='changeType(this.value)' class='form-control'");?></td>
         <td></td>
       </tr>
+      <tr>
+        <th><?php echo $lang->kanbanspace->name;?></th>
+        <td><?php echo html::input('name', '', "class='form-control'");?></td>
+      </tr>
+      <?php if($type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanbanspace->owner;?></th>
         <td><?php echo html::select('owner', $users, '', "class='form-control chosen'");?></td>
@@ -36,6 +41,7 @@
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
@@ -43,14 +49,12 @@
           <?php echo html::textarea('desc', '', "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <tr>
-        <th><?php echo $lang->kanbanspace->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanbanspace->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
-      </tr>
+      <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>

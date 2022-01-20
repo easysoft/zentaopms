@@ -1,5 +1,51 @@
 $(document).ready(function()
 {
+    /*
+     * Get frame select.
+     * param string engine eg. jenkins|gitlab
+     */
+    function getFrameSelect(engine)
+    {
+        $('#frameBox .input-group').empty();
+        $('#frameBox .input-group').append("<div class='load-indicator loading'></div>");
+        var html = "<select id='frame' name='frame' class='form-control chosen'>";
+        for(frame in frameList)
+        {
+            if(engine == 'jenkins' || frame != 'sonarqube') html += "<option value='" + frame + "'>" + frameList[frame] + "</option>";
+        }
+        html += '</select>';
+
+        $('#frameBox .loading').remove();
+        $('#frameBox .input-group').append(html);
+        $('#frameBox #frame').chosen();
+        
+        $('#frame').change();
+    }
+    getFrameSelect('');
+
+    /*
+     * Check sonarqube linked.
+     */
+    function checkSonarquebLink()
+    {
+        var repoID = $('#repo').val();
+        var frame  = $('#frame').val();
+
+        if(frame != 'sonarqube' || repoID == 0) return false;
+
+        $.getJSON(createLink('job', 'ajaxCheckSonarqubeLink', 'repoID=' + repoID), function(result)
+        {
+            if(result.result  != 'success')
+            {
+                alert(result.message);
+                $('#repo').val(0).trigger('chosen:updated');
+                $('#reference').val('').trigger('chosen:updated');
+                $('.reference').hide();
+                return false;
+            }
+        })
+    }
+
     $(document).on('change', '#repo', function()
     {
         var repoID = $(this).val();
@@ -63,6 +109,9 @@ $(document).ready(function()
                 $('#triggerggerType option[value=tag]').html(data.type == 'gitlab' ? buildTag : dirChange).trigger('chosen:updated');
             }
         });
+
+        /* Check exists sonarqube data. */
+        checkSonarquebLink();
     });
 
     $(document).on('change', '[name^=svnDir]', function()
@@ -139,6 +188,42 @@ $(document).ready(function()
 
             $('#jenkinsServerTR #jkTask').chosen({drop_direction: 'auto'});
         })
+
+        /* There has been a problem with handling the prompt label. */
+        $('#jkTaskLabel').remove();
+    })
+
+    $(document).on('change', '#frame', function()
+    {
+        var frame = $(this).val();
+        if(frame == 'sonarqube')
+        {
+            $('tr.sonarqube').removeClass('hide');
+
+            /* Check exists sonarqube data. */
+            checkSonarquebLink();
+        }
+        else
+        {
+            $('tr.sonarqube').addClass('hide');
+        }
+    })
+
+    $(document).on('change', '#sonarqubeServer', function()
+    {
+        var sonarqubeID = $(this).val();
+        $('#sonarProject #projectKey').remove();
+        $('#sonarProject #projectKey_chosen').remove();
+        $('#sonarProject .input-group').append("<div class='load-indicator loading'></div>");
+        $.get(createLink('sonarqube', 'ajaxGetProjectList', 'sonarqubeID=' + sonarqubeID), function(html)
+        {
+            $('#sonarProject .loading').remove();
+            $('#sonarProject .input-group').append(html);
+            $('#sonarProject #projectKey').chosen({drop_direction: 'auto'});
+        })
+
+        /* There has been a problem with handling the prompt label. */
+        $('#projectKeyLabel').remove();
     })
 
     var scheduleOption = "<option value='schedule'>" + $('#triggerType').find('[value=schedule]').text() + "</option>";
@@ -161,9 +246,10 @@ $(document).ready(function()
             $('tr.gitlabRepo').hide();
             $('tr.commonRepo').show();
         }
+
+        getFrameSelect(engine);
     });
 
     $('#engine').change();
-
     $('#triggerType').change();
 });

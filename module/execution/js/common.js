@@ -139,7 +139,7 @@ function loadBranches(product)
     if($('#productsBox .input-group:last select:first').val() != 0)
     {
         var length = $('#productsBox .input-group').size();
-        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html() + '</div>');
+        $('#productsBox .row').append('<div class="col-sm-4">' + $('#productsBox .col-sm-4:last').html().replace('required', '') + '</div>');
         if($('#productsBox .input-group:last select').size() >= 2) $('#productsBox .input-group:last select:last').remove();
         $('#productsBox .input-group:last .chosen-container').remove();
         $('#productsBox .input-group:last select:first').attr('name', 'products[' + length + ']').attr('id', 'products' + length);

@@ -88,6 +88,8 @@ class job extends control
                 }
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
+
+            $this->loadModel('action')->create('job', $jobID, 'created');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $jobID));
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
@@ -120,7 +122,8 @@ class job extends control
         $this->view->repoTypes   = $repoTypes;
         $this->view->products    = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->projectID);
 
-        $this->view->jenkinsServerList = array('' => '') + $this->loadModel('jenkins')->getPairs();
+        $this->view->jenkinsServerList   = array('' => '') + $this->loadModel('jenkins')->getPairs();
+        $this->view->sonarqubeServerList = array('') + $this->loadModel('pipeline')->getPairs('sonarqube');
 
         $this->display();
     }
@@ -162,6 +165,8 @@ class job extends control
                 }
                 return $this->send(array('result' => 'fail', 'message' => $errors));
             }
+
+            $this->loadModel('action')->create('job', $id, 'edited');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
@@ -189,17 +194,18 @@ class job extends control
             if($jobProduct and $jobProduct->deleted == 0) $products += array($job->product => $jobProduct->name);
         }
 
-        $this->view->title             = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
-        $this->view->position[]        = html::a(inlink('browse'), $this->lang->ci->job);
-        $this->view->position[]        = $this->lang->job->edit;
-        $this->view->repoPairs         = $repoPairs;
-        $this->view->gitlabRepos       = $gitlabRepos;
-        $this->view->repoTypes         = $repoTypes;
-        $this->view->repoType          = zget($repoTypes, $job->repo, 'Git');
-        $this->view->job               = $job;
-        $this->view->products          = array(0 => '') + $products;
-        $this->view->jenkinsServerList = $this->loadModel('jenkins')->getPairs();
-        $this->view->pipelines         = $this->jenkins->getTasks($job->server);
+        $this->view->title               = $this->lang->ci->job . $this->lang->colon . $this->lang->job->edit;
+        $this->view->position[]          = html::a(inlink('browse'), $this->lang->ci->job);
+        $this->view->position[]          = $this->lang->job->edit;
+        $this->view->repoPairs           = $repoPairs;
+        $this->view->gitlabRepos         = $gitlabRepos;
+        $this->view->repoTypes           = $repoTypes;
+        $this->view->repoType            = zget($repoTypes, $job->repo, 'Git');
+        $this->view->job                 = $job;
+        $this->view->products            = array('') + $products;
+        $this->view->jenkinsServerList   = $this->loadModel('jenkins')->getPairs();
+        $this->view->sonarqubeServerList = array('') + $this->loadModel('pipeline')->getPairs('sonarqube');
+        $this->view->pipelines           = $this->jenkins->getTasks($job->server);
 
         $this->display();
     }
@@ -323,6 +329,7 @@ class job extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $this->app->loadLang('compile');
+        $this->loadModel('action')->create('job', $id, 'executed');
         return $this->send(array('result' => 'success', 'message' => sprintf($this->lang->job->sendExec, zget($this->lang->compile->statusList, $compile->status))));
     }
 
@@ -414,4 +421,21 @@ class job extends control
         $this->send(array('result' => 'success', 'type' => strtolower($repo->SCM)));
     }
 
+    /**
+     * Ajax check SonarQube linked by repoID.
+     *
+     * @param  int    $repoID
+     * @access public
+     * @return void
+     */
+    public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
+    {
+        $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID, true);
+        if(!empty($repo)) 
+        {
+            $message = $repo[$repoID]->deleted ? $this->lang->job->jobIsDeleted : sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
+            $this->send(array('result' => 'fail', 'message' => $message));
+        }
+        $this->send(array('result' => 'success', 'message' => ''));
+    }
 }

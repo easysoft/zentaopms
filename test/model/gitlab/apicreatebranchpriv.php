@@ -40,6 +40,7 @@ if($result === false) $result = 'return false';
 r($result) && p() && e('return false'); //使用正确的gitlabID、保护分支信息，错误的projectID创建保护分支
 
 $projectID = 966;
+$gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch->name);
 r($gitlab->apiCreateBranchPriv($gitlabID, $projectID, $branch)) && p('name')    && e($branch->name); //通过gitlabID,projectID,保护分支对象正确创建GitLab保护分支
 r($gitlab->apiCreateBranchPriv($gitlabID, $projectID, $branch)) && p('message') && e("Protected branch 'master' already exists"); //使用重复的保护分支信息创建保护分支
 

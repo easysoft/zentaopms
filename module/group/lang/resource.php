@@ -670,11 +670,11 @@ $lang->resource->kanban->deleteCard         = 'deleteCard';
 $lang->resource->kanban->moveCard           = 'moveCard';
 $lang->resource->kanban->setCardColor       = 'setCardColor';
 $lang->resource->kanban->laneMove           = 'laneMove';
-$lang->resource->kanban->cardsSort          = 'cardsSort';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
 $lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
+$lang->resource->kanban->import             = 'import';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -720,6 +720,7 @@ $lang->kanban->methodorder[200] = 'viewArchivedCard';
 $lang->kanban->methodorder[205] = 'archiveColumn';
 $lang->kanban->methodorder[210] = 'restoreCard';
 $lang->kanban->methodorder[215] = 'setLaneHeight';
+$lang->kanban->methodorder[220] = 'import';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
@@ -1386,6 +1387,24 @@ $lang->gitlab->methodOrder[135] = 'browseTag';
 $lang->gitlab->methodOrder[140] = 'browseTagPriv';
 $lang->gitlab->methodOrder[145] = 'deleteTagPriv';
 
+/* SonarQube. */
+$lang->resource->sonarqube = new stdclass();
+$lang->resource->sonarqube->browse        = 'browse';
+$lang->resource->sonarqube->create        = 'create';
+$lang->resource->sonarqube->edit          = 'edit';
+$lang->resource->sonarqube->delete        = 'delete';
+$lang->resource->sonarqube->browseProject = 'browseProject';
+$lang->resource->sonarqube->deleteProject = 'deleteProject';
+$lang->resource->sonarqube->execJob       = 'execJob';
+
+$lang->sonarqube->methodOrder[5]  = 'browse';
+$lang->sonarqube->methodOrder[10] = 'create';
+$lang->sonarqube->methodOrder[15] = 'edit';
+$lang->sonarqube->methodOrder[20] = 'delete';
+$lang->sonarqube->methodOrder[25] = 'browseProject';
+$lang->sonarqube->methodOrder[35] = 'deleteProject';
+$lang->sonarqube->methodOrder[40] = 'execJob';
+
 /* merge request. */
 $lang->resource->mr = new stdclass();
 $lang->resource->mr->create    = 'create';
@@ -1730,12 +1749,12 @@ $lang->backup->methodOrder[25] = 'setting';
 $lang->backup->methodOrder[30] = 'rmPHPHeader';
 
 $lang->resource->cron = new stdclass();
-$lang->resource->cron->index   = 'index';
-$lang->resource->cron->turnon  = 'turnon';
-$lang->resource->cron->create  = 'createAction';
-$lang->resource->cron->edit    = 'edit';
-$lang->resource->cron->toggle  = 'toggle';
-$lang->resource->cron->delete  = 'delete';
+$lang->resource->cron->index       = 'index';
+$lang->resource->cron->turnon      = 'turnon';
+$lang->resource->cron->create      = 'createAction';
+$lang->resource->cron->edit        = 'edit';
+$lang->resource->cron->toggle      = 'toggle';
+$lang->resource->cron->delete      = 'delete';
 $lang->resource->cron->openProcess = 'restart';
 
 $lang->cron->methodOrder[5]  = 'index';

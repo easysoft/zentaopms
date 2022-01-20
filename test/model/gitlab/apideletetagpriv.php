@@ -35,7 +35,8 @@ $tag       = 'masters';
 $result    = $gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
 r($result) && p('message') && e('404 Not found'); //使用错误的保护标签信息删除保护标签
 
-$tag    = '2021/12/30';
-$result = $gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
+$projectID = 1555;
+$tag       = 'test_tag1';
+$result    = $gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
 if(!$result or substr($result->message, 0, 2) == '20') $result = 'return true';
 r($result) && p() && e('return true');  //通过gitlabID,projectID,标签名称正确删除保护标签

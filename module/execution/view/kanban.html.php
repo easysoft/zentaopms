@@ -146,12 +146,12 @@ js::set('hasTaskButton', $hasTaskButton);
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->createStory, '', "class='iframe'") . '</li>';?>
-        <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='iframe' data-width='90%'") . '</li>';?>
+        <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStoryByPlane) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
         <?php if($hasStoryButton and $hasBugButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
-        <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=0&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>
+        <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
@@ -168,7 +168,6 @@ js::set('hasTaskButton', $hasTaskButton);
       <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
         <div class="region-header dropdown">
           <span class="strong"><?php echo $region->name;?></span>
-          <label class="label label-region"><?php echo $this->lang->kanbanlane->common . ' ' . $region->laneCount;?></label>
           <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
           <span class='regionActions'>
             <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>

@@ -189,8 +189,8 @@ function createColumnMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
+    if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban', '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban', '' ,'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -780,7 +780,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
             {
-                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -821,6 +821,8 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 showIframe = true;
             }
         }
+
+        if(fromLaneID != toLaneID && fromColID == toColID) shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
     }
 
     /* Bug lane. */
@@ -868,24 +870,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             }
         }
 
-        if(moveCard || (fromLaneID != toLaneID && fromColID == toColID))
-        {
-            var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
-            $.ajax(
-            {
-                method:   'post',
-                dataType: 'json',
-                url:       link,
-                success: function(data)
-                {
-                    updateRegion(regionID, data[regionID]);
-                },
-                error: function(xhr, status, error)
-                {
-                    showErrorMessager(error || lang.timeout);
-                }
-            });
-        }
+        if(moveCard || (fromLaneID != toLaneID && fromColID == toColID)) shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID);
     }
 
     /* Story lane. */
@@ -918,6 +903,70 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
     }
 }
 
+/**
+ * Close modal and update kanban data.
+ *
+ * @param  string kanbanData
+ * @param  int    regionID
+ * @access public
+ * @return void
+ */
+function updateKanban(kanbanData, regionID)
+{
+    setTimeout(function()
+    {
+        if(regionID)
+        {
+            updateRegion(regionID, kanbanData[regionID]);
+        }
+        else
+        {
+            $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+            {
+                var regionID = $(this).attr('data-id');
+                updateRegion(regionID, kanbanData[regionID]);
+            });
+        }
+    }, 200);
+}
+
+/**
+ * Shift card.
+ *
+ * @param  int objectID
+ * @param  int fromColID
+ * @param  int toColID
+ * @param  int fromLaneID
+ * @param  int toLaneID
+ * @param  int regionID
+ * @access public
+ * @return void
+ */
+function shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
+{
+    var link  = createLink('kanban', 'ajaxMoveCard', 'cardID=' + objectID + '&fromColID=' + fromColID + '&toColID=' + toColID + '&fromLaneID=' + fromLaneID + '&toLaneID=' + toLaneID + '&execitionID=' + executionID + '&browseType=' + browseType + '&groupBy=' + groupBy + '&regionID=' + regionID + '&orderBy=' + orderBy );
+    $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       link,
+        success: function(data)
+        {
+            updateRegion(regionID, data[regionID]);
+        },
+        error: function(xhr, status, error)
+        {
+            showErrorMessager(error || lang.timeout);
+        }
+    });
+}
+
+/**
+ * Process minus button.
+ *
+ * @access public
+ * @return void
+ */
 function processMinusBtn()
 {
     var columnCount = $('#splitTable .child-column').size();

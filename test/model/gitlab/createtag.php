@@ -40,7 +40,12 @@ r($result) && p() && e('return false'); //使用正确的gitlabID、标签信息
 
 dao::$errors = array();
 $projectID   = 1555;
-$result      = $gitlab->createTag($gitlabID, $projectID);
+
+/* Delete tags with the same name. */
+$gitlab->apiDeleteTagPriv($gitlabID, $projectID, $_POST['tag_name']);
+$gitlab->apiDeleteTag($gitlabID, $projectID, $_POST['tag_name']);
+
+$result = $gitlab->createTag($gitlabID, $projectID);
 if($result === true) $result = 'return true';
 r($result) && p() && e('return true');  //通过gitlabID,projectID,标签对象正确创建GitLab标签
 

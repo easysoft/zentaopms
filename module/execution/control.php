@@ -1604,6 +1604,7 @@ class execution extends control
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
         $this->view->allProjects          = $this->project->getPairsByModel('all', 0, 'noclosed');
+        $this->view->project              = $this->project->getById($execution->project);
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
@@ -1965,6 +1966,8 @@ class execution extends control
      */
     public function kanban($executionID, $browseType = 'all', $orderBy = 'id_asc', $groupBy = 'default')
     {
+        $this->app->loadLang('bug');
+        $this->app->loadLang('story');
         if(empty($groupBy)) $groupBy = 'default';
 
         $this->lang->execution->menu = new stdclass();
@@ -1989,8 +1992,14 @@ class execution extends control
 
         /* Get execution's product. */
         $productID = 0;
-        $products  = $this->loadModel('product')->getProducts($execution->project);
-        if($products) $productID = key($products);
+        $branchID  = 0;
+        $products  = $this->loadModel('product')->getProducts($executionID);
+        if($products)
+        {
+            $productID = key($products);
+            $branches  = $this->loadModel('branch')->getPairs($productID, '', $executionID);
+            if($branches) $branchID = key($branches);
+        }
 
         $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
@@ -2008,6 +2017,7 @@ class execution extends control
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
+        $this->view->branchID         = $branchID;
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
