@@ -788,7 +788,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'developing' && priv.canPauseTask)
             {
-                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -796,12 +796,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
-                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
             {
-                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -809,7 +809,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
             {
-                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -817,7 +817,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
             {
-                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -911,7 +911,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
  * @access public
  * @return void
  */
-function updateKanban(kanbanData, regionID)
+function updateKanban(kanbanData, regionID = 0)
 {
     setTimeout(function()
     {

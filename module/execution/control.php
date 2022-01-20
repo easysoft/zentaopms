@@ -1969,6 +1969,7 @@ class execution extends control
         $this->app->loadLang('bug');
         $this->app->loadLang('story');
         if(empty($groupBy)) $groupBy = 'default';
+        $this->session->set('execLaneType', $browseType);
 
         $this->lang->execution->menu = new stdclass();
         $execution        = $this->commonAction($executionID);
