@@ -56,23 +56,15 @@ class gitlabModel extends model
     /**
      * Get gitlab api base url by gitlab id.
      *
-     * @param  int $gitlabID
+     * @param  int $id
      * @access public
      * @return string
      */
-    public function getApiRoot($gitlabID)
+    public function getApiRoot($id)
     {
-        $gitlab = $this->getByID($gitlabID);
+        $gitlab = $this->getByID($id);
         if(!$gitlab) return '';
-
-        $sudoParam = '';
-        if(!$this->app->user->admin)
-        {
-            $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
-            if($openID) $sudoParam = "&sudo={$openID}";
-        }
-
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
+        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}";
     }
 
     /**
@@ -621,15 +613,17 @@ class gitlabModel extends model
      */
     public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy = 'id_desc', $pager = null)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
-        if(!$apiRoot) return array();
+        $gitlab = $this->getByID($gitlabID);
+        if(!$gitlab) return array();
 
-        $url = sprintf($apiRoot, "/projects");
+        $host = rtrim($gitlab->url, '/');
+        $host .= '/api/v4/projects';
 
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
-        $result = commonModel::httpWithHeader($url . "&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $keyword = urlencode($keyword);
+        $result  = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
@@ -648,15 +642,16 @@ class gitlabModel extends model
      */
     public function apiGetProjects($gitlabID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
-        if(!$apiRoot) return array();
+        $gitlab = $this->getByID($gitlabID);
+        if(!$gitlab) return array();
 
-        $url = sprintf($apiRoot, "/projects");
+        $host = rtrim($gitlab->url, '/');
+        $host .= '/api/v4/projects';
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($host . "&simple=true&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
             if(count($results)<100 or $page > 10) break;

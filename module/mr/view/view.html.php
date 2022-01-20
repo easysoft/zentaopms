@@ -139,9 +139,9 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->compile->atTime;?></th>
-                    <td><?php echo zget($compileJob, 'lastExec', $lang->mr->compileUnexecuted);?></td>
+                    <td><?php echo $compileJob ? $compileJob->lastExec : $lang->mr->compileUnexecuted;?></td>
                   </tr>
-                  <?php if($compileJob && !empty($compileJob->id)):?>
+                  <?php if($compileJob):?>
                   <tr>
                     <th><?php echo $lang->compile->result;?></th>
                     <td>
