@@ -432,6 +432,7 @@ CREATE TABLE IF NOT EXISTS `zt_designspec` (
 -- DROP TABLE IF EXISTS `zt_doc`;
 CREATE TABLE IF NOT EXISTS `zt_doc` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `project` mediumint(8) unsigned NOT NULL,
   `product` mediumint(8) unsigned NOT NULL,
   `execution` mediumint(8) unsigned NOT NULL,
@@ -475,6 +476,7 @@ CREATE TABLE IF NOT EXISTS `zt_doccontent` (
 CREATE TABLE IF NOT EXISTS `zt_doclib` (
   `id` smallint(5) unsigned NOT NULL auto_increment,
   `type` varchar(30) NOT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `product` mediumint(8) unsigned NOT NULL,
   `project` mediumint(8) unsigned NOT NULL,
   `execution` mediumint(8) unsigned NOT NULL,
