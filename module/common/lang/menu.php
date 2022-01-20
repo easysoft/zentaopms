@@ -491,7 +491,7 @@ $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang-
 $lang->admin->menu->allModel['menuOrder'][5] = 'storyConcept';
 
 $lang->admin->menu->waterfall['subMenu'] = new stdclass();
-$lang->admin->menu->waterfall['subMenu']->stage = array('link' => '阶段|stage|setType|', 'subModule' => 'stage');
+$lang->admin->menu->waterfall['subMenu']->stage = array('link' => "{$lang->stage->common}|stage|setType|", 'subModule' => 'stage');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
