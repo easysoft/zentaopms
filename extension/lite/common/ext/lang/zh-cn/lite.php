@@ -11,9 +11,18 @@ $lang->mainNav->report = "{$lang->navIcons['report']} {$lang->report->common}|re
 $lang->mainNav->system = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin  = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
+if($config->edition != 'open')
+{
+    $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
+    $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
+}
+
+/* Menu order. */
 $lang->mainNav->menuOrder     = array();
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[20] = 'project';
+$lang->mainNav->menuOrder[21] = 'oa';
+$lang->mainNav->menuOrder[25] = 'feedback';
 $lang->mainNav->menuOrder[35] = 'doc';
 $lang->mainNav->menuOrder[45] = 'system';
 $lang->mainNav->menuOrder[65] = 'admin';
