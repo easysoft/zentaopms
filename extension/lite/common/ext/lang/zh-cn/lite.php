@@ -1,8 +1,27 @@
 <?php
-$lang->mainNav->menuOrder = array();
+/* Main Navigation. */
+$lang->mainNav            = new stdclass();
+$lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
+$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+$lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
+$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
+$lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
+$lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
+if($config->edition != 'open')
+{
+    $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
+    $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
+}
+
+/* Menu order. */
+$lang->mainNav->menuOrder     = array();
 $lang->mainNav->menuOrder[5]  = 'my';
 $lang->mainNav->menuOrder[20] = 'project';
+$lang->mainNav->menuOrder[21] = 'oa';
+$lang->mainNav->menuOrder[25] = 'feedback';
 $lang->mainNav->menuOrder[35] = 'doc';
 $lang->mainNav->menuOrder[45] = 'system';
 $lang->mainNav->menuOrder[65] = 'admin';
@@ -148,3 +167,45 @@ $lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->time
 $lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
 
 $lang->admin->dividerMenu = ',company,message,system,';
+
+/* adjust items of search. */
+$lang->searchObjects['all']       = '全部';
+$lang->searchObjects['todo']      = '待办';
+$lang->searchObjects['story']     = '目标';
+$lang->searchObjects['task']      = '卡片';
+$lang->searchObjects['doc']       = '文档';
+$lang->searchObjects['project']   = '项目';
+$lang->searchObjects['execution'] = '看板';
+
+if($config->edition != 'open') $lang->searchObjects['feedback']  = '反馈';
+
+$lang->navGroup->task      = 'project';
+$lang->navGroup->execution = 'project';
+
+unset($lang->searchObjects['bug']);
+unset($lang->searchObjects['testcase']);
+unset($lang->searchObjects['product']);
+unset($lang->searchObjects['build']);
+unset($lang->searchObjects['release']);
+unset($lang->searchObjects['productplan']);
+unset($lang->searchObjects['testtask']);
+unset($lang->searchObjects['caselib']);
+unset($lang->searchObjects['testreport']);
+unset($lang->searchObjects['program']);
+unset($lang->searchObjects['user']);
+
+/* adjust items of global create. */
+
+unset($lang->createIcons['effort']);
+unset($lang->createIcons['bug']);
+unset($lang->createIcons['testcase']);
+unset($lang->createIcons['product']);
+unset($lang->createIcons['program']);
+unset($lang->createIcons['kanbanspace']);
+unset($lang->createIcons['kanban']);
+
+$lang->createObjects['story']       = '目标';
+$lang->createObjects['task']        = '卡片';
+$lang->createObjects['execution']   = '看板';
+
+$lang->createIcons['execution']      = 'kanban';

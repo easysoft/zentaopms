@@ -14,6 +14,7 @@ include '../../common/view/header.lite.html.php';
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
+js::set('vision',        $config->vision);
 js::set('navGroup',      $lang->navGroup);
 js::set('appsLang',      $lang->index->app);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
