@@ -23,7 +23,6 @@ class kanban extends control
      */
     public function space($browseType = 'private', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
@@ -156,8 +155,6 @@ class kanban extends control
      */
     public function create($spaceID = 0, $type = 'private')
     {
-        $type = $type == 'involved' ? 'private' : $type;
-
         if(!empty($_POST))
         {
             $kanbanID = $this->kanban->create();
