@@ -140,13 +140,6 @@
                   <?php endif;?>
                   <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
                 </div>
-                <div class='kanbanAcl'>
-                  <?php $icon = 'unlock';?>
-                  <?php if($kanban->acl == 'private') $icon = 'lock';?>
-                  <?php if($kanban->acl == 'extend') $icon = 'inherit-space';?>
-                    <i class="<?php echo 'icon-' . $icon;?>"></i>
-                  <?php echo zget($lang->kanban->aclGroup, $kanban->acl, '');?>
-                </div>
               </div>
             </div>
           </div>
