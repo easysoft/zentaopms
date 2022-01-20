@@ -1344,11 +1344,13 @@ class docModel extends model
                 $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
                     ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
+                    ->andWhere('t1.vision')->eq($this->config->vision)
                     ->fetchPairs();
             }
 
             $objects = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
+                ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->orderBy('order_asc')
