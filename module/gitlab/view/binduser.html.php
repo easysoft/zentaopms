@@ -33,7 +33,7 @@
             <td class='text-left'>
               <strong><?php echo $gitlabUser->realname;?></strong>
               <br>
-              <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
+              <?php if($gitlabUser->email) echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
             <td></td>
@@ -46,7 +46,7 @@
             <td>
               <strong><?php echo $gitlabUser->realname;?></strong>
               <br>
-              <?php echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
+              <?php if($gitlabUser->email) echo $gitlabUser->account . " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, $gitlabUser->zentaoAccount, "class='form-control select chosen'" );?></td>
             <td>
