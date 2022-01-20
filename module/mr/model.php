@@ -258,6 +258,7 @@ class mrModel extends model
     {
         $MR = fixer::input('post')
             ->setDefault('jobID', 0)
+            ->setDefault('compileID', 0)
             ->setDefault('repoID', 0)
             ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)

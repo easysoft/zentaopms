@@ -43,6 +43,12 @@
           </td>
         </tr>
         <tr>
+          <th><?php echo $lang->kanbanlane->common;?></th>
+          <td colspan='2'>
+            <?php echo html::select('lane', $lanePairs, key($lanePairs), "class='form-control chosen'");?>
+          </td>
+        </tr>
+        <tr>
           <th><?php echo $lang->kanbancard->assignedTo;?></th>
           <td colspan='2'>
             <?php echo html::select('assignedTo[]', $users, $app->user->account, "class='form-control chosen' multiple");?>

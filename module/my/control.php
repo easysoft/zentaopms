@@ -86,7 +86,7 @@ class my extends control
      */
     public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->showWorkCount($orderBy, $recTotal, $recPerPage, $pageID);
+        $this->showWorkCount($recTotal, $recPerPage, $pageID);
 
         echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
     }
@@ -94,14 +94,13 @@ class my extends control
     /**
      * Show to-do work count.
      *
-     * @param string $orderBy
      * @param int    $recTotal
      * @param int    $recPerPage
      * @param int    $pageID
      * @access public
      * @return void
      */
-    public function showWorkCount($orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
+    public function showWorkCount($recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->loadModel('task');
         $this->loadModel('story');
@@ -119,9 +118,9 @@ class my extends control
         $taskCount = $pager->recTotal;
 
         /* Get the number of stories assigned to me. */
-        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', $orderBy, $pager, 'story', false);
+        $assignedToStories    = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'story', false);
         $assignedToStoryCount = $pager->recTotal;
-        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', $orderBy, $pager, 'story', false);
+        $reviewByStories      = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'story', false);
         $reviewByStoryCount   = $pager->recTotal;
         $storyCount           = $assignedToStoryCount + $reviewByStoryCount;
 
@@ -130,23 +129,23 @@ class my extends control
         if($isOpenedURAndSR)
         {
             /* Get the number of requirements assigned to me. */
-            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', $orderBy, $pager, 'requirement');
+            $assignedRequirements     = $this->story->getUserStories($this->app->user->account, 'assignedTo', 'id_desc', $pager, 'requirement');
             $assignedRequirementCount = $pager->recTotal;
-            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', $orderBy, $pager, 'requirement');
+            $reviewByRequirements     = $this->story->getUserStories($this->app->user->account, 'reviewBy', 'id_desc', $pager, 'requirement');
             $reviewByRequirementCount = $pager->recTotal;
             $requirementCount         = $assignedRequirementCount + $reviewByRequirementCount;
         }
 
         /* Get the number of bugs assigned to me. */
-        $bugs     = $this->bug->getUserBugs($this->app->user->account, 'assignedTo', $orderBy, 0, $pager);
+        $bugs     = $this->bug->getUserBugs($this->app->user->account, 'assignedTo', 'id_desc', 0, $pager);
         $bugCount = $pager->recTotal;
 
         /* Get the number of testcases assigned to me. */
-        $cases     = $this->testcase->getByAssignedTo($this->app->user->account, $orderBy, $pager, 'skip');
+        $cases     = $this->testcase->getByAssignedTo($this->app->user->account, 'id_desc', $pager, 'skip');
         $caseCount = $pager->recTotal;
 
         /* Get the number of testtasks assigned to me. */
-        $testTasks     = $this->testtask->getByUser($this->app->user->account, $pager, $orderBy, 'wait');
+        $testTasks     = $this->testtask->getByUser($this->app->user->account, $pager, 'id_desc', 'wait');
         $testTaskCount = $pager->recTotal;
 
         $issueCount   = 0;
@@ -163,23 +162,23 @@ class my extends control
             $this->loadModel('meeting');
 
             /* Get the number of issues assigned to me. */
-            $issues     = $this->issue->getUserIssues('assignedTo', $this->app->user->account, $orderBy, $pager);
+            $issues     = $this->issue->getUserIssues('assignedTo', $this->app->user->account, 'id_desc', $pager);
             $issueCount = $pager->recTotal;
 
             /* Get the number of risks assigned to me. */
-            $risks     = $this->risk->getUserRisks('assignedTo', $this->app->user->account, $orderBy, $pager);
+            $risks     = $this->risk->getUserRisks('assignedTo', $this->app->user->account, 'id_desc', $pager);
             $riskCount = $pager->recTotal;
 
             /* Get the number of reviews assigned to me. */
-            $reviewList  = $this->review->getUserReviews('wait', $orderBy, $pager);
+            $reviewList  = $this->review->getUserReviews('wait', 'id_desc', $pager);
             $reviewCount = $pager->recTotal;
 
             /* Get the number of nc assigned to me. */
-            $ncList  = $this->my->getNcList('assignedToMe', $orderBy, $pager);
+            $ncList  = $this->my->getNcList('assignedToMe', 'id_desc', $pager);
             $ncCount = $pager->recTotal;
 
             /* Get the number of meetings assigned to me. */
-            $meetings     = $this->meeting->getListByUser('futureMeeting', $orderBy, 0, $pager);
+            $meetings     = $this->meeting->getListByUser('futureMeeting', 'id_desc', 0, $pager);
             $meetingCount = $pager->recTotal;
         }
 

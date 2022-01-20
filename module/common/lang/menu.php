@@ -386,22 +386,24 @@ $lang->qa->menuOrder[45] = 'automation';
 $lang->qa->dividerMenu = ',bug,testtask,caselib,';
 
 /* DevOps menu. */
-$lang->devops->menu           = new stdclass();
-$lang->devops->menu->code     = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
-$lang->devops->menu->compile  = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
-$lang->devops->menu->mr       = array('link' => "{$lang->devops->mr}|mr|browse");
-$lang->devops->menu->gitlab   = array('link' => "GitLab|gitlab|browse", 'alias' => 'create,edit');
-$lang->devops->menu->jenkins  = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
-$lang->devops->menu->maintain = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
-$lang->devops->menu->rules    = array('link' => "{$lang->devops->rules}|repo|setrules");
+$lang->devops->menu            = new stdclass();
+$lang->devops->menu->code      = array('link' => "{$lang->repo->common}|repo|browse|repoID=%s", 'alias' => 'diff,view,revision,log,blame,showsynccommit');
+$lang->devops->menu->compile   = array('link' => "{$lang->devops->compile}|job|browse", 'subModule' => 'compile,job');
+$lang->devops->menu->mr        = array('link' => "{$lang->devops->mr}|mr|browse");
+$lang->devops->menu->gitlab    = array('link' => "GitLab|gitlab|browse", 'alias' => 'create,edit');
+$lang->devops->menu->sonarqube = array('link' => "SonarQube|sonarqube|browse");
+$lang->devops->menu->jenkins   = array('link' => "Jenkins|jenkins|browse", 'alias' => 'create,edit');
+$lang->devops->menu->maintain  = array('link' => "{$lang->devops->repo}|repo|maintain", 'alias' => 'create,edit');
+$lang->devops->menu->rules     = array('link' => "{$lang->devops->rules}|repo|setrules");
 
 $lang->devops->menuOrder[5]  = 'code';
 $lang->devops->menuOrder[10] = 'compile';
 $lang->devops->menuOrder[15] = 'mr';
 $lang->devops->menuOrder[20] = 'gitlab';
-$lang->devops->menuOrder[25] = 'jenkins';
-$lang->devops->menuOrder[30] = 'maintain';
-$lang->devops->menuOrder[35] = 'rules';
+$lang->devops->menuOrder[25] = 'sonarqube';
+$lang->devops->menuOrder[30] = 'jenkins';
+$lang->devops->menuOrder[35] = 'maintain';
+$lang->devops->menuOrder[40] = 'rules';
 
 /* Kanban menu. */
 $lang->kanban->menu = new stdclass();
@@ -489,7 +491,7 @@ $lang->admin->menu->allModel['subMenu']->storyConcept = array('link' => "{$lang-
 $lang->admin->menu->allModel['menuOrder'][5] = 'storyConcept';
 
 $lang->admin->menu->waterfall['subMenu'] = new stdclass();
-$lang->admin->menu->waterfall['subMenu']->stage = array('link' => '阶段|stage|setType|', 'subModule' => 'stage');
+$lang->admin->menu->waterfall['subMenu']->stage = array('link' => "{$lang->stage->common}|stage|setType|", 'subModule' => 'stage');
 
 /* Admin menu order. */
 $lang->admin->menuOrder[5]  = 'index';
@@ -618,16 +620,18 @@ $lang->navGroup->testtask   = 'qa';
 $lang->navGroup->testsuite  = 'qa';
 $lang->navGroup->caselib    = 'qa';
 
-$lang->navGroup->devops  = 'devops';
-$lang->navGroup->repo    = 'devops';
-$lang->navGroup->job     = 'devops';
-$lang->navGroup->jenkins = 'devops';
-$lang->navGroup->mr      = 'devops';
-$lang->navGroup->gitlab  = 'devops';
-$lang->navGroup->compile = 'devops';
-$lang->navGroup->ci      = 'devops';
-$lang->navGroup->svn     = 'devops';
-$lang->navGroup->git     = 'devops';
+$lang->navGroup->devops           = 'devops';
+$lang->navGroup->repo             = 'devops';
+$lang->navGroup->job              = 'devops';
+$lang->navGroup->jenkins          = 'devops';
+$lang->navGroup->mr               = 'devops';
+$lang->navGroup->gitlab           = 'devops';
+$lang->navGroup->sonarqube        = 'devops';
+$lang->navGroup->sonarqubeproject = 'devops';
+$lang->navGroup->compile          = 'devops';
+$lang->navGroup->ci               = 'devops';
+$lang->navGroup->svn              = 'devops';
+$lang->navGroup->git              = 'devops';
 
 $lang->navGroup->company = 'system';
 

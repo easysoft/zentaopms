@@ -76,7 +76,7 @@ class pipelineModel extends model
             ->add('private',md5(rand(10,113450)))
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
-            ->trim('token')
+            ->trim('url,token,account,password')
             ->skipSpecial('url,token,account,password')
             ->get();
         if($type == 'gitlab') $pipeline->url = rtrim($pipeline->url, '/');
@@ -105,7 +105,7 @@ class pipelineModel extends model
         $pipeline = fixer::input('post')
             ->add('editedBy', $this->app->user->account)
             ->add('editedDate', helper::now())
-            ->trim('token')
+            ->trim('url,token,account,password')
             ->skipSpecial('url,token,account,password')
             ->get();
 
@@ -121,5 +121,22 @@ class pipelineModel extends model
             ->exec();
 
         return !dao::isError();
+    }
+
+    /**
+     * Delete one record.
+     *
+     * @param  string $id     the id to be deleted
+     * @param  string $object the action object
+     * @access public
+     * @return int
+     */
+    public function delete($id, $object = 'gitlab')
+    {
+        $this->dao->update(TABLE_PIPELINE)->set('deleted')->eq(1)->where('id')->eq($id)->exec();
+        $this->loadModel('action')->create($object, $id, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
+
+        $actionID = $this->dao->lastInsertID();
+        return $actionID;
     }
 }

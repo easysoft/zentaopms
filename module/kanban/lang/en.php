@@ -37,6 +37,8 @@ $lang->kanban->setCardColor        = 'Set Card Color';
 $lang->kanban->deleteCard          = 'Delete Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
+$lang->kanban->setDoneFunction     = 'Set done function';
+$lang->kanban->doneFunction        = 'Done function';
 $lang->kanban->splitColumn         = 'Split Column';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -56,6 +58,7 @@ $lang->kanban->restoreCard         = 'Restore Card';
 $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
 $lang->kanban->import              = 'Import';
+$lang->kanban->showClosed          = 'Closed';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -94,6 +97,9 @@ $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist mem
 
 $lang->kanban->enableArchived['0'] = 'No Enable';
 $lang->kanban->enableArchived['1'] = 'Enable';
+
+$lang->kanban->enableFinished['0'] = 'No Enable';
+$lang->kanban->enableFinished['1'] = 'Enable';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -231,16 +237,17 @@ $lang->kanbanspace->lastEditedBy   = 'Edited By';
 $lang->kanbanspace->lastEditedDate = 'Edited Date';
 $lang->kanbanspace->closedBy       = 'Closed By';
 $lang->kanbanspace->closedDate     = 'Closed Date';
+$lang->kanbanspace->type           = 'Type';
 
 $lang->kanbanspace->empty = 'No Space';
 
 $lang->kanbanspace->aclList['open']    = 'Open (Accessible with kanban view permissions)';
 $lang->kanbanspace->aclList['private'] = 'Private (For the space owner, team and whitelist members only)';
 
-$lang->kanbanspace->featureBar['all']    = 'All';
-$lang->kanbanspace->featureBar['my']     = 'My';
-$lang->kanbanspace->featureBar['other']  = 'Other';
-$lang->kanbanspace->featureBar['closed'] = 'Closed';
+$lang->kanbanspace->featureBar['private']     = 'Private Space';
+$lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
+$lang->kanbanspace->featureBar['public']      = 'Public Space';
+$lang->kanbanspace->featureBar['involved']    = 'Involved';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;

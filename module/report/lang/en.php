@@ -18,6 +18,7 @@ $lang->report->undefined = 'Undefined';
 $lang->report->query     = 'Query';
 $lang->report->annual    = 'Annual Summary';
 $lang->report->project   = 'Project';
+$lang->report->PO        = 'PO';
 
 $lang->report->colors[]   = 'AFD8F8';
 $lang->report->colors[]   = 'F6BD0F';

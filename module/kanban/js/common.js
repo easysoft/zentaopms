@@ -1,20 +1,3 @@
-$(function()
-{
-    if(typeof acl != 'undefined' && acl != null) setWhite(acl);
-});
-
-/**
- * Set white list.
- *
- * @param  string $acl
- * @access public
- * @return void
- */
-function setWhite(acl)
-{
-    acl != 'private' ? $('#whitelistBox').addClass('hidden') : $('#whitelistBox').removeClass('hidden');
-}
-
 /**
  * Set mailto.
  *
@@ -35,8 +18,8 @@ function setMailto(field, value)
 }
 
 /**
- * Initialize custom color selector. 
- * 
+ * Initialize custom color selector.
+ *
  * @access public
  * @return void
  */
@@ -59,6 +42,6 @@ function initColorPicker()
         $('input[name=color]').val(color);
         $(this).addClass('checked');
         $(this).siblings().removeClass('checked');
-    }) 
+    })
 }
 

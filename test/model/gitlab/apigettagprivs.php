@@ -21,8 +21,8 @@ $gitlab = $tester->loadModel('gitlab');
 $gitlabID  = 1;
 $projectID = 1552;
 $result    = $gitlab->apiGetTagPrivs($gitlabID, $projectID);
-r(isset($result[0]->name)) && p() && e(1); //通过gitlabID,projectID,获取GitLab标签保护列表
-r(count($result) > 0)      && p() && e(1); //通过gitlabID,projectID,获取GitLab标签保护数量
+r(isset(array_shift($result)->name)) && p() && e(1); //通过gitlabID,projectID,获取GitLab标签保护列表
+r(count($result) > 0)                && p() && e(1); //通过gitlabID,projectID,获取GitLab标签保护数量
 
 $gitlabID  = 1;
 $projectID = 1570;

@@ -37,6 +37,8 @@ $lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
+$lang->kanban->setDoneFunction     = '设置完成功能';
+$lang->kanban->doneFunction        = '完成功能';
 $lang->kanban->splitColumn         = '新增子看板列';
 $lang->kanban->createColumnOnLeft  = '左侧新增看板列';
 $lang->kanban->createColumnOnRight = '右侧新增看板列';
@@ -56,6 +58,7 @@ $lang->kanban->restoreCard         = '还原卡片';
 $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 $lang->kanban->import              = '导入功能';
+$lang->kanban->showClosed          = '显示已关闭';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -94,6 +97,9 @@ $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、�
 
 $lang->kanban->enableArchived['0'] = '不启用';
 $lang->kanban->enableArchived['1'] = '启用';
+
+$lang->kanban->enableFinished['0'] = '不启用';
+$lang->kanban->enableFinished['1'] = '启用';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "综合看板";
@@ -231,16 +237,17 @@ $lang->kanbanspace->lastEditedBy   = '最后修改';
 $lang->kanbanspace->lastEditedDate = '最后修改日期';
 $lang->kanbanspace->closedBy       = '由谁关闭';
 $lang->kanbanspace->closedDate     = '关闭日期';
+$lang->kanbanspace->type           = '空间类型';
 
 $lang->kanbanspace->empty = '暂时没有空间';
 
 $lang->kanbanspace->aclList['open']    = '公开（有看板空间视图权限即可访问）';
 $lang->kanbanspace->aclList['private'] = '私有（只有看板空间负责人、团队成员、白名单可访问）';
 
-$lang->kanbanspace->featureBar['all']    = '所有';
-$lang->kanbanspace->featureBar['my']     = '我的空间';
-$lang->kanbanspace->featureBar['other']  = '其他空间';
-$lang->kanbanspace->featureBar['closed'] = '已关闭';
+$lang->kanbanspace->featureBar['private']     = '私人空间';
+$lang->kanbanspace->featureBar['cooperation'] = '协作空间';
+$lang->kanbanspace->featureBar['public']      = '公共空间';
+$lang->kanbanspace->featureBar['involved']    = '我参与的';
 
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;
