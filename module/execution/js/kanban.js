@@ -904,7 +904,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
 }
 
 /**
- *Close modal and update kanban data.
+ * Close modal and update kanban data.
  *
  * @param  string kanbanData
  * @param  int    regionID

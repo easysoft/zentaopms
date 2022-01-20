@@ -715,7 +715,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getRegionPairs($kanbanID, $regionID = 0 )
+    public function getRegionPairs($kanbanID, $regionID = 0)
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
