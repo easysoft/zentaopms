@@ -2142,6 +2142,12 @@ class storyModel extends model
         $releases = $this->dao->select('*')->from(TABLE_RELEASE)->where("CONCAT(',', stories, ',')")->like("%,$storyID,%")->andWhere('deleted')->eq(0)->fetchPairs('branch', 'branch');
         foreach($releases as $branch) $stages[$branch] = 'released';
 
+        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
+        foreach($executions as $executionID => $branch)
+        {
+            $this->kanban->updateLane($executionID, 'story', $storyID);
+        }
+
         if(empty($stages)) return;
         if($hasBranch)
         {
@@ -2173,7 +2179,6 @@ class storyModel extends model
             $this->dao->update(TABLE_STORY)->set('stage')->eq(current($stages))->where('id')->eq($storyID)->exec();
         }
 
-        $currentStory = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch();
         if($story->stage != $currentStory->stage)
         {
             foreach($executions as $executionID => $branch)

@@ -2659,7 +2659,7 @@ class execution extends control
         if(empty($products))
         {
             echo js::alert($this->lang->execution->errorNoLinkedProducts);
-            die(js::locate($this->createLink('execution', 'manageproducts', "executionID=$objectID")));
+            return print(js::locate($this->createLink('execution', 'manageproducts', "executionID=$objectID")));
         }
 
         if(!empty($_POST))
@@ -2667,8 +2667,22 @@ class execution extends control
             $this->execution->linkStory($objectID, array(), array(), $extra);
             if($object->type != 'project' and $object->project != 0) $this->execution->linkStory($object->project);
 
-            if(isonlybody()) die(js::reload('parent'));
-            die(js::locate($browseLink));
+            if(isonlybody())
+            {
+                if($this->app->tab == 'execution' and $object->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($objectID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent', '', "parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::reload('parent'));
+                }
+            }
+
+            return print(js::locate($browseLink));
         }
 
         if($object->type == 'project')
@@ -3442,7 +3456,7 @@ class execution extends control
             include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
         }
         if($count != 0) echo js::alert(sprintf($this->lang->execution->haveDraft, $count)) . js::locate($this->createLink($moduleName, $execution->type == 'sprint' ? 'story' : 'kanban', $param));
-        die(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
+        return print(js::locate(helper::createLink($moduleName, $fromMethod, $param)));
     }
 
     /**
