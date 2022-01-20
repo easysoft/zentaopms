@@ -778,6 +778,66 @@ class kanban extends control
     }
 
     /**
+     * Import cards.
+     *
+     * @param int $kanbanID
+     * @param int $regionID
+     * @param int $groupID
+     * @param int $columnID
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
+     * @access public
+     * @return void
+     */
+    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $this->kanban->importCard($kanbanID, $regionID, $groupID, $columnID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $cards2Imported = array();
+        if($selectedKanbanID)
+        {
+            $cards2Imported = $this->kanban->getCardsByObject('kanban', $selectedKanbanID);
+        }
+        else
+        {
+            $allKanbanCards = $this->kanban->getCardsByObject();
+            foreach($allKanbanCards as $card)
+            {
+                if($card->kanban != $kanbanID) $cards2Imported[$card->id] = $card;
+            }
+        }
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal       = count($cards2Imported);
+        $pager          = new pager($recTotal, $recPerPage, $pageID);
+        $cards2Imported = array_chunk($cards2Imported, $pager->recPerPage);
+
+        $kanbanPairs = $this->kanban->getKanbanPairs();
+        unset($kanbanPairs[$kanbanID]);
+
+        $this->view->cards2Imported   = empty($cards2Imported) ? $cards2Imported : $cards2Imported[$pageID - 1];
+        $this->view->kanbanPairs      = array(0 => $this->lang->kanban->all) + $kanbanPairs;
+        $this->view->lanePairs        = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->pager            = $pager;
+        $this->view->selectedKanbanID = $selectedKanbanID;
+        $this->view->kanbanID         = $kanbanID;
+        $this->view->regionID         = $regionID;
+        $this->view->groupID          = $groupID;
+        $this->view->columnID         = $columnID;
+
+        $this->display();
+    }
+
+    /**
      * Set a card's color.
      *
      * @param  int   $cardID

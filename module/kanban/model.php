@@ -469,6 +469,39 @@ class kanbanModel extends model
     }
 
     /**
+     * Import card.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @access public
+     * @return bool
+     */
+    public function importCard($kanbanID, $regionID, $groupID, $columnID)
+    {
+        $data = fixer::input('post')->get();
+        $importIDList = $data->cards;
+        $targetLaneID = $data->targetLane;
+
+        $updateData = new stdClass();
+        $updateData->kanban = $kanbanID;
+        $updateData->region = $regionID;
+        $updateData->group  = $groupID;
+        $this->dao->update(TABLE_KANBANCARD)->data($updateData)->where('id')->in($importIDList)->exec();
+
+        if(!dao::isError())
+        {
+            $cards = implode(',', $importIDList);
+            $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
+
+            return true;
+        }
+
+        return false;
+    }
+
+    /**
      * Get kanban by id.
      *
      * @param  int    $kanbanID
@@ -1384,6 +1417,23 @@ class kanbanModel extends model
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
+    }
+
+    /**
+     * Get Kanban pairs.
+     *
+     * @access public
+     * @return void
+     */
+    public function getKanbanPairs()
+    {
+        $kanbanIdList = $this->getCanViewObjects('kanban');
+
+        return $this->dao->select('id,name')->from(TABLE_KANBAN)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($kanbanIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
     }

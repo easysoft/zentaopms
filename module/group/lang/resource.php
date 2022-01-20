@@ -674,6 +674,7 @@ $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
 $lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
+$lang->resource->kanban->importCard         = 'importCard';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -718,6 +719,7 @@ $lang->kanban->methodorder[195] = 'viewArchivedCard';
 $lang->kanban->methodorder[200] = 'archiveColumn';
 $lang->kanban->methodorder[205] = 'restoreCard';
 $lang->kanban->methodorder[210] = 'setLaneHeight';
+$lang->kanban->methodorder[215] = 'importCard';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
