@@ -792,8 +792,9 @@ CREATE TABLE IF NOT EXISTS `zt_lang` (
   `key` varchar(60) NOT NULL,
   `value` text NOT NULL,
   `system` enum('0','1') NOT NULL default '1',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY  (`id`),
-  UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`)
+  UNIQUE KEY `lang` (`lang`,`module`,`section`,`key`,`vision`)
 ) ENGINE=MyISAM  DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_log`;
 CREATE TABLE IF NOT EXISTS `zt_log` (

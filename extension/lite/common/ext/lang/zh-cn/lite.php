@@ -1,15 +1,14 @@
 <?php
 /* Main Navigation. */
-$lang->mainNav     = new stdclass();
-$lang->mainNav->my = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
-$lang->mainNav->product = "{$lang->navIcons['product']} {$lang->product->common}|$productModule|$productMethod|";
-$lang->mainNav->project = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
+$lang->mainNav            = new stdclass();
+$lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
+$lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
 $lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
-$lang->mainNav->kanban = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
-$lang->mainNav->doc    = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->report = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
-$lang->mainNav->system = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
-$lang->mainNav->admin  = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
+$lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
+$lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
+$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
+$lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
+$lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
 if($config->edition != 'open')
 {
@@ -194,3 +193,19 @@ unset($lang->searchObjects['caselib']);
 unset($lang->searchObjects['testreport']);
 unset($lang->searchObjects['program']);
 unset($lang->searchObjects['user']);
+
+/* adjust items of global create. */
+
+unset($lang->createIcons['effort']);
+unset($lang->createIcons['bug']);
+unset($lang->createIcons['testcase']);
+unset($lang->createIcons['product']);
+unset($lang->createIcons['program']);
+unset($lang->createIcons['kanbanspace']);
+unset($lang->createIcons['kanban']);
+
+$lang->createObjects['story']       = '目标';
+$lang->createObjects['task']        = '卡片';
+$lang->createObjects['execution']   = '看板';
+
+$lang->createIcons['execution']      = 'kanban';
