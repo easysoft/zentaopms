@@ -190,7 +190,7 @@ function createColumnMenu(options)
 
     var items = [];
     if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban', '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban','' ,'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
+    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban', '' ,'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
