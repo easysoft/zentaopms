@@ -168,7 +168,7 @@ class kanban extends control
         unset($this->lang->kanbanspace->featureBar['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
-        $spaceUsers = $space->owner . $space->team . $space->whitelist;
+        $spaceUsers = trim($space->owner) . ',' . trim($space->team). ',' . trim($space->whitelist);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
@@ -202,10 +202,12 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $kanban = $this->kanban->getByID($kanbanID);
-        $space  = $this->kanban->getSpaceById($kanban->space);
+        $kanban     = $this->kanban->getByID($kanbanID);
+        $space      = $this->kanban->getSpaceById($kanban->space);
+        $spaceUsers = trim($space->owner) . ',' . trim($space->team). ',' . trim($space->whitelist);
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->users      = $users;
         $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs($space->type);
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
