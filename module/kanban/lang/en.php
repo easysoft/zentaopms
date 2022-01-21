@@ -55,6 +55,7 @@ $lang->kanban->restoreColumn       = 'Restore Column';
 $lang->kanban->restoreCard         = 'Restore Card';
 $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
+$lang->kanban->batchCreateCard     = 'Batchcreate Card';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';

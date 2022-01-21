@@ -55,6 +55,7 @@ $lang->kanban->restoreColumn       = '还原看板列';
 $lang->kanban->restoreCard         = '还原卡片';
 $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
+$lang->kanban->batchCreateCard     = '批量创建卡片';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';

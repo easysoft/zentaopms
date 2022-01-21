@@ -142,15 +142,14 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
         var $actions = $column.children('.actions');
-
         if(columnPrivs.includes('createCard') && column.parent != -1)
         {
-            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID);
-            addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+            addItemBtn  = ['<a data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="text-primary">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
         $actions.html(addItemBtn + moreAction);
+
     }
 }
 
@@ -766,6 +765,28 @@ function createColumnMenu(options)
     return items;
 }
 
+/**
+ * Create create menu for column.
+ *
+ * @param  object $options
+ * @access public
+ * @return object
+ */
+function createColumnCreateMenu(options)
+{
+    var col      = options.$trigger.closest('.kanban-col').data('col');
+    var privs    = col.actions;
+    var items    = [];
+    var regionID = col.region;
+    var groupID  = col.group;
+    var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var columnID = col.id;
+
+    if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
+    return items;
+}
+
 /** Calculate column height */
 function calcColHeight(col, lane, colCards, colHeight, kanban)
 {
@@ -785,7 +806,8 @@ window.menuCreators =
 {
     card: createCardMenu,
     lane: createLaneMenu,
-    column: createColumnMenu
+    column: createColumnMenu,
+    columnCreate: createColumnCreateMenu
 };
 
 /**

@@ -692,6 +692,34 @@ class kanban extends control
     }
 
     /**
+     * Batch create cards.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $laneID
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $laneID = 0, $columnID = 0)
+    {
+        $backLink = $this->createLink('kanban', 'view', "kanbanID=$kanbanID");
+
+        if($_POST)
+        {
+            $this->kanban->batchCreateCard($kanbanID, $regionID, $groupID, $columnID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
+        }
+
+        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
+
+        $this->display();
+    }
+
+    /**
      * Edit a card.
      *
      * @param  int    $cardID
