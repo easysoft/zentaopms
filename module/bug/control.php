@@ -407,9 +407,8 @@ class bug extends control
                 $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
                 if($executionID == $output['executionID'])
                 {
-                    $kanbanData  = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                    $kanbanData  = json_encode($kanbanData);
-                    $callback    = '"callback" => "parent.updateKanban($kanbanData, 0)"';
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
                     return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
                 }
                 else
@@ -1217,7 +1216,7 @@ class bug extends control
             {
                 $bug       = $this->bug->getById($bugID);
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if($execution->type == 'kanban')
+                if(isset($execution->type) and $execution->type == 'kanban')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
