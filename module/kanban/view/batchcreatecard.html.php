@@ -33,8 +33,8 @@
           </tr>
         </thead>
         <tbody>
-          <?php for($i = 0; $i < $config->kanban->batchCreate; $i++):?>
           <?php $pri = 3;?>
+          <?php for($i = 0; $i < $config->kanban->batchCreate; $i++):?>
           <tr>
             <td class='text-center'><?php echo $i + 1;?></td>
             <td class='text-center'><?php echo html::input("name[$i]", '', "class='form-control title-import'");?></td>
