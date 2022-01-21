@@ -142,7 +142,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
         var $actions = $column.children('.actions');
-        if(columnPrivs.includes('createCard') && column.parent != -1)
+        if(column.parent != -1)
         {
             addItemBtn  = ['<a data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="text-primary">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
         }
