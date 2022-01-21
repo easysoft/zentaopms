@@ -1559,8 +1559,10 @@ class baseRouter
         if(empty($extFiles) and empty($hookFiles) and empty($apiFiles)) return $mainModelFile;
 
         /* 计算合并之后的modelFile路径。Compute the merged model file path. */
-        $extModelPrefix  = ($siteExtended and !empty($this->siteCode)) ? $this->siteCode[0] . DS . $this->siteCode : '';
-        $mergedModelDir  = $this->getTmpRoot() . 'model' . DS . ($extModelPrefix ? $extModelPrefix . DS : '');
+        $extModelPrefix = $this->config->edition . DS . $this->config->vision . DS;
+        if($siteExtended and !empty($this->siteCode)) $extModelPrefix .= $this->siteCode[0] . DS . $this->siteCode;
+
+        $mergedModelDir  = $this->getTmpRoot() . 'model' . DS . $extModelPrefix;
         $mergedModelFile = $mergedModelDir . $moduleName . '.php';
         if(!is_dir($mergedModelDir)) mkdir($mergedModelDir, 0755, true);
 
@@ -1631,9 +1633,7 @@ class baseRouter
         /* 开始拼装代码。Prepare the codes. */
         $modelLines  = "<?php\n";
         $modelLines .= "global \$app;\n";
-        $modelLines .= "helper::cd(\$app->getBasePath());\n";
-        $modelLines .= "helper::import('" . str_replace($this->getBasePath(), '', $mainModelFile) . "');\n";
-        $modelLines .= "helper::cd();\n";
+        $modelLines .= "helper::import(\$app->getBasePath() . '" . str_replace($this->getBasePath(), '', $this->getModulePath($this->appName, $moduleName)) . "model.php');\n";
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */

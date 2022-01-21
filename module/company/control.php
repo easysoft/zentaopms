@@ -271,7 +271,7 @@ class company extends control
         $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "browseType=bysearch&param=myQueryID");
         $this->config->company->dynamic->search['queryID'] = $queryID;
         $this->config->company->dynamic->search['params']['action']['values']    = $this->lang->action->search->label;
-        $this->config->company->dynamic->search['params']['product']['values']   = $products;
+        if($this->config->vision == 'rnd') $this->config->company->dynamic->search['params']['product']['values']   = $products;
         $this->config->company->dynamic->search['params']['project']['values']   = $projects;
         $this->config->company->dynamic->search['params']['execution']['values'] = $executions;
         $this->config->company->dynamic->search['params']['actor']['values']     = $accountPairs;

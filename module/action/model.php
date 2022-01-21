@@ -48,6 +48,7 @@ class actionModel extends model
         $action->action     = $actionType;
         $action->date       = helper::now();
         $action->extra      = $extra;
+        $action->vision     = $this->config->vision;
 
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
@@ -868,6 +869,7 @@ class actionModel extends model
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
