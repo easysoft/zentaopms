@@ -168,7 +168,7 @@ class kanban extends control
         unset($this->lang->kanbanspace->featureBar['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
-        $spaceUsers = trim($space->owner) . ',' . trim($space->team) . ',' . trim($space->whitelist);
+        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team) . ',' . trim($space->whitelist);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
