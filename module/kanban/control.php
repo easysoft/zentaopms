@@ -1055,6 +1055,28 @@ class kanban extends control
 
         $this->display();
     }
+  
+    /**
+     * Set done function.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function setArchivedFunction($kanbanID)
+    {
+        if(!empty($_POST))
+        {
+            $this->dao->update(TABLE_KANBAN)->set('archived')->eq($_POST['archived'])->exec();
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
+
+        $this->view->kanban = $this->kanban->getByID($kanbanID);
+
+        $this->display();
+    }
 
     /**
      * AJAX: Update the cards sorting of the lane column.

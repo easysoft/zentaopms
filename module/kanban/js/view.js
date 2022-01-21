@@ -259,6 +259,15 @@ function renderKanbanItem(item, $item)
     var privs        = item.actions;
     var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
 
+    if(kanban.performable == 1 && item.status == 'done' )
+    {
+        $item.closest('.kanban-card').css({'filter' : 'opacity(0.5)', 'text-decoration' : 'line-through'});
+    }
+    else
+    {
+        $item.closest('.kanban-card').css({'filter' : '', 'text-decoration' : ''});
+    }
+
     if(privs.includes('sortCard')) $item.parent().addClass('sort');
     if(!$title.length)
     {
