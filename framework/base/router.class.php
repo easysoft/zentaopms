@@ -1915,7 +1915,16 @@ class baseRouter
             * 引入该模块的control文件。
             * Include the control file of the module.
             **/
-            $file2Included = $this->setActionExtFile() ? $this->extActionFile : $this->controlFile;
+            $isExt = $this->setActionExtFile();
+            if($isExt)
+            {
+                spl_autoload_register(function($class)
+                {
+                    if($class == $this->moduleName) include $this->controlFile;
+                });
+            }
+
+            $file2Included = $isExt ? $this->extActionFile : $this->controlFile;
             chdir(dirname($file2Included));
             helper::import($file2Included);
 

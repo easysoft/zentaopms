@@ -758,6 +758,7 @@ class baseControl
          */
         $this->app->setModuleName($moduleName);
         $this->app->setMethodName($methodName);
+        $this->app->setControlFile();
 
         if(!is_array($params)) parse_str($params, $params);
         $this->app->params = $params;
