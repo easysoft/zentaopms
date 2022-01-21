@@ -15,6 +15,11 @@ class gitlabModel extends model
 
     const HOOK_PUSH_EVENT = 'Push Hook';
 
+    /* Gitlab access level. */
+    public $noAccess         = 0;
+    public $developerAccess  = 30;
+    public $maintainerAccess = 40;
+
     /**
      * Get a gitlab by id.
      *
@@ -137,6 +142,23 @@ class gitlabModel extends model
             ->andWhere('providerID')->eq($gitlabID)
             ->andWhere('account')->eq($zentaoAccount)
             ->fetch('openID');
+    }
+
+    /**
+     * Get GitLab id list by user account.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getGitLabListByAccount($account = '')
+    {
+        if(!$account) $account = $this->app->user->account;
+
+        return $this->dao->select('providerID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('account')->eq($account)
+            ->fetchPairs('providerID');
     }
 
     /**
@@ -2657,21 +2679,18 @@ class gitlabModel extends model
      */
     public function checkAccessLevel($accessLevels)
     {
-        $noAccess         = 0;
-        $developerAccess  = 30;
-        $maintainerAccess = 40;
         if(is_array($accessLevels))
         {
             $levels = array();
             foreach($accessLevels as $level)
             {
                 if(is_array($level)) $level = (object)$level;
-                $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
+                $levels[] = isset($level->access_level) ? (int)$level->access_level : $this->maintainerAccess;
             }
-            if(in_array($noAccess, $levels)) return $noAccess;
-            if(in_array($developerAccess, $levels)) return $developerAccess;
+            if(in_array($this->noAccess, $levels)) return $this->noAccess;
+            if(in_array($this->developerAccess, $levels)) return $this->developerAccess;
         }
-        return $maintainerAccess;
+        return $this->maintainerAccess;
     }
 
     /**
