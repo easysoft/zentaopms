@@ -517,8 +517,19 @@ class testcase extends control
         if(!empty($_POST))
         {
             $caseIDList = $this->testcase->batchCreate($productID, $branch, $storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    return print(js::closeModal('parent.parent', ''));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $caseIDList));
 

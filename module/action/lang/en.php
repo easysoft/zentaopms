@@ -134,6 +134,8 @@ $lang->action->objectTypes['kanbanregion']     = 'Kanban Region';
 $lang->action->objectTypes['kanbanlane']       = 'Kanban Lane';
 $lang->action->objectTypes['kanbancolumn']     = 'Kanban Column';
 $lang->action->objectTypes['kanbancard']       = 'Kanban Card';
+$lang->action->objectTypes['sonarqube']        = 'SonarQube Server';
+$lang->action->objectTypes['sonarqubeproject'] = 'SonarQube Project';
 
 /* Used to describe operation history. */
 $lang->action->desc = new stdclass();
@@ -329,6 +331,7 @@ $lang->action->label->finishedbychild       = 'finished';
 $lang->action->label->closedbychild         = 'closed';
 $lang->action->label->activatedbychild      = 'activated';
 $lang->action->label->createchild           = 'activated';
+$lang->action->label->executed              = 'executed';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -568,6 +571,22 @@ $lang->action->dynamicAction->user['loginxuanxuan'] = 'Login Desktop';
 $lang->action->dynamicAction->entry['created'] = 'Add Application';
 $lang->action->dynamicAction->entry['edited']  = 'Edit Application';
 
+$lang->action->dynamicAction->job['created']   = 'Create Job';
+$lang->action->dynamicAction->job['edited']    = 'Edit Job';
+$lang->action->dynamicAction->job['executed']  = 'Execute Job';
+$lang->action->dynamicAction->job['deleted']   = 'Delete Job';
+$lang->action->dynamicAction->job['undeleted'] = 'Undelete Job';
+
+$lang->action->dynamicAction->sonarqube['created'] = 'Create SonarQube Server';
+$lang->action->dynamicAction->sonarqube['edited']  = 'Edit SonarQube Server';
+$lang->action->dynamicAction->sonarqube['deleted'] = 'Delete SonarQube Server';
+
+$lang->action->dynamicAction->sonarqubeproject['deleted'] = 'Delete SonarQube Project';
+
+$lang->action->dynamicAction->gitlab['created'] = 'Create GitLab Server';
+$lang->action->dynamicAction->gitlab['edited']  = 'Edit GitLab Server';
+$lang->action->dynamicAction->gitlab['deleted'] = 'Delete GitLab Server';
+
 /* Generate the corresponding object link. */
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = 'Plan|productplan|view|productID=%s';
@@ -603,7 +622,7 @@ $lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design       = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->kanbanspace  = 'Kanban Space|kanban|space|browseType=all';
+$lang->action->label->kanbanspace  = 'Kanban Space|kanban|space|browseType=%s';
 $lang->action->label->kanbanregion = 'Kanban Region|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';

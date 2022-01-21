@@ -509,7 +509,6 @@ class installModel extends model
         $company->name   = $this->post->company;
         $company->admins = ",{$this->post->account},";
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name', 'notempty')->exec();
-
         if(!dao::isError())
         {
             /* Set admin. */
@@ -519,21 +518,54 @@ class installModel extends model
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
             $this->dao->replace(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
+        }
+    }
 
-            /* Update group name and desc on dafault lang. */
-            $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
-            foreach($groups as $group)
+    /**
+     * Update language for group and cron.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateLang()
+    {
+        /* Update group name and desc on dafault lang. */
+        $groups = $this->dao->select('*')->from(TABLE_GROUP)->orderBy('id')->fetchAll();
+        foreach($groups as $group)
+        {
+            $data = zget($this->lang->install->groupList, $group->name, '');
+            if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
+        }
+
+        /* Update cron remark by lang. */
+        foreach($this->lang->install->cronList as $command => $remark)
+        {
+            $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
+        }
+
+        if(!empty($this->config->maxVersion))
+        {
+            /* Update process by lang. */
+            foreach($this->lang->install->processList as $id => $name)
             {
-                $data = zget($this->lang->install->groupList, $group->name, '');
-                if($data) $this->dao->update(TABLE_GROUP)->data($data)->where('id')->eq($group->id)->exec();
+                $this->dao->update(TABLE_PROCESS)->set('name')->eq($name)->where('id')->eq($id)->exec();
             }
 
-            /* Update cron remark by lang. */
-            foreach($this->lang->install->cronList as $command => $remark)
+            /* Update basicmeas by lang. */
+            foreach($this->lang->install->basicmeasList as $id => $basic)
             {
-                $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
+                $this->dao->update(TABLE_BASICMEAS)->set('name')->eq($basic['name'])->set('unit')->eq($basic['unit'])->set('definition')->eq($basic['definition'])->where('id')->eq($id)->exec();
+            }
+
+            /* Update lang,stage by lang. */
+            $this->app->loadLang('stage');
+            foreach($this->lang->stage->typeList as $key => $value)
+            {
+                $this->dao->update(TABLE_LANG)->set('value')->eq($value)->where('`key`')->eq($key)->exec();
+                $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
             }
         }
+
     }
 
     /**

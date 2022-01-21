@@ -134,6 +134,8 @@ $lang->action->objectTypes['kanbanregion']     = '看板区域';
 $lang->action->objectTypes['kanbanlane']       = '看板泳道';
 $lang->action->objectTypes['kanbancolumn']     = '看板列';
 $lang->action->objectTypes['kanbancard']       = '看板卡片';
+$lang->action->objectTypes['sonarqube']        = 'SonarQube服务器';
+$lang->action->objectTypes['sonarqubeproject'] = 'SonarQube项目';
 
 /* 用来描述操作历史记录。*/
 $lang->action->desc = new stdclass();
@@ -329,6 +331,7 @@ $lang->action->label->finishedbychild       = '完成了';
 $lang->action->label->closedbychild         = '关闭了';
 $lang->action->label->activatedbychild      = '激活了';
 $lang->action->label->createchild           = '激活了';
+$lang->action->label->executed              = '执行了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -568,6 +571,22 @@ $lang->action->dynamicAction->user['loginxuanxuan'] = '登录客户端';
 $lang->action->dynamicAction->entry['created'] = '添加应用';
 $lang->action->dynamicAction->entry['edited']  = '编辑应用';
 
+$lang->action->dynamicAction->job['created']   = '创建构建任务';
+$lang->action->dynamicAction->job['edited']    = '编辑构建任务';
+$lang->action->dynamicAction->job['executed']  = '执行构建任务';
+$lang->action->dynamicAction->job['deleted']   = '删除构建任务';
+$lang->action->dynamicAction->job['undeleted'] = '还原构建任务';
+
+$lang->action->dynamicAction->sonarqube['created'] = '创建SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['edited']  = '设置SonarQube服务器';
+$lang->action->dynamicAction->sonarqube['deleted'] = '删除SonarQube服务器';
+
+$lang->action->dynamicAction->sonarqubeproject['deleted'] = '删除SonarQube项目';
+
+$lang->action->dynamicAction->gitlab['created'] = '创建GitLab服务器';
+$lang->action->dynamicAction->gitlab['edited']  = '设置GitLab服务器';
+$lang->action->dynamicAction->gitlab['deleted'] = '删除GitLab服务器';
+
 /* 用来生成相应对象的链接。*/
 $lang->action->label->product     = $lang->productCommon . '|product|view|productID=%s';
 $lang->action->label->productplan = "计划|productplan|view|productID=%s";
@@ -603,7 +622,7 @@ $lang->action->label->issue        = '问题|issue|view|issueID=%s';
 $lang->action->label->design       = '设计|design|view|designID=%s';
 $lang->action->label->stakeholder  = '干系人|stakeholder|view|userID=%s';
 $lang->action->label->api          = '接口|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->kanbanspace  = '看板空间|kanban|space|browseType=all';
+$lang->action->label->kanbanspace  = '看板空间|kanban|space|browseType=%s';
 $lang->action->label->kanbanregion = '看板区域|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = '看板|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';

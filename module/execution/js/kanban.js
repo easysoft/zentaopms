@@ -189,8 +189,8 @@ function createColumnMenu(options)
     if(!privs.length) return [];
 
     var items = [];
-    if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
-    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
+    if(privs.includes('setColumn')) items.push({label: kanbanLang.editColumn, icon: 'edit', url: createLink('kanban', 'setColumn', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban', '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('setWIP')) items.push({label: kanbanLang.setWIP, icon: 'alert', url: createLink('kanban', 'setWIP', 'columnID=' + column.id + '&executionID=' + executionID + '&from=RDKanban', '' ,'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width' : '500px'}});
 
     var bounds = options.$trigger[0].getBoundingClientRect();
     items.$options = {x: bounds.right, y: bounds.top};
@@ -780,7 +780,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait') && priv.canFinishTask)
             {
-                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'finish', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -788,7 +788,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'developing' && priv.canPauseTask)
             {
-                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -796,12 +796,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
-                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
             {
-                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -809,7 +809,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
             {
-                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -817,7 +817,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
             {
-                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -832,7 +832,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -841,7 +841,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -849,7 +849,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
-                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -865,7 +865,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'testing' || fromColType == 'tested')
             {
-                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -901,6 +901,33 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         var modalTrigger = new $.zui.ModalTrigger({type: 'iframe', width: '80%', url: link});
         modalTrigger.show();
     }
+}
+
+/**
+ * Close modal and update kanban data.
+ *
+ * @param  string kanbanData
+ * @param  int    regionID
+ * @access public
+ * @return void
+ */
+function updateKanban(kanbanData, regionID = 0)
+{
+    setTimeout(function()
+    {
+        if(regionID)
+        {
+            updateRegion(regionID, kanbanData[regionID]);
+        }
+        else
+        {
+            $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+            {
+                var regionID = $(this).attr('data-id');
+                updateRegion(regionID, kanbanData[regionID]);
+            });
+        }
+    }, 200);
 }
 
 /**
@@ -1019,6 +1046,8 @@ function initKanban($kanban)
  */
 $(function()
 {
+    if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
+
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);

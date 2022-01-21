@@ -65,6 +65,7 @@ $filter->mr           = new stdclass();
 $filter->ci           = new stdclass();
 $filter->tree         = new stdclass();
 $filter->productplan  = new stdclass();
+$filter->kanban       = new stdclass();
 
 $filter->block->default           = new stdclass();
 $filter->block->main              = new stdclass();
@@ -158,6 +159,7 @@ $filter->ci->checkCompileStatus   = new stdclass();
 $filter->execution->export        = new stdclass();
 $filter->tree->browse             = new stdclass();
 $filter->productplan->browse      = new stdclass();
+$filter->kanban->space            = new stdclass();
 
 $filter->my->work->cookie['pagerMyTask']        = 'int';
 $filter->my->work->cookie['pagerMyRequirement'] = 'int';
@@ -404,3 +406,5 @@ $filter->ci->checkCompileStatus->get['gitlabOnly'] = 'string';
 
 $filter->tree->browse->cookie['preProductID'] = 'int';
 $filter->tree->browse->cookie['preBranch']    = 'reg::word';
+
+$filter->kanban->space->cookie['showClosed'] = 'code';

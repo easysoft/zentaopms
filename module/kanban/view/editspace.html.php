@@ -12,7 +12,6 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
-<?php js::set('acl', $space->acl);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->editSpace;?></h2>
@@ -24,6 +23,7 @@
         <td><?php echo html::input('name', $space->name, "class='form-control'");?></td>
         <td></td>
       </tr>
+      <?php if($space->type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanbanspace->owner;?></th>
         <td><?php echo html::select('owner', $users, $space->owner, "class='form-control chosen'");?></td>
@@ -37,6 +37,7 @@
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
@@ -44,14 +45,12 @@
           <?php echo html::textarea('desc', $space->desc, "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <tr>
-        <th><?php echo $lang->kanbanspace->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanbanspace->aclList, $space->acl, "onclick='setWhite(this.value);'", 'block'));?></td>
-      </tr>
+      <?php if($space->type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, $space->whitelist, 'class="form-control chosen" multiple');?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>

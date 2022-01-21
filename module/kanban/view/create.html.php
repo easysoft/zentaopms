@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('spaceType', $type);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->create;?></h2>
@@ -19,8 +20,13 @@
   <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
+        <th><?php echo $lang->kanbanspace->type;?></th>
+        <td><?php echo html::select('type', $typeList, $type, "onchange='changeValue({$spaceID}, this.value)' class='form-control chosen'");?></td>
+        <td></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->kanban->space;?></th>
-        <td><?php echo html::select('space', $spacePairs, $spaceID, "class='form-control chosen'");?></td>
+        <td><?php echo html::select('space', $spacePairs, $spaceID, "onchange='changeValue(this.value)' class='form-control chosen'");?></td>
         <td></td>
       </tr>
       <tr>
@@ -31,6 +37,7 @@
         <th><?php echo $lang->kanban->archived;?></th>
         <td><?php echo html::radio('archived', $lang->kanban->enableArchived, '0');?></td>
       </tr>
+      <?php if($type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanban->owner;?></th>
         <td><?php echo html::select('owner', $users, '', "class='form-control chosen' data-drop_direction='down'");?></td>
@@ -44,6 +51,7 @@
           </div>
         </td>
       </tr>
+      <?php endif;?>
       <tr>
         <th><?php echo $lang->kanban->desc;?></th>
         <td colspan='2'>
@@ -51,14 +59,12 @@
           <?php echo html::textarea('desc', '', "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <tr>
-        <th><?php echo $lang->kanban->acl;?></th>
-        <td colspan='2'><?php echo nl2br(html::radio('acl', $lang->kanban->aclList, 'private', "onclick='setWhite(this.value);'", 'block'));?></td>
-      </tr>
+      <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
       </tr>
+      <?php endif;?>
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>

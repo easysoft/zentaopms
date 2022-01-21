@@ -19,10 +19,11 @@
     <?php if($browseType == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
     <?php echo html::a(inlink('space', "browseType=$key"), $label, '', "class='btn btn-link $active'");?>
     <?php endforeach;?>
+    <?php echo html::checkbox('showClosed', array('1' => $lang->kanban->showClosed), '', $this->cookie->showClosed ? 'checked=checked' : '');?>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(!empty($unclosedSpace)) common::printLink('kanban', 'create', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', 'class="btn btn-secondary iframe" data-width="75%"', '', true);?>
-    <?php common::printLink('kanban', 'createSpace', '', '<i class="icon icon-plus"></i> ' . $lang->kanban->createSpace, '', 'class="btn btn-primary iframe" data-width="75%"', '', true);?>
+    <?php if(!empty($unclosedSpace) and $browseType != 'involved') common::printLink('kanban', 'create', "spaceID=0&type={$browseType}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', 'class="btn btn-secondary iframe" data-width="75%"', '', true);?>
+    <?php if($browseType != 'involved')common::printLink('kanban', 'createSpace', "type={$browseType}", '<i class="icon icon-plus"></i> ' . $lang->kanban->createSpace, '', 'class="btn btn-primary iframe" data-width="75%"', '', true);?>
   </div>
 </div>
 <div id='mainContent'>
@@ -44,13 +45,12 @@
               <span class="label label-closed"><?php echo $lang->kanban->closed;?></span>
               <?php endif;?>
               <?php echo $space->name;?>
-              <?php echo isset($space->kanbans) ? count($space->kanbans) : '';?>
             </h4>
           </div>
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
-          <?php if($space->status != 'closed') common::printLink('kanban', 'create', "spaceID={$space->id}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
+          <?php if($space->status != 'closed' and $browseType != 'involved') common::printLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
           <?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?>
           <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe {$class}'", '', true);?>
           <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
@@ -139,13 +139,6 @@
                   </div>
                   <?php endif;?>
                   <div class='kanban-members-total pull-left'><?php echo sprintf($lang->kanban->teamSumCount, $teamCount);?></div>
-                </div>
-                <div class='kanbanAcl'>
-                  <?php $icon = 'unlock';?>
-                  <?php if($kanban->acl == 'private') $icon = 'lock';?>
-                  <?php if($kanban->acl == 'extend') $icon = 'inherit-space';?>
-                    <i class="<?php echo 'icon-' . $icon;?>"></i>
-                  <?php echo zget($lang->kanban->aclGroup, $kanban->acl, '');?>
                 </div>
               </div>
             </div>

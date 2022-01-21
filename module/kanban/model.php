@@ -460,7 +460,7 @@ class kanbanModel extends model
             $cardID = $this->dao->lastInsertID();
             $this->file->saveUpload('kanbancard', $cardID);
             $this->file->updateObjectID($this->post->uid, $cardID, 'kanbancard');
-            $this->addKanbanCell($kanbanID, $this->post->lane, $columnID, 'common', $cardID);
+            $this->addKanbanCell($kanbanID, (int)$this->post->lane, $columnID, 'common', $cardID);
 
             return $cardID;
         }
@@ -721,7 +721,7 @@ class kanbanModel extends model
 
         $kanbanData   = array();
         $actions      = array('sortGroup');
-        $regions      = $this->getRegionPairs($executionID);
+        $regions      = $this->getRegionPairs($executionID, $regionID);
         $regionIDList = $regionID == 0 ? array_keys($regions) : array(0 => $regionID);
         $groupGroup   = $this->getGroupGroupByRegions($regionIDList);
         $laneGroup    = $this->getLaneGroupByRegions($regionIDList, $browseType);
@@ -783,14 +783,16 @@ class kanbanModel extends model
      * Get ordered region pairs.
      *
      * @param  int    $kanbanID
+     * @param  int    $regionID
      * @access public
      * @return array
      */
-    public function getRegionPairs($kanbanID)
+    public function getRegionPairs($kanbanID, $regionID = 0)
     {
         return $this->dao->select('id,name')->from(TABLE_KANBANREGION)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('deleted')->eq('0')
+            ->beginIF($regionID)->andWhere('id')->eq($regionID)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
     }
@@ -930,27 +932,41 @@ class kanbanModel extends model
      */
     public function getCardGroupByKanban($kanbanID)
     {
-        $cards = $this->dao->select('t1.*,t2.kanban,t2.lane,t2.column')->from(TABLE_KANBANCARD)->alias('t1')
-            ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.kanban=t2.kanban')
+        /* Get card data.*/
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
             ->where('deleted')->eq(0)
-            ->andWhere("INSTR(t2.cards, CONCAT(',',t1.id,','))")->gt(0)
+            ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
-            ->andWhere('t2.kanban')->eq($kanbanID)
-            ->andWhere('t2.type')->eq('common')
-            //->orderBy('`order` asc')
             ->fetchAll('id');
 
-        $actions = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard');
-        $cardGroup = array();
-        foreach($cards as $card)
-        {
-            $card->actions = array();
-            foreach($actions as $action)
-            {
-                if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
-            }
+        $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('type')->eq('common')
+            ->fetchAll();
 
-            $cardGroup[$card->lane]['column' . $card->column][] = $card;
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+        $cardGroup = array();
+        foreach($cellList as $cell)
+        {
+            $cardIdList = array_filter(explode(',', $cell->cards));
+
+            if(empty($cardIdList)) continue;
+            foreach($cardIdList as $cardID)
+            {
+                if(!isset($cards[$cardID])) continue;
+
+                $card         = zget($cards, $cardID);
+                $card->column = $cell->column;
+                $card->lane   = $cell->lane;
+
+                $card->actions = array();
+                foreach($actions as $action)
+                {
+                    if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
+                }
+
+                $cardGroup[$cell->lane]['column' . $cell->column][] = $card;
+            }
         }
 
         return $cardGroup;
@@ -1395,7 +1411,7 @@ class kanbanModel extends model
     /**
      * Get space list.
      *
-     * @param  string $browseType all|my|other|closed
+     * @param  string $browseType private|cooperation|public|involved
      * @param  object $pager
      * @access public
      * @return array
@@ -1403,18 +1419,19 @@ class kanbanModel extends model
     public function getSpaceList($browseType, $pager = null)
     {
         $account     = $this->app->user->account;
-        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+        $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
         $spaceList   = $this->dao->select('*')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
-            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
+            ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
+            ->beginIF($browseType == 'private')->andWhere('owner')->eq($account)->fi()
+            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->page($pager)
             ->fetchAll('id');
 
-        $kanbanIdList = $this->getCanViewObjects();
+        $kanbanIdList = $this->getCanViewObjects('kanban', $browseType);
         $kanbanGroup  = $this->getGroupBySpaceList(array_keys($spaceList), $kanbanIdList);
         foreach($spaceList as $spaceID => $space)
         {
@@ -1427,21 +1444,20 @@ class kanbanModel extends model
     /**
      * Get space pairs.
      *
-     * @param  string $browseType all|my|other|closed
+     * @param  string $browseType private|cooperation|public|involved
      * @access public
      * @return array
      */
-    public function getSpacePairs($browseType = 'all')
+    public function getSpacePairs($browseType = 'private')
     {
         $account     = $this->app->user->account;
         $spaceIdList = $this->getCanViewObjects('kanbanspace');
 
         return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
-            ->beginIF($browseType == 'my')->andWhere('owner')->eq($account)->fi()
-            ->beginIF($browseType == 'other')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($browseType == 'closed')->andWhere('status')->eq('closed')->fi()
-            ->beginIF($browseType == 'noclosed')->andWhere('status')->ne('closed')->fi()
+            ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
+            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
+            ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
@@ -1451,7 +1467,7 @@ class kanbanModel extends model
      * Get can view objects.
      *
      * @param  string $objectType kanbanspace|kanban
-     * @param  string $param      noclosed
+     * @param  string $param      noclosed|private|cooperation|public|involved
      * @access public
      * @return array
      */
@@ -1463,31 +1479,29 @@ class kanbanModel extends model
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
 
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if($object->acl == 'private' or $object->acl == 'extend')
-            {
-                $remove = true;
-                if($object->owner == $account) $remove = false;
-                if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
-                if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
-                if($objectType == 'kanban')
-                {
-                    $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
-                    $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
-                    $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
-                    if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
-                    if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
-                    if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') $remove = false;
-                }
+            $remove = true;
+            if($param == 'public') continue;
 
-                if($remove) unset($objects[$objectID]);
+            if($object->owner == $account) $remove = false;
+            if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
+            if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
+
+            if($objectType == 'kanban')
+            {
+                $spaceOwner = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                $spaceType  = isset($spaceList[$object->space]->type) ? $spaceList[$object->space]->type : '';
+                if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                if($spaceType == 'public') $remove = false;
             }
+
+            if($remove) unset($objects[$objectID]);
         }
 
         return array_keys($objects);
@@ -1505,11 +1519,15 @@ class kanbanModel extends model
         $space   = fixer::input('post')
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
+            ->setdefault('team', '')
+            ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
+
+        if($space->type == 'private') $space->owner = $account;
 
         if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 
@@ -1550,8 +1568,6 @@ class kanbanModel extends model
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
-
-        $space->whitelist = $space->acl == 'open' ? '' : $space->whitelist;
 
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
@@ -1695,10 +1711,13 @@ class kanbanModel extends model
         $kanban  = fixer::input('post')
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
+            ->setdefault('owner', '')
+            ->setdefault('team', '')
+            ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
-            ->remove('uid,contactListMenu')
+            ->remove('uid,contactListMenu,type')
             ->get();
 
         if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
@@ -1711,12 +1730,6 @@ class kanbanModel extends model
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
-
-            if($kanban->acl == 'extend')
-            {
-                $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
-                $kanban->acl = $spaceAcl == 'open' ? 'open' : 'extend';
-            }
         }
 
 
@@ -1758,14 +1771,6 @@ class kanbanModel extends model
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
-
-        if($kanban->acl == 'extend')
-        {
-            $spaceAcl = $this->dao->select('acl')->from(TABLE_KANBANSPACE)->where('id')->eq($kanban->space)->fetch('acl');
-            $kanban->acl       = $spaceAcl == 'open' ? 'open' : 'extend';
-            $kanban->whitelist = $kanban->acl == 'open' ? '' : $kanban->whitelist;
-        }
-
 
         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->edit['id'], $this->post->uid);
 
@@ -2606,19 +2611,21 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
             $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
             if($printSetHeight)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
                 $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
             }
+            if(common::hasPriv('kanban', 'setDoneFunction')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setDoneFunction', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link'") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
@@ -2627,7 +2634,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }
@@ -3163,5 +3170,20 @@ class kanbanModel extends model
         }
 
         return true;
+    }
+
+    /**
+     * Import.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function import($kanbanID)
+    {
+        $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
+        $importObjectList = implode(',', $importObjects);
+
+        $this->dao->update(TABLE_KANBAN)->set('importObject')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
     }
 }

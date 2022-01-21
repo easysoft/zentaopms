@@ -146,7 +146,20 @@ class task extends control
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $taskID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody())
+            {
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->kanban->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
+                }
+                else
+                {
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+                }
+            }
 
             /* Locate the browser. */
             if($this->app->getViewType() == 'xhtml')
@@ -309,7 +322,20 @@ class task extends control
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $taskIDList));
 
             /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody())
+            {
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
+                }
+                else
+                {
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+                }
+            }
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $taskLink));
         }
 
@@ -424,7 +450,22 @@ class task extends control
                 }
             }
 
-            if(isonlybody()) die(js::reload('parent.parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $taskID));
@@ -622,8 +663,23 @@ class task extends control
             $this->executeHooks($taskID);
 
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody())
+            {
+                $task      = $this->task->getById($taskID);
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
@@ -809,6 +865,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         $task = $this->task->getById($taskID);
 
         if(!empty($_POST))
@@ -848,7 +907,23 @@ class task extends control
             }
 
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'success'));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                }
+            }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -895,8 +970,22 @@ class task extends control
                 }
             }
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $this->session->set('estimateList', $this->app->getURI(true), 'execution');
@@ -976,6 +1065,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1010,7 +1102,25 @@ class task extends control
                     }
                 }
             }
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, 'all', 'id_desc', $regionID);
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                }
+            }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('result' => 'success', 'data' => $taskID));
@@ -1063,6 +1173,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1077,8 +1190,25 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody())
+            {
+                $task      = $this->task->getById($taskID);
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->pause;
@@ -1116,8 +1246,23 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody())
+            {
+                $task      = $this->task->getById($taskID);
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->restart;
@@ -1141,6 +1286,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1156,7 +1304,24 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+            if(isonlybody())
+            {
+                $task      = $this->task->getById($taskID);
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
+                }
+            }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
                 return $this->send(array('status' => 'success', 'data' => $taskID));
@@ -1273,6 +1438,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1287,7 +1455,23 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody())
+            {
+                $task      = $this->task->getById($taskID);
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
             die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
@@ -1310,6 +1494,9 @@ class task extends control
     {
         $this->commonAction($taskID);
 
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $this->loadModel('action');
@@ -1324,8 +1511,24 @@ class task extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            if(isonlybody())
+            {
+                $task      = $this->task->getById($taskID);
+                $execution = $this->execution->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         if(!empty($this->view->task->team))
