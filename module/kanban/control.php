@@ -167,7 +167,11 @@ class kanban extends control
 
         unset($this->lang->kanbanspace->featureBar['involved']);
 
-        $this->view->users      = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $space      = $this->kanban->getSpaceById($spaceID);
+        $spaceUsers = $space->owner . $space->team . $space->whitelist;
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+
+        $this->view->users      = $users;
         $this->view->spaceID    = $spaceID;
         $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs($type);
         $this->view->type       = $type;
