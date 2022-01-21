@@ -2709,9 +2709,10 @@ class kanbanModel extends model
         $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
 
-        $fromCardList = str_replace("$cardID,", '', $fromCellCards);
+        $fromCardList = str_replace(",$cardID,", ',', $fromCellCards);
         $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
 
+        if($fromCardList == ',') $fromCardList = '';
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }
