@@ -492,6 +492,8 @@ class kanbanModel extends model
 
         if(!dao::isError())
         {
+            $this->removeKanbanCell('common', $importIDList);
+
             $cards = implode(',', $importIDList);
             $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
 
@@ -1997,6 +1999,30 @@ class kanbanModel extends model
             $cell->cards = $cell->cards ? ",$cardID" . $cell->cards : ",$cardID,";
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
         }
+    }
+
+    /**
+     * Remove kanban cell.
+     *
+     * @param  int|array $removeCardID
+     * @access public
+     * @return void
+     */
+    public function removeKanbanCell($type, $removeCardID = 0)
+    {
+        if(is_array($removeCardID))
+        {
+            foreach($removeCardID as $cardID)
+            {
+                $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET cards = REPLACE(cards, ',{$cardID},', ',') WHERE type = '$type'");
+            }
+        }
+        else
+        {
+            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET cards = REPLACE(cards, ',{$removeCardID},', ',') WHERE type = '$type'");
+        }
+
+        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('cards')->eq(',')->andWhere('type')->eq($type)->exec();
     }
 
     /**
