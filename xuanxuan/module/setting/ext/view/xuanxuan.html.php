@@ -44,7 +44,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->im->backendLang;?></th>
-          <td><?php echo $type == 'edit' ? html::select('backendLang', $config->langs, $config->xuanxuan->backendLang, "class='form-control'") : zget($config->langs, $config->xuanxuan->backendLang, '');?></td>
+          <td><?php echo $type == 'edit' ? html::select('backendLang', $config->langs, $config->xuanxuan->backendLang, "class='form-control'") : zget($lang->setting->langs, $config->xuanxuan->backendLang, '');?></td>
           <td></td>
         </tr>
         <tr>
