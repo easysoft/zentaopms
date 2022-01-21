@@ -39,12 +39,19 @@
         //common::printLink('kanban', 'assigntoCard', "cardID=$card->id", "<i class='icon icon-hand-right'></i><span class='text'>{$lang->kanbancard->assign}</span>", '', "class='btn btn-link iframe' title='{$lang->kanbancard->assign}'", true, true);
         if($kanban->archived)
         {
-            common::printLink('kanban', 'archiveCard',  "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archive}</span>", 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->archive}'", true, true);
+            common::printLink('kanban', 'archiveCard', "cardID=$card->id", "<i class='icon icon-ban-circle'></i><span class='text'>{$lang->kanbancard->archive}</span>", 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->archive}'", true, true);
 
             echo "<div class='divider'></div>";
         }
 
         common::printLink('kanban', 'editCard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link iframe' data-width='80%' title='{$lang->kanbancard->edit}'",  true, true);
+
+        if($kanban->performable)
+        {
+            if($card->status == 'done') common::printLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-magic"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->activateCard}'", true, true);
+            if($card->status == 'doing') common::printLink('kanban', 'finishCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-checked"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->finishCard}'", true, true);
+        }
+
         common::printLink('kanban', 'copyCard',   "cardID=$card->id", '<i class="icon icon-copy"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'",  true, true);
         common::printLink('kanban', 'deleteCard', "cardID=$card->id", '<i class="icon icon-trash"></i>', 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->delete}'",true, true);
         ?>

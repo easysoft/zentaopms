@@ -767,6 +767,44 @@ class kanban extends control
     }
 
     /**
+     * Finish a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function finishCard($cardID, $kanbanID)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
+        return print(json_encode($kanbanGroup));
+    }
+
+    /**
+     * Activate a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function activate($cardID, $kanbanID)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
+        return print(json_encode($kanbanGroup));
+    }
+
+    /**
      * View a card.
      *
      * @param  int    $cardID
@@ -1065,13 +1103,13 @@ class kanban extends control
     }
 
     /**
-     * Set done function.
+     * Setup done function.
      *
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function setDoneFunction($kanbanID)
+    public function performable($kanbanID)
     {
         if(!empty($_POST))
         {
