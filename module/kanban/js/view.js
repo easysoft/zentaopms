@@ -257,7 +257,7 @@ function renderKanbanItem(item, $item)
 {
     var $title       = $item.children('.title');
     var privs        = item.actions;
-    var printMoreBtn = (privs.includes('editCard') || privs.includes('finishCard') || privs.includes('activeCard') ||privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
+    var printMoreBtn = (privs.includes('editCard') || privs.includes('finishCard') || privs.includes('activateCard') ||privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
 
     if(privs.includes('sortCard')) $item.parent().addClass('sort');
     if(!$title.length)
@@ -472,7 +472,7 @@ function finishCard(cardID, kanbanID, regionID)
 }
 
 /**
- * Active a card.
+ * Activate a card.
  *
  * @param  int $cardID
  * @param  int $kanbanID
@@ -480,10 +480,10 @@ function finishCard(cardID, kanbanID, regionID)
  * @access public
  * @return void
  */
-function activeCard(cardID, kanbanID, regionID)
+function activateCard(cardID, kanbanID, regionID)
 {
     if(!cardID) return false;
-    var url = createLink('kanban', 'activeCard', 'cardID=' + cardID + '&kanbanID=' + kanbanID);
+    var url = createLink('kanban', 'activateCard', 'cardID=' + cardID + '&kanbanID=' + kanbanID);
     return $.ajax(
     {
         method:   'post',
@@ -750,9 +750,9 @@ function createCardMenu(options)
     if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(kanban.performable == 1)
     {
-        if(privs.includes('activeCard') && card.status != 'doing')
+        if(privs.includes('activateCard') && card.status != 'doing')
         {
-            items.push({label: kanbanLang.activeCard, icon: 'magic', onClick: function(){activeCard(card.id, card.kanban, card.region);}});
+            items.push({label: kanbanLang.activateCard, icon: 'magic', onClick: function(){activateCard(card.id, card.kanban, card.region);}});
         }
         else
         {

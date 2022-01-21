@@ -48,7 +48,7 @@
 
         if($kanban->performable)
         {
-            if($card->status == 'done') common::printLink('kanban', 'activeCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-magic"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->activeCard}'", true, true);
+            if($card->status == 'done') common::printLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-magic"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->activateCard}'", true, true);
             if($card->status == 'doing') common::printLink('kanban', 'finishCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-checked"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->finishCard}'", true, true);
         }
 
