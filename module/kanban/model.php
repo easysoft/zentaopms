@@ -469,6 +469,78 @@ class kanbanModel extends model
     }
 
     /**
+     * Batch create kanban cards.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
+     * @access public
+     * @return void
+     */
+    public function batchCreateCard($kanbanID, $regionID, $groupID, $columnID)
+    {
+        foreach($_POST['name'] as $index => $value)
+        {
+            if($_POST['name'][$index] and isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = implode(',', $_POST['assignedTo'][$index]);
+        }
+        $cards = fixer::input('post')->get();
+
+        $now   = helper::now();
+        $data  = array();
+        $lanes = array();
+
+        foreach($cards->name as $i => $name)
+        {
+            if(empty($cards->name[$i])) continue;
+            $data[$i]               = new stdclass();
+            $data[$i]->name         = trim($cards->name[$i]);
+            $data[$i]->begin        = $cards->begin[$i];
+            $data[$i]->end          = $cards->end[$i];
+            $data[$i]->assignedTo   = $cards->assignedTo[$i];
+            $data[$i]->desc         = nl2br($cards->desc[$i]);
+            $data[$i]->pri          = $cards->pri[$i];
+            $data[$i]->kanban       = $kanbanID;
+            $data[$i]->region       = $regionID;
+            $data[$i]->group        = $groupID;
+            $data[$i]->createdBy    = $this->app->user->account;
+            $data[$i]->createdDate  = $now;
+            $data[$i]->assignedDate = $now;
+            $data[$i]->color        = '#fff';
+            $data[$i]->estimate     = is_numeric($cards->estimate[$i]) ? (float)$cards->estimate[$i] : $cards->estimate[$i];
+
+            $lanes[$i] = $cards->lane[$i];
+        }
+
+        foreach($data as $i => $card)
+        {
+            $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
+                ->checkIF($card->estimate != '', 'estimate', 'float')
+                ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
+                ->exec();
+
+            if($card->estimate < 0)
+            {
+                dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+                return false;
+            }
+            if($card->end && $card->begin > $card->end)
+            {
+                dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+                return false;
+            }
+
+            if(!dao::isError())
+            {
+                $cardID = $this->dao->lastInsertID();
+                $lane = $lanes[$i];
+                $this->addKanbanCell($kanbanID, $lane, $columnID, 'common', $cardID);
+                $this->loadModel('action')->create('kanbancard', $cardID, 'created');
+            }
+        }
+    }
+
+    /**
      * Get kanban by id.
      *
      * @param  int    $kanbanID
@@ -807,7 +879,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
