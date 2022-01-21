@@ -969,7 +969,7 @@ class kanban extends control
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
                 $regionID   = $column->region;
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, 'all', 'id_desc', $regionID);
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
                 $kanbanData = json_encode($kanbanData);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));
@@ -1050,7 +1050,7 @@ class kanban extends control
             {
                 if(dao::isError()) return $this->sendError(dao::getError());
                 $regionID   = $column->region;
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, 'all', 'id_desc', $regionID);
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
                 $kanbanData = json_encode($kanbanData);
 
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, $regionID)"));

@@ -1709,10 +1709,11 @@ class execution extends control
      * Start execution.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function start($executionID)
+    public function start($executionID, $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1732,7 +1733,14 @@ class execution extends control
 
             $this->loadModel('common')->syncPPEStatus($executionID);
             $this->executeHooks($executionID);
-            die(js::reload('parent.parent'));
+            if(isonlybody() and $from == 'kanban')
+            {
+                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
+            }
+            else
+            {
+                return print(js::reload('parent.parent'));
+            }
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->start;
@@ -1747,10 +1755,11 @@ class execution extends control
      * Delay execution.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function putoff($executionID)
+    public function putoff($executionID, $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1767,7 +1776,14 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($executionID);
-            die(js::reload('parent.parent'));
+            if(isonlybody() and $from == 'kanban')
+            {
+                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
+            }
+            else
+            {
+                return print(js::reload('parent.parent'));
+            }
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->putoff;
@@ -1782,10 +1798,11 @@ class execution extends control
      * Suspend execution.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function suspend($executionID)
+    public function suspend($executionID, $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1803,7 +1820,14 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($executionID);
-            die(js::reload('parent.parent'));
+            if(isonlybody() and $from == 'kanban')
+            {
+                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('suspended')"));
+            }
+            else
+            {
+                return print(js::reload('parent.parent'));
+            }
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->suspend;
@@ -1818,10 +1842,11 @@ class execution extends control
      * Activate execution.
      *
      * @param  int    $executionID
+     * @param  string $frim
      * @access public
      * @return void
      */
-    public function activate($executionID)
+    public function activate($executionID, $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1839,7 +1864,14 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($executionID);
-            die(js::reload('parent.parent'));
+            if(isonlybody() and $from == 'kanban')
+            {
+                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('doing')"));
+            }
+            else
+            {
+                return print(js::reload('parent.parent'));
+            }
         }
 
         $newBegin = date('Y-m-d');
@@ -1861,10 +1893,11 @@ class execution extends control
      * Close execution.
      *
      * @param  int    $executionID
+     * @param  string $from
      * @access public
      * @return void
      */
-    public function close($executionID)
+    public function close($executionID, $from = 'execution')
     {
         $execution   = $this->commonAction($executionID);
         $executionID = $execution->id;
@@ -1882,7 +1915,14 @@ class execution extends control
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($executionID);
-            die(js::reload('parent.parent'));
+            if(isonlybody() and $from == 'kanban')
+            {
+                return print(js::closeModal('parent.parent', '', "parent.parent.changeStatus('closed')"));
+            }
+            else
+            {
+                return print(js::reload('parent.parent'));
+            }
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->execution->close;

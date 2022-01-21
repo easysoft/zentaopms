@@ -1,4 +1,47 @@
 /**
+ * When execution status change.
+ *
+ * @param  stirng executionStatus
+ * @access public
+ * @return void
+ */
+function changeStatus(executionStatus)
+{
+    if(executionStatus == 'wait')
+    {
+        $('.startButton').removeClass('hidden');
+        $('.putoffButton').removeClass('hidden');
+        $('.suspendButton').removeClass('hidden');
+        $('.closeButton').removeClass('hidden');
+        $('.activateButton').addClass('hidden');
+    }
+    else if(executionStatus == 'doing')
+    {
+        $('.startButton').addClass('hidden');
+        $('.putoffButton').removeClass('hidden');
+        $('.suspendButton').removeClass('hidden');
+        $('.closeButton').removeClass('hidden');
+        $('.activateButton').addClass('hidden');
+    }
+    else if(executionStatus == 'suspended')
+    {
+        $('.startButton').addClass('hidden');
+        $('.putoffButton').addClass('hidden');
+        $('.suspendButton').addClass('hidden');
+        $('.closeButton').removeClass('hidden');
+        $('.activateButton').removeClass('hidden');
+    }
+    else if(executionStatus == 'closed')
+    {
+        $('.startButton').addClass('hidden');
+        $('.putoffButton').addClass('hidden');
+        $('.suspendButton').addClass('hidden');
+        $('.closeButton').addClass('hidden');
+        $('.activateButton').removeClass('hidden');
+    }
+}
+
+/**
  * Display the kanban in full screen.
  *
  * @access public
@@ -1046,6 +1089,8 @@ function initKanban($kanban)
  */
 $(function()
 {
+    changeStatus(execution.status);
+    
     if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
 
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
