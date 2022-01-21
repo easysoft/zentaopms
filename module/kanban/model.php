@@ -1448,13 +1448,14 @@ class kanbanModel extends model
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->setdefault('team', '')
-            ->setdefault('owner', $account)
             ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
+
+        if($space->type == 'private') $space->owner = $account;
 
         if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 

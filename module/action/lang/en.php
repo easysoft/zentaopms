@@ -622,7 +622,7 @@ $lang->action->label->issue        = 'Issue|issue|view|issueID=%s';
 $lang->action->label->design       = 'Design|design|view|designID=%s';
 $lang->action->label->stakeholder  = 'Stakeholder|stakeholder|view|userID=%s';
 $lang->action->label->api          = 'Interface|api|index|libID=%s&moduleID=%s&apiID=%s';
-$lang->action->label->kanbanspace  = 'Kanban Space|kanban|space|browseType=all';
+$lang->action->label->kanbanspace  = 'Kanban Space|kanban|space|browseType=%s';
 $lang->action->label->kanbanregion = 'Kanban Region|kanban|view|kanbanID=%s';
 $lang->action->label->kanban       = 'Kanban|kanban|view|kanbanID=%s';
 $lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%s';

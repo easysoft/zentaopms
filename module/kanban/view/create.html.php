@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/kindeditor.html.php';?>
+<?php js::set('spaceType', $type);?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2><?php echo $lang->kanban->create;?></h2>
@@ -20,12 +21,12 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>
-        <td><?php echo html::select('type', $typeList, $type, "onchange='changeType({$spaceID}, this.value)' class='form-control chosen'");?></td>
+        <td><?php echo html::select('type', $typeList, $type, "onchange='changeValue({$spaceID}, this.value)' class='form-control chosen'");?></td>
         <td></td>
       </tr>
       <tr>
         <th><?php echo $lang->kanban->space;?></th>
-        <td><?php echo html::select('space', $spacePairs, $spaceID, "class='form-control chosen'");?></td>
+        <td><?php echo html::select('space', $spacePairs, $spaceID, "onchange='changeValue(this.value)' class='form-control chosen'");?></td>
         <td></td>
       </tr>
       <tr>
