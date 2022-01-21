@@ -38,17 +38,19 @@ class mrModel extends model
     /**
      * Get MR list of gitlab project.
      *
-     * @param  string   $mode
-     * @param  string   $param
-     * @param  string   $orderBy
-     * @param  object   $pager
-     * @param  array    $filterProjects
+     * @param  string     $mode
+     * @param  string     $param
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  array|bool $filterProjects
      * @access public
      * @return array
      */
     public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array())
     {
-        if($filterProjects === false) return array(); // If filterProjects equals false,it means no permission.
+        /* If filterProjects equals false,it means no permission. */
+        if($filterProjects === false) return array();
+
         $filterProjectSql = '';
         if(!empty($filterProjects))
         {
@@ -58,11 +60,7 @@ class mrModel extends model
                 if(!empty($projectIDList)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject ".helper::dbIN($projectIDList).") or ";
             }
 
-            if($filterProjectSql)
-            {
-                $filterProjectSql = substr($filterProjectSql, 0, -3); // Remove last or.
-                $filterProjectSql = '(' . $filterProjectSql . ')';
-            }
+            if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
         }
 
         $MRList = $this->dao->select('*')
@@ -108,10 +106,10 @@ class mrModel extends model
             ->fetchPairs('gitlabID');
 
         $allProjects = array();
-        $gitlabUsers = $this->dao->select('openID,providerID')->from(TABLE_OAUTH)
+        $gitlabUsers = $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
             ->andWhere('account')->eq($this->app->user->account)
-            ->fetchPairs('providerID', 'openID');
+            ->fetchPairs();
         foreach($gitlabIDList as $gitlabID)
         {
             if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
