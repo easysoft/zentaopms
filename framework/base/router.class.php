@@ -694,7 +694,9 @@ class baseRouter
     public function setVision()
     {
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
-        $vision  = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
+
+        if($this->config->installed) $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
+
         $this->config->vision = $vision ? $vision->value : 'rnd';
     }
 
