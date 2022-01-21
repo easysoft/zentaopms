@@ -3,7 +3,6 @@ class product extends control
 {
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
-
         /* Load datatable and execution. */
         $this->loadModel('datatable');
         $this->loadModel('execution');
@@ -165,7 +164,7 @@ class product extends control
         $this->view->browseType      = $browseType;
         $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
         $this->view->moduleID        = $moduleID;
-        $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
+        $this->view->moduleName      = ($moduleID and $moduleID !== 'all') ? $this->tree->getById($moduleID)->name : $this->lang->tree->allMenu;
         $this->view->branch          = $branch;
         $this->view->branchID        = $branchID;
         $this->view->branchOption    = $branchOption;

@@ -2,11 +2,13 @@
 public function setMenu($executionID, $buildID = 0, $extra = '')
 {
     common::setMenuVars('execution', $executionID);
+
     $execution = $this->getById($executionID);
     if(isset($this->lang->execution->menu->kanban))
     {
         $this->loadModel('project')->setMenu($execution->project);
         $this->lang->kanban->menu->execution['subMenu'] = $this->lang->execution->menu;
+        if($this->app->rawModule == 'tree') unset($this->lang->kanban->menu->execution['subMenu']);
     }
 
     $kanbanList    = $this->getList($execution->project, 'kanban', 'all');
