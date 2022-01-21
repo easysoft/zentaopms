@@ -253,6 +253,7 @@ class productModel extends model
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
@@ -285,7 +286,8 @@ class productModel extends model
             ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
             ->fetchPairs('id', 'name');
         return $products;
@@ -325,6 +327,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t3.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t3.vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
             ->fetchPairs('id', 'name');
     }
@@ -353,7 +356,8 @@ class productModel extends model
             ->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
             ->fetchAll('id');
