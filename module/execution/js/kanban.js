@@ -832,7 +832,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',executionID=' + executionID, '', true);
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -841,7 +841,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',executionID=' + executionID, '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -849,7 +849,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
-                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',executionID=' + executionID, '', true);
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -865,7 +865,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'testing' || fromColType == 'tested')
             {
-                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
