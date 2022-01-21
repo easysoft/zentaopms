@@ -677,7 +677,11 @@ class kanban extends control
         }
         else
         {
+            $column = $this->kanban->getColumnById($columnID);
             $this->kanban->delete(TABLE_KANBANCOLUMN, $columnID);
+
+            if($column->parent) $this->kanban->processParentColumn($column);
+
             die(js::reload('parent'));
         }
     }

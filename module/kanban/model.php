@@ -2841,6 +2841,25 @@ class kanbanModel extends model
         if(!dao::isError()) return common::createChanges($oldCard, $card);
     }
 
+    public function processParentColumn($column)
+    {
+        $firstColumnID = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)
+            ->where('parent')->eq($column->parent)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('archived')->eq('0')
+            ->fetch('id');
+
+        $extendID = $firstColumnID ? $firstColumnID : $column->parent;
+
+        $cells = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('`column`')->eq($column->id)
+            ->fetchAll('id');
+
+        foreach($cells as $cell)
+        {
+        }
+    }
+
     /**
      * Get space by id.
      *
