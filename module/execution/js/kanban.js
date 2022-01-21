@@ -927,6 +927,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 method:   'post',
                 dataType: 'json',
                 url:       link,
+                async:     false,
                 success: function(data)
                 {
                     updateRegion(regionID, data[regionID]);
@@ -993,6 +994,7 @@ function shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
         method:   'post',
         dataType: 'json',
         url:       link,
+        async:     false,
         success: function(data)
         {
             updateRegion(regionID, data[regionID]);
@@ -1229,13 +1231,6 @@ $(function()
 
                 return $ele.parent().children('.kanban-lane');
             }
-
-            /* Sort lanes */
-            if($ele.hasClass('kanban-item'))
-            {
-                sortType = 'item';
-                return $ele.parent().children('.kanban-item');
-            }
         },
         start: function(e)
         {
@@ -1284,10 +1279,7 @@ $(function()
                 var region = e.element.parent().parent().data('id');
                 url = createLink('kanban', 'sortLane', 'region=' + region + '&lanes=' + orders.join(','));
             }
-            if(sortType == 'item')
-            {
-                url = createLink('task', 'sort', 'kanbanID=' + kanbanID + '&tasks=' + orders.join(','));
-            }
+
             if(!url) return true;
 
             $.getJSON(url, function(response)
