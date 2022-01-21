@@ -145,6 +145,23 @@ class gitlabModel extends model
     }
 
     /**
+     * Get GitLab id list by user account.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getGitLabListByAccount($account = '')
+    {
+        if(!$account) $account = $this->app->user->account;
+
+        return $this->dao->select('providerID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('account')->eq($account)
+            ->fetchPairs('providerID');
+    }
+
+    /**
      * Get project pairs of one gitlab.
      *
      * @param  int $gitlabID
