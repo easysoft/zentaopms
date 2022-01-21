@@ -48,13 +48,14 @@ class mrModel extends model
      */
     public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array())
     {
+        if($filterProjects === false) return array(); // If filterProjects equals false,it means no permission.
         $filterProjectSql = '';
         if(!empty($filterProjects))
         {
             foreach($filterProjects as $gitlabID => $projects)
             {
-                $projectIDs = array_keys($projects);
-                if(!empty($projectIDs)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject ".helper::dbIN($projectIDs).") or ";
+                $projectIDList = array_keys($projects);
+                if(!empty($projectIDList)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject ".helper::dbIN($projectIDList).") or ";
             }
 
             if($filterProjectSql)
@@ -98,11 +99,11 @@ class mrModel extends model
      * Get all gitlab server project,private projects that do not include guest permissions.
      *
      * @access public
-     * @return void
+     * @return array
      */
     public function getAllGitlabProjects()
     {
-        $gitlabIDs = $this->dao->select('distinct gitlabID')->from(TABLE_MR)
+        $gitlabIDList = $this->dao->select('distinct gitlabID')->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->fetchPairs('gitlabID');
 
@@ -111,9 +112,9 @@ class mrModel extends model
             ->where('providerType')->eq('gitlab')
             ->andWhere('account')->eq($this->app->user->account)
             ->fetchPairs('providerID', 'openID');
-        foreach($gitlabIDs as $gitlabID)
+        foreach($gitlabIDList as $gitlabID)
         {
-            if(!isset($gitlabUsers[$gitlabID])) continue;
+            if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
             $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID);
         }
 

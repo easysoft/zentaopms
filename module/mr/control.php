@@ -33,12 +33,8 @@ class mr extends control
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
 
-        $projects = array();
-        if(!$this->app->user->admin)
-        {
-            $projects = $this->mr->getAllGitlabProjects();
-        }
-        $MRList = $this->mr->getList($mode, $param, $orderBy, $pager, $projects);
+        $projects = $this->mr->getAllGitlabProjects();
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');

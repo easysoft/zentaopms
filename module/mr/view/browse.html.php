@@ -64,8 +64,6 @@
       </thead>
       <tbody>
         <?php foreach($MRList as $MR):?>
-        <?php if(!isset($projects[$MR->gitlabID][$MR->sourceProject])) $projects[$MR->gitlabID][$MR->sourceProject] = $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->sourceProject); ?>
-        <?php if(!isset($projects[$MR->gitlabID][$MR->targetProject])) $projects[$MR->gitlabID][$MR->targetProject] = $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject); ?>
         <tr>
           <td class='text'><?php echo $MR->id;?></td>
           <td class='text'><?php echo html::a(inlink('view', "mr={$MR->id}"), $MR->title);?></td>
