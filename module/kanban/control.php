@@ -733,20 +733,38 @@ class kanban extends control
     }
 
     /**
-     * Update card status.
+     * Finish a card.
      *
      * @param  int    $cardID
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function editCardStatus($cardID, $kanbanID)
+    public function finishCard($cardID, $kanbanID)
     {
-        $card         = $this->kanban->getCardByID($cardID);
-        $card->status = $card->status == 'doing' ? 'done' : 'doing';
-
-        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq($card->status)->where('id')->eq($cardID)->exec();
+        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(isonlybody()) return print(js::reload('parent.parent'));
+
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
+        return print(json_encode($kanbanGroup));
+    }
+
+    /**
+     * Active a card.
+     *
+     * @param  int    $cardID
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function activeCard($cardID, $kanbanID)
+    {
+        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        if(isonlybody()) return print(js::reload('parent.parent'));
 
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
         return print(json_encode($kanbanGroup));
