@@ -90,7 +90,7 @@ $lang->kanban->confirmDelete = '您确认删除吗？';
 $lang->kanban->cardCountTip  = '请输入卡片数量';
 
 $lang->kanban->selectedKanban = '请选择看板';
-$lang->kanban->selectedLane   = '请选择泳道';
+$lang->kanban->selectedLane   = '目标泳道';
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';

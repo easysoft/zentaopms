@@ -800,6 +800,7 @@ class kanban extends control
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
 
+        /* Get cards to imported. */
         $cards2Imported = array();
         if($selectedKanbanID)
         {
@@ -820,11 +821,12 @@ class kanban extends control
         $pager          = new pager($recTotal, $recPerPage, $pageID);
         $cards2Imported = array_chunk($cards2Imported, $pager->recPerPage);
 
+        /* Find Kanban other than this kanban. */
         $kanbanPairs = $this->kanban->getKanbanPairs();
         unset($kanbanPairs[$kanbanID]);
 
         $this->view->cards2Imported   = empty($cards2Imported) ? $cards2Imported : $cards2Imported[$pageID - 1];
-        $this->view->kanbanPairs      = array(0 => $this->lang->kanban->all) + $kanbanPairs;
+        $this->view->kanbanPairs      = array($this->lang->kanban->all) + $kanbanPairs;
         $this->view->lanePairs        = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager            = $pager;

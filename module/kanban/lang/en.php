@@ -58,6 +58,8 @@ $lang->kanban->restoreCard         = 'Restore Card';
 $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
 $lang->kanban->showClosed          = 'Closed';
+$lang->kanban->importCard          = 'Import Card';
+$lang->kanban->all                 = 'All Kanban';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -86,6 +88,9 @@ $lang->kanban->createColumnOnRight = 'Create Column On Right';
 $lang->kanban->accessDenied  = "You have no access to the kanban.";
 $lang->kanban->confirmDelete = 'Do you want to delete this?';
 $lang->kanban->cardCountTip  = 'Please enter the number of cards';
+
+$lang->kanban->selectedKanban = 'Please select Kanban';
+$lang->kanban->selectedLane   = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
