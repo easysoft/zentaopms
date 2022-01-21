@@ -3547,15 +3547,29 @@ class executionModel extends model
     public function fillTasksInTree($node, $executionID)
     {
         $node = (object)$node;
+        a($node);
         static $storyGroups, $taskGroups;
         if(empty($storyGroups))
         {
-            $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where('t1.project')->eq((int)$executionID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('t1.`order`_desc')
-                ->fetchAll();
+            if($this->config->vision == 'lite')
+            {
+                $execution = $this->getById($executionID);
+                $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                    ->where('t1.project')->eq((int)$execution->project)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->orderBy('t1.`order`_desc')
+                    ->fetchAll();
+            }
+            else
+            {
+                $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                    ->where('t1.project')->eq((int)$executionID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->orderBy('t1.`order`_desc')
+                    ->fetchAll();
+            }
             $storyGroups = array();
             foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
         }
@@ -3609,6 +3623,7 @@ class executionModel extends model
 
             $node->type = 'module';
             $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
+            a($stories);
             foreach($stories as $story)
             {
                 $storyItem = new stdclass();
