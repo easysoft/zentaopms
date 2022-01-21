@@ -157,7 +157,21 @@ class story extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $storyID));
 
             /* If link from no head then reload. */
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.updateKanban($kanbanData, 0)"));
+                }
+                else
+                {
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+                }
+            }
 
             if($this->post->newStory)
             {
@@ -398,13 +412,13 @@ class story extends control
         if($storyID)
         {
             $story = $this->story->getById($storyID);
-            if($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) die(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         if(!empty($_POST))
         {
             $mails = $this->story->batchCreate($productID, $branch, $type);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $stories = array();
             foreach($mails as $mail) $stories[] = $mail->storyID;
@@ -426,11 +440,25 @@ class story extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
 
             if($storyID)
             {
-                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
             elseif($executionID)
             {
@@ -438,13 +466,13 @@ class story extends control
                 $moduleName = $execution->type == 'project' ? 'projectstory' : 'execution';
                 $param      = $execution->type == 'project' ? "projectID=$executionID&productID=$productID" : "executionID=$executionID&orderBy=id_desc&browseType=unclosed";
                 $link       = $this->createLink($moduleName, 'story', $param);
-                die(js::locate($link, 'parent'));
+                return print(js::locate($link, 'parent'));
             }
             else
             {
                 setcookie('storyModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
                 $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID=$productID&branch=$branch&browseType=unclosed&queryID=0&type=$type");
-                die(js::locate($locateLink, 'parent'));
+                return print(js::locate($locateLink, 'parent'));
             }
         }
 
@@ -921,9 +949,24 @@ class story extends control
 
             $module = $this->app->tab == 'project' ? 'projectstory' : 'story';
 
-            if(isonlybody()) die(js::reload('parent.parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -974,8 +1017,22 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -1243,7 +1300,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->close($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($changes)
             {
@@ -1253,14 +1310,29 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this'));
+                }
+            }
+
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                die(array('status' => 'success', 'data' => $storyID));
+                return print(array('status' => 'success', 'data' => $storyID));
             }
             else
             {
-                die(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
+                return print(js::locate(inlink('view', "storyID=$storyID"), 'parent'));
             }
         }
 
@@ -1586,8 +1658,22 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
-            die(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
+            if(isonlybody())
+            {
+                $execution = $this->execution->getByID($this->session->execution);
+                if($this->app->tab == 'execution' and $execution->type == 'kanban')
+                {
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($this->session->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                    $kanbanData = json_encode($kanbanData);
+
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                }
+                else
+                {
+                    return print(js::closeModal('parent.parent', 'this', 'function(){parent.parent.$(\'[data-ride="searchList"]\').searchList();}'));
+                }
+            }
+            return print(js::locate($this->createLink('story', 'view', "storyID=$storyID"), 'parent'));
         }
 
         /* Get story and product. */
