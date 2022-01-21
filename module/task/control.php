@@ -679,7 +679,7 @@ class task extends control
                     return print(js::closeModal('parent.parent', 'this'));
                 }
             }
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $members = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
