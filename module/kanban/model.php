@@ -480,6 +480,10 @@ class kanbanModel extends model
      */
     public function batchCreateCard($kanbanID, $regionID, $groupID, $columnID)
     {
+        foreach($_POST['name'] as $index => $value)
+        {
+            if($_POST['name'][$index] and isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = implode(',', $_POST['assignedTo'][$index]);
+        }
         $cards = fixer::input('post')->get();
 
         $now   = helper::now();
