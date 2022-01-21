@@ -497,7 +497,7 @@ class kanbanModel extends model
             $cards = implode(',', $importIDList);
             $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
 
-            return true;
+            return $importIDList;
         }
 
         return false;

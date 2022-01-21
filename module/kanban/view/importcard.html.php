@@ -59,7 +59,11 @@
           </td>
           <td title='<?php echo zget($kanbanPairs, $card->kanban);?>'><?php echo zget($kanbanPairs, $card->kanban);?></td>
           <td><span class='label-pri <?php echo 'label-pri-' . $card->pri?>' title='<?php echo zget($lang->kanbancard->priList, $card->pri, $card->pri);?>'><?php echo zget($lang->kanbancard->priList, $card->pri, $card->pri);?></span></td>
-          <td title='<?php echo $card->name;?>'><?php common::printLink('kanban', 'viewCard', "cardID=$card->id", $card->name, '', "class='preview'", true, true);?></td>
+          <?php if(common::hasPriv('kanban', 'viewCard')):?>
+          <td title='<?php echo $card->name;?>'><?php common::printLink('kanban', 'viewCard', "cardID=$card->id", $card->name, '', "class='iframe'", true, true);?></td>
+          <?php else:?>
+          <td title='<?php echo $card->name;?>'><?php echo $card->name;?></td>
+          <?php endif;?>
           <td title='<?php echo zget($users, $card->assignedTo);?>'><?php echo zget($users, $card->assignedTo);?></td>
           <td title='<?php echo $card->end;?>'><?php echo $card->end;?></td>
         </tr>

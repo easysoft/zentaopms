@@ -794,8 +794,13 @@ class kanban extends control
     {
         if($_POST)
         {
-            $this->kanban->importCard($kanbanID, $regionID, $groupID, $columnID);
+            $importedIDList = $this->kanban->importCard($kanbanID, $regionID, $groupID, $columnID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'imported');
+            }
 
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
