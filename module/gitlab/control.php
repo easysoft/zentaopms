@@ -606,6 +606,12 @@ class gitlab extends control
      */
     public function browseProject($gitlabID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword'); // Fix bug#16741.

@@ -72,6 +72,7 @@ $lang->gitlab->tokenFirst    = 'Token不为空时，优先使用Token。';
 $lang->gitlab->tips          = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
 $lang->gitlab->emptyError    = "不能为空";
 $lang->gitlab->createSuccess = "创建成功";
+$lang->gitlab->mustBindUser  = '您还未绑定GitLab用户，请联系管理员进行绑定';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';

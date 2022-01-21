@@ -72,6 +72,7 @@ $lang->gitlab->tokenFirst    = 'When the Token is not empty, the Token will be u
 $lang->gitlab->tips          = 'When using a password, please disable the "Prevent cross-site request forgery" option in the GitLab global security settings.';
 $lang->gitlab->emptyError    = " cannot be empty";
 $lang->gitlab->createSuccess = "Create success";
+$lang->gitlab->mustBindUser  = 'You have not registered the GitLab account, please contact the administrator to register.';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
