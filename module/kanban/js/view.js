@@ -1011,10 +1011,10 @@ $(function()
     });
 
     /* Init sortable */
-    var sortType   = '';
+    var sortType  = '';
     var oldLaneID = '';
     var oldColID  = '';
-    var $cards     = null;
+    var $cards    = null;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort',
