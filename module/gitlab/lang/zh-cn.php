@@ -73,6 +73,7 @@ $lang->gitlab->tips          = '使用密码时，请在GitLab全局安全设置
 $lang->gitlab->emptyError    = "不能为空";
 $lang->gitlab->createSuccess = "创建成功";
 $lang->gitlab->mustBindUser  = '您还未绑定GitLab用户，请联系管理员进行绑定';
+$lang->gitlab->noAccess      = '权限不足';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
@@ -100,6 +101,7 @@ $lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
 $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 $lang->gitlab->apiError[4] = 'Branch already exists';
 $lang->gitlab->apiError[5] = 'Failed to save group {:path=>["has already been taken"]}';
+$lang->gitlab->apiError[6] = '403 Forbidden';
 
 $lang->gitlab->errorLang[0] = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1] = '私有分组的项目，可见性级别不能设为公开。';
@@ -107,6 +109,7 @@ $lang->gitlab->errorLang[2] = '密码太短（最少8个字符）';
 $lang->gitlab->errorLang[3] = "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。";
 $lang->gitlab->errorLang[4] = '分支名已存在。';
 $lang->gitlab->errorLang[5] = '保存失败，群组URL路径已经被使用。';
+$lang->gitlab->errorLang[6] = $lang->gitlab->noAccess;
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "项目ID";
