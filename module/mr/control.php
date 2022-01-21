@@ -32,7 +32,9 @@ class mr extends control
     {
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $MRList = $this->mr->getList($mode, $param, $orderBy, $pager);
+
+        $projects = $this->mr->getAllGitlabProjects();
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
@@ -53,6 +55,7 @@ class mr extends control
 
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
+        $this->view->projects   = $projects;
         $this->view->pager      = $pager;
         $this->view->mode       = $mode;
         $this->view->param      = $param;
