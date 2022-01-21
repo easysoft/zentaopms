@@ -1108,10 +1108,10 @@ class task extends control
                 $execution = $this->execution->getByID($task->execution);
                 if($execution->type == 'kanban')
                 {
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc');
+                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
 
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData, $regionID)"));
+                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
                 else
                 {
