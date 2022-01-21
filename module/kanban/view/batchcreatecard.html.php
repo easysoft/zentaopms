@@ -23,7 +23,7 @@
         <thead>
           <tr>
             <th class='c-id text-center'><?php echo $lang->idAB;?></th>
-            <th class='c-name required'><?php echo $lang->kanban->name?></th>
+            <th class='c-name required'><?php echo $lang->kanbancard->name?></th>
             <th><?php echo $lang->kanbancard->lane;?></th>
             <th><?php echo $lang->kanbancard->assignedTo;?></th>
             <th class='c-estimate'><?php echo $lang->kanbancard->estimate;?></th>
