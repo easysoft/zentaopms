@@ -1046,6 +1046,8 @@ function initKanban($kanban)
  */
 $(function()
 {
+    if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
+
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
