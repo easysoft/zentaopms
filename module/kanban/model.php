@@ -476,7 +476,7 @@ class kanbanModel extends model
      * @param  int $groupID
      * @param  int $columnID
      * @access public
-     * @return bool
+     * @return bool|array
      */
     public function importCard($kanbanID, $regionID, $groupID, $columnID)
     {
@@ -523,7 +523,7 @@ class kanbanModel extends model
      *
      * @param  int    $kanbanID
      * @access public
-     * @return void
+     * @return array
      */
     public function getKanbanData($kanbanID)
     {
