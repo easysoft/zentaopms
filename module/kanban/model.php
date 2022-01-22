@@ -484,6 +484,8 @@ class kanbanModel extends model
         $importIDList = $data->cards;
         $targetLaneID = $data->targetLane;
 
+        $oldCardsKanban = $this->dao->select('id,kanban')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchPairs();
+
         $updateData = new stdClass();
         $updateData->kanban = $kanbanID;
         $updateData->region = $regionID;
@@ -492,7 +494,7 @@ class kanbanModel extends model
 
         if(!dao::isError())
         {
-            $this->removeKanbanCell('common', $importIDList);
+            $this->removeKanbanCell('common', $importIDList, $oldCardsKanban);
 
             $cards = implode(',', $importIDList);
             $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
@@ -2004,25 +2006,27 @@ class kanbanModel extends model
     /**
      * Remove kanban cell.
      *
+     * @param  string    $type
      * @param  int|array $removeCardID
+     * @param  array     $cardsKanban
      * @access public
      * @return void
      */
-    public function removeKanbanCell($type, $removeCardID = 0)
+    public function removeKanbanCell($type, $removeCardID, $cardsKanban)
     {
-        if(is_array($removeCardID))
+        $removeIDList = is_array($removeCardID) ? $removeCardID : array($removeCardID);
+        foreach($removeIDList as $cardID)
         {
-            foreach($removeCardID as $cardID)
-            {
-                $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET cards = REPLACE(cards, ',{$cardID},', ',') WHERE type = '$type'");
-            }
-        }
-        else
-        {
-            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET cards = REPLACE(cards, ',{$removeCardID},', ',') WHERE type = '$type'");
+            if(empty($cardID)) continue;
+
+            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET `cards` = REPLACE(cards, ',$cardID,', ',') WHERE `type` = '$type' AND `kanban` = {$cardsKanban[$cardID]}");
         }
 
-        $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')->where('cards')->eq(',')->andWhere('type')->eq($type)->exec();
+        $this->dao->update(TABLE_KANBANCELL)
+            ->set('cards')->eq('')
+            ->where('cards')->eq(',')
+            ->andWhere('type')->eq($type)
+            ->exec();
     }
 
     /**
@@ -3016,6 +3020,27 @@ class kanbanModel extends model
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get imported cards.
+     *
+     * @param  int $objectID
+     * @param  int $excluded
+     * @param  obj $pager
+     * @access public
+     * @return array
+     */
+    public function getImportedCards($kanbanID = 0, $excluded = 0, $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('archived')->eq(0)
+            ->beginIF($kanbanID)->andWhere('kanban')->eq($kanbanID)->fi()
+            ->beginIF($excluded)->andWhere('kanban')->ne($excluded)->fi()
+            ->orderBy('order')
+            ->page($pager)
             ->fetchAll('id');
     }
 

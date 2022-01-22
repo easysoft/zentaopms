@@ -792,6 +792,12 @@ class kanban extends control
      */
     public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $cards2Imported = $this->kanban->getImportedCards($selectedKanbanID, $kanbanID, $pager);
+
         if($_POST)
         {
             $importedIDList = $this->kanban->importCard($kanbanID, $regionID, $groupID, $columnID);
@@ -799,38 +805,17 @@ class kanban extends control
 
             foreach($importedIDList as $cardID)
             {
-                $this->loadModel('action')->create('kanbancard', $cardID, 'imported');
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedcard', '', $cards2Imported[$cardID]->kanban);
             }
 
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
 
-        /* Get cards to imported. */
-        $cards2Imported = array();
-        if($selectedKanbanID)
-        {
-            $cards2Imported = $this->kanban->getCardsByObject('kanban', $selectedKanbanID);
-        }
-        else
-        {
-            $allKanbanCards = $this->kanban->getCardsByObject();
-            foreach($allKanbanCards as $card)
-            {
-                if($card->kanban != $kanbanID) $cards2Imported[$card->id] = $card;
-            }
-        }
-
-        /* Pager. */
-        $this->app->loadClass('pager', $static = true);
-        $recTotal       = count($cards2Imported);
-        $pager          = new pager($recTotal, $recPerPage, $pageID);
-        $cards2Imported = array_chunk($cards2Imported, $pager->recPerPage);
-
         /* Find Kanban other than this kanban. */
         $kanbanPairs = $this->kanban->getKanbanPairs();
         unset($kanbanPairs[$kanbanID]);
 
-        $this->view->cards2Imported   = empty($cards2Imported) ? $cards2Imported : $cards2Imported[$pageID - 1];
+        $this->view->cards2Imported   = $cards2Imported;
         $this->view->kanbanPairs      = array($this->lang->kanban->all) + $kanbanPairs;
         $this->view->lanePairs        = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');

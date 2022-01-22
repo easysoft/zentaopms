@@ -193,7 +193,7 @@ $lang->action->desc->syncexecution        = '$date, 系统判断由于任务开�
 $lang->action->desc->importfromgitlab     = '$date, 由 <strong>$actor</strong> 从Gitlab的Issue关联创建。' . "\n";
 $lang->action->desc->archived             = '$date, 由 <strong>$actor</strong> 归档。' . "\n";
 $lang->action->desc->restore              = '$date, 由 <strong>$actor</strong> 还原。' . "\n";
-$lang->action->desc->imported             = '$date, 由 <strong>$actor</strong> 导入。' . "\n";
+$lang->action->desc->importedcard         = '$date, 由 <strong>$actor</strong> 从看板 <strong>$extra</strong> 导入。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -333,7 +333,7 @@ $lang->action->label->closedbychild         = '关闭了';
 $lang->action->label->activatedbychild      = '激活了';
 $lang->action->label->createchild           = '激活了';
 $lang->action->label->executed              = '执行了';
-$lang->action->label->imported              = '导入了';
+$lang->action->label->importedcard          = '导入了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

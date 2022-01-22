@@ -193,7 +193,7 @@ $lang->action->desc->syncexecution        = '$date, starting the task sets the e
 $lang->action->desc->importfromgitlab     = '$date, Issue associate created from gitlab by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->archived             = '$date, archived by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->restore              = '$date, restore by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->imported             = '$date, imported by <strong>$actor</strong> .' . "\n";
+$lang->action->desc->importedcard         = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -333,7 +333,7 @@ $lang->action->label->closedbychild         = 'closed';
 $lang->action->label->activatedbychild      = 'activated';
 $lang->action->label->createchild           = 'activated';
 $lang->action->label->executed              = 'executed';
-$lang->action->label->imported              = 'imported';
+$lang->action->label->importedcard          = 'imported';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
