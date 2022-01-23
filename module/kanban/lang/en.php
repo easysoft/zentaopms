@@ -62,6 +62,8 @@ $lang->kanban->importCard          = 'Import Card';
 $lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->importPlan          = 'Import Plan';
 $lang->kanban->allProducts         = 'All Products';
+$lang->kanban->importExecution     = 'Import Execution';
+$lang->kanban->allProjects         = 'All Projects';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -93,6 +95,7 @@ $lang->kanban->cardCountTip  = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
+$lang->kanban->selectedProject = 'Please select Project';
 $lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';

@@ -778,15 +778,16 @@ class kanban extends control
     }
 
     /**
-     * Import cards.
+     * Import card.
      *
-     * @param int $kanbanID
-     * @param int $regionID
-     * @param int $groupID
-     * @param int $columnID
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedKanbanID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
      * @access public
      * @return void
      */
@@ -832,14 +833,14 @@ class kanban extends control
     /**
      * Import plan.
      *
-     * @param int $kanbanID
-     * @param int $regionID
-     * @param int $groupID
-     * @param int $columnID
-     * @param int $selectedProductID
-     * @param int $recTotal
-     * @param int $recPerPage
-     * @param int $pageID
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProductID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
      * @access public
      * @return void
      */
@@ -871,12 +872,62 @@ class kanban extends control
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all');
+        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all', $pager);
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
         $this->view->regionID          = $regionID;
         $this->view->groupID           = $groupID;
         $this->view->columnID          = $columnID;
+
+        $this->display();
+    }
+
+    /**
+     * Import execution.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProjectID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        $this->loadModel('project');
+        $this->loadModel('execution');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'execution');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $executionID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedExecution', '', $executionID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->view->projects            = $this->project->getPairsByProgram();
+        $this->view->selectedProjectID   = $selectedProjectID;
+        $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->executions2Imported = $this->project->getStats($selectedProjectID, 'undone', 0, 0, 30, 'id_asc', $pager);
+        $this->view->users               = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->pager               = $pager;
+        $this->view->kanbanID            = $kanbanID;
+        $this->view->regionID            = $regionID;
+        $this->view->groupID             = $groupID;
+        $this->view->columnID            = $columnID;
 
         $this->display();
     }
