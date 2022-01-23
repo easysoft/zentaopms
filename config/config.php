@@ -178,3 +178,6 @@ if(file_exists($routesConfig)) include $routesConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
+
+/* Set version. */
+if($config->edition != 'open') $config->version = $config->edition . $config->{$config->edition . 'Version'};
