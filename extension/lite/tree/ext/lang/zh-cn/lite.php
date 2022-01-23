@@ -12,3 +12,4 @@ if($app->rawModule == 'tree' and $app->rawMethod == 'browse')
     $lang->tree->name             = '目录名称';
     $lang->tree->syncFromProduct  = '复制目录';
 }
+if($app->rawModule == 'story') $lang->tree->manage = $lang->tree->manageMenu;
