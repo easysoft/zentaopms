@@ -506,6 +506,49 @@ class kanbanModel extends model
     }
 
     /**
+     * Import object.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function importObject($kanbanID, $regionID, $groupID, $columnID, $objectType)
+    {
+        $data = fixer::input('post')->get();
+        $objectIDList = $data->{$objectType . 's'};
+        $targetLaneID = $data->targetLane;
+
+        $objectCards = array();
+        foreach($objectIDList as $objectID)
+        {
+            $cardData = new stdClass();
+            $cardData->kanban   = $kanbanID;
+            $cardData->region   = $regionID;
+            $cardData->group    = $groupID;
+            $cardData->fromID   = $objectID;
+            $cardData->fromType = $objectType;
+            $this->dao->insert(TABLE_KANBANCARD)->data($cardData)->exec();
+
+            $cardID = $this->dao->lastInsertID();
+            $objectCards[$cardID] = $objectID;
+        }
+
+        if(!dao::isError())
+        {
+            $cards = implode(',', array_keys($objectCards));
+            $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
+
+            return $objectCards;
+        }
+
+        return false;
+    }
+
+    /**
      * Get kanban by id.
      *
      * @param  int    $kanbanID

@@ -59,7 +59,9 @@ $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 $lang->kanban->showClosed          = '显示已关闭';
 $lang->kanban->importCard          = '转入卡片';
-$lang->kanban->all                 = '所有看板';
+$lang->kanban->allKanban           = '所有看板';
+$lang->kanban->importPlan          = '导入产品计划';
+$lang->kanban->allProducts         = '所有产品';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -89,8 +91,9 @@ $lang->kanban->accessDenied  = '您无权访问该看板';
 $lang->kanban->confirmDelete = '您确认删除吗？';
 $lang->kanban->cardCountTip  = '请输入卡片数量';
 
-$lang->kanban->selectedKanban = '请选择看板';
-$lang->kanban->selectedLane   = '目标泳道';
+$lang->kanban->selectedKanban  = '请选择看板';
+$lang->kanban->selectedProduct = '请选择产品';
+$lang->kanban->selectedLane    = '目标泳道';
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';

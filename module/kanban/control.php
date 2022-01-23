@@ -816,7 +816,7 @@ class kanban extends control
         unset($kanbanPairs[$kanbanID]);
 
         $this->view->cards2Imported   = $cards2Imported;
-        $this->view->kanbanPairs      = array($this->lang->kanban->all) + $kanbanPairs;
+        $this->view->kanbanPairs      = array($this->lang->kanban->allKanban) + $kanbanPairs;
         $this->view->lanePairs        = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager            = $pager;
@@ -825,6 +825,58 @@ class kanban extends control
         $this->view->regionID         = $regionID;
         $this->view->groupID          = $groupID;
         $this->view->columnID         = $columnID;
+
+        $this->display();
+    }
+
+    /**
+     * Import plan.
+     *
+     * @param int $kanbanID
+     * @param int $regionID
+     * @param int $groupID
+     * @param int $columnID
+     * @param int $selectedProductID
+     * @param int $recTotal
+     * @param int $recPerPage
+     * @param int $pageID
+     * @access public
+     * @return void
+     */
+    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        $this->loadModel('product');
+        $this->loadModel('productplan');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productPairs      = $this->product->getPairs();
+        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
+
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'productplan');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $planID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedPlan', '', $planID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->view->products          = $productPairs;
+        $this->view->selectedProductID = $selectedProductID;
+        $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all');
+        $this->view->pager             = $pager;
+        $this->view->kanbanID          = $kanbanID;
+        $this->view->regionID          = $regionID;
+        $this->view->groupID           = $groupID;
+        $this->view->columnID          = $columnID;
 
         $this->display();
     }

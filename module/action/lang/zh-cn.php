@@ -194,6 +194,7 @@ $lang->action->desc->importfromgitlab     = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->archived             = '$date, 由 <strong>$actor</strong> 归档。' . "\n";
 $lang->action->desc->restore              = '$date, 由 <strong>$actor</strong> 还原。' . "\n";
 $lang->action->desc->importedcard         = '$date, 由 <strong>$actor</strong> 从看板 <strong>$extra</strong> 导入。' . "\n";
+$lang->action->desc->importedplan         = '$date, 由 <strong>$actor</strong> 从产品计划 <strong>$extra</strong> 导入。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -334,6 +335,7 @@ $lang->action->label->activatedbychild      = '激活了';
 $lang->action->label->createchild           = '激活了';
 $lang->action->label->executed              = '执行了';
 $lang->action->label->importedcard          = '导入了';
+$lang->action->label->importedplan          = '导入了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

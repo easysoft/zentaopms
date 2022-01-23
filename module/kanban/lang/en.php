@@ -59,7 +59,9 @@ $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
 $lang->kanban->showClosed          = 'Closed';
 $lang->kanban->importCard          = 'Import Card';
-$lang->kanban->all                 = 'All Kanban';
+$lang->kanban->allKanban           = 'All Kanban';
+$lang->kanban->importPlan          = 'Import Plan';
+$lang->kanban->allProducts         = 'All Products';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';
@@ -89,8 +91,9 @@ $lang->kanban->accessDenied  = "You have no access to the kanban.";
 $lang->kanban->confirmDelete = 'Do you want to delete this?';
 $lang->kanban->cardCountTip  = 'Please enter the number of cards';
 
-$lang->kanban->selectedKanban = 'Please select Kanban';
-$lang->kanban->selectedLane   = 'Target Lane';
+$lang->kanban->selectedKanban  = 'Please select Kanban';
+$lang->kanban->selectedProduct = 'Please select Product';
+$lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';
 $lang->kanban->aclGroup['private'] = 'Private';
