@@ -15,6 +15,7 @@ $lang->gitlab->confirmDelete     = 'Do you want to delete this GitLab server?';
 $lang->gitlab->gitlabAccount     = 'GitLab Account';
 $lang->gitlab->zentaoAccount     = 'Zentao Account';
 $lang->gitlab->bindingStatus     = 'Binding Status';
+$lang->gitlab->notBind           = 'Not bind';
 $lang->gitlab->binded            = 'Binded';
 $lang->gitlab->bindedError       = 'The bound user has been deleted or modified. Please bind again.';
 $lang->gitlab->serverFail        = 'Connect to GitLab server failed, please check the GitLab server.';

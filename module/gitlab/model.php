@@ -544,13 +544,15 @@ class gitlabModel extends model
      *
      * @param  int    $gitlabID
      * @param  int    $groupID
+     * @param  int    $userID
      * @access public
      * @return object
      */
-    public function apiGetGroupMembers($gitlabID, $groupID)
+    public function apiGetGroupMembers($gitlabID, $groupID, $userID = 0)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/$groupID/members/all");
+        if($userID) $url .= "&user_ids=$userID";
 
         $allResults = array();
         for($page = 1; true; $page++)
