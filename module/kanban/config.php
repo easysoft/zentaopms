@@ -44,6 +44,9 @@ $config->kanban->editor->close       = array('id' => 'comment', 'tools' => 'simp
 $config->kanban->editor->editcard    = array('id' => 'desc', 'tools' => 'simpleTools');
 $config->kanban->editor->viewcard    = array('id' => 'comment', 'tools' => 'simpleTools');
 
+$config->kanban->fromType       = array('execution', 'productplan', 'release', 'build');
+$config->kanban->executionField = array('name', 'status', 'end', 'PM', 'type', 'deleted');
+
 $config->kanban->default = new stdclass();
 $config->kanban->default->story  = new stdclass();
 $config->kanban->default->story->name  = $lang->SRCommon;

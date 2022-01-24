@@ -948,37 +948,9 @@ class kanbanModel extends model
             ->andWhere('fromID')->eq(0)
             ->fetchAll('id');
 
-        $executionCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
-            ->where('deleted')->eq(0)
-            ->andWhere('kanban')->eq($kanbanID)
-            ->andWhere('archived')->eq(0)
-            ->andWhere('fromType')->eq('execution')
-            ->fetchAll('fromID');
-
-        if(!empty($executionCards))
+        foreach($this->config->kanban->fromType as $fromType)
         {
-            $executions = $this->dao->select('*')->from(TABLE_PROJECT)
-                ->where('id')->in(array_keys($executionCards))
-                ->fetchAll('id');
-            foreach($executionCards as $executionCard)
-            {
-                $execution = $executions[$executionCard->fromID];
-
-                $executionCard->name     = $execution->name;
-                $executionCard->status   = $execution->status;
-                $executionCard->end      = $execution->end;
-                $executionCard->PM       = $execution->PM;
-                $executionCard->execType = $execution->type;
-                $executionCard->deleted  = $execution->deleted;
-
-                if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
-                {
-                    $delay = helper::diffDate(helper::today(), $execution->end);
-                    if($delay > 0) $executionCard->delay = $delay;
-                }
-
-                $cards[$executionCard->id] = $executionCard;
-            }
+            $cards = $this->getImportCards($kanbanID, $cards, $fromType);
         }
 
         $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
@@ -1018,6 +990,54 @@ class kanbanModel extends model
         }
 
         return $cardGroup;
+    }
+
+    /**
+     * Get import cards.
+     *
+     * @param  int    $kanbanID
+     * @param  object $cards
+     * @param  string $fromType
+     * @access public
+     * @return void
+     */
+    public function getImportCards($kanbanID, $cards, $fromType)
+    {
+        $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->eq($kanbanID)
+            ->andWhere('archived')->eq(0)
+            ->andWhere('fromType')->eq($fromType)
+            ->fetchAll('fromID');
+
+        if(!empty($objectCards))
+        {
+            $table   = $this->config->objectTables[$fromType];
+            $objects = $this->dao->select('*')->from($table)
+                ->where('id')->in(array_keys($objectCards))
+                ->fetchAll('id');
+
+            foreach($objectCards as $objectCard)
+            {
+                $object    = $objects[$objectCard->fromID];
+                $fieldType = $fromType . 'Field';
+
+                foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
+
+                if($fromType =='execution')
+                {
+                    if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
+                    {
+                        $delay = helper::diffDate(helper::today(), $object->end);
+                        if($delay > 0) $objectCard->delay = $delay;
+                    }
+                    $objectCard->execType = $object->type;
+                }
+
+                $cards[$objectCard->id] = $objectCard;
+            }
+        }
+        return $cards;
     }
 
     /**
