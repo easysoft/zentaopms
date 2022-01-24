@@ -45,3 +45,26 @@ function initColorPicker()
     })
 }
 
+/**
+ * Reload object list.
+ *
+ * @param  int $targetID
+ * @access public
+ * @return void
+ */
+function reloadObjectList(targetID)
+{
+    location.href = createLink('kanban', methodName, 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID + '&targetID=' + targetID);
+}
+
+/**
+ * Set target lane ID.
+ *
+ * @param  int $targetLaneID
+ * @access public
+ * @return void
+ */
+function setTargetLane(targetLaneID)
+{
+    $('#targetLane').val(targetLaneID);
+}

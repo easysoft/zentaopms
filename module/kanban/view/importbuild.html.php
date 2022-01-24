@@ -16,6 +16,7 @@
 <?php js::set('regionID', $regionID);?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
+<?php js::set('methodName', $this->app->rawMethod);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -24,7 +25,7 @@
   </div>
   <div class='table-row' style="padding: 10px">
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedProject;?></h4></div>
-    <div class='table-col'><?php echo html::select('project', $projects, $selectedProjectID, "onchange='reloadBuildList(this.value)' class='form-control chosen'");?></div>
+    <div class='table-col'><?php echo html::select('project', $projects, $selectedProjectID, "onchange='reloadObjectList(this.value)' class='form-control chosen'");?></div>
   </div>
   <div class='table-row' style="padding: 10px">
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
@@ -58,8 +59,8 @@
             <?php printf('%03d', $build->id);?>
           </td>
           <td title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
-          <?php if(common::hasPriv('project', 'build')):?>
-          <td title='<?php echo $build->name;?>'><?php common::printLink('project', 'build', "projectID=$build->project", $build->name, '', "class='iframe'", true, true);?></td>
+          <?php if(common::hasPriv('build', 'view')):?>
+          <td title='<?php echo $build->name;?>'><?php common::printLink('build', 'view', "buildID=$build->id", $build->name, '', "class='iframe'", true, true);?></td>
           <?php else:?>
           <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
           <?php endif;?>

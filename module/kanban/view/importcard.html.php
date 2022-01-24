@@ -16,6 +16,7 @@
 <?php js::set('regionID', $regionID);?>
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
+<?php js::set('methodName', $this->app->rawMethod);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -24,7 +25,7 @@
   </div>
   <div class='table-row' style="padding: 10px">
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedKanban;?></h4></div>
-    <div class='table-col'><?php echo html::select('kanban', $kanbanPairs, $selectedKanbanID, "onchange='reloadCardList(this.value)' class='form-control chosen'");?></div>
+    <div class='table-col'><?php echo html::select('kanban', $kanbanPairs, $selectedKanbanID, "onchange='reloadObjectList(this.value)' class='form-control chosen'");?></div>
   </div>
   <div class='table-row' style="padding: 10px">
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>

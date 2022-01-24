@@ -863,7 +863,7 @@ class kanban extends control
 
             foreach($importedIDList as $cardID => $planID)
             {
-                $this->loadModel('action')->create('kanbancard', $cardID, 'importedPlan', '', $planID);
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedProductplan', '', $planID);
             }
 
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
