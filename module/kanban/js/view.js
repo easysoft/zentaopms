@@ -280,6 +280,10 @@ function renderKanbanItem(item, $item)
     {
         renderExecutionItem(item, $item);
     }
+    else if(item.fromType == 'release')
+    {
+        renderReleaseItem(item, $item);
+    }
     else
     {
         var $title       = $item.children('.title');
@@ -457,9 +461,72 @@ function renderExecutionItem(item, $item)
     /* Display avatars of PM. */
     var $user = $info.children('.user');
     var user  = [item.PM];
-    if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+    if(users[item.PM])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.PM]);
+    }
+}
 
-    $user.html(renderUsersAvatar(user, item.id)).attr('title', item.PM);
+/**
+ * Render plan item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderReleaseItem(item, $item)
+{
+    var privs = item.actions;
+
+    /* Print  name. */
+    var $title = $item.children('.releaseTitle');
+    if(!$title.length)
+    {
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($item);
+    }
+    $title.attr('title', item.name);
+
+    var $info = $item.children('.releaseInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="releaseInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.releaseStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="releaseStatus label label-' + item.status + '">' + releaseLang.statusList[item.status] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="releaseStatus label label-deleted">' + releaseLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display release date. */
+    var $date       = $info.children('.date');
+    var releaseDate = $.zui.createDate(item.date);
+    var today       = new Date();
+    var labelType   = releaseDate.toLocaleDateString() == today.toLocaleDateString() ? 'light' : 'wait';
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(releaseDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(releaseDate, 'yyyy-MM-dd')).show();
+    if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
 }
 
 /**

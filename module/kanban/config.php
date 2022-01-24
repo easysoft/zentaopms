@@ -47,7 +47,7 @@ $config->kanban->editor->viewcard    = array('id' => 'comment', 'tools' => 'simp
 $config->kanban->fromType         = array('execution', 'productplan', 'release', 'build');
 $config->kanban->executionField   = array('name', 'status', 'end', 'PM', 'type', 'deleted');
 $config->kanban->productplanField = array();
-$config->kanban->releaseField     = array('name', 'status', 'date');
+$config->kanban->releaseField     = array('name', 'status', 'date', 'deleted');
 $config->kanban->buildField       = array();
 
 $config->kanban->default = new stdclass();
