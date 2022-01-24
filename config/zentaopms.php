@@ -145,6 +145,11 @@ $config->openMethods[] = 'doc.selectlibtype';
 $config->openMethods[] = 'sso.getfeishusso';
 $config->openMethods[] = 'sso.feishuauthen';
 $config->openMethods[] = 'sso.feishulogin';
+$config->openMethods[] = 'kanban.importcard';
+$config->openMethods[] = 'kanban.importplan';
+$config->openMethods[] = 'kanban.importrelease';
+$config->openMethods[] = 'kanban.importexecution';
+$config->openMethods[] = 'kanban.importbuild';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
