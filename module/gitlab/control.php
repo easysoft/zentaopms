@@ -314,7 +314,7 @@ class gitlab extends control
         }
 
         $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->config->gitlab->accessLevel['owner']);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->config->gitlab->accessLevel['maintainer']);
 
         $adminGropuIDList = array();
         foreach($adminGroups as $group) $adminGropuIDList[] = $group->id;

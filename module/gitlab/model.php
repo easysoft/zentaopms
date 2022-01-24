@@ -155,7 +155,7 @@ class gitlabModel extends model
     {
         if(!$account) $account = $this->app->user->account;
 
-        return $this->dao->select('providerID')->from(TABLE_OAUTH)
+        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
             ->where('providerType')->eq('gitlab')
             ->andWhere('account')->eq($account)
             ->fetchPairs('providerID');

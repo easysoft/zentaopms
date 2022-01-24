@@ -82,11 +82,12 @@
           <?php endif;?>
           <td class='c-actions'>
             <?php
+            $canDelete = ($app->user->admin or $projects[$MR->gitlabID][$MR->sourceProject]->owner->id === $openIDList[$MR->gitlabID]) ? '' : 'disabled';
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
             common::printIcon('mr', 'edit',   "mr={$MR->id}", $MR, 'list');
             common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-diff"></i>', '', "title='{$lang->mr->viewDiff}' class='btn btn-info'");
             common::printLink('mr', 'link',   "mr={$MR->id}", '<i class="icon icon-link"></i>', '', "title='{$lang->mr->link}' class='btn btn-info'" . ($MR->linkButton == false ? 'disabled' : ''));
-            common::printLink('mr', 'delete', "mr={$MR->id}", '<i class="icon icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn btn-info'");
+            common::printLink('mr', 'delete', "mr={$MR->id}", '<i class="icon icon-trash"></i>', 'hiddenwin', "title='{$lang->mr->delete}' class='btn btn-info {$canDelete}'");
             ?>
           </td>
         </tr>
