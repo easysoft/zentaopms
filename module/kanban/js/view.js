@@ -378,7 +378,7 @@ function renderExecutionItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
-    var $titleBox = $item.children('.executionName');
+    var $titleBox = $header.children('.executionName');
     if(!$titleBox.length) $titleBox = $(
     [
         '<div class="executionName">',
@@ -434,7 +434,7 @@ function renderExecutionItem(item, $item)
     var end       = $.zui.createDate(item.end);
     var today     = new Date();
     var labelType = end.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
-    if(!$date.length) $date = $('<span class="label label-' + labelType + '"></span>').appendTo($info);
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
 
     $date.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
 
