@@ -51,9 +51,9 @@
           <td class='c-id'><?php printf('%03d', $project->id);?></td>
           <td class='c-name text-left' title='<?php echo $project->name?>'>
             <?php
-                if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->waterfall}</span> ";
-                if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$lang->project->scrum}</span> ";
-                if($project->model === 'kanban')    echo "<span class='project-type-label label label-outline label-info'>{$lang->project->kanban}</span> ";
+            if($project->model === 'waterfall') echo "<span class='project-type-label label label-outline label-warning'>{$lang->project->waterfall}</span> ";
+            if($project->model === 'scrum')     echo "<span class='project-type-label label label-outline label-info'>{$lang->project->scrum}</span> ";
+            if($project->model === 'kanban')    echo "<span class='project-type-label label label-outline label-info'>{$lang->project->kanban}</span> ";
             echo html::a($this->createLink('project', 'index', "projectID=$project->id", '', '', $project->id), $project->name, '', "data-group='project'");
             ?>
           </td>
