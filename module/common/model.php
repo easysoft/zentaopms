@@ -537,7 +537,11 @@ class commonModel extends model
                         $attr         = "class='iframe' data-width='650px'";
                         break;
                     case 'project':
-                        if(!defined('TUTORIAL'))
+                        if($config->vision == 'lite')
+                        {
+                            $params = "model=kanban";
+                        }
+                        else if(!defined('TUTORIAL'))
                         {
                             $params       = "programID=0&copyProjectID=0&extra=from=global";
                             $createMethod = 'createGuide';
@@ -556,9 +560,7 @@ class commonModel extends model
                         if(!$productID and $config->vision == 'lite')
                         {
                             $module       = 'project';
-                            $params       = "programID=0&copyProjectID=0&extra=from=global";
-                            $createMethod = 'createGuide';
-                            $attr         = 'data-toggle="modal"';
+                            $params       = "model=kanban";
                         }
                         else
                         {

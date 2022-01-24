@@ -882,6 +882,8 @@ class actionModel extends model
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
             ->markRight(1)
+            /* Types excluded from Lite. */
+            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
