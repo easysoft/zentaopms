@@ -2756,6 +2756,8 @@ class gitlabModel extends model
      */
     public function checkUserAccess($gitlabID, $openID = 0, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
     {
+        if($this->app->user->admin) return true;
+
         if($project == null) $project = $this->apiGetSingleProject($gitlabID, $projectID);
         if(!$openID or !isset($project->id)) return false;
 
