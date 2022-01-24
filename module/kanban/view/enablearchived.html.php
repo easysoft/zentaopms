@@ -6,7 +6,7 @@
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Runyu Zheng <zhengrunyu@easycorp.ltd>
  * @package     kanban
- * @version     $Id: setarchivedfunction.html.php 935 2022-01-21 11:02:24Z $
+ * @version     $Id: enableArchived.html.php 935 2022-01-21 11:02:24Z $
  * @link        https://www.zentao.net
  */
 ?>
@@ -19,7 +19,7 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanban->ArchivedFunction;?></th>
+          <th><?php echo $lang->kanban->archivedFunction;?></th>
           <td><?php echo nl2br(html::radio('archived', $lang->kanban->enableArchived, $kanban->archived));?></td>
         </tr>
         <tr>
