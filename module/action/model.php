@@ -1053,6 +1053,13 @@ class actionModel extends model
                 $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
                 if($user) $action->objectName = $user->realname;
             }
+            elseif($action->objectType == 'kanbancard' and strpos($action->action, 'imported') !== false and $action->action != 'importedcard')
+            {
+                $objectType  = str_replace('imported', '', $action->action);
+                $objectTable = zget($this->config->objectTables, $objectType);
+                $objectName  = $objectType == 'productplan' ? 'title' : 'name';
+                $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
+            }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;
 

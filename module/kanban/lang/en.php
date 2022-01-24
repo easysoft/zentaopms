@@ -59,11 +59,13 @@ $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
 $lang->kanban->showClosed          = 'Closed';
 $lang->kanban->importCard          = 'Import Card';
-$lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->importPlan          = 'Import Plan';
-$lang->kanban->allProducts         = 'All Products';
-$lang->kanban->importExecution     = 'Import Execution';
+$lang->kanban->importRelease       = 'Import Release';
+$lang->kanban->importExecution     = 'Import ' . $lang->execution->common;
+$lang->kanban->importBuild         = 'Import Build';
+$lang->kanban->allKanban           = 'All Kanban';
 $lang->kanban->allProjects         = 'All Projects';
+$lang->kanban->allProducts         = 'All Products';
 
 /* Fields. */
 $lang->kanban->space          = 'Space';

@@ -56,10 +56,11 @@ class buildModel extends model
      * @param  string $type
      * @param  int    $param
      * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc')
+    public function getProjectBuilds($projectID = 0, $type = 'all', $param = 0, $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name as executionName, t2.id as executionID, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
@@ -72,6 +73,7 @@ class buildModel extends model
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 
@@ -243,7 +245,7 @@ class buildModel extends model
                 $branchName = $allBuilds[$buildID]->branchName ? $allBuilds[$buildID]->branchName : $this->lang->branch->main;
                 $builds[$buildID] = (strpos($params, 'withbranch') !== false ? $branchName . '/' : '') . $releaseName;
             }
-        } 
+        }
 
         return $sysBuilds + $builds + $selectedBuilds;
     }
