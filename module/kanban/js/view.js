@@ -993,10 +993,6 @@ $(function()
         $('.import').parent().addClass('dropdown-submenu top');
 
         /* The submenu of import. */
-        var importPlanLink      = createLink('kanban', 'importPlan');
-        var importReleaseLink   = createLink('kanban', 'importRelease');
-        var importExecutionLink = createLink('kanban', 'importExecution');
-        var importBuildLink     = createLink('kanban', 'importBuild');
         var importPlanLink      = kanban.importObject.indexOf('plan') != -1 ? '<li><a href="' + createLink('kanban', 'importPlan') + '">' + kanbanLang.importPlan + '</a></li>' : '';
         var importReleaseLink   = kanban.importObject.indexOf('release') != -1 ? '<li><a href="' + createLink('kanban', 'importRelease') + '">' + kanbanLang.importRelease + '</a></li>' : '';
         var importExecutionLink = kanban.importObject.indexOf('execution') != -1 ? '<li><a href="' + createLink('kanban', 'importExecution') + '">' + kanbanLang.importExecution + '</a></li>' : '';
