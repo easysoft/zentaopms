@@ -857,17 +857,13 @@ class projectModel extends model
         {
             $projectID = $this->dao->lastInsertId();
 
-            /* Add the creator to team. */
-            $this->app->loadLang('user');
-
             /* Set team of project. */
-            $creatorExists = false;
-            $teamMembers   = array();
-
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
-            array_push($members, $project->PM);
+            array_push($members, $project->PM, $project->openedBy);
             $members = array_unique($members);
             $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
+
+            $teamMembers = array();
             foreach($members as $account)
             {
                 if(empty($account)) continue;
@@ -881,22 +877,7 @@ class projectModel extends model
                 $member->days    = zget($project, 'days', 0);
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                if($member->account == $this->app->user->account) $creatorExists = true;
                 $teamMembers[$account] = $member;
-            }
-
-            if(!$creatorExists)
-            {
-                $member = new stdClass();
-                $member->root    = $projectID;
-                $member->type    = 'project';
-                $member->account = $this->app->user->account;
-                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
-                $member->join    = helper::now();
-                $member->days    = zget($project, 'days', 0);
-                $member->hours   = $this->config->execution->defaultWorkhours;
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                $teamMembers[$member->account] = $member;
             }
             if($this->config->systemMode == 'new') $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
