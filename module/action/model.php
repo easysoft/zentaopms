@@ -1301,6 +1301,11 @@ class actionModel extends model
                 {
                     $params = sprintf($vars, trim($action->product, ','));
                 }
+                elseif($action->objectType == 'kanbanspace')
+                {
+                    $kanbanSpace = $this->dao->select('type')->from(TABLE_KANBANSPACE)->where('id')->eq($action->objectID)->fetch();
+                    $params = sprintf($vars, $kanbanSpace->type);
+                }
                 elseif($action->objectType == 'kanbancolumn' or $action->objectType == 'kanbanlane')
                 {
                     $params = sprintf($vars, $action->extra);

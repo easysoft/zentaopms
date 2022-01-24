@@ -27,6 +27,8 @@ $lang->kanban->sortColumn          = '看板列排序';
 $lang->kanban->deleteColumn        = '删除看板列';
 $lang->kanban->createCard          = '创建卡片';
 $lang->kanban->editCard            = '编辑卡片';
+$lang->kanban->finishCard          = '完成卡片';
+$lang->kanban->activateCard        = '激活卡片';
 $lang->kanban->viewCard            = '查看卡片';
 $lang->kanban->archiveCard         = '归档卡片';
 $lang->kanban->sortCard            = '卡片排序';
@@ -37,7 +39,9 @@ $lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
-$lang->kanban->setDoneFunction     = '设置完成功能';
+$lang->kanban->enableArchived      = '设置归档功能';
+$lang->kanban->archive             = '归档功能';
+$lang->kanban->performable         = '设置完成功能';
 $lang->kanban->doneFunction        = '完成功能';
 $lang->kanban->splitColumn         = '新增子看板列';
 $lang->kanban->createColumnOnLeft  = '左侧新增看板列';
@@ -57,6 +61,9 @@ $lang->kanban->restoreColumn       = '还原看板列';
 $lang->kanban->restoreCard         = '还原卡片';
 $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
+$lang->kanban->batchCreateCard     = '批量创建卡片';
+$lang->kanban->import              = '导入功能';
+$lang->kanban->importAB            = '导入';
 $lang->kanban->showClosed          = '显示已关闭';
 $lang->kanban->importCard          = '转入卡片';
 $lang->kanban->importPlan          = '导入产品计划';
@@ -107,8 +114,8 @@ $lang->kanban->aclGroup['extend']  = '继承空间';
 $lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
-$lang->kanban->enableArchived['0'] = '不启用';
-$lang->kanban->enableArchived['1'] = '启用';
+$lang->kanban->archiveList['0'] = '不启用';
+$lang->kanban->archiveList['1'] = '启用';
 
 $lang->kanban->enableFinished['0'] = '不启用';
 $lang->kanban->enableFinished['1'] = '启用';
@@ -174,9 +181,21 @@ $lang->kanban->my                 = '我的看板';
 $lang->kanban->other              = '其他';
 
 $lang->kanban->error = new stdclass();
-$lang->kanban->error->mustBeInt       = '在制品数量必须是正整数。';
-$lang->kanban->error->parentLimitNote = '父列的在制品数量不能小于子列在制品数量之和';
-$lang->kanban->error->childLimitNote  = '子列在制品数量之和不能大于父列的在制品数量';
+$lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。';
+$lang->kanban->error->parentLimitNote   = '父列的在制品数量不能小于子列在制品数量之和';
+$lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大于父列的在制品数量';
+$lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
+
+$lang->kanban->importList = array();
+$lang->kanban->importList['off'] = '不启用导入功能';
+$lang->kanban->importList['on']  = '启用导入功能，只能导入自己有权限查看的内容';
+
+$lang->kanban->importObjectList = array();
+$lang->kanban->importObjectList['plan']      = '产品计划';
+$lang->kanban->importObjectList['release']   = '产品发布';
+$lang->kanban->importObjectList['build']     = '项目版本';
+$lang->kanban->importObjectList['execution'] = '项目执行';
+$lang->kanban->importObjectList['cards']     = '其他看板卡片';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = '未开始';
@@ -257,9 +276,9 @@ $lang->kanbancolumn->childName  = '子列名称';
 $lang->kanbancolumn->childColor = '子状态颜色';
 $lang->kanbancolumn->empty      = '暂时没有看板列';
 
-$lang->kanbancolumn->confirmArchive = '您确认归档该列吗？归档列后，该列和列中所有卡片将被隐藏，您可以在区域-已归档中查看已归档的列。';
-$lang->kanbancolumn->confirmDelete  = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
-$lang->kanbancolumn->confirmRestore = '您确定要还原该看板列吗？还原看板列后，该看板列和看板列中所有的任务将同时还原到之前的位置。';
+$lang->kanbancolumn->confirmArchive = '您确认归档该列吗？归档列后，该列将被隐藏，列中所有卡片移动到兄弟列或父列，您可以在区域-已归档中查看已归档的列。';
+$lang->kanbancolumn->confirmDelete  = '您确认删除该列吗？删除列后，该列中所有卡片会被移动到兄弟列或父列。';
+$lang->kanbancolumn->confirmRestore = '您确定要还原该看板列吗？还原后，该看板列将回到之前的位置。';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name      = $lang->kanban->laneName;
@@ -325,6 +344,7 @@ $lang->kanbancard->beginAB         = '开始';
 $lang->kanbancard->to              = '~';
 $lang->kanbancard->archived        = '已归档';
 $lang->kanbancard->empty           = '暂时没有卡片';
+$lang->kanbancard->ditto           = '同上';
 
 $lang->kanbancard->confirmArchive    = '您确认归档该卡片吗？归档卡片后，该卡片将从列中隐藏，您可以在区域-已归档中查看。';
 $lang->kanbancard->confirmDelete     = '您确认删除该卡片吗？删除卡片后，该卡片将从看板中删除，您只能通过系统回收站查看。';

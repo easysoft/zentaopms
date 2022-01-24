@@ -548,6 +548,80 @@ class kanbanModel extends model
         return false;
     }
 
+    /*
+     * Batch create kanban cards.
+     * @access public
+     * @return void
+     */
+    public function batchCreateCard($kanbanID, $regionID, $groupID, $columnID)
+    {
+        foreach($_POST['name'] as $index => $value)
+        {
+            if($_POST['name'][$index] and isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = implode(',', $_POST['assignedTo'][$index]);
+        }
+        $cards = fixer::input('post')->get();
+
+        $now   = helper::now();
+        $data  = array();
+        $lanes = array();
+        $lane  = '';
+        $begin = '0000-00-00';
+        $end   = '0000-00-00';
+
+        foreach($cards->name as $i => $name)
+        {
+            $lane  = ($cards->lane[$i] == 'ditto')   ? $lane  : $cards->lane[$i];
+            $begin = (isset($cards->beginDitto[$i])) ? $begin : $cards->begin[$i];
+            $end   = (isset($cards->endDitto[$i]))   ? $end   : $cards->end[$i];
+
+            if(empty($cards->name[$i])) continue;
+            $data[$i]               = new stdclass();
+            $data[$i]->name         = trim($cards->name[$i]);
+            $data[$i]->begin        = $begin;
+            $data[$i]->end          = $end;
+            $data[$i]->assignedTo   = $cards->assignedTo[$i];
+            $data[$i]->desc         = nl2br($cards->desc[$i]);
+            $data[$i]->pri          = $cards->pri[$i];
+            $data[$i]->kanban       = $kanbanID;
+            $data[$i]->region       = $regionID;
+            $data[$i]->group        = $groupID;
+            $data[$i]->createdBy    = $this->app->user->account;
+            $data[$i]->createdDate  = $now;
+            $data[$i]->assignedDate = $now;
+            $data[$i]->color        = '#fff';
+            $data[$i]->estimate     = is_numeric($cards->estimate[$i]) ? (float)$cards->estimate[$i] : $cards->estimate[$i];
+
+            $lanes[$i] = $lane;
+        }
+
+        foreach($data as $i => $card)
+        {
+            $this->dao->insert(TABLE_KANBANCARD)->data($card)->autoCheck()
+                ->checkIF($card->estimate != '', 'estimate', 'float')
+                ->batchCheck($this->config->kanban->createcard->requiredFields, 'notempty')
+                ->exec();
+
+            if($card->estimate < 0)
+            {
+                dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
+                return false;
+            }
+            if($card->end && $card->begin > $card->end)
+            {
+                dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+                return false;
+            }
+
+            if(!dao::isError())
+            {
+                $cardID = $this->dao->lastInsertID();
+                $lane = $lanes[$i];
+                $this->addKanbanCell($kanbanID, $lane, $columnID, 'common', $cardID);
+                $this->loadModel('action')->create('kanbancard', $cardID, 'created');
+            }
+        }
+    }
+
     /**
      * Get kanban by id.
      *
@@ -887,7 +961,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'splitColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'import', 'sortColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -958,7 +1032,8 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution');
+        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution');
+
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -969,7 +1044,10 @@ class kanbanModel extends model
             {
                 if(!isset($cards[$cardID])) continue;
 
-                $card = zget($cards, $cardID);
+                $card         = zget($cards, $cardID);
+                $card->column = $cell->column;
+                $card->lane   = $cell->lane;
+
                 $card->actions = array();
                 foreach($actions as $action)
                 {
@@ -1564,7 +1642,7 @@ class kanbanModel extends model
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
 
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
         if($this->app->user->admin) return array_keys($objects);
 
@@ -1581,7 +1659,9 @@ class kanbanModel extends model
             if($objectType == 'kanban')
             {
                 $spaceOwner = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                $spaceType  = isset($spaceList[$object->space]->type) ? $spaceList[$object->space]->type : '';
                 if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                if($spaceType == 'public') $remove = false;
             }
 
             if($remove) unset($objects[$objectID]);
@@ -1603,13 +1683,14 @@ class kanbanModel extends model
             ->setDefault('createdBy', $account)
             ->setDefault('createdDate', helper::now())
             ->setdefault('team', '')
-            ->setdefault('owner', $account)
             ->setdefault('whitelist', '')
             ->join('whitelist', ',')
             ->join('team', ',')
             ->trim('name')
             ->remove('uid,contactListMenu')
             ->get();
+
+        if($space->type == 'private') $space->owner = $account;
 
         if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
 
@@ -2720,20 +2801,22 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
             $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'enableArchived')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link'") . '</li>';
             if($printSetHeight)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
                 $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
             }
-            if(common::hasPriv('kanban', 'setDoneFunction')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setDoneFunction', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link'") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
@@ -2742,7 +2825,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }
@@ -2817,9 +2900,10 @@ class kanbanModel extends model
         $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
 
-        $fromCardList = str_replace("$cardID,", '', $fromCellCards);
+        $fromCardList = str_replace(",$cardID,", ',', $fromCellCards);
         $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
 
+        if($fromCardList == ',') $fromCardList = '';
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }
@@ -2897,6 +2981,39 @@ class kanbanModel extends model
      */
     public function restoreColumn($columnID)
     {
+        $column = $this->getColumnByID($columnID);
+
+        if($column->parent)
+        {
+            $parent = $this->getColumnByID($column->parent);
+
+            /* If the parent column is normal now, put its card into child column. */
+            if($parent->parent != -1)
+            {
+                $parentCells = $this->dao->select('*')->from(TABLE_KANBANCELL)
+                    ->where('`column`')->eq($column->parent)
+                    ->andWhere('type')->eq('common')
+                    ->fetchAll('id');
+
+                foreach($parentCells as $cell)
+                {
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)
+                        ->where('lane')->eq($cell->lane)
+                        ->andWhere('`column`')->eq($columnID)
+                        ->andWhere('type')->eq('common')
+                        ->exec();
+
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')
+                        ->where('lane')->eq($cell->lane)
+                        ->andWhere('`column`')->eq($cell->column)
+                        ->andWhere('type')->eq('common')
+                        ->exec();
+                }
+
+                $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($column->parent)->exec();
+            }
+        }
+
         $this->dao->update(TABLE_KANBANCOLUMN)
             ->set('archived')->eq(0)
             ->where('id')->eq($columnID)
@@ -2947,6 +3064,53 @@ class kanbanModel extends model
         $card = $this->getCardByID($cardID);
 
         if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
+     * Process cards when delete a column. 
+     * 
+     * @param  object $column 
+     * @access public
+     * @return void
+     */
+    public function processCards($column)
+    {
+        $firstColumnID = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)
+            ->where('parent')->eq($column->parent)
+            ->andWhere('id')->ne($column->id)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('archived')->eq('0')
+            ->orderBy('`order` asc')
+            ->fetch('id');
+
+        $extendID = $firstColumnID;
+        if(!$firstColumnID)
+        {
+            $extendID = $column->parent;
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
+        }
+
+        $cells = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('`column`')->eq($column->id)
+            ->andWhere('type')->eq('common')
+            ->fetchAll('id');
+
+        foreach($cells as $cell)
+        {
+            $extendCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)
+                ->where('lane')->eq($cell->lane)
+                ->andWhere('`column`')->eq($extendID)
+                ->andWhere('type')->eq('common')
+                ->fetch('cards');
+
+            $extendCards = $extendCards ? $extendCards . ltrim($cell->cards, ',') : $cell->cards;
+
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($extendCards)
+                ->where('lane')->eq($cell->lane)
+                ->andWhere('`column`')->eq($extendID)
+                ->andWhere('type')->eq('common')
+                ->exec();
+        }
     }
 
     /**
@@ -3276,18 +3440,6 @@ class kanbanModel extends model
             case 'deletecolumn' :
                 if($object->deleted != '0') return false;
 
-                if($object->parent > 0)
-                {
-                    $childrenCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
-                        ->where('parent')->eq($object->parent)
-                        ->andWhere('deleted')->eq('0')
-                        ->andWhere('archived')->eq('0')
-                        ->fetch('count');
-
-                    return $childrenCount > 2;
-                }
-
-
                 $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
                     ->where('region')->eq($object->region)
                     ->andWhere('parent')->in('0,-1')
@@ -3297,8 +3449,25 @@ class kanbanModel extends model
                     ->fetch('count');
 
                 return $count > 1;
+            case 'sortColumn' :
+                if($object->deleted != '0') return false;
         }
 
         return true;
+    }
+
+    /**
+     * Import.
+     *
+     * @param  int    $kanbanID
+     * @access public
+     * @return void
+     */
+    public function import($kanbanID)
+    {
+        $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
+        $importObjectList = implode(',', $importObjects);
+
+        $this->dao->update(TABLE_KANBAN)->set('object')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
     }
 }

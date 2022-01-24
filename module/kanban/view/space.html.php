@@ -50,7 +50,7 @@
         </div>
         <div class='spaceActions pull-right'>
           <?php $class = $space->status == 'closed' ? 'disabled' : '';?>
-          <?php if($space->status != 'closed' and $browseType != 'involved') common::printLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
+          <?php if($space->status != 'closed' and $browseType != 'involved' and !empty($unclosedSpace)) common::printLink('kanban', 'create', "spaceID={$space->id}&type={$space->type}", '<i class="icon icon-plus"></i> ' . $lang->kanban->create, '', "class='iframe' data-width='75%'", '', true);?>
           <?php common::printLink('kanban', 'editSpace', "spaceID={$space->id}", '<i class="icon icon-cog-outline"></i> ' . $lang->kanban->setting, '', "class='iframe' data-width='75%'", '', true);?>
           <?php common::printLink('kanban', 'closeSpace', "spaceID={$space->id}", '<i class="icon icon-off"></i> ' . $lang->close, '', "class='iframe {$class}'", '', true);?>
           <?php common::printLink('kanban', 'deleteSpace', "spaceID={$space->id}", '<i class="icon icon-trash"></i> ' . $lang->delete, 'hiddenwin', '', '', true);?>
