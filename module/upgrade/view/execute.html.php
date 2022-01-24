@@ -22,8 +22,15 @@
       <?php endif;?>
     </div>
     <?php if($result == 'fail'):?>
-    <div class='modal-footer text-left'><?php echo $lang->upgrade->afterDeleted;?> <?php echo html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='location.reload()'");?></div>
+    <div class='modal-footer text-left'><?php echo $lang->upgrade->afterDeleted;?> <?php echo html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage(this)'");?></div>
     <?php endif;?>
   </div>
 </div>
+<script>
+function refreshPage(obj)
+{
+    $(obj).attr('disabled', true);
+    location.reload()
+}
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>
