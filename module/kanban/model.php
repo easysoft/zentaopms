@@ -950,7 +950,7 @@ class kanbanModel extends model
 
         foreach($this->config->kanban->fromType as $fromType)
         {
-            $cards = $this->getImportCards($kanbanID, $cards, $fromType);
+            $cards = $this->getImportedCards($kanbanID, $cards, $fromType);
         }
 
         $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
@@ -993,15 +993,15 @@ class kanbanModel extends model
     }
 
     /**
-     * Get import cards.
+     * Get imported cards.
      *
      * @param  int    $kanbanID
      * @param  object $cards
      * @param  string $fromType
      * @access public
-     * @return void
+     * @return array
      */
-    public function getImportCards($kanbanID, $cards, $fromType)
+    public function getImportedCards($kanbanID, $cards, $fromType)
     {
         $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)

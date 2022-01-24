@@ -87,12 +87,6 @@ $lang->kanban->closedDate     = 'Closed Date';
 $lang->kanban->empty          = 'No Kanban';
 $lang->kanban->teamSumCount   = '%s people in total';
 $lang->kanban->cardCount      = 'Card Count';
-$lang->kanban->delayed        = 'Delayed';
-$lang->kanban->wait           = 'Wait';
-$lang->kanban->doing          = 'Doing';
-$lang->kanban->suspended      = 'Suspended';
-$lang->kanban->closed         = 'Closed';
-$lang->kanban->deleted        = 'Deleted';
 
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';

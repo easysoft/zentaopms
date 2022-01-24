@@ -87,12 +87,6 @@ $lang->kanban->closedDate     = '关闭日期';
 $lang->kanban->empty          = '暂时没有看板';
 $lang->kanban->teamSumCount   = '共%s人';
 $lang->kanban->cardCount      = '卡片数量';
-$lang->kanban->delayed        = '已延期';
-$lang->kanban->wait           = '未开始';
-$lang->kanban->doing          = '进行中';
-$lang->kanban->suspended      = '已挂起';
-$lang->kanban->closed         = '已关闭';
-$lang->kanban->deleted        = '已删除';
 
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';

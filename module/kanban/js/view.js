@@ -400,7 +400,7 @@ function renderExecutionItem(item, $item)
         $delayed = $titleBox.children('.delayed');
         if(!$delayed.length)
         {
-            $('<span class="delayed label label-danger label-badge">' + kanbanLang.delayed + '</span>').appendTo($titleBox);
+            $('<span class="delayed label label-danger label-badge">' + executionLang.delayed + '</span>').appendTo($titleBox);
         }
     }
 
@@ -418,14 +418,11 @@ function renderExecutionItem(item, $item)
     {
         if(item.deleted == '0')
         {
-            if(item.status == 'wait') $statusBox = $('<span class="execStatus label label-wait">' + kanbanLang.wait + '</span>').appendTo($info);
-            if(item.status == 'doing') $statusBox = $('<span class="execStatus label label-doing">' + kanbanLang.doing + '</span>').appendTo($info);
-            if(item.status == 'suspended') $statusBox = $('<span class="execStatus label label-suspended">' + kanbanLang.suspended + '</span>').appendTo($info);
-            if(item.status == 'closed') $statusBox = $('<span class="execStatus label label-closed">' + kanbanLang.closed + '</span>').appendTo($info);
+            $statusBox = $('<span class="execStatus label label-' + item.status + '">' + executionLang.statusList[item.status] + '</span>').appendTo($info);
         }
         else
         {
-            $statusBox = $('<span class="execStatus label label-deleted">' + kanbanLang.deleted + '</span>').appendTo($info);
+            $statusBox = $('<span class="execStatus label label-deleted">' + executionLang.deleted + '</span>').appendTo($info);
         }
     }
 
@@ -436,7 +433,7 @@ function renderExecutionItem(item, $item)
     var labelType = end.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
     if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
 
-    $date.text($.zui.formatDate(end, 'MM/dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy/MM/dd') + ' ' + kanbancardLang.deadlineAB).show();
+    $date.text($.zui.formatDate(end, 'MM-dd') + ' ' + kanbancardLang.deadlineAB).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + ' ' + kanbancardLang.deadlineAB).show();
 
     /* Display avatars of PM. */
     var $user = $info.children('.user');
