@@ -597,6 +597,9 @@ class kanban extends control
         }
         else
         {
+            $column = $this->kanban->getColumnById($columnID);
+            if($column->parent) $this->kanban->processCards($column);
+
             $this->kanban->archiveColumn($columnID);
             if(dao::isError()) die(js::error(dao::getError()));
 
@@ -677,7 +680,11 @@ class kanban extends control
         }
         else
         {
-            $this->kanban->delete(TABLE_KANBANCOLUMN, $columnID);
+            $column = $this->kanban->getColumnById($columnID);
+            if($column->parent) $this->kanban->processCards($column);
+
+            $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
+
             die(js::reload('parent'));
         }
     }

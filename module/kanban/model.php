@@ -2791,6 +2791,39 @@ class kanbanModel extends model
      */
     public function restoreColumn($columnID)
     {
+        $column = $this->getColumnByID($columnID);
+
+        if($column->parent)
+        {
+            $parent = $this->getColumnByID($column->parent);
+
+            /* If the parent column is normal now, put its card into child column. */
+            if($parent->parent != -1)
+            {
+                $parentCells = $this->dao->select('*')->from(TABLE_KANBANCELL)
+                    ->where('`column`')->eq($column->parent)
+                    ->andWhere('type')->eq('common')
+                    ->fetchAll('id');
+
+                foreach($parentCells as $cell)
+                {
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)
+                        ->where('lane')->eq($cell->lane)
+                        ->andWhere('`column`')->eq($columnID)
+                        ->andWhere('type')->eq('common')
+                        ->exec();
+
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')
+                        ->where('lane')->eq($cell->lane)
+                        ->andWhere('`column`')->eq($cell->column)
+                        ->andWhere('type')->eq('common')
+                        ->exec();
+                }
+
+                $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($column->parent)->exec();
+            }
+        }
+
         $this->dao->update(TABLE_KANBANCOLUMN)
             ->set('archived')->eq(0)
             ->where('id')->eq($columnID)
@@ -2841,6 +2874,53 @@ class kanbanModel extends model
         $card = $this->getCardByID($cardID);
 
         if(!dao::isError()) return common::createChanges($oldCard, $card);
+    }
+
+    /**
+     * Process cards when delete a column. 
+     * 
+     * @param  object $column 
+     * @access public
+     * @return void
+     */
+    public function processCards($column)
+    {
+        $firstColumnID = $this->dao->select('id')->from(TABLE_KANBANCOLUMN)
+            ->where('parent')->eq($column->parent)
+            ->andWhere('id')->ne($column->id)
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('archived')->eq('0')
+            ->orderBy('`order` asc')
+            ->fetch('id');
+
+        $extendID = $firstColumnID;
+        if(!$firstColumnID)
+        {
+            $extendID = $column->parent;
+            $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
+        }
+
+        $cells = $this->dao->select('*')->from(TABLE_KANBANCELL)
+            ->where('`column`')->eq($column->id)
+            ->andWhere('type')->eq('common')
+            ->fetchAll('id');
+
+        foreach($cells as $cell)
+        {
+            $extendCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)
+                ->where('lane')->eq($cell->lane)
+                ->andWhere('`column`')->eq($extendID)
+                ->andWhere('type')->eq('common')
+                ->fetch('cards');
+
+            $extendCards = $extendCards ? $extendCards . ltrim($cell->cards, ',') : $cell->cards;
+
+            $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($extendCards)
+                ->where('lane')->eq($cell->lane)
+                ->andWhere('`column`')->eq($extendID)
+                ->andWhere('type')->eq('common')
+                ->exec();
+        }
     }
 
     /**
@@ -3147,18 +3227,6 @@ class kanbanModel extends model
                 if($object->archived != '0') return false;    // The column has been archived.
             case 'deletecolumn' :
                 if($object->deleted != '0') return false;
-
-                if($object->parent > 0)
-                {
-                    $childrenCount = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
-                        ->where('parent')->eq($object->parent)
-                        ->andWhere('deleted')->eq('0')
-                        ->andWhere('archived')->eq('0')
-                        ->fetch('count');
-
-                    return $childrenCount > 2;
-                }
-
 
                 $count = $this->dao->select('COUNT(id) AS count')->from(TABLE_KANBANCOLUMN)
                     ->where('region')->eq($object->region)
