@@ -328,6 +328,7 @@ $lang->kanbancard->beginAB         = 'Begin';
 $lang->kanbancard->to              = '~';
 $lang->kanbancard->archived        = 'Archived';
 $lang->kanbancard->empty           = 'No Card';
+$lang->kanbancard->ditto           = 'Ditto';
 
 $lang->kanbancard->confirmArchive    = 'Are you sure to archive this card? After archiving the card, it will be hidden from the column and you can view it in the Region - Archived.';
 $lang->kanbancard->confirmDelete     = 'Are you sure to delete this card? After deleting the card, it will be deleted from the Kanban. You can only view it in the system recycle bin.';
