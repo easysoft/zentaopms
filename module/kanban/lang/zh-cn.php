@@ -61,9 +61,10 @@ $lang->kanban->showClosed          = '显示已关闭';
 $lang->kanban->importCard          = '转入卡片';
 $lang->kanban->allKanban           = '所有看板';
 $lang->kanban->importPlan          = '导入产品计划';
-$lang->kanban->allProducts         = '所有产品';
 $lang->kanban->importExecution     = '导入项目执行';
+$lang->kanban->importRelease       = '导入产品发布';
 $lang->kanban->allProjects         = '所有项目';
+$lang->kanban->allProducts         = '所有产品';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';

@@ -195,6 +195,7 @@ $lang->action->desc->archived             = '$date, archived by <strong>$actor</
 $lang->action->desc->restore              = '$date, restore by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedcard         = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedplan         = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
@@ -337,6 +338,7 @@ $lang->action->label->createchild           = 'activated';
 $lang->action->label->executed              = 'executed';
 $lang->action->label->importedcard          = 'imported';
 $lang->action->label->importedplan          = 'imported';
+$lang->action->label->importedrelease       = 'imported';
 $lang->action->label->importedexecution     = 'imported';
 
 /* Dynamic information is grouped by object. */
