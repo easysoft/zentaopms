@@ -655,7 +655,8 @@ class gitlabModel extends model
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
-        $result = commonModel::httpWithHeader($url . "&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $keyword = urlencode($keyword);
+        $result = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
