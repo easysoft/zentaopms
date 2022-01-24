@@ -77,10 +77,10 @@
               </div>
               <div class="kanban-footer">
                 <div class='kanban-members pull-left'>
-                  <?php $teams = explode(',', trim($kanban->team, ','));?>
-                  <?php foreach($teams as $account):?>
-                  <div title="<?php echo zget($users, $account);?>">
-                    <?php echo html::smallAvatar(array('avatar' => zget($usersAvatar, $account), 'account' => $account)); ?>
+                  <?php $teams = $memberGroup[$kanban->id];?>
+                  <?php foreach($teams as $member):?>
+                  <div title="<?php echo zget($users, $member->account);?>">
+                    <?php echo html::smallAvatar(array('avatar' => zget($usersAvatar, $member->account), 'account' => $member->account)); ?>
                   </div>
                   <?php endforeach;?>
                 </div>

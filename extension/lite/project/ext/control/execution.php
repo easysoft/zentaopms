@@ -21,7 +21,8 @@ class project extends control
 
         $this->view->kanbanList       = array_values($kanbanList);
         $this->view->memberGroup      = $this->execution->getMembersByIdList(array_keys($kanbanList));
-        $this->view->usersAvatar      = $this->loadModel('user')->getAvatarPairs();
+        $this->view->users            = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->usersAvatar      = $this->user->getAvatarPairs();
         $this->view->projectID        = $projectID;
         $this->view->status           = $status;
         $this->view->executionActions = $executionActions;
