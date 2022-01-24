@@ -1615,6 +1615,7 @@ class execution extends control
         $this->view->multiBranchProducts  = $this->product->getMultiBranchPairs();
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
+        $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
         $this->display();
     }
 
