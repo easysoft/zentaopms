@@ -941,18 +941,52 @@ class kanbanModel extends model
     public function getCardGroupByKanban($kanbanID)
     {
         /* Get card data.*/
-        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
+            ->andWhere('fromID')->eq(0)
             ->fetchAll('id');
+
+        $executionCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->eq($kanbanID)
+            ->andWhere('archived')->eq(0)
+            ->andWhere('fromType')->eq('execution')
+            ->fetchAll('fromID');
+
+        if(!empty($executionCards))
+        {
+            $executions = $this->dao->select('*')->from(TABLE_PROJECT)
+                ->where('id')->in(array_keys($executionCards))
+                ->fetchAll('id');
+            foreach($executionCards as $executionCard)
+            {
+                $execution = $executions[$executionCard->fromID];
+
+                $executionCard->name     = $execution->name;
+                $executionCard->status   = $execution->status;
+                $executionCard->end      = $execution->end;
+                $executionCard->PM       = $execution->PM;
+                $executionCard->execType = $execution->type;
+                $executionCard->deleted  = $execution->deleted;
+
+                if($execution->status != 'done' and $execution->status != 'closed' and $execution->status != 'suspended')
+                {
+                    $delay = helper::diffDate(helper::today(), $execution->end);
+                    if($delay > 0) $executionCard->delay = $delay;
+                }
+
+                $cards[$executionCard->id] = $executionCard;
+            }
+        }
 
         $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+        $actions   = array('editCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution');
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -967,6 +1001,15 @@ class kanbanModel extends model
                 $card->actions = array();
                 foreach($actions as $action)
                 {
+                    if($action == 'viewExecution')
+                    {
+                        if($card->fromType == 'execution')
+                        {
+                            if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $card->actions[] = $action;
+                            if($card->execType != 'kanban' and common::hasPriv('execution', 'task')) $card->actions[] = $action;
+                        }
+                        continue;
+                    }
                     if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
                 }
 
