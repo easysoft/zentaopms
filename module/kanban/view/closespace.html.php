@@ -23,11 +23,11 @@
     <form method='post' enctype='multipart/form-data' target='hiddenwin'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->comment;?></th>
-          <td colspan='2'><?php echo html::textarea('comment', '', "rows='6'");?></td>
+          <th class='c-comment'><?php echo $lang->comment;?></th>
+          <td><?php echo html::textarea('comment', '', "rows='6'");?></td>
         </tr>
         <tr>
-          <td colspan='3' class='text-center form-actions'>
+          <td colspan='2' class='text-center form-actions'>
             <?php echo html::submitButton($lang->kanban->closeSpace);?>
           </td>
         </tr>

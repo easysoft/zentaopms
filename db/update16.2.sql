@@ -1,5 +1,5 @@
 ALTER TABLE `zt_kanbanspace` ADD `type` varchar(50) NOT NULL AFTER `name`;
-UPDATE `zt_kanbanspace` SET `type` = 'cooperation';
+UPDATE `zt_kanbanspace` SET `type` = 'cooperation', `whitelist` = '';
 
 ALTER TABLE `zt_kanban` ADD `importObject` varchar(255) NOT NULL AFTER `displayCards`;
 ALTER TABLE `zt_kanban` ADD `performable` enum ('0', '1') NOT NULL DEFAULT '0' AFTER `archived`;
