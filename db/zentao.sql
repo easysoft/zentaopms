@@ -679,7 +679,7 @@ CREATE TABLE `zt_kanban` (
   `status` enum('active','closed') NOT NULL default 'active',
   `order` mediumint(8) NOT NULL DEFAULT '0',
   `displayCards` smallint(6) NOT NULL default '0',
-  `importObject` varchar(255) NOT NULL,
+  `object` varchar(255) NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `lastEditedBy` char(30) NOT NULL,

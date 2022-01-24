@@ -886,7 +886,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'import', 'sortColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -3263,6 +3263,6 @@ class kanbanModel extends model
         $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
         $importObjectList = implode(',', $importObjects);
 
-        $this->dao->update(TABLE_KANBAN)->set('importObject')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
+        $this->dao->update(TABLE_KANBAN)->set('object')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
     }
 }
