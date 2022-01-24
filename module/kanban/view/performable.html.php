@@ -1,12 +1,12 @@
 <?php
 /**
- * The setdonefunction file of kanban module of ZenTaoPMS.
+ * The performable file of kanban module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2022 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Yue Ma <mayue@easycorp.ltd>
  * @package     kanban
- * @version     $Id: setdonefunction.html.php 935 2022-01-1 14:20:24Z $
+ * @version     $Id: performable.html.php 935 2022-01-1 14:20:24Z $
  * @link        https://www.zentao.net
  */
 ?>
@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->setDoneFunction;?></h2>
+      <h2><?php echo $lang->kanban->performable;?></h2>
     </div>
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>

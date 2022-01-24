@@ -142,15 +142,14 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(!$column.children('.actions').length) $column.append('<div class="actions"></div>');
         var $actions = $column.children('.actions');
-
-        if(columnPrivs.includes('createCard') && column.parent != -1)
+        if(column.parent != -1)
         {
-            var cardUrl = createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
-            addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+            addItemBtn  = ['<a data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="text-primary">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
         $actions.html(addItemBtn + moreAction);
+
     }
 }
 
@@ -257,7 +256,7 @@ function renderKanbanItem(item, $item)
 {
     var $title       = $item.children('.title');
     var privs        = item.actions;
-    var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
+    var printMoreBtn = (privs.includes('editCard') || privs.includes('finishCard') || privs.includes('activateCard') ||privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
 
     if(kanban.performable == 1 && item.status == 'done' )
     {
@@ -403,6 +402,7 @@ function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, re
         method:   'post',
         dataType: 'json',
         url:       url,
+        async:     false,
         success: function(data)
         {
             regions = data;
@@ -446,12 +446,61 @@ function setCardColor(cardID, color, kanbanID, regionID)
         url:       url,
         success: function(data)
         {
-            regions = data;
             updateRegion(regionID, data[regionID]);
         },
         error: function(xhr, status, error)
         {
             showErrorMessager(error || lang.timeout);
+        }
+    });
+}
+
+/**
+ * Finish a card.
+ *
+ * @param  int $cardID
+ * @param  int $kanbanID
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function finishCard(cardID, kanbanID, regionID)
+{
+    if(!cardID) return false;
+    var url = createLink('kanban', 'finishCard', 'cardID=' + cardID + '&kanbanID=' + kanbanID);
+    return $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       url,
+        success: function(data)
+        {
+            updateRegion(regionID, data[regionID]);
+        }
+    });
+}
+
+/**
+ * Activate a card.
+ *
+ * @param  int $cardID
+ * @param  int $kanbanID
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function activateCard(cardID, kanbanID, regionID)
+{
+    if(!cardID) return false;
+    var url = createLink('kanban', 'activateCard', 'cardID=' + cardID + '&kanbanID=' + kanbanID);
+    return $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:       url,
+        success: function(data)
+        {
+            updateRegion(regionID, data[regionID]);
         }
     });
 }
@@ -708,6 +757,17 @@ function createCardMenu(options)
 
     var items = [];
     if(privs.includes('editCard')) items.push({label: kanbanLang.editCard, icon: 'edit', url: createLink('kanban', 'editCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(kanban.performable == 1)
+    {
+        if(privs.includes('activateCard') && card.status != 'doing')
+        {
+            items.push({label: kanbanLang.activateCard, icon: 'magic', onClick: function(){activateCard(card.id, card.kanban, card.region);}});
+        }
+        else
+        {
+            items.push({label: kanbanLang.finishCard, icon: 'checked', onClick: function(){finishCard(card.id, card.kanban, card.region);}});
+        }
+    }
     if(privs.includes('archiveCard') && kanban.archived == '1') items.push({label: kanbanLang.archiveCard, icon: 'card-archive', url: createLink('kanban', 'archiveCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('copyCard')) items.push({label: kanbanLang.copyCard, icon: 'copy', url: createLink('kanban', 'copyCard', 'cardID=' + card.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('deleteCard')) items.push({label: kanbanLang.deleteCard, icon: 'trash', url: createLink('kanban', 'deleteCard', 'cardID=' + card.id), attrs: {'target': 'hiddenwin'}});
@@ -777,6 +837,28 @@ function createColumnMenu(options)
     return items;
 }
 
+/**
+ * Create create menu for column.
+ *
+ * @param  object $options
+ * @access public
+ * @return object
+ */
+function createColumnCreateMenu(options)
+{
+    var col      = options.$trigger.closest('.kanban-col').data('col');
+    var privs    = col.actions;
+    var items    = [];
+    var regionID = col.region;
+    var groupID  = col.group;
+    var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var columnID = col.id;
+
+    if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
+    return items;
+}
+
 /** Calculate column height */
 function calcColHeight(col, lane, colCards, colHeight, kanban)
 {
@@ -796,7 +878,8 @@ window.menuCreators =
 {
     card: createCardMenu,
     lane: createLaneMenu,
-    column: createColumnMenu
+    column: createColumnMenu,
+    columnCreate: createColumnCreateMenu
 };
 
 /**
@@ -937,8 +1020,10 @@ $(function()
     });
 
     /* Init sortable */
-    var sortType = '';
-    var $cards   = null;
+    var sortType  = '';
+    var oldLaneID = '';
+    var oldColID  = '';
+    var $cards    = null;
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort',
@@ -993,6 +1078,12 @@ $(function()
                 $('.region').find('.kanban').hide();
                 hideKanbanAction();
             }
+
+            if(sortType == 'card')
+            {
+                oldLaneID = e.element.closest('.kanban-lane').data('id');
+                oldColID  = e.element.closest('.kanban-col').data('id');
+            }
         },
         finish: function(e)
         {
@@ -1028,9 +1119,9 @@ $(function()
             }
             if(sortType == 'card')
             {
-                var laneID   = e.element.closest('.kanban-lane').data('id');
-                var columnID = e.element.closest('.kanban-col').data('id');
-                url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + laneID + '&columnID=' + columnID + '&cards=' + orders.join(','));
+                var newLaneID = e.element.closest('.kanban-lane').data('id');
+                var newColID  = e.element.closest('.kanban-col').data('id');
+                if(newLaneID == oldLaneID && newColID == oldColID) url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
             }
             if(!url) return true;
 

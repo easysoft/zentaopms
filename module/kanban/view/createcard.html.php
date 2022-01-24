@@ -5,7 +5,7 @@
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
  * @author      Shujie Tian<tianshujie@cnezsoft.com>
- * @package     kanban 
+ * @package     kanban
  * @version     $Id: createcard.html.php 5090 2021-12-13 13:49:24Z tainshujie@cnezsoft.com $
  * @link        https://www.zentao.net
  */

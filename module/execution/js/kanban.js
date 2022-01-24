@@ -1,4 +1,47 @@
 /**
+ * When execution status change.
+ *
+ * @param  stirng executionStatus
+ * @access public
+ * @return void
+ */
+function changeStatus(executionStatus)
+{
+    if(executionStatus == 'wait')
+    {
+        $('.startButton').removeClass('hidden');
+        $('.putoffButton').removeClass('hidden');
+        $('.suspendButton').removeClass('hidden');
+        $('.closeButton').removeClass('hidden');
+        $('.activateButton').addClass('hidden');
+    }
+    else if(executionStatus == 'doing')
+    {
+        $('.startButton').addClass('hidden');
+        $('.putoffButton').removeClass('hidden');
+        $('.suspendButton').removeClass('hidden');
+        $('.closeButton').removeClass('hidden');
+        $('.activateButton').addClass('hidden');
+    }
+    else if(executionStatus == 'suspended')
+    {
+        $('.startButton').addClass('hidden');
+        $('.putoffButton').addClass('hidden');
+        $('.suspendButton').addClass('hidden');
+        $('.closeButton').removeClass('hidden');
+        $('.activateButton').removeClass('hidden');
+    }
+    else if(executionStatus == 'closed')
+    {
+        $('.startButton').addClass('hidden');
+        $('.putoffButton').addClass('hidden');
+        $('.suspendButton').addClass('hidden');
+        $('.closeButton').addClass('hidden');
+        $('.activateButton').removeClass('hidden');
+    }
+}
+
+/**
  * Display the kanban in full screen.
  *
  * @access public
@@ -788,7 +831,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'developing' && priv.canPauseTask)
             {
-                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'pause', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -796,12 +839,12 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
-                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
             {
-                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'start', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -809,7 +852,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developing' || fromColType == 'wait' || fromColType == 'pause') && priv.canCancelTask)
             {
-                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'cancel', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -817,7 +860,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'developed' || fromColType == 'canceled') && priv.canCloseTask)
             {
-                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('task', 'close', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -832,7 +875,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'unconfirmed' && priv.canConfirmBug)
             {
-                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',executionID=' + executionID, '', true);
+                var link = createLink('bug', 'confirmBug', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -841,7 +884,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
             if(fromColType == 'confirmed' || fromColType == 'unconfirmed') moveCard = true;
             if((fromColType == 'closed' || fromColType == 'fixed' || fromColType == 'testing' || fromColType == 'tested') && priv.canActivateBug)
             {
-                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',executionID=' + executionID, '', true);
+                var link = createLink('bug', 'activate', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -849,7 +892,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'fixing' || fromColType == 'confirmed' || fromColType == 'unconfirmed')
             {
-                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',executionID=' + executionID, '', true);
+                var link = createLink('bug', 'resolve', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -865,7 +908,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if(fromColType == 'testing' || fromColType == 'tested')
             {
-                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID, '', true);
+                var link = createLink('bug', 'close', 'bugID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
                 showIframe = true;
             }
         }
@@ -884,6 +927,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 method:   'post',
                 dataType: 'json',
                 url:       link,
+                async:     false,
                 success: function(data)
                 {
                     updateRegion(regionID, data[regionID]);
@@ -911,7 +955,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
  * @access public
  * @return void
  */
-function updateKanban(kanbanData, regionID)
+function updateKanban(kanbanData, regionID = 0)
 {
     setTimeout(function()
     {
@@ -950,6 +994,7 @@ function shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
         method:   'post',
         dataType: 'json',
         url:       link,
+        async:     false,
         success: function(data)
         {
             updateRegion(regionID, data[regionID]);
@@ -1046,6 +1091,10 @@ function initKanban($kanban)
  */
 $(function()
 {
+    changeStatus(execution.status);
+    
+    if($.cookie('isFullScreen') == 1) $.cookie('isFullScreen', 0);
+
     window.kanbanScaleSize = +$.zui.store.get('executionKanbanScaleSize', 1);
     $('#kanbanScaleSize').text(window.kanbanScaleSize);
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', window.kanbanScaleSize >= 4 ? 'disabled' : null);
@@ -1182,13 +1231,6 @@ $(function()
 
                 return $ele.parent().children('.kanban-lane');
             }
-
-            /* Sort lanes */
-            if($ele.hasClass('kanban-item'))
-            {
-                sortType = 'item';
-                return $ele.parent().children('.kanban-item');
-            }
         },
         start: function(e)
         {
@@ -1237,10 +1279,7 @@ $(function()
                 var region = e.element.parent().parent().data('id');
                 url = createLink('kanban', 'sortLane', 'region=' + region + '&lanes=' + orders.join(','));
             }
-            if(sortType == 'item')
-            {
-                url = createLink('task', 'sort', 'kanbanID=' + kanbanID + '&tasks=' + orders.join(','));
-            }
+
             if(!url) return true;
 
             $.getJSON(url, function(response)
