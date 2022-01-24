@@ -102,9 +102,9 @@
 .gray .actions {display:none;}
 
 .kanban-card .header .executionName {display: flex; width: 100%; float: left; white-space: nowrap; overflow: hidden;}
-.kanban-card .header .executionName .title, .releaseTitle {padding-right: 0px; margin-right: 5px; white-space: nowrap; overflow: hidden;}
+.kanban-card .header .executionName .title, .releaseTitle, .productplanTitle {padding-right: 0px; margin-right: 5px; white-space: nowrap; overflow: hidden;}
 .kanban-card .header .executionName > span {flex: none;}
-.execInfo, .releaseInfo {margin-top: 23px;}
+.execInfo, .releaseInfo, .productplanInfo {margin-top: 23px;}
 .execInfo .execStatus{margin-right: 20px;}
 .label-wait {background: #EFEFEF !important; color: #838A9D;}
 .label-doing {background: #f8d2d2 !important; color: #e64b4c;}
@@ -112,7 +112,7 @@
 .label-closed, .label-terminate {background: #e5e5e5 !important; color: #b8b8b8;}
 .label-deleted {background: #ff5d5d !important; color: #fff;}
 .label-normal {background: #e1e8d9 !important; color: #9abe76;}
-.region .kanban-item > .kanban-card > .execInfo > .user, .region .kanban-item > .kanban-card > .releaseInfo > .user {position: absolute; right: 10px; bottom: -2px}
-.region .kanban-item > .kanban-card > .execInfo > .user > .avatar, .region .kanban-item > .kanban-card > .releaseInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
-.kanban-card .releaseTitle .icon, .kanban-card .title .icon {padding-right: 5px;}
-.kanban-card .releaseTitle {width: 100%; float: left;}
+.region .kanban-item > .kanban-card > .execInfo > .user, .region .kanban-item > .kanban-card > .releaseInfo > .user, .region .kanban-item > .kanban-card > .productplanInfo > .user {position: absolute; right: 10px; bottom: -2px}
+.region .kanban-item > .kanban-card > .execInfo > .user > .avatar, .region .kanban-item > .kanban-card > .releaseInfo > .user > .avatar, .region .kanban-item > .kanban-card > .productplanInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
+.kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon {padding-right: 5px;}
+.kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}

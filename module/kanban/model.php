@@ -523,14 +523,17 @@ class kanbanModel extends model
         $targetLaneID = $data->targetLane;
 
         $objectCards = array();
+        $now         = helper::now();
         foreach($objectIDList as $objectID)
         {
             $cardData = new stdClass();
-            $cardData->kanban   = $kanbanID;
-            $cardData->region   = $regionID;
-            $cardData->group    = $groupID;
-            $cardData->fromID   = $objectID;
-            $cardData->fromType = $objectType;
+            $cardData->kanban      = $kanbanID;
+            $cardData->region      = $regionID;
+            $cardData->group       = $groupID;
+            $cardData->fromID      = $objectID;
+            $cardData->fromType    = $objectType;
+            $cardData->createdBy   = $this->app->user->account;
+            $cardData->createdDate = $now;
             $this->dao->insert(TABLE_KANBANCARD)->data($cardData)->exec();
 
             $cardID = $this->dao->lastInsertID();

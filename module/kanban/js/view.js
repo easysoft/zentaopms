@@ -288,6 +288,10 @@ function renderKanbanItem(item, $item)
     {
         renderBuildItem(item, $item);
     }
+    else if(item.fromType == 'productplan')
+    {
+        renderProductplanItem(item, $item);
+    }
     else
     {
         var $title       = $item.children('.title');
@@ -521,6 +525,67 @@ function renderReleaseItem(item, $item)
     if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
 
     $date.text($.zui.formatDate(releaseDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(releaseDate, 'yyyy-MM-dd')).show();
+    if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
+}
+
+/**
+ * Render product plan item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderProductplanItem(item, $item)
+{
+    var privs = item.actions;
+
+    /* Print  name. */
+    var $title = $item.children('.productplanTitle');
+    if(!$title.length)
+    {
+        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle"><i class="icon icon-run"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
+        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<a class="productplanTitle"><i class="icon icon-run"></i>' + item.title + '</a>').appendTo($item);
+    }
+    $title.attr('title', item.title);
+
+    var $info = $item.children('.productplanInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="productplanInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.productplanStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="productplanStatus label label-' + item.status + '">' + productplanLang.statusList[item.status] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="productplanStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display product plan date. */
+    var $date           = $info.children('.date');
+    var productplanDate = $.zui.createDate(item.date);
+    var today           = new Date();
+    var labelType       = productplanDate.toLocaleDateString() == today.toLocaleDateString() ? 'light' : 'wait';
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(productplanDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(productplanDate, 'yyyy-MM-dd')).show();
     if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
 
     /* Display avatars of creator. */
