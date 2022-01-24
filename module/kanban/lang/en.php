@@ -100,10 +100,10 @@ $lang->kanban->aclGroup['extend']  = 'Extend';
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->archiveList['0'] = 'No Enable';
+$lang->kanban->archiveList['0'] = 'Disabled ';
 $lang->kanban->archiveList['1'] = 'Enable';
 
-$lang->kanban->enableFinished['0'] = 'No Enable';
+$lang->kanban->enableFinished['0'] = 'Disabled ';
 $lang->kanban->enableFinished['1'] = 'Enable';
 
 $lang->kanban->type = array();

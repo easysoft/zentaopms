@@ -793,7 +793,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function activate($cardID, $kanbanID)
+    public function activateCard($cardID, $kanbanID)
     {
         $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
