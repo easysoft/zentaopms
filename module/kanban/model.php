@@ -495,7 +495,7 @@ class kanbanModel extends model
 
         foreach($cards->name as $i => $name)
         {
-            $lane  = ($cards->lane[$i] == 'ditto')  ? $lane  : $cards->lane[$i];
+            $lane  = ($cards->lane[$i] == 'ditto')   ? $lane  : $cards->lane[$i];
             $begin = (isset($cards->beginDitto[$i])) ? $begin : $cards->begin[$i];
             $end   = (isset($cards->endDitto[$i]))   ? $end   : $cards->end[$i];
 

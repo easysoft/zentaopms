@@ -46,7 +46,7 @@
               <div class='input-group'>
                 <?php
                 echo html::input("begin[$i]", '', "class='form-control form-date' onkeyup='toggleCheck(this)'");
-                if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='beginDitto[$i]' id='beginDitto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->kanbancard->ditto}</span>";
+                if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='beginDitto[$i]' id='beginDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->kanbancard->ditto}</span>";
                 ?>
               </div>
             </td>
@@ -54,7 +54,7 @@
               <div class='input-group'>
                 <?php
                 echo html::input("end[$i]", '', "class='form-control form-date' onkeyup='toggleCheck(this)'");
-                if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='endDitto[$i]' id='endDitto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->kanbancard->ditto}</span>";
+                if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='endDitto[$i]' id='endDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->kanbancard->ditto}</span>";
                 ?>
               </div>
             </td>
