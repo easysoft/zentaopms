@@ -1489,10 +1489,19 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetBranches($gitlabID, $projectID)
+    public function apiGetBranches($gitlabID, $projectID, $pager = null)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
-        return json_decode(commonModel::http($url));
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results)<100) break;
+        }
+
+        return $allResults;
     }
 
     /**
