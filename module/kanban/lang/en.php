@@ -39,6 +39,8 @@ $lang->kanban->setCardColor        = 'Set Card Color';
 $lang->kanban->deleteCard          = 'Delete Card';
 $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
+$lang->kanban->enableArchived      = 'Enable Archived';
+$lang->kanban->archive             = 'Archive';
 $lang->kanban->performable         = 'Set done function';
 $lang->kanban->doneFunction        = 'Done function';
 $lang->kanban->splitColumn         = 'Split Column';
@@ -98,8 +100,8 @@ $lang->kanban->aclGroup['extend']  = 'Extend';
 $lang->kanban->aclList['extend']  = 'Extend (Accessible with space view permissions)';
 $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist members and space owner only)';
 
-$lang->kanban->enableArchived['0'] = 'No Enable';
-$lang->kanban->enableArchived['1'] = 'Enable';
+$lang->kanban->archiveList['0'] = 'No Enable';
+$lang->kanban->archiveList['1'] = 'Enable';
 
 $lang->kanban->enableFinished['0'] = 'No Enable';
 $lang->kanban->enableFinished['1'] = 'Enable';

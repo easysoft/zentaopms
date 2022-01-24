@@ -26,10 +26,6 @@
         <th><?php echo $lang->kanban->name;?></th>
         <td><?php echo html::input('name', $kanban->name, "class='form-control'");?></td>
       </tr>
-      <tr>
-        <th><?php echo $lang->kanban->archived;?></th>
-        <td><?php echo html::radio('archived', $lang->kanban->enableArchived, $kanban->archived);?></td>
-      </tr>
       <?php if($type != 'private'):?>
       <tr>
         <th><?php echo $lang->kanban->owner;?></th>

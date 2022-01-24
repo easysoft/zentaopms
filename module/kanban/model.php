@@ -2611,7 +2611,7 @@ class kanbanModel extends model
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'));
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
@@ -2619,6 +2619,7 @@ class kanbanModel extends model
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'enableArchived')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link'") . '</li>';
             if($printSetHeight)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
@@ -2634,7 +2635,11 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
+<<<<<<< module/kanban/model.php
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'setDoneFunction')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+=======
                 $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+>>>>>>> module/kanban/model.php
             }
             $actions .= "</ul>";
         }
@@ -2709,9 +2714,10 @@ class kanbanModel extends model
         $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
 
-        $fromCardList = str_replace("$cardID,", '', $fromCellCards);
+        $fromCardList = str_replace(",$cardID,", ',', $fromCellCards);
         $toCardList   = rtrim($toCellCards, ',') . ",$cardID,";
 
+        if($fromCardList == ',') $fromCardList = '';
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($fromCardList)->where('`column`')->eq($fromColID)->andWhere('lane')->eq($fromLaneID)->exec();
         $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($toCardList)->where('`column`')->eq($toColID)->andWhere('lane')->eq($toLaneID)->exec();
     }

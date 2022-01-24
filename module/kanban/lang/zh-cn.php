@@ -39,6 +39,8 @@ $lang->kanban->setCardColor        = '设置卡片颜色';
 $lang->kanban->deleteCard          = '删除卡片';
 $lang->kanban->assigntoCard        = '指派';
 $lang->kanban->setting             = '设置';
+$lang->kanban->enableArchived      = '设置归档功能';
+$lang->kanban->archive             = '归档功能';
 $lang->kanban->performable         = '设置完成功能';
 $lang->kanban->doneFunction        = '完成功能';
 $lang->kanban->splitColumn         = '新增子看板列';
@@ -98,8 +100,8 @@ $lang->kanban->aclGroup['extend']  = '继承空间';
 $lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
-$lang->kanban->enableArchived['0'] = '不启用';
-$lang->kanban->enableArchived['1'] = '启用';
+$lang->kanban->archiveList['0'] = '不启用';
+$lang->kanban->archiveList['1'] = '启用';
 
 $lang->kanban->enableFinished['0'] = '不启用';
 $lang->kanban->enableFinished['1'] = '启用';
