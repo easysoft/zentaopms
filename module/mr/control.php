@@ -53,6 +53,9 @@ class mr extends control
         /* Load lang from compile module */
         $this->app->loadLang('compile');
 
+        $openIDList = array();
+        if(!$this->app->user->admin) $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
+
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
         $this->view->projects   = $projects;
@@ -61,6 +64,7 @@ class mr extends control
         $this->view->param      = $param;
         $this->view->objectID   = $objectID;
         $this->view->orderBy    = $orderBy;
+        $this->view->openIDList = $openIDList;
         $this->display();
     }
 
@@ -190,8 +194,12 @@ class mr extends control
 
         $MR = $this->mr->getByID($id);
 
+        if($MR->synced)
+        {
+           $res = $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+           if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
+        }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
-        $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
         die(js::locate(inlink('browse'), 'parent'));
     }
