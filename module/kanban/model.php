@@ -1032,7 +1032,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution');
+        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
 
         $cardGroup = array();
         foreach($cellList as $cell)
@@ -1051,12 +1051,16 @@ class kanbanModel extends model
                 $card->actions = array();
                 foreach($actions as $action)
                 {
-                    if($action == 'viewExecution')
+                    if(in_array($action, array('viewExecution', 'viewPlan', 'viewRelease', 'viewBuild')))
                     {
                         if($card->fromType == 'execution')
                         {
                             if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $card->actions[] = $action;
                             if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $card->actions[] = $action;
+                        }
+                        else
+                        {
+                            if(common::hasPriv($fromType, 'view')) $card->actions[] = $action;
                         }
                         continue;
                     }
