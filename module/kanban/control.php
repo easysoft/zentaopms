@@ -846,16 +846,6 @@ class kanban extends control
      */
     public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
-        $this->loadModel('product');
-        $this->loadModel('productplan');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $productPairs      = $this->product->getPairs();
-        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
-
         if($_POST)
         {
             $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'productplan');
@@ -868,6 +858,16 @@ class kanban extends control
 
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
+
+        $this->loadModel('product');
+        $this->loadModel('productplan');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productPairs      = $this->product->getPairs();
+        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
 
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
@@ -898,16 +898,6 @@ class kanban extends control
      */
     public function importRelease($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
-        $this->loadModel('product');
-        $this->loadModel('release');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
-        $productPairs      = $this->product->getPairs();
-        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
-
         if($_POST)
         {
             $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'release');
@@ -920,6 +910,16 @@ class kanban extends control
 
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
+
+        $this->loadModel('product');
+        $this->loadModel('release');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productPairs      = $this->product->getPairs();
+        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
 
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
@@ -1003,13 +1003,6 @@ class kanban extends control
      */
     public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
     {
-        $this->loadModel('project');
-        $this->loadModel('execution');
-
-        /* Load pager. */
-        $this->app->loadClass('pager', $static = true);
-        $pager = new pager($recTotal, $recPerPage, $pageID);
-
         if($_POST)
         {
             $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'execution');
@@ -1022,6 +1015,13 @@ class kanban extends control
 
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
+
+        $this->loadModel('project');
+        $this->loadModel('execution');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         $this->view->projects            = $this->project->getPairsByProgram();
         $this->view->selectedProjectID   = $selectedProjectID;
