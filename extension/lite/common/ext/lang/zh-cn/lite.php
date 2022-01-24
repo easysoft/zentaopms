@@ -38,6 +38,8 @@ else
     $lang->dividerMenu = ',doc,admin,';
 }
 
+$lang->task->common = '卡片';
+
 /* My menu. */
 $lang->my->menu           = new stdclass();
 $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
