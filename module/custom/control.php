@@ -192,7 +192,7 @@ class custom extends control
                     }
                 }
 
-                $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
+                $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
                 $data = fixer::input('post')->get();
                 foreach($data->keys as $index => $key)
                 {
@@ -209,7 +209,7 @@ class custom extends control
 
         /* Check whether the current language has been customized. */
         $lang = str_replace('_', '-', $lang);
-        $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field");
+        $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
         if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=" . ($lang == $currentLang ? 'all' : $currentLang) . "&module=$module&section=$field");
         if($dbFields)
         {

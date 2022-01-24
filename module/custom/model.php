@@ -23,7 +23,7 @@ class customModel extends model
 
         try
         {
-            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->orderBy('lang,id')->get();
+            $sql  = $this->dao->select('*')->from(TABLE_LANG)->where('`lang`')->in("$currentLang,all")->andWhere('vision')->eq($this->config->vision)->orderBy('lang,id')->get();
             $stmt = $this->dbh->query($sql);
 
             $allCustomLang = array();
@@ -76,6 +76,7 @@ class customModel extends model
         $item->key     = $key;
         $item->value   = $value;
         $item->system  = $system;
+        $item->vision  = $this->config->vision;
 
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
     }
@@ -117,7 +118,7 @@ class customModel extends model
         parse_str($paramString, $params);
 
         /* Init fields not set in the param string. */
-        $fields = 'lang,module,section,key';
+        $fields = 'lang,module,section,key,vision';
         $fields = explode(',', $fields);
         foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
 
@@ -138,7 +139,8 @@ class customModel extends model
             ->beginIF($params['lang'])->andWhere('lang')->in($params['lang'])->fi()
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
-            ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi();
+            ->beginIF($params['key'])->andWhere('`key`')->in($params['key'])->fi()
+            ->beginIF($params['vision'])->andWhere('`vision`')->eq($params['vision'])->fi();
     }
 
     /**
