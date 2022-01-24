@@ -879,7 +879,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -3168,6 +3168,8 @@ class kanbanModel extends model
                     ->fetch('count');
 
                 return $count > 1;
+            case 'sortColumn' :
+                if($object->deleted != '0') return false;
         }
 
         return true;

@@ -111,7 +111,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
 {
     /* Render group header. */
     var privs       = kanbanData.actions;
-    var columnPrivs = kanbanData.columns[0].actions;
+    var columnPrivs = $column.data().col.actions;
 
     if(privs.includes('sortGroup'))
     {
@@ -150,6 +150,16 @@ function renderHeaderCol($column, column, $header, kanbanData)
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
         $actions.html(addItemBtn + moreAction);
 
+    }
+    if(columnPrivs.includes('sortColumn')){
+      if($column.hasClass('kanban-header-parent-col'))
+      {
+          $column.children('.kanban-header-col').addClass('sort');
+      }
+      else
+      {
+        $column.addClass('sort');
+      }
     }
 }
 
@@ -1017,8 +1027,8 @@ $(function()
     var $cards    = null;
     $('#kanban').sortable(
     {
-        selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort',
-        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort',
+        selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort, .kanban-col',
+        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort, .kanban-col.sort',
         container: function($ele)
         {
             return $ele.parent();
@@ -1046,6 +1056,13 @@ $(function()
                 $cards   = $ele.find('.kanban-item');
 
                 return $ele.parent().children('.kanban-lane');
+            }
+
+            /* Sort columns. */
+            if($ele.hasClass('kanban-col'))
+            {
+                sortType = 'column';
+                return $ele.parent().children('.kanban-col');
             }
 
             /* Sort cards. */
@@ -1078,8 +1095,9 @@ $(function()
         },
         finish: function(e)
         {
-            var url = '';
-            var orders = [];
+            var url      = '';
+            var orders   = [];
+            var regionID = '';
             e.list.each(function(index, data)
             {
                 orders.push(data.item.data('id'));
@@ -1100,13 +1118,18 @@ $(function()
             }
             if(sortType == 'board')
             {
-                var region = e.element.parent().data('id');
-                url = createLink('kanban', 'sortGroup', 'region=' + region + '&groups=' + orders.join(','));
+                regionID = e.element.closest('.region').data('id');
+                url      = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
             }
             if(sortType == 'lane')
             {
-                var region = e.element.parent().parent().data('id');
-                url = createLink('kanban', 'sortLane', 'region=' + region + '&lanes=' + orders.join(','));
+                regionID = e.element.closest('.region').data('id');
+                url      = createLink('kanban', 'sortLane', 'region=' + regionID + '&lanes=' + orders.join(','));
+            }
+            if(sortType == 'column')
+            {
+                regionID = e.element.closest('.region').data('id');
+                url      = createLink('kanban', 'sortColumn', 'region=' + regionID + '&kanbanID=' + kanban.id + '&columns=' + orders.join(','));
             }
             if(sortType == 'card')
             {
@@ -1122,6 +1145,10 @@ $(function()
                 {
                     bootbox.alert(response.message);
                     setTimeout(function(){return location.reload()}, 3000);
+                }
+                else if (sortType == 'column')
+                {
+                    updateRegion(regionID, response[regionID]);
                 }
             });
         },

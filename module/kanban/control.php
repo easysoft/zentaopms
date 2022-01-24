@@ -466,7 +466,7 @@ class kanban extends control
      * @param  int    $regionID
      * @param  string $lanes
      * @access public
-     * @return void
+     * @return array
      */
     public function sortLane($regionID, $lanes = '')
     {
@@ -481,6 +481,29 @@ class kanban extends control
         }
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+    }
+
+    /**
+     * Sort columns.
+     *
+     * @param  int    $regionID
+     * @param  int    $kanbanID
+     * @param  string $columns
+     * @access public
+     * @return array|string
+     */
+    public function sortColumn($regionID, $kanbanID, $columns = '')
+    {
+        if(empty($columns)) return;
+        $columns =  explode(',', trim($columns, ','));
+
+        $order = 1;
+        foreach($columns as $columnID) $this->dao->update(TABLE_KANBANCOLUMN)->set('`order`')->eq($order++)->where('id')->eq($columnID)->andWhere('region')->eq($regionID)->exec();
+
+        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
+
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+        return print(json_encode($kanbanGroup));
     }
 
     /**
