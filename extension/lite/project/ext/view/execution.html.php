@@ -118,6 +118,10 @@
 .kanban-card .kanban-members > span:after {right: -4px;}
 .kanban-card .kanban-members-count {display: inline-block; margin-left: 6px; position: relative; top: 3px}
 .kanban-card .kanban-acl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
+.kanban-card .label.kanban-status-wait {background-color: #E5E5E5; color: #808080;}
+.kanban-card .label.kanban-status-doing {background-color: #DDF4DF; color: #38B03F;}
+.kanban-card .label.kanban-status-suspended {background-color: #FFF0D5; color: #F1A325;}
+.kanban-card .label.kanban-status-closed {background-color: #808080; color: #FFF;}
 </style>
 <script>
 /* Make cards clickable. */
