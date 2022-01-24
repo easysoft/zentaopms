@@ -867,7 +867,7 @@ class gitlab extends control
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         $keyword  = fixer::input('post')->setDefault('keyword', '')->get('keyword');
@@ -908,7 +908,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
@@ -989,7 +989,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         if($confirm != 'yes')
@@ -1033,7 +1033,7 @@ class gitlab extends control
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         $this->session->set('gitlabTagList', $this->app->getURI(true));
@@ -1089,7 +1089,7 @@ class gitlab extends control
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         $this->session->set('gitlabTagPrivList', $this->app->getURI(true));
@@ -1164,7 +1164,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         if($_POST)
@@ -1209,7 +1209,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
@@ -1251,7 +1251,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
             $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/

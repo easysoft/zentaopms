@@ -2750,17 +2750,16 @@ class gitlabModel extends model
      * Check user access.
      *
      * @param  int    $gitlabID
-     * @param  int    $openID
      * @param  int    $projectID
      * @param  object $project
      * @param  string $maxRole
      * @access public
      * @return bool
      */
-    public function checkUserAccess($gitlabID, $openID = 0, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    public function checkUserAccess($gitlabID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
     {
         if($project == null) $project = $this->apiGetSingleProject($gitlabID, $projectID);
-        if(!$openID or !isset($project->id)) return false;
+        if(!isset($project->id)) return false;
 
         $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
 
