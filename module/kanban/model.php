@@ -978,7 +978,7 @@ class kanbanModel extends model
                         if($card->fromType == 'execution')
                         {
                             if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $card->actions[] = $action;
-                            if($card->execType != 'kanban' and common::hasPriv('execution', 'task')) $card->actions[] = $action;
+                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $card->actions[] = $action;
                         }
                         continue;
                     }
