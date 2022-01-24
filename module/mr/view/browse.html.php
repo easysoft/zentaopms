@@ -82,7 +82,7 @@
           <?php endif;?>
           <td class='c-actions'>
             <?php
-            $canDelete = ($app->user->admin or (isset($projects[$MR->gitlabID][$MR->sourceProject]->owner->id) and $projects[$MR->gitlabID][$MR->sourceProject]->owner->id === $openIDList[$MR->gitlabID])) ? '' : 'disabled';
+            $canDelete = ($app->user->admin or (isset($projects[$MR->gitlabID][$MR->sourceProject]->owner->id) and $projects[$MR->gitlabID][$MR->sourceProject]->owner->id == $openIDList[$MR->gitlabID])) ? '' : 'disabled';
             common::printLink('mr', 'view',   "mr={$MR->id}", '<i class="icon icon-eye"></i>', '', "title='{$lang->mr->view}' class='btn btn-info'");
             common::printIcon('mr', 'edit',   "mr={$MR->id}", $MR, 'list');
             common::printLink('mr', 'diff',   "mr={$MR->id}", '<i class="icon icon-diff"></i>', '', "title='{$lang->mr->viewDiff}' class='btn btn-info'");
