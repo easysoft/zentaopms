@@ -1,7 +1,7 @@
 <?php
 $lang->custom->execution       = '看板';
 $lang->custom->closedExecution = '已关闭' . $lang->custom->execution;
-$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->execution}下的任务、日志以及关联目标都禁止修改。";
+$lang->custom->notice->readOnlyOfExecution = "禁止修改后，已关闭{$lang->custom->execution}下的卡片、日志以及关联目标都禁止修改。";
 
 $lang->custom->object = array();
 $lang->custom->object['project']   = '项目';
