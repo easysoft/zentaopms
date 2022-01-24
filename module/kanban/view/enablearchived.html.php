@@ -20,7 +20,7 @@
       <table class='table table-form'>
         <tr>
           <th><?php echo $lang->kanban->archive;?></th>
-          <td><?php echo nl2br(html::radio('archived', $lang->kanban->enableArchive, $kanban->archived));?></td>
+          <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, $kanban->archived));?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center form-actions'>

@@ -95,8 +95,8 @@ $lang->kanban->aclGroup['extend']  = '继承空间';
 $lang->kanban->aclList['extend']  = '继承空间访问权限（能访问当前空间，即可访问）';
 $lang->kanban->aclList['private'] = '私有（看板团队成员、白名单、空间负责人可访问）';
 
-$lang->kanban->enableArchive['0'] = '不启用';
-$lang->kanban->enableArchive['1'] = '启用';
+$lang->kanban->archiveList['0'] = '不启用';
+$lang->kanban->archiveList['1'] = '启用';
 
 $lang->kanban->enableFinished['0'] = '不启用';
 $lang->kanban->enableFinished['1'] = '启用';
