@@ -11,7 +11,6 @@
  */
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/kindeditor.html.php';?>
 <?php js::set('kanbanID', $kanbanID);?>
 <?php js::set('regionID', $regionID);?>
 <?php js::set('groupID', $groupID);?>
@@ -23,11 +22,11 @@
       <h2><?php echo $lang->kanban->importRelease;?></h2>
     </div>
   </div>
-  <div class='table-row' style="padding: 10px">
+  <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedProduct;?></h4></div>
     <div class='table-col'><?php echo html::select('product', $products, $selectedProductID, "onchange='reloadObjectList(this.value)' class='form-control chosen'");?></div>
   </div>
-  <div class='table-row' style="padding: 10px">
+  <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
     <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen'");?></div>
   </div>

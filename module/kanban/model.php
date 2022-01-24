@@ -2114,24 +2114,25 @@ class kanbanModel extends model
      *
      * @param  string    $type
      * @param  int|array $removeCardID
-     * @param  array     $cardsKanban
+     * @param  array     $kanbanList
      * @access public
      * @return void
      */
-    public function removeKanbanCell($type, $removeCardID, $cardsKanban)
+    public function removeKanbanCell($type, $removeCardID, $kanbanList)
     {
         $removeIDList = is_array($removeCardID) ? $removeCardID : array($removeCardID);
         foreach($removeIDList as $cardID)
         {
             if(empty($cardID)) continue;
 
-            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET `cards` = REPLACE(cards, ',$cardID,', ',') WHERE `type` = '$type' AND `kanban` = {$cardsKanban[$cardID]}");
+            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET `cards` = REPLACE(cards, ',$cardID,', ',') WHERE `type` = '$type' AND `kanban` = {$kanbanList[$cardID]}");
         }
 
         $this->dao->update(TABLE_KANBANCELL)
             ->set('cards')->eq('')
             ->where('cards')->eq(',')
             ->andWhere('type')->eq($type)
+            ->andWhere('kanban')->in($kanbanList)
             ->exec();
     }
 
@@ -3132,19 +3133,20 @@ class kanbanModel extends model
     /**
      * Get imported cards.
      *
-     * @param  int $objectID
-     * @param  int $excluded
+     * @param  int $kanbanID
+     * @param  int $excludedID
      * @param  obj $pager
      * @access public
      * @return array
      */
-    public function getImportedCards($kanbanID = 0, $excluded = 0, $pager = null)
+    public function getImportedCards($kanbanID = 0, $excludedID = 0, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('archived')->eq(0)
+            ->andWhere('fromID')->eq(0)
             ->beginIF($kanbanID)->andWhere('kanban')->eq($kanbanID)->fi()
-            ->beginIF($excluded)->andWhere('kanban')->ne($excluded)->fi()
+            ->beginIF($excludedID)->andWhere('kanban')->ne($excludedID)->fi()
             ->orderBy('order')
             ->page($pager)
             ->fetchAll('id');

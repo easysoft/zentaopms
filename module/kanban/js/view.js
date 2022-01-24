@@ -145,7 +145,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
 
         if(columnPrivs.includes('createCard') && column.parent != -1)
         {
-            var cardUrl = createLink('kanban', 'importplan', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
+            var cardUrl = createLink('kanban', 'importcard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID);
             addItemBtn  = ['<a data-contextmenu="columnCreate" data-toggle="modal" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" href="' + cardUrl + '" class="text-primary iframe">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
         }
 
@@ -437,7 +437,7 @@ function renderExecutionItem(item, $item)
 
     /* Display avatars of PM. */
     var $user = $info.children('.user');
-    var user  = [item.PM]; 
+    var user  = [item.PM];
     if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
 
     $user.html(renderUsersAvatar(user, item.id)).attr('title', item.PM);
