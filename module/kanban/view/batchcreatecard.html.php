@@ -27,7 +27,8 @@
             <th><?php echo $lang->kanbancard->lane;?></th>
             <th><?php echo $lang->kanbancard->assignedTo;?></th>
             <th class='c-estimate'><?php echo $lang->kanbancard->estimate;?></th>
-            <th><?php echo $lang->kanbancard->beginAndEnd;?></th>
+            <th class='c-date'><?php echo $lang->kanbancard->begin;?></th>
+            <th class='c-date'><?php echo $lang->kanbancard->end;?></th>
             <th><?php echo $lang->kanbancard->desc;?></th>
             <th class='c-pri w-120px'><?php echo $lang->kanbancard->pri;?></th>
           </tr>
@@ -43,9 +44,18 @@
             <td><?php echo html::input("estimate[$i]", '', "class='form-control text-center'");?></td>
             <td>
               <div class='input-group'>
-                <?php echo html::input("begin[$i]", '', "class='form-control form-date' placeholder='{$lang->kanbancard->begin}'");?>
-                <span class='input-group-addon fix-border'>~</span>
-                <?php echo html::input("end[$i]", '', "class='form-control form-date' placeholder='{$lang->kanbancard->end}'");?>
+                <?php
+                echo html::input("begin[$i]", '', "class='form-control form-date' onkeyup='toggleCheck(this)'");
+                if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='beginDitto[$i]' id='beginDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->kanbancard->ditto}</span>";
+                ?>
+              </div>
+            </td>
+            <td>
+              <div class='input-group'>
+                <?php
+                echo html::input("end[$i]", '', "class='form-control form-date' onkeyup='toggleCheck(this)'");
+                if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='endDitto[$i]' id='endDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->kanbancard->ditto}</span>";
+                ?>
               </div>
             </td>
             <td ><?php echo html::textarea("desc[$i]", '', "rows='1' class='form-control autosize'");?></td>

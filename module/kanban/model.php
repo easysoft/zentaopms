@@ -489,14 +489,21 @@ class kanbanModel extends model
         $now   = helper::now();
         $data  = array();
         $lanes = array();
+        $lane  = '';
+        $begin = '0000-00-00';
+        $end   = '0000-00-00';
 
         foreach($cards->name as $i => $name)
         {
+            $lane  = ($cards->lane[$i] == 'ditto')   ? $lane  : $cards->lane[$i];
+            $begin = (isset($cards->beginDitto[$i])) ? $begin : $cards->begin[$i];
+            $end   = (isset($cards->endDitto[$i]))   ? $end   : $cards->end[$i];
+
             if(empty($cards->name[$i])) continue;
             $data[$i]               = new stdclass();
             $data[$i]->name         = trim($cards->name[$i]);
-            $data[$i]->begin        = $cards->begin[$i];
-            $data[$i]->end          = $cards->end[$i];
+            $data[$i]->begin        = $begin;
+            $data[$i]->end          = $end;
             $data[$i]->assignedTo   = $cards->assignedTo[$i];
             $data[$i]->desc         = nl2br($cards->desc[$i]);
             $data[$i]->pri          = $cards->pri[$i];
@@ -509,7 +516,7 @@ class kanbanModel extends model
             $data[$i]->color        = '#fff';
             $data[$i]->estimate     = is_numeric($cards->estimate[$i]) ? (float)$cards->estimate[$i] : $cards->estimate[$i];
 
-            $lanes[$i] = $cards->lane[$i];
+            $lanes[$i] = $lane;
         }
 
         foreach($data as $i => $card)

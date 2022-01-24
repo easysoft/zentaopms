@@ -761,8 +761,13 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
         }
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
+        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $lanePairs = $this->kanban->getLanePairsByGroup($groupID);
+
+        $lanePairs['ditto'] = $this->lang->kanbancard->ditto;
+
+        $this->view->users     = $users;
+        $this->view->lanePairs = $lanePairs;
 
         $this->display();
     }
