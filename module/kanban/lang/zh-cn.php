@@ -63,6 +63,7 @@ $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 $lang->kanban->batchCreateCard     = '批量创建卡片';
 $lang->kanban->import              = '导入功能';
+$lang->kanban->importAB            = '导入';
 $lang->kanban->showClosed          = '显示已关闭';
 
 /* Fields. */

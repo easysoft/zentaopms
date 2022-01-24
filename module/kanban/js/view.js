@@ -867,6 +867,10 @@ function createColumnCreateMenu(options)
 
     if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
+    if(privs.includes('import') && kanban.importObject.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
+    if(privs.includes('import') && kanban.importObject) items.push({className: 'parentDivider'});
+    if(privs.includes('import') && kanban.importObject) items.push({label: kanbanLang.importAB, className: 'import'});
+
     return items;
 }
 
@@ -984,6 +988,22 @@ $(function()
         if(!items || !items.length) return;
 
         $.zui.ContextMenu.show(items, items.$options || {event: event});
+
+        $('.parentDivider').parent().addClass('divider');
+        $('.import').parent().addClass('dropdown-submenu top');
+
+        /* The submenu of import. */
+        var importPlanLink      = createLink('kanban', 'importPlan');
+        var importReleaseLink   = createLink('kanban', 'importRelease');
+        var importExecutionLink = createLink('kanban', 'importExecution');
+        var importBuildLink     = createLink('kanban', 'importBuild');
+        var importPlanLink      = kanban.importObject.indexOf('plan') != -1 ? '<li><a href="' + createLink('kanban', 'importPlan') + '">' + kanbanLang.importPlan + '</a></li>' : '';
+        var importReleaseLink   = kanban.importObject.indexOf('release') != -1 ? '<li><a href="' + createLink('kanban', 'importRelease') + '">' + kanbanLang.importRelease + '</a></li>' : '';
+        var importExecutionLink = kanban.importObject.indexOf('execution') != -1 ? '<li><a href="' + createLink('kanban', 'importExecution') + '">' + kanbanLang.importExecution + '</a></li>' : '';
+        var importBuildLink     = kanban.importObject.indexOf('build') != -1 ? '<li><a href="' + createLink('kanban', 'importBuild') + '">' + kanbanLang.importBuild + '</a></li>' : '';
+        var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink +'</ul>';
+        $('.import').parent().append(importSubmenu);
+
     });
 
     /* Adjust the add button position on window resize */

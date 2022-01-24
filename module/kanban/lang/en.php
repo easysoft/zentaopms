@@ -63,6 +63,7 @@ $lang->kanban->restore             = 'Restore';
 $lang->kanban->child               = 'Child';
 $lang->kanban->batchCreateCard     = 'Batchcreate Card';
 $lang->kanban->import              = 'Import';
+$lang->kanban->importAB            = 'Import';
 $lang->kanban->showClosed          = 'Closed';
 
 /* Fields. */

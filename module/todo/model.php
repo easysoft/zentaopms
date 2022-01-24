@@ -51,7 +51,7 @@ class todoModel extends model
             if($todo->pri == 'low')    $todo->pri = 3;
         }
 
-        if($todo->type != 'custom')
+        if($todo->type != 'custom' and $todo->idvalue)
         {
             $type   = $todo->type;
             $object = $this->loadModel($type)->getByID($this->post->$type);
