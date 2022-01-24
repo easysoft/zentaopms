@@ -1097,6 +1097,11 @@ $(function()
                 hideKanbanAction();
             }
 
+            if(sortType == 'column')
+            {
+                $('.kanban-item').addClass('hidden');
+            }
+
             if(sortType == 'card')
             {
                 oldLaneID = e.element.closest('.kanban-lane').data('id');
@@ -1160,6 +1165,7 @@ $(function()
                 {
                     updateRegion(regionID, response[regionID]);
                 }
+                $('.kanban-item').removeClass('hidden');
             });
         },
         always: function(e)
