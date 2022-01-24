@@ -1135,5 +1135,5 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
 /* Hide contextmenu when page scroll */
 $('.panel-body').scroll(function()
 {
-	$.zui.ContextMenu.hide();
+    $.zui.ContextMenu.hide();
 });
