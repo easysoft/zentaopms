@@ -656,7 +656,7 @@ class gitlabModel extends model
         $order = explode('_', $orderBy);
 
         $keyword = urlencode($keyword);
-        $result = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $result  = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
