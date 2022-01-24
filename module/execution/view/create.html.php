@@ -175,7 +175,6 @@
             </div>
           </td>
         </tr>
-        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->teamname;?></th>
           <td><?php echo html::input('team', $team, "class='form-control'");?></td>
@@ -185,7 +184,6 @@
           <th><?php echo $lang->execution->copyTeam;?></th>
           <td><?php echo html::select('teams', $teams, $copyExecutionID, "class='form-control chosen' data-placeholder='{$lang->execution->copyTeamTip}'"); ?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>
           <td>
@@ -215,12 +213,10 @@
             </div>
           </td>
         </tr>
-        <?php if(empty($project) or $project->model != 'kanban'):?>
         <tr>
           <th><?php echo $lang->execution->team;?></th>
           <td colspan='3'><?php echo html::select('teamMembers[]', $users, '', "class='form-control chosen' multiple"); ?></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo (($from == 'execution') and ($config->systemMode == 'new')) ? $lang->execution->execDesc : $lang->execution->desc;?></th>
           <td colspan='3'>

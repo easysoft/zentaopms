@@ -493,7 +493,7 @@ class executionModel extends model
             ->setDefault('team', $this->post->name)
             ->join('whitelist', ',')
             ->stripTags($this->config->execution->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products, branch, uid, plans, syncStories, contactListMenu')
+            ->remove('products, branch, uid, plans, syncStories, contactListMenu, teamMembers')
             ->get();
 
         if($this->config->systemMode == 'new' and (empty($execution->project) or $execution->project == $oldExecution->project)) $this->checkBeginAndEndDate($oldExecution->project, $execution->begin, $execution->end);
@@ -535,32 +535,40 @@ class executionModel extends model
             ->limit(1)
             ->exec();
 
-        if($oldExecution->type == 'kanban') $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq((int)$executionID)->andWhere('type')->eq('execution')->andWhere('account')->ne($oldExecution->openedBy)->exec();
-
         /* Get team and language item. */
-        $this->lang->execution->team = $this->lang->execution->teamname;
-        $team = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
+        $this->loadModel('user');
+        $team    = $this->user->getTeamMemberPairs($executionID, 'execution');
+        $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+        array_push($members, $execution->PO, $execution->QD, $execution->PM, $execution->RD);
+        $members = array_unique($members);
+        $roles   = $this->user->getUserRoles(array_values($members));
 
         $changedAccounts = array();
         $teamMembers     = array();
-        foreach($this->config->execution->ownerFields as $ownerField)
+        foreach($members as $account)
         {
-            $owner = zget($execution, $ownerField, '');
-            if(empty($owner) or isset($team[$owner])) continue;
+            if(empty($account) or isset($team[$account])) continue;
 
             $member = new stdclass();
             $member->root    = (int)$executionID;
-            $member->account = $owner;
+            $member->account = $account;
             $member->join    = helper::today();
-            $member->role    = $this->lang->execution->$ownerField;
+            $member->role    = zget($roles, $account, '');
             $member->days    = zget($execution, 'days', 0);
             $member->type    = 'execution';
             $member->hours   = $this->config->execution->defaultWorkhours;
             $this->dao->replace(TABLE_TEAM)->data($member)->exec();
 
-            $changedAccounts[$owner]  = $owner;
-            $teamMembers[$ownerField] = $member;
+            $changedAccounts[$account]  = $account;
+            $teamMembers[$account] = $member;
         }
+        $this->dao->delete()->from(TABLE_TEAM)
+            ->where('root')->eq((int)$executionID)
+            ->andWhere('type')->eq('execution')
+            ->andWhere('account')->in(array_keys($team))
+            ->andWhere('account')->notin(array_values($members))
+            ->andWhere('account')->ne($oldExecution->openedBy)
+            ->exec();
         if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
         if(!empty($execution->whitelist))
