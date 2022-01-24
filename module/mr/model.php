@@ -752,12 +752,6 @@ class mrModel extends model
             $diffs   = $singleDiff->diffs;
             foreach($diffs as $index => $diff)
             {
-                if(empty($commits[$index])) continue;
-                /* Make sure every file with same commitID is unique in $lines. */
-                $shortID = $commits[$index]->short_id;
-                if(in_array($shortID, $commitList)) continue;
-                $commitList[] = $shortID;
-
                 $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
                 $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
                 $lines[] = sprintf("--a/%s", $diff->old_path);
