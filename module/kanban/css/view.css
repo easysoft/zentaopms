@@ -98,5 +98,19 @@
 
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
-.kanban-item:hover .title {padding-right: 10px;}
+.kanban-item .title {padding-right: 10px;}
 .gray .actions {display:none;}
+
+.kanban-card .header .executionName {display: flex; width: 100%; float: left; white-space: nowrap; overflow: hidden;}
+.kanban-card .header .executionName .title {padding-right: 0px; margin-right: 5px; white-space: nowrap; overflow: hidden;}
+.kanban-card .header .executionName .title .icon {padding-right: 5px;}
+.kanban-card .header .executionName > span {flex: none;}
+.execInfo {margin-top: 23px;}
+.execInfo .execStatus{margin-right: 20px;}
+.execInfo .label-wait {background: #EFEFEF !important; color: #838A9D;}
+.execInfo .label-doing {background: #f8d2d2 !important; color: #e64b4c;}
+.execInfo .label-suspended {background: #fff3d9 !important; color: #ff9800;}
+.execInfo .label-closed {background: #e5e5e5 !important; color: #b8b8b8;}
+.execInfo .label-deleted {background: #ff5d5d !important; color: #fff;}
+.region .kanban-item > .kanban-card > .execInfo > .user {position: absolute; right: 10px; bottom: -2px}
+.region .kanban-item > .kanban-card > .execInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}

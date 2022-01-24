@@ -63,7 +63,16 @@ $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 $lang->kanban->batchCreateCard     = '批量创建卡片';
 $lang->kanban->import              = '导入功能';
+$lang->kanban->importAB            = '导入';
 $lang->kanban->showClosed          = '显示已关闭';
+$lang->kanban->importCard          = '转入卡片';
+$lang->kanban->importPlan          = '导入产品计划';
+$lang->kanban->importRelease       = '导入产品发布';
+$lang->kanban->importExecution     = '导入项目' . $lang->execution->common;
+$lang->kanban->importBuild         = '导入项目版本';
+$lang->kanban->allKanban           = '所有看板';
+$lang->kanban->allProjects         = '所有项目';
+$lang->kanban->allProducts         = '所有产品';
 
 /* Fields. */
 $lang->kanban->space          = '所属空间';
@@ -92,6 +101,11 @@ $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 $lang->kanban->accessDenied  = '您无权访问该看板';
 $lang->kanban->confirmDelete = '您确认删除吗？';
 $lang->kanban->cardCountTip  = '请输入卡片数量';
+
+$lang->kanban->selectedKanban  = '请选择看板';
+$lang->kanban->selectedProduct = '请选择产品';
+$lang->kanban->selectedProject = '请选择项目';
+$lang->kanban->selectedLane    = '目标泳道';
 
 $lang->kanban->aclGroup['open']    = '公开';
 $lang->kanban->aclGroup['private'] = '私有';

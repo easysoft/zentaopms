@@ -469,12 +469,87 @@ class kanbanModel extends model
     }
 
     /**
-     * Batch create kanban cards.
+     * Import card.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @access public
+     * @return bool|array
+     */
+    public function importCard($kanbanID, $regionID, $groupID, $columnID)
+    {
+        $data = fixer::input('post')->get();
+        $importIDList = $data->cards;
+        $targetLaneID = $data->targetLane;
+
+        $oldCardsKanban = $this->dao->select('id,kanban')->from(TABLE_KANBANCARD)->where('id')->in($importIDList)->fetchPairs();
+
+        $updateData = new stdClass();
+        $updateData->kanban = $kanbanID;
+        $updateData->region = $regionID;
+        $updateData->group  = $groupID;
+        $this->dao->update(TABLE_KANBANCARD)->data($updateData)->where('id')->in($importIDList)->exec();
+
+        if(!dao::isError())
+        {
+            $this->removeKanbanCell('common', $importIDList, $oldCardsKanban);
+
+            $cards = implode(',', $importIDList);
+            $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
+
+            return $importIDList;
+        }
+
+        return false;
+    }
+
+    /**
+     * Import object.
      *
      * @param  int    $kanbanID
      * @param  int    $regionID
      * @param  int    $groupID
      * @param  int    $columnID
+     * @param  string $objectType
+     * @access public
+     * @return array
+     */
+    public function importObject($kanbanID, $regionID, $groupID, $columnID, $objectType)
+    {
+        $data = fixer::input('post')->get();
+        $objectIDList = $data->{$objectType . 's'};
+        $targetLaneID = $data->targetLane;
+
+        $objectCards = array();
+        foreach($objectIDList as $objectID)
+        {
+            $cardData = new stdClass();
+            $cardData->kanban   = $kanbanID;
+            $cardData->region   = $regionID;
+            $cardData->group    = $groupID;
+            $cardData->fromID   = $objectID;
+            $cardData->fromType = $objectType;
+            $this->dao->insert(TABLE_KANBANCARD)->data($cardData)->exec();
+
+            $cardID = $this->dao->lastInsertID();
+            $objectCards[$cardID] = $objectID;
+        }
+
+        if(!dao::isError())
+        {
+            $cards = implode(',', array_keys($objectCards));
+            $this->addKanbanCell($kanbanID, $targetLaneID, $columnID, 'common', $cards);
+
+            return $objectCards;
+        }
+
+        return false;
+    }
+
+    /*
+     * Batch create kanban cards.
      * @access public
      * @return void
      */
@@ -567,7 +642,7 @@ class kanbanModel extends model
      *
      * @param  int    $kanbanID
      * @access public
-     * @return void
+     * @return array
      */
     public function getKanbanData($kanbanID)
     {
@@ -886,7 +961,7 @@ class kanbanModel extends model
             ->orderBy($order)
             ->fetchGroup('group');
 
-        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'sortColumn');
+        $actions = array('createColumn', 'setColumn', 'setWIP', 'archiveColumn', 'restoreColumn', 'deleteColumn', 'createCard', 'batchCreateCard', 'splitColumn', 'import', 'sortColumn');
 
         /* Group by parent. */
         $parentColumnGroup = array();
@@ -940,18 +1015,25 @@ class kanbanModel extends model
     public function getCardGroupByKanban($kanbanID)
     {
         /* Get card data.*/
-        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)->alias('t1')
+        $cards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
+            ->andWhere('fromID')->eq(0)
             ->fetchAll('id');
+
+        foreach($this->config->kanban->fromType as $fromType)
+        {
+            $cards = $this->getImportedCards($kanbanID, $cards, $fromType);
+        }
 
         $cellList = $this->dao->select('*')->from(TABLE_KANBANCELL)
             ->where('kanban')->eq($kanbanID)
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard');
+        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution');
+
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -969,6 +1051,15 @@ class kanbanModel extends model
                 $card->actions = array();
                 foreach($actions as $action)
                 {
+                    if($action == 'viewExecution')
+                    {
+                        if($card->fromType == 'execution')
+                        {
+                            if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $card->actions[] = $action;
+                            if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $card->actions[] = $action;
+                        }
+                        continue;
+                    }
                     if(common::hasPriv('kanban', $action)) $card->actions[] = $action;
                 }
 
@@ -977,6 +1068,54 @@ class kanbanModel extends model
         }
 
         return $cardGroup;
+    }
+
+    /**
+     * Get imported cards.
+     *
+     * @param  int    $kanbanID
+     * @param  object $cards
+     * @param  string $fromType
+     * @access public
+     * @return array
+     */
+    public function getImportedCards($kanbanID, $cards, $fromType)
+    {
+        $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('kanban')->eq($kanbanID)
+            ->andWhere('archived')->eq(0)
+            ->andWhere('fromType')->eq($fromType)
+            ->fetchAll('fromID');
+
+        if(!empty($objectCards))
+        {
+            $table   = $this->config->objectTables[$fromType];
+            $objects = $this->dao->select('*')->from($table)
+                ->where('id')->in(array_keys($objectCards))
+                ->fetchAll('id');
+
+            foreach($objectCards as $objectCard)
+            {
+                $object    = $objects[$objectCard->fromID];
+                $fieldType = $fromType . 'Field';
+
+                foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
+
+                if($fromType =='execution')
+                {
+                    if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
+                    {
+                        $delay = helper::diffDate(helper::today(), $object->end);
+                        if($delay > 0) $objectCard->delay = $delay;
+                    }
+                    $objectCard->execType = $object->type;
+                }
+
+                $cards[$objectCard->id] = $objectCard;
+            }
+        }
+        return $cards;
     }
 
     /**
@@ -1466,6 +1605,23 @@ class kanbanModel extends model
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs('id');
+    }
+
+    /**
+     * Get Kanban pairs.
+     *
+     * @access public
+     * @return void
+     */
+    public function getKanbanPairs()
+    {
+        $kanbanIdList = $this->getCanViewObjects('kanban');
+
+        return $this->dao->select('id,name')->from(TABLE_KANBAN)
+            ->where('deleted')->eq(0)
+            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($kanbanIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
     }
@@ -2032,6 +2188,33 @@ class kanbanModel extends model
             $cell->cards = $cell->cards ? ",$cardID" . $cell->cards : ",$cardID,";
             $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)->where('id')->eq($cell->id)->exec();
         }
+    }
+
+    /**
+     * Remove kanban cell.
+     *
+     * @param  string    $type
+     * @param  int|array $removeCardID
+     * @param  array     $kanbanList
+     * @access public
+     * @return void
+     */
+    public function removeKanbanCell($type, $removeCardID, $kanbanList)
+    {
+        $removeIDList = is_array($removeCardID) ? $removeCardID : array($removeCardID);
+        foreach($removeIDList as $cardID)
+        {
+            if(empty($cardID)) continue;
+
+            $this->dbh->query("UPDATE " . TABLE_KANBANCELL. " SET `cards` = REPLACE(cards, ',$cardID,', ',') WHERE `type` = '$type' AND `kanban` = {$kanbanList[$cardID]}");
+        }
+
+        $this->dao->update(TABLE_KANBANCELL)
+            ->set('cards')->eq('')
+            ->where('cards')->eq(',')
+            ->andWhere('type')->eq($type)
+            ->andWhere('kanban')->in($kanbanList)
+            ->exec();
     }
 
     /**
@@ -3100,7 +3283,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getCardsByObject($objectType = '', $objectID = 0, $archived = 0, $deleted = '0')
+    public function getCardsByObject($objectType = '', $objectID = 0, $archived = '0', $deleted = '0')
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where(true)
@@ -3108,6 +3291,28 @@ class kanbanModel extends model
             ->beginIF($archived != '')->andWhere('archived')->eq($archived)->fi()
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
+            ->fetchAll('id');
+    }
+
+    /**
+     * Get cards to import.
+     *
+     * @param  int $kanbanID
+     * @param  int $excludedID
+     * @param  obj $pager
+     * @access public
+     * @return array
+     */
+    public function getCards2Import($kanbanID = 0, $excludedID = 0, $pager = null)
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANCARD)
+            ->where('deleted')->eq(0)
+            ->andWhere('archived')->eq(0)
+            ->andWhere('fromID')->eq(0)
+            ->beginIF($kanbanID)->andWhere('kanban')->eq($kanbanID)->fi()
+            ->beginIF($excludedID)->andWhere('kanban')->ne($excludedID)->fi()
+            ->orderBy('order')
+            ->page($pager)
             ->fetchAll('id');
     }
 
@@ -3263,6 +3468,6 @@ class kanbanModel extends model
         $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
         $importObjectList = implode(',', $importObjects);
 
-        $this->dao->update(TABLE_KANBAN)->set('importObject')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
+        $this->dao->update(TABLE_KANBAN)->set('object')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
     }
 }

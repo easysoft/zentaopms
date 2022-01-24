@@ -47,10 +47,11 @@ class releaseModel extends model
      * @param  int    $branch
      * @param  string $type
      * @param  string $orderBy
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc')
+    public function getList($productID, $branch = 'all', $type = 'all', $orderBy = 't1.date_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name as productName, t3.id as buildID, t3.name as buildName, t3.project, t4.name as projectName')
             ->from(TABLE_RELEASE)->alias('t1')
@@ -62,6 +63,7 @@ class releaseModel extends model
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
             ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll();
     }
 
@@ -480,13 +482,13 @@ class releaseModel extends model
     }
 
     /**
-     * Judge btn is clickable or not. 
-     * 
-     * @param  int    $release 
-     * @param  string $action 
+     * Judge btn is clickable or not.
+     *
+     * @param  int    $release
+     * @param  string $action
      * @static
      * @access public
-     * @return bool 
+     * @return bool
      */
     public static function isClickable($release, $action)
     {
@@ -498,7 +500,7 @@ class releaseModel extends model
 
     /**
      * Send mail to release related users.
-     * 
+     *
      * @param  int    $releaseID
      * @access public
      * @return void

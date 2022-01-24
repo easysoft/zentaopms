@@ -435,6 +435,11 @@ class actionModel extends model
                 $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
             }
+            elseif($actionName == 'importedcard')
+            {
+                $title = $this->dao->select('name')->from(TABLE_KANBAN)->where('id')->eq($action->extra)->fetch('name');
+                if($title) $action->extra = common::hasPriv('kanban', 'view') ? html::a(helper::createLink('kanban', 'view', "kanbanID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
+            }
             elseif($actionName == 'createchildren')
             {
                 $names = $this->dao->select('id,name')->from(TABLE_TASK)->where('id')->in($action->extra)->fetchPairs('id', 'name');
@@ -1047,6 +1052,13 @@ class actionModel extends model
             {
                 $user = $this->dao->select('id,realname')->from(TABLE_USER)->where('id')->eq($action->objectID)->fetch();
                 if($user) $action->objectName = $user->realname;
+            }
+            elseif($action->objectType == 'kanbancard' and strpos($action->action, 'imported') !== false and $action->action != 'importedcard')
+            {
+                $objectType  = str_replace('imported', '', $action->action);
+                $objectTable = zget($this->config->objectTables, $objectType);
+                $objectName  = $objectType == 'productplan' ? 'title' : 'name';
+                $action->objectName = $this->dao->select($objectName)->from($objectTable)->where('id')->eq($action->extra)->fetch($objectName);
             }
 
             $projectID = isset($relatedProjects[$action->objectType][$action->objectID]) ? $relatedProjects[$action->objectType][$action->objectID] : 0;

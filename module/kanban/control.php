@@ -885,6 +885,266 @@ class kanban extends control
     }
 
     /**
+     * Import card.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedKanbanID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $cards2Imported = $this->kanban->getCards2Import($selectedKanbanID, $kanbanID, $pager);
+
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importCard($kanbanID, $regionID, $groupID, $columnID);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedcard', '', $cards2Imported[$cardID]->kanban);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        /* Find Kanban other than this kanban. */
+        $kanbanPairs = $this->kanban->getKanbanPairs();
+        unset($kanbanPairs[$kanbanID]);
+
+        $this->view->cards2Imported   = $cards2Imported;
+        $this->view->kanbanPairs      = array($this->lang->kanban->allKanban) + $kanbanPairs;
+        $this->view->lanePairs        = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->users            = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->pager            = $pager;
+        $this->view->selectedKanbanID = $selectedKanbanID;
+        $this->view->kanbanID         = $kanbanID;
+        $this->view->regionID         = $regionID;
+        $this->view->groupID          = $groupID;
+        $this->view->columnID         = $columnID;
+
+        $this->display();
+    }
+
+    /**
+     * Import plan.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProductID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'productplan');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $planID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedProductplan', '', $planID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->loadModel('product');
+        $this->loadModel('productplan');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productPairs      = $this->product->getPairs();
+        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
+
+        $this->view->products          = $productPairs;
+        $this->view->selectedProductID = $selectedProductID;
+        $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all', $pager);
+        $this->view->pager             = $pager;
+        $this->view->kanbanID          = $kanbanID;
+        $this->view->regionID          = $regionID;
+        $this->view->groupID           = $groupID;
+        $this->view->columnID          = $columnID;
+
+        $this->display();
+    }
+
+    /**
+     * Import release.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProductID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importRelease($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'release');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $releaseID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedRelease', '', $releaseID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->loadModel('product');
+        $this->loadModel('release');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $productPairs      = $this->product->getPairs();
+        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
+
+        $this->view->products          = $productPairs;
+        $this->view->selectedProductID = $selectedProductID;
+        $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->releases2Imported = $this->release->getList($selectedProductID, 'all', 'all', 't1.date_desc', $pager);
+        $this->view->pager             = $pager;
+        $this->view->kanbanID          = $kanbanID;
+        $this->view->regionID          = $regionID;
+        $this->view->groupID           = $groupID;
+        $this->view->columnID          = $columnID;
+
+        $this->display();
+    }
+
+    /**
+     * Import build.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProjectID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'build');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $buildID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedBuild', '', $buildID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->loadModel('project');
+        $this->loadModel('build');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $projectPairs      = $this->project->getPairsByProgram();
+        $selectedProjectID = empty($selectedProjectID) ? key($projectPairs) : $selectedProjectID;
+
+        $this->view->projects          = $projectPairs;
+        $this->view->selectedProjectID = $selectedProjectID;
+        $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->builds2Imported   = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->pager             = $pager;
+        $this->view->kanbanID          = $kanbanID;
+        $this->view->regionID          = $regionID;
+        $this->view->groupID           = $groupID;
+        $this->view->columnID          = $columnID;
+
+        $this->display();
+    }
+
+    /**
+     * Import execution.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProjectID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'execution');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $executionID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedExecution', '', $executionID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->loadModel('project');
+        $this->loadModel('execution');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $this->view->projects            = $this->project->getPairsByProgram();
+        $this->view->selectedProjectID   = $selectedProjectID;
+        $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->executions2Imported = $this->project->getStats($selectedProjectID, 'undone', 0, 0, 30, 'id_asc', $pager);
+        $this->view->users               = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->pager               = $pager;
+        $this->view->kanbanID            = $kanbanID;
+        $this->view->regionID            = $regionID;
+        $this->view->groupID             = $groupID;
+        $this->view->columnID            = $columnID;
+
+        $this->display();
+    }
+
+    /**
      * Set a card's color.
      *
      * @param  int   $cardID
@@ -1381,8 +1641,8 @@ class kanban extends control
 
         $kanban = $this->kanban->getByID($kanbanID);
 
-        $this->view->enableImport  = empty($kanban->importObject) ? 'off' : 'on';
-        $this->view->importObjects = empty($kanban->importObject) ? array() : explode(',', $kanban->importObject);
+        $this->view->enableImport  = empty($kanban->object) ? 'off' : 'on';
+        $this->view->importObjects = empty($kanban->object) ? array() : explode(',', $kanban->object);
 
         $this->display();
     }
