@@ -629,6 +629,7 @@ class project extends control
         $this->view->budgetUnitList           = $this->project->getBudgetUnitList();
         $this->view->model                    = $project->model;
         $this->view->disableModel             = (isset($canChangeModel) and $canChangeModel == true) ? '' : 'disabled';
+        $this->view->teamMembers              = $this->user->getTeamMemberPairs($projectID, 'project');
 
         $this->display();
     }

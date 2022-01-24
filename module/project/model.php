@@ -771,7 +771,7 @@ class projectModel extends model
             ->add('type', 'project')
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->create['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu')
+            ->remove('products,branch,plans,delta,newProduct,productName,future,contactListMenu,teamMembers')
             ->get();
 
         $linkedProductsCount = 0;
@@ -859,14 +859,47 @@ class projectModel extends model
 
             /* Add the creator to team. */
             $this->app->loadLang('user');
-            $member = new stdclass();
-            $member->root    = $projectID;
-            $member->account = $this->app->user->account;
-            $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
-            $member->join    = helper::today();
-            $member->type    = 'project';
-            $member->hours   = $this->config->execution->defaultWorkhours;
-            $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+
+            /* Set team of project. */
+            $creatorExists = false;
+            $teamMembers   = array();
+
+            $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+            array_push($members, $project->PM);
+            $members = array_unique($members);
+
+            $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
+            foreach($members as $account)
+            {
+                if(empty($account)) continue;
+
+                $member = new stdClass();
+                $member->root    = $projectID;
+                $member->type    = 'project';
+                $member->account = $account;
+                $member->role    = zget($roles, $account, '');
+                $member->join    = helper::now();
+                $member->days    = zget($project, 'days', 0);
+                $member->hours   = $this->config->execution->defaultWorkhours;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                if($member->account == $this->app->user->account) $creatorExists = true;
+                $teamMembers[$account] = $member;
+            }
+
+            if(!$creatorExists)
+            {
+                $member = new stdClass();
+                $member->root    = $projectID;
+                $member->type    = 'project';
+                $member->account = $this->app->user->account;
+                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
+                $member->join    = helper::now();
+                $member->days    = zget($project, 'days', 0);
+                $member->hours   = $this->config->execution->defaultWorkhours;
+                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                $teamMembers[$member->account] = $member;
+            }
+            if($this->config->systemMode == 'new') $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
             $whitelist = explode(',', $project->whitelist);
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'project', $projectID);
@@ -999,7 +1032,7 @@ class projectModel extends model
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
             ->join('whitelist', ',')
             ->stripTags($this->config->project->editor->edit['id'], $this->config->allowedTags)
-            ->remove('products,branch,plans,delta,future,contactListMenu')
+            ->remove('products,branch,plans,delta,future,contactListMenu,teamMembers')
             ->get();
 
         if($project->parent)
@@ -1059,6 +1092,40 @@ class projectModel extends model
             ->checkIF(!empty($project->code), 'code', 'unique', "id != $projectID and `type` = 'project'")
             ->where('id')->eq($projectID)
             ->exec();
+
+        /* Get team and language item. */
+        $this->loadModel('user');
+        $team    = $this->user->getTeamMemberPairs($projectID, 'project');
+        $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
+        array_push($members, $project->PM);
+        $members = array_unique($members);
+        $roles   = $this->user->getUserRoles(array_values($members));
+
+        $teamMembers = array();
+        foreach($members as $account)
+        {
+            if(empty($account) or isset($team[$account])) continue;
+
+            $member = new stdclass();
+            $member->root    = (int)$projectID;
+            $member->account = $account;
+            $member->join    = helper::today();
+            $member->role    = zget($roles, $account, '');
+            $member->days    = zget($project, 'days', 0);
+            $member->type    = 'project';
+            $member->hours   = $this->config->execution->defaultWorkhours;
+            $this->dao->replace(TABLE_TEAM)->data($member)->exec();
+
+            $teamMembers[$account] = $member;
+        }
+        $this->dao->delete()->from(TABLE_TEAM)
+            ->where('root')->eq((int)$projectID)
+            ->andWhere('type')->eq('project')
+            ->andWhere('account')->in(array_keys($team))
+            ->andWhere('account')->notin(array_values($members))
+            ->andWhere('account')->ne($oldProject->openedBy)
+            ->exec();
+        if(!empty($projectID) and !empty($teamMembers)) $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
         if(!dao::isError())
         {
