@@ -6,3 +6,11 @@ $lang->block->flowchart['dev']     = array('执行人员', '创建任务', '认�
 
 $lang->block->titleList['scrumlist'] = '看板列表';
 $lang->block->titleList['sprint']    = '看板总览';
+
+$lang->block->myTask = '我的卡片';
+
+$lang->block->finishedTasks = '完成的卡片数';
+
+$lang->block->story = '目标';
+
+$lang->block->storyCount = '目标数';
