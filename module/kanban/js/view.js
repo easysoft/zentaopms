@@ -284,6 +284,10 @@ function renderKanbanItem(item, $item)
     {
         renderReleaseItem(item, $item);
     }
+    else if(item.fromType == 'build')
+    {
+        renderBuildItem(item, $item);
+    }
     else
     {
         var $title       = $item.children('.title');
@@ -526,6 +530,54 @@ function renderReleaseItem(item, $item)
     {
         if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
         $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
+}
+
+/**
+ * Render build item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderBuildItem(item, $item)
+{
+    var privs = item.actions;
+
+    /* Print  name. */
+    var $title = $item.children('.title');
+    if(!$title.length)
+    {
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-code"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<a class="title"><i class="icon icon-code"></i>' + item.name + '</a>').appendTo($item);
+    }
+    $title.attr('title', item.name);
+
+    var $info = $item.children('.info');
+    if(!$info.length) $info = $(
+    [
+        '<div class="info">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    /* Display build date. */
+    var $date       = $info.children('.date');
+    var buildDate   = $.zui.createDate(item.date);
+    var today       = new Date();
+    var labelType   = buildDate.toLocaleDateString() == today.toLocaleDateString() ? 'light' : 'wait';
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(buildDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(buildDate, 'yyyy-MM-dd')).show();
+    if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.builder];
+    if(users[item.builder])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.builder]);
     }
 }
 

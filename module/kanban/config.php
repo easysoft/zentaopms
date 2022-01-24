@@ -48,7 +48,7 @@ $config->kanban->fromType         = array('execution', 'productplan', 'release',
 $config->kanban->executionField   = array('name', 'status', 'end', 'PM', 'type', 'deleted');
 $config->kanban->productplanField = array();
 $config->kanban->releaseField     = array('name', 'status', 'date', 'deleted');
-$config->kanban->buildField       = array();
+$config->kanban->buildField       = array('name', 'date', 'builder');
 
 $config->kanban->default = new stdclass();
 $config->kanban->default->story  = new stdclass();
