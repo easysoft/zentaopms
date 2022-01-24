@@ -14,3 +14,10 @@ $lang->block->finishedTasks = '完成的卡片数';
 $lang->block->story = '目标';
 
 $lang->block->storyCount = '目标数';
+
+$lang->block->modules['kanban']['index'] = new stdclass();
+$lang->block->modules['kanban']['index']->availableBlocks = new stdclass();
+$lang->block->modules['kanban']['index']->availableBlocks->scrumoverview  = '项目概况';
+$lang->block->modules['kanban']['index']->availableBlocks->scrumlist      = $lang->executionCommon . '列表';
+$lang->block->modules['kanban']['index']->availableBlocks->sprint         = $lang->executionCommon . '总览';
+$lang->block->modules['kanban']['index']->availableBlocks->projectdynamic = '最新动态';
