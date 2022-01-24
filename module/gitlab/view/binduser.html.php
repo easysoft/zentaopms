@@ -37,7 +37,7 @@
               <?php if($gitlabUser->email) echo " &lt;" . $gitlabUser->email . "&gt;";?>
             </td>
             <td><?php echo html::select("zentaoUsers[$gitlabUser->id]", $userPairs, '', "class='form-control select chosen'" );?></td>
-            <td></td>
+            <td><?php echo $lang->gitlab->notBind;?></td>
           </tr>
           <?php endforeach;?>
           <?php foreach($gitlabUsers as $gitlabUser):?>

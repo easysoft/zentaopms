@@ -307,10 +307,23 @@ class gitlab extends control
      */
     public function browseGroup($gitlabID, $orderBy = 'name_asc')
     {
-        $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
-        $this->view->gitlabID        = $gitlabID;
-        $this->view->gitlabGroupList = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-        $this->view->orderBy         = $orderBy;
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->gitlab->config->accessLevel['owner']);
+
+        $adminGropuIDList = array();
+        foreach($adminGroups as $group) $adminGropuIDList[] = $group->id;
+
+        $this->view->title            = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
+        $this->view->gitlabID         = $gitlabID;
+        $this->view->gitlabGroupList  = $groups;
+        $this->view->adminGropuIDList = $adminGropuIDList;
+        $this->view->orderBy          = $orderBy;
         $this->display();
     }
 
@@ -323,6 +336,12 @@ class gitlab extends control
      */
     public function createGroup($gitlabID)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         if($_POST)
         {
             $this->gitlab->createGroup($gitlabID);
@@ -349,6 +368,15 @@ class gitlab extends control
      */
     public function editGroup($gitlabID, $groupID)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, $openID);
+            if(empty($members)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         if($_POST)
         {
             $this->gitlab->editGroup($gitlabID);
