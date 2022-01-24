@@ -624,13 +624,17 @@ class gitlab extends control
 
         $result = $this->gitlab->apiGetProjectsPager($gitlabID, $keyword, $orderBy, $pager);
 
+        /* Get group id list by gitlab user that the user is maintainer. */
+        $groupIDList = array(0 => 0);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['maintainer']);
+        foreach($groups as $group) $groupIDList[] = $group->id;
+
         foreach($result['projects'] as $key => $project)
         {
             $project->adminer = (bool)$this->app->user->admin;
             if(!$project->adminer and isset($project->owner) and $project->owner->id == $openID) $project->adminer = true;
 
-            $project->userAccess = 0;
-            if(isset($project->permissions) and $project->permissions->project_access) $project->userAccess = (int)$project->permissions->project_access->access_level; 
+            $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $openID, $project->id, $project, $groupIDList, 'maintainer');
         }
 
         $gitlab = $this->gitlab->getByID($gitlabID);
