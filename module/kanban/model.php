@@ -3071,9 +3071,9 @@ class kanbanModel extends model
     }
 
     /**
-     * Process cards when delete a column. 
-     * 
-     * @param  object $column 
+     * Process cards when delete a column.
+     *
+     * @param  object $column
      * @access public
      * @return void
      */
@@ -3309,10 +3309,13 @@ class kanbanModel extends model
      */
     public function getCards2Import($kanbanID = 0, $excludedID = 0, $pager = null)
     {
+        $kanbanIdList = $this->getCanViewObjects();
+
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('archived')->eq(0)
             ->andWhere('fromID')->eq(0)
+            ->andWhere('kanban')->in($kanbanIdList)
             ->beginIF($kanbanID)->andWhere('kanban')->eq($kanbanID)->fi()
             ->beginIF($excludedID)->andWhere('kanban')->ne($excludedID)->fi()
             ->orderBy('order')

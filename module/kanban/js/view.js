@@ -969,9 +969,9 @@ function createColumnCreateMenu(options)
 
     if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
-    if(privs.includes('import') && kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
-    if(privs.includes('import') && kanban.object) items.push({className: 'parentDivider'});
-    if(privs.includes('import') && kanban.object) items.push({label: kanbanLang.importAB, className: 'import'});
+    if(privs.includes('import') && kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('import') && kanban.object && kanban.object != 'cards') items.push({className: 'parentDivider'});
+    if(privs.includes('import') && kanban.object && kanban.object != 'cards') items.push({label: kanbanLang.importAB, className: 'import'});
 
     return items;
 }
@@ -1094,11 +1094,15 @@ $(function()
         $('.parentDivider').parent().addClass('divider');
         $('.import').parent().addClass('dropdown-submenu top');
 
+        var regionID = $(this).closest('.kanban').data('id');
+        var groupID  = $(this).closest('.kanban-board').data('id');
+        var columnID = $(this).closest('.kanban-col').data('id');
+
         /* The submenu of import. */
-        var importPlanLink      = kanban.object.indexOf('plan') != -1 ? '<li><a href="' + createLink('kanban', 'importPlan') + '">' + kanbanLang.importPlan + '</a></li>' : '';
-        var importReleaseLink   = kanban.object.indexOf('release') != -1 ? '<li><a href="' + createLink('kanban', 'importRelease') + '">' + kanbanLang.importRelease + '</a></li>' : '';
-        var importExecutionLink = kanban.object.indexOf('execution') != -1 ? '<li><a href="' + createLink('kanban', 'importExecution') + '">' + kanbanLang.importExecution + '</a></li>' : '';
-        var importBuildLink     = kanban.object.indexOf('build') != -1 ? '<li><a href="' + createLink('kanban', 'importBuild') + '">' + kanbanLang.importBuild + '</a></li>' : '';
+        var importPlanLink      = kanban.object.indexOf('plan') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importPlan', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importPlan + '</a></li>' : '';
+        var importReleaseLink   = kanban.object.indexOf('release') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
+        var importExecutionLink = kanban.object.indexOf('execution') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
+        var importBuildLink     = kanban.object.indexOf('build') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
         var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink +'</ul>';
         $('.import').parent().append(importSubmenu);
 
