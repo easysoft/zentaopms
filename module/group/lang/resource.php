@@ -679,6 +679,7 @@ $lang->resource->kanban->restoreCard        = 'restoreCard';
 $lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
 $lang->resource->kanban->batchCreateCard    = 'batchCreateCard';
 $lang->resource->kanban->import             = 'import';
+$lang->resource->kanban->enableArchived     = 'enableArchived';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -726,6 +727,7 @@ $lang->kanban->methodorder[210] = 'restoreCard';
 $lang->kanban->methodorder[215] = 'setLaneHeight';
 $lang->kanban->methodOrder[220] = 'batchCreateCard';
 $lang->kanban->methodorder[225] = 'import';
+$lang->kanban->methodorder[230] = 'enableArchived';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
