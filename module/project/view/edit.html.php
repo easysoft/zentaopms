@@ -165,6 +165,12 @@
             </div>
           </td>
         </tr>
+        <?php if($project->model == 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->execution->team;?></th>
+          <td colspan='2'><?php echo html::select('teamMembers[]', $users, array_keys($teamMembers), "class='form-control chosen' multiple"); ?></td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->desc;?></th>
           <td colspan='3'>

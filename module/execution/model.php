@@ -381,7 +381,6 @@ class executionModel extends model
         {
             $executionID   = $this->dao->lastInsertId();
             $today         = helper::today();
-            $creatorExists = false;
             $teamMembers   = array();
 
             if((isset($project) and $project->model != 'kanban') or empty($project)) $this->loadModel('kanban')->createExecutionLane($executionID);
@@ -395,9 +394,8 @@ class executionModel extends model
 
             /* Set team of execution. */
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
-	    array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD);
-	    $members = array_unique($members);
-
+            array_push($members, $sprint->PO, $sprint->QD, $sprint->PM, $sprint->RD, $sprint->openedBy);
+            $members = array_unique($members);
             $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
             foreach($members as $account)
             {
@@ -412,24 +410,8 @@ class executionModel extends model
                 $member->days    = $sprint->days;
                 $member->hours   = $this->config->execution->defaultWorkhours;
                 $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                if($member->account == $this->app->user->account) $creatorExists = true;
                 $teamMembers[$account] = $member;
             }
-
-            if(!$creatorExists)
-            {
-                $member = new stdClass();
-                $member->root    = $executionID;
-                $member->type    = 'execution';
-                $member->account = $this->app->user->account;
-                $member->role    = zget($this->lang->user->roleList, $this->app->user->role, '');
-                $member->join    = $today;
-                $member->days    = $sprint->days;
-                $member->hours   = $this->config->execution->defaultWorkhours;
-                $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                $teamMembers[$member->account] = $member;
-            }
-
             if($this->config->systemMode == 'new') $this->addProjectMembers($sprint->project, $teamMembers);
 
             /* Create doc lib. */
