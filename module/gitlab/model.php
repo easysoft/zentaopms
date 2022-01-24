@@ -542,8 +542,8 @@ class gitlabModel extends model
     /**
      * Get group members of one gitlab.
      *
-     * @param  int     $gitlabID
-     * @param  int     $groupID
+     * @param  int    $gitlabID
+     * @param  int    $groupID
      * @access public
      * @return object
      */
@@ -596,10 +596,12 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetGroups($gitlabID, $orderBy)
+    public function apiGetGroups($gitlabID, $orderBy, $minAccessLevel = 0)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
+        if($minAccessLevel > 0) $url .= "&min_access_level=$minAccessLevel";
+
         list($order, $sort) = explode('_', $orderBy);
 
         $allResults = array();
@@ -2739,5 +2741,42 @@ class gitlabModel extends model
         }
 
         return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Check user access.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $openID
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  string $maxRole
+     * @access public
+     * @return bool
+     */
+    public function checkUserAccess($gitlabID, $openID = 0, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    {
+        if($project == null) $project = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(!$openID or !isset($project->id)) return false;
+
+        $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
+
+        if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
+        if(!empty($project->shared_with_groups))
+        {
+            if(empty($groupIDList))
+            {
+                $groups = $this->apiGetGroups($gitlabID, 'name_asc', $accessLevel);
+                foreach($groups as $group) $groupIDList[] = $group->id;
+            }
+
+            foreach($project->shared_with_groups as $group)
+            {
+                if($group->group_access_level < $accessLevel) continue;
+                if(in_array($group->group_id, $groupIDList)) return true;
+            }
+        }
+
+        return false;
     }
 }
