@@ -1131,3 +1131,9 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
     return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
 }
+
+/* Hide contextmenu when page scroll */
+$('.panel-body').scroll(function()
+{
+    $.zui.ContextMenu.hide();
+});
