@@ -1057,13 +1057,13 @@ class kanban extends control
     }
   
     /**
-     * Set done function.
+     * Set archived.
      *
      * @param  int    $kanbanID
      * @access public
      * @return void
      */
-    public function setArchivedFunction($kanbanID)
+    public function enableArchived($kanbanID)
     {
         if(!empty($_POST))
         {

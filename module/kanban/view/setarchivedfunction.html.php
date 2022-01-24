@@ -14,7 +14,7 @@
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->setArchivedFunction;?></h2>
+      <h2><?php echo $lang->kanban->enableArchived;?></h2>
     </div>
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
