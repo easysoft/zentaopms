@@ -655,7 +655,8 @@ class gitlabModel extends model
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
-        $result = commonModel::httpWithHeader($url . "&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $keyword = urlencode($keyword);
+        $result  = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
@@ -2749,19 +2750,18 @@ class gitlabModel extends model
      * Check user access.
      *
      * @param  int    $gitlabID
-     * @param  int    $openID
      * @param  int    $projectID
      * @param  object $project
      * @param  string $maxRole
      * @access public
      * @return bool
      */
-    public function checkUserAccess($gitlabID, $openID = 0, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    public function checkUserAccess($gitlabID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
     {
         if($this->app->user->admin) return true;
 
         if($project == null) $project = $this->apiGetSingleProject($gitlabID, $projectID);
-        if(!$openID or !isset($project->id)) return false;
+        if(!isset($project->id)) return false;
 
         $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
 
