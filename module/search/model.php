@@ -569,6 +569,7 @@ class searchModel extends model
         $results = $this->dao->select("*, {$scoreColumn} as score")
             ->from(TABLE_SEARCHINDEX)
             ->where("(MATCH(title) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 or MATCH(content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 $likeCondition)")
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObject)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
@@ -633,6 +634,9 @@ class searchModel extends model
                 }
 
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+
+                if($this->config->vision == 'lite') $record->url = helper::createLink('projectstory', $method, "storyID={$record->objectID}", '', false, 0, true);
+
                 $record->extraType = isset($story->type) ? $story->type : '';
             }
             elseif(($module == 'risk' or $module == 'opportunity') and isset($this->config->maxVersion))
@@ -688,6 +692,7 @@ class searchModel extends model
         $index->title      = $object->{$fields->title};
         $index->addedDate  = isset($object->{$fields->addedDate}) ? $object->{$fields->addedDate} : '0000-00-00 00:00:00';
         $index->editedDate = isset($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : '0000-00-00 00:00:00';
+        $index->vision     = $this->config->vision;
 
         $index->content = '';
         $contentFields  = explode(',', $fields->content . ',comment');

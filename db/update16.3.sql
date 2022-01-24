@@ -9,3 +9,4 @@ ALTER TABLE `zt_lang` DROP INDEX `lang`, ADD UNIQUE `lang` (`lang`,`module`,`sec
 ALTER TABLE `zt_doc` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_doclib` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `type`;
 ALTER TABLE `zt_action` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `read`;
+ALTER TABLE `zt_searchindex` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `title`;
