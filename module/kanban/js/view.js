@@ -151,15 +151,16 @@ function renderHeaderCol($column, column, $header, kanbanData)
         $actions.html(addItemBtn + moreAction);
 
     }
-    if(columnPrivs.includes('sortColumn')){
-      if($column.hasClass('kanban-header-parent-col'))
-      {
-          $column.children('.kanban-header-col').addClass('sort');
-      }
-      else
-      {
-        $column.addClass('sort');
-      }
+    if(columnPrivs.includes('sortColumn'))
+    {
+        if($column.hasClass('kanban-header-parent-col'))
+        {
+            $column.children('.kanban-header-col').addClass('sort');
+        }
+        else
+        {
+          $column.addClass('sort');
+        }
     }
 }
 
