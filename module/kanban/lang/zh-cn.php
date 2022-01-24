@@ -260,9 +260,9 @@ $lang->kanbancolumn->childName  = '子列名称';
 $lang->kanbancolumn->childColor = '子状态颜色';
 $lang->kanbancolumn->empty      = '暂时没有看板列';
 
-$lang->kanbancolumn->confirmArchive = '您确认归档该列吗？归档列后，该列和列中所有卡片将被隐藏，您可以在区域-已归档中查看已归档的列。';
-$lang->kanbancolumn->confirmDelete  = '您确认删除该列吗？删除列后，该列中所有卡片也会被删除。';
-$lang->kanbancolumn->confirmRestore = '您确定要还原该看板列吗？还原看板列后，该看板列和看板列中所有的任务将同时还原到之前的位置。';
+$lang->kanbancolumn->confirmArchive = '您确认归档该列吗？归档列后，该列将被隐藏，列中所有卡片移动到兄弟列或父列，您可以在区域-已归档中查看已归档的列。';
+$lang->kanbancolumn->confirmDelete  = '您确认删除该列吗？删除列后，该列中所有卡片会被移动到兄弟列或父列。';
+$lang->kanbancolumn->confirmRestore = '您确定要还原该看板列吗？还原后，该看板列将回到之前的位置。';
 
 $lang->kanbanlane = new stdclass();
 $lang->kanbanlane->name      = $lang->kanban->laneName;
