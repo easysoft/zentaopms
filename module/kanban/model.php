@@ -3263,6 +3263,6 @@ class kanbanModel extends model
         $importObjects    = $_POST['import'] == 'off' ? array() : $_POST['importObjectList'];
         $importObjectList = implode(',', $importObjects);
 
-        $this->dao->update(TABLE_KANBAN)->set('importObject')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
+        $this->dao->update(TABLE_KANBAN)->set('object')->eq($importObjectList)->where('id')->eq($kanbanID)->exec();
     }
 }

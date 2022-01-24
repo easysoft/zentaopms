@@ -1381,8 +1381,8 @@ class kanban extends control
 
         $kanban = $this->kanban->getByID($kanbanID);
 
-        $this->view->enableImport  = empty($kanban->importObject) ? 'off' : 'on';
-        $this->view->importObjects = empty($kanban->importObject) ? array() : explode(',', $kanban->importObject);
+        $this->view->enableImport  = empty($kanban->object) ? 'off' : 'on';
+        $this->view->importObjects = empty($kanban->object) ? array() : explode(',', $kanban->object);
 
         $this->display();
     }
