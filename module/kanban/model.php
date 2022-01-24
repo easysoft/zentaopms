@@ -3131,7 +3131,7 @@ class kanbanModel extends model
     }
 
     /**
-     * Get imported cards.
+     * Get cards to import.
      *
      * @param  int $kanbanID
      * @param  int $excludedID
@@ -3139,7 +3139,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function getImportedCards($kanbanID = 0, $excludedID = 0, $pager = null)
+    public function getCards2Import($kanbanID = 0, $excludedID = 0, $pager = null)
     {
         return $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)

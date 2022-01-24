@@ -797,7 +797,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $cards2Imported = $this->kanban->getImportedCards($selectedKanbanID, $kanbanID, $pager);
+        $cards2Imported = $this->kanban->getCards2Import($selectedKanbanID, $kanbanID, $pager);
 
         if($_POST)
         {
