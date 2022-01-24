@@ -935,6 +935,59 @@ class kanban extends control
     }
 
     /**
+     * Import build.
+     *
+     * @param  int $kanbanID
+     * @param  int $regionID
+     * @param  int $groupID
+     * @param  int $columnID
+     * @param  int $selectedProjectID
+     * @param  int $recTotal
+     * @param  int $recPerPage
+     * @param  int $pageID
+     * @access public
+     * @return void
+     */
+    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    {
+        if($_POST)
+        {
+            $importedIDList = $this->kanban->importObject($kanbanID, $regionID, $groupID, $columnID, 'build');
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            foreach($importedIDList as $cardID => $buildID)
+            {
+                $this->loadModel('action')->create('kanbancard', $cardID, 'importedBuild', '', $buildID);
+            }
+
+            return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
+        }
+
+        $this->loadModel('project');
+        $this->loadModel('build');
+
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
+        $projectPairs      = $this->project->getPairsByProgram();
+        $selectedProjectID = empty($selectedProjectID) ? key($projectPairs) : $selectedProjectID;
+
+        $this->view->projects          = $projectPairs;
+        $this->view->selectedProjectID = $selectedProjectID;
+        $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
+        $this->view->builds2Imported   = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);;
+        $this->view->users             = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->pager             = $pager;
+        $this->view->kanbanID          = $kanbanID;
+        $this->view->regionID          = $regionID;
+        $this->view->groupID           = $groupID;
+        $this->view->columnID          = $columnID;
+
+        $this->display();
+    }
+
+    /**
      * Import execution.
      *
      * @param  int $kanbanID

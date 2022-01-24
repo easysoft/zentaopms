@@ -59,10 +59,11 @@ $lang->kanban->restore             = '还原';
 $lang->kanban->child               = '子';
 $lang->kanban->showClosed          = '显示已关闭';
 $lang->kanban->importCard          = '转入卡片';
-$lang->kanban->allKanban           = '所有看板';
 $lang->kanban->importPlan          = '导入产品计划';
-$lang->kanban->importExecution     = '导入项目执行';
 $lang->kanban->importRelease       = '导入产品发布';
+$lang->kanban->importExecution     = '导入项目执行';
+$lang->kanban->importBuild         = '导入项目版本';
+$lang->kanban->allKanban           = '所有看板';
 $lang->kanban->allProjects         = '所有项目';
 $lang->kanban->allProducts         = '所有产品';
 

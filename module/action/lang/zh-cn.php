@@ -197,6 +197,7 @@ $lang->action->desc->importedcard         = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->importedplan         = '$date, 由 <strong>$actor</strong> 从产品计划 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedrelease      = '$date, 由 <strong>$actor</strong> 从产品发布 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedexecution    = '$date, 由 <strong>$actor</strong> 从项目执行 <strong>$extra</strong> 导入。' . "\n";
+$lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 从项目版本 <strong>$extra</strong> 导入。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -340,6 +341,7 @@ $lang->action->label->importedcard          = '导入了';
 $lang->action->label->importedplan          = '导入了';
 $lang->action->label->importedrelease       = '导入了';
 $lang->action->label->importedexecution     = '导入了';
+$lang->action->label->importedbuild         = '导入了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();

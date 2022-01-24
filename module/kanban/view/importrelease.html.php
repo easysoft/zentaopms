@@ -42,7 +42,7 @@
           </th>
           <th class='c-name'><?php echo $lang->release->name;?></th>
           <th class='c-name'><?php echo $lang->release->project;?></th>
-          <th class='c-date'><?php echo $lang->release->build;?></th>
+          <th class='c-name'><?php echo $lang->release->build;?></th>
           <th class='c-date'><?php echo $lang->release->date;?></th>
         </tr>
       </thead>
@@ -61,8 +61,8 @@
           <?php else:?>
           <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>
-          <td title='<?php echo $release->project;?>'><?php echo $release->project;?></td>
-          <td title='<?php echo $release->build;?>'><?php echo $release->build;?></td>
+          <td title='<?php echo $release->projectName;?>'><?php echo $release->projectName;?></td>
+          <td title='<?php echo $release->buildName;?>'><?php echo $release->buildName;?></td>
           <td title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
         </tr>
         <?php endforeach;?>
