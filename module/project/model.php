@@ -867,7 +867,6 @@ class projectModel extends model
             $members = isset($_POST['teamMembers']) ? $_POST['teamMembers'] : array();
             array_push($members, $project->PM);
             $members = array_unique($members);
-
             $roles   = $this->loadModel('user')->getUserRoles(array_values($members));
             foreach($members as $account)
             {
