@@ -833,18 +833,18 @@ class gitlab extends control
      */
     public function browseBranchPriv($gitlabID, $projectID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-        $openID = 0;
+        $openID  = 0;
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
         if(!$this->app->user->admin)
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $openID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         $keyword  = fixer::input('post')->setDefault('keyword', '')->get('keyword');
         $branches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, $keyword, $orderBy);
-        $project  = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-
-        if(!$this->app->user->admin and (!isset($project->owner) or $project->owner->id != $openID)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1053,15 +1053,15 @@ class gitlab extends control
      */
     public function browseTagPriv($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $openID = 0;
+        $openID  = 0;
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
         if(!$this->app->user->admin)
         {
             $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!isset($project->owner) or $project->owner->id != $openID) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
-
-        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
-        if(!$this->app->user->admin and (!isset($project->owner) or $project->owner->id != $openID)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
 
         $this->session->set('gitlabTagPrivList', $this->app->getURI(true));
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
