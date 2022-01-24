@@ -1,4 +1,7 @@
 <?php
+$lang->execution->common  = '看板';
+$lang->executionCommon    = '看板';
+
 /* Main Navigation. */
 $lang->mainNav            = new stdclass();
 $lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";

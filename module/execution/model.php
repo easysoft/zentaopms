@@ -3548,7 +3548,6 @@ class executionModel extends model
     public function fillTasksInTree($node, $executionID)
     {
         $node = (object)$node;
-        a($node);
         static $storyGroups, $taskGroups;
         if(empty($storyGroups))
         {
@@ -3624,7 +3623,6 @@ class executionModel extends model
 
             $node->type = 'module';
             $stories = isset($storyGroups[$node->root][$node->id]) ? $storyGroups[$node->root][$node->id] : array();
-            a($stories);
             foreach($stories as $story)
             {
                 $storyItem = new stdclass();
