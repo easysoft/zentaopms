@@ -314,7 +314,7 @@ class gitlab extends control
         }
 
         $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->config->gitlab->accessLevel['maintainer']);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->config->gitlab->accessLevel['owner']);
 
         $adminGropuIDList = array();
         foreach($adminGroups as $group) $adminGropuIDList[] = $group->id;
@@ -374,7 +374,7 @@ class gitlab extends control
             if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
 
             $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, $openID);
-            if(empty($members)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+            if(empty($members) or $members[0]->access_level < $this->config->gitlab->accessLevel['owner']) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
         }
 
         if($_POST)
@@ -405,19 +405,21 @@ class gitlab extends control
      */
     public function deleteGroup($gitlabID, $groupID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
 
-        $group   = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
-        $reponse = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
+        $group    = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
+        $response = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
-        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        if(!$response or substr($response->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabgroup', $groupID, 'deleted', '', $group->name);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
+        $result   = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
+        return print(js::alert($result));
     }
 
     /**

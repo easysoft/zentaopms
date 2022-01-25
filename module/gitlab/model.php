@@ -560,7 +560,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -584,7 +584,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -612,7 +612,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100 or $page > 10) break;
         }
 
         return $allResults;
@@ -686,7 +686,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100 or $page > 10) break;
         }
 
         return $allResults;
@@ -1498,7 +1498,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -1537,7 +1537,7 @@ class gitlabModel extends model
                 $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
                 if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results)<100) break;
+                if(count($results) < 100) break;
             }
 
             return $allResults;
@@ -1595,7 +1595,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         $tags = array();
