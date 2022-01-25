@@ -1123,9 +1123,24 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '')
+    public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '', $filter = '')
     {
-        $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
+        if($this->app->user->admin)
+        {
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
+        }
+        else
+        {
+            $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$gitlabUser) $this->send(array('message' => array()));
+
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            if($filter == 'IS_DEVELOPER')
+            {
+                foreach($projects as $key => $project) if($this->gitlab->checkUserAccess($gitlabID, 0, $project, array(), 'developer') == false) unset($projects[$key]);
+            }
+        }
+
 
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;

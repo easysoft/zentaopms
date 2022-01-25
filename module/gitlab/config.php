@@ -117,6 +117,7 @@ $config->gitlab->objectTypes['story'] = '需求';
 
 $config->gitlab->accessLevel = array();
 $config->gitlab->accessLevel['guest']      = 10;
+$config->gitlab->accessLevel['reporter']   = 20;
 $config->gitlab->accessLevel['developer']  = 30;
 $config->gitlab->accessLevel['maintainer'] = 40;
 $config->gitlab->accessLevel['owner']      = 50;

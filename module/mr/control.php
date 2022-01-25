@@ -82,12 +82,16 @@ class mr extends control
             return $this->send($result);
         }
 
+        $gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $gitlabUsers = $this->gitlab->getGitLabListByAccount();
+        foreach($gitlabHosts as $gitlabID=> $gitlabHost) if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) unset($gitlabHosts[$gitlabID]);
+
         $this->app->loadLang('repo'); /* Import lang in repo module. */
         $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->jobList     = $this->loadModel('job')->getList();
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->gitlabHosts = $gitlabHosts;
         $this->display();
     }
 
@@ -151,6 +155,15 @@ class mr extends control
         }
 
         $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
+
+        /* Check permissions. */
+        if(!$this->app->user->admin)
+        {
+            $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
+            $isDeveloper   = $this->gitlab->checkUserAccess($MR->gitlabID, 0, $sourceProject, array(), 'developer');
+
+            if(!isset($gitlabUsers[$this->app->user->account]) or !$isDeveloper) die(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
+        }
 
         /* Import lang for required modules. */
         $this->loadModel('repo');

@@ -94,7 +94,7 @@ class mrModel extends model
     }
 
     /**
-     * Get all gitlab server project,private projects that do not include guest permissions.
+     * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
      *
      * @access public
      * @return array
@@ -106,14 +106,11 @@ class mrModel extends model
             ->fetchPairs('gitlabID');
 
         $allProjects = array();
-        $gitlabUsers = $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
-            ->where('providerType')->eq('gitlab')
-            ->andWhere('account')->eq($this->app->user->account)
-            ->fetchPairs();
+        $gitlabUsers = $this->gitlab->getGitLabListByAccount();
         foreach($gitlabIDList as $gitlabID)
         {
             if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
-            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID);
+            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false');
         }
 
         $allProjectPairs = array();
@@ -121,7 +118,7 @@ class mrModel extends model
         {
             foreach($projects as $key => $project)
             {
-                if(empty($project->permissions->project_access->access_level) or $project->permissions->project_access->access_level <= 10) continue;
+                if($this->gitlab->checkUserAccess($gitlabID, 0, $project, array(), 'reporter') == false) continue;
                 $allProjectPairs[$gitlabID][$project->id] = $project;
             }
         }
