@@ -280,6 +280,18 @@ function renderKanbanItem(item, $item)
     {
         renderExecutionItem(item, $item);
     }
+    else if(item.fromType == 'release')
+    {
+        renderReleaseItem(item, $item);
+    }
+    else if(item.fromType == 'build')
+    {
+        renderBuildItem(item, $item);
+    }
+    else if(item.fromType == 'productplan')
+    {
+        renderProductplanItem(item, $item);
+    }
     else
     {
         var $title       = $item.children('.title');
@@ -457,9 +469,187 @@ function renderExecutionItem(item, $item)
     /* Display avatars of PM. */
     var $user = $info.children('.user');
     var user  = [item.PM];
-    if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+    if(users[item.PM])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.PM]);
+    }
+}
 
-    $user.html(renderUsersAvatar(user, item.id)).attr('title', item.PM);
+/**
+ * Render plan item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderReleaseItem(item, $item)
+{
+    var privs = item.actions;
+
+    /* Print name. */
+    var $title = $item.children('.releaseTitle');
+    if(!$title.length)
+    {
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-flag"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-flag"></i>' + item.name + '</a>').appendTo($item);
+    }
+    $title.attr('title', item.name);
+
+    var $info = $item.children('.releaseInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="releaseInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.releaseStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="releaseStatus label label-' + item.status + '">' + releaseLang.statusList[item.status] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="releaseStatus label label-deleted">' + releaseLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display release date. */
+    var $date       = $info.children('.date');
+    var releaseDate = $.zui.createDate(item.date);
+    if(!$date.length) $date = $('<span class="date label label-wait"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(releaseDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(releaseDate, 'yyyy-MM-dd')).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
+}
+
+/**
+ * Render product plan item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderProductplanItem(item, $item)
+{
+    var privs = item.actions;
+
+    /* Print name. */
+    var $title = $item.children('.productplanTitle');
+    if(!$title.length)
+    {
+        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
+        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item);
+    }
+    $title.attr('title', item.title);
+
+    var $info = $item.children('.productplanInfo');
+    if(!$info.length) $info = $(
+    [
+        '<div class="productplanInfo">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.productplanStatus');
+    if(!$statusBox.length)
+    {
+        if(item.deleted == '0')
+        {
+            $statusBox = $('<span class="productplanStatus label label-' + item.status + '">' + productplanLang.statusList[item.status] + '</span>').appendTo($info);
+        }
+        else
+        {
+            $statusBox = $('<span class="productplanStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+        }
+    }
+
+    /* Display date of product plan. */
+    var $date      = $info.children('.date');
+    var begin      = $.zui.createDate(item.begin);
+    var end        = $.zui.createDate(item.end);
+    var today      = new Date();
+    var labelType  = end.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
+    var labelTitle = $.zui.formatDate(begin, 'MM-dd') + ' ' + productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd');
+
+    if((item.begin == '2030-01-01' || item.end == '2030-01-01'))
+    {
+        labelType  = 'future';
+        labelTitle = productplanLang.future;
+    }
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    $date.text(labelTitle).attr('title', labelTitle).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.createdBy];
+    if(users[item.createdBy])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.createdBy]);
+    }
+}
+
+/**
+ * Render build item.
+ *
+ * @param  object item
+ * @param  object $item
+ * @access public
+ * @return void
+ */
+function renderBuildItem(item, $item)
+{
+    var privs = item.actions;
+
+    /* Print name. */
+    var $title = $item.children('.title');
+    if(!$title.length)
+    {
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-code"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<a class="title"><i class="icon icon-code"></i>' + item.name + '</a>').appendTo($item);
+    }
+    $title.attr('title', item.name);
+
+    var $info = $item.children('.info');
+    if(!$info.length) $info = $(
+    [
+        '<div class="info">',
+        '</div>'
+    ].join('')).appendTo($item);
+
+    var $statusBox = $info.children('.buildStatus');
+    if(!$statusBox.length && item.deleted == '1')
+    {
+        $statusBox = $('<span class="buildStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+    }
+
+    /* Display build date. */
+    var $date     = $info.children('.date');
+    var buildDate = $.zui.createDate(item.date);
+    if(!$date.length) $date = $('<span class="date label label-wait"></span>').appendTo($info);
+
+    $date.text($.zui.formatDate(buildDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(buildDate, 'yyyy-MM-dd')).show();
+
+    /* Display avatars of creator. */
+    var $user = $info.children('.user');
+    var user  = [item.builder];
+    if(users[item.builder])
+    {
+        if(!$user.length) $user = $('<div class="user"></div>').appendTo($info);
+        $user.html(renderUsersAvatar(user, item.id)).attr('title', users[item.builder]);
+    }
 }
 
 /**
@@ -1099,10 +1289,10 @@ $(function()
         var columnID = $(this).closest('.kanban-col').data('id');
 
         /* The submenu of import. */
-        var importPlanLink      = kanban.object.indexOf('plan') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importPlan', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importPlan + '</a></li>' : '';
-        var importReleaseLink   = kanban.object.indexOf('release') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
-        var importExecutionLink = kanban.object.indexOf('execution') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
-        var importBuildLink     = kanban.object.indexOf('build') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
+        var importPlanLink      = kanban.object.indexOf('plan') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importPlan', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importPlan + '</a></li>' : '';
+        var importReleaseLink   = kanban.object.indexOf('release') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
+        var importExecutionLink = kanban.object.indexOf('execution') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
+        var importBuildLink     = kanban.object.indexOf('build') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
         var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink +'</ul>';
         $('.import').parent().append(importSubmenu);
 
