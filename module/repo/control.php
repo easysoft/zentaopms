@@ -1134,12 +1134,15 @@ class repo extends control
             $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if(!$gitlabUser) $this->send(array('message' => array()));
 
-            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+            foreach($groups as $group) $groupIDList[] = $group->id;
             if($filter == 'IS_DEVELOPER')
             {
                 foreach($projects as $key => $project)
                 {
-                    if($this->gitlab->checkUserAccess($gitlabID, 0, $project, array(), 'developer') == false) unset($projects[$key]);
+                    if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
                 }
             }
         }

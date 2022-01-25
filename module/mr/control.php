@@ -162,10 +162,13 @@ class mr extends control
         /* Check permissions. */
         if(!$this->app->user->admin)
         {
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($MR->gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+            foreach($groups as $group) $groupIDList[] = $group->id;
             $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
-            $isDeveloper   = $this->gitlab->checkUserAccess($MR->gitlabID, 0, $sourceProject, array(), 'developer');
+            $isDeveloper   = $this->gitlab->checkUserAccess($MR->gitlabID, 0, $sourceProject, $groupIDList, 'developer');
 
-            if(!isset($gitlabUsers[$this->app->user->account]) or !$isDeveloper) die(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
+            if(!isset($gitlabUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
         }
 
         /* Import lang for required modules. */

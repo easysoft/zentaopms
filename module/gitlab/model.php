@@ -2776,6 +2776,7 @@ class gitlabModel extends model
         $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
 
         if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
+        if(isset($project->permissions->group_access->access_level) and $project->permissions->group_access->access_level >= $accessLevel) return true;
         if(!empty($project->shared_with_groups))
         {
             if(empty($groupIDList))
