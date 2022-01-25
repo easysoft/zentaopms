@@ -248,7 +248,7 @@ class gitlab extends control
         if(strpos($gitlabURL, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!$token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
-        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token);
+        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token, true);
 
         if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
