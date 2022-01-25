@@ -91,6 +91,15 @@ class repo extends control
         $recTotal = count($repoList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $repoList = array_chunk($repoList, $pager->recPerPage);
+        $repoList = empty($repoList) ? $repoList : $repoList[$pageID - 1];
+
+        /* Get success jobs of sonarqube.*/
+        $jobIDList = array();
+        foreach($repoList as $repo)
+        {
+            if(isset($sonarRepoList[$repo->id])) $jobIDList[] = $sonarRepoList[$repo->id]->id;
+        }
+        $successJobs = $this->loadModel('compile')->getSuccessJobs($jobIDList);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
@@ -99,9 +108,10 @@ class repo extends control
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
         $this->view->pager         = $pager;
-        $this->view->repoList      = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
+        $this->view->repoList      = $repoList;
         $this->view->products      = $this->loadModel('product')->getPairs();
         $this->view->sonarRepoList = $sonarRepoList;
+        $this->view->successJobs   = $successJobs;
 
         $this->display();
     }
