@@ -1094,7 +1094,7 @@ class kanbanModel extends model
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
             ->andWhere('fromType')->eq($fromType)
-            ->fetchAll('fromID, id');
+            ->fetchGroup('fromID', 'id');
 
         if(!empty($objectCards))
         {
