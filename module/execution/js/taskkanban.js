@@ -285,7 +285,7 @@ function renderHeaderCol($col, col, $header, kanban)
     if(col.asParent) $col = $col.children('.kanban-header-col');
     var $actions = $('<div class="actions" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
-    if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlane) printStoryButton = true;
+    if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlan) printStoryButton = true;
     if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
     if(priv.canCreateBug   || priv.canBatchCreateBug)  printBugButton  = true;
 
@@ -514,16 +514,16 @@ function findDropColumns($element, $root)
 }
 
 /**
- * changeCardColType 
- * 
- * @param  int    $cardID 
- * @param  int    $fromColID 
- * @param  int    $toColID 
- * @param  int    $fromLaneID 
- * @param  int    $toLaneID 
- * @param  string $cardType 
- * @param  string $fromColType 
- * @param  string $toColType 
+ * Change card's type by changing column.
+ *
+ * @param  int    $cardID
+ * @param  int    $fromColID
+ * @param  int    $toColID
+ * @param  int    $fromLaneID
+ * @param  int    $toLaneID
+ * @param  string $cardType
+ * @param  string $fromColType
+ * @param  string $toColType
  * @access public
  * @return void
  */
@@ -682,10 +682,10 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
 
 /**
  * Handle drop task.
- * 
- * @param  object $element 
- * @param  object $event 
- * @param  object $kanban 
+ *
+ * @param  object $element
+ * @param  object $event
+ * @param  object $kanban
  * @access public
  * @return void
  */
@@ -718,11 +718,11 @@ var kanbanActionHandlers =
 
 /**
  * Handle kanban action.
- * 
- * @param  string $action 
- * @param  object $element 
- * @param  object $event 
- * @param  object $kanban 
+ *
+ * @param  string $action
+ * @param  object $element
+ * @param  object $event
+ * @param  object $kanban
  * @access public
  * @return void
  */
@@ -783,7 +783,7 @@ function createColumnCreateMenu(options)
         if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
         if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
-        if(priv.canLinkStoryByPlane) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
+        if(priv.canLinkStoryByPlan) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }
     else if(col.laneType == 'bug')
     {
