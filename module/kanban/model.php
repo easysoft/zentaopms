@@ -1911,7 +1911,7 @@ class kanbanModel extends model
 
         if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
 
-         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
+        $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
 
         if(!empty($kanban->space))
         {
@@ -1919,6 +1919,9 @@ class kanbanModel extends model
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+
+            $space = $this->getSpaceById($kanban->space);
+            if($space->type == 'private') $kanban->owner = $account;
         }
 
 
