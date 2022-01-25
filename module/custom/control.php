@@ -111,12 +111,12 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
-                $this->loadModel('setting')->setItems("system.$module", $data);
+                $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'story' and $field == 'reviewRules')
             {
                 $data = fixer::input('post')->join('superReviewers', ',')->get();
-                $this->loadModel('setting')->setItems("system.$module", $data);
+                $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
             {
