@@ -40,6 +40,7 @@ function fullScreen()
             $('.action').hide();
             $('.kanban-group-header').hide();
             $(".title").attr("disabled", true).css("pointer-events", "none");
+            $('#kanban').sortable('destroy');
             $.cookie('isFullScreen', 1);
         };
 
@@ -81,6 +82,7 @@ function exitFullScreen()
     $('.action').show();
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
+    initSortable();
     $.cookie('isFullScreen', 0);
 }
 
@@ -922,6 +924,8 @@ function findDropColumns($element, $root)
 
     return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
     {
+
+        if($.cookie('isFullScreen') == 1) return false;
         var $newCol = $(this);
         var newCol = $newCol.data();
         var $newLane = $newCol.closest('.kanban-lane');
@@ -1342,7 +1346,15 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
+
     /* Init sortable */
+    initSortable();
+
+    resetRegionHeight('open');
+});
+
+function initSortable()
+{
     var sortType  = '';
     var oldLaneID = '';
     var oldColID  = '';
@@ -1485,9 +1497,7 @@ $(function()
             if(sortType == 'lane') $cards.show();
         }
     });
-
-    resetRegionHeight('open');
-});
+}
 
 /**
  * Reset region height according to window height.
