@@ -69,10 +69,7 @@
           <td title='<?php echo $plan->stories;?>'><?php echo $plan->stories;?></td>
           <td title='<?php echo $plan->bugs;?>'><?php echo $plan->bugs;?></td>
           <td title='<?php echo $plan->hour;?>'><?php echo $plan->hour;?></td>
-          <td class='text-left content'>
-            <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));?>
-            <div title='<?php echo $desc;?>'><?php echo $desc;?></div>
-          </td>
+          <td title='<?php echo strip_tags(htmlspecialchars_decode($plan->desc));;?>'><?php echo strip_tags(htmlspecialchars_decode($plan->desc));;?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
