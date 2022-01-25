@@ -20,6 +20,8 @@ $lang->kanban->editLane            = 'Edit Lane';
 $lang->kanban->sortLane            = 'Sort Lane';
 $lang->kanban->laneHeight          = 'Lane Height';
 $lang->kanban->setLaneHeight       = 'Set Lane Height';
+$lang->kanban->columnWidth         = 'Column Height';
+$lang->kanban->setColumnWidth      = 'Set Column Height';
 $lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
 $lang->kanban->editColumn          = 'Edit Column';
@@ -298,6 +300,9 @@ $lang->kanbanlane->modeList['independent'] = 'Independent Kanban column';
 
 $lang->kanbanlane->heightTypeList['auto']   = 'Adaptive (Adaptive according to the card height)';
 $lang->kanbanlane->heightTypeList['custom'] = 'Custom (Customize lane height based on number of cards)';
+
+$lang->kanbancolumn->fluidBoardList['0'] = 'Fixed';
+$lang->kanbancolumn->fluidBoardList['1'] = 'Auto Width';
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = 'The number of cards must be a positive integer greater than 2.';

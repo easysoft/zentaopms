@@ -1013,7 +1013,7 @@ function initKanban($kanban)
         data:              region.groups,
         maxColHeight:      510,
         calcColHeight:     calcColHeight,
-        fluidBoardWidth:   false,
+        fluidBoardWidth:   fluidBoard,
         minColWidth:       285,
         maxColWidth:       285,
         cardHeight:        60,

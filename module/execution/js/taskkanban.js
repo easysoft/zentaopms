@@ -971,7 +971,7 @@ $(function()
         cardHeight:           getCardHeight(),
         showCount:            true,
         showZeroCount:        true,
-        fluidBoardWidth:      false,
+        fluidBoardWidth:      fluidBoard,
         cardsPerRow:          window.kanbanScaleSize,
         virtualize:           true,
         onAction:             handleKanbanAction,

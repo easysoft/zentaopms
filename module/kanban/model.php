@@ -2776,6 +2776,22 @@ class kanbanModel extends model
     }
 
     /**
+     * Set column width.
+     * 
+     * @param  int    $kanbanID 
+     * @param  string $from 
+     * @access public
+     * @return void
+     */
+    public function setColumnWidth($kanbanID, $from = 'kanban')
+    {
+        $table = $this->config->objectTables[$from];
+        $this->dao->update($table)->set('fluidBoard')->eq($this->post->fluidBoard)->where('id')->eq($kanbanID)->exec();
+
+        if(dao::isError()) return false;
+    }
+
+    /**
      * Set kanban headerActions.
      *
      * @param  object $kanban
@@ -2784,7 +2800,7 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
-        $printSetHeight = false;
+        $printSetHeightBtn = false;
         if(common::hasPriv('kanban', 'setLaneHeight'))
         {
             $laneCount = $this->dao->select('COUNT(t2.id) as count')->from(TABLE_KANBANREGION)->alias('t1')
@@ -2794,14 +2810,14 @@ class kanbanModel extends model
                 ->andWhere('t2.deleted')->eq(0)
                 ->fetch('count');
 
-            if($laneCount > 1) $printSetHeight = true;
+            if($laneCount > 1) $printSetHeightBtn = true;
         }
 
         $actions  = '';
         $actions .= "<div class='btn-group'>";
         $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
-        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
+        $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
@@ -2810,12 +2826,13 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'enableArchived')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link'") . '</li>';
-            if($printSetHeight)
+            if($printSetHeightBtn)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
                 $actions .= '<li>' . html::a(helper::createLink('kanban', 'setLaneHeight', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-height"></i>' . $this->lang->kanban->laneHeight, '', "class='iframe btn btn-link' data-width='$width'") . '</li>';
 
             }
+            if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=30%") . '</li>';
             if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link'") . '</li>';
 
             $kanbanActions = '';

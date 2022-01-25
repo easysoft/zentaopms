@@ -535,6 +535,33 @@ class kanban extends control
     }
 
     /**
+     * Set column width.
+     *
+     * @param  int    $kanbanID
+     * @param  string $from     kanban|execution
+     * @access public
+     * @return void
+     */
+    public function setColumnWidth($kanbanID, $from = 'kanban')
+    {
+        if(!empty($_POST))
+        {
+            $this->kanban->setColumnWidth($kanbanID, $from);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+
+        }
+
+        $kanban = $from == 'execution' ? $this->loadModel('execution')->getByID($kanbanID) : $this->kanban->getByID($kanbanID);
+
+        $this->view->kanban = $kanban;
+
+        $this->display();
+    }
+
+    /**
      * Delete a lane.
      *
      * @param  int    $laneID
