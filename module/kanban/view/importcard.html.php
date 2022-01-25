@@ -65,7 +65,7 @@
           <td title='<?php echo $card->name;?>'><?php echo $card->name;?></td>
           <?php endif;?>
           <td title='<?php echo zget($users, $card->assignedTo);?>'><?php echo zget($users, $card->assignedTo);?></td>
-          <td title='<?php echo $card->end;?>'><?php echo $card->end;?></td>
+          <td title='<?php echo helper::isZeroDate($card->end) ? '' : $card->end;?>'><?php echo helper::isZeroDate($card->end) ? '' : $card->end;?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
