@@ -561,6 +561,7 @@ class kanbanModel extends model
         foreach($_POST['name'] as $index => $value)
         {
             if($_POST['name'][$index] and isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = implode(',', $_POST['assignedTo'][$index]);
+            if(!isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = '';
         }
         $cards = fixer::input('post')->get();
 
