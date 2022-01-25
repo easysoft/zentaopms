@@ -550,8 +550,8 @@ function renderProductplanItem(item, $item)
     var $title = $item.children('.productplanTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle"><i class="icon icon-run"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
-        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<a class="productplanTitle"><i class="icon icon-run"></i>' + item.title + '</a>').appendTo($item);
+        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
+        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item);
     }
     $title.attr('title', item.title);
 
@@ -580,7 +580,7 @@ function renderProductplanItem(item, $item)
     var begin      = $.zui.createDate(item.begin);
     var end        = $.zui.createDate(item.end);
     var today      = new Date();
-    var labelType  = 'wait';
+    var labelType  = end.toLocaleDateString() == today.toLocaleDateString() ? 'danger' : 'wait';
     var labelTitle = $.zui.formatDate(begin, 'MM-dd') + ' ' + productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd');
 
     if((item.begin == '2030-01-01' || item.end == '2030-01-01'))
