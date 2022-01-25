@@ -744,7 +744,11 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $kanban      = $this->kanban->getById($kanbanID);
+        $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team) . ',' . trim($kanban->whitelist);
+        $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+
+        $this->view->users     = $users;
         $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
         $this->display();
@@ -805,9 +809,14 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->card     = $this->kanban->getCardByID($cardID);
+        $card        = $this->kanban->getCardByID($cardID);
+        $kanban      = $this->kanban->getById($card->kanban);
+        $kanbanUsers = $card->kanban == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team) . ',' . trim($kanban->whitelist);
+        $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+
+        $this->view->card     = $card;
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users    = $users;
 
         $this->display();
     }
@@ -1449,7 +1458,7 @@ class kanban extends control
 
         $this->display();
     }
-  
+
     /**
      * Set archived.
      *
