@@ -578,15 +578,21 @@ function renderProductplanItem(item, $item)
         }
     }
 
-    /* Display product plan date. */
-    var $date           = $info.children('.date');
-    var productplanDate = $.zui.createDate(item.date);
-    var today           = new Date();
-    var labelType       = productplanDate.toLocaleDateString() == today.toLocaleDateString() ? 'light' : 'wait';
-    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    /* Display deadline of product plan. */
+    var $date      = $info.children('.date');
+    var begin      = $.zui.createDate(item.begin);
+    var end        = $.zui.createDate(item.end);
+    var today      = new Date();
+    var labelType  = 'wait';
+    var labelTitle = $.zui.formatDate(begin, 'MM-dd') + ' ' + productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd');
 
-    $date.text($.zui.formatDate(productplanDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(productplanDate, 'yyyy-MM-dd')).show();
-    if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
+    if((item.begin == '2030-01-01' || item.end == '2030-01-01'))
+    {
+        labelType  = 'future';
+        labelTitle = productplanLang.future;
+    }
+    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    $date.text(labelTitle).attr('title', labelTitle).show();
 
     /* Display avatars of creator. */
     var $user = $info.children('.user');
