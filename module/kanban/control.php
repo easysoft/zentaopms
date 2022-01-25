@@ -811,8 +811,18 @@ class kanban extends control
      */
     public function finishCard($cardID, $kanbanID)
     {
+        $this->loadModel('action');
+
+        $oldCard = $this->kanban->getCardByID($cardID);
         $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
+        $card = $this->kanban->getCardByID($cardID);
+
+        $changes = common::createChanges($oldCard, $card);
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $actionID = $this->action->create('kanbanCard', $cardID, 'finished');
+        $this->action->logHistory($actionID, $changes);
 
         if(isonlybody()) return print(js::reload('parent.parent'));
 
@@ -830,8 +840,18 @@ class kanban extends control
      */
     public function activateCard($cardID, $kanbanID)
     {
+        $this->loadModel('action');
+
+        $oldCard = $this->kanban->getCardByID($cardID);
         $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        $card = $this->kanban->getCardByID($cardID);
+
+        $changes = common::createChanges($oldCard, $card);
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
+        $this->action->logHistory($actionID, $changes);
 
         if(isonlybody()) return print(js::reload('parent.parent'));
 
