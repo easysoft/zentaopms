@@ -3735,15 +3735,16 @@ class executionModel extends model
      *
      * @param int|array $productID
      * @param string    $param withMainPlan|skipParent
+     * @param int       $executionID
      * @return mixed
      */
-    public function getPlans($products, $param = '')
+    public function getPlans($products, $param = '', $executionID = 0)
     {
         $this->loadModel('productplan');
 
         $param        = strtolower($param);
         $branchIDList = strpos($param, 'withmainplan') !== false ? array(BRANCH_MAIN => BRANCH_MAIN) : array();
-        $branchGroups   = $this->loadModel('branch')->getByProducts(array_keys($products), 'noclosed');
+        $branchGroups = $this->getBranchByProduct(array_keys($products), $executionID, 'noclosed');
         foreach($branchGroups as $branches)
         {
             foreach($branches as $branchID => $branchName) $branchIDList[$branchID] = $branchID;
