@@ -2043,7 +2043,7 @@ class execution extends control
             if($branches) $branchID = key($branches);
         }
 
-        $plans    = $this->execution->getPlans($products);
+        $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {
