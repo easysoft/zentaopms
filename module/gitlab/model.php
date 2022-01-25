@@ -468,6 +468,7 @@ class gitlabModel extends model
      *
      * @param  string $host
      * @param  string $token
+     * @param  bool   $rootCheck
      * @access public
      * @return array
      */
