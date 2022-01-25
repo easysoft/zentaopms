@@ -40,8 +40,8 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-name'><?php echo $lang->execution->name;?></th>
-          <th class='c-status'><?php echo $lang->execution->status;?></th>
+          <th class='c-name'><?php echo $lang->execution->execName;?></th>
+          <th class='c-status'><?php echo $lang->execution->execStatus;?></th>
           <th class='c-user'><?php echo $lang->execution->owner;?></th>
           <th class='c-date'><?php echo $lang->execution->end;?></th>
           <th class='c-hour'><?php echo $lang->execution->totalEstimate;?></th>

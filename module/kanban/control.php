@@ -1161,7 +1161,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projects            = $this->project->getPairsByProgram();
+        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram();
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->executions2Imported = $this->project->getStats($selectedProjectID, 'undone', 0, 0, 30, 'id_asc', $pager);
@@ -1449,7 +1449,7 @@ class kanban extends control
 
         $this->display();
     }
-  
+
     /**
      * Set archived.
      *
