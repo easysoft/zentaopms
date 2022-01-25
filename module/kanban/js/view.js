@@ -705,7 +705,6 @@ function moveCard(cardID, fromColID, toColID, fromLaneID, toLaneID, kanbanID, re
         method:   'post',
         dataType: 'json',
         url:       url,
-        async:     false,
         success: function(data)
         {
             regions = data;

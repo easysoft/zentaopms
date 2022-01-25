@@ -927,7 +927,6 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
                 method:   'post',
                 dataType: 'json',
                 url:       link,
-                async:     false,
                 success: function(data)
                 {
                     updateRegion(regionID, data[regionID]);
@@ -994,7 +993,6 @@ function shiftCard(objectID, fromColID, toColID, fromLaneID, toLaneID, regionID)
         method:   'post',
         dataType: 'json',
         url:       link,
-        async:     false,
         success: function(data)
         {
             updateRegion(regionID, data[regionID]);
