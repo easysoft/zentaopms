@@ -924,7 +924,6 @@ function findDropColumns($element, $root)
 
     return $root.find('.kanban-lane-col:not([data-type="EMPTY"],[data-type=""])').filter(function()
     {
-
         if($.cookie('isFullScreen') == 1) return false;
         var $newCol = $(this);
         var newCol = $newCol.data();
