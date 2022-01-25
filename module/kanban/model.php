@@ -2781,7 +2781,7 @@ class kanbanModel extends model
      * @param  int    $kanbanID 
      * @param  string $from 
      * @access public
-     * @return void
+     * @return bool|void 
      */
     public function setColumnWidth($kanbanID, $from = 'kanban')
     {
