@@ -488,12 +488,12 @@ function renderReleaseItem(item, $item)
 {
     var privs = item.actions;
 
-    /* Print  name. */
+    /* Print name. */
     var $title = $item.children('.releaseTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
-        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($item);
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-flag"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-flag"></i>' + item.name + '</a>').appendTo($item);
     }
     $title.attr('title', item.name);
 
@@ -520,12 +520,9 @@ function renderReleaseItem(item, $item)
     /* Display release date. */
     var $date       = $info.children('.date');
     var releaseDate = $.zui.createDate(item.date);
-    var today       = new Date();
-    var labelType   = releaseDate.toLocaleDateString() == today.toLocaleDateString() ? 'light' : 'wait';
-    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    if(!$date.length) $date = $('<span class="date label label-wait"></span>').appendTo($info);
 
     $date.text($.zui.formatDate(releaseDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(releaseDate, 'yyyy-MM-dd')).show();
-    if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
 
     /* Display avatars of creator. */
     var $user = $info.children('.user');
@@ -549,7 +546,7 @@ function renderProductplanItem(item, $item)
 {
     var privs = item.actions;
 
-    /* Print  name. */
+    /* Print name. */
     var $title = $item.children('.productplanTitle');
     if(!$title.length)
     {
@@ -578,7 +575,7 @@ function renderProductplanItem(item, $item)
         }
     }
 
-    /* Display deadline of product plan. */
+    /* Display date of product plan. */
     var $date      = $info.children('.date');
     var begin      = $.zui.createDate(item.begin);
     var end        = $.zui.createDate(item.end);
@@ -616,7 +613,7 @@ function renderBuildItem(item, $item)
 {
     var privs = item.actions;
 
-    /* Print  name. */
+    /* Print name. */
     var $title = $item.children('.title');
     if(!$title.length)
     {
@@ -633,14 +630,11 @@ function renderBuildItem(item, $item)
     ].join('')).appendTo($item);
 
     /* Display build date. */
-    var $date       = $info.children('.date');
-    var buildDate   = $.zui.createDate(item.date);
-    var today       = new Date();
-    var labelType   = buildDate.toLocaleDateString() == today.toLocaleDateString() ? 'light' : 'wait';
-    if(!$date.length) $date = $('<span class="date label label-' + labelType + '"></span>').appendTo($info);
+    var $date     = $info.children('.date');
+    var buildDate = $.zui.createDate(item.date);
+    if(!$date.length) $date = $('<span class="date label label-wait"></span>').appendTo($info);
 
     $date.text($.zui.formatDate(buildDate, 'yyyy-MM-dd')).attr('title', $.zui.formatDate(buildDate, 'yyyy-MM-dd')).show();
-    if(labelType == 'light') $date.css('background-color', 'rgba(210, 50, 61, 0.3)');
 
     /* Display avatars of creator. */
     var $user = $info.children('.user');
