@@ -43,13 +43,13 @@
     </thead>
     <tbody>
       <tr>
-        <td><?php echo $measures['bugs']->value;?></td>
-        <td><?php echo $measures['vulnerabilities']->value;?></td>
-        <td><?php echo $measures['security_hotspots_reviewed']->value;?></td>
-        <td><?php echo $measures['code_smells']->value;?></td>
-        <td><?php echo $measures['coverage']->value;?></td>
-        <td><?php echo $measures['duplicated_lines_density']->value;?></td>
-        <td><?php echo $measures['ncloc']->value;?></td>
+        <td><?php echo $measures['bugs'];?></td>
+        <td><?php echo $measures['vulnerabilities'];?></td>
+        <td><?php echo $measures['security_hotspots_reviewed'];?></td>
+        <td><?php echo $measures['code_smells'];?></td>
+        <td><?php echo $measures['coverage'];?></td>
+        <td><?php echo $measures['duplicated_lines_density'];?></td>
+        <td><?php echo $measures['ncloc'];?></td>
       </tr>
     </tbody>
   </table>
