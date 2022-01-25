@@ -101,10 +101,9 @@
 .kanban-item .title {padding-right: 10px;}
 .gray .actions {display:none;}
 
-.kanban-card .header .executionName {display: flex; width: 100%; float: left; white-space: nowrap; overflow: hidden;}
-.kanban-card .header .executionName .title, .releaseTitle, .productplanTitle {padding-right: 0px; margin-right: 5px; white-space: nowrap; overflow: hidden;}
+.kanban-card .header .executionName {display: flex; width: 100%; float: left;}
+.kanban-card .header .executionName .title {padding-right: 0px; margin-right: 5px;}
 .kanban-card .header .executionName > span {flex: none;}
-.execInfo, .releaseInfo, .productplanInfo {margin-top: 23px;}
 .label-wait {background: #EFEFEF !important; color: #838A9D;}
 .label-doing {background: #f8d2d2 !important; color: #e64b4c;}
 .label-suspended {background: #fff3d9 !important; color: #ff9800;}

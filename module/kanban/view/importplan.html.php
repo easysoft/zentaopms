@@ -43,10 +43,10 @@
           <th class='c-name'><?php echo $lang->productplan->title;?></th>
           <th class='c-date'><?php echo $lang->productplan->begin;?></th>
           <th class='c-date'><?php echo $lang->productplan->end;?></th>
-          <th class='w-90px'><?php echo $lang->productplan->stories;?></th>
-          <th class='w-80px'><?php echo $lang->productplan->bugs;?></th>
+          <th class='c-story'><?php echo $lang->productplan->stories;?></th>
+          <th class='c-bug'><?php echo $lang->productplan->bugs;?></th>
           <th class='c-hour'><?php echo $lang->productplan->hour;?></th>
-          <th><?php echo $lang->productplan->desc;?></th>
+          <th class='c-name'><?php echo $lang->productplan->desc;?></th>
         </tr>
       </thead>
       <tbody>
@@ -64,12 +64,15 @@
           <?php else:?>
           <td title='<?php echo $plan->title;?>'><?php echo $plan->title;?></td>
           <?php endif;?>
-          <td title='<?php echo $plan->begin;?>'><?php echo $plan->begin;?></td>
-          <td title='<?php echo $plan->end;?>'><?php echo $plan->end;?></td>
+          <td><?php echo $plan->begin == $config->productplan->future ? $lang->productplan->future : $plan->begin;?></td>
+          <td><?php echo $plan->end == $config->productplan->future ? $lang->productplan->future : $plan->end;?></td>
           <td title='<?php echo $plan->stories;?>'><?php echo $plan->stories;?></td>
           <td title='<?php echo $plan->bugs;?>'><?php echo $plan->bugs;?></td>
           <td title='<?php echo $plan->hour;?>'><?php echo $plan->hour;?></td>
-          <td title='<?php echo $plan->desc;?>'><?php echo $plan->desc;?></td>
+          <td class='text-left content'>
+            <?php $desc = trim(strip_tags(str_replace(array('</p>', '<br />', '<br>', '<br/>'), "\n", str_replace(array("\n", "\r"), '', $plan->desc)), '<img>'));?>
+            <div title='<?php echo $desc;?>'><?php echo $desc;?></div>
+          </td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
