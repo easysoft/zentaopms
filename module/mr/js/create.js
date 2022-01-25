@@ -5,7 +5,7 @@ $(function()
         var gitlabID = $('#gitlabID').val();
         if(gitlabID == '') return false;
 
-        var url = createLink('repo', 'ajaxgetgitlabprojects', "gitlabID=" + gitlabID);
+        var url = createLink('repo', 'ajaxgetgitlabprojects', "gitlabID=" + gitlabID + "&projectIdList=&filter=IS_DEVELOPER");
         $.get(url, function(response)
         {
             $('#sourceProject').html('').append(response);
