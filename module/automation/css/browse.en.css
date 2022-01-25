@@ -5,7 +5,7 @@
 .zendata-logo { width: 30%;}
 .block-zendata {height:230px; padding: 30px 14px;}
 .block-details {padding: 30px 60px;}
-.block-details li {width: 50%;}
+.block-details li {width: 50%; font-size :13px}
 .block-details-line li {width: 100%;}
 
 .zendata-download {width: 68%;}
