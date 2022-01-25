@@ -709,7 +709,7 @@ CREATE TABLE `zt_kanbancard` (
   `kanban` mediumint(8) unsigned NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
   `group` mediumint(8) unsigned NOT NULL,
-  `fromID` mediumint(8) undigned NOT NULL,
+  `fromID` mediumint(8) unsigned NOT NULL,
   `fromType` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
   `pri` mediumint(8) unsigned NOT NULL,
