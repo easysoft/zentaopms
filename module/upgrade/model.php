@@ -5463,13 +5463,11 @@ class upgradeModel extends model
 
         foreach($kanbanUsers as $spaceID => $kanban)
         {
-            $team = trim(zget($spaceUsers, $spaceID)->users, ',');
+            $team = zget($spaceUsers, $spaceID)->users;
             $team = $team . ',' . $kanban->users;
             $team = explode(',', $team);
             $team = array_filter($team);
-            $team = array_flip($team);
             $team = array_unique($team);
-            $team = array_flip($team);
             $team = implode(',', $team);
             $team = trim($team, ',');
 
