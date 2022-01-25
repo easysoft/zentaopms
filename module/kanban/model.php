@@ -1088,6 +1088,7 @@ class kanbanModel extends model
      */
     public function getImportedCards($kanbanID, $cards, $fromType)
     {
+        /* Get imported cards based on imported object type. */
         $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
@@ -1097,17 +1098,33 @@ class kanbanModel extends model
 
         if(!empty($objectCards))
         {
+            /* Get imported objects. */
             $table   = $this->config->objectTables[$fromType];
             $objects = $this->dao->select('*')->from($table)
                 ->where('id')->in(array_keys($objectCards))
                 ->fetchAll('id');
 
+            if($fromType == 'productplan' or $fromType == 'release')
+            {
+                $creators = $this->dao->select('objectID, actor')->from(TABLE_ACTION)
+                    ->where('objectID')->in(array_keys($objectCards))
+                    ->andWhere('objectType')->eq($fromType)
+                    ->andWhere('action')->eq('opened')
+                    ->fetchPairs();
+            }
+
+            /* Data for constructing the card. */
             foreach($objectCards as $objectCard)
             {
                 $object    = $objects[$objectCard->fromID];
                 $fieldType = $fromType . 'Field';
 
                 foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
+
+                if($fromType == 'productplan' or $fromType == 'release')
+                {
+                    $objectCard->createdBy = zget($creators, $object->id, '');
+                }
 
                 if($fromType =='execution')
                 {
