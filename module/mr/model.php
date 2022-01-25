@@ -52,7 +52,7 @@ class mrModel extends model
         if($filterProjects === false) return array();
 
         $filterProjectSql = '';
-        if(!empty($filterProjects))
+        if(!$this->app->user->admin and !empty($filterProjects))
         {
             foreach($filterProjects as $gitlabID => $projects)
             {
@@ -113,9 +113,14 @@ class mrModel extends model
             if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
 
             $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false');
+
+            /* If not an administrator, need to obtain group member information. */
             $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['reporter']);
-            foreach($groups as $group) $groupIDList[] = $group->id;
+            if(!$this->app->user->admin)
+            {
+                $groups = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['reporter']);
+                foreach($groups as $group) $groupIDList[] = $group->id;
+            }
             $allGroups[$gitlabID] = $groupIDList;
         }
 
