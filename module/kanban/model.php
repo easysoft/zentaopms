@@ -1094,7 +1094,7 @@ class kanbanModel extends model
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
             ->andWhere('fromType')->eq($fromType)
-            ->fetchAll('fromID');
+            ->fetchAll('fromID, id');
 
         if(!empty($objectCards))
         {
@@ -1114,29 +1114,32 @@ class kanbanModel extends model
             }
 
             /* Data for constructing the card. */
-            foreach($objectCards as $objectCard)
+            foreach($objectCards as $objectID => $cardsInfo)
             {
-                $object    = $objects[$objectCard->fromID];
-                $fieldType = $fromType . 'Field';
-
-                foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
-
-                if($fromType == 'productplan' or $fromType == 'release')
+                foreach($cardsInfo as $cardID => $objectCard)
                 {
-                    $objectCard->createdBy = zget($creators, $object->id, '');
-                }
+                    $object    = $objects[$objectID];
+                    $fieldType = $fromType . 'Field';
 
-                if($fromType =='execution')
-                {
-                    if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
+                    foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
+
+                    if($fromType == 'productplan' or $fromType == 'release')
                     {
-                        $delay = helper::diffDate(helper::today(), $object->end);
-                        if($delay > 0) $objectCard->delay = $delay;
+                        $objectCard->createdBy = zget($creators, $object->id, '');
                     }
-                    $objectCard->execType = $object->type;
-                }
 
-                $cards[$objectCard->id] = $objectCard;
+                    if($fromType =='execution')
+                    {
+                        if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
+                        {
+                            $delay = helper::diffDate(helper::today(), $object->end);
+                            if($delay > 0) $objectCard->delay = $delay;
+                        }
+                        $objectCard->execType = $object->type;
+                    }
+
+                    $cards[$cardID] = $objectCard;
+                }
             }
         }
         return $cards;
