@@ -492,8 +492,8 @@ function renderReleaseItem(item, $item)
     var $title = $item.children('.releaseTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-flag"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
-        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-flag"></i>' + item.name + '</a>').appendTo($item);
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item);
     }
     $title.attr('title', item.name);
 
@@ -617,8 +617,8 @@ function renderBuildItem(item, $item)
     var $title = $item.children('.title');
     if(!$title.length)
     {
-        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-code"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
-        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<a class="title"><i class="icon icon-code"></i>' + item.name + '</a>').appendTo($item);
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<a class="title"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item);
     }
     $title.attr('title', item.name);
 
