@@ -2990,32 +2990,7 @@ class kanbanModel extends model
         if($column->parent)
         {
             $parent = $this->getColumnByID($column->parent);
-
-            /* If the parent column is normal now, put its card into child column. */
-            if($parent->parent != -1)
-            {
-                $parentCells = $this->dao->select('*')->from(TABLE_KANBANCELL)
-                    ->where('`column`')->eq($column->parent)
-                    ->andWhere('type')->eq('common')
-                    ->fetchAll('id');
-
-                foreach($parentCells as $cell)
-                {
-                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)
-                        ->where('lane')->eq($cell->lane)
-                        ->andWhere('`column`')->eq($columnID)
-                        ->andWhere('type')->eq('common')
-                        ->exec();
-
-                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq('')
-                        ->where('lane')->eq($cell->lane)
-                        ->andWhere('`column`')->eq($cell->column)
-                        ->andWhere('type')->eq('common')
-                        ->exec();
-                }
-
-                $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($column->parent)->exec();
-            }
+            if($parent->parent != -1) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(-1)->where('id')->eq($column->parent)->exec();
         }
 
         $this->dao->update(TABLE_KANBANCOLUMN)
