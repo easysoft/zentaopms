@@ -405,7 +405,7 @@ class gitlab extends control
      */
     public function deleteGroup($gitlabID, $groupID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
 
         $group    = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
         $response = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
