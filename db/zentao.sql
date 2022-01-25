@@ -1555,6 +1555,7 @@ CREATE TABLE IF NOT EXISTS `zt_todo` (
   `closedBy` varchar(30) NOT NULL DEFAULT '',
   `closedDate` datetime NOT NULL,
   `deleted` enum('0','1') NOT NULL default '0',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   KEY `account` (`account`),
   KEY `assignedTo` (`assignedTo`),

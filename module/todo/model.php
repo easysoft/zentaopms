@@ -175,6 +175,7 @@ class todoModel extends model
                 $todo->assignedTo   = $this->app->user->account;
                 $todo->assignedBy   = $this->app->user->account;
                 $todo->assignedDate = $now;
+                $todo->vision       = $todos->vision[$i];
 
                 if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
