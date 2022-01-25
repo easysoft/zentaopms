@@ -650,6 +650,7 @@ class reportModel extends model
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
     }

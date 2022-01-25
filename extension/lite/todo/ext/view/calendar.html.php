@@ -64,7 +64,8 @@
         ->where('status')->in('wait,doing')
         ->andWhere('type')->ne('cycle')
         ->andWhere('date')->ne(date('Y-m-d'))
-        ->andWhere("assignedTo")->eq($this->app->user->account)
+        ->andWhere('assignedTo')->eq($this->app->user->account)
+        ->andWhere('vision')->eq($this->config->vision)
         ->fetchAll();
     $undoneTodos = array();
     $futureTodos = array();
