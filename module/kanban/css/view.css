@@ -55,8 +55,7 @@
 .region .kanban-lane-col {max-height: unset !important; overflow: auto; position: relative;}
 .region .kanban-lane-col.has-scrollbar > .kanban-lane-actions {position: absolute; background-color: inherit; bottom: 0; left: 0; right: 0;}
 
-.region .kanban-lane-items {overflow: hidden; padding-bottom: 10px;}
-.region .kanban-lane-items:hover {overflow: overlay !important;}
+.region .kanban-lane-items {overflow: overlay !important; padding-bottom: 10px;}
 
 .region .kanban-item {position: relative}
 .region .kanban-item > .kanban-card > .title {line-height: 18px;}
