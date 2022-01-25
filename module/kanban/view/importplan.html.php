@@ -16,7 +16,7 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->kanban->importPlan;?></h2>
