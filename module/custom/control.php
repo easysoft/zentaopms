@@ -484,7 +484,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.CRExecution', $this->post->execution);
+            $this->loadModel('setting')->setItem("system.common.CRExecution@{$this->config->vision}", $this->post->execution);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 
