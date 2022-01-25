@@ -109,6 +109,7 @@
 .label-wait {background: #EFEFEF !important; color: #838A9D;}
 .label-doing {background: #f8d2d2 !important; color: #e64b4c;}
 .label-suspended {background: #fff3d9 !important; color: #ff9800;}
+.label-future {background: #EFEFEF !important; color: #838A9D; border-radius: 9px}
 .label-closed, .label-terminate {background: #e5e5e5 !important; color: #b8b8b8;}
 .label-deleted {background: #ff5d5d !important; color: #fff;}
 .label-normal {background: #e1e8d9 !important; color: #9abe76;}
