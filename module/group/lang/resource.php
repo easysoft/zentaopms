@@ -1403,6 +1403,7 @@ $lang->resource->sonarqube->delete        = 'delete';
 $lang->resource->sonarqube->browseProject = 'browseProject';
 $lang->resource->sonarqube->deleteProject = 'deleteProject';
 $lang->resource->sonarqube->execJob       = 'execJob';
+$lang->resource->sonarqube->reportView    = 'reportView';
 
 $lang->sonarqube->methodOrder[5]  = 'browse';
 $lang->sonarqube->methodOrder[10] = 'create';

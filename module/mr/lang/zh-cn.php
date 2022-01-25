@@ -113,10 +113,12 @@ $lang->mr->closeSuccess        = "已关闭合并请求。";
 $lang->mr->apiErrorMap[1] = "You can't use same project/branch for source and target";
 $lang->mr->apiErrorMap[2] = "/Another open merge request already exists for this source branch: !([0-9]+)/";
 $lang->mr->apiErrorMap[3] = "401 Unauthorized";
+$lang->mr->apiErrorMap[4] = "403 Forbidden";
 
 $lang->mr->errorLang[1] = '源项目分支与目标项目分支不能相同';
 $lang->mr->errorLang[2] = '存在另外一个同样的合并请求在源项目分支中: ID%u';
 $lang->mr->errorLang[3] = '权限不足';
+$lang->mr->errorLang[4] = '权限不足';
 
 $lang->mr->from = "从";
 $lang->mr->to   = "合并到";

@@ -98,6 +98,21 @@ class compileModel extends model
     }
 
     /**
+     * Get success jobs by job id list.
+     *
+     * @param  array  $jobIDList
+     * @access public
+     * @return array
+     */
+    public function getSuccessJobs($jobIDList)
+    {
+        return $this->dao->select('job')->from(TABLE_COMPILE)
+            ->where('job')->in($jobIDList)
+            ->andWhere('status')->eq('success')
+            ->fetchPairs();
+    }
+
+    /**
      * Get build url.
      *
      * @param  object $jenkins

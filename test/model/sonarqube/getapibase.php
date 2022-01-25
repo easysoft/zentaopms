@@ -8,7 +8,7 @@ title=测试 sonarqubeModel::getApiBase();
 cid=1
 pid=1
 
-通过sonarqubeID,获取SonarQube url和header    >> http://192.168.1.161:59001/api/%s
+通过sonarqubeID,获取SonarQube url和header >> http://192.168.1.161:59001/api/%s
 当sonarqubeID为0时,获取SonarQube url和header >> return empty
 
 */

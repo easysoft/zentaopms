@@ -51,6 +51,46 @@ class sonarqube extends control
     }
 
     /**
+     * Show sonarqube report.
+     *
+     * @param  int    $jobID
+     * @access public
+     * @return void
+     */
+    public function reportView($jobID)
+    {
+        $job         = $this->loadModel('job')->getByID($jobID);
+        $qualitygate = $this->sonarqube->apiGetQualitygate($job->sonarqubeServer, $job->projectKey);
+        $report      = $this->sonarqube->apiGetReport($job->sonarqubeServer, $job->projectKey);
+        $measures    = array();
+        if(isset($report->component->measures))
+        {
+            foreach($report->component->measures as $measure)
+            {
+                if(in_array($measure->metric, array('security_hotspots_reviewed', 'coverage', 'duplicated_lines_density')))
+                {
+                    $measures[$measure->metric] = $measure->value . '%';
+                }
+                else
+                {
+                    $measures[$measure->metric] = $measure->value;
+                    if($measure->value > 1000) $measures[$measure->metric] = round($measure->value / 1000, 1) . 'K';
+                }
+            }
+        }
+
+        $projectName = $job->projectKey;
+        $projects    = $this->sonarqube->apiGetProjects($job->sonarqubeServer, '', $job->projectKey);
+        if(isset($projects[0]->name)) $projectName = $projects[0]->name;
+
+        $this->view->measures    = $measures;
+        $this->view->qualitygate = $qualitygate;
+        $this->view->projectName = $projectName;
+
+        $this->display();
+    }
+
+    /**
      * Ajax get project select.
      *
      * @param  int    $sonarqubeID

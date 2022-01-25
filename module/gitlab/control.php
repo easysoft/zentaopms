@@ -41,11 +41,16 @@ class gitlab extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
+        /* Admin user don't need bind. */
         $gitlabList = $this->gitlab->getList($orderBy, $pager);
+        $myGitLabs  = $this->gitlab->getGitLabListByAccount();
+
         foreach($gitlabList as $gitlab)
         {
             $token = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
             $gitlab->isAdminToken = (isset($token->is_admin) and $token->is_admin);
+            $gitlab->isBindUser   = true;
+            if(!$this->app->user->admin and !isset($myGitLabs[$gitlab->id])) $gitlab->isBindUser = false;
         }
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browse;
@@ -243,7 +248,7 @@ class gitlab extends control
         if(strpos($gitlabURL, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!$token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
-        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token);
+        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token, true);
 
         if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
@@ -302,10 +307,23 @@ class gitlab extends control
      */
     public function browseGroup($gitlabID, $orderBy = 'name_asc')
     {
-        $this->view->title           = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
-        $this->view->gitlabID        = $gitlabID;
-        $this->view->gitlabGroupList = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-        $this->view->orderBy         = $orderBy;
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->config->gitlab->accessLevel['owner']);
+
+        $adminGropuIDList = array();
+        foreach($adminGroups as $group) $adminGropuIDList[] = $group->id;
+
+        $this->view->title            = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
+        $this->view->gitlabID         = $gitlabID;
+        $this->view->gitlabGroupList  = $groups;
+        $this->view->adminGropuIDList = $adminGropuIDList;
+        $this->view->orderBy          = $orderBy;
         $this->display();
     }
 
@@ -318,6 +336,12 @@ class gitlab extends control
      */
     public function createGroup($gitlabID)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         if($_POST)
         {
             $this->gitlab->createGroup($gitlabID);
@@ -344,6 +368,15 @@ class gitlab extends control
      */
     public function editGroup($gitlabID, $groupID)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $members = $this->gitlab->apiGetGroupMembers($gitlabID, $groupID, $openID);
+            if(empty($members) or $members[0]->access_level < $this->config->gitlab->accessLevel['owner']) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         if($_POST)
         {
             $this->gitlab->editGroup($gitlabID);
@@ -372,19 +405,21 @@ class gitlab extends control
      */
     public function deleteGroup($gitlabID, $groupID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->group->confirmDelete , inlink('deleteGroup', "gitlabID=$gitlabID&groupID=$groupID&confirm=yes")));
 
-        $group   = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
-        $reponse = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
+        $group    = $this->gitlab->apiGetSingleGroup($gitlabID, $groupID);
+        $response = $this->gitlab->apiDeleteGroup($gitlabID, $groupID);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
-        if(!$reponse or substr($reponse->message, 0, 2) == '20')
+        if(!$response or substr($response->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabgroup', $groupID, 'deleted', '', $group->name);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        $errorKey = array_search($response->message, $this->lang->gitlab->apiError);
+        $result   = $errorKey === false ? $response->message : zget($this->lang->gitlab->errorLang, $errorKey);
+        return print(js::alert($result));
     }
 
     /**
@@ -606,11 +641,31 @@ class gitlab extends control
      */
     public function browseProject($gitlabID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $openID = 0;
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword'); // Fix bug#16741.
 
         $result = $this->gitlab->apiGetProjectsPager($gitlabID, $keyword, $orderBy, $pager);
+
+        /* Get group id list by gitlab user that the user is maintainer. */
+        $groupIDList = array(0 => 0);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['maintainer']);
+        foreach($groups as $group) $groupIDList[] = $group->id;
+
+        foreach($result['projects'] as $key => $project)
+        {
+            $project->adminer = (bool)$this->app->user->admin;
+            if(!$project->adminer and isset($project->owner) and $project->owner->id == $openID) $project->adminer = true;
+
+            $project->isMaintainer = $this->gitlab->checkUserAccess($gitlabID, $project->id, $project, $groupIDList, 'maintainer');
+        }
 
         $gitlab = $this->gitlab->getByID($gitlabID);
 
@@ -812,9 +867,17 @@ class gitlab extends control
      */
     public function browseBranchPriv($gitlabID, $projectID, $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         $keyword  = fixer::input('post')->setDefault('keyword', '')->get('keyword');
         $branches = $this->gitlab->apiGetBranchPrivs($gitlabID, $projectID, $keyword, $orderBy);
-        $project  = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
 
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
@@ -845,6 +908,15 @@ class gitlab extends control
      */
     public function createBranchPriv($gitlabID, $projectID, $branch = '')
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
         if($branch) $branch = str_replace('*', '-', $branch);
 
@@ -917,6 +989,15 @@ class gitlab extends control
      */
     public function deleteBranchPriv($gitlabID, $projectID, $branch, $confirm = 'no')
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         if($confirm != 'yes')
         {
             $branch = urlencode($branch);
@@ -951,6 +1032,14 @@ class gitlab extends control
      */
     public function browseTag($gitlabID, $projectID, $orderBy = 'updated_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         $this->session->set('gitlabTagList', $this->app->getURI(true));
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
@@ -977,7 +1066,7 @@ class gitlab extends control
         $this->view->gitlabID      = $gitlabID;
         $this->view->projectID     = $projectID;
         $this->view->keyword       = $keyword;
-        $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->project       = $project;
         $this->view->gitlabTagList = $tagList;
         $this->view->orderBy       = $orderBy;
         $this->display();
@@ -997,6 +1086,16 @@ class gitlab extends control
      */
     public function browseTagPriv($gitlabID, $projectID, $orderBy = 'name_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         $this->session->set('gitlabTagPrivList', $this->app->getURI(true));
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 
@@ -1047,7 +1146,7 @@ class gitlab extends control
         $this->view->gitlabID      = $gitlabID;
         $this->view->projectID     = $projectID;
         $this->view->keyword       = $keyword;
-        $this->view->project       = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+        $this->view->project       = $project;
         $this->view->gitlabTagList = empty($tagList) ? $tagList: $tagList[$pageID - 1];
         $this->view->orderBy       = $orderBy;
         $this->display();
@@ -1063,6 +1162,15 @@ class gitlab extends control
      */
     public function createTagPriv($gitlabID, $projectID)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         if($_POST)
         {
             $this->gitlab->createTagPriv($gitlabID, $projectID);
@@ -1099,6 +1207,15 @@ class gitlab extends control
      */
     public function editTagPriv($gitlabID, $projectID, $tag = '')
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $tag = str_replace('*', '-', $tag);
 
@@ -1132,6 +1249,15 @@ class gitlab extends control
      */
     public function deleteTagPriv($gitlabID, $projectID, $tag)
     {
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->gitlab->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$openID) return print(js::alert($this->lang->gitlab->mustBindUser) . js::locate($this->createLink('gitlab', 'browse')));
+
+            $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
+            if(!$this->gitlab->checkUserAccess($gitlabID, $projectID, $project)) return print(js::alert($this->lang->gitlab->noAccess) . js::locate($this->createLink('gitlab', 'browse')));
+        }
+
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $tag     = str_replace('*', '-', $tag);
         $reponse = $this->gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);

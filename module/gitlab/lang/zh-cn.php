@@ -15,6 +15,7 @@ $lang->gitlab->confirmDelete     = '确认删除该GitLab吗？';
 $lang->gitlab->gitlabAccount     = 'GitLab用户';
 $lang->gitlab->zentaoAccount     = '禅道用户';
 $lang->gitlab->bindingStatus     = '绑定状态';
+$lang->gitlab->notBind           = '未绑定';
 $lang->gitlab->binded            = '已绑定';
 $lang->gitlab->bindedError       = '绑定的用户已删除或者已修改，请重新绑定';
 $lang->gitlab->serverFail        = '连接GitLab服务器异常，请检查GitLab服务器。';
@@ -72,16 +73,18 @@ $lang->gitlab->tokenFirst    = 'Token不为空时，优先使用Token。';
 $lang->gitlab->tips          = '使用密码时，请在GitLab全局安全设置中禁用"防止跨站点请求伪造"选项。';
 $lang->gitlab->emptyError    = "不能为空";
 $lang->gitlab->createSuccess = "创建成功";
+$lang->gitlab->mustBindUser  = '您还未绑定GitLab用户，请联系管理员进行绑定';
+$lang->gitlab->noAccess      = '权限不足';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
 $lang->gitlab->placeholder->url         = "请填写GitLab Server首页的访问地址，如：https://gitlab.zentao.net。";
-$lang->gitlab->placeholder->token       = "请填写具有admin权限账户的access token";
+$lang->gitlab->placeholder->token       = "请填写具有root权限账户的access token";
 $lang->gitlab->placeholder->projectPath = "项目标识串只能包含字母、数字、“_”、“-”和“.”。不能以“-”开头，以.git或者.atom结尾";
 
 $lang->gitlab->noImportableIssues = "目前没有可供导入的issue。";
-$lang->gitlab->tokenError         = "当前token非管理员权限。";
-$lang->gitlab->tokenLimit         = "GitLab Token权限不足。请更换为有管理员权限的GitLab Token。";
+$lang->gitlab->tokenError         = "当前token非root权限。";
+$lang->gitlab->tokenLimit         = "GitLab Token权限不足。请更换为有root权限的GitLab Token。";
 $lang->gitlab->hostError          = "无效的GitLab服务地址。";
 $lang->gitlab->bindUserError      = "不能重复绑定用户 %s";
 $lang->gitlab->importIssueError   = "未选择该issue所属的执行。";
@@ -99,6 +102,7 @@ $lang->gitlab->apiError[2] = 'is too short (minimum is 8 characters)';
 $lang->gitlab->apiError[3] = "can contain only letters, digits, '_', '-' and '.'. Cannot start with '-', end in '.git' or end in '.atom'";
 $lang->gitlab->apiError[4] = 'Branch already exists';
 $lang->gitlab->apiError[5] = 'Failed to save group {:path=>["has already been taken"]}';
+$lang->gitlab->apiError[6] = '403 Forbidden';
 
 $lang->gitlab->errorLang[0] = '私有分组的项目，可见性级别不能设为内部。';
 $lang->gitlab->errorLang[1] = '私有分组的项目，可见性级别不能设为公开。';
@@ -106,6 +110,7 @@ $lang->gitlab->errorLang[2] = '密码太短（最少8个字符）';
 $lang->gitlab->errorLang[3] = "只能包含字母、数字、'.'-'和'.'。不能以'-'开头、以'.git'结尾或以'.atom'结尾。";
 $lang->gitlab->errorLang[4] = '分支名已存在。';
 $lang->gitlab->errorLang[5] = '保存失败，群组URL路径已经被使用。';
+$lang->gitlab->errorLang[6] = $lang->gitlab->noAccess;
 
 $lang->gitlab->project = new stdclass;
 $lang->gitlab->project->id                         = "项目ID";
