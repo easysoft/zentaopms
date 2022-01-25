@@ -1055,12 +1055,12 @@ function initKanban($kanban)
     $kanban.kanban(
     {
         data:              groupBy == 'default' ? region.groups : kanbanData[groupBy],
-        maxColHeight:      510,
+        maxColHeight:      'auto',
         calcColHeight:     calcColHeight,
-        fluidBoardWidth:   false,
-        minColWidth:       300,
-        maxColWidth:       300,
+        minColWidth:       240,
+        maxColWidth:       240,
         cardHeight:        60,
+        fluidBoardWidth:   fluidBoard,
         displayCards:      displayCards,
         createColumnText:  kanbanLang.createColumn,
         addItemText:       '',

@@ -63,10 +63,11 @@
     if(common::hasPriv('kanban', 'setLaneHeight'))
     {
         $width = $this->app->getClientLang() == 'en' ? '70%' : '60%';
-        echo '<li>' .html::a($this->createLink('kanban', 'setLaneHeight', "executionID=$executionID&from=execution", '', true), "<i class='icon-size-height'></i> " . $lang->kanban->laneHeight, '', "class='iframe btn btn-link' title='{$lang->kanban->laneHeight}' data-width=$width") . '</li>';
+        echo '<li>' .html::a($this->createLink('kanban', 'setLaneHeight', "executionID=$executionID&from=execution", '', true), "<i class='icon icon-size-height'></i> " . $lang->kanban->laneHeight, '', "class='iframe btn btn-link' title='{$lang->kanban->laneHeight}' data-width=$width") . '</li>';
     }
-    if(common::hasPriv('execution', 'printKanban')) echo '<li>' .html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
-    echo '<li>' .html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $lang->execution->fullScreen, '', "class='btn btn-link' title='{$lang->execution->fullScreen}' data-width='500'") . '</li>';
+    if(common::hasPriv('kanban', 'setColumnWidth')) echo '<li>' .html::a($this->createLink('kanban', 'setColumnWidth', "executionID=$executionID&from=execution", '', true), "<i class='icon icon-size-width'></i> " . $lang->kanban->columnWidth, '', "class='iframe btn btn-link' title='{$lang->kanban->laneHeight}' data-width=30%") . '</li>';
+    if(common::hasPriv('execution', 'printKanban')) echo '<li>' .html::a($this->createLink('execution', 'printKanban', "executionID=$executionID"), "<i class='icon icon-printer muted'></i> " . $lang->execution->printKanban, '', "class='iframe btn btn-link' id='printKanban' title='{$lang->execution->printKanban}' data-width='500'") . '</li>';
+    echo '<li>' .html::a('javascript:fullScreen()', "<i class='icon icon-fullscreen muted'></i> " . $lang->execution->fullScreen, '', "class='btn btn-link' title='{$lang->execution->fullScreen}' data-width='500'") . '</li>';
     echo '</ul></div>';
     ?>
     <?php
@@ -177,5 +178,6 @@ js::set('priv',
 <?php js::set('noAssigned', $lang->task->noAssigned);?>
 <?php js::set('userList', $userList);?>
 <?php js::set('entertime', time());?>
+<?php js::set('fluidBoard', $execution->fluidBoard);?>
 <?php js::set('displayCards', $execution->displayCards);?>
 <?php include '../../common/view/footer.html.php';?>

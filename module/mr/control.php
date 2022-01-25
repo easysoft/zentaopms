@@ -910,6 +910,14 @@ class mr extends control
             $projects[] = $project;
         }
 
+        $groupIDList = array(0 => 0);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+        foreach($groups as $group) $groupIDList[] = $group->id;
+        foreach($projects as $key => $project)
+        {
+            if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
+        }
+
         if(!$projects) return $this->send(array('message' => array()));
 
         $options = "<option value=''></option>";

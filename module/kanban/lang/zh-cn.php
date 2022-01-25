@@ -20,6 +20,8 @@ $lang->kanban->editLane            = '泳道设置';
 $lang->kanban->sortLane            = '泳道排序';
 $lang->kanban->laneHeight          = '泳道高度';
 $lang->kanban->setLaneHeight       = '设置泳道高度';
+$lang->kanban->columnWidth         = '列宽度';
+$lang->kanban->setColumnWidth      = '设置列宽度';
 $lang->kanban->deleteLane          = '删除泳道';
 $lang->kanban->createColumn        = '创建看板列';
 $lang->kanban->editColumn          = '编辑看板列';
@@ -298,6 +300,9 @@ $lang->kanbanlane->modeList['independent'] = '采用独立的看板列';
 
 $lang->kanbanlane->heightTypeList['auto']   = '自适应（根据卡片高度自适应）';
 $lang->kanbanlane->heightTypeList['custom'] = '自定义（根据卡片数量自定义泳道高度）';
+
+$lang->kanbancolumn->fluidBoardList['0'] = '固定列宽';
+$lang->kanbancolumn->fluidBoardList['1'] = '自适应列宽';
 
 $lang->kanbanlane->error = new stdclass();
 $lang->kanbanlane->error->mustBeInt = '卡片数量必须是大于2的正整数。';
