@@ -69,7 +69,7 @@
           <td title='<?php echo $plan->stories;?>'><?php echo $plan->stories;?></td>
           <td title='<?php echo $plan->bugs;?>'><?php echo $plan->bugs;?></td>
           <td title='<?php echo $plan->hour;?>'><?php echo $plan->hour;?></td>
-          <td title='<?php echo strip_tags(htmlspecialchars_decode($plan->desc));;?>'><?php echo strip_tags(htmlspecialchars_decode($plan->desc));;?></td>
+          <td class='c-name' title='<?php echo strip_tags(htmlspecialchars_decode($plan->desc));?>'><?php echo strip_tags(htmlspecialchars_decode($plan->desc));?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
