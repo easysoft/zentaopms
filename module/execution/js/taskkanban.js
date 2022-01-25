@@ -471,7 +471,7 @@ if(!window.kanbanDropRules)
         {
             'wait': ['developing', 'developed', 'canceled', 'closed'],
             'developing': ['developed', 'pause', 'canceled'],
-            'developed': ['canceled', 'closed'],
+            'developed': ['closed'],
             'pause': ['developing'],
             'canceled': ['developing'],
             'closed': ['developing'],
