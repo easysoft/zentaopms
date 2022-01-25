@@ -276,6 +276,9 @@ function renderUsersAvatar(users, itemID, size)
  */
 function renderKanbanItem(item, $item)
 {
+    var whiteStyle = null;
+    if(item.color == '#2a5f29' || item.color == '#b10b0b') whiteStyle = 'style="color:#FFFFFF"';
+
     if(item.fromType == 'execution')
     {
         renderExecutionItem(item, $item);
@@ -321,7 +324,7 @@ function renderKanbanItem(item, $item)
             $(
             [
                 '<div class="actions" title="' + kanbanLang.more + '">',
-                  '<a data-contextmenu="card" data-id="' + item.id + '">',
+                  '<a data-contextmenu="card"' + whiteStyle + 'data-id="' + item.id + '">',
                     '<i class="icon icon-ellipsis-v"></i>',
                   '</a>',
                 '</div>'
