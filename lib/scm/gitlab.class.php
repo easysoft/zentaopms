@@ -42,7 +42,7 @@ class gitlab
         $param->recursive = 0;
         if(!empty($this->branch)) $param->ref = $this->branch;
 
-        $list = $this->fetch($api, $param);
+        $list = $this->fetch($api, $param, true);
         if(empty($list)) return array();
 
         $infos = array();
@@ -709,22 +709,38 @@ class gitlab
      * @access public
      * @return mixed
      */
-    public function fetch($api, $params = array())
+    public function fetch($api, $params = array(), $needToLoop = false)
     {
         $params = (array) $params;
         $params['private_token'] = $this->token;
+        $params['per_page']      = 100;
 
         $api = ltrim($api, '/');
         $api = $this->root . $api . '?' . http_build_query($params);
-
-        $response = commonModel::http($api);
-        if(!empty(commonModel::$requestErrors))
+        if($needToLoop)
         {
-            commonModel::$requestErrors = array();
-            return array();
-        }
+            $allResults = array();
+            for($page = 1; true; $page++)
+            {
+                $results = json_decode(commonModel::http($api . "&page={$page}"));
+                if(!is_array($results)) break;
+                if(!empty($results)) $allResults = array_merge($allResults, $results);
+                if(count($results) < 100) break;
+            }
 
-        return json_decode($response);
+            return $allResults;
+        }
+        else
+        {
+            $response = commonModel::http($api);
+            if(!empty(commonModel::$requestErrors))
+            {
+                commonModel::$requestErrors = array();
+                return array();
+            }
+
+            return json_decode($response);
+        }
     }
 
     /**

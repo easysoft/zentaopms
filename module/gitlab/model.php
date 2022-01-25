@@ -560,7 +560,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -584,7 +584,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -612,7 +612,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100 or $page > 10) break;
         }
 
         return $allResults;
@@ -669,11 +669,12 @@ class gitlabModel extends model
     /**
      * Get projects of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
+     * @param  string $simple
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID)
+    public function apiGetProjects($gitlabID, $simple = 'true')
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         if(!$apiRoot) return array();
@@ -683,10 +684,10 @@ class gitlabModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100 or $page > 10) break;
         }
 
         return $allResults;
@@ -1498,7 +1499,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -1537,7 +1538,7 @@ class gitlabModel extends model
                 $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
                 if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results)<100) break;
+                if(count($results) < 100) break;
             }
 
             return $allResults;
@@ -1595,7 +1596,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         $tags = array();
@@ -2775,6 +2776,7 @@ class gitlabModel extends model
         $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
 
         if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
+        if(isset($project->permissions->group_access->access_level) and $project->permissions->group_access->access_level >= $accessLevel) return true;
         if(!empty($project->shared_with_groups))
         {
             if(empty($groupIDList))
