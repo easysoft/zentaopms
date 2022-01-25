@@ -621,7 +621,17 @@ class kanban extends control
         else
         {
             $column = $this->kanban->getColumnById($columnID);
-            if($column->parent) $this->kanban->processCards($column);
+            if($column->parent)
+            {
+                $children = $this->dao->select('count(*) as count')->from(TABLE_KANBANCOLUMN)
+                    ->where('parent')->eq($column->parent)
+                    ->andWhere('id')->ne($column->id)
+                    ->andWhere('deleted')->eq('0')
+                    ->andWhere('archived')->eq('0')
+                    ->fetch('count');
+
+                if(!$children) $this->dao->update(TABLE_KANBANCOLUMN)->set('parent')->eq(0)->where('id')->eq($column->parent)->exec();
+            }
 
             $this->kanban->archiveColumn($columnID);
             if(dao::isError()) die(js::error(dao::getError()));
@@ -697,13 +707,14 @@ class kanban extends control
      */
     public function deleteColumn($columnID, $confirm = 'no')
     {
+        $column = $this->kanban->getColumnById($columnID);
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancolumn->confirmDelete, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
+            $confirmLang = $column->parent ? $this->lang->kanbancolumn->confirmDeleteChild : $this->lang->kanbancolumn->confirmDelete;
+            die(js::confirm($confirmLang, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
         }
         else
         {
-            $column = $this->kanban->getColumnById($columnID);
             if($column->parent) $this->kanban->processCards($column);
 
             $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
