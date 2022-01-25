@@ -38,21 +38,38 @@ class mrModel extends model
     /**
      * Get MR list of gitlab project.
      *
-     * @param  string   $mode
-     * @param  string   $param
-     * @param  string   $orderBy
-     * @param  object   $pager
+     * @param  string     $mode
+     * @param  string     $param
+     * @param  string     $orderBy
+     * @param  object     $pager
+     * @param  array|bool $filterProjects
      * @access public
      * @return array
      */
-    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null)
+    public function getList($mode = 'all', $param = 'all', $orderBy = 'id_desc', $pager = null, $filterProjects = array())
     {
+        /* If filterProjects equals false,it means no permission. */
+        if($filterProjects === false) return array();
+
+        $filterProjectSql = '';
+        if(!$this->app->user->admin and !empty($filterProjects))
+        {
+            foreach($filterProjects as $gitlabID => $projects)
+            {
+                $projectIDList = array_keys($projects);
+                if(!empty($projectIDList)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject ".helper::dbIN($projectIDList).") or ";
+            }
+
+            if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
+        }
+
         $MRList = $this->dao->select('*')
             ->from(TABLE_MR)
             ->where('deleted')->eq('0')
             ->beginIF($mode == 'status' and $param != 'all')->andWhere('status')->eq($param)->fi()
             ->beginIF($mode == 'assignee' and $param != 'all')->andWhere('assignee')->eq($param)->fi()
             ->beginIF($mode == 'creator' and $param != 'all')->andWhere('createdBy')->eq($param)->fi()
+            ->beginIF($filterProjectSql)->andWhere($filterProjectSql)->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -74,6 +91,50 @@ class mrModel extends model
             ->andWhere('repoID')->eq($repoID)
             ->orderBy('id')->fetchPairs('id', 'title');
         return array('' => '') + $MR;
+    }
+
+    /**
+     * Get all gitlab server projects. If not an administrator, the role of project member should be higher than guest.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllGitlabProjects()
+    {
+        $gitlabIDList = $this->dao->select('distinct gitlabID')->from(TABLE_MR)
+            ->where('deleted')->eq('0')
+            ->fetchPairs('gitlabID');
+
+        $allProjects = array();
+        $allGroups   = array();
+        $gitlabUsers = $this->gitlab->getGitLabListByAccount();
+        foreach($gitlabIDList as $gitlabID)
+        {
+            if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
+
+            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false');
+
+            /* If not an administrator, need to obtain group member information. */
+            $groupIDList = array(0 => 0);
+            if(!$this->app->user->admin)
+            {
+                $groups = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['reporter']);
+                foreach($groups as $group) $groupIDList[] = $group->id;
+            }
+            $allGroups[$gitlabID] = $groupIDList;
+        }
+
+        $allProjectPairs = array();
+        foreach($allProjects as $gitlabID => $projects)
+        {
+            foreach($projects as $key => $project)
+            {
+                if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $allGroups[$gitlabID], 'reporter') == false) continue;
+                $allProjectPairs[$gitlabID][$project->id] = $project;
+            }
+        }
+
+        return $allProjectPairs;
     }
 
     /**
@@ -699,12 +760,6 @@ class mrModel extends model
             $diffs   = $singleDiff->diffs;
             foreach($diffs as $index => $diff)
             {
-                if(empty($commits[$index])) continue;
-                /* Make sure every file with same commitID is unique in $lines. */
-                $shortID = $commits[$index]->short_id;
-                if(in_array($shortID, $commitList)) continue;
-                $commitList[] = $shortID;
-
                 $lines[] = sprintf("diff --git a/%s b/%s", $diff->old_path, $diff->new_path);
                 $lines[] = sprintf("index %s ... %s %s ", $singleDiff->head_commit_sha, $singleDiff->base_commit_sha, $diff->b_mode);
                 $lines[] = sprintf("--a/%s", $diff->old_path);

@@ -750,6 +750,11 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile('16.1'));
             $this->moveKanbanData();
             $this->appendExec('16_1');
+        case '16_2':
+            $this->saveLogs('Execute 16_2');
+            $this->execSQL($this->getUpgradeFile('16.2'));
+            $this->addSpaceTeam();
+            $this->appendExec('16_2');
         }
 
         $this->deletePatch();
@@ -5372,8 +5377,8 @@ class upgradeModel extends model
     }
 
     /**
-     * Move kanban card data to kanbancell table. 
-     * 
+     * Move kanban card data to kanbancell table.
+     *
      * @access public
      * @return void
      */
@@ -5443,6 +5448,31 @@ class upgradeModel extends model
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCARD . " DROP COLUMN `column`;");
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `lane`;");
         $this->dao->exec("ALTER TABLE " . TABLE_KANBANCOLUMN . " DROP COLUMN `cards`;");
+    }
+
+    /**
+     * Update kanban space team.
+     *
+     * @access public
+     * @return void
+     */
+    public function updateSpaceTeam()
+    {
+        $kanbanUsers = $this->dao->select("space, CONCAT(owner, ',', team) as users") ->from(TABLE_KANBAN)->fetchAll('space');
+        $spaceUsers  = $this->dao->select("id, CONCAT(owner, ',', team) as users")->from(TABLE_KANBANSPACE)->fetchAll('id');
+
+        foreach($kanbanUsers as $spaceID => $kanban)
+        {
+            $team = zget($spaceUsers, $spaceID)->users;
+            $team = $team . ',' . $kanban->users;
+            $team = explode(',', $team);
+            $team = array_filter($team);
+            $team = array_unique($team);
+            $team = implode(',', $team);
+            $team = trim($team, ',');
+
+            $this->dao->update(TABLE_KANBANSPACE)->set('`team`')->eq($team)->where('id')->eq($spaceID)->exec();
+        }
     }
 
     /**

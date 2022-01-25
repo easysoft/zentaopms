@@ -259,7 +259,7 @@ if($isCustomExport)
         <table class="table table-form">
           <tbody>
             <tr>
-              <th class='w-120px'><?php echo $lang->file->fileName;?></th>
+              <th class='w-230px'><?php echo $lang->file->fileName;?></th>
               <td class="w-300px"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
               <td></td>
             </tr>
@@ -321,7 +321,7 @@ if($isCustomExport)
             <?php endif?>
             <tr>
               <th></th>
-              <td>
+              <td class='text-center'>
                 <?php echo html::submitButton($lang->export, "onclick='setDownloading();'", 'btn btn-primary');?>
               </td>
             </tr>

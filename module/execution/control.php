@@ -1296,6 +1296,9 @@ class execution extends control
                 }
             }
 
+            if(!empty($projectID) and $project->model == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
+            if(!empty($projectID) and $project->model == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
             $this->view->executionID = $executionID;
@@ -1394,8 +1397,6 @@ class execution extends control
                 $this->loadModel('kanban')->createRDKanban($execution);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
             }
 
             if(!empty($planID))
@@ -1404,6 +1405,8 @@ class execution extends control
             }
             else
             {
+                if(!empty($projectID) and $project->model == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
+                if(!empty($projectID) and $project->model == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
             }
         }
@@ -2043,7 +2046,7 @@ class execution extends control
             if($branches) $branchID = key($branches);
         }
 
-        $plans    = $this->execution->getPlans($products);
+        $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');
         if(!empty($plans))
         {

@@ -18,7 +18,6 @@
 <style>
 .table-form>tbody>tr>th {width: 150px;}
 #otherLane_chosen {top: -8px;}
-#laneTypeBox {line-height: 16px;}
 .margin-bottom {margin-bottom: -6px;}
 </style>
 <div id='mainContent' class='main-content'>

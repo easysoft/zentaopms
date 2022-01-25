@@ -16,7 +16,7 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->kanban->importCard;?></h2>
@@ -24,11 +24,11 @@
   </div>
   <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedKanban;?></h4></div>
-    <div class='table-col'><?php echo html::select('kanban', $kanbanPairs, $selectedKanbanID, "onchange='reloadObjectList(this.value)' class='form-control chosen'");?></div>
+    <div class='table-col'><?php echo html::select('kanban', $kanbanPairs, $selectedKanbanID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
   </div>
   <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
-    <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen'");?></div>
+    <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
   </div>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='importCardForm'>
     <table class='table table-fixed' id='cardList'>
@@ -65,7 +65,7 @@
           <td title='<?php echo $card->name;?>'><?php echo $card->name;?></td>
           <?php endif;?>
           <td title='<?php echo zget($users, $card->assignedTo);?>'><?php echo zget($users, $card->assignedTo);?></td>
-          <td title='<?php echo $card->end;?>'><?php echo $card->end;?></td>
+          <td title='<?php echo helper::isZeroDate($card->end) ? '' : $card->end;?>'><?php echo helper::isZeroDate($card->end) ? '' : $card->end;?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>

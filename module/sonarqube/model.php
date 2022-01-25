@@ -22,7 +22,7 @@ class sonarqubeModel extends model
     public function getApiBase($sonarqubeID)
     {
         $sonarqube = $this->loadModel('pipeline')->getByID($sonarqubeID);
-        if(!$sonarqube) return array('', array()); 
+        if(!$sonarqube) return array('', array());
 
         $url      = rtrim($sonarqube->url, '/') . '/api/%s';
         $header[] = 'Authorization: Basic ' . $sonarqube->token;
@@ -46,6 +46,42 @@ class sonarqubeModel extends model
     }
 
     /**
+     * Get sonarqube report.
+     *
+     * @param  int    $sonarqubeID
+     * @param  stirng $projectKey
+     * @param  string $metricKeys
+     * @access public
+     * @return object
+     */
+    public function apiGetReport($sonarqubeID, $projectKey, $metricKeys = '')
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return array();
+
+        if(!$metricKeys) $metricKeys = 'bugs,coverage,vulnerabilities,duplicated_lines_density,code_smells,ncloc,security_hotspots_reviewed';
+        $url = sprintf($apiRoot, "measures/component?component={$projectKey}&metricKeys={$metricKeys}");
+        return json_decode(commonModel::http($url, null, array(), $header));
+    }
+
+    /**
+     * Get sonarqube qualitygate by project.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return object
+     */
+    public function apiGetQualitygate($sonarqubeID, $projectKey)
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return array();
+
+        $url = sprintf($apiRoot, "qualitygates/project_status?projectKey={$projectKey}");
+        return json_decode(commonModel::http($url, null, array(), $header));
+    }
+
+    /**
      * Get projects of one sonarqube.
      *
      * @param  int    $sonarqubeID
@@ -53,17 +89,21 @@ class sonarqubeModel extends model
      * @access public
      * @return array
      */
-    public function apiGetProjects($sonarqubeID, $keyword = '')
+    public function apiGetProjects($sonarqubeID, $keyword = '', $projectKey = '')
     {
         list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
         if(!$apiRoot) return array();
 
-        $url = sprintf($apiRoot, "projects/search");
+        $url  = sprintf($apiRoot, "projects/search");
+        $url .= "?ps=500";
+        if($keyword)    $url .= "&q={$keyword}";
+        if($projectKey) $url .= "&projects={$projectKey}";
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $result = json_decode(commonModel::http($url. "?p={$page}&ps=500" . ($keyword ? "&q={$keyword}" : ''), null, array(), $header));
+            $url .= "&p={$page}";
+            $result = json_decode(commonModel::http($url, null, array(), $header));
             if(!isset($result->components)) break;
             if(!empty($result->components)) $allResults = array_merge($allResults, $result->components);
             if(count($result->components) < 500) break;

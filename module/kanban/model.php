@@ -523,14 +523,17 @@ class kanbanModel extends model
         $targetLaneID = $data->targetLane;
 
         $objectCards = array();
+        $now         = helper::now();
         foreach($objectIDList as $objectID)
         {
             $cardData = new stdClass();
-            $cardData->kanban   = $kanbanID;
-            $cardData->region   = $regionID;
-            $cardData->group    = $groupID;
-            $cardData->fromID   = $objectID;
-            $cardData->fromType = $objectType;
+            $cardData->kanban      = $kanbanID;
+            $cardData->region      = $regionID;
+            $cardData->group       = $groupID;
+            $cardData->fromID      = $objectID;
+            $cardData->fromType    = $objectType;
+            $cardData->createdBy   = $this->app->user->account;
+            $cardData->createdDate = $now;
             $this->dao->insert(TABLE_KANBANCARD)->data($cardData)->exec();
 
             $cardID = $this->dao->lastInsertID();
@@ -558,6 +561,7 @@ class kanbanModel extends model
         foreach($_POST['name'] as $index => $value)
         {
             if($_POST['name'][$index] and isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = implode(',', $_POST['assignedTo'][$index]);
+            if(!isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = '';
         }
         $cards = fixer::input('post')->get();
 
@@ -1032,8 +1036,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution');
-
+        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -1051,12 +1054,16 @@ class kanbanModel extends model
                 $card->actions = array();
                 foreach($actions as $action)
                 {
-                    if($action == 'viewExecution')
+                    if(in_array($action, array('viewExecution', 'viewPlan', 'viewRelease', 'viewBuild')))
                     {
                         if($card->fromType == 'execution')
                         {
                             if($card->execType == 'kanban' and common::hasPriv('execution', 'kanban')) $card->actions[] = $action;
                             if($card->execType != 'kanban' and common::hasPriv('execution', 'view')) $card->actions[] = $action;
+                        }
+                        else
+                        {
+                            if(common::hasPriv($fromType, 'view')) $card->actions[] = $action;
                         }
                         continue;
                     }
@@ -1081,38 +1088,58 @@ class kanbanModel extends model
      */
     public function getImportedCards($kanbanID, $cards, $fromType)
     {
+        /* Get imported cards based on imported object type. */
         $objectCards = $this->dao->select('*')->from(TABLE_KANBANCARD)
             ->where('deleted')->eq(0)
             ->andWhere('kanban')->eq($kanbanID)
             ->andWhere('archived')->eq(0)
             ->andWhere('fromType')->eq($fromType)
-            ->fetchAll('fromID');
+            ->fetchGroup('fromID', 'id');
 
         if(!empty($objectCards))
         {
+            /* Get imported objects. */
             $table   = $this->config->objectTables[$fromType];
             $objects = $this->dao->select('*')->from($table)
                 ->where('id')->in(array_keys($objectCards))
                 ->fetchAll('id');
 
-            foreach($objectCards as $objectCard)
+            if($fromType == 'productplan' or $fromType == 'release')
             {
-                $object    = $objects[$objectCard->fromID];
-                $fieldType = $fromType . 'Field';
+                $creators = $this->dao->select('objectID, actor')->from(TABLE_ACTION)
+                    ->where('objectID')->in(array_keys($objectCards))
+                    ->andWhere('objectType')->eq($fromType)
+                    ->andWhere('action')->eq('opened')
+                    ->fetchPairs();
+            }
 
-                foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
-
-                if($fromType =='execution')
+            /* Data for constructing the card. */
+            foreach($objectCards as $objectID => $cardsInfo)
+            {
+                foreach($cardsInfo as $cardID => $objectCard)
                 {
-                    if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
-                    {
-                        $delay = helper::diffDate(helper::today(), $object->end);
-                        if($delay > 0) $objectCard->delay = $delay;
-                    }
-                    $objectCard->execType = $object->type;
-                }
+                    $object    = $objects[$objectID];
+                    $fieldType = $fromType . 'Field';
 
-                $cards[$objectCard->id] = $objectCard;
+                    foreach($this->config->kanban->$fieldType as $field) $objectCard->$field = $object->$field;
+
+                    if($fromType == 'productplan' or $fromType == 'release')
+                    {
+                        $objectCard->createdBy = zget($creators, $object->id, '');
+                    }
+
+                    if($fromType =='execution')
+                    {
+                        if($object->status != 'done' and $object->status != 'closed' and $object->status != 'suspended')
+                        {
+                            $delay = helper::diffDate(helper::today(), $object->end);
+                            if($delay > 0) $objectCard->delay = $delay;
+                        }
+                        $objectCard->execType = $object->type;
+                    }
+
+                    $cards[$cardID] = $objectCard;
+                }
             }
         }
         return $cards;
@@ -1572,7 +1599,7 @@ class kanbanModel extends model
             ->beginIF($browseType == 'private' and !$this->app->user->admin)->andWhere('owner')->eq($account)->fi()
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
+            ->andWhere('id')->in($spaceIdList)
             ->orderBy('id_desc')
             ->page($pager)
             ->fetchAll('id');
@@ -1644,7 +1671,7 @@ class kanbanModel extends model
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
-        if($this->app->user->admin) return array_keys($objects);
+        if($this->app->user->admin and $param != 'involved') return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
@@ -1885,7 +1912,7 @@ class kanbanModel extends model
 
         if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
 
-         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
+        $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
 
         if(!empty($kanban->space))
         {
@@ -1893,6 +1920,9 @@ class kanbanModel extends model
                 ->where('space')->eq($kanban->space)
                 ->fetch('maxOrder');
             $kanban->order = $maxOrder ? $maxOrder+ 1 : 1;
+
+            $space = $this->getSpaceById($kanban->space);
+            if($space->type == 'private') $kanban->owner = $account;
         }
 
 

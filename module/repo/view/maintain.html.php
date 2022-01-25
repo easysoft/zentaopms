@@ -27,7 +27,7 @@
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->repo->name); ?></th>
           <th class='c-product text-left'><?php common::printOrderLink('product', $orderBy, $vars, $lang->repo->product); ?></th>
           <th class='text-left'><?php echo $lang->repo->path; ?></th>
-          <th class='c-actions-6'><?php echo $lang->actions; ?></th>
+          <th class='c-actions-7'><?php echo $lang->actions; ?></th>
         </tr>
       </thead>
       <tbody>
@@ -63,6 +63,7 @@
             {
                 $jobID = $sonarRepoList[$repo->id]->id;
                 common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin');
+                if(in_array($jobID, $successJobs)) common::printIcon('sonarqube', 'reportView', "jobID=$jobID", '', 'list', 'audit', '', 'iframe', true);
             }
             common::printIcon('repo', 'delete', "repoID=$repo->id&objectID=$objectID", '', 'list', 'trash', 'hiddenwin');
             ?>

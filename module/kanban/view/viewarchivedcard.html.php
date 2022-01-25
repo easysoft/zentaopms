@@ -60,7 +60,11 @@
         if($card->color == '#cfa227') $color = 'has-color yellow';
         if($card->color == '#2a5f29') $color = 'has-color green';
         ?>
-        <div class="kanban-item <?php echo $color;?>" data-id="<?php echo $card->id;?>">
+        <?php
+        $style = '';
+        if($card->status == 'done') $style = 'filter: opacity(0.5); text-decoration: line-through';
+        ?>
+        <div class="kanban-item <?php echo $color;?>" data-id="<?php echo $card->id;?>" style="<?php echo $style;?>">
           <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>

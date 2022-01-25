@@ -16,7 +16,7 @@ pid=1
 $sonarqube = $tester->loadModel('sonarqube');
 
 $sonarqubeID     = 2;
-$sonarqubeServer = $sonarqube->getByID($sonarqubeID);
+$sonarqubeServer = $tester->loadModel('pipeline')->getByID($sonarqubeID);
 $result = $sonarqube->apiValidate($sonarqubeServer->url, $sonarqubeServer->token);
 r($result) && p('valid') && e(1); //通过host,token检验api权限
 

@@ -13,6 +13,7 @@ $lang->sonarqube->deleteProject     = "Delete SonarQube Project";
 $lang->sonarqube->placeholderSearch = 'Project name';
 $lang->sonarqube->execJob           = "Exec SonarQube Job";
 $lang->sonarqube->desc              = 'Description';
+$lang->sonarqube->reportView        = "SonarQube Report";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "Server Name";
@@ -37,7 +38,22 @@ $lang->sonarqube->validError           = 'SonarQube user authority authenticatio
 $lang->sonarqube->hostError            = "Invalid SonarQube service address.";
 $lang->sonarqube->confirmDelete        = 'Do you want to delete this SonarQube server?';
 $lang->sonarqube->confirmDeleteProject = 'Do you want to delete this SonarQube project?';
+$lang->sonarqube->noReport             = "No Reprot";
 
 $lang->sonarqube->projectKey          = 'Project Key';
 $lang->sonarqube->projectName         = 'Project Name';
 $lang->sonarqube->projectlastAnalysis = 'Last analysis time';
+
+$lang->sonarqube->reprot = new stdclass();
+$lang->sonarqube->reprot->bugs                       = 'Bugs';
+$lang->sonarqube->reprot->vulnerabilities            = 'Vulnerabilities';
+$lang->sonarqube->reprot->security_hotspots_reviewed = 'Hotspots Reviewed';
+$lang->sonarqube->reprot->code_smells                = 'Code Smells';
+$lang->sonarqube->reprot->coverage                   = 'Coverage';
+$lang->sonarqube->reprot->duplicated_lines_density   = 'Duplications';
+$lang->sonarqube->reprot->ncloc                      = 'Lines';
+
+$lang->sonarqube->qualitygateList = array();
+$lang->sonarqube->qualitygateList['OK']    = 'Passed';
+$lang->sonarqube->qualitygateList['WARN']  = 'Warning';
+$lang->sonarqube->qualitygateList['ERROR'] = 'Failed';

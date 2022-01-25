@@ -15,6 +15,8 @@
 
 <?php
 $app->loadLang('execution');
+$app->loadLang('release');
+$app->loadLang('productplan');
 $laneCount = 0;
 foreach($regions as $region) $laneCount += $region->laneCount;
 
@@ -25,6 +27,8 @@ js::set('kanbanlaneLang', $lang->kanbanlane);
 js::set('kanbancolumnLang', $lang->kanbancolumn);
 js::set('kanbancardLang', $lang->kanbancard);
 js::set('executionLang', $lang->execution);
+js::set('releaseLang', $lang->release);
+js::set('productplanLang', $lang->productplan);
 js::set('kanbanID', $kanban->id);
 js::set('laneCount', $laneCount);
 js::set('userList', $userList);

@@ -16,7 +16,7 @@
 <?php js::set('groupID', $groupID);?>
 <?php js::set('columnID', $columnID);?>
 <?php js::set('methodName', $this->app->rawMethod);?>
-<div id='mainContent' class='main-content'>
+<div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
       <h2><?php echo $lang->kanban->importPlan;?></h2>
@@ -24,11 +24,11 @@
   </div>
   <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedProduct;?></h4></div>
-    <div class='table-col'><?php echo html::select('product', $products, $selectedProductID, "onchange='reloadObjectList(this.value)' class='form-control chosen'");?></div>
+    <div class='table-col'><?php echo html::select('product', $products, $selectedProductID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
   </div>
   <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
-    <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen'");?></div>
+    <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
   </div>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='importPlanForm'>
     <table class='table table-fixed' id='planList'>
@@ -43,10 +43,10 @@
           <th class='c-name'><?php echo $lang->productplan->title;?></th>
           <th class='c-date'><?php echo $lang->productplan->begin;?></th>
           <th class='c-date'><?php echo $lang->productplan->end;?></th>
-          <th class='w-90px'><?php echo $lang->productplan->stories;?></th>
-          <th class='w-80px'><?php echo $lang->productplan->bugs;?></th>
+          <th class='c-story'><?php echo $lang->productplan->stories;?></th>
+          <th class='c-bug'><?php echo $lang->productplan->bugs;?></th>
           <th class='c-hour'><?php echo $lang->productplan->hour;?></th>
-          <th><?php echo $lang->productplan->desc;?></th>
+          <th class='c-name'><?php echo $lang->productplan->desc;?></th>
         </tr>
       </thead>
       <tbody>
@@ -64,12 +64,12 @@
           <?php else:?>
           <td title='<?php echo $plan->title;?>'><?php echo $plan->title;?></td>
           <?php endif;?>
-          <td title='<?php echo $plan->begin;?>'><?php echo $plan->begin;?></td>
-          <td title='<?php echo $plan->end;?>'><?php echo $plan->end;?></td>
+          <td><?php echo $plan->begin == $config->productplan->future ? $lang->productplan->future : $plan->begin;?></td>
+          <td><?php echo $plan->end == $config->productplan->future ? $lang->productplan->future : $plan->end;?></td>
           <td title='<?php echo $plan->stories;?>'><?php echo $plan->stories;?></td>
           <td title='<?php echo $plan->bugs;?>'><?php echo $plan->bugs;?></td>
           <td title='<?php echo $plan->hour;?>'><?php echo $plan->hour;?></td>
-          <td title='<?php echo $plan->desc;?>'><?php echo $plan->desc;?></td>
+          <td class='c-name' title='<?php echo strip_tags(htmlspecialchars_decode($plan->desc));?>'><?php echo strip_tags(htmlspecialchars_decode($plan->desc));?></td>
         </tr>
         <?php endforeach;?>
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>

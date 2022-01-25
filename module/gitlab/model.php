@@ -15,6 +15,11 @@ class gitlabModel extends model
 
     const HOOK_PUSH_EVENT = 'Push Hook';
 
+    /* Gitlab access level. */
+    public $noAccess         = 0;
+    public $developerAccess  = 30;
+    public $maintainerAccess = 40;
+
     /**
      * Get a gitlab by id.
      *
@@ -129,6 +134,23 @@ class gitlabModel extends model
             ->andWhere('providerID')->eq($gitlabID)
             ->andWhere('account')->eq($zentaoAccount)
             ->fetch('openID');
+    }
+
+    /**
+     * Get GitLab id list by user account.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getGitLabListByAccount($account = '')
+    {
+        if(!$account) $account = $this->app->user->account;
+
+        return $this->dao->select('providerID,openID')->from(TABLE_OAUTH)
+            ->where('providerType')->eq('gitlab')
+            ->andWhere('account')->eq($account)
+            ->fetchPairs('providerID');
     }
 
     /**
@@ -438,12 +460,14 @@ class gitlabModel extends model
      *
      * @param  string $host
      * @param  string $token
+     * @param  bool   $rootCheck
      * @access public
      * @return array
      */
-    public function apiGetCurrentUser($host, $token)
+    public function apiGetCurrentUser($host, $token, $rootCheck = false)
     {
         $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
+        if($rootCheck) $host .= '&sudo=1';
         return $this->apiGet($host, '/user');
     }
 
@@ -470,8 +494,8 @@ class gitlabModel extends model
         while(true)
         {
             /* Also use `per_page=20` to fetch users in API. Fetch active users only. */
-            $url      = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
-            $result   = json_decode(commonModel::http($url));
+            $url    = sprintf($apiRoot, "/users") . "&order_by={$order}&sort={$sort}&page={$page}&per_page=20&active=true";
+            $result = json_decode(commonModel::http($url));
             if(!empty($result))
             {
                 $response = array_merge($response, $result);
@@ -498,10 +522,10 @@ class gitlabModel extends model
             $user->id             = $gitlabUser->id;
             $user->realname       = $gitlabUser->name;
             $user->account        = $gitlabUser->username;
-            $user->email          = $gitlabUser->email;
+            $user->email          = zget($gitlabUser, 'email', '');
             $user->avatar         = $gitlabUser->avatar_url;
-            $user->createdAt      = $gitlabUser->created_at;
-            $user->lastActivityOn = $gitlabUser->last_activity_on;
+            $user->createdAt      = zget($gitlabUser, 'created_at', '');
+            $user->lastActivityOn = zget($gitlabUser, 'last_activity_on', '');
 
             $users[] = $user;
         }
@@ -512,15 +536,17 @@ class gitlabModel extends model
     /**
      * Get group members of one gitlab.
      *
-     * @param  int     $gitlabID
-     * @param  int     $groupID
+     * @param  int    $gitlabID
+     * @param  int    $groupID
+     * @param  int    $userID
      * @access public
      * @return object
      */
-    public function apiGetGroupMembers($gitlabID, $groupID)
+    public function apiGetGroupMembers($gitlabID, $groupID, $userID = 0)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups/$groupID/members/all");
+        if($userID) $url .= "&user_ids=$userID";
 
         $allResults = array();
         for($page = 1; true; $page++)
@@ -528,7 +554,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -552,7 +578,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -566,19 +592,21 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetGroups($gitlabID, $orderBy)
+    public function apiGetGroups($gitlabID, $orderBy, $minAccessLevel = 0)
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
+        if($minAccessLevel > 0) $url .= "&min_access_level=$minAccessLevel";
+
         list($order, $sort) = explode('_', $orderBy);
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100 or $page > 10) break;
         }
 
         return $allResults;
@@ -613,17 +641,16 @@ class gitlabModel extends model
      */
     public function apiGetProjectsPager($gitlabID, $keyword = '', $orderBy = 'id_desc', $pager = null)
     {
-        $gitlab = $this->getByID($gitlabID);
-        if(!$gitlab) return array();
+        $apiRoot = $this->getApiRoot($gitlabID);
+        if(!$apiRoot) return array();
 
-        $host = rtrim($gitlab->url, '/');
-        $host .= '/api/v4/projects';
+        $url = sprintf($apiRoot, "/projects");
 
         /* Parse order string. */
         $order = explode('_', $orderBy);
 
         $keyword = urlencode($keyword);
-        $result  = commonModel::httpWithHeader($host . "?private_token={$gitlab->token}&simple=true&&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
+        $result  = commonModel::httpWithHeader($url . "&per_page={$pager->recPerPage}&order_by={$order[0]}&sort={$order[1]}&page={$pager->pageID}&search={$keyword}&search_namespaces=true");
 
         $header     = $result['header'];
         $recTotal   = $header['X-Total'];
@@ -633,32 +660,34 @@ class gitlabModel extends model
         return array('pager' => $pager, 'projects' => json_decode($result['body']));
     }
 
+
     /**
      * Get projects of one gitlab.
      *
-     * @param  int $gitlabID
+     * @param  int    $gitlabID
+     * @param  string $simple
      * @access public
      * @return array
      */
-    public function apiGetProjects($gitlabID)
+    public function apiGetProjects($gitlabID, $simple = 'true')
     {
-        $gitlab = $this->getByID($gitlabID);
-        if(!$gitlab) return array();
+        $apiRoot = $this->getApiRoot($gitlabID);
+        if(!$apiRoot) return array();
 
-        $host = rtrim($gitlab->url, '/');
-        $host .= '/api/v4/projects';
+        $url = sprintf($apiRoot, "/projects");
 
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $results = json_decode(commonModel::http($host . "?private_token={$gitlab->token}&simple=true&page={$page}&per_page=100"));
+            $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100 or $page > 10) break;
+            if(count($results) < 100 or $page > 10) break;
         }
 
         return $allResults;
     }
+
 
     /**
      * Create a gitab project by api.
@@ -1457,10 +1486,19 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetBranches($gitlabID, $projectID)
+    public function apiGetBranches($gitlabID, $projectID, $pager = null)
     {
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/{$projectID}/repository/branches");
-        return json_decode(commonModel::http($url));
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
+            if(!is_array($results)) break;
+            if(!empty($results)) $allResults = array_merge($allResults, $results);
+            if(count($results) < 100) break;
+        }
+
+        return $allResults;
     }
 
     /**
@@ -1496,7 +1534,7 @@ class gitlabModel extends model
                 $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
                 if(!is_array($results)) break;
                 if(!empty($results)) $allResults = array_merge($allResults, $results);
-                if(count($results)<100) break;
+                if(count($results) < 100) break;
             }
 
             return $allResults;
@@ -1554,7 +1592,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results)<100) break;
+            if(count($results) < 100) break;
         }
 
         $tags = array();
@@ -2652,21 +2690,18 @@ class gitlabModel extends model
      */
     public function checkAccessLevel($accessLevels)
     {
-        $noAccess         = 0;
-        $developerAccess  = 30;
-        $maintainerAccess = 40;
         if(is_array($accessLevels))
         {
             $levels = array();
             foreach($accessLevels as $level)
             {
                 if(is_array($level)) $level = (object)$level;
-                $levels[] = isset($level->access_level) ? (int)$level->access_level : $maintainerAccess;
+                $levels[] = isset($level->access_level) ? (int)$level->access_level : $this->maintainerAccess;
             }
-            if(in_array($noAccess, $levels)) return $noAccess;
-            if(in_array($developerAccess, $levels)) return $developerAccess;
+            if(in_array($this->noAccess, $levels)) return $this->noAccess;
+            if(in_array($this->developerAccess, $levels)) return $this->developerAccess;
         }
-        return $maintainerAccess;
+        return $this->maintainerAccess;
     }
 
     /**
@@ -2715,5 +2750,44 @@ class gitlabModel extends model
         }
 
         return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Check user access.
+     *
+     * @param  int    $gitlabID
+     * @param  int    $projectID
+     * @param  object $project
+     * @param  string $maxRole
+     * @access public
+     * @return bool
+     */
+    public function checkUserAccess($gitlabID, $projectID = 0, $project = null, $groupIDList = array(), $maxRole = 'maintainer')
+    {
+        if($this->app->user->admin) return true;
+
+        if($project == null) $project = $this->apiGetSingleProject($gitlabID, $projectID);
+        if(!isset($project->id)) return false;
+
+        $accessLevel = $this->config->gitlab->accessLevel[$maxRole];
+
+        if(isset($project->permissions->project_access->access_level) and $project->permissions->project_access->access_level >= $accessLevel) return true;
+        if(isset($project->permissions->group_access->access_level) and $project->permissions->group_access->access_level >= $accessLevel) return true;
+        if(!empty($project->shared_with_groups))
+        {
+            if(empty($groupIDList))
+            {
+                $groups = $this->apiGetGroups($gitlabID, 'name_asc', $accessLevel);
+                foreach($groups as $group) $groupIDList[] = $group->id;
+            }
+
+            foreach($project->shared_with_groups as $group)
+            {
+                if($group->group_access_level < $accessLevel) continue;
+                if(in_array($group->group_id, $groupIDList)) return true;
+            }
+        }
+
+        return false;
     }
 }

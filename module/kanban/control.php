@@ -769,7 +769,11 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $kanban      = $this->kanban->getById($kanbanID);
+        $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team) . ',' . trim($kanban->whitelist);
+        $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+
+        $this->view->users     = $users;
         $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
         $this->display();
@@ -830,9 +834,14 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->card     = $this->kanban->getCardByID($cardID);
+        $card        = $this->kanban->getCardByID($cardID);
+        $kanban      = $this->kanban->getById($card->kanban);
+        $kanbanUsers = $card->kanban == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team) . ',' . trim($kanban->whitelist);
+        $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
+
+        $this->view->card     = $card;
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
-        $this->view->users    = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $this->view->users    = $users;
 
         $this->display();
     }
@@ -847,8 +856,18 @@ class kanban extends control
      */
     public function finishCard($cardID, $kanbanID)
     {
+        $this->loadModel('action');
+
+        $oldCard = $this->kanban->getCardByID($cardID);
         $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
+        $card = $this->kanban->getCardByID($cardID);
+
+        $changes = common::createChanges($oldCard, $card);
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $actionID = $this->action->create('kanbanCard', $cardID, 'finished');
+        $this->action->logHistory($actionID, $changes);
 
         if(isonlybody()) return print(js::reload('parent.parent'));
 
@@ -866,8 +885,18 @@ class kanban extends control
      */
     public function activateCard($cardID, $kanbanID)
     {
+        $this->loadModel('action');
+
+        $oldCard = $this->kanban->getCardByID($cardID);
         $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+        $card = $this->kanban->getCardByID($cardID);
+
+        $changes = common::createChanges($oldCard, $card);
+
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
+        $this->action->logHistory($actionID, $changes);
 
         if(isonlybody()) return print(js::reload('parent.parent'));
 
@@ -1166,7 +1195,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $this->view->projects            = $this->project->getPairsByProgram();
+        $this->view->projects            = array($this->lang->kanban->allProjects) + $this->project->getPairsByProgram();
         $this->view->selectedProjectID   = $selectedProjectID;
         $this->view->lanePairs           = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->executions2Imported = $this->project->getStats($selectedProjectID, 'undone', 0, 0, 30, 'id_asc', $pager);
@@ -1454,7 +1483,7 @@ class kanban extends control
 
         $this->display();
     }
-  
+
     /**
      * Set archived.
      *

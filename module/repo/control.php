@@ -91,6 +91,15 @@ class repo extends control
         $recTotal = count($repoList);
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $repoList = array_chunk($repoList, $pager->recPerPage);
+        $repoList = empty($repoList) ? $repoList : $repoList[$pageID - 1];
+
+        /* Get success jobs of sonarqube.*/
+        $jobIDList = array();
+        foreach($repoList as $repo)
+        {
+            if(isset($sonarRepoList[$repo->id])) $jobIDList[] = $sonarRepoList[$repo->id]->id;
+        }
+        $successJobs = $this->loadModel('compile')->getSuccessJobs($jobIDList);
 
         $this->view->title      = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->browse;
         $this->view->position[] = $this->lang->repo->common;
@@ -99,9 +108,10 @@ class repo extends control
         $this->view->orderBy       = $orderBy;
         $this->view->objectID      = $objectID;
         $this->view->pager         = $pager;
-        $this->view->repoList      = empty($repoList) ? $repoList: $repoList[$pageID - 1];;
+        $this->view->repoList      = $repoList;
         $this->view->products      = $this->loadModel('product')->getPairs();
         $this->view->sonarRepoList = $sonarRepoList;
+        $this->view->successJobs   = $successJobs;
 
         $this->display();
     }
@@ -1123,9 +1133,30 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '')
+    public function ajaxGetGitlabProjects($gitlabID, $projectIdList = '', $filter = '')
     {
-        $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
+        if($this->app->user->admin)
+        {
+            $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID);
+        }
+        else
+        {
+            $gitlabUser = $this->loadModel('gitlab')->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if(!$gitlabUser) $this->send(array('message' => array()));
+
+            $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+            foreach($groups as $group) $groupIDList[] = $group->id;
+            if($filter == 'IS_DEVELOPER')
+            {
+                foreach($projects as $key => $project)
+                {
+                    if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
+                }
+            }
+        }
+
 
         if(!$projects) $this->send(array('message' => array()));
         $projectIdList = $projectIdList ? explode(',', $projectIdList) : null;

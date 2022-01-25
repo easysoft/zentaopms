@@ -520,7 +520,7 @@ class testcase extends control
             if(dao::isError()) return print(js::error(dao::getError()));
             if(isonlybody())
             {
-                $execution = $this->execution->getByID($this->session->execution);
+                $execution = $this->loadModel('execution')->getByID($this->session->execution);
                 if($this->app->tab == 'execution' and $execution->type == 'kanban')
                 {
                     return print(js::closeModal('parent.parent', ''));

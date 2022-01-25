@@ -32,7 +32,9 @@ class mr extends control
     {
         $this->app->loadClass('pager', $static = true);
         $pager  = new pager($recTotal, $recPerPage, $pageID);
-        $MRList = $this->mr->getList($mode, $param, $orderBy, $pager);
+
+        $projects = $this->mr->getAllGitlabProjects();
+        $MRList   = $this->mr->getList($mode, $param, $orderBy, $pager, empty($projects) ? false : $projects);
 
         /* Save current URI to session. */
         $this->session->set('mrList', $this->app->getURI(true), 'repo');
@@ -51,13 +53,18 @@ class mr extends control
         /* Load lang from compile module */
         $this->app->loadLang('compile');
 
+        $openIDList = array();
+        if(!$this->app->user->admin) $openIDList = $this->loadModel('gitlab')->getGitLabListByAccount($this->app->user->account);
+
         $this->view->title      = $this->lang->mr->common . $this->lang->colon . $this->lang->mr->browse;
         $this->view->MRList     = $MRList;
+        $this->view->projects   = $projects;
         $this->view->pager      = $pager;
         $this->view->mode       = $mode;
         $this->view->param      = $param;
         $this->view->objectID   = $objectID;
         $this->view->orderBy    = $orderBy;
+        $this->view->openIDList = $openIDList;
         $this->display();
     }
 
@@ -75,12 +82,19 @@ class mr extends control
             return $this->send($result);
         }
 
+        $gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $gitlabUsers = $this->gitlab->getGitLabListByAccount();
+        foreach($gitlabHosts as $gitlabID=> $gitlabHost)
+        {
+            if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) unset($gitlabHosts[$gitlabID]);
+        }
+
         $this->app->loadLang('repo'); /* Import lang in repo module. */
         $this->app->loadLang('compile');
         $this->view->title       = $this->lang->mr->create;
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noclosed');
         $this->view->jobList     = $this->loadModel('job')->getList();
-        $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->gitlabHosts = $gitlabHosts;
         $this->display();
     }
 
@@ -145,6 +159,18 @@ class mr extends control
 
         $gitlabUsers = $this->gitlab->getUserAccountIdPairs($MR->gitlabID);
 
+        /* Check permissions. */
+        if(!$this->app->user->admin)
+        {
+            $groupIDList = array(0 => 0);
+            $groups      = $this->gitlab->apiGetGroups($MR->gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+            foreach($groups as $group) $groupIDList[] = $group->id;
+            $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
+            $isDeveloper   = $this->gitlab->checkUserAccess($MR->gitlabID, 0, $sourceProject, $groupIDList, 'developer');
+
+            if(!isset($gitlabUsers[$this->app->user->account]) or !$isDeveloper) return print(js::alert($this->lang->mr->errorLang[3]) . js::locate($this->createLink('mr', 'browse')));
+        }
+
         /* Import lang for required modules. */
         $this->loadModel('repo');
         $this->loadModel('job');
@@ -187,8 +213,12 @@ class mr extends control
 
         $MR = $this->mr->getByID($id);
 
+        if($MR->synced)
+        {
+           $res = $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+           if(isset($res->message)) return print(js::alert($this->mr->convertApiError($res->message)));
+        }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
-        $this->mr->apiDeleteMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
 
         die(js::locate(inlink('browse'), 'parent'));
     }
@@ -878,6 +908,14 @@ class mr extends control
             $project = $this->gitlab->apiGetUpstream($gitlabID, $project->id);
             if(empty($project)) break;
             $projects[] = $project;
+        }
+
+        $groupIDList = array(0 => 0);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+        foreach($groups as $group) $groupIDList[] = $group->id;
+        foreach($projects as $key => $project)
+        {
+            if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $groupIDList, 'developer') == false) unset($projects[$key]);
         }
 
         if(!$projects) return $this->send(array('message' => array()));
