@@ -260,11 +260,9 @@ class build extends control
 
         $executions = $this->loadModel('execution')->getPairs($this->session->project, 'all', 'empty');
 
-        $this->view->title         = "BUILD #$build->id $build->name - " . $executions[$build->execution];
-        $this->view->position[]    = html::a($this->createLink('execution', 'task', "executionID=$build->execution"), $executions[$build->execution]);
-        $this->view->position[]    = $this->lang->build->view;
-        $this->view->stories       = $stories;
-        $this->view->storyPager    = $storyPager;
+        $this->view->title      = "BUILD #$build->id $build->name" . (isset($executions[$build->execution]) ? " - " . $executions[$build->execution] : '');
+        $this->view->stories    = $stories;
+        $this->view->storyPager = $storyPager;
 
         $generatedBugPager = new pager($type == 'generatedBug' ? $recTotal : 0, $recPerPage, $type == 'generatedBug' ? $pageID : 1);
         $this->view->generatedBugs     = $this->bug->getExecutionBugs($build->execution, $build->product, $build->id, $type, $param, $type == 'generatedBug' ? $orderBy : 'status_desc,id_desc', '', $generatedBugPager);
