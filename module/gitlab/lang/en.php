@@ -79,12 +79,12 @@ $lang->gitlab->noAccess      = 'Permission denied';
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
 $lang->gitlab->placeholder->url         = "Please fill in the access address of the GitLab Server homepage, as: https://gitlab.zentao.net.";
-$lang->gitlab->placeholder->token       = "Please fill in the access token of an account with admin privileges.";
+$lang->gitlab->placeholder->token       = "Please fill in the access token of an account with root privileges.";
 $lang->gitlab->placeholder->projectPath = "It should contain only letters, digits, underscore, hyphen and period.  It should not start with hypen, or end with .git or .atom.";
 
 $lang->gitlab->noImportableIssues = "There are currently no issues available for import.";
-$lang->gitlab->tokenError         = "The current token is not admin rights.";
-$lang->gitlab->tokenLimit         = "The current token has no admin privilege. Please regenerate one with admin user in GitLab.";
+$lang->gitlab->tokenError         = "The current token is not root rights.";
+$lang->gitlab->tokenLimit         = "The current token has no admin privilege. Please regenerate one with root user in GitLab.";
 $lang->gitlab->hostError          = "Invalid GitLab service address.";
 $lang->gitlab->bindUserError      = "Can not bind users repeatedly %s";
 $lang->gitlab->importIssueError   = "The execution to which this issue belongs is not selected.";
