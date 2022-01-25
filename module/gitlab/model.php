@@ -468,12 +468,14 @@ class gitlabModel extends model
      *
      * @param  string $host
      * @param  string $token
+     * @param  bool   $rootCheck
      * @access public
      * @return array
      */
-    public function apiGetCurrentUser($host, $token)
+    public function apiGetCurrentUser($host, $token, $rootCheck = false)
     {
         $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
+        if($rootCheck) $host .= '&sudo=1';
         return $this->apiGet($host, '/user');
     }
 

@@ -79,12 +79,12 @@ $lang->gitlab->noAccess      = '权限不足';
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
 $lang->gitlab->placeholder->url         = "请填写GitLab Server首页的访问地址，如：https://gitlab.zentao.net。";
-$lang->gitlab->placeholder->token       = "请填写具有admin权限账户的access token";
+$lang->gitlab->placeholder->token       = "请填写具有root权限账户的access token";
 $lang->gitlab->placeholder->projectPath = "项目标识串只能包含字母、数字、“_”、“-”和“.”。不能以“-”开头，以.git或者.atom结尾";
 
 $lang->gitlab->noImportableIssues = "目前没有可供导入的issue。";
-$lang->gitlab->tokenError         = "当前token非管理员权限。";
-$lang->gitlab->tokenLimit         = "GitLab Token权限不足。请更换为有管理员权限的GitLab Token。";
+$lang->gitlab->tokenError         = "当前token非root权限。";
+$lang->gitlab->tokenLimit         = "GitLab Token权限不足。请更换为有root权限的GitLab Token。";
 $lang->gitlab->hostError          = "无效的GitLab服务地址。";
 $lang->gitlab->bindUserError      = "不能重复绑定用户 %s";
 $lang->gitlab->importIssueError   = "未选择该issue所属的执行。";
