@@ -56,8 +56,8 @@ $canBatchCreateBug   = common::hasPriv('bug',   'batchCreate');
 $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
 $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
-$canLinkStoryByPlane = ($productID and common::hasPriv('execution', 'importplanstories'));
-$hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane);
+$canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories'));
+$hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
 $hasTaskButton       = ($canCreateTask or $canBatchCreateTask);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
 
@@ -70,7 +70,7 @@ js::set('priv',
         'canCreateStory'      => $canCreateStory,
         'canBatchCreateStory' => $canBatchCreateStory,
         'canLinkStory'        => $canLinkStory,
-        'canLinkStoryByPlane' => $canLinkStoryByPlane,
+        'canLinkStoryByPlan'  => $canLinkStoryByPlan,
         'canAssignTask'       => common::hasPriv('task', 'assignto'),
         'canAssignStory'      => common::hasPriv('story', 'assignto'),
         'canFinishTask'       => common::hasPriv('task', 'finish'),
@@ -141,14 +141,14 @@ js::set('hasTaskButton', $hasTaskButton);
 
     echo $actions;
     ?>
-    <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlane):?>
+    <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
     <div class='dropdown' id='createDropdown'>
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->createStory, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
-        <?php if($canLinkStoryByPlane) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
+        <?php if($canLinkStoryByPlan) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
         <?php if($hasStoryButton and $hasBugButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>

@@ -1160,7 +1160,7 @@ $(function()
     $('#kanban').sortable(
     {
         selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort, .kanban-col',
-        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort, .kanban-col.sort',
+        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort, .kanban-header-col.sort',
         container: function($ele)
         {
             return $ele.parent();
