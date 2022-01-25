@@ -613,6 +613,7 @@ class actionModel extends model
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->andWhere('extra')->eq($extra)
+            ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         if(!$trashes) return array();
 
