@@ -1137,7 +1137,10 @@ class repo extends control
             $projects = $this->loadModel('gitlab')->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
             if($filter == 'IS_DEVELOPER')
             {
-                foreach($projects as $key => $project) if($this->gitlab->checkUserAccess($gitlabID, 0, $project, array(), 'developer') == false) unset($projects[$key]);
+                foreach($projects as $key => $project)
+                {
+                    if($this->gitlab->checkUserAccess($gitlabID, 0, $project, array(), 'developer') == false) unset($projects[$key]);
+                }
             }
         }
 

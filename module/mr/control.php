@@ -84,7 +84,10 @@ class mr extends control
 
         $gitlabHosts = $this->loadModel('gitlab')->getPairs();
         $gitlabUsers = $this->gitlab->getGitLabListByAccount();
-        foreach($gitlabHosts as $gitlabID=> $gitlabHost) if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) unset($gitlabHosts[$gitlabID]);
+        foreach($gitlabHosts as $gitlabID=> $gitlabHost)
+        {
+            if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) unset($gitlabHosts[$gitlabID]);
+        }
 
         $this->app->loadLang('repo'); /* Import lang in repo module. */
         $this->app->loadLang('compile');
