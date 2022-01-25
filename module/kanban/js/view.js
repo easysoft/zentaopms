@@ -629,6 +629,12 @@ function renderBuildItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
+    var $statusBox = $info.children('.buildStatus');
+    if(!$statusBox.length && item.deleted == '1')
+    {
+        $statusBox = $('<span class="buildStatus label label-deleted">' + productplanLang.deleted + '</span>').appendTo($info);
+    }
+
     /* Display build date. */
     var $date     = $info.children('.date');
     var buildDate = $.zui.createDate(item.date);
