@@ -543,6 +543,29 @@ class installModel extends model
             $this->dao->update(TABLE_CRON)->set('remark')->eq($remark)->where('command')->eq($command)->exec();
         }
 
+        /* Update lang,stage by lang. */
+        $this->app->loadLang('stage');
+        foreach($this->lang->stage->typeList as $key => $value)
+        {
+            $this->dao->update(TABLE_LANG)->set('value')->eq($value)->where('`key`')->eq($key)->exec();
+            $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
+        }
+
+        if(!empty($this->config->bizVersion))
+        {
+            /* Update flowdatasource by lang. */
+            foreach($this->lang->install->workflowdatasource as $id => $name)
+            {
+                $this->dao->update(TABLE_WORKFLOWDATASOURCE)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+
+            /* Update workflowrule by lang. */
+            foreach($this->lang->install->workflowrule as $id => $name)
+            {
+                $this->dao->update(TABLE_WORKFLOWRULE)->set('name')->eq($name)->where('id')->eq($id)->exec();
+            }
+        }
+
         if(!empty($this->config->maxVersion))
         {
             /* Update process by lang. */
@@ -556,16 +579,7 @@ class installModel extends model
             {
                 $this->dao->update(TABLE_BASICMEAS)->set('name')->eq($basic['name'])->set('unit')->eq($basic['unit'])->set('definition')->eq($basic['definition'])->where('id')->eq($id)->exec();
             }
-
-            /* Update lang,stage by lang. */
-            $this->app->loadLang('stage');
-            foreach($this->lang->stage->typeList as $key => $value)
-            {
-                $this->dao->update(TABLE_LANG)->set('value')->eq($value)->where('`key`')->eq($key)->exec();
-                $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
-            }
         }
-
     }
 
     /**
