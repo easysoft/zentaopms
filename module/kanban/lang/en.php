@@ -193,11 +193,11 @@ $lang->kanban->importList['off'] = 'Import is not enabled';
 $lang->kanban->importList['on']  = 'Enable the import function, you can only import content that you have permission to view.';
 
 $lang->kanban->importObjectList = array();
-$lang->kanban->importObjectList['plan']      = 'Product Plan';
-$lang->kanban->importObjectList['release']   = 'Release';
-$lang->kanban->importObjectList['build']     = 'Build';
-$lang->kanban->importObjectList['execution'] = 'Execution';
-$lang->kanban->importObjectList['cards']     = 'Other Kanban Cards';
+$lang->kanban->importObjectList['plans']      = 'Product Plan';
+$lang->kanban->importObjectList['releases']   = 'Release';
+$lang->kanban->importObjectList['builds']     = 'Build';
+$lang->kanban->importObjectList['executions'] = 'Execution';
+$lang->kanban->importObjectList['cards']      = 'Other Kanban Cards';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = 'wait';

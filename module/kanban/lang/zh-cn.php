@@ -193,11 +193,11 @@ $lang->kanban->importList['off'] = '不启用导入功能';
 $lang->kanban->importList['on']  = '启用导入功能，只能导入自己有权限查看的内容';
 
 $lang->kanban->importObjectList = array();
-$lang->kanban->importObjectList['plan']      = '产品计划';
-$lang->kanban->importObjectList['release']   = '产品发布';
-$lang->kanban->importObjectList['build']     = '项目版本';
-$lang->kanban->importObjectList['execution'] = '项目执行';
-$lang->kanban->importObjectList['cards']     = '其他看板卡片';
+$lang->kanban->importObjectList['plans']      = '产品计划';
+$lang->kanban->importObjectList['releases']   = '产品发布';
+$lang->kanban->importObjectList['builds']     = '项目版本';
+$lang->kanban->importObjectList['executions'] = '项目执行';
+$lang->kanban->importObjectList['cards']      = '其他看板卡片';
 
 $lang->kanban->defaultColumn = array();
 $lang->kanban->defaultColumn['wait']   = '未开始';
