@@ -62,16 +62,17 @@ class gitlabModel extends model
      * Get gitlab api base url by gitlab id.
      *
      * @param  int    $gitlabID
+     * @param  bool   $sudo
      * @access public
      * @return string
      */
-    public function getApiRoot($gitlabID)
+    public function getApiRoot($gitlabID, $sudo = true)
     {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return '';
 
         $sudoParam = '';
-        if(!$this->app->user->admin)
+        if($sudo == true and !$this->app->user->admin)
         {
             $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if($openID) $sudoParam = "&sudo={$openID}";
@@ -1103,7 +1104,7 @@ class gitlabModel extends model
      */
     public function apiGetHooks($gitlabID, $projectID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/{$projectID}/hooks";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1148,7 +1149,7 @@ class gitlabModel extends model
 
         foreach($hook as $index => $item) $newHook->$index= $item;
 
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks");
 
         return json_decode(commonModel::http($url, $newHook));
