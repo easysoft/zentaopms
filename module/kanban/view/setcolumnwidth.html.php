@@ -19,7 +19,7 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanban->columnWidth;?></th>
+          <th class='w-120px'><?php echo $lang->kanban->columnWidth;?></th>
           <td><?php echo nl2br(html::radio('fluidBoard', $lang->kanbancolumn->fluidBoardList, $kanban->fluidBoard));?></td>
         </tr>
         <tr>
