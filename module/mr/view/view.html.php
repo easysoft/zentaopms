@@ -139,9 +139,9 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->compile->atTime;?></th>
-                    <td><?php echo $compileJob ? $compileJob->lastExec : $lang->mr->compileUnexecuted;?></td>
+                    <td><?php echo $compile->createdDate;?></td>
                   </tr>
-                  <?php if($compileJob):?>
+                  <?php if($compileJob and !empty($compileJob->id)):?>
                   <tr>
                     <th><?php echo $lang->compile->result;?></th>
                     <td>
