@@ -3621,7 +3621,7 @@ class execution extends control
 
         if($lastEditedTime > $enterTime or $groupBy != 'default')
         {
-            $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy);;
+            $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy);
             die(json_encode($kanbanGroup));
         }
         else
