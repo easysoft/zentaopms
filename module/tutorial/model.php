@@ -158,6 +158,7 @@ class tutorialModel extends model
         $project->whitelist    = '';
         $project->budget       = 0;
         $project->displayCards = 0;
+        $project->fluidBoard   = 0;
         $project->deleted      = '0';
 
         return $project;
@@ -268,33 +269,34 @@ class tutorialModel extends model
     public function getExecution()
     {
         $execution = new stdclass();
-        $execution->id             = 3;
-        $execution->project        = 2;
-        $execution->type           = 'sprint';
-        $execution->name           = 'Test execution';
-        $execution->code           = 'test';
-        $execution->lifetime       = '';
-        $execution->begin          = date('Y-m-d', strtotime('-7 days'));
-        $execution->end            = date('Y-m-d', strtotime('+7 days'));
-        $execution->days           = 10;
-        $execution->status         = 'wait';
-        $execution->pri            = '1';
-        $execution->desc           = '';
-        $execution->goal           = '';
-        $execution->acl            = 'open';
-        $execution->parent         = 2;
-        $execution->path           = ',2,3,';
-        $execution->grade          = 1;
-        $execution->PM             = $this->app->user->account;
-        $execution->PO             = $this->app->user->account;
-        $execution->QD             = $this->app->user->account;
-        $execution->RD             = $this->app->user->account;
-        $execution->deleted        = '0';
-        $execution->totalConsumed  = 0;
-        $execution->totalLeft      = 0;
-        $execution->totalHours     = 0;
-        $execution->totalEstimate  = 0;
-        $execution->displayCards   = 0;
+        $execution->id            = 3;
+        $execution->project       = 2;
+        $execution->type          = 'sprint';
+        $execution->name          = 'Test execution';
+        $execution->code          = 'test';
+        $execution->lifetime      = '';
+        $execution->begin         = date('Y-m-d', strtotime('-7 days'));
+        $execution->end           = date('Y-m-d', strtotime('+7 days'));
+        $execution->days          = 10;
+        $execution->status        = 'wait';
+        $execution->pri           = '1';
+        $execution->desc          = '';
+        $execution->goal          = '';
+        $execution->acl           = 'open';
+        $execution->parent        = 2;
+        $execution->path          = ',2,3,';
+        $execution->grade         = 1;
+        $execution->PM            = $this->app->user->account;
+        $execution->PO            = $this->app->user->account;
+        $execution->QD            = $this->app->user->account;
+        $execution->RD            = $this->app->user->account;
+        $execution->deleted       = '0';
+        $execution->totalConsumed = 0;
+        $execution->totalLeft     = 0;
+        $execution->totalHours    = 0;
+        $execution->totalEstimate = 0;
+        $execution->displayCards  = 0;
+        $execution->fluidBoard    = 0;
         return $execution;
     }
 
