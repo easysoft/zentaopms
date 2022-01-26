@@ -16,6 +16,8 @@ $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|a
 
 if($config->edition != 'open')
 {
+    $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
+    $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
 }
