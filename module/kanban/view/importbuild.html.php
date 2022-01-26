@@ -42,7 +42,7 @@
           </th>
           <th class='c-name'><?php echo $lang->build->product;?></th>
           <th class='c-name'><?php echo $lang->build->name;?></th>
-          <th class='c-name'><?php echo $lang->executionCommon;?></th>
+          <th class='c-name'><?php echo $lang->execution->common;?></th>
           <th class='c-date'><?php echo $lang->build->date;?></th>
           <th class='c-user'><?php echo $lang->build->builder;?></th>
         </tr>
