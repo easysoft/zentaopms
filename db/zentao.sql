@@ -22,6 +22,7 @@ CREATE TABLE IF NOT EXISTS `zt_action` (
   `comment` text NOT NULL,
   `extra` text NOT NULL,
   `read` enum('0','1') NOT NULL default '0',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   PRIMARY KEY (`id`),
   KEY `date` (`date`),
   KEY `actor` (`actor`),
@@ -953,6 +954,7 @@ CREATE TABLE IF NOT EXISTS `zt_product` (
   `createdDate` datetime NOT NULL,
   `createdVersion` varchar(20) NOT NULL,
   `order` mediumint(8) unsigned NOT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `acl` (`acl`),
@@ -1072,7 +1074,8 @@ CREATE TABLE IF NOT EXISTS `zt_projectstory` (
   `story` mediumint(8) unsigned NOT NULL default '0',
   `version` smallint(6) NOT NULL default '1',
   `order` smallint(6) unsigned NOT NULL,
-  UNIQUE KEY `project` (`project`,`story`)
+  UNIQUE KEY `project` (`project`,`story`),
+  KEY `story` (`story`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_relation`;
 CREATE TABLE IF NOT EXISTS `zt_relation` (
@@ -1203,6 +1206,7 @@ CREATE TABLE IF NOT EXISTS `zt_searchdict` (
 -- DROP TABLE IF EXISTS `zt_searchindex`;
 CREATE TABLE IF NOT EXISTS `zt_searchindex` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `objectType` char(20) NOT NULL,
   `objectID` mediumint(9) NOT NULL,
   `title` text NOT NULL,
@@ -1386,9 +1390,9 @@ CREATE TABLE IF NOT EXISTS `zt_task` (
   `lines` varchar(10) NOT NULL,
   `v1` varchar(40) NOT NULL,
   `v2` varchar(40) NOT NULL,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `deleted` enum('0','1') NOT NULL default '0',
-   PRIMARY KEY (`id`),
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  PRIMARY KEY (`id`),
   KEY `execution` (`execution`),
   KEY `story` (`story`),
   KEY `parent` (`parent`),

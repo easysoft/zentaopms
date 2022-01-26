@@ -1,6 +1,5 @@
 ALTER TABLE `zt_project` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `order`;
 ALTER TABLE `zt_product` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `order`;
-ALTER TABLE `zt_doclib` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `order`;
 ALTER TABLE `zt_task` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `deleted`;
 ALTER TABLE `zt_projectstory` ADD INDEX `story` (`story`);
 ALTER TABLE `zt_group` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `project`;
@@ -9,7 +8,7 @@ ALTER TABLE `zt_lang` DROP INDEX `lang`, ADD UNIQUE `lang` (`lang`,`module`,`sec
 ALTER TABLE `zt_doc` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_doclib` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `type`;
 ALTER TABLE `zt_action` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `read`;
-ALTER TABLE `zt_searchindex` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `title`;
+ALTER TABLE `zt_searchindex` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_config` ADD `vision` varchar(10) NOT NULL DEFAULT '' AFTER `id`;
 ALTER TABLE `zt_config` DROP INDEX `unique`, ADD UNIQUE `unique` (`vision`,`owner`,`module`,`section`,`key`);
 ALTER TABLE `zt_todo` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `deleted`;
