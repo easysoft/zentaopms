@@ -628,7 +628,7 @@ function renderBuildItem(item, $item)
     var $title = $item.children('.buildTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle title"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle" data-app="project"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
         if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<div class="buildTitle"><i class="icon icon-ver"></i>' + item.name + '</div>').appendTo($item);
     }
     $title.attr('title', item.name);
