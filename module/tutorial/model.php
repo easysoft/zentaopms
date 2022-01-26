@@ -158,6 +158,7 @@ class tutorialModel extends model
         $project->whitelist    = '';
         $project->budget       = 0;
         $project->displayCards = 0;
+        $project->fluidBoard   = 0;
         $project->deleted      = '0';
 
         return $project;
@@ -295,6 +296,7 @@ class tutorialModel extends model
         $execution->totalHours     = 0;
         $execution->totalEstimate  = 0;
         $execution->displayCards   = 0;
+        $execution->fluidBoard     = 0;
         return $execution;
     }
 

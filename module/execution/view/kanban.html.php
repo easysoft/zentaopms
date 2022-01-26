@@ -41,6 +41,7 @@ js::set('laneCount', $laneCount);
 js::set('userList', $userList);
 js::set('noAssigned', $lang->kanbancard->noAssigned);
 js::set('users', $users);
+js::set('entertime', time());
 js::set('displayCards', $execution->displayCards);
 js::set('fluidBoard', $execution->fluidBoard);
 js::set('colorListLang', $lang->kanbancard->colorList);
