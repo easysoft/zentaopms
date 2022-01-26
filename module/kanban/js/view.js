@@ -585,7 +585,7 @@ function renderProductplanItem(item, $item)
     var begin      = $.zui.createDate(item.begin);
     var end        = $.zui.createDate(item.end);
     var today      = new Date();
-    var labelType  = begin.getTime() <= today.getTime() || end.getTime() >= today.getTime() ? 'danger' : 'wait';
+    var labelType  = begin.getTime() <= today.getTime() && end.getTime() >= today.getTime() ? 'danger' : 'wait';
     var labelTitle = $.zui.formatDate(begin, 'MM-dd') + ' ' + productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd');
 
     if((item.begin == '2030-01-01' || item.end == '2030-01-01'))

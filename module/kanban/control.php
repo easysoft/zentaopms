@@ -1090,10 +1090,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $productPairs      = $this->product->getPairs();
-        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
-
-        $this->view->products          = $productPairs;
+        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs();
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->releases2Imported = $this->release->getList($selectedProductID, 'all', 'all', 't1.date_desc', $pager);
@@ -1135,20 +1132,29 @@ class kanban extends control
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
 
-        $this->loadModel('project');
         $this->loadModel('build');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $projectPairs      = $this->project->getPairsByProgram();
-        $selectedProjectID = empty($selectedProjectID) ? key($projectPairs) : $selectedProjectID;
+        $builds2Imported = array();
+        $projects        = array($this->lang->kanban->allProjects);
+        if($this->config->systemMode == 'classic')
+        {
+            $projects        += $this->loadModel('execution')->getPairs();
+            $builds2Imported  = $this->build->getExecutionBuilds($selectedProjectID, '', '', 't1.date_desc,t1.id_desc', $pager);
+        }
+        else
+        {
+            $projects        += $this->loadModel('project')->getPairsByProgram();
+            $builds2Imported  = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
+        }
 
-        $this->view->projects          = $projectPairs;
+        $this->view->projects          = $projects;
         $this->view->selectedProjectID = $selectedProjectID;
+        $this->view->builds2Imported   = $builds2Imported;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->builds2Imported   = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);;
         $this->view->users             = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;

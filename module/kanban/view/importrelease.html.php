@@ -19,7 +19,7 @@
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->importRelease;?></h2>
+      <h2><?php echo $lang->kanban->importAB . $lang->kanban->importRelease;?></h2>
     </div>
   </div>
   <div class='table-row p-10px'>
@@ -41,7 +41,9 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->release->name;?></th>
+          <?php if($config->systemMode == 'new'):?>
           <th class='c-name'><?php echo $lang->release->project;?></th>
+          <?php endif;?>
           <th class='c-name'><?php echo $lang->release->build;?></th>
           <th class='c-date'><?php echo $lang->release->date;?></th>
         </tr>
@@ -61,7 +63,9 @@
           <?php else:?>
           <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>
+          <?php if($config->systemMode == 'new'):?>
           <td title='<?php echo $release->projectName;?>'><?php echo $release->projectName;?></td>
+          <?php endif;?>
           <td title='<?php echo $release->buildName;?>'><?php echo $release->buildName;?></td>
           <td title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
         </tr>
@@ -72,7 +76,7 @@
     <?php if($releases2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importRelease, '', 'btn btn-default');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importAB, '', 'btn btn-default');?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
