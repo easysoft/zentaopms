@@ -406,7 +406,9 @@ function renderKanbanItem(item, $item)
 function renderExecutionItem(item, $item)
 {
     /* Output header information. */
-    var privs   = item.actions;
+    var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
+
     var $header = $item.children('.header');
     if(!$header.length) $header = $(
     [
@@ -427,7 +429,7 @@ function renderExecutionItem(item, $item)
     {
         var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
         if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
-        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<a class="title"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($titleBox);
+        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-run"></i>' + item.name + '</div>').appendTo($titleBox);
     }
     $title.attr('title', item.name);
 
@@ -492,13 +494,14 @@ function renderExecutionItem(item, $item)
 function renderReleaseItem(item, $item)
 {
     var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
 
     /* Print name. */
     var $title = $item.children('.releaseTitle');
     if(!$title.length)
     {
         if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
-        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<a class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item);
+        if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<div class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</div>').appendTo($item);
     }
     $title.attr('title', item.name);
 
@@ -550,13 +553,14 @@ function renderReleaseItem(item, $item)
 function renderProductplanItem(item, $item)
 {
     var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
 
     /* Print name. */
     var $title = $item.children('.productplanTitle');
     if(!$title.length)
     {
         if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
-        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item);
+        if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<div class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</div>').appendTo($item);
     }
     $title.attr('title', item.title);
 
@@ -617,13 +621,14 @@ function renderProductplanItem(item, $item)
 function renderBuildItem(item, $item)
 {
     var privs = item.actions;
+    if(privs.includes('sortCard')) $item.parent().addClass('sort');
 
     /* Print name. */
-    var $title = $item.children('.title');
+    var $title = $item.children('.buildTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
-        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<a class="title"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item);
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<div class="buildTitle"><i class="icon icon-ver"></i>' + item.name + '</div>').appendTo($item);
     }
     $title.attr('title', item.name);
 
