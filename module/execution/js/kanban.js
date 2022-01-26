@@ -1306,7 +1306,7 @@ $(function()
                 if(data && lastUpdateData !== data)
                 {
                     lastUpdateData = data;
-                    kanbanData = $.parseJSON(data);
+                    kanbanData     = $.parseJSON(data);
                     for(var region in kanbanData)
                     {
                         updateRegion(region, kanbanData[region]);
