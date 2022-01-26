@@ -2947,11 +2947,13 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
         $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
         $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+
+        $kanbanID = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
 
         if(!$toCell) $this->addKanbanCell($kanbanID, $toLaneID, $toColID, 'common');
 

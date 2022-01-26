@@ -941,7 +941,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
         $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
