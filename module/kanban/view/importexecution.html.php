@@ -19,13 +19,15 @@
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->importExecution;?></h2>
+      <h2><?php echo $lang->kanban->importAB . $lang->kanban->importExecution;?></h2>
     </div>
   </div>
+  <?php if($config->systemMode == 'new'):?>
   <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedProject;?></h4></div>
     <div class='table-col'><?php echo html::select('project', $projects, $selectedProjectID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
   </div>
+  <?php endif;?>
   <div class='table-row p-10px'>
     <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
     <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
@@ -78,7 +80,7 @@
     <?php if($executions2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importExecution, '', 'btn btn-default');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importAB, '', 'btn btn-default');?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>

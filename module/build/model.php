@@ -67,9 +67,9 @@ class buildModel extends model
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.project')->eq((int)$projectID)
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq(0)
             ->andWhere('t1.project')->ne(0)
+            ->beginIF($projectID)->andWhere('t1.project')->eq((int)$projectID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->orderBy($orderBy)
@@ -121,21 +121,23 @@ class buildModel extends model
      * @param  string     $type      all|product|bysearch
      * @param  int|string $param     productID|buildQuery
      * @param  string     $orderBy
+     * @param  object     $pager
      * @access public
      * @return array
      */
-    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc')
+    public function getExecutionBuilds($executionID, $type = '', $param = '', $orderBy = 't1.date_desc,t1.id_desc', $pager = null)
     {
         return $this->dao->select('t1.*, t2.name as executionName, t3.name as productName, t4.name as branchName')
             ->from(TABLE_BUILD)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.execution = t2.id')
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product = t3.id')
             ->leftJoin(TABLE_BRANCH)->alias('t4')->on('t1.branch = t4.id')
-            ->where('t1.execution')->eq((int)$executionID)
-            ->andWhere('t1.deleted')->eq(0)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($executionID)->andWhere('t1.execution')->eq((int)$executionID)->fi()
             ->beginIF($type == 'product' and $param)->andWhere('t1.product')->eq($param)->fi()
             ->beginIF($type == 'bysearch')->andWhere($param)->fi()
             ->orderBy($orderBy)
+            ->page($pager)
             ->fetchAll('id');
     }
 

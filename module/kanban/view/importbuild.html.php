@@ -19,7 +19,7 @@
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->importBuild;?></h2>
+      <h2><?php echo $lang->kanban->importAB . $lang->kanban->importBuild;?></h2>
     </div>
   </div>
   <div class='table-row p-10px'>
@@ -74,7 +74,7 @@
     <?php if($builds2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importBuild, '', 'btn btn-default');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importAB, '', 'btn btn-default');?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
     <?php endif;?>
