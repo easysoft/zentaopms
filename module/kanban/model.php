@@ -3058,7 +3058,7 @@ class kanbanModel extends model
                         ->andWhere('type')->eq('common')
                         ->fetch('cards');
 
-                    $cards = $cards ? $cards . ltrim($cell->cards, ',') : $cards;
+                    $cards = $cards ? $cards . ltrim($cell->cards, ',') : $cell->cards;
 
                     $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)
                         ->where('lane')->eq($cell->lane)
