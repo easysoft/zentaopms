@@ -3051,7 +3051,15 @@ class kanbanModel extends model
 
                 foreach($parentCells as $cell)
                 {
-                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)
+                    $cards = $this->dao->select('cards')->from(TABLE_KANBANCELL)
+                        ->where('lane')->eq($cell->lane)
+                        ->andWhere('`column`')->eq($columnID)
+                        ->andWhere('type')->eq('common')
+                        ->fetch('cards');
+
+                    $cards = $cards ? $cards . ltrim($cell->cards, ',') : $cards;
+
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)
                         ->where('lane')->eq($cell->lane)
                         ->andWhere('`column`')->eq($columnID)
                         ->andWhere('type')->eq('common')
