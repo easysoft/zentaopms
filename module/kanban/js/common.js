@@ -68,3 +68,17 @@ function setTargetLane(targetLaneID)
 {
     $('#targetLane').val(targetLaneID);
 }
+
+/**
+ * Jump to the view page.
+ *
+ * @param  string $module
+ * @param  int    $objectID
+ * @access public
+ * @return void
+ */
+function locateView(module, objectID)
+{
+    var dataApp = module == 'productplan' || module == 'release' ? 'product' : 'execution';
+    parent.$.apps.open(createLink(module, 'view', 'objectID=' + objectID), dataApp);
+}

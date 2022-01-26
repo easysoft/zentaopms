@@ -60,7 +60,9 @@
             <?php printf('%03d', $plan->id);?>
           </td>
           <?php if(common::hasPriv('productplan', 'view')):?>
-          <td title='<?php echo $plan->title;?>'><?php common::printLink('productplan', 'view', "planID=$plan->id", $plan->title, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $plan->title;?>'>
+            <a href='javascript:void(0);' onclick="locateView('productplan', <?php echo $plan->id;?>)"><?php echo $plan->title;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $plan->title;?>'><?php echo $plan->title;?></td>
           <?php endif;?>

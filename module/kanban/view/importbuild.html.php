@@ -59,7 +59,9 @@
           </td>
           <td title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <?php if(common::hasPriv('build', 'view')):?>
-          <td title='<?php echo $build->name;?>'><?php common::printLink('build', 'view', "buildID=$build->id", $build->name, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $build->name;?>'>
+            <a href='javascript:void(0);' onclick="locateView('build', <?php echo $build->id;?>)"><?php echo $build->name;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
           <?php endif;?>
