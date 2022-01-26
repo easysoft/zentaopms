@@ -753,7 +753,7 @@ class upgradeModel extends model
         case '16_2':
             $this->saveLogs('Execute 16_2');
             $this->execSQL($this->getUpgradeFile('16.2'));
-            $this->addSpaceTeam();
+            $this->updateSpaceTeam();
             $this->appendExec('16_2');
         }
 
