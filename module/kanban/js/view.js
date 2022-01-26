@@ -501,7 +501,7 @@ function renderReleaseItem(item, $item)
     var $title = $item.children('.releaseTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
+        if(privs.includes('viewRelease') && item.deleted == '0') $title = $('<a class="releaseTitle title"><i class="icon icon-publish"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('release', 'view', 'releaseID=' + item.fromID));
         if(!privs.includes('viewRelease') || item.deleted == '1') $title = $('<div class="releaseTitle"><i class="icon icon-publish"></i>' + item.name + '</div>').appendTo($item);
     }
     $title.attr('title', item.name);
@@ -560,7 +560,7 @@ function renderProductplanItem(item, $item)
     var $title = $item.children('.productplanTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
+        if(privs.includes('viewPlan') && item.deleted == '0') $title = $('<a class="productplanTitle title"><i class="icon icon-delay"></i>' + item.title + '</a>').appendTo($item).attr('href', createLink('productplan', 'view', 'productplanID=' + item.fromID));
         if(!privs.includes('viewPlan') || item.deleted == '1') $title = $('<div class="productplanTitle"><i class="icon icon-delay"></i>' + item.title + '</div>').appendTo($item);
     }
     $title.attr('title', item.title);
@@ -628,7 +628,7 @@ function renderBuildItem(item, $item)
     var $title = $item.children('.buildTitle');
     if(!$title.length)
     {
-        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
+        if(privs.includes('viewBuild') && item.deleted == '0') $title = $('<a class="buildTitle title"><i class="icon icon-ver"></i>' + item.name + '</a>').appendTo($item).attr('href', createLink('build', 'view', 'buildID=' + item.fromID));
         if(!privs.includes('viewBuild') || item.deleted == '1') $title = $('<div class="buildTitle"><i class="icon icon-ver"></i>' + item.name + '</div>').appendTo($item);
     }
     $title.attr('title', item.name);
