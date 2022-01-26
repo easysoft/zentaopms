@@ -1123,7 +1123,7 @@ class gitlabModel extends model
      */
     public function apiGetHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/$projectID/hooks/$hookID)";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1167,7 +1167,7 @@ class gitlabModel extends model
      */
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete')));
@@ -1226,7 +1226,7 @@ class gitlabModel extends model
      */
     public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
 
         if(!isset($hook->url)) return false;
 
