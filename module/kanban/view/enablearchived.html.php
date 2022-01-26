@@ -19,7 +19,7 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanban->archive;?></th>
+          <th class='w-70px'><?php echo $lang->kanban->archive;?></th>
           <td><?php echo nl2br(html::radio('archived', $lang->kanban->archiveList, $kanban->archived));?></td>
         </tr>
         <tr>
