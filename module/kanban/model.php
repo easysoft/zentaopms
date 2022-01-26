@@ -2807,11 +2807,11 @@ class kanbanModel extends model
 
     /**
      * Set column width.
-     * 
-     * @param  int    $kanbanID 
-     * @param  string $from 
+     *
+     * @param  int    $kanbanID
+     * @param  string $from
      * @access public
-     * @return bool|void 
+     * @return bool|void
      */
     public function setColumnWidth($kanbanID, $from = 'kanban')
     {
@@ -2830,6 +2830,9 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
+        $blackButton = '';
+        if($this->app->cookie->theme == 'blue') $blackButton = 'style="color:#000000"';
+
         $printSetHeightBtn = false;
         if(common::hasPriv('kanban', 'setLaneHeight'))
         {
@@ -2845,13 +2848,13 @@ class kanbanModel extends model
 
         $actions  = '';
         $actions .= "<div class='btn-group'>";
-        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $blackButton class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
-            $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+            $actions .= "<a data-toggle='dropdown' $blackButton class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
             if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
