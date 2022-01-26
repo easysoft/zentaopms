@@ -64,11 +64,13 @@
       </thead>
       <tbody>
         <?php foreach($MRList as $MR):?>
+        <?php $sourceProject = isset($projects[$MR->gitlabID][$MR->sourceProject]) ? $projects[$MR->gitlabID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch : $MR->sourceProject . ':' . $MR->sourceBranch; ?>
+        <?php $targetProject = isset($projects[$MR->gitlabID][$MR->targetProject]) ? $projects[$MR->gitlabID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch : $MR->targetProject . ':' . $MR->targetBranch; ?>
         <tr>
           <td class='text'><?php echo $MR->id;?></td>
           <td class='text'><?php echo html::a(inlink('view', "mr={$MR->id}"), $MR->title);?></td>
-          <td class='text' title='<?php echo $projects[$MR->gitlabID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch;?>'><?php echo $projects[$MR->gitlabID][$MR->sourceProject]->name_with_namespace . ':' . $MR->sourceBranch;?></td>
-          <td class='text' title='<?php echo $projects[$MR->gitlabID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch;?>'><?php echo $projects[$MR->gitlabID][$MR->targetProject]->name_with_namespace . ':' . $MR->targetBranch;?></td>
+          <td class='text' title='<?php echo $sourceProject;?>'><?php echo $sourceProject;?></td>
+          <td class='text' title='<?php echo $targetProject;?>'><?php echo $targetProject;?></td>
           <?php if($MR->status == 'closed'):?>
             <td class='text'><?php echo zget($lang->mr->statusList, $MR->status);?></td>
           <?php else:?>
