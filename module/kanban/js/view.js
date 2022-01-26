@@ -428,9 +428,10 @@ function renderExecutionItem(item, $item)
     var $title = $titleBox.children('.title');
     if(!$title.length)
     {
+        var icon = mode == 'new' ? 'run' : 'project';
         var viewMethod = item.execType == 'kanban' ? 'kanban' : 'view';
-        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-run"></i>' + item.name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
-        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-run"></i>' + item.name + '</div>').appendTo($titleBox);
+        if(privs.includes('viewExecution') && item.deleted == '0') $title = $('<a class="title"><i class="icon icon-' + icon + '"></i>' + item.name + '</a>').appendTo($titleBox).attr('href', createLink('execution', viewMethod, 'executionID=' + item.fromID));
+        if(!privs.includes('viewExecution') || item.deleted == '1') $title = $('<div class="title"><i class="icon icon-' + icon + '"></i>' + item.name + '</div>').appendTo($titleBox);
     }
     $title.attr('title', item.name);
 
