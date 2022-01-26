@@ -42,7 +42,7 @@
           </th>
           <th class='c-name'><?php echo $lang->build->product;?></th>
           <th class='c-name'><?php echo $lang->build->name;?></th>
-          <th class='c-name'><?php echo $lang->executionCommon;?></th>
+          <th class='c-name'><?php echo $lang->execution->common;?></th>
           <th class='c-date'><?php echo $lang->build->date;?></th>
           <th class='c-user'><?php echo $lang->build->builder;?></th>
         </tr>
@@ -59,7 +59,9 @@
           </td>
           <td title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <?php if(common::hasPriv('build', 'view')):?>
-          <td title='<?php echo $build->name;?>'><?php common::printLink('build', 'view', "buildID=$build->id", $build->name, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $build->name;?>'>
+            <a href='javascript:void(0);' onclick="locateView('build', <?php echo $build->id;?>)"><?php echo $build->name;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
           <?php endif;?>

@@ -59,7 +59,9 @@
             <?php printf('%03d', $release->id);?>
           </td>
           <?php if(common::hasPriv('release', 'view')):?>
-          <td title='<?php echo $release->name;?>'><?php common::printLink('release', 'view', "releaseID=$release->id", $release->name, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $release->name;?>'>
+            <a href='javascript:void(0);' onclick="locateView('release', <?php echo $release->id;?>)"><?php echo $release->name;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>

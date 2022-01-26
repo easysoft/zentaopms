@@ -62,7 +62,9 @@
             <?php printf('%03d', $execution->id);?>
           </td>
           <?php if(common::hasPriv('execution', 'view')):?>
-          <td title='<?php echo $execution->name;?>'><?php common::printLink('execution', 'view', "executionID=$execution->id", $execution->name, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $execution->name;?>'>
+            <a href='javascript:void(0);' onclick="locateView('execution', <?php echo $execution->id;?>)"><?php echo $execution->name;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $execution->name;?>'><?php echo $execution->name;?></td>
           <?php endif;?>
