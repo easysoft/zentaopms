@@ -26,7 +26,6 @@ $lang->sonarqube->private        = 'MD5验证';
 
 $lang->sonarqube->createServer  = '添加SonarQube服务器';
 $lang->sonarqube->editServer    = '修改SonarQube服务器';
-$lang->sonarqube->desc          = '描述';
 $lang->sonarqube->createSuccess = "创建成功";
 
 $lang->sonarqube->placeholder = new stdclass;
