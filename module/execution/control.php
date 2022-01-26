@@ -3612,7 +3612,7 @@ class execution extends control
      * @param  string $groupBy
      * @param  string $from execution|RD
      * @access public
-     * @return void
+     * @return array 
      */
     public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '', $from = 'execution')
     {
