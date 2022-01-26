@@ -1677,7 +1677,7 @@ class kanbanModel extends model
         foreach($objects as $objectID => $object)
         {
             $remove = true;
-            if($param == 'public') continue;
+            if($objectType == 'kanbanspace' and $object->type == 'public') continue;
 
             if($object->owner == $account) $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
@@ -2807,11 +2807,11 @@ class kanbanModel extends model
 
     /**
      * Set column width.
-     * 
-     * @param  int    $kanbanID 
-     * @param  string $from 
+     *
+     * @param  int    $kanbanID
+     * @param  string $from
      * @access public
-     * @return bool|void 
+     * @return bool|void
      */
     public function setColumnWidth($kanbanID, $from = 'kanban')
     {
