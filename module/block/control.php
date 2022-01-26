@@ -226,6 +226,7 @@ class block extends control
     {
         if($this->loadModel('user')->isLogon()) $this->session->set('blockModule', $module);
         $blocks = $this->block->getBlockList($module, $type);
+        $vision = $this->config->vision;
 
         $commonField = 'common';
         if($module == 'project' and $projectID)
@@ -234,7 +235,12 @@ class block extends control
             $commonField = $project->model . 'common';
         }
 
-        $inited = empty($this->config->$module->$commonField->blockInited) ? '' : $this->config->$module->$commonField->blockInited;
+        $inited = $this->dao->select('*')->from(TABLE_CONFIG)
+            ->where('module')->eq($module)
+            ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`key`')->eq('blockInited')
+            ->andWhere('vision')->eq($vision)
+            ->fetch('value');
 
         /* Init block when vist index first. */
         if((empty($blocks) and !$inited and !defined('TUTORIAL')))
@@ -1873,8 +1879,18 @@ class block extends control
     {
         if($confirm != 'yes') die(js::confirm($this->lang->block->confirmReset, inlink('ajaxReset', "module=$module&confirm=yes")));
 
-        $this->dao->delete()->from(TABLE_BLOCK)->where('module')->eq($module)->andWhere('account')->eq($this->app->user->account)->exec();
-        $this->dao->delete()->from(TABLE_CONFIG)->where('module')->eq($module)->andWhere('owner')->eq($this->app->user->account)->andWhere('`key`')->eq('blockInited')->exec();
+        $this->dao->delete()->from(TABLE_BLOCK)
+            ->where('module')->eq($module)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('account')->eq($this->app->user->account)
+            ->exec();
+
+        $this->dao->delete()->from(TABLE_CONFIG)
+            ->where('module')->eq($module)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->andWhere('owner')->eq($this->app->user->account)
+            ->andWhere('`key`')->eq('blockInited')
+            ->exec();
         die(js::reload('parent'));
     }
 

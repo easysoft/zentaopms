@@ -12,3 +12,5 @@ ALTER TABLE `zt_searchindex` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFT
 ALTER TABLE `zt_config` ADD `vision` varchar(10) NOT NULL DEFAULT '' AFTER `id`;
 ALTER TABLE `zt_config` DROP INDEX `unique`, ADD UNIQUE `unique` (`vision`,`owner`,`module`,`section`,`key`);
 ALTER TABLE `zt_todo` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `deleted`;
+ALTER TABLE `zt_block` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `account`;
+ALTER TABLE `zt_block` DROP INDEX `account_module_type_order`, ADD UNIQUE `account_vision_module_type_order` (`account`, `vision`, `module`, `type`, `order`);

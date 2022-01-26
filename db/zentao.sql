@@ -124,6 +124,7 @@ CREATE TABLE `zt_apistruct_spec` (
 CREATE TABLE IF NOT EXISTS `zt_block` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `account` char(30) NOT NULL,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `module` varchar(20) NOT NULL,
   `type` char(30) NOT NULL,
   `title` varchar(100) NOT NULL,
@@ -135,7 +136,7 @@ CREATE TABLE IF NOT EXISTS `zt_block` (
   `height` smallint(5) unsigned NOT NULL DEFAULT '0',
   `hidden` tinyint(1) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
-  UNIQUE KEY `account_module_type_order` (`account`,`module`,`type`,`order`),
+  UNIQUE KEY `account_vision_module_type_order` (`account`,`vision`,`module`,`type`,`order`),
   KEY `account` (`account`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_branch`;
