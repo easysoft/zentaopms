@@ -1147,7 +1147,7 @@ class kanban extends control
         }
         else
         {
-            $projects        += $this->loadModel('project')->getPairsByProgram();
+            $projects        += $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
             $builds2Imported  = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
         }
 
