@@ -62,16 +62,17 @@ class gitlabModel extends model
      * Get gitlab api base url by gitlab id.
      *
      * @param  int    $gitlabID
+     * @param  bool   $sudo
      * @access public
      * @return string
      */
-    public function getApiRoot($gitlabID)
+    public function getApiRoot($gitlabID, $sudo = true)
     {
         $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return '';
 
         $sudoParam = '';
-        if(!$this->app->user->admin)
+        if($sudo == true and !$this->app->user->admin)
         {
             $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
             if($openID) $sudoParam = "&sudo={$openID}";
@@ -1103,7 +1104,7 @@ class gitlabModel extends model
      */
     public function apiGetHooks($gitlabID, $projectID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/{$projectID}/hooks";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1122,7 +1123,7 @@ class gitlabModel extends model
      */
     public function apiGetHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/$projectID/hooks/$hookID)";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1148,7 +1149,7 @@ class gitlabModel extends model
 
         foreach($hook as $index => $item) $newHook->$index= $item;
 
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks");
 
         return json_decode(commonModel::http($url, $newHook));
@@ -1166,7 +1167,7 @@ class gitlabModel extends model
      */
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete')));
@@ -1225,7 +1226,7 @@ class gitlabModel extends model
      */
     public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
 
         if(!isset($hook->url)) return false;
 
