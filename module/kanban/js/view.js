@@ -315,7 +315,7 @@ function renderKanbanItem(item, $item)
         if(privs.includes('sortCard')) $item.parent().addClass('sort');
         if(!$title.length)
         {
-            if(privs.includes('viewCard')) $title = $('<a class="title iframe text-ellipsis" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
+            if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
             if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
         }
 
@@ -1302,10 +1302,10 @@ $(function()
         var columnID = $(this).closest('.kanban-col').data('id');
 
         /* The submenu of import. */
-        var importPlanLink      = kanban.object.indexOf('plans') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importPlan', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importPlan + '</a></li>' : '';
-        var importReleaseLink   = kanban.object.indexOf('releases') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
-        var importExecutionLink = kanban.object.indexOf('executions') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
-        var importBuildLink     = kanban.object.indexOf('builds') != -1 ? "<li><a class='iframe' data-toggle='modal' data-width='80%' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
+        var importPlanLink      = kanban.object.indexOf('plans') != -1 ? "<li><a class='iframe' data-toggle='modal'' href='" + createLink('kanban', 'importPlan', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importPlan + '</a></li>' : '';
+        var importReleaseLink   = kanban.object.indexOf('releases') != -1 ? "<li><a class='iframe' data-toggle='modal'' href='" + createLink('kanban', 'importRelease', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importRelease + '</a></li>' : '';
+        var importExecutionLink = kanban.object.indexOf('executions') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importExecution', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importExecution + '</a></li>' : '';
+        var importBuildLink     = kanban.object.indexOf('builds') != -1 ? "<li><a class='iframe' data-toggle='modal' href='" + createLink('kanban', 'importBuild', 'kanbanID=' + kanban.id + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID) + "'>" + kanbanLang.importBuild + '</a></li>' : '';
         var importSubmenu       = '<ul class="dropdown-menu">' + importPlanLink + importReleaseLink + importExecutionLink + importBuildLink +'</ul>';
         $('.import').parent().append(importSubmenu);
 

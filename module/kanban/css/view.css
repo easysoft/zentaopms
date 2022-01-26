@@ -103,7 +103,7 @@
 .kanban-card .header .executionName {display: flex; width: 100%; float: left;}
 .kanban-card .header .executionName .title {padding-right: 0px; margin-right: 5px; overflow: hidden; white-space: nowrap;}
 .kanban-card .header .executionName > span {flex: none;}
-.execInfo, .releaseInfo, .productplanInfo {margin-top: 23px;}
+.execInfo, .releaseInfo, .productplanInfo {margin-top: 22px;}
 .label-wait {background: #EFEFEF !important; color: #838A9D;}
 .label-doing {background: #f8d2d2 !important; color: #e64b4c;}
 .label-suspended {background: #fff3d9 !important; color: #ff9800;}
