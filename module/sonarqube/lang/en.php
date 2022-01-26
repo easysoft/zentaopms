@@ -44,14 +44,14 @@ $lang->sonarqube->projectKey          = 'Project Key';
 $lang->sonarqube->projectName         = 'Project Name';
 $lang->sonarqube->projectlastAnalysis = 'Last analysis time';
 
-$lang->sonarqube->reprot = new stdclass();
-$lang->sonarqube->reprot->bugs                       = 'Bugs';
-$lang->sonarqube->reprot->vulnerabilities            = 'Vulnerabilities';
-$lang->sonarqube->reprot->security_hotspots_reviewed = 'Hotspots Reviewed';
-$lang->sonarqube->reprot->code_smells                = 'Code Smells';
-$lang->sonarqube->reprot->coverage                   = 'Coverage';
-$lang->sonarqube->reprot->duplicated_lines_density   = 'Duplications';
-$lang->sonarqube->reprot->ncloc                      = 'Lines';
+$lang->sonarqube->report = new stdclass();
+$lang->sonarqube->report->bugs                       = 'Bugs';
+$lang->sonarqube->report->vulnerabilities            = 'Vulnerabilities';
+$lang->sonarqube->report->security_hotspots_reviewed = 'Hotspots Reviewed';
+$lang->sonarqube->report->code_smells                = 'Code Smells';
+$lang->sonarqube->report->coverage                   = 'Coverage';
+$lang->sonarqube->report->duplicated_lines_density   = 'Duplications';
+$lang->sonarqube->report->ncloc                      = 'Lines';
 
 $lang->sonarqube->qualitygateList = array();
 $lang->sonarqube->qualitygateList['OK']    = 'Passed';
