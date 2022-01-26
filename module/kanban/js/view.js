@@ -321,7 +321,8 @@ function renderKanbanItem(item, $item)
 
         $title.text(item.name).attr('title', item.name);
 
-        if(printMoreBtn)
+        var $actions = $item.children('.actions');
+        if(printMoreBtn && !$actions.length)
         {
             $(
             [
