@@ -314,15 +314,15 @@ class gitlab extends control
         }
 
         $groups      = $this->gitlab->apiGetGroups($gitlabID, $orderBy);
-        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, $this->config->gitlab->accessLevel['owner']);
+        $adminGroups = $this->gitlab->apiGetGroups($gitlabID, $orderBy, 'owner');
 
-        $adminGropuIDList = array();
-        foreach($adminGroups as $group) $adminGropuIDList[] = $group->id;
+        $adminGroupIDList = array();
+        foreach($adminGroups as $group) $adminGroupIDList[] = $group->id;
 
         $this->view->title            = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
         $this->view->gitlabID         = $gitlabID;
         $this->view->gitlabGroupList  = $groups;
-        $this->view->adminGropuIDList = $adminGropuIDList;
+        $this->view->adminGroupIDList = $adminGroupIDList;
         $this->view->orderBy          = $orderBy;
         $this->display();
     }
@@ -656,7 +656,7 @@ class gitlab extends control
 
         /* Get group id list by gitlab user that the user is maintainer. */
         $groupIDList = array(0 => 0);
-        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['maintainer']);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'maintainer');
         foreach($groups as $group) $groupIDList[] = $group->id;
 
         foreach($result['projects'] as $key => $project)

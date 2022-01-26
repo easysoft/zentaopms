@@ -55,7 +55,7 @@
           <td class='text' title='<?php echo substr($gitlabGroup->created_at, 0, 10);?>'><?php echo substr($gitlabGroup->created_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php
-            $adminClass = ($app->user->admin or in_array($gitlabGroup->id, $adminGropuIDList)) ? '' : 'disabled';
+            $adminClass = ($app->user->admin or in_array($gitlabGroup->id, $adminGroupIDList)) ? '' : 'disabled';
             common::printLink('gitlab', 'manageGroupMembers', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-team'></i> ", '',"title='{$lang->gitlab->group->manageMembers}' class='btn btn-primary'");
             common::printLink('gitlab', 'editGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->group->edit}' class='btn btn-primary {$adminClass}'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteGroup', "gitlabID=$gitlabID&groupID=$gitlabGroup->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteGroup}' class='btn {$adminClass}'");
