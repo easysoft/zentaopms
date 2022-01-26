@@ -208,7 +208,7 @@ class kanban extends control
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
-        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs($space->type);
+        $this->view->spacePairs = array(0 => '') + array($kanban->space => $space->name) + $this->kanban->getSpacePairs($space->type);
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
 
