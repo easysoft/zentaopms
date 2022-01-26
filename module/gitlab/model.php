@@ -61,15 +61,23 @@ class gitlabModel extends model
     /**
      * Get gitlab api base url by gitlab id.
      *
-     * @param  int $id
+     * @param  int    $gitlabID
      * @access public
      * @return string
      */
-    public function getApiRoot($id)
+    public function getApiRoot($gitlabID)
     {
-        $gitlab = $this->getByID($id);
+        $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return '';
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}";
+
+        $sudoParam = '';
+        if(!$this->app->user->admin)
+        {
+            $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if($openID) $sudoParam = "&sudo={$openID}";
+        }
+
+        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
     }
 
     /**
@@ -596,7 +604,7 @@ class gitlabModel extends model
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
-        if($minRole == 'owner') 
+        if($minRole == 'owner')
         {
             $url .= '&owned=true';
         }
