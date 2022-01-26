@@ -247,6 +247,14 @@ class mr extends control
         $sourceBranch  = $this->gitlab->apiGetSingleBranch($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch);
         $targetBranch  = $this->gitlab->apiGetSingleBranch($MR->gitlabID, $MR->targetProject, $MR->targetBranch);
 
+        $projectOwner = true;
+        if(isset($MR->gitlabID))
+        {
+            $projectOwner = $this->app->user->admin;
+            $openID       = $this->gitlab->getUserIDByZentaoAccount($MR->gitlabID, $this->app->user->account);
+            if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
+        }
+
         $this->view->sourceProjectName = $sourceProject->name_with_namespace;
         $this->view->targetProjectName = $targetProject->name_with_namespace;
         $this->view->sourceProjectURL  = isset($sourceBranch->web_url) ? $sourceBranch->web_url : '';
@@ -260,8 +268,9 @@ class mr extends control
         $this->app->loadLang('productplan');
         $product  = $this->mr->getMRProduct($MR);
 
-        $this->view->compile    = $this->loadModel('compile')->getById($MR->compileID);
-        $this->view->compileJob = $MR->jobID ? $this->job->getById($MR->jobID) : false;
+        $this->view->compile      = $this->loadModel('compile')->getById($MR->compileID);
+        $this->view->compileJob   = $MR->jobID ? $this->job->getById($MR->jobID) : false;
+        $this->view->projectOwner = $projectOwner;
 
         $this->view->title   = $this->lang->mr->view;
         $this->view->MR      = $MR;
