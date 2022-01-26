@@ -963,7 +963,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1016,7 +1016,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
@@ -1068,7 +1068,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importRelease($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importRelease($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
@@ -1120,7 +1120,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
@@ -1173,7 +1173,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
