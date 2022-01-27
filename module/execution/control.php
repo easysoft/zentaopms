@@ -1394,7 +1394,10 @@ class execution extends control
                 $this->loadModel('kanban')->createRDKanban($execution);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
+
+                $link= $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
             }
 

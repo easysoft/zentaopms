@@ -180,4 +180,8 @@ $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
 
 /* Set version. */
-if($config->edition != 'open') $config->version = $config->edition . $config->{$config->edition . 'Version'};
+if($config->edition != 'open')
+{
+    $config->version = $config->edition . $config->{$config->edition . 'Version'};
+    if($config->edition != 'max') unset($config->maxVersion);
+}
