@@ -433,14 +433,26 @@ class mrModel extends model
      *
      * @param  object $MRList
      * @access public
-     * @return void
+     * @return array
      */
     public function batchSyncMR($MRList)
     {
-        if(!empty($MRList)) foreach($MRList as $key => $MR)
+        if(empty($MRList)) return array();
+
+        foreach($MRList as $key => $MR)
         {
             if($MR->status != 'opened') continue;
-            $rawMR = $this->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
+
+            if(!isset($rawMRList[$MR->gitlabID][$MR->targetProject])) $rawMRList[$MR->gitlabID][$MR->targetProject] = $this->apiGetMRList($MR->gitlabID, $MR->targetProject);
+            $rawMR = new stdClass();
+            foreach($rawMRList[$MR->gitlabID][$MR->targetProject] as $projcetRawMR)
+            {
+                if($projcetRawMR->iid == $MR->mriid)
+                {
+                    $rawMR = $projcetRawMR;
+                    break;
+                }
+            }
 
             if(isset($rawMR->iid))
             {
