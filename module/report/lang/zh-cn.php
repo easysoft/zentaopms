@@ -109,8 +109,8 @@ $lang->report->mailTitle->todo     = " 待办(%s),";
 $lang->report->mailTitle->testTask = " 测试版本(%s),";
 
 $lang->report->deviationDesc = '按照已关闭执行统计偏差率（偏差率 = (总消耗 - 总预计) / 总预计），总预计为0时偏差率为n/a。';
-$lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">更多精彩，尽在专业版！</a>';
-$lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion    = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">更多精彩，尽在企业版！</a>';
+$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/" target="_blank">Try ZenTao Biz for more!</a>';
 $lang->report->workloadDesc  = '工作负载=用户所有任务剩余工时之和/选择的时间天数*每天的工时。例如：起止时间设为1月1日~1月7日、工作日天数5天、每天工时8h，统计的是所有指派给该人员的未完成的任务，在5天内，每天8h的情况下的工作负载。';
 
 
