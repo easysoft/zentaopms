@@ -105,3 +105,5 @@
 #kanban .kanban-card[data-scale-size="2"] > .infos > .avatar {display: inline-block; transform: scale(.8); position: relative; top: -2px; vertical-align: top; margin-right: -1px;}
 
 #mainMenu .divider {margin: 10px}
+
+.kanbanRegion {margin:5px}

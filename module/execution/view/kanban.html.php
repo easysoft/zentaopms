@@ -183,7 +183,7 @@ js::set('hasTaskButton', $hasTaskButton);
             <?php endif;?>
           </span>
         </div>
-        <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
+        <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban kanbanRegion'></div>
       </div>
       <?php endforeach;?>
     </div>
