@@ -79,6 +79,9 @@ function setTargetLane(targetLaneID)
  */
 function locateView(module, objectID)
 {
-    var dataApp = module == 'productplan' || module == 'release' ? 'product' : 'execution';
+    var dataApp = 'kanban';
+    if(module == 'productplan' || module == 'release') dataApp = 'product';
+    if(module == 'execution') dataApp = 'execution';
+    if(module == 'build') dataApp = 'project';
     parent.$.apps.open(createLink(module, 'view', 'objectID=' + objectID), dataApp);
 }
