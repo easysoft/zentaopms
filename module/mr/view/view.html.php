@@ -119,7 +119,7 @@
               <?php common::printIcon('mr', 'edit', "mr=$MR->id", $MR, 'button', 'edit');?>
             <?php endif;?>
             <?php if($MR->synced and $rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
-            <?php common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
+            <?php if($projectOwner) common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
           </div>
         </div>
       </div>

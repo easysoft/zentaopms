@@ -1036,7 +1036,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
+        $actions   = array('editCard', 'performable', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -2876,7 +2876,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'setColumnWidth')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'setColumnWidth')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<li class='divider'></li>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }

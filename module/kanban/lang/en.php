@@ -29,6 +29,7 @@ $lang->kanban->sortColumn          = 'Sort Column';
 $lang->kanban->deleteColumn        = 'Delete Column';
 $lang->kanban->createCard          = 'Create Card';
 $lang->kanban->editCard            = 'Edit Card';
+$lang->kanban->finished            = 'Finished';
 $lang->kanban->finishCard          = 'Finish Card';
 $lang->kanban->activateCard        = 'Activate Card';
 $lang->kanban->viewCard            = 'View Card';
