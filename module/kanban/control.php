@@ -168,7 +168,7 @@ class kanban extends control
         unset($this->lang->kanbanspace->featureBar['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
-        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team) . ',' . trim($space->whitelist);
+        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
@@ -204,7 +204,7 @@ class kanban extends control
 
         $kanban     = $this->kanban->getByID($kanbanID);
         $space      = $this->kanban->getSpaceById($kanban->space);
-        $spaceUsers = trim($space->owner) . ',' . trim($space->team) . ',' . trim($space->whitelist);
+        $spaceUsers = trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
@@ -801,7 +801,11 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
         }
 
-        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $kanban     = $this->kanban->getByID($kanbanID);
+        $space      = $this->kanban->getSpaceById($kanban->space);
+        $spaceUsers = $kanban->space == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+
         $lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
         $lanePairs['ditto'] = $this->lang->kanbancard->ditto;
