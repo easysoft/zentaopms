@@ -19,12 +19,12 @@ $sonarqube = $tester->loadModel('sonarqube');
 
 $sonarqubeID = 2;
 $result      = $sonarqube->apiGetProjects($sonarqubeID);
-r(isset($result[0]->name)) && p() && e(1); //通过sonarqubeID,获取SonarQube项目列表
-r(count($result) > 0)      && p() && e(1); //通过sonarqubeID,获取SonarQube项目数量
+r(isset($result[0]->name)) && p() && e('1'); //通过sonarqubeID,获取SonarQube项目列表
+r(count($result) > 0)      && p() && e('1'); //通过sonarqubeID,获取SonarQube项目数量
 
 $keyword = '02';
 $result  = $sonarqube->apiGetProjects($sonarqubeID, $keyword);
-r(strpos($result[0]->name, '02') !== false) && p() && e(1); //通过sonarqubeID,关键字,搜索获取SonarQube项目
+r(strpos($result[0]->name, '02') !== false) && p() && e('1'); //通过sonarqubeID,关键字,搜索获取SonarQube项目
 
 $sonarqubeID = 0;
 $result      = $sonarqube->apiGetProjects($sonarqubeID);

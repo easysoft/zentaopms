@@ -265,6 +265,12 @@ class mrModel extends model
         $MR->createdBy      = $this->app->user->account;
         $MR->createdDate    = date('Y-m-d H:i:s');
 
+        if($MR->sourceProject == $MR->targetProject and $MR->sourceBranch == $MR->targetBranch)
+        {
+            dao::$errors[] = $this->lang->mr->errorLang[1];
+            return false;
+        }
+
         $result = $this->checkSameOpened($MR->gitlabID, $MR->sourceProject, $MR->sourceBranch, $MR->targetProject, $MR->targetBranch);
         if($result['result'] == 'fail')
         {

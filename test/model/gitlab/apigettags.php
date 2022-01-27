@@ -24,12 +24,12 @@ $gitlab = $tester->loadModel('gitlab');
 $gitlabID  = 1;
 $projectID = 1552;
 $result    = $gitlab->apiGetTags($gitlabID, $projectID);
-r(isset($result[0]->name)) && p() && e(1); //通过gitlabID,projectID,获取GitLab标签列表
-r(count($result) > 0)      && p() && e(1); //通过gitlabID,projectID,获取GitLab标签数量
+r(isset($result[0]->name)) && p() && e('1'); //通过gitlabID,projectID,获取GitLab标签列表
+r(count($result) > 0)      && p() && e('1'); //通过gitlabID,projectID,获取GitLab标签数量
 
 $gitlabID  = 1;
 $projectID = 1570;
-r(count($gitlab->apiGetTags($gitlabID, $projectID))) && p() && e(0); //当前项目没有标签时,获取GitLab标签列表
+r(count($gitlab->apiGetTags($gitlabID, $projectID))) && p() && e('0'); //当前项目没有标签时,获取GitLab标签列表
 
 $gitlabID  = 1;
 $projectID = 0;
