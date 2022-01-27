@@ -1668,7 +1668,13 @@ class treeModel extends model
         {
             $this->dao->update(TABLE_MODULE)->set('root')->eq($module->root)->where('id')->in($childs)->exec();
             $this->dao->update(TABLE_MODULE)->set('branch')->eq($module->branch)->where('id')->in($childs)->exec();
-            if($self->type == 'doc') $this->dao->update(TABLE_DOC)->set('`lib`')->eq($module->root)->where('module')->eq($moduleID)->exec();
+            if($self->type == 'doc')
+            {
+                $this->dao->update(TABLE_DOC)->set('`lib`')->eq($module->root)
+                    ->where('module')->eq($moduleID)
+                    ->orWhere('module')->in($childs)
+                    ->exec();
+            }
         }
         $this->fixModulePath(isset($module->root) ? $module->root : $self->root, $self->type);
         if(isset($module->root) and $module->root != $self->root) $this->changeRoot($moduleID, $self->root, $module->root, $self->type);
