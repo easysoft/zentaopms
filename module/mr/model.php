@@ -433,11 +433,13 @@ class mrModel extends model
      *
      * @param  object $MRList
      * @access public
-     * @return void
+     * @return array
      */
     public function batchSyncMR($MRList)
     {
-        if(!empty($MRList)) foreach($MRList as $key => $MR)
+        if(empty($MRList)) return array();
+
+        foreach($MRList as $key => $MR)
         {
             if($MR->status != 'opened') continue;
 
