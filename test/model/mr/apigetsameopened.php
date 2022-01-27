@@ -28,6 +28,17 @@ $sourceProject = '42';
 $sourceBranch  = 'branch-08';
 $targetProject = '42';
 $targetBranch  = 'master';
+$_POST['gitlabID']           = $gitlabID;
+$_POST['title']              = 'test_create';
+$_POST['description']        = 'test_create';
+$_POST['repoID']             = 1;
+$_POST['assignee']           = '';
+$_POST['removeSourceBranch'] = '1';
+$_POST['sourceProject']      = $sourceProject;
+$_POST['sourceBranch']       = $sourceBranch;
+$_POST['targetProject']      = $targetProject;
+$_POST['targetBranch']       = $targetBranch;
+$result = $mrModel->create();
 $result = $mrModel->apiGetSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
 if(isset($result->iid)) $result = 'success';
 r($result) && p() && e('success'); //使用正确的gitlabID, sourceProject,sourceBranch,targetProject,targetBranch

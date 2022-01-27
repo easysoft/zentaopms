@@ -21,12 +21,12 @@ $gitlab = $tester->loadModel('gitlab');
 $gitlabID  = 1;
 $projectID = 1552;
 $result    = $gitlab->apiGetBranches($gitlabID, $projectID);
-r(isset(array_shift($result)->name)) && p() && e(1); //通过gitlabID,projectID,获取GitLab分支列表
-r(count($result) > 0)                && p() && e(1); //通过gitlabID,projectID,获取GitLab分支数量
+r(isset(array_shift($result)->name)) && p() && e('1'); //通过gitlabID,projectID,获取GitLab分支列表
+r(count($result) > 0)                && p() && e('1'); //通过gitlabID,projectID,获取GitLab分支数量
 
 $gitlabID  = 1;
 $projectID = 959;
-r(count($gitlab->apiGetBranches($gitlabID, $projectID))) && p() && e(0); //当前项目没有分支时,获取GitLab分支列表
+r(count($gitlab->apiGetBranches($gitlabID, $projectID))) && p() && e('0'); //当前项目没有分支时,获取GitLab分支列表
 
 $gitlabID  = 1;
 $projectID = 0;

@@ -20,8 +20,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->common;?></th>
-            <!-- Use `array('') + $gitlabHosts` here because of this field must be changed when creating this MR. -->
-            <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control'");?></td>
+            <td class='required'><?php echo html::select('gitlabID', array('') + $gitlabHosts, '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
             <th style="white-space: nowrap;"><?php echo $lang->mr->sourceProject;?></th>

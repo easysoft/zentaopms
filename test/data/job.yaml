@@ -41,20 +41,6 @@ fields:
   - field: engine
     note: "引擎"
     range: jenkins,gitlab
-  - field: jkHost
-    note: "Jenkins服务器"
-    range: 1-10000
-    prefix: ""
-    postfix: ""
-    loop: 0
-    format: ""
-  - field: jkJob
-    note: "Jenkins任务"
-    range: 1-10000
-    prefix: "job"
-    postfix: ""
-    loop: 0
-    format: ""
   - field: triggerType
     note: "触发方式"
     range: tag,commit,schedule
@@ -81,6 +67,13 @@ fields:
     range: "22:05"
     prefix: ""
     postfix: ""
+    loop: 0
+    format: ""
+  - field: customParam
+    note: "自定义构建参数"
+    range: ''
+    prefix: "["
+    postfix: "]"
     loop: 0
     format: ""
   - field: comment

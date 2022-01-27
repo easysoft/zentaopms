@@ -16,5 +16,9 @@ fields:
     range: 1
   - field: extra
     range: 42
+  - field: preMerge
+    range: 1
+  - field: job
+    range: 1
   - field: deleted
     range: 0

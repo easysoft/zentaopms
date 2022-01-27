@@ -22,4 +22,5 @@ $builder->release = array('rows' => 8, 'extends' => array('release'));
 
 $builder->pipeline = array('rows' => 2, 'extends' => array('pipeline'));
 $builder->repo     = array('rows' => 1, 'extends' => array('repo'));
+$builder->job      = array('rows' => 2, 'extends' => array('job'));
 $builder->mr       = array('rows' => 1, 'extends' => array('mr'));
