@@ -161,6 +161,7 @@ class feishuapi
 
         /* Get depts by parent dept. */
         $pageToken = '';
+        $index     = 0;
         while(true)
         {
             $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
@@ -168,11 +169,11 @@ class feishuapi
             {
                 foreach($response->data->items as $key => $dept)
                 {
-                    $key ++;
-                    $data[$key]['id']   = $dept->open_department_id;
-                    $data[$key]['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
-                    $data[$key]['name'] = $dept->name;
-                    $data[$key]['open'] = 1;
+                    $index++;
+                    $data[$index]['id']   = $dept->open_department_id;
+                    $data[$index]['pId']  = empty($dept->parent_department_id) ? 1 : $dept->parent_department_id;
+                    $data[$index]['name'] = $dept->name;
+                    $data[$index]['open'] = 1;
                 }
             }
 
