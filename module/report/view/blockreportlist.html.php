@@ -24,7 +24,7 @@
   <?php if(!isset($config->proVersion) and !isset($config->bizVersion) and !isset($config->maxVersion)):?>
   <div class='panel panel-body' style='padding: 10px 6px'>
     <div class='text proversion'>
-      <strong class='text-danger small text-latin'>PRO</strong> &nbsp;<span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->report->proVersionEn : $lang->report->proVersion;?></span>
+      <strong class='text-danger small text-latin'>BIZ</strong> &nbsp;<span class='text-important'><?php echo (!empty($config->isINT)) ? $lang->report->proVersionEn : $lang->report->proVersion;?></span>
     </div>
   </div>
   <?php endif;?>
