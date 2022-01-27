@@ -14,3 +14,4 @@ ALTER TABLE `zt_config` DROP INDEX `unique`, ADD UNIQUE `unique` (`vision`,`owne
 ALTER TABLE `zt_todo` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `deleted`;
 ALTER TABLE `zt_block` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `account`;
 ALTER TABLE `zt_block` DROP INDEX `account_module_type_order`, ADD UNIQUE `account_vision_module_type_order` (`account`, `vision`, `module`, `type`, `order`);
+ALTER TABLE `zt_effort` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
