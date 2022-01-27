@@ -56,7 +56,7 @@ if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志
 $lang->my->menuOrder     = array();
 $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
-if($config->edition != 'open') $lang->my->menuOrder[15] = 'effort';
+if($config->edition != 'open') $lang->my->menuOrder[11] = 'effort';
 $lang->my->menuOrder[20] = 'task';
 
 $lang->my->dividerMenu = ',calendar,';
