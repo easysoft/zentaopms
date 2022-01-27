@@ -248,10 +248,9 @@ class mr extends control
         $targetBranch  = $this->gitlab->apiGetSingleBranch($MR->gitlabID, $MR->targetProject, $MR->targetBranch);
 
         $projectOwner = true;
-        if(isset($MR->gitlabID))
+        if(isset($MR->gitlabID) and !$this->app->user->admin)
         {
-            $projectOwner = $this->app->user->admin;
-            $openID       = $this->gitlab->getUserIDByZentaoAccount($MR->gitlabID, $this->app->user->account);
+            $openID = $this->gitlab->getUserIDByZentaoAccount($MR->gitlabID, $this->app->user->account);
             if(!$projectOwner and isset($sourceProject->owner->id) and $sourceProject->owner->id == $openID) $projectOwner = true;
         }
 
