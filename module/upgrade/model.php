@@ -5459,8 +5459,8 @@ class upgradeModel extends model
      */
     public function updateSpaceTeam()
     {
-        $kanbanUsers = $this->dao->select("space, CONCAT(owner, ',', team) as users") ->from(TABLE_KANBAN)->fetchAll('space');
-        $spaceUsers  = $this->dao->select("id, CONCAT(owner, ',', team) as users")->from(TABLE_KANBANSPACE)->fetchAll('id');
+        $kanbanUsers = $this->dao->select("space, CONCAT(owner, ',', team, ',', whitelist) as users") ->from(TABLE_KANBAN)->fetchAll('space');
+        $spaceUsers  = $this->dao->select("id, CONCAT(owner, ',', team, ',', whitelist) as users")->from(TABLE_KANBANSPACE)->fetchAll('id');
 
         foreach($kanbanUsers as $spaceID => $kanban)
         {
@@ -5474,6 +5474,8 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_KANBANSPACE)->set('`team`')->eq($team)->where('id')->eq($spaceID)->exec();
         }
+        $this->dao->update(TABLE_KANBANSPACE)->set('`whitelist`')->eq('')->exec();
+        $this->dao->update(TABLE_KANBAN)->set('`whitelist`')->eq('')->exec();
     }
 
     /**
