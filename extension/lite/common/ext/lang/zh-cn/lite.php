@@ -89,7 +89,7 @@ $lang->execution->menu->list     = array('link' => "列表|execution|task|execut
 if($config->edition != 'open') $lang->execution->menu->calendar = array('link' => "日历|execution|calendar|executionID=%s");
 if($config->edition != 'open') $lang->execution->menu->gantt    = array('link' => "甘特图|execution|gantt|executionID=%s");
 $lang->execution->menu->tree     = array('link' => "树状图|execution|tree|executionID=%s");
-$lang->execution->menu->group    = array('link' => "分组视图|execution|groupTask|executionID=%s");
+$lang->execution->menu->group    = array('link' => "分组视图|execution|grouptask|executionID=%s");
 
 $lang->kanban->menu->doc['subMenu'] = new stdclass();
 
