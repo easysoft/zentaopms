@@ -803,10 +803,9 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
         }
 
-        $kanban     = $this->kanban->getByID($kanbanID);
-        $space      = $this->kanban->getSpaceById($kanban->space);
-        $spaceUsers = $kanban->space == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
-        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+        $kanban      = $this->kanban->getById($kanbanID);
+        $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
+        $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
         $lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
