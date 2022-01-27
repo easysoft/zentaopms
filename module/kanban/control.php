@@ -1051,7 +1051,7 @@ class kanban extends control
         $this->view->products          = $productPairs;
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all', $pager);
+        $this->view->plans2Imported    = $this->productplan->getList($selectedProductID, 0, 'all', $pager, 'begin_desc', 'skipparent');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
         $this->view->regionID          = $regionID;

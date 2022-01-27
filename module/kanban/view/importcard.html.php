@@ -63,7 +63,12 @@
           <?php else:?>
           <td title='<?php echo $card->name;?>'><?php echo $card->name;?></td>
           <?php endif;?>
-          <td title='<?php echo zget($users, $card->assignedTo);?>'><?php echo zget($users, $card->assignedTo);?></td>
+          <?php
+          $assignedToName = '';
+          $assignedToList = explode(',', $card->assignedTo);
+          foreach($assignedToList as $assignedTo) $assignedToName .= zget($users, $assignedTo) . ' ';
+          ?>
+          <td class='c-name' title='<?php echo $assignedToName;?>'><?php echo $assignedToName;?></td>
           <td title='<?php echo helper::isZeroDate($card->end) ? '' : $card->end;?>'><?php echo helper::isZeroDate($card->end) ? '' : $card->end;?></td>
         </tr>
         <?php endforeach;?>
