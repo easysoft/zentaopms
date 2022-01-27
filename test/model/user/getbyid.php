@@ -17,9 +17,9 @@ pid=1
 */
 $user = $tester->loadModel('user');
 
-r($user->getById(1, 'id'))               && p('account') && e('account1'); // 通过id获取存在的用户
-r($user->getByID('account1', 'account')) && p('account') && e('account1'); // 使用account字段获取存在的用户
-r($user->getByID('account1'))            && p('account') && e('account1'); // 通过默认字段获取存在的用户
+r($user->getById(1, 'id'))            && p('account') && e('admin'); // 通过id获取存在的用户
+r($user->getByID('admin', 'account')) && p('account') && e('admin'); // 使用account字段获取存在的用户
+r($user->getByID('admin'))            && p('account') && e('admin'); // 通过默认字段获取存在的用户
 
 /*
 r($user->getByID(1))                     && p('account') && e('');         // 通过默认字段获取不存在的用户
