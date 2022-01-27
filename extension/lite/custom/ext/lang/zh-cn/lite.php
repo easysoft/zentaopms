@@ -12,4 +12,5 @@ $lang->custom->object['todo']      = '待办';
 $lang->custom->object['user']      = '用户';
 $lang->custom->object['block']     = '区块';
 
-$lang->custom->system = array('required', 'score');
+if($this->config->edition != 'open') $lang->custom->system = array('required', 'score', 'feedback');
+if($this->config->edition != 'open') $lang->custom->system = array('required', 'score');
