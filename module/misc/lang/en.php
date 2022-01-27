@@ -26,7 +26,7 @@ $lang->misc->zentao->icons['support'] = 'question-sign';
 $lang->misc->zentao->icons['cowin']   = 'hand-right';
 $lang->misc->zentao->icons['service'] = 'heart';
 
-$lang->misc->zentao->about['proversion']   = 'ZenTao Pro';
+$lang->misc->zentao->about['bizversion']   = 'ZenTao Biz';
 $lang->misc->zentao->about['official']     = "Official Website";
 $lang->misc->zentao->about['changelog']    = "Change Log";
 $lang->misc->zentao->about['license']      = "License";

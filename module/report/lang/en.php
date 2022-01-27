@@ -109,8 +109,8 @@ $lang->report->mailTitle->todo     = " Todo (%s),";
 $lang->report->mailTitle->testTask = " Request (%s),";
 
 $lang->report->deviationDesc = 'According to the Closed Execution Deviation Rate = ((Total Cost - Total Estimate) / Total Estimate), the Deviation Rate is n/a when the Total Estimate is 0.';
-$lang->report->proVersion    = '<a href="https://api.zentao.net/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
-$lang->report->proVersionEn  = '<a href="http://api.zentao.pm/goto.php?item=proversion&from=reportpage" target="_blank">Try ZenTao Pro for more!</a>';
+$lang->report->proVersion    = '<a href="https://www.zentao.net/page/enterprise.html" target="_blank">Try ZenTao Biz for more!</a>';
+$lang->report->proVersionEn  = '<a href="https://www.zentao.pm/" target="_blank">Try ZenTao Biz for more!</a>';
 $lang->report->workloadDesc  = 'Workload = the total left hours of all tasks of the user / selected days * hours per day.
 For example: the begin and end date is January 1st to January 7th, and the total work days is 5 days, 8 hours per day. The Work load is all unfinished tasks assigned to this user to be finished in 5 days, 8 hours per day.';
 
