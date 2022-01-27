@@ -314,9 +314,9 @@ function renderKanbanItem(item, $item)
 
         if(kanban.performable == 1 && item.status == 'done' )
         {
-            var finishStyle = '#2a5f29';
-            if(item.color == '#2a5f29') finishStyle  = '#FFFFFF';
-            $title.text(item.name).css('color', finishStyle);
+            var finishColor = '#2a5f29';
+            if(item.color == '#2a5f29') finishColor  = '#FFFFFF';
+            $title.text(item.name).css('color', finishColor);
             $item.children('.label').show();
             if(item.color == '#2a5f29')
             {

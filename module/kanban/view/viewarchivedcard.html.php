@@ -62,16 +62,16 @@
         if($card->color == '#2a5f29') $color = 'has-color green';
         ?>
         <?php
-        $nameStyle = '';
-        if($card->status == 'done' and $card->color != '#2a5f29') $nameStyle = 'green-name'; 
+        $nameColor = '';
+        if($card->status == 'done' and $card->color != '#2a5f29') $nameColor = 'green-name';
         ?>
         <?php
-        $style = 'background-color: #2a5f29';
-        if($card->color == '#2a5f29') $style = 'background-color: #FFFFFF; color: #2a5f29';
+        $finishIcon = 'background-color: #2a5f29';
+        if($card->color == '#2a5f29') $finishIcon = 'background-color: #FFFFFF; color: #2a5f29';
         ?>
-        <div class="kanban-item <?php echo $nameStyle;?> <?php echo $color;?>" data-id="<?php echo $card->id;?>">
+        <div class="kanban-item <?php echo $nameColor;?> <?php echo $color;?>" data-id="<?php echo $card->id;?>">
         <?php if($card->status == 'done'):?>
-        <div class="label" style="<?php echo $style;?>"><?php echo $lang->kanban->finished;?></div>
+        <div class="label" style="<?php echo $finishIcon;?>"><?php echo $lang->kanban->finished;?></div>
         <?php endif;?>
           <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
           <div class="info">
