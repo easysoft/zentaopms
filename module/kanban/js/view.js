@@ -306,7 +306,7 @@ function renderKanbanItem(item, $item)
         if(privs.includes('sortCard')) $item.parent().addClass('sort');
         if(!$title.length)
         {
-            $('<div class="label-finish">' + kanbanLang.finished + '</div>').appendTo($item);
+            $('<div class="label label-finish">' + kanbanLang.finished + '</div>').appendTo($item);
             if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
             if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
         }
