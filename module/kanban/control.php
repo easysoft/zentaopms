@@ -796,7 +796,9 @@ class kanban extends control
      */
     public function batchCreateCard($kanbanID = 0, $regionID = 0, $groupID = 0, $laneID = 0, $columnID = 0)
     {
+        $kanban   = $this->kanban->getById($kanbanID);
         $backLink = $this->createLink('kanban', 'view', "kanbanID=$kanbanID");
+        $this->kanban->setSwitcher($kanban);
 
         if($_POST)
         {
@@ -805,7 +807,6 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
         }
 
-        $kanban      = $this->kanban->getById($kanbanID);
         $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
         $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
