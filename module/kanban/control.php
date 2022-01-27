@@ -812,6 +812,7 @@ class kanban extends control
 
         $lanePairs['ditto'] = $this->lang->kanbancard->ditto;
 
+        $this->view->title     = $this->lang->kanban->batchCreateCard;
         $this->view->users     = $users;
         $this->view->lanePairs = $lanePairs;
 
