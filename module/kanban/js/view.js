@@ -306,7 +306,7 @@ function renderKanbanItem(item, $item)
         if(privs.includes('sortCard')) $item.parent().addClass('sort');
         if(!$title.length)
         {
-            $('<div class="label">' + kanbanLang.finished + '</div>').appendTo($item);
+            $('<div class="label-finish">' + kanbanLang.finished + '</div>').appendTo($item);
             if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
             if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
         }
@@ -317,20 +317,20 @@ function renderKanbanItem(item, $item)
             var finishColor = '#2a5f29';
             if(item.color == '#2a5f29') finishColor  = '#FFFFFF';
             $title.text(item.name).css('color', finishColor);
-            $item.children('.label').show();
+            $item.children('.label-finish').show();
             if(item.color == '#2a5f29')
             {
-                $item.children('.label').css({'background-color':'#FFFFFF','color':'#2a5f29'});
+                $item.children('.label-finish').css({'background-color':'#FFFFFF','color':'#2a5f29'});
             }
             else
             {
-                $item.children('.label').css({'background-color':'','color':''});
+                $item.children('.label-finish').css({'background-color':'','color':'#FFFFFF'});
             }
         }
         else
         {
             $title.text(item.name).css('color', '');
-            $item.children('.label').hide();
+            $item.children('.label-finish').hide();
         }
 
         var $actions = $item.children('.actions');
