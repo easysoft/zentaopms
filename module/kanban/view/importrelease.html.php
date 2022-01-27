@@ -19,17 +19,16 @@
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->importRelease;?></h2>
+      <h2><?php echo $lang->kanban->importAB . $lang->kanban->importRelease;?></h2>
     </div>
   </div>
-  <div class='table-row p-10px'>
-    <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedProduct;?></h4></div>
-    <div class='table-col'><?php echo html::select('product', $products, $selectedProductID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
+  <div class='input-group space'>
+    <span class='input-group-addon'><?php echo $lang->kanban->selectedProduct;?></span>
+    <?php echo html::select('product', $products, $selectedProductID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?>
+    <span class='input-group-addon'><?php echo $lang->kanban->selectedLane;?></span>
+    <?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?>
   </div>
-  <div class='table-row p-10px'>
-    <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
-    <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
-  </div>
+  <?php if($releases2Imported):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='importReleaseForm'>
     <table class='table table-fixed' id='releaseList'>
       <thead>
@@ -41,7 +40,9 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->release->name;?></th>
+          <?php if($config->systemMode == 'new'):?>
           <th class='c-name'><?php echo $lang->release->project;?></th>
+          <?php endif;?>
           <th class='c-name'><?php echo $lang->release->build;?></th>
           <th class='c-date'><?php echo $lang->release->date;?></th>
         </tr>
@@ -57,11 +58,15 @@
             <?php printf('%03d', $release->id);?>
           </td>
           <?php if(common::hasPriv('release', 'view')):?>
-          <td title='<?php echo $release->name;?>'><?php common::printLink('release', 'view', "releaseID=$release->id", $release->name, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $release->name;?>'>
+            <a href='javascript:void(0);' onclick="locateView('release', <?php echo $release->id;?>)"><?php echo $release->name;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $release->name;?>'><?php echo $release->name;?></td>
           <?php endif;?>
+          <?php if($config->systemMode == 'new'):?>
           <td title='<?php echo $release->projectName;?>'><?php echo $release->projectName;?></td>
+          <?php endif;?>
           <td title='<?php echo $release->buildName;?>'><?php echo $release->buildName;?></td>
           <td title='<?php echo $release->date;?>'><?php echo $release->date;?></td>
         </tr>
@@ -69,13 +74,15 @@
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
       </tbody>
     </table>
-    <?php if($releases2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importRelease, '', 'btn btn-default');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importAB, '', 'btn btn-default');?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php else:?>
+  <div class='table-empty-tip'><?php echo $lang->noData;?></div>
+  <?php endif;?>
 </div>
+<style>#product_chosen {width: 45% !important}</style>
 <?php include '../../common/view/footer.lite.html.php';?>

@@ -61,15 +61,24 @@ class gitlabModel extends model
     /**
      * Get gitlab api base url by gitlab id.
      *
-     * @param  int $id
+     * @param  int    $gitlabID
+     * @param  bool   $sudo
      * @access public
      * @return string
      */
-    public function getApiRoot($id)
+    public function getApiRoot($gitlabID, $sudo = true)
     {
-        $gitlab = $this->getByID($id);
+        $gitlab = $this->getByID($gitlabID);
         if(!$gitlab) return '';
-        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}";
+
+        $sudoParam = '';
+        if($sudo == true and !$this->app->user->admin)
+        {
+            $openID = $this->getUserIDByZentaoAccount($gitlabID, $this->app->user->account);
+            if($openID) $sudoParam = "&sudo={$openID}";
+        }
+
+        return rtrim($gitlab->url, '/') . '/api/v4%s' . "?private_token={$gitlab->token}" . $sudoParam;
     }
 
     /**
@@ -592,11 +601,18 @@ class gitlabModel extends model
      * @access public
      * @return object
      */
-    public function apiGetGroups($gitlabID, $orderBy, $minAccessLevel = 0)
+    public function apiGetGroups($gitlabID, $orderBy, $minRole = '')
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
-        if($minAccessLevel > 0) $url .= "&min_access_level=$minAccessLevel";
+        if($minRole == 'owner')
+        {
+            $url .= '&owned=true';
+        }
+        elseif(!empty($minRole))
+        {
+            $url .= "&min_access_level=$this->config->gitlab->accessLevel[$minRole]";
+        }
 
         list($order, $sort) = explode('_', $orderBy);
 
@@ -1088,7 +1104,7 @@ class gitlabModel extends model
      */
     public function apiGetHooks($gitlabID, $projectID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/{$projectID}/hooks";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1107,7 +1123,7 @@ class gitlabModel extends model
      */
     public function apiGetHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot  = $this->getApiRoot($gitlabID);
+        $apiRoot  = $this->getApiRoot($gitlabID, false);
         $apiPath  = "/projects/$projectID/hooks/$hookID)";
         $url      = sprintf($apiRoot, $apiPath);
 
@@ -1133,7 +1149,7 @@ class gitlabModel extends model
 
         foreach($hook as $index => $item) $newHook->$index= $item;
 
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks");
 
         return json_decode(commonModel::http($url, $newHook));
@@ -1151,7 +1167,7 @@ class gitlabModel extends model
      */
     public function apiDeleteHook($gitlabID, $projectID, $hookID)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/hooks/{$hookID}");
 
         return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'delete')));
@@ -1210,7 +1226,7 @@ class gitlabModel extends model
      */
     public function apiUpdateHook($gitlabID, $projectID, $hookID, $hook)
     {
-        $apiRoot = $this->getApiRoot($gitlabID);
+        $apiRoot = $this->getApiRoot($gitlabID, false);
 
         if(!isset($hook->url)) return false;
 
@@ -2777,7 +2793,7 @@ class gitlabModel extends model
         {
             if(empty($groupIDList))
             {
-                $groups = $this->apiGetGroups($gitlabID, 'name_asc', $accessLevel);
+                $groups = $this->apiGetGroups($gitlabID, 'name_asc', $maxRole);
                 foreach($groups as $group) $groupIDList[] = $group->id;
             }
 

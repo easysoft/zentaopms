@@ -20,8 +20,8 @@ $lang->kanban->editLane            = 'Edit Lane';
 $lang->kanban->sortLane            = 'Sort Lane';
 $lang->kanban->laneHeight          = 'Lane Height';
 $lang->kanban->setLaneHeight       = 'Set Lane Height';
-$lang->kanban->columnWidth         = 'Column Height';
-$lang->kanban->setColumnWidth      = 'Set Column Height';
+$lang->kanban->columnWidth         = 'Column Width';
+$lang->kanban->setColumnWidth      = 'Set Column Width';
 $lang->kanban->deleteLane          = 'Delete Lane';
 $lang->kanban->createColumn        = 'Create Column';
 $lang->kanban->editColumn          = 'Edit Column';
@@ -74,7 +74,7 @@ $lang->kanban->importRelease       = 'Release';
 $lang->kanban->importExecution     = $lang->execution->common;
 $lang->kanban->importBuild         = 'Build';
 $lang->kanban->allKanban           = 'All Kanban';
-$lang->kanban->allProjects         = 'All Projects';
+$lang->kanban->allProjects         = 'All ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Projects');
 $lang->kanban->allProducts         = 'All Products';
 
 /* Fields. */
@@ -107,7 +107,7 @@ $lang->kanban->cardCountTip  = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
-$lang->kanban->selectedProject = 'Please select Project';
+$lang->kanban->selectedProject = 'Please select ' . ($this->config->systemMode == 'classic' ? $lang->executionCommon : 'Project');
 $lang->kanban->selectedLane    = 'Target Lane';
 
 $lang->kanban->aclGroup['open']    = 'Open';

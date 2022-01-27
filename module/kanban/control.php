@@ -168,7 +168,7 @@ class kanban extends control
         unset($this->lang->kanbanspace->featureBar['involved']);
 
         $space      = $this->kanban->getSpaceById($spaceID);
-        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team) . ',' . trim($space->whitelist);
+        $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
@@ -204,11 +204,11 @@ class kanban extends control
 
         $kanban     = $this->kanban->getByID($kanbanID);
         $space      = $this->kanban->getSpaceById($kanban->space);
-        $spaceUsers = trim($space->owner) . ',' . trim($space->team) . ',' . trim($space->whitelist);
+        $spaceUsers = trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
 
         $this->view->users      = $users;
-        $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs($space->type);
+        $this->view->spacePairs = array(0 => '') + array($kanban->space => $space->name) + $this->kanban->getSpacePairs($space->type);
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
 
@@ -801,7 +801,11 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $backLink));
         }
 
-        $users     = $this->loadModel('user')->getPairs('noclosed|nodeleted');
+        $kanban     = $this->kanban->getByID($kanbanID);
+        $space      = $this->kanban->getSpaceById($kanban->space);
+        $spaceUsers = $kanban->space == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
+        $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+
         $lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
         $lanePairs['ditto'] = $this->lang->kanbancard->ditto;
@@ -941,7 +945,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
         $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
@@ -963,7 +967,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importCard($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedKanbanID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
@@ -1016,7 +1020,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importPlan($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
@@ -1068,7 +1072,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importRelease($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importRelease($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProductID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
@@ -1090,10 +1094,7 @@ class kanban extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $productPairs      = $this->product->getPairs();
-        $selectedProductID = empty($selectedProductID) ? key($productPairs) : $selectedProductID;
-
-        $this->view->products          = $productPairs;
+        $this->view->products          = array($this->lang->kanban->allProducts) + $this->product->getPairs();
         $this->view->selectedProductID = $selectedProductID;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
         $this->view->releases2Imported = $this->release->getList($selectedProductID, 'all', 'all', 't1.date_desc', $pager);
@@ -1120,7 +1121,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importBuild($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {
@@ -1135,20 +1136,29 @@ class kanban extends control
             return print(js::locate($this->createLink('kanban', 'view', "kanbanID=$kanbanID"), 'parent.parent'));
         }
 
-        $this->loadModel('project');
         $this->loadModel('build');
 
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
 
-        $projectPairs      = $this->project->getPairsByProgram();
-        $selectedProjectID = empty($selectedProjectID) ? key($projectPairs) : $selectedProjectID;
+        $builds2Imported = array();
+        $projects        = array($this->lang->kanban->allProjects);
+        if($this->config->systemMode == 'classic')
+        {
+            $projects        += $this->loadModel('execution')->getPairs();
+            $builds2Imported  = $this->build->getExecutionBuilds($selectedProjectID, '', '', 't1.date_desc,t1.id_desc', $pager);
+        }
+        else
+        {
+            $projects        += $this->loadModel('project')->getPairsByProgram('', 'all', false, 'order_asc', 'kanban');
+            $builds2Imported  = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);
+        }
 
-        $this->view->projects          = $projectPairs;
+        $this->view->projects          = $projects;
         $this->view->selectedProjectID = $selectedProjectID;
+        $this->view->builds2Imported   = $builds2Imported;
         $this->view->lanePairs         = $this->kanban->getLanePairsByGroup($groupID);
-        $this->view->builds2Imported   = $this->build->getProjectBuilds($selectedProjectID, 'all', 0, 't1.date_desc,t1.id_desc', $pager);;
         $this->view->users             = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->pager             = $pager;
         $this->view->kanbanID          = $kanbanID;
@@ -1173,7 +1183,7 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 30, $pageID = 1)
+    public function importExecution($kanbanID = 0, $regionID = 0, $groupID = 0, $columnID = 0, $selectedProjectID = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         if($_POST)
         {

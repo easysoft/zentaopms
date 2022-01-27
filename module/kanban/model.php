@@ -1036,7 +1036,7 @@ class kanbanModel extends model
             ->andWhere('type')->eq('common')
             ->fetchAll();
 
-        $actions   = array('editCard', 'finishCard', 'activateCard', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
+        $actions   = array('editCard', 'performable', 'archiveCard', 'deleteCard', 'moveCard', 'setCardColor', 'viewCard', 'sortCard', 'viewExecution', 'viewPlan', 'viewRelease', 'viewBuild');
         $cardGroup = array();
         foreach($cellList as $cell)
         {
@@ -1677,7 +1677,7 @@ class kanbanModel extends model
         foreach($objects as $objectID => $object)
         {
             $remove = true;
-            if($param == 'public') continue;
+            if($objectType == 'kanbanspace' and $object->type == 'public') continue;
 
             if($object->owner == $account) $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
@@ -2807,11 +2807,11 @@ class kanbanModel extends model
 
     /**
      * Set column width.
-     * 
-     * @param  int    $kanbanID 
-     * @param  string $from 
+     *
+     * @param  int    $kanbanID
+     * @param  string $from
      * @access public
-     * @return bool|void 
+     * @return bool|void
      */
     public function setColumnWidth($kanbanID, $from = 'kanban')
     {
@@ -2830,6 +2830,9 @@ class kanbanModel extends model
      */
     public function setHeaderActions($kanban)
     {
+        $btnColor = '';
+        if($this->app->cookie->theme == 'blue') $btnColor = 'style="color:#000000"';
+
         $printSetHeightBtn = false;
         if(common::hasPriv('kanban', 'setLaneHeight'))
         {
@@ -2845,17 +2848,18 @@ class kanbanModel extends model
 
         $actions  = '';
         $actions .= "<div class='btn-group'>";
-        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
+        $actions .= "<a href='javascript:fullScreen();' id='fullScreenBtn' $btnColor class='btn btn-link'><i class='icon icon-fullscreen'></i> {$this->lang->kanban->fullScreen}</a>";
 
         $printSettingBtn = (common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'));
 
         if($printSettingBtn)
         {
-            $actions .= "<a data-toggle='dropdown' class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
+            $actions .= "<a data-toggle='dropdown' $btnColor class='btn btn-link dropdown-toggle setting' type='button'>" . '<i class="icon icon-cog-outline"></i> ' . $this->lang->kanban->setting . '</a>';
             $actions .= "<ul id='kanbanActionMenu' class='dropdown-menu text-left'>";
             if(common::hasPriv('kanban', 'createRegion')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'createRegion', "kanbanID=$kanban->id", '', true), '<i class="icon icon-plus"></i>' . $this->lang->kanban->createRegion, '', "class='iframe btn btn-link'") . '</li>';
-            if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link'") . '</li>';
-            if(common::hasPriv('kanban', 'enableArchived')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link'") . '</li>';
+            $importWidth = $this->app->getClientLang() == 'en' ? '70%' : '50%';
+            if(common::hasPriv('kanban', 'import')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'import', "kanbanID=$kanban->id", '', true), '<i class="icon icon-import"></i>' . $this->lang->kanban->import, '', "class='iframe btn btn-link' data-width=$importWidth") . '</li>';
+            if(common::hasPriv('kanban', 'enableArchived')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'enableArchived', "kanbanID=$kanban->id", '', true), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->archived, '', "class='iframe btn btn-link' data-width=20%") . '</li>';
             if($printSetHeightBtn)
             {
                 $width    = $this->app->getClientLang() == 'en' ? '70%' : '60%';
@@ -2863,7 +2867,7 @@ class kanbanModel extends model
 
             }
             if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=30%") . '</li>';
-            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link'") . '</li>';
+            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link' data-width=20%") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
@@ -2872,7 +2876,7 @@ class kanbanModel extends model
             if(common::hasPriv('kanban', 'delete')) $kanbanActions .= '<li>' . html::a(helper::createLink('kanban', 'delete', "kanbanID=$kanban->id"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->delete, 'hiddenwin', "class='btn btn-link'") . '</li>';
             if($kanbanActions)
             {
-                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeight or common::hasPriv('kanban', 'performable')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<div class='divider'></div>" . $kanbanActions : $kanbanActions;
+                $actions .= ((common::hasPriv('kanban', 'createRegion') or $printSetHeightBtn or common::hasPriv('kanban', 'performable') or common::hasPriv('kanban', 'setColumnWidth')) and (common::hasPriv('kanban', 'edit') or common::hasPriv('kanban', 'close') or common::hasPriv('kanban', 'enableArchived') or common::hasPriv('kanban', 'delete'))) ? "<li class='divider'></li>" . $kanbanActions : $kanbanActions;
             }
             $actions .= "</ul>";
         }
@@ -2943,11 +2947,13 @@ class kanbanModel extends model
      * @access public
      * @return void
      */
-    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID)
+    public function moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID = 0)
     {
         $fromCellCards = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($fromLaneID)->andWhere('`column`')->eq($fromColID)->fetch('cards');
         $toCell        = $this->dao->select('*')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch();
         $toCellCards   = $this->dao->select('cards')->from(TABLE_KANBANCELL)->where('lane')->eq($toLaneID)->andWhere('`column`')->eq($toColID)->fetch('cards');
+
+        $kanbanID = $kanbanID == 0 ? $toCell->kanban : $kanbanID;
 
         if(!$toCell) $this->addKanbanCell($kanbanID, $toLaneID, $toColID, 'common');
 
@@ -3048,7 +3054,15 @@ class kanbanModel extends model
 
                 foreach($parentCells as $cell)
                 {
-                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cell->cards)
+                    $cards = $this->dao->select('cards')->from(TABLE_KANBANCELL)
+                        ->where('lane')->eq($cell->lane)
+                        ->andWhere('`column`')->eq($columnID)
+                        ->andWhere('type')->eq('common')
+                        ->fetch('cards');
+
+                    $cards = $cards ? $cards . ltrim($cell->cards, ',') : $cell->cards;
+
+                    $this->dao->update(TABLE_KANBANCELL)->set('cards')->eq($cards)
                         ->where('lane')->eq($cell->lane)
                         ->andWhere('`column`')->eq($columnID)
                         ->andWhere('type')->eq('common')

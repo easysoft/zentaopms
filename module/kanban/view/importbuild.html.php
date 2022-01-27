@@ -19,17 +19,16 @@
 <div id='mainContent' class='main-content importModal'>
   <div class='center-block'>
     <div class='main-header'>
-      <h2><?php echo $lang->kanban->importBuild;?></h2>
+      <h2><?php echo $lang->kanban->importAB . $lang->kanban->importBuild;?></h2>
     </div>
   </div>
-  <div class='table-row p-10px'>
-    <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedProject;?></h4></div>
-    <div class='table-col'><?php echo html::select('project', $projects, $selectedProjectID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
+  <div class='input-group space'>
+    <span class='input-group-addon'><?php echo $lang->kanban->selectedProject;?></span>
+    <?php echo html::select('project', $projects, $selectedProjectID, "onchange='reloadObjectList(this.value)' class='form-control chosen' data-drop_direction='down'");?>
+    <span class='input-group-addon'><?php echo $lang->kanban->selectedLane;?></span>
+    <?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?>
   </div>
-  <div class='table-row p-10px'>
-    <div class='table-col w-150px text-center'><h4><?php echo $lang->kanban->selectedLane;?></h4></div>
-    <div class='table-col'><?php echo html::select('lane', $lanePairs, '', "onchange='setTargetLane(this.value)' class='form-control chosen' data-drop_direction='down'");?></div>
-  </div>
+  <?php if($builds2Imported):?>
   <form class='main-table' method='post' data-ride='table' target='hiddenwin' id='importBuildForm'>
     <table class='table table-fixed' id='buildList'>
       <thead>
@@ -42,7 +41,7 @@
           </th>
           <th class='c-name'><?php echo $lang->build->product;?></th>
           <th class='c-name'><?php echo $lang->build->name;?></th>
-          <th class='c-name'><?php echo $lang->executionCommon;?></th>
+          <th class='c-name'><?php echo $lang->execution->common;?></th>
           <th class='c-date'><?php echo $lang->build->date;?></th>
           <th class='c-user'><?php echo $lang->build->builder;?></th>
         </tr>
@@ -59,7 +58,9 @@
           </td>
           <td title='<?php echo $build->productName;?>'><?php echo $build->productName;?></td>
           <?php if(common::hasPriv('build', 'view')):?>
-          <td title='<?php echo $build->name;?>'><?php common::printLink('build', 'view', "buildID=$build->id", $build->name, '', "class='iframe'", true, true);?></td>
+          <td title='<?php echo $build->name;?>'>
+            <a href='javascript:void(0);' onclick="locateView('build', <?php echo $build->id;?>)"><?php echo $build->name;?></a>
+          </td>
           <?php else:?>
           <td title='<?php echo $build->name;?>'><?php echo $build->name;?></td>
           <?php endif;?>
@@ -71,13 +72,15 @@
         <tr><?php echo html::hidden('targetLane', key($lanePairs));?></tr>
       </tbody>
     </table>
-    <?php if($builds2Imported):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
-      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importBuild, '', 'btn btn-default');?></div>
+      <div class="table-actions btn-toolbar show-always"><?php echo html::submitButton($lang->kanban->importAB, '', 'btn btn-default');?></div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
+  <?php else:?>
+  <div class='table-empty-tip'><?php echo $lang->noData;?></div>
+  <?php endif;?>
 </div>
+<style>#project_chosen {width: 45% !important}</style>
 <?php include '../../common/view/footer.lite.html.php';?>

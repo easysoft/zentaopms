@@ -59,6 +59,8 @@
               <?php else:?>
               <?php echo '<span class="text-red">' . $lang->gitlab->bindedError . '</span>';?>
               <?php endif;?>
+              <?php else:?>
+              <?php echo $lang->gitlab->notBind;?>
               <?php endif;?>
             </td>
           </tr>

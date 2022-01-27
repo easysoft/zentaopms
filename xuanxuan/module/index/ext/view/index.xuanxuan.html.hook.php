@@ -30,15 +30,19 @@ $(document).on('showapp', function(e, app)
 <?php
 $this->loadModel('im');
 
-$xuanConfig      = new stdclass();
-$token           = $this->im->userGetAuthToken($this->app->user->id, 'zentaoweb');
-$clientUrl       = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/';
+if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon)
+{
+    $xuanConfig  = new stdclass();
+    $token       = $this->im->userGetAuthToken($this->app->user->id, 'zentaoweb');
+    $clientUrl   = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/';
+    $backendUrl  = $this->im->getServer('zentao');
 
-$xuanConfig->clientUrl        =  $clientUrl;
-$xuanConfig->server           = $this->im->getServer('zentao');
-$xuanConfig->account          = $this->app->user->account;
-$xuanConfig->authKey          = $token->token;
-$xuanConfig->debug            = $this->config->debug;
+    $xuanConfig->clientUrl = $clientUrl;
+    $xuanConfig->server    = parse_url($backendUrl, PHP_URL_HOST);
+    $xuanConfig->account   = $this->app->user->account;
+    $xuanConfig->authKey   = $token->token;
+    $xuanConfig->debug     = $this->config->debug;
+}
 ?>
 <?php if(isset($xuanConfig)): ?>
 <style>

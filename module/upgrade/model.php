@@ -753,7 +753,8 @@ class upgradeModel extends model
         case '16_2':
             $this->saveLogs('Execute 16_2');
             $this->execSQL($this->getUpgradeFile('16.2'));
-            $this->addSpaceTeam();
+            $this->updateSpaceTeam();
+            $this->updateDocField();
             $this->appendExec('16_2');
         }
 
@@ -964,6 +965,7 @@ class upgradeModel extends model
             case '16_0_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0.beta1'));
             case '16_0': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0'));
             case '16_1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.1'));
+            case '16_2': $confirmContent .= file_get_contents($this->getUpgradeFile('16.2'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
@@ -5458,8 +5460,8 @@ class upgradeModel extends model
      */
     public function updateSpaceTeam()
     {
-        $kanbanUsers = $this->dao->select("space, CONCAT(owner, ',', team) as users") ->from(TABLE_KANBAN)->fetchAll('space');
-        $spaceUsers  = $this->dao->select("id, CONCAT(owner, ',', team) as users")->from(TABLE_KANBANSPACE)->fetchAll('id');
+        $kanbanUsers = $this->dao->select("space, CONCAT(owner, ',', team, ',', whitelist) as users") ->from(TABLE_KANBAN)->fetchAll('space');
+        $spaceUsers  = $this->dao->select("id, CONCAT(owner, ',', team, ',', whitelist) as users")->from(TABLE_KANBANSPACE)->fetchAll('id');
 
         foreach($kanbanUsers as $spaceID => $kanban)
         {
@@ -5473,6 +5475,8 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_KANBANSPACE)->set('`team`')->eq($team)->where('id')->eq($spaceID)->exec();
         }
+        $this->dao->update(TABLE_KANBANSPACE)->set('`whitelist`')->eq('')->exec();
+        $this->dao->update(TABLE_KANBAN)->set('`whitelist`')->eq('')->exec();
     }
 
     /**
@@ -5578,6 +5582,25 @@ class upgradeModel extends model
             }
         }
 
+        return true;
+    }
+
+    /**
+     * Document library for updating documents.
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateDocField()
+    {
+        $hasModuleDocs = $this->dao->select('*')->from(TABLE_DOC)->where('module')->ne(0)->fetchAll('id');
+        $docModules    = $this->dao->select('*')->from(TABLE_MODULE)->where('type')->eq('doc')->fetchAll('id');
+        foreach($hasModuleDocs as $doc)
+        {
+            $libID = isset($docModules[$doc->module]->root) ? $docModules[$doc->module]->root : 0;
+            if(!$libID or $libID == $doc->lib) continue;
+            $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('id')->eq($doc->id)->exec();
+        }
         return true;
     }
 }

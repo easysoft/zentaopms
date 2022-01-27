@@ -1294,6 +1294,27 @@ $(function()
             if(sortType == 'lane') $cards.show();
         }
     });
+
+    /* Ajax update kanban. */
+    if(groupBy == 'default')
+    {
+        var lastUpdateData;
+        setInterval(function()
+        {
+            $.get(createLink('execution', 'ajaxUpdateKanban', "executionID=" + executionID + "&entertime=" + entertime + "&browseType=" + browseType + "&groupBy=" + groupBy + '&from=RD'), function(data)
+            {
+                if(data && lastUpdateData !== data)
+                {
+                    lastUpdateData = data;
+                    kanbanData     = $.parseJSON(data);
+                    for(var region in kanbanData)
+                    {
+                        updateRegion(region, kanbanData[region]);
+                    }
+                }
+            });
+        }, 10000);
+    }
 });
 
 /** Calculate column height */

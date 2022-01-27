@@ -58,10 +58,10 @@ class releaseModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product = t2.id')
             ->leftJoin(TABLE_BUILD)->alias('t3')->on('t1.build = t3.id')
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on('t1.project = t4.id')
-            ->where('t1.product')->eq((int)$productID)
+            ->where('t1.deleted')->eq(0)
+            ->beginIF($productID)->andWhere('t1.product')->eq((int)$productID)->fi()
             ->beginIF($branch !== 'all')->andWhere('t1.branch')->eq($branch)->fi()
             ->beginIF($type != 'all')->andWhere('t1.status')->eq($type)->fi()
-            ->andWhere('t1.deleted')->eq(0)
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

@@ -11,6 +11,9 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<style>
+.table-form>tbody>tr>th {width: 90px;}
+</style>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

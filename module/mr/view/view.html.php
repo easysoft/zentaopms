@@ -119,7 +119,7 @@
               <?php common::printIcon('mr', 'edit', "mr=$MR->id", $MR, 'button', 'edit');?>
             <?php endif;?>
             <?php if($MR->synced and $rawMR->state == 'closed') common::printIcon('mr', 'reopen', "mr=$MR->id", $MR, 'button', 'restart', 'hiddenwin', 'mergeButton'); ?>
-            <?php common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
+            <?php if($projectOwner) common::printIcon('mr', 'delete', "mr=$MR->id", $MR, 'button', 'trash', 'hiddenwin');?>
           </div>
         </div>
       </div>
@@ -139,9 +139,9 @@
                   </tr>
                   <tr>
                     <th><?php echo $lang->compile->atTime;?></th>
-                    <td><?php echo $compileJob ? $compileJob->lastExec : $lang->mr->compileUnexecuted;?></td>
+                    <td><?php echo $compile->createdDate;?></td>
                   </tr>
-                  <?php if($compileJob):?>
+                  <?php if($compileJob and !empty($compileJob->id)):?>
                   <tr>
                     <th><?php echo $lang->compile->result;?></th>
                     <td>

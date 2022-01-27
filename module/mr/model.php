@@ -57,7 +57,7 @@ class mrModel extends model
             foreach($filterProjects as $gitlabID => $projects)
             {
                 $projectIDList = array_keys($projects);
-                if(!empty($projectIDList)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject ".helper::dbIN($projectIDList).") or ";
+                if(!empty($projectIDList)) $filterProjectSql .= "(gitlabID = {$gitlabID} and sourceProject " . helper::dbIN($projectIDList) . ") or ";
             }
 
             if($filterProjectSql) $filterProjectSql = '(' . substr($filterProjectSql, 0, -3) . ')'; // Remove last or.
@@ -164,7 +164,7 @@ class mrModel extends model
             if(!empty($pipeline->queue))
             {
                 $compile = $this->loadModel('compile')->getByQueue($pipeline->queue);
-                $MR->compileID = $compile->id;
+                $MR->compileID     = $compile->id;
                 $MR->compileStatus = $compile->status;
             }
         }

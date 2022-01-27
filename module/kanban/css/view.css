@@ -58,7 +58,7 @@
 .region .kanban-lane-items {overflow: overlay !important; padding-bottom: 10px;}
 
 .region .kanban-item {position: relative}
-.region .kanban-item > .kanban-card > .title {line-height: 18px;}
+.region .kanban-item > .kanban-card > .title {display: block; line-height: 18px;}
 .region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
 .region .kanban-item > .kanban-card > .info {margin-top: 4px; position: relative;}
 .region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
@@ -103,11 +103,12 @@
 .kanban-card .header .executionName {display: flex; width: 100%; float: left;}
 .kanban-card .header .executionName .title {padding-right: 0px; margin-right: 5px; overflow: hidden; white-space: nowrap;}
 .kanban-card .header .executionName > span {flex: none;}
-.execInfo, .releaseInfo, .productplanInfo {margin-top: 23px;}
+.execInfo, .releaseInfo, .productplanInfo {margin-top: 22px;}
 .label-wait {background: #EFEFEF !important; color: #838A9D;}
 .label-doing {background: #f8d2d2 !important; color: #e64b4c;}
 .label-suspended {background: #fff3d9 !important; color: #ff9800;}
 .label-future {background: #EFEFEF !important; color: #838A9D; border-radius: 9px}
+.label-done {background: #dfe9d8 !important; color: #429b16;}
 .label-closed, .label-terminate {background: #e5e5e5 !important; color: #b8b8b8;}
 .label-deleted {background: #ff5d5d !important; color: #fff;}
 .label-normal {background: #e1e8d9 !important; color: #9abe76;}
