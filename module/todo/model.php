@@ -501,7 +501,7 @@ class todoModel extends model
         elseif($type == 'before')
         {
             $begin = '1970-01-01';
-            $end   = date::yesterday();
+            $end   = date::today();
         }
         elseif($type == 'cycle')
         {

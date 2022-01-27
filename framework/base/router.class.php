@@ -1920,9 +1920,10 @@ class baseRouter
             $isExt = $this->setActionExtFile();
             if($isExt)
             {
-                spl_autoload_register(function($class)
+                $controlFile = $this->controlFile;
+                spl_autoload_register(function($class) use ($moduleName, $controlFile)
                 {
-                    if($class == $this->moduleName) include $this->controlFile;
+                    if($class == $moduleName) include $controlFile;
                 });
             }
 
