@@ -50,7 +50,7 @@
       <?php if($type == 'private'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
-        <td><?php echo html::select('whitelist[]', $users, $kanban->whitelist, 'class="form-control chosen" multiple');?></td>
+        <td><?php echo html::select('whitelist[]', $whitelist, $kanban->whitelist, 'class="form-control chosen" multiple');?></td>
       </tr>
       <?php endif;?>
       <tr>
