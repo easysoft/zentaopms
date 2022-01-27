@@ -1,5 +1,6 @@
 ALTER TABLE `zt_kanbanspace` ADD `type` varchar(50) NOT NULL AFTER `name`;
 UPDATE `zt_kanbanspace` SET `type` = 'cooperation' WHERE `type` = '';
+UPDATE `zt_kanban` SET `team` = CONCAT(team, ',', whitelist) where `whitelist` != '';
 
 ALTER TABLE `zt_kanban` ADD `object` varchar(255) NOT NULL AFTER `displayCards`;
 ALTER TABLE `zt_kanban` ADD `performable` enum ('0', '1') NOT NULL DEFAULT '0' AFTER `archived`;
