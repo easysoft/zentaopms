@@ -3238,6 +3238,7 @@ class kanbanModel extends model
             ->where('t1.id')->eq($columnID)
             ->fetch();
 
+        if(empty($column)) return false;
         if($column->parent > 0) $column->parentName = $this->dao->findById($column->parent)->from(TABLE_KANBANCOLUMN)->fetch('name');
 
         return $column;
@@ -3500,7 +3501,7 @@ class kanbanModel extends model
                 if($object->parent > 0)
                 {
                     $parent = $this->getColumnByID($object->parent);
-                    if($parent->deleted == '1' || $parent->archived == '1') return false;
+                    if(!empty($parent) and $parent->deleted == '1' || $parent->archived == '1') return false;
                 }
                 return $object->archived == '1';
             case 'archivecolumn' :

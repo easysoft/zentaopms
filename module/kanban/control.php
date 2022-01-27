@@ -737,12 +737,12 @@ class kanban extends control
         $column = $this->kanban->getColumnById($columnID);
         if($confirm == 'no')
         {
-            $confirmLang = $column->parent ? $this->lang->kanbancolumn->confirmDeleteChild : $this->lang->kanbancolumn->confirmDelete;
+            $confirmLang = $column->parent > 0 ? $this->lang->kanbancolumn->confirmDeleteChild : $this->lang->kanbancolumn->confirmDelete;
             die(js::confirm($confirmLang, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
         }
         else
         {
-            if($column->parent) $this->kanban->processCards($column);
+            if($column->parent > 0) $this->kanban->processCards($column);
 
             $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
