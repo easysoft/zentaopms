@@ -170,9 +170,10 @@ class kanban extends control
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+        $whitelist  = isset($space->whitelist) ? $space->whitelist : '';
 
         $this->view->users      = $users;
-        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $space->whitelist);
+        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
         $this->view->spaceID    = $spaceID;
         $this->view->spacePairs = array(0 => '') + $this->kanban->getSpacePairs($type);
         $this->view->type       = $type;
@@ -207,9 +208,10 @@ class kanban extends control
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
+        $whitelist  = isset($space->whitelist) ? $space->whitelist : '';
 
         $this->view->users      = $users;
-        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $space->whitelist);
+        $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
         $this->view->spacePairs = array(0 => '') + array($kanban->space => $space->name) + $this->kanban->getSpacePairs($space->type);
         $this->view->kanban     = $kanban;
         $this->view->type       = $space->type;
@@ -772,7 +774,7 @@ class kanban extends control
         }
 
         $kanban      = $this->kanban->getById($kanbanID);
-        $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team) . ',' . trim($kanban->whitelist);
+        $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
         $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
         $this->view->users     = $users;
@@ -841,7 +843,7 @@ class kanban extends control
 
         $card        = $this->kanban->getCardByID($cardID);
         $kanban      = $this->kanban->getById($card->kanban);
-        $kanbanUsers = $card->kanban == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team) . ',' . trim($kanban->whitelist);
+        $kanbanUsers = $card->kanban == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
         $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
         $this->view->card     = $card;
