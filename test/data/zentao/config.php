@@ -20,7 +20,8 @@ $builder->team = array('rows' => 400, 'extends' => array('team'));
 $builder->build   = array('rows' => 8, 'extends' => array('build'));
 $builder->release = array('rows' => 8, 'extends' => array('release'));
 
-$builder->pipeline = array('rows' => 2, 'extends' => array('pipeline'));
-$builder->repo     = array('rows' => 1, 'extends' => array('repo'));
-$builder->job      = array('rows' => 2, 'extends' => array('job'));
-$builder->mr       = array('rows' => 1, 'extends' => array('mr'));
+$builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
+$builder->repo     = array('rows' => 1,  'extends' => array('repo'));
+$builder->job      = array('rows' => 2,  'extends' => array('job'));
+$builder->mr       = array('rows' => 1,  'extends' => array('mr'));
+$builder->oauth    = array('rows' => 90, 'extends' => array('oauth'));
