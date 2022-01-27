@@ -1477,8 +1477,8 @@ class taskModel extends model
         if($oldTask->story) $this->loadModel('story')->setStage($oldTask->story);
 
         $this->loadModel('kanban');
-        if(!isset($output['toColID'])) $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
-        if(isset($output['toColID'])) $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
+        if(!isset($output['toColID']) or $task->status == 'done') $this->kanban->updateLane($oldTask->execution, 'task', $taskID);
+        if(isset($output['toColID']) and $task->status == 'doing') $this->kanban->moveCard($taskID, $output['fromColID'], $output['toColID'], $output['fromLaneID'], $output['toLaneID']);
         if(!dao::isError()) return common::createChanges($oldTask, $task);
     }
 
