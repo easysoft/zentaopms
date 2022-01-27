@@ -598,6 +598,7 @@ class gitlabModel extends model
      *
      * @param  int     $gitlabID
      * @param  string  $orderBy
+     * @param  string  $minRole
      * @access public
      * @return object
      */
