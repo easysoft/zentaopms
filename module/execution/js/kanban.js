@@ -159,12 +159,21 @@ function changeKanbanScaleSize(newScaleSize)
     $('#kanbanScaleControl .btn[data-type="+"]').attr('disabled', newScaleSize >= 4 ? 'disabled' : null);
     $('#kanbanScaleControl .btn[data-type="-"]').attr('disabled', newScaleSize <= 1 ? 'disabled' : null);
 
-    $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+    if(groupBy == 'default')
     {
-        var kanban = $(this).data('zui.kanban');
+        $('#kanban').children('.region').children("div[id^='kanban']").each(function()
+        {
+            var kanban = $(this).data('zui.kanban');
+            if(!kanban) return;
+            kanban.setOptions({cardsPerRow: newScaleSize, cardHeight: getCardHeight()});
+        });
+    }
+    else
+    {
+        var kanban = $('#kanban').data('zui.kanban');
         if(!kanban) return;
         kanban.setOptions({cardsPerRow: newScaleSize, cardHeight: getCardHeight()});
-    });
+    }
 
     return newScaleSize;
 }

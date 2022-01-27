@@ -192,7 +192,7 @@ js::set('hasTaskButton', $hasTaskButton);
 <?php else:?>
 <div class='panel' id='kanbanContainer'>
   <div class='panel-body region'>
-    <div id='kanbans' class='kanban'></div>
+    <div id='kanban' class='kanban'></div>
   </div>
 </div>
 <?php endif;?>
