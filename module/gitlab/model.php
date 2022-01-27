@@ -598,10 +598,11 @@ class gitlabModel extends model
      *
      * @param  int     $gitlabID
      * @param  string  $orderBy
+     * @param  string  $minRole
      * @access public
      * @return object
      */
-    public function apiGetGroups($gitlabID, $orderBy, $minRole = '')
+    public function apiGetGroups($gitlabID, $orderBy = 'id_desc', $minRole = '')
     {
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/groups");
@@ -614,7 +615,9 @@ class gitlabModel extends model
             $url .= "&min_access_level=$this->config->gitlab->accessLevel[$minRole]";
         }
 
-        list($order, $sort) = explode('_', $orderBy);
+        $order = 'id';
+        $sort  = 'desc';
+        if(strpos($orderBy, '_') !== false) list($order, $sort) = explode('_', $orderBy);
 
         $allResults = array();
         for($page = 1; true; $page++)
