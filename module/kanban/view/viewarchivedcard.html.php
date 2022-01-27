@@ -33,6 +33,7 @@
 #archivedCards .card-item .red {background-color: #b10b0b;}
 #archivedCards .card-item .yellow {background-color: #cfa227;}
 #archivedCards .card-item .green {background-color: #2a5f29;}
+#archivedCards .card-item .green-name .cardName {color: #2a5f29 !important;}
 #archivedCards .card-item .has-color .cardName,
 #archivedCards .card-item .has-color .actions .icon-more-v,
 #archivedCards .card-item .has-color .info > .label-pri,
@@ -61,10 +62,17 @@
         if($card->color == '#2a5f29') $color = 'has-color green';
         ?>
         <?php
-        $style = '';
-        if($card->status == 'done') $style = 'filter: opacity(0.5); text-decoration: line-through';
+        $nameStyle = '';
+        if($card->status == 'done' and $card->color != '#2a5f29') $nameStyle = 'green-name'; 
         ?>
-        <div class="kanban-item <?php echo $color;?>" data-id="<?php echo $card->id;?>" style="<?php echo $style;?>">
+        <?php
+        $style = 'background-color: #2a5f29';
+        if($card->color == '#2a5f29') $style = 'background-color: #FFFFFF; color: #2a5f29';
+        ?>
+        <div class="kanban-item <?php echo $nameStyle;?> <?php echo $color;?>" data-id="<?php echo $card->id;?>">
+        <?php if($card->status == 'done'):?>
+        <div class="label" style="<?php echo $style;?>"><?php echo $lang->kanban->finished;?></div>
+        <?php endif;?>
           <?php echo html::a($this->createLink('kanban', 'viewCard', "cardID=$card->id", '', true), $card->name, '', "class='cardName iframe' data-toggle='modal' data-width='80%' title='$card->name'");?>
           <div class="info">
             <span class="pri label-pri label-pri-<?php echo $card->pri;?>"><?php echo $card->pri;?></span>

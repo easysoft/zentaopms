@@ -114,4 +114,5 @@
 .region .kanban-item > .kanban-card > .execInfo > .user, .region .kanban-item > .kanban-card > .releaseInfo > .user, .region .kanban-item > .kanban-card > .productplanInfo > .user {position: absolute; right: 13px; bottom: 1px}
 .region .kanban-item > .kanban-card > .execInfo > .user > .avatar, .region .kanban-item > .kanban-card > .releaseInfo > .user > .avatar, .region .kanban-item > .kanban-card > .productplanInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
 .kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon, .kanban-card .buildTitle .icon{padding-right: 5px;}
+.kanban-card .label{margin-right: 7px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}

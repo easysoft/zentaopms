@@ -279,7 +279,7 @@ function renderUsersAvatar(users, itemID, size)
 function renderKanbanItem(item, $item)
 {
     var whiteStyle = null;
-    if(item.color == '#2a5f29' || item.color == '#b10b0b') whiteStyle = 'style="color:#FFFFFF"';
+    if(item.color == '#2a5f29' || item.color == '#b10b0b' || item.color == '#cfa227') whiteStyle = 'style="color:#FFFFFF"';
 
     if(item.fromType == 'execution')
     {
@@ -303,24 +303,35 @@ function renderKanbanItem(item, $item)
         var privs        = item.actions;
         var printMoreBtn = (privs.includes('editCard') || privs.includes('archiveCard') || privs.includes('copyCard') || privs.includes('deleteCard') || privs.includes('moveCard') || privs.includes('setCardColor'));
 
-        if(kanban.performable == 1 && item.status == 'done' )
-        {
-            $item.closest('.kanban-card').css({'filter' : 'opacity(0.5)', 'text-decoration' : 'line-through'});
-        }
-        else
-        {
-            $item.closest('.kanban-card').css({'filter' : '', 'text-decoration' : ''});
-        }
-
         if(privs.includes('sortCard')) $item.parent().addClass('sort');
         if(!$title.length)
         {
+            $('<div class="label">' + kanbanLang.finished + '</div>').appendTo($item);
             if(privs.includes('viewCard')) $title = $('<a class="title iframe" data-toggle="modal" data-width="80%"></a>').appendTo($item).attr('href', createLink('kanban', 'viewCard', 'cardID=' + item.id, '', true));
             if(!privs.includes('viewCard')) $title = $('<p class="title"></p>').appendTo($item);
         }
-
         $title.text(item.name).attr('title', item.name);
 
+        if(kanban.performable == 1 && item.status == 'done' )
+        {
+            var finishStyle = '#2a5f29';
+            if(item.color == '#2a5f29') finishStyle  = '#FFFFFF';
+            $title.text(item.name).css('color', finishStyle);
+            $item.children('.label').show();
+            if(item.color == '#2a5f29')
+            {
+                $item.children('.label').css({'background-color':'#FFFFFF','color':'#2a5f29'});
+            }
+            else
+            {
+                $item.children('.label').css({'background-color':'','color':''});
+            }
+        }
+        else
+        {
+            $title.text(item.name).css('color', '');
+            $item.children('.label').hide();
+        }
         if(printMoreBtn)
         {
             $(

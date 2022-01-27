@@ -29,6 +29,7 @@ $lang->kanban->sortColumn          = '看板列排序';
 $lang->kanban->deleteColumn        = '删除看板列';
 $lang->kanban->createCard          = '创建卡片';
 $lang->kanban->editCard            = '编辑卡片';
+$lang->kanban->finished            = '已完成';
 $lang->kanban->finishCard          = '完成卡片';
 $lang->kanban->activateCard        = '激活卡片';
 $lang->kanban->viewCard            = '查看卡片';
