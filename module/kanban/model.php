@@ -1597,7 +1597,6 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
             ->beginIF($browseType == 'private' and !$this->app->user->admin)->andWhere('owner')->eq($account)->fi()
-            ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
             ->andWhere('id')->in($spaceIdList)
             ->orderBy('id_desc')
@@ -1679,7 +1678,7 @@ class kanbanModel extends model
             $remove = true;
             if($objectType == 'kanbanspace' and $object->type == 'public' and $param != 'involved') continue;
 
-            if($object->owner == $account) $remove = false;
+            if($object->owner == $account and $param != 'involved') $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
             if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
 
@@ -1719,7 +1718,8 @@ class kanbanModel extends model
 
         if($space->type == 'private') $space->owner = $account;
 
-        if(strpos(",{$space->team},", ",$account,") === false and $space->owner != $account) $space->team .= ",$account";
+        if(strpos(",{$space->team},", ",$account,") === false) $space->team .= ",$account";
+        if(strpos(",{$space->team},", ",$space->owner,") === false) $space->team .= ",$space->owner";
 
          $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->createspace['id'], $this->post->uid);
 
