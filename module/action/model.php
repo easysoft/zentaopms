@@ -1343,6 +1343,11 @@ class actionModel extends model
             $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
         }
 
+        if($action->objectType == 'story' and $this->config->vision == 'lite')
+        {
+            $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
+        }
+
         if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)
         {
             $table    = $this->config->objectTables[$action->objectType];

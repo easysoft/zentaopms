@@ -725,6 +725,8 @@ class task extends control
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
 
+        $this->commonAction($taskID);
+
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);
         if(!$task)
