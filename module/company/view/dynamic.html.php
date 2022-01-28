@@ -42,6 +42,13 @@
 
 <div id='queryBox' data-module='action' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
 <div id='mainContent' class='main-content'>
+  <?php if(empty($dateGroups)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->company->empty;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <div id='dynamics'>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
@@ -91,6 +98,7 @@
     </div>
     <?php endforeach;?>
   </div>
+  <?php endif;?>
 </div>
 <?php if(!empty($firstAction)):?>
 <?php
