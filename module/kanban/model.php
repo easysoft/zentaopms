@@ -881,6 +881,7 @@ class kanbanModel extends model
             ->andWhere('deleted')->eq('0')
             ->beginIF($regionID)->andWhere('id')->eq($regionID)->fi()
             ->beginIF($from == 'execution')->andWhere('space')->eq(0)->fi()
+            ->beginIF($from == 'kanban')->andWhere('space')->ne(0)->fi()
             ->orderBy('order_asc')
             ->fetchPairs();
     }
