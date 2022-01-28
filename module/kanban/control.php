@@ -170,7 +170,7 @@ class kanban extends control
         $space      = $this->kanban->getSpaceById($spaceID);
         $spaceUsers = $spaceID == 0 ? ',' : trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
-        $whitelist  = isset($space->whitelist) and !empty($space->whitelist) ? $space->whitelist : ',';
+        $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
 
         $this->view->users      = $users;
         $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
@@ -208,7 +208,7 @@ class kanban extends control
         $space      = $this->kanban->getSpaceById($kanban->space);
         $spaceUsers = trim($space->owner) . ',' . trim($space->team);
         $users      = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $spaceUsers);
-        $whitelist  = isset($space->whitelist) and !empty($space->whitelist) ? $space->whitelist : ',';
+        $whitelist  = (isset($space->whitelist) and !empty($space->whitelist)) ? $space->whitelist : ',';
 
         $this->view->users      = $users;
         $this->view->whitelist  = $this->user->getPairs('noclosed|nodeleted', '', 0, $whitelist);
