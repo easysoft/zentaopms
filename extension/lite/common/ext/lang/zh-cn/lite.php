@@ -66,7 +66,7 @@ $lang->project->target = '目标';
 /* Scrum menu. */
 $lang->kanban->menu            = new stdclass();
 $lang->kanban->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->kanban->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution');
+$lang->kanban->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution,task');
 $lang->kanban->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->kanban->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->kanban->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
