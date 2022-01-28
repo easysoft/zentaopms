@@ -2,6 +2,7 @@
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
 $lang->task->common       = '卡片';
+$lang->story->common      = '目标';
 
 /* Main Navigation. */
 $lang->mainNav            = new stdclass();
@@ -66,7 +67,7 @@ $lang->project->target = '目标';
 /* Scrum menu. */
 $lang->kanban->menu            = new stdclass();
 $lang->kanban->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
-$lang->kanban->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution');
+$lang->kanban->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution,task');
 $lang->kanban->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
 $lang->kanban->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->kanban->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
@@ -89,7 +90,7 @@ $lang->execution->menu->list     = array('link' => "列表|execution|task|execut
 if($config->edition != 'open') $lang->execution->menu->calendar = array('link' => "日历|execution|calendar|executionID=%s");
 if($config->edition != 'open') $lang->execution->menu->gantt    = array('link' => "甘特图|execution|gantt|executionID=%s");
 $lang->execution->menu->tree     = array('link' => "树状图|execution|tree|executionID=%s");
-$lang->execution->menu->group    = array('link' => "分组视图|execution|groupTask|executionID=%s");
+$lang->execution->menu->group    = array('link' => "分组视图|execution|grouptask|executionID=%s");
 
 $lang->kanban->menu->doc['subMenu'] = new stdclass();
 
@@ -210,6 +211,17 @@ unset($lang->searchObjects['caselib']);
 unset($lang->searchObjects['testreport']);
 unset($lang->searchObjects['program']);
 unset($lang->searchObjects['user']);
+
+/* biz search. */
+unset($lang->searchObjects['service']);
+unset($lang->searchObjects['deploy']);
+unset($lang->searchObjects['deploystep']);
+
+/* max search. */
+unset($lang->searchObjects['trainplan']);
+unset($lang->searchObjects['risk']);
+unset($lang->searchObjects['issue']);
+unset($lang->searchObjects['opportunity']);
 
 /* adjust items of global create. */
 unset($lang->createIcons['effort']);

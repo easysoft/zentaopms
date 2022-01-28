@@ -165,6 +165,7 @@
               <?php echo html::hidden('type', $type) . html::submitButton();?>
               <?php echo html::hidden('product', $productID);?>
               <?php echo html::hidden('plan', $planID);?>
+              <?php echo html::hidden('vision', 'lite');?>
               <?php echo $gobackLink ? html::a($gobackLink, $lang->goback, '', 'class="btn btn-wide"') : html::backButton();?>
             </td>
           </tr>

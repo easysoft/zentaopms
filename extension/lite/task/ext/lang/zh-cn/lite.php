@@ -56,6 +56,7 @@ $lang->task->confirmFinish          = '"预计剩余"为0，确认将卡片状�
 $lang->task->confirmRecord          = '"剩余"为0，卡片将标记为"已完成"，您确定吗？';
 $lang->task->confirmTransfer        = '"当前剩余"为0，卡片将被转交，您确定吗？';
 $lang->task->noTask                 = '暂时没有卡片。';
+$lang->task->kanbanDenied           = '请先创建看板';
 $lang->task->createDenied           = '你不能在该项目添加卡片';
 $lang->task->cannotDeleteParent     = '不能删除父卡片。';
 $lang->task->addChildTask           = '因该卡片已经产生消耗，为保证数据一致性，我们会帮您创建一条同名子卡片记录该消耗。';
