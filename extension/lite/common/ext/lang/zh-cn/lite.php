@@ -2,6 +2,7 @@
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
 $lang->task->common       = '卡片';
+$lang->story->common      = '目标';
 
 /* Main Navigation. */
 $lang->mainNav            = new stdclass();
