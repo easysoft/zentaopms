@@ -212,7 +212,6 @@ unset($lang->searchObjects['program']);
 unset($lang->searchObjects['user']);
 
 /* adjust items of global create. */
-
 unset($lang->createIcons['effort']);
 unset($lang->createIcons['bug']);
 unset($lang->createIcons['testcase']);
@@ -221,8 +220,8 @@ unset($lang->createIcons['program']);
 unset($lang->createIcons['kanbanspace']);
 unset($lang->createIcons['kanban']);
 
-$lang->createObjects['story']       = '目标';
-$lang->createObjects['task']        = '卡片';
-$lang->createObjects['execution']   = '看板';
+$lang->createObjects['story']     = '目标';
+$lang->createObjects['task']      = '卡片';
+$lang->createObjects['execution'] = '看板';
 
-$lang->createIcons['execution']      = 'kanban';
+$lang->createIcons['execution'] = 'kanban';
