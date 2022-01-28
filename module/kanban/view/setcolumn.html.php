@@ -21,7 +21,7 @@
     <form class="load-indicator main-form form-ajax" method='post' target='hiddenwin'>
       <table align='center' class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanban->columnName;?></th>
+          <th class='w-110px'><?php echo $lang->kanban->columnName;?></th>
           <td colspan='2'>
             <?php echo html::input('name', $column->name, "class='form-control'");?>
           </td>

@@ -1128,7 +1128,7 @@ function createCardMenu(options)
         if(!card.color) color = "#fff";
         for(let i = 0 ; i < colorList.length ; i ++ )
         {
-            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 10px"></i>' : '';
+            var attr   = card.color == colorList[i] ? '<i class="icon icon-check" style="margin-left: 5px"></i>' : '';
             var border = i == 0 ? 'border:1px solid #b0b0b0;' : '';
             cardColoritems.push({label: "<div class='cardcolor' style='background:" + colorList[i] + ";" + border + "'></div>" + colorListLang[colorList[i]]  + attr ,
                 onClick: function(){setCardColor(card.id, colorList[i], card.kanban, card.region);}, html: true, attrs: {id: 'cardcolormenu'}, className: 'color' + i});
