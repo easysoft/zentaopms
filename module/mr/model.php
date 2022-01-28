@@ -130,6 +130,8 @@ class mrModel extends model
             foreach($projects as $key => $project)
             {
                 if($this->gitlab->checkUserAccess($gitlabID, 0, $project, $allGroups[$gitlabID], 'reporter') == false) continue;
+                $project->isDeveloper = $this->gitlab->checkUserAccess($gitlabID, 0, $project, $allGroups[$gitlabID], 'developer');
+
                 $allProjectPairs[$gitlabID][$project->id] = $project;
             }
         }
