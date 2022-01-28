@@ -211,6 +211,17 @@ unset($lang->searchObjects['testreport']);
 unset($lang->searchObjects['program']);
 unset($lang->searchObjects['user']);
 
+/* biz search. */
+unset($lang->searchObjects['service']);
+unset($lang->searchObjects['deploy']);
+unset($lang->searchObjects['deploystep']);
+
+/* max search. */
+unset($lang->searchObjects['trainplan']);
+unset($lang->searchObjects['risk']);
+unset($lang->searchObjects['issue']);
+unset($lang->searchObjects['opportunity']);
+
 /* adjust items of global create. */
 
 unset($lang->createIcons['effort']);
