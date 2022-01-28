@@ -232,7 +232,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
       if($from == 'project') $vars = "projectID=$projectID&productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";
 
-      if($useDatatable) $this->app->getModuleRoot() . '/common/view/datatable.html.php';
+      if($useDatatable) include $this->app->getModuleRoot() . '/common/view/datatable.html.php';
       $setting = $this->datatable->getSetting('product');
       $widths  = $this->datatable->setFixedFieldWidth($setting);
       $columns = 0;
