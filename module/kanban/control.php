@@ -335,7 +335,7 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $regions     = $this->kanban->getRegionPairs($kanbanID);
+        $regions     = $this->kanban->getRegionPairs($kanbanID, 0, $from);
         $regionPairs = array();
         foreach($regions as $regionID => $region)
         {
