@@ -93,8 +93,7 @@ class kanbanModel extends model
         $region->order = $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
-            ->checkIF($from == 'execution', 'name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space = '0'")
-            ->checkIF($from == 'kanban', 'name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space != '0'")
+            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space = {$kanban->space}")
             ->autoCheck()
             ->exec();
 
@@ -2289,7 +2288,7 @@ class kanbanModel extends model
         $region->order       = 1;
 
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
-            ->check('name', 'unique', "kanban={$execution->id} AND deleted='0'")
+            ->check('name', 'unique', "kanban={$execution->id} AND deleted='0' AND space = '0'")
             ->autoCheck()
             ->exec();
 
