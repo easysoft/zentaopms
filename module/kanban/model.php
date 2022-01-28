@@ -1910,7 +1910,8 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu,type')
             ->get();
 
-        if(strpos(",{$kanban->team},", ",$account,") === false and $kanban->owner != $account) $kanban->team .= ",$account";
+        if(strpos(",{$kanban->team},", ",$account,") === false) $kanban->team .= ",$account";
+        if(strpos(",{$kanban->team},", ",$kanban->owner,") === false) $kanban->team .= ",$kanban->owner";
 
         $kanban = $this->loadModel('file')->processImgURL($kanban, $this->config->kanban->editor->create['id'], $this->post->uid);
 
