@@ -337,7 +337,7 @@ class kanbanModel extends model
         $column        = $this->getColumnByID($columnID);
         $maxOrder      = $this->dao->select('MAX(`order`) AS maxOrder')->from(TABLE_KANBANCOLUMN)->where('`group`')->eq($column->group)->fetch('maxOrder');
         $order         = $maxOrder ? $maxOrder + 1 : 1;
-        $sumChildLimit = $this->dao->select('SUM(`limit`) AS sumChildLimit')->from(TABLE_KANBANCOLUMN)->where('parent')->eq($columnID)->fetch('sumChildLimit');
+        $sumChildLimit = 0;
 
         $childrenColumn = array();
         foreach($data->name as $i => $name)
@@ -363,7 +363,7 @@ class kanbanModel extends model
                 return false;
             }
 
-            $sumChildLimit += $childColumn->limit;
+            $sumChildLimit += $childColumn->limit == -1 ? 0 : $childColumn->limit;
             if($column->limit != -1 and ($childColumn->limit == -1 or ($column->limit < $sumChildLimit)))
             {
                 dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
