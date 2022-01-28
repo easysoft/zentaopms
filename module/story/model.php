@@ -2913,6 +2913,7 @@ class storyModel extends model
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq($type)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('assignedTo')->eq($account)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
             ->orderBy('id_desc')
