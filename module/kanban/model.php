@@ -1677,7 +1677,7 @@ class kanbanModel extends model
         foreach($objects as $objectID => $object)
         {
             $remove = true;
-            if($objectType == 'kanbanspace' and $object->type == 'public') continue;
+            if($objectType == 'kanbanspace' and $object->type == 'public' and $param != 'involved') continue;
 
             if($object->owner == $account) $remove = false;
             if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
@@ -1688,7 +1688,7 @@ class kanbanModel extends model
                 $spaceOwner = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
                 $spaceType  = isset($spaceList[$object->space]->type) ? $spaceList[$object->space]->type : '';
                 if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
-                if($spaceType == 'public') $remove = false;
+                if($spaceType == 'public' and $param != 'involved') $remove = false;
             }
 
             if($remove) unset($objects[$objectID]);
