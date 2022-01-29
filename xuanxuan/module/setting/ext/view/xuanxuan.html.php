@@ -22,11 +22,11 @@
     <form method='post' id='ajaxForm' class='form-ajax'>
       <table class='table table-form'>
         <tr>
-          <th class='w-120px'><?php echo $lang->im->version;?></th>
+          <th class='w-130px'><?php echo $lang->im->version;?></th>
           <td class='w-p30'><?php echo $config->xuanxuan->version;?></td>
         </tr>
         <tr>
-          <th class='w-120px'><?php echo $lang->im->turnon;?></th>
+          <th class='w-130px'><?php echo $lang->im->turnon;?></th>
           <td class='w-p30'><?php echo $type == 'edit' ? html::radio('turnon', $lang->im->turnonList, $turnon) : zget($lang->im->turnonList, $config->xuanxuan->turnon);?></td>
           <td></td>
         </tr>
