@@ -22,7 +22,7 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th><?php echo $lang->kanban->laneHeight;?></th>
+          <th id='c-name'><?php echo $lang->kanban->laneHeight;?></th>
           <td><?php echo nl2br(html::radio('heightType', $lang->kanbanlane->heightTypeList, $heightType, "onclick='setCardCount(this.value);'"));?></td>
         </tr>
         <tr class="hidden" id='cardBox'>
