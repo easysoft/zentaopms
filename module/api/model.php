@@ -751,7 +751,7 @@ class apiModel extends model
         $lib->type    = 'api';
         $lib->name    = $name;
         $lib->baseUrl = $baseUrl;
-        $lib->acl     = 'private';
+        $lib->acl     = 'open';
         $lib->users   = ',' . $currentAccount . ',';
         $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 

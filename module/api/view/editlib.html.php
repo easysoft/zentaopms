@@ -80,4 +80,7 @@
   </table>
 </div>
 <?php js::set('noticeAcl', $lang->api->noticeAcl);?>
+<script>
+$(function(){toggleAcl($('form input[name="acl"]:checked').val(), 'lib');}) 
+</script>
 <?php include '../../common/view/footer.lite.html.php';?>
