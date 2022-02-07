@@ -214,7 +214,7 @@ class bug extends control
         $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
