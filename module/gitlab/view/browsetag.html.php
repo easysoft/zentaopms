@@ -70,7 +70,7 @@
             /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
             $tagName    = str_replace('-', '*', $gitlabTag->name);
             $isDisabled = $gitlabTag->protected ? 'disabled' : '';
-            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=$tagName", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn btn-primary' target='hiddenwin' $isDisabled");
+            common::printLink('gitlab', 'deleteTag', "gitlabID=$gitlabID&projectID={$projectID}&tag_name=$tagName", "<i class='icon icon-trash'></i> ", '', "title='{$lang->gitlab->deleteTag}' class='btn' target='hiddenwin' $isDisabled");
             ?>
           </td>
         </tr>
