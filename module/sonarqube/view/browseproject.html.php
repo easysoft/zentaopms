@@ -49,7 +49,7 @@
           <th class='c-key text-left'><?php common::printOrderLink('key', $orderBy, $vars, $lang->sonarqube->projectKey);?></th>
           <th class='c-name text-left'><?php common::printOrderLink('name', $orderBy, $vars, $lang->sonarqube->projectName);?></th>
           <th class='text-left'><?php common::printOrderLink('lastAnalysisDate', $orderBy, $vars, $lang->sonarqube->projectlastAnalysis);?></th>
-          <th class='c-actions-2'><?php echo $lang->actions;?></th>
+          <th class='c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
@@ -67,6 +67,7 @@
             {
                 $jobID = $projectJobPairs[$sonarqubeProject->key];
                 common::printIcon('sonarqube', 'execJob', "jobID=$jobID", '', 'list', 'sonarqube', 'hiddenwin');
+                if(in_array($jobID, $successJobs)) common::printIcon('sonarqube', 'reportView', "jobID=$jobID", '', 'list', 'audit', '', 'iframe', true);
             }
             ?>
           </td>

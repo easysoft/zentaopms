@@ -269,14 +269,19 @@ class sonarqube extends control
         $pager    = new pager($recTotal, $recPerPage, $pageID);
         $sonarqubeProjectList = array_chunk($sonarqubeProjectList, $pager->recPerPage);
 
+        /* Get success jobs of sonarqube.*/
+        $projectJobPairs = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
+        $successJobs     = $this->loadModel('compile')->getSuccessJobs($projectJobPairs);
+
         $this->view->sonarqube            = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->view->keyword              = urldecode(urldecode($keyword));
         $this->view->pager                = $pager;
         $this->view->title                = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseProject;
         $this->view->sonarqubeID          = $sonarqubeID;
         $this->view->sonarqubeProjectList = (empty($sonarqubeProjectList) or empty($sonarqubeProjectList[$pageID - 1])) ? array() : $sonarqubeProjectList[$pageID - 1];
-        $this->view->projectJobPairs      = $this->loadModel('job')->getJobBySonarqubeProject($sonarqubeID, $projectKeyList);
+        $this->view->projectJobPairs      = $projectJobPairs;
         $this->view->orderBy              = $orderBy;
+        $this->view->successJobs          = $successJobs;
         $this->display();
     }
 
