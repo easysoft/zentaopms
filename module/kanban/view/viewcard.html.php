@@ -48,11 +48,11 @@
 
         if($kanban->performable)
         {
-            if($card->status == 'done') common::printLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-magic"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->activateCard}'", true, true);
-            if($card->status == 'doing') common::printLink('kanban', 'finishCard', "cardID={$card->id}&kanbanID={$kanban->id}", '<i class="icon icon-checked"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->finishCard}'", true, true);
+            if($card->status == 'done') echo html::a(helper::createLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-magic"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->activateCard}'");
+            if($card->status == 'doing') echo html::a(helper::createLink('kanban', 'finishCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-checked"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->finishCard}'");
         }
 
-        common::printLink('kanban', 'copyCard',   "cardID=$card->id", '<i class="icon icon-copy"></i>',  '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'",  true, true);
+        //common::printLink('kanban', 'copyCard', "cardID=$card->id", '<i class="icon icon-copy"></i>', '', "class='btn btn-link iframe' title='{$lang->kanbancard->copy}'", true, true);
         common::printLink('kanban', 'deleteCard', "cardID=$card->id", '<i class="icon icon-trash"></i>', 'hiddenwin', "class='btn btn-link' title='{$lang->kanbancard->delete}'",true, true);
         ?>
         <?php endif;?>
