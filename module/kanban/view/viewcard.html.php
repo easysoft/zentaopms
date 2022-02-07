@@ -82,8 +82,8 @@
                   <?php if(!empty($assignedToPairs)):?>
                     <div class='kanban-members pull-left'>
                       <?php foreach($assignedToPairs as $member):?>
-                      <div title="<?php echo $users[$member];?>">
-                        <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member)); ?>
+                      <div title="<?php echo zget($users, $member);?>">
+                        <?php echo zget($users, $member) . '&nbsp;&nbsp;';?>
                       </div>
                       <?php endforeach;?>
                     </div>
