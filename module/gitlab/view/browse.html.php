@@ -48,8 +48,8 @@
             <?php
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';
             $notBind  = $gitlab->isBindUser ? '' : 'disabled';
-            common::printLink('gitlab', 'browseProject', "gitlabID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->gitlab->browseProject}' class='btn btn-primary {$notBind}'");
-            common::printLink('gitlab', 'browseGroup', "gitlabID=$id", "<i class='icon icon-groups'></i> ", '', "title='{$lang->gitlab->browseGroup}'  class='btn btn-primary {$notBind}'");
+            common::printLink('gitlab', 'browseProject', "gitlabID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->gitlab->browseProject}' class='btn {$notBind}'");
+            common::printLink('gitlab', 'browseGroup', "gitlabID=$id", "<i class='icon icon-groups'></i> ", '', "title='{$lang->gitlab->browseGroup}'  class='btn {$notBind}'");
             common::printLink('gitlab', 'edit', "gitlabID=$id", "<i class='icon icon-edit'></i> ", '',"title='{$lang->gitlab->edit}' class='btn btn-primary'");
             common::printLink('gitlab', 'browseUser', "gitlabID=$id", "<i class='icon icon-person'></i> ", '', "title='{$lang->gitlab->browseUser}'  class='btn {$disabled} {$notBind}' ,'disabled'");
             common::printLink('gitlab', 'bindUser', "id=$id", "<i class='icon icon-link'></i> ", '', "title='{$lang->gitlab->bindUser}'  class='btn {$disabled} {$notBind}' ,'disabled'");

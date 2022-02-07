@@ -69,11 +69,11 @@
             <?php
             $maintainerClass = $gitlabProject->isMaintainer ? '' : 'disabled';
             $ownerClass      = $gitlabProject->adminer ? '' : 'disabled';
-            common::printLink('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-treemap'></i> ", '', "title='{$lang->gitlab->browseBranch}' class='btn btn-primary'");
-            common::printLink('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-branch-lock'></i> ", '', "title='{$lang->gitlab->branch->accessLevel}' class='btn btn-primary {$maintainerClass}'");
-            common::printLink('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag'></i> ", '', "title='{$lang->gitlab->browseTag}' class='btn btn-primary'");
-            common::printLink('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag-lock'></i> ", '', "title='{$lang->gitlab->browseTagPriv}' class='btn btn-primary {$maintainerClass}'");
-            common::printLink('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->project->edit}' class='btn btn-primary {$ownerClass}'");
+            common::printLink('gitlab', 'browseBranch', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-treemap'></i> ", '', "title='{$lang->gitlab->browseBranch}' class='btn'");
+            common::printLink('gitlab', 'browseBranchPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-branch-lock'></i> ", '', "title='{$lang->gitlab->branch->accessLevel}' class='btn {$maintainerClass}'");
+            common::printLink('gitlab', 'browseTag', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag'></i> ", '', "title='{$lang->gitlab->browseTag}' class='btn'");
+            common::printLink('gitlab', 'browseTagPriv', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-tag-lock'></i> ", '', "title='{$lang->gitlab->browseTagPriv}' class='btn {$maintainerClass}'");
+            common::printLink('gitlab', 'editProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id", "<i class='icon icon-edit'></i> ", '', "title='{$lang->gitlab->project->edit}' class='btn {$ownerClass}'");
             if(common::hasPriv('gitlab', 'delete')) echo html::a($this->createLink('gitlab', 'deleteProject', "gitlabID=$gitlabID&projectID=$gitlabProject->id"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteProject}' class='btn {$ownerClass}'");
             ?>
           </td>
