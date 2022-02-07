@@ -1165,7 +1165,7 @@ class user extends control
      * AJAX: get users from a contact list.
      *
      * @param  int    $contactListID
-     * @param  string $dropdownName
+     * @param  string $dropdownName mailto|whitelist
      * @access public
      * @return string
      */
@@ -1175,7 +1175,7 @@ class user extends control
 
         $attr = $dropdownName == 'mailto' ? "data-placeholder='{$this->lang->chooseUsersToMail}'" : '';
 
-        $users = $this->user->getPairs('devfirst|nodeleted', $list ? $list->userList : '', $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst|nodeleted|noclosed', $list ? $list->userList : '', $this->config->maxCount);
         if(isset($this->config->user->moreLink)) $this->config->moreLinks[$dropdownName . "[]"] = $this->config->user->moreLink;
 
         if(!$contactListID)
