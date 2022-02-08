@@ -42,7 +42,10 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->group->visibility;?></th>
-            <td colspan='2'><?php echo nl2br(html::radio('visibility', $lang->gitlab->group->visibilityList, $group->visibility, "", 'block'));?></td>
+            <td colspan='2'>
+              <?php echo nl2br(html::radio('visibility', $lang->gitlab->group->visibilityList, $group->visibility, "", 'block'));?>
+              <span id='publicTip' class='text-danger <?php echo $group->visibility != 'public' ? "hidden" : '';?>'><?php echo $lang->gitlab->group->publicTip;?></span>
+            </td>
           </tr>
           <tr>
             <th></th>

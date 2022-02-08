@@ -134,6 +134,7 @@ $lang->gitlab->project->emptyNameError             = "Project name cannot be emp
 $lang->gitlab->project->emptyPathError             = "Project slug cannot be empty.";
 $lang->gitlab->project->confirmDelete              = 'Do you want to delete this GitLab project?';
 $lang->gitlab->project->notbindedError             = 'GitLab user has not been bound, unable to modify permissions!';
+$lang->gitlab->project->publicTip                  = 'The visible status of the current project will be modified to public, and the project can be accessed without any authentication in GitLab. ';
 
 $lang->gitlab->user = new stdclass;
 $lang->gitlab->user->id             = "User ID";
@@ -196,6 +197,7 @@ $lang->gitlab->group->memberName                              = 'Account';
 $lang->gitlab->group->memberAccessLevel                       = 'Access Level';
 $lang->gitlab->group->memberExpiresAt                         = 'Expiration time';
 $lang->gitlab->group->repeatError                             = "Group members cannot be added repeatedly";
+$lang->gitlab->group->publicTip                               = 'The visible status of the current group will be modified to public, and the group can be accessed without any authentication in GitLab. ';
 
 $lang->gitlab->branch = new stdclass();
 $lang->gitlab->branch->name                        = 'Branch name';
