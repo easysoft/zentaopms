@@ -287,6 +287,28 @@ class sonarqube extends control
     }
 
     /**
+     * Creat a sonarqube project.
+     *
+     * @param  int     $sonarqubeID
+     * @access public
+     * @return void
+     */
+    public function createProject($sonarqubeID)
+    {
+        if($_POST)
+        {
+            $this->sonarqube->createProject($sonarqubeID);
+
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browseProject', "sonarqubeID=$sonarqubeID")));
+        }
+
+        $this->view->title       = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->createProject;
+        $this->view->sonarqubeID = $sonarqubeID;
+        $this->display();
+    }
+
+    /**
      * Delete project.
      *
      * @param  int    $sonarqubeID

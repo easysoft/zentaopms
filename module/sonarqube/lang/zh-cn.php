@@ -30,9 +30,11 @@ $lang->sonarqube->editServer    = '修改SonarQube服务器';
 $lang->sonarqube->createSuccess = "创建成功";
 
 $lang->sonarqube->placeholder = new stdclass;
-$lang->sonarqube->placeholder->name    = '';
-$lang->sonarqube->placeholder->url     = "请填写SonarQube Server首页的访问地址，如：https://sonarqube.zentao.net。";
-$lang->sonarqube->placeholder->account = "请填写具有Administrator权限的SonarQube用户信息";
+$lang->sonarqube->placeholder->name        = '';
+$lang->sonarqube->placeholder->url         = "请填写SonarQube Server首页的访问地址，如：https://sonarqube.zentao.net。";
+$lang->sonarqube->placeholder->account     = "请填写具有Administrator权限的SonarQube用户信息";
+$lang->sonarqube->placeholder->projectName = '最多255个字符';
+$lang->sonarqube->placeholder->projectKey  = "最多400个字符。 允许的字符为字母数字，'-'，'_'，'. '和':'，至少有一个非数字";
 
 $lang->sonarqube->nameRepeatError      = "服务器名称已存在！";
 $lang->sonarqube->urlRepeatError       = "服务器地址已存在！";
@@ -60,3 +62,7 @@ $lang->sonarqube->qualitygateList = array();
 $lang->sonarqube->qualitygateList['OK']    = 'Passed';
 $lang->sonarqube->qualitygateList['WARN']  = 'Warning';
 $lang->sonarqube->qualitygateList['ERROR'] = 'Failed';
+
+$lang->sonarqube->apiErrorMap[1] = "/Malformed key for Project: '([\s\S]+)'. Allowed characters are alphanumeric, '-', '_', '\.' and ':', with at least one non-digit\./";
+
+$lang->sonarqube->errorLang[1] = "项目'%s'的格式不正确。允许的字符为字母数字、'-'、''、'.'和“：”，至少有一个非数字。";
