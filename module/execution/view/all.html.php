@@ -118,15 +118,9 @@
             <?php printf('%03d', $execution->id);?>
           </td>
           <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $execution->name?>'>
-            <?php if($config->systemMode == 'classic'):?>
-            <?php $executionLink = $execution->projectModel == 'kanban' ? html::a($this->createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name,'', "class='text-ellipsis'") : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");echo !empty($execution->children) ? $execution->name :  $executionLink;
-          if(isset($execution->delay)) echo "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span> ";?>
-            <?php if(!empty($execution->children)):?>
-              <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
-            <?php endif;?>
-            <?php endif;?>
             <?php if($config->systemMode == 'new'):?> 
              <span class='project-type-label label label-outline <?php echo $execution->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
+            <?php endif;?>
             <?php
             $executionLink = $execution->projectModel == 'kanban' ? html::a($this->createLink('execution', 'kanban', 'executionID=' . $execution->id), $execution->name, '', "class='text-ellipsis'") : html::a($this->createLink('execution', 'task', 'execution=' . $execution->id), $execution->name, '', "class='text-ellipsis'");
             echo !empty($execution->children) ? $execution->name :  $executionLink;
@@ -134,7 +128,6 @@
             ?>
             <?php if(!empty($execution->children)):?>
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
-            <?php endif;?>
             <?php endif;?>
           </td>
           <?php if($config->systemMode == 'new' and $this->app->tab == 'execution'):?>
