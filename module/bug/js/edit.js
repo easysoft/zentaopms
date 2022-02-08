@@ -19,6 +19,16 @@ $(function()
             }
         });
     }
+
+    $('#project').change(function()
+    {
+        var projectID = $('#project').val();
+        var link      = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+        $.post(link, function(executionLang)
+        {
+            $('#executionBox').html(executionLang);
+        })
+    })
 });
 
 /**

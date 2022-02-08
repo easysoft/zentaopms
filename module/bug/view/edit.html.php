@@ -194,7 +194,7 @@ if($this->app->tab == 'project')   js::set('objectID', $bug->project);
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-85px'><?php echo $lang->bug->execution;?></th>
+                  <th class='w-85px' id='executionBox'><?php echo $lang->bug->execution;?></th>
                   <td><span id='executionIdBox'><?php echo html::select('execution', $executions, $bug->execution, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?></span></td>
                 </tr>
                 <tr>
