@@ -86,6 +86,7 @@ class sonarqube extends control
         $this->view->measures    = $measures;
         $this->view->qualitygate = $qualitygate;
         $this->view->projectName = $projectName;
+        $this->view->sonarqubeID = $job->sonarqubeServer;
 
         $this->display();
     }
