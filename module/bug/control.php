@@ -1415,8 +1415,7 @@ class bug extends control
             parse_str($extra, $output);
             if(isonlybody())
             {
-                $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban')
+                if($this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
