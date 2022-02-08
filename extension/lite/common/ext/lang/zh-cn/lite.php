@@ -136,8 +136,8 @@ $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|comp
 $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
 $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' => 'db', 'subModule' => 'dev,editor,entry');
-$lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook');
-$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
+$lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook,sms');
+$lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search,ldap', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
 /* Admin menu order. */
 $lang->admin->menuOrder = array();
@@ -153,11 +153,15 @@ $lang->admin->menu->message['subMenu']          = new stdclass();
 $lang->admin->menu->message['subMenu']->message = new stdclass();
 $lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
 $lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
+
+if($config->edition != 'open') $lang->admin->menu->message['subMenu']->sms = array('link' => "短信|sms|index");
+
 $lang->admin->menu->message['subMenu']->browser = array('link' => "$lang->browser|message|browser");
 $lang->admin->menu->message['subMenu']->setting = array('link' => "$lang->settings|message|setting");
 
 $lang->admin->menu->message['menuOrder'][5]  = 'mail';
 $lang->admin->menu->message['menuOrder'][10] = 'webhook';
+$lang->admin->menu->message['menuOrder'][11] = 'sms';
 $lang->admin->menu->message['menuOrder'][15] = 'browser';
 $lang->admin->menu->message['menuOrder'][20] = 'setting';
 
@@ -177,12 +181,18 @@ $lang->admin->menu->dev['menuOrder'][10] = 'db';
 $lang->admin->menu->dev['menuOrder'][15] = 'editor';
 $lang->admin->menu->dev['menuOrder'][20] = 'entry';
 
-$lang->admin->menu->system['subMenu']             = new stdclass();
-$lang->admin->menu->system['subMenu']->data       = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
-$lang->admin->menu->system['subMenu']->safe       = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
-$lang->admin->menu->system['subMenu']->cron       = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
-$lang->admin->menu->system['subMenu']->timezone   = array('link' => "$lang->timezone|custom|timezone");
-$lang->admin->menu->system['subMenu']->buildIndex = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+$lang->admin->menu->system['subMenu']              = new stdclass();
+$lang->admin->menu->system['subMenu']->data        = array('link' => "{$lang->admin->data}|backup|index", 'subModule' => 'action');
+$lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->security|admin|safe", 'alias' => 'checkweak');
+$lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
+$lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
+$lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+
+if($config->edition != 'open')
+{
+    $lang->admin->menu->system['subMenu']->ldap        = array('link' => 'LDAP|ldap|set', 'subModule' => 'ldap');
+    $lang->admin->menu->system['subMenu']->libreoffice = array('link' => 'Office|custom|libreoffice');
+}
 
 $lang->admin->dividerMenu = ',company,message,system,';
 
