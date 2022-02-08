@@ -20,6 +20,9 @@ class gitlabModel extends model
     public $developerAccess  = 30;
     public $maintainerAccess = 40;
 
+    /* Minimum compatible version. */
+    public $minCompatibleVersion = '9.0';
+
     /**
      * Get a gitlab by id.
      *
@@ -2808,5 +2811,19 @@ class gitlabModel extends model
         }
 
         return false;
+    }
+
+    /**
+     * Get gitlab version.
+     *
+     * @param  string $host
+     * @param  string $token
+     * @access public
+     * @return array
+     */
+    public function getVersion($host, $token)
+    {
+        $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
+        return $this->apiGet($host, '/version');
     }
 }
