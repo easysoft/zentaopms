@@ -30,8 +30,9 @@ $lang->sonarqube->editServer    = '修改SonarQube服务器';
 $lang->sonarqube->createSuccess = "创建成功";
 
 $lang->sonarqube->placeholder = new stdclass;
-$lang->sonarqube->placeholder->name = '';
-$lang->sonarqube->placeholder->url  = "请填写SonarQube Server首页的访问地址，如：https://sonarqube.zentao.net。";
+$lang->sonarqube->placeholder->name    = '';
+$lang->sonarqube->placeholder->url     = "请填写SonarQube Server首页的访问地址，如：https://sonarqube.zentao.net。";
+$lang->sonarqube->placeholder->account = "请填写具有Administrator权限的SonarQube用户信息";
 
 $lang->sonarqube->nameRepeatError      = "服务器名称已存在！";
 $lang->sonarqube->urlRepeatError       = "服务器地址已存在！";
@@ -40,6 +41,7 @@ $lang->sonarqube->hostError            = "无效的SonarQube服务地址。";
 $lang->sonarqube->confirmDelete        = '确认删除该SonarQube吗？';
 $lang->sonarqube->confirmDeleteProject = '确认删除该SonarQube项目吗？';
 $lang->sonarqube->noReport             = "暂无报告";
+$lang->sonarqube->notAdminer           = "请填写具有Administrator权限的SonarQube用户信息";
 
 $lang->sonarqube->projectKey          = '项目标识';
 $lang->sonarqube->projectName         = '项目名称';

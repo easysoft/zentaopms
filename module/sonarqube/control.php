@@ -166,7 +166,7 @@ class sonarqube extends control
         $token  = base64_encode("{$sonarqube->account}:{$sonarqube->password}");
         $result = $this->sonarqube->apiValidate($sonarqube->url, $token);
 
-        if(!isset($result->valid) or !$result->valid) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->sonarqube->validError))));
+        if(!empty($result)) return $this->send(array('result' => 'fail', 'message' => $result));
         $this->post->set('token', $token);
     }
 
