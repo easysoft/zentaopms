@@ -30,7 +30,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->sonarqube->account;?></th>
-            <td><?php echo html::input('account', isset($sonarqube->account) ? $sonarqube->account : '', "class='form-control'");?></td>
+            <td><?php echo html::input('account', isset($sonarqube->account) ? $sonarqube->account : '', "class='form-control' placeholder='{$lang->sonarqube->placeholder->account}'");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->sonarqube->password;?></th>

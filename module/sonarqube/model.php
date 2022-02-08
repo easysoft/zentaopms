@@ -42,7 +42,15 @@ class sonarqubeModel extends model
     {
         $url    = rtrim($host, '/') . "/api/authentication/validate";
         $header = 'Authorization: Basic ' . $token;
-        return json_decode(commonModel::http($url, null, array(), $header));
+        $result = json_decode(commonModel::http($url, null, array(), $header));
+        if(!isset($result->valid) or !$result->valid) return array('password' => array($this->lang->sonarqube->validError)); 
+
+        $url     = rtrim($host, '/') . "/api/user_groups/search";
+        $header  = 'Authorization: Basic ' . $token;
+        $adminer = json_decode(commonModel::http($url, null, array(), $header));
+        if(empty($adminer) or isset($adminer->errors)) return array('account' => array($this->lang->sonarqube->notAdminer));
+
+        return array();
     }
 
     /**

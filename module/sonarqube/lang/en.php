@@ -29,8 +29,9 @@ $lang->sonarqube->editServer    = 'Edit SonarQube Server';
 $lang->sonarqube->createSuccess = 'Create success';
 
 $lang->sonarqube->placeholder = new stdclass;
-$lang->sonarqube->placeholder->name = '';
-$lang->sonarqube->placeholder->url  = "Please fill in the access address of the SonarQube Server homepage, as: https://sonarqube.zentao.net.";
+$lang->sonarqube->placeholder->name    = '';
+$lang->sonarqube->placeholder->url     = "Please fill in the access address of the SonarQube Server homepage, as: https://sonarqube.zentao.net.";
+$lang->sonarqube->placeholder->account = "Please fill in the SonarQube user information with Administrator privileges";
 
 $lang->sonarqube->nameRepeatError      = "Server name  already exists!";
 $lang->sonarqube->urlRepeatError       = 'Server address already exists!';
@@ -39,6 +40,7 @@ $lang->sonarqube->hostError            = "Invalid SonarQube service address.";
 $lang->sonarqube->confirmDelete        = 'Do you want to delete this SonarQube server?';
 $lang->sonarqube->confirmDeleteProject = 'Do you want to delete this SonarQube project?';
 $lang->sonarqube->noReport             = "No Reprot";
+$lang->sonarqube->notAdminer           = "Please fill in the SonarQube user information with Administrator privileges";
 
 $lang->sonarqube->projectKey          = 'Project Key';
 $lang->sonarqube->projectName         = 'Project Name';
