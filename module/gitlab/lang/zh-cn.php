@@ -61,7 +61,7 @@ $lang->gitlab->editTagPriv          = '编辑标签保护';
 $lang->gitlab->deleteTagPriv        = '删除标签保护';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "{$lang->gitlab->common}名称";
+$lang->gitlab->name           = "{$lang->gitlab->common}服务器";
 $lang->gitlab->url            = '服务地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';

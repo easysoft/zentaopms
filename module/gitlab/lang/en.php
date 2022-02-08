@@ -61,7 +61,7 @@ $lang->gitlab->editTagPriv          = 'Edit tag protected';
 $lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "GitLab Name";
+$lang->gitlab->name           = "GitLab Server";
 $lang->gitlab->url            = 'GitLab URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
