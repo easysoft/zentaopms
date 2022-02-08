@@ -1,1 +1,1 @@
-<?php include dirname(dirname(dirname(dirname(__FILE__)))) . '/workflowfield/ext/view/setexport.flow.html.hook.php';?>
+<?php include $this->app->getExtensionRoot() . 'biz/workflow/ext/view/' . basename(__FILE__);?>

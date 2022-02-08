@@ -1,3 +1,1 @@
-<script>
-if(typeof(readonlyActions) == 'undefined') readonlyActions = '';
-</script>
+<?php include $this->app->getExtensionRoot() . 'biz/workflow/ext/view/' . basename(__FILE__);?>
