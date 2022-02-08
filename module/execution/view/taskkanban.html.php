@@ -34,7 +34,7 @@
   </div>
   <div class='btn-toolbar pull-right'>
     <?php
-    $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=kanban");
+    $link = $this->createLink('task', 'export', "execution=$executionID&orderBy=$orderBy&type=unclosed");
     if(common::hasPriv('task', 'export')) echo html::a($link, "<i class='icon-export muted'></i> " . $lang->export, '', "class='btn btn-link iframe export' data-width='700'");
     ?>
     <?php if($canBeChanged):?>
