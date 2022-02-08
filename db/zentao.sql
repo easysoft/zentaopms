@@ -677,7 +677,7 @@ CREATE TABLE `zt_kanban` (
   `desc` text NOT NULL,
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
-  `archived` enum('0', '1') NOT NULL DEFAULT '0',
+  `archived` enum('0', '1') NOT NULL DEFAULT '1',
   `performable` enum ('0', '1') NOT NULL DEFAULT '0',
   `status` enum('active','closed') NOT NULL default 'active',
   `order` mediumint(8) NOT NULL DEFAULT '0',

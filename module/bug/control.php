@@ -306,6 +306,8 @@ class bug extends control
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
 
+        $project = new stdclass();
+
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
@@ -637,6 +639,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
         $this->view->projects         = $projects;
+        $this->view->project          = $project;
         $this->view->executions       = $executions;
         $this->view->builds           = $builds;
         $this->view->moduleID         = (int)$moduleID;
@@ -782,6 +785,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
+        $this->view->project          = $this->loadModel('project')->getByID($projectID);
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;

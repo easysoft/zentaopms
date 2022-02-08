@@ -29,7 +29,7 @@ CREATE TABLE `zt_kanban` (
   `desc` text NOT NULL,
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
-  `archived` enum('0', '1') NOT NULL DEFAULT '0',
+  `archived` enum('0', '1') NOT NULL DEFAULT '1',
   `status` enum('active','closed') NOT NULL default 'active',
   `order` smallint(6) NOT NULL DEFAULT '0',
   `createdBy` char(30) NOT NULL,
