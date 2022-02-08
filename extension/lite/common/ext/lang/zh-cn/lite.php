@@ -21,6 +21,7 @@ if($config->edition != 'open')
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
+    $lang->mainNav->workflow = $lang->navIcons['workflow'] . '工作流|workflow|browseFlow|';
 }
 
 /* Menu order. */
@@ -35,6 +36,7 @@ if($config->edition != 'open')
 {
     $lang->mainNav->menuOrder[21] = 'oa';
     $lang->mainNav->menuOrder[25] = 'feedback';
+    $lang->mainNav->menuOrder[60] = 'workflow';
     $lang->dividerMenu = ',oa,admin,';
 }
 else
