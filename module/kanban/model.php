@@ -1947,7 +1947,6 @@ class kanbanModel extends model
 
             return $kanbanID;
         }
-
     }
 
     /**
