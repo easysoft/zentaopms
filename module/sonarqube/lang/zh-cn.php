@@ -14,6 +14,7 @@ $lang->sonarqube->placeholderSearch = '请输入项目名称';
 $lang->sonarqube->execJob           = "执行SonarQube任务";
 $lang->sonarqube->desc              = '描述';
 $lang->sonarqube->reportView        = "SonarQube报告";
+$lang->sonarqube->browseIssue       = "SonarQube问题列表";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "服务器名称";

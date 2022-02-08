@@ -1404,6 +1404,7 @@ $lang->resource->sonarqube->browseProject = 'browseProject';
 $lang->resource->sonarqube->deleteProject = 'deleteProject';
 $lang->resource->sonarqube->execJob       = 'execJob';
 $lang->resource->sonarqube->reportView    = 'reportView';
+$lang->resource->sonarqube->browseIssue   = 'browseIssue';
 
 $lang->sonarqube->methodOrder[5]  = 'browse';
 $lang->sonarqube->methodOrder[10] = 'create';
@@ -1412,6 +1413,8 @@ $lang->sonarqube->methodOrder[20] = 'delete';
 $lang->sonarqube->methodOrder[25] = 'browseProject';
 $lang->sonarqube->methodOrder[35] = 'deleteProject';
 $lang->sonarqube->methodOrder[40] = 'execJob';
+$lang->sonarqube->methodOrder[45] = 'reportView';
+$lang->sonarqube->methodOrder[50] = 'browseIssue';
 
 /* merge request. */
 $lang->resource->mr = new stdclass();

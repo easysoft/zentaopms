@@ -19,7 +19,7 @@
     <div class="page-title">
       <span class='text' title="<?php echo $projectName;?>">
         <h4>
-          <?php echo $projectName;?>
+          <?php common::printLink('sonarqube', 'browseIssue', "", "" . $projectName, '', "target='_parent'");?>
           <?php if(!empty($qualitygate->projectStatus->status) and $qualitygate->projectStatus->status != 'NONE'):?>
           <span class="label label-badge label-<?php echo zget($config->sonarqube->projectStatusClass, $qualitygate->projectStatus->status);?>">
             <?php echo zget($lang->sonarqube->qualitygateList, $qualitygate->projectStatus->status);?>

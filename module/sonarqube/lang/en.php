@@ -14,6 +14,7 @@ $lang->sonarqube->placeholderSearch = 'Project name';
 $lang->sonarqube->execJob           = "Exec SonarQube Job";
 $lang->sonarqube->desc              = 'Description';
 $lang->sonarqube->reportView        = "SonarQube Report";
+$lang->sonarqube->browseIssue       = "SonarQube Issue List";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "Server Name";
