@@ -217,23 +217,6 @@
                   <th><?php echo $lang->story->status;?></th>
                   <td><span class='status-story status-<?php echo $story->status?>'><span class="label label-dot"></span> <?php echo $this->processStatus('story', $story);?></span></td>
                 </tr>
-                <?php if($story->type != 'requirement'):?>
-                <tr class='stage-line'>
-                  <th><?php echo $lang->story->stage;?></th>
-                  <td>
-                  <?php
-                  if($story->stages and $branches)
-                  {
-                      foreach($story->stages as $branch => $stage) if(isset($branches[$branch])) echo $branches[$branch] . ' : ' . $lang->story->stageList[$stage] . '<br />';
-                  }
-                  else
-                  {
-                      echo $lang->story->stageList[$story->stage];
-                  }
-                  ?>
-                  </td>
-                </tr>
-                <?php endif;?>
                 <tr>
                   <th><?php echo $lang->story->pri;?></th>
                   <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri)?></span></td>
