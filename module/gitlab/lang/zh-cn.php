@@ -134,6 +134,7 @@ $lang->gitlab->project->emptyNameError             = "项目名称不能为空";
 $lang->gitlab->project->emptyPathError             = "项目标识串不能为空";
 $lang->gitlab->project->confirmDelete              = '确认删除该GitLab项目吗？';
 $lang->gitlab->project->notbindedError             = '还没绑定GitLab用户，无法修改权限！';
+$lang->gitlab->project->publicTip                  = '当前项目的可见性级别将修改为公开，该项目可以在GitLab中没有任何身份验证的情况下被访问';
 
 $lang->gitlab->user = new stdclass;
 $lang->gitlab->user->id             = "用户ID";
@@ -196,6 +197,7 @@ $lang->gitlab->group->memberName                              = '账号';
 $lang->gitlab->group->memberAccessLevel                       = '角色权限';
 $lang->gitlab->group->memberExpiresAt                         = '过期时间';
 $lang->gitlab->group->repeatError                             = "群组成员不能重复添加";
+$lang->gitlab->group->publicTip                               = '当前群组的可见性级别将修改为公开，该群组可以在GitLab中没有任何身份验证的情况下被访问';
 
 $lang->gitlab->branch = new stdclass();
 $lang->gitlab->branch->name                        = '分支名';
