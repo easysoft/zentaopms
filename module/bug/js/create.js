@@ -161,8 +161,16 @@ $(function()
     $('#project').change(function()
     {
         var projectID = parseInt($(this).val());
+        var link      = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
         projectID ? loadProjectTeamMembers(projectID) : loadExecutionTeamMembers($('#product').val());
+        $.post(link, function(executionLang)
+        {
+            bugExecution = executionLang;
+        })
+
     });
+
+
 });
 
 $(window).unload(function(){

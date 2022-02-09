@@ -277,7 +277,7 @@ function loadProductExecutions(productID, projectID = 0)
     $('#executionIdBox').load(link, function()
     {
         $(this).find('select').chosen();
-        if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' style='border-left-width: 0px;'>" + bugExecution + "</span>");
+        if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).addClass('required');
     });
     loadProjectBuilds(projectID);
