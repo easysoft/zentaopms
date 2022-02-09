@@ -5,7 +5,6 @@ UPDATE `zt_kanban` SET `team` = CONCAT(team, ',', whitelist) where `whitelist` !
 ALTER TABLE `zt_kanban` ADD `object` varchar(255) NOT NULL AFTER `displayCards`;
 ALTER TABLE `zt_kanban` ADD `performable` enum ('0', '1') NOT NULL DEFAULT '0' AFTER `archived`;
 ALTER TABLE `zt_kanban` ADD `fluidBoard` enum('0','1') NOT NULL DEFAULT '0' AFTER `displayCards`;
-ALTER TABLE `zt_kanban` MODIFY COLUMN `archived` enum('0,1') NOT NULL DEFAULT '1';
 ALTER TABLE `zt_kanbancard` ADD `status` varchar(30) NOT NULL DEFAULT 'doing' AFTER `name`;
 
 ALTER TABLE `zt_kanbancard` ADD `fromID` mediumint(8) unsigned NOT NULL AFTER `group`;
