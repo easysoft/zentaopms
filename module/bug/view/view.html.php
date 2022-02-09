@@ -281,7 +281,7 @@
                 </tr>
                 <?php endif;?>
                 <tr>
-                  <th class='w-70px'><?php echo $lang->bug->execution;?></th>
+                  <th class='w-70px'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
                   <td><?php if($bug->execution) echo html::a($this->createLink('execution', 'browse', "executionID=$bug->execution"), $bug->executionName);?></td>
                 </tr>
                 <tr class='nofixed'>

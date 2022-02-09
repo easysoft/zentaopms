@@ -856,6 +856,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
+        $this->view->project     = $this->loadModel('project')->getByID($bug->project);
         $this->view->productID   = $productID;
         $this->view->branches    = $branches;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
@@ -2241,5 +2242,20 @@ class bug extends control
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
         foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
         die(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
+    }
+
+
+    /**
+     * Ajax get execution lang.
+     *
+     * @param  int  $projectID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetExecutionLang($projectID)
+    {
+        $project = $this->loadModel('project')->getByID($projectID);
+        if($project->model == 'kanban') return print($this->lang->bug->kanban);
+        if($project->model != 'kanban') return print($this->lang->bug->execution);
     }
 }
