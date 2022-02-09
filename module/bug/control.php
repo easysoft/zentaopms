@@ -815,10 +815,6 @@ class bug extends control
         $bug   = $this->bug->getById($bugID, true);
         if(!$bug) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
-        $projectID = $bug->project;
-        $project   = new stdclass();
-        $project   = $this->loadModel('project')->getByID($projectID);
-
         $this->session->set('storyList', '', 'product');
         $this->session->set('projectList', $this->app->getURI(true) . "#app={$this->app->tab}", 'project');
         $this->bug->checkBugExecutionPriv($bug);
@@ -860,7 +856,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
-        $this->view->project     = $project;
+        $this->view->project     = $this->loadModel('project')->getByID($bug->project);
         $this->view->productID   = $productID;
         $this->view->branches    = $branches;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
