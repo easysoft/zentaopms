@@ -1065,6 +1065,7 @@ class reportModel extends model
             ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('execution')->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('id', 'status');
 
         $statusOverview = array();
