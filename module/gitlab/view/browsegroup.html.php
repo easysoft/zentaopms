@@ -51,7 +51,7 @@
             <?php echo html::avatar($groupName[0], 20); ?>
             <span><?php echo $gitlabGroup->name;?></span>
           </td>
-          <td class='text' title='<?php echo $gitlabGroup->path;?>'><?php echo $gitlabGroup->path;?></td>
+          <td class='text' title='<?php echo $gitlabGroup->path;?>'><?php echo html::a($gitlab->url . '/' . $gitlabGroup->path, $gitlabGroup->path, '_target');?></td>
           <td class='text' title='<?php echo substr($gitlabGroup->created_at, 0, 10);?>'><?php echo substr($gitlabGroup->created_at, 0, 10);?></td>
           <td class='c-actions text-left'>
             <?php

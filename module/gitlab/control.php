@@ -321,6 +321,7 @@ class gitlab extends control
 
         $this->view->title            = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
         $this->view->gitlabID         = $gitlabID;
+        $this->view->gitlab           = $this->gitlab->getByID($gitlabID);
         $this->view->gitlabGroupList  = $groups;
         $this->view->adminGroupIDList = $adminGroupIDList;
         $this->view->orderBy          = $orderBy;
