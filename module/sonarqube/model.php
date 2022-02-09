@@ -123,10 +123,10 @@ class sonarqubeModel extends model
     /**
      * Create a sonarqube project by api.
      *
-     * @param mixed $sonarqubeID
-     * @param mixed $project
+     * @param int    $sonarqubeID
+     * @param object $project
      * @access public
-     * @return void
+     * @return object
      */
     public function apiCreateProject($sonarqubeID, $project)
     {
