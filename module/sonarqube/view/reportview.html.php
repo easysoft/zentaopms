@@ -53,5 +53,5 @@
       </tr>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
-<?php endif;?>
