@@ -132,7 +132,11 @@ if($viewType == 'doc' or $viewType == 'api')
                     <div class='table-col col-module'><?php echo html::select('allProduct', $allProduct, '', "class='form-control chosen' onchange=\"syncProductOrProject(this,'product')\"");?></div>
                     <div class='table-col col-shorts'><?php echo html::select('productModule', $productModules, '', "class='form-control chosen'");?></div>
                     <div class='table-col col-actions'>
-                      <?php echo html::commonButton('', "id='copyModule' onclick='syncModule($currentProduct, \"story\")'", 'btn btn-link btn-icon', 'icon icon-copy');?>
+                      <?php
+                        $string = "id='copyModule' onclick='syncModule($currentProduct, \"story\")'";
+                        echo $string;
+                        echo html::commonButton('', $string, 'btn btn-link btn-icon', 'icon icon-copy');
+                      ?>
                     </div>
                   </div>
                   <?php endif;?>
