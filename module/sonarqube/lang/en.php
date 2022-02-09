@@ -30,9 +30,11 @@ $lang->sonarqube->editServer    = 'Edit SonarQube Server';
 $lang->sonarqube->createSuccess = 'Create success';
 
 $lang->sonarqube->placeholder = new stdclass;
-$lang->sonarqube->placeholder->name    = '';
-$lang->sonarqube->placeholder->url     = "Please fill in the access address of the SonarQube Server homepage, as: https://sonarqube.zentao.net.";
-$lang->sonarqube->placeholder->account = "Please fill in the SonarQube user information with Administrator privileges";
+$lang->sonarqube->placeholder->name        = '';
+$lang->sonarqube->placeholder->url         = "Please fill in the access address of the SonarQube Server homepage, as: https://sonarqube.zentao.net.";
+$lang->sonarqube->placeholder->account     = "Please fill in the SonarQube user information with Administrator privileges";
+$lang->sonarqube->placeholder->projectName = 'Up to 255 characters.';
+$lang->sonarqube->placeholder->projectKey  = "It may contain up to 400 characters. Allowed characters are alphanumeric, '-' (dash), '_' (underscore), '.' (period) and ':' (colon), with at least one non-digit.";
 
 $lang->sonarqube->nameRepeatError      = "Server name  already exists!";
 $lang->sonarqube->urlRepeatError       = 'Server address already exists!';
