@@ -2816,7 +2816,7 @@ class gitlabModel extends model
      * @param  string $host
      * @param  string $token
      * @access public
-     * @return array
+     * @return object
      */
     public function getVersion($host, $token)
     {
