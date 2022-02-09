@@ -105,26 +105,6 @@
                   <?php echo html::hidden('status', $story->status);?>
                 </td>
               </tr>
-              <?php if($story->status != 'draft' and $story->type == 'story'):?>
-              <tr>
-                <th><?php echo $lang->story->stage;?></th>
-                <td>
-                <?php
-                if($story->stages and $branchTagOption)
-                {
-                    foreach($story->stages as $branch => $stage)
-                    {
-                        if(isset($branchTagOption[$branch])) echo '<p>' . $branchTagOption[$branch] . html::select("stages[$branch]", $lang->story->stageList, $stage, "class='form-control chosen'") . '</p>';
-                    }
-                }
-                else
-                {
-                    echo html::select('stage', $lang->story->stageList, $story->stage, "class='form-control chosen'");
-                }
-                ?>
-                </td>
-              </tr>
-              <?php endif;?>
               <tr>
                 <th><?php echo $lang->story->pri;?></th>
                 <td><?php echo html::select('pri', $lang->story->priList, $story->pri, "class='form-control chosen'");?></td>
@@ -188,49 +168,6 @@
 
           <?php $this->printExtendFields($story, 'div', 'position=right');?>
 
-          <div class='detail'>
-            <div class='detail-title'><?php echo $lang->story->legendMisc;?></div>
-            <table class='table table-form'>
-              <?php if($story->status == 'closed'):?>
-              <tr id='duplicateStoryBox'>
-                <th class='w-70px'><?php echo $lang->story->duplicateStory;?></th>
-                <td><?php echo html::input('duplicateStory', $story->duplicateStory, "class='form-control'");?></td>
-              </tr>
-              <?php endif;?>
-              <?php if($story->status == 'closed'):?>
-              <tr class='text-top'>
-                <th><?php echo $lang->story->childStories;?></th>
-                <td>
-                  <?php echo html::a($this->createLink('story', 'linkStory', "storyID=$story->id&type=childStories", '', true), $lang->story->linkStory, '', "data-toggle='modal' data-type='iframe' data-width='95%'");?>
-                </td>
-              </tr>
-              <tr>
-                <th></th>
-                <td>
-                  <ul class='list-unstyled'>
-                    <?php
-                    if($story->childStories)
-                    {
-                        $childStories = explode(',', $story->childStories);
-                        foreach($childStories as $childStoryID)
-                        {
-                            if(isset($story->extraStories[$childStoryID]))
-                            {
-                                echo "<li><div class='checkbox-primary'>";
-                                echo "<input type='checkbox' checked='checked' name='childStories[]' value=$childStoryID />";
-                                echo "<label>#{$childStoryID} {$story->extraStories[$childStoryID]}</label>";
-                                echo '</div></li>';
-                            }
-                        }
-                    }
-                    ?>
-                    <span id='childStoriesBox'></span>
-                  </ul>
-                </td>
-              </tr>
-              <?php endif;?>
-           </table>
-          </div>
         </div>
       </div>
     </div>
