@@ -1,6 +1,7 @@
 $(function()
 {
-    $("#name").bind("input propertychange", function(event){
+    $("#name").bind("input propertychange", function(event)
+    {
         $("#path").val($(this).val().toLowerCase());
     });
 
