@@ -114,3 +114,39 @@ $lang->convert->issue = new stdclass();
 $lang->convert->issue->redmine = 'Redmine';
 $lang->convert->issue->zentao  = '禅道';
 $lang->convert->issue->goto    = '转换为';
+
+$lang->convert->jira = new stdclass();
+$lang->convert->jira->method         = '选择导入方式';
+$lang->convert->jira->next           = '下一步';
+$lang->convert->jira->importFromDB   = '从数据库导入';
+$lang->convert->jira->importFromFile = '从文件导入';
+$lang->convert->jira->mapJira2Zentao = '设置对应关系';
+$lang->convert->jira->dbNameNotice   = '请输入Jira数据库名字';
+$lang->convert->jira->importNotice   = '注意：导入数据有风险！请务必确保如下操作步骤依次完成，再进行合并。';
+$lang->convert->jira->dbDesc         = '<p>如果您的Jira使用Mysql数据库, 请选择此方式</p>';
+$lang->convert->jira->fileDesc       = '<p>如果您的Jira使用非Mysql数据库, 请选择此方式</p>';
+$lang->convert->jira->jiraObject     = 'Jira Issues';
+$lang->convert->jira->zentaoObject   = '禅道对象';
+$lang->convert->jira->jiraLinkType   = 'Jira 关联关系';
+$lang->convert->jira->zentaoLinkType = '禅道关联关系';
+
+$lang->convert->jira->dbNameEmpty = 'Jira数据库名字不能为空！';
+$lang->convert->jira->invalidDB   = '无效的数据库名！';
+
+$lang->convert->jira->zentaoObjectList['task']        = '任务';
+$lang->convert->jira->zentaoObjectList['requirement'] = '用户需求';
+$lang->convert->jira->zentaoObjectList['story']       = '软件需求';
+$lang->convert->jira->zentaoObjectList['bug']         = 'Bug';
+
+$lang->convert->jira->zentaoLinkTypeList['subTaskLink']  = '父-子任务';
+$lang->convert->jira->zentaoLinkTypeList['subStoryLink'] = '父-子需求';
+$lang->convert->jira->zentaoLinkTypeList['duplicate']    = '重复对象';
+$lang->convert->jira->zentaoLinkTypeList['relates']      = '互相关联';
+
+$lang->convert->jira->importSteps['db'][1]   = '备份禅道数据库，备份Jira数据库。';
+$lang->convert->jira->importSteps['db'][2]   = '将Jira数据库导入到禅道使用的Mysql中，名字和禅道数据库区别开来。';
+$lang->convert->jira->importSteps['db'][3]   = "将Jira附件目录<strong class='text-red'> attachment</strong> 放到 <strong class='text-red'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
+$lang->convert->jira->importSteps['db'][4]   = "上述步骤完成后，请输入Jira数据库名字进行下一步。";
+$lang->convert->jira->importSteps['file'][1] = '备份禅道数据库，备份Jira数据库。';
+$lang->convert->jira->importSteps['file'][2] = '将Jira数据库导入到禅道使用的Mysql中，名字和禅道数据库区别开来。';
+$lang->convert->jira->importSteps['file'][3] = "将Jira附件目录放到 <strong class='text-red'>%s</strong> 下。";

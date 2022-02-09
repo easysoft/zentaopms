@@ -19,15 +19,15 @@ class convertModel extends model
      * @access public
      * @return void
      */
-    public function connectDB()
+    public function connectDB($dbName = '')
     {
-        $dsn = "mysql:host={$this->post->dbHost}; port={$this->post->dbPort};dbname={$this->post->dbName}";
+        $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port};dbname={$dbName}";
         try 
         {
-            $dbh = new PDO($dsn, $this->post->dbUser, $this->post->dbPassword);
+            $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
             $dbh->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-            $dbh->exec("SET NAMES {$this->post->dbCharset}");
+            $dbh->exec("SET NAMES {$this->config->db->encoding}");
             $this->sourceDBH = $dbh;
             return $dbh;
         }
@@ -43,9 +43,9 @@ class convertModel extends model
      * @access public
      * @return bool
      */
-    public function dbExists()
+    public function dbExists($dbName = '')
     {
-        $sql = "SHOW DATABASES like '{$this->post->db->name}'";
+        $sql = "SHOW DATABASES like '{$dbName}'";
         return $this->dbh->query($sql)->fetch();
     }
 
@@ -92,5 +92,15 @@ class convertModel extends model
             $state[$value] = (int)$this->dao->select('MAX(id) AS id')->from($value)->fetch('id');
         }
         $this->session->set('state', $state);
+    }
+
+    public function getIssueTypePairs()
+    {
+        return $this->dao->dbh($this->sourceDBH)->select('ID,pname')->from(JIRA_ISSUETYPE)->fetchPairs();
+    }
+
+    public function getLinkTypePairs()
+    {
+        return $this->dao->dbh($this->sourceDBH)->select('ID,LINKNAME')->from(JIRA_ISSUELINKTYPE)->fetchPairs();
     }
 }

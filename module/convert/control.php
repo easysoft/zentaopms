@@ -247,4 +247,60 @@ class convert extends control
         $this->view->info    = redmineConvertModel::$info;
         $this->display();
     }
+
+    public function jira()
+    {
+        $this->view->title = $this->lang->convert->jira->method;
+        $this->display();
+    }
+
+    public function importNotice($type = 'db')
+    {
+        if($_POST)
+        {
+            $dbName = $this->post->dbName;
+            if(!$dbName) 
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->dbNameEmpty;
+                return print($this->send($response));
+            }
+
+            if(!$this->convert->dbExists($dbName))
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->invalidDB;
+                return print($this->send($response));
+            }
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'mapJira2Zentao', "type=db&dbName={$this->post->dbName}");
+            return print($this->send($response));
+        }
+
+        $this->view->title = $this->lang->convert->jira->method;
+        $this->view->type  = $type;
+        $this->display();
+    }
+
+    public function mapJira2Zentao($type = 'db', $dbName = '')
+    {
+        if($_POST)
+        {
+            a($_POST);die;
+        }
+
+        if($type == 'db')
+        {
+            $this->convert->connectDB($dbName);
+            $issueTypePairs = $this->convert->getIssueTypePairs();
+            $linkTypePairs  = $this->convert->getLinkTypePairs();
+        }
+        
+        $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
+        $this->view->issueTypePairs = $issueTypePairs;
+        $this->view->linkTypePairs  = $linkTypePairs;
+        $this->display();
+    }
 }

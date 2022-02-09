@@ -280,6 +280,8 @@ $lang->admin->data       = 'Data';
 $lang->admin->cron       = 'Cron';
 $lang->admin->buildIndex = 'Full Text Search';
 
+$lang->convert->importJira = 'Import Jira';
+
 $lang->storyConcept = 'Story Concpet';
 
 $lang->searchTips = '';
