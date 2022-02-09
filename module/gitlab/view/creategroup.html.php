@@ -11,6 +11,8 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php $publicTip = "<span id='publicTip' class='text-danger'>" . $lang->gitlab->group->publicTip . '</span>';?>
+<?php js::set('publicTip', $publicTip);?>
 <div id='mainContent' class='main-row'>
   <div class='main-col main-content'>
     <div class='center-block'>
@@ -40,10 +42,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->group->visibility;?></th>
-            <td colspan='2'>
-              <?php echo nl2br(html::radio('visibility', $lang->gitlab->group->visibilityList, 'private', "", 'block'));?>
-              <span id='publicTip' class='text-danger hidden'><?php echo $lang->gitlab->group->publicTip;?></span>
-            </td>
+            <td colspan='2'><?php echo nl2br(html::radio('visibility', $lang->gitlab->group->visibilityList, 'private', "", 'block'));?></td>
           </tr>
           <tr>
             <th><?php echo $lang->gitlab->group->permission;?></th>
