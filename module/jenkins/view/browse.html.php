@@ -43,7 +43,7 @@
         <tr>
           <td class='text-center'><?php echo $id; ?></td>
           <td class='text' title='<?php echo $jenkins->name; ?>'><?php echo $jenkins->name; ?></td>
-          <td class='text' title='<?php echo $jenkins->url; ?>'><?php echo $jenkins->url; ?></td>
+          <td class='text' title='<?php echo $jenkins->url; ?>'><?php echo html::a($jenkins->url, $jenkins->url, '_blank'); ?></td>
           <td class='c-actions text-left'>
             <?php
             common::printIcon('jenkins', 'edit', "jenkinsID=$id", '', 'list',  'edit');
