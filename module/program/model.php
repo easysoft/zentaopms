@@ -225,7 +225,8 @@ class programModel extends model
             ->andWhere('deleted')->eq(0)
             ->fetchGroup('execution', 'id');
 
-        $hours = $this->computeProgress($tasks);
+        $hours        = $this->computeProgress($tasks);
+        $projectHours = $this->getProgressList();
 
         /* Group data by product. */
         foreach($productGroup as $programID => $products)
@@ -249,7 +250,7 @@ class programModel extends model
                     }
 
                     $project->execution = $execution;
-                    $project->hours     = zget($hours, $project->id, array());
+                    $project->hours['progress']   = zget($projectHours, $project->id, array());
                     $product->projects[$status][] = $project;
                 }
             }
