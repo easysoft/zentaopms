@@ -252,6 +252,10 @@ class gitlab extends control
 
         if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
         if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+
+        /* Verify version compatibility. */
+        $result = $this->gitlab->getVersion($gitlabURL, $token);
+        if(empty($result) or !isset($result->version) or (version_compare($result->version, $this->config->gitlab->minCompatibleVersion, '<'))) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->notCompatible))));
     }
 
     /**

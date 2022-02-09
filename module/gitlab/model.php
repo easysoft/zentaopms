@@ -2809,4 +2809,18 @@ class gitlabModel extends model
 
         return false;
     }
+
+    /**
+     * Get gitlab version.
+     *
+     * @param  string $host
+     * @param  string $token
+     * @access public
+     * @return object
+     */
+    public function getVersion($host, $token)
+    {
+        $host = rtrim($host, '/') . "/api/v4%s?private_token=$token";
+        return $this->apiGet($host, '/version');
+    }
 }

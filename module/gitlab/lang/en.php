@@ -61,7 +61,7 @@ $lang->gitlab->editTagPriv          = 'Edit tag protected';
 $lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "GitLab Name";
+$lang->gitlab->name           = "GitLab Server";
 $lang->gitlab->url            = 'GitLab URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
@@ -75,6 +75,7 @@ $lang->gitlab->emptyError    = " cannot be empty";
 $lang->gitlab->createSuccess = "Create success";
 $lang->gitlab->mustBindUser  = 'You have not registered the GitLab account, please contact the administrator to register.';
 $lang->gitlab->noAccess      = 'Permission denied';
+$lang->gitlab->notCompatible = 'The current GitLab version is not compatible with ZenTao, please upgrade the GitLab version and try again';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';

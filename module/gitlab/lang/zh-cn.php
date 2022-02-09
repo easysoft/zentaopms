@@ -61,7 +61,7 @@ $lang->gitlab->editTagPriv          = '编辑标签保护';
 $lang->gitlab->deleteTagPriv        = '删除标签保护';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "{$lang->gitlab->common}名称";
+$lang->gitlab->name           = "{$lang->gitlab->common}服务器";
 $lang->gitlab->url            = '服务地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
@@ -75,6 +75,7 @@ $lang->gitlab->emptyError    = "不能为空";
 $lang->gitlab->createSuccess = "创建成功";
 $lang->gitlab->mustBindUser  = '您还未绑定GitLab用户，请联系管理员进行绑定';
 $lang->gitlab->noAccess      = '权限不足';
+$lang->gitlab->notCompatible = '当前GitLab版本与禅道不兼容，请升级GitLab版本后重试';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
