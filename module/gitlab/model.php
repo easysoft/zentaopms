@@ -612,7 +612,7 @@ class gitlabModel extends model
         }
         elseif(!empty($minRole))
         {
-            $url .= "&min_access_level=$this->config->gitlab->accessLevel[$minRole]";
+            $url .= '&min_access_level=' . $this->config->gitlab->accessLevel[$minRole];
         }
 
         $order = 'id';
