@@ -1299,9 +1299,7 @@ class storyModel extends model
         $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
         if($isSuperReviewer === false)
         {
-            $list       = $this->getById($storyID);
-            $version    = $list->version;
-            $reviewers  = $this->getReviewerPairs($storyID, $version);
+            $reviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
             if(count($reviewers) > 1) $skipFields = 'closedReason';
         }
 
