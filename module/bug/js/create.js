@@ -167,10 +167,7 @@ $(function()
         {
             bugExecution = executionLang;
         })
-
     });
-
-
 });
 
 $(window).unload(function(){
