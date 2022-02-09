@@ -121,3 +121,6 @@ $config->gitlab->accessLevel['reporter']   = 20;
 $config->gitlab->accessLevel['developer']  = 30;
 $config->gitlab->accessLevel['maintainer'] = 40;
 $config->gitlab->accessLevel['owner']      = 50;
+
+/* Minimum compatible version. */
+$config->gitlab->minCompatibleVersion = '9.0';

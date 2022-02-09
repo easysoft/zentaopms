@@ -255,7 +255,7 @@ class gitlab extends control
 
         /* Verify version compatibility. */
         $result = $this->gitlab->getVersion($gitlabURL, $token);
-        if(empty($result) or !isset($result->version) or (version_compare($result->version, $this->gitlab->minCompatibleVersion, '<'))) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->notCompatible))));
+        if(empty($result) or !isset($result->version) or (version_compare($result->version, $this->config->gitlab->minCompatibleVersion, '<'))) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->notCompatible))));
     }
 
     /**

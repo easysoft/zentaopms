@@ -20,9 +20,6 @@ class gitlabModel extends model
     public $developerAccess  = 30;
     public $maintainerAccess = 40;
 
-    /* Minimum compatible version. */
-    public $minCompatibleVersion = '9.0';
-
     /**
      * Get a gitlab by id.
      *
