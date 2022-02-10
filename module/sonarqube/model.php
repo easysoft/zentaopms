@@ -89,6 +89,35 @@ class sonarqubeModel extends model
         return json_decode(commonModel::http($url, null, array(), $header));
     }
 
+     /**
+     * Get issues of one sonarqube.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return array
+     */
+    public function apiGetIssues($sonarqubeID, $projectKey = '')
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return array();
+
+        $url  = sprintf($apiRoot, "issues/search");
+        $url .= "?ps=500";
+        if($projectKey) $url .= "&componentKeys={$projectKey}";
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $result = json_decode(commonModel::http($url . "&p={$page}", null, array(), $header));
+            if(!isset($result->issues)) break;
+            if(!empty($result->issues)) $allResults = array_merge($allResults, $result->issues);
+            if(count($result->issues) < 500) break;
+        }
+
+        return $allResults;
+    }
+
     /**
      * Get projects of one sonarqube.
      *
@@ -110,8 +139,7 @@ class sonarqubeModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $url .= "&p={$page}";
-            $result = json_decode(commonModel::http($url, null, array(), $header));
+            $result = json_decode(commonModel::http($url . "&p={$page}", null, array(), $header));
             if(!isset($result->components)) break;
             if(!empty($result->components)) $allResults = array_merge($allResults, $result->components);
             if(count($result->components) < 500) break;
@@ -168,7 +196,10 @@ class sonarqubeModel extends model
     {
         $project = fixer::input('post')->get();
 
-        $this->dao->insert('sonarqube')->data($project)->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty');
+        $this->dao->insert('sonarqube')->data($project)
+            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty')
+            ->check('projectName', 'length', 255, 1)
+            ->check('projectKey', 'length', 400, 1);
         if(dao::isError()) return false;
 
         $response = $this->apiCreateProject($sonarqubeID, $project);
@@ -234,5 +265,21 @@ class sonarqubeModel extends model
             if(isset($errorMessage)) break;
         }
         return isset($errorMessage) ? $errorMessage : $message;
+    }
+
+    /**
+     * Get cache file.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return string
+     */
+    public function getCacheFile($sonarqubeID, $projectKey)
+    {
+        $cachePath = $this->app->getCacheRoot() . '/' . 'sonarqube';
+        if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
+        if(!is_writable($cachePath)) return false;
+        return $cachePath . '/' . $sonarqubeID . '-' . md5($projectKey);
     }
 }

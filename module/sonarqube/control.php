@@ -330,4 +330,83 @@ class sonarqube extends control
         $this->loadModel('action')->create('sonarqubeproject', 0, 'deleted', '', $projectKey);
         return print(js::reload('parent'));
     }
+
+    /**
+     * Browse sonarqube issue.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @param  string $orderBy
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
+     * @access public
+     * @return void
+     */
+    public function browseIssue($sonarqubeID, $projectKey = '', $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    {
+        $this->app->loadClass('pager', $static = true);
+        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+
+        $cacheFile = $this->sonarqube->getCacheFile($sonarqubeID, $projectKey);
+        if(!$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->sonarqube->cacheTime)
+        {
+            $sonarqubeIssueList = $this->sonarqube->apiGetIssues($sonarqubeID, $projectKey);
+
+            if($cacheFile)
+            {
+                if(!file_exists($cacheFile . '.lock'))
+                {
+                    touch($cacheFile . '.lock');
+                    file_put_contents($cacheFile, serialize($sonarqubeIssueList));
+                    unlink($cacheFile . '.lock');
+                }
+            }
+        }
+        else
+        {
+            $sonarqubeIssueList = unserialize(file_get_contents($cacheFile));
+        }
+
+        foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
+        {
+            if(!isset($sonarqubeIssue->line)) $sonarqubeIssue->line = '';
+            if(!isset($sonarqubeIssue->effort)) $sonarqubeIssue->effort = '';
+            $sonarqubeIssue->message = htmlspecialchars($sonarqubeIssue->message);
+
+            list($project, $file) = explode(':', $sonarqubeIssue->component);
+            $sonarqubeIssue->file = $file;
+        }
+
+        /* Data search. */
+        if($keyword)
+        {
+            foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
+            {
+                if(strpos($sonarqubeIssue->message, $keyword) === false and strpos($sonarqubeIssue->file, $keyword) === false) unset($sonarqubeIssueList[$key]);
+            }
+            $sonarqubeIssueList = array_values($sonarqubeIssueList);
+        }
+
+         /* Data sort. */
+        list($order, $sort) = explode('_', $orderBy);
+        $orderList = array();
+        foreach($sonarqubeIssueList as $sonarqubeIssue) $orderList[] = $sonarqubeIssue->$order;
+        array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeIssueList);
+
+        /* Pager. */
+        $this->app->loadClass('pager', $static = true);
+        $recTotal = count($sonarqubeIssueList);
+        $pager    = new pager($recTotal, $recPerPage, $pageID);
+        $sonarqubeIssueList = array_chunk($sonarqubeIssueList, $pager->recPerPage);
+
+        $this->view->projectKey         = $projectKey;
+        $this->view->keyword            = $keyword;
+        $this->view->pager              = $pager;
+        $this->view->title              = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseIssue;
+        $this->view->sonarqubeID        = $sonarqubeID;
+        $this->view->sonarqubeIssueList = (empty($sonarqubeIssueList) or empty($sonarqubeIssueList[$pageID - 1])) ? array() : $sonarqubeIssueList[$pageID - 1];
+        $this->view->orderBy            = $orderBy;
+        $this->display();
+    }
 }

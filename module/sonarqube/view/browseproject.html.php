@@ -27,7 +27,7 @@
     </div>
   </div>
   <div class="btn-toolbar pull-right">
-    <?php if(common::hasPriv('sonarqube', 'createProject')) common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
+    <?php common::printLink('sonarqube', 'createProject', "sonarqubeID=$sonarqubeID", "<i class='icon icon-plus'></i> " . $lang->sonarqube->createProject, '', "class='btn btn-primary'");?>
   </div>
 </div>
 <?php if(empty($sonarqubeProjectList)):?>
