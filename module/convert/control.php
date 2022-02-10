@@ -314,7 +314,7 @@ class convert extends control
 
         if($_POST)
         {
-            $this->session->set('linkType', $_POST);
+            $this->session->set('jiraRelation', $_POST);
 
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
@@ -391,7 +391,7 @@ class convert extends control
      * @access public
      * @return void
      */
-    public function importJira($method = 'db', $type = 'user', $lastID = 0)
+    public function importJira($method = 'db', $type = 'user', $lastID = 0, $createTable = false)
     {
         set_time_limit(0);
         
@@ -399,7 +399,7 @@ class convert extends control
         {
             if(helper::isAjaxRequest())
             {   
-                $result = $this->convert->importJiraFromDB($type, $lastID);
+                $result = $this->convert->importJiraFromDB($type, $lastID, $createTable);
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 if(isset($result['finished']) and $result['finished'])
                 {   
@@ -423,8 +423,9 @@ class convert extends control
             //$this->convert->importJiraFromFile();
         }
 
-        $this->view->type  = $type;
-        $this->view->title = $this->lang->convert->jira->importJira;
+        $this->view->type   = $type;
+        $this->view->method = $method;
+        $this->view->title  = $this->lang->convert->jira->importJira;
         $this->display();
     }
 }

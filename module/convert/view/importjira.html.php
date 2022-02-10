@@ -19,7 +19,7 @@
     <div class='form-group'>
       <ul id='resultBox'></ul>
     </div>
-    <div class='from-group'><?php echo html::a(inlink('importJira', "type=$type"), $lang->convert->jira->start, '', "class='btn btn-primary' id='execButton'");?></div>
+    <div class='from-group'><?php echo html::a(inlink('importJira', "method=db&type=user&lastID=0&createTable=true"), $lang->convert->jira->start, '', "class='btn btn-primary' id='execButton'");?></div>
   </div>
 </div>
 </div>

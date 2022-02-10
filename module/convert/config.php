@@ -11,3 +11,4 @@ define('JIRA_RESOLUTION', '`resolution`');
 define('JIRA_PROJECTVERSION', '`projectversion`');
 define('JIRA_NODEASSOCIATION', '`nodeassociation`');
 define('JIRA_FILEATTACHMENT', '`fileattachment`');
+define('JIRA_TMPRELATION', '`jiratmprelation`');
