@@ -1,7 +1,8 @@
 <?php
-define('JIRA_USER',    'app_user`');
+define('JIRA_USER', 'app_user`');
+define('JIRA_USERINFO', 'cwd_user`');
 define('JIRA_PROJECT', 'project`');
-define('JIRA_ISSUE',   'jiraissue`');
+define('JIRA_ISSUE', 'jiraissue`');
 define('JIRA_ISSUETYPE', 'issuetype');
 define('JIRA_ISSUELINK', 'issuelink');
 define('JIRA_ISSUELINKTYPE', 'issuelinktype');

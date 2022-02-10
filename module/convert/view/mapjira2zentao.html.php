@@ -16,7 +16,7 @@
       <?php echo $lang->convert->jira->mapJira2Zentao;?>
     </h2>
   </div>
-  <form class='main-form' method='post' target='hiddenwin'>
+  <form class='main-form form-ajax' method='post'>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
@@ -27,8 +27,8 @@
       <tbody>
         <?php foreach($issueTypePairs as $id => $name):?>
         <tr>
-          <td><?php echo html::select('jiraObjects[]', $issueTypePairs, $id, "class='form-control chosen'");?></td>
-          <td><?php echo html::select('zentaoObjects[]', $lang->convert->jira->zentaoObjectList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('jiraObject[]', $issueTypePairs, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('zentaoObject[]', $lang->convert->jira->zentaoObjectList, '', "class='form-control chosen'");?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
@@ -44,14 +44,56 @@
       <tbody>
         <?php foreach($linkTypePairs as $id => $name):?>
         <tr>
-          <td><?php echo html::select('jiraObjects[]', $linkTypePairs, $id, "class='form-control chosen'");?></td>
-          <td><?php echo html::select('zentaoObjects[]', $lang->convert->jira->zentaoLinkTypeList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('jiraLinkType[]', $linkTypePairs, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('zentaoLinkType[]', $lang->convert->jira->zentaoLinkTypeList, '', "class='form-control chosen'");?></td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+    <hr />
+    <table class='table table-form'>
+      <thead>
+        <tr class='text-center'>
+          <th><?php echo $lang->convert->jira->jiraResolution;?></th>
+          <th><?php echo $lang->convert->jira->zentaoResolution;?></th>
+          <th><?php echo $lang->convert->jira->zentaoReason;?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($resolutions as $id => $name):?>
+        <tr>
+          <td><?php echo html::select('jiraResolution[]', $resolutions, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('zentaoResolution[]', $lang->bug->resolutionList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('zentaoReason[]', $lang->story->reasonList, '', "class='form-control chosen'");?></td>
+        </tr>
+        <?php endforeach;?>
+      </tbody>
+    </table>
+    <hr />
+    <table class='table table-form'>
+      <thead>
+        <tr class='text-center'>
+          <th><?php echo $lang->convert->jira->jiraStatus;?></th>
+          <th><?php echo $lang->convert->jira->storyStatus;?></th>
+          <th><?php echo $lang->convert->jira->storyStage;?></th>
+          <th><?php echo $lang->convert->jira->taskStatus;?></th>
+          <th><?php echo $lang->convert->jira->bugStatus;?></th>
+        </tr>
+      </thead>
+      <tbody>
+        <?php foreach($statusList as $id => $name):?>
+        <tr>
+          <td><?php echo html::select('jiraStatus[]', $statusList, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('storyStatus[]', $lang->story->statusList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('storyStage[]', $lang->story->stageList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('taskStatus[]', $lang->task->statusList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('bugStatus[]', $lang->bug->statusList, '', "class='form-control chosen'");?></td>
         </tr>
         <?php endforeach;?>
       </tbody>
       <tfoot>
         <tr>
-          <td colspan="2" class="text-center form-actions"><?php echo html::submitButton();?></td>
+          <td colspan="5" class="text-center form-actions"><?php echo html::submitButton($lang->convert->jira->next);?></td>
         </tr>
       </tfoot>
     </table>

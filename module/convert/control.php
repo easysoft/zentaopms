@@ -286,21 +286,101 @@ class convert extends control
 
     public function mapJira2Zentao($type = 'db', $dbName = '')
     {
+        $this->app->loadLang('story');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('task');
+
         if($_POST)
         {
-            a($_POST);die;
+            $this->session->set('linkType', $_POST);
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'initJiraUser', "type=$type");
+            return print($this->send($response));
         }
 
         if($type == 'db')
         {
-            $this->convert->connectDB($dbName);
-            $issueTypePairs = $this->convert->getIssueTypePairs();
-            $linkTypePairs  = $this->convert->getLinkTypePairs();
+            $dbh = $this->convert->connectDB($dbName);
+
+            $issueTypePairs = $this->dao->dbh($dbh)->select('ID,pname')->from(JIRA_ISSUETYPE)->fetchPairs();
+            $linkTypePairs  = $this->dao->dbh($dbh)->select('ID,LINKNAME')->from(JIRA_ISSUELINKTYPE)->fetchPairs();
+            $resolutions    = $this->dao->dbh($dbh)->select('ID,pname')->from(JIRA_RESOLUTION)->fetchPairs();
+            $statusList     = $this->dao->dbh($dbh)->select('ID,pname')->from(JIRA_ISSUESTATUS)->fetchPairs();
         }
         
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
         $this->view->issueTypePairs = $issueTypePairs;
         $this->view->linkTypePairs  = $linkTypePairs;
+        $this->view->resolutions    = $resolutions;
+        $this->view->statusList     = $statusList;
+        $this->display();
+    }
+
+    public function initJiraUser($type = 'db')
+    {
+        $this->app->loadLang('user');
+
+        if($_POST)
+        {
+            if(!$this->post->password1 || !$this->post->password2)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordEmpty;
+                return print($this->send($response));
+            }
+
+            if($this->post->password1 != $this->post->password2)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordDifferent;
+                return print($this->send($response));
+            }
+
+            $jiraUser['password'] = md5($this->post->password1);
+            $jiraUser['group']    = $this->post->group;
+            $this->session->set('jiraUser', $jiraUser);
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'importJira', "type=$type");
+            return print($this->send($response));
+        }
+
+        $this->view->title  = $this->lang->convert->jira->initJiraUser;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->display();
+    }
+
+    public function importJira($method = 'db', $type = 'user', $lastID = 0)
+    {
+        set_time_limit(0);
+        
+        if($method = 'db')
+        {
+            if(helper::isAjaxRequest())
+            {   
+                $result = $this->convert->importJiraFromDB($type, $lastID);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(isset($result['finished']) and $result['finished'])
+                {   
+                    return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+                }   
+                else
+                {   
+                    $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
+                    return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('importJira', "type={$result['type']}&lastID={$result['lastID']}") ));
+                }   
+            }
+        }
+        else
+        {
+            //$this->convert->importJiraFromFile();
+        }
+
+        $this->view->type  = $type;
+        $this->view->title = $this->lang->convert->jira->importJira;
         $this->display();
     }
 }

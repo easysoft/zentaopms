@@ -94,13 +94,26 @@ class convertModel extends model
         $this->session->set('state', $state);
     }
 
-    public function getIssueTypePairs()
+    public function importJiraFromDB($type = '', $lastID = 0)
     {
-        return $this->dao->dbh($this->sourceDBH)->select('ID,pname')->from(JIRA_ISSUETYPE)->fetchPairs();
+        $limit = 1000;
+        $nextObject = false;
+        if(empty($type)) $type = key($this->lang->convert->jira->objectList);
+
+        foreach($this->lang->convert->jira->objectList as $module => $moduleName)
+        {
+            if($module != $type and !$nextObject) continue;
+            if($module == $type) $nextObject = true;
+
+            while(true)
+            {
+                $query = $this->buildQuery($module);
+            }
+        }
     }
 
-    public function getLinkTypePairs()
+    public function buildQuery($module)
     {
-        return $this->dao->dbh($this->sourceDBH)->select('ID,LINKNAME')->from(JIRA_ISSUELINKTYPE)->fetchPairs();
+        if($module == 'user')
     }
 }
