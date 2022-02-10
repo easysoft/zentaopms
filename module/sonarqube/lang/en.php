@@ -15,7 +15,7 @@ $lang->sonarqube->execJob           = "Exec SonarQube Job";
 $lang->sonarqube->desc              = 'Description';
 $lang->sonarqube->reportView        = "SonarQube Report";
 $lang->sonarqube->browseIssue       = "SonarQube Issue List";
-$lang->sonarqube->createBug         = "Turn bug";
+$lang->sonarqube->createBug         = "Create Bug";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "Server Name";
