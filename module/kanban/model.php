@@ -110,6 +110,8 @@ class kanbanModel extends model
             $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc');
 
             /* Create groups, lanes, and columns. */
+            if(empty($copyGroups)) return $regionID;
+
             foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
             {
                 $newGroupID = $this->createGroup($kanban->id, $regionID);
