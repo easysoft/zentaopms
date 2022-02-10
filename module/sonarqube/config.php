@@ -14,3 +14,5 @@ $config->sonarqube->projectStatusClass['ERROR'] = 'danger';
 
 $config->sonarqube->createproject = new stdclass();
 $config->sonarqube->createproject->requiredFields = 'projectName,projectKey';
+
+$config->sonarqube->cacheTime = 10;

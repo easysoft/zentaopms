@@ -15,6 +15,7 @@ $lang->sonarqube->execJob           = "执行SonarQube任务";
 $lang->sonarqube->desc              = '描述';
 $lang->sonarqube->reportView        = "SonarQube报告";
 $lang->sonarqube->browseIssue       = "SonarQube问题列表";
+$lang->sonarqube->createBug         = "转bug";
 
 $lang->sonarqube->id             = 'ID';
 $lang->sonarqube->name           = "服务器名称";
@@ -35,6 +36,7 @@ $lang->sonarqube->placeholder->url         = "请填写SonarQube Server首页的
 $lang->sonarqube->placeholder->account     = "请填写具有Administrator权限的SonarQube用户信息";
 $lang->sonarqube->placeholder->projectName = '最多255个字符';
 $lang->sonarqube->placeholder->projectKey  = "最多400个字符。 允许的字符为字母数字，'-'，'_'，'. '和':'，至少有一个非数字";
+$lang->sonarqube->placeholder->searchIssue = "请输入问题名称或文件";
 
 $lang->sonarqube->nameRepeatError      = "服务器名称已存在！";
 $lang->sonarqube->urlRepeatError       = "服务器地址已存在！";
@@ -64,5 +66,17 @@ $lang->sonarqube->qualitygateList['WARN']  = 'Warning';
 $lang->sonarqube->qualitygateList['ERROR'] = 'Failed';
 
 $lang->sonarqube->apiErrorMap[1] = "/Malformed key for Project: '([\s\S]+)'. Allowed characters are alphanumeric, '-', '_', '\.' and ':', with at least one non-digit\./";
+$lang->sonarqube->apiErrorMap[2] = "/Could not create Project, key already exists: ([\s\S]+)/";
 
-$lang->sonarqube->errorLang[1] = "项目'%s'的格式不正确。允许的字符为字母数字、'-'、''、'.'和“：”，至少有一个非数字。";
+$lang->sonarqube->errorLang[1] = "项目标识的格式不正确。允许的字符为字母数字、'-'、''、'.'和“：”，至少有一个非数字。";
+$lang->sonarqube->errorLang[2] = "无法创建项目，项目标识已存在：%s";
+
+$lang->sonarqube->issue = new stdclass();
+$lang->sonarqube->issue->message      = '问题名称';
+$lang->sonarqube->issue->severity     = '严重程度';
+$lang->sonarqube->issue->type         = '类型';
+$lang->sonarqube->issue->status       = '状态';
+$lang->sonarqube->issue->file         = '所属文件';
+$lang->sonarqube->issue->line         = '行数';
+$lang->sonarqube->issue->effort       = '预计修复时长';
+$lang->sonarqube->issue->creationDate = '创建日期';
