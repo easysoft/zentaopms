@@ -197,9 +197,11 @@ class sonarqubeModel extends model
         $project = fixer::input('post')->get();
 
         $this->dao->insert('sonarqube')->data($project)
-            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty')
-            ->check('projectName', 'length', 255, 1)
-            ->check('projectKey', 'length', 400, 1);
+            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty');
+        if(dao::isError()) return false;
+
+        if(mb_strlen($project->projectName) > 255) dao::$errors['projectName'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectName, 255);
+        if(mb_strlen($project->projectKey) > 400) dao::$errors['projectKey'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectKey, 400);
         if(dao::isError()) return false;
 
         $response = $this->apiCreateProject($sonarqubeID, $project);
