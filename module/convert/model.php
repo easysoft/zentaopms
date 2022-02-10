@@ -94,8 +94,18 @@ class convertModel extends model
         $this->session->set('state', $state);
     }
 
+    /**
+     * Import jira from db.
+     * 
+     * @param  string $type 
+     * @param  int    $lastID 
+     * @access public
+     * @return void
+     */
     public function importJiraFromDB($type = '', $lastID = 0)
     {
+        $this->connectDB($this->session->jiraDB);
+
         $limit = 1000;
         $nextObject = false;
         if(empty($type)) $type = key($this->lang->convert->jira->objectList);
@@ -107,13 +117,73 @@ class convertModel extends model
 
             while(true)
             {
-                $query = $this->buildQuery($module);
+                $dataList = $this->getJiraData($module, $lastID, $limit);
+
+                if(empty($dataList))
+                {
+                    $lastID = 0;
+                    break;
+                }
+
+                if($module == 'user') $this->importJiraUser($dataList);
+                return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
+
+            return array('finished' => true);
         }
     }
 
-    public function buildQuery($module)
+    /**
+     * Get jira data.
+     * 
+     * @param  int    $module 
+     * @access public
+     * @return void
+     */
+    public function getJiraData($module = '', $lastID = 0, $limit = 0)
     {
         if($module == 'user')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
+                ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
+                ->where('t1.active')->eq(1)
+                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
+                ->orderBy('t1.ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+
+        return $dataList;
+    }
+
+    public function importJiraUser($dataList)
+    {
+        $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
+        $userConfig = $this->session->jiraUser;
+
+        foreach($dataList as $id => $data)
+        {
+            if(isset($localUsers[$data->account])) continue;
+
+            $user = new stdclass();
+            $user->account  = $data->account;
+            $user->realname = $data->realname;
+            $user->password = $userConfig['password'];
+            $user->group    = $userConfig['group'];
+            $user->email    = $data->email;
+            $user->gender   = 'f';
+            $user->type     = 'inside';
+            $user->join     = $data->join;
+
+            $this->dao->dbh($this->dbh)->insert(TABLE_USER)->data($user, 'group')->exec();
+
+            if(!dao::isError())
+            {   
+                $data = new stdclass();
+                $data->account = $user->account;
+                $data->group   = $user->group;
+
+                $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->set('account')->eq($user->account)->set('`group`')->eq($user->group)->exec();
+            }
+        }
     }
 }

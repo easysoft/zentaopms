@@ -248,12 +248,25 @@ class convert extends control
         $this->display();
     }
 
+    /**
+     * Import jira index.
+     * 
+     * @access public
+     * @return void
+     */
     public function jira()
     {
         $this->view->title = $this->lang->convert->jira->method;
         $this->display();
     }
 
+    /**
+     * Import jira notice.
+     * 
+     * @param  string $type  db|file
+     * @access public
+     * @return void
+     */
     public function importNotice($type = 'db')
     {
         if($_POST)
@@ -273,6 +286,7 @@ class convert extends control
                 return print($this->send($response));
             }
 
+            $this->session->set('jiraDB', $dbName);
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
             $response['locate']  = $this->createLink('convert', 'mapJira2Zentao', "type=db&dbName={$this->post->dbName}");
@@ -284,6 +298,14 @@ class convert extends control
         $this->display();
     }
 
+    /**
+     * Map jira objects to zentao.
+     * 
+     * @param  string $type db|file
+     * @param  string $dbName 
+     * @access public
+     * @return void
+     */
     public function mapJira2Zentao($type = 'db', $dbName = '')
     {
         $this->app->loadLang('story');
@@ -318,6 +340,13 @@ class convert extends control
         $this->display();
     }
 
+    /**
+     * Init jira user.
+     * 
+     * @param  string $type db|file
+     * @access public
+     * @return void
+     */
     public function initJiraUser($type = 'db')
     {
         $this->app->loadLang('user');
@@ -353,6 +382,15 @@ class convert extends control
         $this->display();
     }
 
+    /**
+     * Import jira main logic.
+     * 
+     * @param  string $method db|file
+     * @param  string $type user|issue|project|attachment
+     * @param  int    $lastID 
+     * @access public
+     * @return void
+     */
     public function importJira($method = 'db', $type = 'user', $lastID = 0)
     {
         set_time_limit(0);
@@ -365,12 +403,18 @@ class convert extends control
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
                 if(isset($result['finished']) and $result['finished'])
                 {   
-                    return $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+                    return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
                 }   
                 else
                 {   
                     $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
-                    return $this->send(array('result' => 'unfinished', 'message' => sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']), 'type' => $type, 'count' => $result['count'], 'next' => inlink('importJira', "type={$result['type']}&lastID={$result['lastID']}") ));
+
+                    $response['result']  = 'unfinished';
+                    $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
+                    $response['type']    = $type;
+                    $response['count']   = $result['count'];
+                    $response['next']    = inlink('importJira', "method=$method&type={$result['type']}&lastID={$result['lastID']}");
+                    return print $this->send($response);
                 }   
             }
         }

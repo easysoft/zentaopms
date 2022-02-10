@@ -148,7 +148,7 @@ $lang->convert->jira->groupNotice        = "<span class='text-red'>设置Jira用
 $lang->convert->jira->passwordDifferent  = '两次密码不一致！';
 $lang->convert->jira->passwordEmpty      = '密码不能为空！';
 $lang->convert->jira->importSuccessfully = 'Jira导入完成！';
-$lang->convert->jira->importResult       = "导入 %s 数据, 已导入 <strong class='%scount'>%s</strong> 条记录；";
+$lang->convert->jira->importResult       = "导入 <strong class='text-red'>%s</strong> 数据, 已导入 <strong class='%scount'>%s</strong> 条记录；";
 
 $lang->convert->jira->zentaoObjectList['task']        = '任务';
 $lang->convert->jira->zentaoObjectList['requirement'] = '用户需求';
