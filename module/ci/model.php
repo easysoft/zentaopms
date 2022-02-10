@@ -42,17 +42,24 @@ class ciModel extends model
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($compiles as $compile) $this->syncCompileStatus($compile);
+        $notCompileMR = $this->dao->select('id,jobID')
+            ->from(TABLE_MR)
+            ->where('jobID')->gt(0)
+            ->andWhere('compileStatus')->eq('created')
+            ->fetchPairs();
+
+        foreach($compiles as $compile) $this->syncCompileStatus($compile, $notCompileMR);
     }
 
     /**
      * Sync compile status.
      *
      * @param  object $compile
+     * @param  array  $notCompileMR
      * @access public
      * @return void
      */
-    public function syncCompileStatus($compile)
+    public function syncCompileStatus($compile, $notCompileMR)
     {
         /* Max retry times is: 3. */
         if($compile->times >= 3)
@@ -114,6 +121,14 @@ class ciModel extends model
                     $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                 }
             }
+        }
+
+        /* Added merge request result push to xuanxuan. */
+        $MRID = array_search($compile->job, $notCompileMR);
+        if($MRID)
+        {
+            $actionType = $compile->status == 'success' ? 'compilepass' : 'compilefail';
+            $this->loadModel('message')->send('mr', $MRID, $actionType, 0);
         }
     }
 
