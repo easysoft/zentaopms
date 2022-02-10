@@ -159,7 +159,6 @@ if($config->systemMode == 'new')
     $lang->resource->project->unbindWhitelist     = 'unbindWhitelist';
     $lang->resource->project->manageProducts      = 'manageProducts';
     $lang->resource->project->dynamic             = 'dynamic';
-    $lang->resource->project->build               = 'build';
     $lang->resource->project->qa                  = 'qa';
     $lang->resource->project->bug                 = 'bug';
     $lang->resource->project->testcase            = 'testcase';
@@ -199,7 +198,6 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[120] = 'manageProducts';
     $lang->project->methodOrder[125] = 'view';
     $lang->project->methodOrder[130] = 'dynamic';
-    $lang->project->methodOrder[135] = 'build';
     $lang->project->methodOrder[140] = 'qa';
     $lang->project->methodOrder[145] = 'bug';
     $lang->project->methodOrder[150] = 'testcase';
@@ -211,11 +209,6 @@ if($config->systemMode == 'new')
     $lang->project->methodOrder[180] = 'updateOrder';
     $lang->project->methodOrder[185] = 'team';
     $lang->project->methodOrder[190] = 'unlinkMember';
-
-    $lang->resource->projectbuild = new stdclass();
-    $lang->resource->projectbuild->browse = 'browse';
-
-    $lang->projectbuild->methodOrder[5] = 'browse';
 
     /* Project Story. */
     $lang->resource->projectstory = new stdclass();
@@ -554,20 +547,6 @@ $lang->task->methodOrder[100] = 'editEstimate';
 $lang->task->methodOrder[105] = 'deleteEstimate';
 $lang->task->methodOrder[110] = 'report';
 $lang->task->methodOrder[115] = 'batchChangeModule';
-
-$lang->resource->job = new stdclass();
-$lang->resource->job->browse = 'browseAction';
-$lang->resource->job->create = 'create';
-$lang->resource->job->edit   = 'edit';
-$lang->resource->job->delete = 'delete';
-$lang->resource->job->exec   = 'exec';
-$lang->resource->job->view   = 'view';
-
-$lang->job->methodOrder[5]  = 'browse';
-$lang->job->methodOrder[10] = 'create';
-$lang->job->methodOrder[15] = 'edit';
-$lang->job->methodOrder[20] = 'delete';
-$lang->job->methodOrder[25] = 'exec';
 
 /* Doc. */
 $lang->resource->doc = new stdclass();

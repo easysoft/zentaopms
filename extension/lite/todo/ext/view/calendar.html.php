@@ -44,12 +44,10 @@
           <div class="col-4 text-center table-col">
             <ul class="nav nav-primary">
               <li class="active"><?php echo html::a($this->createLink('todo', 'calendar'), $lang->todo->common);?></li>
-              <?php if(isset($effortCount)):?>
               <?php if(common::hasPriv('effort', 'calendar')):?>
               <li><?php echo html::a($this->createLink('effort', 'calendar'), $lang->effort->common);?></li>
               <?php elseif(common::hasPriv('my', 'effort')):?>
               <li><?php echo html::a($this->createLink('my', 'effort'), $lang->effort->common);?></li>
-              <?php endif;?>
               <?php endif;?>
             </ul>
           </div>
