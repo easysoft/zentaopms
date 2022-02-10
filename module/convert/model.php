@@ -125,7 +125,9 @@ class convertModel extends model
                     break;
                 }
 
-                if($module == 'user') $this->importJiraUser($dataList);
+                if($module == 'user')    $this->importJiraUser($dataList);
+                if($module == 'project') $this->importJiraProject($dataList);
+
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
 
@@ -149,6 +151,13 @@ class convertModel extends model
                 ->where('t1.active')->eq(1)
                 ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
                 ->orderBy('t1.ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elesif($module == 'project')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from('project')
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
         }
 
@@ -185,5 +194,9 @@ class convertModel extends model
                 $this->dao->dbh($this->dbh)->replace(TABLE_USERGROUP)->set('account')->eq($user->account)->set('`group`')->eq($user->group)->exec();
             }
         }
+    }
+
+    public function importJiraProject($dataList)
+    {
     }
 }
