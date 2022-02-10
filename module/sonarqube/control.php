@@ -345,8 +345,6 @@ class sonarqube extends control
      */
     public function browseIssue($sonarqubeID, $projectKey = '', $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        set_time_limit(600);
-
         $this->app->loadClass('pager', $static = true);
         $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
 

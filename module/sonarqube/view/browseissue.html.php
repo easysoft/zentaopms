@@ -54,12 +54,12 @@
         <?php foreach ($sonarqubeIssueList as $id => $sonarqubeIssue): ?>
         <tr class='text'>
           <td class='text' title="<?php echo $sonarqubeIssue->message;?>"><?php echo $sonarqubeIssue->message;?></td>
-          <td class='text-c-name' title='<?php echo $sonarqubeIssue->severity;?>'><?php echo $sonarqubeIssue->severity;?></td>
-          <td class='text-c-name' title='<?php echo $sonarqubeIssue->type;?>'><?php echo $sonarqubeIssue->type;?></td>
-          <td class='text-c-name' title='<?php echo $sonarqubeIssue->status;?>'><?php echo $sonarqubeIssue->status;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->severity;?>'><?php echo $sonarqubeIssue->severity;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->type;?>'><?php echo $sonarqubeIssue->type;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->status;?>'><?php echo $sonarqubeIssue->status;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->file;?>'><?php echo $sonarqubeIssue->file;?></td>
-          <td class='text-c-name' title='<?php echo $sonarqubeIssue->line;?>'><?php echo $sonarqubeIssue->line;?></td>
-          <td class='text-c-name' title='<?php echo $sonarqubeIssue->effort;?>'><?php echo $sonarqubeIssue->effort;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->line;?>'><?php echo $sonarqubeIssue->line;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->effort;?>'><?php echo $sonarqubeIssue->effort;?></td>
           <td class='c-actions text-left'>
             <?php
             common::printLink('bug', 'create', '', "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn btn-primary'");
