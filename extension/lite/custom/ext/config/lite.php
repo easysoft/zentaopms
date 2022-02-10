@@ -5,3 +5,7 @@ $config->custom->requiredModules[20] = 'story';
 $config->custom->requiredModules[35] = 'execution';
 $config->custom->requiredModules[40] = 'task';
 $config->custom->requiredModules[85] = 'user';
+
+$config->custom->fieldList['execution']['create'] = 'desc';
+$config->custom->fieldList['execution']['edit']   = 'desc,PO,PM,QD,RD';
+$config->custom->fieldList['story']['create']     = 'module,pri,estimate,keywords';
