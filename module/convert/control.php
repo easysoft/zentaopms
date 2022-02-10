@@ -254,7 +254,7 @@ class convert extends control
      * @access public
      * @return void
      */
-    public function jira()
+    public function convertJira()
     {
         $this->view->title = $this->lang->convert->jira->method;
         $this->display();

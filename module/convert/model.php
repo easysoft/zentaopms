@@ -95,6 +95,53 @@ class convertModel extends model
     }
 
     /**
+     * Get jira data.
+     * 
+     * @param  int    $module 
+     * @access public
+     * @return void
+     */
+    public function getJiraData($module = '', $lastID = 0, $limit = 0)
+    {
+        $dataList = array();
+        if($module == 'user')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
+                ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
+                ->where(1)
+                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
+                ->orderBy('t1.ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif($module == 'project')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_PROJECT)
+                ->where(1)
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif($module == 'issue')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUE)
+                ->where(1)
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif($module == 'build')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_BUILD)
+                ->where(1)
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+
+        return $dataList;
+    }
+
+    /**
      * Import jira from db.
      * 
      * @param  string $type 
@@ -130,6 +177,7 @@ class convertModel extends model
                 if($module == 'user')    $this->importJiraUser($dataList);
                 if($module == 'project') $this->importJiraProject($dataList);
                 if($module == 'issue')   $this->importJiraIssue($dataList);
+                if($module == 'build')   $this->importJiraBuild($dataList);
 
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
@@ -137,45 +185,6 @@ class convertModel extends model
 
         $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
         return array('finished' => true);
-    }
-
-    /**
-     * Get jira data.
-     * 
-     * @param  int    $module 
-     * @access public
-     * @return void
-     */
-    public function getJiraData($module = '', $lastID = 0, $limit = 0)
-    {
-        $dataList = array();
-        if($module == 'user')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('t1.`ID`, t1.`lower_user_name` as account, t1.`lower_display_name` as realname, t1.`lower_email_address` as email, t1.created_date as `join`, t2.user_key as userCode')->from(JIRA_USERINFO)->alias('t1')
-                ->leftJoin(JIRA_USER)->alias('t2')->on('t1.`lower_user_name` = t2.`lower_user_name`')
-                ->where(1)
-                ->beginIF($lastID)->andWhere('t1.ID')->gt($lastID)->fi()
-                ->orderBy('t1.ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'project')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_PROJECT)
-                ->where(1)
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-        elseif($module == 'issue')
-        {
-            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUE)
-                ->where(1)
-                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
-                ->orderBy('ID asc')->limit($limit)
-                ->fetchAll('ID');
-        }
-
-        return $dataList;
     }
 
     public function importJiraUser($dataList)
@@ -539,21 +548,21 @@ class convertModel extends model
         }
     }
 
+    public function importJiraBuild($dataList)
+    {
+    }
+
     public function convertStatus($objectType, $jiraStatus)
     {
-        $relations = $this->session->jiraRelation;
-
         $status = 'active';
         if($objectType == 'task') $status = 'wait';
+        $relations = $this->session->jiraRelation;
 
-        $arrayKey = "{$objectType}Status";
-        foreach($relations['jiraStatus'] as $id => $jiraCode)
-        {
-            if($jiraCode == $jiraStatus)
-            {
-                if(!empty($relations[$arrayKey][$id])) $status = $relations[$arrayKey][$id];
-            }
-        }
+        $arrayKey       = "{$objectType}Status";
+        $jiraStatusList = array_flip($relations['jiraStatus']);
+        $statusID       = $jiraStatusList[$jiraStatus];
+
+        if(!empty($relations[$arrayKey][$statusID])) $status = $relations[$arrayKey][$statusID];
 
         return $status;
     }
@@ -563,13 +572,10 @@ class convertModel extends model
         $stage = 'wait';
         $relations = $this->session->jiraRelation;
 
-        foreach($relations['jiraStatus'] as $id => $jiraCode)
-        {
-            if($jiraCode == $jiraStatus)
-            {
-                if(!empty($relations['storyStage'][$id])) $stage = $relations['storyStage'][$id];
-            }
-        }
+        $jiraStatusList = array_flip($relations['jiraStatus']);
+        $stageID        = $jiraStatusList[$jiraStatus];
+
+        if(!empty($relations['storyStage'][$stageID])) $stage = $relations['storyStage'][$stageID];
 
         return $stage;
     }
