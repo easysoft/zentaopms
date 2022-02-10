@@ -1295,8 +1295,13 @@ class storyModel extends model
 
         $story = $this->updateStoryByReview($storyID, $oldStory, $story);
 
+        $skipFields      = '';
         $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
-        $skipFields      = $isSuperReviewer !== false ? '' : 'closedReason';
+        if($isSuperReviewer === false)
+        {
+            $reviewers = $this->getReviewerPairs($storyID, $oldStory->version);
+            if(count($reviewers) > 1) $skipFields = 'closedReason';
+        }
 
         $this->dao->update(TABLE_STORY)->data($story, $skipFields)
             ->autoCheck()
