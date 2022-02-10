@@ -42,6 +42,7 @@ $lang->sonarqube->nameRepeatError      = "服务器名称已存在！";
 $lang->sonarqube->urlRepeatError       = "服务器地址已存在！";
 $lang->sonarqube->validError           = "SonarQube 用户权限认证失败！";
 $lang->sonarqube->hostError            = "无效的SonarQube服务地址。";
+$lang->sonarqube->lengthError          = "『%s』长度应当不超过『%d』";
 $lang->sonarqube->confirmDelete        = '确认删除该SonarQube吗？';
 $lang->sonarqube->confirmDeleteProject = '确认删除该SonarQube项目吗？';
 $lang->sonarqube->noReport             = "暂无报告";
