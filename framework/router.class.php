@@ -438,7 +438,7 @@ class router extends baseRouter
         }
         else
         {
-            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
+            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName' AND `vision` = '{$this->config->vision}'")->fetch();
             if(zget($action, 'extensionType') == 'override')
             {
                 $this->rawModule = $this->moduleName;
