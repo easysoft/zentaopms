@@ -31,10 +31,10 @@
   </div>
   <table class="table table-data">
     <thead>
-      <tr>
+      <tr class="text-center">
         <th><?php echo $lang->sonarqube->report->bugs;?></th>
         <th><?php echo $lang->sonarqube->report->vulnerabilities;?></th>
-        <th><?php echo $lang->sonarqube->report->security_hotspots_reviewed;?></th>
+        <th class="w-150px"><?php echo $lang->sonarqube->report->security_hotspots_reviewed;?></th>
         <th><?php echo $lang->sonarqube->report->code_smells;?></th>
         <th><?php echo $lang->sonarqube->report->coverage;?></th>
         <th><?php echo $lang->sonarqube->report->duplicated_lines_density;?></th>
@@ -42,7 +42,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="text-center">
         <td><?php echo $measures['bugs'];?></td>
         <td><?php echo $measures['vulnerabilities'];?></td>
         <td><?php echo $measures['security_hotspots_reviewed'];?></td>
