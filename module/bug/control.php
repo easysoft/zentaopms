@@ -1708,8 +1708,12 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function linkBugs($bugID, $browseType = '', $param = 0)
+    public function linkBugs($bugID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Load pager. */
+         $this->app->loadClass('pager', $static = true);
+         $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -1723,7 +1727,7 @@ class bug extends control
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
 
         /* Get bugs to link. */
-        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID);
+        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager);
 
         /* Assign. */
         $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
@@ -1732,8 +1736,11 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->linkBugs;
         $this->view->bug        = $bug;
         $this->view->bugs2Link  = $bugs2Link;
+        $this->view->pager      = $pager;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;                                                                                                        
+        $this->view->pageID     = $pageID; 
         $this->display();
     }
 

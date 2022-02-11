@@ -240,10 +240,9 @@ class testtask extends control
         }
 
         /* Create testtask from testtask of test.*/
-        $productID  = $productID ? $productID : key($this->products);
-        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
-
+        $productID   = $productID ? $productID : key($this->products);
+        $executions  = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
         $testreports = $this->testtask->getTestReportPairsByBuild($build);
 
         /* Set menu. */

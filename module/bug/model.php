@@ -1360,12 +1360,12 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager)
     {
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id');
+            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', '', $pager);
             foreach($bugs2Link as $key => $bug2Link)
             {
                 if($bug2Link->id == $bugID) unset($bugs2Link[$key]);
