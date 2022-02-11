@@ -115,6 +115,7 @@
                 return link.prj ? 'project' : 'report';
             }
         }
+        if(moduleName === 'story' && vision === 'lite') return 'project'
         if(moduleName === 'story' && methodLowerCase === 'zerocase')
         {
             return link.params.from == 'project' ? 'project' : 'qa';
