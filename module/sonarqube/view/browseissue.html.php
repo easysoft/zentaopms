@@ -64,7 +64,7 @@
             <?php
             $issueKey = $sonarqubeID . ':' . $sonarqubeIssue->key;
             $attr     = isset($bugs[$issueKey]) ? 'disabled' : '';
-            common::printLink('bug', 'create', "productID=$productID&branch=&extra=from=sonarqube,sonarqubeID=$sonarqubeID,issueKey={$sonarqubeIssue->key}", "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn' $attr");
+            common::printLink('bug', 'create', "productID=$productID&branch=&extra=from=sonarqube,sonarqubeID=$sonarqubeID,issueKey={$sonarqubeIssue->key}", "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn' $attr data-app='qa'");
             ?>
           </td>
         </tr>
