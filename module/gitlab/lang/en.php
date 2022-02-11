@@ -62,7 +62,7 @@ $lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "GitLab Server";
-$lang->gitlab->url            = 'GitLab URL';
+$lang->gitlab->url            = 'GitLab Server URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
 $lang->gitlab->private        = 'MD5 Verify';

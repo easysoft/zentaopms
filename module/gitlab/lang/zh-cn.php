@@ -62,7 +62,7 @@ $lang->gitlab->deleteTagPriv        = '删除标签保护';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "{$lang->gitlab->common}服务器";
-$lang->gitlab->url            = '服务地址';
+$lang->gitlab->url            = '服务器地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
 $lang->gitlab->private        = 'MD5验证';
