@@ -351,7 +351,19 @@ class sonarqube extends control
         $cacheFile = $this->sonarqube->getCacheFile($sonarqubeID, $projectKey);
         if(!$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->sonarqube->cacheTime)
         {
+            ini_set('memory_limit', '256M');
+
             $sonarqubeIssueList = $this->sonarqube->apiGetIssues($sonarqubeID, $projectKey);
+            foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
+            {
+                if(!isset($sonarqubeIssue->line)) $sonarqubeIssue->line = '';
+                if(!isset($sonarqubeIssue->effort)) $sonarqubeIssue->effort = '';
+                $sonarqubeIssue->message      = htmlspecialchars($sonarqubeIssue->message);
+                $sonarqubeIssue->creationDate = date('Y-m-d H:i:s', strtotime($sonarqubeIssue->creationDate));
+
+                list($project, $file) = explode(':', $sonarqubeIssue->component);
+                $sonarqubeIssue->file = $file;
+            }
 
             if($cacheFile)
             {
@@ -366,16 +378,6 @@ class sonarqube extends control
         else
         {
             $sonarqubeIssueList = unserialize(file_get_contents($cacheFile));
-        }
-
-        foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
-        {
-            if(!isset($sonarqubeIssue->line)) $sonarqubeIssue->line = '';
-            if(!isset($sonarqubeIssue->effort)) $sonarqubeIssue->effort = '';
-            $sonarqubeIssue->message = htmlspecialchars($sonarqubeIssue->message);
-
-            list($project, $file) = explode(':', $sonarqubeIssue->component);
-            $sonarqubeIssue->file = $file;
         }
 
         /* Data search. */
