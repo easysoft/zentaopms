@@ -42,22 +42,34 @@ class ciModel extends model
             ->andWhere('compile.createdDate')->gt(date(DT_DATETIME1, strtotime("-1 day")))
             ->fetchAll();
 
-        foreach($compiles as $compile) $this->syncCompileStatus($compile);
+        $notCompileMR = $this->dao->select('id,jobID')
+            ->from(TABLE_MR)
+            ->where('jobID')->gt(0)
+            ->andWhere('compileStatus')->eq('created')
+            ->fetchPairs();
+
+        foreach($compiles as $compile) $this->syncCompileStatus($compile, $notCompileMR);
     }
 
     /**
      * Sync compile status.
      *
      * @param  object $compile
+     * @param  array  $notCompileMR
      * @access public
      * @return void
      */
-    public function syncCompileStatus($compile)
+    public function syncCompileStatus($compile, $notCompileMR)
     {
+        $MRID = array_search($compile->job, $notCompileMR);
+
         /* Max retry times is: 3. */
         if($compile->times >= 3)
         {
             $this->updateBuildStatus($compile, 'failure');
+
+            /* Added merge request result push to xuanxuan. */
+            if($MRID) $this->loadModel('message')->send('mr', $MRID, 'compilefail', 0);
             return false;
         }
 
@@ -69,6 +81,7 @@ class ciModel extends model
         $queueUrl        = sprintf('%s/queue/item/%s/api/json', $jenkinsServer, $compile->queue);
 
         $response = common::http($queueUrl, '', array(CURLOPT_USERPWD => $userPWD));
+        $result   = '';
 
         if($compile->engine != 'gitlab') $this->dao->update(TABLE_COMPILE)->set('times = times + 1')->where('id')->eq($compile->id)->exec();
         if(strripos($response, "404") > -1)
@@ -114,6 +127,12 @@ class ciModel extends model
                     $this->dao->update(TABLE_COMPILE)->set('logs')->eq($response)->where('id')->eq($compile->id)->exec();
                 }
             }
+        }
+
+        if($MRID && in_array($result, array('success', 'failure')))
+        {
+            $actionType = $result == 'success' ? 'compilepass' : 'compilefail';
+            $this->loadModel('message')->send('mr', $MRID, $actionType, 0);
         }
     }
 
