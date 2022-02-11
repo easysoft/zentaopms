@@ -243,7 +243,8 @@ class testtask extends control
         $productID  = $productID ? $productID : key($this->products);
         $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
         $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
-
+        a($projectID);
+        a($productID);
         $testreports = $this->testtask->getTestReportPairsByBuild($build);
 
         /* Set menu. */
