@@ -54,7 +54,7 @@
       <tbody>
         <?php foreach ($sonarqubeIssueList as $id => $sonarqubeIssue): ?>
         <tr class='text'>
-          <td class='text' title="<?php echo $sonarqubeIssue->message;?>"><?php echo $sonarqubeIssue->message;?></td>
+          <td class='text' title="<?php echo $sonarqubeIssue->message;?>"><?php echo html::a(trim($sonarqube->url, '/') . '/issues?open=' . $sonarqubeIssue->key, $sonarqubeIssue->message, '_target');?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->severity;?>'><?php echo $sonarqubeIssue->severity;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->type;?>'><?php echo $sonarqubeIssue->type;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->status;?>'><?php echo $sonarqubeIssue->status;?></td>
