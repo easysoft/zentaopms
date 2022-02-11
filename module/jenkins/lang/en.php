@@ -11,7 +11,7 @@ $lang->jenkins->deleteAction = 'Delete Jenkins';
 
 $lang->jenkins->id       = 'ID';
 $lang->jenkins->name     = 'Name';
-$lang->jenkins->url      = 'URL';
+$lang->jenkins->url      = 'Server URL';
 $lang->jenkins->token    = 'Token';
 $lang->jenkins->account  = 'Username';
 $lang->jenkins->password = 'Password';
