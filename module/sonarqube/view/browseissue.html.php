@@ -47,6 +47,7 @@
           <th class='c-file text-left'><?php common::printOrderLink('file', $orderBy, $vars, $lang->sonarqube->issue->file);?></th>
           <th><?php common::printOrderLink('line', $orderBy, $vars, $lang->sonarqube->issue->line);?></th>
           <th><?php common::printOrderLink('effort', $orderBy, $vars, $lang->sonarqube->issue->effort);?></th>
+          <th><?php common::printOrderLink('creationDate', $orderBy, $vars, $lang->sonarqube->issue->creationDate);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -60,6 +61,7 @@
           <td class='text' title='<?php echo $sonarqubeIssue->file;?>'><?php echo $sonarqubeIssue->file;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->line;?>'><?php echo $sonarqubeIssue->line;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->effort;?>'><?php echo $sonarqubeIssue->effort;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->creationDate;?>'><?php echo $sonarqubeIssue->creationDate;?></td>
           <td class='c-actions text-left'>
             <?php
             common::printLink('bug', 'create', '', "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn btn-primary'");
