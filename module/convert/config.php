@@ -9,6 +9,7 @@ define('JIRA_ISSUELINKTYPE', '`issuelinktype`');
 define('JIRA_ISSUESTATUS', '`issuestatus`');
 define('JIRA_RESOLUTION', '`resolution`');
 define('JIRA_BUILD', '`projectversion`');
+define('JIRA_ACTION', '`jiraaction`');
 define('JIRA_NODEASSOCIATION', '`nodeassociation`');
-define('JIRA_FILEATTACHMENT', '`fileattachment`');
+define('JIRA_FILE', '`fileattachment`');
 define('JIRA_TMPRELATION', '`jiratmprelation`');

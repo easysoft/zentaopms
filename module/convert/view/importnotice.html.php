@@ -26,10 +26,17 @@ li .form-control {margin-top: 10px}
       <ol>
         <li><?php echo $lang->convert->jira->importSteps[$type][1];?></li>
         <li><?php echo $lang->convert->jira->importSteps[$type][2];?></li>
-        <li><?php echo sprintf($lang->convert->jira->importSteps[$type][3], $this->app->getTmpRoot());?></li>
+        <?php if($type == 'db'):?>
+        <li><?php echo $lang->convert->jira->importSteps[$type][3];?></li>
+        <?php else:?>
+        <li><?php echo sprintf($lang->convert->jira->importSteps[$type][3], $app->getTmpRoot() . 'jirafile');?></li>
+        <?php endif;?>
+        <li><?php echo sprintf($lang->convert->jira->importSteps[$type][4], $app->getTmpRoot());?></li>
         <li>
-          <?php echo $lang->convert->jira->importSteps[$type][4];?>
+          <?php echo $lang->convert->jira->importSteps[$type][5];?>
+          <?php if($type == 'db'):?>
           <?php echo html::input('dbName', '', "class='form-control w-200px' placeholder={$lang->convert->jira->dbNameNotice}");?>
+          <?php endif;?>
         </li>
       </ol>
     </div>

@@ -137,6 +137,30 @@ class convertModel extends model
                 ->orderBy('ID asc')->limit($limit)
                 ->fetchAll('ID');
         }
+        elseif($module == 'issuelink')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ISSUELINK)
+                ->where(1)
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif($module == 'action')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_ACTION)
+                ->where(1)
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
+        elseif($module == 'file')
+        {
+            $dataList = $this->dao->dbh($this->sourceDBH)->select('*')->from(JIRA_FILE)
+                ->where(1)
+                ->beginIF($lastID)->andWhere('ID')->gt($lastID)->fi()
+                ->orderBy('ID asc')->limit($limit)
+                ->fetchAll('ID');
+        }
 
         return $dataList;
     }
@@ -174,19 +198,39 @@ class convertModel extends model
                     break;
                 }
 
-                if($module == 'user')    $this->importJiraUser($dataList);
-                if($module == 'project') $this->importJiraProject($dataList);
-                if($module == 'issue')   $this->importJiraIssue($dataList);
-                if($module == 'build')   $this->importJiraBuild($dataList);
+                if($module == 'user')      $this->importJiraUser($dataList);
+                if($module == 'project')   $this->importJiraProject($dataList);
+                if($module == 'issue')     $this->importJiraIssue($dataList);
+                if($module == 'build')     $this->importJiraBuild($dataList);
+                if($module == 'issuelink') $this->importJiraIssueLink($dataList);
+                if($module == 'action')    $this->importJiraAction($dataList);
+                if($module == 'file')      $this->importJiraFile($dataList);
 
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => max(array_keys($dataList)));
             }
+        }
+
+        /* Set project min start date. */
+        $executionProject  = $this->dao->dbh($this->dbh)->select('id,project')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('project')->ne(0)->fetchPairs();
+        $minOpenedDateList = $this->dao->dbh($this->dbh)->select('id,execution,min(openedDate) as minOpenedDate')->from(TABLE_TASK)->where('execution')->in(array_keys($executionProject))->groupBy('execution')->fetchPairs('execution', 'minOpenedDate');
+
+        foreach($minOpenedDateList as $executionID => $minOpenedDate) 
+        {
+            $projectID = $executionProject[$executionID];
+            $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
         }
 
         $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
         return array('finished' => true);
     }
 
+    /**
+     * Import jira user.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
     public function importJiraUser($dataList)
     {
         $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
@@ -202,7 +246,7 @@ class convertModel extends model
             $user->password = $userConfig['password'];
             $user->group    = $userConfig['group'];
             $user->email    = $data->email;
-            $user->gender   = 'f';
+            $user->gender   = 'm';
             $user->type     = 'inside';
             $user->join     = $data->join;
 
@@ -219,6 +263,13 @@ class convertModel extends model
         }
     }
 
+    /**
+     * Import jira project.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
     public function importJiraProject($dataList)
     {
         global $app;
@@ -248,8 +299,8 @@ class convertModel extends model
             $project->openedBy      = $this->getJiraAccount($data->LEAD);
             $project->openedDate    = $now;
             $project->openedVersion = $this->config->version;
-            $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($project)->exec();
 
+            $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($project)->exec();
             $projectID = $this->dao->dbh($this->dbh)->lastInsertID();
             $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('`order`')->eq($projectID * 5)->set('path')->eq(",$projectID,")->where('id')->eq($projectID)->exec();
 
@@ -289,8 +340,8 @@ class convertModel extends model
             $execution->openedBy      = $project->openedBy;
             $execution->openedDate    = $now;
             $execution->openedVersion = $this->config->version;
-            $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($execution)->exec();
 
+            $this->dao->dbh($this->dbh)->insert(TABLE_PROJECT)->data($execution)->exec();
             $executionID = $this->dao->dbh($this->dbh)->lastInsertID();
             $this->dao->dbh($this->dbh)->update(TABLE_PROJECT)->set('`order`')->eq($executionID * 5)->set('path')->eq(",$projectID,$executionID,")->where('id')->eq($executionID)->exec();
 
@@ -312,6 +363,7 @@ class convertModel extends model
             $lib->type      = 'execution';
             $lib->main      = '1';
             $lib->acl       = 'default';
+
             $this->dao->dbh($this->dbh)->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             /* Create product. */
@@ -325,8 +377,8 @@ class convertModel extends model
             $product->createdBy      = $project->openedBy;
             $product->createdDate    = helper::now();
             $product->createdVersion = $this->config->version;
-            $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($product)->exec();
 
+            $this->dao->dbh($this->dbh)->insert(TABLE_PRODUCT)->data($product)->exec();
             $productID = $this->dao->dbh($this->dbh)->lastInsertID();
 
             /* Create doc lib. */
@@ -358,6 +410,13 @@ class convertModel extends model
         }
     }
 
+    /**
+     * Import jira issue.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
     public function importJiraIssue($dataList)
     {
         $relations = $this->session->jiraRelation;
@@ -395,7 +454,6 @@ class convertModel extends model
 
         $projectKeys = $this->dao->dbh($this->sourceDBH)->select('ID, ORIGINALKEY as oldKey, pkey as newKey')->from(JIRA_PROJECT)->fetchAll('ID');
 
-        $issueObjectType = array();
         foreach($dataList as $id => $data)
         {
             $issueType    = isset($issueTypeList[$data->issuetype]) ? $issueTypeList[$data->issuetype] : 'task';
@@ -452,6 +510,16 @@ class convertModel extends model
                         ->set('version')->eq('1')
                         ->exec();
 
+                    /* Create opened action from openedDate. */
+                    $action = new stdclass();
+                    $action->objectType = 'story';
+                    $action->objectID   = $storyID;
+                    $action->actor      = $story->openedBy;
+                    $action->action     = 'Opened';
+                    $action->date       = $story->openedDate;
+                    $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+
+                    /* Record relation. */
                     $storyRelation['AType'] = 'jstory';
                     $storyRelation['BType'] = 'zstory';
                     $storyRelation['AID']   = $issueID;
@@ -486,6 +554,15 @@ class convertModel extends model
 
                 $this->dao->dbh($this->dbh)->insert(TABLE_TASK)->data($task)->exec();
                 $taskID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+                /* Create opened action from openedDate. */
+                $action = new stdclass();
+                $action->objectType = 'task';
+                $action->objectID   = $taskID;
+                $action->actor      = $task->openedBy;
+                $action->action     = 'Opened';
+                $action->date       = $task->openedDate;
+                $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
 
                 $taskRelation['AType'] = 'jtask';
                 $taskRelation['BType'] = 'ztask';
@@ -522,6 +599,15 @@ class convertModel extends model
                 $this->dao->dbh($this->dbh)->insert(TABLE_BUG)->data($bug)->exec();
                 $bugID = $this->dao->dbh($this->dbh)->lastInsertID();
 
+                /* Create opened action from openedDate. */
+                $action = new stdclass();
+                $action->objectType = 'bug';
+                $action->objectID   = $bugID;
+                $action->actor      = $bug->openedBy;
+                $action->action     = 'Opened';
+                $action->date       = $bug->openedDate;
+                $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+
                 $bugRelation['AType'] = 'jbug';
                 $bugRelation['BType'] = 'zbug';
                 $bugRelation['AID']   = $issueID;
@@ -548,10 +634,356 @@ class convertModel extends model
         }
     }
 
+    /**
+     * Import jira build.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
     public function importJiraBuild($dataList)
     {
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jproject')
+            ->andWhere('BType')->eq('zproject')
+            ->fetchPairs();
+
+        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in(array_values($projectRelation))
+            ->fetchPairs();
+
+        $versionGroup = $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID');
+
+        foreach($dataList as $data)
+        {
+            if(empty($data->RELEASEDATE)) continue;
+
+            $versionID    = $data->ID;
+            $buildProject = $data->PROJECT;
+            $projectID    = $projectRelation[$buildProject];
+            $productID    = $projectProduct[$projectID];
+
+            $build = new stdclass();
+            $build->product = $productID;
+            $build->project = $projectID;
+            $build->name    = $data->vname;
+            $build->date    = substr($data->RELEASEDATE, 0, 10);
+            $build->builder = $this->app->user->account;
+
+            $this->dao->dbh($this->dbh)->insert(TABLE_BUILD)->data($build)->exec();
+            $buildID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+            $release = new stdclass();
+            $release->product = $build->product;
+            $release->build   = $buildID;
+            $release->name    = $build->name;
+            $release->date    = $build->date;
+            $release->desc    = $data->DESCRIPTION;
+            $release->status  = 'normal';
+
+            $this->dao->dbh($this->dbh)->insert(TABLE_RELEASE)->data($release)->exec();
+            $releaseID = $this->dao->dbh($this->dbh)->lastInsertID();
+
+            /* Process release data. */
+            if(isset($versionGroup[$versionID]))
+            {
+                foreach($versionGroup[$versionID] as $issue)
+                {
+                    $issueType = zget($issueObjectType, $issue->issueID, '');
+                    if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
+                    $objectID  = $issueType == 'bug' ? zget($issueBugs, $issue->issueID) : zget($issueStories, $issue->issueID);
+
+                    $field = $issueType == 'story' ? 'stories' : 'bugs';
+                    if($issueType == 'story')
+                    {
+                        $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("stories = CONCAT(stories, ',$objectID')")->where('id')->eq($releaseID)->exec();
+                    }
+                    else
+                    {
+                        $this->dao->dbh($this->dbh)->update(TABLE_RELEASE)->set("bugs = CONCAT(bugs, ',$objectID')")->where('id')->eq($releaseID)->exec();
+                    }
+                }
+            }
+        }
     }
 
+    /**
+     * Import jira issue link.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
+    public function importJiraIssueLink($dataList)
+    {
+        $issueLinkTypeList = array();
+        $relations = $this->session->jiraRelation;
+
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jtask')
+            ->andWhere('BType')->eq('ztask')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        foreach($relations['jiraLinkType'] as $id => $jiraCode) $issueLinkTypeList[$jiraCode] = $relations['zentaoLinkType'][$id];
+
+        $storyLink = $taskLink = $duplicateLink = $relatesLink = array();
+        foreach($dataList as $issueLink)
+        {
+            $linkType = $issueLink->LINKTYPE;
+            if($issueLinkTypeList[$linkType] == 'subStoryLink') $storyLink[$issueLink->SOURCE][]   = $issueLink->DESTINATION;
+            if($issueLinkTypeList[$linkType] == 'subTaskLink')  $taskLink[$issueLink->SOURCE][]    = $issueLink->DESTINATION;
+            if($issueLinkTypeList[$linkType] == 'duplicate')    $duplicateLink[$issueLink->SOURCE] = $issueLink->DESTINATION;
+            if($issueLinkTypeList[$linkType] == 'relates')      $relatesLink[$issueLink->SOURCE]   = $issueLink->DESTINATION;
+        }
+
+        foreach($storyLink as $source => $dest)
+        {
+            if(!isset($issueStories[$source])) continue;
+            $parentID = $issueStories[$source];
+            $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+            foreach($dest as $childID) 
+            {
+                if(!isset($issueStories[$childID])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq($parentID)->where('id')->eq($issueStories[$childID])->exec();
+            }
+        }
+
+        foreach($taskLink as $source => $dest)
+        {
+            if(!isset($issueTasks[$source])) continue;
+            $parentID = $issueTasks[$source];
+            $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
+            foreach($dest as $childID) 
+            {
+                if(!isset($issueTasks[$childID])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq($parentID)->where('id')->eq($issueTasks[$childID])->exec();
+            }
+        }
+
+        foreach($duplicateLink as $source => $dest)
+        {
+            $objectType = $issueObjectType[$source];
+
+            if($objectType != 'story' and $objectType != 'bug') continue;
+            if($issueObjectType[$source] != $issueObjectType[$dest]) continue;
+
+            if(!isset($relation[$objectType][$source]) or !isset($relation[$objectType][$dest])) continue;
+
+            if($objectType == 'story') 
+            {
+                if(empty($issueStories[$dest]) or empty($issueStories[$source])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($$issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
+            }
+            elseif($objectType == 'bug')   
+            {
+                if(empty($issueBugs[$dest]) or empty($issueBugs[$source])) continue;
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($issueBugs[$dest])->where('id')->eq($issueBugs[$source])->exec();
+            }
+        }
+
+        foreach($relatesLink as $source => $dest)
+        {
+            if(empty($issueObjectType[$source]) or empty($issueObjectType[$dest])) continue;
+
+            $sourceObjectType = $issueObjectType[$source];
+            $destObjectType   = $issueObjectType[$dest];
+
+            if($sourceObjectType == 'task' and $destObjectType == 'story') 
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$dest])->where('id')->eq($issueTasks[$source])->exec();
+            }
+            elseif($sourceObjectType == 'story' and $destObjectType == 'task') 
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$source])->where('id')->eq($issueTasks[$dest])->exec();
+            }
+            elseif($sourceObjectType == 'story' and $destObjectType == 'bug')  
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$source])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$dest])->exec();
+            }
+            elseif($sourceObjectType == 'bug' and $destObjectType == 'story')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$dest])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$source])->exec();
+            }
+            elseif($sourceObjectType == 'story' and $destObjectType == 'story') 
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("linkStories=concat(linkStories, ',{$issueStories[$dest]}')")->where('id')->eq($issueStories[$source])->exec();
+            }
+            elseif($sourceObjectType == 'bug' and $destObjectType == 'bug')
+            {
+                $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set("linkBug=concat(linkBug, ',{$issueBugs[$dest]}')")->where('id')->eq($issueBugs[$source])->exec();
+            }
+        }
+    }
+
+    /**
+     * Import jira action.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
+    public function importJiraAction($dataList)
+    {
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jtask')
+            ->andWhere('BType')->eq('ztask')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        $projectRelation = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jproject')
+            ->andWhere('BType')->eq('zproject')
+            ->fetchPairs();
+
+        $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
+            ->where('project')->in(array_values($projectRelation))
+            ->fetchPairs();
+
+        foreach($dataList as $data)
+        {
+            $action = new stdclass();
+
+            $issueID = $data->issueid;
+            $comment = $data->actionbody;
+            if(empty($comment)) continue;
+
+            $objectType = $issueObjectType[$issueID];
+            if($objectType == 'task')  $objectID = $issueTasks[$issueID];
+            if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
+            if($objectType == 'story') $objectID = $issueStories[$issueID];
+
+            if(empty($objectID)) continue;
+
+            $action = new stdclass();
+            $action->objectType = $objectType;
+            $action->objectID   = $objectID;
+            $action->actor      = $this->getJiraAccount($data->AUTHOR);
+            $action->action     = 'commented';
+            $action->date       = substr($data->CREATED, 0, 19);
+            $action->comment    = $comment;
+            $this->dao->dbh($this->dbh)->insert(TABLE_ACTION)->data($action)->exec();
+        }
+    }
+
+    /**
+     * Import jira file.
+     * 
+     * @param  object $dataList 
+     * @access public
+     * @return void
+     */
+    public function importJiraFile($dataList)
+    {
+        $this->loadModel('file');
+
+        $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('zissuetype')
+            ->fetchPairs();
+
+        $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jstory')
+            ->andWhere('BType')->eq('zstory')
+            ->fetchPairs();
+
+        $issueTasks = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jtask')
+            ->andWhere('BType')->eq('ztask')
+            ->fetchPairs();
+
+        $issueBugs = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jbug')
+            ->andWhere('BType')->eq('zbug')
+            ->fetchPairs();
+
+        $filePaths = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('jissueid')
+            ->andWhere('BType')->eq('jfilepath')
+            ->fetchPairs();
+
+        foreach($dataList as $fileAttachment)
+        {
+            $issueID    = $fileAttachment->issueid;
+            $objectType = $issueObjectType[$issueID];
+            if($objectType != 'bug' and $objectType != 'task' and $objectType != 'story') continue;
+
+            $fileID     = $fileAttachment->ID;
+            $fileName   = $fileAttachment->FILENAME;
+            list($mime, $extension) = explode('/', $fileAttachment->MIMETYPE);
+
+            if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
+            if($objectType == 'task')  $objectID = $issueTasks[$issueID];
+            if($objectType == 'story') $objectID = $issueStories[$issueID];
+            if(empty($objectID)) continue;
+
+            $file = new stdclass();
+            $file->pathname   = $this->file->setPathName($fileID, $extension);
+            $file->title      = str_ireplace(".{$extension}", '', $fileName);
+            $file->extension  = $extension;
+            $file->size       = $fileAttachment->FILESIZE;
+            $file->objectType = $objectType;
+            $file->objectID   = $objectID;
+            $file->addedBy    = $this->getJiraAccount($fileAttachment->AUTHOR);
+            $file->addedDate  = substr($fileAttachment->CREATED, 0, 19);
+            $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
+
+            $jiraFile = $this->app->getCacheRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
+            if(is_file($jiraFile)) copy($jiraFile, $this->file->savePath . $file->pathname);
+        }
+    }
+
+    /**
+     * Convert jira status.
+     * 
+     * @param  string $objectType 
+     * @param  string $jiraStatus 
+     * @access public
+     * @return void
+     */
     public function convertStatus($objectType, $jiraStatus)
     {
         $status = 'active';
@@ -567,6 +999,13 @@ class convertModel extends model
         return $status;
     }
 
+    /**
+     * Convert stage.
+     * 
+     * @param  string $jiraStatus 
+     * @access public
+     * @return void
+     */
     public function convertStage($jiraStatus)
     {
         $stage = 'wait';
@@ -580,6 +1019,13 @@ class convertModel extends model
         return $stage;
     }
 
+    /**
+     * Get jira account.
+     * 
+     * @param  string $userKey 
+     * @access public
+     * @return void
+     */
     public function getJiraAccount($userKey)
     {
         if(strpos($userKey, 'JIRAUSER') === false) return $userKey;
