@@ -1710,8 +1710,8 @@ class bug extends control
     public function linkBugs($bugID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         /* Load pager. */
-         $this->app->loadClass('pager', $static = true);
-         $pager = new pager($recTotal, $recPerPage, $pageID);
+        $this->app->loadClass('pager', $static = true);
+        $pager   = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
