@@ -55,7 +55,10 @@ class xuanxuanMessage extends messageModel
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
                 if($objectType == 'mr' && !empty($object->createdBy)) $target .= ",{$object->createdBy}";
                 $target = trim($target, ',');
-                $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->andWhere('account')->ne($this->app->user->account)->fetchAll('id');
+                $target = $this->dao->select('id')->from(TABLE_USER)
+                    ->where('account')->in($target)
+                    ->beginIF($objectType != 'mr')->andWhere('account')->ne($this->app->user->account)->fi()
+                    ->fetchAll('id');
                 $target = array_keys($target);
 
                 $subcontent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);

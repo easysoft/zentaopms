@@ -62,7 +62,7 @@ $lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
 $lang->gitlab->name           = "GitLab Server";
-$lang->gitlab->url            = 'GitLab URL';
+$lang->gitlab->url            = 'GitLab Server URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
 $lang->gitlab->private        = 'MD5 Verify';
@@ -86,7 +86,7 @@ $lang->gitlab->placeholder->projectPath = "It should contain only letters, digit
 $lang->gitlab->noImportableIssues = "There are currently no issues available for import.";
 $lang->gitlab->tokenError         = "The current token is not root rights.";
 $lang->gitlab->tokenLimit         = "The current token has no admin privilege. Please regenerate one with root user in GitLab.";
-$lang->gitlab->hostError          = "So the current GitLab server address is invalid or the current GitLab version is not compatible with ZenTao, please confirm that the current server can be accessed or contact the administrator to upgrade the GitLab version to %s and try again.";
+$lang->gitlab->hostError          = "So the current GitLab server address is invalid or the current GitLab version is not compatible with ZenTao, please confirm that the current server can be accessed or contact the administrator to upgrade the GitLab version to %s or above and try again.";
 $lang->gitlab->bindUserError      = "Can not bind users repeatedly %s";
 $lang->gitlab->importIssueError   = "The execution to which this issue belongs is not selected.";
 $lang->gitlab->importIssueWarn    = "There is a problem of import failure, you can try to import again.";
