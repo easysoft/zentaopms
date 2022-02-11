@@ -123,7 +123,7 @@ $config->story->datatable->fieldList['openedDate']['required'] = 'no';
 
 $config->story->datatable->fieldList['assignedTo']['title']    = 'assignedToAB';
 $config->story->datatable->fieldList['assignedTo']['fixed']    = 'no';
-$config->story->datatable->fieldList['assignedTo']['width']    = '86';
+$config->story->datatable->fieldList['assignedTo']['width']    = '90';
 $config->story->datatable->fieldList['assignedTo']['required'] = 'no';
 
 $config->story->datatable->fieldList['assignedDate']['title']    = 'assignedDate';

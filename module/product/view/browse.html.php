@@ -330,10 +330,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 
               if($value->show)
               {
-                  if($value->title == $lang->product->assigned)
-                  {
-                      $value->width = 90;
-                  }
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
                   $columns ++;
               }

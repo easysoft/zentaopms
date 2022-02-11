@@ -80,7 +80,6 @@ $lang->product->assignToNullBugsTitle = '未指派Bug';
 $lang->product->closedBugs            = '关闭Bug';
 $lang->product->bugFixedRate          = 'Bug修复率';
 $lang->product->unfoldClosed          = '展开已关闭';
-$lang->product->assigned              = '指派';
 
 $lang->product->confirmDelete        = " 您确定删除该{$lang->productCommon}吗？";
 $lang->product->errorNoProduct       = "还没有创建{$lang->productCommon}！";
