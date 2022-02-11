@@ -245,7 +245,7 @@ class gitlab extends control
         $gitlabURL = trim($this->post->url);
         $token     = trim($this->post->token);
 
-        if(strpos($gitlabURL, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(strpos($gitlabURL, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
         if(!$token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
         $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token, true);
