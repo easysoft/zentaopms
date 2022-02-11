@@ -67,7 +67,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php if($bugCount) echo html::submitButton('', '', 'btn btn-default');?></div>
       <?php echo html::hidden('bug', $bug->id);?>
-<?php $pager->show('right', 'pagerjs');?>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>
