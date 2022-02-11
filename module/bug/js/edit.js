@@ -26,16 +26,18 @@ $(function()
  *
  * @param int $projectID
  * @access public
- * @return bool
+ * @return void
  */
 function changeExecutionName(projectID)
 {
-      if(!parseInt(projectID)) return false;
-      var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
-      $.post(link, function(executionLang)
-      {
+    if(parseInt(projectID))
+    {
+        var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+        $.post(link, function(executionLang)
+        {
           $('#executionBox').html(executionLang);
-      })
+        })
+    }
 }
 
 /**

@@ -164,7 +164,7 @@ $(function()
  *
  * @param int $projectID
  * @access public
- * @return bool
+ * @return void
  */
 function changeExecutionName(projectID)
 {
