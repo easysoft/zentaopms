@@ -410,6 +410,7 @@ class sonarqube extends control
         $this->view->pager              = $pager;
         $this->view->title              = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseIssue;
         $this->view->sonarqubeID        = $sonarqubeID;
+        $this->view->sonarqube          = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->view->sonarqubeIssueList = (empty($sonarqubeIssueList) or empty($sonarqubeIssueList[$pageID - 1])) ? array() : $sonarqubeIssueList[$pageID - 1];
         $this->view->orderBy            = $orderBy;
         $this->view->productID          = $productID;
