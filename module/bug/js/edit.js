@@ -35,7 +35,7 @@ function changeExecutionName(projectID)
         var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
         $.post(link, function(executionLang)
         {
-          $('#executionBox').html(executionLang);
+            $('#executionBox').html(executionLang);
         })
     }
 }
