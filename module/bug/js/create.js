@@ -168,13 +168,19 @@ $(function()
  */
 function changeExecutionName(projectID)
 {
-    if(!projectID) return false;
-    projectID ? loadProjectTeamMembers(projectID) : loadExecutionTeamMembers($('#product').val());
-    var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
-    $.post(link, function(executionLang)
+    if(parseInt(projectID))
     {
-        $('#executionBox').html(executionLang);
-    })
+        loadProjectTeamMembers(projectID);
+        var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+        $.post(link, function(executionLang)
+        {
+            $('#executionBox').html(executionLang);
+        })
+    }
+    else
+    {
+        loadExecutionTeamMembers($('#product').val());
+    }
 }
 
 $(window).unload(function(){

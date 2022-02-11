@@ -30,7 +30,7 @@ $(function()
  */
 function changeExecutionName(projectID)
 {
-      if(!projectID) return false;
+      if(!parseInt(projectID)) return false;
       var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
       $.post(link, function(executionLang)
       {
