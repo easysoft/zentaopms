@@ -470,6 +470,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
           <?php endif;?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
+        <?php $pager->show('right', 'pagerjs');?>
       </div>
     </form>
     <?php endif;?>
