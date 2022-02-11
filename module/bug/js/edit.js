@@ -24,7 +24,7 @@ $(function()
 /**
  * Ajax change execution name.
  *
- * @param int $projectID
+ * @param  int projectID
  * @access public
  * @return void
  */
