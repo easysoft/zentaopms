@@ -338,6 +338,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <tr class='hide'>
             <th><?php echo $lang->bug->status;?></th>
             <td><?php echo html::hidden('status', 'active');?></td>
+            <td><?php echo html::hidden('issueKey', $issueKey);?></td>
           </tr>
           <?php $this->printExtendFields('', 'table');?>
           <tr>

@@ -62,7 +62,9 @@
           <td class='text' title='<?php echo $sonarqubeIssue->effort;?>'><?php echo $sonarqubeIssue->effort;?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('bug', 'create', '', "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn btn-primary'");
+            $issueKey = $sonarqubeID . ':' . $sonarqubeIssue->key;
+            $attr     = isset($bugs[$issueKey]) ? 'disabled' : '';
+            common::printLink('bug', 'create', "productID=$productID&branch=&extra=from=sonarqube,sonarqubeID=$sonarqubeID,issueKey={$sonarqubeIssue->key}", "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn' $attr data-app='qa'");
             ?>
           </td>
         </tr>

@@ -21,6 +21,12 @@ $(document).ready(function()
         $("#sonarqubeIssueForm").attr('action', $(this).data('url'))
         triggerSearch();
     });
+
+    $('.c-actions>a').click(function()
+    {
+        issueTitle = $(this).parent().parent().children(':first').attr('title');
+        $.cookie('sonarqubeIssue', issueTitle);
+    });
 });
 
 /**

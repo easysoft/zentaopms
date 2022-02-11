@@ -395,6 +395,10 @@ class sonarqube extends control
         foreach($sonarqubeIssueList as $sonarqubeIssue) $orderList[] = $sonarqubeIssue->$order;
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeIssueList);
 
+        /* Get product. */
+        $products  = $this->sonarqube->getLinkedProducts($sonarqubeID, $projectKey);
+        $productID = current(explode(',', $products));
+
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
         $recTotal = count($sonarqubeIssueList);
@@ -408,6 +412,8 @@ class sonarqube extends control
         $this->view->sonarqubeID        = $sonarqubeID;
         $this->view->sonarqubeIssueList = (empty($sonarqubeIssueList) or empty($sonarqubeIssueList[$pageID - 1])) ? array() : $sonarqubeIssueList[$pageID - 1];
         $this->view->orderBy            = $orderBy;
+        $this->view->productID          = $productID;
+        $this->view->bugs               = $this->loadModel('bug')->getBySonarqubeID($sonarqubeID);
         $this->display();
     }
 }

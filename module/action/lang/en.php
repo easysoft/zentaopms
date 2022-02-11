@@ -198,6 +198,7 @@ $lang->action->desc->importedproductplan  = '$date, imported to <strong>$extra</
 $lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
+$lang->action->desc->fromsonarqube        = '$date, by <strong>$actor</strong> turn from <strong>SonarQube Issue</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -342,6 +343,7 @@ $lang->action->label->importedproductplan   = 'imported';
 $lang->action->label->importedrelease       = 'imported';
 $lang->action->label->importedexecution     = 'imported';
 $lang->action->label->importedbuild         = 'imported';
+$lang->action->label->fromsonarqube         = 'from SonarQube Issue';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -519,6 +521,7 @@ $lang->action->dynamicAction->bug['linked2release']      = 'Link Release';
 $lang->action->dynamicAction->bug['unlinkedfromrelease'] = 'Unlink Plan';
 $lang->action->dynamicAction->bug['linked2bug']          = 'Link Build';
 $lang->action->dynamicAction->bug['unlinkedfrombuild']   = 'Unlink Build';
+$lang->action->dynamicAction->bug['fromsonarqube']       = 'Create Bug from SonarQube Issue';
 
 $lang->action->dynamicAction->testtask['opened']    = 'Create Test Request';
 $lang->action->dynamicAction->testtask['edited']    = 'Edit Test Request';

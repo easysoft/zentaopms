@@ -284,4 +284,22 @@ class sonarqubeModel extends model
         if(!is_writable($cachePath)) return false;
         return $cachePath . '/' . $sonarqubeID . '-' . md5($projectKey);
     }
+
+    /**
+     * Get linked products.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return string
+     */
+    public function getLinkedProducts($sonarqubeID, $projectKey)
+    {
+        return $this->dao->select('t2.product')->from(TABLE_JOB)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
+            ->where('t1.frame')->eq('sonarqube')
+            ->andWhere('sonarqubeServer')->eq($sonarqubeID)
+            ->andWhere('projectKey')->eq($projectKey)
+            ->fetch('product');
+    }
 }
