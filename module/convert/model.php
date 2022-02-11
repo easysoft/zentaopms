@@ -971,7 +971,7 @@ class convertModel extends model
             $file->addedDate  = substr($fileAttachment->CREATED, 0, 19);
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
-            $jiraFile = $this->app->getCacheRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
+            $jiraFile = $this->app->getTmpRoot() . 'attachments/' . $filePaths[$issueID] .  $fileID;
             if(is_file($jiraFile)) copy($jiraFile, $this->file->savePath . $file->pathname);
         }
     }
