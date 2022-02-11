@@ -18,6 +18,7 @@ $gitlab = $tester->loadModel('gitlab');
 
 $gitlabID     = 1;
 $gitlabServer = $tester->loadModel('pipeline')->getByID($gitlabID);
+
 $result = $gitlab->getVersion($gitlabServer->url, $gitlabServer->token);
 if(isset($result->version)) $result = 'success';
 r($result) && p() && e('success'); //通过host,token检验api权限
