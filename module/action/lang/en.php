@@ -198,7 +198,7 @@ $lang->action->desc->importedproductplan  = '$date, imported to <strong>$extra</
 $lang->action->desc->importedrelease      = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedexecution    = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
 $lang->action->desc->importedbuild        = '$date, imported to <strong>$extra</strong> by <strong>$actor</strong>.' . "\n";
-$lang->action->desc->fromsonarqube        = '$date, by <strong>$actor</strong> turn from <strong>SonarQube Issue</strong>.' . "\n";
+$lang->action->desc->fromsonarqube        = '$date, created by <strong>$actor</strong> from <strong>SonarQube Issue</strong>.' . "\n";
 
 /* Used to describe the history of operations related to parent-child tasks. */
 $lang->action->desc->createchildren     = '$date, <strong>$actor</strong> created a child task <strong>$extra</strong>。' . "\n";
@@ -343,7 +343,7 @@ $lang->action->label->importedproductplan   = 'imported';
 $lang->action->label->importedrelease       = 'imported';
 $lang->action->label->importedexecution     = 'imported';
 $lang->action->label->importedbuild         = 'imported';
-$lang->action->label->fromsonarqube         = 'from SonarQube Issue';
+$lang->action->label->fromsonarqube         = 'created a bug from SonarQube Issue named:';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
