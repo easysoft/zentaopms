@@ -247,4 +247,185 @@ class convert extends control
         $this->view->info    = redmineConvertModel::$info;
         $this->display();
     }
+
+    /**
+     * Import jira index.
+     * 
+     * @access public
+     * @return void
+     */
+    public function convertJira()
+    {
+        $this->view->title = $this->lang->convert->jira->method;
+        $this->display();
+    }
+
+    /**
+     * Import jira notice.
+     * 
+     * @param  string $type  db|file
+     * @access public
+     * @return void
+     */
+    public function importNotice($type = 'db')
+    {
+        if($_POST)
+        {
+            $dbName = $this->post->dbName;
+            if(!$dbName) 
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->dbNameEmpty;
+                return print($this->send($response));
+            }
+
+            if(!$this->convert->dbExists($dbName))
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->invalidDB;
+                return print($this->send($response));
+            }
+
+            $this->session->set('jiraDB', $dbName);
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'mapJira2Zentao', "type=db&dbName={$this->post->dbName}");
+            return print($this->send($response));
+        }
+
+        $this->view->title = $this->lang->convert->jira->method;
+        $this->view->type  = $type;
+        $this->display();
+    }
+
+    /**
+     * Map jira objects to zentao.
+     * 
+     * @param  string $type db|file
+     * @param  string $dbName 
+     * @access public
+     * @return void
+     */
+    public function mapJira2Zentao($type = 'db', $dbName = '')
+    {
+        $this->app->loadLang('story');
+        $this->app->loadLang('bug');
+        $this->app->loadLang('task');
+
+        if($_POST)
+        {
+            $this->session->set('jiraRelation', $_POST);
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'initJiraUser', "type=$type");
+            return print($this->send($response));
+        }
+
+        if($type == 'db')
+        {
+            $dbh = $this->convert->connectDB($dbName);
+
+            $issueTypePairs = $this->dao->dbh($dbh)->select('ID,pname')->from(JIRA_ISSUETYPE)->fetchPairs();
+            $linkTypePairs  = $this->dao->dbh($dbh)->select('ID,LINKNAME')->from(JIRA_ISSUELINKTYPE)->fetchPairs();
+            $resolutions    = $this->dao->dbh($dbh)->select('ID,pname')->from(JIRA_RESOLUTION)->fetchPairs();
+            $statusList     = $this->dao->dbh($dbh)->select('ID,pname')->from(JIRA_ISSUESTATUS)->fetchPairs();
+        }
+        
+        $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
+        $this->view->issueTypePairs = $issueTypePairs;
+        $this->view->linkTypePairs  = $linkTypePairs;
+        $this->view->resolutions    = $resolutions;
+        $this->view->statusList     = $statusList;
+        $this->display();
+    }
+
+    /**
+     * Init jira user.
+     * 
+     * @param  string $type db|file
+     * @access public
+     * @return void
+     */
+    public function initJiraUser($type = 'db')
+    {
+        $this->app->loadLang('user');
+
+        if($_POST)
+        {
+            if(!$this->post->password1 || !$this->post->password2)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordEmpty;
+                return print($this->send($response));
+            }
+
+            if($this->post->password1 != $this->post->password2)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordDifferent;
+                return print($this->send($response));
+            }
+
+            $jiraUser['password'] = md5($this->post->password1);
+            $jiraUser['group']    = $this->post->group;
+            $this->session->set('jiraUser', $jiraUser);
+
+            $response['result']  = 'success';
+            $response['message'] = $this->lang->saveSuccess;
+            $response['locate']  = $this->createLink('convert', 'importJira', "type=$type");
+            return print($this->send($response));
+        }
+
+        $this->view->title  = $this->lang->convert->jira->initJiraUser;
+        $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->display();
+    }
+
+    /**
+     * Import jira main logic.
+     * 
+     * @param  string $method db|file
+     * @param  string $type user|issue|project|attachment
+     * @param  int    $lastID 
+     * @access public
+     * @return void
+     */
+    public function importJira($method = 'db', $type = 'user', $lastID = 0, $createTable = false)
+    {
+        set_time_limit(0);
+        
+        if($method = 'db')
+        {
+            if(helper::isAjaxRequest())
+            {   
+                $result = $this->convert->importJiraFromDB($type, $lastID, $createTable);
+                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+                if(isset($result['finished']) and $result['finished'])
+                {   
+                    return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+                }   
+                else
+                {   
+                    $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);
+
+                    $response['result']  = 'unfinished';
+                    $response['message'] = sprintf($this->lang->convert->jira->importResult, $type, $type, $result['count']);
+                    $response['type']    = $type;
+                    $response['count']   = $result['count'];
+                    $response['next']    = inlink('importJira', "method=$method&type={$result['type']}&lastID={$result['lastID']}");
+                    return print $this->send($response);
+                }   
+            }
+        }
+        else
+        {
+            //$this->convert->importJiraFromFile();
+        }
+
+        $this->view->type   = $type;
+        $this->view->method = $method;
+        $this->view->title  = $this->lang->convert->jira->importJira;
+        $this->display();
+    }
 }

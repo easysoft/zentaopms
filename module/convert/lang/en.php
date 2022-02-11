@@ -114,3 +114,6 @@ $lang->convert->issue = new stdclass();
 $lang->convert->issue->redmine = 'Redmine';
 $lang->convert->issue->zentao  = 'ZenTao';
 $lang->convert->issue->goto    = 'Convert To';
+
+$lang->convert->jira = new stdclass();
+$lang->convert->jira->import = 'Import Jira';

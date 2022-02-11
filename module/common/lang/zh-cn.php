@@ -280,6 +280,8 @@ $lang->admin->data       = '数据';
 $lang->admin->cron       = '定时';
 $lang->admin->buildIndex = '重建索引';
 
+$lang->convert->importJira = '导入Jira数据';
+
 $lang->storyConcept = '需求概念';
 
 $lang->searchTips = '';
