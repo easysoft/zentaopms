@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
+  <?php unset($_GET['onlybody']);?>
   <?php if(empty($measures)): ?>
     <div class='empty-tip'><?php echo $lang->sonarqube->noReport;?></div>
   <?php else:?>
