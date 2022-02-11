@@ -187,6 +187,7 @@ $filter->bug->default->cookie['lastProduct']   = 'int';
 $filter->bug->default->cookie['preProductID']  = 'int';
 $filter->bug->create->cookie['preBranch']      = 'reg::word';
 $filter->bug->create->cookie['lastBugModule']  = 'int';
+$filter->bug->create->cookie['sonarqubeIssue'] = 'reg::any';
 $filter->bug->export->cookie['checkedItem']    = 'reg::checked';
 
 $filter->caselib->create->cookie['lastLibCaseModule'] = 'int';
