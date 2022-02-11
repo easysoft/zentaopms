@@ -19,17 +19,24 @@ $(function()
             }
         });
     }
-
-    $('#project').change(function()
-    {
-        var projectID = $('#project').val();
-        var link      = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
-        $.post(link, function(executionLang)
-        {
-            $('#executionBox').html(executionLang);
-        })
-    })
 });
+
+/**
+ * Ajax change execution name.
+ *
+ * @param int $projectID
+ * @access public
+ * @return bool
+ */
+function changeExecutionName(projectID)
+{
+      if(!projectID) return false;
+      var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+      $.post(link, function(executionLang)
+      {
+          $('#executionBox').html(executionLang);
+      })
+}
 
 /**
  * Set duplicate field.

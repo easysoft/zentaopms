@@ -281,6 +281,7 @@ function loadProductExecutions(productID, projectID = 0)
         if(required) $(this).addClass('required');
     });
     loadProjectBuilds(projectID);
+    changeExecutionName(projectID);
 }
 
 /**
