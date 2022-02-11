@@ -309,6 +309,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           <tr>
           <?php if($this->app->getViewType() == 'xhtml'):?>
           <?php
+            echo "222222222222";
           foreach($setting as $key => $value)
           {
               if($value->id == 'title' || $value->id == 'id' || $value->id == 'pri' || $value->id == 'status')
@@ -324,12 +325,17 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           }?>
           <?php else:?>
           <?php
+            echo "11111111111";
           foreach($setting as $key => $value)
           {
               if($storyType == 'requirement' and (in_array($value->id, array('plan', 'stage')))) $value->show = false;
 
               if($value->show)
               {
+                  if($value->title == $lang->product->assigned)
+                  {
+                      $value->width = 90;
+                  }
                   $this->datatable->printHead($value, $orderBy, $vars, $canBatchAction);
                   $columns ++;
               }
