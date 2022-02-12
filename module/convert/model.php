@@ -95,13 +95,15 @@ class convertModel extends model
     }
 
     /**
-     * Get jira data.
+     * Get jira data from db.
      * 
-     * @param  int    $module 
+     * @param  string $module 
+     * @param  int    $lastID
+     * @param  int    $limit
      * @access public
      * @return void
      */
-    public function getJiraData($module = '', $lastID = 0, $limit = 0)
+    public function getJiraDataFromDB($module = '', $lastID = 0, $limit = 0)
     {
         $dataList = array();
         if($module == 'user')
@@ -165,6 +167,104 @@ class convertModel extends model
         return $dataList;
     }
 
+    public function getJiraDataFromFile($module, $lastID = 0, $limit = 0)
+    {
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/' . $module . '.xml');
+        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
+        $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
+
+        $dataList  = array();
+        $parsedXML = $this->object2Array($parsedXML);
+        foreach($parsedXML as $key => $xmlArray)
+        {
+            if(strtolower($key) != strtolower($module)) continue;
+            foreach($xmlArray as $key => $attributes)
+            {
+                if(isset($attributes['description'])) 
+                {
+                    $desc = $attributes['description'];
+                    unset($attributes['description']);
+                }
+                else
+                {
+                    $desc = '';
+                }
+
+                foreach($attributes as $value)
+                {
+                    if(!empty($desc)) $value['description'] = $desc;
+                    $dataList[$value['id']] = $value;
+                }
+            }
+        }
+
+        if($limit) 
+        {
+            $dataList = array_slice($dataList, $lastID, $limit, true);
+            if(empty($dataList)) return array();
+        }
+
+        if($module == 'user')
+        {
+            foreach($dataList as $key => $data)
+            {
+                $user = new stdclass();
+                $user->account  = $data['lowerUserName'];
+                $user->realname = $data['lowerDisplayName'];
+                $user->email    = $data['emailAddress'];
+                $user->join     = $data['createdDate'];
+                $dataList[$key] = $user;
+            }
+        }
+        elseif($module == 'project')
+        {
+            foreach($dataList as $key => $data)
+            {
+                $project = new stdclass();
+                $project->ID          = $data['id'];
+                $project->pname       = $data['name'];
+                $project->pkey        = $data['key'];
+                $project->oldKey      = $data['originalkey'];
+                $project->DESCRIPTION = $data['description'];
+                $project->LEAD        = $data['lead'];
+
+                $dataList[$key] = $project;
+            }
+        }
+        elseif($module == 'issue')
+        {
+        }
+        elseif($module == 'build')
+        {
+        }
+        elseif($module == 'issuelink')
+        {
+        }
+        elseif($module == 'action')
+        {
+        }
+        elseif($module == 'file')
+        {
+        }
+
+        return $dataList;
+    }
+
+    public function object2Array($parsedXML)
+    {
+        if(is_object($parsedXML))
+        {
+            $parsedXML = (array)$parsedXML;
+        }
+
+        if(is_array($parsedXML))
+        {
+            foreach($parsedXML as $key => $value) $parsedXML[$key] = $this->object2Array($value);
+        }
+
+        return $parsedXML;
+    }
+
     /**
      * Import jira from db.
      * 
@@ -190,7 +290,7 @@ class convertModel extends model
 
             while(true)
             {
-                $dataList = $this->getJiraData($module, $lastID, $limit);
+                $dataList = $this->getJiraDataFromDB($module, $lastID, $limit);
 
                 if(empty($dataList))
                 {
@@ -210,17 +310,56 @@ class convertModel extends model
             }
         }
 
-        /* Set project min start date. */
-        $executionProject  = $this->dao->dbh($this->dbh)->select('id,project')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('project')->ne(0)->fetchPairs();
-        $minOpenedDateList = $this->dao->dbh($this->dbh)->select('id,execution,min(openedDate) as minOpenedDate')->from(TABLE_TASK)->where('execution')->in(array_keys($executionProject))->groupBy('execution')->fetchPairs('execution', 'minOpenedDate');
+        $this->afterExec();
+        return array('finished' => true);
+    }
 
-        foreach($minOpenedDateList as $executionID => $minOpenedDate) 
+    /**
+     * Import jira from file.
+     * 
+     * @param  string   $type 
+     * @param  int      $lastID 
+     * @param  bool     $createTable
+     * @access public
+     * @return void
+     */
+    public function importJiraFromFile($type = '', $lastID = 0, $createTable = false)
+    {
+        if($createTable) $this->createTmpTable4Jira();
+
+        $limit = 1000;
+        $nextObject = false;
+        if(empty($type)) $type = key($this->lang->convert->jira->objectList);
+
+        foreach($this->lang->convert->jira->objectList as $module => $moduleName)
         {
-            $projectID = $executionProject[$executionID];
-            $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
+            if($module != $type and !$nextObject) continue;
+            if($module == $type) $nextObject = true;
+
+            while(true)
+            {
+                $dataList = $this->getJiraDataFromFile($module, $lastID, $limit);
+
+                if(empty($dataList))
+                {
+                    $lastID = 0;
+                    break;
+                }
+
+                if($module == 'user')      $this->importJiraUser($dataList);
+                if($module == 'project')   $this->importJiraProject($dataList);
+                if($module == 'issue')     $this->importJiraIssue($dataList);
+                if($module == 'build')     $this->importJiraBuild($dataList);
+                if($module == 'issuelink') $this->importJiraIssueLink($dataList);
+                if($module == 'action')    $this->importJiraAction($dataList);
+                if($module == 'file')      $this->importJiraFile($dataList);
+
+                $offset = $lastID + $limit;
+                return array('type' => $module, 'count' => count($dataList), 'lastID' => $offset);
+            }
         }
 
-        $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
+        $this->afterExec();
         return array('finished' => true);
     }
 
@@ -250,7 +389,7 @@ class convertModel extends model
             $user->type     = 'inside';
             $user->join     = $data->join;
 
-            $this->dao->dbh($this->dbh)->insert(TABLE_USER)->data($user, 'group')->exec();
+            $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
 
             if(!dao::isError())
             {   
@@ -398,15 +537,20 @@ class convertModel extends model
             $projectRelation['BType'] = 'zproject'; 
             $projectRelation['AID']   = $id; 
             $projectRelation['BID']   = $projectID; 
-
             $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($projectRelation)->exec();
 
             $executionRelation['AType'] = 'jproject'; 
             $executionRelation['BType'] = 'zexecution'; 
             $executionRelation['AID']   = $id; 
             $executionRelation['BID']   = $executionID; 
-
             $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($executionRelation)->exec();
+
+            $keyRelation['AType'] = 'joldkey';
+            $keyRelation['BType'] = 'jnewkey';
+            $keyRelation['AID']   = $data->ORIGINALKEY;
+            $keyRelation['BID']   = $data->pkey;
+            $keyRelation['extra'] = $data->ID;
+            $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($keyRelation)->exec();
         }
     }
 
@@ -430,6 +574,11 @@ class convertModel extends model
             ->andWhere('BType')->eq('zproject')
             ->fetchPairs();
 
+        $projectKeys = $this->dao->dbh($this->dbh)->select('extra as ID, AID as oldKey, BID as newKey')->from(JIRA_TMPRELATION)
+            ->where('AType')->eq('joldkey')
+            ->andWhere('BType')->eq('jnewkey')
+            ->fetchAll('ID');
+
         $projectProduct = $this->dao->dbh($this->dbh)->select('project,product')->from(TABLE_PROJECTPRODUCT)
             ->where('project')->in(array_values($projectRelation))
             ->fetchPairs();
@@ -451,8 +600,6 @@ class convertModel extends model
             if(!empty($relations['zentaoReason'][$id]))     $reasonList[$jiraCode]     = $relations['zentaoReason'][$id];
             if(!empty($relations['zentaoResolution'][$id])) $resolutionList[$jiraCode] = $relations['zentaoResolution'][$id];
         }
-
-        $projectKeys = $this->dao->dbh($this->sourceDBH)->select('ID, ORIGINALKEY as oldKey, pkey as newKey')->from(JIRA_PROJECT)->fetchAll('ID');
 
         foreach($dataList as $id => $data)
         {
@@ -1033,6 +1180,62 @@ class convertModel extends model
         return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name'); 
     }
 
+    public function splitFile()
+    {
+        $filePath = $this->app->getTmpRoot() . 'jirafile/';
+        $fileName = 'entities.xml';
+        $file     = $filePath . $fileName;
+        $handle   = fopen($file, "r");
+
+        $usingData  = array();
+        $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType');
+        $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>');
+
+        while(!feof($handle))
+        {
+            $itemStr = fgets($handle);
+            foreach($headerList as $object)
+            {
+                $itemName  = $object;
+                $itemName .= ' ';
+
+                if(strpos($itemStr, $itemName) === false) continue;
+
+                if(strpos($itemStr, '/>') === false)
+                {
+                    $end = $footerList[$object];
+                    while(true)
+                    {   
+                        $followItemStr = fgets($handle);
+                        $itemStr      .= $followItemStr;
+                        if(strpos($itemStr, $end) !== false) break;
+                    } 
+                }
+
+                $object = str_replace('<', '', $object);
+                $object = strtolower($object);
+                $data   = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $itemStr);
+                if(!file_exists($filePath . $object . '.xml')) $data = "<?xml version='1.0' encoding='UTF-8'?>\n  <entity-engine-xml>\n" . $data;
+                file_put_contents($filePath . $object . '.xml', $data, FILE_APPEND);
+            }
+        }
+
+        foreach($headerList as $object)
+        {
+            $object = str_replace('<', '', $object);
+            $object = strtolower($object);
+            file_put_contents($filePath . $object . '.xml', '</entity-engine-xml>', FILE_APPEND);
+        }
+
+        fclose($handle);
+    }
+
+    /**
+     * Create tmp table for import jira.
+     * 
+     * @access public
+     * @return void
+     */
     public function createTmpTable4Jira()
     {
 $sql = <<<EOT
@@ -1053,5 +1256,20 @@ EOT;
             $this->dbh->exec($sql);
         }    
         catch(Exception $e){}
+    }
+
+    public function afterExec()
+    {
+        /* Set project min start date. */
+        $executionProject  = $this->dao->dbh($this->dbh)->select('id,project')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('project')->ne(0)->fetchPairs();
+        $minOpenedDateList = $this->dao->dbh($this->dbh)->select('id,execution,min(openedDate) as minOpenedDate')->from(TABLE_TASK)->where('execution')->in(array_keys($executionProject))->groupBy('execution')->fetchPairs('execution', 'minOpenedDate');
+    
+        foreach($minOpenedDateList as $executionID => $minOpenedDate) 
+        {
+            $projectID = $executionProject[$executionID];
+            $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
+        }
+    
+        $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
     }
 }
