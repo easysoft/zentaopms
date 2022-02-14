@@ -143,14 +143,17 @@ $lang->convert->jira->start            = '开始导入';
 
 $lang->convert->jira->dbNameEmpty        = 'Jira数据库名字不能为空！';
 $lang->convert->jira->invalidDB          = '无效的数据库名！';
+$lang->convert->jira->invalidTable       = '本数据库非Jira数据库！';
 $lang->convert->jira->passwordNotice     = "<span class='text-red'>设置Jira用户导入到禅道后的默认密码，用户后续可以在禅道中自行修改密码。</span>";
 $lang->convert->jira->groupNotice        = "<span class='text-red'>设置Jira用户导入到禅道后的默认权限分组。</span>";
 $lang->convert->jira->passwordDifferent  = '两次密码不一致！';
 $lang->convert->jira->passwordEmpty      = '密码不能为空！';
+$lang->convert->jira->passwordLess       = '密码不能少于六位！';
 $lang->convert->jira->importSuccessfully = 'Jira导入完成！';
 $lang->convert->jira->importResult       = "导入 <strong class='text-red'>%s</strong> 数据, 已处理 <strong class='%scount'>%s</strong> 条记录；";
 $lang->convert->jira->importing          = '数据导入中，请不要切换其它页面';
 
+$lang->convert->jira->zentaoObjectList[''] = '';
 $lang->convert->jira->zentaoObjectList['task']        = '任务';
 $lang->convert->jira->zentaoObjectList['requirement'] = '用户需求';
 $lang->convert->jira->zentaoObjectList['story']       = '软件需求';

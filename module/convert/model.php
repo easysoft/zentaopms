@@ -52,6 +52,7 @@ class convertModel extends model
     /**
      * Check table exits or not.
      * 
+     * @param  string  $table
      * @access public
      * @return bool
      */
@@ -59,6 +60,21 @@ class convertModel extends model
     {
         $sql = "SHOW tables like '$table'";
         return $this->dbh->query($sql)->fetch();
+    }
+
+    /**
+     * Check table of jira databases exits or not.
+     *
+     * @param  string  $dbName
+     * @param  string  $table
+     * @access public
+     * @return bool
+     */
+    public function tableExistsOfJira($dbName, $table)
+    {
+        $this->connectDB($dbName);
+        $sql = "SHOW tables like '$table'";
+        return $this->dao->dbh($this->sourceDBH)->query($sql)->fetch();
     }
 
     /**

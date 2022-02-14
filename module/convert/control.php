@@ -288,6 +288,13 @@ class convert extends control
                     return print($this->send($response));
                 }
 
+                if(!$this->convert->tableExistsOfJira($dbName, 'nodeassociation'))
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = $this->lang->convert->jira->invalidTable;
+                    return print($this->send($response));
+                }
+
                 $this->session->set('jiraDB', $dbName);
                 $link = $this->createLink('convert', 'mapJira2Zentao', "method=db&dbName={$this->post->dbName}");
             }
@@ -348,7 +355,7 @@ class convert extends control
             $resolutionList = $this->convert->getJiraDataFromFile('resolution');
             $statusList     = $this->convert->getJiraDataFromFile('status');
         }
-        
+
         $this->view->title          = $this->lang->convert->jira->mapJira2Zentao;
         $this->view->issueTypeList  = $issueTypeList;
         $this->view->linkTypeList   = $linkTypeList;
@@ -375,6 +382,13 @@ class convert extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = $this->lang->convert->jira->passwordEmpty;
+                return print($this->send($response));
+            }
+
+            if(strlen(trim($this->post->password1)) < 6)
+            {
+                $response['result']  = 'fail';
+                $response['message'] = $this->lang->convert->jira->passwordLess;
                 return print($this->send($response));
             }
 
