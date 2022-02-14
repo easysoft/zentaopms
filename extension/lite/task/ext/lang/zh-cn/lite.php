@@ -26,6 +26,7 @@ $lang->task->exportAction        = "导出卡片";
 $lang->task->copy                = '复制卡片';
 $lang->task->waitTask            = '未开始的卡片';
 
+$lang->task->module            = '所属目录';
 $lang->task->common            = '卡片';
 $lang->task->name              = '卡片名称';
 $lang->task->type              = '卡片类型';
