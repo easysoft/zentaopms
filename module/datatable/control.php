@@ -62,7 +62,6 @@ class datatable extends control
         $key    = $mode == 'datatable' ? 'cols' : 'tablecols';
 
         $version = $this->datatable->getMode();
-        a($version);
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
