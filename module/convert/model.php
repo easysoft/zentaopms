@@ -167,9 +167,18 @@ class convertModel extends model
         return $dataList;
     }
 
+    /**
+     * Get jira data from file.
+     * 
+     * @param  sting  $module 
+     * @param  int    $lastID 
+     * @param  int    $limit 
+     * @access public
+     * @return void
+     */
     public function getJiraDataFromFile($module, $lastID = 0, $limit = 0)
     {
-        $filename   = $module;
+        $filename = $module;
         if($module == 'build') $filename = 'version';
         if($module == 'file')  $filename = 'fileattachment';
 
@@ -295,6 +304,12 @@ class convertModel extends model
         return $dataList;
     }
 
+    /**
+     * Get version group from jira file.
+     * 
+     * @access public
+     * @return void
+     */
     public function getVersionGroup()
     {
         $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
@@ -1260,6 +1275,12 @@ class convertModel extends model
         return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name'); 
     }
 
+    /**
+     * Split jira file.
+     * 
+     * @access public
+     * @return void
+     */
     public function splitFile()
     {
         $filePath = $this->app->getTmpRoot() . 'jirafile/';
@@ -1338,6 +1359,12 @@ EOT;
         catch(Exception $e){}
     }
 
+    /**
+     * After exec.
+     * 
+     * @access public
+     * @return void
+     */
     public function afterExec()
     {
         /* Set project min start date. */
