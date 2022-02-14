@@ -1711,7 +1711,7 @@ class bug extends control
     {
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
-        $pager   = new pager($recTotal, $recPerPage, $pageID);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
 
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
