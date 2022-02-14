@@ -336,6 +336,7 @@ class sonarqube extends control
      *
      * @param  int    $sonarqubeID
      * @param  string $projectKey
+     * @param  bool   $search
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -343,10 +344,20 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseIssue($sonarqubeID, $projectKey = '', $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
-        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+        if(isset($_POST['keyword']))
+        {
+            $keyword = htmlspecialchars(trim($_POST['keyword']));
+            $search  = true;
+            $pageID  = 1;
+            $this->session->set('sonarqubeIssueKeyword', $keyword);
+        }
+        else
+        {
+            $keyword = '';
+            if($search == true) $keyword = $this->session->sonarqubeIssueKeyword;
+        }
 
         $cacheFile = $this->sonarqube->getCacheFile($sonarqubeID, $projectKey);
         if(!$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->sonarqube->cacheTime)
@@ -407,6 +418,7 @@ class sonarqube extends control
         $sonarqubeIssueList = array_chunk($sonarqubeIssueList, $pager->recPerPage);
 
         $this->view->projectKey         = $projectKey;
+        $this->view->search             = $search;
         $this->view->keyword            = $keyword;
         $this->view->pager              = $pager;
         $this->view->title              = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseIssue;
