@@ -610,7 +610,7 @@ class gitlabModel extends model
         {
             $url .= '&owned=true';
         }
-        elseif(!empty($minRole))
+        elseif(!empty($minRole) and isset($this->config->gitlab->accessLevel[$minRole]))
         {
             $url .= '&min_access_level=' . $this->config->gitlab->accessLevel[$minRole];
         }
