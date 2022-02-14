@@ -25,9 +25,10 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($issueTypePairs as $id => $name):?>
+        <?php foreach($issueTypeList as $id => $issueType):?>
+        <?php $value = $method == 'db' ? $issueType->pname : $issueType['name'];?>
         <tr>
-          <td><?php echo html::select('jiraObject[]', $issueTypePairs, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('jiraObject[]', array($id => $value), $id, "class='form-control chosen'");?></td>
           <td><?php echo html::select('zentaoObject[]', $lang->convert->jira->zentaoObjectList, '', "class='form-control chosen'");?></td>
         </tr>
         <?php endforeach;?>
@@ -42,9 +43,10 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($linkTypePairs as $id => $name):?>
+        <?php foreach($linkTypeList as $id => $linkType):?>
+        <?php $value = $method == 'db' ? $linkType->linkname : $linkType['linkname'];?>
         <tr>
-          <td><?php echo html::select('jiraLinkType[]', $linkTypePairs, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('jiraLinkType[]', array($id => $value), $id, "class='form-control chosen'");?></td>
           <td><?php echo html::select('zentaoLinkType[]', $lang->convert->jira->zentaoLinkTypeList, '', "class='form-control chosen'");?></td>
         </tr>
         <?php endforeach;?>
@@ -60,9 +62,10 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($resolutions as $id => $name):?>
+        <?php foreach($resolutionList as $id => $resolution):?>
+        <?php $value = $method == 'db' ? $resolution->pname : $resolution['name'];?>
         <tr>
-          <td><?php echo html::select('jiraResolution[]', $resolutions, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('jiraResolution[]', array($id => $value), $id, "class='form-control chosen'");?></td>
           <td><?php echo html::select('zentaoResolution[]', $lang->bug->resolutionList, '', "class='form-control chosen'");?></td>
           <td><?php echo html::select('zentaoReason[]', $lang->story->reasonList, '', "class='form-control chosen'");?></td>
         </tr>
@@ -81,9 +84,10 @@
         </tr>
       </thead>
       <tbody>
-        <?php foreach($statusList as $id => $name):?>
+        <?php foreach($statusList as $id => $status):?>
+        <?php $value = $method == 'db' ? $status->pname : $status['name'];?>
         <tr>
-          <td><?php echo html::select('jiraStatus[]', $statusList, $id, "class='form-control chosen'");?></td>
+          <td><?php echo html::select('jiraStatus[]', array($id => $value), $id, "class='form-control chosen'");?></td>
           <td><?php echo html::select('storyStatus[]', $lang->story->statusList, '', "class='form-control chosen'");?></td>
           <td><?php echo html::select('storyStage[]', $lang->story->stageList, '', "class='form-control chosen'");?></td>
           <td><?php echo html::select('taskStatus[]', $lang->task->statusList, '', "class='form-control chosen'");?></td>

@@ -17,24 +17,24 @@ li .form-control {margin-top: 10px}
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <h2>
-      <?php echo $type == 'db' ? $lang->convert->jira->importFromDB : $lang->convert->jira->importFromFile;?>
+      <?php echo $method == 'db' ? $lang->convert->jira->importFromDB : $lang->convert->jira->importFromFile;?>
     </h2>
   </div>
   <form class='form-ajax' method='post'>
     <div class='panel-title text-center text-red'><?php echo $lang->convert->jira->importNotice;?></div>
     <div class='panel-body'>
       <ol>
-        <li><?php echo $lang->convert->jira->importSteps[$type][1];?></li>
-        <li><?php echo $lang->convert->jira->importSteps[$type][2];?></li>
-        <?php if($type == 'db'):?>
-        <li><?php echo $lang->convert->jira->importSteps[$type][3];?></li>
+        <li><?php echo $lang->convert->jira->importSteps[$method][1];?></li>
+        <li><?php echo $lang->convert->jira->importSteps[$method][2];?></li>
+        <?php if($method == 'db'):?>
+        <li><?php echo $lang->convert->jira->importSteps[$method][3];?></li>
         <?php else:?>
-        <li><?php echo sprintf($lang->convert->jira->importSteps[$type][3], $app->getTmpRoot() . 'jirafile');?></li>
+        <li><?php echo sprintf($lang->convert->jira->importSteps[$method][3], $app->getTmpRoot() . 'jirafile');?></li>
         <?php endif;?>
-        <li><?php echo sprintf($lang->convert->jira->importSteps[$type][4], $app->getTmpRoot());?></li>
+        <li><?php echo sprintf($lang->convert->jira->importSteps[$method][4], $app->getTmpRoot());?></li>
         <li>
-          <?php echo $lang->convert->jira->importSteps[$type][5];?>
-          <?php if($type == 'db'):?>
+          <?php echo $lang->convert->jira->importSteps[$method][5];?>
+          <?php if($method == 'db'):?>
           <?php echo html::input('dbName', '', "class='form-control w-200px' placeholder={$lang->convert->jira->dbNameNotice}");?>
           <?php endif;?>
         </li>

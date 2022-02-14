@@ -17,11 +17,12 @@
   </div>
   <div>
     <div class='form-group'>
-      <ul id='resultBox'></ul>
+      <ul id='resultBox'>
+        <li class='text-red hidden'><strong><?php echo $lang->convert->jira->importing;?></strong></li>
+      </ul>
     </div>
-    <div class='from-group'><?php echo html::a(inlink('importJira', "method=db&type=user&lastID=0&createTable=true"), $lang->convert->jira->start, '', "class='btn btn-primary' id='execButton'");?></div>
+    <div class='from-group'><?php echo html::a(inlink('importJira', "method=$method&type=user&lastID=0&createTable=true"), $lang->convert->jira->start, '', "class='btn btn-primary' id='execButton'");?></div>
   </div>
-</div>
 </div>
 <script>
 $(document).ready(function()
@@ -29,6 +30,7 @@ $(document).ready(function()
     $('#execButton').click(function()
     {
         $('#execButton').hide();
+        $('#resultBox .text-red').removeClass('hidden');
 
         $.getJSON($(this).attr('href'), function(response)
         {

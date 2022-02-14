@@ -149,6 +149,7 @@ $lang->convert->jira->passwordDifferent  = '两次密码不一致！';
 $lang->convert->jira->passwordEmpty      = '密码不能为空！';
 $lang->convert->jira->importSuccessfully = 'Jira导入完成！';
 $lang->convert->jira->importResult       = "导入 <strong class='text-red'>%s</strong> 数据, 已处理 <strong class='%scount'>%s</strong> 条记录；";
+$lang->convert->jira->importing          = '数据导入中，请不要切换其它页面';
 
 $lang->convert->jira->zentaoObjectList['task']        = '任务';
 $lang->convert->jira->zentaoObjectList['requirement'] = '用户需求';
@@ -164,6 +165,7 @@ $lang->convert->jira->importSteps['db'][1]   = '备份禅道数据库，备份Ji
 $lang->convert->jira->importSteps['db'][2]   = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
 $lang->convert->jira->importSteps['db'][3]   = '将Jira数据库导入到禅道使用的Mysql中，名字和禅道数据库区别开来。';
 $lang->convert->jira->importSteps['db'][4]   = "将Jira附件目录<strong class='text-red'> attachments</strong> 放到 <strong class='text-red'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
+
 $lang->convert->jira->importSteps['db'][5]   = "上述步骤完成后，请输入Jira数据库名字进行下一步。";
 $lang->convert->jira->importSteps['file'][1] = '备份禅道数据库，备份Jira数据库。';
 $lang->convert->jira->importSteps['file'][2] = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
