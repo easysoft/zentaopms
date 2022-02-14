@@ -310,7 +310,7 @@ class projectModel extends model
         $allBugs  = $this->getTotalBugByProject($projectIdList, 'all');
         $doneBugs = $this->getTotalBugByProject($projectIdList, 'resolved');
 
-        $leftTasks = $this->getTotalTaskByProject($projectIdList, 'doing');
+        $leftTasks = $this->getTotalTaskByProject($projectIdList, 'undone');
         $allTasks  = $this->getTotalTaskByProject($projectIdList, 'all');
         $doneTasks = $this->getTotalTaskByProject($projectIdList, 'done');
 
@@ -562,7 +562,7 @@ class projectModel extends model
      * Get associated tasks by project.
      *
      * @param  array  $projectIdList
-     * @param  string $status
+     * @param  string $status all|done|undone
      * @access public
      * @return array
      */
@@ -571,7 +571,8 @@ class projectModel extends model
         return $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
-            ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->in('wait,pause,cancel')->fi()
             ->groupBy('project')
             ->fetchPairs('project');
     }
