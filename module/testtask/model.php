@@ -1069,7 +1069,8 @@ class testtaskModel extends model
         $testtaskPairs = array();
         while($testtask = $stmt->fetch())
         {
-            $testtaskPairs[$testtask->id] = $testtask->execution . ' / ' . $testtask->name;
+            if($testtask->execution) $testtask->execution .= " / ";
+            $testtaskPairs[$testtask->id] = $testtask->execution . $testtask->name;
         }
         return $testtaskPairs;
     }
