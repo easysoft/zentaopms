@@ -61,6 +61,8 @@ class datatable extends control
         $mode   = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
         $key    = $mode == 'datatable' ? 'cols' : 'tablecols';
 
+        $version = $this->datatable->getMode();
+        a($version);
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
@@ -77,6 +79,7 @@ class datatable extends control
         $this->view->module = $module;
         $this->view->method = $method;
         $this->view->mode   = $mode;
+        $this->view->version= $version->value;
 
         $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';
