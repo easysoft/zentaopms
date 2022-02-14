@@ -1075,6 +1075,38 @@ class testtaskModel extends model
     }
 
     /**
+     * Get user test taskpairs for ajax.
+     *
+     * @param mixed $account
+     * @param int $limit
+     * @param string $status
+     * @param array $skipProductIDList
+     * @param array $skipExecutionIDList
+     * @access public
+     * @return void
+     */
+    public function getAjaxUserTestTaskPairs($account, $limit = 0, $status = 'all', $skipProductIDList = array(), $skipExecutionIDList = array())
+    {
+        $stmt = $this->dao->select('t1.id, t1.name, t2.name as execution')
+            ->from(TABLE_TESTTASK)->alias('t1')
+            ->leftjoin(TABLE_EXTENSION)->alias('t2')->on('t1.execution = t2.id')
+            ->where('t1.owner')->eq($account)
+            ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
+            ->beginIF(!empty($skipProductIDList))->andWhere('t1.product')->notin($skipProductIDList)->fi()
+            ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
+            ->beginIF($limit)->limit($limit)->fi()
+            ->query();
+
+        $testtaskPairs = array();
+        while($testtask = $stmt->fetch())
+        {
+            $testtaskPairs[$testtask->id] = $testtask->execution . ' ' . $testtask->name;
+        }
+        return $testtaskPairs;
+    }
+
+    /**
      * Get info of a test run.
      *
      * @param  int   $runID
