@@ -169,7 +169,11 @@ class convertModel extends model
 
     public function getJiraDataFromFile($module, $lastID = 0, $limit = 0)
     {
-        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/' . $module . '.xml');
+        $filename   = $module;
+        if($module == 'build') $filename = 'version';
+        if($module == 'file')  $filename = 'fileattachment';
+
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/' . $filename. '.xml');
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
         $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
 
@@ -177,22 +181,19 @@ class convertModel extends model
         $parsedXML = $this->object2Array($parsedXML);
         foreach($parsedXML as $key => $xmlArray)
         {
-            if(strtolower($key) != strtolower($module)) continue;
+            if(strtolower($key) != strtolower($filename)) continue;
             foreach($xmlArray as $key => $attributes)
             {
-                if(isset($attributes['description'])) 
-                {
-                    $desc = $attributes['description'];
-                    unset($attributes['description']);
-                }
-                else
-                {
-                    $desc = '';
-                }
+                $desc    = isset($attributes['description']) ? $attributes['description'] : '';
+                $summary = isset($attributes['summary']) ? $attributes['summary'] : '';
+                $body    = isset($attributes['body']) ? $attributes['body'] : '';
 
                 foreach($attributes as $value)
                 {
-                    if(!empty($desc)) $value['description'] = $desc;
+                    if(!is_array($value)) continue;
+                    if(!empty($desc))    $value['description'] = $desc;
+                    if(!empty($summary)) $value['summary']     = $summary;
+                    if(!empty($body))    $value['body']        = $body;
                     $dataList[$value['id']] = $value;
                 }
             }
@@ -204,52 +205,129 @@ class convertModel extends model
             if(empty($dataList)) return array();
         }
 
-        if($module == 'user')
+        foreach($dataList as $key => $data)
         {
-            foreach($dataList as $key => $data)
+            if($module == 'user')
             {
                 $user = new stdclass();
                 $user->account  = $data['lowerUserName'];
                 $user->realname = $data['lowerDisplayName'];
                 $user->email    = $data['emailAddress'];
                 $user->join     = $data['createdDate'];
+
                 $dataList[$key] = $user;
             }
-        }
-        elseif($module == 'project')
-        {
-            foreach($dataList as $key => $data)
+            elseif($module == 'project')
             {
                 $project = new stdclass();
                 $project->ID          = $data['id'];
                 $project->pname       = $data['name'];
                 $project->pkey        = $data['key'];
-                $project->oldKey      = $data['originalkey'];
+                $project->ORIGINALKEY = $data['originalkey'];
                 $project->DESCRIPTION = $data['description'];
                 $project->LEAD        = $data['lead'];
 
                 $dataList[$key] = $project;
             }
-        }
-        elseif($module == 'issue')
-        {
-        }
-        elseif($module == 'build')
-        {
-        }
-        elseif($module == 'issuelink')
-        {
-        }
-        elseif($module == 'action')
-        {
-        }
-        elseif($module == 'file')
-        {
+            elseif($module == 'issue')
+            {
+                $issue = new stdclass();
+                $issue->ID          = $data['id'];
+                $issue->SUMMARY     = $data['summary'];
+                $issue->PRIORITY    = $data['priority'];
+                $issue->PROJECT     = $data['project'];
+                $issue->issuestatus = $data['status'];
+                $issue->CREATED     = $data['created'];
+                $issue->CREATOR     = $data['creator'];
+                $issue->issuetype   = $data['type'];
+                $issue->ASSIGNEE    = isset($data['assignee']) ? $data['assignee'] : '';
+                $issue->RESOLUTION  = isset($data['resolution']) ? $data['resolution'] : '';
+                $issue->issuenum    = $data['number'];
+                $issue->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
+
+                $dataList[$key] = $issue;
+            }
+            elseif($module == 'build')
+            {
+                $build = new stdclass();
+                $build->ID          = $data['id'];
+                $build->PROJECT     = $data['project'];
+                $build->vname       = $data['name'];
+                $build->RELEASEDATE = isset($data['releasedate']) ? $data['releasedate'] : '';
+                $build->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
+
+                $dataList[$key] = $build;
+            }
+            elseif($module == 'issuelink')
+            {
+                $issueLink = new stdclass();
+                $issueLink->LINKTYPE    = $data['linktype'];
+                $issueLink->SOURCE      = $data['source']; 
+                $issueLink->DESTINATION = $data['destination'];
+
+                $dataList[$key] = $issueLink;
+            }
+            elseif($module == 'action')
+            {
+                $action = new stdclass();
+                $action->issueid    = $data['issue'];
+                $action->actionbody = $data['body'];
+                $action->AUTHOR     = $data['author'];
+                $action->CREATED    = $data['created'];
+
+                $dataList[$key] = $action;
+            }
+            elseif($module == 'file')
+            {
+                $file = new stdclass();
+                $file->issueid  = $data['issue'];
+                $file->ID       = $data['id'];
+                $file->FILENAME = $data['filename'];
+                $file->MIMETYPE = $data['mimetype'];
+                $file->FILESIZE = $data['filesize'];
+                $file->CREATED  = $data['created'];
+                $file->AUTHOR   = $data['author'];
+
+                $dataList[$key] = $file;
+            }
         }
 
         return $dataList;
     }
 
+    public function getVersionGroup()
+    {
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
+        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
+        $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
+
+        $dataList  = array();
+        $parsedXML = $this->object2Array($parsedXML);
+        foreach($parsedXML as $key => $xmlArray)
+        {
+            if(strtolower($key) != 'nodeassociation') continue;
+            foreach($xmlArray as $key => $attributes)
+            {
+                foreach($attributes as $value)
+                {
+                    if(!is_array($value)) continue;
+                    if($value['sinkNodeEntity'] != 'Version') continue;
+                    $dataList[$value['sinkNodeId']][] = $value['sinkNodeId'];
+                    $dataList[$value['sinkNodeId']][] = $value['sourceNodeId'];
+                }
+            }
+        }
+
+        return $dataList;
+    }
+
+    /**
+     * Convert object to array.
+     * 
+     * @param  object $parsedXML 
+     * @access public
+     * @return void
+     */
     public function object2Array($parsedXML)
     {
         if(is_object($parsedXML))
@@ -349,7 +427,7 @@ class convertModel extends model
                 if($module == 'user')      $this->importJiraUser($dataList);
                 if($module == 'project')   $this->importJiraProject($dataList);
                 if($module == 'issue')     $this->importJiraIssue($dataList);
-                if($module == 'build')     $this->importJiraBuild($dataList);
+                if($module == 'build')     $this->importJiraBuild($dataList, 'file');
                 if($module == 'issuelink') $this->importJiraIssueLink($dataList);
                 if($module == 'action')    $this->importJiraAction($dataList);
                 if($module == 'file')      $this->importJiraFile($dataList);
@@ -785,10 +863,11 @@ class convertModel extends model
      * Import jira build.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraBuild($dataList)
+    public function importJiraBuild($dataList, $method = 'db')
     {
         $issueObjectType = $this->dao->dbh($this->dbh)->select('AID,extra')->from(JIRA_TMPRELATION)
             ->where('AType')->eq('jissueid')
@@ -814,7 +893,7 @@ class convertModel extends model
             ->where('project')->in(array_values($projectRelation))
             ->fetchPairs();
 
-        $versionGroup = $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID');
+        $versionGroup = $method == 'db' ? $this->dao->dbh($this->sourceDBH)->select('SINK_NODE_ID as versionID, SOURCE_NODE_ID as issueID')->from(JIRA_NODEASSOCIATION)->where('SINK_NODE_ENTITY')->eq('Version')->fetchGroup('versionID') : $this->getVersionGroup();
 
         foreach($dataList as $data)
         {
@@ -851,9 +930,10 @@ class convertModel extends model
             {
                 foreach($versionGroup[$versionID] as $issue)
                 {
-                    $issueType = zget($issueObjectType, $issue->issueID, '');
+                    $issueID   = $method == 'db' ? $issue->issueID : $issue;
+                    $issueType = zget($issueObjectType, $issueID, '');
                     if(!$issueType || ($issueType != 'story' and $issueType != 'bug')) continue;
-                    $objectID  = $issueType == 'bug' ? zget($issueBugs, $issue->issueID) : zget($issueStories, $issue->issueID);
+                    $objectID  = $issueType == 'bug' ? zget($issueBugs, $issueID) : zget($issueStories, $issueID);
 
                     $field = $issueType == 'story' ? 'stories' : 'bugs';
                     if($issueType == 'story')
@@ -1188,8 +1268,8 @@ class convertModel extends model
         $handle   = fopen($file, "r");
 
         $usingData  = array();
-        $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType');
-        $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>');
+        $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType', '<NodeAssociation');
+        $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>');
 
         while(!feof($handle))
         {
@@ -1242,9 +1322,9 @@ $sql = <<<EOT
 CREATE TABLE `jiratmprelation`(
   `id` int(8) NOT NULL AUTO_INCREMENT,
   `AType` char(30) NOT NULL,
-  `AID` mediumint(8) NOT NULL,
+  `AID` char(30) NOT NULL,
   `BType` char(30) NOT NULL,
-  `BID` mediumint(8) NOT NULL,
+  `BID` char(30) NOT NULL,
   `extra` char(30) NOT NULL,
   PRIMARY KEY (`id`),
   UNIQUE KEY `relation` (`AType`,`BType`,`AID`,`BID`)
