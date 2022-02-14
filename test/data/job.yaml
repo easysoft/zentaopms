@@ -33,7 +33,7 @@ fields:
     format: ""
   - field: frame
     note: "工具/框架"
-    range: junit,testng,phpunit,pytest,jtest,cppunit,gtest,qtest
+    range: sonarqube,junit,testng,phpunit,pytest,jtest,cppunit,gtest,qtest
     prefix: ""
     postfix: ""
     loop: 0
@@ -44,6 +44,20 @@ fields:
   - field: triggerType
     note: "触发方式"
     range: tag,commit,schedule
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: sonarqubeServer
+    note: "Sonarqube服务器"
+    range: 2,0{8}
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: projectKey
+    note: "Sonarqube项目"
+    range: zentaopms
     prefix: ""
     postfix: ""
     loop: 0

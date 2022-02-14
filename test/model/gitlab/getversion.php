@@ -27,6 +27,6 @@ $result = $gitlab->getVersion($gitlabServer->url, $gitlabServer->token . 'a');
 if(!isset($result->version)) $result = 'return false';
 r($result) && p() && e('return false'); //通过正确的host，错误的token获取api权限
 
-$result = $gitlab->getVersion($gitlabServer->url . 'a', $gitlabServer->token);
+$result = $gitlab->getVersion($gitlabServer->url . '1', $gitlabServer->token);
 if(!isset($result->version)) $result = 'return false';
 r($result) && p() && e('return false'); //通过错误或低版本的的host，token获取api权限
