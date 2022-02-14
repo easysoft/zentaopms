@@ -206,10 +206,10 @@ $lang->kanban->defaultColumn['doing']  = 'doing';
 $lang->kanban->defaultColumn['done']   = 'done';
 $lang->kanban->defaultColumn['closed'] = 'close';
 
-$this->lang->kanban->laneTypeList = array();
-$this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
-$this->lang->kanban->laneTypeList['bug']   = 'Bug';
-$this->lang->kanban->laneTypeList['task']  = 'Task';
+$lang->kanban->laneTypeList = array();
+$lang->kanban->laneTypeList['story'] = $lang->SRCommon;
+$lang->kanban->laneTypeList['bug']   = 'Bug';
+$lang->kanban->laneTypeList['task']  = 'Task';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';
