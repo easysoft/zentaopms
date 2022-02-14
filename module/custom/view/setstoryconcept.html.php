@@ -52,8 +52,7 @@ EOT;
           <?php if($this->config->URAndSR):?>
           <td class='w-200px'><strong><?php echo $lang->custom->URConcept;?></strong></th>
           <?php endif;?>
-          <td class='w-200px'><strong><?php echo $lang->custom->SRConcept;?></strong></th>
-          <td></td><td></td>
+          <td<?php echo $this->config->URAndSR ? " class='w-200px'": " class='w-250px'";?>><strong><?php echo $lang->custom->SRConcept;?></strong></th>
         </tr>
         <tr>
           <?php if($this->config->URAndSR):?>
@@ -65,7 +64,7 @@ EOT;
           </td>
         </tr>
         <tr>
-          <td class='text-center' colspan='4'><?php echo html::submitButton();?></td>
+          <td class='text-center' colspan='<?php echo !$this->config->URAndSR ? 2 : 4;?>'><?php echo html::submitButton();?></td>
         </tr>
       </table>
     </div>
