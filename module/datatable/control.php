@@ -60,8 +60,8 @@ class datatable extends control
         $target = $module . ucfirst($method);
         $mode   = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
         $key    = $mode == 'datatable' ? 'cols' : 'tablecols';
+        $version= $this->datatable->getMode();
 
-        $version = $this->datatable->getMode();
         if($module == 'testtask')
         {
             $this->loadModel('testcase');
