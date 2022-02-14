@@ -2036,7 +2036,6 @@ class kanbanModel extends model
                 $lane->type      = $type;
                 $lane->execution = $executionID;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-
                 $laneID = $this->dao->lastInsertId();
                 $this->createExecutionColumns($laneID, $type, $executionID);
             }
