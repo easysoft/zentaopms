@@ -466,7 +466,7 @@ class build extends control
                 $html .= html::a("javascript:loadExecutionBuilds($executionID)", $this->lang->refresh);
                 die($html);
             }
-            die(html::select('build', array('') + $builds, $build, "class='form-control' onchange='loadTestReports(this.value)'"));
+            die(html::select('build', array('') + $builds, $build, "class='form-control'"));
         }
         if($varName == 'dropdownList')
         {

@@ -36,7 +36,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->build;?></th>
-          <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen' onchange='loadTestReports(this.value)'");?></span></td>
+          <td class='w-p35-f'><span id='buildBox'><?php echo html::select('build', $builds, $task->build, "class='form-control chosen'");?></span></td>
           <td></td>
         </tr>
         <tr>
@@ -69,7 +69,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->testtask->testreport;?></th>
-          <td><?php echo html::select('testreport', $testreports, $task->testreport,  "class='form-control chosen'");?></td>
+          <td><?php echo html::select('testreport', array('') + $testreports, $task->testreport,  "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->testtask->name;?></th>

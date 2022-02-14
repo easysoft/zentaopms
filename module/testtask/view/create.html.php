@@ -30,7 +30,7 @@
         <?php else:?>
         <tr class='hide'>
           <th class='w-80px'><?php echo $lang->testtask->product;?></th>
-          <td class='w-p35-f'><?php echo html::input('product', $productID, "class='form-control'");?></td><td></td>
+          <td class='w-p35-f'><?php echo html::input('product', $productID, "class='form-control' onchange='loadTestReports(this.value)'");?></td><td></td>
         </tr>
         <?php endif;?>
         <tr>
@@ -41,7 +41,7 @@
           <th class='w-80px'><?php echo $lang->testtask->build;?></th>
           <td class='w-p35-f'>
             <div class='input-group' id='buildBox'>
-            <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen' onchange='loadTestReports(this.value)'");?>
+            <?php echo html::select('build', empty($builds) ? '' : $builds, $build, "class='form-control chosen'");?>
             <?php if(isset($executionID) and $executionID and empty($builds)):?>
             <span class='input-group-addon'><?php echo html::a(helper::createLink('build', 'create', "executionID=$executionID&productID=$productID&projectID=$projectID", '', true), $lang->build->create, '', "data-toggle='modal' data-type='iframe' data-width='95%'")?> </span>
             </div>
