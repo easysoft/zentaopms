@@ -489,35 +489,9 @@ class program extends control
      * @access public
      * @return void
      */
-    public function createStakeholder($programID = 0, $dept = '', $parentIdList = '')
+    public function createStakeholder($programID = 0)
     {
-        if($_POST)
-        {
-            $this->program->createStakeholder($programID);
-            die(js::locate($this->createLink('program', 'stakeholder', "programID=$programID"), 'parent'));
-        }
-
-        $this->program->setMenu($programID);
-
-        $this->loadModel('user');
-        $this->lang->program->switcherMenu = $this->program->getSwitcher($programID, true);
-
-        $this->loadModel('dept');
-        $deptUsers = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
-
-        $this->view->title      = $this->lang->program->createStakeholder;
-        $this->view->position[] = $this->lang->program->createStakeholder;
-
-        $this->view->programID          = $programID;
-        $this->view->program            = $this->program->getByID($programID);
-        $this->view->users              = $this->loadModel('user')->getPairs('nodeleted|noclosed');
-        $this->view->deptUsers          = $deptUsers;
-        $this->view->dept               = $dept;
-        $this->view->depts              = array('' => '') + $this->dept->getOptionMenu();
-        $this->view->stakeholders       = $this->program->getStakeholders($programID, 't1.id_desc');
-        $this->view->parentStakeholders = $this->program->getStakeholdersByPrograms($parentIdList);
-
-        $this->display();
+        return print($this->fetch('stakeholder', 'create', "objectID=$programID"));
     }
 
     /**
