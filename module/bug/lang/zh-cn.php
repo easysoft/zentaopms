@@ -19,6 +19,7 @@ $lang->bug->module           = '所属模块';
 $lang->bug->moduleAB         = '模块';
 $lang->bug->project          = '所属项目';
 $lang->bug->execution        = '所属' . $lang->execution->common;
+$lang->bug->kanban           = '所属看板';
 $lang->bug->story            = "相关需求";
 $lang->bug->storyVersion     = "{$lang->SRCommon}版本";
 $lang->bug->color            = '标题颜色';

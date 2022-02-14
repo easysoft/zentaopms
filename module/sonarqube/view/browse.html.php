@@ -43,7 +43,7 @@
         <tr class='text'>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $sonarqube->name;?>'><?php echo $sonarqube->name;?></td>
-          <td class='text' title='<?php echo $sonarqube->url;?>'><?php echo $sonarqube->url;?></td>
+          <td class='text' title='<?php echo $sonarqube->url;?>'><?php echo html::a($sonarqube->url, $sonarqube->url, '_blank');?></td>
           <td class='c-actions text-left'>
             <?php
             common::printLink('sonarqube', 'browseProject', "sonarqubeID=$id", "<i class='icon icon-list-box'></i> ", '',"title='{$lang->sonarqube->browseProject}' class='btn btn-primary'");

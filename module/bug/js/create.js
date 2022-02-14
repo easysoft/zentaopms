@@ -157,13 +157,31 @@ $(function()
             return false;
         }
     });
-
-    $('#project').change(function()
-    {
-        var projectID = parseInt($(this).val());
-        projectID ? loadProjectTeamMembers(projectID) : loadExecutionTeamMembers($('#product').val());
-    });
 });
+
+/**
+ * Ajax change execution name.
+ *
+ * @param  int $projectID
+ * @access public
+ * @return void
+ */
+function changeExecutionName(projectID)
+{
+    if(parseInt(projectID))
+    {
+        loadProjectTeamMembers(projectID);
+        var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
+        $.post(link, function(executionLang)
+        {
+            $('#executionBox').html(executionLang);
+        })
+    }
+    else
+    {
+        loadExecutionTeamMembers($('#product').val());
+    }
+}
 
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));

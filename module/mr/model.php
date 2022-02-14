@@ -449,7 +449,7 @@ class mrModel extends model
             $rawMR = new stdClass();
             foreach($rawMRList[$MR->gitlabID][$MR->targetProject] as $projcetRawMR)
             {
-                if($projcetRawMR->iid == $MR->mriid)
+                if(isset($projcetRawMR->iid) and $projcetRawMR->iid == $MR->mriid)
                 {
                     $rawMR = $projcetRawMR;
                     break;

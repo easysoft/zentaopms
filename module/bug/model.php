@@ -2553,6 +2553,20 @@ class bugModel extends model
     }
 
     /**
+     * Get by Sonarqube id.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return array
+     */
+    public function getBySonarqubeID($sonarqubeID)
+    {
+        return $this->dao->select('issueKey')->from(TABLE_BUG)
+            ->where('issueKey')->like("$sonarqubeID:%")
+            ->fetchPairs();
+    }
+
+    /**
      * Get bugs by search.
      *
      * @param  array       $productIDList

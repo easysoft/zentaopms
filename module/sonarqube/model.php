@@ -42,7 +42,15 @@ class sonarqubeModel extends model
     {
         $url    = rtrim($host, '/') . "/api/authentication/validate";
         $header = 'Authorization: Basic ' . $token;
-        return json_decode(commonModel::http($url, null, array(), $header));
+        $result = json_decode(commonModel::http($url, null, array(), $header));
+        if(!isset($result->valid) or !$result->valid) return array('password' => array($this->lang->sonarqube->validError));
+
+        $url     = rtrim($host, '/') . "/api/user_groups/search";
+        $header  = 'Authorization: Basic ' . $token;
+        $adminer = json_decode(commonModel::http($url, null, array(), $header));
+        if(empty($adminer) or isset($adminer->errors)) return array('account' => array($this->lang->sonarqube->notAdminer));
+
+        return array();
     }
 
     /**
@@ -81,6 +89,35 @@ class sonarqubeModel extends model
         return json_decode(commonModel::http($url, null, array(), $header));
     }
 
+     /**
+     * Get issues of one sonarqube.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return array
+     */
+    public function apiGetIssues($sonarqubeID, $projectKey = '')
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return array();
+
+        $url  = sprintf($apiRoot, "issues/search");
+        $url .= "?ps=500";
+        if($projectKey) $url .= "&componentKeys={$projectKey}";
+
+        $allResults = array();
+        for($page = 1; true; $page++)
+        {
+            $result = json_decode(commonModel::http($url . "&p={$page}", null, array(), $header));
+            if(!isset($result->issues)) break;
+            if(!empty($result->issues)) $allResults = array_merge($allResults, $result->issues);
+            if(count($result->issues) < 500) break;
+        }
+
+        return $allResults;
+    }
+
     /**
      * Get projects of one sonarqube.
      *
@@ -102,8 +139,7 @@ class sonarqubeModel extends model
         $allResults = array();
         for($page = 1; true; $page++)
         {
-            $url .= "&p={$page}";
-            $result = json_decode(commonModel::http($url, null, array(), $header));
+            $result = json_decode(commonModel::http($url . "&p={$page}", null, array(), $header));
             if(!isset($result->components)) break;
             if(!empty($result->components)) $allResults = array_merge($allResults, $result->components);
             if(count($result->components) < 500) break;
@@ -111,6 +147,25 @@ class sonarqubeModel extends model
 
         return $allResults;
     }
+
+    /**
+     * Create a sonarqube project by api.
+     *
+     * @param int    $sonarqubeID
+     * @param object $project
+     * @access public
+     * @return object
+     */
+    public function apiCreateProject($sonarqubeID, $project)
+    {
+        list($apiRoot, $header) = $this->getApiBase($sonarqubeID);
+        if(!$apiRoot) return false;
+
+        $url    = sprintf($apiRoot, "projects/create?name=" . urlencode($project->projectName) . "&project=" . urlencode($project->projectKey));
+        $result = json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
+        return $result;
+    }
+
 
     /**
      * Delete sonarqube project by api.
@@ -128,5 +183,123 @@ class sonarqubeModel extends model
         $url    = sprintf($apiRoot, "projects/delete?project=$projectKey");
         $result = json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header));
         return $result;
+    }
+
+    /**
+     * Create a sonarqube project.
+     *
+     * @param int $sonarqubeID
+     * @access public
+     * @return bool
+     */
+    public function createProject($sonarqubeID)
+    {
+        $project = fixer::input('post')->get();
+
+        $this->dao->insert('sonarqube')->data($project)
+            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty');
+        if(dao::isError()) return false;
+
+        if(mb_strlen($project->projectName) > 255) dao::$errors['projectName'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectName, 255);
+        if(mb_strlen($project->projectKey) > 400) dao::$errors['projectKey'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectKey, 400);
+        if(dao::isError()) return false;
+
+        $response = $this->apiCreateProject($sonarqubeID, $project);
+
+        if(!empty($response->project->key))
+        {
+            $this->loadModel('action')->create('sonarqubeproject', 0, 'created', '', $response->project->name);
+            return true;
+        }
+
+        return $this->apiErrorHandling($response);
+    }
+
+    /**
+     * Api error handling.
+     *
+     * @param  object $response
+     * @access public
+     * @return bool
+     */
+    public function apiErrorHandling($response)
+    {
+        if(!empty($response->errors))
+        {
+            foreach($response->errors as $error)
+            {
+                if(isset($error->msg))
+                {
+                    dao::$errors[] = $this->convertApiError($error->msg);
+                }
+            }
+            return false;
+        }
+
+        if(!$response) dao::$errors[] = false;
+        return false;
+    }
+
+    /**
+     * Convert API error.
+     *
+     * @param  array  $message
+     * @access public
+     * @return string
+     */
+    public function convertApiError($message)
+    {
+        if(is_array($message)) $message = $message[0];
+        if(!is_string($message)) return $message;
+
+        if(!isset($this->lang->sonarqube->apiErrorMap)) return $message;
+        foreach($this->lang->sonarqube->apiErrorMap as $key => $errorMsg)
+        {
+            if(strpos($errorMsg, '/') === 0)
+            {
+                $result = preg_match($errorMsg, $message, $matches);
+                if($result) $errorMessage = sprintf(zget($this->lang->sonarqube->errorLang, $key), $matches[1]);
+            }
+            elseif($message == $errorMsg)
+            {
+                $errorMessage = zget($this->lang->mr->errorLang, $key, $message);
+            }
+            if(isset($errorMessage)) break;
+        }
+        return isset($errorMessage) ? $errorMessage : $message;
+    }
+
+    /**
+     * Get cache file.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return string
+     */
+    public function getCacheFile($sonarqubeID, $projectKey)
+    {
+        $cachePath = $this->app->getCacheRoot() . '/' . 'sonarqube';
+        if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
+        if(!is_writable($cachePath)) return false;
+        return $cachePath . '/' . $sonarqubeID . '-' . md5($projectKey);
+    }
+
+    /**
+     * Get linked products.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return string
+     */
+    public function getLinkedProducts($sonarqubeID, $projectKey)
+    {
+        return $this->dao->select('t2.product')->from(TABLE_JOB)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
+            ->where('t1.frame')->eq('sonarqube')
+            ->andWhere('sonarqubeServer')->eq($sonarqubeID)
+            ->andWhere('projectKey')->eq($projectKey)
+            ->fetch('product');
     }
 }

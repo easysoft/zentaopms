@@ -61,8 +61,8 @@ $lang->gitlab->editTagPriv          = '编辑标签保护';
 $lang->gitlab->deleteTagPriv        = '删除标签保护';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "{$lang->gitlab->common}名称";
-$lang->gitlab->url            = '服务地址';
+$lang->gitlab->name           = "{$lang->gitlab->common}服务器";
+$lang->gitlab->url            = '服务器地址';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = '默认项目';
 $lang->gitlab->private        = 'MD5验证';
@@ -75,6 +75,7 @@ $lang->gitlab->emptyError    = "不能为空";
 $lang->gitlab->createSuccess = "创建成功";
 $lang->gitlab->mustBindUser  = '您还未绑定GitLab用户，请联系管理员进行绑定';
 $lang->gitlab->noAccess      = '权限不足';
+$lang->gitlab->notCompatible = '当前GitLab版本与禅道不兼容，请升级GitLab版本后重试';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
@@ -85,7 +86,7 @@ $lang->gitlab->placeholder->projectPath = "项目标识串只能包含字母、�
 $lang->gitlab->noImportableIssues = "目前没有可供导入的issue。";
 $lang->gitlab->tokenError         = "当前token非root权限。";
 $lang->gitlab->tokenLimit         = "GitLab Token权限不足。请更换为有root权限的GitLab Token。";
-$lang->gitlab->hostError          = "无效的GitLab服务地址。";
+$lang->gitlab->hostError          = "当前GitLab服务器地址无效或当前GitLab版本与禅道不兼容，请确认当前服务器可被访问或联系管理员升级GitLab至%s及以上版本后重试";
 $lang->gitlab->bindUserError      = "不能重复绑定用户 %s";
 $lang->gitlab->importIssueError   = "未选择该issue所属的执行。";
 $lang->gitlab->importIssueWarn    = "存在导入失败的issue，可再次尝试导入。";
@@ -134,6 +135,7 @@ $lang->gitlab->project->emptyNameError             = "项目名称不能为空";
 $lang->gitlab->project->emptyPathError             = "项目标识串不能为空";
 $lang->gitlab->project->confirmDelete              = '确认删除该GitLab项目吗？';
 $lang->gitlab->project->notbindedError             = '还没绑定GitLab用户，无法修改权限！';
+$lang->gitlab->project->publicTip                  = '当前项目的可见性级别将修改为公开，该项目可以在GitLab中没有任何身份验证的情况下被访问';
 
 $lang->gitlab->user = new stdclass;
 $lang->gitlab->user->id             = "用户ID";
@@ -196,6 +198,7 @@ $lang->gitlab->group->memberName                              = '账号';
 $lang->gitlab->group->memberAccessLevel                       = '角色权限';
 $lang->gitlab->group->memberExpiresAt                         = '过期时间';
 $lang->gitlab->group->repeatError                             = "群组成员不能重复添加";
+$lang->gitlab->group->publicTip                               = '当前群组的可见性级别将修改为公开，该群组可以在GitLab中没有任何身份验证的情况下被访问';
 
 $lang->gitlab->branch = new stdclass();
 $lang->gitlab->branch->name                        = '分支名';

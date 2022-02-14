@@ -61,8 +61,8 @@ $lang->gitlab->editTagPriv          = 'Edit tag protected';
 $lang->gitlab->deleteTagPriv        = 'Delete tag protected';
 
 $lang->gitlab->id             = 'ID';
-$lang->gitlab->name           = "GitLab Name";
-$lang->gitlab->url            = 'GitLab URL';
+$lang->gitlab->name           = "GitLab Server";
+$lang->gitlab->url            = 'Server URL';
 $lang->gitlab->token          = 'Token';
 $lang->gitlab->defaultProject = 'Default Project';
 $lang->gitlab->private        = 'MD5 Verify';
@@ -75,6 +75,7 @@ $lang->gitlab->emptyError    = " cannot be empty";
 $lang->gitlab->createSuccess = "Create success";
 $lang->gitlab->mustBindUser  = 'You have not registered the GitLab account, please contact the administrator to register.';
 $lang->gitlab->noAccess      = 'Permission denied';
+$lang->gitlab->notCompatible = 'The current GitLab version is not compatible with ZenTao, please upgrade the GitLab version and try again';
 
 $lang->gitlab->placeholder = new stdclass;
 $lang->gitlab->placeholder->name        = '';
@@ -85,7 +86,7 @@ $lang->gitlab->placeholder->projectPath = "It should contain only letters, digit
 $lang->gitlab->noImportableIssues = "There are currently no issues available for import.";
 $lang->gitlab->tokenError         = "The current token is not root rights.";
 $lang->gitlab->tokenLimit         = "The current token has no admin privilege. Please regenerate one with root user in GitLab.";
-$lang->gitlab->hostError          = "Invalid GitLab service address.";
+$lang->gitlab->hostError          = "So the current GitLab server address is invalid or the current GitLab version is not compatible with ZenTao, please confirm that the current server can be accessed or contact the administrator to upgrade the GitLab version to %s or above and try again.";
 $lang->gitlab->bindUserError      = "Can not bind users repeatedly %s";
 $lang->gitlab->importIssueError   = "The execution to which this issue belongs is not selected.";
 $lang->gitlab->importIssueWarn    = "There is a problem of import failure, you can try to import again.";
@@ -134,6 +135,7 @@ $lang->gitlab->project->emptyNameError             = "Project name cannot be emp
 $lang->gitlab->project->emptyPathError             = "Project slug cannot be empty.";
 $lang->gitlab->project->confirmDelete              = 'Do you want to delete this GitLab project?';
 $lang->gitlab->project->notbindedError             = 'GitLab user has not been bound, unable to modify permissions!';
+$lang->gitlab->project->publicTip                  = 'The visible status of the current project will be modified to public, and the project can be accessed without any authentication in GitLab. ';
 
 $lang->gitlab->user = new stdclass;
 $lang->gitlab->user->id             = "User ID";
@@ -196,6 +198,7 @@ $lang->gitlab->group->memberName                              = 'Account';
 $lang->gitlab->group->memberAccessLevel                       = 'Access Level';
 $lang->gitlab->group->memberExpiresAt                         = 'Expiration time';
 $lang->gitlab->group->repeatError                             = "Group members cannot be added repeatedly";
+$lang->gitlab->group->publicTip                               = 'The visible status of the current group will be modified to public, and the group can be accessed without any authentication in GitLab. ';
 
 $lang->gitlab->branch = new stdclass();
 $lang->gitlab->branch->name                        = 'Branch name';

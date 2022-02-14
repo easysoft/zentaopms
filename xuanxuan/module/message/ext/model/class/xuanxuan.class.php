@@ -43,7 +43,7 @@ class xuanxuanMessage extends messageModel
                     ->where('obj.id')->eq($objectID)
                     ->fetch();
                 $field = $this->config->action->objectNameFields[$objectType];
-                $title = sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
+                $title = $objectType == 'mr' ? '' : sprintf($this->lang->message->notifyTitle, $this->app->user->realname, $this->lang->action->label->$actionType, 1, $this->lang->action->objectTypes[$objectType]);
 
                 $server   = $this->loadModel('im')->getServer('zentao');
                 $onlybody = isset($_GET['onlybody']) ? $_GET['onlybody'] : '';
@@ -53,8 +53,12 @@ class xuanxuanMessage extends messageModel
                 $target = '';
                 if(!empty($object->assignedTo)) $target .= $object->assignedTo;
                 if(!empty($object->mailto))     $target .= ",{$object->mailto}";
+                if($objectType == 'mr' && !empty($object->createdBy)) $target .= ",{$object->createdBy}";
                 $target = trim($target, ',');
-                $target = $this->dao->select('id')->from(TABLE_USER)->where('account')->in($target)->andWhere('account')->ne($this->app->user->account)->fetchAll('id');
+                $target = $this->dao->select('id')->from(TABLE_USER)
+                    ->where('account')->in($target)
+                    ->beginIF($objectType != 'mr')->andWhere('account')->ne($this->app->user->account)->fi()
+                    ->fetchAll('id');
                 $target = array_keys($target);
 
                 $subcontent = (object)array('action' => $actionType, 'object' => $objectID, 'objectName' => $object->$field, 'objectType' => $objectType, 'actor' => $this->app->user->id, 'actorName' => $this->app->user->realname);
@@ -95,16 +99,49 @@ class xuanxuanMessage extends messageModel
                 }
 
                 $contentData = new stdclass();
-                $contentData->title       = $title;
-                $contentData->subtitle    = '';
-                $contentData->contentType = "zentao-$objectType-$actionType";
-                $contentData->parentType  = $subcontent->parentType;
-                $contentData->content     = json_encode($subcontent);
-                $contentData->actions     = array();
-                $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
-                $content = json_encode($contentData);
+                if($objectType == 'mr')
+                {
+                    $contentData->contentType = 'text';
+                    $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
+                    $contentData->actions     = array();
 
+                    if(is_array($this->lang->message->mr->$actionType))
+                    {
+                        $contentData->content = sprintf($this->lang->message->mr->{$actionType}['creator'], $object->title);
+                    }
+                    else
+                    {
+                        $contentData->content   = sprintf($this->lang->message->mr->$actionType, $object->title);
+                        $contentData->actions[] = array(
+                            'type' => 'normal',
+                            'label' => $this->lang->message->mr->logTitle,
+                            'url' => "xxc:openInApp/zentao-integrated/" . urlencode($server . helper::createLink('compile', 'logs', "compileID=$object->compileID", 'html'))
+                        );
+                    }
+                }
+                else
+                {
+                    $contentData->title       = $title;
+                    $contentData->subtitle    = '';
+                    $contentData->contentType = "zentao-$objectType-$actionType";
+                    $contentData->parentType  = $subcontent->parentType;
+                    $contentData->content     = json_encode($subcontent);
+                    $contentData->actions     = array();
+                    $contentData->url         = "xxc:openInApp/zentao-integrated/" . urlencode($url);
+                }
+
+                $content = json_encode($contentData);
                 if($target) $this->loadModel('im')->messageCreateNotify($target, $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+
+                if($objectType == 'mr' and is_array($this->lang->message->mr->$actionType) and !empty($object->assignee))
+                {
+                    $contentData->content = sprintf($this->lang->message->mr->{$actionType}['reviewer'], $object->title);
+
+                    $content = json_encode($contentData);
+                    $target  = $this->dao->select('id')->from(TABLE_USER)->where('account')->eq($object->assignee)->fetch('id');
+                    if($target) $this->loadModel('im')->messageCreateNotify(array($target), $title, $subtitle = '', $content, $contentType = 'object', $url, $actions = array(), $sender = array('id' => 'zentao', 'realname' => $this->lang->message->sender, 'name' => $this->lang->message->sender));
+                }
+
                 if($onlybody) $_GET['onlybody'] = $onlybody;
             }
         }

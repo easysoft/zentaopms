@@ -109,7 +109,7 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug->pri?>' title='<?php echo zget($lang->bug->priList, $bug->pri);?>'><?php echo zget($lang->bug->priList, $bug->pri)?></span></td>
           <td class="text-center"><span class='<?php echo $bug->confirmed == '1' ? 'confirmed' : 'unconfirmed';?>' title='<?php echo zget($lang->bug->confirmedList, $bug->confirmed);?>'><?php echo zget($lang->bug->confirmedList, $bug->confirmed)?></span></td>
-          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title={$bug->title}");?></td>
+          <td class='text-left nobr'><?php echo html::a($this->createLink('bug', 'view', "bugID=$bug->id"), $bug->title, null, "style='color: $bug->color' title='{$bug->title}'");?></td>
           <?php $param = $config->productLink == 'product-all' ? '' : "productID=$bug->product";?>
           <td class='text-left nobr'>
             <?php

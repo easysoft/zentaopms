@@ -43,7 +43,7 @@
         <tr class='text' title='<?php if(!$gitlab->isAdminToken) echo $lang->gitlab->tokenLimit;?>'>
           <td class='text-center'><?php echo $id;?></td>
           <td class='text-c-name' title='<?php echo $gitlab->name;?>'><a class="iframe" href="<?php echo $this->createLink('gitlab', 'view', "id=$id", '', true); ?>"><?php echo $gitlab->name;?></a></td>
-          <td class='text' title='<?php echo $gitlab->url;?>'><?php echo $gitlab->url;?></td>
+          <td class='text' title='<?php echo $gitlab->url;?>'><?php echo html::a($gitlab->url, $gitlab->url, '_target');?></td>
           <td class='c-actions text-left'>
             <?php
             $disabled = !empty($gitlab->isAdminToken) ? '' : 'disabled';

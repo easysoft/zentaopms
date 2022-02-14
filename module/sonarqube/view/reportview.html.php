@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
+  <?php unset($_GET['onlybody']);?>
   <?php if(empty($measures)): ?>
     <div class='empty-tip'><?php echo $lang->sonarqube->noReport;?></div>
   <?php else:?>
@@ -19,7 +20,7 @@
     <div class="page-title">
       <span class='text' title="<?php echo $projectName;?>">
         <h4>
-          <?php echo $projectName;?>
+          <?php echo common::hasPriv('sonarqube', 'browseIssue') ? html::a($this->createLink('sonarqube', 'browseIssue', "sonarqubeID={$sonarqubeID}&project={$projectName}"), $projectName, '_parent') : $projectName;?>
           <?php if(!empty($qualitygate->projectStatus->status) and $qualitygate->projectStatus->status != 'NONE'):?>
           <span class="label label-badge label-<?php echo zget($config->sonarqube->projectStatusClass, $qualitygate->projectStatus->status);?>">
             <?php echo zget($lang->sonarqube->qualitygateList, $qualitygate->projectStatus->status);?>
@@ -31,10 +32,10 @@
   </div>
   <table class="table table-data">
     <thead>
-      <tr>
+      <tr class="text-center">
         <th><?php echo $lang->sonarqube->report->bugs;?></th>
         <th><?php echo $lang->sonarqube->report->vulnerabilities;?></th>
-        <th><?php echo $lang->sonarqube->report->security_hotspots_reviewed;?></th>
+        <th class="w-150px"><?php echo $lang->sonarqube->report->security_hotspots_reviewed;?></th>
         <th><?php echo $lang->sonarqube->report->code_smells;?></th>
         <th><?php echo $lang->sonarqube->report->coverage;?></th>
         <th><?php echo $lang->sonarqube->report->duplicated_lines_density;?></th>
@@ -42,7 +43,7 @@
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <tr class="text-center">
         <td><?php echo $measures['bugs'];?></td>
         <td><?php echo $measures['vulnerabilities'];?></td>
         <td><?php echo $measures['security_hotspots_reviewed'];?></td>
@@ -53,5 +54,5 @@
       </tr>
     </tbody>
   </table>
+  <?php endif;?>
 </div>
-<?php endif;?>

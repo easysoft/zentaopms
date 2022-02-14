@@ -305,6 +305,9 @@ class bug extends control
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
+        $from = isset($output['from']) ? $output['from'] : '';
+
+        $project = new stdclass();
 
         if($this->app->tab == 'execution')
         {
@@ -329,28 +332,6 @@ class bug extends control
             $this->qa->setMenu($this->products, $productID, $branch);
         }
 
-        foreach($output as $paramKey => $paramValue)
-        {
-            if(isset($this->config->bug->fromObjects[$paramKey]))
-            {
-                $fromObjectIDKey  = $paramKey;
-                $fromObjectID     = $paramValue;
-                $fromObjectName   = $this->config->bug->fromObjects[$fromObjectIDKey]['name'];
-                $fromObjectAction = $this->config->bug->fromObjects[$fromObjectIDKey]['action'];
-                break;
-            }
-        }
-
-        /* If there is a object to transfer bug, get it by getById function and set objectID,object in views. */
-        if(isset($fromObjectID))
-        {
-            $fromObject = $this->loadModel($fromObjectName)->getById($fromObjectID);
-            if(!$fromObject) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
-
-            $this->view->$fromObjectIDKey = $fromObjectID;
-            $this->view->$fromObjectName  = $fromObject;
-        }
-
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
 
@@ -361,7 +342,7 @@ class bug extends control
 
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extras);
+            $bugResult = $this->bug->create('', $extras);
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -378,15 +359,9 @@ class bug extends control
                 return $this->send($response);
             }
 
-            /* Record related action, for example FromFeedback. */
-            if(isset($fromObjectID))
-            {
-                $actionID = $this->action->create('bug', $bugID, $fromObjectAction, '', $fromObjectID);
-            }
-            else
-            {
-                $actionID = $this->action->create('bug', $bugID, 'Opened');
-            }
+            /* Record related action, for example FromSonarqube. */
+            $createAction = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
+            $actionID     = $this->action->create('bug', $bugID, $createAction);
 
             $extras = str_replace(array(',', ' '), array('&', ''), $extras);
             parse_str($extras, $output);
@@ -464,7 +439,7 @@ class bug extends control
         $runID       = 0;
         $testtask    = 0;
         $version     = 0;
-        $title       = '';
+        $title       = $from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : '';
         $steps       = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
         $os          = '';
         $browser     = '';
@@ -528,15 +503,6 @@ class bug extends control
         else
         {
             $branches = $productInfo->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        }
-
-        /* Replace the value of bug that needs to be replaced with the value of the object that is transferred to bug. */
-        if(isset($fromObject))
-        {
-            foreach($this->config->bug->fromObjects[$fromObjectIDKey]['fields'] as $bugField => $fromObjectField)
-            {
-                $$bugField = $fromObject->{$fromObjectField};
-            }
         }
 
         /* If executionID is setted, get builds and stories of this execution. */
@@ -637,6 +603,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
         $this->view->projects         = $projects;
+        $this->view->project          = $project;
         $this->view->executions       = $executions;
         $this->view->builds           = $builds;
         $this->view->moduleID         = (int)$moduleID;
@@ -668,6 +635,7 @@ class bug extends control
         $this->view->color            = $color;
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
+        $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
 
         $this->display();
     }
@@ -782,6 +750,7 @@ class bug extends control
         $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
         $this->view->position[] = $this->lang->bug->batchCreate;
 
+        $this->view->project          = $this->loadModel('project')->getByID($projectID);
         $this->view->product          = $product;
         $this->view->productID        = $productID;
         $this->view->stories          = $stories;
@@ -852,6 +821,7 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->view;
 
         /* Assign. */
+        $this->view->project     = $this->loadModel('project')->getByID($bug->project);
         $this->view->productID   = $productID;
         $this->view->branches    = $branches;
         $this->view->modulePath  = $this->tree->getParents($bug->module);
@@ -2244,5 +2214,20 @@ class bug extends control
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
         foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
         die(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
+    }
+
+
+    /**
+     * Ajax get execution lang.
+     *
+     * @param  int  $projectID
+     * @access public
+     * @return string
+     */
+    public function ajaxGetExecutionLang($projectID)
+    {
+        $project = $this->loadModel('project')->getByID($projectID);
+        if($project->model == 'kanban') return print($this->lang->bug->kanban);
+        if($project->model != 'kanban') return print($this->lang->bug->execution);
     }
 }

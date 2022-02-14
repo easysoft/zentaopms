@@ -242,16 +242,21 @@ class gitlab extends control
      */
     protected function checkToken()
     {
-        $gitlabURL = trim($this->post->url);
-        $token     = trim($this->post->token);
+        $gitlab = fixer::input('post')->trim('url,token')->get();
+        $this->dao->update('gitlab')->data($gitlab)->batchCheck($this->config->gitlab->create->requiredFields, 'notempty');
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        if(strpos($gitlabURL, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
-        if(!$token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+        if(strpos($gitlab->url, 'http') !== 0) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
+        if(!$gitlab->token) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
-        $user = $this->gitlab->apiGetCurrentUser($gitlabURL, $token, true);
+        $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token, true);
 
-        if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->hostError))));
+        if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
         if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+
+        /* Verify version compatibility. */
+        $result = $this->gitlab->getVersion($gitlab->url, $gitlab->token);
+        if(empty($result) or !isset($result->version) or (version_compare($result->version, $this->config->gitlab->minCompatibleVersion, '<'))) return $this->send(array('result' => 'fail', 'message' => array('url' => array($this->lang->gitlab->notCompatible))));
     }
 
     /**
@@ -321,6 +326,7 @@ class gitlab extends control
 
         $this->view->title            = $this->lang->gitlab->common . $this->lang->colon . $this->lang->gitlab->browseGroup;
         $this->view->gitlabID         = $gitlabID;
+        $this->view->gitlab           = $this->gitlab->getByID($gitlabID);
         $this->view->gitlabGroupList  = $groups;
         $this->view->adminGroupIDList = $adminGroupIDList;
         $this->view->orderBy          = $orderBy;

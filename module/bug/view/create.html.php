@@ -108,7 +108,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                 </div>
                 <div class='table-col'>
                   <div class='input-group' id='executionIdBox'>
-                    <span class='input-group-addon fix-border'><?php echo $lang->bug->execution;?></span>
+                    <span class='input-group-addon fix-border' id='executionBox'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></span>
                     <?php echo html::select('execution', $executions, $executionID, "class='form-control chosen' onchange='loadExecutionRelated(this.value)'");?>
                   </div>
                 </div>
@@ -338,6 +338,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <tr class='hide'>
             <th><?php echo $lang->bug->status;?></th>
             <td><?php echo html::hidden('status', 'active');?></td>
+            <td><?php echo html::hidden('issueKey', $issueKey);?></td>
           </tr>
           <?php $this->printExtendFields('', 'table');?>
           <tr>

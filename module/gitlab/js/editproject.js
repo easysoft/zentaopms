@@ -1,9 +1,6 @@
 $(function()
 {
-    $("#name").bind("input propertychange", function(event)
-    {
-        $("#path").val($(this).val().toLowerCase());
-    });
+    if(visibility == 'public') $("#visibilitypublic").parent().append(publicTip);
 
     $('input:radio[name="visibility"]').change(function()
     {
