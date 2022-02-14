@@ -1365,12 +1365,8 @@ class bugModel extends model
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', '', $pager);
-            foreach($bugs2Link as $key => $bug2Link)
-            {
-                if($bug2Link->id == $bugID) unset($bugs2Link[$key]);
-                if(in_array($bug2Link->id, explode(',', $bug->linkBug))) unset($bugs2Link[$key]);
-            }
+            $bugIDList = $bug->id . ',' . $bug->linkBug; 
+            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList ,$pager);
             return $bugs2Link;
         }
         else
