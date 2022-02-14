@@ -1146,7 +1146,7 @@ class repo extends control
 
             $projects    = $this->gitlab->apiGetProjects($gitlabID, $filter ? 'false' : 'true');
             $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+            $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
             if($filter == 'IS_DEVELOPER')
             {
