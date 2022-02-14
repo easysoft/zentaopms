@@ -1,2 +1,2 @@
 <?php
-$lang->user->task = '卡片';
+$lang->user->task = '任务';

@@ -1,5 +1,5 @@
 <?php
-$lang->search->modules['task']        = '卡片';
+$lang->search->modules['task']        = '任务';
 $lang->search->modules['execution']   = '看板';
 $lang->search->modules['story']       = '目标';
 
