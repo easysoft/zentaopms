@@ -366,14 +366,28 @@ function renderKanbanItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
-    var $time = $dateBox.children('.time');
+    var $time           = $dateBox.children('.time');
+    var $beginTimeShort = $.zui.formatDate(begin, 'MM-dd');
+    var $beginTimeLong  = $.zui.formatDate(begin, 'yyyy-MM-dd');
+    var $endTimeShort   = $.zui.formatDate(end, 'MM-dd');
+    var $endTimeLong    = $.zui.formatDate(end, 'yyyy-MM-dd')
+    var $to             = productplanLang.to;
+    var $undetermined   = productplanLang.future;
     if(item.begin != '2030-01-01' && item.end != '2030-01-01')
     {
-        $time.text($.zui.formatDate(begin, 'MM-dd') + ' ' +  productplanLang.to + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + productplanLang.to + $.zui.formatDate(end, 'yyyy-MM-dd')).show();
+        $time.text($beginTimeShort + ' ' + $to + ' ' + $endTimeShort).attr('title', $beginTimeLong + $to + $$endTimeLong).show();
+    }
+    else if(item.begin != '2030-01-01' && item.end == '2030-01-01')
+    {
+        $time.text($beginTimeShort +  ' ' + $to  + ' ' + $undetermined).attr('title', $beginTimeLong + $to).show();
+    }
+    else if(item.begin == '2030-01-01' && item.end != '2030-01-01')
+    {
+        $time.text($undetermined +  ' ' + $to  + ' ' + $endTimeShort).attr('title', $to + $endTimeLong).show();
     }
     else
     {
-        $time.text(productplanLang.future).attr('title', productplanLang.future).show();
+        $time.text($undetermined).attr('title', $undetermined).show();
     }
 
     /* Output plan desc information. */
@@ -425,10 +439,10 @@ function getPlanID(obj, branch)
 if(!window.kanbanDropRules)
 {
     window.kanbanDropRules =
-    {    
+    {
         wait:   ['doing'],
         doing:  ['done'],
         done:   ['doing', 'closed'],
         closed: ['doing']
-    }    
+    }
 }
