@@ -7,7 +7,8 @@
 function loadProductRelated()
 {
     loadExecutions($('#product').val());
-    buildData = '<select id="build" name="build" class="form-control" onchange="loadTestReports(this.value)"></select>';
+    loadTestReports($('#product').val());
+    buildData = '<select id="build" name="build" class="form-control"></select>';
     $('#build').replaceWith(buildData);
     $('#build_chosen').remove();
     $("#build").chosen();
@@ -37,5 +38,6 @@ function loadExecutions(productID)
 $(function()
 {
     adjustPriBoxWidth();
+    loadTestReports($('#product').val());
     if($('#execution').val() != 0) loadExecutionBuilds($('#execution').val());
 });
