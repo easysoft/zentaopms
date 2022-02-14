@@ -2024,7 +2024,7 @@ class execution extends control
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
         }
-
+        
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $avatarPairs = $this->user->getAvatarPairs();
