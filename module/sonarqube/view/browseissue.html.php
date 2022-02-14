@@ -74,7 +74,12 @@
       </tbody>
     </table>
     <?php if($sonarqubeIssueList):?>
-    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <div class='table-footer'>
+      <?php
+      $this->app->rawParams['search'] = $search;
+      $pager->show('right', 'pagerjs');
+      ?>
+    </div>
     <?php endif;?>
   </form>
 </div>
