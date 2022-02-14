@@ -2256,6 +2256,6 @@ class bug extends control
     {
         $project = $this->loadModel('project')->getByID($projectID);
         if($project->model == 'kanban') return print($this->lang->bug->kanban);
-        if($project->model != 'kanban') return print($this->lang->bug->execution);
+        return print($this->lang->bug->execution);
     }
 }
