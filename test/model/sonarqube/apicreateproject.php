@@ -18,7 +18,7 @@ pid=1
 $sonarqube = $tester->loadModel('sonarqube');
 
 $sonarqubeID = 0;
-$project = new stdclass();
+$project     = new stdclass();
 
 $result = $sonarqube->apiCreateProject($sonarqubeID, $project);
 if($result === false) $result = 'return false';

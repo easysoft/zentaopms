@@ -16,5 +16,5 @@ $sonarqube = $tester->loadModel('sonarqube');
 
 $sonarqubeID = 2;
 $projectKey  = 'unit_test';
-$result = $sonarqube->getCacheFile($sonarqubeID, $projectKey);
+$result      = $sonarqube->getCacheFile($sonarqubeID, $projectKey);
 r(strPos($result, '/' . $sonarqubeID . '-' ) !== false) && p('') && e(1); //使用正确的sonarqubeID,项目key获取缓存文件
