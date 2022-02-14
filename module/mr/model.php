@@ -118,7 +118,7 @@ class mrModel extends model
             $groupIDList = array(0 => 0);
             if(!$this->app->user->admin)
             {
-                $groups = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['reporter']);
+                $groups = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'reporter');
                 foreach($groups as $group) $groupIDList[] = $group->id;
             }
             $allGroups[$gitlabID] = $groupIDList;
