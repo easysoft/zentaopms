@@ -32,6 +32,8 @@
 .modal-iframe .modal-content .modal-header .modal-title .icon-eye-open {display: none;}
 .modal-iframe .modal-content .modal-header .modal-title a.btn {border-color: transparent; background: none; padding: 0px; border-radius: 2px; color: #036; padding: 4px 7px;}
 .modal-iframe .modal-content .modal-header .modal-title a.btn .icon-eye-open {display: inline;}
+
+.modal-iframe .modal-header .close{top: 17px !important;}
 .input-group-btn.goback {padding-left: 10px;}
 .input-group-btn.select {min-width: 60px; margin-left: -2px;}
 .input-group .chosen-container {min-width: 250px;}
