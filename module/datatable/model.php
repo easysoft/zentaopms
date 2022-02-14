@@ -225,7 +225,4 @@ class datatableModel extends model
 
         return $widths;
     }
-    public function getMode(){
-        return $this->dao->select('value')->from(TABLE_CONFIG)->where('module')->eq('common')->andWhere('section')->eq('global')->andWhere('`key`')->eq('mode')->fetch();
-    }
 }

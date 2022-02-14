@@ -60,7 +60,6 @@ class datatable extends control
         $target = $module . ucfirst($method);
         $mode   = isset($this->config->datatable->$target->mode) ? $this->config->datatable->$target->mode : 'table';
         $key    = $mode == 'datatable' ? 'cols' : 'tablecols';
-        $version= $this->datatable->getMode();
 
         if($module == 'testtask')
         {
@@ -78,7 +77,6 @@ class datatable extends control
         $this->view->module = $module;
         $this->view->method = $method;
         $this->view->mode   = $mode;
-        $this->view->version= $version->value;
 
         $module  = zget($this->config->datatable->moduleAlias, "$module-$method", $module);
         $setting = '';

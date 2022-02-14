@@ -60,10 +60,7 @@
       <div id='colsFixedFlex' class='cols-list'></div>
       <div id='colsFixedRight' class='cols-list'></div>
       <div class='cols-list template' id="originCols">
-        <?php
-            foreach ($cols as $key => $col):
-                if($version == 'classic' && $key == 'project') continue;
-        ?>
+        <?php foreach ($cols as $key => $col):?>
         <?php
         $required = $col['required'] == 'yes';
         $fixed = $col['fixed'];
