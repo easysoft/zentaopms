@@ -19,6 +19,7 @@ $lang->bug->module           = 'Module';
 $lang->bug->moduleAB         = 'Module';
 $lang->bug->project          = 'Project';
 $lang->bug->execution        = $lang->execution->common;
+$lang->bug->kanban           = 'Kanban';
 $lang->bug->story            = 'Story';
 $lang->bug->storyVersion     = 'Story Version';
 $lang->bug->color            = 'Color';
