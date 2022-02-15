@@ -367,27 +367,28 @@ function renderKanbanItem(item, $item)
     ].join('')).appendTo($item);
 
     var $time           = $dateBox.children('.time');
-    var $beginTimeShort = $.zui.formatDate(begin, 'MM-dd');
-    var $beginTimeLong  = $.zui.formatDate(begin, 'yyyy-MM-dd');
-    var $endTimeShort   = $.zui.formatDate(end, 'MM-dd');
-    var $endTimeLong    = $.zui.formatDate(end, 'yyyy-MM-dd')
-    var $to             = productplanLang.to;
-    var $undetermined   = productplanLang.future;
-    if(item.begin != '2030-01-01' && item.end != '2030-01-01')
+    var beginTimeShort = $.zui.formatDate(begin, 'MM-dd');
+    var beginTimeLong  = $.zui.formatDate(begin, 'yyyy-MM-dd');
+    var endTimeShort   = $.zui.formatDate(end, 'MM-dd');
+    var endTimeLong    = $.zui.formatDate(end, 'yyyy-MM-dd')
+    var to             = productplanLang.to;
+    var undetermined   = productplanLang.future;
+    var undetermindeDate = '2030-01-01';
+    if(item.begin != undetermindeDate && item.end != undetermindeDate)
     {
-        $time.text($beginTimeShort + ' ' + $to + ' ' + $endTimeShort).attr('title', $beginTimeLong + $to + $$endTimeLong).show();
+        $time.text(beginTimeShort + ' ' + to + ' ' + endTimeShort).attr('title', beginTimeLong + to + endTimeLong).show();
     }
-    else if(item.begin != '2030-01-01' && item.end == '2030-01-01')
+    else if(item.begin != undetermindeDate && item.end == undetermindeDate)
     {
-        $time.text($beginTimeShort +  ' ' + $to  + ' ' + $undetermined).attr('title', $beginTimeLong + $to).show();
+        $time.text(beginTimeShort +  ' ' + to  + ' ' + undetermined).attr('title', beginTimeLong + to).show();
     }
-    else if(item.begin == '2030-01-01' && item.end != '2030-01-01')
+    else if(item.begin == undetermindeDate && item.end != undetermindeDate)
     {
-        $time.text($undetermined +  ' ' + $to  + ' ' + $endTimeShort).attr('title', $to + $endTimeLong).show();
+        $time.text(undetermined +  ' ' + to  + ' ' + endTimeShort).attr('title', to + endTimeLong).show();
     }
     else
     {
-        $time.text($undetermined).attr('title', $undetermined).show();
+        $time.text(undetermined).attr('title', undetermined).show();
     }
 
     /* Output plan desc information. */
