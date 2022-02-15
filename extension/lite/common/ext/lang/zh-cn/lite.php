@@ -88,13 +88,13 @@ $lang->kanban->menuOrder[20] = 'doc';
 $lang->kanban->menuOrder[25] = 'dynamic';
 $lang->kanban->menuOrder[30] = 'settings';
 
-$lang->execution->menu           = new stdclass();
-$lang->execution->menu->kanban   = array('link' => "看板|execution|kanban|executionID=%s");
-$lang->execution->menu->list     = array('link' => "列表|execution|task|executionID=%s");
-if($config->edition != 'open') $lang->execution->menu->calendar = array('link' => "日历|execution|calendar|executionID=%s");
+$lang->execution->menu            = new stdclass();
+$lang->execution->menu->kanban    = array('link' => "看板视图|execution|kanban|executionID=%s");
+$lang->execution->menu->task      = array('link' => "列表视图|execution|task|executionID=%s");
+if($config->edition != 'open') $lang->execution->menu->calendar = array('link' => "日历视图|execution|calendar|executionID=%s");
 if($config->edition != 'open') $lang->execution->menu->gantt    = array('link' => "甘特图|execution|gantt|executionID=%s");
-$lang->execution->menu->tree     = array('link' => "树状图|execution|tree|executionID=%s");
-$lang->execution->menu->group    = array('link' => "分组视图|execution|grouptask|executionID=%s");
+$lang->execution->menu->tree      = array('link' => "树状图|execution|tree|executionID=%s");
+$lang->execution->menu->grouptask = array('link' => "分组视图|execution|grouptask|executionID=%s");
 
 $lang->kanban->menu->doc['subMenu'] = new stdclass();
 

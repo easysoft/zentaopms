@@ -7,11 +7,33 @@ class myExecution extends execution
         $this->app->loadLang('kanban');
         common::setMenuVars('execution', $executionID);
 
-        $execution = $this->execution->getById($executionID);
+        $currentMethod = $this->app->methodName;
+        $execution     = $this->execution->getById($executionID);
         $this->loadModel('project')->setMenu($execution->project);
-        $this->lang->kanban->menu->execution['subMenu'] = $this->lang->execution->menu;
+        $this->lang->kanban->menu->execution['subMenu'] = new stdClass();
+
+        /* change subMenu to sub select menu */
+        $subMenu = $this->lang->execution->menu;
+        foreach($subMenu as $key => $value)
+        {
+            $tmpValue = explode('|', $value['link']);
+            $subMenu->$key['name']   = $tmpValue[0];
+            $subMenu->$key['module'] = $tmpValue[1];
+            $subMenu->$key['method'] = $tmpValue[2];
+            $subMenu->$key['vars']   = $tmpValue[3];
+        }
 
         $TRActions  = '';
+        $TRActions .= "<div class='dropdown'>";
+        $TRActions .= html::a('javascript:;', "<i class='icon icon-$currentMethod'></i> " . $subMenu->$currentMethod['name'] . "<span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
+        $TRActions .= "<ul class='dropdown-menu pull-right'>";
+        foreach($subMenu as $subKey => $subName)
+        {
+            $TRActions .=  '<li>' . html::a(helper::createLink('execution', $subName['method'], $subName['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$subName['method']] . "'></i> " . $subName['name']) . '</li>';
+        }
+
+        $TRActions .= "</ul></div>";
+
         $TRActions .= "<div class='dropdown'>";
         $TRActions .= html::a('javascript:;', $this->lang->execution->kanbanGroup[$groupBy] . "<span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
         $TRActions .= "<ul class='dropdown-menu pull-right'>";
