@@ -144,6 +144,8 @@ $lang->convert->jira->start            = 'Start';
 $lang->convert->jira->dbNameEmpty        = 'Jira database name cannot be empty!';
 $lang->convert->jira->invalidDB          = 'Invalid database name!';
 $lang->convert->jira->invalidTable       = 'This database is not a Jira database!';
+$lang->convert->jira->notReadAndWrite    = 'Please modify the jirafile directory permissions!';
+$lang->convert->jira->notExistEntities   = 'The entities.xml file does not exist!';
 $lang->convert->jira->passwordNotice     = "<span class='text-red'>Set the default password of Jira users after they are imported into ZenTao. Users can modify the password in ZenTao later.</span>";
 $lang->convert->jira->groupNotice        = "<span class='text-red'>Set the default permission grouping of Jira users after importing into ZenTao.</span>";
 $lang->convert->jira->passwordDifferent  = 'Password do not match!';
