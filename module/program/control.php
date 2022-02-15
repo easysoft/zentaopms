@@ -59,6 +59,7 @@ class program extends control
         $this->view->status       = $status;
         $this->view->orderBy      = $orderBy;
         $this->view->users        = $this->user->getPairs('noletter');
+        $this->view->userIdPairs  = $this->user->getPairs('noletter|showid');
         $this->view->usersAvatar  = $this->user->getAvatarPairs();
         $this->view->programType  = $programType;
         $this->view->PMList       = $PMList;
