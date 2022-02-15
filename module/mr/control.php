@@ -163,7 +163,7 @@ class mr extends control
         if(!$this->app->user->admin)
         {
             $groupIDList = array(0 => 0);
-            $groups      = $this->gitlab->apiGetGroups($MR->gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+            $groups      = $this->gitlab->apiGetGroups($MR->gitlabID, 'name_asc', 'developer');
             foreach($groups as $group) $groupIDList[] = $group->id;
             $sourceProject = $this->gitlab->apiGetSingleProject($MR->gitlabID, $MR->sourceProject);
             $isDeveloper   = $this->gitlab->checkUserAccess($MR->gitlabID, 0, $sourceProject, $groupIDList, 'developer');
@@ -919,7 +919,7 @@ class mr extends control
         }
 
         $groupIDList = array(0 => 0);
-        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['developer']);
+        $groups      = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'developer');
         foreach($groups as $group) $groupIDList[] = $group->id;
         foreach($projects as $key => $project)
         {

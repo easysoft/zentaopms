@@ -106,13 +106,13 @@ function loadExecutionBuilds(executionID, selected)
 /**
  * Load test report.
  *
- * @param  int    buildID
+ * @param  int    productID
  * @access public
  * @return void
  */
-function loadTestReports(buildID)
+function loadTestReports(productID)
 {
-    link = createLink('testtask', 'ajaxGetTestReports', 'buildID=' + buildID);
+    link = createLink('testtask', 'ajaxGetTestReports', 'productID=' + productID);
     $.get(link, function(data)
     {
         if(!data) data = '<select id="testreport" name="testreport" class="form-control"></select>';

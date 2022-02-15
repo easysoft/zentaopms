@@ -573,4 +573,19 @@ class testreportModel extends model
             ->andWhere('id')->in(trim($storyIdList, ','))
             ->fetchAll('id');
     }
+
+    /**
+     * Get pairs.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getPairs($productID = 0)
+    {
+        return $this->dao->select('id,title')->from(TABLE_TESTREPORT)
+            ->beginIF($productID)->where('product')->eq($productID)->fi()
+            ->orderBy('id_desc')
+            ->fetchPairs();
+    }
 }

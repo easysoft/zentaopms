@@ -11,8 +11,6 @@
  */
 global $config;
 $lang->story->create            = "提{$lang->SRCommon}";
-$lang->story->createStory       = "提{$lang->SRCommon}";
-$lang->story->createRequirement = "提{$lang->SRCommon}";
 
 $lang->story->requirement       = zget($lang, 'URCommon', "需求");
 $lang->story->story             = zget($lang, 'SRCommon', "故事");
@@ -68,6 +66,7 @@ $lang->story->viewAll            = '查看全部';
 $lang->story->toTask             = '转任务';
 $lang->story->batchToTask        = '批量转任务';
 $lang->story->convertRelations   = '换算关系';
+$lang->story->undetermined       = '待定';
 
 $lang->story->editAction      = "编辑{$lang->SRCommon}";
 $lang->story->changeAction    = "变更{$lang->SRCommon}";

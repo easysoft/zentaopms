@@ -1366,7 +1366,7 @@ class bugModel extends model
         {
             $bug       = $this->getById($bugID);
             $bugIDList = $bug->id . ',' . $bug->linkBug; 
-            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList ,$pager);
+            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
             return $bugs2Link;
         }
         else

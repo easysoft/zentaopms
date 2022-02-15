@@ -33,6 +33,7 @@ class kanban extends control
         $this->view->browseType    = $browseType;
         $this->view->pager         = $pager;
         $this->view->users         = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->userIdPairs   = $this->user->getPairs('noletter|nodeleted|showid');
         $this->view->usersAvatar   = $this->user->getAvatarPairs();
 
         $this->display();
@@ -1299,6 +1300,7 @@ class kanban extends control
     {
         $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
+        $this->view->userIdPairs = $this->user->getPairs('noletter|nodeleted|showid');
         $this->view->usersAvatar = $this->user->getAvatarPairs();
 
         $this->display();

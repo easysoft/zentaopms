@@ -11,8 +11,6 @@
  */
 global $config;
 $lang->story->create            = "Create Story";
-$lang->story->createStory       = 'Create Story';
-$lang->story->createRequirement = 'Create Requirement';
 
 $lang->story->requirement       = zget($lang, 'URCommon', "Requirement");
 $lang->story->story             = zget($lang, 'SRCommon', "Story");
@@ -68,6 +66,7 @@ $lang->story->viewAll            = "See All";
 $lang->story->toTask             = 'Convert to Task';
 $lang->story->batchToTask        = 'Batch Convert to Task';
 $lang->story->convertRelations   = 'Convert Relations';
+$lang->story->undetermined       = 'undetermined';
 
 $lang->story->editAction      = "Edit {$lang->SRCommon}";
 $lang->story->changeAction    = "Change {$lang->SRCommon}";
