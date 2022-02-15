@@ -194,11 +194,14 @@ class convertModel extends model
      */
     public function getJiraDataFromFile($module, $lastID = 0, $limit = 0)
     {
-        $filename = $module;
+        $fileName = $module;
         if($module == 'build') $filename = 'version';
         if($module == 'file')  $filename = 'fileattachment';
 
-        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/' . $filename. '.xml');
+        $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
+        if(!file_exists($filePath)) return array();
+
+        $xmlContent = file_get_contents($filePath);
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
         $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
 
@@ -206,20 +209,27 @@ class convertModel extends model
         $parsedXML = $this->object2Array($parsedXML);
         foreach($parsedXML as $key => $xmlArray)
         {
-            if(strtolower($key) != strtolower($filename)) continue;
+            if(strtolower($key) != strtolower($fileName)) continue;
             foreach($xmlArray as $key => $attributes)
             {
                 $desc    = isset($attributes['description']) ? $attributes['description'] : '';
                 $summary = isset($attributes['summary']) ? $attributes['summary'] : '';
                 $body    = isset($attributes['body']) ? $attributes['body'] : '';
 
-                foreach($attributes as $value)
+                if(is_numeric($key))
                 {
-                    if(!is_array($value)) continue;
-                    if(!empty($desc))    $value['description'] = $desc;
-                    if(!empty($summary)) $value['summary']     = $summary;
-                    if(!empty($body))    $value['body']        = $body;
-                    $dataList[$value['id']] = $value;
+                    foreach($attributes as $value)
+                    {
+                        if(!is_array($value)) continue;
+                        if(!empty($desc))    $value['description'] = $desc;
+                        if(!empty($summary)) $value['summary']     = $summary;
+                        if(!empty($body))    $value['body']        = $body;
+                        $dataList[$value['id']] = $value;
+                    }
+                }
+                else
+                {
+                    $dataList[$attributes['id']] = $attributes;
                 }
             }
         }
@@ -455,13 +465,13 @@ class convertModel extends model
                     break;
                 }
 
-                if($module == 'user')      $this->importJiraUser($dataList);
-                if($module == 'project')   $this->importJiraProject($dataList);
-                if($module == 'issue')     $this->importJiraIssue($dataList);
+                if($module == 'user')      $this->importJiraUser($dataList, 'file');
+                if($module == 'project')   $this->importJiraProject($dataList, 'file');
+                if($module == 'issue')     $this->importJiraIssue($dataList, 'file');
                 if($module == 'build')     $this->importJiraBuild($dataList, 'file');
-                if($module == 'issuelink') $this->importJiraIssueLink($dataList);
-                if($module == 'action')    $this->importJiraAction($dataList);
-                if($module == 'file')      $this->importJiraFile($dataList);
+                if($module == 'issuelink') $this->importJiraIssueLink($dataList, 'file');
+                if($module == 'action')    $this->importJiraAction($dataList, 'file');
+                if($module == 'file')      $this->importJiraFile($dataList, 'file');
 
                 $offset = $lastID + $limit;
                 return array('type' => $module, 'count' => count($dataList), 'lastID' => $offset);
@@ -476,10 +486,11 @@ class convertModel extends model
      * Import jira user.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraUser($dataList)
+    public function importJiraUser($dataList, $method = 'db')
     {
         $localUsers = $this->dao->dbh($this->dbh)->select('account')->from(TABLE_USER)->where('deleted')->eq('0')->fetchPairs();
         $userConfig = $this->session->jiraUser;
@@ -515,10 +526,11 @@ class convertModel extends model
      * Import jira project.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraProject($dataList)
+    public function importJiraProject($dataList, $method = 'db')
     {
         global $app;
         $app->loadConfig('execution');
@@ -543,8 +555,8 @@ class convertModel extends model
             $project->acl    = 'open';
             $project->end    = date('Y-m-d', time() + 24 * 3600);
 
-            $project->PM            = $this->getJiraAccount($data->LEAD);
-            $project->openedBy      = $this->getJiraAccount($data->LEAD);
+            $project->PM            = $this->getJiraAccount($data->LEAD, $method);
+            $project->openedBy      = $this->getJiraAccount($data->LEAD, $method);
             $project->openedDate    = $now;
             $project->openedVersion = $this->config->version;
 
@@ -667,10 +679,11 @@ class convertModel extends model
      * Import jira issue.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraIssue($dataList)
+    public function importJiraIssue($dataList, $method = 'db')
     {
         $relations = $this->session->jiraRelation;
 
@@ -732,9 +745,9 @@ class convertModel extends model
                 $story->version    = 1;
                 $story->stage      = $this->convertStage($data->issuestatus);
                 $story->status     = $this->convertStatus('story', $data->issuestatus);
-                $story->openedBy   = $this->getJiraAccount($data->CREATOR);
+                $story->openedBy   = $this->getJiraAccount($data->CREATOR, $method);
                 $story->openedDate = substr($data->CREATED, 0, 19);
-                $story->assignedTo = $this->getJiraAccount($data->ASSIGNEE);
+                $story->assignedTo = $this->getJiraAccount($data->ASSIGNEE, $method);
 
                 if($data->RESOLUTION)
                 {
@@ -799,9 +812,9 @@ class convertModel extends model
                 $task->pri        = $data->PRIORITY;
                 $task->status     = $this->convertStatus('task', $data->issuestatus);
                 $task->desc       = $data->DESCRIPTION;
-                $task->openedBy   = $this->getJiraAccount($data->CREATOR);
+                $task->openedBy   = $this->getJiraAccount($data->CREATOR, $method);
                 $task->openedDate = substr($data->CREATED, 0, 19);
-                $task->assignedTo = $this->getJiraAccount($data->ASSIGNEE);
+                $task->assignedTo = $this->getJiraAccount($data->ASSIGNEE, $method);
                 if($data->RESOLUTION)
                 {
                     $task->closedReason = zget($reasonList, $data->RESOLUTION, '');
@@ -841,10 +854,10 @@ class convertModel extends model
                 $bug->pri         = $data->PRIORITY;
                 $bug->status      = $this->convertStatus('bug', $data->issuestatus);
                 $bug->steps       = $data->DESCRIPTION;
-                $bug->openedBy    = $this->getJiraAccount($data->CREATOR); 
+                $bug->openedBy    = $this->getJiraAccount($data->CREATOR, $method); 
                 $bug->openedDate  = substr($data->CREATED, 0, 19);
                 $bug->openedBuild = 'trunk';
-                $bug->assignedTo  = $this->getJiraAccount($data->ASSIGNEE);
+                $bug->assignedTo  = $this->getJiraAccount($data->ASSIGNEE, $method);
 
                 if($data->RESOLUTION)
                 {
@@ -984,10 +997,11 @@ class convertModel extends model
      * Import jira issue link.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraIssueLink($dataList)
+    public function importJiraIssueLink($dataList, $method = 'db')
     {
         $issueLinkTypeList = array();
         $relations = $this->session->jiraRelation;
@@ -1107,10 +1121,11 @@ class convertModel extends model
      * Import jira action.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraAction($dataList)
+    public function importJiraAction($dataList, $method = 'db')
     {
         $issueStories = $this->dao->dbh($this->dbh)->select('AID,BID')->from(JIRA_TMPRELATION)
             ->where('AType')->eq('jstory')
@@ -1159,7 +1174,7 @@ class convertModel extends model
             $action = new stdclass();
             $action->objectType = $objectType;
             $action->objectID   = $objectID;
-            $action->actor      = $this->getJiraAccount($data->AUTHOR);
+            $action->actor      = $this->getJiraAccount($data->AUTHOR, $method);
             $action->action     = 'commented';
             $action->date       = substr($data->CREATED, 0, 19);
             $action->comment    = $comment;
@@ -1171,10 +1186,11 @@ class convertModel extends model
      * Import jira file.
      * 
      * @param  object $dataList 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function importJiraFile($dataList)
+    public function importJiraFile($dataList, $method = 'db')
     {
         $this->loadModel('file');
 
@@ -1225,7 +1241,7 @@ class convertModel extends model
             $file->size       = $fileAttachment->FILESIZE;
             $file->objectType = $objectType;
             $file->objectID   = $objectID;
-            $file->addedBy    = $this->getJiraAccount($fileAttachment->AUTHOR);
+            $file->addedBy    = $this->getJiraAccount($fileAttachment->AUTHOR, $method);
             $file->addedDate  = substr($fileAttachment->CREATED, 0, 19);
             $this->dao->dbh($this->dbh)->insert(TABLE_FILE)->data($file)->exec();
 
@@ -1281,14 +1297,61 @@ class convertModel extends model
      * Get jira account.
      * 
      * @param  string $userKey 
+     * @param  string $method
      * @access public
      * @return void
      */
-    public function getJiraAccount($userKey)
+    public function getJiraAccount($userKey, $method = 'db')
     {
         if(strpos($userKey, 'JIRAUSER') === false) return $userKey;
 
-        return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name'); 
+        if($method == 'db')
+        {
+            return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name'); 
+        }
+        else
+        {
+            $appUsers = $this->getJiraAppUser();
+            return zget($appUsers, $userKey, $userKey);
+        }
+    }
+
+    /**
+     * Get jira app user pairs.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getJiraAppUser()
+    {
+        $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/applicationuser.xml');
+        $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
+        $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
+
+        $pairs = array();
+        $parsedXML = $this->object2Array($parsedXML);
+        foreach($parsedXML as $key => $xmlArray)
+        {
+            if(strtolower($key) != 'applicationuser') continue;
+            foreach($xmlArray as $key => $attributes)
+            {
+                if(is_numeric($key))
+                {
+                    foreach($attributes as $value)
+                    {
+                        if(!is_array($value)) continue;
+                        if(!isset($value['userKey'])) continue;
+                        $pairs[$value['userKey']] = $value['lowerUserName'];
+                    }
+                }
+                else
+                {
+                    $pairs[$attributes['userKey']] = $attributes['lowerUserName'];
+                }
+            }
+        }
+
+        return $pairs;
     }
 
     /**
@@ -1305,8 +1368,8 @@ class convertModel extends model
         $handle   = fopen($file, "r");
 
         $usingData  = array();
-        $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType', '<NodeAssociation');
-        $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>');
+        $headerList = array('<Action', '<Project', '<Status', '<Resolution', '<User', '<Issue', '<ChangeGroup', '<ChangeItem', '<IssueLink', '<IssueLinkType', '<FileAttachment', '<Version', '<IssueType', '<NodeAssociation', '<ApplicationUser');
+        $footerList = array('<Action' => '</Action>', '<Project' => '</Project>', '<Status' => '</Status>', '<Resolution' => '</Resolution>', '<User' => '</User>', '<Issue' => '</Issue>', '<ChangeGroup' => '</ChangeGroup>', '<ChangeItem' => '</ChangeItem>', '<IssueLink' => '</IssueLink>', '<IssueLinkType' => '</IssueLinkType>', '<FileAttachment' => '</FileattAchment>', '<Version' => '</Version>', '<IssueType' => '</IssueType>', '<NodeAssociation' => '</NodeAssociation>', '<ApplicationUser' => '</ApplicationUser>');
 
         while(!feof($handle))
         {
@@ -1339,9 +1402,10 @@ class convertModel extends model
 
         foreach($headerList as $object)
         {
-            $object = str_replace('<', '', $object);
-            $object = strtolower($object);
-            file_put_contents($filePath . $object . '.xml', '</entity-engine-xml>', FILE_APPEND);
+            $object   = str_replace('<', '', $object);
+            $object   = strtolower($object);
+            $filename = $filePath . $object . '.xml';
+            if(file_exists($filename)) file_put_contents($filename, '</entity-engine-xml>', FILE_APPEND);
         }
 
         fclose($handle);
