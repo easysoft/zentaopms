@@ -311,7 +311,7 @@ class convert extends control
                 if(!file_exists($jiraFilePath . 'entities.xml'))
                 {
                     $response['result']  = 'fail';
-                    $response['message'] = $this->lang->convert->jira->notExistEntities;
+                    $response['message'] = sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml');
                     return print($this->send($response));
                 }
 
