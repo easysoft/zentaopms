@@ -43,20 +43,13 @@
       </tr>
     </thead>
     <tbody>
-      <?php 
-      $emptyRing = "<span class='label-pri'></span>";
-      $fullRing  = "<span class='label-pri'><span class='label-full'></span></span>";
-
-      $coverageIcon    = $measures['coverage'] != '0.0%' ? $fullRing : $emptyRing;
-      $duplicationIcon = $measures['duplicated_lines_density'] != '0.0%' ? $fullRing : $emptyRing;
-      ?>
       <tr class="text-center">
         <td><?php echo $measures['bugs'];?></td>
         <td><?php echo $measures['vulnerabilities'];?></td>
         <td><?php echo $measures['security_hotspots_reviewed'];?></td>
         <td><?php echo $measures['code_smells'];?></td>
-        <td><?php echo $measures['coverage'] . $coverageIcon;?></td>
-        <td><?php echo $measures['duplicated_lines_density'] . $duplicationIcon;?></td>
+        <td><?php echo $measures['coverage'];?></td>
+        <td><?php echo $measures['duplicated_lines_density'];?></td>
         <td><?php echo $measures['ncloc'];?></td>
       </tr>
     </tbody>
