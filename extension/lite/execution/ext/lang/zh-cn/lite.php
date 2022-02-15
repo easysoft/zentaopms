@@ -13,3 +13,10 @@ $lang->execution->kanbanGroup['story']      = '目标';
 $lang->execution->kanbanGroup['module']     = '所属目录';
 $lang->execution->kanbanGroup['pri']        = '优先级';
 $lang->execution->kanbanGroup['assignedTo'] = '指派人';
+
+$lang->execution->icons['kanban']    = 'kanban';
+$lang->execution->icons['task']      = 'list';
+$lang->execution->icons['calendar']  = 'calendar';
+$lang->execution->icons['gantt']     = 'lane';
+$lang->execution->icons['tree']      = 'treemap';
+$lang->execution->icons['grouptask'] = 'sitemap';
