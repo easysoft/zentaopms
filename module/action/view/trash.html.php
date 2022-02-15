@@ -62,6 +62,11 @@
                 $params     = "libID=0&moduelID=0&apiID={$action->objectID}";
                 $methodName = 'index';
             }
+            if(strpos('traincourse,traincontents', $module) !== false)
+            {
+                $methodName = $module == 'traincourse' ? 'viewcourse' : 'viewchapter';
+                $module     = 'traincourse';
+            }
             if(isset($config->action->customFlows[$action->objectType]))
             {
                 $flow   = $config->action->customFlows[$action->objectType];
