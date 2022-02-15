@@ -47,7 +47,7 @@
       $emptyRing = "<span class='label-pri'></span>";
       $fullRing  = "<span class='label-pri'><span class='label-full'></span></span>";
 
-      $coverageIcon    = !$measures['coverage'] ? $fullRing : $emptyRing;
+      $coverageIcon    = $measures['coverage'] ? $fullRing : $emptyRing;
       $duplicationIcon = $measures['duplicated_lines_density'] ? $fullRing : $emptyRing;
       ?>
       <tr class="text-center">
