@@ -232,7 +232,7 @@ class company extends control
         $userIdPairs[''] = $this->lang->company->user;
         $this->view->userIdPairs = $userIdPairs;
 
-        $accountPairs = $this->user->getPairs('noclosed|nodeleted|noletter|all');
+        $accountPairs = $this->user->getPairs('nodeleted|noletter|all');
         $accountPairs[''] = '';
 
         /* The header and position. */
