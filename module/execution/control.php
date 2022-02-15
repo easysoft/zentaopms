@@ -2066,6 +2066,7 @@ class execution extends control
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
+        $this->view->kanban           = $this->lang->execution->kanban;
         $this->display();
     }
 
