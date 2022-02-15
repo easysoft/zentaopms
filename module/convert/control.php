@@ -320,10 +320,11 @@ class convert extends control
      * 
      * @param  string $method db|file
      * @param  string $dbName 
+     * @param  int    $step
      * @access public
      * @return void
      */
-    public function mapJira2Zentao($method = 'db', $dbName = '')
+    public function mapJira2Zentao($method = 'db', $dbName = '', $step = 1)
     {
         $this->app->loadLang('story');
         $this->app->loadLang('bug');
@@ -331,11 +332,13 @@ class convert extends control
 
         if($_POST)
         {
-            $this->session->set('jiraRelation', $_POST);
+            foreach($_POST as $key => $value) $_SESSION['jiraRelation'][$key] = $value;
 
+            $step = $step + 1;
+            $link = $step == 5 ? $this->createLink('convert', 'initJiraUser', "method=$method") : inlink('mapJira2Zentao', "method=$method&dbName=$dbName&step=$step");
             $response['result']  = 'success';
             $response['message'] = $this->lang->saveSuccess;
-            $response['locate']  = $this->createLink('convert', 'initJiraUser', "method=$method");
+            $response['locate']  = $link;
             return print($this->send($response));
         }
 
@@ -362,6 +365,7 @@ class convert extends control
         $this->view->resolutionList = $resolutionList;
         $this->view->statusList     = $statusList;
         $this->view->method         = $method;
+        $this->view->step           = $step;
         $this->display();
     }
 

@@ -164,6 +164,11 @@ $lang->convert->jira->zentaoLinkTypeList['subStoryLink'] = '父-子需求';
 $lang->convert->jira->zentaoLinkTypeList['duplicate']    = '重复对象';
 $lang->convert->jira->zentaoLinkTypeList['relates']      = '互相关联';
 
+$lang->convert->jira->steps[1] = '对象';
+$lang->convert->jira->steps[2] = '对象关联关系';
+$lang->convert->jira->steps[3] = '解决方案';
+$lang->convert->jira->steps[4] = '状态';
+
 $lang->convert->jira->importSteps['db'][1]   = '备份禅道数据库，备份Jira数据库。';
 $lang->convert->jira->importSteps['db'][2]   = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
 $lang->convert->jira->importSteps['db'][3]   = '将Jira数据库导入到禅道使用的Mysql中，名字和禅道数据库区别开来。';
@@ -172,7 +177,7 @@ $lang->convert->jira->importSteps['db'][4]   = "将Jira附件目录<strong class
 $lang->convert->jira->importSteps['db'][5]   = "上述步骤完成后，请输入Jira数据库名字进行下一步。";
 $lang->convert->jira->importSteps['file'][1] = '备份禅道数据库，备份Jira数据库。';
 $lang->convert->jira->importSteps['file'][2] = '导入数据时使用禅道会给服务器造成性能压力，请尽量保证导入数据时无人使用禅道。';
-$lang->convert->jira->importSteps['file'][3] = "将Jira的备份文件 <strong class='text-red'>entities.xml</strong> 放到 <strong class='text-red'>%s</strong> 下。";
+$lang->convert->jira->importSteps['file'][3] = "将Jira的备份文件 <strong class='text-red'>entities.xml</strong> 放到 <strong class='text-red'>%s</strong> 下，并给该目录读写权限。";
 $lang->convert->jira->importSteps['file'][4] = "将Jira附件目录<strong class='text-red'> attachments</strong> 放到 <strong class='text-red'>%s</strong> 下，确保禅道服务器磁盘空间足够。";
 $lang->convert->jira->importSteps['file'][5]   = "上述步骤完成后，点击下一步。";
 

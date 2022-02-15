@@ -164,6 +164,11 @@ $lang->convert->jira->zentaoLinkTypeList['subStoryLink'] = 'Parent-Child Story';
 $lang->convert->jira->zentaoLinkTypeList['duplicate']    = 'Duplicate';
 $lang->convert->jira->zentaoLinkTypeList['relates']      = 'Relates';
 
+$lang->convert->jira->steps[1] = 'Objects';
+$lang->convert->jira->steps[2] = 'Relates';
+$lang->convert->jira->steps[3] = 'Resolution';
+$lang->convert->jira->steps[4] = 'Status';
+
 $lang->convert->jira->importSteps['db'][1]   = 'Backup ZenTao database, backup Jira database.';
 $lang->convert->jira->importSteps['db'][2]   = 'Using ZenTao when importing data will cause performance pressure on the server, please try to ensure that no one is using ZenTao when importing data.';
 $lang->convert->jira->importSteps['db'][3]   = 'Import the Jira database into the Mysql used by ZenTao, the name is distinguished from the ZenTao database.';
