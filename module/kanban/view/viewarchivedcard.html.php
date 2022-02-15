@@ -109,7 +109,7 @@
             foreach($assignedToList as $account)
             {
                 if($count > 2) continue;
-                echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account));
+                echo html::smallAvatar(array('avatar' => $usersAvatar[$account], 'account' => $account), 'avatar-circle avatar-' . zget($userIdPairs, $account));
                 $count ++;
             }
             ?>
