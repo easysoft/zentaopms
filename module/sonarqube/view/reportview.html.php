@@ -47,8 +47,8 @@
       $emptyRing = "<span class='label-pri'></span>";
       $fullRing  = "<span class='label-pri'><span class='label-full'></span></span>";
 
-      $coverageIcon    = $measures['coverage'] ? $fullRing : $emptyRing;
-      $duplicationIcon = $measures['duplicated_lines_density'] ? $fullRing : $emptyRing;
+      $coverageIcon    = $measures['coverage'] != '0.0%' ? $fullRing : $emptyRing;
+      $duplicationIcon = $measures['duplicated_lines_density'] != '0.0%' ? $fullRing : $emptyRing;
       ?>
       <tr class="text-center">
         <td><?php echo $measures['bugs'];?></td>
