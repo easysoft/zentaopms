@@ -16,3 +16,6 @@ ALTER TABLE `zt_block` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `ac
 ALTER TABLE `zt_block` DROP INDEX `account_module_type_order`, ADD UNIQUE `account_vision_module_type_order` (`account`, `vision`, `module`, `type`, `order`);
 ALTER TABLE `zt_effort` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_story` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
+
+ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
+UPDATE `zt_user` SET `visions`='rnd,lite';
