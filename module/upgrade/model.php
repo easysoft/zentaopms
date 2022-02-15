@@ -756,6 +756,10 @@ class upgradeModel extends model
             $this->updateSpaceTeam();
             $this->updateDocField();
             $this->appendExec('16_2');
+        case '16_3':
+            $this->saveLogs('Execute 16_3');
+            $this->execSQL($this->getUpgradeFile('16.3'));
+            $this->appendExec('16_3');
         }
 
         $this->deletePatch();
@@ -966,6 +970,7 @@ class upgradeModel extends model
             case '16_0': $confirmContent .= file_get_contents($this->getUpgradeFile('16.0'));
             case '16_1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.1'));
             case '16_2': $confirmContent .= file_get_contents($this->getUpgradeFile('16.2'));
+            case '16_3': $confirmContent .= file_get_contents($this->getUpgradeFile('16.3'));
         }
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
