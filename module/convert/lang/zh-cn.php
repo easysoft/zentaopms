@@ -152,6 +152,8 @@ $lang->convert->jira->passwordLess       = '密码不能少于六位！';
 $lang->convert->jira->importSuccessfully = 'Jira导入完成！';
 $lang->convert->jira->importResult       = "导入 <strong class='text-red'>%s</strong> 数据, 已处理 <strong class='%scount'>%s</strong> 条记录；";
 $lang->convert->jira->importing          = '数据导入中，请不要切换其它页面';
+$lang->convert->jira->importingAB        = '数据导入中';
+$lang->convert->jira->imported           = '数据导入完成';
 
 $lang->convert->jira->zentaoObjectList[''] = '';
 $lang->convert->jira->zentaoObjectList['task']        = '任务';

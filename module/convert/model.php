@@ -1164,6 +1164,8 @@ class convertModel extends model
             $comment = $data->actionbody;
             if(empty($comment)) continue;
 
+            if(!isset($issueObjectType[$issueID])) continue;
+
             $objectType = $issueObjectType[$issueID];
             if($objectType == 'task')  $objectID = $issueTasks[$issueID];
             if($objectType == 'bug')   $objectID = $issueBugs[$issueID];
@@ -1222,6 +1224,8 @@ class convertModel extends model
         foreach($dataList as $fileAttachment)
         {
             $issueID    = $fileAttachment->issueid;
+            if(!isset($issueObjectType[$issueID])) continue;
+
             $objectType = $issueObjectType[$issueID];
             if($objectType != 'bug' and $objectType != 'task' and $objectType != 'story') continue;
 

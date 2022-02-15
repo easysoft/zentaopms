@@ -152,6 +152,8 @@ $lang->convert->jira->passwordLess       = 'Password must not be less than six c
 $lang->convert->jira->importSuccessfully = 'Done!';
 $lang->convert->jira->importResult       = "Import <strong class='text-red'>%s</strong> data, <strong class='%scount'>%s</strong> pieces of data processed；";
 $lang->convert->jira->importing          = 'Data is being imported, please do not switch to other pages.';
+$lang->convert->jira->importingAB        = 'Data Import';
+$lang->convert->jira->imported           = 'Data Import Complete';
 
 $lang->convert->jira->zentaoObjectList[''] = '';
 $lang->convert->jira->zentaoObjectList['task']        = 'Task';
