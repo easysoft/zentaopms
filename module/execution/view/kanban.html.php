@@ -201,7 +201,7 @@ js::set('hasTaskButton', $hasTaskButton);
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo str_replace("$lang->executionCommon", "$kanban", $lang->execution->linkStoryByPlanTips);?>
+        <h4 class="modal-title"><?php echo $lang->execution->linkStoryByPlan;?></h4><?php echo str_replace($lang->executionCommon, $kanban, $lang->execution->linkStoryByPlanTips);?>
       </div>
       <div class="modal-body">
         <div class='input-group'>
