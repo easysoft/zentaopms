@@ -295,9 +295,11 @@ class userModel extends model
             ->setDefault('join', '0000-00-00')
             ->setDefault('type', 'inside')
             ->setDefault('company', 0)
+            ->setDefault('visions', '')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
+            ->join('visions', ',')
             ->remove('new, group, password1, password2, verifyPassword, passwordStrength')
             ->get();
 
@@ -385,7 +387,8 @@ class userModel extends model
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i + 1)));
-                $role = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                $role    = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
+                $visions = in_array('ditto', $users->visions[$i]) ? (isset($prev['visions']) ? $prev['visions'] : array()) : $users->visions[$i];
 
                 /* Check weak and common weak password. */
                 if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) die(js::error(sprintf($this->lang->user->error->weakPassword, $i + 1)));
@@ -417,6 +420,7 @@ class userModel extends model
                 $data[$i]->phone    = $users->phone[$i];
                 $data[$i]->address  = $users->address[$i];
                 $data[$i]->zipcode  = $users->zipcode[$i];
+                $data[$i]->visions  = join(',', $visions);
 
                 /* Check required fields. */
                 foreach(explode(',', $this->config->user->create->requiredFields) as $field)
@@ -447,6 +451,7 @@ class userModel extends model
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
+                $prev['visions']  = $users->visions[$i];
                 $prev['password'] = $users->password[$i];
             }
         }
@@ -502,8 +507,10 @@ class userModel extends model
         $user   = fixer::input('post')
             ->setDefault('join', '0000-00-00')
             ->setDefault('company', 0)
+            ->setDefault('visions', '')
             ->setIF($this->post->password1 != false, 'password', substr($this->post->password1, 0, 32))
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
+            ->join('visions', ',')
             ->remove('new, password1, password2, groups,verifyPassword, passwordStrength')
             ->get();
 
@@ -545,6 +552,7 @@ class userModel extends model
             ->checkIF($this->post->mobile != '', 'mobile', 'mobile')
             ->where('id')->eq((int)$userID)
             ->exec();
+        if(dao::isError()) return false;
 
         /* If account changed, update the privilege. */
         if($this->post->account != $oldUser->account)
@@ -647,6 +655,7 @@ class userModel extends model
             $users[$id]['phone']    = $data->phone[$id];
             $users[$id]['address']  = $data->address[$id];
             $users[$id]['zipcode']  = $data->zipcode[$id];
+            $users[$id]['visions']  = !empty($data->visions[$id]) ? join(',', $data->visions[$id]) : '';
             $users[$id]['dept']     = $data->dept[$id] == 'ditto' ? (isset($prev['dept']) ? $prev['dept'] : 0) : $data->dept[$id];
             $users[$id]['role']     = $data->role[$id] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : 0) : $data->role[$id];
 
@@ -2648,5 +2657,22 @@ class userModel extends model
             $userDetails[$user->account] = $user;
         }
         return $userDetails;
+    }
+
+    /**
+     * Get vision list.
+     *
+     * @access public
+     * @return array
+     */
+    public function getVisionList()
+    {
+        $visionList = $this->lang->visionList;
+        foreach($visionList as $visionKey => $visionName)
+        {
+            if(strpos($this->config->visions, ",{$visionKey},") === false) unset($visionList[$visionKey]);
+        }
+
+        return $visionList;
     }
 }

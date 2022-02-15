@@ -319,7 +319,7 @@ $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
 
 $lang->visionList = array();
-$lang->visionList['rnd']  = '研发界面';
+$lang->visionList['rnd']  = '研发综合界面';
 $lang->visionList['lite'] = '迅捷界面';
 
 $lang->createObjects['todo']        = '待办';
