@@ -99,6 +99,7 @@ $lang->block->productName  = $lang->productCommon . '名称';
 $lang->block->totalStory   = '总' . $lang->SRCommon;
 $lang->block->totalBug     = '总Bug';
 $lang->block->totalRelease = '发布次数';
+$lang->block->totalTask    = '总' . $lang->task->common;
 
 $lang->block->totalInvestment = '总投入';
 $lang->block->totalPeople     = '总人数';

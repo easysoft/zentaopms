@@ -11,9 +11,9 @@ $lang->block->delayed  = '已延期';
 $lang->block->titleList['scrumlist'] = '看板列表';
 $lang->block->titleList['sprint']    = '看板总览';
 
-$lang->block->myTask = '我的卡片';
+$lang->block->myTask = '我的任务';
 
-$lang->block->finishedTasks = '完成的卡片数';
+$lang->block->finishedTasks = '完成的任务数';
 
 $lang->block->story = '目标';
 
@@ -44,7 +44,7 @@ $lang->block->modules['execution']->availableBlocks = new stdclass();
 $lang->block->modules['execution']->availableBlocks->statistic = $lang->execution->common . '统计';
 $lang->block->modules['execution']->availableBlocks->overview  = $lang->execution->common . '总览';
 $lang->block->modules['execution']->availableBlocks->list      = $lang->execution->common . '列表';
-$lang->block->modules['execution']->availableBlocks->task      = '卡片列表';
+$lang->block->modules['execution']->availableBlocks->task      = '任务列表';
 
 unset($lang->block->moduleList['product']);
 unset($lang->block->moduleList['qa']);

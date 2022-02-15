@@ -128,9 +128,27 @@ echo "<span>" . html::a($this->createLink('tree', 'browsetask', "root={$root->id
   </div>
 </div>
 <script>
+function getTree(data)
+{
+    var tree = [];
+    $.each(data,function(index, value){
+        if(value.type === 'product')
+        {
+            for (var child of value.children) tree.push(child);
+        }
+        else
+        {
+            tree.push(value);
+        }
+    });
+
+    return tree;
+}
+
 $(function()
 {
     var data = $.parseJSON('<?php echo helper::jsonEncode4Parse($tree);?>');
+    data = getTree(data);
     var options = {
         initialState: 'preserve',
         data: data,

@@ -1,7 +1,7 @@
 <?php
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
-$lang->task->common       = '卡片';
+$lang->task->common       = '任务';
 $lang->story->common      = '目标';
 
 /* Main Navigation. */
@@ -46,7 +46,7 @@ else
     $lang->dividerMenu = ',doc,admin,';
 }
 
-$lang->task->common = '卡片';
+$lang->task->common = '任务';
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
@@ -204,7 +204,7 @@ $lang->admin->dividerMenu = ',company,message,system,';
 $lang->searchObjects['all']       = '全部';
 $lang->searchObjects['todo']      = '待办';
 $lang->searchObjects['story']     = '目标';
-$lang->searchObjects['task']      = '卡片';
+$lang->searchObjects['task']      = '任务';
 $lang->searchObjects['doc']       = '文档';
 $lang->searchObjects['project']   = '项目';
 $lang->searchObjects['execution'] = '看板';
@@ -247,7 +247,7 @@ unset($lang->createIcons['kanbanspace']);
 unset($lang->createIcons['kanban']);
 
 $lang->createObjects['story']     = '目标';
-$lang->createObjects['task']      = '卡片';
+$lang->createObjects['task']      = '任务';
 $lang->createObjects['execution'] = '看板';
 
 $lang->createIcons['execution'] = 'kanban';

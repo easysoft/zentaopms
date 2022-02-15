@@ -42,7 +42,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
 .btn-group button.dropdown-toggle.btn-secondary, .btn-group button.dropdown-toggle.btn-primary {padding:6px;}
 </style>
 <div id="mainMenu" class="clearfix">
-  <?php if(!$isProjectStory):?>
   <div id="sidebarHeader">
     <div class="title" title="<?php echo $moduleName;?>">
       <?php
@@ -55,20 +54,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       ?>
     </div>
   </div>
-  <?php endif;?>
   <div class="btn-toolbar pull-left">
-    <?php if($isProjectStory): ?>
-    <div class="btn-group">
-      <a href="javascript:;" class="btn btn-link" style="padding-right: 0;"> <?php echo $moduleName;?> </a>
-      <?php
-      if($moduleID)
-      {
-          $removeLink = $browseType == 'bymodule' ? $this->createLink($this->app->rawModule, $this->app->rawMethod, $projectIDParam . "productID=$productID&branch=$branch&browseType=$browseType&param=0&storyType=$storyType&orderBy=$orderBy&recTotal=0&recPerPage={$pager->recPerPage}") : 'javascript:removeCookieByKey("storyModuleParam")';
-          echo html::a($removeLink, "<i class='icon icon-sm icon-close'></i>", '', "class='text-muted btn btn-link' style='padding-left: 0;'");
-      }
-      ?>
-    </div>
-    <?php endif;?>
     <?php
     if(!commonModel::isTutorialMode())
     {

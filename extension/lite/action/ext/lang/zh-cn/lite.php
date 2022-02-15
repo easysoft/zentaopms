@@ -1,8 +1,8 @@
 <?php
 $lang->action->label->execution = "看板|execution|task|executionID=%s";
-$lang->action->label->task      = '卡片|task|view|taskID=%s';
+$lang->action->label->task      = '任务|task|view|taskID=%s';
 
-$lang->action->objectTypes['task'] = '卡片';
+$lang->action->objectTypes['task'] = '任务';
 
 unset($lang->action->dynamicAction->program);
 unset($lang->action->dynamicAction->product);
