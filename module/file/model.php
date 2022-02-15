@@ -50,12 +50,22 @@ class fileModel extends model
             ->beginIF($extra)->andWhere('extra')->eq($extra)
             ->orderBy('id')
             ->fetchAll('id');
+
         foreach($files as $file)
         {
-            $realPathName   = $this->getRealPathName($file->pathname);
-            $file->realPath = $this->savePath . $realPathName;
-            $file->webPath  = $this->webPath . $realPathName;
+            if($objectType != 'traincourse' and $objectType != 'traincontents')
+            {
+                $realPathName   = $this->getRealPathName($file->pathname);
+                $file->realPath = $this->savePath . $realPathName;
+                $file->webPath  = $this->webPath . $realPathName;
+            }
+            else
+            {
+                $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+                $file->webPath  = '/data/course/' . $file->pathname;
+            }
         }
+
         return $files;
     }
 
