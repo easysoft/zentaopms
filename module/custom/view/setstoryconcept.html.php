@@ -64,7 +64,8 @@ EOT;
           </td>
         </tr>
         <tr>
-          <td class='text-center' colspan='<?php echo !$this->config->URAndSR ? 2 : 4;?>'><?php echo html::submitButton();?></td>
+          <?php if ($this->config->URAndSR):?><td></td><?php endif;?>
+          <td class=<?php echo !$this->config->URAndSR ? "'text-center' colspan='2'" : "text-left";?>'><?php echo html::submitButton();?></td>
         </tr>
       </table>
     </div>
