@@ -34,9 +34,9 @@
     <thead>
       <tr class="text-center">
         <th><?php echo "<span class='table-nest-icon icon icon-bug'></span>" . $lang->sonarqube->report->bugs;?></th>
-        <th><?php echo "<span class='table-nest-icon icon icon-unlock'></span>" . $lang->sonarqube->report->vulnerabilities;?></th>
-        <th class="w-150px"><?php echo "<span class='table-nest-icon icon icon-shield'></span>" . $lang->sonarqube->report->security_hotspots_reviewed;?></th>
-        <th><?php echo "<span class='table-nest-icon icon icon-frown'></span>" . $lang->sonarqube->report->code_smells;?></th>
+        <th class="w-140px"><?php echo "<span class='table-nest-icon icon icon-unlock'></span>" . $lang->sonarqube->report->vulnerabilities;?></th>
+        <th class="w-180px"><?php echo "<span class='table-nest-icon icon icon-shield'></span>" . $lang->sonarqube->report->security_hotspots_reviewed;?></th>
+        <th class="w-130px"><?php echo "<span class='table-nest-icon icon icon-frown'></span>" . $lang->sonarqube->report->code_smells;?></th>
         <th><?php echo $lang->sonarqube->report->coverage;?></th>
         <th><?php echo $lang->sonarqube->report->duplicated_lines_density;?></th>
         <th><?php echo $lang->sonarqube->report->ncloc;?></th>
