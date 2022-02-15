@@ -23,7 +23,7 @@
           <?php if($this->config->URAndSR):?>
           <td class='w-200px'><strong><?php echo $lang->custom->URConcept;?></strong></th>
           <?php endif;?>
-          <td class='w-200px'><strong><?php echo $lang->custom->SRConcept;?></strong></th>
+          <td class='<?php echo $this->config->URAndSR ? "w-200px" : "w-250px";?>'><strong><?php echo $lang->custom->SRConcept;?></strong></th>
           <td></td><td></td>
         </tr>
         <tr>
