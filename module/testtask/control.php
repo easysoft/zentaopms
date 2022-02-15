@@ -240,10 +240,9 @@ class testtask extends control
         }
 
         /* Create testtask from testtask of test.*/
-        $productID  = $productID ? $productID : key($this->products);
-        $executions = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
-        $builds     = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
-
+        $productID   = $productID ? $productID : key($this->products);
+        $executions  = empty($productID) ? array() : $this->loadModel('product')->getExecutionPairsByProduct($productID, '', 'id_desc', $projectID);
+        $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'notrunk');
         $testreports = $this->testtask->getTestReportPairsByBuild($build);
 
         /* Set menu. */
@@ -757,7 +756,7 @@ class testtask extends control
         $executions  = empty($productID) ? array() : $this->product->getExecutionPairsByProduct($productID, 0, 'id_desc', $projectID);
         $executionID = $task->execution;
         $builds      = empty($productID) ? array() : $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,notrunk', $executionID, 'execution');
-        $testreports = $this->testtask->getTestReportPairsByBuild($task->build);
+        $testreports = $this->loadModel('testreport')->getPairs($task->product);
 
         $this->view->task         = $task;
         $this->view->executions   = $executions;
@@ -1436,7 +1435,7 @@ class testtask extends control
         $testTasks = $this->testtask->getUserTestTaskPairs($account, 0, $status);
 
         if($id) return print(html::select("testtasks[$id]", $testTasks, '', 'class="form-control"'));
-        return print(html::select('testtask', $testTasks, '', 'class=form-control'));
+        return print(html::select('testtask', $testTasks, '', 'class="form-control"'));
     }
 
     /**
@@ -1454,16 +1453,16 @@ class testtask extends control
     }
 
     /**
-     * Ajax get test report.
+     * Ajax: Get test report by productID.
      *
-     * @param  int    $buildID
+     * @param  int    $productID
      * @access public
      * @return void
      */
-    public function ajaxGetTestReports($buildID)
+    public function ajaxGetTestReports($productID)
     {
         /* Testreport list. */
-        $pairs = $this->testtask->getTestReportPairsByBuild($buildID);
-        return print(html::select('testreport', $pairs, '', "class='form-control chosen'"));
+        $pairs = $this->loadModel('testreport')->getPairs($productID);
+        return print(html::select('testreport', array('') + $pairs, '', "class='form-control chosen'"));
     }
 }

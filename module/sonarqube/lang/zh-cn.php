@@ -35,13 +35,14 @@ $lang->sonarqube->placeholder->name        = '';
 $lang->sonarqube->placeholder->url         = "请填写SonarQube Server首页的访问地址，如：https://sonarqube.zentao.net。";
 $lang->sonarqube->placeholder->account     = "请填写具有Administrator权限的SonarQube用户信息";
 $lang->sonarqube->placeholder->projectName = '最多255个字符';
-$lang->sonarqube->placeholder->projectKey  = "最多400个字符。 允许的字符为字母数字，'-'，'_'，'. '和':'，至少有一个非数字";
+$lang->sonarqube->placeholder->projectKey  = "最多400个字符。 允许的字符为字母、数字，'-'，'_'，'. '和':'，至少有一个非数字";
 $lang->sonarqube->placeholder->searchIssue = "请输入问题名称或文件";
 
 $lang->sonarqube->nameRepeatError      = "服务器名称已存在！";
 $lang->sonarqube->urlRepeatError       = "服务器地址已存在！";
 $lang->sonarqube->validError           = "SonarQube 用户权限认证失败！";
 $lang->sonarqube->hostError            = "无效的SonarQube服务地址。";
+$lang->sonarqube->lengthError          = "『%s』长度应当不超过『%d』";
 $lang->sonarqube->confirmDelete        = '确认删除该SonarQube吗？';
 $lang->sonarqube->confirmDeleteProject = '确认删除该SonarQube项目吗？';
 $lang->sonarqube->noReport             = "暂无报告";
@@ -68,7 +69,7 @@ $lang->sonarqube->qualitygateList['ERROR'] = 'Failed';
 $lang->sonarqube->apiErrorMap[1] = "/Malformed key for Project: '([\s\S]+)'. Allowed characters are alphanumeric, '-', '_', '\.' and ':', with at least one non-digit\./";
 $lang->sonarqube->apiErrorMap[2] = "/Could not create Project, key already exists: ([\s\S]+)/";
 
-$lang->sonarqube->errorLang[1] = "项目标识的格式不正确。允许的字符为字母数字、'-'、''、'.'和“：”，至少有一个非数字。";
+$lang->sonarqube->errorLang[1] = "项目标识的格式不正确。允许的字符为字母、数字、'-'、''、'.'和“：”，至少有一个非数字。";
 $lang->sonarqube->errorLang[2] = "无法创建项目，项目标识已存在：%s";
 
 $lang->sonarqube->issue = new stdclass();

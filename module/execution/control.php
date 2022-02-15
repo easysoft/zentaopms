@@ -2024,7 +2024,7 @@ class execution extends control
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
         }
-
+        
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $avatarPairs = $this->user->getAvatarPairs();
@@ -2066,6 +2066,7 @@ class execution extends control
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
+        $this->view->kanban           = $this->lang->execution->kanban;
         $this->display();
     }
 

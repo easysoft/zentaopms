@@ -93,7 +93,7 @@ class kanbanModel extends model
         $region->order = $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
-            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space = {$kanban->space}")
+            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0'")
             ->autoCheck()
             ->exec();
 
@@ -110,6 +110,8 @@ class kanbanModel extends model
             $copyColumnGroup = $this->getColumnGroupByRegions($copyRegionID, 'id_asc');
 
             /* Create groups, lanes, and columns. */
+            if(empty($copyGroups)) return $regionID;
+
             foreach($copyGroups[$copyRegionID] as $copyGroupID => $copyGroup)
             {
                 $newGroupID = $this->createGroup($kanban->id, $regionID);
@@ -1933,6 +1935,7 @@ class kanbanModel extends model
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
+            ->check('name', 'unique')
             ->exec();
 
         if(!dao::isError())
@@ -2033,7 +2036,7 @@ class kanbanModel extends model
                 $lane->type      = $type;
                 $lane->execution = $executionID;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-
+                
                 $laneID = $this->dao->lastInsertId();
                 $this->createExecutionColumns($laneID, $type, $executionID);
             }

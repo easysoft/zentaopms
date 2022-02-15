@@ -93,7 +93,7 @@
                 <?php if($count > 2) break;?>
                 <?php $count ++;?>
                 <div title="<?php echo $member->realname;?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member->account], 'account' => $member->account)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member->account], 'account' => $member->account), 'avatar-circle avatar-' . zget($userIdPairs, $member->account)); ?>
                 </div>
                 <?php endforeach;?>
                 <?php if(count($members) > 4):?>
@@ -102,7 +102,7 @@
                 <?php if(count($members) > 3):?>
                 <?php $lastMember = end($members);?>
                 <div title="<?php echo $lastMember->realname;?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$lastMember->account], 'account' => $lastMember->account), 'avatar-circle avatar-' . zget($userIdPairs, $lastMember->account)); ?>
                 </div>
                 <?php endif;?>
               </div>

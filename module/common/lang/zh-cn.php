@@ -215,8 +215,6 @@ $lang->module          = '模块';
 $lang->priv            = '权限';
 $lang->other           = '其他';
 $lang->estimation      = '估算';
-$lang->issue           = '问题';
-$lang->risk            = '风险';
 $lang->measure         = '度量';
 $lang->treeView        = '树状图';
 $lang->groupView       = '分组视图';
@@ -279,6 +277,8 @@ $lang->admin->entry      = '应用';
 $lang->admin->data       = '数据';
 $lang->admin->cron       = '定时';
 $lang->admin->buildIndex = '重建索引';
+
+$lang->convert->importJira = '导入Jira数据';
 
 $lang->storyConcept = '需求概念';
 

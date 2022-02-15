@@ -262,9 +262,10 @@ class project extends control
             $this->view->executionActions = $executionActions;
         }
 
-        $this->view->title      = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
-        $this->view->position[] = $this->lang->project->index;
-        $this->view->project    = $project;
+        $this->view->title       = $this->lang->project->common . $this->lang->colon . $this->lang->project->index;
+        $this->view->position[]  = $this->lang->project->index;
+        $this->view->project     = $project;
+        $this->view->userIdPairs = $this->loadModel('user')->getPairs('nodeleted|showid');
 
         $this->display();
     }
@@ -308,6 +309,7 @@ class project extends control
         $this->view->programTree  = $this->project->getTreeMenu(0, array('projectmodel', 'createManageLink'), 0, 'list');
         $this->view->programs     = array('0' => '') + $this->program->getParentPairs();
         $this->view->users        = $this->loadModel('user')->getPairs('noletter|pofirst|nodeleted');
+        $this->view->userIdPairs  = $this->loadModel('user')->getPairs('nodeleted|showid');
         $this->view->usersAvatar  = $this->user->getAvatarPairs();
         $this->view->browseType   = $browseType;
         $this->view->projectType  = $projectType;

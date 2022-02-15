@@ -157,10 +157,10 @@ $lang->kanban->error->childLimitNote  = '子列在製品數量之和不能大於
 
 $lang->kanban->defaultColumn = array('未開始', '進行中', '已完成', '已關閉');
 
-$this->lang->kanban->laneTypeList = array();
-$this->lang->kanban->laneTypeList['story'] = $lang->SRCommon;
-$this->lang->kanban->laneTypeList['bug']   = 'Bug';
-$this->lang->kanban->laneTypeList['task']  = '任務';
+$lang->kanban->laneTypeList = array();
+$lang->kanban->laneTypeList['story'] = $lang->SRCommon;
+$lang->kanban->laneTypeList['bug']   = 'Bug';
+$lang->kanban->laneTypeList['task']  = '任務';
 
 $lang->kanban->storyColumn = array();
 $lang->kanban->storyColumn['backlog']    = 'Backlog';

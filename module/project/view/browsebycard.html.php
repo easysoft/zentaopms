@@ -155,13 +155,13 @@
                 $count ++;
                 ?>
                 <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
                 </a>
                 <?php endforeach;?>
                 <?php if($project->teamCount > 3):?>
                 <?php if($project->teamCount > 4) echo '<span>…</span>';?>
                 <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member)); ?>
+                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
                 </a>
                 <?php endif;?>
               </div>

@@ -321,7 +321,7 @@ class block extends control
         $pager = new pager(0, 30, 1);
 
         $this->view->actions = $this->loadModel('action')->getDynamic('all', 'today', 'date_desc', $pager);
-        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|nodeleted|noletter|all');
+        $this->view->users   = $this->loadModel('user')->getPairs('nodeleted|noletter|all');
 
         $this->display();
     }

@@ -209,6 +209,7 @@ CREATE TABLE IF NOT EXISTS `zt_bug` (
   `v1` varchar(40) NOT NULL,
   `v2` varchar(40) NOT NULL,
   `repoType` varchar(30) NOT NULL DEFAULT '',
+  `issueKey` varchar(50) NOT NULL DEFAULT '',
   `testtask` mediumint(8) unsigned NOT NULL,
   `lastEditedBy` varchar(30) NOT NULL default '',
   `lastEditedDate` datetime NOT NULL,

@@ -215,8 +215,6 @@ $lang->module          = 'Module';
 $lang->priv            = 'Privilege';
 $lang->other           = 'Other';
 $lang->estimation      = 'Estimation';
-$lang->issue           = 'Issue';
-$lang->risk            = 'Risk';
 $lang->measure         = 'Report';
 $lang->treeView        = 'Tree View';
 $lang->groupView       = 'Group View';
@@ -279,6 +277,8 @@ $lang->admin->entry      = 'Application';
 $lang->admin->data       = 'Data';
 $lang->admin->cron       = 'Cron';
 $lang->admin->buildIndex = 'Full Text Search';
+
+$lang->convert->importJira = 'Import Jira';
 
 $lang->storyConcept = 'Story Concpet';
 

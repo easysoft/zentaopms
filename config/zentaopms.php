@@ -23,6 +23,14 @@ $config->productCommonList['fr'][0]    = 'Product';
 $config->productCommonList['fr'][1]    = 'Project';
 $config->productCommonList['vi'][0]    = 'Sản phẩm';
 $config->productCommonList['vi'][1]    = 'Project';
+$config->productCommonList['ru'][0]    = 'продукт';
+$config->productCommonList['ru'][1]    = 'Проект';
+$config->productCommonList['ja'][0]    = '製品';
+$config->productCommonList['ja'][1]    = 'プロジェクト';
+$config->productCommonList['es'][0]    = 'Productos';
+$config->productCommonList['es'][1]    = 'Proyecto';
+$config->productCommonList['pt'][0]    = 'produto';
+$config->productCommonList['pt'][1]    = 'projecto';
 
 /* Project common list. */
 $config->projectCommonList['zh-cn'][0] = '项目';
@@ -49,6 +57,22 @@ $config->projectCommonList['vi'][0] = 'Project';
 $config->projectCommonList['vi'][1] = 'Iteration';
 $config->projectCommonList['vi'][2] = 'Sprint';
 
+$config->projectCommonList['ru'][0] = 'Проект';
+$config->projectCommonList['ru'][1] = 'итерация';
+$config->projectCommonList['ru'][2] = 'пробивание';
+
+$config->projectCommonList['ja'][0] = 'プロジェクト';
+$config->projectCommonList['ja'][1] = '反復';
+$config->projectCommonList['ja'][2] = 'スパート';
+
+$config->projectCommonList['es'][0] = 'Proyecto';
+$config->projectCommonList['es'][1] = 'Iteración';
+$config->projectCommonList['es'][2] = 'Sprint';
+
+$config->projectCommonList['pt'][0] = 'Projecto';
+$config->projectCommonList['pt'][1] = 'Iteração';
+$config->projectCommonList['pt'][2] = 'Sprint';
+
 $config->executionCommonList['zh-cn'][0] = '迭代';
 $config->executionCommonList['zh-cn'][1] = '冲刺';
 $config->executionCommonList['zh-cn'][2] = '阶段';
@@ -72,6 +96,22 @@ $config->executionCommonList['fr'][2] = 'Phase';
 $config->executionCommonList['vi'][0] = 'Lặp lại';
 $config->executionCommonList['vi'][1] = 'Sprint';
 $config->executionCommonList['vi'][2] = 'Giai đoạn';
+
+$config->executionCommonList['ru'][0] = 'итерация';
+$config->executionCommonList['ru'][1] = 'пробивание';
+$config->executionCommonList['ru'][2] = ' этап';
+
+$config->executionCommonList['ja'][0] = '反復';
+$config->executionCommonList['ja'][1] = 'スパート';
+$config->executionCommonList['ja'][2] = 'ステージ';
+
+$config->executionCommonList['es'][0] = 'Iteración';
+$config->executionCommonList['es'][1] = 'Sprint';
+$config->executionCommonList['es'][2] = 'Fase';
+
+$config->executionCommonList['pt'][0] = 'Iteração';
+$config->executionCommonList['pt'][1] = 'Sprint';
+$config->executionCommonList['pt'][2] = 'Fase';
 
 /* Story common list. */
 $config->hourPointCommonList['zh-cn'][0] = '工时';
@@ -98,6 +138,22 @@ $config->hourPointCommonList['vi'][0] = 'giờ';
 $config->hourPointCommonList['vi'][1] = 'điểm';
 $config->hourPointCommonList['vi'][2] = 'function point';
 
+$config->hourPointCommonList['ru'][0] = 'продолжительность рабочего времени';
+$config->hourPointCommonList['ru'][1] = 'точка повести';
+$config->hourPointCommonList['ru'][2] = 'функциональная точка';
+
+$config->hourPointCommonList['ja'][0] = '工数';
+$config->hourPointCommonList['ja'][1] = 'ストーリーポイント';
+$config->hourPointCommonList['ja'][2] = 'きのうてん';
+
+$config->hourPointCommonList['es'][0] = 'Horas de trabajo';
+$config->hourPointCommonList['es'][1] = 'Punto de historia';
+$config->hourPointCommonList['es'][2] = 'Punto de función';
+
+$config->hourPointCommonList['pt'][0] = 'horas de trabalho';
+$config->hourPointCommonList['pt'][1] = 'Ponto da história';
+$config->hourPointCommonList['pt'][2] = 'Ponto de função';
+
 $config->manualUrl['home'] = 'https://www.zentao.net/book/zentaopmshelp.html?fullScreen=zentao';
 $config->manualUrl['int']  = 'https://www.zentao.pm/book/zentaomanual/zentao-installation-11.html?fullScreen=zentao';
 
@@ -114,6 +170,14 @@ $config->charsets['fr']['utf-8']    = 'UTF-8';
 $config->charsets['fr']['GBK']      = 'GBK';
 $config->charsets['vi']['utf-8']    = 'UTF-8';
 $config->charsets['vi']['GBK']      = 'GBK';
+$config->charsets['ru']['utf-8']    = 'UTF-8';
+$config->charsets['ru']['GBK']      = 'GBK';
+$config->charsets['ja']['utf-8']    = 'UTF-8';
+$config->charsets['ja']['GBK']      = 'GBK';
+$config->charsets['es']['utf-8']    = 'UTF-8';
+$config->charsets['es']['GBK']      = 'GBK';
+$config->charsets['pt']['utf-8']    = 'UTF-8';
+$config->charsets['pt']['GBK']      = 'GBK';
 
 $config->openMethods = array();
 $config->openMethods[] = 'gitlab.webhook';

@@ -19,7 +19,7 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th class='w-110px'><?php echo $lang->kanban->doneFunction;?></th>
+          <th id='c-done'><?php echo $lang->kanban->doneFunction;?></th>
           <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableFinished, $kanban->performable));?></td>
         </tr>
         <tr>

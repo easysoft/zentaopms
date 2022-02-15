@@ -42,6 +42,7 @@ $lang->sonarqube->nameRepeatError      = "Server name  already exists!";
 $lang->sonarqube->urlRepeatError       = 'Server address already exists!';
 $lang->sonarqube->validError           = 'SonarQube user authority authentication failed!';
 $lang->sonarqube->hostError            = "Invalid SonarQube service address.";
+$lang->sonarqube->lengthError          = "『%s』length should be <=『%d』";
 $lang->sonarqube->confirmDelete        = 'Do you want to delete this SonarQube server?';
 $lang->sonarqube->confirmDeleteProject = 'Do you want to delete this SonarQube project?';
 $lang->sonarqube->noReport             = "No Reprot";
@@ -66,8 +67,10 @@ $lang->sonarqube->qualitygateList['WARN']  = 'Warning';
 $lang->sonarqube->qualitygateList['ERROR'] = 'Failed';
 
 $lang->sonarqube->apiErrorMap[1] = "/Malformed key for Project: '([\s\S]+)'. Allowed characters are alphanumeric, '-', '_', '\.' and ':', with at least one non-digit\./";
+$lang->sonarqube->apiErrorMap[2] = "/Could not create Project, key already exists: ([\s\S]+)/";
 
 $lang->sonarqube->errorLang[1] = "Malformed key for Project Key,Allowed characters are alphanumeric, '-', '_', '.' and ':', with at least one non-digit.";
+$lang->sonarqube->errorLang[2] = "Could not create Project, key already exists: %s";
 
 $lang->sonarqube->issue = new stdclass();
 $lang->sonarqube->issue->message      = 'Issue Name';

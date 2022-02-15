@@ -11,8 +11,6 @@
  */
 global $config;
 $lang->story->create            = "Create Story";
-$lang->story->createStory       = 'Create Story';
-$lang->story->createRequirement = 'Create Requirement';
 
 $lang->story->requirement       = zget($lang, 'UrCommon', "Requirement");
 $lang->story->story             = zget($lang, 'SrCommon', "Story");

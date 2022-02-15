@@ -11,8 +11,6 @@
  */
 global $config;
 $lang->story->create            = "提{$lang->SRCommon}";
-$lang->story->createStory       = "提{$lang->SRCommon}";
-$lang->story->createRequirement = "提{$lang->SRCommon}";
 
 $lang->story->requirement       = zget($lang, 'URCommon', "需求");
 $lang->story->story             = zget($lang, 'SRCommon', "故事");

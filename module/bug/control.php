@@ -214,7 +214,7 @@ class bug extends control
         $this->view->product         = $product;
         $this->view->projectProducts = $this->product->getProducts($this->projectID);
         $this->view->productName     = $productName;
-        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID);
+        $this->view->builds          = $this->loadModel('build')->getBuildPairs($productID, $branch);
         $this->view->modules         = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch);
         $this->view->moduleTree      = $moduleTree;
         $this->view->moduleName      = $moduleID ? $this->tree->getById($moduleID)->name : $this->lang->tree->all;
@@ -305,6 +305,7 @@ class bug extends control
         /* Whether there is a object to transfer bug, for example feedback. */
         $extras = str_replace(array(',', ' '), array('&', ''), $extras);
         parse_str($extras, $output);
+        $from = isset($output['from']) ? $output['from'] : '';
 
         $project = new stdclass();
 
@@ -331,28 +332,6 @@ class bug extends control
             $this->qa->setMenu($this->products, $productID, $branch);
         }
 
-        foreach($output as $paramKey => $paramValue)
-        {
-            if(isset($this->config->bug->fromObjects[$paramKey]))
-            {
-                $fromObjectIDKey  = $paramKey;
-                $fromObjectID     = $paramValue;
-                $fromObjectName   = $this->config->bug->fromObjects[$fromObjectIDKey]['name'];
-                $fromObjectAction = $this->config->bug->fromObjects[$fromObjectIDKey]['action'];
-                break;
-            }
-        }
-
-        /* If there is a object to transfer bug, get it by getById function and set objectID,object in views. */
-        if(isset($fromObjectID))
-        {
-            $fromObject = $this->loadModel($fromObjectName)->getById($fromObjectID);
-            if(!$fromObject) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
-
-            $this->view->$fromObjectIDKey = $fromObjectID;
-            $this->view->$fromObjectName  = $fromObject;
-        }
-
         $this->view->users = $this->user->getPairs('devfirst|noclosed|nodeleted');
         $this->app->loadLang('release');
 
@@ -363,7 +342,7 @@ class bug extends control
 
             /* Set from param if there is a object to transfer bug. */
             setcookie('lastBugModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
-            $bugResult = $this->bug->create($from = isset($fromObjectIDKey) ? $fromObjectIDKey : '', $extras);
+            $bugResult = $this->bug->create('', $extras);
             if(!$bugResult or dao::isError())
             {
                 $response['result']  = 'fail';
@@ -380,15 +359,9 @@ class bug extends control
                 return $this->send($response);
             }
 
-            /* Record related action, for example FromFeedback. */
-            if(isset($fromObjectID))
-            {
-                $actionID = $this->action->create('bug', $bugID, $fromObjectAction, '', $fromObjectID);
-            }
-            else
-            {
-                $actionID = $this->action->create('bug', $bugID, 'Opened');
-            }
+            /* Record related action, for example FromSonarqube. */
+            $createAction = $from == 'sonarqube' ? 'fromSonarqube' : 'Opened';
+            $actionID     = $this->action->create('bug', $bugID, $createAction);
 
             $extras = str_replace(array(',', ' '), array('&', ''), $extras);
             parse_str($extras, $output);
@@ -466,7 +439,7 @@ class bug extends control
         $runID       = 0;
         $testtask    = 0;
         $version     = 0;
-        $title       = '';
+        $title       = $from == 'sonarqube' ? $_COOKIE['sonarqubeIssue'] : '';
         $steps       = $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect;
         $os          = '';
         $browser     = '';
@@ -530,15 +503,6 @@ class bug extends control
         else
         {
             $branches = $productInfo->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
-        }
-
-        /* Replace the value of bug that needs to be replaced with the value of the object that is transferred to bug. */
-        if(isset($fromObject))
-        {
-            foreach($this->config->bug->fromObjects[$fromObjectIDKey]['fields'] as $bugField => $fromObjectField)
-            {
-                $$bugField = $fromObject->{$fromObjectField};
-            }
         }
 
         /* If executionID is setted, get builds and stories of this execution. */
@@ -671,6 +635,7 @@ class bug extends control
         $this->view->color            = $color;
         $this->view->stepsRequired    = strpos($this->config->bug->create->requiredFields, 'steps');
         $this->view->isStepsTemplate  = $steps == $this->lang->bug->tplStep . $this->lang->bug->tplResult . $this->lang->bug->tplExpect ? true : false;
+        $this->view->issueKey         = $from == 'sonarqube' ? $output['sonarqubeID'] . ':' . $output['issueKey'] : '';
 
         $this->display();
     }
@@ -1421,7 +1386,7 @@ class bug extends control
             if(isonlybody())
             {
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban')
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
@@ -1713,8 +1678,12 @@ class bug extends control
      * @access public
      * @return void
      */
-    public function linkBugs($bugID, $browseType = '', $param = 0)
+    public function linkBugs($bugID, $browseType = '', $param = 0, $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
+        /* Load pager. */
+        $this->app->loadClass('pager', $static = true);
+        $pager = new pager($recTotal, $recPerPage, $pageID);
+
         /* Get bug and queryID. */
         $bug     = $this->bug->getById($bugID);
         $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
@@ -1728,7 +1697,7 @@ class bug extends control
         $this->bug->buildSearchForm($bug->product, $this->products, $queryID, $actionURL);
 
         /* Get bugs to link. */
-        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID);
+        $bugs2Link = $this->bug->getBugs2Link($bugID, $browseType, $queryID, $pager);
 
         /* Assign. */
         $this->view->title      = $this->lang->bug->linkBugs . "BUG #$bug->id $bug->title - " . $this->products[$bug->product];
@@ -1737,8 +1706,11 @@ class bug extends control
         $this->view->position[] = $this->lang->bug->linkBugs;
         $this->view->bug        = $bug;
         $this->view->bugs2Link  = $bugs2Link;
+        $this->view->pager      = $pager;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;                                                                                                        
+        $this->view->pageID     = $pageID; 
         $this->display();
     }
 
@@ -2256,6 +2228,6 @@ class bug extends control
     {
         $project = $this->loadModel('project')->getByID($projectID);
         if($project->model == 'kanban') return print($this->lang->bug->kanban);
-        if($project->model != 'kanban') return print($this->lang->bug->execution);
+        return print($this->lang->bug->execution);
     }
 }

@@ -336,6 +336,7 @@ class sonarqube extends control
      *
      * @param  int    $sonarqubeID
      * @param  string $projectKey
+     * @param  bool   $search
      * @param  string $orderBy
      * @param  int    $recTotal
      * @param  int    $recPerPage
@@ -343,15 +344,37 @@ class sonarqube extends control
      * @access public
      * @return void
      */
-    public function browseIssue($sonarqubeID, $projectKey = '', $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
+    public function browseIssue($sonarqubeID, $projectKey = '', $search = false, $orderBy = 'severity_desc', $recTotal = 0, $recPerPage = 100, $pageID = 1)
     {
-        $this->app->loadClass('pager', $static = true);
-        $keyword = fixer::input('post')->setDefault('keyword', '')->get('keyword');
+        if(isset($_POST['keyword']))
+        {
+            $keyword = htmlspecialchars(trim($_POST['keyword']));
+            $search  = true;
+            $pageID  = 1;
+            $this->session->set('sonarqubeIssueKeyword', $keyword);
+        }
+        else
+        {
+            $keyword = '';
+            if($search == true) $keyword = $this->session->sonarqubeIssueKeyword;
+        }
 
         $cacheFile = $this->sonarqube->getCacheFile($sonarqubeID, $projectKey);
         if(!$cacheFile or !file_exists($cacheFile) or (time() - filemtime($cacheFile)) / 60 > $this->config->sonarqube->cacheTime)
         {
+            ini_set('memory_limit', '256M');
+
             $sonarqubeIssueList = $this->sonarqube->apiGetIssues($sonarqubeID, $projectKey);
+            foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
+            {
+                if(!isset($sonarqubeIssue->line)) $sonarqubeIssue->line = '';
+                if(!isset($sonarqubeIssue->effort)) $sonarqubeIssue->effort = '';
+                $sonarqubeIssue->message      = htmlspecialchars($sonarqubeIssue->message);
+                $sonarqubeIssue->creationDate = date('Y-m-d H:i:s', strtotime($sonarqubeIssue->creationDate));
+
+                list($project, $file) = explode(':', $sonarqubeIssue->component);
+                $sonarqubeIssue->file = $file;
+            }
 
             if($cacheFile)
             {
@@ -366,16 +389,6 @@ class sonarqube extends control
         else
         {
             $sonarqubeIssueList = unserialize(file_get_contents($cacheFile));
-        }
-
-        foreach($sonarqubeIssueList as $key => $sonarqubeIssue)
-        {
-            if(!isset($sonarqubeIssue->line)) $sonarqubeIssue->line = '';
-            if(!isset($sonarqubeIssue->effort)) $sonarqubeIssue->effort = '';
-            $sonarqubeIssue->message = htmlspecialchars($sonarqubeIssue->message);
-
-            list($project, $file) = explode(':', $sonarqubeIssue->component);
-            $sonarqubeIssue->file = $file;
         }
 
         /* Data search. */
@@ -394,6 +407,10 @@ class sonarqube extends control
         foreach($sonarqubeIssueList as $sonarqubeIssue) $orderList[] = $sonarqubeIssue->$order;
         array_multisort($orderList, $sort == 'desc' ? SORT_DESC : SORT_ASC, $sonarqubeIssueList);
 
+        /* Get product. */
+        $products  = $this->sonarqube->getLinkedProducts($sonarqubeID, $projectKey);
+        $productID = current(explode(',', $products));
+
         /* Pager. */
         $this->app->loadClass('pager', $static = true);
         $recTotal = count($sonarqubeIssueList);
@@ -401,12 +418,16 @@ class sonarqube extends control
         $sonarqubeIssueList = array_chunk($sonarqubeIssueList, $pager->recPerPage);
 
         $this->view->projectKey         = $projectKey;
+        $this->view->search             = $search;
         $this->view->keyword            = $keyword;
         $this->view->pager              = $pager;
         $this->view->title              = $this->lang->sonarqube->common . $this->lang->colon . $this->lang->sonarqube->browseIssue;
         $this->view->sonarqubeID        = $sonarqubeID;
+        $this->view->sonarqube          = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->view->sonarqubeIssueList = (empty($sonarqubeIssueList) or empty($sonarqubeIssueList[$pageID - 1])) ? array() : $sonarqubeIssueList[$pageID - 1];
         $this->view->orderBy            = $orderBy;
+        $this->view->productID          = $productID;
+        $this->view->bugs               = $this->loadModel('bug')->getBySonarqubeID($sonarqubeID);
         $this->display();
     }
 }

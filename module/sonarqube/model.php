@@ -197,9 +197,11 @@ class sonarqubeModel extends model
         $project = fixer::input('post')->get();
 
         $this->dao->insert('sonarqube')->data($project)
-            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty')
-            ->check('projectName', 'length', 255, 1)
-            ->check('projectKey', 'length', 400, 1);
+            ->batchCheck($this->config->sonarqube->createproject->requiredFields, 'notempty');
+        if(dao::isError()) return false;
+
+        if(mb_strlen($project->projectName) > 255) dao::$errors['projectName'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectName, 255);
+        if(mb_strlen($project->projectKey) > 400) dao::$errors['projectKey'][] = sprintf($this->lang->sonarqube->lengthError, $this->lang->sonarqube->projectKey, 400);
         if(dao::isError()) return false;
 
         $response = $this->apiCreateProject($sonarqubeID, $project);
@@ -281,5 +283,23 @@ class sonarqubeModel extends model
         if(!is_dir($cachePath)) mkdir($cachePath, 0777, true);
         if(!is_writable($cachePath)) return false;
         return $cachePath . '/' . $sonarqubeID . '-' . md5($projectKey);
+    }
+
+    /**
+     * Get linked products.
+     *
+     * @param  int    $sonarqubeID
+     * @param  string $projectKey
+     * @access public
+     * @return string
+     */
+    public function getLinkedProducts($sonarqubeID, $projectKey)
+    {
+        return $this->dao->select('t2.product')->from(TABLE_JOB)->alias('t1')
+            ->leftJoin(TABLE_REPO)->alias('t2')->on('t1.repo=t2.id')
+            ->where('t1.frame')->eq('sonarqube')
+            ->andWhere('sonarqubeServer')->eq($sonarqubeID)
+            ->andWhere('projectKey')->eq($projectKey)
+            ->fetch('product');
     }
 }

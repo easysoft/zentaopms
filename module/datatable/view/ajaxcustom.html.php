@@ -3,9 +3,9 @@
  * The view file of datatable module of ZenTaoPMS.
  *
  * @copyright   Copyright 2014-2014 青岛易软天创网络科技有限公司 (QingDao Nature Easy Soft Network Technology Co,LTD www.cnezsoft.com)
- * @license     business(商业软件) 
+ * @license     business(商业软件)
  * @author      Hao sun <sunhao@cnezsoft.com>
- * @package     datatable 
+ * @package     datatable
  * @version     $Id$
  * @link        http://www.zentao.net
  */

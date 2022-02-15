@@ -75,7 +75,7 @@
             {
                 $tab = '';
                 if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";
-                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title={$action->objectName} $tab");
+                echo html::a($this->createLink($module, $methodName, $params), $action->objectName, '_self', "title='{$action->objectName}' $tab");
             }
             ?>
           </td>

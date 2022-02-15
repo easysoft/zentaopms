@@ -198,6 +198,7 @@ $lang->action->desc->importedproductplan  = '$date, 由 <strong>$actor</strong> 
 $lang->action->desc->importedrelease      = '$date, 由 <strong>$actor</strong> 从产品发布 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedexecution    = '$date, 由 <strong>$actor</strong> 从项目执行 <strong>$extra</strong> 导入。' . "\n";
 $lang->action->desc->importedbuild        = '$date, 由 <strong>$actor</strong> 从项目版本 <strong>$extra</strong> 导入。' . "\n";
+$lang->action->desc->fromsonarqube        = '$date, 由 <strong>$actor</strong> 从<strong>SonarQube问题</strong>转化而来。' . "\n";
 
 /* 用来描述和父子任务相关的操作历史记录。*/
 $lang->action->desc->createchildren     = '$date, 由 <strong>$actor</strong> 创建子任务 <strong>$extra</strong>。' . "\n";
@@ -342,6 +343,7 @@ $lang->action->label->importedproductplan   = '导入了';
 $lang->action->label->importedrelease       = '导入了';
 $lang->action->label->importedexecution     = '导入了';
 $lang->action->label->importedbuild         = '导入了';
+$lang->action->label->fromsonarqube         = '由SonarQube问题创建';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -519,6 +521,7 @@ $lang->action->dynamicAction->bug['linked2release']      = 'Bug关联发布';
 $lang->action->dynamicAction->bug['unlinkedfromrelease'] = '发布移除Bug';
 $lang->action->dynamicAction->bug['linked2bug']          = 'Bug关联版本';
 $lang->action->dynamicAction->bug['unlinkedfrombuild']   = '版本移除Bug';
+$lang->action->dynamicAction->bug['fromsonarqube']       = '由SonarQube问题创建';
 
 $lang->action->dynamicAction->testtask['opened']    = '创建测试单';
 $lang->action->dynamicAction->testtask['edited']    = '编辑测试单';

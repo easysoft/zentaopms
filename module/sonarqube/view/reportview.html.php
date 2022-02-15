@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
+  <?php unset($_GET['onlybody']);?>
   <?php if(empty($measures)): ?>
     <div class='empty-tip'><?php echo $lang->sonarqube->noReport;?></div>
   <?php else:?>
@@ -29,26 +30,33 @@
       </span>
     </div>
   </div>
-  <table class="table table-data">
+  <table class="table table-data table-report">
     <thead>
-      <tr>
-        <th><?php echo $lang->sonarqube->report->bugs;?></th>
-        <th><?php echo $lang->sonarqube->report->vulnerabilities;?></th>
-        <th><?php echo $lang->sonarqube->report->security_hotspots_reviewed;?></th>
-        <th><?php echo $lang->sonarqube->report->code_smells;?></th>
+      <tr class="text-center">
+        <th><?php echo "<span class='table-nest-icon icon icon-bug'></span>" . $lang->sonarqube->report->bugs;?></th>
+        <th class="w-140px"><?php echo "<span class='table-nest-icon icon icon-unlock'></span>" . $lang->sonarqube->report->vulnerabilities;?></th>
+        <th class="w-180px"><?php echo "<span class='table-nest-icon icon icon-shield'></span>" . $lang->sonarqube->report->security_hotspots_reviewed;?></th>
+        <th class="w-130px"><?php echo "<span class='table-nest-icon icon icon-frown'></span>" . $lang->sonarqube->report->code_smells;?></th>
         <th><?php echo $lang->sonarqube->report->coverage;?></th>
         <th><?php echo $lang->sonarqube->report->duplicated_lines_density;?></th>
         <th><?php echo $lang->sonarqube->report->ncloc;?></th>
       </tr>
     </thead>
     <tbody>
-      <tr>
+      <?php 
+      $emptyRing = "<span class='label-pri'></span>";
+      $fullRing  = "<span class='label-pri'><span class='label-full'></span></span>";
+
+      $coverageIcon    = $measures['coverage'] != '0.0%' ? $fullRing : $emptyRing;
+      $duplicationIcon = $measures['duplicated_lines_density'] != '0.0%' ? $fullRing : $emptyRing;
+      ?>
+      <tr class="text-center">
         <td><?php echo $measures['bugs'];?></td>
         <td><?php echo $measures['vulnerabilities'];?></td>
         <td><?php echo $measures['security_hotspots_reviewed'];?></td>
         <td><?php echo $measures['code_smells'];?></td>
-        <td><?php echo $measures['coverage'];?></td>
-        <td><?php echo $measures['duplicated_lines_density'];?></td>
+        <td><?php echo $measures['coverage'] . $coverageIcon;?></td>
+        <td><?php echo $measures['duplicated_lines_density'] . $duplicationIcon;?></td>
         <td><?php echo $measures['ncloc'];?></td>
       </tr>
     </tbody>

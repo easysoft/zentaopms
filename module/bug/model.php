@@ -1360,17 +1360,13 @@ class bugModel extends model
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager)
     {
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugs2Link = $this->getBySearch($bug->product, $bug->branch, $queryID, 'id');
-            foreach($bugs2Link as $key => $bug2Link)
-            {
-                if($bug2Link->id == $bugID) unset($bugs2Link[$key]);
-                if(in_array($bug2Link->id, explode(',', $bug->linkBug))) unset($bugs2Link[$key]);
-            }
+            $bugIDList = $bug->id . ',' . $bug->linkBug; 
+            $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
             return $bugs2Link;
         }
         else
@@ -2554,6 +2550,20 @@ class bugModel extends model
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
+    }
+
+    /**
+     * Get by Sonarqube id.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return array
+     */
+    public function getBySonarqubeID($sonarqubeID)
+    {
+        return $this->dao->select('issueKey')->from(TABLE_BUG)
+            ->where('issueKey')->like("$sonarqubeID:%")
+            ->fetchPairs();
     }
 
     /**

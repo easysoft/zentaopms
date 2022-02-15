@@ -118,7 +118,7 @@ class mrModel extends model
             $groupIDList = array(0 => 0);
             if(!$this->app->user->admin)
             {
-                $groups = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', $this->config->gitlab->accessLevel['reporter']);
+                $groups = $this->gitlab->apiGetGroups($gitlabID, 'name_asc', 'reporter');
                 foreach($groups as $group) $groupIDList[] = $group->id;
             }
             $allGroups[$gitlabID] = $groupIDList;
@@ -449,7 +449,7 @@ class mrModel extends model
             $rawMR = new stdClass();
             foreach($rawMRList[$MR->gitlabID][$MR->targetProject] as $projcetRawMR)
             {
-                if($projcetRawMR->iid == $MR->mriid)
+                if(isset($projcetRawMR->iid) and $projcetRawMR->iid == $MR->mriid)
                 {
                     $rawMR = $projcetRawMR;
                     break;

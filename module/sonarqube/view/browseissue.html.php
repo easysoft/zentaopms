@@ -37,32 +37,36 @@
 <div id='mainContent' class='main-row'>
   <form class='main-table' id='ajaxForm' method='post'>
     <table id='sonarqubeIssueList' class='table has-sort-head table-fixed'>
-      <?php $vars = "sonarqubeID={$sonarqubeID}&projectKey={$projectKey}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
+      <?php $vars = "sonarqubeID={$sonarqubeID}&projectKey={$projectKey}&search={$search}&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}&pageID={$pager->pageID}";?>
       <thead>
         <tr>
           <th class='c-message text-left'><?php common::printOrderLink('message', $orderBy, $vars, $lang->sonarqube->issue->message);?></th>
-          <th><?php common::printOrderLink('severity', $orderBy, $vars, $lang->sonarqube->issue->severity);?></th>
+          <th class='c-severity'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->sonarqube->issue->severity);?></th>
           <th><?php common::printOrderLink('type', $orderBy, $vars, $lang->sonarqube->issue->type);?></th>
           <th><?php common::printOrderLink('status', $orderBy, $vars, $lang->sonarqube->issue->status);?></th>
           <th class='c-file text-left'><?php common::printOrderLink('file', $orderBy, $vars, $lang->sonarqube->issue->file);?></th>
           <th><?php common::printOrderLink('line', $orderBy, $vars, $lang->sonarqube->issue->line);?></th>
-          <th><?php common::printOrderLink('effort', $orderBy, $vars, $lang->sonarqube->issue->effort);?></th>
+          <th class='c-effort'><?php common::printOrderLink('effort', $orderBy, $vars, $lang->sonarqube->issue->effort);?></th>
+          <th class='c-date'><?php common::printOrderLink('creationDate', $orderBy, $vars, $lang->sonarqube->issue->creationDate);?></th>
           <th class='c-actions-2'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
       <tbody>
         <?php foreach ($sonarqubeIssueList as $id => $sonarqubeIssue): ?>
         <tr class='text'>
-          <td class='text' title="<?php echo $sonarqubeIssue->message;?>"><?php echo $sonarqubeIssue->message;?></td>
+          <td class='text' title="<?php echo $sonarqubeIssue->message;?>"><?php echo html::a(trim($sonarqube->url, '/') . '/issues?open=' . $sonarqubeIssue->key, $sonarqubeIssue->message, '_target');?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->severity;?>'><?php echo $sonarqubeIssue->severity;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->type;?>'><?php echo $sonarqubeIssue->type;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->status;?>'><?php echo $sonarqubeIssue->status;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->file;?>'><?php echo $sonarqubeIssue->file;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->line;?>'><?php echo $sonarqubeIssue->line;?></td>
           <td class='text' title='<?php echo $sonarqubeIssue->effort;?>'><?php echo $sonarqubeIssue->effort;?></td>
+          <td class='text' title='<?php echo $sonarqubeIssue->creationDate;?>'><?php echo $sonarqubeIssue->creationDate;?></td>
           <td class='c-actions text-left'>
             <?php
-            common::printLink('bug', 'create', '', "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn btn-primary'");
+            $issueKey = $sonarqubeID . ':' . $sonarqubeIssue->key;
+            $attr     = isset($bugs[$issueKey]) ? 'disabled' : '';
+            common::printLink('bug', 'create', "productID=$productID&branch=&extra=from=sonarqube,sonarqubeID=$sonarqubeID,issueKey={$sonarqubeIssue->key}", "<i class='icon-testcase-createBug icon-bug'></i> ", '', "title='{$lang->sonarqube->createBug}' class='btn' $attr data-app='qa'");
             ?>
           </td>
         </tr>
@@ -70,7 +74,12 @@
       </tbody>
     </table>
     <?php if($sonarqubeIssueList):?>
-    <div class='table-footer'><?php $pager->show('right', 'pagerjs');?></div>
+    <div class='table-footer'>
+      <?php
+      $this->app->rawParams['search'] = $search;
+      $pager->show('right', 'pagerjs');
+      ?>
+    </div>
     <?php endif;?>
   </form>
 </div>

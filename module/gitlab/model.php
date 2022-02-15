@@ -610,9 +610,9 @@ class gitlabModel extends model
         {
             $url .= '&owned=true';
         }
-        elseif(!empty($minRole))
+        elseif(!empty($minRole) and isset($this->config->gitlab->accessLevel[$minRole]))
         {
-            $url .= "&min_access_level=$this->config->gitlab->accessLevel[$minRole]";
+            $url .= '&min_access_level=' . $this->config->gitlab->accessLevel[$minRole];
         }
 
         $order = 'id';
@@ -625,7 +625,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&statistics=true&order_by={$order}&sort={$sort}&page={$page}&per_page=100&all_available=true"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results) < 100 or $page > 10) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;
@@ -701,7 +701,7 @@ class gitlabModel extends model
             $results = json_decode(commonModel::http($url . "&simple={$simple}&page={$page}&per_page=100"));
             if(!is_array($results)) break;
             if(!empty($results)) $allResults = array_merge($allResults, $results);
-            if(count($results) < 100 or $page > 10) break;
+            if(count($results) < 100) break;
         }
 
         return $allResults;

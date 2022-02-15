@@ -53,7 +53,7 @@
             <?php printf('%03d', $bug2Link->id);?>
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $bug2Link->pri?>' title='<?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?>'><?php echo zget($lang->bug->priList, $bug2Link->pri, $bug2Link->pri);?></span></td>
-          <td><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
+          <td class='nobr' title="<?php echo $products[$bug2Link->product]?>"><?php echo html::a($this->createLink('product', 'browse', "productID=$bug2Link->product&branch=$bug2Link->branch"), $products[$bug2Link->product], '_blank');?></td>
           <td class='text-left nobr' title="<?php echo $bug2Link->title?>"><?php echo html::a($bugLink, $bug2Link->title);?></td>
           <td><?php echo $this->processStatus('bug', $bug);?></td>
           <td><?php echo zget($users, $bug2Link->openedBy);?></td>
@@ -67,6 +67,7 @@
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar"><?php if($bugCount) echo html::submitButton('', '', 'btn btn-default');?></div>
       <?php echo html::hidden('bug', $bug->id);?>
+      <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>
   <?php endif;?>

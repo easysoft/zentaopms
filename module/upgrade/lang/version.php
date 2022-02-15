@@ -151,3 +151,4 @@ $lang->upgrade->fromVersions['16_0_beta1'] = '16.0.beta1';
 $lang->upgrade->fromVersions['16_0']       = '16.0';
 $lang->upgrade->fromVersions['16_1']       = '16.1';
 $lang->upgrade->fromVersions['16_2']       = '16.2';
+$lang->upgrade->fromVersions['16_3']       = '16.3';

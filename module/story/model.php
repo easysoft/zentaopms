@@ -2928,6 +2928,7 @@ class storyModel extends model
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq($type)
             ->andWhere('assignedTo')->eq($account)
+            ->andWhere('product')->ne(0)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
             ->orderBy('id_desc')
             ->limit($limit)

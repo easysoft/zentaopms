@@ -386,6 +386,14 @@ function renderKanbanItem(item, $item)
     {
         $time.text(undetermined +  ' ' + to  + ' ' + endTimeShort).attr('title', to + endTimeLong).show();
     }
+    else if(item.begin != '2030-01-01' && item.end == '2030-01-01')
+    {
+        $time.text($.zui.formatDate(begin, 'MM-dd') +  ' ' + productplanLang.to  + ' ' + productplanLang.future).attr('title', $.zui.formatDate(begin, 'yyyy-MM-dd') + productplanLang.to).show();
+    }
+    else if(item.begin == '2030-01-01' && item.end != '2030-01-01')
+    {
+        $time.text(productplanLang.future +  ' ' + productplanLang.to  + ' ' + $.zui.formatDate(end, 'MM-dd')).attr('title', $.zui.formatDate(end, 'yyyy-MM-dd') + productplanLang.to).show();
+    }
     else
     {
         $time.text(undetermined).attr('title', undetermined).show();
