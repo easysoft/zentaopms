@@ -195,8 +195,8 @@ class convertModel extends model
     public function getJiraDataFromFile($module, $lastID = 0, $limit = 0)
     {
         $fileName = $module;
-        if($module == 'build') $filename = 'version';
-        if($module == 'file')  $filename = 'fileattachment';
+        if($module == 'build') $fileName = 'version';
+        if($module == 'file')  $fileName = 'fileattachment';
 
         $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
         if(!file_exists($filePath)) return array();
@@ -259,7 +259,7 @@ class convertModel extends model
                 $project->pname       = $data['name'];
                 $project->pkey        = $data['key'];
                 $project->ORIGINALKEY = $data['originalkey'];
-                $project->DESCRIPTION = $data['description'];
+                $project->DESCRIPTION = isset($data['description']) ? $data['description'] : '';
                 $project->LEAD        = $data['lead'];
 
                 $dataList[$key] = $project;
