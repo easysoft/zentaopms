@@ -10,13 +10,27 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<div id='mainContent' class='main-content'>
-  <div class='main-header'>
-    <h2>
-      <?php echo $lang->convert->jira->mapJira2Zentao;?>
-    </h2>
+<div id="mainMenu" class="clearfix">
+  <div class="btn-toolbar pull-left">
+    <?php echo html::a("javascript::void(0);", "<span class='text'>" . $lang->convert->jira->mapJira2Zentao . '</span>', '', "class='btn btn-link btn-active-text'");?>
   </div>
+</div>
+<div id='mainContent' class='main-content'>
   <form class='main-form form-ajax' method='post'>
+    <div class='main-header text-center'>
+      <ul class='nav nav-primary'>
+        <?php foreach($lang->convert->jira->steps as $key => $label):?>
+        <?php $active = $step == $key ? 'class="active"' : '';?>
+        <li <?php echo $active;?>>
+          <a><?php echo $label;?></a>
+        </li>
+        <?php endforeach;?>
+      </ul>
+      <div class='btn-toolbar pull-right'>
+        <?php echo html::submitButton($lang->convert->jira->next);?>
+      </div>
+    </div>
+    <?php if($step == 1):?>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
@@ -35,6 +49,8 @@
       </tbody>
     </table>
     <hr />
+    <?php endif;?>
+    <?php if($step == 2):?>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
@@ -53,6 +69,8 @@
       </tbody>
     </table>
     <hr />
+    <?php endif;?>
+    <?php if($step == 3):?>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
@@ -73,6 +91,8 @@
       </tbody>
     </table>
     <hr />
+    <?php endif;?>
+    <?php if($step == 4):?>
     <table class='table table-form'>
       <thead>
         <tr class='text-center'>
@@ -95,11 +115,7 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-      <tfoot>
-        <tr>
-          <td colspan="5" class="text-center form-actions"><?php echo html::submitButton($lang->convert->jira->next);?></td>
-        </tr>
-      </tfoot>
     </table>
+    <?php endif;?>
   </form>
 </div>
