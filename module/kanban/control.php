@@ -1317,6 +1317,7 @@ class kanban extends control
         if($confirm == 'no')
         {
             $card   = $this->kanban->getCardByID($cardID);
+            a($card);
             $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
             if($column->archived or $column->deleted) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
 
