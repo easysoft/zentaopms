@@ -13,7 +13,7 @@
 <?php include '../../common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
-    <h2><i class='icon-import'></i> <?php echo $lang->convert->jira->importJira;?></h2>
+    <h2 class="importData"><i class='icon-import'></i> <?php echo $lang->convert->jira->importJira;?></h2>
   </div>
   <div>
     <div class='form-group'>
@@ -31,12 +31,15 @@ $(document).ready(function()
     {
         $('#execButton').hide();
         $('#resultBox .text-red').removeClass('hidden');
+        $('.importData').html('<?php echo $lang->convert->jira->importingAB;?>');
 
         $.getJSON($(this).attr('href'), function(response)
         {
             if(response.result == 'finished')
             {
                 $('#resultBox').append("<li class='text-success'>" + response.message + "</li>");
+                $('#resultBox li.text-red').hide();
+                $('.importData').html('<?php echo $lang->convert->jira->imported;?>');
                 return false;
             }
             else
