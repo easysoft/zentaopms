@@ -14,7 +14,7 @@
 <div class='empty-tip'><?php echo $lang->block->emptyTip;?></div>
 <?php else:?>
 <style>
-.status-bars {display: table;width: 80%;height: 140px;padding: 5px;padding-top: 50px;margin: 0;overflow: hidden;}
+.status-bars {display: table; width: 80%; height: 140px; padding: 5px; padding-top: 50px; margin: 0; overflow: hidden;}
 </style>
 <div class="panel-body table-row">
   <div class="col-4 text-middle text-center">
