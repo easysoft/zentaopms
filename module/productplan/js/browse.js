@@ -366,13 +366,13 @@ function renderKanbanItem(item, $item)
         '</div>'
     ].join('')).appendTo($item);
 
-    var $time           = $dateBox.children('.time');
-    var beginTimeShort = $.zui.formatDate(begin, 'MM-dd');
-    var beginTimeLong  = $.zui.formatDate(begin, 'yyyy-MM-dd');
-    var endTimeShort   = $.zui.formatDate(end, 'MM-dd');
-    var endTimeLong    = $.zui.formatDate(end, 'yyyy-MM-dd')
-    var to             = productplanLang.to;
-    var undetermined   = productplanLang.future;
+    var $time            = $dateBox.children('.time');
+    var beginTimeShort   = $.zui.formatDate(begin, 'MM-dd');
+    var beginTimeLong    = $.zui.formatDate(begin, 'yyyy-MM-dd');
+    var endTimeShort     = $.zui.formatDate(end, 'MM-dd');
+    var endTimeLong      = $.zui.formatDate(end, 'yyyy-MM-dd')
+    var to               = productplanLang.to;
+    var undetermined     = productplanLang.future;
     var undetermindeDate = '2030-01-01';
     if(item.begin != undetermindeDate && item.end != undetermindeDate)
     {
