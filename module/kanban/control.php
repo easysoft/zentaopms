@@ -23,7 +23,6 @@ class kanban extends control
      */
     public function space($browseType = 'my', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
-
         /* Load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager($recTotal, $recPerPage, $pageID);
