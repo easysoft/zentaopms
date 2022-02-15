@@ -144,7 +144,7 @@ $lang->convert->jira->start            = '开始导入';
 $lang->convert->jira->dbNameEmpty        = 'Jira数据库名字不能为空！';
 $lang->convert->jira->invalidDB          = '无效的数据库名！';
 $lang->convert->jira->invalidTable       = '本数据库非Jira数据库！';
-$lang->convert->jira->notReadAndWrite    = '请修改jirafile目录权限！';
+$lang->convert->jira->notReadAndWrite    = '权限不足！请修改%s目录读写权限！';
 $lang->convert->jira->notExistEntities   = '%s 文件不存在！';
 $lang->convert->jira->passwordNotice     = "<span class='text-red'>设置Jira用户导入到禅道后的默认密码，用户后续可以在禅道中自行修改密码。</span>";
 $lang->convert->jira->groupNotice        = "<span class='text-red'>设置Jira用户导入到禅道后的默认权限分组。</span>";

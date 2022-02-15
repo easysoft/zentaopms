@@ -304,7 +304,7 @@ class convert extends control
                 if(!is_readable($jiraFilePath) or !is_writable($jiraFilePath))
                 {
                     $response['result']  = 'fail';
-                    $response['message'] = $this->lang->convert->jira->notReadAndWrite;
+                    $response['message'] = sprintf($this->lang->convert->jira->notReadAndWrite, $jiraFilePath);
                     return print($this->send($response));
                 }
 
