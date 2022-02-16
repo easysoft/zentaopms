@@ -28,7 +28,8 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
         $modulePageNav .=  '<li>' . html::a(helper::createLink('execution', $this->app->rawMethod, "execution=$kanban->id"), $kanban->name) . '</li>';
     }
     $modulePageNav .= "</ul></div></div>";
-    if($this->app->rawMethod != 'kanban') $this->lang->TRActions = $this->getTRActions($this->app->rawMethod);
+
+    if(in_array($this->app->rawMethod, array('task', 'calendar', 'gantt', 'tree', 'grouptask'))) $this->lang->TRActions = $this->getTRActions($this->app->rawMethod);
 
     $this->lang->modulePageNav = $modulePageNav;
 }
