@@ -96,6 +96,7 @@ $lang->customMenu      = 'Tùy biến Menu';
 $lang->customField     = 'Tùy biến trường';
 $lang->lineNumber      = 'Số dòng';
 $lang->tutorialConfirm = 'Bạn đang sử dụng hướng dẫn ZenTao. Bạn có muốn thoát bây giờ？';
+$lang->noticeOkFile    = 'For security reasons, your Admin account has to be confirmed. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 
 $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';

@@ -96,6 +96,7 @@ $lang->customMenu      = 'Personnalisation Menu';
 $lang->customField     = 'Personnalisation Champ';
 $lang->lineNumber      = 'Ligne No.';
 $lang->tutorialConfirm = 'Vous utilisez le didacticiel ZenTao. Voulez-vous quitter maintenant ？';
+$lang->noticeOkFile    = 'Pour des raisons de s?curit?, votre compte administrateur doit ?tre confirm?. \n Please login ZenTao server and create %s File.\n Note:\n 1. File is blank.\n 2. If the file existed, delete it and then create a new one.';
 
 $lang->preShortcutKey  = '[Shortcut:←]';
 $lang->nextShortcutKey = '[Shortcut:→]';
