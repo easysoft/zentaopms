@@ -1634,7 +1634,7 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
-            ->beginIF($this->cookie->showClosed == 0)->andWhere('status')->ne('closed')->fi()
+            ->beginIF($this->cookie->showClosed == 0 and $browseType != 'showClosed')->andWhere('status')->ne('closed')->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
@@ -2036,7 +2036,7 @@ class kanbanModel extends model
                 $lane->type      = $type;
                 $lane->execution = $executionID;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-                
+
                 $laneID = $this->dao->lastInsertId();
                 $this->createExecutionColumns($laneID, $type, $executionID);
             }
