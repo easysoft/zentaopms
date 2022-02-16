@@ -39,6 +39,7 @@
         </tr>
         <tr>
           <td class='text-center form-actions' colspan='3'>
+            <?php echo html::a(inlink('mapJira2Zentao', "method=$method&dnname={$this->session->jiraDB}&step=4"), $lang->goback, '', "class='btn btn-wide'");?>
             <?php echo html::submitButton($lang->convert->jira->next);?>
           </td>
         </tr>

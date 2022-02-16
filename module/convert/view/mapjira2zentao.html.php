@@ -27,6 +27,13 @@
         <?php endforeach;?>
       </ul>
       <div class='btn-toolbar pull-right'>
+        <?php 
+        if($step != 1)
+        {
+            $preStep = $step - 1;
+            echo html::a(inlink('mapJira2Zentao', "method=$method&dnname=$dbName&preStep=$preStep"), $lang->goback, '', "class='btn btn-wide'");
+        }
+        ?>
         <?php echo html::submitButton($lang->convert->jira->next);?>
       </div>
     </div>

@@ -381,6 +381,7 @@ class convert extends control
         $this->view->statusList     = $statusList;
         $this->view->method         = $method;
         $this->view->step           = $step;
+        $this->view->dbName         = $dbName;
         $this->display();
     }
 
@@ -430,6 +431,7 @@ class convert extends control
 
         $this->view->title  = $this->lang->convert->jira->initJiraUser;
         $this->view->groups = $this->loadModel('group')->getPairs();
+        $this->view->method = $method;
         $this->display();
     }
 
