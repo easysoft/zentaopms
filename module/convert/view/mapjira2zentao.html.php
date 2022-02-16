@@ -34,7 +34,7 @@
             echo html::a(inlink('mapJira2Zentao', "method=$method&dnname=$dbName&preStep=$preStep"), $lang->goback, '', "class='btn btn-wide'");
         }
         ?>
-        <?php echo html::submitButton($lang->convert->jira->next);?>
+        <?php echo html::submitButton($lang->convert->jira->next, "data-placement='bottom'");?>
       </div>
     </div>
     <?php if($step == 1):?>
