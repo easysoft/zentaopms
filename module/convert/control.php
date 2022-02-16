@@ -300,6 +300,21 @@ class convert extends control
             }
             else
             {
+                $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
+                if(!is_readable($jiraFilePath) or !is_writable($jiraFilePath))
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = sprintf($this->lang->convert->jira->notReadAndWrite, $jiraFilePath);
+                    return print($this->send($response));
+                }
+
+                if(!file_exists($jiraFilePath . 'entities.xml'))
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = sprintf($this->lang->convert->jira->notExistEntities, $jiraFilePath . 'entities.xml');
+                    return print($this->send($response));
+                }
+
                 $this->convert->splitFile();
                 $link = $this->createLink('convert', 'mapJira2Zentao', "method=file");
             }
