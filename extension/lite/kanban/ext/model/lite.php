@@ -104,3 +104,71 @@ public function getKanban4Group($executionID, $browseType, $groupBy)
 
     return $kanbanGroup;
 }
+
+/**
+ * Get card group by execution id.
+ *
+ * @param  int    $kanbanID
+ * @param  string $browseType all|task|bug|story
+ * @param  string $orderBy
+ * @access public
+ * @return array
+ */
+public function getCardGroupByExecution($executionID, $browseType = 'all', $orderBy = 'id_asc')
+{
+    $cards = $this->dao->select('t1.*, t2.type as columnType')
+        ->from(TABLE_KANBANCELL)->alias('t1')
+        ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
+        ->where('t1.kanban')->eq($executionID)
+        ->beginIF($browseType != 'all')->andWhere('t1.type')->eq($browseType)->fi()
+        ->orderby($orderBy)
+        ->fetchgroup('lane', 'column');
+
+    /* Get group objects. */
+    if($browseType == 'all' or $browseType == 'story') $objectGroup['story'] = $this->loadModel('story')->getExecutionStories($executionID, 0, 0, 't1.`order`_desc', 'allStory');
+    if($browseType == 'all' or $browseType == 'bug')   $objectGroup['bug']   = $this->loadModel('bug')->getExecutionBugs($executionID);
+    if($browseType == 'all' or $browseType == 'task')  $objectGroup['task']  = $this->loadModel('execution')->getKanbanTasks($executionID, "id");
+    $taskCardMenu  = $this->getKanbanCardMenu($executionID, $objectGroup['task'], 'task');
+    $cardGroup = array();
+
+    foreach($cards as $laneID => $cells)
+    {
+        foreach($cells as $columnID => $cell)
+        {
+            $cardIdList = array_filter(explode(',', $cell->cards));
+            $cardOrder  = 1;
+            foreach($cardIdList as $cardID)
+            {
+                $cardData = array();
+                $objects  = zget($objectGroup, $cell->type, array());
+                $object   = zget($objects, $cardID, array());
+
+                if(empty($object)) continue;
+
+                $cardData['id']         = $object->id;
+                $cardData['order']      = $cardOrder++;
+                $cardData['pri']        = $object->pri ? $object->pri : '';
+                $cardData['estimate']   = $cell->type == 'bug' ? '' : $object->estimate;
+                $cardData['assignedTo'] = $object->assignedTo;
+                $cardData['deadline']   = $cell->type == 'story' ? '' : $object->deadline;
+                $cardData['severity']   = $cell->type == 'bug' ? $object->severity : '';
+                $cardData['acl']        = 'open';
+                $cardData['lane']       = $laneID;
+                $cardData['column']     = $cell->column;
+                $cardData['menus']      = $taskCardMenu[$cardID];
+
+                if($cell->type == 'task')
+                {
+                    $cardData['name'] = $object->name;
+                }
+                else
+                {
+                    $cardData['title'] = $object->title;
+                }
+                $cardGroup[$laneID][$cell->columnType][] = $cardData;
+            }
+        }
+    }
+    return $cardGroup;
+}
+

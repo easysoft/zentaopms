@@ -936,12 +936,34 @@ function processMinusBtn()
     }
 }
 
+ /**
+ * Create task menu
+ * @returns {Object[]}
+ */
+function createTaskMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var task  = $card.data('item');
+
+    var items = [];
+    $.each(task.menus, function()
+    {
+        var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
+        if(this.size) item.attrs['data-width'] = this.size;
+
+        items.push(item);
+    });
+
+    return items;
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
     lane:         createLaneMenu,
     column:       createColumnMenu,
-    columnCreate: createColumnCreateMenu
+    columnCreate: createColumnCreateMenu,
+    task:         createTaskMenu,
 };
 
 /**
