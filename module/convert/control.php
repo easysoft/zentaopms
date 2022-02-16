@@ -453,8 +453,9 @@ class convert extends control
             $result = $method == 'db' ? $this->convert->importJiraFromDB($type, $lastID, $createTable) : $this->convert->importJiraFromFile($type, $lastID, $createTable);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isset($result['finished']) and $result['finished'])
-            {   
-                return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+            {
+                $message = $method == 'db' ? $this->lang->convert->jira->importSuccessfully : $this->lang->convert->jira->importSuccessfully . sprintf($this->lang->convert->jira->removeFile, $this->app->getTmpRoot() . 'jirafile/');
+                return print $this->send(array('result' => 'finished', 'message' => $message));
             }   
             else
             {   

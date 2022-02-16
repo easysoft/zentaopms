@@ -156,6 +156,7 @@ $lang->convert->jira->importResult       = "导入 <strong class='text-red'>%s</
 $lang->convert->jira->importing          = '数据导入中，请不要切换其它页面';
 $lang->convert->jira->importingAB        = '数据导入中';
 $lang->convert->jira->imported           = '数据导入完成';
+$lang->convert->jira->removeFile         = "请手动清空 <strong class='text-red'>%s</strong> 下的文件";
 
 $lang->convert->jira->zentaoObjectList[''] = '';
 $lang->convert->jira->zentaoObjectList['task']        = '任务';
