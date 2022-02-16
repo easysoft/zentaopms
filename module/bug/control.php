@@ -380,7 +380,7 @@ class bug extends control
             if(isset($output['executionID']) and isonlybody())
             {
                 $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
-                if($executionID == $output['executionID'])
+                if($executionID == $output['executionID'] and $this->app->tab == 'execution')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -672,7 +672,7 @@ class bug extends control
             if(isonlybody() and $executionID)
             {
                 $execution = $this->loadModel('execution')->getByID($executionID);
-                if($execution->type == 'kanban')
+                if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -1186,7 +1186,7 @@ class bug extends control
             {
                 $bug       = $this->bug->getById($bugID);
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban')
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
@@ -1477,7 +1477,7 @@ class bug extends control
             if(isonlybody())
             {
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban')
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
@@ -1574,7 +1574,7 @@ class bug extends control
             if(isonlybody())
             {
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban')
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
@@ -1632,7 +1632,7 @@ class bug extends control
             if(isonlybody())
             {
                 $execution = $this->loadModel('execution')->getByID($bug->execution);
-                if(isset($execution->type) and $execution->type == 'kanban')
+                if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($bug->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
