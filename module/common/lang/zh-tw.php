@@ -110,6 +110,7 @@ $lang->customField     = '自定義表單項';
 $lang->lineNumber      = '行號';
 $lang->tutorialConfirm = '檢測到你尚未退出新手教程模式，是否現在退出？';
 $lang->levelExceeded   = '層級已超過顯示範圍，更多信息請前往網頁端查看或者是通過搜索方式查看。';
+$lang->noticeOkFile    = '為了安全起見，系統需要確認您的管理員身份。\n 請登錄禪道所在的伺服器，創建%s檔案。\n 注意：\n 1. 檔案內容為空。\n 2. 如果之前檔案存在，刪除之後重新創建。';
 
 $lang->serviceAgreement = "服務協議";
 $lang->privacyPolicy    = "隱私政策";
