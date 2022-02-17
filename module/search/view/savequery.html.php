@@ -17,7 +17,7 @@
     <span class='input-group-addon'>
       <div class="checkbox-primary">
         <input type="checkbox" name="common" value="1" id="common" />
-        <label for="common"><?php echo "设为公共搜索条件";?></label>
+        <label for="common"><?php echo $lang->search->setCommon;?></label>
       </div>
     </span>
     <?php if($onMenuBar == 'yes'):?>

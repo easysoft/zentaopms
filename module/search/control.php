@@ -103,12 +103,12 @@ class search extends control
         if($_POST)
         {
             $queryID = $this->search->saveQuery();
-            if(!$queryID) die(js::error(dao::getError()));
+            if(!$queryID) return print(js::error(dao::getError()));
 
             $data     = fixer::input('post')->get();
             $shortcut = empty($data->onMenuBar) ? 0 : 1;
 
-            die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
+            return print(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
         }
         $this->view->module    = $module;
         $this->view->onMenuBar = $onMenuBar;
