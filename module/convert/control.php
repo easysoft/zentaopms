@@ -454,8 +454,7 @@ class convert extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isset($result['finished']) and $result['finished'])
             {
-                $message = $method == 'db' ? $this->lang->convert->jira->importSuccessfully : $this->lang->convert->jira->importSuccessfully . sprintf($this->lang->convert->jira->removeFile, $this->app->getTmpRoot() . 'jirafile/');
-                return print $this->send(array('result' => 'finished', 'message' => $message));
+                return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
             }   
             else
             {   
