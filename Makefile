@@ -24,7 +24,7 @@ common:
 	cp -fr lib zentaopms/
 	cp -fr module zentaopms/
 	cp -fr sdk zentaopms/
-	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload
+	cp -fr www zentaopms && rm -fr zentaopms/www/data/ && mkdir -p zentaopms/www/data/upload && mkdir zentaopms/www/data/course
 	mkdir zentaopms/tmp
 	mkdir zentaopms/tmp/cache/
 	mkdir zentaopms/tmp/extension/
