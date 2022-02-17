@@ -77,7 +77,7 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", isset($modules[$story->product][$story->branch]) ? $modules[$story->product][$story->branch] : array('0' => '/'), $story->module, "class='form-control chosen'");?>
+          <?php echo html::select("modules[$storyID]", $products[$story->product]->type == 'normal' ? (isset($modules[$story->product][$story->module])?$modules[$story->product][$story->module] : array('0' => '/')) : (isset($modules[$story->product][$story->branch][$story->module]) ? $modules[$story->product][$story->branch][$story->module] : array('0' => '/')), $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control chosen'");?>
