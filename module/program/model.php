@@ -133,6 +133,7 @@ class programModel extends model
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)
             ->andWhere('(id')->in($this->app->user->view->programs)
             ->orWhere('id')->in($this->app->user->view->projects)
