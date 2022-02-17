@@ -107,6 +107,7 @@ class search extends control
 
             $data     = fixer::input('post')->get();
             $shortcut = empty($data->onMenuBar) ? 0 : 1;
+
             die(js::closeModal('parent.parent', '', "function(){parent.parent.loadQueries($queryID, $shortcut, '{$data->title}')}"));
         }
         $this->view->module    = $module;

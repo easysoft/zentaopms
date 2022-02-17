@@ -1637,6 +1637,7 @@ CREATE TABLE IF NOT EXISTS `zt_userquery` (
   `form` text NOT NULL,
   `sql` text NOT NULL,
   `shortcut` enum('0','1') NOT NULL DEFAULT '0',
+  `common` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY  (`id`),
   KEY `account` (`account`),
   KEY `module` (`module`)
