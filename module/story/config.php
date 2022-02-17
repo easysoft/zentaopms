@@ -166,6 +166,11 @@ $config->story->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->story->datatable->fieldList['lastEditedDate']['width']    = '90';
 $config->story->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
+$config->story->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
+$config->story->datatable->fieldList['activatedDate']['fixed']    = 'no';
+$config->story->datatable->fieldList['activatedDate']['width']    = '90';
+$config->story->datatable->fieldList['activatedDate']['required'] = 'no';
+
 $config->story->datatable->fieldList['feedbackBy']['title']    = 'feedbackBy';
 $config->story->datatable->fieldList['feedbackBy']['fixed']    = 'no';
 $config->story->datatable->fieldList['feedbackBy']['width']    = '100';

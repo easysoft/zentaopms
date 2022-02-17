@@ -760,6 +760,11 @@ class upgradeModel extends model
             $this->saveLogs('Execute 16_3');
             $this->execSQL($this->getUpgradeFile('16.3'));
             $this->appendExec('16_3');
+        case '16_4':
+            $this->saveLogs('Execute 16_4');
+            $this->execSQL($this->getUpgradeFile('16.4'));
+            $this->updateActivatedDate();
+            $this->appendExec('16_4');
         }
 
         $this->deletePatch();
@@ -5605,6 +5610,27 @@ class upgradeModel extends model
             $libID = isset($docModules[$doc->module]->root) ? $docModules[$doc->module]->root : 0;
             if(!$libID or $libID == $doc->lib) continue;
             $this->dao->update(TABLE_DOC)->set('lib')->eq($libID)->where('id')->eq($doc->id)->exec();
+        }
+        return true;
+    }
+
+    /**
+     * updateActivatedDate
+     *
+     * @access public
+     * @return bool
+     */
+    public function updateActivatedDate()
+    {
+        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->in('story, task, bug')->fetchAll('id');
+        foreach($actions as $action)
+        {
+            $objectType = $action->objectType;
+            $date       = $action->date;
+            $objectID   = $action->objectID;
+            if($objectType == "story") $this->dao->update(TABLE_STORY)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
+            if($objectType == "task")  $this->dao->update(TABLE_TASK)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
+            if($objectType == "bug")   $this->dao->update(TABLE_BUG)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
         }
         return true;
     }

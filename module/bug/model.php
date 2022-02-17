@@ -1365,7 +1365,7 @@ class bugModel extends model
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugIDList = $bug->id . ',' . $bug->linkBug; 
+            $bugIDList = $bug->id . ',' . $bug->linkBug;
             $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
             return $bugs2Link;
         }

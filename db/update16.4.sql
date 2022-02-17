@@ -16,3 +16,5 @@ ALTER TABLE `zt_block` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `ac
 ALTER TABLE `zt_block` DROP INDEX `account_module_type_order`, ADD UNIQUE `account_vision_module_type_order` (`account`, `vision`, `module`, `type`, `order`);
 ALTER TABLE `zt_effort` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_story` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
+ALTER TABLE `zt_story` ADD `activatedDate` datetime NOT NULL DEFAULT '0000-00-00' AFTER `deleted`;
+ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL;
