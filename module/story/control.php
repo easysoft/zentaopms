@@ -832,8 +832,11 @@ class story extends control
                     foreach($branchList as $branchInfo) $branches[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
 
                     $branchTagOption[$linkedProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
-                    $modules[$linkedProduct->id]         = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
-                    $plans[$linkedProduct->id]           = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
+
+                    $moduleList = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
+                    $modules[$linkedProduct->id] = $linkedProduct->type != 'normal' ? $moduleList : array(0 => $moduleList);
+
+                    $plans[$linkedProduct->id] = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
                     if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
 
                     if($linkedProduct->type != 'normal') $branchProduct = true;
