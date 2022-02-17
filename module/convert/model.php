@@ -478,7 +478,7 @@ class convertModel extends model
             }
         }
 
-        $this->afterExec();
+        $this->afterExec('file');
         return array('finished' => true);
     }
 
@@ -1446,10 +1446,11 @@ EOT;
     /**
      * After exec.
      * 
+     * @param  string $method 
      * @access public
      * @return void
      */
-    public function afterExec()
+    public function afterExec($method = 'db')
     {
         /* Set project min start date. */
         $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
@@ -1462,6 +1463,16 @@ EOT;
             $minOpenedDate = substr($minOpenedDate, 0, 11);
             $minOpenedDate = helper::isZeroDate($minOpenedDate) ? $minDate : $minOpenedDate;
             $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
+        }
+
+        if($method == 'file')
+        {
+            $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser');
+            foreach($fileList as $fileName)
+            {
+                $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
+                if(file_exists($filePath)) @unlink($filePath);
+            }
         }
     
         $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
