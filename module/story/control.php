@@ -2210,14 +2210,26 @@ class story extends control
             $stories = array();
             if($this->session->storyOnlyCondition)
             {
-                $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)
-                    ->beginIF($this->post->exportType == 'selected')->andWhere('id')->in($this->cookie->checkedItem)->fi()
-                    ->orderBy($orderBy)->fetchAll('id');
+                if($this->post->exportType == 'selected')
+                {
+                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where('id')->in($this->cookie->checkedItem)->orderBy($orderBy)->fetchAll('id');
+                }
+                else
+                {
+                    $stories = $this->dao->select('*')->from(TABLE_STORY)->where($this->session->storyQueryCondition)->orderBy($orderBy)->fetchAll('id');
+                }
             }
             else
             {
                 $field = $executionID ? 't2.id' : 't1.id';
-                $stmt  = $this->dbh->query($this->session->storyQueryCondition . ($this->post->exportType == 'selected' ? " AND $field IN({$this->cookie->checkedItem})" : '') . " ORDER BY " . strtr($orderBy, '_', ' '));
+                if($this->post->exportType == 'selected')
+                {
+                    $stmt  = $this->dbh->query("SELECT * FROM " . TABLE_STORY . "WHERE `id` IN({$this->cookie->checkedItem})" . " ORDER BY " . strtr($orderBy, '_', ' '));
+                }
+                else
+                {
+                    $stmt  = $this->dbh->query($this->session->storyQueryCondition . " ORDER BY " . strtr($orderBy, '_', ' '));
+                }
                 while($row = $stmt->fetch()) $stories[$row->id] = $row;
             }
             $storyIdList = array_keys($stories);
