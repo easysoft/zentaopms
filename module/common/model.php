@@ -393,9 +393,6 @@ class commonModel extends model
         {
             $isGuest = $app->user->account == 'guest';
 
-            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo html::avatar($app->user);
-            echo '</a>';
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
             {
@@ -406,11 +403,6 @@ class commonModel extends model
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
-
-                $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
-                echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
-                echo '<li class="divider"></li>';
-
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
                 if($app->config->vision === 'rnd')
@@ -462,6 +454,38 @@ class commonModel extends model
                 echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout, '_top');
             }
             echo '</li></ul>';
+
+            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
+            echo html::avatar($app->user);
+            echo '</a>';
+        }
+    }
+
+    /**
+     * Print vision switcher.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printVisionSwitcher()
+    {
+        global $lang, $app;
+
+        if(isset($app->user))
+        {
+            $vision  = $app->config->vision;
+
+            echo "<ul class='dropdown-menu pull-right'>";
+            foreach($lang->visionList as $visionKey => $visionName)
+            {
+                echo ($vision == $visionKey ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$visionKey"), $visionName, '', "data-type='ajax'") . '</li>';
+            }
+            echo '</ul>';
+
+            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
+            echo "<div>{$lang->visionList[$vision]}</div>";
+            echo '</a>';
         }
     }
 
@@ -476,9 +500,7 @@ class commonModel extends model
     {
         global $app, $config, $lang;
 
-        $html  = "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
-        $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
+        $html  = "<ul class='dropdown-menu pull-right create-list'>";
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
@@ -600,6 +622,10 @@ class commonModel extends model
         if(!$showCreateList) return '';
 
         $html .= "</ul>";
+        $html .= "<a class='dropdown-toggle' data-toggle='dropdown'>";
+        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "</a>";
+
         echo $html;
     }
 
