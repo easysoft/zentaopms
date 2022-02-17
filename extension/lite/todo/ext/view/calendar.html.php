@@ -44,7 +44,7 @@
           <div class="col-4 text-center table-col">
             <ul class="nav nav-primary">
               <li class="active"><?php echo html::a($this->createLink('todo', 'calendar'), $lang->todo->common);?></li>
-              <?php if(common::hasPriv('effort', 'calendar')):?>
+              <?php if($this->config->edition != 'open' and common::hasPriv('effort', 'calendar')):?>
               <li><?php echo html::a($this->createLink('effort', 'calendar'), $lang->effort->common);?></li>
               <?php elseif(common::hasPriv('my', 'effort')):?>
               <li><?php echo html::a($this->createLink('my', 'effort'), $lang->effort->common);?></li>
@@ -115,10 +115,10 @@
           <ul class='todo-list'>
           <?php $i = 1;?>
           <?php foreach($todoList['task'] as $id => $todo):?>
-            <?php $projectID = isset($todoProjects[$type][$id]) ? $todoProjects[$type][$id] : 0;?>
+            <?php $projectID = isset($todoProjects['task'][$id]) ? $todoProjects['task'][$id] : 0;?>
             <li data-index='<?php echo $i++;?>'>
               <?php $class = common::hasPriv('todo', 'create') ? 'todo-item' : 'todoList'?>
-              <?php echo html::a($this->createLink('task', 'view', "id=$id", 'html', true), $todo, '', "class='iframe $class' data-id='{$id}' data-type='{$type}' data-title='{$todo}' title='{$todo}' data-width='70%'");?>
+              <?php echo html::a($this->createLink('task', 'view', "id=$id", 'html', true), $todo, '', "class='iframe $class' data-id='{$id}' data-type='task' data-title='{$todo}' title='{$todo}' data-width='70%'");?>
             </li>
           <?php endforeach;?>
           </ul>

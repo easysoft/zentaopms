@@ -310,6 +310,10 @@ class projectModel extends model
         $allBugs  = $this->getTotalBugByProject($projectIdList, 'all');
         $doneBugs = $this->getTotalBugByProject($projectIdList, 'resolved');
 
+        $leftTasks = $this->getTotalTaskByProject($projectIdList, 'undone');
+        $allTasks  = $this->getTotalTaskByProject($projectIdList, 'all');
+        $doneTasks = $this->getTotalTaskByProject($projectIdList, 'done');
+
         foreach($projects as $projectID => $project)
         {
             $project->consumed    = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
@@ -322,6 +326,9 @@ class projectModel extends model
             $project->allStories  = $allStories[$projectID];
             $project->doneStories = $doneStories[$projectID];
             $project->leftStories = $leftStories[$projectID];
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
+            $project->allTasks    = isset($allTasks[$projectID])  ? $allTasks[$projectID]  : 0;
+            $project->doneTasks   = isset($doneTasks[$projectID]) ? $doneTasks[$projectID] : 0;
 
             if(is_float($project->consumed)) $project->consumed = round($project->consumed, 1);
             if(is_float($project->estimate)) $project->estimate = round($project->estimate, 1);
@@ -549,6 +556,25 @@ class projectModel extends model
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->groupBy('project')
+            ->fetchPairs('project');
+    }
+
+    /**
+     * Get associated tasks by project.
+     *
+     * @param  array  $projectIdList
+     * @param  string $status all|done|undone
+     * @access public
+     * @return array
+     */
+    public function getTotalTaskByProject($projectIdList, $status)
+    {
+        return $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
+            ->where('project')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->in('wait,pause,cancel')->fi()
             ->groupBy('project')
             ->fetchPairs('project');
     }
@@ -917,7 +943,7 @@ class projectModel extends model
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
             $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
-            $lib->vision  = zget($project, 'vision', 'common');
+            $lib->vision  = zget($project, 'vision', 'rnd');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -935,7 +961,7 @@ class projectModel extends model
                 $product->createdDate    = helper::now();
                 $product->status         = 'normal';
                 $product->createdVersion = $this->config->version;
-                $product->vision         = zget($project, 'vision', 'common');
+                $product->vision         = zget($project, 'vision', 'rnd');
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();

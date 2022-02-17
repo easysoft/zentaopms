@@ -696,6 +696,7 @@ class baseRouter
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
 
         if($this->config->installed) $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
+        if(!empty($_SESSION['user']->visions) and empty($vision)) list($vision) = explode(',', $_SESSION['user']->visions);
 
         $this->config->vision = $vision ? $vision->value : 'rnd';
     }

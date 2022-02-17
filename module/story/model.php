@@ -2891,6 +2891,7 @@ class storyModel extends model
 
         $stories = $sql->where('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
@@ -3904,7 +3905,7 @@ class storyModel extends model
                 }
                 break;
             case 'taskCount':
-                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id");
+                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id", '', 'class="iframe"');
                 $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
                 break;
             case 'bugCount':

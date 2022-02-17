@@ -1,18 +1,16 @@
 <?php
 $lang->execution->common  = '看板';
 $lang->executionCommon    = '看板';
-$lang->task->common       = '卡片';
+$lang->task->common       = '任务';
 $lang->story->common      = '目标';
 
 /* Main Navigation. */
 $lang->mainNav            = new stdclass();
 $lang->mainNav->my        = "{$lang->navIcons['my']} {$lang->my->shortCommon}|my|index|";
 $lang->mainNav->project   = "{$lang->navIcons['project']} {$lang->project->common}|$projectModule|$projectMethod|";
-$lang->mainNav->execution = "{$lang->navIcons['execution']} {$lang->execution->common}|$executionModule|$executionMethod|";
+$lang->mainNav->execution = "{$lang->navIcons['execution']} 任务|$executionModule|$executionMethod|";
 $lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->doc       = "{$lang->navIcons['doc']} {$lang->doc->common}|doc|index|";
-$lang->mainNav->report    = "{$lang->navIcons['report']} {$lang->report->common}|report|productSummary|";
-$lang->mainNav->kanban    = "{$lang->navIcons['kanban']} {$lang->kanban->common}|kanban|space|";
 $lang->mainNav->system    = "{$lang->navIcons['system']} {$lang->system->common}|my|team|";
 $lang->mainNav->admin     = "{$lang->navIcons['admin']} {$lang->admin->common}|admin|index|";
 
@@ -46,7 +44,7 @@ else
     $lang->dividerMenu = ',doc,admin,';
 }
 
-$lang->task->common = '卡片';
+$lang->task->common = '任务';
 
 /* My menu. */
 $lang->my->menu           = new stdclass();
@@ -88,13 +86,13 @@ $lang->kanban->menuOrder[20] = 'doc';
 $lang->kanban->menuOrder[25] = 'dynamic';
 $lang->kanban->menuOrder[30] = 'settings';
 
-$lang->execution->menu           = new stdclass();
-$lang->execution->menu->kanban   = array('link' => "看板|execution|kanban|executionID=%s");
-$lang->execution->menu->list     = array('link' => "列表|execution|task|executionID=%s");
-if($config->edition != 'open') $lang->execution->menu->calendar = array('link' => "日历|execution|calendar|executionID=%s");
+$lang->execution->menu            = new stdclass();
+$lang->execution->menu->kanban    = array('link' => "看板视图|execution|kanban|executionID=%s");
+$lang->execution->menu->task      = array('link' => "列表视图|execution|task|executionID=%s");
+if($config->edition != 'open') $lang->execution->menu->calendar = array('link' => "日历视图|execution|calendar|executionID=%s");
 if($config->edition != 'open') $lang->execution->menu->gantt    = array('link' => "甘特图|execution|gantt|executionID=%s");
-$lang->execution->menu->tree     = array('link' => "树状图|execution|tree|executionID=%s");
-$lang->execution->menu->group    = array('link' => "分组视图|execution|grouptask|executionID=%s");
+$lang->execution->menu->tree      = array('link' => "树状图|execution|tree|executionID=%s");
+$lang->execution->menu->grouptask = array('link' => "分组视图|execution|grouptask|executionID=%s");
 
 $lang->kanban->menu->doc['subMenu'] = new stdclass();
 
@@ -204,7 +202,7 @@ $lang->admin->dividerMenu = ',company,message,system,';
 $lang->searchObjects['all']       = '全部';
 $lang->searchObjects['todo']      = '待办';
 $lang->searchObjects['story']     = '目标';
-$lang->searchObjects['task']      = '卡片';
+$lang->searchObjects['task']      = '任务';
 $lang->searchObjects['doc']       = '文档';
 $lang->searchObjects['project']   = '项目';
 $lang->searchObjects['execution'] = '看板';
@@ -247,7 +245,7 @@ unset($lang->createIcons['kanbanspace']);
 unset($lang->createIcons['kanban']);
 
 $lang->createObjects['story']     = '目标';
-$lang->createObjects['task']      = '卡片';
+$lang->createObjects['task']      = '任务';
 $lang->createObjects['execution'] = '看板';
 
 $lang->createIcons['execution'] = 'kanban';
