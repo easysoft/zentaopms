@@ -589,10 +589,6 @@ $(function()
                 checkedEstimate += data.estimate;
                 if(data.cases > 0) checkedCase += 1;
             });
-            var rate = Math.round(checkedCase / checkedTotal * 10000 / 100) + '' + '%';
-            return checkedSummary.replace('%total%', checkedTotal)
-                  .replace('%estimate%', checkedEstimate.toFixed(1))
-                  .replace('%rate%', rate);
         }
     });
 });
