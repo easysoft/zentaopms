@@ -1465,16 +1465,24 @@ EOT;
             $this->dao->update(TABLE_PROJECT)->set('begin')->eq($minOpenedDate)->where('id')->eq($projectID)->orWhere('id')->eq($executionID)->exec();
         }
 
-        if($method == 'file')
-        {
-            $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser');
-            foreach($fileList as $fileName)
-            {
-                $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
-                if(file_exists($filePath)) @unlink($filePath);
-            }
-        }
+        if($method == 'file') $this->deleteJiraFile();
     
         $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
+    }
+
+    /**
+     * Delete jira backip file.
+     * 
+     * @access public
+     * @return void
+     */
+    public function deleteJiraFile()
+    {
+        $fileList = array('action', 'project', 'status', 'resolution', 'user', 'issue', 'changegroup', 'changeitem', 'issuelink', 'issuelinktype', 'fileattachment', 'version', 'issuetype', 'nodeassociation', 'applicationuser');
+        foreach($fileList as $fileName)
+        {
+            $filePath = $this->app->getTmpRoot() . 'jirafile/' . $fileName . '.xml';
+            if(file_exists($filePath)) @unlink($filePath);
+        }
     }
 }

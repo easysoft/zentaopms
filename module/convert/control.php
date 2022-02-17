@@ -300,6 +300,7 @@ class convert extends control
             }
             else
             {
+                $this->convert->deleteJiraFile();
                 $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
                 if(!is_readable($jiraFilePath) or !is_writable($jiraFilePath))
                 {
