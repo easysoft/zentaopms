@@ -60,6 +60,7 @@ $config->story->datatable->fieldList['pri']['title']    = 'priAB';
 $config->story->datatable->fieldList['pri']['fixed']    = 'left';
 $config->story->datatable->fieldList['pri']['width']    = '50';
 $config->story->datatable->fieldList['pri']['required'] = 'no';
+$config->story->datatable->fieldList['pri']['name']     = $this->lang->story->pri;
 
 $config->story->datatable->fieldList['title']['title']    = 'title';
 $config->story->datatable->fieldList['title']['fixed']    = 'left';
