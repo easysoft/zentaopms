@@ -72,6 +72,7 @@ $lang->user->products         = $lang->productCommon;
 $lang->user->projects         = '项目';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = '身份';
+$lang->user->switchVision     = '切换到 %s';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';

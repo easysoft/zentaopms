@@ -90,7 +90,7 @@
       $setting          = $this->datatable->getSetting('project');
       $fixedFieldsWidth = $this->datatable->setFixedFieldWidth($setting);
 
-      if($useDatatable) include '../../common/view/datatable.html.php';
+      if($useDatatable) include dirname(dirname(dirname(__FILE__))) . '/common/view/datatable.html.php';
       ?>
       <?php if(!$useDatatable) echo '<div class="table-responsive">';?>
       <table class='table has-sort-head <?php if($useDatatable) echo 'datatable';?>' data-fixed-left-width='<?php echo $fixedFieldsWidth['leftWidth']?>' data-fixed-right-width='<?php echo $fixedFieldsWidth['rightWidth']?>'>

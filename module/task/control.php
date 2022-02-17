@@ -219,6 +219,8 @@ class task extends control
         }
         $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleIdList, 'full', 'unclosed');
 
+        if($this->config->vision == 'lite') $stories = $stories + array('', '');
+
         /* Get block id of assinge to me. */
         $blockID = 0;
         if(isonlybody())
@@ -236,6 +238,8 @@ class task extends control
         $position[] = $this->lang->task->common;
         $position[] = $this->lang->task->create;
 
+        $projectID = $execution ? $execution->project : 0;
+
         /* Set Custom*/
         foreach(explode(',', $this->config->task->customCreateFields) as $field) $customFields[$field] = $this->lang->task->$field;
         if($execution->type == 'ops') unset($customFields['story']);
@@ -248,7 +252,7 @@ class task extends control
         $this->view->position         = $position;
         $this->view->gobackLink       = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'task', "executionID=$executionID") : '';
         $this->view->execution        = $execution;
-        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject(0, 'undone', 0, true);
+        $this->view->executions       = $this->config->systemMode == 'classic' ? $executions : $this->execution->getByProject($projectID, 'undone', 0, true);
         $this->view->task             = $task;
         $this->view->users            = $users;
         $this->view->storyID          = $storyID;
@@ -776,6 +780,8 @@ class task extends control
     public function view($taskID)
     {
         $this->session->set('executionList', $this->app->getURI(true), 'execution');
+
+        $this->commonAction($taskID);
 
         $taskID = (int)$taskID;
         $task   = $this->task->getById($taskID, true);

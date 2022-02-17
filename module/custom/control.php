@@ -111,12 +111,12 @@ class custom extends control
             elseif($module == 'story' and $field == 'review')
             {
                 $data = fixer::input('post')->join('forceReview', ',')->get();
-                $this->loadModel('setting')->setItems("system.$module", $data);
+                $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'story' and $field == 'reviewRules')
             {
                 $data = fixer::input('post')->join('superReviewers', ',')->get();
-                $this->loadModel('setting')->setItems("system.$module", $data);
+                $this->loadModel('setting')->setItems("system.$module@{$this->config->vision}", $data);
             }
             elseif($module == 'testcase' and $field == 'review')
             {
@@ -192,7 +192,7 @@ class custom extends control
                     }
                 }
 
-                $this->custom->deleteItems("lang=$lang&module=$module&section=$field");
+                $this->custom->deleteItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
                 $data = fixer::input('post')->get();
                 foreach($data->keys as $index => $key)
                 {
@@ -209,7 +209,7 @@ class custom extends control
 
         /* Check whether the current language has been customized. */
         $lang = str_replace('_', '-', $lang);
-        $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field");
+        $dbFields = $this->custom->getItems("lang=$lang&module=$module&section=$field&vision={$this->config->vision}");
         if(empty($dbFields)) $dbFields = $this->custom->getItems("lang=" . ($lang == $currentLang ? 'all' : $currentLang) . "&module=$module&section=$field");
         if($dbFields)
         {
@@ -484,7 +484,7 @@ class custom extends control
     {
         if($_POST)
         {
-            $this->loadModel('setting')->setItem('system.common.CRExecution', $this->post->execution);
+            $this->loadModel('setting')->setItem("system.common.CRExecution@{$this->config->vision}", $this->post->execution);
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'reload'));
         }
 

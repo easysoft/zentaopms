@@ -286,7 +286,7 @@ class userEntry extends Entry
                     $info->issue = array('total' => 0, 'issues' => array());
                     if(!common::hasPriv('my', 'issue')) break;
 
-                    if(!empty($this->config->maxVersion))
+                    if($this->config->edition == 'max')
                     {
                         $control = $this->loadController('my', 'issue');
                         $control->issue('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
@@ -303,7 +303,7 @@ class userEntry extends Entry
                     $info->risk = array('total' => 0, 'risks' => array());
                     if(!common::hasPriv('my', 'risk')) break;
 
-                    if(!empty($this->config->maxVersion))
+                    if($this->config->edition == 'max')
                     {
                         $control = $this->loadController('my', 'risk');
                         $control->risk('createdBy', 'id_desc', 0, $this->param('limit', 5), 1);
@@ -320,7 +320,7 @@ class userEntry extends Entry
                     $info->meeting = array('total' => 0, 'meetings' => array());
                     if(!common::hasPriv('my', 'myMeeting')) break;
 
-                    if(!empty($this->config->maxVersion))
+                    if($this->config->edition == 'max')
                     {
                         $control = $this->loadController('my', 'myMeeting');
                         $control->myMeeting('all', 'id_desc', 0, $this->param('limit', 5), 1);

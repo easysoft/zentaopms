@@ -69,6 +69,7 @@ class docModel extends model
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('type')->ne('api')
                 ->beginIF($type == 'all')->andWhere('deleted')->eq(0)->fi()
+                ->andWhere('vision')->eq($this->config->vision)
                 ->orderBy('id_desc')
                 ->query();
         }
@@ -76,6 +77,7 @@ class docModel extends model
         {
             $stmt = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF($type)->andWhere('type')->eq($type)->fi()
                 ->beginIF(!$type)->andWhere('type')->ne('api')->fi()
                 ->beginIF($objectID and strpos(',product,project,execution,', ",$type,") !== false)->andWhere($type)->eq($objectID)->fi()
@@ -453,6 +455,7 @@ class docModel extends model
         $docIdList = $this->getPrivDocs($libID, $module);
         return $this->dao->select('*')->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->orderBy($orderBy)
             ->page($pager)
@@ -1008,7 +1011,7 @@ class docModel extends model
 
         $libs = $this->getLibs($type == 'collector' ? 'all' : $type);
         $key  = ($type == 'product' or $type == 'execution') ? $type : 'id';
-        $stmt = $this->dao->select("DISTINCT $key")->from(TABLE_DOCLIB)->where('deleted')->eq(0);
+        $stmt = $this->dao->select("DISTINCT $key")->from(TABLE_DOCLIB)->where('deleted')->eq(0)->andWhere('vision')->eq($this->config->vision);
         if($type == 'product' or $type == 'execution')
         {
             $stmt = $stmt->andWhere($type)->ne(0);
@@ -1063,6 +1066,7 @@ class docModel extends model
         $libs = $this->getLibs('all', '', $appendLibs);
         $stmt = $this->dao->select("id,type,product,execution,name")->from(TABLE_DOCLIB)
             ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere("id")->in(array_keys($libs))
             ->orderBy("product desc,execution desc, `order` asc, id asc")
             ->query();
@@ -1251,6 +1255,7 @@ class docModel extends model
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('type')->eq($type)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'custom')->orderBy('`order`, id')->fi()
@@ -1265,6 +1270,7 @@ class docModel extends model
         {
             $objectLibs = $this->dao->select('*')->from(TABLE_DOCLIB)
                 ->where('deleted')->eq(0)
+                ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere($type)->eq($objectID)
                 ->beginIF(!empty($appendLib))->orWhere('id')->eq($appendLib)->fi()
                 ->beginIF($type == 'project')->andWhere('execution')->eq(0)->fi()
@@ -1338,11 +1344,13 @@ class docModel extends model
                 $myObjects = $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
                     ->leftjoin(TABLE_DOCLIB)->alias('t2')->on('t2.project=t1.id')
                     ->where("CONCAT(',', t2.users, ',')")->like("%,{$this->app->user->account},%")
+                    ->andWhere('t1.vision')->eq($this->config->vision)
                     ->fetchPairs();
             }
 
             $objects = $this->dao->select('*')->from(TABLE_PROJECT)
                 ->where('type')->eq('project')
+                ->andWhere('vision')->eq($this->config->vision)
                 ->andWhere('deleted')->eq(0)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
                 ->orderBy('order_asc')
@@ -1801,6 +1809,7 @@ class docModel extends model
             count(editedDate > '{$lately}' or null) as lastEditedDocs, count(addedDate > '{$lately}' or null) as lastAddedDocs,
             count(collector like '%,{$this->app->user->account},%' or null) as myCollection, count(addedBy = '{$this->app->user->account}' or null) as myDocs")->from(TABLE_DOC)
             ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('id')->in($docIdList)
             ->fetch();
 

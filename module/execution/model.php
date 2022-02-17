@@ -324,7 +324,7 @@ class executionModel extends model
             ->setIF($this->config->systemMode == 'new', 'parent', $this->post->project)
             ->setIF($this->post->acl == 'open', 'whitelist', '')
             ->join('whitelist', ',')
-            ->add('type', $type)
+            ->setDefault('type', $type)
             ->stripTags($this->config->execution->editor->create['id'], $this->config->allowedTags)
             ->remove('products, workDays, delta, branch, uid, plans, teams, teamMembers, contactListMenu')
             ->get();
@@ -1050,6 +1050,7 @@ class executionModel extends model
         /* Order by status's content whether or not done */
         $executions = $this->dao->select('*, IF(INSTR("done,closed", status) < 2, 0, 1) AS isDone, INSTR("doing,wait,suspended,closed", status) AS sortStatus')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'all')->andWhere('type')->in('stage,sprint,kanban')->fi()
             ->beginIF($projectID and $this->config->systemMode == 'new')->andWhere('project')->eq($projectID)->fi()
             ->beginIF($type != 'all' and $this->config->systemMode == 'new')->andWhere('type')->eq($type)->fi()
@@ -3542,12 +3543,25 @@ class executionModel extends model
         static $storyGroups, $taskGroups;
         if(empty($storyGroups))
         {
-            $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
-                ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
-                ->where('t1.project')->eq((int)$executionID)
-                ->andWhere('t2.deleted')->eq(0)
-                ->orderBy('t1.`order`_desc')
-                ->fetchAll();
+            if($this->config->vision == 'lite')
+            {
+                $execution = $this->getById($executionID);
+                $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                    ->where('t1.project')->eq((int)$execution->project)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->orderBy('t1.`order`_desc')
+                    ->fetchAll();
+            }
+            else
+            {
+                $stories = $this->dao->select('t2.*, t1.version as taskVersion')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
+                    ->where('t1.project')->eq((int)$executionID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->orderBy('t1.`order`_desc')
+                    ->fetchAll();
+            }
             $storyGroups = array();
             foreach($stories as $story) $storyGroups[$story->product][$story->module][$story->id] = $story;
         }

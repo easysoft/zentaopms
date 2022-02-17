@@ -319,6 +319,10 @@ $lang->exportFileTypeList['html'] = 'html';
 $lang->exportTypeList['all']      = 'All Data';
 $lang->exportTypeList['selected'] = 'Selected Data';
 
+$lang->visionList = array();
+$lang->visionList['rnd']  = 'R&D';
+$lang->visionList['lite'] = 'Lite';
+
 $lang->createObjects['todo']        = 'Todo';
 $lang->createObjects['effort']      = 'Effort';
 $lang->createObjects['bug']         = 'Bug';

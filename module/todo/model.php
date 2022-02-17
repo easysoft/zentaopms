@@ -175,6 +175,7 @@ class todoModel extends model
                 $todo->assignedTo   = $this->app->user->account;
                 $todo->assignedBy   = $this->app->user->account;
                 $todo->assignedDate = $now;
+                $todo->vision       = $todos->vision[$i];
 
                 if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
@@ -500,7 +501,7 @@ class todoModel extends model
         elseif($type == 'before')
         {
             $begin = '1970-01-01';
-            $end   = date::yesterday();
+            $end   = date::today();
         }
         elseif($type == 'cycle')
         {
@@ -515,6 +516,7 @@ class todoModel extends model
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
             ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
             ->orWhere('finishedBy')->eq($account)
@@ -799,6 +801,7 @@ class todoModel extends model
         return $this->dao->select('count(*) as count')->from(TABLE_TODO)
             ->where('cycle')->eq('0')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('account', true)->eq($account)
             ->orWhere('assignedTo')->eq($account)
             ->orWhere('finishedBy')->eq($account)

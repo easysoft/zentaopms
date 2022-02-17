@@ -938,6 +938,7 @@ class userModel extends model
             $groups = $this->dao->select('t1.acl, t1.project')->from(TABLE_GROUP)->alias('t1')
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id=t2.`group`')
                 ->where('t2.account')->eq($account)
+                ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.role')->ne('projectAdmin')
                 ->andWhere('t1.role')->ne('limited')
                 ->fetchAll();
@@ -998,7 +999,8 @@ class userModel extends model
                 ->leftJoin(TABLE_USERGROUP)->alias('t2')->on('t1.id = t2.`group`')
                 ->leftJoin(TABLE_GROUPPRIV)->alias('t3')->on('t2.`group` = t3.`group`')
                 ->where('t2.account')->eq($account)
-                ->andWhere('t1.project')->eq(0);
+                ->andWhere('t1.project')->eq(0)
+                ->andWhere('t1.vision')->eq($this->config->vision);
         }
 
         $stmt = $sql->query();
