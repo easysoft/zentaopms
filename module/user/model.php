@@ -1123,6 +1123,7 @@ class userModel extends model
             ->beginIF($type == 'project' and !$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
             ->andWhere('t1.account')->eq($account)
             ->andWhere('t2.deleted')->eq(0)
+            ->andWhere('t2.vision')->eq($this->config->vision)
             ->orderBy("t2.$orderBy")
             ->page($pager)
             ->fetchAll('root');
