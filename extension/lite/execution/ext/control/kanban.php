@@ -21,7 +21,7 @@ class myExecution extends execution
         foreach($this->lang->execution->kanbanGroup as $groupKey => $groupName)
         {
             $attr       = $groupBy == $groupKey ? '<i class="icon icon-check"></i>' : '';
-            $TRActions .=  '<li>' . html::a(helper::createLink('execution', 'kanban', "execution=$execution->id&browseType=task&orderBy=$orderBy&groupBy=$groupKey"), $groupName) . $attr .'</li>';
+            $TRActions .=  '<li>' . html::a(helper::createLink('execution', 'kanban', "execution=$execution->id&browseType=task&orderBy=$orderBy&groupBy=$groupKey"), $groupName . $attr) . '</li>';
         }
         $TRActions .= "</ul></div>";
         $TRActions .= html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $this->lang->kanban->fullScreen, '', "class='btn btn-link'");
