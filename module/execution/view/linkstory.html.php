@@ -39,7 +39,7 @@
             <?php endif;?>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->story->title;?></th>
           <th class='c-object'><?php echo $lang->story->product;?></th>
           <th class='c-module'><?php echo $lang->story->module;?></th>
