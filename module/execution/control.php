@@ -126,7 +126,7 @@ class execution extends control
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
 
-        if($execution->type == 'kanban') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' and $this->config->vision != 'lite') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Get products by execution. */
         $products = $this->product->getProductPairsByProject($executionID);
@@ -1397,6 +1397,11 @@ class execution extends control
                 $this->loadModel('kanban')->createRDKanban($execution);
 
                 if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                $link= $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
             }
 
             if(!empty($planID))
@@ -2024,7 +2029,7 @@ class execution extends control
         {
             if($this->execution->isClickable($execution, $action)) $executionActions[] = $action;
         }
-        
+
         $userList    = array();
         $users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $avatarPairs = $this->user->getAvatarPairs();
@@ -3613,7 +3618,7 @@ class execution extends control
      * @param  string $groupBy
      * @param  string $from execution|RD
      * @access public
-     * @return array 
+     * @return array
      */
     public function ajaxUpdateKanban($executionID = 0, $enterTime = '', $browseType = '', $groupBy = '', $from = 'execution')
     {

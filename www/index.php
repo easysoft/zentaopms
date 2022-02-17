@@ -36,7 +36,6 @@ $app = router::createApp('pms', dirname(dirname(__FILE__)), 'router');
 /* installed or not. */
 if(!isset($config->installed) or !$config->installed) die(header('location: install.php'));
 
-
 /* Run the app. */
 $common = $app->loadCommon();
 

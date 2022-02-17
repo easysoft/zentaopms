@@ -28,7 +28,9 @@
     ?>
     <?php endforeach;?>
     <div class="input-control space c-user"><?php echo html::select('account', $userIdPairs, $userID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
+    <?php if($this->config->vision == 'rnd'):?>
     <div class="input-control space c-product"><?php echo html::select('product', $products, $productID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
+    <?php endif;?>
     <?php if($config->systemMode == 'new'):?>
     <div class="input-control space c-project"><?php echo html::select('project', $projects, $projectID, 'class="form-control chosen" data-max_drop_width="215"');?></div>
     <?php endif;?>
@@ -40,6 +42,13 @@
 
 <div id='queryBox' data-module='action' class='cell <?php if($browseType =='bysearch') echo 'show';?>'></div>
 <div id='mainContent' class='main-content'>
+  <?php if(empty($dateGroups)):?>
+  <div class="table-empty-tip">
+    <p>
+      <span class="text-muted"><?php echo $lang->company->empty;?></span>
+    </p>
+  </div>
+  <?php else:?>
   <div id='dynamics'>
     <?php $firstAction = '';?>
     <?php foreach($dateGroups as $date => $actions):?>
@@ -95,6 +104,7 @@
     </div>
     <?php endforeach;?>
   </div>
+  <?php endif;?>
 </div>
 <?php if(!empty($firstAction)):?>
 <?php

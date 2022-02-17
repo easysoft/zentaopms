@@ -438,6 +438,7 @@ class kanbanModel extends model
             ->add('kanban', $kanbanID)
             ->add('region', $regionID)
             ->add('group', $groupID)
+            ->add('column', $columnID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
@@ -1672,6 +1673,7 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
+        if($this->app->user->admin) return array_keys($objects);
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
@@ -1695,6 +1697,7 @@ class kanbanModel extends model
                 if($spaceType == 'public' and $param != 'involved') $remove = false;
             }
 
+            if($objectType == 'kanbanspace' and $param == 'involved' and $object->owner == $account) $remove = true;
             if($remove) unset($objects[$objectID]);
         }
 
@@ -1931,7 +1934,6 @@ class kanbanModel extends model
             if($space->type == 'private') $kanban->owner = $account;
         }
 
-
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
@@ -2036,7 +2038,7 @@ class kanbanModel extends model
                 $lane->type      = $type;
                 $lane->execution = $executionID;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-                
+
                 $laneID = $this->dao->lastInsertId();
                 $this->createExecutionColumns($laneID, $type, $executionID);
             }

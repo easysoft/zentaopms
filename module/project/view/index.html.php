@@ -10,7 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
-<?php if($project->model != 'kanban'):?>
+<?php if($project->model != 'kanban' or $config->vision == 'lite'):?>
 <?php echo $this->fetch('block', 'dashboard', "module=project&type={$project->model}&projectID={$project->id}");?>
 <?php else:?>
 <div class='clearfix' id='mainMenu'>

@@ -18,7 +18,7 @@
     <h2><i class='icon-pencil'></i> <?php echo $lang->my->editProfile;?></h2>
   </div>
   <form method='post' target='hiddenwin' id='dataform'>
-    <table class='table table-form'> 
+    <table class='table table-form'>
       <caption><?php echo $lang->my->form->lblBasic;?></caption>
       <tr>
         <th class='w-90px'><?php echo $lang->user->realname;?></th>
@@ -83,12 +83,18 @@
         </td>
       </tr>
     </table>
+    <?php echo html::select('visions[]', $this->user->getVisionList(), $user->visions, "class='form-control chosen' multiple");?>
     <div class='text-center form-actions'><?php echo html::submitButton() . html::backButton();?></div>
   </form>
   <?php echo html::hidden('verifyRand', $rand);?>
 </div>
 <?php js::set('passwordStrengthList', $lang->user->passwordStrengthList)?>
 <script>
+$(function()
+{
+    $('#visions_chosen').css('display', 'none')
+});
+
 function checkPassword(password)
 {
     $('#passwordStrength').html(password == '' ? '' : passwordStrengthList[computePasswordStrength(password)]);

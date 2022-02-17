@@ -42,13 +42,18 @@ class settingModel extends model
     /**
      * Set value of an item.
      *
-     * @param  string      $path     system.common.global.sn or system.common.sn
+     * @param  string      $path     system.common.global.sn | system.common.sn | system.common.global.sn@rnd
      * @param  string      $value
      * @access public
      * @return void
      */
     public function setItem($path, $value = '')
     {
+        /* Determine vision of config item. */
+        $pathVision = explode('@', $path);
+        $vision = isset($pathVision[1]) ? $pathVision[1] : '';
+        $path   = $pathVision[0];
+
         /* fix bug when account has dot. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
         $replace = false;
@@ -67,6 +72,7 @@ class settingModel extends model
         if($replace) $owner = $account;
 
         $item = new stdclass();
+        $item->vision  = $vision;
         $item->owner   = $owner;
         $item->module  = $module;
         $item->section = $section;
@@ -90,6 +96,11 @@ class settingModel extends model
      */
     public function setItems($path, $items)
     {
+        /* Determine vision of config item. */
+        $pathVision = explode('@', $path);
+        $vision = isset($pathVision[1]) ? $pathVision[1] : '';
+        $path   = $pathVision[0];
+
         foreach($items as $key => $item)
         {
             if(is_array($item) or is_object($item))
@@ -97,12 +108,12 @@ class settingModel extends model
                 $section = $key;
                 foreach($item as $subKey => $subItem)
                 {
-                    $this->setItem($path . '.' . $section . '.' . $subKey, $subItem);
+                    $this->setItem($path . '.' . $section . '.' . $subKey . "@$vision", $subItem);
                 }
             }
             else
             {
-                $this->setItem($path . '.' . $key, $item);
+                $this->setItem($path . '.' . $key . "@$vision", $item);
             }
         }
 
@@ -135,7 +146,7 @@ class settingModel extends model
         parse_str($paramString, $params);
 
         /* Init fields not set in the param string. */
-        $fields = 'owner,module,section,key';
+        $fields = 'vision,owner,module,section,key';
         $fields = explode(',', $fields);
         foreach($fields as $field) if(!isset($params[$field])) $params[$field] = '';
 
@@ -153,6 +164,7 @@ class settingModel extends model
     public function createDAO($params, $method = 'select')
     {
         return $this->dao->$method('*')->from(TABLE_CONFIG)->where('1 = 1')
+            ->beginIF($params['vision'])->andWhere('vision')->in($params['vision'])->fi()
             ->beginIF($params['owner'])->andWhere('owner')->in($params['owner'])->fi()
             ->beginIF($params['module'])->andWhere('module')->in($params['module'])->fi()
             ->beginIF($params['section'])->andWhere('section')->in($params['section'])->fi()
@@ -171,6 +183,7 @@ class settingModel extends model
         $owner   = 'system,' . ($account ? $account : '');
         $records = $this->dao->select('*')->from(TABLE_CONFIG)
             ->where('owner')->in($owner)
+            ->andWhere('vision')->in(array('', $this->config->vision))
             ->orderBy('id')
             ->fetchAll('id');
         if(!$records) return array();

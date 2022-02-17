@@ -72,6 +72,7 @@ $lang->user->products         = $lang->productCommon;
 $lang->user->projects         = 'Project';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = 'Identity';
+$lang->user->switchVision     = 'Switch to %s';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';

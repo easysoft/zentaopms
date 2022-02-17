@@ -259,7 +259,7 @@ class commonModel extends model
     {
         /* Get configs of system and current user. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
-        if($this->config->db->name) $config  = $this->loadModel('setting')->getSysAndPersonalConfig($account);
+        if($this->config->db->name) $config = $this->loadModel('setting')->getSysAndPersonalConfig($account);
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
@@ -406,14 +406,23 @@ class commonModel extends model
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
+
+                $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
+                echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
+                echo '<li class="divider"></li>';
+
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
-                if(!commonModel::isTutorialMode())
+                if($app->config->vision === 'rnd')
                 {
-                    echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    if(!commonModel::isTutorialMode())
+                    {
+                        echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    }
+
+                    echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 }
 
-                echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
 
                 echo "<li class='divider'></li>";
@@ -528,7 +537,11 @@ class commonModel extends model
                         $attr         = "class='iframe' data-width='650px'";
                         break;
                     case 'project':
-                        if(!defined('TUTORIAL'))
+                        if($config->vision == 'lite')
+                        {
+                            $params = "model=kanban";
+                        }
+                        else if(!defined('TUTORIAL'))
                         {
                             $params       = "programID=0&copyProjectID=0&extra=from=global";
                             $createMethod = 'createGuide';
@@ -544,7 +557,16 @@ class commonModel extends model
                         $params = "productID=$productID&branch=&extras=from=global";
                         break;
                     case 'story':
-                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        if(!$productID and $config->vision == 'lite')
+                        {
+                            $module       = 'project';
+                            $params       = "model=kanban";
+                        }
+                        else
+                        {
+                            $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        }
+
                         break;
                     case 'task':
                         $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";

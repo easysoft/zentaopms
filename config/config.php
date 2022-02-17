@@ -22,6 +22,7 @@ $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The co
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
 $config->webRoot       = '';                   // URL根目录。       The root path of the url.
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
+$config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 
 /* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';               // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
@@ -31,6 +32,7 @@ $config->methodVar   = 'f';                       // 请求类型为GET：模块
 $config->viewVar     = 't';                       // 请求类型为GET：视图变量名。            requestType=GET: the view var name.
 $config->sessionVar  = 'zentaosid';               // 请求类型为GET：session变量名。         requestType=GET: the session var name.
 $config->views       = ',html,json,mhtml,xhtml,'; // 支持的视图类型。                       Supported view formats.
+$config->visions     = ',rnd,lite,';              // 支持的界面类型。                       Supported vision formats.
 
 /* 支持的主题和语言。Supported thems and languages. */
 $config->themes['default'] = 'default';
@@ -177,3 +179,10 @@ if(file_exists($routesConfig)) include $routesConfig;
 /* Include extension config files. */
 $extConfigFiles = glob(dirname(__FILE__) . DIRECTORY_SEPARATOR . 'ext/*.php');
 if($extConfigFiles) foreach($extConfigFiles as $extConfigFile) include $extConfigFile;
+
+/* Set version. */
+if($config->edition != 'open')
+{
+    $config->version = $config->edition . $config->{$config->edition . 'Version'};
+    if($config->edition != 'max') unset($config->maxVersion);
+}

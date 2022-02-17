@@ -34,6 +34,7 @@ $lang->company->product   = $lang->productCommon;
 $lang->company->project   = 'Project';
 $lang->company->execution = 'Execution';
 $lang->company->user      = 'User';
+$lang->company->empty     = 'No Dynamic';
 
 $lang->company->guestOptions[0] = 'Deny';
 $lang->company->guestOptions[1] = 'Allow';

@@ -260,6 +260,7 @@ class projectModel extends model
         $queryType = strtolower($queryType);
         $projects = $this->dao->select('*')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->beginIF($queryType == 'bystatus' and $param == 'undone')->andWhere('status')->notIN('done,closed')->fi()
@@ -309,6 +310,10 @@ class projectModel extends model
         $allBugs  = $this->getTotalBugByProject($projectIdList, 'all');
         $doneBugs = $this->getTotalBugByProject($projectIdList, 'resolved');
 
+        $leftTasks = $this->getTotalTaskByProject($projectIdList, 'undone');
+        $allTasks  = $this->getTotalTaskByProject($projectIdList, 'all');
+        $doneTasks = $this->getTotalTaskByProject($projectIdList, 'done');
+
         foreach($projects as $projectID => $project)
         {
             $project->consumed    = isset($hours[$projectID]) ? (float)$hours[$projectID]->consumed : 0;
@@ -321,6 +326,9 @@ class projectModel extends model
             $project->allStories  = $allStories[$projectID];
             $project->doneStories = $doneStories[$projectID];
             $project->leftStories = $leftStories[$projectID];
+            $project->leftTasks   = isset($leftTasks[$projectID]) ? $leftTasks[$projectID] : 0;
+            $project->allTasks    = isset($allTasks[$projectID])  ? $allTasks[$projectID]  : 0;
+            $project->doneTasks   = isset($doneTasks[$projectID]) ? $doneTasks[$projectID] : 0;
 
             if(is_float($project->consumed)) $project->consumed = round($project->consumed, 1);
             if(is_float($project->estimate)) $project->estimate = round($project->estimate, 1);
@@ -490,6 +498,7 @@ class projectModel extends model
         return $this->dao->select('id, name')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($programID !== '')->andWhere('parent')->eq($programID)->fi()
             ->beginIF($status != 'all' && $status != 'noclosed')->andWhere('status')->eq($status)->fi()
             ->beginIF($excludedModel)->andWhere('model')->ne($excludedModel)->fi()
@@ -547,6 +556,25 @@ class projectModel extends model
             ->where('project')->in($projectIdList)
             ->andWhere('deleted')->eq(0)
             ->beginIF($status != 'all')->andWhere('status')->eq($status)->fi()
+            ->groupBy('project')
+            ->fetchPairs('project');
+    }
+
+    /**
+     * Get associated tasks by project.
+     *
+     * @param  array  $projectIdList
+     * @param  string $status all|done|undone
+     * @access public
+     * @return array
+     */
+    public function getTotalTaskByProject($projectIdList, $status)
+    {
+        return $this->dao->select('project, count(*) as tasks')->from(TABLE_TASK)
+            ->where('project')->in($projectIdList)
+            ->andWhere('deleted')->eq(0)
+            ->beginIF($status == 'done')->andWhere('status')->in('done,closed')->fi()
+            ->beginIF($status == 'undone')->andWhere('status')->in('wait,pause,cancel')->fi()
             ->groupBy('project')
             ->fetchPairs('project');
     }
@@ -645,6 +673,7 @@ class projectModel extends model
         $projects = $this->dao->select('id, name, path')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->andWhere('deleted')->eq('0')
@@ -914,6 +943,7 @@ class projectModel extends model
             $lib->main    = '1';
             $lib->acl     = $project->acl != 'program' ? $project->acl : 'custom';
             $lib->users   = ',' . implode(',', array_filter($authorizedUsers)) . ',';
+            $lib->vision  = zget($project, 'vision', 'rnd');
             $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
             $this->updateProducts($projectID);
@@ -931,6 +961,7 @@ class projectModel extends model
                 $product->createdDate    = helper::now();
                 $product->status         = 'normal';
                 $product->createdVersion = $this->config->version;
+                $product->vision         = zget($project, 'vision', 'rnd');
 
                 $this->dao->insert(TABLE_PRODUCT)->data($product)->exec();
                 $productID = $this->dao->lastInsertId();
@@ -1888,10 +1919,12 @@ class projectModel extends model
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t1.type')->in('sprint,stage,kanban')
                 ->beginIF($projectID != 0)->andWhere('t1.project')->eq($projectID)->fi()
+                ->beginIF($projectID == 0 && $this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
                 ->beginIF(!empty($myExecutionIDList))->andWhere('t1.id')->in(array_keys($myExecutionIDList))->fi()
                 ->beginIF($status == 'undone')->andWhere('t1.status')->notIN('done,closed')->fi()
                 ->beginIF($status != 'all' and $status != 'undone' and $status != 'involved')->andWhere('t1.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->sprints)->fi()
+                ->andWhere('t1.vision')->eq($this->config->vision)
                 ->andWhere('t1.deleted')->eq('0')
                 ->orderBy($orderBy)
                 ->page($pager)
@@ -1908,6 +1941,7 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.deleted')->eq('0')
+                ->andWhere('t1.vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');

@@ -127,7 +127,7 @@ function addNewProduct(obj)
  */
 function setAclList(programID)
 {
-    if(programID != 0)
+    if(programID)
     {
         $('.aclBox').html($('#programAcl').html());
     }
