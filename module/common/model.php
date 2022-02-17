@@ -2225,7 +2225,9 @@ EOD;
 
         /* Reset priv by program privway. */
         $rights = $this->app->user->rights['rights'];
-        $this->app->user  = clone $_SESSION['user'];
+        $this->app->user = clone $_SESSION['user'];
+
+        if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
