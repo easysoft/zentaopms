@@ -59,7 +59,7 @@ $(function()
             data:         kanbanData,
             minColWidth:  290,
             maxColWidth:  290,
-            maxColHeight: 460,
+            maxColHeight: (product.type == 'branch') ? 460 : 806,
             minColHeight: 190,
             cardHeight:   80,
             itemRender:   renderKanbanItem,
