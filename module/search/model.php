@@ -175,6 +175,19 @@ class searchModel extends model
             {
                 if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
                 $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
+
+                if($operator == '=')
+                {
+                    $values    = explode(',', trim($this->dbh->quote($value), "'"));
+                    foreach($values as $value)
+                    {
+                        $value = "'" . $value . "'";
+                    }
+
+                    $value     = implode(',', $values);
+                    $operator  = 'IN';
+                    $condition = $operator . ' (' . $value . ') ';
+                }
             }
 
             /* Processing query criteria. */
