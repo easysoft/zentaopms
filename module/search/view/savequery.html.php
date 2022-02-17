@@ -14,6 +14,12 @@
 <form target='hiddenwin' method='post' style='padding: 15px 70px 15px 15px'>
   <div class='input-group'>
     <input name='title' id='title' class="form-control" autocomplete="off" type="text">
+    <span class='input-group-addon'>
+      <div class="checkbox-primary">
+        <input type="checkbox" name="common" value="1" id="common" />
+        <label for="common"><?php echo $lang->search->setCommon;?></label>
+      </div>
+    </span>
     <?php if($onMenuBar == 'yes'):?>
     <span class='input-group-addon'>
       <div class="checkbox-primary">
