@@ -27,7 +27,6 @@ $lang->entry->editedDate  = '编辑时间';
 $lang->entry->date        = '请求时间';
 $lang->entry->url         = '请求地址';
 $lang->entry->calledTime  = '调用时间';
-$lang->entry->editedBy    = '由谁编辑';
 $lang->entry->deleted     = '已删除';
 
 $lang->entry->confirmDelete = '您确认要删除该应用吗？';
