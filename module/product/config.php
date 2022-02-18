@@ -51,6 +51,7 @@ $config->product->search['fields']['reviewedDate']   = $lang->story->reviewedDat
 $config->product->search['fields']['assignedDate']   = $lang->story->assignedDate;
 $config->product->search['fields']['closedDate']     = $lang->story->closedDate;
 $config->product->search['fields']['lastEditedDate'] = $lang->story->lastEditedDate;
+$config->product->search['fields']['activatedDate']  = $lang->story->activatedDate;
 
 $config->product->search['params']['title']          = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->product->search['params']['keywords']       = array('operator' => 'include', 'control' => 'input',  'values' => '');
@@ -84,6 +85,7 @@ $config->product->search['params']['reviewedDate']   = array('operator' => '=', 
 $config->product->search['params']['assignedDate']   = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->product->search['params']['closedDate']     = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 $config->product->search['params']['lastEditedDate'] = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
+$config->product->search['params']['activatedDate']  = array('operator' => '=', 'control' => 'input', 'values' => '', 'class' => 'date');
 
 $config->product->create = new stdclass();
 $config->product->edit   = new stdclass();
