@@ -694,10 +694,18 @@ class baseRouter
     public function setVision()
     {
         $account = isset($_SESSION['user']) ? $_SESSION['user']->account : '';
+        if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
+        if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
 
+        $vision  = '';
         if($this->config->installed) $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
+        if($vision) $vision = $vision->value;
+        if(!empty($_SESSION['user']->visions) and empty($vision)) list($vision) = explode(',', $_SESSION['user']->visions);
 
-        $this->config->vision = $vision ? $vision->value : 'rnd';
+        list($defaultVision) = explode(',', trim($this->config->visions, ','));
+        if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
+
+        $this->config->vision = $vision ? $vision : $defaultVision;
     }
 
     /**

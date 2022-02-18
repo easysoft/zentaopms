@@ -7,17 +7,21 @@ class myExecution extends execution
         $this->app->loadLang('kanban');
         common::setMenuVars('execution', $executionID);
 
-        $execution = $this->execution->getById($executionID);
+        $currentMethod = $this->app->methodName;
+        $execution     = $this->execution->getById($executionID);
         $this->loadModel('project')->setMenu($execution->project);
-        $this->lang->kanban->menu->execution['subMenu'] = $this->lang->execution->menu;
+        $this->lang->kanban->menu->execution['subMenu'] = new stdClass();
 
-        $TRActions  = '';
+        /* change subMenu to sub select menu */
+        $TRActions  = $this->execution->getTRActions($currentMethod);
+
         $TRActions .= "<div class='dropdown'>";
         $TRActions .= html::a('javascript:;', $this->lang->execution->kanbanGroup[$groupBy] . "<span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
-        $TRActions .= "<ul class='dropdown-menu pull-right'>";
+        $TRActions .= "<ul class='dropdown-menu pull-right course-groupBy'>";
         foreach($this->lang->execution->kanbanGroup as $groupKey => $groupName)
         {
-            $TRActions .=  '<li>' . html::a(helper::createLink('execution', 'kanban', "execution=$execution->id&browseType=task&orderBy=$orderBy&groupBy=$groupKey"), $groupName) . '</li>';
+            $attr       = $groupBy == $groupKey ? '<i class="icon icon-check"></i>' : '';
+            $TRActions .=  '<li>' . html::a(helper::createLink('execution', 'kanban', "execution=$execution->id&browseType=task&orderBy=$orderBy&groupBy=$groupKey"), $groupName . $attr) . '</li>';
         }
         $TRActions .= "</ul></div>";
         $TRActions .= html::a('javascript:fullScreen()', "<i class='icon-fullscreen muted'></i> " . $this->lang->kanban->fullScreen, '', "class='btn btn-link'");

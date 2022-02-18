@@ -403,7 +403,11 @@ class searchModel extends model
     {
         $queries = $this->dao->select('id, title')
             ->from(TABLE_USERQUERY)
+            ->where()
+            ->markLeft(1)
             ->where('account')->eq($this->app->user->account)
+            ->orWhere('common')->eq(1)
+            ->markRight(1)
             ->andWhere('module')->eq($module)
             ->orderBy('id_desc')
             ->fetchPairs();

@@ -1701,6 +1701,7 @@ class block extends control
      */
     public function printAssignToMeBlock($longBlock = true)
     {
+        $hasViewPriv = array();
         if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
         if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
         if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;

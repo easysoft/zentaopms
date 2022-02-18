@@ -1357,10 +1357,11 @@ class bugModel extends model
      * @param  int    $bugID
      * @param  string $browseType
      * @param  int    $queryID
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null)
     {
         if($browseType == 'bySearch')
         {

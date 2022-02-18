@@ -999,7 +999,7 @@ class bug extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->users            = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -1135,7 +1135,7 @@ class bug extends control
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
         }
-        $users = $this->user->getPairs('devfirst|noclosed', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst', $appendUsers, $this->config->maxCount);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
@@ -1709,8 +1709,8 @@ class bug extends control
         $this->view->pager      = $pager;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;                                                                                                        
-        $this->view->pageID     = $pageID; 
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
         $this->display();
     }
 

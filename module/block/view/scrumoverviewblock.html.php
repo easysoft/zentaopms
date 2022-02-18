@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php $vision = $this->config->vision;?>
 <?php if(empty($totalData)): ?>
 <div class='empty-tip'><?php common::printLink('project', 'create', '', "<i class='icon-plus'></i> " . $lang->project->create, '', "class='btn btn-primary'")?></div>
 <?php else:?>
@@ -22,7 +23,11 @@
       <th></th>
       <th><?php echo $lang->workingHour;?></th>
       <th></th>
+      <?php if($vision == 'lite'): ?>
+      <th><?php echo $lang->block->taskCount;?></th>
+      <?php else:?>
       <th><?php echo $lang->block->bugCount;?></th>
+      <?php endif;?>
       <th></th>
     </tr>
   </thead>
@@ -34,8 +39,8 @@
       <td><?php echo $totalData[$projectID]->teamCount ? html::a($this->createLink('project', 'team', 'projectID=' . $projectID), $totalData[$projectID]->teamCount) : 0;?></td>
       <th><?php echo $lang->block->estimatedHours . ':';?></th>
       <td><?php echo $totalData[$projectID]->estimate . $lang->execution->workHour;?></td>
-      <th><?php echo $lang->block->totalBug. ':';?></th>
-      <td><?php echo $totalData[$projectID]->allBugs;?></td>
+      <th><?php echo ($vision == 'lite' ? $lang->block->totalTask : $lang->block->totalBug) . ':';?></th>
+      <td><?php echo $vision == 'lite' ? $totalData[$projectID]->allTasks : $totalData[$projectID]->allBugs;?></td>
     </tr>
     <tr>
       <th><?php echo $lang->block->done . ':';?></th>
@@ -44,8 +49,8 @@
       <td></td>
       <th><?php echo $lang->block->consumedHours . ':';?></th>
       <td><?php echo $totalData[$projectID]->consumed . $lang->execution->workHour;?></td>
-      <th><?php echo $lang->bug->statusList['resolved'] . ':';?></th>
-      <td><?php echo $totalData[$projectID]->doneBugs;?></td>
+      <th><?php echo ($vision == 'lite' ? $lang->block->done : $lang->bug->statusList['resolved']) . ':';?></th>
+      <td><?php echo $vision == 'lite' ? $totalData[$projectID]->doneTasks : $totalData[$projectID]->doneBugs;?></td>
     </tr>
     <tr>
       <th><?php echo $lang->block->left . ':';?></th>
@@ -54,8 +59,8 @@
       <td></td>
       <th></th>
       <td></td>
-      <th><?php echo $lang->bug->unResolved . ':';?></th>
-      <td><?php echo $totalData[$projectID]->leftBugs;?></td>
+      <th><?php echo ($vision == 'lite' ? $lang->block->undone : $lang->bug->unResolved) . ':';?></th>
+      <td><?php echo $vision == 'lite' ? $totalData[$projectID]->leftTasks : $totalData[$projectID]->leftBugs;?></td>
     </tr>
 
   </tbody>

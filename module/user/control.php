@@ -977,6 +977,7 @@ class user extends control
         /* Check deny type. */
         $rights  = $this->app->user->rights['rights'];
         $acls    = $this->app->user->rights['acls'];
+
         $module  = strtolower($module);
         $method  = strtolower($method);
 

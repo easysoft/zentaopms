@@ -42,6 +42,7 @@ $lang->user->address          = '通讯地址';
 $lang->user->zipcode          = '邮编';
 $lang->user->join             = '入职日期';
 $lang->user->visits           = '访问次数';
+$lang->user->visions          = '版本类型';
 $lang->user->ip               = '最后IP';
 $lang->user->last             = '最后登录';
 $lang->user->ranzhi           = 'ZDOO帐号';

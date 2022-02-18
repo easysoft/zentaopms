@@ -49,6 +49,7 @@
             <th class='c-dept<?php echo zget($visibleFields, 'dept', ' hidden') . zget($requiredFields, 'dept', '', ' required');?>'>              <?php echo $lang->user->dept;?></th>
             <th class='accountThWidth required'><?php echo $lang->user->account;?></th>
             <th class='c-realname required'><?php echo $lang->user->realname;?></th>
+            <th class='c-visions required'><?php echo $lang->user->visions;?></th>
             <th class='c-role<?php echo zget($requiredFields, 'role', '', ' required')?>'><?php echo $lang->user->role;?></th>
             <th class='c-group'><?php echo $lang->user->group;?></th>
             <th class='<?php echo zget($visibleFields, 'email', "$minWidth hidden", $minWidth) . zget($requiredFields, 'email', '', ' required')?>'><?php echo $lang->user->email;?></th>
@@ -71,13 +72,15 @@
         <tbody>
         <?php $depts = $depts + array('ditto' => $lang->user->ditto)?>
         <?php $lang->user->roleList = $lang->user->roleList + array('ditto' => $lang->user->ditto)?>
-        <?php $groupList = $groupList + array('ditto' => $lang->user->ditto)?>
+        <?php $groupList  = $groupList + array('ditto' => $lang->user->ditto);?>
+        <?php $visionList = $this->user->getVisionList() + array('ditto' => $lang->user->ditto);?>
         <?php for($i = 0; $i < $config->user->batchCreate; $i++):?>
         <tr class='text-center'>
-          <td><?php echo $i+1;?></td>
+          <td><?php echo $i + 1;?></td>
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$i]", '', "class='form-control account_$i' onchange='changeEmail($i)'");?></td>
           <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>
+          <td class='text-left'><?php echo html::select("visions[$i][]", $visionList, $i > 0 ? 'ditto' : '', "class='form-control chosen' multiple");?></td>
           <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
           <td class='text-left' style='overflow:visible'><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='form-control chosen'");?></td>
           <td <?php echo zget($visibleFields, 'email', "class='hidden'")?>><?php echo html::input("email[$i]", '', "class='form-control email_$i' onchange='setDefaultEmail($i)'");?></td>

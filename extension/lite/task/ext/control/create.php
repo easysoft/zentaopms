@@ -11,6 +11,6 @@ class myTask extends task
             die(js::locate(helper::createLink('execution', 'create')));
         }
 
-        return parent::create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '');
+        return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra);
     }
 }

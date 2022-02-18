@@ -1675,50 +1675,33 @@ class kanbanModel extends model
             ->fetchAll('id');
         if($this->app->user->admin) return array_keys($objects);
 
-        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type,team,whitelist')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+        $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
+
         if($this->app->user->admin and $param != 'involved') return array_keys($objects);
 
+        $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
         {
-            if(!$this->checkKanbanPriv($object, $objectType, $spaceList)) unset($objects[$objectID]);
+            $remove = true;
+            if($objectType == 'kanbanspace' and $object->type == 'public' and $param != 'involved') continue;
+
+            if($object->owner == $account and $param != 'involved') $remove = false;
+            if(strpos(",{$object->team},", ",$account,") !== false) $remove = false;
+            if(strpos(",{$object->whitelist},", ",$account,") !== false) $remove = false;
+
+            if($objectType == 'kanban')
+            {
+                $spaceOwner = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
+                $spaceType  = isset($spaceList[$object->space]->type) ? $spaceList[$object->space]->type : '';
+                if(strpos(",$spaceOwner,", ",$account,") !== false) $remove = false;
+                if($spaceType == 'public' and $param != 'involved') $remove = false;
+            }
+
+            if($objectType == 'kanbanspace' and $param == 'involved' and $object->owner == $account) $remove = true;
+            if($remove) unset($objects[$objectID]);
         }
 
         return array_keys($objects);
-    }
-
-    /**
-     * Check kanban priv.
-     *
-     * @param  object   $object
-     * @param  string   $objectType
-     * @param  array    $spaceList
-     * @access public
-     * @return bool
-     */
-    public function checkKanbanPriv($object, $objectType, $spaceList)
-    {
-        $account = $this->app->user->account;
-        if($object->acl == 'private' or $object->acl == 'extend')
-        {
-            if($objectType == 'kanbanspace' and $object->type == 'public' and $param != 'involved') return true;
-
-            if($object->owner == $account and $param != 'involved') return true;
-            if(strpos(",{$object->team},", ",$account,") !== false) return true;
-            if(strpos(",{$object->whitelist},", ",$account,") !== false) return true;
-            if($objectType == 'kanban')
-            {
-                $spaceOwner     = isset($spaceList[$object->space]->owner) ? $spaceList[$object->space]->owner : '';
-                $spaceTeam      = isset($spaceList[$object->space]->team) ? trim($spaceList[$object->space]->team, ',') : '';
-                $spaceWhiteList = isset($spaceList[$object->space]->whitelist) ? trim($spaceList[$object->space]->whitelist, ',') : '';
-                if(strpos(",$spaceOwner,", ",$account,") !== false) return true;
-                if(strpos(",$spaceTeam,", ",$account,") !== false and $object->acl == 'extend') return true;
-                if(strpos(",$spaceWhiteList,", ",$account,") !== false and $object->acl == 'extend') return true;
-                if($spaceType == 'public' and $param != 'involved') return true;
-            }
-
-            return false;
-        }
-        return true;
     }
 
     /**
