@@ -62,7 +62,7 @@ class fileModel extends model
             else
             {
                 $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-                $file->webPath  = '/data/course/' . $file->pathname;
+                $file->webPath  = $this->app->getWebRoot() . 'data/course/' . $file->pathname;
             }
         }
 
@@ -80,10 +80,18 @@ class fileModel extends model
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         if(empty($file)) return false;
+        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
+        {
+            $realPathName   = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $realPathName;
+            $file->webPath  = $this->webPath . $realPathName;
+        }
+        else
+        {
+            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+            $file->webPath  = $this->app->getWebRoot() . 'data/course/' . $file->pathname;
+        }
 
-        $realPathName   = $this->getRealPathName($file->pathname);
-        $file->realPath = $this->savePath . $realPathName;
-        $file->webPath  = $this->webPath . $realPathName;
         return $file;
     }
 
