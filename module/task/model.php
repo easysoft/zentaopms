@@ -1906,6 +1906,7 @@ class taskModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('assignedDate', helper::now())
+            ->setDefault('activatedDate', helper::now())
             ->remove('comment')
             ->get();
 

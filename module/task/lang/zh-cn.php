@@ -40,6 +40,7 @@ $lang->task->cancel              = "取消";
 $lang->task->cancelAction        = "取消任务";
 $lang->task->activateAction      = "激活任务";
 $lang->task->activate            = "激活";
+$lang->task->activatedDate       = "激活日期";
 $lang->task->export              = "导出数据";
 $lang->task->exportAction        = "导出任务";
 $lang->task->reportChart         = "报表统计";
