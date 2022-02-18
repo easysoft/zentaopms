@@ -241,11 +241,10 @@ unset($lang->createIcons['bug']);
 unset($lang->createIcons['testcase']);
 unset($lang->createIcons['product']);
 unset($lang->createIcons['program']);
-unset($lang->createIcons['kanbanspace']);
-unset($lang->createIcons['kanban']);
 
-$lang->createObjects['story']     = '目标';
-$lang->createObjects['task']      = '任务';
-$lang->createObjects['execution'] = '看板';
+$lang->createObjects['story']       = '目标';
+$lang->createObjects['task']        = '任务';
+$lang->createObjects['execution']   = '任务看板';
+$lang->createObjects['kanban']      = '通用看板';
 
 $lang->createIcons['execution'] = 'kanban';
