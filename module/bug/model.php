@@ -1357,15 +1357,16 @@ class bugModel extends model
      * @param  int    $bugID
      * @param  string $browseType
      * @param  int    $queryID
+     * @param  object $pager
      * @access public
      * @return array
      */
-    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager)
+    public function getBugs2Link($bugID, $browseType = 'bySearch', $queryID = 0, $pager = null)
     {
         if($browseType == 'bySearch')
         {
             $bug       = $this->getById($bugID);
-            $bugIDList = $bug->id . ',' . $bug->linkBug; 
+            $bugIDList = $bug->id . ',' . $bug->linkBug;
             $bugs2Link = $this->getBySearch($bug->product, 'all', $queryID, 'id', $bugIDList, $pager);
             return $bugs2Link;
         }
