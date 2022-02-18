@@ -296,6 +296,8 @@ class gitlab
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
         $results = $this->fetch($api, $params);
+        if(!isset($results->diffs)) return array();
+
         foreach($results->diffs as $key => $diff)
         {
             if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
