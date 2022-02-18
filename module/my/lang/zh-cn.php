@@ -38,8 +38,6 @@ $lang->my->storyChanged    = "需求变更";
 $lang->my->hours           = '工时/天';
 $lang->my->uploadAvatar    = '更换头像';
 $lang->my->requirement     = "我的{$lang->URCommon}";
-$lang->my->testtask        = '我的测试单';
-$lang->my->testcase        = '我的用例';
 $lang->my->storyConcept    = $config->URAndSR ? '默认需求概念组合' : '默认需求概念';
 
 $lang->my->indexAction      = '地盘仪表盘';
