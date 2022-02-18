@@ -1015,7 +1015,7 @@ class testcase extends control
             $this->lang->testcase->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'testcase';
 
-            $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->testCase);
+            $this->view->position[] = html::a($this->server->http_referer, $this->lang->my->myTestCase);
             $this->view->title      = $this->lang->testcase->batchEdit;
 
             $productIdList = array();

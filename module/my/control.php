@@ -533,8 +533,8 @@ EOF;
         /* Append id for secend sort. */
         $sort = common::appendOrder($orderBy);
 
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testTask;
-        $this->view->position[] = $this->lang->my->testTask;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestTask;
+        $this->view->position[] = $this->lang->my->myTestTask;
         $this->view->tasks      = $this->loadModel('testtask')->getByUser($this->app->user->account, $pager, $sort, $type);
 
         $this->view->recTotal   = $recTotal;
@@ -590,8 +590,8 @@ EOF;
         $cases = $this->testcase->appendData($cases, $type == 'assigntome' ? 'run' : 'case');
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->testCase;
-        $this->view->position[] = $this->lang->my->testCase;
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->myTestCase;
+        $this->view->position[] = $this->lang->my->myTestCase;
         $this->view->cases      = $cases;
         $this->view->users      = $this->user->getPairs('noletter');
         $this->view->tabID      = 'test';

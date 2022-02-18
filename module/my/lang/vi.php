@@ -37,6 +37,8 @@ $lang->my->storyChanged    = "Story Changed";
 $lang->my->hours           = "Hours/day";
 $lang->my->uploadAvatar    = 'Upload Avatar';
 $lang->my->requirement     = "My {$lang->URCommon}";
+$lang->my->testtask        = 'My Test Task';
+$lang->my->testcase        = 'My Case';
 $lang->my->storyConcept    = 'Story Concept';
 
 $lang->my->myExecutions = "My Stage/Sprint/Iteration";

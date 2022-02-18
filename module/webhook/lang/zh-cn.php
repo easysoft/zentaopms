@@ -39,7 +39,6 @@ $lang->webhook->result      = '结果';
 $lang->webhook->products    = $lang->productCommon;
 $lang->webhook->executions  = $lang->execution->common;
 $lang->webhook->actions     = '系统日志';
-$lang->webhook->editedBy    = '由谁编辑';
 $lang->webhook->deleted     = '已删除';
 
 $lang->webhook->typeList['']            = '';

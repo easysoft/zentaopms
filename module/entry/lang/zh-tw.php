@@ -27,7 +27,6 @@ $lang->entry->editedDate  = '編輯時間';
 $lang->entry->date        = '請求時間';
 $lang->entry->url         = '請求地址';
 $lang->entry->calledTime  = '調用時間';
-$lang->entry->editedBy    = '由誰編輯';
 $lang->entry->deleted     = '已刪除';
 
 $lang->entry->confirmDelete = '您確認要刪除該應用嗎？';
