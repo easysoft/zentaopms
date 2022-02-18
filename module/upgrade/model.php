@@ -5627,7 +5627,7 @@ class upgradeModel extends model
         {
             $table = TABLE_BUG;
             if($action->objectType == 'story') $table = TABLE_STORY;
-            if($action->objectType == 'task') $table = TABLE_TASK;
+            if($action->objectType == 'task') $table  = TABLE_TASK;
 
             $this->dao->update($table)->set('activatedDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
         }
