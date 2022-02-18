@@ -189,6 +189,11 @@ $config->task->datatable->fieldList['lastEditedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['lastEditedDate']['width']    = '120';
 $config->task->datatable->fieldList['lastEditedDate']['required'] = 'no';
 
+$config->task->datatable->fieldList['activatedDate']['title']    = 'activatedDate';
+$config->task->datatable->fieldList['activatedDate']['fixed']    = 'no';
+$config->task->datatable->fieldList['activatedDate']['width']    = '90';
+$config->task->datatable->fieldList['activatedDate']['required'] = 'no';
+
 $config->task->datatable->fieldList['actions']['title']    = 'actions';
 $config->task->datatable->fieldList['actions']['fixed']    = 'right';
 $config->task->datatable->fieldList['actions']['width']    = '180';
