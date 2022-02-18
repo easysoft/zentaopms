@@ -408,7 +408,7 @@ class commonModel extends model
                 echo '</a></li><li class="divider"></li>';
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
-                echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
+                if(strpos($app->user->visions, $vision) !== false) echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
                 echo '<li class="divider"></li>';
 
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
