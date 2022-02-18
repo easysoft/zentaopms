@@ -170,6 +170,7 @@ function renderProjectItem(item, $item)
             $item.addClass('link-block');
             $title = $('<a class="title" />')
                 .attr('href', $.createLink('project', 'index', 'projectID=' + item._id));
+            console.log(item);
         }
         else
         {

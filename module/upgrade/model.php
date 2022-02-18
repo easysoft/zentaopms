@@ -5615,23 +5615,23 @@ class upgradeModel extends model
     }
 
     /**
-     * updateActivatedDate
+     * Update activated date by history action.
      *
      * @access public
      * @return bool
      */
     public function updateActivatedDate()
     {
-        $actions = $this->dao->select('*')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->in('story, task, bug')->fetchAll('id');
+        $actions = $this->dao->select('objectID, objectType, date')->from(TABLE_ACTION)->where('action')->eq('activated')->andWhere('objectType')->in('story, task, bug')->orderBy('date')->fetchAll('id');
+        $dates = array('bug' => array(), 'story' => array(), 'task' => array());
         foreach($actions as $action)
         {
-            $objectType = $action->objectType;
-            $date       = $action->date;
-            $objectID   = $action->objectID;
-            if($objectType == "story") $this->dao->update(TABLE_STORY)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
-            if($objectType == "task")  $this->dao->update(TABLE_TASK)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
-            if($objectType == "bug")   $this->dao->update(TABLE_BUG)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
+            $dates[$action->objectType][$action->objectID] = $action->date;
         }
+
+        foreach($dates['bug'] as $objectID => $date) $this->dao->update(TABLE_BUG)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
+        foreach($dates['story'] as $objectID => $date) $this->dao->update(TABLE_STORY)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
+        foreach($dates['task'] as $objectID => $date) $this->dao->update(TABLE_TASK)->set('activatedDate')->eq($date)->where('id')->eq($objectID)->exec();
         return true;
     }
 }
