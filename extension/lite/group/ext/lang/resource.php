@@ -907,4 +907,543 @@ $lang->cron->methodOrder[25] = 'toggle';
 $lang->cron->methodOrder[30] = 'delete';
 $lang->cron->methodOrder[35] = 'openProcess';
 
+if($config->edition == 'biz' or $config->edition == 'max')
+{
+    /* My module. */
+    $lang->resource->my->effort = 'effort';  // pro effort
+
+    /* Pro effort */
+    $lang->resource->effort = new stdclass();
+    $lang->resource->effort->batchCreate     = 'batchCreate';
+    $lang->resource->effort->createForObject = 'createForObject';
+    $lang->resource->effort->edit            = 'edit';
+    $lang->resource->effort->batchEdit       = 'batchEdit';
+    $lang->resource->effort->view            = 'view';
+    $lang->resource->effort->delete          = 'delete';
+    $lang->resource->effort->export          = 'export';
+    $lang->resource->effort->calendar        = 'calendar';  // pro calendar
+
+    /* Todo. */
+    $lang->resource->todo->calendar  = 'calendar';  // pro calendar
+
+    /* Feedback. */
+    $lang->resource->feedback = new stdclass();
+    $lang->resource->feedback->index      = 'index';
+    $lang->resource->feedback->create     = 'create';
+    $lang->resource->feedback->edit       = 'edit';
+    $lang->resource->feedback->browse     = 'browse';
+    $lang->resource->feedback->view       = 'view';
+    $lang->resource->feedback->comment    = 'comment';
+    $lang->resource->feedback->delete     = 'delete';
+    $lang->resource->feedback->close      = 'closeAction';
+    $lang->resource->feedback->export     = 'exportAction';
+
+    /* Faq. */
+    $lang->resource->faq = new stdclass();
+    $lang->resource->faq->browse = 'browse';
+
+    /* Attend */
+    $lang->resource->attend = new stdclass();
+    $lang->resource->attend->department       = 'department';
+    $lang->resource->attend->company          = 'company';
+    $lang->resource->attend->browseReview     = 'browseReview';
+    $lang->resource->attend->review           = 'review';
+    $lang->resource->attend->export           = 'exportAction';
+    $lang->resource->attend->stat             = 'reportAction';
+    $lang->resource->attend->saveStat         = 'saveStatAction';
+    $lang->resource->attend->exportStat       = 'exportStat';
+    $lang->resource->attend->detail           = 'detailAction';
+    $lang->resource->attend->exportDetail     = 'exportDetail';
+    $lang->resource->attend->settings         = 'settings';
+    $lang->resource->attend->personalSettings = 'personalSettings';
+    $lang->resource->attend->setManager       = 'setManager';
+
+    $lang->resource->attend->personal         = 'personal';
+    $lang->resource->attend->edit             = 'editAction';
+
+    $lang->attend->methodOrder[5]  = 'department';
+    $lang->attend->methodOrder[10] = 'company';
+    $lang->attend->methodOrder[15] = 'browseReview';
+    $lang->attend->methodOrder[20] = 'review';
+    $lang->attend->methodOrder[25] = 'export';
+    $lang->attend->methodOrder[30] = 'stat';
+    $lang->attend->methodOrder[35] = 'saveStat';
+    $lang->attend->methodOrder[40] = 'exportStat';
+    $lang->attend->methodOrder[45] = 'detail';
+    $lang->attend->methodOrder[60] = 'exportDetail';
+    $lang->attend->methodOrder[65] = 'settings';
+    $lang->attend->methodOrder[70] = 'personalSettings';
+    $lang->attend->methodOrder[75] = 'setManager';
+
+    $lang->attend->methodOrder[80] = 'personal';
+    $lang->attend->methodOrder[85] = 'edit';
+
+    /* Holiday */
+    $lang->resource->holiday = new stdclass();
+    $lang->resource->holiday->create = 'createAction';
+    $lang->resource->holiday->edit   = 'editAction';
+    $lang->resource->holiday->delete = 'deleteAction';
+
+    $lang->resource->holiday->browse = 'browse';
+
+    $lang->holiday->methodOrder[0]  = 'browse';
+    $lang->holiday->methodOrder[5]  = 'create';
+    $lang->holiday->methodOrder[10] = 'edit';
+    $lang->holiday->methodOrder[15] = 'delete';
+
+    /* Leave */
+    $lang->resource->leave = new stdclass();
+    $lang->resource->leave->browseReview   = 'browseReview';
+    $lang->resource->leave->company        = 'companyAction';
+    $lang->resource->leave->review         = 'reviewAction';
+    $lang->resource->leave->export         = 'exportAction';
+    $lang->resource->leave->setReviewer    = 'setReviewerAction';
+    $lang->resource->leave->personalAnnual = 'personalAnnual';
+
+    $lang->resource->leave->personal     = 'personal';
+    $lang->resource->leave->create       = 'createAction';
+    $lang->resource->leave->edit         = 'editAction';
+    $lang->resource->leave->delete       = 'deleteAction';
+    $lang->resource->leave->view         = 'viewAction';
+    $lang->resource->leave->switchstatus = 'switchstatus';
+    $lang->resource->leave->back         = 'backAction';
+
+    $lang->leave->methodOrder[0]  = 'browseReview';
+    $lang->leave->methodOrder[5]  = 'company';
+    $lang->leave->methodOrder[10] = 'review';
+    $lang->leave->methodOrder[15] = 'export';
+    $lang->leave->methodOrder[20] = 'setReviewer';
+    $lang->leave->methodOrder[25] = 'personalAnnual';
+
+    $lang->leave->methodOrder[30] = 'personal';
+    $lang->leave->methodOrder[35] = 'create';
+    $lang->leave->methodOrder[40] = 'edit';
+    $lang->leave->methodOrder[45] = 'delete';
+    $lang->leave->methodOrder[50] = 'view';
+    $lang->leave->methodOrder[55] = 'switchstatus';
+    $lang->leave->methodOrder[60] = 'back';
+
+    /* Makeup */
+    $lang->resource->makeup = new stdclass();
+    $lang->resource->makeup->browseReview = 'browseReview';
+    $lang->resource->makeup->company      = 'companyAction';
+    $lang->resource->makeup->review       = 'reviewAction';
+    $lang->resource->makeup->export       = 'exportAction';
+    $lang->resource->makeup->setReviewer  = 'setReviewerAction';
+
+    $lang->resource->makeup->personal     = 'personal';
+    $lang->resource->makeup->create       = 'createAction';
+    $lang->resource->makeup->edit         = 'editAction';
+    $lang->resource->makeup->view         = 'viewAction';
+    $lang->resource->makeup->delete       = 'deleteAction';
+    $lang->resource->makeup->switchstatus = 'switchstatus';
+
+    $lang->makeup->methodOrder[0]  = 'browseReview';
+    $lang->makeup->methodOrder[5]  = 'company';
+    $lang->makeup->methodOrder[10] = 'review';
+    $lang->makeup->methodOrder[15] = 'export';
+    $lang->makeup->methodOrder[20] = 'setReviewer';
+
+    $lang->makeup->methodOrder[25]  = 'personal';
+    $lang->makeup->methodOrder[30]  = 'create';
+    $lang->makeup->methodOrder[35] = 'edit';
+    $lang->makeup->methodOrder[40] = 'view';
+    $lang->makeup->methodOrder[45] = 'delete';
+    $lang->makeup->methodOrder[50] = 'switchstatus';
+
+    /* Overtime */
+    $lang->resource->overtime = new stdclass();
+    $lang->resource->overtime->browseReview = 'browseReview';
+    $lang->resource->overtime->company      = 'companyAction';
+    $lang->resource->overtime->review       = 'reviewAction';
+    $lang->resource->overtime->export       = 'exportAction';
+    $lang->resource->overtime->setReviewer  = 'setReviewerAction';
+
+    $lang->resource->overtime->personal     = 'personal';
+    $lang->resource->overtime->create       = 'createAction';
+    $lang->resource->overtime->edit         = 'editAction';
+    $lang->resource->overtime->view         = 'viewAction';
+    $lang->resource->overtime->delete       = 'deleteAction';
+    $lang->resource->overtime->switchstatus = 'switchstatus';
+
+    $lang->overtime->methodOrder[0]  = 'browseReview';
+    $lang->overtime->methodOrder[5]  = 'company';
+    $lang->overtime->methodOrder[10] = 'review';
+    $lang->overtime->methodOrder[15] = 'export';
+    $lang->overtime->methodOrder[20] = 'setReviewer';
+
+    $lang->overtime->methodOrder[25]  = 'personal';
+    $lang->overtime->methodOrder[30]  = 'create';
+    $lang->overtime->methodOrder[35] = 'edit';
+    $lang->overtime->methodOrder[40] = 'view';
+    $lang->overtime->methodOrder[45] = 'delete';
+    $lang->overtime->methodOrder[50] = 'switchstatus';
+
+    /* Lieu */
+    $lang->resource->lieu = new stdclass();
+    $lang->resource->lieu->company      = 'companyAction';
+    $lang->resource->lieu->browseReview = 'browseReviewAction';
+    $lang->resource->lieu->review       = 'reviewAction';
+    $lang->resource->lieu->setReviewer  = 'setReviewerAction';
+
+    $lang->resource->lieu->personal     = 'personal';
+    $lang->resource->lieu->create       = 'createAction';
+    $lang->resource->lieu->edit         = 'editAction';
+    $lang->resource->lieu->delete       = 'deleteAction';
+    $lang->resource->lieu->view         = 'viewAction';
+    $lang->resource->lieu->switchstatus = 'switchstatus';
+
+    $lang->lieu->methodOrder[0]  = 'company';
+    $lang->lieu->methodOrder[5]  = 'browseReview';
+    $lang->lieu->methodOrder[10] = 'review';
+    $lang->lieu->methodOrder[15] = 'setReviewer';
+
+    $lang->lieu->methodOrder[20]  = 'personal';
+    $lang->lieu->methodOrder[25]  = 'create';
+    $lang->lieu->methodOrder[30] = 'edit';
+    $lang->lieu->methodOrder[35] = 'delete';
+    $lang->lieu->methodOrder[40] = 'view';
+    $lang->lieu->methodOrder[45] = 'switchstatus';
+
+    /* Ops */
+    $lang->resource->tree->editHost = 'editHost';
+    $lang->resource->tree->browsehost = 'groupMaintenance';
+
+    $lang->tree->methodOrder[35] = 'editHost';
+    $lang->host->methodOrder[40] = 'groupMaintenance';
+
+    $lang->resource->ops = new stdclass();
+    $lang->resource->ops->index    = 'index';
+    $lang->resource->ops->setting  = 'setting';
+
+    $lang->ops->methodOrder[5]  = 'index';
+    $lang->ops->methodOrder[10] = 'setting';
+
+    $lang->resource->host = new stdclass();
+    $lang->resource->host->browse       = 'browse';
+    $lang->resource->host->create       = 'create';
+    $lang->resource->host->edit         = 'editAction';
+    $lang->resource->host->view         = 'view';
+    $lang->resource->host->delete       = 'deleteAction';
+    $lang->resource->host->changeStatus = 'changeStatus';
+    $lang->resource->host->treemap      = 'treemap';
+
+    $lang->host->methodOrder[5]  = 'browse';
+    $lang->host->methodOrder[10] = 'create';
+    $lang->host->methodOrder[15] = 'edit';
+    $lang->host->methodOrder[20] = 'view';
+    $lang->host->methodOrder[25] = 'delete';
+    $lang->host->methodOrder[30] = 'changeStatus';
+    $lang->host->methodOrder[35] = 'treemap';
+
+    $lang->resource->serverroom = new stdclass();
+    $lang->resource->serverroom->browse = 'browse';
+    $lang->resource->serverroom->create = 'create';
+    $lang->resource->serverroom->edit   = 'editAction';
+    $lang->resource->serverroom->view   = 'view';
+    $lang->resource->serverroom->delete = 'delete';
+
+    $lang->serverroom->methodOrder[5]  = 'browse';
+    $lang->serverroom->methodOrder[10] = 'create';
+    $lang->serverroom->methodOrder[15] = 'edit';
+    $lang->serverroom->methodOrder[20] = 'view';
+    $lang->serverroom->methodOrder[25] = 'delete';
+
+    $lang->resource->account = new stdclass();
+    $lang->resource->account->browse       = 'browse';
+    $lang->resource->account->create       = 'create';
+    $lang->resource->account->edit         = 'editAction';
+    $lang->resource->account->view         = 'view';
+    $lang->resource->account->delete       = 'deleteAction';
+
+    $lang->account = new stdclass();
+    $lang->account->methodOrder[5]  = 'browse';
+    $lang->account->methodOrder[10] = 'create';
+    $lang->account->methodOrder[15] = 'edit';
+    $lang->account->methodOrder[20] = 'view';
+    $lang->account->methodOrder[25] = 'delete';
+
+    $lang->resource->domain = new stdclass();
+    $lang->resource->domain->browse       = 'browse';
+    $lang->resource->domain->create       = 'create';
+    $lang->resource->domain->edit         = 'editAction';
+    $lang->resource->domain->view         = 'view';
+    $lang->resource->domain->delete       = 'deleteAction';
+
+    $lang->domain = new stdclass();
+    $lang->domain->methodOrder[5]  = 'browse';
+    $lang->domain->methodOrder[10] = 'create';
+    $lang->domain->methodOrder[15] = 'edit';
+    $lang->domain->methodOrder[20] = 'view';
+    $lang->domain->methodOrder[25] = 'delete';
+
+
+    $lang->resource->service = new stdclass();
+    $lang->resource->service->index  = 'index';
+    $lang->resource->service->create = 'create';
+    $lang->resource->service->edit   = 'edit';
+    $lang->resource->service->view   = 'view';
+    $lang->resource->service->delete = 'delete';
+    $lang->resource->service->manage = 'manage';
+    $lang->resource->service->browse = 'browse';
+
+    $lang->service->methodOrder[5]  = 'index';
+    $lang->service->methodOrder[10] = 'create';
+    $lang->service->methodOrder[15] = 'edit';
+    $lang->service->methodOrder[20] = 'view';
+    $lang->service->methodOrder[25] = 'delete';
+    $lang->service->methodOrder[30] = 'manage';
+    $lang->service->methodOrder[35] = 'browse';
+
+    $lang->resource->deploy = new stdclass();
+    $lang->resource->deploy->browse           = 'browse';
+    $lang->resource->deploy->create           = 'create';
+    $lang->resource->deploy->edit             = 'editAction';
+    $lang->resource->deploy->delete           = 'deleteAction';
+    $lang->resource->deploy->activate         = 'activateAction';
+    $lang->resource->deploy->finish           = 'finishAction';
+    $lang->resource->deploy->scope            = 'scope';
+    $lang->resource->deploy->manageScope      = 'manageScope';
+    $lang->resource->deploy->view             = 'view';
+    $lang->resource->deploy->cases            = 'casesAction';
+    $lang->resource->deploy->linkCases        = 'linkCases';
+    $lang->resource->deploy->unlinkCase       = 'unlinkCase';
+    $lang->resource->deploy->batchUnlinkCases = 'batchUnlinkCases';
+    $lang->resource->deploy->steps            = 'steps';
+    $lang->resource->deploy->manageStep       = 'manageStep';
+    $lang->resource->deploy->finishStep       = 'finishStep';
+    $lang->resource->deploy->assignTo         = 'assignAction';
+    $lang->resource->deploy->viewStep         = 'viewStep';
+    $lang->resource->deploy->editStep         = 'editStep';
+    $lang->resource->deploy->deleteStep       = 'deleteStep';
+
+    $lang->service->methodOrder[5]   = 'browse';
+    $lang->service->methodOrder[10]  = 'create';
+    $lang->service->methodOrder[15]  = 'edit';
+    $lang->service->methodOrder[20]  = 'delete';
+    $lang->service->methodOrder[25]  = 'activate';
+    $lang->service->methodOrder[30]  = 'finish';
+    $lang->service->methodOrder[35]  = 'scope';
+    $lang->service->methodOrder[40]  = 'manageScope';
+    $lang->service->methodOrder[45]  = 'view';
+    $lang->service->methodOrder[50]  = 'cases';
+    $lang->service->methodOrder[55]  = 'linkCases';
+    $lang->service->methodOrder[60]  = 'unlinkCase';
+    $lang->service->methodOrder[65]  = 'batchUnlinkCases';
+    $lang->service->methodOrder[70]  = 'steps';
+    $lang->service->methodOrder[75]  = 'manageStep';
+    $lang->service->methodOrder[80]  = 'finishStep';
+    $lang->service->methodOrder[85]  = 'assignTo';
+    $lang->service->methodOrder[90]  = 'viewStep';
+    $lang->service->methodOrder[95]  = 'editStep';
+    $lang->service->methodOrder[100] = 'deleteStep';
+
+    $lang->resource->doc->diff    = 'diffAction';
+    $lang->resource->doc->catalog = 'catalogAction';
+
+    $lang->resource->my->review = 'review';
+
+    /* workflow */
+    $lang->resource->workflow = new stdclass();
+    $lang->resource->workflow->browseFlow = 'browseFlow';
+    $lang->resource->workflow->browseDB   = 'browseDB';
+    $lang->resource->workflow->create     = 'create';
+    $lang->resource->workflow->copy       = 'copy';
+    $lang->resource->workflow->edit       = 'edit';
+    $lang->resource->workflow->backup     = 'backup';
+    $lang->resource->workflow->upgrade    = 'upgradeAction';
+    $lang->resource->workflow->view       = 'view';
+    $lang->resource->workflow->delete     = 'delete';
+    $lang->resource->workflow->flowchart  = 'flowchart';
+    $lang->resource->workflow->ui         = 'ui';
+    $lang->resource->workflow->release    = 'release';
+    $lang->resource->workflow->deactivate = 'deactivate';
+    $lang->resource->workflow->activate   = 'activate';
+    $lang->resource->workflow->setJS      = 'setJS';
+    $lang->resource->workflow->setCSS     = 'setCSS';
+
+    $lang->workflow->methodOrder[5]  = 'browseFlow';
+    $lang->workflow->methodOrder[10] = 'browseDB';
+    $lang->workflow->methodOrder[15] = 'create';
+    $lang->workflow->methodOrder[20] = 'copy';
+    $lang->workflow->methodOrder[25] = 'edit';
+    $lang->workflow->methodOrder[30] = 'backup';
+    $lang->workflow->methodOrder[35] = 'upgrade';
+    $lang->workflow->methodOrder[40] = 'view';
+    $lang->workflow->methodOrder[45] = 'delete';
+    $lang->workflow->methodOrder[50] = 'flowchart';
+    $lang->workflow->methodOrder[55] = 'ui';
+    $lang->workflow->methodOrder[60] = 'release';
+    $lang->workflow->methodOrder[65] = 'deactivate';
+    $lang->workflow->methodOrder[70] = 'activate';
+    $lang->workflow->methodOrder[75] = 'setJS';
+    $lang->workflow->methodOrder[80] = 'setCSS';
+
+    /* workflowfield */
+    $lang->resource->workflowfield = new stdclass();
+    $lang->resource->workflowfield->browse         = 'browse';
+    $lang->resource->workflowfield->create         = 'create';
+    $lang->resource->workflowfield->edit           = 'edit';
+    $lang->resource->workflowfield->delete         = 'delete';
+    $lang->resource->workflowfield->import         = 'import';
+    $lang->resource->workflowfield->showImport     = 'showImport';
+    $lang->resource->workflowfield->sort           = 'sort';
+    $lang->resource->workflowfield->exportTemplate = 'exportTemplate';
+    $lang->resource->workflowfield->setValue       = 'setValue';
+    $lang->resource->workflowfield->setExport      = 'setExport';
+    $lang->resource->workflowfield->setSearch      = 'setSearch';
+
+    $lang->workflowfield->methodOrder[5]  = 'browse';
+    $lang->workflowfield->methodOrder[10] = 'create';
+    $lang->workflowfield->methodOrder[15] = 'edit';
+    $lang->workflowfield->methodOrder[20] = 'delete';
+    $lang->workflowfield->methodOrder[25] = 'sort';
+    $lang->workflowfield->methodOrder[30] = 'import';
+    $lang->workflowfield->methodOrder[35] = 'showImport';
+    $lang->workflowfield->methodOrder[40] = 'exportTemplate';
+    $lang->workflowfield->methodOrder[45] = 'setValue';
+    $lang->workflowfield->methodOrder[50] = 'setExport';
+    $lang->workflowfield->methodOrder[55] = 'setSearch';
+
+    /* workflowaction */
+    $lang->resource->workflowaction = new stdclass();
+    $lang->resource->workflowaction->browse          = 'browse';
+    $lang->resource->workflowaction->create          = 'create';
+    $lang->resource->workflowaction->edit            = 'edit';
+    $lang->resource->workflowaction->view            = 'view';
+    $lang->resource->workflowaction->delete          = 'delete';
+    $lang->resource->workflowaction->sort            = 'sort';
+    $lang->resource->workflowaction->setVerification = 'setVerification';
+    $lang->resource->workflowaction->setNotice       = 'setNotice';
+    $lang->resource->workflowaction->setJS           = 'setJS';
+    $lang->resource->workflowaction->setCSS          = 'setCSS';
+
+    $lang->workflowaction->methodOrder[5]  = 'browse';
+    $lang->workflowaction->methodOrder[10] = 'create';
+    $lang->workflowaction->methodOrder[15] = 'edit';
+    $lang->workflowaction->methodOrder[20] = 'view';
+    $lang->workflowaction->methodOrder[25] = 'delete';
+    $lang->workflowaction->methodOrder[30] = 'sort';
+    $lang->workflowaction->methodOrder[35] = 'setVerification';
+    $lang->workflowaction->methodOrder[40] = 'setNotice';
+    $lang->workflowaction->methodOrder[45] = 'setJS';
+    $lang->workflowaction->methodOrder[50] = 'setCSS';
+
+    /* workflowcondition */
+    $lang->resource->workflowcondition = new stdclass();
+    $lang->resource->workflowcondition->browse = 'browse';
+    $lang->resource->workflowcondition->create = 'create';
+    $lang->resource->workflowcondition->edit   = 'edit';
+    $lang->resource->workflowcondition->delete = 'delete';
+
+    $lang->workflowcondition->methodOrder[5]  = 'browse';
+    $lang->workflowcondition->methodOrder[10] = 'create';
+    $lang->workflowcondition->methodOrder[15] = 'edit';
+    $lang->workflowcondition->methodOrder[20] = 'delete';
+
+    /* workflowlayout */
+    $lang->resource->workflowlayout = new stdclass();
+    $lang->resource->workflowlayout->admin = 'admin';
+    $lang->resource->workflowlayout->block = 'block';
+
+    $lang->workflowlayout->methodOrder[5]  = 'admin';
+    $lang->workflowlayout->methodOrder[10] = 'block';
+
+    /* workflowlinkage */
+    $lang->resource->workflowlinkage = new stdclass();
+    $lang->resource->workflowlinkage->browse = 'browse';
+    $lang->resource->workflowlinkage->create = 'create';
+    $lang->resource->workflowlinkage->edit   = 'edit';
+    $lang->resource->workflowlinkage->delete = 'delete';
+
+    $lang->workflowlinkage->methodOrder[5]  = 'browse';
+    $lang->workflowlinkage->methodOrder[10] = 'create';
+    $lang->workflowlinkage->methodOrder[15] = 'edit';
+    $lang->workflowlinkage->methodOrder[20] = 'delete';
+
+    /* workflowhook */
+    $lang->resource->workflowhook = new stdclass();
+    $lang->resource->workflowhook->browse = 'browse';
+    $lang->resource->workflowhook->create = 'create';
+    $lang->resource->workflowhook->edit   = 'edit';
+    $lang->resource->workflowhook->delete = 'delete';
+
+    $lang->workflowhook->methodOrder[5]  = 'browse';
+    $lang->workflowhook->methodOrder[10] = 'create';
+    $lang->workflowhook->methodOrder[15] = 'edit';
+    $lang->workflowhook->methodOrder[20] = 'delete';
+
+    /* workflowlabel */
+    $lang->resource->workflowlabel = new stdclass();
+    $lang->resource->workflowlabel->browse = 'browse';
+    $lang->resource->workflowlabel->create = 'create';
+    $lang->resource->workflowlabel->edit   = 'edit';
+    $lang->resource->workflowlabel->delete = 'delete';
+    $lang->resource->workflowlabel->sort   = 'sort';
+
+    $lang->workflowlabel->methodOrder[5]  = 'browse';
+    $lang->workflowlabel->methodOrder[10] = 'create';
+    $lang->workflowlabel->methodOrder[15] = 'edit';
+    $lang->workflowlabel->methodOrder[20] = 'delete';
+    $lang->workflowlabel->methodOrder[25] = 'sort';
+
+    /* workflowrelation */
+    $lang->resource->workflowrelation = new stdclass();
+    $lang->resource->workflowrelation->admin = 'admin';
+
+    $lang->workflowrelation->methodOrder[5] = 'admin';
+
+    /* workflowreport*/
+    $lang->resource->workflowreport = new stdclass();
+    $lang->resource->workflowreport->browse = 'brow';
+    $lang->resource->workflowreport->create = 'create';
+    $lang->resource->workflowreport->edit   = 'edit';
+    $lang->resource->workflowreport->delete = 'delete';
+    $lang->resource->workflowreport->sort   = 'sort';
+
+    $lang->workflowreport->methodOrder[5]  = 'browse';
+    $lang->workflowreport->methodOrder[10] = 'create';
+    $lang->workflowreport->methodOrder[15] = 'edit';
+    $lang->workflowreport->methodOrder[20] = 'delete';
+    $lang->workflowreport->methodOrder[25] = 'sort';
+
+    /* workflowdatasource */
+    $lang->resource->workflowdatasource = new stdclass();
+    $lang->resource->workflowdatasource->browse = 'browse';
+    $lang->resource->workflowdatasource->create = 'create';
+    $lang->resource->workflowdatasource->edit   = 'edit';
+    $lang->resource->workflowdatasource->delete = 'delete';
+
+    $lang->workflowdatasource->methodOrder[5]  = 'browse';
+    $lang->workflowdatasource->methodOrder[10] = 'create';
+    $lang->workflowdatasource->methodOrder[15] = 'edit';
+    $lang->workflowdatasource->methodOrder[20] = 'delete';
+
+    /* workflowrule */
+    $lang->resource->workflowrule = new stdclass();
+    $lang->resource->workflowrule->browse = 'browse';
+    $lang->resource->workflowrule->create = 'create';
+    $lang->resource->workflowrule->edit   = 'edit';
+    $lang->resource->workflowrule->view   = 'view';
+    $lang->resource->workflowrule->delete = 'delete';
+
+    $lang->workflowrule->methodOrder[5]  = 'browse';
+    $lang->workflowrule->methodOrder[10] = 'create';
+    $lang->workflowrule->methodOrder[15] = 'edit';
+    $lang->workflowrule->methodOrder[20] = 'view';
+    $lang->workflowrule->methodOrder[25] = 'delete';
+
+    $lang->resource->workflow->browse     = 'browseAction';
+    $lang->resource->workflow->release    = 'releaseAction';
+    $lang->resource->workflow->deactivate = 'deactivateAction';
+    $lang->resource->workflow->activate   = 'activateAction';
+    $lang->resource->workflow->setJS      = 'setJSAction';
+    $lang->resource->workflow->setCSS     = 'setCSSAction';
+
+    $lang->resource->workflowfield->browse = 'browseAction';
+
+    $lang->resource->workflowaction->browse = 'browseAction';
+    $lang->resource->workflowaction->setJS  = 'setJSAction';
+    $lang->resource->workflowaction->setCSS = 'setCSSAction';
+}
 // include (dirname(__FILE__) . '/changelog.php');
