@@ -1273,6 +1273,10 @@ EOF;
     {
         $_SESSION['vision'] = $vision;
         $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
+        $this->config->vision = $vision;
+
+        $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
+
         echo js::locate($this->createLink('my', 'index'), 'parent');
     }
 }
