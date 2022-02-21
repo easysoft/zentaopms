@@ -282,13 +282,15 @@ class gitlab
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
+     * @param  string $fromProject
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision, $fromProject = '')
+    public function diff($path, $fromRevision, $toRevision, $fromProject = '', $extra = '')
     {
-        if(!scm::checkRevision($fromRevision)) return array();
-        if(!scm::checkRevision($toRevision))   return array();
+        if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
+        if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
         $api    = "compare";
         $params = array('from' => $fromRevision, 'to' => $toRevision);
