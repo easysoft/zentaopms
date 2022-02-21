@@ -397,7 +397,8 @@ class gitlab
         $endLine = end($lines);
         if(strpos($endLine, '\ No newline at end of file') === 0) $num -= 1;
 
-        $newFile = false;
+        $newFile  = false;
+        $allFiles = array();
         for($i = 0; $i < $num; $i ++)
         {
             $diffFile = new stdclass();
@@ -405,6 +406,11 @@ class gitlab
             {
                 $fileInfo = explode(' ',$lines[$i]);
                 $fileName = substr($fileInfo[2], strpos($fileInfo[2], '/') + 1);
+
+                /* Prevent duplicate display of files. */
+                if(in_array($fileName, $allFiles)) continue;
+                $allFiles[] = $fileName;
+
                 $diffFile->fileName = $fileName;
                 for($i++; $i < $num; $i ++)
                 {

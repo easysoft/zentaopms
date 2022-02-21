@@ -226,7 +226,7 @@ class scm
      */
     public static function checkRevision($revision)
     {
-        if(preg_match('/[^a-z0-9\^]/i', $revision)) return false;
+        if(preg_match('/[^a-z0-9\-\^]/i', $revision)) return false;
         return true;
     }
 }

@@ -80,6 +80,7 @@ $lang->mr->statusList['merged'] = '已合并';
 $lang->mr->statusList['closed'] = '已关闭';
 
 $lang->mr->mergeStatusList = array();
+$lang->mr->mergeStatusList['unchecked']            = '未检查';
 $lang->mr->mergeStatusList['checking']             = '检查中';
 $lang->mr->mergeStatusList['can_be_merged']        = '可合并';
 $lang->mr->mergeStatusList['cannot_be_merged']     = '不可自动合并';
