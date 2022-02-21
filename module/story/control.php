@@ -325,6 +325,9 @@ class story extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->story->custom->createFields;
 
+        $reviewers = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $reviewers['ditto'] = $this->lang->story->ditto;
+
         $this->view->title            = $product->name . $this->lang->colon . $this->lang->story->create;
         $this->view->position[]       = html::a($this->createLink('product', 'browse', "product=$productID&branch=$branch"), $product->name);
         $this->view->position[]       = $this->lang->story->common;
@@ -345,7 +348,7 @@ class story extends control
         $this->view->stories          = $this->story->getParentStoryPairs($productID);
         $this->view->productID        = $productID;
         $this->view->product          = $product;
-        $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
+        $this->view->reviewers        = $reviewers;
         $this->view->objectID         = $objectID;
         $this->view->estimate         = $estimate;
         $this->view->storyTitle       = $title;

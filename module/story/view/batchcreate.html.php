@@ -95,7 +95,12 @@
             <td class='text-left' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'>
+            <?php
+            echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");
+            echo "<span id='dittoBox' class='input-group-addon reviewsBox'><input type='checkbox' name='reviewDitto[]' id='reviewDitto'/> {$lang->story->ditto}</span>";
+            ?>
+            </td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";?>
           </tr>
@@ -123,11 +128,14 @@ $(function()
         idEnd: <?php echo max((empty($titles) ? 0 : count($titles)), 9)?>,
         rowCreator: function($row, index)
         {
+            console.log($row);
+            console.log(index);
             $row.find('select.chosen,select.picker-select').each(function()
             {
                 var $select = $(this);
                 if($select.hasClass('picker-select')) $select.parent().find('.picker').remove();
                 if(index == 0) $select.find("option[value='ditto']").remove();
+                if(index == 0) $select.find("#dittoBox").remove();
                 if(index > 0) $select.val('ditto');
                 if($select.attr('id').indexOf('branch') >= 0) $select.val('<?php echo $branch;?>')
                 $select.chosen();
