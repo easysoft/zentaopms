@@ -11,6 +11,11 @@ class myTask extends task
             die(js::locate(helper::createLink('execution', 'create')));
         }
 
+        $regionList = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
+
+        $this->view->regionList = $regionList;
+        $this->view->laneList   = array('', '');
+
         return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra);
     }
 }
