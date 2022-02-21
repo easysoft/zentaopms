@@ -247,6 +247,13 @@ class taskModel extends model
         $preStory  = 0;
         $tasks     = fixer::input('post')->get();
 
+        if($this->config->vision == 'lite')
+        {
+            $lanes   = $tasks->lane;
+            $columns = $tasks->column;
+            unset($tasks->lane);
+            unset($tasks->column);
+        }
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -405,7 +412,14 @@ class taskModel extends model
 
             $this->executeHooks($taskID);
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            if($this->config->vision == 'lite')
+            {
+                $this->kanban->addKanbanCell($executionID, $lanes[$i], $columns[$i], 'task', $taskID);
+            }
+            else
+            {
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            }
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
@@ -459,7 +473,7 @@ class taskModel extends model
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'task');
+        if(!isset($output['laneID']) or !isset($output['columnID']) or !isset($lanes)) $this->kanban->updateLane($executionID, 'task');
         return $mails;
     }
 
