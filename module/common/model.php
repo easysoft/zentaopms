@@ -405,8 +405,6 @@ class commonModel extends model
                 echo '</a></li><li class="divider"></li>';
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
-                if(strpos($app->user->visions, $vision) !== false) echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
-                echo '<li class="divider"></li>';
 
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
@@ -479,17 +477,24 @@ class commonModel extends model
 
         if(isset($app->user))
         {
-            $vision  = $app->config->vision;
+            $currentVision = $app->config->vision;
+            $userVisions   = array_filter(explode(',', $app->user->visions));
+            if(count($userVisions) < 2)
+            {
+                echo "<div>{$lang->visionList[$currentVision]}</div>";
+                return;
+            }
 
             echo "<ul class='dropdown-menu pull-right'>";
-            foreach($lang->visionList as $visionKey => $visionName)
+            echo "<li class='text-gray'>{$lang->switchTo}:</li>";
+            foreach($userVisions as $vision)
             {
-                echo ($vision == $visionKey ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$visionKey"), $visionName, '', "data-type='ajax'") . '</li>';
+                echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
             }
             echo '</ul>';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div>{$lang->visionList[$vision]}</div>";
+            echo "<div>{$lang->visionList[$currentVision]}</div>";
             echo '</a>';
         }
     }
