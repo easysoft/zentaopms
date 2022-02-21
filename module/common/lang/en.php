@@ -145,6 +145,8 @@ $lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
 
+$lang->pri = 'Priority';
+
 $lang->common->common     = 'Common Module';
 $lang->my->common         = 'My';
 $lang->program->common    = 'Program';
