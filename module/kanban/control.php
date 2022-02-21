@@ -1692,6 +1692,8 @@ class kanban extends control
      *
      * @param  int    $regionID
      * @param  string $type all|story|task|bug
+     * @param  string $field otherLane|lane
+     * @param  int    $i
      * @access public
      * @return string
      */
