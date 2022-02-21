@@ -262,13 +262,13 @@ class gitlab
             $line['lines']     = count($blame->lines);
             $line['content']   = array_shift($blame->lines);
 
-            $blames[] = $line;
+            $blames[$lineNumber] = $line;
 
             $lineNumber ++;
 
             foreach($blame->lines as $line)
             {
-                $blames[] = array('line' => $lineNumber, 'content' => $line);
+                $blames[$lineNumber] = array('line' => $lineNumber, 'content' => $line);
                 $lineNumber ++;
             }
         }
@@ -539,9 +539,30 @@ class gitlab
     public function getCommits($version = '', $count = 0, $branch = '')
     {
         if(!scm::checkRevision($version)) return array();
-        $api = "commits";
+        $api     = "commits";
+        $commits = array();
+        $files   = array();
 
         if(empty($count)) $count = 10;
+
+        if(!empty($version) and $count == 1)
+        {
+            $api .= '/' . $version;
+            $commit = $this->fetch($api);
+            if(isset($commit->id))
+            {
+                $log = new stdclass;
+                $log->committer = $commit->committer_name;
+                $log->revision  = $commit->id;
+                $log->comment   = $commit->message;
+                $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+
+                $commits[$commit->id] = $log;
+                $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+
+                return array('commits' => $commits, 'files' => $files);
+            }
+        }
 
         $params = array();
         $params['ref_name'] = $branch;
@@ -572,8 +593,6 @@ class gitlab
 
         $list = $this->fetch($api, $params);
 
-        $commits = array();
-        $files   = array();
         foreach($list as $commit)
         {
             if(!is_object($commit)) continue;
