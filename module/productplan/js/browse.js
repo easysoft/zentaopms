@@ -59,7 +59,7 @@ $(function()
             data:         kanbanData,
             minColWidth:  290,
             maxColWidth:  290,
-            maxColHeight: (product.type == 'branch') ? 460 : 806,
+            maxColHeight: 460,
             minColHeight: 190,
             cardHeight:   80,
             itemRender:   renderKanbanItem,
@@ -71,6 +71,8 @@ $(function()
                 mouseButton: 'left'
             }
         });
+
+        resetLaneHeight();
 
         $('#kanban').on('scroll', function()
         {
@@ -213,6 +215,24 @@ function findDropColumns($element, $root)
         return colRules.indexOf(newCol.type) > -1 && newLane.id === lane.id;
     });
 }
+
+/**
+ * Reset lane height according to window height.
+ */
+function resetLaneHeight()
+{
+    if(product.type == 'normal')
+    {
+        var windowHeight = $(window).height();
+        var mainHeader   = $('#mainHeader').outerHeight();
+        var marginMenu   = $('#mainMenu').outerHeight();
+        var headerHeight = $('#kanban > .kanban-board > .kanban-header').outerHeight();
+
+        maxHeight = windowHeight - headerHeight - mainHeader - marginMenu - 80;
+        $('.kanban-lane').css('height', maxHeight);
+    }
+}
+
 
 /**
  * Handle finish drop card.
