@@ -75,6 +75,7 @@
     $checkObject->execution = $executionID;
     $canCreateTask       = common::hasPriv('task',  'create', $checkObject);
     $canBatchCreateTask  = common::hasPriv('task',  'batchCreate', $checkObject);
+    $canImportBug        = common::hasPriv('execution', 'importBug');    
     $canCreateBug        = common::hasPriv('bug',   'create');
     $canBatchCreateBug   = common::hasPriv('bug',   'batchCreate');
     $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
@@ -82,10 +83,10 @@
     $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
     $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories'));
     $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
-    $hasTaskButton       = ($canCreateTask or $canBatchCreateTask);
+    $hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
     $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
     ?>
-    <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
+    <?php if($canCreateTask or $canBatchCreateTask or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
     <div class='dropdown' id='createDropdown'>
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
@@ -99,11 +100,12 @@
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
+        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "execution=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe'") . '</li>';?>
       </ul>
     </div>
     <?php endif;?>
     <?php else:?>
-    <?php $canCreateTask = $canBatchCreateTask = $canCreateBug = $canBatchCreateBug = $canCreateStory = $canBatchCreateStory = $canLinkStory = $canLinkStoryByPlan = false;?>
+    <?php $canCreateTask = $canBatchCreateTask = $canImportBug = $canCreateBug = $canBatchCreateBug = $canCreateStory = $canBatchCreateStory = $canLinkStory = $canLinkStoryByPlan = false;?>
     <?php endif;?>
   </div>
 </div>
@@ -146,6 +148,7 @@ js::set('priv',
         'canSortCards'        => common::hasPriv('kanban', 'cardsSort'),
         'canCreateTask'       => $canCreateTask,
         'canBatchCreateTask'  => $canBatchCreateTask,
+        'canImportBug'        => $canImportBug,
         'canCreateBug'        => $canCreateBug,
         'canBatchCreateBug'   => $canBatchCreateBug,
         'canCreateStory'      => $canCreateStory,
