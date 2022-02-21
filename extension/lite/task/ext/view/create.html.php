@@ -199,13 +199,14 @@
             </div>
           </td>
         </tr>
+        <?php if(count($regionList) > 1 or count($lanes) > 1 or empty($extra)):?>
         <tr>
           <th><?php echo $lang->task->region;?></th>
-          <td><?php echo html::select('region[]', $regionList, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td    ><td></td>
+          <td><?php echo html::select('region', $regionList, isset($regionID) ? $regionID : '', "class='form-control chosen' onchange='loadLaneGroup(this.value)' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->lane;?></th>
-          <td><?php echo html::select('lane[]', $laneList, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td    ><td></td>
+          <td><?php echo html::select('otherLane', $laneList, '', "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
         </tr>
         <tr>
           <th><?php echo $lang->task->desc;?></th>
@@ -214,6 +215,7 @@
             <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows='10' class='form-control'");?>
           </td>
         </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->files;?></th>
           <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
@@ -331,16 +333,21 @@
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
 <script>
-$(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
+$(function()
+{
+    var regionID = $('#region').val();
+    loadLaneGroup(regionID);
+    parent.$('body.hide-modal-close').removeClass('hide-modal-close');
+})
 
 function loadLaneGroup(regionID)
 {
-    var link = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID);
+    var link = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task');
     $.post(link, function(data)
     {
-        $('#assignedTo').replaceWith(data);
-        $('#assignedTo_chosen').remove();
-        $('#assignedTo').chosen();
+        $('#otherLane').replaceWith(data);
+        $('#otherLane_chosen').remove();
+        $('#otherLane').chosen();
     })
 }
 </script>
