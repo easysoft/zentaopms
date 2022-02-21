@@ -149,7 +149,18 @@
           <?php if($type == 'story' and $this->config->URAndSR):?>
           <tr>
             <th><?php echo $lang->story->requirement;?></th>
-            <td colspan="4"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="2"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
+            <td colspan="2">
+              <div class='input-group' id='moduleIdBox'>
+                <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
+                <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
+              </div>  
+            </td>
+          </tr> 
+          <?php else:?>
+          <tr>
+            <th><?php echo $lang->story->parent;?></th>
+            <td colspan="4"><?php echo html::select('parent', $stories, '', "class='form-control chosen'");?></td>
           </tr>
           <?php endif;?>
           <tr>
