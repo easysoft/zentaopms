@@ -15,9 +15,9 @@ tmp/extension/*
 extension/pro/*
 extension/biz/*
 extension/max/*
+extension/xuan/*
 extension/custom/*
 test/data/sql/
-.gitkeep
 .bak
 .idea
 .vscode
@@ -31,3 +31,4 @@ composer.lock
 CodeSniffer.conf
 test/runtime/*
 test/www
+!/**/.gitkeep
