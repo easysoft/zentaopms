@@ -51,7 +51,7 @@
           if(strpos(",{$config->task->customBatchCreateFields},", ",{$field},") !== false) $visibleFields[$field] = '';
       }
   }
-  $colspan     = count($visibleFields) + 3;
+  $colspan = count($visibleFields) + 3;
   ?>
   <form method='post' class='load-indicator batch-actions-form form-ajax' enctype='multipart/form-data' id="batchCreateForm">
     <div class="table-responsive">
