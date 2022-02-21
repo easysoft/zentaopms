@@ -115,11 +115,15 @@ class scm
      */
     public function diff($path, $fromRevision = 0, $toRevision = 'HEAD', $parse = 'yes', $extra = '')
     {
-        if(!scm::checkRevision($fromRevision)) return array();
-        if(!scm::checkRevision($toRevision))   return array();
+        if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
+        if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
         if(!$extra) $diffs = $this->engine->diff($path, $fromRevision, $toRevision);
-        if($extra) $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra);
+        if($extra)
+        {
+            if(get_class($this->engine) == 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, '', $extra);
+            if(get_class($this->engine) != 'gitlab') $diffs = $this->engine->diff($path, $fromRevision, $toRevision, $extra);
+        }
 
         if($parse  != 'yes') return implode("\n", $diffs);
         return $this->engine->parseDiff($diffs);

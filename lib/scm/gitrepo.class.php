@@ -261,13 +261,14 @@ class GitRepo
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision)
+    public function diff($path, $fromRevision, $toRevision, $extra = '')
     {
-        if(!scm::checkRevision($fromRevision)) return array();
-        if(!scm::checkRevision($toRevision))   return array();
+        if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
+        if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);

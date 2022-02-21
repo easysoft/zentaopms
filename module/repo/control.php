@@ -709,10 +709,11 @@ class repo extends control
      * @param  string $newRevision
      * @param  string $showBug
      * @param  string $encoding
+     * @param  bool   $isBranchOrTag
      * @access public
      * @return void
      */
-    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
     {
         $this->commonAction($repoID, $objectID);
 
@@ -745,7 +746,7 @@ class repo extends control
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
         $info     = $this->scm->info($entry, $newRevision);
-        $diffs    = $this->scm->diff($entry, $oldRevision, $newRevision);
+        $diffs    = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
         foreach($diffs as $diff)
         {
             if($encoding != 'utf-8')
