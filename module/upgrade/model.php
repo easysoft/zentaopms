@@ -5633,4 +5633,124 @@ class upgradeModel extends model
         }
         return true;
     }
+
+    /**
+     * Get extent files.
+     *
+     * @access public
+     * @return array
+     */
+    public function getEXTFiles()
+    {
+        $files           = array();
+        $files['custom'] = array();
+        $files['charge'] = array();
+
+        $dirs = array('control', 'model', 'css', 'js', 'view', 'config', 'lang');
+        foreach($this->config->upgrade->allModule as $module)
+        {
+            $extRoot = $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . 'ext';
+            if(!is_dir($extRoot)) continue;
+            
+            foreach($dirs as $dir)
+            {
+                $realPath = $extRoot . DIRECTORY_SEPARATOR . $dir;
+                $path     = $module . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . $dir;
+
+                if(is_dir($realPath))
+                {
+                    /* If both the control and model files are encrypted, the current module is not customized. */
+                    if($dir != 'control' and $dir != 'model' and empty($files['custom'])) continue;
+
+                    $extFiles = $this->getPluginFiles($module, $dir, $realPath, $path);
+                    $files['custom'] += $extFiles['custom'];
+                    $files['charge'] += $extFiles['charge'];
+                }
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Get plugin files.
+     *
+     * @param  string $module
+     * @param  string $dir
+     * @param  string $realPath
+     * @param  string $path
+     * @access public
+     * @return array
+     */
+    public function getPluginFiles($module, $dir, $realPath, $path)
+    {
+        $files = array();
+        $files['custom'] = array();
+        $files['charge'] = array();
+
+        $extFiles = scandir($realPath);
+        foreach($extFiles as $extFile)
+        {
+            if($extFile === '.' or $extFile === '..') continue;
+
+            $filePath = $realPath . DIRECTORY_SEPARATOR . $extFile;
+            $fileName = $path . DIRECTORY_SEPARATOR . $extFile;
+
+            /* If the current point to a directory, traverse the files in the directory. */
+            if(is_dir($filePath))
+            {
+                $pluginFiles = $this->getPluginFiles($module, $dir, $filePath, $fileName);
+
+                $files['custom'] += $pluginFiles['custom'];
+                $files['charge'] += $pluginFiles['charge'];
+            }
+            else
+            {
+                $handle = fopen($filePath, 'r');
+                $i      = 0;
+                $line   = '';
+                while(!feof($handle))
+                {
+                    $line = fgets($handle);
+                    if(++ $i > 1) break;
+                }
+                fclose($handle);
+
+                /* Determine whether the current file is encrypted. */
+                if(($dir == 'control' or $dir == 'model') and strpos($line, "extension_loaded('ionCube Loader')") !== false)
+                {
+                    $files['charge'][$fileName] = $fileName;
+                }
+                else
+                {
+                    $files['custom'][$fileName] = $fileName;
+                }
+            }
+        }
+
+        return $files;
+    }
+
+    /**
+     * Move extent files.
+     * 
+     * @access public
+     * @return void
+     */
+    public function moveEXTFiles()
+    {
+        $data       = fixer::input('post')->get();
+        $customRoot = $this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom';
+        if(!is_dir($customRoot)) @mkdir($customRoot, 0777);
+
+        foreach($data->files as $file)
+        {
+            $dirRoot  = $customRoot . DIRECTORY_SEPARATOR . dirname($file);
+            $fileName = basename($file);
+            $fromPath = $this->app->getModuleRoot() . $file;
+            $toPath   = $dirRoot . DIRECTORY_SEPARATOR . $fileName;
+            if(!is_dir($dirRoot)) @mkdir($dirRoot, 0777, true);
+            copy($fromPath, $toPath);
+        }
+    }
 }

@@ -50,3 +50,5 @@ $config->upgrade->discardedBugTypes['zh-tw']['trackthings']  = '事務跟蹤';
 
 $config->delete['10.6'][]   = 'module/chat/ext/control/extensions.php';
 $config->delete['12.4.2'][] = 'www/js/ueditor';
+
+$config->upgrade->allModule = array('action','common','execution','job','productplan','search','testtask','admin','company','extension','kanban','program','setting','todo','api','compile','file','license','programplan','sonarqube','tree','automation','convert','git','mail','project','sso','tutorial','backup','cron','gitlab','message','projectbuild','stage','upgrade','block','custom','group','misc','projectrelease','stakeholder','user','branch','datatable','holiday','mr','projectstory','story','webhook','bug','dept','im','my','qa','svn','weekly','build','design','index','owt','release','task','caselib','dev','personnel','repo','testcase','ci','doc','install','pipeline','report','testreport','client','entry','jenkins','product','score','testsuite');
