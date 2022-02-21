@@ -14,7 +14,7 @@ class myTask extends task
         $regionList = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
 
         $this->view->regionList = $regionList;
-        $this->view->laneList   = array('', '');
+        $this->view->laneList   = array();
         $this->view->extra      = $extra;
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -25,7 +25,6 @@ class myTask extends task
             $regionID = $this->dao->select("*")->from(TABLE_KANBANLANE)->where('id')->eq($output['laneID'])->fetch('region');
             $lanes    = $this->kanban->getLanePairsByRegion($regionID, 'task');
             $this->view->regionID = $regionID;
-
         }
 
         $this->view->lanes = $lanes;
