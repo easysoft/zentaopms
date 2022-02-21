@@ -146,7 +146,8 @@
             </td>
             <?php endif;?>
           </tr>
-          <?php if($type == 'story' and $this->config->URAndSR):?>
+          <?php if($type == 'story'):?>
+          <?php if($this->config->URAndSR):?>
           <tr>
             <th><?php echo $lang->story->requirement;?></th>
             <td colspan="2"><?php echo html::select('URS[]', $URS, '', "class='form-control chosen' multiple");?></td>
@@ -162,6 +163,7 @@
             <th><?php echo $lang->story->parent;?></th>
             <td colspan="4"><?php echo html::select('parent', $stories, '', "class='form-control chosen'");?></td>
           </tr>
+          <?php endif;?>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->title;?></th>
