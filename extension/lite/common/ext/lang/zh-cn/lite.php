@@ -18,9 +18,12 @@ if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
+
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
     $lang->mainNav->workflow = $lang->navIcons['workflow'] . '工作流|workflow|browseFlow|';
+
+    if($config->visions == ',lite,') unset($lang->mainNav->feedback);
 }
 
 /* Menu order. */
@@ -38,6 +41,8 @@ if($config->edition != 'open')
     $lang->mainNav->menuOrder[25] = 'feedback';
     $lang->mainNav->menuOrder[60] = 'workflow';
     $lang->dividerMenu = ',oa,admin,';
+
+    if($config->visions == ',lite,') unset($lang->mainNav->menuOrder[25]);
 }
 else
 {
@@ -207,7 +212,8 @@ $lang->searchObjects['doc']       = '文档';
 $lang->searchObjects['project']   = '项目';
 $lang->searchObjects['execution'] = '看板';
 
-if($config->edition != 'open') $lang->searchObjects['feedback']  = '反馈';
+if($config->edition != 'open') $lang->searchObjects['feedback'] = '反馈';
+if($config->visions == ',lite,') unset($lang->searchObjects['feedback']);
 
 $lang->navGroup->task      = 'project';
 $lang->navGroup->execution = 'project';
