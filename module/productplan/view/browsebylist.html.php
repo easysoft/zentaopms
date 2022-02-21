@@ -48,7 +48,7 @@
       <?php $vars = "productID=$productID&branch=$branch&browseType=$browseType&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}"; ?>
       <tr>
         <th class='c-id'>
-          <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+          <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <div class="checkbox-primary check-all" title="<?php echo $lang->selectAll?>">
             <label></label>
           </div>
@@ -104,7 +104,7 @@
       ?>
       <tr class='<?php echo $class;?>'>
         <td class='cell-id'>
-          <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+          <?php if(common::hasPriv('productplan', 'batchEdit') or common::hasPriv('productplan', 'batchChangeStatus')):?>
           <?php echo html::checkbox('planIDList', array($plan->id => ''), '', $attribute) . html::a(helper::createLink('productplan', 'view', "planID=$plan->id"), sprintf('%03d', $plan->id));?>
           <?php else:?>
           <?php echo sprintf('%03d', $plan->id);?>
@@ -211,12 +211,26 @@
       </tbody>
     </table>
     <div class="table-footer">
-      <?php if(common::hasPriv('productplan', 'batchEdit')):?>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar">
-        <?php echo html::submitButton($lang->edit, '', 'btn');?>
-      </div>
+      <?php if(common::hasPriv('productplan', 'batchEdit')):?>
+      <?php $actionLink = $this->inlink('batchEdit', "productID=$product->id&branch=$branch");?>
+      <?php echo html::submitButton($lang->edit, "onclick=\"setFormAction('$actionLink')\"", 'btn');?>
       <?php endif;?>
+      <?php if(common::hasPriv('productplan', 'batchChangeStatus')):?>
+        <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->productplan->planStatus;?> <span class="caret"></span></button>
+        <div class="dropdown-menu search-list">
+        <div class="list-group">
+          <?php
+          foreach($lang->productplan->statusList as $key => $status)
+          {
+              $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key");
+              echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+          }
+          ?>
+        </div>
+      <?php endif;?>
+      </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
   </form>

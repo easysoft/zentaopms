@@ -563,22 +563,23 @@ $lang->story->methodOrder[140] = 'processStoryChange';
 
 /* Product plan. */
 $lang->resource->productplan = new stdclass();
-$lang->resource->productplan->browse           = 'browse';
-$lang->resource->productplan->create           = 'create';
-$lang->resource->productplan->edit             = 'edit';
-$lang->resource->productplan->delete           = 'delete';
-$lang->resource->productplan->view             = 'view';
-$lang->resource->productplan->linkStory        = 'linkStory';
-$lang->resource->productplan->unlinkStory      = 'unlinkStory';
-$lang->resource->productplan->batchUnlinkStory = 'batchUnlinkStory';
-$lang->resource->productplan->linkBug          = 'linkBug';
-$lang->resource->productplan->unlinkBug        = 'unlinkBug';
-$lang->resource->productplan->batchUnlinkBug   = 'batchUnlinkBug';
-$lang->resource->productplan->batchEdit        = 'batchEdit';
-$lang->resource->productplan->start            = 'start';
-$lang->resource->productplan->finish           = 'finish';
-$lang->resource->productplan->close            = 'close';
-$lang->resource->productplan->activate         = 'activate';
+$lang->resource->productplan->browse            = 'browse';
+$lang->resource->productplan->create            = 'create';
+$lang->resource->productplan->edit              = 'edit';
+$lang->resource->productplan->delete            = 'delete';
+$lang->resource->productplan->view              = 'view';
+$lang->resource->productplan->linkStory         = 'linkStory';
+$lang->resource->productplan->unlinkStory       = 'unlinkStory';
+$lang->resource->productplan->batchUnlinkStory  = 'batchUnlinkStory';
+$lang->resource->productplan->linkBug           = 'linkBug';
+$lang->resource->productplan->unlinkBug         = 'unlinkBug';
+$lang->resource->productplan->batchUnlinkBug    = 'batchUnlinkBug';
+$lang->resource->productplan->batchEdit         = 'batchEdit';
+$lang->resource->productplan->start             = 'start';
+$lang->resource->productplan->finish            = 'finish';
+$lang->resource->productplan->close             = 'close';
+$lang->resource->productplan->activate          = 'activate';
+$lang->resource->productplan->batchChangeStatus = 'batchChangeStatus';
 
 $lang->productplan->methodOrder[5]  = 'browse';
 $lang->productplan->methodOrder[10] = 'create';
@@ -596,6 +597,7 @@ $lang->productplan->methodOrder[65] = 'start';
 $lang->productplan->methodOrder[70] = 'finish';
 $lang->productplan->methodOrder[75] = 'close';
 $lang->productplan->methodOrder[80] = 'activate';
+$lang->productplan->methodOrder[85] = 'batchChangeStatus';
 
 /* Release. */
 $lang->resource->release = new stdclass();
