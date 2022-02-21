@@ -342,6 +342,7 @@ class story extends control
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+        $this->view->stories          = $this->story->getParentStoryPairs($productID);
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
