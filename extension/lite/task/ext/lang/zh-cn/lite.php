@@ -25,6 +25,8 @@ $lang->task->activateAction      = "激活任务";
 $lang->task->exportAction        = "导出任务";
 $lang->task->copy                = '复制任务';
 $lang->task->waitTask            = '未开始的任务';
+$lang->task->region              = '所属区域';
+$lang->task->lane                = '所属泳道';
 
 $lang->task->module            = '所属目录';
 $lang->task->common            = '任务';
