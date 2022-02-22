@@ -507,8 +507,8 @@ class docModel extends model
         {
             echo(js::alert($this->lang->doc->accessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
-            die(js::locate('back'));
+            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
+            return print(js::locate('back'));
         }
         $version    = $version ? $version : $doc->version;
         $docContent = $this->dao->select('*')->from(TABLE_DOCCONTENT)->where('doc')->eq($doc->id)->andWhere('version')->eq($version)->fetch();
@@ -2611,7 +2611,7 @@ EOT;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-            if(empty($object)) die(js::locate(helper::createLink($type, 'create')));
+            if(empty($object)) return print(js::locate(helper::createLink($type, 'create')));
         }
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';

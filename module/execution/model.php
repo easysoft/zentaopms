@@ -44,12 +44,12 @@ class executionModel extends model
 
         echo(js::alert($this->lang->execution->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('execution', 'index')));
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('execution', 'index')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('execution', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('execution', 'index')));
 
-        die(js::locate(helper::createLink('execution', 'all')));
+        return print(js::locate(helper::createLink('execution', 'all')));
     }
 
     /**
@@ -70,7 +70,7 @@ class executionModel extends model
             $this->lang->execution->accessDenied = str_replace($this->lang->executionCommon, $this->lang->execution->kanban, $this->lang->execution->accessDenied);
         }
 
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) die(js::error($this->lang->execution->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->sprints},", ",$executionID,") === false and !defined('TUTORIAL') and $executionID != 0) return print(js::error($this->lang->execution->accessDenied) . js::locate('back'));
 
         $executions = $this->getPairs(0, 'all', 'nocode');
         if(!$executionID and $this->session->execution) $executionID = $this->session->execution;
@@ -649,10 +649,10 @@ class executionModel extends model
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         foreach($executions as $executionID => $execution)
         {
@@ -671,7 +671,7 @@ class executionModel extends model
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
-            if(dao::isError()) die(js::error('execution#' . $executionID . dao::getError(true)));
+            if(dao::isError()) return print(js::error('execution#' . $executionID . dao::getError(true)));
 
             if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {
@@ -2107,7 +2107,7 @@ class executionModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
 
             $taskID = $this->dao->lastInsertID();
@@ -2152,7 +2152,7 @@ class executionModel extends model
                 $newBug->assignedTo     = $task->assignedTo;
                 $newBug->assignedDate   = $now;
                 $this->dao->update(TABLE_BUG)->data($newBug)->where('id')->eq($key)->exec();
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
                 $changes = common::createChanges($bug, $newBug);
 
                 $actionID = $this->action->create('bug', $key, 'Assigned', '', $newBug->assignedTo);
@@ -2412,7 +2412,7 @@ class executionModel extends model
         {
             $executions       = $this->dao->select('*')->from(TABLE_EXECUTION)->where('parent')->eq($executionID)->fetchAll('id');
             $executionStories = $this->dao->select('project,story')->from(TABLE_PROJECTSTORY)->where('story')->eq($storyID)->andWhere('project')->in(array_keys($executions))->fetchAll();
-            if(!empty($executionStories)) die(js::alert($this->lang->execution->notAllowedUnlinkStory));
+            if(!empty($executionStories)) return print(js::alert($this->lang->execution->notAllowedUnlinkStory));
         }
         $this->dao->delete()->from(TABLE_PROJECTSTORY)->where('project')->eq($executionID)->andWhere('story')->eq($storyID)->limit(1)->exec();
 

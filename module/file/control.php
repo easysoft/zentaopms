@@ -56,11 +56,11 @@ class file extends control
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api')
                 {
-                    die(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
+                    return print(json_encode(array('status' => 'error', 'message' => $this->lang->file->errorFileUpload)));
                 }
                 else
                 {
-                    die(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
+                    return print(json_encode(array('error' => 1, 'message' => $this->lang->file->errorFileUpload)));
                 }
             }
             if(@move_uploaded_file($file['tmpname'], $this->file->savePath . $this->file->getSaveName($file['pathname'])))
@@ -84,7 +84,7 @@ class file extends control
                 }
                 else
                 {
-                    die(json_encode(array('error' => 0, 'url' => $url)));
+                    return print(json_encode(array('error' => 0, 'url' => $url)));
                 }
             }
             else
@@ -96,7 +96,7 @@ class file extends control
                 }
                 else
                 {
-                    die(json_encode(array('error' => 1, 'message' => $error)));
+                    return print(json_encode(array('error' => 1, 'message' => $error)));
                 }
             }
         }
@@ -118,7 +118,7 @@ class file extends control
         if(empty($file))
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound));
-            die("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
+            return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
         }
 
         /* Judge the mode, down or open. */
@@ -161,7 +161,7 @@ class file extends control
         else
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => $this->lang->file->fileNotFound));
-            die("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
+            return print("<html><head><meta charset='utf-8'></head><body>{$this->lang->file->fileNotFound}</body></html>");
         }
     }
 
@@ -267,7 +267,7 @@ class file extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->file->confirmDelete, inlink('delete', "fileID=$fileID&confirm=yes")));
+            return print(js::confirm($this->lang->file->confirmDelete, inlink('delete', "fileID=$fileID&confirm=yes")));
         }
         else
         {
@@ -277,7 +277,7 @@ class file extends control
             /* Fix Bug #1518. */
             $fileRecord = $this->dao->select('id')->from(TABLE_FILE)->where('pathname')->eq($file->pathname)->fetch();
             if(empty($fileRecord)) @unlink($file->realPath);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -315,7 +315,7 @@ class file extends control
             if(validater::checkLength($data->fileName, 80, 1) == false)
             {
                 $errTip = $this->lang->error->length;
-                die(js::alert(sprintf($errTip[1], $this->lang->file->title, 80, 1)));
+                return print(js::alert(sprintf($errTip[1], $this->lang->file->title, 80, 1)));
             }
             $fileName = $data->fileName . '.' . $data->extension;
             $this->dao->update(TABLE_FILE)->set('title')->eq($fileName)->where('id')->eq($fileID)->exec();
@@ -325,7 +325,7 @@ class file extends control
             $changes[] = array('field' => 'fileName', 'old' => $file->title . $extension, 'new' => $fileName);
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->file = $this->file->getById($fileID);
@@ -340,7 +340,7 @@ class file extends control
      */
     public function ajaxPasteImg($uid = '')
     {
-        if($_POST) die($this->file->pasteImage($this->post->editor, $uid));
+        if($_POST) return print($this->file->pasteImage($this->post->editor, $uid));
     }
 
     /**
@@ -359,22 +359,22 @@ class file extends control
             $imageFiles  = $this->session->$sessionName;
             $this->session->set($module . 'ImagesFile', $imageFiles);
             unset($_SESSION[$sessionName]);
-            die(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent'));
+            return print(js::locate($this->createLink($module, 'batchCreate', helper::safe64Decode($params)), 'parent'));
         }
 
         if($_FILES)
         {
             $file = $this->file->getUploadFile('file');
-            if(!$file) die(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
+            if(!$file) return print(json_encode(array('result' => 'fail', 'message' => $this->lang->error->noData)));
             if(empty($file['extension']) or !in_array($file['extension'], $this->config->file->imageExtensions))
             {
-                die(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
+                return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileFormate)));
             }
 
             $imageFile = $this->file->saveUploadFile($file, $uid);
             if($imageFile === false)
             {
-                die(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));
+                return print(json_encode(array('result' => 'fail', 'message' => $this->lang->file->errorFileMove)));
             }
             else
             {
@@ -386,7 +386,7 @@ class file extends control
                     $imageFiles[$fileName] = $imageFile;
                     $this->session->set($sessionName, $imageFiles);
                 }
-                die(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
+                return print(json_encode(array('result' => 'success', 'file' => $file, 'message' => $this->lang->file->uploadSuccess)));
             }
         }
 
@@ -432,7 +432,7 @@ class file extends control
             echo js::error(dao::getError(), $full = false);
             $templateID = 0;
         }
-        die($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));
+        return print($this->fetch('file', 'buildExportTPL', "module=$module&templateID=$templateID"));
     }
 
     /**
@@ -445,7 +445,7 @@ class file extends control
     public function ajaxDeleteTemplate($templateID)
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
-        die();
+        return print();
     }
 
     /**
