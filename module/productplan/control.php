@@ -182,6 +182,31 @@ class productplan extends control
     }
 
     /**
+     * Batch change the status of productplan.
+     *
+     * @param  string $status
+     * @access public
+     * @return void
+     */
+    public function batchChangeStatus($status)
+    {
+        if($this->post->planIDList)
+        {
+            $planIDList = $this->post->planIDList;
+            unset($_POST['planIDList']);
+            $allChanges = $this->productplan->batchChangeStatus($planIDList, $status);
+            if(dao::isError()) die(js::error(dao::getError()));
+            foreach($allChanges as $planID => $changes)
+            {
+                $this->loadModel('action');
+                $actionID = $this->action->create('productplan', $planID, 'edited');
+                $this->action->logHistory($actionID, $changes);
+            }
+            die(js::reload('parent'));
+        }
+    }
+
+    /**
      * Delete a plan.
      *
      * @param  int    $planID

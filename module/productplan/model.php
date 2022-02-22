@@ -694,6 +694,33 @@ class productplanModel extends model
     }
 
     /**
+     * Batch change the status of productplan.
+     *
+     * @param  array   $planIDList
+     * @param  string  $status
+     * @access public
+     * @return array
+     */
+    public function batchChangeStatus($planIDList, $status)
+    {
+        $now = helper::now();
+        $allChanges = array();
+        $oldPlans = $this->getByIDList($planIDList, $status);
+        foreach($planIDList as $planID)
+        {
+            $oldPlan = $oldPlans[$planID];
+            if($status == $oldPlan->status) continue;
+
+            $plan = new stdclass();
+            $plan->status         = $status;
+
+            $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
+            if(!dao::isError()) $allChanges[$planID] = common::createChanges($oldPlan, $plan);
+        }
+        return $allChanges;
+    }
+
+    /**
      * Check date for plan.
      *
      * @param  object $plan

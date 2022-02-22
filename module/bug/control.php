@@ -1530,9 +1530,9 @@ class bug extends control
      */
     public function batchResolve($resolution, $resolvedBuild = '')
     {
-        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : return print(js::locate($this->session->bugList, 'parent'));
-        $bugIDList = array_unique($bugIDList);
+        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
+        $bugIDList = array_unique($this->post->bugIDList);
         $changes   = $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
         if(dao::isError()) return print(js::error(dao::getError()));
 
@@ -1766,8 +1766,9 @@ class bug extends control
             return print(js::locate($this->session->bugList, 'parent'));
         }
 
-        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : return print(js::locate($this->session->bugList, 'parent'));
-        $bugIDList = array_unique($bugIDList);
+        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
+
+        $bugIDList = array_unique($this->post->bugIDList);
         $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         $this->qa->setMenu($this->products, $productID, $branch);
