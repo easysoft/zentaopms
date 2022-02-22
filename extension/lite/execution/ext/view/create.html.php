@@ -17,6 +17,7 @@
 
 <?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php include $app->getModuleRoot() . 'common/view/kindeditor.html.php';?>
+<?php include '../lang/' . $this->app->getClientLang() . '/lite.php';?>
 <?php js::import($jsRoot . 'misc/date.js');?>
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('holders', $lang->execution->placeholder);?>
