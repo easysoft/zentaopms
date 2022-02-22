@@ -229,6 +229,7 @@
           }
           ?>
         </div>
+        </div>
       <?php endif;?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
