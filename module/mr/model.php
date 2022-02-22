@@ -1393,9 +1393,9 @@ class mrModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         /* Get link action text. */
-        $MR       = $this->getByID($MRID);
-        $users    = $this->loadModel('user')->getPairs('noletter');
-        $MRCreateAction = sprintf($this->lang->mr->createAction, $MR->createdDate, zget($users, $MR->createdBy), helper::createLink('mr', 'view', "mr={$MR->id}"));
+        $MR             = $this->getByID($MRID);
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
         foreach($links as $linkID)
         {
@@ -1429,7 +1429,7 @@ class mrModel extends model
     {
         $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
 
-        $this->loadModel('action')->create($type, $linkID, 'deletemr');
+        $this->loadModel('action')->create($type, $linkID, 'deletemr', '', helper::createLink('mr', 'view', "mr={$MRID}"));
     }
 
     /**

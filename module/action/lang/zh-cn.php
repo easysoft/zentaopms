@@ -818,6 +818,7 @@ $lang->action->label->repocreated                 = "创建评审";
 $lang->action->dynamicAction->task['gitcommited'] = 'git提交';
 $lang->action->dynamicAction->bug['repocreated']  = '创建代码评审';
 $lang->action->desc->createmr                     = '$extra';
+$lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</strong> 取消关联了 <a href="$extra">合并请求</a>。';
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 审核通过。';
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
