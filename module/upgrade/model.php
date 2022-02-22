@@ -5642,34 +5642,82 @@ class upgradeModel extends model
      */
     public function getEXTFiles()
     {
-        $files           = array();
-        $files['custom'] = array();
-        $files['charge'] = array();
+        $files         = array();
+        $allModules    = scandir($this->app->moduleRoot);
+        $skipModules   = $this->getEncryptModules($allModules);
 
-        $dirs = array('control', 'model', 'css', 'js', 'view', 'config', 'lang');
-        foreach($this->config->upgrade->allModule as $module)
+        foreach($allModules as $module)
         {
-            $extRoot = $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . 'ext';
-            if(!is_dir($extRoot)) continue;
-            
+            if($module === '.' or $module === '..' or in_array($module, $skipModules)) continue;
+
+            $dirPath = in_array($module, $this->config->upgrade->PMSModules) ? $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . 'ext' : $this->app->moduleRoot . $module;
+            $dirs    = scandir($dirPath);
             foreach($dirs as $dir)
             {
-                $realPath = $extRoot . DIRECTORY_SEPARATOR . $dir;
-                $path     = $module . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . $dir;
+                if($dir === '.' or $dir === '..') continue;
 
+                $realPath = is_file($dirPath . DIRECTORY_SEPARATOR . $dir) ? $dirPath : $dirPath . DIRECTORY_SEPARATOR . $dir;
+                $path     = in_array($module, $this->config->upgrade->PMSModules) ? $module . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . $dir : $module . DIRECTORY_SEPARATOR . $dir;
                 if(is_dir($realPath))
                 {
-                    /* If both the control and model files are encrypted, the current module is not customized. */
-                    if($dir != 'control' and $dir != 'model' and empty($files['custom'])) continue;
-
                     $extFiles = $this->getPluginFiles($module, $dir, $realPath, $path);
-                    $files['custom'] += $extFiles['custom'];
-                    $files['charge'] += $extFiles['charge'];
+                    $files += $extFiles;
                 }
             }
         }
 
         return $files;
+    }
+
+    /**
+     * Get encrypt modules.
+     *
+     * @param  array  $allModules
+     * @access public
+     * @return array
+     */
+    public function getEncryptModules($allModules)
+    {
+        $encryptModules = array();
+        foreach($allModules as $module)
+        {
+            if($module === '.' or $module === '..') continue;
+
+            $customFiles = array();
+            if(in_array($module, $this->config->upgrade->PMSModules))
+            {
+                $extRoot = $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . 'ext';
+                if(!is_dir($extRoot))
+                {
+                    $encryptModules[] = $module;
+                    continue;
+                }
+                else
+                {
+                    foreach(array('control', 'model') as $dir)
+                    {
+                        $realPath = $extRoot . DIRECTORY_SEPARATOR . $dir;
+                        $path     = $module . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . $dir;
+                        if(!is_dir($realPath)) continue;
+                        $customFiles += $this->getPluginFiles($module, $dir, $realPath, $path);
+                    }
+                }
+            }
+            else
+            {
+                foreach(array('control.php', 'model.php') as $file)
+                {
+                    $realPath = $this->app->moduleRoot . $module;
+                    $filePath = $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . $file;
+                    if(!is_file($filePath)) continue;
+
+                    $customFiles += $this->getPluginFiles($module, $file, $realPath, $module);
+                }
+            }
+
+            if(empty($customFiles)) $encryptModules[] = $module;
+        }
+        return $encryptModules;
     }
 
     /**
@@ -5684,25 +5732,20 @@ class upgradeModel extends model
      */
     public function getPluginFiles($module, $dir, $realPath, $path)
     {
-        $files = array();
-        $files['custom'] = array();
-        $files['charge'] = array();
-
-        $extFiles = scandir($realPath);
+        $files    = array();
+        $extFiles = is_file($realPath . DIRECTORY_SEPARATOR . $dir) ? array($dir) : scandir($realPath);
         foreach($extFiles as $extFile)
         {
             if($extFile === '.' or $extFile === '..') continue;
 
             $filePath = $realPath . DIRECTORY_SEPARATOR . $extFile;
-            $fileName = $path . DIRECTORY_SEPARATOR . $extFile;
+            $fileName = is_file($realPath . DIRECTORY_SEPARATOR . $dir) ? $path : $path . DIRECTORY_SEPARATOR . $extFile;
 
             /* If the current point to a directory, traverse the files in the directory. */
             if(is_dir($filePath))
             {
                 $pluginFiles = $this->getPluginFiles($module, $dir, $filePath, $fileName);
-
-                $files['custom'] += $pluginFiles['custom'];
-                $files['charge'] += $pluginFiles['charge'];
+                $files      += $pluginFiles;
             }
             else
             {
@@ -5717,13 +5760,9 @@ class upgradeModel extends model
                 fclose($handle);
 
                 /* Determine whether the current file is encrypted. */
-                if(($dir == 'control' or $dir == 'model') and strpos($line, "extension_loaded('ionCube Loader')") !== false)
+                if(strpos($line, "extension_loaded('ionCube Loader')") === false)
                 {
-                    $files['charge'][$fileName] = $fileName;
-                }
-                else
-                {
-                    $files['custom'][$fileName] = $fileName;
+                    $files[$fileName] = $fileName;
                 }
             }
         }

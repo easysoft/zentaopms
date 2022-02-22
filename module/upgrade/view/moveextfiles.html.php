@@ -21,20 +21,7 @@
           <div class="checkbox-primary" title="<?php echo $lang->selectAll?>">
             <input type='checkbox' id='checkAll' checked><label for='checkAll'><strong><?php echo $lang->upgrade->fileName;?></strong></label>
           </div>
-          <?php echo html::checkbox('files', $files['custom'], '', 'checked');?>
-          <?php if(empty($files['charge'])):?>
-          <div class="panel">
-            <div class="panel-heading" id="headingOne">
-              <h4 class="panel-title">
-                <a data-toggle="collapse" href="#collapseOne"><?php echo $lang->upgrade->viewChargeFile;?></a>
-              </h4>
-            </div>
-            <div id="collapseOne" class="collapse">
-              <?php echo html::checkbox('files', $files['custom'], '', 'checked');?>
-            </div>
-          </div>
-          <?php endif;?>
-          <div></div>
+          <?php echo html::checkbox('files', $files, '', 'checked');?>
         </div>
       </div>
       <div class='modal-footer text-center'><?php echo html::submitButton();?></div>
