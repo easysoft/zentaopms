@@ -18,6 +18,7 @@ if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
+    $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
