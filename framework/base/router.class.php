@@ -1418,6 +1418,7 @@ class baseRouter
 
         /* When extensionLevel == 1. */
         $paths['common'] = $this->config->edition != 'open' ? $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS . 'ext' . DS . $ext . DS : '';
+        $paths['xuan']   = $this->getExtensionRoot() . 'xuan' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         $paths['vision'] = $this->config->vision == 'rnd' ? '' : $this->basePath . 'extension' . DS . $this->config->vision . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         $paths['custom'] = $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS . 'ext' . DS . $ext . DS;
         if($this->config->framework->extensionLevel == 1) return $paths;
@@ -1487,7 +1488,11 @@ class baseRouter
         if($moduleExtPaths['vision']) $this->extActionFile = $moduleExtPaths['vision'] . $this->methodName . '.php';
         if(file_exists($this->extActionFile)) return true;;
 
-        /* 4. 最后尝试寻找公共扩展文件。Finally, try to find the common extension file. */
+        /* 4. 在喧喧目录中查找扩展文件。Then try to find the xuan extension file. */
+        if($moduleExtPaths['xuan']) $this->extActionFile = $moduleExtPaths['xuan'] . $this->methodName . '.php';
+        if(file_exists($this->extActionFile)) return true;;
+
+        /* 5. 最后尝试寻找公共扩展文件。Finally, try to find the common extension file. */
         $this->extActionFile = $moduleExtPaths['common'] . $this->methodName . '.php';
         if(empty($moduleExtPaths['common'])) return false;
         return file_exists($this->extActionFile);

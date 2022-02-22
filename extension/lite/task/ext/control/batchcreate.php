@@ -2,7 +2,7 @@
 helper::importControl('task');
 class myTask extends task
 {
-    public function create($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $todoID = 0, $extra = '')
+    public function batchCreate($executionID = 0, $storyID = 0, $moduleID = 0, $taskID = 0, $iframe = 0, $extra = '')
     {
         $executions = $this->execution->getPairs();
         if(empty($executions))
@@ -14,7 +14,6 @@ class myTask extends task
         $regionList = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
 
         $this->view->regionList = $regionList;
-        $this->view->laneList   = array();
         $this->view->extra      = $extra;
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
@@ -29,20 +28,20 @@ class myTask extends task
 
         $this->view->lanes = $lanes;
 
-        if(isset($_POST['region']))
+        if(!empty($_POST))
         {
-            $regionID = $_POST['region'];
-            $laneID   = $_POST['otherLane'];
-            $columnID =  $this->dao->select("t1.id")->from(TABLE_KANBANCOLUMN)->alias('t1')
-                ->leftJoin(TABLE_KANBANLANE)->alias('t2')
-                ->on("t2.group = t1.group")
-                ->where('t1.deleted')->eq('0')
-                ->andWhere('t2.id')->eq($laneID)
-                ->andWhere('t1.type')->eq('wait')
-                ->fetch('id');
-
-            $extra = "laneID=$laneID,columnID=$columnID";
+            $laneIDList = $_POST['lane'];
+            foreach($laneIDList as $key => $lane)
+            {
+                $_POST['column'][$key] = $this->dao->select("t1.id")->from(TABLE_KANBANCOLUMN)->alias('t1')
+                    ->leftJoin(TABLE_KANBANLANE)->alias('t2')
+                    ->on("t2.group = t1.group")
+                    ->where('t1.deleted')->eq('0')
+                    ->andWhere('t2.id')->eq($lane)
+                    ->andWhere('t1.type')->eq('wait')
+                    ->fetch('id');
+            }
         }
-        return parent::create($executionID, $storyID, $moduleID, $taskID, $todoID, $extra);
+        return parent::batchCreate($executionID, $storyID, $moduleID, $taskID, $iframe, $extra);
     }
 }
