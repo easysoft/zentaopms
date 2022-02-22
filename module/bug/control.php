@@ -1768,7 +1768,7 @@ class bug extends control
 
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
-        $bugIDList = array_unique($$this->post->bugIDList);
+        $bugIDList = array_unique($this->post->bugIDList);
         $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         $this->qa->setMenu($this->products, $productID, $branch);
