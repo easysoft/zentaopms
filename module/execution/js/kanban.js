@@ -469,7 +469,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus && item.menus.length)
+        if(!$actions.length && (priv.canEditStory || priv.canChangeStory || priv.canCreateTask || priv.canBatchCreate || priv.canUnlinkStory))
         {
             $actions = $([
                 '<div class="actions">',
@@ -1038,6 +1038,24 @@ function processMinusBtn()
 }
 
  /**
+ * Create story menu
+ * @returns {Object[]}
+ */
+function createStoryMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var story = $card.data('item');
+
+    var items = [];
+    if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canChangeStory) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask) items.push({label: taskLang.create, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    return items;
+}
+
+ /**
  * Create task menu
  * @returns {Object[]}
  */
@@ -1065,6 +1083,7 @@ window.menuCreators =
     column:       createColumnMenu,
     columnCreate: createColumnCreateMenu,
     task:         createTaskMenu,
+    story:        createStoryMenu,
 };
 
 /**

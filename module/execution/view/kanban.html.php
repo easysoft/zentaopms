@@ -83,7 +83,12 @@ js::set('priv',
         'canStartTask'        => common::hasPriv('task', 'start'),
         'canAssignBug'        => common::hasPriv('bug', 'assignto'),
         'canConfirmBug'       => common::hasPriv('bug', 'confirmBug'),
-        'canActivateBug'      => common::hasPriv('bug', 'activate')
+        'canActivateBug'      => common::hasPriv('bug', 'activate'),
+        'canEditStory'        => common::hasPriv('story', 'edit'),
+        'canChangeStory'      => common::hasPriv('story', 'change'),
+        'canCreateTask'       => common::hasPriv('task', 'create'),
+        'canBatchCreateTask'  => common::hasPriv('task', 'batchCreate'),
+        'canUnlinkStory'      => common::hasPriv('execution', 'unlinkStory'),
     )
 );
 js::set('hasStoryButton', $hasStoryButton);
