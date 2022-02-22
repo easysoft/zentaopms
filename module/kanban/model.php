@@ -1754,7 +1754,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function updateSpace($spaceID)
+    public function updateSpace($spaceID, $type = '')
     {
         $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
@@ -1767,6 +1767,8 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
+        if($type == 'cooperation' or $type == 'public') $space->whitelist = '';
+
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
@@ -1775,12 +1777,27 @@ class kanbanModel extends model
             ->where('id')->eq($spaceID)
             ->exec();
 
+        if($oldSpace->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        {
+            $kanbanList = $this->dao->select('id,team,whitelist')->from(TABLE_KANBAN)->where('space')->eq($spaceID)->andWhere('deleted')->eq('0')->fetchAll('id');
+            foreach($kanbanList as $id => $kanbanData)
+            {
+                $this->dao->update(TABLE_KANBAN)->set('team')->eq($kanbanData->whitelist)->set('whitelist')->eq('')->where('id')->eq($id)->andWhere('deleted')->eq('0')->exec();
+            }
+        }
+
         if(!dao::isError())
         {
             $this->file->saveUpload('kanbanspace', $spaceID);
             $this->file->updateObjectID($this->post->uid, $spaceID, 'kanbanspace');
             return common::createChanges($oldSpace, $space);
         }
+    }
+
+    public function updateKanbanBySpace($spaceID, $type)
+    {
+        $spaceType = $this->dao->select('type')->from(TABLE_KANBANSPACE)->where('id')->eq($spaceID)->fetch();
+
     }
 
     /**
