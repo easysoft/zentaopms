@@ -455,5 +455,3 @@ if(!window.kanbanDropRules)
         closed: ['doing']
     }
 }
-
-$('#submit').attr('id', 'submitButton');
