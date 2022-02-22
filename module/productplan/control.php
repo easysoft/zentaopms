@@ -498,7 +498,7 @@ class productplan extends control
         $plans    = $this->productplan->getPairs($productID, $branch, $expired, true);
         $planName = $number === '' ? 'plan' : "plan[$number]";
         $plans    = empty($plans) ? array('' => '') : $plans;
-        die(html::select($planName, $plans, '', "class='form-control'"));
+        echo html::select($planName, $plans, '', "class='form-control'");
     }
 
     /**
@@ -531,7 +531,7 @@ class productplan extends control
     public function ajaxGetProjects($productID, $branch = 0)
     {
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID, $branch);
-        die(html::select('project', $projects, key($projects), "class='form-control chosen'"));
+        echo html::select('project', $projects, key($projects), "class='form-control chosen'");
     }
 
     /**
@@ -670,7 +670,7 @@ class productplan extends control
     public function batchUnlinkStory($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->storyIdList as $storyID) $this->productplan->unlinkStory($storyID, $planID);
-        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent'));
+        echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=story&orderBy=$orderBy"), 'parent');
     }
 
     /**
@@ -810,7 +810,7 @@ class productplan extends control
     public function batchUnlinkBug($planID, $orderBy = 'id_desc')
     {
         foreach($this->post->bugIDList as $bugID) $this->productplan->unlinkBug($bugID);
-        die(js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent'));
+        echo js::locate($this->createLink('productplan', 'view', "planID=$planID&type=bug&orderBy=$orderBy"), 'parent');
     }
 
     /**

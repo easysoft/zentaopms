@@ -260,7 +260,7 @@ class branch extends control
     {
         $param   = $param ? $param : 'all';
         $product = $this->loadModel('product')->getById($productID);
-        if(empty($product) or $product->type == 'normal') return print();
+        if(empty($product) or $product->type == 'normal') return;
 
         $branches = $this->loadModel('branch')->getList($productID, $projectID, $param);
         $branchOption    = array();

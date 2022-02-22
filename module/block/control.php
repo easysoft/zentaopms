@@ -455,7 +455,7 @@ class block extends control
             $this->app->loadLang('common');
             $this->app->loadLang('block');
 
-            if(!$this->block->checkAPI($this->get->hash)) return print();
+            if(!$this->block->checkAPI($this->get->hash)) return;
         }
 
         $mode = strtolower($this->get->mode);
@@ -629,7 +629,7 @@ class block extends control
     public function printTaskBlock()
     {
         $this->session->set('taskList',  $this->app->getURI(true), 'execution');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $account = $this->app->user->account;
         $type    = $this->params->type;
@@ -647,7 +647,7 @@ class block extends control
     public function printBugBlock()
     {
         $this->session->set('bugList', $this->app->getURI(true), 'qa');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $projectID = $this->lang->navGroup->qa  == 'project' ? $this->session->project : 0;
         $projectID = $this->view->block->module == 'my' ? 0 : $projectID;
@@ -710,7 +710,7 @@ class block extends control
         $this->session->set('productList',  $this->app->getURI(true), 'product');
         $this->session->set('testtaskList', $this->app->getURI(true), 'qa');
         $this->session->set('buildList',    $this->app->getURI(true), 'execution');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->view->testtasks = $this->dao->select('distinct t1.*,t2.name as productName,t3.name as buildName,t4.name as projectName')->from(TABLE_TESTTASK)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')->on('t1.product=t2.id')
@@ -736,7 +736,7 @@ class block extends control
     public function printStoryBlock()
     {
         $this->session->set('storyList', $this->app->getURI(true), 'product');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadClass('pager', $static = true);
         $count   = isset($this->params->count) ? (int)$this->params->count : 0;
@@ -840,7 +840,7 @@ class block extends control
     public function printProductBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 0;
         $type  = isset($this->params->type) ? $this->params->type : '';
         $pager = pager::init(0, $count , 1);
@@ -881,7 +881,7 @@ class block extends control
      */
     public function printProjectStatisticBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         /* Load models and langs. */
         $this->loadModel('project');
@@ -956,7 +956,7 @@ class block extends control
      */
     public function printProductStatisticBlock($storyType = 'story')
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $status = isset($this->params->type) ? $this->params->type : '';
         $count  = isset($this->params->count) ? $this->params->count : '';
@@ -1055,7 +1055,7 @@ class block extends control
      */
     public function printExecutionStatisticBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadLang('task');
         $this->app->loadLang('story');
@@ -1238,7 +1238,7 @@ class block extends control
     {
         $uri = $this->app->getURI(true);
         $this->session->set('issueList', $uri, 'project');
-        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $this->view->users  = $this->loadModel('user')->getPairs('noletter');
         $this->view->issues = $this->loadModel('issue')->getBlockIssues($this->session->project, $this->params->type, $this->viewType == 'json' ? 0 : (int)$this->params->count, $this->params->orderBy);
     }
@@ -1347,7 +1347,7 @@ class block extends control
      */
     public function printScrumListBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count = isset($this->params->count) ? (int)$this->params->count : 15;
         $type  = isset($this->params->type) ? $this->params->type : 'undone';
 
@@ -1505,7 +1505,7 @@ class block extends control
      */
     public function printQaStatisticBlock()
     {
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
 
         $this->app->loadLang('bug');
         $status = isset($this->params->type)  ? $this->params->type : '';
@@ -1680,7 +1680,7 @@ class block extends control
     public function printExecutionBlock()
     {
         $this->app->loadClass('pager', $static = true);
-        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return print();
+        if(!empty($this->params->type) and preg_match('/[^a-zA-Z0-9_]/', $this->params->type)) return;
         $count  = isset($this->params->count) ? (int)$this->params->count : 0;
         $status = isset($this->params->type)  ? $this->params->type : 'all';
         $pager  = pager::init(0, $count, 1);

@@ -445,7 +445,6 @@ class file extends control
     public function ajaxDeleteTemplate($templateID)
     {
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)->andWhere('account')->eq($this->app->user->account)->exec();
-        return print();
     }
 
     /**
