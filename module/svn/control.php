@@ -124,8 +124,7 @@ class svn extends control
             $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
             $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
             $this->view->parsedObjects = $parsedObjects;
-            $this->display();
-            exit;
+            return $this->display();
         }
     }
 

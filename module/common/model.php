@@ -359,7 +359,7 @@ class commonModel extends model
         {
             echo js::locate($denyLink);
         }
-        exit;
+        helper::end();
     }
 
     /**

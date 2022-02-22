@@ -1153,8 +1153,7 @@ class story extends control
 
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), '');
-            exit;
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), ''));
         }
         else
         {

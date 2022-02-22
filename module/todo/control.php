@@ -427,8 +427,7 @@ class todo extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID=$todoID&confirm=yes"));
-            exit;
+            return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID=$todoID&confirm=yes")));
         }
         else
         {
