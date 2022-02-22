@@ -477,21 +477,24 @@ class commonModel extends model
 
         if(isset($app->user))
         {
-            $vision = $app->config->vision;
+            $currentVision = $app->config->vision;
+            $userVisions   = array_filter(explode(',', $app->user->visions));
+            if(count($userVisions) < 2)
+            {
+                echo "<div>{$lang->visionList[$currentVision]}</div>";
+                return;
+            }
 
             echo "<ul class='dropdown-menu pull-right'>";
-            foreach($lang->visionList as $visionKey => $visionName)
+            echo "<li class='text-gray'>{$lang->switchTo}:</li>";
+            foreach($userVisions as $vision)
             {
-                if(strpos($app->user->visions, $visionKey) === false) continue;
-
-                echo $vision == $visionKey ? '<li class="active">' : '<li>';
-                echo html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$visionKey"), $visionName, '', "data-type='ajax'");
-                echo '</li>';
+                echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
             }
             echo '</ul>';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div>{$lang->visionList[$vision]}</div>";
+            echo "<div>{$lang->visionList[$currentVision]}</div>";
             echo '</a>';
         }
     }

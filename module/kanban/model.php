@@ -1825,7 +1825,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
-            ->andWhere('region')->eq($regionID)
+            ->andWhere('region')->in($regionID)
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
     }

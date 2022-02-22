@@ -88,6 +88,7 @@ $lang->history         = 'History';
 $lang->attatch         = 'Files';
 $lang->reverse         = 'Inverse';
 $lang->switchDisplay   = 'Toggle';
+$lang->switchTo        = 'Switch To';
 $lang->expand          = 'Expand';
 $lang->collapse        = 'Collapse';
 $lang->saveSuccess     = 'Saved';

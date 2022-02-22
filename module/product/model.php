@@ -942,7 +942,7 @@ class productModel extends model
                 $modules          = array();
                 $branchList       = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
                 $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-                foreach($branchModuleList as $branchID => $branchModules) $modules += $branchModules;
+                foreach($branchModuleList as $branchID => $branchModules) $modules[] = $branchModules;
             }
             else
             {
