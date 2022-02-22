@@ -127,7 +127,7 @@ class upgrade extends control
             $this->view->result = 'fail';
             $this->view->errors  = $result;
 
-            die($this->display());
+            return $this->display());
         }
 
         $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
@@ -265,7 +265,7 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
 
                 /* Process merged products and projects. */
                 if($_POST['projectType'] == 'execution')
@@ -317,7 +317,7 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram($linkedProducts, $linkedSprints);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
 
                 /* Process productline. */
                 $this->dao->delete()->from(TABLE_MODULE)->where('`root`')->eq(0)->andWhere('`type`')->eq('line')->exec();
@@ -347,7 +347,7 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
 
                 if($_POST['projectType'] == 'execution')
                 {
@@ -369,7 +369,7 @@ class upgrade extends control
 
                 /* Create Program. */
                 list($programID, $projectList, $lineID) = $this->upgrade->createProgram(array(), $linkedSprints);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
 
                 if($_POST['projectType'] == 'execution')
                 {
@@ -401,7 +401,7 @@ class upgrade extends control
                 }
             }
 
-            die(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType"), 'parent'));
+            return print(js::locate($this->createLink('upgrade', 'mergeProgram', "type=$type&programID=$programID&projectType=$projectType"), 'parent'));
         }
 
         /* Get no merged product and project count. */
@@ -423,7 +423,7 @@ class upgrade extends control
             /* Update sprints history. */
             $sprints = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('sprint')->fetchAll('id');
             $this->dao->update(TABLE_ACTION)->set('objectType')->eq('execution')->where('objectID')->in(array_keys($sprints))->andWhere('objectType')->eq('project')->exec();
-            die(js::locate($this->createLink('upgrade', 'mergeRepo')));
+            return print(js::locate($this->createLink('upgrade', 'mergeRepo')));
         }
 
         $this->view->noMergedProductCount = $noMergedProductCount;
@@ -622,7 +622,7 @@ class upgrade extends control
                 $this->dao->update(TABLE_PROJECT)->set('name')->eq($projectName)->where('id')->eq($projectID)->exec();
             }
 
-            die(js::closeModal('parent.parent', ''));
+            return print(js::closeModal('parent.parent', ''));
         }
 
         $objectGroup = array();
@@ -649,7 +649,7 @@ class upgrade extends control
         if($_POST)
         {
             $this->upgrade->mergeRepo();
-            die(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
+            return print(js::locate($this->createLink('upgrade', 'mergeRepo'), 'parent'));
         }
 
         $repoes   = $this->dao->select('id, name')->from(TABLE_REPO)->where('deleted')->eq(0)->andWhere('product')->eq('')->fetchPairs();
@@ -659,7 +659,7 @@ class upgrade extends control
             $this->dao->delete()->from(TABLE_BLOCK)->exec();
             $this->dao->delete()->from(TABLE_CONFIG)->where('`key`')->eq('blockInited')->exec();
             $this->loadModel('setting')->deleteItems('owner=system&module=common&section=global&key=upgradeStep');
-            die(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
+            return print(js::locate($this->createLink('upgrade', 'afterExec', "fromVersion=&processed=no")));
         }
 
         $this->view->title    = $this->lang->upgrade->mergeRepo;
@@ -680,7 +680,7 @@ class upgrade extends control
     public function ajaxGetProjectPairsByProgram($programID = 0)
     {
         $projects = array('' => '') + $this->upgrade->getProjectPairsByProgram($programID);
-        die(html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getProgramStatus(\'project\', this.value)"'));
+        echo html::select('projects', $projects, '', 'class="form-control prj-exist" onchange="getProgramStatus(\'project\', this.value)"');
     }
 
     /**
@@ -694,7 +694,7 @@ class upgrade extends control
     {
         $lines = array('' => '');
         if((int)$programID) $lines += $this->loadModel('product')->getLinePairs($programID);
-        die(html::select('lines', $lines, '', 'class="form-control line-exist"'));
+        echo html::select('lines', $lines, '', 'class="form-control line-exist"');
     }
 
     /**
@@ -712,7 +712,7 @@ class upgrade extends control
         {
             $this->view->title    = $this->lang->upgrade->consistency;
             $this->view->alterSQL = $alterSQL;
-            die($this->display('upgrade', 'consistency'));
+            return print($this->display('upgrade', 'consistency'));
         }
 
         unset($_SESSION['user']);
@@ -837,7 +837,7 @@ class upgrade extends control
             $response['nextType'] = $result['type'];
             $response['message']  = zget($this->lang->searchObjects, $result['type']) . " <span class='{$result['type']}-num'>0</span>";
         }
-        die(json_encode($response));
+        echo json_encode($response);
     }
 
     /**
@@ -849,7 +849,7 @@ class upgrade extends control
      */
     public function ajaxGetProductName($productID)
     {
-        die($this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name'));
+        echo $this->dao->findByID($productID)->from(TABLE_PRODUCT)->fetch('name');
     }
 
     /**
@@ -861,6 +861,6 @@ class upgrade extends control
      */
     public function ajaxGetProgramStatus($programID)
     {
-        die($this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status'));
+        echo $this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status');
     }
 }

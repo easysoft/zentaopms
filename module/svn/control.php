@@ -144,7 +144,7 @@ class svn extends control
         $files    = $this->post->files;
 
         /* Ignore git. */
-        if(strpos($repoUrl, '://') === false) die();
+        if(strpos($repoUrl, '://') === false) return;
 
         $parsedFiles = array();
         $repoDirs    = explode('/', trim($repoUrl, '/'));
@@ -182,7 +182,6 @@ class svn extends control
             $log->files    = $parsedFiles;
             $this->repo->saveAction2PMS($objects, $log, $repoUrl);
         }
-        die();
     }
 
     /**
@@ -194,6 +193,6 @@ class svn extends control
     public function ajaxGetRepos()
     {
         $repos = $this->svn->getRepos();
-        die(json_encode($repos));
+        echo json_encode($repos);
     }
 }

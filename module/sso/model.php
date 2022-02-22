@@ -48,10 +48,10 @@ class ssoModel extends model
         $data = fixer::input('post')->get();
         if($data->bindType == 'bind')
         {
-            if(empty($data->bindPassword))die(js::alert($this->lang->sso->bindNoPassword));
+            if(empty($data->bindPassword)) return print(js::alert($this->lang->sso->bindNoPassword));
             $password = md5($data->bindPassword);
             $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->bindUser)->andWhere('password')->eq($password)->andWhere('deleted')->eq('0')->fetch();
-            if(empty($user))die(js::alert($this->lang->sso->bindNoUser));
+            if(empty($user)) return print(js::alert($this->lang->sso->bindNoUser));
             $user->ranzhi = $this->session->ssoData->account;
             $this->dao->update(TABLE_USER)->set('ranzhi')->eq($user->ranzhi)->where('id')->eq($user->id)->exec();
         }
@@ -59,7 +59,7 @@ class ssoModel extends model
         {
             if(!$this->loadModel('user')->checkPassword()) return;
             $user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($data->account)->fetch();
-            if($user) die(js::alert($this->lang->sso->bindHasAccount));
+            if($user) return print(js::alert($this->lang->sso->bindHasAccount));
 
             $user = new stdclass();
             $user->account    = $data->account;

@@ -4364,9 +4364,9 @@ class upgradeModel extends model
 
         if(isset($data->newProgram))
         {
-            if(!$this->post->longTime and !$this->post->end and isset($data->begin)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
+            if(!$this->post->longTime and !$this->post->end and isset($data->begin)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
 
-            if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
+            if(isset($data->projectName) and $data->projectType == 'execution' and empty($data->projectName)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->projectName)));
 
             /* Insert program. */
             $program = new stdclass();
@@ -4445,7 +4445,7 @@ class upgradeModel extends model
 
         if(isset($data->newProject))
         {
-            if(!$this->post->longTime and !$this->post->end) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
+            if(!$this->post->longTime and !$this->post->end) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->upgrade->end)));
 
             /* Create a project. */
             $this->loadModel('action');
@@ -4618,7 +4618,7 @@ class upgradeModel extends model
         /* No project is created when there are no sprints. */
         if(!$sprintIdList) return;
 
-        if(!$projectID) die(js::alert($this->lang->upgrade->projectEmpty));
+        if(!$projectID) return print(js::alert($this->lang->upgrade->projectEmpty));
 
         $this->dao->update(TABLE_BUG)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();
         $this->dao->update(TABLE_TESTREPORT)->set('project')->eq($projectID)->where('product')->in($productIdList)->exec();

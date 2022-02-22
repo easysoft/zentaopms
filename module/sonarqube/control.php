@@ -210,7 +210,7 @@ class sonarqube extends control
      */
     public function delete($sonarqubeID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->sonarqube->confirmDelete, inlink('delete', "sonarqubeID=$sonarqubeID&confirm=yes")));
 
         $oldSonarQube = $this->loadModel('pipeline')->getByID($sonarqubeID);
         $this->loadModel('action');
@@ -319,7 +319,7 @@ class sonarqube extends control
      */
     public function deleteProject($sonarqubeID, $projectKey, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->sonarqube->confirmDeleteProject, inlink('deleteProject', "sonarqubeID=$sonarqubeID&projectKey=$projectKey&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->sonarqube->confirmDeleteProject, inlink('deleteProject', "sonarqubeID=$sonarqubeID&projectKey=$projectKey&confirm=yes")));
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $projectKey = str_replace('*', '-', $projectKey);

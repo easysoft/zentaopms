@@ -487,7 +487,7 @@ class storyModel extends model
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
@@ -514,7 +514,7 @@ class storyModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
 
             $storyID = $this->dao->lastInsertID();
@@ -1206,7 +1206,7 @@ class storyModel extends model
 
                     $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
-                    if($message) die(js::alert($message));
+                    if($message) return print(js::alert($message));
                 }
 
                 $stories[$storyID] = $story;
@@ -1246,7 +1246,7 @@ class storyModel extends model
                 }
                 else
                 {
-                    die(js::error('story#' . $storyID . dao::getError(true)));
+                    return print(js::error('story#' . $storyID . dao::getError(true)));
                 }
             }
         }
@@ -1263,8 +1263,8 @@ class storyModel extends model
      */
     public function review($storyID)
     {
-        if($this->post->result == false)   die(js::alert($this->lang->story->mustChooseResult));
-        if($this->post->result == 'revert' and $this->post->preVersion == false) die(js::alert($this->lang->story->mustChoosePreVersion));
+        if($this->post->result == false)   return print(js::alert($this->lang->story->mustChooseResult));
+        if($this->post->result == 'revert' and $this->post->preVersion == false) return print(js::alert($this->lang->story->mustChoosePreVersion));
 
         if(strpos($this->config->story->review->requiredFields, 'comment') !== false and !$this->post->comment)
         {
@@ -1457,11 +1457,11 @@ class storyModel extends model
                 $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
             }
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $isonlybody = isonlybody();
             unset($_GET['onlybody']);
-            die(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
+            return print(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
         }
         else
         {
@@ -1591,7 +1591,7 @@ class storyModel extends model
             }
             else
             {
-                die(js::error('story#' . $storyID . dao::getError(true)));
+                return print(js::error('story#' . $storyID . dao::getError(true)));
             }
             if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         }

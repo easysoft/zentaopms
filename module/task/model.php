@@ -866,7 +866,7 @@ class taskModel extends model
         {
             $taskConsumed = 0;
             $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
-            if($taskConsumed > 0) die(js::error($this->lang->task->error->alreadyConsumed));
+            if($taskConsumed > 0) return print(js::error($this->lang->task->error->alreadyConsumed));
         }
 
         $now  = helper::now();
@@ -915,7 +915,7 @@ class taskModel extends model
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
             ->get();
 
-        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+        if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
 
         /* Fix bug#1388, Check children task executionID and moduleID. */
         if(isset($task->execution) and $task->execution != $oldTask->execution)
@@ -1166,7 +1166,7 @@ class taskModel extends model
 
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             if($data->consumeds[$taskID])
@@ -1245,9 +1245,9 @@ class taskModel extends model
         /* Check field not empty. */
         foreach($tasks as $taskID => $task)
         {
-            if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
+            if($task->status == 'done' and $task->consumed == false) return print(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) return print(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1315,7 +1315,7 @@ class taskModel extends model
             }
             else
             {
-                die(js::error('task#' . $taskID . dao::getError(true)));
+                return print(js::error('task#' . $taskID . dao::getError(true)));
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
@@ -1533,8 +1533,8 @@ class taskModel extends model
 
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
-                if(!$record->consumed[$id])   die(js::alert($this->lang->task->error->consumedThisTime));
-                if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
+                if(!$record->consumed[$id])   return print(js::alert($this->lang->task->error->consumedThisTime));
+                if($record->left[$id] === '') return print(js::alert($this->lang->task->error->left));
 
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];

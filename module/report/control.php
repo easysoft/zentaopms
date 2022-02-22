@@ -369,6 +369,7 @@ class report extends control
         $this->view->dept   = $dept;
         $this->view->userID = $userID;
         $this->view->months = $this->report->getYearMonths($year);
-        die($this->display());
+
+        $this->display();
     }
 }

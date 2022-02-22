@@ -32,7 +32,7 @@ class testsuite extends control
         parent::__construct($moduleName, $methodName);
 
         $this->view->products = $this->products = $this->loadModel('product')->getPairs();
-        if(empty($this->products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
+        if(empty($this->products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=qa&activeMenu=testsuite")));
     }
 
     /**
@@ -158,8 +158,8 @@ class testsuite extends control
 
         /* Get test suite, and set menu. */
         $suite = $this->testsuite->getById($suiteID, true);
-        if(!$suite) die(js::error($this->lang->notFound) . js::locate('back'));
-        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+        if(!$suite) return print(js::error($this->lang->notFound) . js::locate('back'));
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
@@ -229,7 +229,7 @@ class testsuite extends control
             return $this->send($response);
         }
 
-        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+        if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
         /* Set product session. */
         $productID = $this->product->saveState($suite->product, $this->products);
@@ -256,12 +256,12 @@ class testsuite extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
+            return print(js::confirm($this->lang->testsuite->confirmDelete, inlink('delete', "suiteID=$suiteID&confirm=yes")));
         }
         else
         {
             $suite = $this->testsuite->getById($suiteID);
-            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($suite->type == 'private' and $suite->addedBy != $this->app->user->account and !$this->app->user->admin) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $this->testsuite->delete($suiteID);
 
@@ -282,7 +282,7 @@ class testsuite extends control
                 }
                 return $this->send($response);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -358,7 +358,7 @@ class testsuite extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "rowID=$rowID&confirm=yes")));
+            return print(js::confirm($this->lang->testsuite->confirmUnlinkCase, $this->createLink('testsuite', 'unlinkCase', "rowID=$rowID&confirm=yes")));
         }
         else
         {
@@ -392,6 +392,6 @@ class testsuite extends control
                 ->exec();
         }
 
-        die(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
+        return print(js::locate($this->createLink('testsuite', 'view', "suiteID=$suiteID")));
     }
 }

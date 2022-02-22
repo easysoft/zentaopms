@@ -46,13 +46,13 @@ class repoModel extends model
             if(empty($repo))
             {
                 echo(js::alert($this->lang->repo->error->noFound));
-                die(js::locate('back'));
+                return print(js::locate('back'));
             }
 
             if(!$this->checkPriv($repo))
             {
                 echo(js::alert($this->lang->repo->error->accessDenied));
-                die(js::locate('back'));
+                return print(js::locate('back'));
             }
         }
 

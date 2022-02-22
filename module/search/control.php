@@ -73,21 +73,21 @@ class search extends control
 
         $actionURL = $this->post->actionURL;
         $parsedURL = parse_url($actionURL);
-        if(isset($parsedURL['host'])) die();
+        if(isset($parsedURL['host'])) return;
         if($this->config->requestType != 'GET')
         {
             $path = $parsedURL['path'];
             $path = str_replace($this->config->webRoot, '', $path);
             if(strpos($path, '.') !== false) $path = substr($path, 0, strpos($path, '.'));
-            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) die();
+            if(preg_match("/^\w+{$this->config->requestFix}\w+/", $path) == 0) return;
         }
         else
         {
             $query = $parsedURL['query'];
-            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) die();
+            if(preg_match("/^{$this->config->moduleVar}=\w+\&{$this->config->methodVar}=\w+/", $query) == 0) return;
         }
 
-        die(js::locate($actionURL, 'parent'));
+        echo js::locate($actionURL, 'parent');
     }
 
     /**
@@ -125,8 +125,8 @@ class search extends control
     public function deleteQuery($queryID)
     {
         $this->search->deleteQuery($queryID);
-        if(dao::isError()) die(js::error(dao::getError()));
-        die('success');
+        if(dao::isError()) return print(js::error(dao::getError()));
+        echo 'success';
     }
 
     /**
@@ -149,7 +149,7 @@ class search extends control
             if(empty($queryID)) continue;
             $html .= '<li>' . html::a("javascript:executeQuery({$queryID})", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID'") . '</li>';
         }
-        die($html);
+        echo $html;
     }
 
     /**
