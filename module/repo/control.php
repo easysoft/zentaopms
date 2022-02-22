@@ -713,7 +713,7 @@ class repo extends control
      * @access public
      * @return void
      */
-    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
+    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
     {
         $this->commonAction($repoID, $objectID);
 
@@ -742,11 +742,16 @@ class repo extends control
             $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
         }
 
-        $this->scm->setEngine($repo);
+        $info     = new stdClass();
+        $diffs    = array();
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
-        $info     = $this->scm->info($entry, $newRevision);
-        $diffs    = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
+        if($oldRevision !== '')
+        {
+            $this->scm->setEngine($repo);
+            $info  = $this->scm->info($entry, $newRevision);
+            $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
+        }
         foreach($diffs as $diff)
         {
             if($encoding != 'utf-8')
