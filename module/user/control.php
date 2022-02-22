@@ -524,7 +524,10 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
-        $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groups = $this->dao->select('id, name, role')
+            ->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
+            ->fetchAll();
         $groupList = array('' => '');
         $roleGroup = array();
         foreach($groups as $group)
@@ -556,7 +559,10 @@ class user extends control
      */
     public function batchCreate($deptID = 0)
     {
-        $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groups = $this->dao->select('id, name, role')
+            ->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
+            ->fetchAll();
         $groupList = array('' => '');
         $roleGroup = array();
         foreach($groups as $group)
