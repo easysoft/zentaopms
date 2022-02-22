@@ -1671,7 +1671,8 @@ class execution extends control
             $this->view->project = $this->project->getById($this->session->project);
         }
 
-        $executionIDList = $this->post->executionIDList ? $this->post->executionIDList : return print(js::locate($this->session->executionList, 'parent'));
+        if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
+        $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
 
         $appendPoUsers = $appendPmUsers = $appendQdUsers = $appendRdUsers = array();

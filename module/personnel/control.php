@@ -230,12 +230,12 @@ class personnel extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhitelist',"id=$id&confirm=yes")));
+            return print(js::confirm($this->lang->personnel->confirmDelete, inLink('unbindWhitelist',"id=$id&confirm=yes")));
         }
         else
         {
             $acl = $this->dao->select('*')->from(TABLE_ACL)->where('id')->eq($id)->fetch();
-            if(empty($acl)) die(js::reload('parent'));
+            if(empty($acl)) return print(js::reload('parent'));
 
             $objectTable  = $acl->objectType == 'product' ? TABLE_PRODUCT : TABLE_PROJECT;
             $whitelist    = $this->dao->select('whitelist')->from($objectTable)->where('id')->eq($acl->objectID)->fetch('whitelist');
@@ -254,7 +254,7 @@ class personnel extends control
 
             $this->loadModel('action')->create('whitelist', $acl->objectID, 'managedWhitelist', '', $acl->objectType);
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 }
