@@ -209,7 +209,7 @@ class mr extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->mr->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $MR = $this->mr->getByID($id);
 
@@ -220,7 +220,7 @@ class mr extends control
         }
         $this->dao->delete()->from(TABLE_MR)->where('id')->eq($id)->exec();
 
-        die(js::locate(inlink('browse'), 'parent'));
+        echo js::locate(inlink('browse'), 'parent');
     }
 
     /**
@@ -233,7 +233,7 @@ class mr extends control
     public function view($id)
     {
         $MR = $this->mr->getByID($id);
-        if(!$MR) die(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
+        if(!$MR) return print(js::error($this->lang->notFound) . js::locate($this->createLink('mr', 'browse')));
         if(isset($MR->gitlabID)) $rawMR = $this->mr->apiGetSingleMR($MR->gitlabID, $MR->targetProject, $MR->mriid);
         if($MR->synced and (!isset($rawMR->id) or (isset($rawMR->message) and $rawMR->message == '404 Not found') or empty($rawMR))) return $this->display();
 
@@ -560,8 +560,8 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'story');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::locate(inlink('link', "MRID=$MRID&type=story&orderBy=$orderBy"), 'parent'));
         }
 
         $this->loadModel('story');
@@ -648,8 +648,8 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'bug');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::locate(inlink('link', "MRID=$MRID&type=bug&orderBy=$orderBy"), 'parent'));
         }
 
         $this->loadModel('bug');
@@ -734,8 +734,8 @@ class mr extends control
         {
             $this->mr->link($MRID, $productID, 'task');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::locate(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::locate(inlink('link', "MRID=$MRID&type=task&orderBy=$orderBy"), 'parent'));
         }
 
         $this->loadModel('execution');
@@ -827,7 +827,7 @@ class mr extends control
 
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('mr', 'unlink', "MRID=$MRID&productID=$productID&linkID=$linkID&type=$type&confirm=yes")));
+            return print(js::confirm($this->lang->productplan->confirmUnlinkStory, $this->createLink('mr', 'unlink', "MRID=$MRID&productID=$productID&linkID=$linkID&type=$type&confirm=yes")));
         }
         else
         {
@@ -848,7 +848,7 @@ class mr extends control
                 }
                 return $this->send($response);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -872,7 +872,7 @@ class mr extends control
         {
             if($this->post->reviewType == 'bug')  $result = $this->mr->saveBug($repoID, $mr, $v1, $v2);
             if($this->post->reviewType == 'task') $result = $this->mr->saveTask($repoID, $mr, $v1, $v2);
-            if($result['result'] == 'fail') die(json_encode($result));
+            if($result['result'] == 'fail') return print(json_encode($result));
 
             $objectID = $result['id'];
             $repo     = $this->repo->getRepoById($repoID);
@@ -1004,6 +1004,6 @@ class mr extends control
        $targetBranch  = $this->post->targetBranch;
 
        $result = $this->mr->checkSameOpened($gitlabID, $sourceProject, $sourceBranch, $targetProject, $targetBranch);
-       die(json_encode($result));
+       echo json_encode($result);
    }
 }
