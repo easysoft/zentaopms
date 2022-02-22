@@ -2497,7 +2497,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
-        if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
+        if($task->story)  $this->loadModel('story')->setStage($task->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
