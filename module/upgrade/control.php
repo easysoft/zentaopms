@@ -127,7 +127,7 @@ class upgrade extends control
             $this->view->result = 'fail';
             $this->view->errors  = $result;
 
-            return $this->display());
+            return $this->display();
         }
 
         $fromVersion = isset($_POST['fromVersion']) ? $this->post->fromVersion : $fromVersion;
