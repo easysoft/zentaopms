@@ -571,8 +571,9 @@ class task extends control
             return print(js::locate($this->session->taskList, 'parent'));
         }
 
-        $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : return print(js::locate($this->session->taskList, 'parent'));
-        $taskIDList = array_unique($taskIDList);
+        if(!$this->post->taskIDList) return print(js::locate($this->session->taskList, 'parent'));
+
+        $taskIDList = array_unique($this->post->taskIDList);
 
         /* The tasks of execution. */
         if($executionID)

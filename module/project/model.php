@@ -1941,7 +1941,7 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t2.vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');
