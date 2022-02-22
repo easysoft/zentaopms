@@ -240,11 +240,11 @@ class gitlab
     {
         if(!scm::checkRevision($revision)) return array();
 
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
-        $path = urlencode($path);
-        $api  = "files/$path/blame";
+        $path  = ltrim($path, DIRECTORY_SEPARATOR);
+        $path  = urlencode($path);
+        $api   = "files/$path/blame";
         $param = new stdclass;
-        $param->ref = $this->branch;
+        $param->ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
         $results = $this->fetch($api, $param);
 
         $blames   = array();
