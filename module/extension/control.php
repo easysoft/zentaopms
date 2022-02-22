@@ -30,7 +30,8 @@ class extension extends control
             $this->view->position[] = $this->lang->extension->browse;
 
             $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace('\\', '/', $statusFile));
-            return $this->display('extension', 'safe');
+            $this->display('extension', 'safe');
+            helper::end();
         }
     }
 
