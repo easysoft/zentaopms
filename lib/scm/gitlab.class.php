@@ -365,7 +365,7 @@ class gitlab
             $commits = $this->getCommitsByPath($entry);
 
             if(!empty($commits)) $file->revision = zget($commits[0], 'id', '');
-            $info->kind = $file->type == 'tree' ? 'dir' : 'file';
+            $info->kind = (isset($file->type) and $file->type == 'tree') ? 'dir' : 'file';
         }
 
         return $info;
