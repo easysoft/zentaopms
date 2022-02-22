@@ -863,4 +863,18 @@ class upgrade extends control
     {
         echo $this->dao->select('status')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch('status');
     }
+
+    /**
+     * Move Extent files.
+     *
+     * @access public
+     * @return void
+     */
+    public function moveEXTFiles()
+    {
+        if(!empty($_POST)) $this->upgrade->moveEXTFiles();
+
+        $this->view->files = $this->upgrade->getEXTFiles();
+        $this->display();
+    }
 }
