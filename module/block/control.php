@@ -1396,7 +1396,8 @@ class block extends control
     {
         $sprints = $this->dao->select('status, count(*) as sprints')->from(TABLE_EXECUTION)
             ->where('deleted')->eq(0)
-            ->andWhere('type')->eq('sprint')
+            ->beginIF($this->config->vision == 'lite')->andWhere('type')->eq('kanban')->fi()
+            ->beginIF($this->config->vision == 'rnd')->andWhere('type')->eq('sprint')->fi()
             ->andWhere('parent')->eq($this->session->project)
             ->groupBy('status')
             ->fetchPairs();
