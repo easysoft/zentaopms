@@ -160,6 +160,7 @@ class product extends control
         $this->view->parentModules   = $this->tree->getParents($moduleID);
         $this->view->pager           = $pager;
         $this->view->users           = $this->user->getPairs('noletter|pofirst|nodeleted');
+        $this->view->teamMembers     = $this->user->getTeamMemberPairs($projectID);
         $this->view->orderBy         = $orderBy;
         $this->view->browseType      = $browseType;
         $this->view->modules         = $this->tree->getOptionMenu($productID, 'story', 0, $branchID);
