@@ -1531,7 +1531,7 @@ class bug extends control
     public function batchResolve($resolution, $resolvedBuild = '')
     {
         if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
-        
+
         $bugIDList = array_unique($this->post->bugIDList);
         $changes   = $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
         if(dao::isError()) return print(js::error(dao::getError()));
