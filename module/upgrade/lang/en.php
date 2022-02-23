@@ -130,6 +130,7 @@ $lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this
 $lang->upgrade->errorEngineInnodb  = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->upgrade->duplicateProject   = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";
+$lang->upgrade->moveEXTFileFail    = 'The migration file failed, please execute the above command and refresh!';
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";

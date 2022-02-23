@@ -872,9 +872,32 @@ class upgrade extends control
      */
     public function moveEXTFiles()
     {
-        if(!empty($_POST)) $this->upgrade->moveEXTFiles();
+        $errorMessage = '';
+        $command      = '';
+        $result       = 'success';
+        if(!empty($_POST))
+        {
+            $response = $this->upgrade->moveEXTFiles();
+            $result   = $response['result'];
 
-        $this->view->files = $this->upgrade->getEXTFiles();
+            if($result == 'success')
+            {
+                $response = $this->upgrade->removeChargeDir();
+                $result   = $response['result'];
+            }
+
+            if($response['result'] == 'fail')
+            {
+                $errorMessage = $response['message'];
+                $command      = $response['command'];
+            }
+        }
+
+        $this->view->files        = $this->upgrade->getEXTFiles();
+        $this->view->result       = $result;
+        $this->view->errorMessage = $errorMessage;
+        $this->view->command      = $command;
+
         $this->display();
     }
 }
