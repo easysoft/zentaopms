@@ -352,7 +352,7 @@ class control extends baseControl
      */
     public function checkRequireFlowField()
     {
-        if($this->config->edition != 'biz') return false;
+        if($this->config->edition == 'open') return false;
         if(empty($_POST)) return false;
 
         $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
