@@ -74,12 +74,12 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function editSpace($spaceID)
+    public function editSpace($spaceID, $type = '')
     {
         $this->loadModel('action');
         if(!empty($_POST))
         {
-            $changes = $this->kanban->updateSpace($spaceID);
+            $changes = $this->kanban->updateSpace($spaceID, $type);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -89,8 +89,27 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->space = $this->kanban->getSpaceById($spaceID);
-        $this->view->users = $this->loadModel('user')->getPairs('noclosed');
+        $space = $this->kanban->getSpaceById($spaceID);
+
+        $typeList = $this->lang->kanbanspace->typeList;
+        if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
+
+        if($space->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        {
+            $team = $space->whitelist;
+        }
+        else
+        {
+            $team = $space->team;
+        }
+
+        $this->view->spaceID     = $spaceID;
+        $this->view->space       = $space;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->typeList    = $typeList;
+        $this->view->type        = $type;
+        $this->view->team        = $team;
+        $this->view->defaultType = $type == '' ? $space->type : $type;
 
         $this->display();
     }
