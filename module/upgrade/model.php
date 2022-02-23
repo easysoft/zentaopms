@@ -5852,21 +5852,21 @@ class upgradeModel extends model
      */
     public function replaceEXTFile($file)
     {
-        $filePathInfo = pathinfo($file);
-        $namePathInfo = pathinfo($filePathInfo['filename']);
-
         $content = file_get_contents($file);
-        if(isset($namePathInfo['extension']) and $namePathInfo['extension'] == 'html')
+        if(strpos(basename($file), 'html'))
         {
-            $content = str_replace("include '../../", "include '../../../", $content);
-            $ch = 97;
-            for ($i = 0; $i < 26; $i ++)
-            {
-                $letter = chr($ch + $i);
-                $content = str_replace("../../../" . $letter, "../../../module/" . $letter, $content);
-            }
-            $content = str_replace("../../../module/module", "../../../module", $content);
-            file_put_contents($file, $content);
+            $content = preg_replace("#(include ')((../){2,})([a-z]+/)#", "$1$2../../module/$4", $content);
         }
+        else
+        {
+            $dir = dirname($file);
+            $dir = str_replace($this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom' .DIRECTORY_SEPARATOR , '', $dir);
+            $moduleName = explode(DIRECTORY_SEPARATOR,  $dir)[0];
+
+            $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
+            $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
+            $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
+        }
+        file_put_contents($file, $content);
     }
 }
