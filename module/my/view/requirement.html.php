@@ -58,7 +58,7 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri w-40px' title=<?php echo $lang->task->pri;?>><?php common::printOrderLink('pri',          $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-pri w-40px' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-name'>      <?php common::printOrderLink('title',        $orderBy, $vars, $lang->my->name);?></th>
           <th class='c-product'>   <?php common::printOrderLink('productTitle', $orderBy, $vars, $lang->story->product);?></th>
           <th class='c-user'>      <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>
