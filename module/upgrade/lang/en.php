@@ -116,6 +116,8 @@ $lang->upgrade->projectName    = 'Project Name';
 $lang->upgrade->moveEXTFiles   = 'Migrate Expansion Files';
 $lang->upgrade->fileName       = 'File Name';
 $lang->upgrade->next           = 'Next';
+$lang->upgrade->yes            = 'Yes';
+$lang->upgrade->no             = 'No';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->editedName         = 'New Name';

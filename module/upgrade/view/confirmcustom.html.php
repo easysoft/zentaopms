@@ -17,8 +17,8 @@
         <strong><?php echo $lang->upgrade->confirmCustomTip;?></strong>
       </div>
       <div class='modal-footer'>
-        <?php echo html::submitButton($lang->confirm);?>
-        <?php echo html::a(inlink('afterExec', "fromVersion=$fromVersion&processed=no&skipConfirm=yes"), $lang->cancel, '', "class='btn btn-back btn-wide'");?>
+        <?php echo html::submitButton($lang->upgrade->yes);?>
+        <?php echo html::a(inlink('afterExec', "fromVersion=$fromVersion&processed=no&skipConfirm=yes"), $lang->upgrade->no, '', "class='btn btn-back btn-wide'");?>
       </div>
     </div>
   </form>

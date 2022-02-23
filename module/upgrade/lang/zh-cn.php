@@ -116,6 +116,8 @@ $lang->upgrade->projectName    = '项目名称';
 $lang->upgrade->moveEXTFiles   = '迁移插件文件';
 $lang->upgrade->fileName       = '文件名称';
 $lang->upgrade->next           = '下一步';
+$lang->upgrade->yes            = '是';
+$lang->upgrade->no             = '否';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->editedName         = '调整后名称';
