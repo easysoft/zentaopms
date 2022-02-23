@@ -702,11 +702,11 @@ class upgrade extends control
      *
      * @param  string $fromVersion
      * @param  string $processed
-     * @param  string $skipConfirm
+     * @param  string $skipMoveFile
      * @access public
      * @return void
      */
-    public function afterExec($fromVersion, $processed = 'no', $skipConfirm = 'no')
+    public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no')
     {
         $alterSQL = $this->upgrade->checkConsistency($this->config->version);
         if(!empty($alterSQL))
@@ -717,7 +717,7 @@ class upgrade extends control
         }
 
         $EXTfiles = $this->upgrade->getEXTFiles();
-        if(!empty($EXTfiles) and $skipConfirm == 'no') $this->locate(inlink('confirmCustom', "fromVersion=$fromVersion"));
+        if(!empty($EXTfiles) and $skipMoveFile == 'no') $this->locate(inlink('moveEXTFiles', "fromVersion=$fromVersion"));
         unset($_SESSION['user']);
 
         if($processed == 'no')
@@ -868,20 +868,6 @@ class upgrade extends control
     }
 
     /**
-     * Confirm custom.
-     *
-     * @param  string $fromVersion
-     * @access public
-     * @return void
-     */
-    public function confirmCustom($fromVersion)
-    {
-        $this->view->fromVersion = $fromVersion;
-
-        $this->display();
-    }
-
-    /**
      * Move Extent files.
      *
      * @param  string $fromVersion
@@ -895,13 +881,16 @@ class upgrade extends control
         $result       = 'success';
         if(!empty($_POST))
         {
-            $response = $this->upgrade->moveEXTFiles();
-            $result   = $response['result'];
-
-            if($result == 'success')
+            if(!empty($_POST['files']))
             {
-                $response = $this->upgrade->removeChargeDir();
+                $response = $this->upgrade->moveEXTFiles();
                 $result   = $response['result'];
+
+                if($result == 'success')
+                {
+                    $response = $this->upgrade->removeChargeDir();
+                    $result   = $response['result'];
+                }
             }
 
             if($result == 'fail')
@@ -913,6 +902,7 @@ class upgrade extends control
             if($result == 'success') $this->locate($this->inlink('afterExec', "fromVersion=$fromVersion&processed=no&skipConfirm=yes"));
         }
 
+        $this->view->title        = $this->lang->upgrade->common;
         $this->view->files        = $this->upgrade->getEXTFiles();
         $this->view->result       = $result;
         $this->view->errorMessage = $errorMessage;

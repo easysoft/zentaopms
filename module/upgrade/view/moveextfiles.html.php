@@ -14,9 +14,11 @@
   <form method='post' action="<?php echo $this->createLink('upgrade', 'moveEXTFiles', "fromVersion=$fromVersion");?>">
     <div class='modal-dialog'>
       <div class='modal-header'>
-        <strong><?php echo $lang->upgrade->moveEXTFiles;?></strong>
+        <strong><?php echo $lang->upgrade->compatibleEXT;?></strong>
         <?php if($result == 'success'):?>
         <div class='alert alert-info no-margin'><?php echo $lang->upgrade->moveExtFileTip?></div>
+        <?php elseif($result == 'fail' and is_array($command)):?>
+        <div class='alert alert-info no-margin'><?php echo $lang->upgrade->deleteDirTip?></div>
         <?php endif;?>
       </div>
       <div class='modal-body'>
@@ -43,6 +45,7 @@
       <div class='modal-footer text-center'>
         <?php if($result == 'success') echo html::submitButton($lang->upgrade->next);?>
         <?php if($result == 'fail') echo $errorMessage . ' ' . html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage()'");?></div>
+        <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
       </div>
     </div>
   </form>
