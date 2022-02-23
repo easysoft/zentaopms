@@ -1244,8 +1244,8 @@ class testcase extends control
      */
     public function batchCaseTypeChange($result)
     {
-        $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : return print(js::locate($this->session->caseList, 'parent'));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
+        $caseIdList = array_unique($this->post->caseIDList);
         $this->testcase->batchCaseTypeChange($caseIdList, $result);
 
         if(dao::isError()) return print(js::error(dao::getError()));
