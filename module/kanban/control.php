@@ -74,12 +74,12 @@ class kanban extends control
      * @access public
      * @return void
      */
-    public function editSpace($spaceID)
+    public function editSpace($spaceID, $type = '')
     {
         $this->loadModel('action');
         if(!empty($_POST))
         {
-            $changes = $this->kanban->updateSpace($spaceID);
+            $changes = $this->kanban->updateSpace($spaceID, $type);
 
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -89,8 +89,27 @@ class kanban extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
 
-        $this->view->space = $this->kanban->getSpaceById($spaceID);
-        $this->view->users = $this->loadModel('user')->getPairs('noclosed');
+        $space = $this->kanban->getSpaceById($spaceID);
+
+        $typeList = $this->lang->kanbanspace->typeList;
+        if($space->type == 'cooperation' or $space->type == 'public') unset($typeList['private']);
+
+        if($space->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        {
+            $team = $space->whitelist;
+        }
+        else
+        {
+            $team = $space->team;
+        }
+
+        $this->view->spaceID     = $spaceID;
+        $this->view->space       = $space;
+        $this->view->users       = $this->loadModel('user')->getPairs('noclosed');
+        $this->view->typeList    = $typeList;
+        $this->view->type        = $type;
+        $this->view->team        = $team;
+        $this->view->defaultType = $type == '' ? $space->type : $type;
 
         $this->display();
     }
@@ -110,12 +129,12 @@ class kanban extends control
         {
             $changes = $this->kanban->closeSpace($spaceID);
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->action->create('kanbanSpace', $spaceID, 'closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->space   = $this->kanban->getSpaceById($spaceID);
@@ -137,12 +156,12 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
         }
         else
         {
             $this->kanban->delete(TABLE_KANBANSPACE, $spaceID);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -235,12 +254,12 @@ class kanban extends control
         {
             $changes = $this->kanban->close($kanbanID);
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->action->create('kanban', $kanbanID, 'closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->kanban  = $this->kanban->getByID($kanbanID);
@@ -265,11 +284,11 @@ class kanban extends control
         if(!$kanban)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate($this->createLink('kanban', 'space')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('kanban', 'space')));
         }
 
         $kanbanIdList = $this->kanban->getCanViewObjects();
-        if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) die(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and !in_array($kanbanID, $kanbanIdList)) return print(js::error($this->lang->kanban->accessDenied) . js::locate('back'));
 
         $space = $this->kanban->getSpaceByID($kanban->space);
 
@@ -305,12 +324,12 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
         }
         else
         {
             $this->kanban->delete(TABLE_KANBAN, $kanbanID);
-            die(js::locate($this->createLink('kanban', 'space'), 'parent'));
+            return print(js::locate($this->createLink('kanban', 'space'), 'parent'));
         }
     }
 
@@ -428,12 +447,12 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbanregion->confirmDelete, $this->createLink('kanban', 'deleteRegion', "regionID=$regionID&confirm=yes")));
+            return print(js::confirm($this->lang->kanbanregion->confirmDelete, $this->createLink('kanban', 'deleteRegion', "regionID=$regionID&confirm=yes")));
         }
         else
         {
             $this->kanban->delete(TABLE_KANBANREGION, $regionID);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -579,12 +598,12 @@ class kanban extends control
             $laneType   = $this->kanban->getLaneById($laneID)->type;
             $confirmTip = in_array($laneType, array('story', 'task', 'bug')) ? sprintf($this->lang->kanbanlane->confirmDeleteTip, $this->lang->{$laneType}->common) : $this->lang->kanbanlane->confirmDelete;
 
-            die(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
+            return print(js::confirm($confirmTip, $this->createLink('kanban', 'deleteLane', "laneID=$laneID&confirm=yes"), ''));
         }
         else
         {
             $this->kanban->delete(TABLE_KANBANLANE, $laneID);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -646,7 +665,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancolumn->confirmArchive, $this->createLink('kanban', 'archiveColumn', "columnID=$columnID&confirm=yes")));
+            return print(js::confirm($this->lang->kanbancolumn->confirmArchive, $this->createLink('kanban', 'archiveColumn', "columnID=$columnID&confirm=yes")));
         }
         else
         {
@@ -664,12 +683,12 @@ class kanban extends control
             }
 
             $this->kanban->archiveColumn($columnID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('action')->create('kanbancolumn', $columnID, 'archived');
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::reload('parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -685,15 +704,15 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancolumn->confirmRestore, $this->createLink('kanban', 'restoreColumn', "columnID=$columnID&confirm=yes"), ''));
+            return print(js::confirm($this->lang->kanbancolumn->confirmRestore, $this->createLink('kanban', 'restoreColumn', "columnID=$columnID&confirm=yes"), ''));
         }
         else
         {
             $this->kanban->restoreColumn($columnID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('action')->create('kanbancolumn', $columnID, 'restore');
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -741,7 +760,7 @@ class kanban extends control
         if($confirm == 'no')
         {
             $confirmLang = $column->parent > 0 ? $this->lang->kanbancolumn->confirmDeleteChild : $this->lang->kanbancolumn->confirmDelete;
-            die(js::confirm($confirmLang, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
+            return print(js::confirm($confirmLang, $this->createLink('kanban', 'deleteColumn', "columnID=$columnID&confirm=yes")));
         }
         else
         {
@@ -749,7 +768,7 @@ class kanban extends control
 
             $this->dao->delete()->from(TABLE_KANBANCOLUMN)->where('id')->eq($columnID)->exec();
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -956,7 +975,7 @@ class kanban extends control
         $this->kanban->moveCard($cardID, $fromColID, $toColID, $fromLaneID, $toLaneID, $kanbanID);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-        die(json_encode($kanbanGroup));
+        echo json_encode($kanbanGroup);
     }
 
     /**
@@ -1239,7 +1258,7 @@ class kanban extends control
         $this->kanban->updateCardColor($cardID, $color);
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
         $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-        die(json_encode($kanbanGroup));
+        echo json_encode($kanbanGroup);
     }
 
     /**
@@ -1274,7 +1293,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancard->confirmArchive, $this->createLink('kanban', 'archiveCard', "cardID=$cardID&confirm=yes")));
+            return print(js::confirm($this->lang->kanbancard->confirmArchive, $this->createLink('kanban', 'archiveCard', "cardID=$cardID&confirm=yes")));
         }
         else
         {
@@ -1284,8 +1303,8 @@ class kanban extends control
             $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'archived');
             $this->action->logHistory($actionID, $changes);
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::reload('parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            echo js::reload('parent');
         }
     }
 
@@ -1320,21 +1339,21 @@ class kanban extends control
         {
             $card   = $this->kanban->getCardByID($cardID);
             $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
-            if($column->archived or $column->deleted) die(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
+            if($column->archived or $column->deleted) return print(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
 
-            die(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
+            return print(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
         }
         else
         {
             $this->kanban->restoreCard($cardID);
 
             $changes = $this->kanban->restoreCard($cardID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('kanbancard', $cardID, 'restore');
             $this->action->logHistory($actionID, $changes);
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -1350,14 +1369,14 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->kanbancard->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
+            return print(js::confirm($this->lang->kanbancard->confirmDelete, $this->createLink('kanban', 'deleteCard', "cardID=$cardID&confirm=yes")));
         }
         else
         {
             $this->kanban->delete(TABLE_KANBANCARD, $cardID);
 
-            if(isonlybody()) die(js::reload('parent.parent'));
-            die(js::reload('parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -1395,7 +1414,7 @@ class kanban extends control
 
         $this->app->loadLang('story');
 
-        if(!$column) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
+        if(!$column) return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
 
         $title  = isset($column->parentName) ? $column->parentName . '/' . $column->name : $column->name;
 
@@ -1429,7 +1448,7 @@ class kanban extends control
         }
 
         $lane = $this->kanban->getLaneById($laneID);
-        if(!$lane) die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
+        if(!$lane) return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'kanban', "executionID=$executionID")));
 
         $this->view->title = $from == 'kanban' ? $this->lang->edit . '“' . $lane->name . '”' . $this->lang->kanbanlane->common : zget($this->lang->kanban->laneTypeList, $lane->type) . $this->lang->colon . $this->lang->kanban->setLane;
         $this->view->lane  = $lane;
@@ -1614,7 +1633,7 @@ class kanban extends control
             ->exec();
 
         $kanbanGroup = $regionID == 0 ? $this->kanban->getExecutionKanban($executionID, $browseType, $groupBy) : $this->kanban->getRDKanban($executionID, $browseType, $orderBy, $regionID, $groupBy);
-        die(json_encode($kanbanGroup));
+        echo json_encode($kanbanGroup);
     }
 
     /**
@@ -1638,7 +1657,7 @@ class kanban extends control
             $this->loadModel('action')->create('kanbanlane', $laneID, 'Moved');
         }
 
-        die(js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent'));
+        echo js::locate($this->createLink('execution', 'kanban', 'executionID=' . $executionID . '&type=all'), 'parent');
     }
 
     /**
@@ -1692,6 +1711,8 @@ class kanban extends control
      *
      * @param  int    $regionID
      * @param  string $type all|story|task|bug
+     * @param  string $field otherLane|lane
+     * @param  int    $i
      * @access public
      * @return string
      */

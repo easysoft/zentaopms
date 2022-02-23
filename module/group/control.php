@@ -58,10 +58,10 @@ class group extends control
         if(!empty($_POST))
         {
             $groupID = $this->group->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $groupID));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->create;
@@ -81,8 +81,8 @@ class group extends control
        if(!empty($_POST))
         {
             $this->group->update($groupID);
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
         $title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->edit;
@@ -107,9 +107,9 @@ class group extends control
        if(!empty($_POST))
         {
             $this->group->copy($groupID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
 
         $this->view->title      = $this->lang->company->orgView . $this->lang->colon . $this->lang->group->copy;
@@ -251,8 +251,8 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateUser($groupID);
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
@@ -291,7 +291,7 @@ class group extends control
         if(!empty($_POST))
         {
             $this->group->updateProjectAdmin($groupID);
-            die(js::locate(inlink('manageProjectAdmin', "group=$groupID"), 'parent'));
+            return print(js::locate(inlink('manageProjectAdmin', "group=$groupID"), 'parent'));
         }
         $group        = $this->group->getById($groupID);
         $groupUsers   = $this->group->getUserPairs($groupID);
@@ -326,7 +326,7 @@ class group extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->group->confirmDelete, $this->createLink('group', 'delete', "groupID=$groupID&confirm=yes")));
+            return print(js::confirm($this->lang->group->confirmDelete, $this->createLink('group', 'delete', "groupID=$groupID&confirm=yes")));
         }
         else
         {
@@ -347,7 +347,7 @@ class group extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->createLink('group', 'browse'), 'parent'));
+            return print(js::locate($this->createLink('group', 'browse'), 'parent'));
         }
     }
 }

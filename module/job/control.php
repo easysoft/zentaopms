@@ -219,10 +219,10 @@ class job extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->job->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->job->confirmDelete, inlink('delete', "jobID=$id&confirm=yes")));
 
         $this->job->delete(TABLE_JOB, $id);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -343,7 +343,7 @@ class job extends control
     public function ajaxGetProductByRepo($repoID)
     {
         $repo = $this->loadModel('repo')->getRepoByID($repoID);
-        if(empty($repo)) die(json_encode(array(""=>"")));
+        if(empty($repo)) return print(json_encode(array(""=>"")));
 
         $product = $repo->product;
         if(strpos($product, ','))
@@ -359,11 +359,11 @@ class job extends control
                     if($productLeft == $productRight) $matchedProducts[$productName] = $productRight;
                 }
             }
-            die(json_encode($matchedProducts));
+            return print(json_encode($matchedProducts));
         }
 
         $productName = $this->loadModel('product')->getByID($repo->product)->name;
-        die(json_encode(array($productName => $repo->product)));
+        ehco json_encode(array($productName => $repo->product));
     }
 
     /**
@@ -405,7 +405,6 @@ class job extends control
             }
         }
         echo html::select('repo', $repoPairs, '', "class='form-control chosen'");
-        die();
     }
 
     /**
@@ -431,7 +430,7 @@ class job extends control
     public function ajaxCheckSonarqubeLink($repoID, $jobID = 0)
     {
         $repo = $this->loadModel('job')->getSonarqubeByRepo(array($repoID), $jobID, true);
-        if(!empty($repo)) 
+        if(!empty($repo))
         {
             $message = $repo[$repoID]->deleted ? $this->lang->job->jobIsDeleted : sprintf($this->lang->job->repoExists, $repo[$repoID]->id . '-' . $repo[$repoID]->name);
             $this->send(array('result' => 'fail', 'message' => $message));

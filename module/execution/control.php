@@ -458,7 +458,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $this->execution->importTask($toExecution);
-            die(js::locate(inlink('importTask', "toExecution=$toExecution&fromExecution=$fromExecution"), 'parent'));
+            return print(js::locate(inlink('importTask', "toExecution=$toExecution&fromExecution=$fromExecution"), 'parent'));
         }
 
         $execution   = $this->commonAction($toExecution);
@@ -513,9 +513,9 @@ class execution extends control
         if(!empty($_POST))
         {
             $mails = $this->execution->importBug($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
-            die(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
+            return print(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
         }
 
         /* Set browseType, productID, moduleID and queryID. */
@@ -1179,7 +1179,7 @@ class execution extends control
     public function computeBurn($reload = 'no')
     {
         $this->view->burns = $this->execution->computeBurn();
-        if($reload == 'yes') die(js::reload('parent'));
+        if($reload == 'yes') return print(js::reload('parent'));
         $this->display();
     }
 
@@ -1195,7 +1195,7 @@ class execution extends control
         if($_POST)
         {
             $this->execution->fixFirst($executionID);
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $execution = $this->execution->getById($executionID);
@@ -1292,7 +1292,7 @@ class execution extends control
                 }
                 else
                 {
-                    die(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
+                    return print(js::confirm($this->lang->execution->importPlanStory, inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=yes"), inlink('create', "projectID=$projectID&executionID=$executionID")));
                 }
             }
 
@@ -1304,8 +1304,7 @@ class execution extends control
             $this->view->executionID = $executionID;
             $this->view->projectID   = $projectID;
             $this->view->project     = $project;
-            $this->display();
-            exit;
+            return $this->display();
         }
 
         $name         = '';
@@ -1662,7 +1661,7 @@ class execution extends control
                     $this->loadModel('common')->syncPPEStatus($syncExecution);
                 }
             }
-            die(js::locate($this->session->executionList, 'parent'));
+            return print(js::locate($this->session->executionList, 'parent'));
         }
 
         if($this->app->tab == 'project')
@@ -1671,7 +1670,8 @@ class execution extends control
             $this->view->project = $this->project->getById($this->session->project);
         }
 
-        $executionIDList = $this->post->executionIDList ? $this->post->executionIDList : die(js::locate($this->session->executionList, 'parent'));
+        if(!$this->post->executionIDList) return print(js::locate($this->session->executionList, 'parent'));
+        $executionIDList = $this->post->executionIDList;
         $executions      = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->in($executionIDList)->fetchAll('id');
 
         $appendPoUsers = $appendPmUsers = $appendQdUsers = $appendRdUsers = array();
@@ -1732,7 +1732,7 @@ class execution extends control
         {
             $this->loadModel('action');
             $changes = $this->execution->start($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1777,7 +1777,7 @@ class execution extends control
         {
             $this->loadModel('action');
             $changes = $this->execution->putoff($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1821,7 +1821,7 @@ class execution extends control
         {
             $this->loadModel('action');
             $changes = $this->execution->suspend($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1865,7 +1865,7 @@ class execution extends control
         {
             $this->loadModel('action');
             $changes = $this->execution->activate($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1916,7 +1916,7 @@ class execution extends control
         {
             $this->loadModel('action');
             $changes = $this->execution->close($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1953,7 +1953,7 @@ class execution extends control
     {
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
-        if(empty($execution) || strpos('stage,sprint', $execution->type) === false) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(empty($execution) || strpos('stage,sprint', $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
 
@@ -2068,6 +2068,7 @@ class execution extends control
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
         $this->view->branchID         = $branchID;
+        $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
@@ -2257,7 +2258,7 @@ class execution extends control
         $this->app->session->set('caseList', $uri, 'qa');
         $this->app->session->set('bugList', $uri, 'qa');
 
-        if($type === 'json') die(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
+        if($type === 'json') return print(helper::jsonEncode4Parse($tree, JSON_HEX_QUOT | JSON_HEX_APOS));
 
         $this->view->title      = $this->lang->execution->tree;
         $this->view->position[] = html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name);
@@ -2354,7 +2355,7 @@ class execution extends control
             {
                 if(!empty($data)) $hasData = true;
             }
-            if(!$hasData) die(js::alert($this->lang->execution->noPrintData) . js::close());
+            if(!$hasData) return print(js::alert($this->lang->execution->noPrintData) . js::close());
 
             $this->execution->saveKanbanData($executionID, $originalDatas);
 
@@ -2374,8 +2375,7 @@ class execution extends control
             $this->view->realnames  = $this->loadModel('user')->getRealNameAndEmails($users);
             $this->view->executionID  = $executionID;
 
-            die($this->display());
-
+            return $this->display();
         }
 
         $this->execution->setMenu($executionID);
@@ -2464,8 +2464,7 @@ class execution extends control
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
-            echo js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));
-            exit;
+            return print(js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes")));
         }
         else
         {
@@ -2507,9 +2506,9 @@ class execution extends control
             $executionType = $this->dao->findById($executionID)->from(TABLE_EXECUTION)->fetch('type');
             if($executionType == 'stage')
             {
-                if(!isset($_POST['products'])) die(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
+                if(!isset($_POST['products'])) return print(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
 
-                if(count($_POST['products']) > 1) die(js::alert($this->lang->execution->oneProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
+                if(count($_POST['products']) > 1) return print(js::alert($this->lang->execution->oneProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
             }
 
             $oldProducts = $this->product->getProducts($executionID);
@@ -2517,7 +2516,7 @@ class execution extends control
             if($from == 'buildCreate' && $this->session->buildCreate) $browseExecutionLink = $this->session->buildCreate;
 
             $this->execution->updateProducts($executionID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $oldProducts  = array_keys($oldProducts);
             $newProducts  = $this->product->getProducts($executionID);
@@ -2528,7 +2527,7 @@ class execution extends control
             if(isonlybody())
             {
                 unset($_GET['onlybody']);
-                die(js::locate($this->createLink('build', 'create', "executionID=$executionID&productID=0&projectID=$execution->project"), 'parent'));
+                return print(js::locate($this->createLink('build', 'create', "executionID=$executionID&productID=0&projectID=$execution->project"), 'parent'));
             }
         }
 
@@ -2594,7 +2593,7 @@ class execution extends control
         {
             $this->execution->manageMembers($executionID);
             $this->loadModel('action')->create('team', $executionID, 'managedTeam');
-            die(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
+            return print(js::locate($this->createLink('execution', 'team', "executionID=$executionID"), 'parent'));
         }
 
         /* Load model. */
@@ -2654,7 +2653,7 @@ class execution extends control
      */
     public function unlinkMember($executionID, $userID, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->execution->confirmUnlinkMember, $this->inlink('unlinkMember', "executionID=$executionID&userID=$userID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->execution->confirmUnlinkMember, $this->inlink('unlinkMember', "executionID=$executionID&userID=$userID&confirm=yes")));
 
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $account = $user->account;
@@ -2677,7 +2676,7 @@ class execution extends control
             }
             return $this->send($response);
         }
-        die(js::locate($this->inlink('team', "executionID=$executionID"), 'parent'));
+        return print(js::locate($this->inlink('team', "executionID=$executionID"), 'parent'));
     }
 
     /**
@@ -2829,7 +2828,7 @@ class execution extends control
         if($confirm == 'no')
         {
             $tip = $this->app->rawModule == 'projectstory' ? $this->lang->execution->confirmUnlinkExecutionStory : $this->lang->execution->confirmUnlinkStory;
-            die(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes")));
+            return print(js::confirm($tip, $this->createLink('execution', 'unlinkstory', "executionID=$executionID&storyID=$storyID&confirm=yes")));
         }
         else
         {
@@ -2838,7 +2837,7 @@ class execution extends control
             /* if kanban then reload and if ajax request then send result. */
             if(isonlybody())
             {
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
             elseif(helper::isAjaxRequest())
             {
@@ -2854,7 +2853,7 @@ class execution extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->app->session->storyList, 'parent'));
+            return print(js::locate($this->app->session->storyList, 'parent'));
         }
     }
 
@@ -2883,7 +2882,7 @@ class execution extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->createLink('execution', 'story', "executionID=$executionID")));
+        return print(js::locate($this->createLink('execution', 'story', "executionID=$executionID")));
     }
 
     /**
@@ -2970,7 +2969,7 @@ class execution extends control
     public function ajaxGetProducts($executionID)
     {
         $products = $this->loadModel('product')->getProducts($executionID, 'all', '', false);
-        die(html::select('product', $products, '', 'class="form-control"'));
+        return print(html::select('product', $products, '', 'class="form-control"'));
     }
 
     /**
@@ -2986,12 +2985,12 @@ class execution extends control
         $users = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
         if($this->app->getViewType() === 'json')
         {
-            die(json_encode($users));
+            return print(json_encode($users));
         }
         else
         {
             $assignedTo = isset($users[$assignedTo]) ? $assignedTo : '';
-            die(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
+            return print(html::select('assignedTo', $users, $assignedTo, "class='form-control'"));
         }
     }
 
@@ -3014,7 +3013,7 @@ class execution extends control
         $users   = $this->loadModel('user')->getPairs('nodeleted|noclosed');
         $members = $this->user->getTeamMemberPairs($objectID, $type);
 
-        die(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
+        return print(html::select('teamMembers[]', $users, array_keys($members), "class='form-control chosen' multiple"));
     }
 
     /**
@@ -3414,7 +3413,7 @@ class execution extends control
             }
             if(common::hasPriv('execution', 'kanbanColsColor')) $this->setting->setItem("system.execution.kanbanSetting.colorList", json_encode($data->colorList));
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->app->loadLang('task');
@@ -3434,7 +3433,7 @@ class execution extends control
      */
     public function ajaxResetKanban($executionID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->kanbanSetting->noticeReset, inlink('ajaxResetKanban', "executionID=$executionID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->kanbanSetting->noticeReset, inlink('ajaxResetKanban', "executionID=$executionID&confirm=yes")));
 
         $this->loadModel('setting');
 
@@ -3450,7 +3449,7 @@ class execution extends control
 
         if(common::hasPriv('execution', 'kanbanColsColor')) $this->setting->deleteItems("owner=system&module=execution&section=kanbanSetting&key=colorList");
 
-        die(js::reload('parent.parent'));
+        return print(js::reload('parent.parent'));
     }
 
     /**
@@ -3606,7 +3605,7 @@ class execution extends control
         $this->app->loadLang('kanban');
         $groups = array();
         $groups = $this->lang->kanban->group->$type;
-        die(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
+        return print(html::select("group", $groups, $group, 'class="form-control chosen" data-max_drop_width="215"'));
     }
 
     /**
@@ -3628,11 +3627,7 @@ class execution extends control
         if($lastEditedTime > $enterTime or $groupBy != 'default')
         {
             $kanbanGroup = $from == 'execution' ? $this->loadModel('kanban')->getExecutionKanban($executionID, $browseType, $groupBy) : $this->loadModel('kanban')->getRDKanban($executionID, $browseType, 'id_asc', 0, $groupBy);
-            die(json_encode($kanbanGroup));
-        }
-        else
-        {
-            die('');
+            return print(json_encode($kanbanGroup));
         }
     }
 

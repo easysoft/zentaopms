@@ -271,7 +271,7 @@ class branchModel extends model
                     ->where('id')->eq($branchID)
                     ->exec();
 
-                if(dao::isError()) die(js::error('branch#' . $branchID . dao::getError(true)));
+                if(dao::isError()) return print(js::error('branch#' . $branchID . dao::getError(true)));
 
                 $changes[$branchID] = common::createChanges($oldBranchList[$branchID], $branch);
             }
@@ -331,7 +331,7 @@ class branchModel extends model
         {
             foreach($data->branch as $branchID => $branch)
             {
-                if(!$branch) die(js::alert($this->lang->branch->nameNotEmpty));
+                if(!$branch) return print(js::alert($this->lang->branch->nameNotEmpty));
                 if($oldBranches[$branchID] != $branch) $this->dao->update(TABLE_BRANCH)->set('name')->eq($branch)->where('id')->eq($branchID)->exec();
             }
         }

@@ -198,12 +198,12 @@ class productModel extends model
 
         echo(js::alert($this->lang->product->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('product', 'index')));
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('product', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
 
-        die(js::locate('back'));
+        echo js::locate('back');
     }
 
     /**
@@ -739,10 +739,10 @@ class productModel extends model
 
                 $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $products[$productID]->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $unlinkProducts = array();
         foreach($products as $productID => $product)
@@ -757,7 +757,7 @@ class productModel extends model
                 ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
                 ->where('id')->eq($productID)
                 ->exec();
-            if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
+            if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
 
             /* When acl is open, white list set empty. When acl is private,update user view. */
             if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
@@ -2175,7 +2175,7 @@ class productModel extends model
      */
     public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) die(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
 
         $product = $this->getByID($productID);
         $params  = array('branch' => $branch);

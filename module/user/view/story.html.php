@@ -42,7 +42,7 @@
       <thead>
         <tr class='colhead'>
           <th class='w-id'>   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>  <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <?php if($this->config->vision == 'lite'):?>
           <th class='w-200px'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->project);?></th>
           <?php else:?>

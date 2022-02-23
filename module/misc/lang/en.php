@@ -94,6 +94,7 @@ $lang->misc->feature->downloadFile   = 'Download introduction';
 $lang->misc->feature->tutorialDesc   = '<p>ZenTao 15.0 has new functions, and you know how to use it through the "<strong>Tutorial</strong>".</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 $lang->misc->feature->themeDesc      = '<p>ZenTao 15.0+ a new "Youth Blue" theme, the pages are more beautiful and the experience is more friendly.</p><p>Click your [<span style="color: #0c60e1">Avatar-Theme-Young Blue</span>] to set it.</p>';
 
+$lang->misc->releaseDate['16.5']        = '2022-02-22';
 $lang->misc->releaseDate['16.4']        = '2022-02-15';
 $lang->misc->releaseDate['16.3']        = '2022-01-26';
 $lang->misc->releaseDate['16.2']        = '2022-01-17';
@@ -168,6 +169,7 @@ $lang->misc->releaseDate['7.2.stable']  = '2015-05-22';
 $lang->misc->releaseDate['7.1.stable']  = '2015-03-07';
 $lang->misc->releaseDate['6.3.stable']  = '2014-11-07';
 
+$lang->misc->feature->all['16.5'][]       = array('title' => 'Fix bug, merge all code to one package', 'desc' => '');
 $lang->misc->feature->all['16.4'][]       = array('title' => 'Implement JIRA import function and improve plug-in extension mechanism.', 'desc' => '');
 $lang->misc->feature->all['16.3'][]       = array('title' => 'Kanban adds related plan/release/version/iteration functions, and the detail experience is optimized, fix bugs.', 'desc' => '');
 $lang->misc->feature->all['16.2'][]       = array('title' => 'Add kanban model project, fix bugs.', 'desc' => '');

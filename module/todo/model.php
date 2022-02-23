@@ -188,7 +188,7 @@ class todoModel extends model
                     if(isset($object->title)) $todo->name = $object->title;
                 }
 
-                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $validTodos[] = $todo;
             }
@@ -210,7 +210,7 @@ class todoModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
             $todoID       = $this->dao->lastInsertID();
             $todoIDList[] = $todoID;
@@ -336,7 +336,7 @@ class todoModel extends model
                 {
                     $todo->idvalue = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
                 }
-                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
             }
@@ -369,7 +369,7 @@ class todoModel extends model
                 }
                 else
                 {
-                    die(js::error('todo#' . $todoID . dao::getError(true)));
+                    return print(js::error('todo#' . $todoID . dao::getError(true)));
                 }
             }
         }

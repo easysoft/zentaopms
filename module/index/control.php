@@ -126,6 +126,6 @@ class index extends control
                 }
             }
         }
-        die($method);
+        echo $method;
     }
 }
