@@ -5816,7 +5816,7 @@ class upgradeModel extends model
                 /* Determine whether the current file is encrypted. */
                 if(strpos($line, "extension_loaded('ionCube Loader')") === false)
                 {
-                    $maxFiles = file_get_contents('maxfiles.php');
+                    $maxFiles = file_get_contents('maxfiles.txt');
                     if(strpos($maxFiles, $fileName) !== false) continue;
 
                     $files[$fileName] = $fileName;

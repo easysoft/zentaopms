@@ -113,11 +113,9 @@ $lang->upgrade->end            = 'End Date';
 $lang->upgrade->selectProject  = 'The target project';
 $lang->upgrade->programName    = 'Program Name';
 $lang->upgrade->projectName    = 'Project Name';
-$lang->upgrade->moveEXTFiles   = 'Migrate Expansion Files';
+$lang->upgrade->compatibleEXT  = 'Extension mechanism compatible';
 $lang->upgrade->fileName       = 'File Name';
 $lang->upgrade->next           = 'Next';
-$lang->upgrade->yes            = 'Yes';
-$lang->upgrade->no             = 'No';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->editedName         = 'New Name';
@@ -133,8 +131,11 @@ $lang->upgrade->errorEngineInnodb  = 'Your MySQL does not support InnoDB data ta
 $lang->upgrade->duplicateProject   = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";
 $lang->upgrade->moveEXTFileFail    = 'The migration file failed, please execute the above command and refresh!';
-$lang->upgrade->confirmCustomTip   = 'Please confirm whether customization or secondary development has been done';
-$lang->upgrade->moveExtFileTip     = 'The following files will be migrated to zentaopms/extension/custom';
+$lang->upgrade->deleteDirTip       = 'After the upgrade, the following folders will affect the use of system functions, please delete them.';
+$lang->upgrade->moveExtFileTip     = <<<EOT
+<p>The new version will be compatible with the extension mechanism of the historical customization/plug-in. You need to migrate the customization/plug-in related files to zentaopms/extension/custom, otherwise the customization/plug-in function will not be available.</p>
+<p>Please confirm whether the system has been customized/plug-in. If no customization/plug-in has been done, you can uncheck the following files; Whether you have done customization/plug-in, you can also keep the file checked.</p>
+EOT;
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";
