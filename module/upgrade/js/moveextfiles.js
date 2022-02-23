@@ -35,5 +35,5 @@ $("[name^='files']").click(function()
  */
 function refreshPage()
 {
-    location.href = createLink('upgrade', 'moveExtFiles');
+    location.reload(true);
 }
