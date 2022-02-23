@@ -37,6 +37,13 @@ $lang->action->dynamicAction->task['deletechildrentask']  = '删除子任务';
 $lang->action->dynamicAction->task['linkparenttask']      = '关联到父任务';
 $lang->action->dynamicAction->task['linkchildtask']       = '关联子任务';
 
+$lang->action->label->createchildrenstory   = "创建子目标";
+$lang->action->label->linkchildstory        = "关联子目标";
+$lang->action->label->unlinkchildrenstory   = "取消关联子目标";
+$lang->action->label->linkparentstory       = "关联到父目标";
+$lang->action->label->unlinkparentstory     = "从父目标取消关联";
+$lang->action->label->deletechildrenstory   = "删除子目标";
+
 $lang->action->search->label = array();
 $lang->action->search->label['']                      = '';
 $lang->action->search->label['created']               = $lang->action->label->created;
