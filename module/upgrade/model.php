@@ -59,28 +59,41 @@ class upgradeModel extends model
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
 
             $openVersion = $version;
-            $proVersion  = array_search($openVersion, $this->config->proVersion);
-            $bizVersion  = array_search($openVersion, $this->config->bizVersion);
-            $maxVersion  = array_search($openVersion, $this->config->maxVersion);
+            if(str_replace('_', '.', $openVersion) == '10.1') $executeXuanxuan = true;
 
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-
-            $this->saveLogs("Execute $proVersion");
-            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
-
-            $this->saveLogs("Execute $bizVersion");
-            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
-
-            $this->saveLogs("Execute $maxVersion");
-            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
-
-            if(str_replace('_', '.', $openVersion) == '10.1') $executeXuanxuan = true;
             $this->executeOpen($openVersion, $fromVersion, $executeXuanxuan);
 
-            $this->executePro($proVersion);
+            $proVersions = array();
+            foreach($this->config->proVersion as $pro => $open) 
+            {
+                if($open == $openVersion) $proVersions[] = $pro;
+            }
 
-            $this->executeBiz($bizVersion, $executeXuanxuan);
+            foreach($proVersions as $proVersion)
+            {
+                $this->saveLogs("Execute $proVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
+                $this->executePro($proVersion);
+            }
+
+            $bizVersions = array();
+            foreach($this->config->bizVersion as $biz => $open) 
+            {
+                if($open == $openVersion) $bizVersions[] = $biz;
+            }
+
+            foreach($bizVersions as $bizVersion)
+            {
+                $this->saveLogs("Execute $bizVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
+                $this->executeBiz($bizVersion, $executeXuanxuan);
+            }
+
+            $maxVersion = array_search($openVersion, $this->config->maxVersion);
+            $this->saveLogs("Execute $maxVersion");
+            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
         }
     }
 
