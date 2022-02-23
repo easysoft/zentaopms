@@ -839,6 +839,7 @@ class execution extends control
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
+
         $this->display();
     }
 
