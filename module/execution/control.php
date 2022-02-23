@@ -1304,8 +1304,7 @@ class execution extends control
             $this->view->executionID = $executionID;
             $this->view->projectID   = $projectID;
             $this->view->project     = $project;
-            $this->display();
-            exit;
+            return $this->display();
         }
 
         $name         = '';
@@ -2069,6 +2068,7 @@ class execution extends control
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
         $this->view->branchID         = $branchID;
+        $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
@@ -2464,8 +2464,7 @@ class execution extends control
                 include $this->app->getModulePath('', 'execution') . 'lang/' . $this->app->getClientLang() . '.php';
             }
 
-            echo js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes"));
-            exit;
+            return print(js::confirm($tips . sprintf($this->lang->execution->confirmDelete, $this->executions[$executionID]), $this->createLink('execution', 'delete', "executionID=$executionID&confirm=yes")));
         }
         else
         {

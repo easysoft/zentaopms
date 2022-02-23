@@ -124,7 +124,7 @@ js::set('flow',          $config->global->flow);
                 <?php endif;?>
                 <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
               </th>
-              <th class='c-pri'>   <?php common::printOrderLink('pri',      $orderBy, $vars, $lang->priAB);?></th>
+              <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
               <th class='text-left'><?php common::printOrderLink('title',   $orderBy, $vars, $lang->testcase->title);?></th>
               <th class='c-type'>  <?php common::printOrderLink('type',     $orderBy, $vars, $lang->typeAB);?></th>
               <th class='c-user'>  <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>

@@ -866,7 +866,7 @@ class taskModel extends model
         {
             $taskConsumed = 0;
             $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
-            if($taskConsumed > 0) die(js::error($this->lang->task->error->alreadyConsumed));
+            if($taskConsumed > 0) return print(js::error($this->lang->task->error->alreadyConsumed));
         }
 
         $now  = helper::now();
@@ -915,7 +915,7 @@ class taskModel extends model
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
             ->get();
 
-        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+        if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
 
         /* Fix bug#1388, Check children task executionID and moduleID. */
         if(isset($task->execution) and $task->execution != $oldTask->execution)
@@ -1166,7 +1166,7 @@ class taskModel extends model
 
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             if($data->consumeds[$taskID])
@@ -1245,9 +1245,9 @@ class taskModel extends model
         /* Check field not empty. */
         foreach($tasks as $taskID => $task)
         {
-            if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
+            if($task->status == 'done' and $task->consumed == false) return print(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) return print(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1315,7 +1315,7 @@ class taskModel extends model
             }
             else
             {
-                die(js::error('task#' . $taskID . dao::getError(true)));
+                return print(js::error('task#' . $taskID . dao::getError(true)));
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
@@ -1533,8 +1533,8 @@ class taskModel extends model
 
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
-                if(!$record->consumed[$id])   die(js::alert($this->lang->task->error->consumedThisTime));
-                if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
+                if(!$record->consumed[$id])   return print(js::alert($this->lang->task->error->consumedThisTime));
+                if($record->left[$id] === '') return print(js::alert($this->lang->task->error->left));
 
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
@@ -2118,6 +2118,26 @@ class taskModel extends model
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        
+        $lanes      = array();
+        $cardsWhere = '';
+        foreach($tasks as $task) 
+        {
+            if(empty($cardsWhere)) 
+            {
+                $cardsWhere = "cards like '%,{$task->id},%'";
+            } 
+            else
+            {
+                $cardsWhere .= " or cards like '%,{$task->id},%'";
+            }
+        }
+        $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
+            ->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere("($cardsWhere)")
+            ->fetchAll('cards');
 
         foreach($tasks as $task)
         {
@@ -2132,6 +2152,15 @@ class taskModel extends model
                 {
                     $parent = $parents[$task->parent];
                     $task->parentName = $parent->name;
+                }
+            }
+
+            $task->lane = '';
+            if(!empty($lanes))
+            {
+                foreach($lanes as $lane) 
+                {
+                    if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
                 }
             }
         }
@@ -2497,7 +2526,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($data)->where('id')->eq($task->id)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
-        if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
+        if($task->story)  $this->loadModel('story')->setStage($task->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
@@ -3101,6 +3130,7 @@ class taskModel extends model
             if($id == 'deadline') $class .= ' text-center';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo') $class .= ' has-btn text-left';
+            if($id == 'lane') $class .= ' text-left';
             if(strpos('progress', $id) !== false) $class .= ' text-right';
 
             $title = '';
@@ -3181,6 +3211,9 @@ class taskModel extends model
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($task, $users);
+                break;
+            case 'lane':
+                echo trim($task->lane);
                 break;
             case 'assignedDate':
                 echo substr($task->assignedDate, 5, 11);

@@ -18,6 +18,7 @@ if($config->edition != 'open')
 {
     $lang->navIcons['feedback'] = "<i class='icon icon-feedback'></i>";
     $lang->navIcons['oa']       = "<i class='icon icon-oa'></i>";
+    $lang->navIcons['workflow'] = "<i class='icon icon-flow'></i>";
 
     $lang->mainNav->feedback = $lang->navIcons['feedback'] . '反馈|feedback|browse|';
     $lang->mainNav->oa       = $lang->navIcons['oa'] . '办公|attend|personal|';
@@ -75,7 +76,7 @@ $lang->project->target = '目标';
 $lang->kanban->menu            = new stdclass();
 $lang->kanban->menu->index     = array('link' => "{$lang->dashboard}|project|index|project=%s");
 $lang->kanban->menu->execution = array('link' => "$lang->executionKanban|project|execution|status=all&projectID=%s", 'subModule' => 'execution,task');
-$lang->kanban->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree', 'alias' => 'story,track');
+$lang->kanban->menu->story     = array('link' => "{$lang->project->target}|projectstory|story|projectID=%s", 'subModule' => 'projectstory,tree,story', 'alias' => 'story,track');
 $lang->kanban->menu->doc       = array('link' => "{$lang->doc->common}|doc|tableContents|type=project&objectID=%s", 'subModule' => 'doc');
 $lang->kanban->menu->dynamic   = array('link' => "$lang->dynamic|project|dynamic|project=%s");
 $lang->kanban->menu->settings  = array('link' => "$lang->settings|project|view|project=%s", 'subModule' => 'stakeholder', 'alias' => 'edit,manageproducts,group,managemembers,manageview,managepriv,whitelist,addwhitelist,team');

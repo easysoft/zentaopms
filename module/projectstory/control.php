@@ -37,7 +37,7 @@ class projectStory extends control
     public function story($projectID = 0, $productID = 0, $branch = 0, $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
         $this->products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        if(empty($this->products)) die($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
+        if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=story&projectID=' . $projectID)));
         echo $this->fetch('product', 'browse', "productID=$productID&branch=$branch&browseType=$browseType&param=$param&storyType=$storyType&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID&projectID=$projectID");
     }
 
@@ -140,7 +140,7 @@ ETO;
         }
 
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die($html);
+        echo $html;
     }
 
     /**

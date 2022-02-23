@@ -627,7 +627,7 @@ class programplanModel extends model
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
         }
     }
 

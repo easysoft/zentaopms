@@ -42,7 +42,7 @@
       <thead>
         <tr class='colhead'>
           <th class='w-id'><?php echo $lang->idAB;?></th>
-          <th class='w-pri'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th><?php common::printOrderLink('execution', $orderBy, $vars, $lang->task->execution);?></th>
           <th><?php common::printOrderLink('name', $orderBy, $vars, $lang->task->name);?></th>
           <th class='w-70px hours'><?php echo $lang->task->estimateAB;?></th>

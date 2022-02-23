@@ -53,7 +53,7 @@ class task extends control
         if(strpos(",{$limitedExecutions},", ",$executionID,") !== false)
         {
             echo js::alert($this->lang->task->createDenied);
-            die(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
+            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
         $task = new stdClass();
@@ -284,7 +284,7 @@ class task extends control
         if(strpos(",{$limitedExecutions},", ",$executionID,") !== false)
         {
             echo js::alert($this->lang->task->createDenied);
-            die(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
+            return print(js::locate($this->createLink('execution', 'task', "executionID=$executionID")));
         }
 
         $execution = $this->execution->getById($executionID);
@@ -449,7 +449,7 @@ class task extends control
                     {
                         $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
                         $cancelURL  = $this->server->HTTP_REFERER;
-                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
+                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
                     }
                 }
             }
@@ -476,7 +476,7 @@ class task extends control
             }
             else
             {
-                die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+                return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
             }
         }
 
@@ -525,7 +525,7 @@ class task extends control
         if($this->post->names)
         {
             $allChanges = $this->task->batchUpdate();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if(!empty($allChanges))
             {
@@ -560,7 +560,7 @@ class task extends control
                             {
                                 $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
                                 $cancelURL  = $this->server->HTTP_REFERER;
-                                die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
+                                return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent'));
                             }
                         }
                     }
@@ -568,11 +568,12 @@ class task extends control
                 }
             }
             $this->loadModel('score')->create('ajax', 'batchOther');
-            die(js::locate($this->session->taskList, 'parent'));
+            return print(js::locate($this->session->taskList, 'parent'));
         }
 
-        $taskIDList = $this->post->taskIDList ? $this->post->taskIDList : die(js::locate($this->session->taskList, 'parent'));
-        $taskIDList = array_unique($taskIDList);
+        if(!$this->post->taskIDList) return print(js::locate($this->session->taskList, 'parent'));
+
+        $taskIDList = array_unique($this->post->taskIDList);
 
         /* The tasks of execution. */
         if($executionID)
@@ -658,7 +659,7 @@ class task extends control
             if(dao::isError())
             {
                 if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                die(js::error(dao::getError()));
+                return print(js::error(dao::getError()));
             }
 
             $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
@@ -722,7 +723,7 @@ class task extends control
             $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
             $allChanges = $this->task->batchChangeModule($taskIDList, $moduleID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $taskID => $changes)
             {
                 $this->loadModel('action');
@@ -731,7 +732,7 @@ class task extends control
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -749,7 +750,7 @@ class task extends control
             $taskIDList = $this->post->taskIDList;
             $taskIDList = array_unique($taskIDList);
             unset($_POST['taskIDList']);
-            if(!is_array($taskIDList)) die(js::locate($this->createLink('execution', 'task', "executionID=$execution"), 'parent'));
+            if(!is_array($taskIDList)) return print(js::locate($this->createLink('execution', 'task', "executionID=$execution"), 'parent'));
             $taskIDList = array_unique($taskIDList);
 
             $muletipleTasks = $this->dao->select('root , account')->from(TABLE_TEAM)->where('type')->eq('task')->andWhere('root')->in($taskIDList)->fetchGroup('root', 'account');
@@ -761,12 +762,12 @@ class task extends control
                 if(isset($muletipleTasks[$taskID]) and !isset($muletipleTasks[$taskID][$this->post->assignedTo])) continue;
 
                 $changes = $this->task->assign($taskID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
                 $actionID = $this->action->create('task', $taskID, 'Assigned', $this->post->comment, $this->post->assignedTo);
                 $this->action->logHistory($actionID, $changes);
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -788,7 +789,7 @@ class task extends control
         if(!$task)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('execution', 'all')));
         }
 
         $this->session->project = $task->project;
@@ -856,7 +857,7 @@ class task extends control
 
         $this->executeHooks($taskID);
 
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -884,7 +885,7 @@ class task extends control
             if(dao::isError())
             {
                 if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                die(js::error(dao::getError()));
+                return print(js::error(dao::getError()));
             }
 
             if($this->post->comment != '' or !empty($changes))
@@ -907,7 +908,7 @@ class task extends control
                         $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
                         unset($_GET['onlybody']);
                         $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                     }
                 }
             }
@@ -930,7 +931,7 @@ class task extends control
                     return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
                 }
             }
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->start;
@@ -956,7 +957,7 @@ class task extends control
         if(!empty($_POST))
         {
             $changes = $this->task->recordEstimate($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->loadModel('common')->syncPPEStatus($taskID);
 
@@ -971,7 +972,7 @@ class task extends control
                         $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug");
                         unset($_GET['onlybody']);
                         $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                     }
                 }
             }
@@ -1016,13 +1017,13 @@ class task extends control
         if(!empty($_POST))
         {
             $changes = $this->task->updateEstimate($estimateID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'EditEstimate', $this->post->work);
             $this->action->logHistory($actionID, $changes);
 
             $url = $this->session->estimateList ? $this->session->estimateList : inlink('record', "taskID={$estimate->task}");
-            die(js::locate($url, 'parent'));
+            return print(js::locate($url, 'parent'));
         }
 
         $estimate = $this->task->getEstimateById($estimateID);
@@ -1045,17 +1046,17 @@ class task extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
+            return print(js::confirm($this->lang->task->confirmDeleteEstimate, $this->createLink('task', 'deleteEstimate', "estimateID=$estimateID&confirm=yes")));
         }
         else
         {
             $estimate = $this->task->getEstimateById($estimateID);
             $changes  = $this->task->deleteEstimate($estimateID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->loadModel('action')->create('task', $estimate->task, 'DeleteEstimate');
             $this->action->logHistory($actionID, $changes);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -1081,7 +1082,7 @@ class task extends control
             if(dao::isError())
             {
                 if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-                die(js::error(dao::getError()));
+                return print(js::error(dao::getError()));
             }
             $files = $this->loadModel('file')->saveUpload('task', $taskID);
 
@@ -1104,7 +1105,7 @@ class task extends control
                         $confirmURL = $this->createLink('bug', 'view', "id=$task->fromBug", '', true);
                         unset($_GET['onlybody']);
                         $cancelURL  = $this->createLink('task', 'view', "taskID=$taskID");
-                        die(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                        return print(js::confirm(sprintf($this->lang->task->remindBug, $task->fromBug), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                     }
                 }
             }
@@ -1133,7 +1134,7 @@ class task extends control
             }
             else
             {
-                die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+                return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
             }
         }
 
@@ -1186,7 +1187,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->pause($taskID, $extra);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1241,7 +1242,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->start($taskID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1300,7 +1301,7 @@ class task extends control
             $this->loadModel('action');
             $changes = $this->task->close($taskID, $extra);
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1334,7 +1335,7 @@ class task extends control
             }
             else
             {
-                die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+                return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
             }
         }
 
@@ -1377,7 +1378,7 @@ class task extends control
             }
         }
 
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -1425,11 +1426,12 @@ class task extends control
                 $skipTasks = join(',', $skipTasks);
                 $confirmURL = $this->createLink('task', 'batchClose', "skipTaskIdList=$skipTasks");
                 $cancelURL  = $this->server->HTTP_REFERER;
-                die(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
+                return print(js::confirm(sprintf($this->lang->task->error->skipClose, $skipTasks), $confirmURL, $cancelURL, 'self', 'parent'));
             }
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
         }
-        die(js::reload('parent'));
+
+        echo js::reload('parent');
     }
 
     /**
@@ -1451,7 +1453,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->cancel($taskID, $extra);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1478,7 +1480,7 @@ class task extends control
                     return print(js::closeModal('parent.parent', 'this'));
                 }
             }
-            die(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
+            return print(js::locate($this->createLink('task', 'view', "taskID=$taskID"), 'parent'));
         }
 
         $this->view->title      = $this->view->execution->name . $this->lang->colon .$this->lang->task->cancel;
@@ -1507,7 +1509,7 @@ class task extends control
         {
             $this->loadModel('action');
             $changes = $this->task->activate($taskID, $extra);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -1609,8 +1611,8 @@ class task extends control
             if(isset($suspendedTasks[$taskid])) unset($tasks[$taskid]);
         }
 
-        if($id) die(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
-        die(html::select('task', $tasks, '', 'class=form-control'));
+        if($id) return print(html::select("tasks[$id]", $tasks, '', 'class="form-control"'));
+        echo html::select('task', $tasks, '', 'class=form-control');
     }
 
     /**
@@ -1624,7 +1626,7 @@ class task extends control
     public function ajaxGetExecutionTasks($executionID, $taskID = 0)
     {
         $tasks = $this->task->getExecutionTaskPairs((int)$executionID);
-        die(html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID, "class='form-control'"));
+        echo html::select('task', empty($tasks) ? array('' => '') : $tasks, $taskID, "class='form-control'");
     }
 
     /**
@@ -1965,6 +1967,6 @@ class task extends control
             $stage = $this->dao->select('*')->from(TABLE_STORY)->where('id')->eq($task->story)->andWhere('version')->eq($task->storyVersion)->fetch('stage');
             $task->storyStage = zget($this->lang->story->stageList, $stage);
         }
-        die(json_encode($task));
+        echo json_encode($task);
     }
 }

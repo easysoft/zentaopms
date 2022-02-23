@@ -64,7 +64,7 @@ class testreport extends control
             {
                 $products = $this->product->getPairs();
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testreport&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testreport&objectID=$objectID")));
         }
         else
         {
@@ -88,7 +88,7 @@ class testreport extends control
      */
     public function browse($objectID = 0, $objectType = 'product', $extra = '', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        if(strpos('product|execution|project', $objectType) === false) die('Type Error!');
+        if(strpos('product|execution|project', $objectType) === false) return print('Type Error!');
 
         $objectID = $this->commonAction($objectID, $objectType);
         $object   = $this->$objectType->getById($objectID);
@@ -171,10 +171,10 @@ class testreport extends control
         if($_POST)
         {
             $reportID = $this->testreport->create();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             $this->loadModel('action')->create('testreport', $reportID, 'Opened');
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $reportID));
-            die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
+            return print(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
         if($objectType == 'testtask')
@@ -195,7 +195,7 @@ class testreport extends control
                 if($testTask->build == 'trunk') continue;
                 $taskPairs[$testTask->id] = $testTask->name;
             }
-            if(empty($taskPairs)) die(js::alert($this->lang->testreport->noTestTask) . js::locate('back'));
+            if(empty($taskPairs)) return print(js::alert($this->lang->testreport->noTestTask) . js::locate('back'));
 
             if(empty($objectID))
             {
@@ -209,10 +209,10 @@ class testreport extends control
             if($this->app->tab == 'project') $this->project->setMenu($task->project);
         }
 
-        if(empty($objectID)) die(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
+        if(empty($objectID)) return print(js::alert($this->lang->testreport->noObjectID) . js::locate('back'));
         if($objectType == 'testtask')
         {
-            if($productID != $task->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($productID != $task->product) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
             $productIdList[$productID] = $productID;
 
             $begin     = !empty($begin) ? date("Y-m-d", strtotime($begin)) : $task->begin;
@@ -222,7 +222,7 @@ class testreport extends control
             if($task->build == 'trunk')
             {
                 echo js::alert($this->lang->testreport->errorTrunk);
-                die(js::locate('back'));
+                return print(js::locate('back'));
             }
             else
             {
@@ -246,7 +246,7 @@ class testreport extends control
         elseif($objectType == 'execution')
         {
             $executionID = $this->commonAction($objectID, $objectType);
-            if($executionID != $objectID) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($executionID != $objectID) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $execution     = $this->execution->getById($executionID);
             $tasks         = $this->testtask->getExecutionTasks($executionID);
@@ -270,7 +270,7 @@ class testreport extends control
             if(count($productIdList) > 1)
             {
                 echo(js::alert($this->lang->testreport->moreProduct));
-                die(js::locate('back'));
+                return print(js::locate('back'));
             }
 
             if($this->app->tab == 'qa')
@@ -355,14 +355,14 @@ class testreport extends control
         if($_POST)
         {
             $changes = $this->testreport->update($reportID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $files      = $this->loadModel('file')->saveUpload('testreport', $reportID);
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
             $actionID   = $this->loadModel('action')->create('testreport', $reportID, 'Edited', $fileAction);
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
 
-            die(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
+            return print(js::locate(inlink('view', "reportID=$reportID"), 'parent'));
         }
 
         $report    = $this->testreport->getById($reportID);
@@ -374,7 +374,7 @@ class testreport extends control
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
-            if($productID != $report->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($productID != $report->product) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
@@ -385,12 +385,12 @@ class testreport extends control
             if($this->app->tab == 'execution')
             {
                 $objectID = $this->commonAction($report->execution, 'execution');
-                if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+                if($objectID != $report->execution) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
             }
             else
             {
                 $objectID = $this->commonAction($report->project, 'project');
-                if($objectID != $report->project) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+                if($objectID != $report->project) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
             }
 
             $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
@@ -408,7 +408,7 @@ class testreport extends control
             if($task->build == 'trunk')
             {
                 echo js::alert($this->lang->testreport->errorTrunk);
-                die(js::locate('back'));
+                return print(js::locate('back'));
             }
             else
             {
@@ -483,7 +483,7 @@ class testreport extends control
     {
         $reportID = (int)$reportID;
         $report   = $this->testreport->getById($reportID);
-        if(!$report) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        if(!$report) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         $this->session->project = $report->project;
 
         $browseLink = '';
@@ -492,7 +492,7 @@ class testreport extends control
         {
             $product   = $this->product->getById($report->product);
             $productID = $this->commonAction($report->product, 'product');
-            if($productID != $report->product) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+            if($productID != $report->product) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
 
             $browseLink = inlink('browse', "objectID=$productID&objectType=product");
             $this->view->position[] = html::a($browseLink, $product->name);
@@ -502,12 +502,12 @@ class testreport extends control
             if($this->app->tab == 'execution')
             {
                 $objectID = $this->commonAction($report->execution, 'execution');
-                if($objectID != $report->execution) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+                if($objectID != $report->execution) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
             }
             else
             {
                 $objectID = $this->commonAction($report->project, 'project');
-                if($objectID != $report->project) die(js::error($this->lang->error->accessDenied) . js::locate('back'));
+                if($objectID != $report->project) return print(js::error($this->lang->error->accessDenied) . js::locate('back'));
             }
 
             $browseLink = inlink('browse', "objectID=$objectID&objectType=execution");
@@ -589,7 +589,7 @@ class testreport extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testreport->confirmDelete, inlink('delete', "reportID=$reportID&confirm=yes")));
+            return print(js::confirm($this->lang->testreport->confirmDelete, inlink('delete', "reportID=$reportID&confirm=yes")));
         }
         else
         {
@@ -597,7 +597,7 @@ class testreport extends control
             $locateLink = $this->session->reportList ? $this->session->reportList : inlink('browse', "productID={$testreport->product}");
 
             $this->testreport->delete(TABLE_TESTREPORT, $reportID);
-            die(js::locate($locateLink, 'parent'));
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 

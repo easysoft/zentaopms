@@ -126,6 +126,7 @@ $lang->story->rejectedReason = 'Reject Reason';
 $lang->story->reviewedBy     = 'ReviewedBy';
 $lang->story->reviewers      = 'Reviewers';
 $lang->story->reviewedDate   = 'ReviewedDate';
+$lang->story->activatedDate  = 'Activated Date';
 $lang->story->version        = 'Version';
 $lang->story->feedbackBy     = 'From Name';
 $lang->story->notifyEmail    = 'From Email';

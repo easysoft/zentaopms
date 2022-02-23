@@ -115,7 +115,7 @@ class testcaseModel extends model
 
         foreach($cases->title as $i => $title)
         {
-            if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
+            if(!empty($cases->title[$i]) and empty($cases->type[$i])) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
         }
 
         $module = 0;
@@ -176,13 +176,13 @@ class testcaseModel extends model
 
                 $data[$i]->{$extendField->field} = htmlSpecialString($data[$i]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $data[$i]->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             foreach(explode(',', $this->config->testcase->create->requiredFields) as $field)
             {
                 $field = trim($field);
-                if($field and empty($data[$i]->$field)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
+                if($field and empty($data[$i]->$field)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->$field)));
             }
         }
 
@@ -197,7 +197,7 @@ class testcaseModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
 
             $caseID       = $this->dao->lastInsertID();
@@ -793,7 +793,7 @@ class testcaseModel extends model
      */
     public function review($caseID)
     {
-        if($this->post->result == false) die(js::alert($this->lang->testcase->mustChooseResult));
+        if($this->post->result == false) return print(js::alert($this->lang->testcase->mustChooseResult));
 
         $oldCase = $this->getById($caseID);
 
@@ -932,7 +932,7 @@ class testcaseModel extends model
 
                 $case->{$extendField->field} = htmlSpecialString($case->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $case->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             $cases[$caseID] = $case;
@@ -964,7 +964,7 @@ class testcaseModel extends model
             }
             else
             {
-                die(js::error('case#' . $caseID . dao::getError(true)));
+                return print(js::error('case#' . $caseID . dao::getError(true)));
             }
         }
 
@@ -1199,7 +1199,7 @@ class testcaseModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $forceNotReview = $this->forceNotReview();
         foreach($cases as $key => $caseData)
@@ -1562,7 +1562,7 @@ class testcaseModel extends model
                 else
                 {
                     $showBranch = isset($this->config->testcase->browse->showBranch) ? $this->config->testcase->browse->showBranch : 1;
-                } 
+                }
                 if(isset($branches[$case->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$case->branch]}</span> ";
                 if($modulePairs and $case->module and isset($modulePairs[$case->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$case->module]}</span> ";
                 echo $canView ? ($fromCaseID ? html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'") . html::a(helper::createLink('testcase', 'view', "caseID=$fromCaseID"), "[<i class='icon icon-share' title='{$this->lang->testcase->fromCase}'></i>#$fromCaseID]", '', "data-app='{$this->app->tab}'") : html::a($caseLink, $case->title, null, "style='color: $case->color' data-app='{$this->app->tab}'")) : "<span style='color: $case->color'>$case->title</span>";

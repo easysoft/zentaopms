@@ -46,6 +46,7 @@ js::set('displayCards', $execution->displayCards);
 js::set('fluidBoard', $execution->fluidBoard);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
+js::set('projectID', $projectID);
 
 $canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion   = commonModel::hasPriv('kanban', 'editRegion');
@@ -65,30 +66,34 @@ $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
 
 js::set('priv',
     array(
-        'canCreateTask'       => $canCreateTask,
-        'canBatchCreateTask'  => $canBatchCreateTask,
-        'canCreateBug'        => $canCreateBug,
-        'canBatchCreateBug'   => $canBatchCreateBug,
-        'canCreateStory'      => $canCreateStory,
-        'canBatchCreateStory' => $canBatchCreateStory,
-        'canLinkStory'        => $canLinkStory,
-        'canLinkStoryByPlan'  => $canLinkStoryByPlan,
-        'canAssignTask'       => common::hasPriv('task', 'assignto'),
-        'canAssignStory'      => common::hasPriv('story', 'assignto'),
-        'canFinishTask'       => common::hasPriv('task', 'finish'),
-        'canPauseTask'        => common::hasPriv('task', 'pause'),
-        'canCancelTask'       => common::hasPriv('task', 'cancel'),
-        'canCloseTask'        => common::hasPriv('task', 'close'),
-        'canActivateTask'     => common::hasPriv('task', 'activate'),
-        'canStartTask'        => common::hasPriv('task', 'start'),
-        'canAssignBug'        => common::hasPriv('bug', 'assignto'),
-        'canConfirmBug'       => common::hasPriv('bug', 'confirmBug'),
-        'canActivateBug'      => common::hasPriv('bug', 'activate'),
-        'canEditStory'        => common::hasPriv('story', 'edit'),
-        'canChangeStory'      => common::hasPriv('story', 'change'),
-        'canCreateTask'       => common::hasPriv('task', 'create'),
-        'canBatchCreateTask'  => common::hasPriv('task', 'batchCreate'),
-        'canUnlinkStory'      => common::hasPriv('execution', 'unlinkStory'),
+        'canCreateTask'         => $canCreateTask,
+        'canBatchCreateTask'    => $canBatchCreateTask,
+        'canCreateBug'          => $canCreateBug,
+        'canBatchCreateBug'     => $canBatchCreateBug,
+        'canCreateStory'        => $canCreateStory,
+        'canBatchCreateStory'   => $canBatchCreateStory,
+        'canLinkStory'          => $canLinkStory,
+        'canLinkStoryByPlan'    => $canLinkStoryByPlan,
+        'canAssignBug'          => common::hasPriv('bug', 'assignto'),
+        'canConfirmBug'         => common::hasPriv('bug', 'confirmBug'),
+        'canResolveBug'         => common::hasPriv('bug', 'resolve'),
+        'canCopyBug'            => common::hasPriv('bug', 'create'),
+        'canEditBug'            => common::hasPriv('bug', 'edit'),
+        'canActivateBug'        => common::hasPriv('bug', 'activate'),
+        'canAssignTask'         => common::hasPriv('task', 'assignto'),
+        'canFinishTask'         => common::hasPriv('task', 'finish'),
+        'canPauseTask'          => common::hasPriv('task', 'pause'),
+        'canCancelTask'         => common::hasPriv('task', 'cancel'),
+        'canCloseTask'          => common::hasPriv('task', 'close'),
+        'canActivateTask'       => common::hasPriv('task', 'activate'),
+        'canStartTask'          => common::hasPriv('task', 'start'),
+        'canEditTask'           => common::hasPriv('task', 'edit'),
+        'canRecordEstimateTask' => common::hasPriv('task', 'recordEstimate'),
+        'canToStoryBug'         => common::hasPriv('story', 'create'),
+        'canAssignStory'        => common::hasPriv('story', 'assignto'),
+        'canEditStory'          => common::hasPriv('story', 'edit'),
+        'canChangeStory'        => common::hasPriv('story', 'change'),
+        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
     )
 );
 js::set('hasStoryButton', $hasStoryButton);

@@ -162,7 +162,7 @@ class release extends control
     {
         $releaseID = (int)$releaseID;
         $release   = $this->release->getByID($releaseID, true);
-        if(!$release) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        if(!$release) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         if($type == 'story') $this->session->set('storyList', $this->app->getURI(true), 'product');
         if($type == 'bug' or $type == 'leftBug') $this->session->set('bugList', $this->app->getURI(true), 'qa');
@@ -224,8 +224,8 @@ class release extends control
 
     /**
      * Notify for release.
-     * 
-     * @param  int    $releaseID 
+     *
+     * @param  int    $releaseID
      * @access public
      * @return void
      */
@@ -235,7 +235,7 @@ class release extends control
         {
             if(isset($_POST['notify']))
             {
-                $notify = implode(',', $this->post->notify); 
+                $notify = implode(',', $this->post->notify);
                 $this->dao->update(TABLE_RELEASE)->set('notify')->eq($notify)->where('id')->eq($releaseID)->exec();
 
                 $this->release->sendmail($releaseID);
@@ -244,7 +244,7 @@ class release extends control
 
             $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
         }
-    
+
         $this->view->release = $this->release->getById($releaseID);
         $this->view->actions = $this->loadModel('action')->getList('release', $releaseID);
         $this->view->users   = $this->loadModel('user')->getPairs('noletter|noclosed');
@@ -263,7 +263,7 @@ class release extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->release->confirmDelete, $this->createLink('release', 'delete', "releaseID=$releaseID&confirm=yes")));
+            return print(js::confirm($this->lang->release->confirmDelete, $this->createLink('release', 'delete', "releaseID=$releaseID&confirm=yes")));
         }
         else
         {
@@ -297,7 +297,7 @@ class release extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $locateLink = $this->session->releaseList ? $this->session->releaseList : inlink('browse', "productID={$release->product}");
-            die(js::locate($locateLink, 'parent'));
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -404,7 +404,7 @@ class release extends control
             }
 
             $html = "<html><head><meta charset='utf-8'><title>{$this->post->fileName}</title><style>table, th, td{font-size:12px; border:1px solid gray; border-collapse:collapse;}</style></head><body>$html</body></html>";
-            die($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
+            return print($this->fetch('file', 'sendDownHeader', array('fileName' => $this->post->fileName, 'html', $html)));
         }
 
         $this->display();
@@ -427,7 +427,7 @@ class release extends control
         if(!empty($_POST['stories']))
         {
             $this->release->linkStory($releaseID);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
+            return print(js::locate(inlink('view', "releaseID=$releaseID&type=story"), 'parent'));
         }
         $this->session->set('storyList', inlink('view', "releaseID=$releaseID&type=story&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'product');
 
@@ -512,7 +512,7 @@ class release extends control
             }
             return $this->send($response);
         }
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -525,7 +525,7 @@ class release extends control
     public function batchUnlinkStory($releaseID)
     {
         $this->release->batchUnlinkStory($releaseID);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent'));
+        echo js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=story"), 'parent');
     }
 
     /**
@@ -546,7 +546,7 @@ class release extends control
         if(!empty($_POST['bugs']))
         {
             $this->release->linkBug($releaseID, $type);
-            die(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
+            return print(js::locate(inlink('view', "releaseID=$releaseID&type=$type"), 'parent'));
         }
 
         $this->session->set('bugList', inlink('view', "releaseID=$releaseID&type=$type&link=true&param=" . helper::safe64Encode("&browseType=$browseType&queryID=$param")), 'qa');
@@ -643,7 +643,7 @@ class release extends control
             }
             return $this->send($response);
         }
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -657,7 +657,7 @@ class release extends control
     public function batchUnlinkBug($releaseID, $type = 'bug')
     {
         $this->release->batchUnlinkBug($releaseID, $type);
-        die(js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent'));
+        echo js::locate($this->createLink('release', 'view', "releaseID=$releaseID&type=$type"), 'parent');
     }
 
     /**
@@ -671,8 +671,8 @@ class release extends control
     public function changeStatus($releaseID, $status)
     {
         $this->release->changeStatus($releaseID, $status);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         $actionID = $this->loadModel('action')->create('release', $releaseID, 'changestatus', '', $status);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 }

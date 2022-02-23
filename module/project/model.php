@@ -1223,10 +1223,10 @@ class projectModel extends model
 
                 $projects[$projectID]->{$extendField->field} = htmlSpecialString($projects[$projectID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $projects[$projectID]->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) hepler::end(js::alert($message));
             }
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) helper::end(js::error(dao::getError()));
 
         foreach($projects as $projectID => $project)
         {
@@ -1244,7 +1244,7 @@ class projectModel extends model
                 ->where('id')->eq($projectID)
                 ->exec();
 
-            if(dao::isError()) die(js::error('project#' . $projectID . dao::getError(true)));
+            if(dao::isError()) helper::end(js::error('project#' . $projectID . dao::getError(true)));
             if(!dao::isError())
             {
                 $linkedProducts = $this->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
@@ -1941,7 +1941,7 @@ class projectModel extends model
                 ->beginIF($status != 'all' and $status != 'undone')->andWhere('t2.status')->eq($status)->fi()
                 ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
                 ->andWhere('t2.deleted')->eq('0')
-                ->andWhere('t1.vision')->eq($this->config->vision)
+                ->andWhere('t2.vision')->eq($this->config->vision)
                 ->orderBy($orderBy)
                 ->page($pager)
                 ->fetchAll('id');

@@ -626,8 +626,8 @@ class productplanModel extends model
             $plan->status = isset($data->status[$planID]) ? $data->status[$planID] : $oldPlans[$planID]->status;
             $plan->parent = $oldPlans[$planID]->parent;
 
-            if(empty($plan->title)) die(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
-            if($plan->begin > $plan->end and !empty($plan->end)) die(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
+            if(empty($plan->title)) return print(js::alter(sprintf($this->lang->productplan->errorNoTitle, $planID)));
+            if($plan->begin > $plan->end and !empty($plan->end)) return print(js::alert(sprintf($this->lang->productplan->beginGeEnd, $planID)));
 
             if($plan->begin == '') $plan->begin = $this->config->productplan->future;
             if($plan->end   == '') $plan->end   = $this->config->productplan->future;
@@ -639,7 +639,7 @@ class productplanModel extends model
 
                 $plan->{$extendField->field} = htmlSpecialString($plan->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $plan->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             $plans[$planID] = $plan;
@@ -656,11 +656,11 @@ class productplanModel extends model
                 $parent   = isset($plans[$parentID]) ? $plans[$parentID] : $this->getByID($parentID);
                 if($parent->begin != $this->config->productplan->future and $plan->begin != $this->config->productplan->future and $plan->begin < $parent->begin)
                 {
-                    die(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
+                    return print(js::alert(sprintf($this->lang->productplan->beginLetterParentTip, $planID, $plan->begin, $parent->begin)));
                 }
                 elseif($parent->end != $this->config->productplan->future and $plan->end != $this->config->productplan->future and $plan->end > $parent->end)
                 {
-                    die(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
+                    return print(js::alert(sprintf($this->lang->productplan->endGreaterParentTip, $planID, $plan->end, $parent->end)));
                 }
             }
             elseif($parentID == -1 and $plan->begin != $this->config->productplan->future)
@@ -674,8 +674,8 @@ class productplanModel extends model
                     if($childPlan->begin < $minBegin and $minBegin != $this->config->productplan->future) $minBegin = $childPlan->begin;
                     if($childPlan->end > $maxEnd and $maxEnd != $this->config->productplan->future) $maxEnd = $childPlan->end;
                 }
-                if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) die(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
-                if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) die(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
+                if($minBegin < $plan->begin and $minBegin != $this->config->productplan->future) return print(js::alert(sprintf($this->lang->productplan->beginGreaterChildTip, $planID, $plan->begin, $minBegin)));
+                if($maxEnd > $plan->end and $maxEnd != $this->config->productplan->future) return print(js::alert(sprintf($this->lang->productplan->endLetterChildTip, $planID, $plan->end, $maxEnd)));
             }
 
             $change = common::createChanges($oldPlans[$planID], $plan);
@@ -683,7 +683,7 @@ class productplanModel extends model
             {
                 if($parentID > 0 and !isset($parents[$parentID])) $parents[$parentID] = $parentID;
                 $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq($planID)->exec();
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
                 $changes[$planID] = $change;
             }
         }
