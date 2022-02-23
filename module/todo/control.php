@@ -46,7 +46,7 @@ class todo extends control
         if(!empty($_POST))
         {
             $todoID = $this->todo->create($date, $account);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             $this->loadModel('action')->create('todo', $todoID, 'opened');
 
             $date = str_replace('-', '', $this->post->date);
@@ -69,9 +69,9 @@ class todo extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $todoID));
-            if($this->viewType == 'xhtml') die(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
-            if(isonlybody()) die(js::closeModal('parent.parent'));
-            die(js::locate($this->createLink('my', 'todo', "type=all&userID=&status=all&orderBy=id_desc"), 'parent'));
+            if($this->viewType == 'xhtml') return print(js::locate($this->createLink('todo', 'view', "todoID=$todoID", 'html'), 'parent'));
+            if(isonlybody()) return print(js::closeModal('parent.parent'));
+            return print(js::locate($this->createLink('my', 'todo', "type=all&userID=&status=all&orderBy=id_desc"), 'parent'));
         }
 
         unset($this->lang->todo->typeList['cycle']);
@@ -97,7 +97,7 @@ class todo extends control
         if(!empty($_POST))
         {
             $todoIDList = $this->todo->batchCreate();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Locate the browser. */
             $date = str_replace('-', '', $this->post->date);
@@ -111,8 +111,8 @@ class todo extends control
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $todoIDList));
-            if(isonlybody())die(js::reload('parent.parent'));
-            die(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            return print(js::locate($this->createLink('my', 'todo', "type=$date"), 'parent'));
         }
 
         /* Set Custom*/
@@ -146,7 +146,7 @@ class todo extends control
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                die(js::error(dao::getError()));
+                return print(js::error(dao::getError()));
             }
             if($changes)
             {
@@ -155,12 +155,12 @@ class todo extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($this->session->todoList, 'parent.parent'));
+            return print(js::locate($this->session->todoList, 'parent.parent'));
         }
 
         /* Judge a private todo or not, If private, die. */
         $todo = $this->todo->getById($todoID);
-        if($todo->private and $this->app->user->account != $todo->account) die('private');
+        if($todo->private and $this->app->user->account != $todo->account) return print('private');
 
         unset($this->lang->todo->typeList['cycle']);
         $todo->date = date("Y-m-d", strtotime($todo->date));
@@ -271,7 +271,7 @@ class todo extends control
                 $this->action->logHistory($actionID, $changes);
             }
 
-            die(js::locate($this->session->todoList, 'parent'));
+            return print(js::locate($this->session->todoList, 'parent'));
         }
     }
 
@@ -295,10 +295,11 @@ class todo extends control
             if($todo->type == 'task')  $app = 'execution';
             if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
-            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+            return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
-        if(isonlybody())die(js::reload('parent.parent'));
-        die(js::reload('parent'));
+
+        if(isonlybody())return print(js::reload('parent.parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -313,8 +314,8 @@ class todo extends control
         $todo = $this->todo->getById($todoID);
         if($todo->status == 'done' or $todo->status == 'closed') $this->todo->activate($todoID);
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody()) die(js::reload('parent.parent'));
-        die(js::reload('parent'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -329,8 +330,8 @@ class todo extends control
     {
         $todo = $this->todo->getById($todoID);
         if($todo->status == 'done') $this->todo->close($todoID);
-        if(isonlybody()) die(js::reload('parent.parent'));
-        die(js::reload('parent'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -345,10 +346,10 @@ class todo extends control
     {
         if(!empty($_POST))
         {
-            if(empty($_POST['assignedTo'])) die(js::error($this->lang->todo->noAssignedTo));
+            if(empty($_POST['assignedTo'])) return print(js::error($this->lang->todo->noAssignedTo));
             $this->todo->assignTo($todoID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent.parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->todo    = $this->todo->getById($todoID);
@@ -373,7 +374,7 @@ class todo extends control
         if(!$todo)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate('back'));
+            return print(js::error($this->lang->notFound) . js::locate('back'));
         }
         /* Save the session. */
         if(!isonlybody())
@@ -426,8 +427,7 @@ class todo extends control
     {
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID=$todoID&confirm=yes"));
-            exit;
+            return print(js::confirm($this->lang->todo->confirmDelete, $this->createLink('todo', 'delete', "todoID=$todoID&confirm=yes")));
         }
         else
         {
@@ -450,10 +450,10 @@ class todo extends control
             }
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            if(isonlybody()) die(js::reload('parent.parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
 
             $browseLink = $this->session->todoList ? $this->session->todoList : $this->createLink('my', 'todo');
-            die(js::locate($browseLink, 'parent'));
+            return print(js::locate($browseLink, 'parent'));
         }
     }
 
@@ -478,11 +478,11 @@ class todo extends control
             if($todo->type == 'story') $app = 'product';
             $cancelURL   = $this->server->HTTP_REFERER;
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'message' => sprintf($this->lang->todo->$confirmNote, $todo->idvalue), 'locate' => $confirmURL));
-            die(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
+            return print(js::confirm(sprintf($this->lang->todo->$confirmNote, $todo->idvalue), $confirmURL, $cancelURL, $okTarget, 'parent', $app));
         }
         if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-        if(isonlybody())die(js::reload('parent.parent'));
-        die(js::reload('parent'));
+        if(isonlybody()) return print(js::reload('parent.parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -500,7 +500,7 @@ class todo extends control
                 $todo = $this->todo->getById($todoID);
                 if($todo->status != 'done' && $todo->status != 'closed') $this->todo->finish($todoID);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -521,7 +521,7 @@ class todo extends control
         }
         if(!empty($waitIdList)) echo js::alert(sprintf($this->lang->todo->unfinishedTodo, implode(',', $waitIdList)));
 
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -654,7 +654,7 @@ class todo extends control
     {
         $table = $objectType == 'project' ? TABLE_PROJECT : TABLE_PRODUCT;
         $field = $objectType == 'project' ? 'parent' : 'program';
-        die($this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch($field));
+        echo $this->dao->select($field)->from($table)->where('id')->eq($objectID)->fetch($field);
     }
 
     /**
@@ -671,7 +671,7 @@ class todo extends control
         $executions = $this->loadModel('execution')->getByProject($projectID, 'undone');
         foreach($executions as $id => $execution) $executions[$id] = $execution->name;
 
-        die(html::select('execution', $executions, '', "class='form-control chosen'"));
+        echo html::select('execution', $executions, '', "class='form-control chosen'");
     }
 
     /**
@@ -686,7 +686,7 @@ class todo extends control
         $this->session->set('project', $projectID);
 
         $products = $this->loadModel('product')->getProductPairsByProject($projectID);
-        die(html::select('bugProduct', $products, '', "class='form-control chosen'"));
+        echo html::select('bugProduct', $products, '', "class='form-control chosen'");
     }
 
     /**

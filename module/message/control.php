@@ -114,11 +114,11 @@ class message extends control
      */
     public function ajaxGetMessage($windowBlur = false)
     {
-        if($this->config->message->browser->turnon == 0) die();
+        if($this->config->message->browser->turnon == 0) return;
 
         $waitMessages = $this->message->getMessages('wait');
         $todos = $this->message->getNoticeTodos();
-        if(empty($waitMessages) and empty($todos)) die();
+        if(empty($waitMessages) and empty($todos)) return;
 
         $messages = '';
         $newline  = $windowBlur ? "\n" : '<br />';

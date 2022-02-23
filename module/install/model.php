@@ -489,7 +489,7 @@ class installModel extends model
         catch (PDOException $exception)
         {
             echo $exception->getMessage();
-            die();
+            helper::end();
         }
         return true;
     }
@@ -502,7 +502,7 @@ class installModel extends model
      */
     public function grantPriv()
     {
-        if($this->post->password == '') die(js::error($this->lang->install->errorEmptyPassword));
+        if($this->post->password == '') return print(js::error($this->lang->install->errorEmptyPassword));
 
         /* Insert a company. */
         $company = new stdclass();

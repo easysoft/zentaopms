@@ -311,8 +311,8 @@ class reportModel extends model
                             $project[$execution->projectname]['execution'][$name]['count']       = 0;
                             $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
 
-                            $workload[$member]['total']['count']                                 = 0;
-                            $workload[$member]['total']['manhour']                               = 0;
+                            $workload[$member]['total']['count']   = 0;
+                            $workload[$member]['total']['manhour'] = 0;
                         }
                     }
                     $workload[$member]['task']['project'] = $project;
@@ -390,6 +390,7 @@ class reportModel extends model
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
                     $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
+
                 $workload[$user]['task']['project'] = $project;
             }
         }

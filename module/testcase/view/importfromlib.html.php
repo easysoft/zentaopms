@@ -36,8 +36,8 @@
           <?php if($product->type != 'normal'):?>
           <th class='c-branch'><?php echo $lang->testcase->branch ?></th>
           <?php endif;?>
-          <th class='c-pri'>  <?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
-          <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
+          <th class='c-pri' title=<?php echo $lang->pri;?>><?php common::printOrderLink('pri',   $orderBy, $vars, $lang->priAB);?></th>
+          <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->testcase->title);?></th>
           <th class='c-module'><?php echo $lang->testcase->fromModule ?></th>
           <th class='c-module'><?php echo $lang->testcase->module ?></th>
           <th class='c-type'><?php common::printOrderLink('type',  $orderBy, $vars, $lang->testcase->type)?></th>

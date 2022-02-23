@@ -26,7 +26,7 @@ class mail extends control
         if(isset($this->config->mail->mta) and $this->config->mail->mta != 'sendcloud' and !function_exists('fsockopen'))
         {
             echo js::alert($this->lang->mail->nofsocket);
-            die(js::locate('back'));
+            return print(js::locate('back'));
         }
     }
 
@@ -65,7 +65,7 @@ class mail extends control
             if($this->post->fromAddress == false) $error = sprintf($this->lang->error->notempty, $this->lang->mail->fromAddress);
             if(!validater::checkEmail($this->post->fromAddress)) $error .= '\n' . sprintf($this->lang->error->email, $this->lang->mail->fromAddress);
 
-            if($error) die(js::alert($error));
+            if($error) return print(js::alert($error));
 
             echo "<script>setTimeout(function(){parent.location.href='" . inlink('edit') . "'}, 10000)</script>";
             $mailConfig = $this->mail->autoDetect($this->post->fromAddress);
@@ -73,7 +73,7 @@ class mail extends control
             $mailConfig->domain      = common::getSysURL();
             $this->session->set('mailConfig',  $mailConfig);
 
-            die(js::locate(inlink('edit'), 'parent'));
+            return print(js::locate(inlink('edit'), 'parent'));
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->detect;
@@ -152,7 +152,7 @@ class mail extends control
             if(empty($mailConfig->fromName))
             {
                 echo js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName));
-                die(js::locate($this->server->http_referer));
+                return print(js::locate($this->server->http_referer));
             }
 
             /* The mail need openssl and curl extension when secure is tls. */
@@ -161,17 +161,17 @@ class mail extends control
                 if(!extension_loaded('openssl'))
                 {
                     echo js::alert($this->lang->mail->noOpenssl);
-                    die(js::locate($this->server->http_referer));
+                    return print(js::locate($this->server->http_referer));
                 }
                 if(!extension_loaded('curl'))
                 {
                     echo js::alert($this->lang->mail->noCurl);
-                    die(js::locate($this->server->http_referer));
+                    return print(js::locate($this->server->http_referer));
                 }
             }
 
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->session->set('mailConfig', '');
 
@@ -206,13 +206,13 @@ class mail extends control
             $mailConfig->sendcloud->accessKey = trim($this->post->accessKey);
             $mailConfig->sendcloud->secretKey = trim($this->post->secretKey);
 
-            if(empty($mailConfig->sendcloud->accessKey)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->accessKey)));
-            if(empty($mailConfig->sendcloud->secretKey)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->secretKey)));
+            if(empty($mailConfig->sendcloud->accessKey)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->accessKey)));
+            if(empty($mailConfig->sendcloud->secretKey)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->secretKey)));
 
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $mailConfig = new stdclass();
@@ -245,7 +245,7 @@ class mail extends control
     {
         if(!$this->config->mail->turnon)
         {
-            die(js::alert($this->lang->mail->needConfigure) . js::locate('back'));
+            return print(js::alert($this->lang->mail->needConfigure) . js::locate('back'));
         }
 
         if($_POST)
@@ -257,12 +257,12 @@ class mail extends control
                 if(!extension_loaded('openssl'))
                 {
                     $this->view->error = array($this->lang->mail->noOpenssl);
-                    die($this->display());
+                    return print($this->display());
                 }
                 if(!extension_loaded('curl'))
                 {
                     $this->view->error = array($this->lang->mail->noCurl);
-                    die($this->display());
+                    return print($this->display());
                 }
             }
 
@@ -270,9 +270,9 @@ class mail extends control
             if($this->mail->isError())
             {
                 $this->view->error = $this->mail->getError();
-                die($this->display());
+                return print($this->display());
             }
-            die(js::alert($this->lang->mail->successSended) . js::locate(inlink('test'), 'parent'));
+            return print(js::alert($this->lang->mail->successSended) . js::locate(inlink('test'), 'parent'));
         }
 
         $this->view->title      = $this->lang->mail->common . $this->lang->colon . $this->lang->mail->test;
@@ -359,7 +359,7 @@ class mail extends control
         if($queue and $queue->status == 'sended')
         {
             echo js::alert($this->lang->mail->noticeResend);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         if(isset($this->config->mail->async)) $this->config->mail->async = 0;
@@ -376,9 +376,9 @@ class mail extends control
         }
         $this->dao->update(TABLE_NOTIFY)->data($data)->where('id')->in($queue->id)->exec();
 
-        if($data->status == 'fail') die(js::alert($data->failReason));
+        if($data->status == 'fail') return print(js::alert($data->failReason));
         echo js::alert($this->lang->mail->noticeResend);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -417,10 +417,10 @@ class mail extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->mail->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->mail->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->eq($id)->exec();
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -434,15 +434,15 @@ class mail extends control
     {
         if($confirm == 'no')
         {
-            if(empty($_POST)) die(js::reload('parent'));
+            if(empty($_POST)) return print(js::reload('parent'));
             $idList = join('|', $this->post->mailIDList);
-            die(js::confirm($this->lang->mail->confirmDelete, inlink('batchDelete', "confirm=yes") . ($this->config->requestType == 'GET' ? '&' : '?') . "idList=$idList"));
+            return print(js::confirm($this->lang->mail->confirmDelete, inlink('batchDelete', "confirm=yes") . ($this->config->requestType == 'GET' ? '&' : '?') . "idList=$idList"));
         }
         $idList = array();
         if(isset($_GET['idList'])) $idList = explode('|', $_GET['idList']);
 
         if($idList) $this->dao->delete()->from(TABLE_NOTIFY)->where('id')->in($idList)->exec();
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -453,7 +453,7 @@ class mail extends control
      */
     public function sendcloudUser()
     {
-        if($this->config->mail->mta != 'sendcloud') die(js::locate('back'));
+        if($this->config->mail->mta != 'sendcloud') return print(js::locate('back'));
 
         $this->mta = $this->mail->setMTA();
         if($_POST)
@@ -463,7 +463,7 @@ class mail extends control
             $listName = $action == 'delete' ? 'syncedList' : 'unsyncList';
 
             $users = array_unique($data->$listName);
-            if(empty($users)) die(js::reload('parent'));
+            if(empty($users)) return print(js::reload('parent'));
 
             $realnameAndEmails = $this->loadModel('user')->getRealNameAndEmails($users);
             $actionedEmail = array();
@@ -476,14 +476,14 @@ class mail extends control
                 if(!$result->result)
                 {
                     echo(js::alert($this->lang->mail->sendCloudFail . str_replace("'", '"', $result->message) . "(CODE: $result->statusCode)"));
-                    die(js::reload('parent'));
+                    return print(js::reload('parent'));
                 }
 
                 $actionedEmail[$email] = $email;
             }
 
             echo(js::alert($this->lang->mail->sendCloudSuccess));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $this->view->title      = $this->lang->mail->sendcloudUser;
@@ -515,10 +515,10 @@ class mail extends control
             $mailConfig->fromName    = $this->post->fromName;
             $mailConfig->domain      = trim($this->post->domain);
 
-            if(empty($mailConfig->fromName)) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName)));
+            if(empty($mailConfig->fromName)) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->mail->fromName)));
 
             $this->loadModel('setting')->setItems('system.mail', $mailConfig);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $this->view->title      = $this->lang->mail->ztCloud;
@@ -536,24 +536,24 @@ class mail extends control
             $this->view->mailExist  = $this->mail->mailExist();
             $this->view->mailConfig = $mailConfig;
             $this->view->step       = 'config';
-            die($this->display());
+            return print($this->display());
         }
 
         if(empty($this->config->global->ztPrivateKey) or $this->config->global->community == 'na' or empty($this->config->global->community))
         {
-            if(!empty($this->config->global->community) and $this->config->global->community != 'na') die(js::locate($this->createLink('admin', 'bind', 'from=mail')));
-            die(js::locate($this->createLink('admin', 'register', 'from=mail')));
+            if(!empty($this->config->global->community) and $this->config->global->community != 'na') return print(js::locate($this->createLink('admin', 'bind', 'from=mail')));
+            return print(js::locate($this->createLink('admin', 'register', 'from=mail')));
         }
 
         if($this->cookie->ztCloudLicense != 'yes')
         {
             $this->view->step = 'license';
-            die($this->display());
+            return print($this->display());
         }
 
         $result = $this->loadModel('admin')->getSecretKey();
-        if(empty($result))die(js::alert($this->lang->mail->connectFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
-        if($result->result == 'fail' and empty($result->data)) die(js::alert($this->lang->mail->centifyFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
+        if(empty($result))return print(js::alert($this->lang->mail->connectFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
+        if($result->result == 'fail' and empty($result->data)) return print(js::alert($this->lang->mail->centifyFail) . js::locate($this->createLink('admin', 'register', "from=mail")));
 
         $data = $result->data;
         if((isset($data->qq) and empty($data->qq)) or (isset($data->company) and empty($data->company)))
@@ -561,15 +561,15 @@ class mail extends control
             $params = '';
             if(empty($data->qq)) $params .= 'qq,';
             if(empty($data->company)) $params .= 'company,';
-            die(js::locate($this->createLink('admin', 'ztCompany', 'fields=' . trim($params, ','))));
+            return print(js::locate($this->createLink('admin', 'ztCompany', 'fields=' . trim($params, ','))));
         }
         if($result->result == 'fail' and empty($data->emailCertified))
         {
-            die(js::locate($this->createLink('admin', 'certifyZtEmail', 'email=' . helper::safe64Encode($data->email))));
+            return print(js::locate($this->createLink('admin', 'certifyZtEmail', 'email=' . helper::safe64Encode($data->email))));
         }
         if($result->result == 'fail' and empty($data->mobileCertified))
         {
-            die(js::locate($this->createLink('admin', 'certifyZtMobile', 'mobile=' . helper::safe64Encode($data->mobile))));
+            return print(js::locate($this->createLink('admin', 'certifyZtMobile', 'mobile=' . helper::safe64Encode($data->mobile))));
         }
         if($result->result == 'success')
         {
@@ -584,7 +584,7 @@ class mail extends control
 
             $this->view->mailConfig = $mailConfig;
             $this->view->step       = 'config';
-            die($this->display());
+            return print($this->display());
         }
     }
 }

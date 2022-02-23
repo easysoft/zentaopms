@@ -32,7 +32,7 @@
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->product;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='c-status'><?php echo $lang->bug->statusAB;?></th>

@@ -389,7 +389,7 @@ class caselibModel extends model
             $cases[$key] = $caseData;
             $line++;
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $forceNotReview = $this->testcase->forceNotReview();
         foreach($cases as $key => $caseData)
@@ -537,7 +537,7 @@ class caselibModel extends model
 
         foreach($cases->title as $i => $title)
         {
-            if(!empty($cases->title[$i]) and empty($cases->type[$i])) die(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
+            if(!empty($cases->title[$i]) and empty($cases->type[$i])) return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->testcase->type)));
         }
 
         $module = 0;
@@ -582,7 +582,7 @@ class caselibModel extends model
                 if(dao::isError())
                 {
                     echo js::error(dao::getError());
-                    die(js::reload('parent'));
+                    return print(js::reload('parent'));
                 }
 
                 $caseID   = $this->dao->lastInsertID();

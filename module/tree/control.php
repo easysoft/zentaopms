@@ -339,7 +339,7 @@ class tree extends control
         $childs = $this->tree->getAllChildId($moduleID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -353,7 +353,7 @@ class tree extends control
     public function fix($root, $type)
     {
         $this->tree->fixModulePath($root, $type);
-        die(js::alert($this->lang->tree->successFixed) . js::reload('parent'));
+        echo js::alert($this->lang->tree->successFixed) . js::reload('parent');
     }
 
     /**
@@ -417,7 +417,7 @@ class tree extends control
         else
         {
             $result = $this->tree->delete($moduleID);
-            if(!$result) die();
+            if(!$result) return;
 
             die(js::reload('parent'));
         }
@@ -543,7 +543,7 @@ class tree extends control
 
         $moduleName = $viewType == 'bug' ? "modules[$number]" : "module[$number]";
         $modules    = empty($modules) ? array('' => '') : $modules;
-        die(html::select($moduleName, $modules, $currentModuleID, 'class=form-control'));
+        echo html::select($moduleName, $modules, $currentModuleID, 'class=form-control');
     }
 
     /**
@@ -563,6 +563,6 @@ class tree extends control
             ->andWhere('type')->eq($type)
             ->andWhere('deleted')->eq(0)
             ->fetchAll('id');
-        die(json_encode($modules));
+        echo json_encode($modules);
     }
 }

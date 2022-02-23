@@ -21,15 +21,15 @@ class custom extends control
     {
         if(($this->config->systemMode == 'new') and common::hasPriv('custom', 'set'))
         {
-            die(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
+            return print(js::locate(inlink('set', "module=project&field=" . key($this->lang->custom->project->fields))));
         }
 
-        if(common::hasPriv('custom', 'product'))   die(js::locate(inlink('product')));
-        if(common::hasPriv('custom', 'execution')) die(js::locate(inlink('execution')));
+        if(common::hasPriv('custom', 'product'))   return print(js::locate(inlink('product')));
+        if(common::hasPriv('custom', 'execution')) return print(js::locate(inlink('execution')));
 
         foreach($this->lang->custom->system as $sysObject)
         {
-            if(common::hasPriv('custom', $sysObject)) die(js::locate(inlink($sysObject)));
+            if(common::hasPriv('custom', $sysObject)) return print(js::locate(inlink($sysObject)));
         }
     }
 
@@ -249,7 +249,7 @@ class custom extends control
      */
     public function restore($module, $field, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('restore', "module=$module&field=$field&confirm=yes")));
 
         if($module == 'user' and $field == 'contactField')
         {
@@ -259,7 +259,7 @@ class custom extends control
         {
             $this->custom->deleteItems("module=$module&section=$field");
         }
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -439,7 +439,7 @@ class custom extends control
     public function setDefaultConcept($key = 0)
     {
         $this->loadModel('setting')->setItem('system.custom.URSR', $key);
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -470,7 +470,7 @@ class custom extends control
                 ->andWhere('`value`')->eq($key)
                 ->exec();
 
-            die(js::locate(inlink('browseStoryConcept'), 'parent'));
+            return print(js::locate(inlink('browseStoryConcept'), 'parent'));
         }
     }
 
@@ -561,19 +561,19 @@ class custom extends control
             {
                 if($sprintConcept == 2) $this->setting->setItem('system.custom.sprintConcept', 1);
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 0);
-                die(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
+                return print(js::locate($this->createLink('upgrade', 'mergeTips'), 'parent'));
             }
             else
             {
                 if($sprintConcept == 0) $this->setting->setItem('system.custom.sprintConcept', 1);
                 if($sprintConcept == 1) $this->setting->setItem('system.custom.sprintConcept', 2);
-                die(js::reload('top'));
+                return print(js::reload('top'));
             }
         }
 
         if($mode == 'new')
         {
-            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') die(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
+            if(isset($this->config->global->upgradeStep) and $this->config->global->upgradeStep == 'mergeProgram') return print(js::locate($this->createLink('upgrade', 'mergeProgram'), 'parent'));
 
             unset($_SESSION['upgrading']);
         }
@@ -611,7 +611,7 @@ class custom extends control
         {
             $this->loadModel('setting')->deleteItems("owner=$account&module=$module&section=$section&key=$key");
         }
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -715,7 +715,7 @@ class custom extends control
         {
             $menu = !empty($method) ? customModel::getFeatureMenu($module, $method) : customModel::getModuleMenu($module, true);
         }
-        die(str_replace("'", '\u0027', json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu))));
+        return print(str_replace("'", '\u0027', json_encode(array('result' => $menu ? 'success' : 'fail', 'menu' => $menu))));
     }
 
     /**
@@ -727,12 +727,12 @@ class custom extends control
      */
     public function ajaxRestoreMenu($setPublic = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('ajaxRestoreMenu', "setPublic=$setPublic&confirm=yes")));
 
         $account = $this->app->user->account;
         $this->loadModel('setting')->deleteItems("owner={$account}&module=common&section=customMenu");
         if($setPublic) $this->setting->deleteItems("owner=system&module=common&section=customMenu");
-        die(js::reload('parent.parent'));
+        return print(js::reload('parent.parent'));
     }
 
     /**
@@ -748,7 +748,7 @@ class custom extends control
             $data = fixer::input('post')->join('showLibs', ',')->get();
             if(isset($data->showLibs)) $data = $data->showLibs;
             $this->loadModel('setting')->setItem("{$this->app->user->account}.doc.custom.showLibs", $data);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -762,9 +762,9 @@ class custom extends control
      */
     public function resetRequired($module, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->custom->confirmRestore, inlink('resetRequired', "module=$module&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->custom->confirmRestore, inlink('resetRequired', "module=$module&confirm=yes")));
 
         $this->loadModel('setting')->deleteItems("owner=system&module={$module}&key=requiredFields");
-        die(js::reload('parent.parent'));
+        return print(js::reload('parent.parent'));
     }
 }

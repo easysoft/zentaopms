@@ -112,7 +112,7 @@
           </div>
         </th>
         <th class="c-id-sm"><?php echo $lang->task->id;?></th>
-        <th class="c-pri"><?php echo $lang->priAB;?></th>
+        <th class="c-pri" title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
         <th class="c-name text-left"><?php echo $lang->task->name;?></th>
         <th class="c-status"><?php echo $lang->task->status;?></th>
         <th class="text-left c-user"><?php echo $lang->task->assignedTo;?></th>

@@ -88,6 +88,7 @@ $lang->history         = 'History';
 $lang->attatch         = 'Files';
 $lang->reverse         = 'Inverse';
 $lang->switchDisplay   = 'Toggle';
+$lang->switchTo        = 'Switch To';
 $lang->expand          = 'Expand';
 $lang->collapse        = 'Collapse';
 $lang->saveSuccess     = 'Saved';
@@ -144,6 +145,8 @@ $lang->openedByAB   = 'CreatedBy';
 $lang->assignedToAB = 'AssignedTo';
 $lang->typeAB       = 'Type';
 $lang->nameAB       = 'Name';
+
+$lang->pri = 'Priority';
 
 $lang->common->common     = 'Common Module';
 $lang->my->common         = 'My';

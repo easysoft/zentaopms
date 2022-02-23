@@ -271,6 +271,21 @@ function renderColumnCount($count, count, col)
 {
     var text = count + '/' + (col.limit < 0 ? '<i class="icon icon-infinite"></i>' : col.limit);
     $count.html(text + '<i class="icon icon-arrow-up"></i>');
+
+    if(col.limit != -1 && col.limit < count)
+    {
+        $count.parents('.title').parent('.kanban-header-col').css('background-color', '#F6A1A1');
+        $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 200);
+        $count.css('color', '#E33030');
+        if(!$count.parent().find('.error').length) $count.parent().find('.include-last').after("<span class='error text-grey'><icon class='icon icon-help' title='" + kanbanLang.limitExceeded + "'></icon></span>");
+    }
+    else
+    {
+        $count.parents('.title').parent('.kanban-header-col').css('background-color', 'transparent');
+        $count.parents('.title').find('.text').css('max-width', $count.parents('.title').width() - 120);
+        $count.css('color', '#8B91A2');
+        $count.parent().find('.error').remove();
+    }
 }
 
 /**

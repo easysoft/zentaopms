@@ -217,7 +217,7 @@ class bugModel extends model
 
                 $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             /* Required field check. */
@@ -226,7 +226,7 @@ class bugModel extends model
                 $field = trim($field);
                 if($field and empty($bug->$field))
                 {
-                    die(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
+                    return print(js::alert(sprintf($this->lang->error->notempty, $this->lang->bug->$field)));
                 }
             }
 
@@ -266,7 +266,7 @@ class bugModel extends model
                 ->autoCheck()
                 ->batchCheck($this->config->bug->create->requiredFields, 'notempty')
                 ->exec();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $bugID = $this->dao->lastInsertID();
 
@@ -290,7 +290,7 @@ class bugModel extends model
                 unset($file);
             }
 
-            if(dao::isError()) die(js::error('bug#' . ($i+1) . dao::getError(true)));
+            if(dao::isError()) return print(js::error('bug#' . ($i+1) . dao::getError(true)));
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
 
@@ -430,8 +430,8 @@ class bugModel extends model
         {
             echo(js::alert($this->lang->bug->executionAccessDenied));
             $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-            if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('bug', 'index', '')));
-            die(js::locate('back'));
+            if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('bug', 'index', '')));
+            return print(js::locate('back'));
         }
     }
 
@@ -804,7 +804,7 @@ class bugModel extends model
 
                     $bug->{$extendField->field} = htmlSpecialString($bug->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $bug->{$extendField->field});
-                    if($message) die(js::alert($message));
+                    if($message) return print(js::alert($message));
                 }
 
                 $bugs[$bugID] = $bug;
@@ -834,7 +834,7 @@ class bugModel extends model
                 }
                 else
                 {
-                    die(js::error('bug#' . $bugID . dao::getError(true)));
+                    return print(js::error('bug#' . $bugID . dao::getError(true)));
                 }
             }
         }
@@ -887,7 +887,7 @@ class bugModel extends model
         {
             $oldBug = $bugs[$bugID];
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
-            if(dao::isError()) die(js::error('bug#' . $bugID . dao::getError(true)));
+            if(dao::isError()) return print(js::error('bug#' . $bugID . dao::getError(true)));
 
             $this->dao->update(TABLE_BUG)->set('activatedCount = activatedCount + 1')->where('id')->eq((int)$bugID)->exec();
         }

@@ -30,6 +30,7 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
     $modulePageNav .= "</ul></div></div>";
 
     if(in_array($this->app->rawMethod, array('task', 'calendar', 'gantt', 'tree', 'grouptask'))) $this->lang->TRActions = $this->getTRActions($this->app->rawMethod);
+    if(in_array($this->app->rawMethod, array('relation', 'maintainrelation'))) $this->lang->TRActions = $this->getTRActions('gantt');
 
     $this->lang->modulePageNav = $modulePageNav;
 }
@@ -94,7 +95,8 @@ public function getTRActions($currentMethod)
 
     $TRActions  = '';
     $TRActions .= "<div class='dropdown'>";
-    $TRActions .= html::a('javascript:;', "<i class='icon icon-".$this->lang->execution->icons[$currentMethod]."'></i> " . $subMenu->$currentMethod['name'] . "<span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");        $TRActions .= "<ul class='dropdown-menu pull-right'>";
+    $TRActions .= html::a('javascript:;', "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'></i> " . $subMenu->$currentMethod['name'] . "<span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+    $TRActions .= "<ul class='dropdown-menu pull-right'>";
     foreach($subMenu as $subKey => $subName)
     {
         $TRActions .=  '<li>' . html::a(helper::createLink('execution', $subName['method'], $subName['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$subName['method']] . "'></i> " . $subName['name']) . '</li>';

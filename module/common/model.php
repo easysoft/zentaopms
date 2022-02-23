@@ -31,7 +31,7 @@ class commonModel extends model
             $this->loadConfigFromDB();
             $this->app->setTimezone();
             $this->loadCustomFromDB();
-            if(!$this->checkIP()) die($this->lang->ipLimited);
+            if(!$this->checkIP()) return print($this->lang->ipLimited);
             $this->app->loadLang('company');
         }
     }
@@ -359,7 +359,7 @@ class commonModel extends model
         {
             echo js::locate($denyLink);
         }
-        exit;
+        helper::end();
     }
 
     /**
@@ -405,8 +405,6 @@ class commonModel extends model
                 echo '</a></li><li class="divider"></li>';
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
-                if(strpos($app->user->visions, $vision) !== false) echo '<li>' . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), "<i class='icon icon-exchange'></i> " . sprintf($lang->user->switchVision, $lang->visionList[$vision]), '', "data-type='ajax'") . '</li>';
-                echo '<li class="divider"></li>';
 
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
@@ -479,17 +477,24 @@ class commonModel extends model
 
         if(isset($app->user))
         {
-            $vision  = $app->config->vision;
+            $currentVision = $app->config->vision;
+            $userVisions   = array_filter(explode(',', $app->user->visions));
+            if(count($userVisions) < 2)
+            {
+                echo "<div>{$lang->visionList[$currentVision]}</div>";
+                return;
+            }
 
             echo "<ul class='dropdown-menu pull-right'>";
-            foreach($lang->visionList as $visionKey => $visionName)
+            echo "<li class='text-gray'>{$lang->switchTo}:</li>";
+            foreach($userVisions as $vision)
             {
-                echo ($vision == $visionKey ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$visionKey"), $visionName, '', "data-type='ajax'") . '</li>';
+                echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
             }
             echo '</ul>';
 
             echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo "<div>{$lang->visionList[$vision]}</div>";
+            echo "<div>{$lang->visionList[$currentVision]}</div>";
             echo '</a>';
         }
     }
@@ -2139,7 +2144,7 @@ EOD;
             echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
             echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
             printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
-            die('</td></tr></table></body></html>');
+            return print('</td></tr></table></body></html>');
         }
     }
 
@@ -2159,7 +2164,7 @@ EOD;
             $method = $this->app->rawMethod;
         }
 
-        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2174,7 +2179,7 @@ EOD;
         else
         {
             $referer  = helper::safe64Encode($this->app->getURI(true));
-            die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            return print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
         }
     }
 
@@ -2521,7 +2526,7 @@ EOD;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) die(js::locate($this->config->webRoot));
+        if($isFreepasswd) return print(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
@@ -2660,12 +2665,12 @@ EOD;
             $response->errcode = $this->config->entry->errcode[$code];
             $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-            die(urldecode(json_encode($response)));
+            return print(urldecode(json_encode($response)));
         }
         else
         {
             $response->error = $code;
-            die(urldecode(json_encode($response)));
+            return print(urldecode(json_encode($response)));
         }
     }
 
@@ -2769,7 +2774,7 @@ EOD;
         global $lang, $app;
         if(!extension_loaded('curl'))
         {
-             if($dataType == 'json') die($lang->error->noCurlExt);
+             if($dataType == 'json') return print($lang->error->noCurlExt);
              return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
         }
 

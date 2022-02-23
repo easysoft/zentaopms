@@ -88,6 +88,7 @@ $lang->history         = '历史记录';
 $lang->attatch         = '附件';
 $lang->reverse         = '切换顺序';
 $lang->switchDisplay   = '切换显示';
+$lang->switchTo        = '切换到';
 $lang->expand          = '展开全部';
 $lang->collapse        = '收起';
 $lang->saveSuccess     = '保存成功';
@@ -144,6 +145,8 @@ $lang->openedByAB   = '创建';
 $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 $lang->nameAB       = '名称';
+
+$lang->pri = '优先级';
 
 $lang->common->common     = '公有模块';
 $lang->my->common         = '地盘';

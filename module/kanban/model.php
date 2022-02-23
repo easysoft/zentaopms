@@ -1754,7 +1754,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function updateSpace($spaceID)
+    public function updateSpace($spaceID, $type = '')
     {
         $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
@@ -1767,6 +1767,8 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
+        if($type == 'cooperation' or $type == 'public') $space->whitelist = '';
+
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
@@ -1774,6 +1776,15 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
             ->where('id')->eq($spaceID)
             ->exec();
+
+        if($oldSpace->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        {
+            $kanbanList = $this->dao->select('id,team,whitelist')->from(TABLE_KANBAN)->where('space')->eq($spaceID)->andWhere('deleted')->eq('0')->fetchAll('id');
+            foreach($kanbanList as $id => $kanbanData)
+            {
+                $this->dao->update(TABLE_KANBAN)->set('team')->eq($kanbanData->whitelist)->set('whitelist')->eq('')->where('id')->eq($id)->andWhere('deleted')->eq('0')->exec();
+            }
+        }
 
         if(!dao::isError())
         {
@@ -1825,7 +1836,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
-            ->andWhere('region')->eq($regionID)
+            ->andWhere('region')->in($regionID)
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
     }

@@ -640,7 +640,7 @@ class webhookModel extends model
      */
     public function fetchHook($webhook, $sendData, $actionID = 0)
     {
-        if(!extension_loaded('curl')) die(helper::jsonEncode($this->lang->webhook->error->curl));
+        if(!extension_loaded('curl')) return print(helper::jsonEncode($this->lang->webhook->error->curl));
 
         if($webhook->type == 'dinguser' || $webhook->type == 'wechatuser' || $webhook->type == 'feishuuser')
         {

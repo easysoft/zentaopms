@@ -60,8 +60,8 @@ class user extends control
     {
         $userID = (int)$userID;
         $user   = $this->user->getById($userID, 'id');
-        if(empty($user)) die(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
-        if($user->deleted == 1) die(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
+        if(empty($user)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('my', 'team')));
+        if($user->deleted == 1) return print(js::error($this->lang->user->noticeHasDeleted) . js::locate('back'));
 
         /* Set thie url to session. */
         $uri = $this->app->getURI(true);
@@ -81,7 +81,7 @@ class user extends control
         $todos   = $this->todo->getList($type, $account, $status, 0, $pager, $sort);
         $date    = (int)$type == 0 ? helper::today() : $type;
         $users   = $this->loadModel('dept')->getDeptUserPairs($this->app->user->dept, 'id');
-        if(!isset($users[$userID])) die(js::error($this->lang->user->error->noAccess) . js::locate('back'));
+        if(!isset($users[$userID])) return print(js::error($this->lang->user->error->noAccess) . js::locate('back'));
 
         /* set menus. */
         $this->view->userList = $this->user->setUserList($users, $userID);
@@ -524,7 +524,10 @@ class user extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('company', 'browse')));
         }
 
-        $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groups = $this->dao->select('id, name, role')
+            ->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
+            ->fetchAll();
         $groupList = array('' => '');
         $roleGroup = array();
         foreach($groups as $group)
@@ -556,7 +559,10 @@ class user extends control
      */
     public function batchCreate($deptID = 0)
     {
-        $groups    = $this->dao->select('id, name, role')->from(TABLE_GROUP)->fetchAll();
+        $groups = $this->dao->select('id, name, role')
+            ->from(TABLE_GROUP)
+            ->where('vision')->eq($this->config->vision)
+            ->fetchAll();
         $groupList = array('' => '');
         $roleGroup = array();
         foreach($groups as $group)
@@ -573,7 +579,7 @@ class user extends control
             $userIDList = $this->user->batchCreate();
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $userIDList));
-            die(js::locate($this->createLink('company', 'browse'), 'parent'));
+            return print(js::locate($this->createLink('company', 'browse'), 'parent'));
         }
 
         /* Set custom. */
@@ -654,7 +660,7 @@ class user extends control
         elseif($_POST)
         {
             if($this->post->account) $this->user->batchEdit();
-            die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
+            return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse', "deptID=$deptID"), 'parent'));
         }
         $this->lang->user->menu      = $this->lang->company->menu;
         $this->lang->user->menuOrder = $this->lang->company->menuOrder;
@@ -693,7 +699,7 @@ class user extends control
         if($this->app->user->admin and $this->app->user->account == $user->account) return;
         if($_POST)
         {
-            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
+            if($this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return print(js::alert($this->lang->user->error->verifyPassword));
             $this->user->delete(TABLE_USER, $userID);
             if(!dao::isError())
             {
@@ -716,7 +722,7 @@ class user extends control
                 }
                 return $this->send($response);
             }
-            die(js::locate($this->session->userList, 'parent.parent'));
+            return print(js::locate($this->session->userList, 'parent.parent'));
         }
 
         $this->view->rand = $this->user->updateSessionRandom();
@@ -734,11 +740,11 @@ class user extends control
      */
     public function unlock($userID, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->user->confirmUnlock, $this->createLink('user', 'unlock', "userID=$userID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->user->confirmUnlock, $this->createLink('user', 'unlock', "userID=$userID&confirm=yes")));
 
         $user = $this->user->getById($userID, 'id');
         $this->user->cleanLocked($user->account);
-        die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+        return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
     }
 
     /**
@@ -751,11 +757,11 @@ class user extends control
      */
     public function unbind($userID, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->user->confirmUnbind, $this->createLink('user', 'unbind', "userID=$userID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->user->confirmUnbind, $this->createLink('user', 'unbind', "userID=$userID&confirm=yes")));
 
         $user = $this->user->getById($userID, 'id');
         $this->user->unbind($user->account);
-        die(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
+        return print(js::locate($this->session->userList ? $this->session->userList : $this->createLink('company', 'browse'), 'parent'));
     }
 
 
@@ -787,11 +793,11 @@ class user extends control
         {
             if(strtoupper(substr(PHP_OS, 0, 3)) === 'WIN')
             {
-                die(sprintf($this->lang->user->mkdirWin, $floderPath, $floderPath));
+                return print(sprintf($this->lang->user->mkdirWin, $floderPath, $floderPath));
             }
             else
             {
-                die(sprintf($this->lang->user->mkdirLinux, $floderPath, $floderPath, $floderPath, $floderPath));
+                return print(sprintf($this->lang->user->mkdirLinux, $floderPath, $floderPath, $floderPath, $floderPath));
             }
         }
 
@@ -813,7 +819,7 @@ class user extends control
             if($this->app->getViewType() == 'json')
             {
                 $data = $this->user->getDataInJSON($this->app->user);
-                die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
+                return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
             }
 
             $response['result']  = 'success';
@@ -847,7 +853,7 @@ class user extends control
             {
                 $response['result']  = 'fail';
                 $response['message'] = sprintf($this->lang->user->loginLocked, $this->config->user->lockMinutes);
-                if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
+                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $failReason))));
                 return $this->send($response);
             }
 
@@ -871,7 +877,7 @@ class user extends control
                     if($this->app->getViewType() == 'json')
                     {
                         $data = $this->user->getDataInJSON($user);
-                        die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
+                        return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
 
                     /* Get the module and method of the referer. */
@@ -911,7 +917,7 @@ class user extends control
                     if($this->app->getViewType() == 'json')
                     {
                         $data = $this->user->getDataInJSON($user);
-                        die(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
+                        return print(helper::removeUTF8Bom(json_encode(array('status' => 'success') + $data)));
                     }
 
                     $response['locate']  = $this->config->webRoot;
@@ -923,7 +929,7 @@ class user extends control
             {
                 $response['result']  = 'fail';
                 $fails = $this->user->failPlus($account);
-                if($this->app->getViewType() == 'json') die(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed))));
+                if($this->app->getViewType() == 'json') return print(helper::removeUTF8Bom(json_encode(array('status' => 'failed', 'reason' => $this->lang->user->loginFailed))));
                 $remainTimes = $this->config->user->failTimes - $fails;
                 if($remainTimes <= 0)
                 {
@@ -993,7 +999,7 @@ class user extends control
 
         $this->view->denyType = $denyType;
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -1009,7 +1015,7 @@ class user extends control
         setcookie('za', false);
         setcookie('zp', false);
 
-        if($this->app->getViewType() == 'json') die(json_encode(array('status' => 'success')));
+        if($this->app->getViewType() == 'json') return print(json_encode(array('status' => 'success')));
         $vars = !empty($referer) ? "referer=$referer" : '';
         $this->locate($this->createLink('user', 'login', $vars));
     }
@@ -1035,15 +1041,15 @@ class user extends control
 
         if($_POST)
         {
-            if($needCreateFile) die(js::reload('parent'));
+            if($needCreateFile) return print(js::reload('parent'));
 
             $result = $this->user->resetPassword();
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(!$result) die(js::alert($this->lang->user->resetFail));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(!$result) return print(js::alert($this->lang->user->resetFail));
 
             echo js::alert($this->lang->user->resetSuccess);
             $referer = helper::safe64Encode($this->createLink('index', 'index'));
-            die(js::locate(inlink('logout', 'referer=' . $referer), 'parent'));
+            return print(js::locate(inlink('logout', 'referer=' . $referer), 'parent'));
         }
 
         /* Remove the real path for security reason. */
@@ -1229,7 +1235,7 @@ class user extends control
     {
         $this->user->saveUserTemplate($type);
         if(dao::isError()) echo js::error(dao::getError(), $full = false);
-        die($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
+        return print($this->fetch('user', 'ajaxPrintTemplates', "type=$type"));
     }
 
     /**
@@ -1244,7 +1250,6 @@ class user extends control
         $this->dao->delete()->from(TABLE_USERTPL)->where('id')->eq($templateID)
             ->beginIF(!$this->app->user->admin)->andWhere('account')->eq($this->app->user->account)->fi()
             ->exec();
-        die();
     }
 
     /**
@@ -1272,7 +1277,7 @@ class user extends control
             $newUsers[$account] = $realname;
         }
 
-        die(json_encode($newUsers));
+        echo json_encode($newUsers);
     }
 
     /**
@@ -1284,6 +1289,6 @@ class user extends control
     public function refreshRandom()
     {
         $rand = (string)$this->user->updateSessionRandom();
-        die($rand);
+        echo $rand;
     }
 }
