@@ -5846,27 +5846,27 @@ class upgradeModel extends model
     /**
      * Replace extent file.
      *
-     * @param  string $file
+     * @param  string $filePath
      * @access public
      * @return void
      */
-    public function replaceEXTFile($file)
+    public function replaceEXTFile($filePath)
     {
-        $content = file_get_contents($file);
-        if(strpos(basename($file), 'html'))
+        $content = file_get_contents($filePath);
+        if(strpos(basename($filePath), 'html'))
         {
             $content = preg_replace("#(include ')((../){2,})([a-z]+/)#", "$1$2../../module/$4", $content);
         }
         else
         {
-            $dir = dirname($file);
-            $dir = str_replace($this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom' .DIRECTORY_SEPARATOR , '', $dir);
+            $dirPath    = dirname($filePath);
+            $dir        = str_replace($this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom' .DIRECTORY_SEPARATOR , '', $dirPath);
             $moduleName = explode(DIRECTORY_SEPARATOR,  $dir)[0];
 
             $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
             $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
             $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
         }
-        file_put_contents($file, $content);
+        file_put_contents($filePath, $content);
     }
 }

@@ -30,10 +30,7 @@
           <?php
           if(is_array($command))
           {
-              foreach($command as $cmd)
-              {
-                  echo "<div><code>$cmd</code></div>";
-              }
+              foreach($command as $cmd) echo "<div><code>$cmd</code></div>";
           }
           else
           {

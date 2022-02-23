@@ -904,7 +904,7 @@ class upgrade extends control
                 $result   = $response['result'];
             }
 
-            if($response['result'] == 'fail')
+            if($result == 'fail')
             {
                 $errorMessage = $response['message'];
                 $command      = $response['command'];
