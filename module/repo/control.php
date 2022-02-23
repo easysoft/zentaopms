@@ -842,9 +842,6 @@ class repo extends control
         $entry = $this->repo->decodePath($path);
         $repo  = $this->repo->getRepoByID($repoID);
 
-        $fromRevision = str_replace('*', '-', $fromRevision);
-        $toRevision   = str_replace('*', '-', $toRevision);
-
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
         $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch', $isBranchOrTag ? 'isBranchOrTag': '');
