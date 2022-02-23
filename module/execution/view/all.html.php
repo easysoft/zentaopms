@@ -29,7 +29,9 @@
     </div>
     <?php endif;?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
     <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
     <div class='input-control w-180px'>
