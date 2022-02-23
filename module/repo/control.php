@@ -837,6 +837,11 @@ class repo extends control
     {
         $fromRevision = str_replace('*', '-', $fromRevision);
         $toRevision   = str_replace('*', '-', $toRevision);
+        if($isBranchOrTag)
+        {
+            $fromRevision = urldecode(helper::safe64Decode($fromRevision));
+            $toRevision   = urldecode(helper::safe64Decode($toRevision));
+        }
 
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
@@ -905,7 +910,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=$branch&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . base64_encode($branch) . "&objectID=$objectID", '', false);
         $this->display();
     }
 
