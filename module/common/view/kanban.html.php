@@ -163,6 +163,9 @@ function renderPlanItem(item, $item)
 function renderProjectItem(item, $item)
 {
     var $title = $item.find('.title');
+
+    console.log($title);
+
     if(!$title.length)
     {
         if(window.userPrivs.project)
@@ -177,7 +180,8 @@ function renderProjectItem(item, $item)
         }
         $title.appendTo($item);
     }
-    $title.text(item.name).attr('title', item.name);
+
+    $title.text(item.name + "<span class='label label-danger label-badge'>{$lang->execution->delayed}</span>").attr('title', item.name);
 
     if(item.status === 'doing')
     {
