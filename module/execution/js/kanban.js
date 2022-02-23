@@ -469,7 +469,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && (priv.canEditStory || priv.canChangeStory || priv.canCreateTask || priv.canBatchCreate || priv.canUnlinkStory))
+        if(!$actions.length && (priv.canEditStory || priv.canActivateStory || priv.canChangeStory || priv.canCreateTask || priv.canBatchCreate || priv.canUnlinkStory))
         {
             $actions = $([
                 '<div class="actions">',
@@ -1048,9 +1048,10 @@ function createStoryMenu(options)
 
     var items = [];
     if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canChangeStory) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canCreateTask) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canBatchCreateTask) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canChangeStory && (story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released')) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask && (story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released')) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canBatchCreateTask && (story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released')) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
     return items;
 }
