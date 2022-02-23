@@ -48,26 +48,28 @@ js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
 js::set('projectID', $projectID);
 
-$canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
-$canEditRegion   = commonModel::hasPriv('kanban', 'editRegion');
-$canDeleteRegion = commonModel::hasPriv('kanban', 'deleteRegion');
-$canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
-$canCreateTask       = common::hasPriv('task',  'create');
-$canBatchCreateTask  = common::hasPriv('task',  'batchCreate');
-$canCreateBug        = common::hasPriv('bug',   'create');
-$canBatchCreateBug   = common::hasPriv('bug',   'batchCreate');
+$canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
+$canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
+$canDeleteRegion     = commonModel::hasPriv('kanban', 'deleteRegion');
+$canCreateLane       = commonModel::hasPriv('kanban', 'createLane');
+$canCreateTask       = common::hasPriv('task', 'create');
+$canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
+$canCreateBug        = common::hasPriv('bug', 'create');
+$canBatchCreateBug   = common::hasPriv('bug', 'batchCreate');
+$canImportBug        = common::hasPriv('execution', 'importBug');
 $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
 $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
 $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories'));
 $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
-$hasTaskButton       = ($canCreateTask or $canBatchCreateTask);
+$hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
 
 js::set('priv',
     array(
         'canCreateTask'         => $canCreateTask,
         'canBatchCreateTask'    => $canBatchCreateTask,
+        'canImportBug'          => $canImportBug,
         'canCreateBug'          => $canCreateBug,
         'canBatchCreateBug'     => $canBatchCreateBug,
         'canCreateStory'        => $canCreateStory,
@@ -101,7 +103,6 @@ js::set('hasStoryButton', $hasStoryButton);
 js::set('hasBugButton', $hasBugButton);
 js::set('hasTaskButton', $hasTaskButton);
 ?>
-
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
@@ -155,7 +156,7 @@ js::set('hasTaskButton', $hasTaskButton);
 
     echo $actions;
     ?>
-    <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
+    <?php if($canCreateTask or $canBatchCreateTask or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
     <div class='dropdown' id='createDropdown'>
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
@@ -168,6 +169,7 @@ js::set('hasTaskButton', $hasTaskButton);
         <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
+        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$executionID", '', true), $lang->execution->importBug, '', "class='ifram'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
       </ul>
     </div>

@@ -39,15 +39,15 @@ class upgradeModel extends model
         set_time_limit(0);
 
         $openVersion = $fromVersion;
-        if(strpos($fromVersion, 'pro') !== false) 
+        if(strpos($fromVersion, 'pro') !== false)
         {
             $openVersion = $this->config->proVersion[$fromVersion];
         }
-        elseif(strpos($fromVersion, 'biz') !== false) 
+        elseif(strpos($fromVersion, 'biz') !== false)
         {
             $openVersion = $this->config->bizVersion[$fromVersion];
         }
-        elseif(strpos($fromVersion, 'max') !== false) 
+        elseif(strpos($fromVersion, 'max') !== false)
         {
             $openVersion = $this->config->maxVersion[$fromVersion];
         }
@@ -66,7 +66,7 @@ class upgradeModel extends model
             $this->executeOpen($openVersion, $fromVersion, $executeXuanxuan);
 
             $proVersions = array();
-            foreach($this->config->proVersion as $pro => $open) 
+            foreach($this->config->proVersion as $pro => $open)
             {
                 if($open == $openVersion) $proVersions[] = $pro;
             }
@@ -79,7 +79,7 @@ class upgradeModel extends model
             }
 
             $bizVersions = array();
-            foreach($this->config->bizVersion as $biz => $open) 
+            foreach($this->config->bizVersion as $biz => $open)
             {
                 if($open == $openVersion) $bizVersions[] = $biz;
             }
@@ -106,9 +106,9 @@ class upgradeModel extends model
 
     /**
      * Execute open source version.
-     * 
-     * @param  string $openVersion 
-     * @param  string $fromVersion 
+     *
+     * @param  string $openVersion
+     * @param  string $fromVersion
      * @param  bool   $executeXuanxuan
      * @access public
      * @return void
@@ -433,7 +433,7 @@ class upgradeModel extends model
                 if(is_numeric($fromVersion[0] == 'b')) break;
                 $this->execSQL($this->getUpgradeFile('bizinstall'));
                 if(!empty($this->config->isINT))
-                {    
+                {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                     $this->execSQL($xuanxuanSql);
                 }
@@ -449,7 +449,7 @@ class upgradeModel extends model
 
     /**
      * Execute pro version sql.
-     * 
+     *
      * @param  string $proVersion
      * @access public
      * @return void
@@ -487,7 +487,7 @@ class upgradeModel extends model
 
     /**
      * Execute biz upgrade program.
-     * 
+     *
      * @param  int   $bizVersion
      * @param  bool  $executeXuanxuan
      * @access public
@@ -588,12 +588,12 @@ class upgradeModel extends model
         $confirmContent = '';
 
         $openVersion = $fromVersion;
-        if(strpos($fromVersion, 'pro') !== false) 
+        if(strpos($fromVersion, 'pro') !== false)
         {
             $openVersion     = $this->config->proVersion[$fromVersion];
             $confirmContent .= $this->getProConfirm($fromVersion);
         }
-        elseif(strpos($fromVersion, 'biz') !== false) 
+        elseif(strpos($fromVersion, 'biz') !== false)
         {
             $openVersion     = $this->config->bizVersion[$fromVersion];
             $proVersion      = array_search($openVersion, $this->config->proVersion);
@@ -601,7 +601,7 @@ class upgradeModel extends model
             $confirmContent .= $this->getProConfirm($proVersion);
             $confirmContent .= $this->getBizConfirm($fromVersion);
         }
-        elseif(strpos($fromVersion, 'max') !== false) 
+        elseif(strpos($fromVersion, 'max') !== false)
         {
             $openVersion     = $this->config->maxVersion[$fromVersion];
             $proVersion      = array_search($openVersion, $this->config->proVersion);
@@ -619,9 +619,9 @@ class upgradeModel extends model
 
     /**
      * Get open source confirm contents.
-     * 
+     *
      * @param  string  $openVersion
-     * @param  string  $fromVersion 
+     * @param  string  $fromVersion
      * @access public
      * @return void
      */
@@ -823,18 +823,18 @@ class upgradeModel extends model
             case '16_1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.1'));
             case '16_2': $confirmContent .= file_get_contents($this->getUpgradeFile('16.2'));
             case '16_3': $confirmContent .= file_get_contents($this->getUpgradeFile('16.3'));
-            case '16_4': 
-                if(strpos($fromVersion, 'pro') === false and strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false) 
+            case '16_4':
+                if(strpos($fromVersion, 'pro') === false and strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false)
                 {
                     $confirmContent .= file_get_contents($this->getUpgradeFile('proinstall'));
                 }
 
-                if(strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false) 
+                if(strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false)
                 {
                     $confirmContent .= file_get_contents($this->getUpgradeFile('bizinstall'));
                 }
 
-                if(strpos($fromVersion, 'max') === false) 
+                if(strpos($fromVersion, 'max') === false)
                 {
                     $confirmContent .= file_get_contents($this->getUpgradeFile('maxinstall'));
                     $confirmContent .= file_get_contents($this->getUpgradeFile('functions'));
@@ -848,8 +848,8 @@ class upgradeModel extends model
 
     /**
      * Get pro version confirm contents.
-     * 
-     * @param  string $fromVersion 
+     *
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
@@ -962,8 +962,8 @@ class upgradeModel extends model
 
     /**
      * Get biz version confirm contents.
-     * 
-     * @param  string $fromVersion 
+     *
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
@@ -1030,8 +1030,8 @@ class upgradeModel extends model
 
     /**
      * Get max version confirm  contents.
-     * 
-     * @param  string $fromVersion 
+     *
+     * @param  string $fromVersion
      * @access public
      * @return void
      */
@@ -1039,9 +1039,9 @@ class upgradeModel extends model
     {
         $confirmContent = '';
         if($fromVersion == 'max2_0_beta4' && $this->config->version != 'max2.0.rc1') $fromVersion = 'max2_0_rc1';
-        
+
         switch($fromVersion)
-        {   
+        {
             case 'max2_0_rc1':
             case 'max2_0_beta4': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.0.beta4'));
             case 'max2_0': $confirmContent .= file_get_contents($this->getUpgradeFile('max2.0'));

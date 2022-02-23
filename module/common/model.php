@@ -479,11 +479,7 @@ class commonModel extends model
         {
             $currentVision = $app->config->vision;
             $userVisions   = array_filter(explode(',', $app->user->visions));
-            if(count($userVisions) < 2)
-            {
-                echo "<div>{$lang->visionList[$currentVision]}</div>";
-                return;
-            }
+            if(count($userVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
             echo "<ul class='dropdown-menu pull-right'>";
             echo "<li class='text-gray'>{$lang->switchTo}:</li>";
