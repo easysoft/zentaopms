@@ -72,7 +72,6 @@ class jenkinsModel extends model
             foreach($response->jobs as $job) $tasks[basename($job->url)] = $job->name;
         }
         return $tasks;
-
     }
 
     /**

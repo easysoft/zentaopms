@@ -8,7 +8,9 @@ $app->loadLang('action');
 $app->loadLang('user');
 $config->company->dynamic = new stdclass();
 $config->company->dynamic->search['module']               = 'action';
-$config->company->dynamic->search['fields']['product']    = $lang->action->product;
+
+if($config->vision == 'rnd') $config->company->dynamic->search['fields']['product']    = $lang->action->product;
+
 $config->company->dynamic->search['fields']['project']    = '项目';
 $config->company->dynamic->search['fields']['execution']  = $lang->action->execution;
 $config->company->dynamic->search['fields']['actor']      = $lang->action->actor;
@@ -17,7 +19,8 @@ $config->company->dynamic->search['fields']['objectType'] = $lang->action->objec
 $config->company->dynamic->search['fields']['date']       = $lang->action->date;
 $config->company->dynamic->search['fields']['action']     = $lang->action->action;
 
-$config->company->dynamic->search['params']['product']    = array('operator' => '=',  'control' => 'select', 'values' => '');
+if($config->vision == 'rnd') $config->company->dynamic->search['params']['product']    = array('operator' => '=',  'control' => 'select', 'values' => '');
+
 $config->company->dynamic->search['params']['project']    = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['execution']  = array('operator' => '=',  'control' => 'select', 'values' => '');
 $config->company->dynamic->search['params']['actor']      = array('operator' => '=',  'control' => 'select', 'values' => '');

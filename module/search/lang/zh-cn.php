@@ -29,6 +29,7 @@ $lang->search->me            = '自己';
 $lang->search->noQuery       = '还没有保存查询！';
 $lang->search->onMenuBar     = '显示在菜单栏';
 $lang->search->custom        = '自定义';
+$lang->search->setCommon     = '设为公共查询条件';
 
 $lang->search->account  = '用户名';
 $lang->search->module   = '模块';

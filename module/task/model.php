@@ -64,7 +64,7 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region')
             ->add('version', 1)
             ->get();
 
@@ -247,6 +247,13 @@ class taskModel extends model
         $preStory  = 0;
         $tasks     = fixer::input('post')->get();
 
+        if($this->config->vision == 'lite')
+        {
+            $lanes   = $tasks->lane;
+            $columns = $tasks->column;
+            unset($tasks->lane);
+            unset($tasks->column);
+        }
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -319,6 +326,7 @@ class taskModel extends model
             $data[$i]->openedBy   = $this->app->user->account;
             $data[$i]->openedDate = $now;
             $data[$i]->parent     = $tasks->parent[$i];
+            $data[$i]->vision     = isset($tasks->vision[$i]) ? $tasks->vision[$i] : 'common';
             if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($assignedTo) $data[$i]->assignedDate = $now;
             if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
@@ -404,7 +412,14 @@ class taskModel extends model
 
             $this->executeHooks($taskID);
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            if($this->config->vision == 'lite')
+            {
+                $this->kanban->addKanbanCell($executionID, $lanes[$i], $columns[$i], 'task', $taskID);
+            }
+            else
+            {
+                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+            }
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
             if(!dao::isError()) $this->loadModel('score')->create('task', 'create', $taskID);
@@ -458,7 +473,7 @@ class taskModel extends model
             if(!empty($changes)) $this->action->logHistory($actionID, $changes);
         }
 
-        if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'task');
+        if(!isset($output['laneID']) or !isset($output['columnID']) or !isset($lanes)) $this->kanban->updateLane($executionID, 'task');
         return $mails;
     }
 
@@ -851,7 +866,7 @@ class taskModel extends model
         {
             $taskConsumed = 0;
             $taskConsumed = $this->dao->select('consumed')->from(TABLE_TASK)->where('id')->eq($this->post->parent)->andWhere('parent')->eq(0)->fetch('consumed');
-            if($taskConsumed > 0) die(js::error($this->lang->task->error->alreadyConsumed));
+            if($taskConsumed > 0) return print(js::error($this->lang->task->error->alreadyConsumed));
         }
 
         $now  = helper::now();
@@ -900,7 +915,7 @@ class taskModel extends model
             ->remove('comment,files,labels,uid,multiple,team,teamEstimate,teamConsumed,teamLeft,contactListMenu')
             ->get();
 
-        if($task->consumed < $oldTask->consumed) die(js::error($this->lang->task->error->consumedSmall));
+        if($task->consumed < $oldTask->consumed) return print(js::error($this->lang->task->error->consumedSmall));
 
         /* Fix bug#1388, Check children task executionID and moduleID. */
         if(isset($task->execution) and $task->execution != $oldTask->execution)
@@ -1151,7 +1166,7 @@ class taskModel extends model
 
                 $task->{$extendField->field} = htmlSpecialString($task->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $task->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             if($data->consumeds[$taskID])
@@ -1230,9 +1245,9 @@ class taskModel extends model
         /* Check field not empty. */
         foreach($tasks as $taskID => $task)
         {
-            if($task->status == 'done' and $task->consumed == false) die(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
+            if($task->status == 'done' and $task->consumed == false) return print(js::error('task#' . $taskID . sprintf($this->lang->error->notempty, $this->lang->task->consumedThisTime)));
             if($task->status == 'cancel') continue;
-            if(!empty($task->deadline) and $task->estStarted > $task->deadline) die(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
+            if(!empty($task->deadline) and $task->estStarted > $task->deadline) return print(js::error('task#' . $taskID . $this->lang->task->error->deadlineSmall));
             foreach(explode(',', $this->config->task->edit->requiredFields) as $field)
             {
                 $field = trim($field);
@@ -1300,7 +1315,7 @@ class taskModel extends model
             }
             else
             {
-                die(js::error('task#' . $taskID . dao::getError(true)));
+                return print(js::error('task#' . $taskID . dao::getError(true)));
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchEdit');
@@ -1518,8 +1533,8 @@ class taskModel extends model
 
             if(!empty($record->work[$id]) or !empty($record->consumed[$id]))
             {
-                if(!$record->consumed[$id])   die(js::alert($this->lang->task->error->consumedThisTime));
-                if($record->left[$id] === '') die(js::alert($this->lang->task->error->left));
+                if(!$record->consumed[$id])   return print(js::alert($this->lang->task->error->consumedThisTime));
+                if($record->left[$id] === '') return print(js::alert($this->lang->task->error->left));
 
                 $estimates[$id] = new stdclass();
                 $estimates[$id]->date     = $record->dates[$id];
@@ -1905,6 +1920,7 @@ class taskModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
             ->setDefault('assignedDate', helper::now())
+            ->setDefault('activatedDate', helper::now())
             ->remove('comment')
             ->get();
 
@@ -2196,6 +2212,7 @@ class taskModel extends model
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
             ->andWhere('t4.deleted')->eq(0)
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
             ->beginIF($type == 'finishedBy')
@@ -2243,6 +2260,7 @@ class taskModel extends model
             ->leftjoin(TABLE_PROJECT)->alias('t2')->on('t1.execution = t2.id')
             ->where('t1.assignedTo')->eq($account)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status != 'all')->andWhere('t1.status')->in($status)->fi()
             ->beginIF(!empty($skipExecutionIDList))->andWhere('t1.execution')->notin($skipExecutionIDList)->fi()
             ->query();
@@ -2273,6 +2291,7 @@ class taskModel extends model
             ->orWhere('t3.status')->eq('suspended')
             ->markRight(1)
             ->andWhere('t1.deleted')->eq(0)
+            ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->andWhere('t2.deleted')->eq(0)
             ->beginIF($this->config->systemMode == 'new')->andWhere('t3.deleted')->eq(0)->fi()
             ->fetchAll('id');

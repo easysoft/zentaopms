@@ -42,6 +42,7 @@ $lang->user->address          = '通讯地址';
 $lang->user->zipcode          = '邮编';
 $lang->user->join             = '入职日期';
 $lang->user->visits           = '访问次数';
+$lang->user->visions          = '版本类型';
 $lang->user->ip               = '最后IP';
 $lang->user->last             = '最后登录';
 $lang->user->ranzhi           = 'ZDOO帐号';
@@ -72,6 +73,7 @@ $lang->user->products         = $lang->productCommon;
 $lang->user->projects         = '项目';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = '身份';
+$lang->user->switchVision     = '切换到 %s';
 
 $lang->user->legendBasic        = '基本资料';
 $lang->user->legendContribution = '个人贡献';

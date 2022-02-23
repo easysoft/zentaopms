@@ -88,6 +88,7 @@ $lang->history         = '历史记录';
 $lang->attatch         = '附件';
 $lang->reverse         = '切换顺序';
 $lang->switchDisplay   = '切换显示';
+$lang->switchTo        = '切换到';
 $lang->expand          = '展开全部';
 $lang->collapse        = '收起';
 $lang->saveSuccess     = '保存成功';
@@ -320,6 +321,10 @@ $lang->exportFileTypeList['html'] = 'html';
 
 $lang->exportTypeList['all']      = '全部记录';
 $lang->exportTypeList['selected'] = '选中记录';
+
+$lang->visionList = array();
+$lang->visionList['rnd']  = '研发综合界面';
+$lang->visionList['lite'] = '迅捷界面';
 
 $lang->createObjects['todo']        = '待办';
 $lang->createObjects['effort']      = '日志';

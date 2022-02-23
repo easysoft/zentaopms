@@ -100,8 +100,8 @@ class company extends control
         if(!empty($_POST))
         {
             $this->company->create();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent.parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->title     = $this->lang->company->common . $this->lang->colon . $this->lang->company->create;
@@ -121,13 +121,13 @@ class company extends control
         if(!empty($_POST))
         {
             $this->company->update();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             /* reset company in session. */
             $company = $this->loadModel('company')->getFirst();
             $this->session->set('company', $company);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->company->setMenu();
@@ -271,7 +271,7 @@ class company extends control
         $this->config->company->dynamic->search['actionURL'] = $this->createLink('company', 'dynamic', "browseType=bysearch&param=myQueryID");
         $this->config->company->dynamic->search['queryID'] = $queryID;
         $this->config->company->dynamic->search['params']['action']['values']    = $this->lang->action->search->label;
-        $this->config->company->dynamic->search['params']['product']['values']   = $products;
+        if($this->config->vision == 'rnd') $this->config->company->dynamic->search['params']['product']['values']   = $products;
         $this->config->company->dynamic->search['params']['project']['values']   = $projects;
         $this->config->company->dynamic->search['params']['execution']['values'] = $executions;
         $this->config->company->dynamic->search['params']['actor']['values']     = $accountPairs;
@@ -304,6 +304,6 @@ class company extends control
     public function ajaxGetOutsideCompany()
     {
         $companies = $this->company->getOutsideCompanies();
-        die(html::select('company', $companies, '', "class='form-control chosen'"));
+        return print(html::select('company', $companies, '', "class='form-control chosen'"));
     }
 }

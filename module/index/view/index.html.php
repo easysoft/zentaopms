@@ -14,6 +14,7 @@ include '../../common/view/header.lite.html.php';
 $this->app->loadConfig('sso');
 if(!empty($config->sso->redirect)) js::set('ssoRedirect', $config->sso->redirect);
 
+js::set('vision',        $config->vision);
 js::set('navGroup',      $lang->navGroup);
 js::set('appsLang',      $lang->index->app);
 js::set('appsMenuItems', commonModel::getMainNavList($app->rawModule));
@@ -37,6 +38,10 @@ js::set('showFeatures', $showFeatures);
 #menuMoreList > li.active {position: relative;}
 #menuMoreList > li.active:before {content: ' '; display: block; position: absolute; left: 100%; border-width: 5px 5px 5px 0; border-style: solid; border-color: transparent; border-right-color: #ff9800; width: 0; height: 0; top: 12px}
 #menuMoreList > li.active:after {content: attr(data-tip); display: block; position: absolute; left: 100%; background-color: #f1a325; color: #fff; top: 3px; white-space: nowrap; line-height: 16px; padding: 8px 10px; margin-left: 5px; border-radius: 4px;}
+<?php endif;?>
+
+<?php if($this->config->vision == 'lite'):?>
+#searchbox .dropdown-menu.show-quick-go.with-active {min-height: 180px;}
 <?php endif;?>
 </style>
 <div id='menu'>

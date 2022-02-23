@@ -390,6 +390,7 @@ class reportModel extends model
                     $workload[$user]['total']['count']   = isset($workload[$user]['total']['count'])   ? $workload[$user]['total']['count']  + 1 : 1;
                     $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
+
                 $workload[$user]['task']['project'] = $project;
             }
         }
@@ -650,6 +651,7 @@ class reportModel extends model
         return $this->dao->select("count(*) as count, sum(if((`status` != 'done'), 1, 0)) AS `undone`, sum(if((`status` = 'done'), 1, 0)) AS `done`")->from(TABLE_TODO)
             ->where('LEFT(date, 4)')->eq($year)
             ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
             ->fetch();
     }
@@ -1064,6 +1066,7 @@ class reportModel extends model
             ->beginIF($this->config->systemMode == 'classic')->andWhere('t2.type')->eq('execution')->fi()
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.type')->eq('project')->fi()
             ->beginIF(!empty($accounts))->andWhere('t2.account')->in($accounts)->fi()
+            ->andWhere('t1.deleted')->eq(0)
             ->fetchPairs('id', 'status');
 
         $statusOverview = array();

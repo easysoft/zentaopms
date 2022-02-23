@@ -19,7 +19,7 @@ class install extends control
      */
     public function __construct()
     {
-        if(!defined('IN_INSTALL')) die();
+        if(!defined('IN_INSTALL')) helper::end();
         parent::__construct();
         $this->app->loadLang('user');
         $this->app->loadLang('admin');
@@ -178,7 +178,7 @@ class install extends control
         if(!empty($_POST))
         {
             $this->loadModel('setting')->setItem('system.common.global.mode', $this->post->mode); // Update mode.
-            die(js::locate(inlink('step5'), 'parent'));
+            return print(js::locate(inlink('step5'), 'parent'));
         }
 
         $this->app->loadLang('upgrade');
@@ -198,10 +198,10 @@ class install extends control
         if(!empty($_POST))
         {
             $this->install->grantPriv();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->install->updateLang();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->importDemoData) $this->install->importDemoData();
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
@@ -212,7 +212,7 @@ class install extends control
             $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
             $this->loadModel('setting')->setItem('system.common.global.cron', 1);
             $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
-            die(js::locate(inlink('step6'), 'parent'));
+            return print(js::locate(inlink('step6'), 'parent'));
         }
 
         $this->app->loadLang('upgrade');

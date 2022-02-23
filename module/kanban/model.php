@@ -438,6 +438,7 @@ class kanbanModel extends model
             ->add('kanban', $kanbanID)
             ->add('region', $regionID)
             ->add('group', $groupID)
+            ->add('column', $columnID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
@@ -1672,6 +1673,7 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
+        if($this->app->user->admin) return array_keys($objects);
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
@@ -1695,6 +1697,7 @@ class kanbanModel extends model
                 if($spaceType == 'public' and $param != 'involved') $remove = false;
             }
 
+            if($objectType == 'kanbanspace' and $param == 'involved' and $object->owner == $account) $remove = true;
             if($remove) unset($objects[$objectID]);
         }
 
@@ -1751,7 +1754,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function updateSpace($spaceID)
+    public function updateSpace($spaceID, $type = '')
     {
         $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
@@ -1764,6 +1767,8 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
+        if($type == 'cooperation' or $type == 'public') $space->whitelist = '';
+
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
@@ -1771,6 +1776,15 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
             ->where('id')->eq($spaceID)
             ->exec();
+
+        if($oldSpace->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        {
+            $kanbanList = $this->dao->select('id,team,whitelist')->from(TABLE_KANBAN)->where('space')->eq($spaceID)->andWhere('deleted')->eq('0')->fetchAll('id');
+            foreach($kanbanList as $id => $kanbanData)
+            {
+                $this->dao->update(TABLE_KANBAN)->set('team')->eq($kanbanData->whitelist)->set('whitelist')->eq('')->where('id')->eq($id)->andWhere('deleted')->eq('0')->exec();
+            }
+        }
 
         if(!dao::isError())
         {
@@ -1822,7 +1836,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
-            ->andWhere('region')->eq($regionID)
+            ->andWhere('region')->in($regionID)
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
     }
@@ -1931,7 +1945,6 @@ class kanbanModel extends model
             if($space->type == 'private') $kanban->owner = $account;
         }
 
-
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
             ->batchCheck($this->config->kanban->create->requiredFields, 'notempty')
@@ -2036,7 +2049,7 @@ class kanbanModel extends model
                 $lane->type      = $type;
                 $lane->execution = $executionID;
                 $this->dao->insert(TABLE_KANBANLANE)->data($lane)->exec();
-                
+
                 $laneID = $this->dao->lastInsertId();
                 $this->createExecutionColumns($laneID, $type, $executionID);
             }

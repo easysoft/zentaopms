@@ -175,6 +175,7 @@ class todoModel extends model
                 $todo->assignedTo   = $this->app->user->account;
                 $todo->assignedBy   = $this->app->user->account;
                 $todo->assignedDate = $now;
+                $todo->vision       = $todos->vision[$i];
 
                 if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
@@ -186,7 +187,7 @@ class todoModel extends model
                     if(isset($object->title)) $todo->name = $object->title;
                 }
 
-                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $validTodos[] = $todo;
             }
@@ -208,7 +209,7 @@ class todoModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
             $todoID       = $this->dao->lastInsertID();
             $todoIDList[] = $todoID;
@@ -334,7 +335,7 @@ class todoModel extends model
                 {
                     $todo->idvalue = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
                 }
-                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
             }
@@ -367,7 +368,7 @@ class todoModel extends model
                 }
                 else
                 {
-                    die(js::error('todo#' . $todoID . dao::getError(true)));
+                    return print(js::error('todo#' . $todoID . dao::getError(true)));
                 }
             }
         }
@@ -500,7 +501,7 @@ class todoModel extends model
         elseif($type == 'before')
         {
             $begin = '1970-01-01';
-            $end   = date::yesterday();
+            $end   = date::today();
         }
         elseif($type == 'cycle')
         {
@@ -515,6 +516,7 @@ class todoModel extends model
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
             ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
             ->orWhere('finishedBy')->eq($account)
@@ -799,6 +801,7 @@ class todoModel extends model
         return $this->dao->select('count(*) as count')->from(TABLE_TODO)
             ->where('cycle')->eq('0')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('account', true)->eq($account)
             ->orWhere('assignedTo')->eq($account)
             ->orWhere('finishedBy')->eq($account)

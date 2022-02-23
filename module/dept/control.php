@@ -56,7 +56,7 @@ class dept extends control
         if(!empty($_POST))
         {
             $this->dept->updateOrder($_POST['orders']);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -72,7 +72,7 @@ class dept extends control
         {
             $deptIDList = $this->dept->manageChild($_POST['parentDeptID'], $_POST['depts']);
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $deptIDList));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -89,7 +89,7 @@ class dept extends control
         {
             $this->dept->update($deptID);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::alert($this->lang->dept->successSave) . js::reload('parent'));
+            return print(js::alert($this->lang->dept->successSave) . js::reload('parent'));
         }
 
         $dept  = $this->dept->getById($deptID);
@@ -105,7 +105,7 @@ class dept extends control
         $childs = $this->dept->getAllChildId($deptID);
         foreach($childs as $childModuleID) unset($this->view->optionMenu[$childModuleID]);
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -124,23 +124,23 @@ class dept extends control
         if($sons)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasSons));
-            die(js::alert($this->lang->dept->error->hasSons));
+            return print(js::alert($this->lang->dept->error->hasSons));
         }
         if($users)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => $this->lang->dept->error->hasUsers));
-            die(js::alert($this->lang->dept->error->hasUsers));
+            return print(js::alert($this->lang->dept->error->hasUsers));
         }
 
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->dept->confirmDelete, $this->createLink('dept', 'delete', "deptID=$deptID&confirm=yes")));
+            return print(js::confirm($this->lang->dept->confirmDelete, $this->createLink('dept', 'delete', "deptID=$deptID&confirm=yes")));
         }
         else
         {
             $this->dept->delete($deptID);
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -155,6 +155,6 @@ class dept extends control
     public function ajaxGetUsers($dept, $user = '')
     {
         $users = array('' => '') + $this->dept->getDeptUserPairs($dept);
-        die(html::select('user', $users, $user, "class='form-control chosen'"));
+        return print(html::select('user', $users, $user, "class='form-control chosen'"));
     }
 }

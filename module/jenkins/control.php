@@ -109,13 +109,13 @@ class jenkins extends control
      */
     public function delete($id, $confim = 'no')
     {
-        if($confim != 'yes') die(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confim != 'yes') return print(js::confirm($this->lang->jenkins->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('server')->eq($id)->andWhere('engine')->eq('jenkins')->andWhere('deleted')->eq('0')->fetchAll();
-        if($jobs) die(js::alert($this->lang->jenkins->error->linkedJob));
+        if($jobs) return print(js::alert($this->lang->jenkins->error->linkedJob));
 
         $this->jenkins->delete(TABLE_PIPELINE, $id);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -127,9 +127,9 @@ class jenkins extends control
      */
     public function ajaxGetJenkinsTasks($id)
     {
-        if(empty($id)) die(json_encode(array('' => '')));
+        if(empty($id)) return print(json_encode(array('' => '')));
 
         $tasks = $this->jenkins->getTasks($id);
-        die(json_encode($tasks));
+        echo json_encode($tasks);
     }
 }

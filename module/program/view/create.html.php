@@ -25,7 +25,7 @@
   </div>
 </body>
 </html>
-<?php exit;?>
+<?php helper::end();?>
 <?php endif;?>
 
 <?php include '../../common/view/header.html.php';?>

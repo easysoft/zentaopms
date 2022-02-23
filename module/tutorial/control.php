@@ -73,7 +73,7 @@ class tutorial extends control
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
         if(empty($referer)) $referer = helper::safe64Encode(helper::createLink('my', 'index', '', 'html'));
-        die(js::locate(helper::safe64Decode($referer), 'parent'));
+        echo js::locate(helper::safe64Decode($referer), 'parent');
     }
 
     /**
@@ -86,7 +86,7 @@ class tutorial extends control
     {
         $this->session->set('tutorialMode', false);
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', 0);
-        die(json_encode(array('result' => 'success')));
+        echo json_encode(array('result' => 'success'));
     }
 
     /**
@@ -118,7 +118,7 @@ class tutorial extends control
             }
         }
         if(!$hasPriv and $module == 'my' and $method == 'index') $hasPriv = true;
-        if(!$hasPriv) die(js::locate('back'));
+        if(!$hasPriv) return print(js::locate('back'));
 
         $params = helper::safe64Decode($params);
         if($_POST)
@@ -127,9 +127,9 @@ class tutorial extends control
             if(($module == 'story' or $module == 'task' or $module == 'bug') and $method == 'create') $target = 'self';
             if($module == 'execution' and $method == 'linkStory') $target = 'self';
             if($module == 'execution' and $method == 'managemembers') $target = 'self';
-            die(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
+            return print(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
         }
-        die($this->fetch($module, $method, $params));
+        echo $this->fetch($module, $method, $params);
     }
 
     /**
@@ -144,7 +144,7 @@ class tutorial extends control
     public function ajaxSaveNovice($novice = 'true', $reload = 'false')
     {
         $this->loadModel('setting')->setItem($this->app->user->account . '.common.global.novice', $novice == true ? 1 : 0);
-        if($reload == 'true') die(js::reload('parent'));
+        if($reload == 'true') return print(js::reload('parent'));
     }
 
     /**
