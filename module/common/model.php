@@ -2130,7 +2130,7 @@ EOD;
      * Check upgrade's status file is ok or not.
      *
      * @access public
-     * @return void
+     * @return bool 
      */
     public function checkUpgradeStatus()
     {
@@ -2144,8 +2144,12 @@ EOD;
             echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
             echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
             printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
-            return print('</td></tr></table></body></html>');
+            echo '</td></tr></table></body></html>';
+
+            return false;
         }
+
+        return true;
     }
 
     /**
