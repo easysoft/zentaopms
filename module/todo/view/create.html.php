@@ -16,6 +16,7 @@
 <?php js::set('noTodo', $lang->todo->noTodo);?>
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
+<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
@@ -115,7 +116,7 @@
           <td><?php echo html::select('type', $lang->todo->typeList, '', 'onchange="loadList(this.value);" class="form-control"');?></td>
         </tr>
         <tr>
-          <th><?php echo $lang->todo->name;?></th>
+          <th id='nameBoxLabel'><?php echo $lang->todo->name;?></th>
           <td colspan='2'>
             <div id='nameBox' class='hidden'><?php echo html::input('name', '', "class='form-control'");?></div>
             <div class='input-group title-group required'>

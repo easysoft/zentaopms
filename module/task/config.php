@@ -48,7 +48,7 @@ $config->task->custom->batchCreateFields = 'module,story,assignedTo,estimate,des
 $config->task->custom->batchEditFields   = 'module,assignedTo,status,pri,estimate,record,left';
 
 $config->task->datatable = new stdclass();
-$config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
+$config->task->datatable->defaultField = array('id', 'pri', 'name', 'status', 'assignedTo', 'lane', 'finishedBy', 'estimate', 'consumed', 'left', 'progress', 'deadline', 'actions');
 
 global $lang;
 $config->task->datatable->fieldList['id']['title']    = 'idAB';
@@ -128,6 +128,11 @@ $config->task->datatable->fieldList['assignedTo']['title']    = 'assignedTo';
 $config->task->datatable->fieldList['assignedTo']['fixed']    = 'no';
 $config->task->datatable->fieldList['assignedTo']['width']    = '100';
 $config->task->datatable->fieldList['assignedTo']['required'] = 'no';
+
+$config->task->datatable->fieldList['lane']['title']    = 'lane';
+$config->task->datatable->fieldList['lane']['fixed']    = 'no';
+$config->task->datatable->fieldList['lane']['width']    = '90';
+$config->task->datatable->fieldList['lane']['required'] = 'no';
 
 $config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';

@@ -91,6 +91,9 @@ js::set('priv',
         'canRecordEstimateTask' => common::hasPriv('task', 'recordEstimate'),
         'canToStoryBug'         => common::hasPriv('story', 'create'),
         'canAssignStory'        => common::hasPriv('story', 'assignto'),
+        'canEditStory'          => common::hasPriv('story', 'edit'),
+        'canChangeStory'        => common::hasPriv('story', 'change'),
+        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
     )
 );
 js::set('hasStoryButton', $hasStoryButton);
