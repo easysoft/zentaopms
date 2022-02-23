@@ -2120,17 +2120,21 @@ class taskModel extends model
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
         $lanes = array();
         $cardsWhere = '';
-        foreach ($tasks as $task) {
-            if (empty($cardsWhere)) {
+        foreach($tasks as $task) 
+        {
+            if(empty($cardsWhere)) 
+            {
                 $cardsWhere = "cards like '%,{$task->id},%'";
-            } else {
+            } 
+            else
+            {
                 $cardsWhere .= " or cards like '%,{$task->id},%'";
             }
         }
         $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
-        ->from(TABLE_KANBANCELL)->alias('t1')
-        ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
-        ->where('t1.kanban')->eq($executionID)->andWhere($cardsWhere, true)->markRight(1)->fetchAll('cards');
+            ->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
+            ->where('t1.kanban')->eq($executionID)->andWhere($cardsWhere, true)->markRight(1)->fetchAll('cards');
     
         foreach($tasks as $task)
         {
@@ -2149,9 +2153,12 @@ class taskModel extends model
             }
 
             $task->lane = '';
-            if (!empty($lanes)) {
-                foreach ($lanes as $lane) {
-                    if (strpos($lane->cards, $task->id) !== false) {
+            if(!empty($lanes))
+            {
+                foreach($lanes as $lane) 
+                {
+                    if(strpos($lane->cards, $task->id) !== false) 
+                    {
                         $task->lane = $lane->name;
                     }
                 }
