@@ -41,6 +41,7 @@ $lang->my->requirement     = "My {$lang->URCommon}";
 $lang->my->testtask        = 'My Test Task';
 $lang->my->testcase        = 'My Case';
 $lang->my->storyConcept    = 'Story Concept';
+$lang->my->pri             = 'Priority';
 
 $lang->my->indexAction      = 'My Index';
 $lang->my->calendarAction   = 'My Calendar';

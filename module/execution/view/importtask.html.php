@@ -33,7 +33,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->execution->name ?></th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th class='w-p30'><?php echo $lang->task->name;?></th>
           <th class='c-user'><?php echo $lang->task->assignedTo;?></th>
           <th class='c-hour'><?php echo $lang->task->leftAB;?></th>

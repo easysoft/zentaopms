@@ -150,7 +150,7 @@
             <thead>
               <tr class='text-center'>
                 <th class='w-50px'> <?php echo $lang->story->id;?></th>
-                <th class='w-40px'> <?php echo $lang->priAB;?></th>
+                <th class='w-40px' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
                 <th>                <?php echo $lang->story->title;?></th>
                 <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
                 <th class='w-90px'> <?php echo $lang->story->estimate;?></th>

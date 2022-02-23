@@ -84,7 +84,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-version text-center'><nobr><?php echo $lang->testtask->linkVersion;?></nobr></th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title='<?php echo $lang->pri;?>'><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->testcase->title;?></th>
           <th class='c-type'><?php echo $lang->testcase->type;?></th>
           <th class='c-user'><?php echo $lang->openedByAB;?></th>
