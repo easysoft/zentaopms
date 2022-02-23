@@ -375,7 +375,7 @@ class userModel extends model
      */
     public function batchCreate()
     {
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return print(js::alert($this->lang->user->error->verifyPassword));
 
         $users    = fixer::input('post')->get();
         $data     = array();
@@ -385,24 +385,24 @@ class userModel extends model
             $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
             {
-                if(strtolower($users->account[$i]) == 'guest') die(js::error(sprintf($this->lang->user->error->reserved, $i + 1)));
+                if(strtolower($users->account[$i]) == 'guest') return print(js::error(sprintf($this->lang->user->error->reserved, $i + 1)));
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
-                if($account) die(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
-                if(in_array($users->account[$i], $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
-                if(!validater::checkAccount($users->account[$i])) die(js::error(sprintf($this->lang->user->error->account, $i + 1)));
-                if($users->realname[$i] == '') die(js::error(sprintf($this->lang->user->error->realname, $i + 1)));
-                if($users->email[$i] and !validater::checkEmail($users->email[$i])) die(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
+                if($account) return print(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
+                if(in_array($users->account[$i], $accounts)) return print(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
+                if(!validater::checkAccount($users->account[$i])) return print(js::error(sprintf($this->lang->user->error->account, $i + 1)));
+                if($users->realname[$i] == '') return print(js::error(sprintf($this->lang->user->error->realname, $i + 1)));
+                if($users->email[$i] and !validater::checkEmail($users->email[$i])) return print(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
-                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) die(js::error(sprintf($this->lang->user->error->password, $i + 1)));
+                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) return print(js::error(sprintf($this->lang->user->error->password, $i + 1)));
                 $role    = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
                 $visions = in_array('ditto', $users->visions[$i]) ? (isset($prev['visions']) ? $prev['visions'] : array()) : $users->visions[$i];
 
                 /* Check weak and common weak password. */
-                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) die(js::error(sprintf($this->lang->user->error->weakPassword, $i + 1)));
+                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) return print(js::error(sprintf($this->lang->user->error->weakPassword, $i + 1)));
                 if(!empty($this->config->safe->changeWeak))
                 {
                     if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) die(js::error(sprintf($this->lang->user->error->dangerPassword, $i + 1, $this->config->safe->weak)));
+                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) return print(js::error(sprintf($this->lang->user->error->dangerPassword, $i + 1, $this->config->safe->weak)));
                 }
 
                 $data[$i] = new stdclass();
@@ -438,7 +438,7 @@ class userModel extends model
                     if(!isset($data[$i]->$field)) continue;
                     if(!empty($data[$i]->$field)) continue;
 
-                    die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                    return print(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
                 }
 
                 /* Change for append field, such as feedback. */
@@ -485,7 +485,7 @@ class userModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
             else
             {
@@ -638,7 +638,7 @@ class userModel extends model
     public function batchEdit()
     {
         $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) die(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return print(js::alert($this->lang->user->error->verifyPassword));
 
         $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
@@ -675,7 +675,7 @@ class userModel extends model
                 if(!isset($users[$id][$field])) continue;
                 if(!empty($users[$id][$field])) continue;
 
-                die(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                return print(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
             }
 
             if(!empty($this->config->user->batchAppendFields))
@@ -690,11 +690,11 @@ class userModel extends model
                 }
             }
 
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(in_array($account, $accounts)) die(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(!validater::checkAccount($users[$id]['account'])) die(js::error(sprintf($this->lang->user->error->account, $id)));
-            if($users[$id]['realname'] == '') die(js::error(sprintf($this->lang->user->error->realname, $id)));
-            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) die(js::error(sprintf($this->lang->user->error->mail, $id)));
+            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) return print(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(in_array($account, $accounts)) return print(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(!validater::checkAccount($users[$id]['account'])) return print(js::error(sprintf($this->lang->user->error->account, $id)));
+            if($users[$id]['realname'] == '') return print(js::error(sprintf($this->lang->user->error->realname, $id)));
+            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) return print(js::error(sprintf($this->lang->user->error->mail, $id)));
 
             $accounts[$id] = $account;
             $prev['dept']  = $users[$id]['dept'];
@@ -1406,13 +1406,13 @@ class userModel extends model
         if(empty($data->listName))
         {
             dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            die(js::error(dao::getError()));
+            return print(js::error(dao::getError()));
         }
 
         $this->dao->insert(TABLE_USERCONTACT)->data($data)
             ->autoCheck()
             ->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         return $this->dao->lastInsertID();
     }
@@ -1435,13 +1435,13 @@ class userModel extends model
         if(empty($data->listName))
         {
             dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            die(js::error(dao::getError()));
+            return print(js::error(dao::getError()));
         }
 
         $this->dao->update(TABLE_USERCONTACT)->data($data)
             ->where('id')->eq($listID)
             ->exec();
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
     }
 
     /**

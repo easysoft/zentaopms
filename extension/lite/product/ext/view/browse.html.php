@@ -438,7 +438,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
             <?php
             $withSearch = count($users) > 10;
             $actionLink = $this->createLink('story', 'batchAssignTo', "productID=$productID");
-            echo html::select('assignedTo', $users, '', 'class="hidden"');
+            echo html::select('assignedTo', $teamMembers, '', 'class="hidden"');
             ?>
             <div class="dropdown-menu search-list<?php if($withSearch) echo ' search-box-sink';?>" data-ride="searchList">
               <?php if($withSearch):?>
@@ -450,7 +450,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
               </div>
               <?php endif;?>
               <div class="list-group">
-              <?php foreach ($users as $key => $value):?>
+              <?php foreach ($teamMembers as $key => $value):?>
               <?php
               if(empty($key) or $key == 'closed') continue;
               $searchKey = $withSearch ? ('data-key="' . zget($usersPinYin, $value, '') . " @$key\"") : "data-key='@$key'";

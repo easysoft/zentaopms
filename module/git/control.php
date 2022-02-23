@@ -136,8 +136,7 @@ class git extends control
             $parsedObjects['tasks']   = array_unique($parsedObjects['tasks']);
             $parsedObjects['bugs']    = array_unique($parsedObjects['bugs']);
             $this->view->parsedObjects = $parsedObjects;
-            $this->display();
-            exit;
+            return $this->display();
         }
     }
 
@@ -154,7 +153,7 @@ class git extends control
         $message  = trim($this->post->message);
         $revision = trim($this->post->revision);
         $files    = $this->post->files;
-        if(empty($repoUrl)) die();
+        if(empty($repoUrl)) return;
         $repoUrl = rtrim($repoUrl, '/') . '/';
 
         $parsedFiles = array();
@@ -193,7 +192,6 @@ class git extends control
             $log->files    = $parsedFiles;
             $this->git->saveAction2PMS($objects, $log, $repoUrl);
         }
-        die();
     }
 
     /**
@@ -205,6 +203,6 @@ class git extends control
     public function ajaxGetRepos()
     {
         $repos = $this->git->getRepos();
-        die(json_encode($repos));
+        echo json_encode($repos);
     }
 }

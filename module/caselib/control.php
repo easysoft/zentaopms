@@ -124,7 +124,7 @@ class caselib extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->caselib->libraryDelete, inlink('delete', "libID=$libID&confirm=yes")));
+            return print(js::confirm($this->lang->caselib->libraryDelete, inlink('delete', "libID=$libID&confirm=yes")));
         }
         else
         {
@@ -147,7 +147,7 @@ class caselib extends control
                 }
                 return $this->send($response);
             }
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -252,20 +252,20 @@ class caselib extends control
             $this->config->testcase->create->requiredFields = $this->config->caselib->createcase->requiredFields;
             setcookie('lastLibCaseModule', (int)$this->post->module, $this->config->cookieLife, $this->config->webRoot, '', $this->config->cookieSecure, false);
             $caseResult = $this->testcase->create($bugID = 0);
-            if(!$caseResult or dao::isError()) die(js::error(dao::getError()));
+            if(!$caseResult or dao::isError()) return print(js::error(dao::getError()));
 
             $caseID = $caseResult['id'];
             if($caseResult['status'] == 'exists')
             {
                 echo js::alert(sprintf($this->lang->duplicate, $this->lang->testcase->common));
-                die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+                return print(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
             }
 
             $this->loadModel('action')->create('case', $caseID, 'Opened');
 
             /* If link from no head then reload. */
-            if(isonlybody()) die(js::reload('parent'));
-            die(js::locate($this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}"), 'parent'));
+            if(isonlybody()) return print(js::reload('parent'));
+            return print(js::locate($this->createLink('caselib', 'browse', "libID={$libID}&browseType=byModule&param={$_POST['module']}"), 'parent'));
         }
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
@@ -340,9 +340,9 @@ class caselib extends control
         if(!empty($_POST))
         {
             $caseID = $this->caselib->batchCreateCase($libID);
-            if(dao::isError()) die(js::error(dao::getError()));
-            if(isonlybody()) die(js::closeModal('parent.parent', 'this'));
-            die(js::locate($this->createLink('caselib', 'browse', "libID=$libID&browseType=byModule&param=$moduleID"), 'parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            if(isonlybody()) return print(js::closeModal('parent.parent', 'this'));
+            return print(js::locate($this->createLink('caselib', 'browse', "libID=$libID&browseType=byModule&param=$moduleID"), 'parent'));
         }
 
         $libraries = $this->caselib->getLibraries();
@@ -378,7 +378,7 @@ class caselib extends control
     {
         $libID = (int)$libID;
         $lib   = $this->caselib->getById($libID, true);
-        if(!isset($lib->id)) die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+        if(!isset($lib->id)) return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
 
         /* Set lib menu. */
         $libraries = $this->caselib->getLibraries();
@@ -555,12 +555,12 @@ class caselib extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) != count($header)) die(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) != count($header)) return print(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
 
-            die(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
+            return print(js::locate(inlink('showImport', "libID=$libID"), 'parent.parent'));
         }
         $this->display();
     }
@@ -589,11 +589,11 @@ class caselib extends control
             if($this->post->isEndPage)
             {
                 unlink($tmpFile);
-                die(js::locate(inlink('browse', "libID=$libID"), 'parent'));
+                return print(js::locate(inlink('browse', "libID=$libID"), 'parent'));
             }
             else
             {
-                die(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
+                return print(js::locate(inlink('showImport', "libID=$libID&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -759,7 +759,7 @@ class caselib extends control
             unlink($this->session->fileImport);
             unset($_SESSION['fileImport']);
             echo js::alert($this->lang->error->noData);
-            die(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
+            return print(js::locate($this->createLink('caselib', 'browse', "libID=$libID")));
         }
 
         $allCount = count($caseData);
@@ -771,13 +771,13 @@ class caselib extends control
                 $this->view->allCount  = $allCount;
                 $this->view->maxImport = $maxImport;
                 $this->view->libID     = $libID;
-                die($this->display());
+                return print($this->display());
             }
 
             $allPager = ceil($allCount / $maxImport);
             $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
-        if(empty($caseData)) die(js::locate(inlink('browse', "libID=$libID")));
+        if(empty($caseData)) return print(js::locate(inlink('browse', "libID=$libID")));
 
         /* Judge whether the items is too large and set session. */
         $countInputVars  = count($caseData) * 9 + (isset($stepVars) ? $stepVars : 0);

@@ -98,7 +98,7 @@ class backup extends control
             if($reload == 'yes')
             {
                 echo js::alert(sprintf($this->lang->backup->error->noWritable, $this->backupPath));
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
             else
             {
@@ -117,7 +117,7 @@ class backup extends control
                 if($reload == 'yes')
                 {
                     echo js::alert(sprintf($this->lang->backup->error->backupFile, $result->error));
-                    die(js::reload('parent'));
+                    return print(js::reload('parent'));
                 }
                 else
                 {
@@ -133,7 +133,7 @@ class backup extends control
                 if($reload == 'yes')
                 {
                     echo js::alert(sprintf($this->lang->backup->error->backupCode, $result->error));
-                    die(js::reload('parent'));
+                    return print(js::reload('parent'));
                 }
                 else
                 {
@@ -164,7 +164,7 @@ class backup extends control
             }
         }
 
-        if($reload == 'yes') die(js::reload('parent'));
+        if($reload == 'yes') return print(js::reload('parent'));
         echo $this->lang->backup->success->backup . "\n";
     }
 
@@ -245,7 +245,7 @@ class backup extends control
             rename($this->backupPath . $fileName . '.code.zip.php', $this->backupPath . $fileName . '.code.zip');
         }
 
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -258,26 +258,26 @@ class backup extends control
      */
     public function delete($fileName, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->backup->confirmDelete, inlink('delete', "fileName=$fileName&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->backup->confirmDelete, inlink('delete', "fileName=$fileName&confirm=yes")));
 
         /* Delete database file. */
         if(file_exists($this->backupPath . $fileName . '.sql.php') and !unlink($this->backupPath . $fileName . '.sql.php'))
         {
-            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql.php')));
+            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql.php')));
         }
         if(file_exists($this->backupPath . $fileName . '.sql') and !unlink($this->backupPath . $fileName . '.sql'))
         {
-            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql')));
+            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.sql')));
         }
 
         /* Delete attatchments file. */
         if(file_exists($this->backupPath . $fileName . '.file.zip.php') and !unlink($this->backupPath . $fileName . '.file.zip.php'))
         {
-            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));
+            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip.php')));
         }
         if(file_exists($this->backupPath . $fileName . '.file.zip') and !unlink($this->backupPath . $fileName . '.file.zip'))
         {
-            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip')));
+            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.file.zip')));
         }
         if(file_exists($this->backupPath . $fileName . '.file'))
         {
@@ -289,11 +289,11 @@ class backup extends control
         /* Delete code file. */
         if(file_exists($this->backupPath . $fileName . '.code.zip.php') and !unlink($this->backupPath . $fileName . '.code.zip.php'))
         {
-            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
+            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip.php')));
         }
         if(file_exists($this->backupPath . $fileName . '.code.zip') and !unlink($this->backupPath . $fileName . '.code.zip'))
         {
-            die(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip')));
+            return print(js::alert(sprintf($this->lang->backup->error->noDelete, $this->backupPath . $fileName . '.code.zip')));
         }
         if(file_exists($this->backupPath . $fileName . '.code'))
         {
@@ -302,7 +302,7 @@ class backup extends control
             $this->backup->processSummary($this->backupPath . $fileName . '.code', 0, 0, array(), 0, 'delete');
         }
 
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -317,7 +317,7 @@ class backup extends control
         {
             $data = fixer::input('post')->get();
             $this->loadModel('setting')->setItem('system.backup.holdDays', $data->holdDays);
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->display();
@@ -337,7 +337,7 @@ class backup extends control
         {
             $this->app->loadLang('extension');
             $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace(dirname($this->app->getBasePath()) . DS, '', $statusFile));
-            die($this->display());
+            return print($this->display());
         }
 
         if(strtolower($this->server->request_method) == "post")
@@ -355,14 +355,14 @@ class backup extends control
             if($settingDir)
             {
                 $settingDir = rtrim($settingDir, DS) . DS;
-                if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) die(js::alert($this->lang->backup->error->noCreateDir));
-                if(!is_writable($settingDir)) die(js::alert(strip_tags(sprintf($this->lang->backup->error->noWritable, $settingDir))));
+                if(!is_dir($settingDir) and mkdir($settingDir, 0777, true)) return print(js::alert($this->lang->backup->error->noCreateDir));
+                if(!is_writable($settingDir)) return print(js::alert(strip_tags(sprintf($this->lang->backup->error->noWritable, $settingDir))));
                 if($data->settingDir == $this->app->getTmpRoot() . 'backup' . DS) $settingDir = '';
             }
 
             $this->setting->setItem('system.backup.settingDir', $settingDir);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
         $this->display();
     }
@@ -406,6 +406,6 @@ class backup extends control
             $message = sprintf($this->lang->backup->progressCode, zget($log, 'allCount', 0), zget($log, 'count', 0));
         }
 
-        die($message);
+        return print($message);
     }
 }

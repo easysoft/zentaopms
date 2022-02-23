@@ -389,7 +389,7 @@ class searchModel extends model
     public function deleteQuery($queryID)
     {
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
-        die('success');
+        echo 'success';
     }
 
     /**

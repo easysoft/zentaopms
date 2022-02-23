@@ -40,7 +40,7 @@
             <?php echo $lang->idAB;?>
           </th>
           <th class='c-name'><?php echo $lang->kanban->name;?></th>
-          <th class='c-pri'><?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->pri;?>><?php echo $lang->priAB;?></th>
           <th class='c-name'><?php echo $lang->kanbancard->name;?></th>
           <th class='c-user'><?php echo $lang->kanbancard->assignedTo;?></th>
           <th class='c-date'><?php echo $lang->kanbancard->end;?></th>

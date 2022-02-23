@@ -545,7 +545,7 @@ class fileModel extends model
             foreach($out[3] as $key => $base64Image)
             {
                 $extension = strtolower($out[2][$key]);
-                if(!in_array($extension, $this->config->file->imageExtensions)) die();
+                if(!in_array($extension, $this->config->file->imageExtensions)) helper::end();
                 $imageData = base64_decode($base64Image);
 
                 $file['extension'] = $extension;
@@ -946,7 +946,7 @@ class fileModel extends model
         setcookie('downloading', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         /* Only download upload file that is in zentao. */
-        if($type == 'file' and stripos($content, $this->savePath) !== 0) die();
+        if($type == 'file' and stripos($content, $this->savePath) !== 0) return;
 
         /* Append the extension name auto. */
         $extension = '.' . $fileType;
@@ -963,17 +963,17 @@ class fileModel extends model
         header("Content-Disposition: attachment; filename=\"$fileName\"");
         header("Pragma: no-cache");
         header("Expires: 0");
-        if($type == 'content') die($content);
+        if($type == 'content') return print($content);
         if($type == 'file' and file_exists($content))
         {
-            if(stripos($content, $this->app->getBasePath()) !== 0) die();
+            if(stripos($content, $this->app->getBasePath()) !== 0) return;
 
             set_time_limit(0);
             $chunkSize = 10 * 1024 * 1024;
             $handle    = fopen($content, "r");
             while(!feof($handle)) echo fread($handle, $chunkSize);
             fclose($handle);
-            die();
+            return;
         }
     }
 

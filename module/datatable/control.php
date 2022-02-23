@@ -110,7 +110,7 @@ class datatable extends control
      */
     public function ajaxReset($module, $method, $system = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&system=$system&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->datatable->confirmReset, inlink('ajaxReset', "module=$module&method=$method&system=$system&confirm=yes")));
 
         $account = $this->app->user->account;
         $target  = $module . ucfirst($method);
@@ -119,6 +119,6 @@ class datatable extends control
 
         $this->loadModel('setting')->deleteItems("owner=$account&module=datatable&section=$target&key=$key");
         if($system) $this->setting->deleteItems("owner=system&module=datatable&section=$target&key=$key");
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 }

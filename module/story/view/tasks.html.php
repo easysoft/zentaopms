@@ -15,7 +15,7 @@ include '../../common/view/chart.html.php';
         <tr class='text-center'>
           <th class='c-id'>      <?php echo $lang->idAB;?></th>
           <th class='w-p30'>     <?php echo $lang->task->name;?></th>
-          <th class='c-pri'>     <?php echo $lang->priAB;?></th>
+          <th class='c-pri' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
           <th class='c-status'>  <?php echo $lang->statusAB;?></th>
           <th class='c-user'>    <?php echo $lang->task->assignedToAB;?></th>
           <th class='c-estimate'><?php echo $lang->task->estimateAB;?></th>

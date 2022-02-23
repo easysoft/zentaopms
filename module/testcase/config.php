@@ -87,6 +87,7 @@ $config->testcase->datatable->fieldList['pri']['title']    = 'priAB';
 $config->testcase->datatable->fieldList['pri']['fixed']    = 'left';
 $config->testcase->datatable->fieldList['pri']['width']    = '40';
 $config->testcase->datatable->fieldList['pri']['required'] = 'no';
+$config->testcase->datatable->fieldList['pri']['name']     = $lang->testcase->pri;
 
 $config->testcase->datatable->fieldList['title']['title']    = 'title';
 $config->testcase->datatable->fieldList['title']['fixed']    = 'left';
