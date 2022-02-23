@@ -24,6 +24,7 @@ $lang->testsuite->deleted          = 'Deleted';
 $lang->testsuite->successSaved     = 'Saved';
 
 $lang->testsuite->id             = 'ID';
+$lang->testsuite->pri            = 'Priority';
 $lang->testsuite->common         = 'Test Suite';
 $lang->testsuite->project        = 'Project';
 $lang->testsuite->product        = $lang->productCommon;

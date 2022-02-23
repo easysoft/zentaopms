@@ -35,7 +35,7 @@
           </div>
           <?php echo $lang->idAB;?>
         </th>
-        <th class='c-pri'><?php echo $lang->priAB;?></th>
+        <th class='c-pri' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
         <th><?php echo $lang->story->title;?></th>
         <th class='c-status'><?php echo $lang->story->status;?></th>
         <?php if($story->type == 'requirement'):?>

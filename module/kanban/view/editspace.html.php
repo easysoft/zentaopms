@@ -19,11 +19,16 @@
   <form class='form-indicator main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
     <table class='table table-form'>
       <tr>
+        <th><?php echo $lang->kanbanspace->type;?></th>
+        <td><?php echo html::select('type', $typeList, $defaultType, "onchange='changeType($spaceID, this.value)' class='form-control chosen'");?></td>
+        <td></td>
+      </tr>
+      <tr>
         <th><?php echo $lang->kanbanspace->name;?></th>
         <td><?php echo html::input('name', $space->name, "class='form-control'");?></td>
         <td></td>
       </tr>
-      <?php if($space->type != 'private'):?>
+      <?php if($space->type != 'private' or $type == 'cooperation' or $type == 'public'):?>
       <tr>
         <th><?php echo $lang->kanbanspace->owner;?></th>
         <td><?php echo html::select('owner', $users, $space->owner, "class='form-control chosen'");?></td>
@@ -32,7 +37,7 @@
         <th><?php echo $lang->kanbanspace->team;?></th>
         <td colspan='2'>
           <div class="input-group">
-            <?php echo html::select('team[]', $users, $space->team, "class='form-control chosen' multiple data-drop_direction='down'");?>
+            <?php echo html::select('team[]', $users, $team, "class='form-control chosen' multiple data-drop_direction='down'");?>
             <?php echo $this->fetch('my', 'buildContactLists');?>
           </div>
         </td>
@@ -45,7 +50,7 @@
           <?php echo html::textarea('desc', $space->desc, "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <?php if($space->type == 'private'):?>
+      <?php if($space->type == 'private' and $type != 'cooperation' and $type != 'public'):?>
       <tr id="whitelistBox">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, $space->whitelist, 'class="form-control chosen" multiple');?></td>

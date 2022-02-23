@@ -60,6 +60,7 @@ $config->task->datatable->fieldList['pri']['title']    = 'priAB';
 $config->task->datatable->fieldList['pri']['fixed']    = 'left';
 $config->task->datatable->fieldList['pri']['width']    = '50';
 $config->task->datatable->fieldList['pri']['required'] = 'no';
+$config->task->datatable->fieldList['pri']['name']     = $lang->task->pri;
 
 $config->task->datatable->fieldList['name']['title']    = 'name';
 $config->task->datatable->fieldList['name']['fixed']    = 'left';

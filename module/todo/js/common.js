@@ -49,6 +49,18 @@ function loadList(type, id)
     {
         $(divClass).html($(divID).html());
     }
+
+    if(nameBoxLabel)
+    {
+        if(type == 'custom')
+        {
+            $('#nameBoxLabel').text(nameBoxLabel.custom);
+        }
+        else
+        {
+            $('#nameBoxLabel').text(nameBoxLabel.idvalue);
+        }
+    }
 }
 
 function selectNext()

@@ -111,7 +111,6 @@ $lang->task->assignedDate      = '指派日期';
 $lang->task->openedBy          = '由谁创建';
 $lang->task->openedDate        = '创建日期';
 $lang->task->openedDateAB      = '创建';
-$lang->task->activatedDate     = '激活日期';
 $lang->task->finishedBy        = '由谁完成';
 $lang->task->finishedByAB      = '完成者';
 $lang->task->finishedDate      = '实际完成';
