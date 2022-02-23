@@ -41,6 +41,16 @@
           <td><?php echo html::select('execution', $executions, $execution->id, "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
         </tr>
         <?php endif;?>
+        <?php if(count($regionList) > 1 or count($lanes) > 1 or empty($extra)):?>
+        <tr>
+          <th><?php echo $lang->task->region;?></th>
+          <td><?php echo html::select('region', $regionList, isset($regionID) ? $regionID : '', "class='form-control chosen' onchange='loadLaneGroup(this.value)' required");?>
+        </tr>
+        <tr>
+          <th><?php echo $lang->task->lane;?></th>
+          <td class='required'><?php echo html::select('otherLane', $laneList, '', "class='form-control chosen' onchange='loadAll(this.value)' required");?>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->type;?></th>
           <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td>
@@ -199,15 +209,6 @@
             </div>
           </td>
         </tr>
-        <?php if(count($regionList) > 1 or count($lanes) > 1 or empty($extra)):?>
-        <tr>
-          <th><?php echo $lang->task->region;?></th>
-          <td><?php echo html::select('region', $regionList, isset($regionID) ? $regionID : '', "class='form-control chosen' onchange='loadLaneGroup(this.value)' required");?></td><td></td><td></td>
-        </tr>
-        <tr>
-          <th><?php echo $lang->task->lane;?></th>
-          <td><?php echo html::select('otherLane', $laneList, '', "class='form-control chosen' onchange='loadAll(this.value)' required");?></td><td></td><td></td>
-        </tr>
         <tr>
           <th><?php echo $lang->task->desc;?></th>
           <td colspan='3'>
@@ -215,7 +216,6 @@
             <?php echo html::textarea('desc', htmlSpecialString($task->desc), "rows='10' class='form-control'");?>
           </td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->files;?></th>
           <td colspan='3'><?php echo $this->fetch('file', 'buildform');?></td>
@@ -332,6 +332,20 @@
 <?php js::set('storyPinYin', (empty($config->isINT) and class_exists('common')) ? common::convert2Pinyin($stories) : array());?>
 <?php js::set('testStoryIdList', $testStoryIdList);?>
 <?php js::set('executionID', $execution->id);?>
+<?php if(isonlybody()):?>
+<style>
+.body-modal .main-header{padding-right:0px;}
+.btn-toolbar>.dropdown{margin:0px;}
+</style>
+<?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
+<script>
+$(function()
+{
+    parent.$('#triggerModal .modal-content .modal-header .close').hide();
+    $('#mainContent .main-header .pull-right.btn-toolbar').append(<?php echo json_encode($html)?>);
+})
+</script>
+<?php endif;?>
 <script>
 $(function()
 {
