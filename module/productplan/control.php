@@ -407,7 +407,6 @@ class productplan extends control
         $this->view->storyPager   = $storyPager;
         $this->view->bugPager     = $bugPager;
         $this->view->canBeChanged = $canBeChanged;
-
         if($this->app->getViewType() == 'json')
         {
             unset($this->view->storyPager);

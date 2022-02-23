@@ -614,6 +614,10 @@
                 <?php endif;?>
                 <?php $this->printExtendFields($plan, 'table', 'inForm=0');?>
                 <tr>
+                  <th><?php echo $lang->productplan->status;?></th>
+                  <td><?php echo $lang->productplan->statusList[$plan->status];?></td>
+                </tr>    
+                <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>
                 </tr>
