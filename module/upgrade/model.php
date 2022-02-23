@@ -53,7 +53,7 @@ class upgradeModel extends model
         }
 
         $executeXuanxuan = false;
-        foreach($lang->upgrade->fromVersions as $version => $versionName)
+        foreach($this->lang->upgrade->fromVersions as $version => $versionName)
         {
             if(!is_numeric($version[0])) continue;
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
