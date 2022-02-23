@@ -69,6 +69,7 @@ js::set('priv',
     array(
         'canCreateTask'         => $canCreateTask,
         'canBatchCreateTask'    => $canBatchCreateTask,
+        'canImportBug'          => $canImportBug,
         'canCreateBug'          => $canCreateBug,
         'canBatchCreateBug'     => $canBatchCreateBug,
         'canCreateStory'        => $canCreateStory,
