@@ -271,6 +271,10 @@ $lang->kanbanspace->featureBar['cooperation'] = 'Cooperation Space';
 $lang->kanbanspace->featureBar['public']      = 'Public Space';
 $lang->kanbanspace->featureBar['involved']    = 'Involved';
 
+$lang->kanbanspace->typeList['private']     = 'Private Space';
+$lang->kanbanspace->typeList['cooperation'] = 'Cooperation Space';
+$lang->kanbanspace->typeList['public']      = 'Public Space';
+
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;
 $lang->kanbancolumn->limit      = $lang->kanban->WIPCount;

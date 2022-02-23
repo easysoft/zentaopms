@@ -115,7 +115,9 @@ $lang->upgrade->programName    = 'Program Name';
 $lang->upgrade->projectName    = 'Project Name';
 $lang->upgrade->moveEXTFiles   = 'Migrate Expansion Files';
 $lang->upgrade->fileName       = 'File Name';
-$lang->upgrade->viewChargeFile = 'View Charge Version Files';
+$lang->upgrade->next           = 'Next';
+$lang->upgrade->yes            = 'Yes';
+$lang->upgrade->no             = 'No';
 
 $lang->upgrade->newProgram         = 'Create';
 $lang->upgrade->editedName         = 'New Name';
@@ -130,6 +132,9 @@ $lang->upgrade->needBuild4Add      = 'Full text retrieval has been added in this
 $lang->upgrade->errorEngineInnodb  = 'Your MySQL does not support InnoDB data table engine. Please modify it to MyISAM and try again.';
 $lang->upgrade->duplicateProject   = "Project name in the same program cannot be duplicate. Please adjust the duplicate names.";
 $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgraded, and restoration is not supported after the upgrade. Please be aware.";
+$lang->upgrade->moveEXTFileFail    = 'The migration file failed, please execute the above command and refresh!';
+$lang->upgrade->confirmCustomTip   = 'Please confirm whether customization or secondary development has been done';
+$lang->upgrade->moveExtFileTip     = 'The following files will be migrated to zentaopms/extension/custom';
 
 $lang->upgrade->projectType['project']   = "Upgrade the historical {$lang->projectCommon} as a project";
 $lang->upgrade->projectType['execution'] = "Upgrade the historical {$lang->projectCommon} as an execution";

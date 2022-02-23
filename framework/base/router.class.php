@@ -2031,14 +2031,8 @@ class baseRouter
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
         }
-        if (isset($module))
-        {
-            return $module;
-        }
-        else
-        {
-            return false;
-        }
+
+        return isset($module) ? $module : false;
     }
 
     /**

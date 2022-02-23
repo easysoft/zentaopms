@@ -311,8 +311,8 @@ class reportModel extends model
                             $project[$execution->projectname]['execution'][$name]['count']       = 0;
                             $project[$execution->projectname]['execution'][$name]['manhour']     = 0;
 
-                            $workload[$member]['total']['count']                                 = 0;
-                            $workload[$member]['total']['manhour']                               = 0;
+                            $workload[$member]['total']['count']   = 0;
+                            $workload[$member]['total']['manhour'] = 0;
                         }
                     }
                     $workload[$member]['task']['project'] = $project;

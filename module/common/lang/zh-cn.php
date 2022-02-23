@@ -146,6 +146,8 @@ $lang->assignedToAB = '指派';
 $lang->typeAB       = '类型';
 $lang->nameAB       = '名称';
 
+$lang->pri = '优先级';
+
 $lang->common->common     = '公有模块';
 $lang->my->common         = '地盘';
 $lang->program->common    = '项目集';

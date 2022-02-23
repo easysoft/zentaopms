@@ -26,7 +26,7 @@
           </div>
         </th>
         <th class='c-id-sm'><?php echo $lang->idAB;?></th>
-        <th class='w-80px'>  <?php echo $lang->priAB;?></th>
+        <th class='w-80px' title='<?php echo $lang->pri;?>'><?php echo $lang->priAB;?></th>
         <th><?php echo $lang->testcase->title;?></th>
         <th class='w-80px'> <?php echo $lang->typeAB;?></th>
         <th class='w-user'> <?php echo $lang->testtask->assignedTo;?></th>

@@ -271,6 +271,10 @@ $lang->kanbanspace->featureBar['cooperation'] = '协作空间';
 $lang->kanbanspace->featureBar['public']      = '公共空间';
 $lang->kanbanspace->featureBar['involved']    = '我参与的';
 
+$lang->kanbanspace->typeList['private']     = '私人空间';
+$lang->kanbanspace->typeList['cooperation'] = '协作空间';
+$lang->kanbanspace->typeList['public']      = '公共空间';
+
 $lang->kanbancolumn = new stdclass();
 $lang->kanbancolumn->name       = $lang->kanban->columnName;
 $lang->kanbancolumn->limit      = $lang->kanban->WIPCount;

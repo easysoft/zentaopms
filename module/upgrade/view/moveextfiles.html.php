@@ -11,20 +11,39 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <form method='post' target='hiddenwin'>
+  <form method='post' action="<?php echo $this->createLink('upgrade', 'moveEXTFiles', "fromVersion=$fromVersion");?>">
     <div class='modal-dialog'>
       <div class='modal-header'>
         <strong><?php echo $lang->upgrade->moveEXTFiles;?></strong>
+        <?php if($result == 'success'):?>
+        <div class='alert alert-info no-margin'><?php echo $lang->upgrade->moveExtFileTip?></div>
+        <?php endif;?>
       </div>
       <div class='modal-body'>
         <div>
+          <?php if($result == 'success'):?>
           <div class="checkbox-primary" title="<?php echo $lang->selectAll?>">
             <input type='checkbox' id='checkAll' checked><label for='checkAll'><strong><?php echo $lang->upgrade->fileName;?></strong></label>
           </div>
           <?php echo html::checkbox('files', $files, '', 'checked');?>
+          <?php else:?>
+          <?php
+          if(is_array($command))
+          {
+              foreach($command as $cmd) echo "<div><code>$cmd</code></div>";
+          }
+          else
+          {
+              echo "<div><code>$command</code></div>";
+          }
+          ?>
+          <?php endif;?>
         </div>
       </div>
-      <div class='modal-footer text-center'><?php echo html::submitButton();?></div>
+      <div class='modal-footer text-center'>
+        <?php if($result == 'success') echo html::submitButton($lang->upgrade->next);?>
+        <?php if($result == 'fail') echo $errorMessage . ' ' . html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage()'");?></div>
+      </div>
     </div>
   </form>
 </div>

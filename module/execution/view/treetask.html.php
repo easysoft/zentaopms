@@ -60,12 +60,14 @@
   </div>
   <?php echo $this->fetch('file', 'printFiles', array('files' => $task->storyFiles, 'fieldset' => 'false', 'object' => $task));?>
 </div>
+<?php if($this->config->vision != 'lite'):?>
 <div class='detail' open>
   <div class='detail-title'><?php echo $lang->task->storyVerify;?></div>
   <div class='detail-content article-content'>
     <?php echo !empty($task->storyVerify) ? $task->storyVerify : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
+<?php endif;?>
 <?php endif;?>
 <?php if(isset($task->cases) and $task->cases):?>
 <div class='detail' open>
