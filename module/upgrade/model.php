@@ -75,7 +75,7 @@ class upgradeModel extends model
             {
                 $this->saveLogs("Execute $proVersion");
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
-                $this->executePro($proVersion);
+                if($this->config->edition != 'open') $this->executePro($proVersion);
             }
 
             $bizVersions = array();
@@ -88,12 +88,19 @@ class upgradeModel extends model
             {
                 $this->saveLogs("Execute $bizVersion");
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
-                $this->executeBiz($bizVersion, $executeXuanxuan);
+                if($this->config->edition != 'open') $this->executeBiz($bizVersion, $executeXuanxuan);
             }
 
             $maxVersion = array_search($openVersion, $this->config->maxVersion);
             $this->saveLogs("Execute $maxVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
+        }
+
+        if(is_numeric($fromVersion[0]) and $this->config->edition != 'open')
+        {
+            $this->loadModel('effort')->convertEstToEffort();
+            $this->importBuildinModules();
+            $this->addSubStatus();
         }
     }
 
@@ -416,19 +423,23 @@ class upgradeModel extends model
                 $this->updateDocField();
                 break;
             case '16_4':
-                if(strpos($fromVersion, 'pro') === false and strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false) 
-                {
-                    $this->upgradeFreeToPro();
-                }
-
-                if(strpos($fromVersion, 'biz') === false and strpos($fromVersion, 'max') === false) 
-                {
-                    $this->upgrade2Biz();
-                }
-
-                if(strpos($fromVersion, 'max') === false) $this->upgrade2Max();
-
+                set_time_limit(0);
                 $this->updateActivatedDate();
+
+                if(is_numeric($fromVersion[0] == 'm')) break;
+                $this->execSQL($this->getUpgradeFile('maxinstall'));
+                $this->execSQL($this->getUpgradeFile('functions'));
+
+                if(is_numeric($fromVersion[0] == 'b')) break;
+                $this->execSQL($this->getUpgradeFile('bizinstall'));
+                if(!empty($this->config->isINT))
+                {    
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
+                    $this->execSQL($xuanxuanSql);
+                }
+
+                if(is_numeric($fromVersion[0] == 'p')) break;
+                $this->execSQL($this->getUpgradeFile('proinstall'));
                 break;
         }
 
