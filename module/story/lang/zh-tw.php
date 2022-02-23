@@ -126,6 +126,7 @@ $lang->story->rejectedReason = '拒絶原因';
 $lang->story->reviewedBy     = '由誰評審';
 $lang->story->reviewers      = '評審人員';
 $lang->story->reviewedDate   = '評審時間';
+$lang->story->activatedDate  = '激活日期';
 $lang->story->version        = '版本號';
 $lang->story->feedbackBy     = '反饋者';
 $lang->story->notifyEmail    = '通知郵箱';

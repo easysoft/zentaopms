@@ -199,7 +199,7 @@
             <?php if($canOrder):?>
             <th class='c-sort {sorter:false}'><?php common::printOrderLink('order', $orderBy, $vars, $lang->execution->orderAB);?></th>
             <?php endif;?>
-            <th class='c-pri {sorter:false}'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+            <th class='c-pri {sorter:false}' title=<?php echo $lang->execution->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
             <th class='c-name {sorter:false}'><?php common::printOrderLink('title', $orderBy, $vars, $lang->execution->storyTitle);?></th>
             <th class='c-category {sorter:false}'><?php common::printOrderLink('category', $orderBy, $vars, $lang->story->category);?></th>
             <th class='c-user {sorter:false}'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>

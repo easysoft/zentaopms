@@ -319,3 +319,4 @@ $lang->upgrade->fromVersions['max2_4']       = 'Max2.4';
 $lang->upgrade->fromVersions['max2_5']       = 'Max2.5';
 $lang->upgrade->fromVersions['max2_6']       = 'Max2.6';
 $lang->upgrade->fromVersions['max2_7']       = 'Max2.7';
+$lang->upgrade->fromVersions['max2_8']       = 'Max2.8';

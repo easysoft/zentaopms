@@ -48,7 +48,7 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-pri'><?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-pri' title=<?php echo $lang->task->pri;?>><?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-name'><?php common::printOrderLink('name',       $orderBy, $vars, $lang->task->name);?></th>
           <?php if($config->systemMode == 'new'):?>
           <th class='c-project'><?php common::printOrderLink('project',    $orderBy, $vars, $lang->my->projects);?></th>

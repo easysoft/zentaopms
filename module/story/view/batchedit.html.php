@@ -50,7 +50,7 @@ foreach(explode(',', $showFields) as $field)
           <th class='c-title required'><?php echo $lang->story->title;?></th>
           <th class='c-estimate<?php echo zget($visibleFields, 'estimate', ' hidden')?>'> <?php echo $lang->story->estimateAB;?></th>
           <th class='c-category'><?php echo $lang->story->category;?></th>
-          <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>'> <?php echo $lang->priAB;?></th>
+          <th class='c-pri<?php echo zget($visibleFields, 'pri', ' hidden')?>' title=<?php echo $lang->story->pri;?>> <?php echo $lang->priAB;?></th>
           <th class='c-user<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>'> <?php echo $lang->story->assignedTo;?></th>
           <th class='c-source<?php echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->source;?></th>
           <th class='c-note<?php echo zget($visibleFields, 'source', ' hidden')?>'> <?php echo $lang->story->sourceNote;?></th>

@@ -16,6 +16,7 @@
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php js::set('idvalue', $todo->idvalue);?>
+<?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
 <?php if(common::checkNotCN()):?>
 <style> label.col-sm-1{width:100px;} </style>
 <?php endif;?>
@@ -127,7 +128,7 @@
       </div>
       <?php endif;?>
       <div class="row form-group">
-        <label class="col-sm-1"><?php echo $lang->todo->name;?></label>
+        <label id='nameBoxLabel' class="col-sm-1"><?php echo $todo->type == 'custom' ? $lang->todo->name : $lang->todo->idvalue;?></label>
         <div class="col-sm-10">
           <div id='nameBox' class='hidden'><?php echo html::input('name', $todo->name, "class='form-control'");?></div>
             <div class='input-group title-group required'>
