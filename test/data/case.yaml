@@ -8,16 +8,16 @@ fields:
     range: 1-10000
   - field: product
     note: "产品ID"
-    range: 1-180{50},0{1000}
+    range: 1-100{3}
   - field: branch
     note: "分支ID"
     range: 0
   - field: execution
     note: "执行ID"
-    range: 0
+    range: 101-700{3}
   - field: lib
     note: "所属库"
-    range: 0{9000},1-10{100}
+    range: 0
   - field: module
     note: "所属模块"
     range: 0
