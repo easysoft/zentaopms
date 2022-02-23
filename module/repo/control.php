@@ -716,6 +716,8 @@ class repo extends control
      */
     public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
     {
+        $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
+
         $this->commonAction($repoID, $objectID);
 
         if($this->get->repoPath) $entry = $this->get->repoPath;
