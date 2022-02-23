@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <form method='post' onsubmit="submit.disabled=1" action='<?php echo inlink('moveEXTFiles', "fromVersion=$fromVersion");?>'>
+  <form method='post' action='<?php echo inlink('moveEXTFiles', "fromVersion=$fromVersion");?>'>
     <div class='modal-dialog'>
       <div class='modal-header'>
         <strong><?php echo $lang->upgrade->confirmCustomTip;?></strong>

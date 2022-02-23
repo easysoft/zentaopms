@@ -5827,10 +5827,7 @@ class upgradeModel extends model
             if(in_array($module, $this->config->upgrade->PMSModules)) continue;
 
             $dirPath = $this->app->moduleRoot . $module;
-            if(!$zfile->removeDir($dirPath))
-            {
-                $command[] = 'rm -f -r ' . $dirPath;
-            }
+            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath;
         }
 
         if(!empty($command))
