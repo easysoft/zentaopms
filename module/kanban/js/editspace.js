@@ -1,6 +1,7 @@
 /**
  * When type change.
  *
+ * @param  int    spaceID
  * @param  string type
  * @access public
  * @return void

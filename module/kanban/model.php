@@ -1794,12 +1794,6 @@ class kanbanModel extends model
         }
     }
 
-    public function updateKanbanBySpace($spaceID, $type)
-    {
-        $spaceType = $this->dao->select('type')->from(TABLE_KANBANSPACE)->where('id')->eq($spaceID)->fetch();
-
-    }
-
     /**
      * Close a space.
      *
