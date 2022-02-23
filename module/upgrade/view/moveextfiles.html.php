@@ -45,7 +45,7 @@
       </div>
       <div class='modal-footer text-center'>
         <?php if($result == 'success') echo html::submitButton($lang->upgrade->next);?>
-        <?php if($result == 'fail') echo $errorMessage . html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage()'");?></div>
+        <?php if($result == 'fail') echo $errorMessage . ' ' . html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage()'");?></div>
       </div>
     </div>
   </form>
