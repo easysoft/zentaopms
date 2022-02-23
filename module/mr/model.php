@@ -112,7 +112,17 @@ class mrModel extends model
         {
             if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
 
-            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false');
+            $minProject = $maxProject = 0;
+            $projectCount = $this->dao->select('min(sourceProject) as minSource,MAX(sourceProject) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
+                ->where('deleted')->eq('0')
+                ->andWhere('gitlabID')->eq($gitlabID)
+                ->fetch();
+            if($projectCount)
+            {
+                $minProject = min($projectCount->minSource, $projectCount->minTarget);
+                $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
+            }
+            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false', $minProject, $maxProject);
 
             /* If not an administrator, need to obtain group member information. */
             $groupIDList = array(0 => 0);

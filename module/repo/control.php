@@ -829,11 +829,15 @@ class repo extends control
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $type
+     * @param  bool   $isBranchOrTag
      * @access public
      * @return void
      */
-    public function download($repoID, $path, $fromRevision = 'HEAD', $toRevision = '', $type = 'file')
+    public function download($repoID, $path, $fromRevision = 'HEAD', $toRevision = '', $type = 'file', $isBranchOrTag = false)
     {
+        $fromRevision = str_replace('*', '-', $fromRevision);
+        $toRevision   = str_replace('*', '-', $toRevision);
+
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
         $repo  = $this->repo->getRepoByID($repoID);
@@ -843,7 +847,7 @@ class repo extends control
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
-        $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch');
+        $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch', $isBranchOrTag ? 'isBranchOrTag': '');
 
         $fileName = basename(urldecode($entry));
         if($type != 'file') $fileName .= "r$fromRevision--r$toRevision.patch";
