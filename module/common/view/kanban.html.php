@@ -163,7 +163,6 @@ function renderPlanItem(item, $item)
 function renderProjectItem(item, $item)
 {
     var $title = $item.find('.title');
-
     if(!$title.length)
     {
         if(window.userPrivs.project)
