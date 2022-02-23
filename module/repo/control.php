@@ -740,9 +740,10 @@ class repo extends control
                 $arrange = $this->post->arrange;
                 setcookie('arrange', $arrange);
             }
-            if($this->post->encoding) $encoding = $this->post->encoding;
+            if($this->post->encoding)      $encoding      = $this->post->encoding;
+            if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
 
-            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding&isBranchOrTag=$isBranchOrTag"));
         }
 
         $info     = new stdClass();
