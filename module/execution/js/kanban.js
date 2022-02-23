@@ -1065,8 +1065,11 @@ function createTaskMenu(options)
     var task  = $card.data('item');
     var items = [];
     if(priv.canEditTask) items.push({label: taskLang.edit, icon: 'edit', url: createLink('task', 'edit', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canRestartTask && task.$col.type == 'pause') items.push({label: taskLang.restart, icon: 'play', url: createLink('task', 'restart', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canPauseTask && task.$col.type == 'developing') items.push({label: taskLang.pause, icon: 'pause', url: createLink('task', 'pause', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canRecordEstimateTask) items.push({label: executionLang.effort, icon: 'time', url: createLink('task', 'recordEstimate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canCreateTask) items.push({label: taskLang.copy, icon: 'copy', url: createLink('task', 'create', 'projectID=' + projectID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canActivateTask && (task.$col.type == 'developed' || task.$col.type == 'canceled' || task.$col.type == 'closed')) items.push({label: executionLang.activate, icon: 'magic', url: createLink('task', 'activate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask) items.push({label: taskLang.copy, icon: 'copy', url: createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCancelTask && (task.$col.type == 'wait' || task.$col.type == 'developing' || task.$col.type == 'pause')) items.push({label: taskLang.cancel, icon: 'cancel', url: createLink('task', 'cancel', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     return items;
 }
@@ -1085,6 +1088,7 @@ function createBugMenu(options)
     if(priv.canConfirmBug && (bug.$col.type === 'unconfirmed')) items.push({label: bugLang.confirmBug, icon: 'ok', url: createLink('bug', 'confirmbug', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCopyBug) items.push({label: bugLang.copy, icon: 'copy', url: createLink('bug', 'create', 'productID=' + productID + '&branch=' + '' + '&extras=bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canToStoryBug && (bug.$col.type != 'closed')) items.push({label: bugLang.toStory, icon: 'lightbulb', url: createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canActivateBug && (bug.$col.type == 'fixed') || bug.$col.type == 'testing' || bug.$col.type == 'tested' || bug.$col.type == 'closed') items.push({label: bugLang.activate, icon: 'magic', url: createLink('bug', 'activate', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     return items;
 }
 
