@@ -115,7 +115,9 @@ $lang->upgrade->programName    = '项目集名称';
 $lang->upgrade->projectName    = '项目名称';
 $lang->upgrade->moveEXTFiles   = '迁移插件文件';
 $lang->upgrade->fileName       = '文件名称';
-$lang->upgrade->viewChargeFile = '查看收费版本文件';
+$lang->upgrade->next           = '下一步';
+$lang->upgrade->yes            = '是';
+$lang->upgrade->no             = '否';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->editedName         = '调整后名称';
@@ -130,6 +132,9 @@ $lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [�
 $lang->upgrade->errorEngineInnodb  = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 $lang->upgrade->duplicateProject   = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
 $lang->upgrade->upgradeTips        = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
+$lang->upgrade->moveEXTFileFail    = '迁移文件失败， 请执行上面命令后刷新！';
+$lang->upgrade->confirmCustomTip   = '请确认是否做过定制或二次开发';
+$lang->upgrade->moveExtFileTip     = '如下文件将会迁移到zentaopms/extension/custom下';
 
 $lang->upgrade->projectType['project']   = "把历史的{$lang->projectCommon}作为项目升级";
 $lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为执行升级";

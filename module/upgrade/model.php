@@ -5696,9 +5696,9 @@ class upgradeModel extends model
      */
     public function getEXTFiles()
     {
-        $files         = array();
-        $allModules    = scandir($this->app->moduleRoot);
-        $skipModules   = $this->getEncryptModules($allModules);
+        $files       = array();
+        $allModules  = scandir($this->app->moduleRoot);
+        $skipModules = $this->getEncryptModules($allModules);
 
         foreach($allModules as $module)
         {
@@ -5816,6 +5816,9 @@ class upgradeModel extends model
                 /* Determine whether the current file is encrypted. */
                 if(strpos($line, "extension_loaded('ionCube Loader')") === false)
                 {
+                    $maxFiles = file_get_contents('maxfiles.php');
+                    if(strpos($maxFiles, $fileName) !== false) continue;
+
                     $files[$fileName] = $fileName;
                 }
             }
@@ -5826,15 +5829,15 @@ class upgradeModel extends model
 
     /**
      * Move extent files.
-     * 
+     *
      * @access public
-     * @return void
+     * @return array
      */
     public function moveEXTFiles()
     {
         $data       = fixer::input('post')->get();
         $customRoot = $this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom';
-        if(!is_dir($customRoot)) @mkdir($customRoot, 0777);
+        $response   = array('result' => 'success');
 
         foreach($data->files as $file)
         {
@@ -5842,8 +5845,79 @@ class upgradeModel extends model
             $fileName = basename($file);
             $fromPath = $this->app->getModuleRoot() . $file;
             $toPath   = $dirRoot . DIRECTORY_SEPARATOR . $fileName;
-            if(!is_dir($dirRoot)) @mkdir($dirRoot, 0777, true);
+            if(!is_dir($dirRoot))
+            {
+                if(!@mkdir($dirRoot, 0777, true))
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = $this->lang->upgrade->moveEXTFileFail;;
+                    $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
+
+                    return $response;
+                }
+            }
             copy($fromPath, $toPath);
+            $this->replaceEXTFile($toPath);
         }
+
+        return $response;
+    }
+
+    /**
+     * Remove charge directory.
+     *
+     * @access public
+     * @return array
+     */
+    public function removeChargeDir()
+    {
+        $allModules  = scandir($this->app->moduleRoot);
+        $skipModules = $this->getEncryptModules($allModules);
+        $zfile       = $this->app->loadClass('zfile');
+        $response    = array('result' => 'success');
+        $command     = array();
+        foreach($skipModules as $module)
+        {
+            if(in_array($module, $this->config->upgrade->PMSModules)) continue;
+
+            $dirPath = $this->app->moduleRoot . $module;
+            if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath;
+        }
+
+        if(!empty($command))
+        {
+            $response['result']  = 'fail';
+            $response['message'] = $this->lang->upgrade->afterDeleted;
+            $response['command'] = $command;
+         }
+
+        return $response;
+    }
+
+    /**
+     * Replace extent file.
+     *
+     * @param  string $filePath
+     * @access public
+     * @return void
+     */
+    public function replaceEXTFile($filePath)
+    {
+        $content = file_get_contents($filePath);
+        if(strpos(basename($filePath), 'html'))
+        {
+            $content = preg_replace("#(include )'((../){2,})([a-z]+/)#", '$1' . '$app->getModuleRoot() . ' . "'$4", $content);
+        }
+        else
+        {
+            $dirPath    = dirname($filePath);
+            $dir        = str_replace($this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom' .DIRECTORY_SEPARATOR , '', $dirPath);
+            $moduleName = explode(DIRECTORY_SEPARATOR,  $dir)[0];
+
+            $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
+            $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);
+            $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
+        }
+        file_put_contents($filePath, $content);
     }
 }
