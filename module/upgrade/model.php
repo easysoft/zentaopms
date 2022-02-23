@@ -5852,7 +5852,7 @@ class upgradeModel extends model
         $content = file_get_contents($filePath);
         if(strpos(basename($filePath), 'html'))
         {
-            $content = preg_replace("#(include ')((../){2,})([a-z]+/)#", "$1$2../../module/$4", $content);
+            $content = preg_replace("#(include )'((../){2,})([a-z]+/)#", '$1' . '$app->getModuleRoot() . ' . "'$4", $content);
         }
         else
         {
