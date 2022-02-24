@@ -1631,7 +1631,7 @@ class projectModel extends model
             if($id == 'surplus')  $title = "title='{$project->hours->totalLeft} {$this->lang->execution->workHour}'";
 
             echo "<td class='$class' $title>";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('project', $project, $id);
+            if($this->config->edition == 'biz') $this->loadModel('flow')->printFlowCell('project', $project, $id);
             switch($id)
             {
                 case 'id':
@@ -2197,7 +2197,7 @@ class projectModel extends model
     public function checkCanChangeModel($projectID, $model)
     {
         $checkList = $this->config->project->checkList->$model;
-        if(isset($this->config->maxVersion)) $checkList = $this->config->project->maxCheckList->$model;
+        if($this->config->edition == 'max') $checkList = $this->config->project->maxCheckList->$model;
         foreach($checkList as $module)
         {
             if($module == '') continue;

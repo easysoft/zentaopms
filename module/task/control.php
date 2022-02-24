@@ -1920,7 +1920,7 @@ class task extends control
                     }
                 }
             }
-            if(isset($this->config->bizVersion)) list($fields, $tasks) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $tasks);
+            if($this->config->edition == 'biz') list($fields, $tasks) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $tasks);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $tasks);

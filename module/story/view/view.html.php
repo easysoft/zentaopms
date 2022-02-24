@@ -215,7 +215,7 @@
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
-        if(isset($this->config->maxVersion) and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) echo html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+        if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) echo html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
 
         if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
         {

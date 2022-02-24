@@ -2,7 +2,7 @@
 <?php if(common::checkNotCN()):?>
 <style>#conditions .col-xs { width: 126px; }</style>
 <?php endif;?>
-<?php if(isset($config->maxVersion) or isset($config->proVersion) or isset($config->bizVersion)):?>
+<?php if($this->config->edition != 'open'):?>
 <style>#mainContent > .side-col.col-lg{width: 235px}</style>
 <style>.hide-sidebar #sidebar{width: 0 !important}</style>
 <?php endif;?>

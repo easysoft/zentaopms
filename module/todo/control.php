@@ -199,8 +199,8 @@ class todo extends control
             $bugs      = $this->bug->getUserBugPairs($account);
             $tasks     = $this->task->getUserTaskPairs($account, $status);
             $storys    = $this->loadModel('story')->getUserStoryPairs($account);
-            if(isset($this->config->bizVersion) or isset($this->config->maxVersion)) $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account);
-            if(isset($this->config->maxVersion))
+            if($this->config->edition != 'open') $this->view->feedbacks = $this->loadModel('feedback')->getUserFeedbackPairs($account);
+            if($this->config->edition == 'max')
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
                 $risks         = $this->loadmodel('risk')->getUserRiskPairs($account);
@@ -209,7 +209,7 @@ class todo extends control
             $testtasks = $this->loadModel('testtask')->getUserTestTaskPairs($account);
 
             $reviews = array();
-            if(isset($this->config->qcVersion) or isset($this->config->maxVersion)) $reviews = $this->loadModel('review')->getUserReviewPairs($account);
+            if($this->config->edition == 'max') $reviews = $this->loadModel('review')->getUserReviewPairs($account);
             $allTodos = $this->todo->getList($type, $account, $status);
             if($this->post->todoIDList) $todoIDList = $this->post->todoIDList;
 
@@ -243,7 +243,7 @@ class todo extends control
             $this->view->bugs        = $bugs;
             $this->view->tasks       = $tasks;
             $this->view->storys      = $storys;
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $this->view->issues        = $issues;
                 $this->view->risks         = $risks;
@@ -577,7 +577,7 @@ class todo extends control
             $bugs      = $this->loadModel('bug')->getUserBugPairs($account);
             $stories   = $this->loadModel('story')->getUserStoryPairs($account, 100, 'story');
             $tasks     = $this->loadModel('task')->getUserTaskPairs($account);
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $issues        = $this->loadModel('issue')->getUserIssuePairs($account);
                 $risks         = $this->loadModel('risk')->getUserRiskPairs($account);
@@ -599,7 +599,7 @@ class todo extends control
                 if($type == 'story')              $todo->name    = isset($stories[$todo->idvalue]) ? $stories[$todo->idvalue] . "(#$todo->idvalue)" : '';
                 if($type == 'task')               $todo->name    = isset($tasks[$todo->idvalue])   ? $tasks[$todo->idvalue] . "(#$todo->idvalue)" : '';
 
-                if(isset($this->config->maxVersion))
+                if($this->config->edition == 'max')
                 {
                     if($type == 'issue') $todo->name = isset($issues[$todo->idvalue]) ? $issues[$todo->idvalue] . "(#$todo->idvalue)" : '';
                     if($type == 'risk')  $todo->name = isset($risks[$todo->idvalue])  ? $risks[$todo->idvalue] . "(#$todo->idvalue)" : '';
@@ -617,7 +617,7 @@ class todo extends control
                 unset($todo->idvalue);
                 unset($todo->private);
             }
-            if(isset($this->config->bizVersion)) list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
+            if($this->config->edition == 'biz') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $todos);

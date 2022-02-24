@@ -66,7 +66,7 @@
             <th class='c-date required'><?php echo $lang->programplan->end;?></th>
             <th class='c-date <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>'><?php echo $lang->programplan->realBegan;?></th>
             <th class='c-date <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>'><?php echo $lang->programplan->realEnd;?></th>
-            <?php if(isset($this->config->qcVersion)):?>
+            <?php if($this->config->edition == 'max'):?>
             <th class='w-110px'><?php echo $lang->programplan->output;?></th>
             <?php endif;?>
             <th class="c-action text-center w-110px"> <?php echo $lang->actions;?></th>
@@ -92,7 +92,7 @@
               <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>]' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
-              <?php if(isset($this->config->qcVersion)):?>
+              <?php if($this->config->edition == 'max'):?>
               <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
               <?php endif;?>
               <td class='c-actions text-left'>
@@ -123,7 +123,7 @@
               <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='<?php echo $plan->end;?>' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='<?php echo $plan->realBegan;?>' class='form-control form-date' /></td>
               <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='<?php echo $plan->realEnd;?>' class='form-control form-date' /></td>
-              <?php if(isset($this->config->qcVersion)):?>
+              <?php if($this->config->edition == 'max'):?>
               <?php $option = empty($plan->output) ? 0 : explode(',', $plan->output);?>
               <td><?php echo html::select("output[$i][]", $documentList, $option, "class='form-control chosen' multiple");?></td>
               <?php endif;?>
@@ -151,7 +151,7 @@
             <td><input type='text' name='end[<?php echo $i;?>]' id='end<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='realBegan[<?php echo $i;?>] ' id='realBegan<?php echo $i;?>' value='' class='form-control form-date' /></td>
             <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='realEnd[<?php echo $i;?>]' id='realEnd<?php echo $i;?>' value='' class='form-control form-date' /></td>
-            <?php if(isset($this->config->qcVersion)):?>
+            <?php if($this->config->edition == 'max'):?>
             <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen' multiple");?></td>
             <?php endif;?>
             <td class='c-actions text-left'>
@@ -193,7 +193,7 @@
       <td><input type='text' name='<?php echo "end[$i]";?>' id='end<?php echo $i;?>' class='form-control form-date' /></td>
       <td <?php echo zget($visibleFields, 'realBegan', ' hidden') . zget($requiredFields, 'realBegan', '', ' required');?>><input type='text' name='<?php echo "realBegan[$i]";?>' id='realBegan<?php echo $i;?>' class='form-control form-date' /></td>
       <td <?php echo zget($visibleFields, 'realEnd', ' hidden') . zget($requiredFields, 'realEnd', '', ' required');?>><input type='text' name='<?php echo "realEnd[$i]";?>' id='realEnd<?php echo $i;?>' class='form-control form-date' /></td>
-      <?php if(isset($this->config->qcVersion)):?>
+      <?php if($this->config->edition == 'max'):?>
       <td><?php echo html::select("output[$i][]", $documentList, '', "class='form-control chosen ' multiple");?></td>
       <?php endif;?>
       <td class='c-actions'>

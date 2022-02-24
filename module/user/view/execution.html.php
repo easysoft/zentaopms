@@ -35,7 +35,7 @@
         <tr>
           <td><?php echo html::a($executionLink, $execution->id);?></td>
           <td>
-            <?php if(isset($config->maxVersion)):?>
+            <?php if($this->config->edition == 'max'):?>
             <span class='project-type-label label label-info label-outline'><?php echo zget($lang->user->executionTypeList, $execution->type);?></span>
             <?php endif;?>
             <?php echo html::a($executionLink, $execution->name);?>
