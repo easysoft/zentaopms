@@ -218,7 +218,7 @@
                   <?php
                   if($execution->type != 'kanban')
                   {
-                      common::printLink('execution', $method, "executionID=$task->execution", $execution->name);
+                      common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
                   }
                   else
                   {
