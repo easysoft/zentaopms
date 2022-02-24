@@ -193,7 +193,6 @@ function renderProjectItem(item, $item)
         $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
         $item.addClass('has-progress');
     }
-
     return $item.addClass('has-left-border')
         .toggleClass('border-left-green', item.status === 'doing' && !item.delay)
         .toggleClass('border-left-red', item.status === 'doing' && !!item.delay)
