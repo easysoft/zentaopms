@@ -141,4 +141,4 @@ $config->project->excludedPriv['doc']        = array('browse', 'view', 'catalog'
 $config->project->excludedPriv['repo']       = array('edit', 'delete', 'maintain', 'setRules');
 $config->project->excludedPriv['testreport'] = array('browse');
 $config->project->excludedPriv['auditplan']  = array('delete');
-if($this->config->edition != 'max') $config->project->excludedPriv['stakeholder'] = array('issue', 'viewIssue', 'userIssue');
+if($config->edition != 'max') $config->project->excludedPriv['stakeholder'] = array('issue', 'viewIssue', 'userIssue');
