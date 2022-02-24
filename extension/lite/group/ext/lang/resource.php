@@ -938,6 +938,8 @@ if($config->edition == 'biz' or $config->edition == 'max')
     $lang->resource->feedback->close      = 'closeAction';
     $lang->resource->feedback->export     = 'exportAction';
 
+    if($config->visions == ',lite,') unset($lang->resource->feedback);
+
     /* Faq. */
     $lang->resource->faq = new stdclass();
     $lang->resource->faq->browse = 'browse';

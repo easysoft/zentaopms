@@ -30,6 +30,7 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setDefault('idvalue', 0)
+            ->setDefault('vision', $this->config->vision)
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
@@ -175,7 +176,7 @@ class todoModel extends model
                 $todo->assignedTo   = $this->app->user->account;
                 $todo->assignedBy   = $this->app->user->account;
                 $todo->assignedDate = $now;
-                $todo->vision       = $todos->vision[$i];
+                $todo->vision       = $this->config->vision;
 
                 if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
