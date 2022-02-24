@@ -1644,9 +1644,9 @@ class testcase extends control
 
             $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
             $branches  = $this->loadModel('branch')->getPairs($productID, '' , $projectID);
-            $modules   = array();
-
             $this->loadModel('tree');
+            $modules = $product->type == 'normal' ? $this->tree->getOptionMenu($productID, 'case', 0, 0) : array();
+
             foreach($branches as $branchID => $branchName)
             {
                 $branches[$branchID] = $branchName . "(#$branchID)";
