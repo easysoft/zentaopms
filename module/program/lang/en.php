@@ -93,7 +93,7 @@ $lang->program->beyondParentBudget = 'The remaining budget of the owned program 
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
-$lang->program->endList[186] = 'Half yearly';
+$lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
