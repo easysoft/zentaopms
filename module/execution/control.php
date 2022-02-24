@@ -2573,8 +2573,8 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
-        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'all');
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal|noclosed');
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal');
 
         $this->display();
     }
@@ -2748,7 +2748,6 @@ class execution extends control
 
         /* Set modules and branches. */
         $modules      = array();
-        $branchIDList = array(BRANCH_MAIN);
         $branches     = $this->project->getBranchesByProject($objectID);
         $productType  = 'normal';
         $this->loadModel('tree');
@@ -2762,7 +2761,8 @@ class execution extends control
             }
             if($product->type != 'normal')
             {
-                $productType = $product->type;
+                $productType  = $product->type;
+                $branchIDList = array(BRANCH_MAIN);
                 if(isset($branches[$product->id]))
                 {
                     foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
@@ -2781,7 +2781,7 @@ class execution extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(array_keys($products), isset($branchIDList) ? $branchIDList : 'all', $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);

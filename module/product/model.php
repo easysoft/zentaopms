@@ -695,6 +695,7 @@ class productModel extends model
             $this->loadModel('personnel')->updateWhitelist($whitelist, 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             if($product->type == 'normal' and $oldProduct->type != 'normal') $this->loadModel('branch')->unlinkBranch4Project($productID);
+            if($product->type != 'normal' and $oldProduct->type == 'normal') $this->loadModel('branch')->linkBranch4Project($productID);
 
             return common::createChanges($oldProduct, $product);
         }
@@ -745,6 +746,7 @@ class productModel extends model
         if(dao::isError()) die(js::error(dao::getError()));
 
         $unlinkProducts = array();
+        $linkProducts   = array();
         foreach($products as $productID => $product)
         {
             $oldProduct = $oldProducts[$productID];
@@ -763,11 +765,13 @@ class productModel extends model
             if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             if($product->type == 'normal' and $oldProduct->type != 'normal') $unlinkProducts[] = $productID;
+            if($product->type != 'normal' and $oldProduct->type == 'normal') $linkProducts[] = $productID;
 
             $allChanges[$productID] = common::createChanges($oldProduct, $product);
         }
 
         if(!empty($unlinkProducts)) $this->loadModel('branch')->unlinkBranch4Project($unlinkProducts);
+        if(!empty($linkProducts)) $this->loadModel('branch')->linkBranch4Project($linkProducts);
 
         return $allChanges;
     }

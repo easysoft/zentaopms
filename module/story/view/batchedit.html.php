@@ -77,7 +77,21 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <?php endif;?>
           <td class='text-left<?php echo zget($visibleFields, 'module')?>'>
-            <?php echo html::select("modules[$storyID]", isset($modules[$story->product][$story->branch]) ? $modules[$story->product][$story->branch] : array('0' => '/'), $story->module, "class='form-control chosen'");?>
+            <?php
+            $moduleList = $modules[$story->product];
+            if($products[$story->product]->type == 'normal' and !empty($story->branch))
+            {
+                $storyModule = '/';
+                $modulePath  = $this->tree->getParents($story->module);
+                foreach($modulePath as $key => $module)
+                {
+                    $storyModule .= $module->name;
+                    if(isset($modulePath[$key + 1])) $storyModule .= '/';
+                }
+                $moduleList[$story->branch] = $modules[$story->product][0] + array($story->module => $storyModule);
+            }
+            ?>
+            <?php echo html::select("modules[$storyID]", isset($moduleList[$story->branch]) ? $moduleList[$story->branch] : array(0 => '/'), $story->module, "class='form-control chosen'");?>
           </td>
           <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>'>
             <?php echo html::select("plans[$storyID]", isset($plans[$story->product][$story->branch]) ? array('' => '') + $plans[$story->product][$story->branch] : '', $story->plan, "class='form-control chosen'");?>

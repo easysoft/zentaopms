@@ -2262,20 +2262,53 @@ class storyModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
-        if(is_array($branch)) $branch = join(',', $branch);
+        $stories        = array();
+        $branchProducts = array();
+        $normalProducts = array();
+        $productList    = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productID)->fetchAll('id');
+        foreach($productList as $product)
+        {
+            if($product->type != 'normal')
+            {
+                $branchProducts[$product->id] = $product->id;
+                continue;
+            }
 
-        $stories = $this->dao->select('*')->from(TABLE_STORY)
-            ->where('product')->in($productID)
-            ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
-            ->beginIF($branch !== 'all')->andWhere("branch")->in($branch)->fi()
-            ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
-            ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
-            ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
-            ->andWhere('type')->eq($type)
-            ->andWhere('deleted')->eq(0)
-            ->orderBy($orderBy)
-            ->page($pager)
-            ->fetchAll('id');
+            $normalProducts[$product->id] = $product->id;
+        }
+
+        if(!empty($normalProducts))
+        {
+            $stories += $this->dao->select('*')->from(TABLE_STORY)
+                ->where('product')->in($normalProducts)
+                ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
+                ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
+                ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
+                ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+                ->andWhere('type')->eq($type)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
+
+        if(!empty($branchProducts))
+        {
+            if(is_array($branch)) $branch = join(',', $branch);
+
+            $stories += $this->dao->select('*')->from(TABLE_STORY)
+                ->where('product')->in($branchProducts)
+                ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
+                ->beginIF($branch !== 'all')->andWhere("branch")->in($branch)->fi()
+                ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
+                ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
+                ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
+                ->andWhere('type')->eq($type)
+                ->andWhere('deleted')->eq(0)
+                ->orderBy($orderBy)
+                ->page($pager)
+                ->fetchAll('id');
+        }
 
         return $this->mergePlanTitle($productID, $stories, $branch, $type);
     }
