@@ -146,11 +146,6 @@ $(function()
               {
                   $row.find('.input-story-title').val(storyTitle).after('<input type="hidden" name="uploadImage[' + index + ']" id="uploadImage[' + index + ']" value="' + imageTitles[storyTitle] + '">');
               }
-            $row.find(".reviewerDitto").each(function()
-            {
-                var $select = $(this);
-                if(index == 0) $select.remove();
-            });
         }
     });
 
@@ -161,7 +156,10 @@ $(function()
         if($(this).val() == 0) $(select).attr('disabled', 'disabled');
         $(select).trigger("chosen:updated");
     })
+
+    $('.reviewerDitto:first').remove();
 });
+
 </script>
 <?php if(isset($execution)) js::set('execution', $execution);?>
 <?php js::set('storyType', $type);?>
