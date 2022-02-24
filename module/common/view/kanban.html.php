@@ -179,7 +179,7 @@ function renderProjectItem(item, $item)
     }
     $title.text(item.name).attr('title', item.name);
 
-    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>")
+    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
 
     if(item.status === 'doing')
     {
@@ -225,6 +225,8 @@ function renderExecutionItem(item, $item)
         $title.appendTo($item);
     }
     $title.text(item.name).attr('title', item.name);
+
+    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
 
     if(window.statusColorList && window.statusColorList[item.status])
     {
