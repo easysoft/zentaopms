@@ -815,6 +815,15 @@ class execution extends control
         $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
+        if($param)
+        $this->session->set('executionStoryBrowseParam', $param);
+
+        a($param);
+        if(isset($_GET['param']))
+        $isAllProduct = $param;
+        else
+        $isAllProduct = $this->session->executionStoryBrowseParam;
+
         /* Assign. */
         $this->view->title             = $title;
         $this->view->position          = $position;
@@ -827,6 +836,7 @@ class execution extends control
         $this->view->orderBy           = $orderBy;
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
+        $this->view->isAllProduct      = $isAllProduct;
         $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, 0, array('treeModel', 'createStoryLink'));
         $this->view->modulePairs       = $modulePairs;
         $this->view->tabID             = 'story';
@@ -839,7 +849,7 @@ class execution extends control
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
-
+a('param:'.$this->view->param.'products:'.count($products));
         $this->display();
     }
 
