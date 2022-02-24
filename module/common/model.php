@@ -527,7 +527,7 @@ class commonModel extends model
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            if(!isset($config->proVersion) and $objectType == 'effort') continue;
+            if($this->config->edition == 'open' and $objectType == 'effort') continue;
             if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
             if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
 
@@ -1780,7 +1780,7 @@ EOD;
          * 当主状态改变并且未设置子状态的值时把子状态的值设置为默认值并记录日志。
          * Change sub status when status is changed and sub status is not set, and record the changes.
          */
-        if(isset($config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $oldID        = zget($old, 'id', '');
             $oldStatus    = zget($old, 'status', '');

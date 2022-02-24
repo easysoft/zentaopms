@@ -3364,7 +3364,7 @@ class execution extends control
                     if(strpos(",$checkedItem,", ",{$execution->id},") === false) unset($executionStats[$i]);
                 }
             }
-            if(isset($this->config->bizVersion)) list($fields, $executionStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $executionStats);
+            if($this->config->edition != 'open') list($fields, $executionStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $executionStats);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $executionStats);

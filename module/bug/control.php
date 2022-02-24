@@ -2113,7 +2113,7 @@ class bug extends control
             }
 
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
-            if(isset($this->config->bizVersion)) list($fields, $bugs) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $bugs);
+            if($this->config->edition != 'open') list($fields, $bugs) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $bugs);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);

@@ -153,7 +153,7 @@ class my extends control
         $reviewCount  = 0;
         $ncCount      = 0;
         $meetingCount = 0;
-        $isMax = isset($this->config->maxVersion) ? 1 : 0;
+        $isMax        = $this->config->edition == 'max' ? 1 : 0;
         if($isMax)
         {
             $this->loadModel('issue');

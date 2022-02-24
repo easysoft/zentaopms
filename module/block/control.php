@@ -1706,9 +1706,9 @@ class block extends control
         if(common::hasPriv('todo',  'view')) $hasViewPriv['todo']  = true;
         if(common::hasPriv('task',  'view')) $hasViewPriv['task']  = true;
         if(common::hasPriv('bug',   'view')) $hasViewPriv['bug']   = true;
-        if(common::hasPriv('risk',  'view') and isset($this->config->maxVersion)) $hasViewPriv['risk']  = true;
-        if(common::hasPriv('issue', 'view') and isset($this->config->maxVersion)) $hasViewPriv['issue'] = true;
-        if(common::hasPriv('meeting', 'view') and isset($this->config->maxVersion)) $hasViewPriv['meeting'] = true;
+        if(common::hasPriv('risk',  'view') and $this->config->edition == 'max') $hasViewPriv['risk']  = true;
+        if(common::hasPriv('issue', 'view') and $this->config->edition == 'max') $hasViewPriv['issue'] = true;
+        if(common::hasPriv('meeting', 'view') and $this->config->edition == 'max') $hasViewPriv['meeting'] = true;
         if(common::hasPriv('story', 'view')) $hasViewPriv['story'] = true;
 
         $params          = $this->get->param;
@@ -1716,7 +1716,7 @@ class block extends control
         $count           = array();
         $objectList      = array('todo' => 'todos', 'task' => 'tasks', 'bug' => 'bugs', 'story' => 'stories');
         $objectCountList = array('todo' => 'todoCount', 'task' => 'taskCount', 'bug' => 'bugCount', 'story' => 'storyCount');
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $objectList      += array('risk' => 'risks', 'issue' => 'issues');
             $objectCountList += array('risk' => 'riskCount', 'issue' => 'issueCount');
