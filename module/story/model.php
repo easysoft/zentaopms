@@ -508,6 +508,7 @@ class storyModel extends model
         }
 
         $planStories = array();
+        $reviewers   = '';
 
         foreach($data as $i => $story)
         {
@@ -566,23 +567,22 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
             /* Save the story reviewer to storyreview table. */
-            if(isset($_POST['reviewer'][$i]))
+            $assignedTo = '';
+            if(empty($_POST['reviewer'][$i]) and empty($_POST['reviewer'][$i])) $_POST['reviewer'][$i] = array();
+            $reviewers = (isset($_POST['reviewDitto'][$i])) ? $reviewers : $_POST['reviewer'][$i];
+            foreach($reviewers as $reviewer)
             {
-                $assignedTo = '';
-                foreach($_POST['reviewer'][$i] as $reviewer)
-                {
-                    if(empty($reviewer)) continue;
+                if(empty($reviewer)) continue;
 
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = 1;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = 1;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
-                    if(empty($assignedTo)) $assignedTo = $reviewer;
-                }
-                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
+                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
+            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
 
             $this->executeHooks($storyID);
 
