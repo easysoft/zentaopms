@@ -44,6 +44,7 @@ js::set('kanbanGroup',      $kanbanGroup);
 js::set('latestExecutions', $latestExecutions);
 js::set('programPairs',     $programPairs);
 js::set('doingText',        $lang->project->statusList['doing']);
+js::set('delayText',        $lang->project->statusList['delay']);
 js::set('priv',
     array(
         'canStart'    => common::hasPriv('project', 'start'),

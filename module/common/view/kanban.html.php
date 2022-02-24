@@ -19,8 +19,8 @@
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block a {padding: 10px; display: block;}
-#kanbanList .kanban-card {display: grid;}
-#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
+#kanbanList .kanban-card {display: flex;}
+#kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: calc(100% - 50px);}
 #kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-card.has-progress > .progress-pie,
 #kanbanList .kanban-card.has-progress > .ring {position: absolute; right: 7px; top: 7px; width: 24px; height: 24px;}
@@ -179,6 +179,8 @@ function renderProjectItem(item, $item)
     }
     $title.text(item.name).attr('title', item.name);
 
+    if(item.delay) $title.after("&nbsp;<span class='label label-danger label-badge'>" + delayText + "</span>")
+
     if(item.status === 'doing')
     {
         var $progress = $item.find('.ring');
@@ -191,6 +193,7 @@ function renderProjectItem(item, $item)
         $progress.css('background-position-x', -Math.ceil(progress / 2) * 24);
         $item.addClass('has-progress');
     }
+
     return $item.addClass('has-left-border')
         .toggleClass('border-left-green', item.status === 'doing' && !item.delay)
         .toggleClass('border-left-red', item.status === 'doing' && !!item.delay)
