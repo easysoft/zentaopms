@@ -1,6 +1,7 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php css::import($jsRoot . 'zui/kanban/min.css'); ?>
 <?php js::import($jsRoot . 'zui/kanban/min.js'); ?>
+<?php js::set('delayText', $lang->delayed); ?>
 <style>
 #kanbanList .panel-heading {padding: 10px;}
 #kanbanList .panel-body {padding: 0 10px 10px;}
