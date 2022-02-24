@@ -62,7 +62,7 @@ class fileModel extends model
             else
             {
                 $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-                $file->webPath  = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+                $file->webPath  = 'data/course/' . $file->pathname;
             }
         }
 
@@ -90,7 +90,7 @@ class fileModel extends model
         else
         {
             $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
-            $file->webPath  = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+            $file->webPath  = 'data/course/' . $file->pathname;
         }
         return $file;
     }
