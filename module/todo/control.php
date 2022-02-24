@@ -617,7 +617,7 @@ class todo extends control
                 unset($todo->idvalue);
                 unset($todo->private);
             }
-            if($this->config->edition == 'biz') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
+            if($this->config->edition != 'open') list($fields, $todos) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $todos);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $todos);

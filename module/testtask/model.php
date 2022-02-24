@@ -1414,7 +1414,7 @@ class testtaskModel extends model
             if($id == 'actions') $class .= 'c-actions';
 
             echo "<td class='" . $class . "'" . ($id=='title' ? "title='{$run->title}'":'') . ">";
-            if($this->config->edition == 'biz') $this->loadModel('flow')->printFlowCell('testcase', $run, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('testcase', $run, $id);
             switch ($id)
             {
             case 'id':

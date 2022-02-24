@@ -1593,7 +1593,7 @@ class testcase extends control
                     }
                 }
             }
-            if($this->config->edition == 'biz') list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
+            if($this->config->edition != 'open') list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $cases);

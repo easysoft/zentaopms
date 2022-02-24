@@ -3147,7 +3147,7 @@ class taskModel extends model
             }
 
             echo "<td class='" . $class . "'" . $title . ">";
-            if($this->config->edition == 'biz') $this->loadModel('flow')->printFlowCell('task', $task, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
             switch($id)
             {
             case 'id':

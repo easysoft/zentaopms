@@ -24,7 +24,7 @@ class searchModel extends model
     public function setSearchParams($searchConfig)
     {
         $module = $searchConfig['module'];
-        if($this->config->edition == 'biz')
+        if($this->config->edition != 'open')
         {
             $flowModule = $module;
             if($module == 'projectStory') $flowModule = 'story';
@@ -688,7 +688,7 @@ class searchModel extends model
         $fields = $this->config->search->fields->{$objectType};
         if(empty($fields)) return true;
 
-        if($objectType == 'doc' && $this->config->edition == 'biz') $object = $this->appendFiles($object);
+        if($objectType == 'doc' && $this->config->edition != 'open') $object = $this->appendFiles($object);
 
         $index = new stdclass();
         $index->objectID   = $object->{$fields->id};
