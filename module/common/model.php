@@ -527,7 +527,7 @@ class commonModel extends model
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            if($this->config->edition == 'open' and $objectType == 'effort') continue;
+            if($config->edition == 'open' and $objectType == 'effort') continue;
             if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
             if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
 
