@@ -167,7 +167,7 @@ class doc extends control
         if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->user->getPairs('nocode');
+        $this->view->users       = $this->user->getPairs('nocode|noclosed');
         $this->view->products    = $products;
         $this->view->projects    = $projects;
         $this->view->executions  = $executions;
