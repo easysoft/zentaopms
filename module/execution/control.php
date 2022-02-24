@@ -2748,6 +2748,7 @@ class execution extends control
 
         /* Set modules and branches. */
         $modules      = array();
+        $branchIDList = array(BRANCH_MAIN);
         $branches     = $this->project->getBranchesByProject($objectID);
         $productType  = 'normal';
         $this->loadModel('tree');
@@ -2762,7 +2763,6 @@ class execution extends control
             if($product->type != 'normal')
             {
                 $productType  = $product->type;
-                $branchIDList = array(BRANCH_MAIN);
                 if(isset($branches[$product->id]))
                 {
                     foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;

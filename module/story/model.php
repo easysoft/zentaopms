@@ -2604,7 +2604,8 @@ class storyModel extends model
                 }
 
                 $branches    = join(',', $branches);
-                $storyQuery .= " OR (`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
+                if(!empty($normalProducts)) $storyQuery .= " OR ";
+                $storyQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
             }
             if(empty($branchProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
             $storyQuery .= ') ';
