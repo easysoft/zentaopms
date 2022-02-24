@@ -63,7 +63,7 @@
           <td class='c-actions text-left'>
             <?php
             /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
-            $branchName = str_replace('-', '*', $branch->name);
+            $branchName = helper::safe64Encode(urlencode($branch->name));
             if(common::hasPriv('gitlab', 'editBranchPriv')) common::printLink('gitlab', 'editBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branchName", "<i class='icon icon-edit'></i> ", '', "title={$lang->gitlab->editBranchPriv} class='btn btn-primary'");
             if(common::hasPriv('gitlab', 'deleteBranchPriv')) echo html::a($this->createLink('gitlab', 'deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branchName"), '<i class="icon-trash"></i>', 'hiddenwin', "title='{$lang->gitlab->deleteBranchPriv}' class='btn'");
             ?>

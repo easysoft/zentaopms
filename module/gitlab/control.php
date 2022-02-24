@@ -924,7 +924,7 @@ class gitlab extends control
         }
 
         /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
-        if($branch) $branch = str_replace('*', '-', $branch);
+        if($branch) $branch = urldecode(helper::safe64Decode($branch));
 
         if($_POST)
         {
@@ -935,7 +935,7 @@ class gitlab extends control
         }
 
         $branchPriv = new stdClass();
-        $branchPriv->name               = '';
+        $branchPriv->name             = '';
         $branchPriv->mergeAccessLevel = 40; // Initialize data, and the operation authority is the maintainers by default.
         $branchPriv->pushAccessLevel  = 40; // Initialize data, and the operation authority is the maintainers by default.
 
@@ -945,6 +945,7 @@ class gitlab extends control
         {
             $title      = $this->lang->gitlab->editBranchPriv;
             $branchPriv = $this->gitlab->apiGetSingleBranchPriv($gitlabID, $projectID, $branch);
+            $branchPriv->name             = helper::safe64Encode(urlencode($branchPriv->name));
             $branchPriv->mergeAccessLevel = $this->gitlab->checkAccessLevel($branchPriv->merge_access_levels);
             $branchPriv->pushAccessLevel  = $this->gitlab->checkAccessLevel($branchPriv->push_access_levels);
         }
@@ -956,7 +957,11 @@ class gitlab extends control
         $branches = array();
         foreach($gitlabBranches as $oneBranch)
         {
-            if(!in_array($oneBranch->name, $protectNames) || $oneBranch->name == $branch) $branches[$oneBranch->name] = $oneBranch->name;
+            if(!in_array($oneBranch->name, $protectNames) || $oneBranch->name == $branch)
+            {
+                $branchName = helper::safe64Encode(urlencode($oneBranch->name));
+                $branches[$branchName] = $oneBranch->name;
+            }
         }
 
         $this->view->title      = $this->lang->gitlab->common . $this->lang->colon . $title;
@@ -1006,12 +1011,11 @@ class gitlab extends control
 
         if($confirm != 'yes')
         {
-            $branch = urlencode($branch);
             die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
         }
 
         /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
-        $branch  = str_replace('*', '-', $branch);
+        $branch  = urldecode(helper::safe64Decode($branch));
         $reponse = $this->gitlab->apiDeleteBranchPriv($gitlabID, $projectID, $branch);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1223,7 +1227,7 @@ class gitlab extends control
         }
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
-        $tag = str_replace('*', '-', $tag);
+        $tag = urldecode(helper::safe64Decode($tag));
 
         if($_POST)
         {
@@ -1265,7 +1269,7 @@ class gitlab extends control
         }
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
-        $tag     = str_replace('*', '-', $tag);
+        $tag     = urldecode(helper::safe64Decode($tag));
         $reponse = $this->gitlab->apiDeleteTagPriv($gitlabID, $projectID, $tag);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
@@ -1677,7 +1681,7 @@ class gitlab extends control
         if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
-        $tagName = str_replace('*', '-', $tagName);
+        $tagName = urldecode(helper::safe64Decode($tagName));
         $reponse = $this->gitlab->apiDeleteTag($gitlabID, $projectID, $tagName);
 
         /* If the status code beginning with 20 is returned or empty is returned, it is successful. */
