@@ -18,7 +18,7 @@
         <h2><?php echo $pageTitle;?></h2>
       </div>
       <form id='branchForm' method='post' class='form-ajax' enctype="multipart/form-data">
-        <?php if($branch) echo html::hidden('name', $branchPriv->name);?>
+        <?php if($branchPriv->name) echo html::hidden('name', $branchPriv->name);?>
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->gitlab->branch->name;?></th>
