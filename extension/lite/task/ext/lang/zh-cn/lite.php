@@ -29,6 +29,7 @@ $lang->task->region              = '所属区域';
 $lang->task->lane                = '所属泳道';
 
 $lang->task->module            = '所属目录';
+$lang->task->allModule         = '所有目录';
 $lang->task->common            = '任务';
 $lang->task->name              = '任务名称';
 $lang->task->type              = '任务类型';
