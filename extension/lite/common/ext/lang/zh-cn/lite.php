@@ -57,6 +57,7 @@ $lang->my->menu           = new stdclass();
 $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
+$lang->my->menu->contacts = array('link' => "$lang->contact|my|managecontacts|");
 
 global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志|effort|calendar|', 'exclude' => 'my-todo');
