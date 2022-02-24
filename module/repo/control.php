@@ -835,17 +835,15 @@ class repo extends control
      */
     public function download($repoID, $path, $fromRevision = 'HEAD', $toRevision = '', $type = 'file', $isBranchOrTag = false)
     {
-        $fromRevision = str_replace('*', '-', $fromRevision);
-        $toRevision   = str_replace('*', '-', $toRevision);
+        if($this->get->repoPath) $path = $this->get->repoPath;
+        $entry = $this->repo->decodePath($path);
+        $repo  = $this->repo->getRepoByID($repoID);
+
         if($isBranchOrTag)
         {
             $fromRevision = urldecode(helper::safe64Decode($fromRevision));
             $toRevision   = urldecode(helper::safe64Decode($toRevision));
         }
-
-        if($this->get->repoPath) $path = $this->get->repoPath;
-        $entry = $this->repo->decodePath($path);
-        $repo  = $this->repo->getRepoByID($repoID);
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
