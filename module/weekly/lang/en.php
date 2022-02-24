@@ -25,7 +25,7 @@ $lang->weekly->workloadByType = 'Workload Summary';
 $lang->weekly->term    = 'Reporting Cycle';
 $lang->weekly->project = 'Project Name';
 $lang->weekly->master  = 'Project Manager ';
-$lang->weekly->staff   = 'The number of men in this week';
+$lang->weekly->staff   = 'Weekly Effort';
 
 $lang->weekly->weekDesc       = 'Week % s (% s ~% s)';
 $lang->weekly->progress       = 'Progress of the project';

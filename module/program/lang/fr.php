@@ -69,11 +69,11 @@ $lang->program->typeList['others'] = 'Others';
 
 $lang->program->noProgram  = 'No program.';
 $lang->program->showClosed = 'Closed programs.';
-$lang->program->tips       = 'If a parent item set is selected, products under that parent item set can be associated. If no item set is selected, a product with the same name as the item is created by default and associated with that item.';
+$lang->program->tips       = 'If a parent program is selected, the products under the parent program can be associated. If no program is selected for the project, a product with the same name as the project is created and associated with the project by default.';
 
 $lang->program->endList[31]  = 'One month';
 $lang->program->endList[93]  = 'Trimester';
-$lang->program->endList[186] = 'Half yearly';
+$lang->program->endList[186] = 'Half year';
 $lang->program->endList[365] = 'One year';
 $lang->program->endList[999] = 'Longtime';
 
