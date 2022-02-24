@@ -39,18 +39,9 @@ class upgradeModel extends model
         set_time_limit(0);
 
         $openVersion = $fromVersion;
-        if(strpos($fromVersion, 'pro') !== false)
-        {
-            $openVersion = $this->config->proVersion[$fromVersion];
-        }
-        elseif(strpos($fromVersion, 'biz') !== false)
-        {
-            $openVersion = $this->config->bizVersion[$fromVersion];
-        }
-        elseif(strpos($fromVersion, 'max') !== false)
-        {
-            $openVersion = $this->config->maxVersion[$fromVersion];
-        }
+        if($fromVersion[0] == 'p') $openVersion = $this->config->proVersion[$fromVersion];
+        if($fromVersion[0] == 'b') $openVersion = $this->config->bizVersion[$fromVersion];
+        if($fromVersion[0] == 'm') $openVersion = $this->config->maxVersion[$fromVersion];
 
         $executeXuanxuan = false;
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
@@ -96,6 +87,7 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
         }
 
+        /* Means open source upgrade to biz or max. */
         if(is_numeric($fromVersion[0]) and $this->config->edition != 'open')
         {
             $this->loadModel('effort')->convertEstToEffort();
@@ -105,7 +97,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Execute open source version.
+     * Process data for open source.
      *
      * @param  string $openVersion
      * @param  string $fromVersion
@@ -448,7 +440,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Execute pro version sql.
+     * Process data for pro.
      *
      * @param  string $proVersion
      * @access public
@@ -486,7 +478,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Execute biz upgrade program.
+     * Process data for biz.
      *
      * @param  int   $bizVersion
      * @param  bool  $executeXuanxuan
@@ -587,13 +579,15 @@ class upgradeModel extends model
     {
         $confirmContent = '';
 
-        $openVersion = $fromVersion;
-        if(strpos($fromVersion, 'pro') !== false)
+        $openVersion     = $fromVersion;
+        $confirmContent .= $this->getOpenConfirm($openVersion, $fromVersion);
+
+        if($fromVersion[0] == 'p')
         {
             $openVersion     = $this->config->proVersion[$fromVersion];
             $confirmContent .= $this->getProConfirm($fromVersion);
         }
-        elseif(strpos($fromVersion, 'biz') !== false)
+        elseif($fromVersion[0] == 'b')
         {
             $openVersion     = $this->config->bizVersion[$fromVersion];
             $proVersion      = array_search($openVersion, $this->config->proVersion);
@@ -601,7 +595,7 @@ class upgradeModel extends model
             $confirmContent .= $this->getProConfirm($proVersion);
             $confirmContent .= $this->getBizConfirm($fromVersion);
         }
-        elseif(strpos($fromVersion, 'max') !== false)
+        elseif($fromVersion[0] == 'm')
         {
             $openVersion     = $this->config->maxVersion[$fromVersion];
             $proVersion      = array_search($openVersion, $this->config->proVersion);
@@ -611,8 +605,6 @@ class upgradeModel extends model
             $confirmContent .= $this->getBizConfirm($bizVersion);
             $confirmContent .= $this->getMaxConfirm($fromVersion);
         }
-
-        $confirmContent .= $this->getOpenConfirm($openVersion, $fromVersion);
 
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
