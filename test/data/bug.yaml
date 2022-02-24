@@ -5,21 +5,21 @@ fields:
   - field: id
     range: 1-10000
   - field: project
-    range: 131{2},0{97}
+    range: 11-100{3},0{30}
   - field: product
-    range: 1{20}
+    range: 1-100{3}
   - field: branch
     range: 0
   - field: module
     range: 0
   - field: execution
-    range: 391,0,391,0{97}
+    range: 101-700{3}
   - field: plan
     range: 0
   - field: story
     range: 0
   - field: storyVersion
-    range: 0
+    range: 1
   - field: task
     range: 0
   - field: toTask

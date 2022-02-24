@@ -27,7 +27,7 @@ fields:
     format: ""
   - field: consumed
     note: "预计剩余"
-    range: 1-10
+    range: 3-11
     prefix: ""
     postfix: ""
     loop: 0
