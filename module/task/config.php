@@ -134,7 +134,6 @@ $config->task->datatable->fieldList['lane']['width']    = '90';
 $config->task->datatable->fieldList['lane']['required'] = 'no';
 $config->task->datatable->fieldList['lane']['sort']     = 'no';
 
-
 $config->task->datatable->fieldList['assignedDate']['title']    = 'assignedDate';
 $config->task->datatable->fieldList['assignedDate']['fixed']    = 'no';
 $config->task->datatable->fieldList['assignedDate']['width']    = '110';
