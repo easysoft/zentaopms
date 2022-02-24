@@ -818,11 +818,8 @@ class execution extends control
         if($param)
         $this->session->set('executionStoryBrowseParam', $param);
 
-        a($param);
-        if(isset($_GET['param']))
-        $isAllProduct = $param;
-        else
-        $isAllProduct = $this->session->executionStoryBrowseParam;
+        if(isset($_GET['param'])) $isAllProduct = $param;
+        else $isAllProduct = $this->session->executionStoryBrowseParam;
 
         /* Assign. */
         $this->view->title             = $title;
@@ -849,7 +846,7 @@ class execution extends control
         $this->view->branchGroups      = $branchGroups;
         $this->view->canBeChanged      = common::canModify('execution', $execution); // Determines whether an object is editable.
         $this->view->showBranch        = $showBranch;
-a('param:'.$this->view->param.'products:'.count($products));
+
         $this->display();
     }
 
