@@ -418,11 +418,11 @@ class upgradeModel extends model
                 set_time_limit(0);
                 $this->updateActivatedDate();
 
-                if(is_numeric($fromVersion[0] == 'm')) break;
+                if($fromVersion[0] == 'm') break;
                 $this->execSQL($this->getUpgradeFile('maxinstall'));
                 $this->execSQL($this->getUpgradeFile('functions'));
 
-                if(is_numeric($fromVersion[0] == 'b')) break;
+                if($fromVersion[0] == 'b') break;
                 $this->execSQL($this->getUpgradeFile('bizinstall'));
                 if(!empty($this->config->isINT))
                 {
@@ -430,7 +430,7 @@ class upgradeModel extends model
                     $this->execSQL($xuanxuanSql);
                 }
 
-                if(is_numeric($fromVersion[0] == 'p')) break;
+                if($fromVersion[0] == 'p') break;
                 $this->execSQL($this->getUpgradeFile('proinstall'));
                 break;
         }
