@@ -98,7 +98,7 @@
             <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'>
               <div class='input-group'>
                 <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");?>
-                <span class='input-group-addon reviewerDitto'><input type='checkbox' name='reviewDitto[$id]' value='ditto' id='dittocheck$id'/> <?php echo $lang->story->ditto;?></span>
+                <span class='input-group-addon reviewerDitto'><input type='checkbox' name='reviewDitto[$id]' value='ditto' checked='checked' id='dittocheck$id'/> <?php echo $lang->story->ditto;?></span>
               </div>
             </td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
@@ -150,7 +150,6 @@ $(function()
             {
                 var $select = $(this);
                 if(index == 0) $select.remove();
-                if(index > 0) $select.find("input[name*='reviewDitto']").attr('checked', true);
             });
         }
     });
