@@ -482,7 +482,7 @@ class commonModel extends model
             if(count($userVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
             echo "<ul class='dropdown-menu pull-right'>";
-            echo "<li class='text-gray'>{$lang->switchTo}</li>";
+            echo "<li class='text-gray switchTo'>{$lang->switchTo}</li>";
             foreach($userVisions as $vision)
             {
                 echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
