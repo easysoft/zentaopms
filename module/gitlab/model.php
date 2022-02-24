@@ -2577,6 +2577,7 @@ class gitlabModel extends model
             return false;
         }
 
+        $priv->name = urldecode(helper::safe64Decode($priv->name));
         $singleBranch = $this->apiGetSingleBranchPriv($gitlabID, $projectID, $priv->name);
         if(empty($branch) && !empty($singleBranch->id))
         {
@@ -2611,6 +2612,7 @@ class gitlabModel extends model
         if(empty($gitlabID))   return false;
         if(empty($projectID))  return false;
         if(empty($priv->name)) return false;
+        $priv->name = html_entity_decode($priv->name, ENT_QUOTES);
         $url = sprintf($this->getApiRoot($gitlabID), "/projects/" . $projectID . '/protected_branches');
         return json_decode(commonModel::http($url, $priv));
     }
@@ -2627,6 +2629,7 @@ class gitlabModel extends model
     public function apiDeleteBranchPriv($gitlabID, $projectID, $branch)
     {
         if(empty($gitlabID)) return false;
+        $branch  = urlencode($branch);
         $apiRoot = $this->getApiRoot($gitlabID);
         $url     = sprintf($apiRoot, "/projects/{$projectID}/protected_branches/{$branch}");
         return json_decode(commonModel::http($url, array(), $options = array(CURLOPT_CUSTOMREQUEST => 'DELETE')));
