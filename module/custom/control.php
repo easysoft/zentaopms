@@ -528,7 +528,7 @@ class custom extends control
         {
             $this->custom->setConcept();
             $this->loadModel('setting')->setItem('system.custom.URAndSR', $this->post->URAndSR);
-            if(!isset($this->config->maxVersion)) $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
+            if($this->config->edition != 'max') $this->loadModel('setting')->setItem('system.custom.hourPoint', $this->post->hourPoint);
 
             $this->app->loadLang('common');
             $locate = $this->config->systemMode == 'new' ? inlink('flow') : 'top';

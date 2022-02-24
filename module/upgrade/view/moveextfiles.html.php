@@ -32,7 +32,7 @@
           <?php
           if(is_array($command))
           {
-              foreach($command as $cmd) echo "<div><code>$cmd</code></div>";
+              echo html::textarea('errors', join("\n", $command), "rows='19' class='form-control' readonly");
           }
           else
           {
