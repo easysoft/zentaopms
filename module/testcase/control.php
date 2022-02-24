@@ -175,20 +175,24 @@ class testcase extends control
             $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? '' : $branch);
         }
 
-        /* Display of branch label. */
-        $showBranch = $this->loadModel('branch')->showBranch($productID);
+        $product = $this->product->getById($productID);
 
-        /* Display status of branch. */
-        $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+        $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
-        foreach($branches as $branchInfo)
+        if($product and $product->type != 'normal')
         {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
-            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-        }
+            /* Display of branch label. */
+            $showBranch = $this->loadModel('branch')->showBranch($productID);
 
-        $product = $this->product->getById($productID);
+            /* Display status of branch. */
+            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id]    = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
+        }
 
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
