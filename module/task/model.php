@@ -3101,6 +3101,7 @@ class taskModel extends model
             if($id == 'deadline') $class .= ' text-center';
             if($id == 'deadline' and isset($task->delay)) $class .= ' delayed';
             if($id == 'assignedTo') $class .= ' has-btn text-left';
+            if($id == 'lane') $class .= ' text-left';
             if(strpos('progress', $id) !== false) $class .= ' text-right';
 
             $title = '';
@@ -3181,6 +3182,9 @@ class taskModel extends model
                 break;
             case 'assignedTo':
                 $this->printAssignedHtml($task, $users);
+                break;
+            case 'lane':
+                echo trim($task->lane);
                 break;
             case 'assignedDate':
                 echo substr($task->assignedDate, 5, 11);
