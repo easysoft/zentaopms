@@ -733,7 +733,7 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->changebychild;
             }
-            elseif($this->config->edition != 'open' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -1232,7 +1232,7 @@ class actionModel extends model
             if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
         }
 
-        if($this->config->edition != 'open' and $objectType == 'assetlib')
+        if($this->config->edition == 'max' and $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -1265,7 +1265,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
-            if($this->config->edition != 'open'
+            if($this->config->edition == 'max'
                and strpos($this->config->action->assetType, $action->objectType) !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {

@@ -44,7 +44,7 @@
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <?php if($this->config->edition == 'max'):?>
+          <?php if($config->edition == 'max'):?>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
           <?php else: ?>
