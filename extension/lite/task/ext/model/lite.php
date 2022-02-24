@@ -79,7 +79,7 @@ public function getExecutionTasks($executionID, $productID = 0, $type = 'all', $
         ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
         ->where('t1.kanban')->eq($executionID)
         ->andWhere("($cardsWhere)")
-        ->fetchAll('cards');
+        ->fetchAll();
 
     foreach($tasks as $task)
     {
@@ -102,7 +102,7 @@ public function getExecutionTasks($executionID, $productID = 0, $type = 'all', $
         {
             foreach($lanes as $lane) 
             {
-                if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
+                if(strpos($lane->cards, ",{$task->id},") !== false)  $task->lane = $lane->name;
             }
         }
     }
