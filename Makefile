@@ -17,7 +17,6 @@ clean:
 	rm -fr build/linux/lampp
 	rm -fr lampp
 	rm -fr zentaoxx
-	rm -fr xuanxuan/www/data/xuanxuan/web/
 common:
 	mkdir zentaopms
 	cp -fr api zentaopms/
