@@ -258,7 +258,7 @@
                       <?php endif;?>
                       <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                     </th>
-                    <th class='w-80px'>    <?php common::printOrderLink('severity',   $orderBy, $vars, $lang->bug->severityAB);?></th>
+                    <th class='w-80px' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
                     <th class='text-left'> <?php common::printOrderLink('title',      $orderBy, $vars, $lang->bug->title);?></th>
                     <th class='w-100px'>   <?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                     <th class='c-user'>    <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>

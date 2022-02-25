@@ -37,7 +37,7 @@ var browseType = '<?php echo $browseType;?>';
             </div>
             <?php echo $lang->idAB;?>
           </th>
-          <th class='c-severity'> <?php echo $lang->bug->severityAB;?></th>
+          <th class='c-severity' title=<?php echo $lang->bug->severity;?>> <?php echo $lang->bug->severityAB;?></th>
           <th class='c-pri' title=<?php echo $lang->execution->pri;?>><?php echo $lang->priAB;?></th>
           <th><?php echo $lang->bug->title;?></th>
           <th class='c-status'><?php echo $lang->bug->statusAB;?></th>

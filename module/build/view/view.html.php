@@ -244,7 +244,7 @@ tbody tr td:first-child input {display: none;}
             <thead>
               <tr class='text-center'>
                 <th class='c-id text-left'><?php common::printOrderLink('id',       $orderBy, $vars, $lang->idAB);?></th>
-                <th class='c-status'> <?php common::printOrderLink('severity',     $orderBy, $vars, $lang->bug->severityAB);?></th>
+                <th class='c-status' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',        $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-status'> <?php common::printOrderLink('status',       $orderBy, $vars, $lang->bug->status);?></th>
                 <th class='c-user'>   <?php common::printOrderLink('openedBy',     $orderBy, $vars, $lang->openedByAB);?></th>

@@ -80,7 +80,7 @@ a.showMoreImage:hover {opacity: 1;}
 
 .fixed-head-table{z-index:1000;}
 
-#headerActions {position: absolute; top: 9px; right: 205px; border-right: 2px solid rgba(255, 255, 255, 0.3);}
+#headerActions {position: absolute; top: 9px; right: 230px; border-right: 2px solid rgba(255, 255, 255, 0.3);}
 #headerActions .btn-group > .btn{ color: #fff; margin-right: 8px; border-radius: 4px !important;}
 #headerActions .btn-group > .btn.active, #headerActions .btn:active, #headerActions .open .dropdown-toggle.btn {background: rgba(0,0,0,0.15) !important;}
 #headerActions #kanbanActionMenu {left: 55px}
