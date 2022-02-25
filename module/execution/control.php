@@ -2039,6 +2039,9 @@ class execution extends control
             $userList[$account]['realname'] = $users[$account];
             $userList[$account]['avatar']   = $avatar;
         }
+        $userList['closed']['account']  = 'Closed';
+        $userList['closed']['realname'] = 'Closed';
+        $userList['closed']['avatar']   = '';
 
         /* Get execution's product. */
         $productID = 0;
