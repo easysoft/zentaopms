@@ -69,8 +69,8 @@ $lang->block->createdDocs         = 'Docs Created';
 $lang->block->allExecutions       = 'All ' . $lang->executionCommon;
 $lang->block->doingExecution      = 'Doning ' . $lang->executionCommon;
 $lang->block->finishExecution     = 'Finish ' . $lang->executionCommon;
-$lang->block->estimatedHours      = 'Estimated Hours';
-$lang->block->consumedHours       = 'Consumed Hours';
+$lang->block->estimatedHours      = 'Estimated';
+$lang->block->consumedHours       = 'Cost';
 $lang->block->time                = 'No';
 $lang->block->week                = 'Week';
 $lang->block->month               = 'Month';
@@ -96,15 +96,15 @@ $lang->block->cannotPlaceInLeft  = 'Cannot place the block at left side.';
 $lang->block->cannotPlaceInRight = 'Cannot place the block at right side.';
 
 $lang->block->productName  = $lang->productCommon . ' Name';
-$lang->block->totalStory   = 'The Total ' . $lang->SRCommon;
-$lang->block->totalBug     = 'The Total Bug';
+$lang->block->totalStory   = 'Total Story';
+$lang->block->totalBug     = 'Total Bug';
 $lang->block->totalRelease = 'Release The Number';
 
 $lang->block->totalInvestment = 'Total investment';
 $lang->block->totalPeople     = 'Total number';
 $lang->block->spent           = 'Has Been Spent';
 $lang->block->budget          = 'Budget';
-$lang->block->left            = 'Residuals';
+$lang->block->left            = 'Remain';
 
 $lang->block->default['waterfall']['project']['3']['title']  = 'Plan Gantt Chart';
 $lang->block->default['waterfall']['project']['3']['block']  = 'waterfallgantt';
