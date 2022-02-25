@@ -17,7 +17,6 @@ clean:
 	rm -fr build/linux/lampp
 	rm -fr lampp
 	rm -fr zentaoxx
-	rm -fr xuanxuan/www/data/xuanxuan/web/
 common:
 	mkdir zentaopms
 	cp -fr api zentaopms/
@@ -54,7 +53,6 @@ common:
 	mkdir zentaopms/www/data/notify/
 zentaoxx:
 	#xuanxuan
-	cp -rf ~/packageTest/web/ xuanxuan/www/data/xuanxuan/
 	mkdir -p zentaoxx/config/ext
 	mkdir -p zentaoxx/lib
 	mkdir -p zentaoxx/extension/xuan
@@ -161,6 +159,7 @@ pms:
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 ci:
+	git pull
 	make common
 	make zentaoxx
 	unzip zentaoxx.*.zip
