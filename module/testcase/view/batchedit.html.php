@@ -86,6 +86,19 @@
 
               $modules[$caseProductID][$caseBranch] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case', 0, $caseBranch);
           }
+          $caseProductID = isset($caseProductID) ? $caseProductID : $productID;
+          $moduleList    = $modules[$caseProductID];
+          if(!isset($moduleList[$caseBranch]))
+          {
+              $caseModule = '/';
+              $modulePath = $this->tree->getParents($cases[$caseID]->module);
+              foreach($modulePath as $key => $module)
+              {
+                  $caseModule .= $module->name;
+                  if(isset($modulePath[$key + 1])) $caseModule .= '/';
+              }
+              $moduleList[$caseBranch] = $modules[$caseProductID][0] + array($cases[$caseID]->module => $caseModule);
+          }
           ?>
           <tr class='text-center'>
             <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
@@ -110,8 +123,7 @@
               <?php echo html::select("branches[$caseID]", $branchTagOption, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
-            <?php $caseProductID = isset($caseProductID) ? $caseProductID : $productID;?>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]",  $modules[$caseProductID][$caseBranch],   $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", $moduleList[$caseBranch], $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>

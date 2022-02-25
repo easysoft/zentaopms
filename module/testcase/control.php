@@ -875,6 +875,18 @@ class testcase extends control
                 }
             }
 
+            if(!isset($moduleOptionMenu[$case->module]))
+            {
+                $caseModule = '/';
+                $modulePath = $this->tree->getParents($case->module);
+                foreach($modulePath as $key => $module)
+                {
+                    $caseModule .= $module->name;
+                    if(isset($modulePath[$key + 1])) $caseModule .= '/';
+                }
+                $moduleOptionMenu[$case->module] = $caseModule;
+            }
+
             /* Get product and branches. */
             $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
