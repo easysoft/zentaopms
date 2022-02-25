@@ -254,6 +254,7 @@ $lang->upgrade->fromVersions['pro10_2']       = 'Pro10.2';
 $lang->upgrade->fromVersions['pro10_3']       = 'Pro10.3';
 $lang->upgrade->fromVersions['pro10_3_1']     = 'Pro10.3.1';
 $lang->upgrade->fromVersions['pro11_0_beta1'] = 'Pro11.0.beta1';
+$lang->upgrade->fromVersions['pro11_0']       = 'Pro11.0';
 
 /* Biz. */
 $lang->upgrade->fromVersions['biz1_0']       = 'Biz1.0';
