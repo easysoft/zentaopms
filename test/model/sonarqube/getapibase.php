@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/sonarqube.class.php';
+su('admin');
 
 /**
 
@@ -13,13 +15,8 @@ pid=1
 
 */
 
-$sonarqube = $tester->loadModel('sonarqube');
-
 $sonarqubeID = 2;
-list($apiRoot, $header) = $sonarqube->getApiBase($sonarqubeID);
-r($apiRoot) && p() && e('http://192.168.1.161:59001/api/%s'); //通过sonarqubeID,获取SonarQube url和header
 
-$sonarqubeID = 0;
-list($apiRoot, $header) = $sonarqube->getApiBase($sonarqubeID);
-if(empty($apiRoot)) $result = 'return empty';
-r($result) && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube url和header
+$sonarqube = new sonarqubeTest();
+r($sonarqube->getApiBaseTest($sonarqubeID)) && p() && e('http://192.168.1.161:59001/api/%s'); //通过sonarqubeID,获取SonarQube url和header
+r($sonarqube->getApiBaseTest(0))            && p() && e('return empty');                      //当sonarqubeID为0时,获取SonarQube url和header
