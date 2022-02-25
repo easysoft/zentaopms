@@ -42,6 +42,7 @@ $lang->user->address          = 'Address';
 $lang->user->zipcode          = 'ZipCode';
 $lang->user->join             = 'Joined';
 $lang->user->visits           = 'Visits';
+$lang->user->visions          = 'Version Type';
 $lang->user->ip               = 'Last IP';
 $lang->user->last             = 'Last Login';
 $lang->user->ranzhi           = 'Zdoo Account';
