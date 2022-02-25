@@ -1,6 +1,6 @@
 <?php
 $config->story->list->exportFields = '
-    id, module, title, spec, verify, keywords,
+    id, module, title, spec, keywords,
     pri, estimate, status,
     openedBy, openedDate, assignedTo, assignedDate, mailto,
     reviewedBy, reviewedDate,
