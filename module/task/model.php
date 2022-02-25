@@ -2119,6 +2119,26 @@ class taskModel extends model
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
+        $lanes      = array();
+        $cardsWhere = '';
+        foreach($tasks as $task)
+        {
+            if(empty($cardsWhere))
+            {
+                $cardsWhere = "cards like '%,{$task->id},%'";
+            }
+            else
+            {
+                $cardsWhere .= " or cards like '%,{$task->id},%'";
+            }
+        }
+        $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
+            ->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
+            ->where('t1.kanban')->eq($executionID)
+            ->andWhere("($cardsWhere)")
+            ->fetchAll('cards');
+
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -2132,6 +2152,15 @@ class taskModel extends model
                 {
                     $parent = $parents[$task->parent];
                     $task->parentName = $parent->name;
+                }
+            }
+
+            $task->lane = '';
+            if(!empty($lanes))
+            {
+                foreach($lanes as $lane)
+                {
+                    if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
                 }
             }
         }
@@ -3118,7 +3147,7 @@ class taskModel extends model
             }
 
             echo "<td class='" . $class . "'" . $title . ">";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('task', $task, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
             switch($id)
             {
             case 'id':

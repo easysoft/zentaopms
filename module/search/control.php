@@ -20,7 +20,7 @@ class search extends control
     public function __construct($module = '', $method = '')
     {
         parent::__construct($module, $method);
-        if(!isset($this->config->maxVersion))  unset($this->lang->search->modules['effort']);
+        if($this->config->edition != 'max')  unset($this->lang->search->modules['effort']);
         if($this->config->systemMode != 'new') unset($this->lang->search->modules['program'], $this->lang->search->modules['project']);
     }
 

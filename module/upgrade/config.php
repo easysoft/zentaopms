@@ -12,6 +12,7 @@ $config->maxVersion['max2_5']       = '16_1';
 $config->maxVersion['max2_6']       = '16_2';
 $config->maxVersion['max2_7']       = '16_3';
 $config->maxVersion['max2_8']       = '16_4';
+$config->maxVersion['max2_9']       = '16_5';
 
 $config->bizVersion = array();
 $config->bizVersion['biz1_0']       = '9_5_1';
@@ -63,6 +64,7 @@ $config->bizVersion['biz6_1']       = '16_1';
 $config->bizVersion['biz6_2']       = '16_2';
 $config->bizVersion['biz6_3']       = '16_3';
 $config->bizVersion['biz6_4']       = '16_4';
+$config->bizVersion['biz6_5']       = '16_5';
 
 $config->proVersion = array();
 $config->proVersion['pro1_0']        = '3_1';

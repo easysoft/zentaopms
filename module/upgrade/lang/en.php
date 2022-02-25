@@ -133,7 +133,7 @@ $lang->upgrade->upgradeTips        = "Historically deleted data cannot be upgrad
 $lang->upgrade->moveEXTFileFail    = 'The migration file failed, please execute the above command and refresh!';
 $lang->upgrade->deleteDirTip       = 'After the upgrade, the following folders will affect the use of system functions, please delete them.';
 $lang->upgrade->moveExtFileTip     = <<<EOT
-<p>The new version will be compatible with the extension mechanism of the historical customization/plug-in. You need to migrate the customization/plug-in related files to zentaopms/extension/custom, otherwise the customization/plug-in function will not be available.</p>
+<p>The new version will be compatible with the extension mechanism of the historical customization/plug-in. You need to migrate the customization/plug-in related files to extension/custom, otherwise the customization/plug-in function will not be available.</p>
 <p>Please confirm whether the system has been customized/plug-in. If no customization/plug-in has been done, you can uncheck the following files; Whether you have done customization/plug-in, you can also keep the file checked.</p>
 EOT;
 
