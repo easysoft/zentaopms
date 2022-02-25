@@ -161,6 +161,7 @@ pms:
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 ci:
+	git pull
 	make common
 	make zentaoxx
 	unzip zentaoxx.*.zip
