@@ -815,13 +815,12 @@ class execution extends control
         $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
-        if($param)
-        $this->session->set('executionStoryBrowseParam', $param);
 
-        if(isset($_GET['param'])) $isAllProduct = $param;
-        else $isAllProduct = $this->session->executionStoryBrowseParam;
+        if($param) $this->session->set('executionStoryBrowseParam', $param ? false : true);
+        $isAllProduct = true;
+        if($this->cookie->storyProductParam) $isAllProduct = $this->session->executionStoryBrowseParam;
+        if(isset($_GET['param'])) $isAllProduct = $param ? false : true; /* Assign. */
 
-        /* Assign. */
         $this->view->title             = $title;
         $this->view->position          = $position;
         $this->view->productID         = $productID;
