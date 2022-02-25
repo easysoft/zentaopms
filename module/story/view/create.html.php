@@ -169,7 +169,7 @@
             <th><?php echo $lang->story->title;?></th>
             <td colspan="4">
               <div class='table-row'>
-                <div class='table-col'>
+                <div class='table-col input-size'>
                   <div class="input-control has-icon-right">
                     <?php echo html::input('title', $storyTitle, "class='form-control' required");?>
                     <div class="colorpicker">
@@ -184,7 +184,7 @@
                 <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
                 <div class='table-col w-150px'>
                   <div class="input-group">
-                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->category;?></span>
+                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->type;?></span>
                     <?php echo html::select('category', $lang->story->categoryList, 'feature', "class='form-control chosen'");?>
                   </div>
                 </div>
