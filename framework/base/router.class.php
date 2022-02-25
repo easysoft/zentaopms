@@ -1657,7 +1657,7 @@ class baseRouter
         /* 开始拼装代码。Prepare the codes. */
         $modelLines  = "<?php\n";
         $modelLines .= "global \$app;\n";
-        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . 'model.php');\n";
+        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'model.php');\n";
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
