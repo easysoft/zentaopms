@@ -173,6 +173,7 @@ class control extends baseControl
         if(!empty($viewExtPath))
         {
             $commonExtViewFile = $viewExtPath['common'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
+            $xuanExtViewFile   = $viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $visionExtViewFile = $viewExtPath['vision'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $customExtViewFile = $viewExtPath['custom'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
             $siteExtViewFile   = empty($viewExtPath['site']) ? '' : $viewExtPath['site'] . $this->devicePrefix . $methodName . ".{$viewType}.php";
@@ -190,6 +191,10 @@ class control extends baseControl
             {
                 $viewFile = $visionExtViewFile;
             }
+            else if(file_exists($xuanExtViewFile))
+            {
+                $viewFile = $xuanExtViewFile;
+            }
             else if(file_exists($commonExtViewFile))
             {
                 $viewFile = $commonExtViewFile;
@@ -206,10 +211,11 @@ class control extends baseControl
             {
                 $commonExtHookFiles = glob($viewExtPath['vision'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             }
+            $xuanExtHookFiles   = glob($viewExtPath['xuan']   . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
             $customExtHookFiles = glob($viewExtPath['custom'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
 
             $siteExtHookFiles = empty($viewExtPath['site']) ? '' : glob($viewExtPath['site'] . $this->devicePrefix . $methodName . ".*.{$viewType}.hook.php");
-            $extHookFiles     = array_merge((array)$commonExtHookFiles, (array)$customExtHookFiles, (array)$siteExtHookFiles);
+            $extHookFiles     = array_merge((array)$commonExtHookFiles, (array)$xuanExtHookFiles, (array)$customExtHookFiles, (array)$siteExtHookFiles);
         }
 
         if(!empty($extHookFiles)) return array('viewFile' => $viewFile, 'hookFiles' => $extHookFiles);
