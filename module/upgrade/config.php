@@ -63,6 +63,7 @@ $config->bizVersion['biz6_0']       = '16_0';
 $config->bizVersion['biz6_1']       = '16_1';
 $config->bizVersion['biz6_2']       = '16_2';
 $config->bizVersion['biz6_3']       = '16_3';
+$config->bizVersion['biz6_4']       = '16_4';
 $config->bizVersion['biz6_5']       = '16_5';
 
 $config->proVersion = array();
