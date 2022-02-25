@@ -5820,6 +5820,7 @@ class upgradeModel extends model
                 if(strpos($line, "extension_loaded('ionCube Loader')") === false)
                 {
                     $maxFiles = file_get_contents('maxfiles.txt');
+                    $maxFiles = str_replace('/', DIRECTORY_SEPARATOR, $maxFiles);
                     if(strpos($maxFiles, $fileName) !== false) continue;
 
                     $files[$fileName] = $fileName;
