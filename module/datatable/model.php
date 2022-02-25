@@ -155,10 +155,6 @@ class datatableModel extends model
             $fixed = $col->fixed == 'no' ? 'true' : 'false';
             $width = is_numeric($col->width) ? "{$col->width}px" : $col->width;
             $title = isset($col->title) ? "title='$col->title'" : '';
-
-            if($id == 'severity') $col->name = $this->lang->bug->severity;
-            if($id == 'pri')      $col->name = $this->lang->pri;
-
             $title = (isset($col->name) and $col->name) ? "title='$col->name'" : $title;
             if($id == 'id' and (int)$width < 90) $width = '90px';
             $align = $id == 'actions' ? 'text-center' : '';
