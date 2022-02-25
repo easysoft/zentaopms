@@ -34,7 +34,7 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon)
 {
     $xuanConfig  = new stdclass();
     $token       = $this->im->userGetAuthToken($this->app->user->id, 'zentaoweb');
-    $clientUrl   = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/';
+    $clientUrl   = isset($this->config->webClientUrl) ? $this->config->webClientUrl : 'data/xuanxuan/web/index.html';
     $backendUrl  = $this->im->getServer('zentao');
 
     $xuanConfig->clientUrl = $clientUrl;
