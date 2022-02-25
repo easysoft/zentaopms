@@ -2470,7 +2470,7 @@ class baseRouter
             if($this->config->framework->extensionLevel >= 1)
             {
                 if(!empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
-                if(!empty($extLangPath['xuan'])) $commonExtLangFiles = helper::ls($extLangPath['xuan'] . $this->clientLang, '.php');
+                if(!empty($extLangPath['xuan'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
             }
