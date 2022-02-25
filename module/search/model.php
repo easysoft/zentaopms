@@ -179,10 +179,7 @@ class searchModel extends model
                 if($operator == '=' and $this->post->$fieldName == 'id' and preg_match('/^[0-9]+(,[0-9]+)+/', $value) and !preg_match('/[\x7f-\xff]+/', $value))
                 {
                     $values = explode(',', trim($this->dbh->quote($value), "'"));
-                    foreach($values as $value)
-                    {
-                        $value = "'" . $value . "'";
-                    }
+                    foreach($values as $value) $value = "'" . $value . "'";
 
                     $value     = implode(',', $values);
                     $operator  = 'IN';
