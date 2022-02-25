@@ -1,4 +1,6 @@
+<?php include dirname(dirname(__FILE__)) . '/lang/' . $this->app->getClientLang() . '/lite.php';?>
 <script>
+$('#aclprivate').closest('td').html(<?php echo json_encode(html::radio('acl', $lang->execution->aclList, $execution->acl, "onclick='setWhite(this.value);'", 'block'));?>)
 $('#begin').closest('tr').hide();
 $('#days').closest('tr').hide();
 $('#productsBox').closest('tr').hide();

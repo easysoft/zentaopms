@@ -2555,7 +2555,7 @@ class taskModel extends model
 
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(1)->fetch();
         $consumed     = $task->consumed - $estimate->consumed;
-        $left         = $lastEstimate->left ? $lastEstimate->left : $estimate->left;
+        $left         = isset($lastEstimate->left) ? $lastEstimate->left : $estimate->left;
 
         $data = new stdclass();
         $data->consumed = $consumed;
@@ -2580,7 +2580,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
-        if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
+        if($task->story)  $this->loadModel('story')->setStage($task->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;

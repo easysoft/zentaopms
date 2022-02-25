@@ -750,7 +750,7 @@ class blockModel extends model
         $params->bugCount['default'] = 20;
         $params->bugCount['control'] = 'input';
 
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $params->riskCount['name']    = $this->lang->block->riskCount;
             $params->riskCount['default'] = 20;

@@ -36,7 +36,7 @@ class datatableModel extends model
             $this->config->$module->datatable->fieldList[$field]['title'] = $title;
         }
 
-        if(isset($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $fields = $this->loadModel('workflowfield')->getList($module);
             foreach($fields as $field)

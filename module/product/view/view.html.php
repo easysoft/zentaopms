@@ -52,12 +52,12 @@
                   <tr>
                     <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->qa;?></th>
                     <td><strong><?php echo zget($users, $product->QD);?></strong></td>
-                    <?php if(!isset($config->bizVersion)):?>
+                    <?php if($this->config->edition == 'open'):?>
                     <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->reviewer;?></th>
                     <td><strong><?php foreach($reviewers as $reviewer) echo zget($users, $reviewer) . "&nbsp;";?></strong></td>
                     <?php endif;?>
                   </tr>
-                  <?php if(isset($config->bizVersion)):?>
+                  <?php if($this->config->edition != 'open'):?>
                   <tr>
                     <th><i class="icon icon-person icon-sm"></i> <?php echo $lang->product->reviewer;?></th>
                     <td><strong><?php foreach($reviewers as $reviewer) echo zget($users, $reviewer) . "&nbsp;";?></strong></td>

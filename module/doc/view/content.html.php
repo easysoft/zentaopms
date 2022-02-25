@@ -41,7 +41,7 @@ $sessionString .= session_name() . '=' . session_id();
             <a data-url="<?php echo $this->createLink('doc', 'collect', "objectID=$doc->id&objectType=doc");?>" title="<?php echo $lang->doc->collect;?>" class='ajaxCollect btn btn-link'><i class='icon <?php echo $star;?>'></i></a>
             <?php endif;?>
 
-            <?php if(isset($this->config->maxVersion) and $this->app->tab == 'project'):?>
+            <?php if($this->config->edition == 'max' and $this->app->tab == 'project'):?>
             <?php
             $canImportToPracticeLib  = common::hasPriv('doc', 'importToPracticeLib');
             $canImportToComponentLib = common::hasPriv('doc', 'importToComponentLib');
@@ -199,7 +199,7 @@ $sessionString .= session_name() . '=' . session_id();
   </div>
 </div>
 
-<?php if(isset($this->config->maxVersion)):?>
+<?php if($this->config->edition == 'max'):?>
 <div class="modal fade" id="importToPracticeLib">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">

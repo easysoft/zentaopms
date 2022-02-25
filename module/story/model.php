@@ -457,9 +457,16 @@ class storyModel extends model
 
         $extendFields = $this->getFlowExtendFields();
         $data         = array();
+        $reviewers    = '';
         foreach($stories->title as $i => $title)
         {
             if(empty($title)) continue;
+
+            if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
+            $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
+            $_POST['reviewer'][$i] = $reviewers;
+            $stories->reviewer[$i] = $reviewers;
+
             $story = new stdclass();
             $story->type       = $type;
             $story->branch     = isset($stories->branch[$i]) ? $stories->branch[$i] : 0;
@@ -508,7 +515,6 @@ class storyModel extends model
         }
 
         $planStories = array();
-        $reviewers   = '';
 
         foreach($data as $i => $story)
         {
@@ -568,9 +574,7 @@ class storyModel extends model
 
             /* Save the story reviewer to storyreview table. */
             $assignedTo = '';
-            if(empty($_POST['reviewer'][$i]) and empty($_POST['reviewer'][$i])) $_POST['reviewer'][$i] = array();
-            $reviewers = (isset($_POST['reviewDitto'][$i])) ? $reviewers : $_POST['reviewer'][$i];
-            foreach($reviewers as $reviewer)
+            foreach($_POST['reviewer'][$i] as $reviewer)
             {
                 if(empty($reviewer)) continue;
 

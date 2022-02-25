@@ -363,7 +363,7 @@ class job extends control
         }
 
         $productName = $this->loadModel('product')->getByID($repo->product)->name;
-        ehco json_encode(array($productName => $repo->product));
+        echo json_encode(array($productName => $repo->product));
     }
 
     /**
