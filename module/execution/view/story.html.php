@@ -86,7 +86,7 @@
 
             if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
             {
-                if(!$isAllProduct or count($products) == 1) echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                if(!($isAllProduct and count($products) > 1)) echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
                 echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app='execution'") . '</li>';
                 echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate, '', "data-app='execution'") . '</li>';

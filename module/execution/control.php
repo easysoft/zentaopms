@@ -815,9 +815,7 @@ class execution extends control
         $showModule  = !empty($this->config->datatable->executionStory->showModule) ? $this->config->datatable->executionStory->showModule : '';
         $modulePairs = $showModule ? $this->tree->getModulePairs($type == 'byproduct' ? $param : 0, 'story', $showModule) : array();
 
-        $isAllProduct = true;
-        if($this->cookie->storyProductParam or $this->cookie->storyModuleParam or $this->cookie->storyBranchParam) $isAllProduct = false;
-
+        /* Assign. */
         $this->view->title             = $title;
         $this->view->position          = $position;
         $this->view->productID         = $productID;
@@ -829,7 +827,7 @@ class execution extends control
         $this->view->orderBy           = $orderBy;
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
-        $this->view->isAllProduct      = $isAllProduct;
+        $this->view->isAllProduct      = ($this->cookie->storyProductParam or $this->cookie->storyModuleParam or $this->cookie->storyBranchParam) ? false : true;
         $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, 0, array('treeModel', 'createStoryLink'));
         $this->view->modulePairs       = $modulePairs;
         $this->view->tabID             = 'story';
