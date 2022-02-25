@@ -54,7 +54,6 @@ common:
 	mkdir zentaopms/www/data/notify/
 zentaoxx:
 	#xuanxuan
-	cp -rf ~/packageTest/web/ xuanxuan/www/data/xuanxuan/
 	mkdir -p zentaoxx/config/ext
 	mkdir -p zentaoxx/lib
 	mkdir -p zentaoxx/extension/xuan
