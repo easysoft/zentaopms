@@ -818,7 +818,7 @@ class treeModel extends model
             $projectProductLink   = helper::createLink('projectstory', 'story', "projectID=$rootID&productID=$id&branch=all");
             $executionProductLink = helper::createLink('execution', 'story', "executionID=$rootID&ordery=&status=byProduct&praram=$id");
             $link = $this->app->rawModule == 'projectstory' ? $projectProductLink : $executionProductLink;
-            if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id'");
+            if($productNum > 1) $menu .= "<li>" . html::a($link, $product, '_self', "id='product$id' title=$product");
 
             /* tree menu. */
             $tree = '';

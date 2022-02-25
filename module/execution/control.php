@@ -827,6 +827,7 @@ class execution extends control
         $this->view->orderBy           = $orderBy;
         $this->view->type              = $this->session->executionStoryBrowseType;
         $this->view->param             = $param;
+        $this->view->isAllProduct      = ($this->cookie->storyProductParam or $this->cookie->storyModuleParam or $this->cookie->storyBranchParam) ? false : true;
         $this->view->moduleTree        = $this->loadModel('tree')->getProjectStoryTreeMenu($executionID, 0, array('treeModel', 'createStoryLink'));
         $this->view->modulePairs       = $modulePairs;
         $this->view->tabID             = 'story';
