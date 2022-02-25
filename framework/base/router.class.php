@@ -697,10 +697,17 @@ class baseRouter
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
 
-        $vision  = '';
-        if($this->config->installed) $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
-        if($vision) $vision = $vision->value;
-        if(!empty($_SESSION['user']->visions) and empty($vision)) list($vision) = explode(',', $_SESSION['user']->visions);
+        $vision = '';
+        if($this->config->installed)
+        {
+            $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
+            if($vision) $vision = $vision->value;
+            if(empty($vision))
+            {
+                $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = '$account' AND deleted = '0' LIMIT 1")->fetch();
+                if(!empty($user->visions)) list($vision) = explode(',', $user->visions);
+            }
+        }
 
         list($defaultVision) = explode(',', trim($this->config->visions, ','));
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
@@ -2031,14 +2038,8 @@ class baseRouter
         } catch (EndResponseException $endResponseException) {
             echo $endResponseException->getContent();
         }
-        if (isset($module))
-        {
-            return $module;
-        }
-        else
-        {
-            return false;
-        }
+
+        return isset($module) ? $module : false;
     }
 
     /**

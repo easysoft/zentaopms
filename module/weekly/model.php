@@ -462,7 +462,7 @@ class weeklyModel extends model
         $executions      = $this->loadModel('execution')->getList($project, 'all', 'all', 0, 0, 0);
         $executionIdList = array_keys($executions);
 
-        if(isset($this->config->proVersion))
+        if($this->config->edition == 'max')
         {
             $AC = $this->dao->select('sum(consumed) as consumed')
                 ->from(TABLE_EFFORT)

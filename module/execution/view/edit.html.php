@@ -89,7 +89,7 @@
         </tr>
         <tr>
           <th><?php echo $lang->execution->status;?></th>
-          <td><?php echo html::select('status', $lang->execution->statusList, $execution->status, "class='form-control'");?></td>
+          <td><?php echo html::select('status', $lang->execution->statusList, $execution->status, "class='form-control chosen'");?></td>
         </tr>
         <tr>
           <th rowspan='2'><?php echo $lang->execution->owner;?></th>

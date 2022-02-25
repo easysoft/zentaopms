@@ -26,3 +26,14 @@ $("[name^='files']").click(function()
         $('#checkAll').prop('checked', false);
     }
 })
+
+/**
+ * Refresh page.
+ *
+ * @access public
+ * @return void
+ */
+function refreshPage()
+{
+    location.reload(true);
+}

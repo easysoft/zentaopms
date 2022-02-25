@@ -1244,8 +1244,8 @@ class testcase extends control
      */
     public function batchCaseTypeChange($result)
     {
-        $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : return print(js::locate($this->session->caseList, 'parent'));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
+        $caseIdList = array_unique($this->post->caseIDList);
         $this->testcase->batchCaseTypeChange($caseIdList, $result);
 
         if(dao::isError()) return print(js::error(dao::getError()));
@@ -1593,7 +1593,7 @@ class testcase extends control
                     }
                 }
             }
-            if(isset($this->config->bizVersion)) list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
+            if($this->config->edition != 'open') list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $cases);
@@ -1644,9 +1644,9 @@ class testcase extends control
 
             $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
             $branches  = $this->loadModel('branch')->getPairs($productID, '' , $projectID);
-            $modules   = array();
-
             $this->loadModel('tree');
+            $modules = $product->type == 'normal' ? $this->tree->getOptionMenu($productID, 'case', 0, 0) : array();
+
             foreach($branches as $branchID => $branchName)
             {
                 $branches[$branchID] = $branchName . "(#$branchID)";

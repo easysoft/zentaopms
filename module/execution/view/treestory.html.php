@@ -26,12 +26,14 @@
     <?php echo !empty($story->spec) ? $story->spec : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
+<?php if($this->config->vision != 'lite'):?>
 <div class="detail">
   <div class="detail-title"><?php echo $lang->story->legendVerify;?></div>
   <div class="detail-content article-content">
     <?php echo !empty($story->verify) ? $story->verify : "<div class='text-center text-muted'>" . $lang->noData . '</div>';?>
   </div>
 </div>
+<?php endif;?>
 <?php echo $this->fetch('file', 'printFiles', array('files' => $story->files, 'fieldset' => 'true', 'object' => $story));?>
 
 <details class="detail" open>

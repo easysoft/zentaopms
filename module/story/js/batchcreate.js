@@ -86,3 +86,32 @@ function copyTitle(num)
     var title = $('#title\\[' + num + '\\]').val();
     $('#spec\\[' + num + '\\]').val(title);
 }
+
+$(document).on('change', "[name*='reviewer']", function()
+{
+    toggleCheck($(this));
+})
+
+/**
+ * Toggle checkbox.
+ *
+ * @param  obj $obj
+ * @access public
+ * @return void
+ */
+function toggleCheck(obj)
+{
+    var $this  = $(obj);
+    var data   = $this.val();
+    var $ditto = $this.closest('div').find("input[name*='reviewDitto']");
+    if(data == '')
+    {
+        $ditto.attr('checked', true);
+        $ditto.closest('.input-group-addon').show();
+    }
+    else
+    {
+        $ditto.removeAttr('checked');
+        $ditto.closest('.input-group-addon').hide();
+    }
+}

@@ -11,20 +11,42 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <form method='post' target='hiddenwin'>
+  <form method='post' action="<?php echo $this->createLink('upgrade', 'moveEXTFiles', "fromVersion=$fromVersion");?>">
     <div class='modal-dialog'>
       <div class='modal-header'>
-        <strong><?php echo $lang->upgrade->moveEXTFiles;?></strong>
+        <strong><?php echo $lang->upgrade->compatibleEXT;?></strong>
+        <?php if($result == 'success'):?>
+        <div class='alert alert-info no-margin'><?php echo $lang->upgrade->moveExtFileTip?></div>
+        <?php elseif($result == 'fail' and is_array($command)):?>
+        <div class='alert alert-info no-margin'><?php echo $lang->upgrade->deleteDirTip?></div>
+        <?php endif;?>
       </div>
       <div class='modal-body'>
         <div>
+          <?php if($result == 'success'):?>
           <div class="checkbox-primary" title="<?php echo $lang->selectAll?>">
             <input type='checkbox' id='checkAll' checked><label for='checkAll'><strong><?php echo $lang->upgrade->fileName;?></strong></label>
           </div>
           <?php echo html::checkbox('files', $files, '', 'checked');?>
+          <?php else:?>
+          <?php
+          if(is_array($command))
+          {
+              echo html::textarea('errors', join("\n", $command), "rows='19' class='form-control' readonly");
+          }
+          else
+          {
+              echo "<div><code>$command</code></div>";
+          }
+          ?>
+          <?php endif;?>
         </div>
       </div>
-      <div class='modal-footer text-center'><?php echo html::submitButton();?></div>
+      <div class='modal-footer text-center'>
+        <?php if($result == 'success') echo html::submitButton($lang->upgrade->next);?>
+        <?php if($result == 'fail') echo $errorMessage . ' ' . html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage()'");?></div>
+        <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
+      </div>
     </div>
   </form>
 </div>

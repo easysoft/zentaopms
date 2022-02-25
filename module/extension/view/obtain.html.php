@@ -30,12 +30,12 @@
           ?>
       </div>
     </div>
-    <div class='panel panel-sm'>
-      <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>
-      <div class='panel-body'>
-        <?php $moduleTree ? print($moduleTree) : print($lang->extension->errorGetModules);?>
+    <?php if($moduleTree):?>
+      <div class='panel panel-sm'>
+        <div class='panel-heading'><?php echo $lang->extension->byCategory;?></div>
+        <div class='panel-body'><?php print($moduleTree);?></div>
       </div>
-    </div>
+    <?php endif;?>
   </div>
   <div class='main-col main-content'>
     <div class='cell'>
@@ -49,8 +49,8 @@
         <div class='detail'>
           <div class='detail-title'>
             <small class='pull-right text-important'>
-              <?php 
-              if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion) 
+              <?php
+              if($latestRelease and $latestRelease->releaseVersion != $currentRelease->releaseVersion)
               {
                   printf($lang->extension->latest, $latestRelease->viewLink, $latestRelease->releaseVersion, $latestRelease->zentaoCompatible);
               }?>
@@ -67,7 +67,7 @@
               echo "{$lang->extension->author}:     {$extension->author} ";
               echo "{$lang->extension->downloads}:  {$extension->downloads} ";
               echo "{$lang->extension->compatible}: {$lang->extension->compatibleList[$currentRelease->compatible]} ";
-    
+
               echo " {$lang->extension->depends}: ";
               if(!empty($currentRelease->depends))
               {

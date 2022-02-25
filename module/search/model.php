@@ -24,7 +24,7 @@ class searchModel extends model
     public function setSearchParams($searchConfig)
     {
         $module = $searchConfig['module'];
-        if(isset($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $flowModule = $module;
             if($module == 'projectStory') $flowModule = 'story';
@@ -603,7 +603,7 @@ class searchModel extends model
             }
             elseif($module == 'issue')
             {
-                $issueField = isset($this->config->maxVersion)? 'id,project,owner,lib' : 'id,project,owner';
+                $issueField = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
                 $issue      = $this->dao->select($issueField)->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($issue->lib))
                 {
@@ -629,7 +629,7 @@ class searchModel extends model
             }
             elseif($module == 'story')
             {
-                $storyField = isset($this->config->maxVersion)? 'id,type,lib' : 'id,type';
+                $storyField = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
                 $story      = $this->dao->select($storyField)->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($story->lib))
                 {
@@ -643,7 +643,7 @@ class searchModel extends model
 
                 $record->extraType = isset($story->type) ? $story->type : '';
             }
-            elseif(($module == 'risk' or $module == 'opportunity') and isset($this->config->maxVersion))
+            elseif(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max')
             {
                 $table  = $this->config->objectTables[$module];
                 $object = $this->dao->select('id,lib')->from($table)->where('id')->eq($record->objectID)->fetch();
@@ -655,7 +655,7 @@ class searchModel extends model
 
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
             }
-            elseif($module == 'doc' and isset($this->config->maxVersion))
+            elseif($module == 'doc' and $this->config->edition == 'max')
             {
                 $doc = $this->dao->select('id,assetLib,assetLibType')->from(TABLE_DOC)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($doc->assetLib))
@@ -688,7 +688,7 @@ class searchModel extends model
         $fields = $this->config->search->fields->{$objectType};
         if(empty($fields)) return true;
 
-        if($objectType == 'doc' && isset($this->config->bizVersion)) $object = $this->appendFiles($object);
+        if($objectType == 'doc' && $this->config->edition != 'open') $object = $this->appendFiles($object);
 
         $index = new stdclass();
         $index->objectID   = $object->{$fields->id};

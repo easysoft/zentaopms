@@ -78,6 +78,7 @@ $lang->productplan->title      = '名称';
 $lang->productplan->desc       = '描述';
 $lang->productplan->begin      = '开始日期';
 $lang->productplan->end        = '结束日期';
+$lang->productplan->status     = '计划状态';
 $lang->productplan->last       = "上次计划";
 $lang->productplan->future     = '待定';
 $lang->productplan->stories    = "{$lang->SRCommon}数";

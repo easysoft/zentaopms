@@ -1,5 +1,6 @@
 <?php
-$lang->tree->allMenu    = '所有目录';
+$lang->tree->all        = '所有目录';
+$lang->tree->allMenu    = $lang->tree->all;
 $lang->tree->manageMenu = '维护目录';
 
 global $app;

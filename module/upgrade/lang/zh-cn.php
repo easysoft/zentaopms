@@ -113,9 +113,9 @@ $lang->upgrade->end            = '结束日期';
 $lang->upgrade->selectProject  = '目标项目';
 $lang->upgrade->programName    = '项目集名称';
 $lang->upgrade->projectName    = '项目名称';
-$lang->upgrade->moveEXTFiles   = '迁移插件文件';
+$lang->upgrade->compatibleEXT  = '扩展机制兼容';
 $lang->upgrade->fileName       = '文件名称';
-$lang->upgrade->viewChargeFile = '查看收费版本文件';
+$lang->upgrade->next           = '下一步';
 
 $lang->upgrade->newProgram         = '新建';
 $lang->upgrade->editedName         = '调整后名称';
@@ -130,6 +130,12 @@ $lang->upgrade->needBuild4Add      = '本次升级需要创建索引。请到 [�
 $lang->upgrade->errorEngineInnodb  = '您当前的数据库不支持使用InnoDB数据表引擎，请修改为MyISAM后重试。';
 $lang->upgrade->duplicateProject   = "同一个项目集内项目名称不能重复，请调整重名的项目名称";
 $lang->upgrade->upgradeTips        = "历史删除数据不参与升级，升级后将不支持还原，请知悉";
+$lang->upgrade->moveEXTFileFail    = '迁移文件失败， 请执行上面命令后刷新！';
+$lang->upgrade->deleteDirTip       = '升级后，如下文件夹会影响系统功能的使用，请删除。';
+$lang->upgrade->moveExtFileTip     = <<<EOT
+<p>新版本将对历史的定制/插件进行扩展机制兼容处理，需要将定制/插件相关的文件迁移到zentaopms/extension/custom下，否则定制/插件功能将无法使用。</p>
+<p>请您确认系统是否有做过定制/插件，如没有做过定制/插件，可取消勾选如下文件；如果不清楚是否做过定制/插件，也可保持文件勾选。</p>
+EOT;
 
 $lang->upgrade->projectType['project']   = "把历史的{$lang->projectCommon}作为项目升级";
 $lang->upgrade->projectType['execution'] = "把历史的{$lang->projectCommon}作为执行升级";

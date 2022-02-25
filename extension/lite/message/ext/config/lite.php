@@ -6,7 +6,6 @@ $config->message->objectTypes['task']    = array('opened', 'edited', 'assigned',
 $config->message->objectTypes['todo']    = array('opened', 'edited');
 $config->message->objectTypes['doc']     = array('created', 'edited');
 
-$config->message->available = array();
 $config->message->available['mail']['story'] = $config->message->objectTypes['story'];
 $config->message->available['mail']['task']  = $config->message->objectTypes['task'];
 $config->message->available['mail']['doc']   = $config->message->objectTypes['doc'];

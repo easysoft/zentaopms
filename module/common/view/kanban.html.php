@@ -1,6 +1,7 @@
 <?php if($extView = $this->getExtViewFile(__FILE__)){include $extView; return helper::cd();}?>
 <?php css::import($jsRoot . 'zui/kanban/min.css'); ?>
 <?php js::import($jsRoot . 'zui/kanban/min.js'); ?>
+<?php js::set('delayText', $lang->delayed); ?>
 <style>
 #kanbanList .panel-heading {padding: 10px;}
 #kanbanList .panel-body {padding: 0 10px 10px;}
@@ -19,7 +20,7 @@
 #kanbanList .kanban-header {position: relative;}
 #kanbanList .kanban-item.link-block {padding: 0;}
 #kanbanList .kanban-item.link-block a {padding: 10px; display: block;}
-#kanbanList .kanban-card {display: grid;}
+#kanbanList .kanban-card {display: flex;}
 #kanbanList .kanban-card > .title {white-space: nowrap; overflow: hidden; text-overflow: ellipsis;}
 #kanbanList .kanban-card.has-progress {padding-right: 40px; position: relative;}
 #kanbanList .kanban-card.has-progress > .progress-pie,
@@ -179,6 +180,8 @@ function renderProjectItem(item, $item)
     }
     $title.text(item.name).attr('title', item.name);
 
+    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
+
     if(item.status === 'doing')
     {
         var $progress = $item.find('.ring');
@@ -223,6 +226,8 @@ function renderExecutionItem(item, $item)
         $title.appendTo($item);
     }
     $title.text(item.name).attr('title', item.name);
+
+    if(item.delay) $title.after("&nbsp;<div><span class='label label-danger label-badge'>" + delayText + "</span></div>");
 
     if(window.statusColorList && window.statusColorList[item.status])
     {

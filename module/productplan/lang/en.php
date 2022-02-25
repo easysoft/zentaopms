@@ -78,6 +78,7 @@ $lang->productplan->title      = 'Title';
 $lang->productplan->desc       = 'Description';
 $lang->productplan->begin      = 'Begin';
 $lang->productplan->end        = 'End';
+$lang->productplan->status     = 'Status';
 $lang->productplan->last       = 'Last Plan';
 $lang->productplan->future     = 'TBD';
 $lang->productplan->stories    = 'Story';

@@ -95,7 +95,12 @@
             <td class='text-left' style='overflow:visible'><?php echo html::select('category[$id]', $lang->story->categoryList, 'feature', "class='form-control chosen'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'pri', ' hidden')?>' style='overflow:visible'><?php echo html::select('pri[$id]', $priList, $pri, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'estimate', 'hidden')?>'><?php echo html::input('estimate[$id]', $estimate, "class='form-control'");?></td>
-            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'><?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");?></td>
+            <td class='<?php echo zget($visibleFields, 'review', 'hidden')?>'>
+              <div class='input-group'>
+                <?php echo html::select('reviewer[$id][]', $reviewers, '', "class='form-control chosen' multiple");?>
+                <span class='input-group-addon reviewerDitto'><input type='checkbox' name='reviewDitto[$id]' value='ditto' checked='checked' id='dittocheck$id'/> <?php echo $lang->story->ditto;?></span>
+              </div>
+            </td>
             <td class='<?php echo zget($visibleFields, 'keywords', 'hidden')?>'><?php echo html::input('keywords[$id]', '', "class='form-control'");?></td>
             <?php foreach($extendFields as $extendField) echo "<td" . (($extendField->control == 'select' or $extendField->control == 'multi-select') ? " style='overflow:visible'" : '') . ">" . $this->loadModel('flow')->getFieldControl($extendField, '', $extendField->field . '[$id]') . "</td>";?>
           </tr>
@@ -151,7 +156,10 @@ $(function()
         if($(this).val() == 0) $(select).attr('disabled', 'disabled');
         $(select).trigger("chosen:updated");
     })
+
+    $('.reviewerDitto:first').remove();
 });
+
 </script>
 <?php if(isset($execution)) js::set('execution', $execution);?>
 <?php js::set('storyType', $type);?>

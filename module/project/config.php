@@ -33,7 +33,7 @@ $config->project->sortFields->budget = 'budget';
 
 global $lang;
 $config->project->datatable = new stdclass();
-$config->project->datatable->defaultField = array('id', 'name', 'code', 'PM', 'status', 'begin', 'end', 'budget', 'teamCount','estimate','consume', 'progress', 'actions');
+$config->project->datatable->defaultField = array('id', 'name', 'PM', 'status', 'begin', 'end', 'budget', 'progress', 'actions');
 
 $config->project->datatable->fieldList['id']['title']    = 'ID';
 $config->project->datatable->fieldList['id']['fixed']    = 'left';
@@ -141,4 +141,4 @@ $config->project->excludedPriv['doc']        = array('browse', 'view', 'catalog'
 $config->project->excludedPriv['repo']       = array('edit', 'delete', 'maintain', 'setRules');
 $config->project->excludedPriv['testreport'] = array('browse');
 $config->project->excludedPriv['auditplan']  = array('delete');
-if(!isset($config->maxVersion)) $config->project->excludedPriv['stakeholder'] = array('issue', 'viewIssue', 'userIssue');
+if($config->edition != 'max') $config->project->excludedPriv['stakeholder'] = array('issue', 'viewIssue', 'userIssue');
