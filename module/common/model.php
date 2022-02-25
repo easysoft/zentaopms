@@ -1780,7 +1780,7 @@ EOD;
          * 当主状态改变并且未设置子状态的值时把子状态的值设置为默认值并记录日志。
          * Change sub status when status is changed and sub status is not set, and record the changes.
          */
-        if($this->config->edition != 'open')
+        if($config->edition != 'open')
         {
             $oldID        = zget($old, 'id', '');
             $oldStatus    = zget($old, 'status', '');
