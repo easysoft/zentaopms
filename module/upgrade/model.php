@@ -562,7 +562,7 @@ class upgradeModel extends model
                 $this->addFileFields();
                 $this->addReportActions();
                 break;
-            case 'biz6_2':
+            case 'biz6_4':
                 $this->importLiteModules();
                 break;
         }
