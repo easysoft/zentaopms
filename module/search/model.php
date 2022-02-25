@@ -176,9 +176,9 @@ class searchModel extends model
                 if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
                 $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
 
-                if($operator == '=')
+                if($operator == '=' and $this->post->$fieldName == 'id' and preg_match('/^[0-9]+(,[0-9]+)+/', $value))
                 {
-                    $values    = explode(',', trim($this->dbh->quote($value), "'"));
+                    $values = explode(',', trim($this->dbh->quote($value), "'"));
                     foreach($values as $value)
                     {
                         $value = "'" . $value . "'";

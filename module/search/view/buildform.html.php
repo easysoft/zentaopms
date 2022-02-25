@@ -120,7 +120,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder(this, $fieldNO)'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
@@ -181,7 +181,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder(this, $fieldNO)'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
@@ -434,7 +434,7 @@ $(function()
         $searchForm.find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
         $searchForm.find('#valueBox' + fieldNO).html($searchForm.find('#box' + fieldName).children().clone());
         $searchForm.find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
-        if(fieldName == 'id') setPlaceHolder(obj, fieldNO);
+        if(fieldName == 'id') setPlaceHolder(fieldNO);
 
         if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
         {
@@ -475,12 +475,11 @@ $(function()
     /**
      * When the value of the operator select changed, set the placeholder for the valueBox.
      *
-     * @param  string $obj
      * @param  int    $fieldNO
      * @access public
      * @return void
      */
-    var setPlaceHolder = window.setPlaceHolder = function(obj, fieldNO)
+    var setPlaceHolder = window.setPlaceHolder = function(fieldNO)
     {
         var operator  = $('#operator' + fieldNO).val();
         var fieldName = $('#field' + fieldNO).val();
