@@ -38,10 +38,26 @@ class upgradeModel extends model
     {
         set_time_limit(0);
 
-        $openVersion = $fromVersion;
-        if($fromVersion[0] == 'p') $openVersion = $this->config->proVersion[$fromVersion];
-        if($fromVersion[0] == 'b') $openVersion = $this->config->bizVersion[$fromVersion];
-        if($fromVersion[0] == 'm') $openVersion = $this->config->maxVersion[$fromVersion];
+        $openVersion  = $fromVersion;
+        $proInstalled = $bizInstalled = $maxInstalled = false;
+        if($fromVersion[0] == 'p') 
+        {
+            $openVersion  = $this->config->proVersion[$fromVersion];
+            $proInstalled = true;
+        }
+        elseif($fromVersion[0] == 'b') 
+        {
+            $openVersion  = $this->config->bizVersion[$fromVersion];
+            $bizInstalled = true;
+            $proInstalled = true;
+        }
+        elseif($fromVersion[0] == 'm')
+        {
+            $openVersion  = $this->config->maxVersion[$fromVersion];
+            $maxInstalled = true;
+            $bizInstalled = true;
+            $proInstalled = true;
+        }
 
         $executeXuanxuan = false;
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
@@ -56,35 +72,44 @@ class upgradeModel extends model
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
             $this->executeOpen($openVersion, $fromVersion, $executeXuanxuan);
 
-            $proVersions = array();
-            foreach($this->config->proVersion as $pro => $open)
+            if($proInstalled)
             {
-                if($open == $openVersion) $proVersions[] = $pro;
+                $proVersions = array();
+                foreach($this->config->proVersion as $pro => $open)
+                {
+                    if($open == $openVersion) $proVersions[] = $pro;
+                }
+
+                foreach($proVersions as $proVersion)
+                {
+                    $this->saveLogs("Execute $proVersion");
+                    $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
+                    if($this->config->edition != 'open') $this->executePro($proVersion);
+                }
             }
 
-            foreach($proVersions as $proVersion)
+            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $bizInstalled)
             {
-                $this->saveLogs("Execute $proVersion");
-                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
-                if($this->config->edition != 'open') $this->executePro($proVersion);
+                $bizVersions = array();
+                foreach($this->config->bizVersion as $biz => $open)
+                {
+                    if($open == $openVersion) $bizVersions[] = $biz;
+                }
+
+                foreach($bizVersions as $bizVersion)
+                {
+                    $this->saveLogs("Execute $bizVersion");
+                    $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
+                    if($this->config->edition != 'open') $this->executeBiz($bizVersion, $executeXuanxuan);
+                }
             }
 
-            $bizVersions = array();
-            foreach($this->config->bizVersion as $biz => $open)
+            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $maxInstalled)
             {
-                if($open == $openVersion) $bizVersions[] = $biz;
+                $maxVersion = array_search($openVersion, $this->config->maxVersion);
+                $this->saveLogs("Execute $maxVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
             }
-
-            foreach($bizVersions as $bizVersion)
-            {
-                $this->saveLogs("Execute $bizVersion");
-                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
-                if($this->config->edition != 'open') $this->executeBiz($bizVersion, $executeXuanxuan);
-            }
-
-            $maxVersion = array_search($openVersion, $this->config->maxVersion);
-            $this->saveLogs("Execute $maxVersion");
-            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
         }
 
         /* Means open source upgrade to biz or max. */
