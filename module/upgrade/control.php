@@ -899,7 +899,7 @@ class upgrade extends control
                 $command      = $response['command'];
             }
 
-            if($result == 'success') $this->locate($this->inlink('afterExec', "fromVersion=$fromVersion&processed=no&skipConfirm=yes"));
+            if($result == 'success') $this->locate($this->inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipConfirm=yes"));
         }
 
         $this->view->title        = $this->lang->upgrade->common;
