@@ -1,5 +1,4 @@
 <?php
-
 /**
  * The model file of api module of ZenTaoCMS.
  *

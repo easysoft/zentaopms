@@ -315,6 +315,7 @@ class router extends baseRouter
         if($config->framework->extensionLevel >= 1)
         {
             if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+            if(!empty($extConfigPath['xuan']))   $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['xuan'], '.php'));
             if(!empty($extConfigPath['vision'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['vision'], '.php'));
             if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
         }
