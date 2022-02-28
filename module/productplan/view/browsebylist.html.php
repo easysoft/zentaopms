@@ -1,6 +1,5 @@
 <?php
-/**
- * The browsebylist view file of plan module of ZenTaoPMS.
+/** * The browsebylist view file of plan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -152,7 +151,7 @@
               $attr = "target='hiddenwin'";
               common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', '', false, $attr);
               common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', '', false, $attr);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', '', false, $attr);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', 'iframe', true);
           }
 
           $attr  = $plan->expired ? "disabled='disabled'" : '';
@@ -224,8 +223,10 @@
             <?php
             foreach($lang->productplan->statusList as $key => $status)
             {
-                $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key");
-                echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
+
+                $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
+                echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
             }
             ?>
           </div>

@@ -154,7 +154,7 @@ function createCardMenu(options)
     if(privs.includes('edit')) items.push({label: productplanLang.edit, icon: 'edit', url: createLink('productplan', 'edit', "planID=" + card.id)});
     if(privs.includes('start')) items.push({label: productplanLang.start, icon: 'start', url: createLink('productplan', 'start', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('finish')) items.push({label: productplanLang.finish, icon: 'checked', url: createLink('productplan', 'finish', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
-    if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
+    if(privs.includes('close')) items.push({label: productplanLang.close, icon: 'off', url: createLink('productplan', 'close', "planID=" + card.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('activate')) items.push({label: productplanLang.activate, icon: 'magic', url: createLink('productplan', 'activate', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
     if(privs.includes('delete')) items.push({label: productplanLang.delete, icon: 'trash', url: createLink('productplan', 'delete', "planID=" + card.id), attrs: {'target': 'hiddenwin'}});
 

@@ -32,8 +32,10 @@ $lang->productplan->plan       = 'Plan';
 $lang->productplan->allAB      = 'All';
 $lang->productplan->to         = 'To';
 $lang->productplan->more       = 'More';
+$lang->productplan->comment    = 'Comment';
 
 $lang->productplan->batchUnlink       = "Batch Unlink";
+$lang->productplan->batchClose        = "Batch Close";
 $lang->productplan->batchChangeStatus = "Batch Change Status";
 $lang->productplan->unlinkAB          = "Unlink";
 $lang->productplan->linkStory         = "Link Story";
@@ -57,6 +59,7 @@ $lang->productplan->unexpired        = 'Unexpired';
 $lang->productplan->all              = 'All Plans';
 $lang->productplan->setDate          = "Set Start and end Date";
 $lang->productplan->expired          = "Expired";
+$lang->productplan->closedReason     = "Closed Reason";
 
 $lang->productplan->confirmDelete      = "Do you want to delete this plan?";
 $lang->productplan->confirmUnlinkStory = "Do you want to unlink this story?";
@@ -99,6 +102,9 @@ $lang->productplan->statusList['wait']   = 'Wait';
 $lang->productplan->statusList['doing']  = 'Doing';
 $lang->productplan->statusList['done']   = 'Done';
 $lang->productplan->statusList['closed'] = 'Closed';
+
+$lang->productplan->closedReasonList['done']   = 'Done';
+$lang->productplan->closedReasonList['cancel'] = 'Cancel';
 
 $lang->productplan->parentActionList['startedbychild']   = '<strong>starting </strong>the productplan sets the plan status as <strong>Doing</strong>.';
 $lang->productplan->parentActionList['finishedbychild']  = '<strong>finishing </strong>all productplan sets the plan status as <strong>Done</strong>.';

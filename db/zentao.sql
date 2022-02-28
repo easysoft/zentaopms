@@ -983,6 +983,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   `order` text NOT NULL,
+  `closedReason` varchar(20) NOT NULL
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
