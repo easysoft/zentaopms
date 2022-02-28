@@ -10,6 +10,6 @@
  * @link        http://xuan.im
  */
 ?>
-<?php include '../../../common/view/header.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <div id='mainContent' class='main-content'><?php echo $error;?></div>
-<?php include '../../../common/view/footer.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.lite.html.php';?>

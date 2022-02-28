@@ -13,7 +13,7 @@ $this->app->loadLang('im');
 $position[] = html::a($this->createLink('admin', 'xuanxuan'), $this->lang->im->common);
 $position[] = $this->lang->client->browse;
 ?>
-<?php include '../../../common/view/header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='main-header'>
     <div class='pull-right'>
@@ -69,4 +69,4 @@ $(function()
 
 })
 </script>
-<?php include '../../../common/view/footer.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
