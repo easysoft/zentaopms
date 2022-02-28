@@ -182,20 +182,15 @@ class upgrade extends control
         }
 
         $title = $this->lang->upgrade->toPMS15Guide;
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $this->lang->upgrade->to15Desc = str_replace('15.0', $this->lang->maxName, $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toMAXGuide;
         }
-        elseif(isset($this->config->bizVersion))
+        elseif($this->config->edition == 'biz')
         {
             $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->bizName . '5', $this->lang->upgrade->to15Desc);
             $title = $this->lang->upgrade->toBIZ5Guide;
-        }
-        elseif(isset($this->config->proVersion))
-        {
-            $this->lang->upgrade->to15Desc = str_replace('15', $this->lang->proName . '10', $this->lang->upgrade->to15Desc);
-            $title = $this->lang->upgrade->toPRO10Guide;
         }
 
         $this->view->title = $title;
