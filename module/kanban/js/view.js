@@ -1458,13 +1458,14 @@ function initSortable()
             var url      = '';
             var orders   = [];
             var regionID = '';
-            e.list.each(function(index, data)
-            {
-                orders.push(data.item.data('id'));
-            });
 
             if(sortType == 'region')
             {
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('region') && data.item.hasClass('sort')) orders.push(data.item.data('id'));
+                });
+
                 $('.region').each(function()
                 {
                     if(showRegionIdList.includes($(this).attr('data-id')))
@@ -1479,15 +1480,32 @@ function initSortable()
             if(sortType == 'board')
             {
                 regionID = e.element.closest('.region').data('id');
-                url      = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-board') && data.item.hasClass('sort') && regionID == data.item.parent().data().id) orders.push(data.item.data('id'));
+                });
+
+                url = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
             }
             if(sortType == 'lane')
             {
+                var groupID = e.element.closest('.kanban-board').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-lane') && data.item.hasClass('sort') && groupID == data.item.data().lane.group) orders.push(data.item.data('id'));
+                });
+
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortLane', 'region=' + regionID + '&lanes=' + orders.join(','));
             }
             if(sortType == 'column')
             {
+                var groupID = e.element.closest('.kanban-board').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-col') && data.item.hasClass('sort') && groupID == data.item.data().col.group) orders.push(data.item.data('id'));
+                });
+
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortColumn', 'region=' + regionID + '&kanbanID=' + kanban.id + '&columns=' + orders.join(','));
             }
@@ -1495,7 +1513,11 @@ function initSortable()
             {
                 var newLaneID = e.element.closest('.kanban-lane').data('id');
                 var newColID  = e.element.closest('.kanban-col').data('id');
-                if(newLaneID == oldLaneID && newColID == oldColID) url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+                e.list.each(function(index, data)
+                {
+                    if(data.item.data('item') != undefined && data.item.data('item').column == newColID && data.item.data('item').lane == newLaneID) orders.push(data.item.data('item').id);
+                });
+                if(newLaneID == oldLaneID && newColID == oldColID && orders.length > 0) url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
             }
             if(!url) return true;
 

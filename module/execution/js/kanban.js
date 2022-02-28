@@ -1049,7 +1049,7 @@ function createStoryMenu(options)
 
     var items      = [];
     var showAction = story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released';
-    
+
     if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canChangeStory && showAction) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCreateTask && showAction) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1321,13 +1321,14 @@ $(function()
         {
             var url = '';
             var orders = [];
-            e.list.each(function(index, data)
-            {
-                orders.push(data.item.data('id'));
-            });
 
             if(sortType == 'region')
             {
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('region') && data.item.hasClass('sort')) orders.push(data.item.data('id'));
+                });
+
                 $('.region').each(function()
                 {
                     if(showRegionIdList.includes($(this).attr('data-id')))
@@ -1341,13 +1342,24 @@ $(function()
             }
             if(sortType == 'board')
             {
-                var region = e.element.parent().data('id');
-                url = createLink('kanban', 'sortGroup', 'region=' + region + '&groups=' + orders.join(','));
+                var regionID = e.element.closest('.region').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-board') && data.item.hasClass('sort') && regionID == data.item.parent().data().id) orders.push(data.item.data('id'));
+                });
+
+                url = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
             }
             if(sortType == 'lane')
             {
-                var region = e.element.parent().parent().data('id');
-                url = createLink('kanban', 'sortLane', 'region=' + region + '&lanes=' + orders.join(','));
+                var groupID = e.element.closest('.kanban-board').data('id');
+                e.list.each(function(index, data)
+                {
+                  if(data.item.hasClass('kanban-lane') && data.item.hasClass('sort') && groupID == data.item.data().lane.group) orders.push(data.item.data('id'));
+                });
+
+                var regionID = e.element.closest('.region').data('id');
+                url          = createLink('kanban', 'sortLane', 'region=' + regionID + '&lanes=' + orders.join(','));
             }
 
             if(!url) return true;
