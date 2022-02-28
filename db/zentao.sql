@@ -501,6 +501,7 @@ CREATE TABLE IF NOT EXISTS `zt_doclib` (
 -- DROP TABLE IF EXISTS `zt_effort`;
 CREATE TABLE IF NOT EXISTS `zt_effort` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `user` char(30) NOT NULL default '',
   `todo` enum('1','0') NOT NULL default '1',
   `date` date NOT NULL,
@@ -1262,6 +1263,7 @@ CREATE TABLE IF NOT EXISTS `zt_stakeholder` (
 -- DROP TABLE IF EXISTS `zt_story`;
 CREATE TABLE IF NOT EXISTS `zt_story` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `parent` mediumint(9) NOT NULL default '0',
   `product` mediumint(8) unsigned NOT NULL default '0',
   `branch` mediumint(8) unsigned NOT NULL default '0',
@@ -1611,7 +1613,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `strategy` text NOT NULL,
   `join` date NOT NULL default '0000-00-00',
   `visits` mediumint(8) unsigned NOT NULL default '0',
-  `visions` varchar(20) NOT NULL,
+  `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite',
   `ip` char(15) NOT NULL default '',
   `last` int(10) unsigned NOT NULL default '0',
   `fails` tinyint(5) NOT NULL default '0',
