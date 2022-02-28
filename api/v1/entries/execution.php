@@ -111,10 +111,13 @@ class executionEntry extends Entry
         $oldExecution = $this->loadModel('execution')->getByID($executionID);
 
         /* Set $_POST variables. */
-        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl,status';
+        $fields = 'project,code,name,begin,end,lifetime,desc,days,acl,status,PO,PM,QD,RD';
         $this->batchSetPost($fields, $oldExecution);
 
         $this->setPost('whitelist', $this->request('whitelist', explode(',', $oldExecution->whitelist)));
+
+        $products = $this->loadModel('product')->getProducts($executionID);
+        $this->setPost('products', $this->request('products', array_keys($products)));
 
         $control = $this->loadController('execution', 'edit');
         $control->edit($executionID);
