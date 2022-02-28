@@ -792,6 +792,12 @@ class baseControl
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
+            if(!empty($actionExtPath['xuan']))
+            {
+                $commonActionExtFile = $actionExtPath['xuan'] . strtolower($methodName) . '.php';
+                if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
+            }
+
             if(!empty($actionExtPath['common']))
             {
                 $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
