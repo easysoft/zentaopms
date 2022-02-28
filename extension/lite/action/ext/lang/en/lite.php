@@ -88,9 +88,9 @@ $lang->action->label->linkparentstory       = "Link parent story";
 $lang->action->label->unlinkparentstory     = "CanceledLink from parent story ";
 $lang->action->label->deletechildrenstory   = "Deleted child story";
 
-$lang->action->desc->createchildrenstory = '$date, 由 <strong>$actor</strong> Create child story <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkchildstory      = '$date, 由 <strong>$actor</strong> Link child story <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkchildrenstory = '$date, 由 <strong>$actor</strong> Unlink child story <strong>$extra</strong>。' . "\n";
-$lang->action->desc->linkparentstory     = '$date, 由 <strong>$actor</strong> Link from parent story <strong>$extra</strong>。' . "\n";
-$lang->action->desc->unlinkparentstory   = '$date, 由 <strong>$actor</strong> From parent story<strong>$extra</strong>CanceledLink。' . "\n";
-$lang->action->desc->deletechildrenstory = '$date, 由 <strong>$actor</strong> Deleted child story<strong>$extra</strong>。' . "\n";
+$lang->action->desc->createchildrenstory = '$date, <strong>$actor</strong> Create child story <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkchildstory      = '$date, <strong>$actor</strong> Link child story <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkchildrenstory = '$date, <strong>$actor</strong> Unlink child story <strong>$extra</strong>。' . "\n";
+$lang->action->desc->linkparentstory     = '$date, <strong>$actor</strong> Link from parent story <strong>$extra</strong>。' . "\n";
+$lang->action->desc->unlinkparentstory   = '$date, <strong>$actor</strong> From parent story<strong>$extra</strong>CanceledLink。' . "\n";
+$lang->action->desc->deletechildrenstory = '$date, <strong>$actor</strong> Deleted child story<strong>$extra</strong>。' . "\n";
