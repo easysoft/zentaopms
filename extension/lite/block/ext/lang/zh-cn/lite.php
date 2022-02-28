@@ -37,7 +37,7 @@ $lang->block->modules['kanban']['index']->availableBlocks->sprint         = $lan
 $lang->block->modules['kanban']['index']->availableBlocks->projectdynamic = '最新动态';
 
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = '项目列表';
+$lang->block->modules['project']->availableBlocks->project = '项目列表';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
