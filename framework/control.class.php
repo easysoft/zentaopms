@@ -117,7 +117,7 @@ class control extends baseControl
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'changepassword') return true;
         if($this->app->getModuleName() == 'my' and $this->app->getMethodName() == 'preference') return true;
 
-        if(!isset($this->config->preferenceSetted))
+        if(!isset($this->config->preferenceSetted) and $this->config->vision == 'rnd')
         {
             $this->locate(helper::createLink('my', 'preference'));
         }

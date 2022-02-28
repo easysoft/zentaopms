@@ -458,7 +458,7 @@ class userModel extends model
                 $prev['dept']     = $data[$i]->dept;
                 $prev['role']     = $data[$i]->role;
                 $prev['group']    = $data[$i]->group;
-                $prev['visions']  = $users->visions[$i];
+                $prev['visions']  = $visions;
                 $prev['password'] = $users->password[$i];
             }
         }
