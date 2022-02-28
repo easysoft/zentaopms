@@ -408,7 +408,7 @@ class taskModel extends model
             if(dao::isError()) return false;
 
             $childTasks .= $taskID . ',';
-            if($story) $this->story->setStage($task->story);
+            if($task->story) $this->story->setStage($task->story);
 
             $this->executeHooks($taskID);
 
