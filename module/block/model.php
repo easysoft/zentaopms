@@ -133,6 +133,7 @@ class blockModel extends model
     {
         $blocks = $this->dao->select('*')->from(TABLE_BLOCK)->where('account')->eq($this->app->user->account)
             ->andWhere('module')->eq($module)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('hidden')->eq(0)
             ->beginIF($type)->andWhere('type')->eq($type)->fi()
             ->orderBy('`order`')
@@ -230,19 +231,21 @@ class blockModel extends model
     {
         $flow    = isset($this->config->global->flow) ? $this->config->global->flow : 'full';
         $account = $this->app->user->account;
+        $vision  = $this->config->vision;
+
         if($module == 'project')
         {
             $blocks = $this->lang->block->default[$type]['project'];
 
             /* Mark project block has init. */
-            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited", true);
+            $this->loadModel('setting')->setItem("$account.$module.{$type}common.blockInited@$vision", true);
         }
         else
         {
             $blocks = $module == 'my' ? $this->lang->block->default[$flow][$module] : $this->lang->block->default[$module];
 
             /* Mark this app has init. */
-            $this->loadModel('setting')->setItem("$account.$module.common.blockInited", true);
+            $this->loadModel('setting')->setItem("$account.$module.common.blockInited@$vision", true);
         }
 
         $this->loadModel('setting')->setItem("$account.$module.block.initVersion", $this->config->block->version);
@@ -253,11 +256,11 @@ class blockModel extends model
             $block['type']    = $type;
             $block['account'] = $account;
             $block['params']  = isset($block['params']) ? helper::jsonEncode($block['params']) : '';
+            $block['vision']  = $this->config->vision;
             if(!isset($block['source'])) $block['source'] = $module;
 
             $this->dao->replace(TABLE_BLOCK)->data($block)->exec();
         }
-
         return !dao::isError();
     }
 
@@ -456,6 +459,7 @@ class blockModel extends model
     public function getProjectParams()
     {
         $this->app->loadLang('project');
+        $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->project->featureBar;
         $params->type['control'] = 'select';
@@ -476,6 +480,7 @@ class blockModel extends model
     public function getProjectTeamParams()
     {
         $this->app->loadLang('project');
+        $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->project->featureBar;
         $params->type['control'] = 'select';
@@ -506,6 +511,7 @@ class blockModel extends model
      */
     public function getProductParams()
     {
+        $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->product;
         $params->type['control'] = 'select';
@@ -714,6 +720,7 @@ class blockModel extends model
      */
     public function getExecutionParams()
     {
+        $params = new stdclass();
         $params->type['name']    = $this->lang->block->type;
         $params->type['options'] = $this->lang->block->typeList->execution;
         $params->type['control'] = 'select';
@@ -729,6 +736,7 @@ class blockModel extends model
      */
     public function getAssignToMeParams()
     {
+        $params = new stdclass();
         $params->todoCount['name']    = $this->lang->block->todoCount;
         $params->todoCount['default'] = 20;
         $params->todoCount['control'] = 'input';
@@ -741,7 +749,7 @@ class blockModel extends model
         $params->bugCount['default'] = 20;
         $params->bugCount['control'] = 'input';
 
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $params->riskCount['name']    = $this->lang->block->riskCount;
             $params->riskCount['default'] = 20;

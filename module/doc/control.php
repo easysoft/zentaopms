@@ -142,7 +142,7 @@ class doc extends control
                 $this->action->create('docLib', $libID, 'Created');
 
                 if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $libID));
-                die(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
+                return print(js::locate($this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID&libID=$libID"), 'parent.parent'));
             }
             else
             {
@@ -167,14 +167,14 @@ class doc extends control
         if(empty($executions)) unset($libTypeList['execution']);
 
         $this->view->groups      = $this->loadModel('group')->getPairs();
-        $this->view->users       = $this->user->getPairs('nocode');
+        $this->view->users       = $this->user->getPairs('nocode|noclosed');
         $this->view->products    = $products;
         $this->view->projects    = $projects;
         $this->view->executions  = $executions;
         $this->view->type        = $type;
         $this->view->libTypeList = $libTypeList;
         $this->view->objectID    = $objectID;
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -231,7 +231,7 @@ class doc extends control
         $this->view->users  = $this->user->getPairs('noletter|noclosed', $lib->users);
         $this->view->libID  = $libID;
 
-        die($this->display());
+        $this->display();
     }
 
     /**
@@ -245,22 +245,22 @@ class doc extends control
      */
     public function deleteLib($libID, $confirm = 'no', $from = 'lib')
     {
-        if($libID == 'product' or $libID == 'execution') die();
+        if($libID == 'product' or $libID == 'execution') return;
         if($confirm == 'no')
         {
             $deleteTip = $from == 'book' ? $this->lang->doc->confirmDeleteBook : $this->lang->doc->confirmDeleteLib;
-            die(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
+            return print(js::confirm($deleteTip, $this->createLink('doc', 'deleteLib', "libID=$libID&confirm=yes")));
         }
         else
         {
             $lib = $this->doc->getLibByID($libID);
-            if(!empty($lib->main)) die(js::alert($this->lang->doc->errorMainSysLib));
+            if(!empty($lib->main)) return print(js::alert($this->lang->doc->errorMainSysLib));
 
             $this->doc->delete(TABLE_DOCLIB, $libID);
             if(isonlybody())
             {
                 unset($_GET['onlybody']);
-                die(js::locate($this->createLink('doc', 'objectLibs', 'type=book'), 'parent.parent'));
+                return print(js::locate($this->createLink('doc', 'objectLibs', 'type=book'), 'parent.parent'));
             }
 
             $browseLink = $this->createLink('doc', 'index');
@@ -271,7 +271,7 @@ class doc extends control
                 $browseLink = $this->createLink('doc', 'objectLibs', "type=$objectType&objectID=$objectID");
             }
 
-            die(js::locate($browseLink, 'parent'));
+            return print(js::locate($browseLink, 'parent'));
         }
     }
 
@@ -492,7 +492,7 @@ class doc extends control
         if(!$doc)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('doc', 'index')));
         }
 
         /* The global search opens in the document library. */
@@ -557,7 +557,7 @@ class doc extends control
         {
             $type = $this->dao->select('type')->from(TABLE_DOC)->where('id')->eq($docID)->fetch('type');
             $tips = $type == 'chapter' ? $this->lang->doc->confirmDeleteChapter : $this->lang->doc->confirmDelete;
-            die(js::confirm($tips, inlink('delete', "docID=$docID&confirm=yes")));
+            return print(js::confirm($tips, inlink('delete', "docID=$docID&confirm=yes")));
         }
         else
         {
@@ -587,7 +587,7 @@ class doc extends control
                 return $this->send($response);
             }
 
-            die(js::locate($this->session->docList, 'parent'));
+            return print(js::locate($this->session->docList, 'parent'));
         }
     }
 
@@ -605,7 +605,7 @@ class doc extends control
         $this->loadModel('file');
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "docID=$docID&fileID=$fileID&confirm=yes")));
+            return print(js::confirm($this->lang->file->confirmDelete, inlink('deleteFile', "docID=$docID&fileID=$fileID&confirm=yes")));
         }
         else
         {
@@ -621,7 +621,7 @@ class doc extends control
 
             $file = $this->file->getById($fileID);
             $this->action->create($file->objectType, $file->objectID, 'deletedFile', '', $extra = $file->title);
-            die(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
+            return print(js::locate($this->createLink('doc', 'view', "docID=$docID"), 'parent'));
         }
     }
 
@@ -694,7 +694,7 @@ class doc extends control
     public function ajaxGetModules($libID)
     {
         $moduleOptionMenu = $this->tree->getOptionMenu($libID, 'doc', $startModuleID = 0);
-        die(html::select('module', $moduleOptionMenu, 0, "class='form-control'"));
+        return print(html::select('module', $moduleOptionMenu, 0, "class='form-control'"));
     }
 
     /**
@@ -712,7 +712,7 @@ class doc extends control
         if($customMenus) $customMenus = json_decode($customMenus);
         if(empty($customMenus))
         {
-            if($type == 'remove') die(js::reload('parent'));
+            if($type == 'remove') return print(js::reload('parent'));
             $customMenus = array();
             $i           = 0;
             foreach($this->lang->doc->menu as $name => $item)
@@ -739,7 +739,7 @@ class doc extends control
         $customMenu->float = 'right';
         if($type == 'fixed') $customMenus[] = $customMenu;
         $this->setting->setItem("{$this->app->user->account}.common.customMenu.{$customMenuKey}", json_encode($customMenus));
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -750,7 +750,7 @@ class doc extends control
      */
     public function ajaxGetAllLibs()
     {
-        die(json_encode($this->doc->getAllLibGroups()));
+        return print(json_encode($this->doc->getAllLibGroups()));
     }
 
     /**
@@ -763,7 +763,7 @@ class doc extends control
     {
         $childModules = $this->tree->getOptionMenu($libID, 'doc');
         $select       = ($type == 'module') ? html::select('module', $childModules, '', "class='form-control chosen'") : html::select('parent', $childModules, '', "class='form-control chosen'");
-        die($select);
+        return print($select);
     }
 
     /**
@@ -919,12 +919,12 @@ class doc extends control
     {
         echo(js::alert($this->lang->doc->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(inlink('index')));
+        if(!$this->server->http_referer) return print(js::locate(inlink('index')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(inlink('index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(inlink('index')));
 
-        die(js::locate('back'));
+        return print(js::locate('back'));
     }
 
     /**
@@ -959,7 +959,7 @@ class doc extends control
         if($docID)
         {
             $doc = $this->doc->getById($docID, $version, true);
-            if(!$doc) die(js::error($this->lang->notFound));
+            if(!$doc) return print(js::error($this->lang->notFound));
 
             if($doc->keywords)
             {

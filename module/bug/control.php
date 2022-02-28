@@ -999,7 +999,7 @@ class bug extends control
         $this->view->branchTagOption  = $branchTagOption;
         $this->view->tasks            = $this->task->getExecutionTaskPairs($bug->execution);
         $this->view->testtasks        = $this->loadModel('testtask')->getPairs($bug->product, $bug->execution, $bug->testtask);
-        $this->view->users            = $this->user->getPairs('noclosed', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
+        $this->view->users            = $this->user->getPairs('', "$bug->assignedTo,$bug->resolvedBy,$bug->closedBy,$bug->openedBy");
         $this->view->openedBuilds     = $openedBuilds;
         $this->view->resolvedBuilds   = array('' => '') + $openedBuilds + $oldResolvedBuild;
         $this->view->actions          = $this->action->getList('bug', $bugID);
@@ -1135,7 +1135,7 @@ class bug extends control
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
         }
-        $users = $this->user->getPairs('devfirst|noclosed', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('devfirst', $appendUsers, $this->config->maxCount);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
@@ -1448,7 +1448,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $changes = $this->bug->resolve($bugID, $extra);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
             $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
@@ -1468,7 +1468,7 @@ class bug extends control
                     $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                     unset($_GET['onlybody']);
                     $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                    die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                 }
             }
 
@@ -1530,11 +1530,11 @@ class bug extends control
      */
     public function batchResolve($resolution, $resolvedBuild = '')
     {
-        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
-        $bugIDList = array_unique($bugIDList);
+        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
 
+        $bugIDList = array_unique($this->post->bugIDList);
         $changes   = $this->bug->batchResolve($bugIDList, $resolution, $resolvedBuild);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         foreach($changes as $bugID => $bugChanges)
         {
@@ -1543,7 +1543,7 @@ class bug extends control
         }
 
         $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->bugList, 'parent'));
+        return print(js::locate($this->session->bugList, 'parent'));
     }
 
     /**
@@ -1560,7 +1560,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $changes = $this->bug->activate($bugID, $extra);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
@@ -1587,7 +1587,7 @@ class bug extends control
                     return print(js::closeModal('parent.parent'));
                 }
             }
-            die(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
+            return print(js::locate($this->createLink('bug', 'view', "bugID=$bugID"), 'parent'));
         }
 
         $productID = $bug->product;
@@ -1620,7 +1620,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $changes = $this->bug->close($bugID, $extra);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $actionID = $this->action->create('bug', $bugID, 'Closed', $this->post->comment);
             $this->action->logHistory($actionID, $changes);
@@ -1709,8 +1709,8 @@ class bug extends control
         $this->view->pager      = $pager;
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;                                                                                                        
-        $this->view->pageID     = $pageID; 
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
         $this->display();
     }
 
@@ -1747,7 +1747,7 @@ class bug extends control
             $this->loadModel('score')->create('ajax', 'batchOther');
             if(isset($skipBugs)) echo js::alert(sprintf($this->lang->bug->skipClose, join(',', $skipBugs)));
         }
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -1763,11 +1763,12 @@ class bug extends control
             $activateBugs = $this->bug->batchActivate();
             foreach($activateBugs as $bugID => $bug) $this->action->create('bug', $bugID, 'Activated', $bug['comment']);
             $this->loadModel('score')->create('ajax', 'batchOther');
-            die(js::locate($this->session->bugList, 'parent'));
+            return print(js::locate($this->session->bugList, 'parent'));
         }
 
-        $bugIDList = $this->post->bugIDList ? $this->post->bugIDList : die(js::locate($this->session->bugList, 'parent'));
-        $bugIDList = array_unique($bugIDList);
+        if(!$this->post->bugIDList) return print(js::locate($this->session->bugList, 'parent'));
+
+        $bugIDList = array_unique($this->post->bugIDList);
         $bugs = $this->dao->select('id, title, status, resolvedBy, openedBuild')->from(TABLE_BUG)->where('id')->in($bugIDList)->fetchAll('id');
 
         $this->qa->setMenu($this->products, $productID, $branch);
@@ -1796,7 +1797,7 @@ class bug extends control
         $this->bug->checkBugExecutionPriv($bug);
         $this->dao->update(TABLE_BUG)->set('storyVersion')->eq($bug->latestStoryVersion)->where('id')->eq($bugID)->exec();
         $this->loadModel('action')->create('bug', $bugID, 'confirmed', '', $bug->latestStoryVersion);
-        die(js::reload('parent'));
+        return print(js::reload('parent'));
     }
 
     /**
@@ -1812,7 +1813,7 @@ class bug extends control
         $bug = $this->bug->getById($bugID);
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->bug->confirmDelete, inlink('delete', "bugID=$bugID&confirm=yes")));
+            return print(js::confirm($this->lang->bug->confirmDelete, inlink('delete', "bugID=$bugID&confirm=yes")));
         }
         else
         {
@@ -1825,7 +1826,7 @@ class bug extends control
                     $confirmURL = $this->createLink('task', 'view', "taskID=$bug->toTask");
                     unset($_GET['onlybody']);
                     $cancelURL  = $this->createLink('bug', 'view', "bugID=$bugID");
-                    die(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
+                    return print(js::confirm(sprintf($this->lang->bug->remindTask, $bug->toTask), $confirmURL, $cancelURL, 'parent', 'parent.parent'));
                 }
             }
 
@@ -1834,7 +1835,7 @@ class bug extends control
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
             $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
-            die(js::locate($locateLink, 'parent'));
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -1853,8 +1854,8 @@ class bug extends control
         $account = $user->account;
         $bugs    = $this->bug->getUserBugPairs($account);
 
-        if($id) die(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
-        die(html::select('bug', $bugs, '', 'class=form-control'));
+        if($id) return print(html::select("bugs[$id]", $bugs, '', 'class="form-control"'));
+        return print(html::select('bug', $bugs, '', 'class=form-control'));
     }
 
     /**
@@ -1876,7 +1877,7 @@ class bug extends control
             if(!empty($this->config->isINT)) $firstLetter = '';
             $realName = $firstLetter . ($user->realname ? $user->realname : $account);
         }
-        die(json_encode(array($account, $realName)));
+        return print(json_encode(array($account, $realName)));
     }
 
     /**
@@ -1891,7 +1892,7 @@ class bug extends control
     {
         $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution', '', $selectedUser);
 
-        die(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
+        return print(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
 
     /**
@@ -1906,7 +1907,7 @@ class bug extends control
     {
         $productMembers = $this->bug->getProductMemberPairs($productID);
 
-        die(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
+        return print(html::select('assignedTo', $productMembers, $selectedUser, 'class="form-control"'));
     }
 
     /**
@@ -1920,7 +1921,7 @@ class bug extends control
     {
         $allUsers = $this->loadModel('user')->getPairs('devfirst|noclosed');
 
-        die(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
+        return print(html::select('assignedTo', $allUsers, $selectedUser, 'class="form-control"'));
     }
 
     /**
@@ -2112,7 +2113,7 @@ class bug extends control
             }
 
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
-            if(isset($this->config->bizVersion)) list($fields, $bugs) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $bugs);
+            if($this->config->edition != 'open') list($fields, $bugs) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $bugs);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $bugs);
@@ -2152,7 +2153,7 @@ class bug extends control
         $bug = $this->dao->select('*')->from(TABLE_BUG)->where('id')->eq($bugID)->fetch();
         $realname = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($bug->assignedTo)->fetch('realname');
         $bug->assignedTo = $realname ? $realname : ($bug->assignedTo == 'closed' ? 'Closed' : $bug->assignedTo);
-        die(json_encode($bug));
+        return print(json_encode($bug));
     }
 
     /**
@@ -2171,7 +2172,7 @@ class bug extends control
         $pri      = $this->lang->bug->priList;
         $severity = $this->lang->bug->severityList;
 
-        die(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
+        return print(json_encode(array('modules' => $modules, 'categories' => $type, 'versions' => $builds, 'severities' => $severity, 'priorities' => $pri)));
     }
 
     /**
@@ -2213,7 +2214,7 @@ class bug extends control
         $users       = $this->loadModel('user')->getPairs('noclosed');
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
         foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
-        die(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
+        return print(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
     }
 
 

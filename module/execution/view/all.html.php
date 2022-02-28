@@ -29,7 +29,9 @@
     </div>
     <?php endif;?>
     <?php foreach($lang->execution->featureBar['all'] as $key => $label):?>
-    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), "<span class='text'>{$label}</span>", '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
+    <?php $label = "<span class='text'>$label</span>";?>
+    <?php if($status == $key) $label .= " <span class='label label-light label-badge'>{$pager->recTotal}</span>";?>
+    <?php echo html::a($this->createLink($this->app->rawModule, $this->app->rawMethod, "status=$key&projectID=$projectID&orderBy=$orderBy&productID=$productID"), $label, '', "class='btn btn-link' id='{$key}Tab' data-app='$from'");?>
     <?php endforeach;?>
     <?php if($from == 'execution' and $this->config->systemMode == 'new'):?>
     <div class='input-control w-180px'>
@@ -91,6 +93,8 @@
           <th class='c-realEnd'><?php common::printOrderLink('realEnd', $orderBy, $vars, $lang->execution->realEnd);?></th>
           <th class='c-action'><?php echo $lang->actions;?></th>
           <?php else:;?>
+          <th class='c-begin'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->execution->begin);?></th>
+          <th class='c-end'><?php common::printOrderLink('end', $orderBy, $vars, $lang->execution->end);?></th>
           <th class='c-estimate text-right hours'><?php echo $lang->execution->totalEstimate;?></th>
           <th class='c-consumed text-right hours'><?php echo $lang->execution->totalConsumed;?></th>
           <th class='c-left text-right hours'><?php echo $lang->execution->totalLeft;?></th>
@@ -118,7 +122,7 @@
             <?php printf('%03d', $execution->id);?>
           </td>
           <td class='text-left c-name <?php if(!empty($execution->children)) echo 'has-child';?> flex' title='<?php echo $execution->name?>'>
-            <?php if($config->systemMode == 'new'):?> 
+            <?php if($config->systemMode == 'new'):?>
             <span class='project-type-label label label-outline <?php echo $execution->type == 'stage' ? 'label-warning' : 'label-info';?>'><?php echo $lang->execution->typeList[$execution->type]?></span>
             <?php endif;?>
             <?php
@@ -175,6 +179,8 @@
                 }
             ?></td>
           <?php else:?>
+          <td><?php echo helper::isZeroDate($execution->begin) ? '' : $execution->begin;?></td>
+          <td><?php echo helper::isZeroDate($execution->end)   ? '' : $execution->end;?></td>
           <td class='hours' title='<?php echo $execution->hours->totalEstimate . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalEstimate . $this->lang->execution->workHourUnit;?></td>
           <td class='hours' title='<?php echo $execution->hours->totalConsumed . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalConsumed . $this->lang->execution->workHourUnit;?></td>
           <td class='hours' title='<?php echo $execution->hours->totalLeft     . ' ' . $this->lang->execution->workHour;?>'><?php echo $execution->hours->totalLeft     . $this->lang->execution->workHourUnit;?></td>

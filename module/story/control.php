@@ -83,7 +83,7 @@ class story extends control
         if(isset($fromObjectID))
         {
             $fromObject = $this->loadModel($fromObjectName)->getById($fromObjectID);
-            if(!$fromObject) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+            if(!$fromObject) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
 
             $this->view->$fromObjectIDKey = $fromObjectID;
             $this->view->$fromObjectName  = $fromObject;
@@ -222,7 +222,7 @@ class story extends control
 
         $users = $this->user->getPairs('pdfirst|noclosed|nodeleted');
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'story', 0, $branch === 'all' ? 0 : $branch);
-        if(empty($moduleOptionMenu)) die(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
 
         /* Init vars. */
         $source     = '';
@@ -342,6 +342,7 @@ class story extends control
         $this->view->pri              = $pri;
         $this->view->branch           = $branch;
         $this->view->branches         = $branches;
+        $this->view->stories          = $this->story->getParentStoryPairs($productID);
         $this->view->productID        = $productID;
         $this->view->product          = $product;
         $this->view->reviewers        = $this->user->getPairs('noclosed|nodeleted', '', 0, $reviewers);
@@ -412,7 +413,7 @@ class story extends control
         if($storyID)
         {
             $story = $this->story->getById($storyID);
-            if($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
+            if(($story->status != 'active' or $story->stage != 'wait' or $story->parent > 0) and $this->config->vision != 'lite') return print(js::alert($this->lang->story->errorNotSubdivide) . js::locate('back'));
         }
 
         if(!empty($_POST))
@@ -436,7 +437,7 @@ class story extends control
             if($storyID and !empty($mails))
             {
                 $this->story->subdivide($storyID, $stories);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
             }
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'idList' => $stories));
@@ -643,7 +644,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->update($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             if($this->post->comment != '' or !empty($changes))
             {
                 $action   = !empty($changes) ? 'Edited' : 'Commented';
@@ -656,9 +657,9 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::reload('parent.parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
-            die(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink($this->app->rawModule, 'view', "storyID=$storyID"), 'parent'));
         }
 
         $this->commonAction($storyID);
@@ -790,10 +791,11 @@ class story extends control
                     $this->action->logHistory($actionID, $changes);
                 }
             }
-            die(js::locate($this->session->storyList, 'parent'));
+            return print(js::locate($this->session->storyList, 'parent'));
         }
 
-        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
@@ -832,8 +834,11 @@ class story extends control
                     foreach($branchList as $branchInfo) $branches[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
 
                     $branchTagOption[$linkedProduct->id] = array(BRANCH_MAIN => $this->lang->branch->main) + $branches;
-                    $modules[$linkedProduct->id]         = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
-                    $plans[$linkedProduct->id]           = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
+
+                    $moduleList = $this->tree->getOptionMenu($linkedProduct->id, 'story', 0, array_keys($branchList));
+                    $modules[$linkedProduct->id] = $linkedProduct->type != 'normal' ? $moduleList : array(0 => $moduleList);
+
+                    $plans[$linkedProduct->id] = $this->productplan->getBranchPlanPairs($linkedProduct->id, array_keys($branchList), true);
                     if(empty($plans[$linkedProduct->id])) $plans[$linkedProduct->id][0] = $plans[$linkedProduct->id];
 
                     if($linkedProduct->type != 'normal') $branchProduct = true;
@@ -930,7 +935,7 @@ class story extends control
             if(dao::isError())
             {
                 if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => dao::getError()));
-                die(js::error(dao::getError()));
+                return print(js::error(dao::getError()));
             }
             $story   = $this->story->getByID($storyID);
             $version = $this->dao->findById($storyID)->from(TABLE_STORY)->fetch('version');
@@ -1007,7 +1012,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->activate($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($changes)
             {
@@ -1061,7 +1066,7 @@ class story extends control
 
         $storyID = (int)$storyID;
         $story   = $this->story->getById($storyID, $version, true);
-        if(!$story) die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+        if(!$story) return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
 
         $story = $this->story->mergeReviewer($story, true);
 
@@ -1144,12 +1149,11 @@ class story extends control
     public function delete($storyID, $confirm = 'no')
     {
         $story = $this->story->getById($storyID);
-        if($story->parent < 0) die(js::alert($this->lang->story->cannotDeleteParent));
+        if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            echo js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), '');
-            exit;
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), ''));
         }
         else
         {
@@ -1165,7 +1169,7 @@ class story extends control
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-            die(js::locate($locateLink, 'parent'));
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -1184,7 +1188,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->review($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($changes)
             {
@@ -1195,10 +1199,10 @@ class story extends control
 
             $this->executeHooks($storyID);
 
-            if(isonlybody()) die(js::reload('parent.parent'));
+            if(isonlybody()) return print(js::reload('parent.parent'));
 
             $module = $from == 'project' ? 'projectstory' : 'story';
-            die(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
+            return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 
         /* Get story and product. */
@@ -1262,13 +1266,14 @@ class story extends control
      */
     public function batchReview($result, $reason = '')
     {
-        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
         $actions     = $this->story->batchReview($storyIdList, $result, $reason);
 
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -1285,7 +1290,7 @@ class story extends control
         $this->loadModel('action')->create('story', $storyID, 'Recalled');
 
         $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
-        die(js::locate($locateLink, 'parent'));
+        echo js::locate($locateLink, 'parent');
     }
 
     /**
@@ -1389,10 +1394,11 @@ class story extends control
             }
 
             if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-            die(js::locate($this->session->storyList, 'parent'));
+            return print(js::locate($this->session->storyList, 'parent'));
         }
 
-        $storyIdList = $this->post->storyIdList ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(!$this->post->storyIdList) return print(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
 
         /* Get edited stories. */
@@ -1484,17 +1490,18 @@ class story extends control
      */
     public function batchChangeModule($moduleID)
     {
-        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
         $allChanges  = $this->story->batchChangeModule($storyIdList, $moduleID);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        echo js::locate($this->session->storyList, 'parent');
     }
 
     /**
@@ -1535,17 +1542,18 @@ class story extends control
      */
     public function batchChangePlan($planID, $oldPlanID = 0)
     {
-        $storyIdList = !empty($_POST['storyIdList']) ? $this->post->storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
         $storyIdList = array_unique($storyIdList);
         $allChanges  = $this->story->batchChangePlan($storyIdList, $planID, $oldPlanID);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        echo js::locate($this->session->storyList, 'parent');
     }
 
     /**
@@ -1559,8 +1567,8 @@ class story extends control
      */
     public function batchChangeBranch($branchID, $confirm = '', $storyIdList = '')
     {
-        if(!empty($_POST['storyIdList'])) $storyIdList = $_POST['storyIdList'];
-        $storyIdList = !empty($storyIdList) ? $storyIdList : die(js::locate($this->session->storyList, 'parent'));
+        if(empty($_POST['storyIdList'])) return print(js::locate($this->session->storyList, 'parent'));
+        $storyIdList = $this->post->storyIdList;
         $plans       = $this->loadModel('productplan')->getPlansByStories($storyIdList);
         if(empty($confirm))
         {
@@ -1594,21 +1602,21 @@ class story extends control
                 $storyIdList       = implode(',', $storyIdList);
                 $confirmURL        = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=yes&storyIdList=$storyIdList");
                 $cancelURL         = $this->createLink('story', 'batchChangeBranch', "branchID=$branchID&confirm=no&storyIdList=$normalStotyIdList");
-                die(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
+                return print(js::confirm(sprintf($this->lang->story->confirmChangeBranch, $conflictStoryIdList ), $confirmURL, $cancelURL));
             }
         }
 
         if(is_string($storyIdList)) $storyIdList = array_filter(explode(',', $storyIdList));
         $storyIdList = array_unique($storyIdList);
         $allChanges  = $this->story->batchChangeBranch($storyIdList, $branchID, $confirm, $plans);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
         foreach($allChanges as $storyID => $changes)
         {
             $actionID = $this->action->create('story', $storyID, 'Edited');
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -1621,11 +1629,11 @@ class story extends control
     public function batchChangeStage($stage)
     {
         $storyIdList = $this->post->storyIdList;
-        if(empty($storyIdList)) die(js::locate($this->session->storyList, 'parent'));
+        if(empty($storyIdList)) return print(js::locate($this->session->storyList, 'parent'));
 
         $storyIdList = array_unique($storyIdList);
         $allChanges  = $this->story->batchChangeStage($storyIdList, $stage);
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $action = $stage == 'verified' ? 'Verified' : 'Edited';
         foreach($allChanges as $storyID => $changes)
@@ -1634,7 +1642,7 @@ class story extends control
             $this->action->logHistory($actionID, $changes);
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        echo js::locate($this->session->storyList, 'parent');
     }
 
     /**
@@ -1649,7 +1657,7 @@ class story extends control
         if(!empty($_POST))
         {
             $changes = $this->story->assign($storyID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             if($changes)
             {
                 $actionID = $this->loadModel('action')->create('story', $storyID, 'Assigned', $this->post->comment, $this->post->assignedTo);
@@ -1687,7 +1695,7 @@ class story extends control
         $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
         $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
+        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project);
         $this->display();
     }
 
@@ -1702,7 +1710,7 @@ class story extends control
         if(!empty($_POST) && isset($_POST['storyIdList']))
         {
             $allChanges  = $this->story->batchAssignTo();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $storyID => $changes)
             {
                 $actionID = $this->action->create('story', $storyID, 'Assigned', '', $this->post->assignedTo);
@@ -1710,7 +1718,7 @@ class story extends control
             }
         }
         if(!dao::isError()) $this->loadModel('score')->create('ajax', 'batchOther');
-        die(js::locate($this->session->storyList, 'parent'));
+        echo js::locate($this->session->storyList, 'parent');
     }
 
     /**
@@ -1889,15 +1897,15 @@ class story extends control
         if($type == 'remove')
         {
             $result = $this->story->unlinkStory($storyID, $linkedStoryID);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         if($_POST)
         {
             $this->story->linkStories($storyID);
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::closeModal('parent.parent', 'this'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::closeModal('parent.parent', 'this'));
         }
 
         /* Get story, product, products, and queryID. */
@@ -1949,7 +1957,7 @@ class story extends control
         if($result == 'no')
         {
             $this->dao->update(TABLE_STORY)->set('URChanged')->eq(0)->where('id')->eq($storyID)->exec();
-            die(js::reload('parent', 'this'));
+            return print(js::reload('parent', 'this'));
         }
 
         $this->view->changedStories = $this->story->getChangedStories($story);
@@ -1979,16 +1987,16 @@ class story extends control
         $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
         if($this->app->getViewType() === 'json')
         {
-            die(json_encode($stories));
+            return print(json_encode($stories));
         }
         elseif($this->app->getViewType() == 'mhtml')
         {
-            die(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'onchange=setStoryRelated()'));
+            return print(html::select('story', empty($stories) ? array('' => '') : $stories, $storyID, 'onchange=setStoryRelated()'));
         }
         else
         {
             $storyName = $number === '' ? 'story' : "story[$number]";
-            die(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
+            return print(html::select($storyName, empty($stories) ? array('' => '') : $stories, $storyID, 'class=form-control onchange=setStoryRelated(' . $number . ');'));
         }
     }
 
@@ -2040,8 +2048,8 @@ class story extends control
         $select  = html::select('story' . $number, empty($stories) ? array('' => '') : $stories, $storyID, "class='form-control'");
 
         /* If only need options, remove select wrap. */
-        if($onlyOption == 'true') die(substr($select, strpos($select, '>') + 1, -10));
-        die($select);
+        if($onlyOption == 'true') return print(substr($select, strpos($select, '>') + 1, -10));
+        echo $select;
     }
 
     /**
@@ -2089,7 +2097,7 @@ class story extends control
             $result['info'] = $this->lang->noResultsMatch;
         }
 
-        die(json_encode($result));
+        echo json_encode($result);
     }
 
     /**
@@ -2435,7 +2443,7 @@ class story extends control
             }
             if(!(in_array('platform', $productsType) or in_array('branch', $productsType))) unset($fields['branch']);// If products's type are normal, unset branch field.
 
-            if(isset($this->config->bizVersion)) list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $stories);
+            if($this->config->edition != 'open') list($fields, $stories) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $stories);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $stories);
@@ -2484,8 +2492,8 @@ class story extends control
         $user    = $this->loadModel('user')->getById($userID, 'id');
         $stories = $this->story->getUserStoryPairs($user->account);
 
-        if($id) die(html::select("stories[$id]", $stories, '', 'class="form-control"'));
-        die(html::select('story', $stories, '', 'class=form-control'));
+        if($id) return print(html::select("stories[$id]", $stories, '', 'class="form-control"'));
+        echo html::select('story', $stories, '', 'class=form-control');
     }
 
     /**
@@ -2521,6 +2529,6 @@ class story extends control
             $status   = $oldStory->status;
             if($params['result'] == 'revert') $status = 'active';
         }
-        die($status);
+        echo $status;
     }
 }

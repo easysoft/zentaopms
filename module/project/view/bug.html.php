@@ -56,8 +56,8 @@
             <?php endif;?>
             <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
           </th>
-          <th class='c-severity'><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
-          <th class='c-pri'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='c-severity' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='c-pri' title=<?php echo $lang->project->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th><?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>
           <th class='c-user'><?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
           <th class='c-user'><?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->assignedToAB);?></th>

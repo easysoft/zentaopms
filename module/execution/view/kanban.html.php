@@ -46,51 +46,65 @@ js::set('displayCards', $execution->displayCards);
 js::set('fluidBoard', $execution->fluidBoard);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
+js::set('projectID', $projectID);
+js::set('vision', $this->config->vision);
 
-$canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
-$canEditRegion   = commonModel::hasPriv('kanban', 'editRegion');
-$canDeleteRegion = commonModel::hasPriv('kanban', 'deleteRegion');
-$canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
-$canCreateTask       = common::hasPriv('task',  'create');
-$canBatchCreateTask  = common::hasPriv('task',  'batchCreate');
-$canCreateBug        = common::hasPriv('bug',   'create');
-$canBatchCreateBug   = common::hasPriv('bug',   'batchCreate');
+$canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
+$canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
+$canDeleteRegion     = commonModel::hasPriv('kanban', 'deleteRegion');
+$canCreateLane       = commonModel::hasPriv('kanban', 'createLane');
+$canCreateTask       = common::hasPriv('task', 'create');
+$canBatchCreateTask  = common::hasPriv('task', 'batchCreate');
+$canCreateBug        = common::hasPriv('bug', 'create');
+$canBatchCreateBug   = common::hasPriv('bug', 'batchCreate');
+$canImportBug        = common::hasPriv('execution', 'importBug');
 $canCreateStory      = ($productID and common::hasPriv('story', 'create'));
 $canBatchCreateStory = ($productID and common::hasPriv('story', 'batchCreate'));
 $canLinkStory        = ($productID and common::hasPriv('execution', 'linkStory'));
 $canLinkStoryByPlan  = ($productID and common::hasPriv('execution', 'importplanstories'));
 $hasStoryButton      = ($canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan);
-$hasTaskButton       = ($canCreateTask or $canBatchCreateTask);
+$hasTaskButton       = ($canCreateTask or $canBatchCreateTask or $canImportBug);
 $hasBugButton        = ($canCreateBug or $canBatchCreateBug);
 
 js::set('priv',
     array(
-        'canCreateTask'       => $canCreateTask,
-        'canBatchCreateTask'  => $canBatchCreateTask,
-        'canCreateBug'        => $canCreateBug,
-        'canBatchCreateBug'   => $canBatchCreateBug,
-        'canCreateStory'      => $canCreateStory,
-        'canBatchCreateStory' => $canBatchCreateStory,
-        'canLinkStory'        => $canLinkStory,
-        'canLinkStoryByPlan'  => $canLinkStoryByPlan,
-        'canAssignTask'       => common::hasPriv('task', 'assignto'),
-        'canAssignStory'      => common::hasPriv('story', 'assignto'),
-        'canFinishTask'       => common::hasPriv('task', 'finish'),
-        'canPauseTask'        => common::hasPriv('task', 'pause'),
-        'canCancelTask'       => common::hasPriv('task', 'cancel'),
-        'canCloseTask'        => common::hasPriv('task', 'close'),
-        'canActivateTask'     => common::hasPriv('task', 'activate'),
-        'canStartTask'        => common::hasPriv('task', 'start'),
-        'canAssignBug'        => common::hasPriv('bug', 'assignto'),
-        'canConfirmBug'       => common::hasPriv('bug', 'confirmBug'),
-        'canActivateBug'      => common::hasPriv('bug', 'activate')
+        'canCreateTask'         => $canCreateTask,
+        'canBatchCreateTask'    => $canBatchCreateTask,
+        'canImportBug'          => $canImportBug,
+        'canCreateBug'          => $canCreateBug,
+        'canBatchCreateBug'     => $canBatchCreateBug,
+        'canCreateStory'        => $canCreateStory,
+        'canBatchCreateStory'   => $canBatchCreateStory,
+        'canLinkStory'          => $canLinkStory,
+        'canLinkStoryByPlan'    => $canLinkStoryByPlan,
+        'canAssignBug'          => common::hasPriv('bug', 'assignto'),
+        'canConfirmBug'         => common::hasPriv('bug', 'confirmBug'),
+        'canResolveBug'         => common::hasPriv('bug', 'resolve'),
+        'canCopyBug'            => common::hasPriv('bug', 'create'),
+        'canEditBug'            => common::hasPriv('bug', 'edit'),
+        'canActivateBug'        => common::hasPriv('bug', 'activate'),
+        'canAssignTask'         => common::hasPriv('task', 'assignto'),
+        'canFinishTask'         => common::hasPriv('task', 'finish'),
+        'canPauseTask'          => common::hasPriv('task', 'pause'),
+        'canCancelTask'         => common::hasPriv('task', 'cancel'),
+        'canCloseTask'          => common::hasPriv('task', 'close'),
+        'canActivateTask'       => common::hasPriv('task', 'activate'),
+        'canActivateStory'      => common::hasPriv('story', 'activate'),
+        'canStartTask'          => common::hasPriv('task', 'start'),
+        'canRestartTask'        => common::hasPriv('task', 'restart'),
+        'canEditTask'           => common::hasPriv('task', 'edit'),
+        'canRecordEstimateTask' => common::hasPriv('task', 'recordEstimate'),
+        'canToStoryBug'         => common::hasPriv('story', 'create'),
+        'canAssignStory'        => common::hasPriv('story', 'assignto'),
+        'canEditStory'          => common::hasPriv('story', 'edit'),
+        'canChangeStory'        => common::hasPriv('story', 'change'),
+        'canUnlinkStory'        => common::hasPriv('execution', 'unlinkStory'),
     )
 );
 js::set('hasStoryButton', $hasStoryButton);
 js::set('hasBugButton', $hasBugButton);
 js::set('hasTaskButton', $hasTaskButton);
 ?>
-
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class="input-control space c-type">
@@ -144,7 +158,7 @@ js::set('hasTaskButton', $hasTaskButton);
 
     echo $actions;
     ?>
-    <?php if($canCreateTask or $canBatchCreateTask or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
+    <?php if($canCreateTask or $canBatchCreateTask or $canImportBug or $canCreateBug or $canBatchCreateBug or $canCreateStory or $canBatchCreateStory or $canLinkStory or $canLinkStoryByPlan):?>
     <div class='dropdown' id='createDropdown'>
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
@@ -157,6 +171,7 @@ js::set('hasTaskButton', $hasTaskButton);
         <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
+        <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='ifram'") . '</li>';?>
         <?php if($canBatchCreateTask) echo '<li>' . html::a(helper::createLink('task', 'batchCreate', "execution=$execution->id", '', true), $lang->execution->batchCreateTask, '', "class='iframe'") . '</li>';?>
       </ul>
     </div>

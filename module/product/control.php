@@ -596,11 +596,11 @@ class product extends control
             }
 
             $locate = $this->app->tab == 'product' ? $this->createLink('product', 'all') : $this->createLink('program', 'product', "programID=$programID");
-            die(js::locate($locate, 'parent'));
+            return print(js::locate($locate, 'parent'));
         }
 
         $productIDList = $this->post->productIDList;
-        if(empty($productIDList)) die(js::locate($this->session->productList, 'parent'));
+        if(empty($productIDList)) return print(js::locate($this->session->productList, 'parent'));
 
         /* Set menu when page come from program. */
         if($this->app->tab == 'program') $this->loadModel('program')->setMenu(0);
@@ -689,7 +689,7 @@ class product extends control
         if(!empty($_POST))
         {
             $changes = $this->product->close($productID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -699,7 +699,7 @@ class product extends control
 
             $this->executeHooks($productID);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->product->setMenu($productID);
@@ -727,7 +727,7 @@ class product extends control
         if(!$product)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'code' => 404, 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('product', 'index')));
         }
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
@@ -765,7 +765,7 @@ class product extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
+            return print(js::confirm($this->lang->product->confirmDelete, $this->createLink('product', 'delete', "productID=$productID&confirm=yes")));
         }
         else
         {
@@ -775,7 +775,7 @@ class product extends control
             $this->executeHooks($productID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
-            die(js::locate($this->createLink('product', 'all'), 'parent'));
+            return print(js::locate($this->createLink('product', 'all'), 'parent'));
         }
     }
 
@@ -898,7 +898,7 @@ class product extends control
 
         $productID = $this->product->saveState($productID, $this->products);
         $product   = $this->product->getStatByID($productID);
-        if(!$product) die(js::locate('product', 'all'));
+        if(!$product) return print(js::locate('product', 'all'));
 
         $product->desc = $this->loadModel('file')->setImgSize($product->desc);
         $this->product->setMenu($productID);
@@ -934,11 +934,11 @@ class product extends control
         $products = $this->product->getProductPairsByProject($executionID);
         if(empty($products))
         {
-            die(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project'));
+            return print(printf($this->lang->build->noProduct, $this->createLink('execution', 'manageproducts', "executionID=$executionID&from=buildCreate", '', 'true'), 'project'));
         }
         else
         {
-            die(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
+            return print(html::select('product', $products, empty($product) ? '' : $product->id, "onchange='loadBranches(this.value);' class='form-control chosen' required data-toggle='modal' data-type='iframe'"));
         }
     }
 
@@ -955,9 +955,9 @@ class product extends control
     {
         $projects  = array('' => '');
         $projects += $this->product->getProjectPairsByProduct($productID, $branch);
-        if($this->app->getViewType() == 'json') die(json_encode($projects));
+        if($this->app->getViewType() == 'json') return print(json_encode($projects));
 
-        die(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
+        return print(html::select('project', $projects, $projectID, "class='form-control' onchange='loadProductExecutions({$productID}, this.value)'"));
     }
 
     /**
@@ -974,17 +974,17 @@ class product extends control
     public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0)
     {
         $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID);
-        if($this->app->getViewType() == 'json') die(json_encode($executions));
+        if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
         {
-            die(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {
             $executionsName = "executions[$number]";
             $executions     = empty($executions) ? array('' => '') : $executions;
-            die(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($executionID, this.value, $number)'"));
+            return print(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($executionID, this.value, $number)'"));
         }
     }
 
@@ -1015,7 +1015,7 @@ class product extends control
             $output .= html::a("javascript:void(0)", "<i class='icon icon-refresh'></i>", '', "class='btn btn-icon refresh' data-toggle='tooltip' title='{$this->lang->refresh}' onclick='loadProductPlans($productID)'");
             $output .= '</div>';
         }
-        die($output);
+        echo $output;
     }
 
     /**
@@ -1031,8 +1031,8 @@ class product extends control
         $lines = array();
         if(empty($productID) or $programID) $lines = $this->product->getLinePairs($programID);
 
-        if($productID)  die(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
-        if(!$productID) die(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
+        if($productID)  return print(html::select("lines[$productID]", array('' => '') + $lines, '', "class='form-control picker-select'"));
+        if(!$productID) return print(html::select('line', array('' => '') + $lines, '', "class='form-control chosen'"));
     }
 
     /**
@@ -1060,7 +1060,7 @@ class product extends control
 
         $reviewers = $this->loadModel('user')->getPairs('noclosed|nodeleted', $storyReviewers, 0, $productReviewers);
 
-        die(html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple"));
+        echo html::select("reviewer[]", $reviewers, $storyReviewers, "class='form-control chosen' multiple");
     }
 
     /**
@@ -1279,8 +1279,8 @@ class product extends control
         if($_POST)
         {
             $this->product->manageLine();
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent'));
         }
 
         $this->view->title      = $this->lang->product->line;
@@ -1417,7 +1417,7 @@ class product extends control
                     if(strpos(",$checkedItem,", ",{$product->id},") === false) unset($productStats[$i]);
                 }
             }
-            if(isset($this->config->bizVersion)) list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
+            if($this->config->edition != 'open') list($fields, $productStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $productStats);
 
             if(isset($rowspan)) $this->post->set('rowspan', $rowspan);
             $this->post->set('fields', $fields);

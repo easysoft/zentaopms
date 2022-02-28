@@ -46,7 +46,7 @@
         common::printLink('user', 'execution',  "userID={$user->id}", $label, '', "class='btn btn-link $active'");
     }
 
-    if(isset($this->config->maxVersion))
+    if($this->config->edition == 'max')
     {
         $label  = "<span class='text'>{$lang->user->issue}</span>";
         $active = $methodName == 'issue' ? ' btn-active-text' : '';

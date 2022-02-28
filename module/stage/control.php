@@ -173,13 +173,13 @@ class stage extends control
 
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->stage->confirmDelete, inlink('delete', "stageID=$stageID&confirm=yes")));
+            return print(js::confirm($this->lang->stage->confirmDelete, inlink('delete', "stageID=$stageID&confirm=yes")));
         }
         else
         {
             $this->stage->delete(TABLE_STAGE, $stageID);
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 }

@@ -42,10 +42,14 @@
       <thead>
         <tr class='colhead'>
           <th class='w-id'>   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='w-pri'>  <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <th class='w-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
+          <?php if($this->config->vision == 'lite'):?>
+          <th class='w-200px'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->project);?></th>
+          <?php else:?>
           <th class='w-200px'><?php common::printOrderLink('product', $orderBy, $vars, $lang->story->product);?></th>
+          <?php endif;?>
           <th>                <?php common::printOrderLink('title', $orderBy, $vars, $lang->story->title);?></th>
-          <?php if($storyType != 'requirement'):?>
+          <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
           <th class='w-150px'><?php common::printOrderLink('plan', $orderBy, $vars, $lang->story->plan);?></th>
           <?php endif;?>
           <th class='w-90px'> <?php common::printOrderLink('openedBy', $orderBy, $vars, $lang->openedByAB);?></th>
@@ -56,13 +60,13 @@
       </thead>
       <tbody>
         <?php foreach($stories as $key => $story):?>
-          <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
+        <?php $storyLink = $this->createLink('story', 'view', "id=$story->id");?>
         <tr class='text-left'>
           <td><?php echo html::a($storyLink, sprintf('%03d', $story->id));?></td>
           <td><span class='<?php echo 'pri' . zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
           <td><?php echo $story->productTitle;?></td>
           <td class='text-left nobr'><?php echo html::a($storyLink, $story->title);?></td>
-          <?php if($storyType != 'requirement'):?>
+          <?php if($storyType != 'requirement' and $this->config->vision != 'lite'):?>
           <td title='<?php echo $story->planTitle;?>'><?php echo $story->planTitle;?></td>
           <?php endif;?>
           <td><?php echo zget($users, $story->openedBy);?></td>

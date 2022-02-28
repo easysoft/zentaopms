@@ -61,7 +61,7 @@ class testcase extends control
             {
                 $products = $this->product->getPairs();
             }
-            if(empty($products) and !helper::isAjaxRequest()) die($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID")));
+            if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID")));
         }
         else
         {
@@ -537,7 +537,7 @@ class testcase extends control
             $currentModule = $this->app->tab == 'project' ? 'project'  : 'testcase';
             $currentMethod = $this->app->tab == 'project' ? 'testcase' : 'browse';
             $projectParam  = $this->app->tab == 'project' ? "projectID={$this->session->project}&" : '';
-            die(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
+            return print(js::locate($this->createLink($currentModule, $currentMethod, $projectParam . "productID=$productID&branch=$branch&browseType=all&param=0&orderBy=id_desc"), 'parent'));
         }
         if(empty($this->products)) $this->locate($this->createLink('product', 'create'));
 
@@ -649,7 +649,7 @@ class testcase extends control
             $results = $this->testtask->getResults(0, $caseID);
         }
 
-        if(!$case) die(js::error($this->lang->notFound) . js::locate('back', 'parent'));
+        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back', 'parent'));
 
         $this->view->title   = $this->products[$productID] . $this->lang->colon . $this->lang->testcase->createBug;
         $this->view->runID   = $runID;
@@ -677,7 +677,7 @@ class testcase extends control
         if(!$case)
         {
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'fail', 'message' => '404 Not found'));
-            die(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
+            return print(js::error($this->lang->notFound) . js::locate($this->createLink('qa', 'index')));
         }
         if($case->auto == 'unit')
         {
@@ -783,7 +783,7 @@ class testcase extends control
             if($comment == false)
             {
                 $changes = $this->testcase->update($caseID);
-                if(dao::isError()) die(js::error(dao::getError()));
+                if(dao::isError()) return print(js::error(dao::getError()));
                 $files = $this->loadModel('file')->saveUpload('testcase', $caseID);
             }
             if($this->post->comment != '' or !empty($changes) or !empty($files))
@@ -804,12 +804,12 @@ class testcase extends control
             }
             else
             {
-                die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
+                return print(js::locate($this->createLink('testcase', 'view', "caseID=$caseID"), 'parent'));
             }
         }
 
         $case = $this->testcase->getById($caseID);
-        if(!$case) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$case) return print(js::error($this->lang->notFound) . js::locate('back'));
         if($case->auto == 'unit')
         {
             $this->lang->testcase->subMenu->testcase->feature['alias']  = '';
@@ -935,11 +935,11 @@ class testcase extends control
                 }
             }
 
-            die(js::locate($this->session->caseList, 'parent'));
+            return print(js::locate($this->session->caseList, 'parent'));
         }
 
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
+        $caseIDList    = array_unique($this->post->caseIDList);
         $branchProduct = false;
 
         if($this->app->tab == 'project')   $this->loadModel('project')->setMenu($this->session->project);
@@ -1085,7 +1085,7 @@ class testcase extends control
         if($_POST)
         {
             $changes = $this->testcase->review($caseID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($changes or $this->post->comment != '')
             {
@@ -1096,7 +1096,7 @@ class testcase extends control
 
             $this->executeHooks($caseID);
 
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->users   = $this->user->getPairs('noletter|noclosed|nodeleted');
@@ -1114,12 +1114,12 @@ class testcase extends control
      */
     public function batchReview($result)
     {
-        $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
-        $caseIdList = array_unique($caseIdList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
+        $caseIdList = array_unique($this->post->caseIDList);
         $actions    = $this->testcase->batchReview($caseIdList, $result);
 
-        if(dao::isError()) die(js::error(dao::getError()));
-        die(js::locate($this->session->caseList, 'parent'));
+        if(dao::isError()) return print(js::error(dao::getError()));
+        echo js::locate($this->session->caseList, 'parent');
     }
 
     /**
@@ -1134,7 +1134,7 @@ class testcase extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->testcase->confirmDelete, inlink('delete', "caseID=$caseID&confirm=yes")));
+            return print(js::confirm($this->lang->testcase->confirmDelete, inlink('delete', "caseID=$caseID&confirm=yes")));
         }
         else
         {
@@ -1161,7 +1161,7 @@ class testcase extends control
 
             $locateLink = $this->session->caseList ? $this->session->caseList : inlink('browse', "productID={$case->product}");
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            die(js::locate($locateLink, 'parent'));
+            return print(js::locate($locateLink, 'parent'));
         }
     }
 
@@ -1174,11 +1174,11 @@ class testcase extends control
      */
     public function batchDelete($productID = 0)
     {
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
+        $caseIDList = array_unique($this->post->caseIDList);
 
         foreach($caseIDList as $caseID) $this->testcase->delete(TABLE_CASE, $caseID);
-        die(js::locate($this->session->caseList));
+        echo js::locate($this->session->caseList);
     }
 
     /**
@@ -1196,7 +1196,7 @@ class testcase extends control
             $caseIDList = array_unique($caseIDList);
             unset($_POST['caseIDList']);
             $allChanges = $this->testcase->batchChangeBranch($caseIDList, $branchID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $caseID => $changes)
             {
                 $this->loadModel('action');
@@ -1205,7 +1205,7 @@ class testcase extends control
             }
         }
 
-        die(js::locate($this->session->caseList, 'parent'));
+        echo js::locate($this->session->caseList, 'parent');
     }
 
     /**
@@ -1223,7 +1223,7 @@ class testcase extends control
             $caseIDList = array_unique($caseIDList);
             unset($_POST['caseIDList']);
             $allChanges = $this->testcase->batchChangeModule($caseIDList, $moduleID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
             foreach($allChanges as $caseID => $changes)
             {
                 $this->loadModel('action');
@@ -1232,7 +1232,7 @@ class testcase extends control
             }
         }
 
-        die(js::locate($this->session->caseList, 'parent'));
+        echo js::locate($this->session->caseList, 'parent');
     }
 
     /**
@@ -1244,12 +1244,12 @@ class testcase extends control
      */
     public function batchCaseTypeChange($result)
     {
-        $caseIdList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList, 'parent'));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList, 'parent'));
+        $caseIdList = array_unique($this->post->caseIDList);
         $this->testcase->batchCaseTypeChange($caseIdList, $result);
 
-        if(dao::isError()) die(js::error(dao::getError()));
-        die(js::locate($this->session->caseList, 'parent'));
+        if(dao::isError()) return print(js::error(dao::getError()));
+        echo js::locate($this->session->caseList, 'parent');
     }
 
     /**
@@ -1305,8 +1305,8 @@ class testcase extends control
     {
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_TESTRUN)->set('version')->eq($case->version)->where('`case`')->eq($caseID)->exec();
-        if($from == 'view') die(js::locate(inlink('view', "caseID=$caseID&version=$case->version&from=testtask&taskID=$taskID"), 'parent'));
-        die(js::reload('parent'));
+        if($from == 'view') return print(js::locate(inlink('view', "caseID=$caseID&version=$case->version&from=testtask&taskID=$taskID"), 'parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -1331,7 +1331,7 @@ class testcase extends control
             $step->version = $version;
             $this->dao->insert(TABLE_CASESTEP)->data($step)->exec();
         }
-        die(js::locate($this->createLink('testcase', 'view', "caseID=$caseID&version=$version"), 'parent'));
+        echo js::locate($this->createLink('testcase', 'view', "caseID=$caseID&version=$version"), 'parent');
     }
 
     /**
@@ -1343,9 +1343,9 @@ class testcase extends control
      */
     public function ignoreLibcaseChange($caseID)
     {
-        $case    = $this->testcase->getById($caseID);
+        $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_CASE)->set('fromCaseVersion')->eq($case->version)->where('id')->eq($caseID)->exec();
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -1360,7 +1360,7 @@ class testcase extends control
         $case = $this->testcase->getById($caseID);
         $this->dao->update(TABLE_CASE)->set('storyVersion')->eq($case->latestStoryVersion)->where('id')->eq($caseID)->exec();
         $this->loadModel('action')->create('case', $caseID, 'confirmed', '', $case->latestStoryVersion);
-        if($reload) die(js::reload('parent'));
+        if($reload) return print(js::reload('parent'));
     }
 
     /**
@@ -1372,11 +1372,11 @@ class testcase extends control
      */
     public function batchConfirmStoryChange($productID = 0)
     {
-        $caseIDList = $this->post->caseIDList ? $this->post->caseIDList : die(js::locate($this->session->caseList));
-        $caseIDList = array_unique($caseIDList);
+        if(!$this->post->caseIDList) return print(js::locate($this->session->caseList));
+        $caseIDList = array_unique($this->post->caseIDList);
 
         foreach($caseIDList as $caseID) $this->confirmStoryChange($caseID,false);
-        die(js::locate($this->session->caseList));
+        echo js::locate($this->session->caseList);
     }
 
     /**
@@ -1593,7 +1593,7 @@ class testcase extends control
                     }
                 }
             }
-            if(isset($this->config->bizVersion)) list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
+            if($this->config->edition != 'open') list($fields, $cases) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $cases);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $cases);
@@ -1644,9 +1644,9 @@ class testcase extends control
 
             $projectID = $this->app->tab == 'project' ? $this->session->project : 0;
             $branches  = $this->loadModel('branch')->getPairs($productID, '' , $projectID);
-            $modules   = array();
-
             $this->loadModel('tree');
+            $modules = $product->type == 'normal' ? $this->tree->getOptionMenu($productID, 'case', 0, 0) : array();
+
             foreach($branches as $branchID => $branchName)
             {
                 $branches[$branchID] = $branchName . "(#$branchID)";
@@ -1741,13 +1741,14 @@ class testcase extends control
                     if(!isset($fields[$title])) continue;
                     $columnKey[] = $fields[$title];
                 }
-                if(count($columnKey) == 0) die(js::alert($this->lang->testcase->errorEncode));
+                if(count($columnKey) == 0) return print(js::alert($this->lang->testcase->errorEncode));
             }
 
             $this->session->set('fileImport', $fileName);
 
-            die(js::locate(inlink('showImport', "productID=$productID&branch=$branch"), 'parent.parent'));
+            return print(js::locate(inlink('showImport', "productID=$productID&branch=$branch"), 'parent.parent'));
         }
+
         $this->display();
     }
 
@@ -1777,7 +1778,7 @@ class testcase extends control
         if($_POST)
         {
             $this->testcase->importFromLib($productID);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
         $this->app->tab == 'project' ? $this->loadModel('project')->setMenu($this->session->project) : $this->testcase->setMenu($this->products, $productID, $branch);
@@ -1786,7 +1787,7 @@ class testcase extends control
         if(empty($libraries))
         {
             echo js::alert($this->lang->testcase->noLibrary);
-            die(js::locate($this->session->caseList));
+            return print(js::locate($this->session->caseList));
         }
         if(empty($libID) or !isset($libraries[$libID])) $libID = key($libraries);
 
@@ -1854,16 +1855,16 @@ class testcase extends control
 
                 if($this->app->tab == 'project')
                 {
-                    die(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
+                    return print(js::locate($this->createLink('project', 'testcase', "projectID={$this->session->project}&productID=$productID"), 'parent'));
                 }
                 else
                 {
-                    die(js::locate(inlink('browse', "productID=$productID"), 'parent'));
+                    return print(js::locate(inlink('browse', "productID=$productID"), 'parent'));
                 }
             }
             else
             {
-                die(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
+                return print(js::locate(inlink('showImport', "productID=$productID&branch=$branch&pagerID=" . ($this->post->pagerID + 1) . "&maxImport=$maxImport&insert=" . zget($_POST, 'insert', '')), 'parent'));
             }
         }
 
@@ -2030,7 +2031,7 @@ class testcase extends control
         if(empty($caseData))
         {
             echo js::alert($this->lang->error->noData);
-            die(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch")));
+            return print(js::locate($this->createLink('testcase', 'browse', "productID=$productID&branch=$branch")));
         }
 
         $allCount = count($caseData);
@@ -2043,13 +2044,13 @@ class testcase extends control
                 $this->view->maxImport = $maxImport;
                 $this->view->productID = $productID;
                 $this->view->branch    = $branch;
-                die($this->display());
+                return print($this->display());
             }
 
             $allPager = ceil($allCount / $maxImport);
             $caseData = array_slice($caseData, ($pagerID - 1) * $maxImport, $maxImport, true);
         }
-        if(empty($caseData)) die(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
+        if(empty($caseData)) return print(js::locate(inlink('browse', "productID=$productID&branch=$branch")));
 
         /* Judge whether the editedCases is too large and set session. */
         $countInputVars  = count($caseData) * 12 + (isset($stepVars) ? $stepVars : 0);
@@ -2105,7 +2106,7 @@ class testcase extends control
     {
         $story = $this->dao->select('module')->from(TABLE_STORY)->where('id')->eq($storyID)->fetch();
         $moduleID = !empty($story) ? $story->module : 0;
-        die(json_encode(array('moduleID'=> $moduleID)));
+        echo json_encode(array('moduleID'=> $moduleID));
     }
 
     /**
@@ -2121,7 +2122,7 @@ class testcase extends control
         $case   = $this->testcase->getByID($caseID);
         $status = $this->testcase->getStatus($methodName, $case);
         if($methodName == 'update') $status = zget($status, 1, '');
-        die($status);
+        echo $status;
     }
 
     /**

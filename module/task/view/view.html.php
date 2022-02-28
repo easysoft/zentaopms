@@ -209,8 +209,23 @@
             <table class="table table-data">
               <tbody>
                 <tr>
+                  <?php
+                  $method = 'view';
+                  if($this->config->vision == 'lite') $method = 'kanban';
+                  ?>
                   <th class='w-90px'><?php echo $lang->task->execution;?></th>
-                  <td><?php if(!common::printLink('execution', 'view', "executionID=$task->execution", $execution->name)) echo $execution->name;?></td>
+                  <td>
+                  <?php
+                  if($execution->type != 'kanban')
+                  {
+                      common::printLink('execution', $method, "executionID={$task->execution}", $execution->name);
+                  }
+                  else
+                  {
+                      echo $execution->name;
+                  }
+                  ?>
+                </td>
                 </tr>
                 <tr>
                   <th><?php echo $lang->task->module;?></th>

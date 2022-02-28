@@ -489,7 +489,7 @@ class installModel extends model
         catch (PDOException $exception)
         {
             echo $exception->getMessage();
-            die();
+            helper::end();
         }
         return true;
     }
@@ -502,7 +502,7 @@ class installModel extends model
      */
     public function grantPriv()
     {
-        if($this->post->password == '') die(js::error($this->lang->install->errorEmptyPassword));
+        if($this->post->password == '') return print(js::error($this->lang->install->errorEmptyPassword));
 
         /* Insert a company. */
         $company = new stdclass();
@@ -517,6 +517,7 @@ class installModel extends model
             $admin->realname = $this->post->account;
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
+            $admin->visions  = 'rnd,lite';
             $this->dao->replace(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
         }
     }
@@ -551,7 +552,7 @@ class installModel extends model
             $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
         }
 
-        if(!empty($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             /* Update flowdatasource by lang. */
             foreach($this->lang->install->workflowdatasource as $id => $name)
@@ -566,7 +567,7 @@ class installModel extends model
             }
         }
 
-        if(!empty($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             /* Update process by lang. */
             foreach($this->lang->install->processList as $id => $name)

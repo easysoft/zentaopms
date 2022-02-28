@@ -259,6 +259,9 @@ class baseModel
         $extensionName = strtolower($extensionName);
         $moduleExtPath = $this->app->getModuleExtPath($this->appName, $moduleName, 'model');
         if(!empty($moduleExtPath['site'])) $extensionFile = $moduleExtPath['site'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['custom'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['vision'] . 'class/' . $extensionName . '.class.php';
+        if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['xuan']   . 'class/' . $extensionName . '.class.php';
         if(!isset($extensionFile) or !file_exists($extensionFile)) $extensionFile = $moduleExtPath['common'] . 'class/' . $extensionName . '.class.php';
 
         /* 设置扩展类的名字。Set the extension class name. */

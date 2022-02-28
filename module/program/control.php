@@ -243,10 +243,10 @@ class program extends control
         {
             /* Only when all subprograms and subprojects are closed can the program be closed. */
             $hasUnfinished = $this->program->hasUnfinished($program);
-            if($hasUnfinished) die(js::error($this->lang->program->closeErrorMessage));
+            if($hasUnfinished) return print(js::error($this->lang->program->closeErrorMessage));
 
             $changes = $this->project->close($programID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -255,7 +255,7 @@ class program extends control
             }
 
             $this->executeHooks($programID);
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->lang->program->close;
@@ -281,7 +281,7 @@ class program extends control
         if(!empty($_POST))
         {
             $changes = $this->project->start($programID, 'program');
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -291,7 +291,7 @@ class program extends control
 
             $this->loadModel('common')->syncPPEStatus($programID);
             $this->executeHooks($programID);
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->lang->program->start;
@@ -317,14 +317,14 @@ class program extends control
         if(!empty($_POST))
         {
             $changes = $this->project->activate($programID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
                 $actionID = $this->action->create('program', $programID, 'Activated', $this->post->comment);
                 $this->action->logHistory($actionID, $changes);
             }
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $newBegin = date('Y-m-d');
@@ -355,7 +355,7 @@ class program extends control
         if(!empty($_POST))
         {
             $changes = $this->project->suspend($programID);
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             if($this->post->comment != '' or !empty($changes))
             {
@@ -363,7 +363,7 @@ class program extends control
                 $this->action->logHistory($actionID, $changes);
             }
             $this->executeHooks($programID);
-            die(js::reload('parent.parent'));
+            return print(js::reload('parent.parent'));
         }
 
         $this->view->title      = $this->lang->program->suspend;
@@ -389,19 +389,19 @@ class program extends control
         if($childrenCount)
         {
             if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'Cannot delete the program has children'));
-            die(js::alert($this->lang->program->hasChildren));
+            return print(js::alert($this->lang->program->hasChildren));
         }
 
         $productCount = $this->dao->select('count(*) as count')->from(TABLE_PRODUCT)->where('program')->eq($programID)->andWhere('deleted')->eq(0)->fetch('count');
-        if($productCount) die(js::alert($this->lang->program->hasProduct));
+        if($productCount) return print(js::alert($this->lang->program->hasProduct));
 
         $program = $this->dao->select('*')->from(TABLE_PROGRAM)->where('id')->eq($programID)->fetch();
-        if($confirm == 'no') die(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->program->confirmDelete, $this->createLink('program', 'delete', "programID=$programID&confirm=yes")));
 
         $this->dao->update(TABLE_PROGRAM)->set('deleted')->eq(1)->where('id')->eq($programID)->exec();
         $this->loadModel('action')->create('program', $programID, 'deleted', '', ACTIONMODEL::CAN_UNDELETED);
 
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -508,7 +508,7 @@ class program extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
+            return print(js::confirm($this->lang->program->confirmDelete, $this->inlink('unlinkStakeholder', "stakeholderID=$stakeholderID&programID=$programID&confirm=yes")));
         }
         else
         {
@@ -518,7 +518,7 @@ class program extends control
             $this->loadModel('user')->updateUserView($programID, 'program', array($account));
             $this->updateChildUserView($programID, $account);
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
          }
     }
 
@@ -537,7 +537,7 @@ class program extends control
 
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->program->confirmBatchUnlink, $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes")));
+            return print(js::confirm($this->lang->program->confirmBatchUnlink, $this->inlink('batchUnlinkStakeholders', "programID=$programID&stakeholderIDList=$stakeholderIDList&confirm=yes")));
         }
         else
         {
@@ -547,7 +547,7 @@ class program extends control
             $this->loadModel('user')->updateUserView($programID, 'program', $account);
             $this->updateChildUserView($programID, $account);
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
     }
 
@@ -611,7 +611,7 @@ class program extends control
                 }
             }
 
-            if(isset($this->config->bizVersion)) list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
+            if($this->config->edition != 'open') list($fields, $projectStats) = $this->loadModel('workflowfield')->appendDataFromFlow($fields, $projectStats);
 
             $this->post->set('fields', $fields);
             $this->post->set('rows', $programs);
@@ -723,7 +723,7 @@ class program extends control
     {
         $programID = (int)$programID;
         $program   = $this->program->getByID($programID);
-        if(!$program) die(js::error($this->lang->notFound) . js::locate('back'));
+        if(!$program) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         echo $this->fetch('program', 'product', "programID=$programID");
     }

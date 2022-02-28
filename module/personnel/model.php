@@ -130,7 +130,7 @@ class personnelModel extends model
         $executionPairs    = $this->getInvolvedExecutions($projects);
         $taskInvest        = $this->getProjectTaskInvest($projects, $accountPairs);
         $bugAndStoryInvest = $this->getBugAndStoryInvest($accountPairs, $programID);
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $issueInvest = $this->getIssueInvest($accountPairs, $projects);
             $riskInvest  = $this->getRiskInvest($accountPairs, $projects);
@@ -151,7 +151,7 @@ class personnelModel extends model
 
             $personnelList[$account] += $taskInvest[$account];
             $personnelList[$account] += $bugAndStoryInvest[$account];
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $personnelList[$account] += $issueInvest[$account];
                 $personnelList[$account] += $riskInvest[$account];
@@ -375,7 +375,7 @@ class personnelModel extends model
 
         /* The number of hours per person. */
         $userHours = array();
-        if(isset($this->config->qcVersion) || isset($this->config->proVersion) || isset($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $userHours = $this->getUserEffortHours($userTasks);
         }

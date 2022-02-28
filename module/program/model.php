@@ -11,12 +11,12 @@ class programModel extends model
     {
         echo(js::alert($this->lang->program->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('my', 'index')));
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('my', 'index')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('my', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('my', 'index')));
 
-        die(js::locate('back'));
+        echo js::locate('back');
     }
 
     /**
@@ -133,6 +133,7 @@ class programModel extends model
         return $this->dao->select('*')->from(TABLE_PROGRAM)
             ->where('type')->in('program,project')
             ->andWhere('deleted')->eq(0)
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF(!$this->app->user->admin)
             ->andWhere('(id')->in($this->app->user->view->programs)
             ->orWhere('id')->in($this->app->user->view->projects)
@@ -449,6 +450,7 @@ class programModel extends model
             ->leftJoin(TABLE_TEAM)->alias('t2')->on('t1.id=t2.root')
             ->leftJoin(TABLE_STAKEHOLDER)->alias('t3')->on('t1.id=t3.objectID')
             ->where('t1.deleted')->eq('0')
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($this->config->systemMode == 'new')->andWhere('t1.type')->eq('project')->fi()
             ->beginIF($this->config->systemMode == 'new' and ($this->cookie->involved or $involved))->andWhere('t2.type')->eq('project')->fi()
             ->beginIF($browseType != 'all' and $browseType != 'undone')->andWhere('t1.status')->eq($browseType)->fi()

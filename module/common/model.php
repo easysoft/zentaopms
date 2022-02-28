@@ -31,7 +31,7 @@ class commonModel extends model
             $this->loadConfigFromDB();
             $this->app->setTimezone();
             $this->loadCustomFromDB();
-            if(!$this->checkIP()) die($this->lang->ipLimited);
+            if(!$this->checkIP()) return print($this->lang->ipLimited);
             $this->app->loadLang('company');
         }
     }
@@ -259,7 +259,7 @@ class commonModel extends model
     {
         /* Get configs of system and current user. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
-        if($this->config->db->name) $config  = $this->loadModel('setting')->getSysAndPersonalConfig($account);
+        if($this->config->db->name) $config = $this->loadModel('setting')->getSysAndPersonalConfig($account);
         $this->config->system   = isset($config['system']) ? $config['system'] : array();
         $this->config->personal = isset($config[$account]) ? $config[$account] : array();
 
@@ -359,7 +359,7 @@ class commonModel extends model
         {
             echo js::locate($denyLink);
         }
-        exit;
+        helper::end();
     }
 
     /**
@@ -393,9 +393,6 @@ class commonModel extends model
         {
             $isGuest = $app->user->account == 'guest';
 
-            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
-            echo html::avatar($app->user);
-            echo '</a>';
             echo "<ul class='dropdown-menu pull-right'>";
             if(!$isGuest)
             {
@@ -406,14 +403,21 @@ class commonModel extends model
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
                 echo '</a></li><li class="divider"></li>';
+
+                $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
+
                 echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
 
-                if(!commonModel::isTutorialMode())
+                if($app->config->vision === 'rnd')
                 {
-                    echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    if(!commonModel::isTutorialMode())
+                    {
+                        echo '<li>' . html::a(helper::createLink('tutorial', 'start'), "<i class='icon icon-guide'></i> " . $lang->tutorialAB, '', "class='iframe' data-class-name='modal-inverse' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
+                    }
+
+                    echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 }
 
-                echo '<li>' . html::a(helper::createLink('my', 'preference', '', '', true), "<i class='icon icon-controls'></i> " . $lang->preference, '', "class='iframe' data-width='650'") . '</li>';
                 echo '<li>' . html::a(helper::createLink('my', 'changepassword', '', '', true), "<i class='icon icon-cog-outline'></i> " . $lang->changePassword, '', "class='iframe' data-width='600'") . '</li>';
 
                 echo "<li class='divider'></li>";
@@ -453,6 +457,41 @@ class commonModel extends model
                 echo html::a(helper::createLink('user', 'logout'), "<i class='icon icon-exit'></i> " . $lang->logout, '_top');
             }
             echo '</li></ul>';
+
+            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
+            echo html::avatar($app->user);
+            echo '</a>';
+        }
+    }
+
+    /**
+     * Print vision switcher.
+     *
+     * @static
+     * @access public
+     * @return void
+     */
+    public static function printVisionSwitcher()
+    {
+        global $lang, $app;
+
+        if(isset($app->user))
+        {
+            $currentVision = $app->config->vision;
+            $userVisions   = array_filter(explode(',', $app->user->visions));
+            if(count($userVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
+
+            echo "<ul class='dropdown-menu pull-right'>";
+            echo "<li class='text-gray switchTo'>{$lang->switchTo}</li>";
+            foreach($userVisions as $vision)
+            {
+                echo ($currentVision == $vision ? '<li class="active">' : '<li>') . html::a(helper::createLink('my', 'ajaxSwitchVision', "vision=$vision"), $lang->visionList[$vision], '', "data-type='ajax'") . '</li>';
+            }
+            echo '</ul>';
+
+            echo "<a class='dropdown-toggle' data-toggle='dropdown'>";
+            echo "<div>{$lang->visionList[$currentVision]}</div>";
+            echo '</a>';
         }
     }
 
@@ -467,9 +506,7 @@ class commonModel extends model
     {
         global $app, $config, $lang;
 
-        $html  = "<a class='dropdown-toggle' data-toggle='dropdown'>";
-        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
-        $html .= "</a><ul class='dropdown-menu pull-right create-list'>";
+        $html  = "<ul class='dropdown-menu pull-right create-list'>";
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
@@ -490,7 +527,7 @@ class commonModel extends model
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            if(!isset($config->proVersion) and $objectType == 'effort') continue;
+            if($config->edition == 'open' and $objectType == 'effort') continue;
             if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
             if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
 
@@ -528,7 +565,11 @@ class commonModel extends model
                         $attr         = "class='iframe' data-width='650px'";
                         break;
                     case 'project':
-                        if(!defined('TUTORIAL'))
+                        if($config->vision == 'lite')
+                        {
+                            $params = "model=kanban";
+                        }
+                        else if(!defined('TUTORIAL'))
                         {
                             $params       = "programID=0&copyProjectID=0&extra=from=global";
                             $createMethod = 'createGuide';
@@ -544,7 +585,16 @@ class commonModel extends model
                         $params = "productID=$productID&branch=&extras=from=global";
                         break;
                     case 'story':
-                        $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        if(!$productID and $config->vision == 'lite')
+                        {
+                            $module       = 'project';
+                            $params       = "model=kanban";
+                        }
+                        else
+                        {
+                            $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                        }
+
                         break;
                     case 'task':
                         $params = "executionID=0&storyID=0&moduleID=0&taskID=0&todoID=0&extra=from=global";
@@ -578,6 +628,10 @@ class commonModel extends model
         if(!$showCreateList) return '';
 
         $html .= "</ul>";
+        $html .= "<a class='dropdown-toggle' data-toggle='dropdown'>";
+        $html .= "<i class='icon icon-plus-solid-circle text-secondary'></i>";
+        $html .= "</a>";
+
         echo $html;
     }
 
@@ -1726,7 +1780,7 @@ EOD;
          * 当主状态改变并且未设置子状态的值时把子状态的值设置为默认值并记录日志。
          * Change sub status when status is changed and sub status is not set, and record the changes.
          */
-        if(isset($config->bizVersion))
+        if($config->edition != 'open')
         {
             $oldID        = zget($old, 'id', '');
             $oldStatus    = zget($old, 'status', '');
@@ -2072,7 +2126,7 @@ EOD;
      * Check upgrade's status file is ok or not.
      *
      * @access public
-     * @return void
+     * @return bool
      */
     public function checkUpgradeStatus()
     {
@@ -2086,8 +2140,12 @@ EOD;
             echo "<html><head><meta http-equiv='Content-Type' content='text/html; charset=utf-8' /></head><body>";
             echo "<table align='center' style='margin-top:100px; border:1px solid gray; font-size:14px;padding:8px;'><tr><td>";
             printf($this->lang->upgrade->setStatusFile, $cmd, $statusFile);
-            die('</td></tr></table></body></html>');
+            echo '</td></tr></table></body></html>';
+
+            return false;
         }
+
+        return true;
     }
 
     /**
@@ -2106,7 +2164,7 @@ EOD;
             $method = $this->app->rawMethod;
         }
 
-        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) die(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2121,7 +2179,7 @@ EOD;
         else
         {
             $referer  = helper::safe64Encode($this->app->getURI(true));
-            die(js::locate(helper::createLink('user', 'login', "referer=$referer")));
+            return print(js::locate(helper::createLink('user', 'login', "referer=$referer")));
         }
     }
 
@@ -2203,7 +2261,9 @@ EOD;
 
         /* Reset priv by program privway. */
         $rights = $this->app->user->rights['rights'];
-        $this->app->user  = clone $_SESSION['user'];
+        $this->app->user = clone $_SESSION['user'];
+
+        if($this->app->user->account == $program->openedBy or $this->app->user->account == $program->PM) $program->auth = 'extend';
 
         if($program->auth == 'extend') $this->app->user->rights['rights'] = array_merge_recursive($programRightGroup, $rights);
         if($program->auth == 'reset')
@@ -2466,7 +2526,7 @@ EOD;
         $this->loadModel('action')->create('user', $user->id, 'login');
         $this->loadModel('score')->create('user', 'login');
 
-        if($isFreepasswd) die(js::locate($this->config->webRoot));
+        if($isFreepasswd) return print(js::locate($this->config->webRoot));
 
         $this->session->set('ENTRY_CODE', $this->get->code);
         $this->session->set('VALID_ENTRY', md5(md5($this->get->code) . $this->server->remote_addr));
@@ -2605,12 +2665,12 @@ EOD;
             $response->errcode = $this->config->entry->errcode[$code];
             $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-            die(urldecode(json_encode($response)));
+            return print(urldecode(json_encode($response)));
         }
         else
         {
             $response->error = $code;
-            die(urldecode(json_encode($response)));
+            return print(urldecode(json_encode($response)));
         }
     }
 
@@ -2714,7 +2774,7 @@ EOD;
         global $lang, $app;
         if(!extension_loaded('curl'))
         {
-             if($dataType == 'json') die($lang->error->noCurlExt);
+             if($dataType == 'json') return print($lang->error->noCurlExt);
              return json_encode(array('result' => 'fail', 'message' => $lang->error->noCurlExt));
         }
 

@@ -105,6 +105,7 @@ $config->bug->search['fields']['resolvedDate']   = $lang->bug->resolvedDate;
 $config->bug->search['fields']['closedDate']     = $lang->bug->closedDate;
 $config->bug->search['fields']['lastEditedDate'] = $lang->bug->lastEditedDateAB;
 $config->bug->search['fields']['deadline']       = $lang->bug->deadline;
+$config->bug->search['fields']['activatedDate']  = $lang->bug->activatedDate;
 
 $config->bug->search['params']['title']         = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->bug->search['params']['keywords']      = array('operator' => 'include', 'control' => 'input',  'values' => '');
@@ -149,6 +150,7 @@ $config->bug->search['params']['resolvedDate']  = array('operator' => '=',      
 $config->bug->search['params']['closedDate']    = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['lastEditedDate']= array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->bug->search['params']['deadline']      = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->bug->search['params']['activatedDate'] = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->bug->datatable = new stdclass();
 $config->bug->datatable->defaultField = array('id', 'severity', 'pri', 'confirmed', 'title', 'status', 'openedBy', 'openedDate', 'assignedTo', 'resolution', 'actions');
@@ -162,11 +164,13 @@ $config->bug->datatable->fieldList['severity']['title']    = 'severityAB';
 $config->bug->datatable->fieldList['severity']['fixed']    = 'left';
 $config->bug->datatable->fieldList['severity']['width']    = '50';
 $config->bug->datatable->fieldList['severity']['required'] = 'no';
+$config->bug->datatable->fieldList['severity']['name']     = $lang->bug->severity;
 
 $config->bug->datatable->fieldList['pri']['title']    = 'P';
 $config->bug->datatable->fieldList['pri']['fixed']    = 'left';
 $config->bug->datatable->fieldList['pri']['width']    = '50';
 $config->bug->datatable->fieldList['pri']['required'] = 'no';
+$config->bug->datatable->fieldList['pri']['name']     = $lang->bug->pri;
 
 $config->bug->datatable->fieldList['confirmed']['title']    = 'confirmedAB';
 $config->bug->datatable->fieldList['confirmed']['fixed']    = 'left';

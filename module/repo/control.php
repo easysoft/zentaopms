@@ -26,7 +26,7 @@ class repo extends control
         if(stripos(",$disFuncs,", ',exec,') !== false or stripos(",$disFuncs,", ',shell_exec,') !== false)
         {
             echo js::alert($this->lang->repo->error->useless);
-            die(js::locate('back'));
+            return print(js::locate('back'));
         }
 
         $this->projectID = $this->session->project ? $this->session->project : 0;
@@ -61,7 +61,7 @@ class repo extends control
             $this->repo->setMenu($this->repos, $repoID);
         }
 
-        if(empty($this->repos) and $this->methodName != 'create') die($this->locate($this->repo->createLink('create', "objectID=$objectID")));
+        if(empty($this->repos) and $this->methodName != 'create') return print($this->locate($this->repo->createLink('create', "objectID=$objectID")));
     }
 
     /**
@@ -216,7 +216,7 @@ class repo extends control
      */
     public function delete($repoID, $objectID = 0, $confirm = 'no')
     {
-        if($confirm == 'no') die(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
+        if($confirm == 'no') return print(js::confirm($this->lang->repo->notice->delete, $this->repo->createLink('delete', "repoID=$repoID&objectID=$objectID&confirm=yes")));
 
         $relationID = $this->dao->select('id')->from(TABLE_RELATION)
             ->where('extra')->eq($repoID)
@@ -228,15 +228,15 @@ class repo extends control
         $jobs = $this->dao->select('*')->from(TABLE_JOB)->where('repo')->eq($repoID)->andWhere('deleted')->eq('0')->fetchAll();
         if($jobs) $error .= ($error ? '\n' : '') . $this->lang->repo->error->linkedJob;
 
-        if($error) die(js::alert($error));
+        if($error) return print(js::alert($error));
 
         $this->dao->delete()->from(TABLE_REPO)->where('id')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOHISTORY)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOFILES)->where('repo')->eq($repoID)->exec();
         $this->dao->delete()->from(TABLE_REPOBRANCH)->where('repo')->eq($repoID)->exec();
 
-        if(dao::isError()) die(js::error(dao::getError()));
-        die(js::reload('parent'));
+        if(dao::isError()) return print(js::error(dao::getError()));
+        echo js::reload('parent');
     }
 
     /**
@@ -924,8 +924,8 @@ class repo extends control
     {
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
-        if(empty($repo)) die();
-        if($repo->synced) die('finish');
+        if(empty($repo)) return;
+        if($repo->synced) return print('finish');
 
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
@@ -996,7 +996,7 @@ class repo extends control
                 if(empty($branchID))
                 {
                     $this->repo->markSynced($repoID);
-                    die('finish');
+                    return print('finish');
                 }
             }
         }
@@ -1017,8 +1017,8 @@ class repo extends control
     {
         set_time_limit(0);
         $repo = $this->repo->getRepoByID($repoID);
-        if(empty($repo)) die();
-        if(strpos($repo->SCM, 'Git') === false) die('finish');
+        if(empty($repo)) return;
+        if(strpos($repo->SCM, 'Git') === false) return print('finish');
         if($branch) $branch = base64_decode($branch);
 
         $this->scm->setEngine($repo);
@@ -1047,7 +1047,7 @@ class repo extends control
 
             setcookie("syncBranch", $branch, 0, $this->config->webRoot, '', $this->config->cookieSecure, true);
             $this->repo->markSynced($repoID);
-            die('finish');
+            return print('finish');
         }
 
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
@@ -1100,7 +1100,7 @@ class repo extends control
     public function ajaxGetSVNDirs($repoID, $path = '')
     {
         $repo = $this->repo->getRepoByID($repoID);
-        if($repo->SCM != 'Subversion') die(json_encode(array()));
+        if($repo->SCM != 'Subversion') return print(json_encode(array()));
 
         $path = $this->repo->decodePath($path);
         $dirs = array();
@@ -1116,7 +1116,7 @@ class repo extends control
             $dirs['/'] = $this->repo->encodePath($path);
             foreach($tags as $dirPath => $dirName) $dirs[$dirPath] = $this->repo->encodePath($dirPath);
         }
-        die(json_encode($dirs));
+        return print(json_encode($dirs));
     }
 
     /**
@@ -1139,7 +1139,7 @@ class repo extends control
         }
         $reposHtml .= '</div></div></div>';
 
-        die($reposHtml);
+        return print($reposHtml);
     }
 
     /**
@@ -1184,7 +1184,7 @@ class repo extends control
             $options .= "<option value='{$project->id}' data-name='{$project->name}'>{$project->name_with_namespace}</option>";
         }
 
-        die($options);
+        return print($options);
     }
 
     /**
@@ -1210,7 +1210,7 @@ class repo extends control
         }
         $branchesHtml .= '</div></div></div>';
 
-        die($branchesHtml);
+        return print($branchesHtml);
     }
 
     /**

@@ -42,6 +42,7 @@ $lang->user->address          = 'Address';
 $lang->user->zipcode          = 'ZipCode';
 $lang->user->join             = 'Joined';
 $lang->user->visits           = 'Visits';
+$lang->user->visions          = 'Version Type';
 $lang->user->ip               = 'Last IP';
 $lang->user->last             = 'Last Login';
 $lang->user->ranzhi           = 'Zdoo Account';
@@ -72,6 +73,7 @@ $lang->user->products         = $lang->productCommon;
 $lang->user->projects         = 'Project';
 $lang->user->sprints          = $lang->execution->common;
 $lang->user->identity         = 'Identity';
+$lang->user->switchVision     = 'Switch to %s';
 
 $lang->user->legendBasic        = 'Basic Information';
 $lang->user->legendContribution = 'Contribution';

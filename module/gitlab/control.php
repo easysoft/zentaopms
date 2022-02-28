@@ -147,7 +147,7 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-        if(!isset($user->is_admin) or !$user->is_admin) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+        if(!isset($user->is_admin) or !$user->is_admin) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
         if($_POST)
         {
@@ -221,7 +221,7 @@ class gitlab extends control
      */
     public function delete($id, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->confirmDelete, inlink('delete', "id=$id&confirm=yes")));
 
         $oldGitLab = $this->gitlab->getByID($id);
         $this->loadModel('action');
@@ -231,7 +231,7 @@ class gitlab extends control
         $actionID = $this->action->create('gitlab', $id, 'deleted');
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->action->logHistory($actionID, $changes);
-        die(js::reload('parent'));
+        echo js::reload('parent');
     }
 
     /**
@@ -615,7 +615,7 @@ class gitlab extends control
      */
     public function deleteUser($gitlabID, $userID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->user->confirmDelete , inlink('deleteUser', "gitlabID=$gitlabID&userID=$userID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->user->confirmDelete , inlink('deleteUser', "gitlabID=$gitlabID&userID=$userID&confirm=yes")));
 
         $user    = $this->gitlab->apiGetSingleUser($gitlabID, $userID);
         $reponse = $this->gitlab->apiDeleteUser($gitlabID, $userID);
@@ -628,10 +628,10 @@ class gitlab extends control
             /* Delete user bind. */
             $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq('gitlab')->andWhere('providerID')->eq($gitlabID)->andWhere('openID')->eq($userID)->exec();
 
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        echo js::alert($reponse->message);
     }
 
     /**
@@ -758,7 +758,7 @@ class gitlab extends control
      */
     public function deleteProject($gitlabID, $projectID, $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->project->confirmDelete , inlink('deleteProject', "gitlabID=$gitlabID&projectID=$projectID&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->project->confirmDelete , inlink('deleteProject', "gitlabID=$gitlabID&projectID=$projectID&confirm=yes")));
 
         $project = $this->gitlab->apiGetSingleProject($gitlabID, $projectID);
         $reponse = $this->gitlab->apiDeleteProject($gitlabID, $projectID);
@@ -767,10 +767,10 @@ class gitlab extends control
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabproject', $projectID, 'deleted', '', $project->name);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        echo js::alert($reponse->message);
     }
 
     /**
@@ -1011,7 +1011,8 @@ class gitlab extends control
 
         if($confirm != 'yes')
         {
-            die(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
+            $branch = urlencode($branch);
+            return print(js::confirm($this->lang->gitlab->branch->confirmDelete , inlink('deleteBranchPriv', "gitlabID=$gitlabID&projectID=$projectID&branch=$branch&confirm=yes")));
         }
 
         /* Fix error when request type is PATH_INFO and the branch name contains '-'.*/
@@ -1022,10 +1023,10 @@ class gitlab extends control
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabbranchPriv', $branch, 'deleted', '', $branch);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        echo js::alert($reponse->message);
     }
 
     /**
@@ -1276,10 +1277,10 @@ class gitlab extends control
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabtagpriv', 0, 'deleted', '', $tag);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        echo js::alert($reponse->message);
     }
 
     /**
@@ -1298,7 +1299,7 @@ class gitlab extends control
 
         $gitlab = $this->gitlab->getByID($gitlabID);
         if($gitlab) $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
-        if(empty($user->is_admin)) die(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
+        if(empty($user->is_admin)) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
         if($_POST)
         {
@@ -1399,7 +1400,7 @@ class gitlab extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->gitlab->confirmAddWebhook, $this->createLink('gitlab', 'createWebhook', "repoID=$repoID&confirm=yes")));
+            return print(js::confirm($this->lang->gitlab->confirmAddWebhook, $this->createLink('gitlab', 'createWebhook', "repoID=$repoID&confirm=yes")));
         }
         else
         {
@@ -1408,11 +1409,11 @@ class gitlab extends control
 
             if($res or is_array($res))
             {
-                die(js::alert($this->lang->gitlab->addWebhookSuccess));
+                return print(js::alert($this->lang->gitlab->addWebhookSuccess));
             }
             else
             {
-                die(js::error($this->lang->gitlab->failCreateWebhook));
+                return print(js::error($this->lang->gitlab->failCreateWebhook));
             }
         }
     }
@@ -1678,7 +1679,7 @@ class gitlab extends control
      */
     public function deleteTag($gitlabID, $projectID, $tagName = '', $confirm = 'no')
     {
-        if($confirm != 'yes') die(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
+        if($confirm != 'yes') return print(js::confirm($this->lang->gitlab->tag->confirmDelete , inlink('deleteTag', "gitlabID=$gitlabID&projectID=$projectID&tagName=$tagName&confirm=yes")));
 
         /* Fix error when request type is PATH_INFO and the tag name contains '-'.*/
         $tagName = urldecode(helper::safe64Decode($tagName));
@@ -1688,9 +1689,9 @@ class gitlab extends control
         if(!$reponse or substr($reponse->message, 0, 2) == '20')
         {
             $this->loadModel('action')->create('gitlabtag', $projectID, 'deleted', '', $project->name);
-            die(js::reload('parent'));
+            return print(js::reload('parent'));
         }
 
-        die(js::alert($reponse->message));
+        echo js::alert($reponse->message);
     }
 }

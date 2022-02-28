@@ -24,7 +24,7 @@ class sso extends control
         $locate  = empty($referer) ? getWebRoot() : base64_decode($referer);
 
         $this->app->loadConfig('sso');
-        if(!$this->config->sso->turnon) die($this->locate($locate));
+        if(!$this->config->sso->turnon) return print($this->locate($locate));
 
         $userIP = $this->server->remote_addr;
         $code   = $this->config->sso->code;
@@ -92,7 +92,7 @@ class sso extends control
 
                 if($this->loadModel('user')->isLogon())
                 {
-                    if($this->session->user && $this->session->user->account == $user->account) die($this->locate($locate));
+                    if($this->session->user && $this->session->user->account == $user->account) return print($this->locate($locate));
                 }
 
                 $this->user->cleanLocked($user->account);
@@ -116,7 +116,8 @@ class sso extends control
                 $this->session->set('user', $user);
                 $this->app->user = $this->session->user;
                 $this->loadModel('action')->create('user', $user->id, 'login');
-                die($this->locate($locate));
+
+                return print($this->locate($locate));
             }
         }
         $this->locate($this->createLink('user', 'login', empty($referer) ? '' : "referer=$referer"));
@@ -170,7 +171,7 @@ class sso extends control
      */
     public function ajaxSetConfig()
     {
-        if(!$this->app->user->admin) die('deny');
+        if(!$this->app->user->admin) return print('deny');
 
         if($_POST)
         {
@@ -181,8 +182,8 @@ class sso extends control
             $ssoConfig->key    = trim($this->post->key);
 
             $this->loadModel('setting')->setItems('system.sso', $ssoConfig);
-            if(dao::isError()) die('fail');
-            die('success');
+            if(dao::isError()) return print('fail');
+            echo 'success';
         }
     }
 
@@ -195,19 +196,19 @@ class sso extends control
      */
     public function bind($referer = '')
     {
-        if(!$this->session->ssoData) die();
+        if(!$this->session->ssoData) return;
 
         $ssoData = $this->session->ssoData;
         $userIP  = $this->server->remote_addr;
         $code    = $this->config->sso->code;
         $key     = $this->config->sso->key;
-        if($ssoData->auth != md5($code . $userIP . $ssoData->token . $key))die();
+        if($ssoData->auth != md5($code . $userIP . $ssoData->token . $key)) return;
 
         $this->loadModel('user');
         if($_POST)
         {
             $user = $this->sso->bind();
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             /* Authorize him and save to session. */
             $user->rights = $this->user->authorize($user->account);
@@ -219,7 +220,7 @@ class sso extends control
             $this->app->user = $this->session->user;
             $this->loadModel('action')->create('user', $user->id, 'login');
             unset($_SESSION['ssoData']);
-            die(js::locate(helper::safe64Decode($referer), 'parent'));
+            return print(js::locate(helper::safe64Decode($referer), 'parent'));
         }
         $this->view->title = $this->lang->sso->bind;
         $this->view->users = $this->user->getPairs('noclosed|nodeleted');
@@ -237,7 +238,7 @@ class sso extends control
     {
         if(!$this->sso->checkKey()) return false;
         $users = $this->loadModel('user')->getPairs('noclosed|nodeleted');
-        die(json_encode($users));
+        echo json_encode($users);
     }
 
     /**
@@ -250,7 +251,7 @@ class sso extends control
     {
         if(!$this->sso->checkKey()) return false;
         $users = $this->sso->getBindUsers();
-        die(json_encode($users));
+        echo json_encode($users);
     }
 
     /**
@@ -265,8 +266,8 @@ class sso extends control
         {
             $this->dao->update(TABLE_USER)->set('ranzhi')->eq('')->where('ranzhi')->eq($this->post->ranzhiAccount)->exec();
             $this->dao->update(TABLE_USER)->set('ranzhi')->eq($this->post->ranzhiAccount)->where('account')->eq($this->post->zentaoAccount)->exec();
-            if(dao::isError()) die(dao::getError());
-            die('success');
+            if(dao::isError()) return print(dao::getError());
+            return print('success');
         }
     }
 
@@ -282,8 +283,8 @@ class sso extends control
         {
             $result = $this->sso->createUser();
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'id' => $result['id']));
-            if($result['status'] != 'success') die($result['data']);
-            die('success');
+            if($result['status'] != 'success') return print($result['data']);
+            return print('success');
         }
     }
 
@@ -303,7 +304,7 @@ class sso extends control
         $datas = array();
         $datas['task'] = $this->dao->select("id, name")->from(TABLE_TASK)->where('assignedTo')->eq($account)->andWhere('status')->in('wait,doing')->andWhere('deleted')->eq(0)->fetchPairs();
         $datas['bug']  = $this->dao->select("id, title")->from(TABLE_BUG)->where('assignedTo')->eq($account)->andWhere('status')->eq('active')->andWhere('deleted')->eq(0)->fetchPairs();
-        die(json_encode($datas));
+        echo json_encode($datas);
     }
 
     /**
@@ -426,6 +427,5 @@ class sso extends control
         $this->view->title   = $this->lang->sso->deny;
         $this->view->message = $message;
         $this->display('sso', 'error');
-        die();
     }
 }

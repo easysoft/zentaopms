@@ -61,6 +61,11 @@
           <td><?php echo html::password('password2', '', "class='form-control'");?></td>
         </tr>
         <tr>
+          <th><?php echo $lang->user->visions;?></th>
+          <?php $visionList = $this->user->getVisionList();?>
+          <td><?php echo html::checkbox('visions', $visionList, key($visionList), "class='form-control'");?></td>
+        </tr>
+        <tr>
           <th><?php echo $lang->user->realname;?></th>
           <td><?php echo html::input('realname', '', "class='form-control'");?></td>
         </tr>

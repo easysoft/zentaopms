@@ -150,7 +150,7 @@
             <thead>
               <tr class='text-center'>
                 <th class='w-50px'> <?php echo $lang->story->id;?></th>
-                <th class='w-40px'> <?php echo $lang->priAB;?></th>
+                <th class='w-40px' title=<?php echo $lang->story->pri;?>><?php echo $lang->priAB;?></th>
                 <th>                <?php echo $lang->story->title;?></th>
                 <th class='w-100px'><?php echo $lang->story->assignedTo;?></th>
                 <th class='w-90px'> <?php echo $lang->story->estimate;?></th>
@@ -215,7 +215,7 @@
         common::printIcon('story', 'assignTo', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'close',    "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
         common::printIcon('story', 'activate', "storyID=$story->id", $story, 'button', '', '', 'iframe showinonlybody', true);
-        if(isset($this->config->maxVersion) and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) echo html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
+        if($this->config->edition == 'max' and $this->app->tab == 'project' and common::hasPriv('story', 'importToLib')) echo html::a('#importToLib', "<i class='icon icon-assets'></i> " . $this->lang->story->importToLib, '', 'class="btn" data-toggle="modal"');
 
         if($story->parent >= 0 and $story->type != 'requirement' and (common::hasPriv('testcase', 'create', $story) or common::hasPriv('testcase', 'batchCreate', $story)))
         {

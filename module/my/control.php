@@ -153,7 +153,7 @@ class my extends control
         $reviewCount  = 0;
         $ncCount      = 0;
         $meetingCount = 0;
-        $isMax = isset($this->config->maxVersion) ? 1 : 0;
+        $isMax        = $this->config->edition == 'max' ? 1 : 0;
         if($isMax)
         {
             $this->loadModel('issue');
@@ -1260,5 +1260,23 @@ EOF;
             $this->user->unbind($this->app->user->account);
             return print(js::locate($this->createLink('my', 'profile'), 'parent'));
         }
+    }
+
+    /**
+     * Switch vision by ajax.
+     *
+     * @param  string $vision
+     * @access public
+     * @return void
+     */
+    public function ajaxSwitchVision($vision)
+    {
+        $_SESSION['vision'] = $vision;
+        $this->loadModel('setting')->setItem("{$this->app->user->account}.common.global.vision", $vision);
+        $this->config->vision = $vision;
+
+        $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
+
+        echo js::locate($this->createLink('my', 'index'), 'parent');
     }
 }

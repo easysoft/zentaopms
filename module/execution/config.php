@@ -78,6 +78,7 @@ $config->execution->search['fields']['finishedDate']   = $lang->task->finishedDa
 $config->execution->search['fields']['closedDate']     = $lang->task->closedDate;
 $config->execution->search['fields']['canceledDate']   = $lang->task->canceledDate;
 $config->execution->search['fields']['lastEditedDate'] = $lang->task->lastEditedDate;
+$config->execution->search['fields']['activatedDate']  = $lang->task->activatedDate;
 
 $config->execution->search['params']['name']           = array('operator' => 'include', 'control' => 'input',  'values' => '');
 $config->execution->search['params']['status']         = array('operator' => '=',       'control' => 'select', 'values' => $lang->task->statusList);
@@ -112,6 +113,7 @@ $config->execution->search['params']['finishedDate']   = array('operator' => '='
 $config->execution->search['params']['closedDate']     = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['canceledDate']   = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 $config->execution->search['params']['lastEditedDate'] = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
+$config->execution->search['params']['activatedDate']  = array('operator' => '=',      'control' => 'input',  'values' => '', 'class' => 'date');
 
 $config->printKanban = new stdClass();
 $config->printKanban->col['story']  = 1;

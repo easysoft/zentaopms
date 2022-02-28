@@ -120,7 +120,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO' style='overflow:visible'>";
@@ -181,7 +181,7 @@ foreach($fieldParams as $fieldName => $param)
                 echo "<td class='fieldWidth' style='overflow: visible'>" . html::select("field$fieldNO", $searchFields, $formSession["field$fieldNO"], "onchange='setField(this, $fieldNO, {$module}params)' class='form-control chosen'") . '</td>';
 
                 /* Print operator. */
-                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control'") . '</td>';
+                echo "<td class='operatorWidth'>" . html::select("operator$fieldNO", $lang->search->operators, $formSession["operator$fieldNO"], "class='form-control' onchange='setPlaceHolder($fieldNO)'") . '</td>';
 
                 /* Print value. */
                 echo "<td id='valueBox$fieldNO'>";
@@ -200,7 +200,7 @@ foreach($fieldParams as $fieldName => $param)
 
                     if($fieldValue && strpos('$lastWeek,$thisWeek,$today,$yesterday,$thisMonth,$lastMonth',$fieldValue) !== false)
                     {
-                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{$fieldValue}'");
+                        echo html::input("value$fieldNO", $fieldValue, "class='form-control $extraClass searchInput' placeholder='{}'");
                     }
                     else
                     {
@@ -222,7 +222,8 @@ foreach($fieldParams as $fieldName => $param)
         <ul>
           <?php foreach($queries as $queryID => $queryName):?>
           <?php if(empty($queryID)) continue;?>
-          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . (common::hasPriv('search', 'deleteQuery') ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
+          <?php $query = $this->search->getQuery($queryID);?>
+          <li><?php echo html::a("javascript:executeQuery($queryID)", $queryName . ((common::hasPriv('search', 'deleteQuery') and $this->app->user->account == $query->account) ? '<i class="icon icon-close"></i>' : ''), '', "class='label user-query' data-query-id='$queryID' title='{$queryName}'");?></li>
           <?php endforeach;?>
         </ul>
       </td>
@@ -314,7 +315,7 @@ $(function()
             if($('#mainMenu .btn-toolbar.pull-left #query').size() == 0)
             {
                 var html = '<div class="btn-group" id="query"><a href="javascript:;" data-toggle="dropdown" class="btn btn-link " style="border-radius: 2px;">' + searchCustom + ' <span class="caret"></span></a><ul class="dropdown-menu"></ul></div>';
-                html += '<style>#mainMenu #query.btn-group li {position: relative;} #mainMenu #query.btn-group li a{margin-right:20px;} #mainMenu #query.btn-group li .btn-delete{ padding:0 7px; position: absolute; right: -10px; top: -5px; display: block; width: 20px; text-align: center; } </style>';
+                html += '<style>#mainMenu #query.btn-group li {position: relative;} #mainMenu #query.btn-group li a{margin-right:20px;} #mainMenu #query.btn-group li .btn-delete{ padding:0 7px; position: absolute; right: -10px; top: -3px; display: block; width: 20px; text-align: center; } </style>';
                 html += "<script> function removeQueryFromMenu(obj) { var $obj = $(obj); var link = createLink('search', 'ajaxRemoveMenu', 'queryID=' + $obj.data('id')); $.get(link, function() { $obj.closest('li').remove(); if($('#mainMenu #query.btn-group').find('li').length == 0) $('#mainMenu #query.btn-group').remove(); })}<\/script>";
                 $('#mainMenu .btn-toolbar.pull-left #bysearchTab').before(html);
             }
@@ -430,9 +431,11 @@ $(function()
         var params    = moduleparams;
         var $obj      = $(obj);
         var fieldName = $obj.val();
+
         $searchForm.find('#operator' + fieldNO).val(params[fieldName]['operator']);   // Set the operator according the param setting.
         $searchForm.find('#valueBox' + fieldNO).html($searchForm.find('#box' + fieldName).children().clone());
         $searchForm.find('#valueBox' + fieldNO).children().attr({name : 'value' + fieldNO, id : 'value' + fieldNO});
+        if(fieldName == 'id') setPlaceHolder(fieldNO);
 
         if(typeof(params[fieldName]['class']) != undefined && params[fieldName]['class'] == 'date')
         {
@@ -469,6 +472,27 @@ $(function()
             }
         }
     };
+
+    /**
+     * When the value of the operator select changed, set the placeholder for the valueBox.
+     *
+     * @param  int    $fieldNO
+     * @access public
+     * @return void
+     */
+    var setPlaceHolder = window.setPlaceHolder = function(fieldNO)
+    {
+        var operator  = $('#operator' + fieldNO).val();
+        var fieldName = $('#field' + fieldNO).val();
+        if(operator == '=' && fieldName == 'id')
+        {
+            $('#value' + fieldNO).attr("placeholder","<?php echo $lang->search->queryTips;?>");
+        }
+        else
+        {
+            $('#value' + fieldNO).attr("placeholder","");
+        }
+    }
 
     /*
      * Reset form

@@ -24,7 +24,7 @@ class searchModel extends model
     public function setSearchParams($searchConfig)
     {
         $module = $searchConfig['module'];
-        if(isset($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             $flowModule = $module;
             if($module == 'projectStory') $flowModule = 'story';
@@ -175,6 +175,16 @@ class searchModel extends model
             {
                 if($operator == 'between' and !isset($this->config->search->dynamic[$value])) $operator = '=';
                 $condition = $operator . ' ' . $this->dbh->quote($value) . ' ';
+
+                if($operator == '=' and $this->post->$fieldName == 'id' and preg_match('/^[0-9]+(,[0-9]+)+/', $value) and !preg_match('/[\x7f-\xff]+/', $value))
+                {
+                    $values = explode(',', trim($this->dbh->quote($value), "'"));
+                    foreach($values as $value) $value = "'" . $value . "'";
+
+                    $value     = implode(',', $values);
+                    $operator  = 'IN';
+                    $condition = $operator . ' (' . $value . ') ';
+                }
             }
 
             /* Processing query criteria. */
@@ -389,7 +399,7 @@ class searchModel extends model
     public function deleteQuery($queryID)
     {
         $this->dao->delete()->from(TABLE_USERQUERY)->where('id')->eq($queryID)->andWhere('account')->eq($this->app->user->account)->exec();
-        die('success');
+        echo 'success';
     }
 
     /**
@@ -403,7 +413,11 @@ class searchModel extends model
     {
         $queries = $this->dao->select('id, title')
             ->from(TABLE_USERQUERY)
+            ->where()
+            ->markLeft(1)
             ->where('account')->eq($this->app->user->account)
+            ->orWhere('common')->eq(1)
+            ->markRight(1)
             ->andWhere('module')->eq($module)
             ->orderBy('id_desc')
             ->fetchPairs();
@@ -569,6 +583,7 @@ class searchModel extends model
         $results = $this->dao->select("*, {$scoreColumn} as score")
             ->from(TABLE_SEARCHINDEX)
             ->where("(MATCH(title) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 or MATCH(content) AGAINST('{$againstCond}' IN BOOLEAN MODE) >= 1 $likeCondition)")
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('objectType')->in($allowedObject)
             ->andWhere('addedDate')->le(helper::now())
             ->orderBy('score_desc, editedDate_desc')
@@ -598,7 +613,7 @@ class searchModel extends model
             }
             elseif($module == 'issue')
             {
-                $issueField = isset($this->config->maxVersion)? 'id,project,owner,lib' : 'id,project,owner';
+                $issueField = $this->config->edition == 'max' ? 'id,project,owner,lib' : 'id,project,owner';
                 $issue      = $this->dao->select($issueField)->from(TABLE_ISSUE)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($issue->lib))
                 {
@@ -624,7 +639,7 @@ class searchModel extends model
             }
             elseif($module == 'story')
             {
-                $storyField = isset($this->config->maxVersion)? 'id,type,lib' : 'id,type';
+                $storyField = $this->config->edition == 'max' ? 'id,type,lib' : 'id,type';
                 $story      = $this->dao->select($storyField)->from(TABLE_STORY)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($story->lib))
                 {
@@ -633,9 +648,12 @@ class searchModel extends model
                 }
 
                 $record->url       = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
+
+                if($this->config->vision == 'lite') $record->url = helper::createLink('projectstory', $method, "storyID={$record->objectID}", '', false, 0, true);
+
                 $record->extraType = isset($story->type) ? $story->type : '';
             }
-            elseif(($module == 'risk' or $module == 'opportunity') and isset($this->config->maxVersion))
+            elseif(($module == 'risk' or $module == 'opportunity') and $this->config->edition == 'max')
             {
                 $table  = $this->config->objectTables[$module];
                 $object = $this->dao->select('id,lib')->from($table)->where('id')->eq($record->objectID)->fetch();
@@ -647,7 +665,7 @@ class searchModel extends model
 
                 $record->url = helper::createLink($module, $method, "id={$record->objectID}", '', false, 0, true);
             }
-            elseif($module == 'doc' and isset($this->config->maxVersion))
+            elseif($module == 'doc' and $this->config->edition == 'max')
             {
                 $doc = $this->dao->select('id,assetLib,assetLibType')->from(TABLE_DOC)->where('id')->eq($record->objectID)->fetch();
                 if(!empty($doc->assetLib))
@@ -680,7 +698,7 @@ class searchModel extends model
         $fields = $this->config->search->fields->{$objectType};
         if(empty($fields)) return true;
 
-        if($objectType == 'doc' && isset($this->config->bizVersion)) $object = $this->appendFiles($object);
+        if($objectType == 'doc' && $this->config->edition != 'open') $object = $this->appendFiles($object);
 
         $index = new stdclass();
         $index->objectID   = $object->{$fields->id};
@@ -688,6 +706,7 @@ class searchModel extends model
         $index->title      = $object->{$fields->title};
         $index->addedDate  = isset($object->{$fields->addedDate}) ? $object->{$fields->addedDate} : '0000-00-00 00:00:00';
         $index->editedDate = isset($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : '0000-00-00 00:00:00';
+        $index->vision     = $this->config->vision;
 
         $index->content = '';
         $contentFields  = explode(',', $fields->content . ',comment');

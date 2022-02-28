@@ -41,6 +41,7 @@ $lang->my->requirement     = "我的{$lang->URCommon}";
 $lang->my->testtask        = '我的测试单';
 $lang->my->testcase        = '我的用例';
 $lang->my->storyConcept    = $config->URAndSR ? '默认需求概念组合' : '默认需求概念';
+$lang->my->pri             = '优先级';
 
 $lang->my->indexAction      = '地盘仪表盘';
 $lang->my->calendarAction   = '我的日程';

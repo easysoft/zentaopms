@@ -48,6 +48,7 @@ class actionModel extends model
         $action->action     = $actionType;
         $action->date       = helper::now();
         $action->extra      = $extra;
+        if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
@@ -527,7 +528,7 @@ class actionModel extends model
                 $this->app->loadLang('execution');
                 $linkedProducts = $this->dao->select('id,name')->from(TABLE_PRODUCT)->where('id')->in($action->extra)->fetchPairs('id', 'name');
                 $action->extra  = '';
-                if($linkedProducts)
+                if($linkedProducts and $this->config->vision == 'rnd')
                 {
                     foreach($linkedProducts as $productID => $productName) $linkedProducts[$productID] = html::a(helper::createLink('product', 'browse', "productID=$productID"), "#{$productID} {$productName}");
                     $action->extra = sprintf($this->lang->execution->action->extra, '<strong>' . join(', ', $linkedProducts) . '</strong>');
@@ -617,6 +618,7 @@ class actionModel extends model
         $trashes = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('action')->eq('deleted')
             ->andWhere('extra')->eq($extra)
+            ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)->page($pager)->fetchAll();
         if(!$trashes) return array();
 
@@ -736,7 +738,7 @@ class actionModel extends model
                 list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
                 $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
             }
-            elseif(isset($this->config->maxVersion) and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -878,6 +880,7 @@ class actionModel extends model
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($period != 'all')->andWhere('date')->gt($begin)->fi()
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
@@ -890,6 +893,8 @@ class actionModel extends model
             ->beginIF(!empty($executions))->andWhere('execution')->in(array_keys($executions))->fi()
             ->beginIF(is_numeric($executionID))->andWhere('execution')->eq($executionID)->fi()
             ->markRight(1)
+            /* Types excluded from Lite. */
+            ->beginIF($this->config->vision == 'lite')->andWhere('objectType')->notin('product')->fi()
             ->beginIF($productID == 'notzero')->andWhere('product')->gt(0)->andWhere('product')->notlike('%,0,%')->fi()
             ->beginIF($projectID == 'notzero')->andWhere('project')->gt(0)->fi()
             ->beginIF($executionID == 'notzero')->andWhere('execution')->gt(0)->fi()
@@ -1232,7 +1237,7 @@ class actionModel extends model
             if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
         }
 
-        if(isset($this->config->maxVersion) and $objectType == 'assetlib')
+        if($this->config->edition == 'max' and $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -1265,7 +1270,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
-            if(isset($this->config->maxVersion)
+            if($this->config->edition == 'max'
                and strpos($this->config->action->assetType, $action->objectType) !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {
@@ -1358,6 +1363,11 @@ class actionModel extends model
         if($action->objectType == 'story' and $action->action == 'import2storylib')
         {
             $action->objectLink = helper::createLink('assetlib', 'storyView', "storyID=$action->objectID");
+        }
+
+        if($action->objectType == 'story' and $this->config->vision == 'lite')
+        {
+            $action->objectLink = helper::createLink('projectstory', 'view', "storyID=$action->objectID");
         }
 
         if(strpos(',kanbanregion,kanbancard,', ",{$action->objectType},") !== false)

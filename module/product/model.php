@@ -198,12 +198,12 @@ class productModel extends model
 
         echo(js::alert($this->lang->product->accessDenied));
 
-        if(!$this->server->http_referer) die(js::locate(helper::createLink('product', 'index')));
+        if(!$this->server->http_referer) return print(js::locate(helper::createLink('product', 'index')));
 
         $loginLink = $this->config->requestType == 'GET' ? "?{$this->config->moduleVar}=user&{$this->config->methodVar}=login" : "user{$this->config->requestFix}login";
-        if(strpos($this->server->http_referer, $loginLink) !== false) die(js::locate(helper::createLink('product', 'index')));
+        if(strpos($this->server->http_referer, $loginLink) !== false) return print(js::locate(helper::createLink('product', 'index')));
 
-        die(js::locate('back'));
+        echo js::locate('back');
     }
 
     /**
@@ -253,6 +253,7 @@ class productModel extends model
             ->beginIF($programID)->andWhere('t1.program')->eq($programID)->fi()
             ->beginIF($line > 0)->andWhere('t1.line')->eq($line)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($status == 'noclosed')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($status != 'all' and $status != 'noclosed' and $status != 'involved')->andWhere('t1.status')->in($status)->fi()
             ->beginIF($status == 'involved')
@@ -285,7 +286,8 @@ class productModel extends model
             ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
             ->fetchPairs('id', 'name');
         return $products;
@@ -325,6 +327,7 @@ class productModel extends model
             ->leftJoin(TABLE_PRODUCT)->alias('t3')->on('t1.product=t3.id')
             ->where('t3.deleted')->eq(0)
             ->beginIF(!$this->app->user->admin)->andWhere('t3.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t3.vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('t2.model')->eq($model)
             ->fetchPairs('id', 'name');
     }
@@ -353,7 +356,8 @@ class productModel extends model
             ->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
             ->fetchAll('id');
@@ -735,10 +739,10 @@ class productModel extends model
 
                 $products[$productID]->{$extendField->field} = htmlSpecialString($products[$productID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $products[$productID]->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
         }
-        if(dao::isError()) die(js::error(dao::getError()));
+        if(dao::isError()) return print(js::error(dao::getError()));
 
         $unlinkProducts = array();
         foreach($products as $productID => $product)
@@ -753,7 +757,7 @@ class productModel extends model
                 ->checkIF((!empty($product->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $productID and `program` = $programID")
                 ->where('id')->eq($productID)
                 ->exec();
-            if(dao::isError()) die(js::error('product#' . $productID . dao::getError(true)));
+            if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
 
             /* When acl is open, white list set empty. When acl is private,update user view. */
             if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
@@ -938,7 +942,7 @@ class productModel extends model
                 $modules          = array();
                 $branchList       = $this->loadModel('branch')->getPairs($productID, '', $this->session->project);
                 $branchModuleList = $this->tree->getOptionMenu($productID, 'story', 0, array_keys($branchList));
-                foreach($branchModuleList as $branchID => $branchModules) $modules += $branchModules;
+                foreach($branchModuleList as $branchID => $branchModules) $modules[] = $branchModules;
             }
             else
             {
@@ -2171,7 +2175,7 @@ class productModel extends model
      */
     public function setMenu($productID, $branch = '', $module = 0, $moduleType = '', $extra = '')
     {
-        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) die(js::error($this->lang->product->accessDenied) . js::locate('back'));
+        if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
 
         $product = $this->getByID($productID);
         $params  = array('branch' => $branch);

@@ -438,6 +438,7 @@ class kanbanModel extends model
             ->add('kanban', $kanbanID)
             ->add('region', $regionID)
             ->add('group', $groupID)
+            ->add('column', $columnID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
@@ -1672,6 +1673,7 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
+        if($this->app->user->admin) return array_keys($objects);
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
@@ -1695,6 +1697,7 @@ class kanbanModel extends model
                 if($spaceType == 'public' and $param != 'involved') $remove = false;
             }
 
+            if($objectType == 'kanbanspace' and $param == 'involved' and $object->owner == $account) $remove = true;
             if($remove) unset($objects[$objectID]);
         }
 
@@ -1751,7 +1754,7 @@ class kanbanModel extends model
      * @access public
      * @return array
      */
-    public function updateSpace($spaceID)
+    public function updateSpace($spaceID, $type = '')
     {
         $spaceID  = (int)$spaceID;
         $oldSpace = $this->getSpaceById($spaceID);
@@ -1764,6 +1767,8 @@ class kanbanModel extends model
             ->remove('uid,contactListMenu')
             ->get();
 
+        if($type == 'cooperation' or $type == 'public') $space->whitelist = '';
+
         $space = $this->loadModel('file')->processImgURL($space, $this->config->kanban->editor->editspace['id'], $this->post->uid);
 
         $this->dao->update(TABLE_KANBANSPACE)->data($space)
@@ -1771,6 +1776,15 @@ class kanbanModel extends model
             ->batchCheck($this->config->kanban->editspace->requiredFields, 'notempty')
             ->where('id')->eq($spaceID)
             ->exec();
+
+        if($oldSpace->type == 'private' and ($type == 'cooperation' or $type == 'public'))
+        {
+            $kanbanList = $this->dao->select('id,team,whitelist')->from(TABLE_KANBAN)->where('space')->eq($spaceID)->andWhere('deleted')->eq('0')->fetchAll('id');
+            foreach($kanbanList as $id => $kanbanData)
+            {
+                $this->dao->update(TABLE_KANBAN)->set('team')->eq($kanbanData->whitelist)->set('whitelist')->eq('')->where('id')->eq($id)->andWhere('deleted')->eq('0')->exec();
+            }
+        }
 
         if(!dao::isError())
         {
@@ -1822,7 +1836,7 @@ class kanbanModel extends model
     {
         return $this->dao->select('id, name')->from(TABLE_KANBANLANE)
             ->where('deleted')->eq('0')
-            ->andWhere('region')->eq($regionID)
+            ->andWhere('region')->in($regionID)
             ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
             ->fetchPairs();
     }
@@ -1930,7 +1944,6 @@ class kanbanModel extends model
             $space = $this->getSpaceById($kanban->space);
             if($space->type == 'private') $kanban->owner = $account;
         }
-
 
         $this->dao->insert(TABLE_KANBAN)->data($kanban)
             ->autoCheck()
@@ -3438,10 +3451,10 @@ class kanbanModel extends model
                     if(common::hasPriv('bug', 'edit') and $this->bug->isClickable($bug, 'edit'))             $menu[] = array('label' => $this->lang->bug->edit, 'icon' => 'edit', 'url' => helper::createLink('bug', 'edit', "bugID=$bug->id", '', true), 'size' => '95%');
                     if(common::hasPriv('bug', 'confirmBug') and $this->bug->isClickable($bug, 'confirmBug')) $menu[] = array('label' => $this->lang->bug->confirmBug, 'icon' => 'ok', 'url' => helper::createLink('bug', 'confirmBug', "bugID=$bug->id", '', true));
                     if(common::hasPriv('bug', 'resolve') and $this->bug->isClickable($bug, 'resolve'))       $menu[] = array('label' => $this->lang->bug->resolve, 'icon' => 'checked', 'url' => helper::createLink('bug', 'resolve', "bugID=$bug->id", '', true));
-                    if(common::hasPriv('bug', 'close') and $this->bug->isClickable($bug, 'close'))           $menu[] = array('label' => $this->lang->bug->close, 'icon' => 'plus', 'url' => helper::createLink('bug', 'close', "bugID=$bug->id", '', true));
-                    if(common::hasPriv('bug', 'create') and $this->bug->isClickable($bug, 'create'))         $menu[] = array('label' => $this->lang->bug->copy, 'icon' => 'pluses', 'url' => helper::createLink('bug', 'create', "productID=$bug->product&branch=$bug->branch&extras=bugID=$bug->id", '', true), 'size' => '95%');
+                    if(common::hasPriv('bug', 'close') and $this->bug->isClickable($bug, 'close'))           $menu[] = array('label' => $this->lang->bug->close, 'icon' => 'off', 'url' => helper::createLink('bug', 'close', "bugID=$bug->id", '', true));
+                    if(common::hasPriv('bug', 'create') and $this->bug->isClickable($bug, 'create'))         $menu[] = array('label' => $this->lang->bug->copy, 'icon' => 'copy', 'url' => helper::createLink('bug', 'create', "productID=$bug->product&branch=$bug->branch&extras=bugID=$bug->id", '', true), 'size' => '95%');
                     if(common::hasPriv('bug', 'activate') and $this->bug->isClickable($bug, 'activate'))     $menu[] = array('label' => $this->lang->bug->activate, 'icon' => 'magic', 'url' => helper::createLink('bug', 'activate', "bugID=$bug->id", '', true));
-                    if(common::hasPriv('story', 'create') and $bug->status != 'closed')                      $menu[] = array('label' => $this->lang->bug->toStory, 'icon' => 'unlink', 'url' => helper::createLink('story', 'create', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", '', true), 'size' => '95%');
+                    if(common::hasPriv('story', 'create') and $bug->status != 'closed')                      $menu[] = array('label' => $this->lang->bug->toStory, 'icon' => 'lightbulb', 'url' => helper::createLink('story', 'create', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", '', true), 'size' => '95%');
 
                     $menus[$bug->id] = $menu;
                 }
@@ -3454,7 +3467,7 @@ class kanbanModel extends model
                     $menu = array();
 
                     if(common::hasPriv('task', 'edit') and $this->task->isClickable($task, 'edit'))                     $menu[] = array('label' => $this->lang->task->edit, 'icon' => 'edit', 'url' => helper::createLink('task', 'edit', "taskID=$task->id", '', true), 'size' => '95%');
-                    if(common::hasPriv('task', 'pause') and $this->task->isClickable($task, 'pause'))                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'ok', 'url' => helper::createLink('task', 'pause', "taskID=$task->id", '', true));
+                    if(common::hasPriv('task', 'pause') and $this->task->isClickable($task, 'pause'))                   $menu[] = array('label' => $this->lang->task->pause, 'icon' => 'pause', 'url' => helper::createLink('task', 'pause', "taskID=$task->id", '', true));
                     if(common::hasPriv('task', 'restart') and $this->task->isClickable($task, 'restart'))               $menu[] = array('label' => $this->lang->task->restart, 'icon' => 'play', 'url' => helper::createLink('task', 'restart', "taskID=$task->id", '', true));
                     if(common::hasPriv('task', 'recordEstimate') and $this->task->isClickable($task, 'recordEstimate')) $menu[] = array('label' => $this->lang->task->recordEstimate, 'icon' => 'time', 'url' => helper::createLink('task', 'recordEstimate', "taskID=$task->id", '', true));
                     if(common::hasPriv('task', 'activate') and $this->task->isClickable($task, 'activate'))             $menu[] = array('label' => $this->lang->task->activate, 'icon' => 'magic', 'url' => helper::createLink('task', 'activate', "taskID=$task->id", '', true));

@@ -110,7 +110,11 @@ class groupModel extends model
      */
     public function getList($projectID = 0)
     {
-        return $this->dao->select('*')->from(TABLE_GROUP)->where('project')->eq($projectID)->orderBy('id')->fetchAll();
+        return $this->dao->select('*')->from(TABLE_GROUP)
+            ->where('project')->eq($projectID)
+            ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
+            ->orderBy('id')
+            ->fetchAll();
     }
 
     /**
@@ -153,6 +157,7 @@ class groupModel extends model
             ->leftJoin(TABLE_GROUP)->alias('t2')
             ->on('t1.`group` = t2.id')
             ->where('t1.account')->eq($account)
+            ->andWhere('t2.project')->eq(0)
             ->fetchAll('id');
     }
 

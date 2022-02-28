@@ -1651,7 +1651,7 @@ class gitlabModel extends model
     public function webhookCheckToken()
     {
         $gitlab = $this->getByID($this->get->gitlab);
-        if($gitlab->private != $_SERVER["HTTP_X_GITLAB_TOKEN"]) die('Token error.');
+        if($gitlab->private != $_SERVER["HTTP_X_GITLAB_TOKEN"]) echo 'Token error.';
     }
 
     /**

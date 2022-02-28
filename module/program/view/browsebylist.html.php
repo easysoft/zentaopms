@@ -53,7 +53,7 @@
           <?php
           $icon = '';
           if($program->type == 'program') $icon = ' icon-program';
-          if($program->type == 'project') $icon = ' icon-common icon-' . (isset($this->config->maxVersion) ? $program->model : $program->type);
+          if($program->type == 'project') $icon = ' icon-common icon-' . ($this->config->edition == 'max' ? $program->model : $program->type);
           $class = $program->type == 'program' ? ' table-nest-toggle' : '';
           ?>
           <span class="table-nest-icon icon <?php echo $class . $icon;?>"></span>

@@ -457,9 +457,16 @@ class storyModel extends model
 
         $extendFields = $this->getFlowExtendFields();
         $data         = array();
+        $reviewers    = '';
         foreach($stories->title as $i => $title)
         {
             if(empty($title)) continue;
+
+            if(empty($stories->reviewer[$i]) and empty($stories->reviewerDitto[$i])) $stories->reviewer[$i] = array();
+            $reviewers = (isset($stories->reviewDitto[$i])) ? $reviewers : $stories->reviewer[$i];
+            $_POST['reviewer'][$i] = $reviewers;
+            $stories->reviewer[$i] = $reviewers;
+
             $story = new stdclass();
             $story->type       = $type;
             $story->branch     = isset($stories->branch[$i]) ? $stories->branch[$i] : 0;
@@ -477,6 +484,7 @@ class storyModel extends model
             $story->sourceNote = $stories->sourceNote[$i];
             $story->product    = $productID;
             $story->openedBy   = $this->app->user->account;
+            $story->vision     = $this->config->vision;
             $story->openedDate = $now;
             $story->version    = 1;
 
@@ -487,7 +495,7 @@ class storyModel extends model
 
                 $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
-                if($message) die(js::alert($message));
+                if($message) return print(js::alert($message));
             }
 
             foreach(explode(',', $this->config->story->create->requiredFields) as $field)
@@ -514,7 +522,7 @@ class storyModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
 
             $storyID = $this->dao->lastInsertID();
@@ -565,23 +573,20 @@ class storyModel extends model
             $this->dao->insert(TABLE_STORYSPEC)->data($specData)->exec();
 
             /* Save the story reviewer to storyreview table. */
-            if(isset($_POST['reviewer'][$i]))
+            $assignedTo = '';
+            foreach($_POST['reviewer'][$i] as $reviewer)
             {
-                $assignedTo = '';
-                foreach($_POST['reviewer'][$i] as $reviewer)
-                {
-                    if(empty($reviewer)) continue;
+                if(empty($reviewer)) continue;
 
-                    $reviewData = new stdclass();
-                    $reviewData->story    = $storyID;
-                    $reviewData->version  = 1;
-                    $reviewData->reviewer = $reviewer;
-                    $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
+                $reviewData = new stdclass();
+                $reviewData->story    = $storyID;
+                $reviewData->version  = 1;
+                $reviewData->reviewer = $reviewer;
+                $this->dao->insert(TABLE_STORYREVIEW)->data($reviewData)->exec();
 
-                    if(empty($assignedTo)) $assignedTo = $reviewer;
-                }
-                if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
+                if(empty($assignedTo)) $assignedTo = $reviewer;
             }
+            if($assignedTo) $this->dao->update(TABLE_STORY)->set('assignedTo')->eq($assignedTo)->set('assignedDate')->eq($now)->where('id')->eq($storyID)->exec();
 
             $this->executeHooks($storyID);
 
@@ -1206,7 +1211,7 @@ class storyModel extends model
 
                     $story->{$extendField->field} = htmlSpecialString($story->{$extendField->field});
                     $message = $this->checkFlowRule($extendField, $story->{$extendField->field});
-                    if($message) die(js::alert($message));
+                    if($message) return print(js::alert($message));
                 }
 
                 $stories[$storyID] = $story;
@@ -1246,7 +1251,7 @@ class storyModel extends model
                 }
                 else
                 {
-                    die(js::error('story#' . $storyID . dao::getError(true)));
+                    return print(js::error('story#' . $storyID . dao::getError(true)));
                 }
             }
         }
@@ -1263,8 +1268,8 @@ class storyModel extends model
      */
     public function review($storyID)
     {
-        if($this->post->result == false)   die(js::alert($this->lang->story->mustChooseResult));
-        if($this->post->result == 'revert' and $this->post->preVersion == false) die(js::alert($this->lang->story->mustChoosePreVersion));
+        if($this->post->result == false)   return print(js::alert($this->lang->story->mustChooseResult));
+        if($this->post->result == 'revert' and $this->post->preVersion == false) return print(js::alert($this->lang->story->mustChoosePreVersion));
 
         if(strpos($this->config->story->review->requiredFields, 'comment') !== false and !$this->post->comment)
         {
@@ -1283,7 +1288,7 @@ class storyModel extends model
             ->removeIF($this->post->result != 'reject', 'closedReason, duplicateStory, childStories')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'duplicate', 'duplicateStory')
             ->removeIF($this->post->result == 'reject' and $this->post->closedReason != 'subdivided', 'childStories')
-            ->add('reviewedDate', $now)
+            ->add('reviewedDate', $date)
             ->add('reviewedBy', $oldStory->reviewedBy . ',' . $this->app->user->account)
             ->remove('result,preVersion,comment')
             ->get();
@@ -1457,11 +1462,11 @@ class storyModel extends model
                 $this->dao->insert(TABLE_RELATION)->data($data)->autoCheck()->exec();
             }
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
 
             $isonlybody = isonlybody();
             unset($_GET['onlybody']);
-            die(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
+            return print(js::locate(helper::createLink('product', 'browse', "productID=$oldStory->product&branch=0&browseType=unclosed&queryID=0&type=story"), $isonlybody ? 'parent.parent' : 'parent'));
         }
         else
         {
@@ -1522,9 +1527,9 @@ class storyModel extends model
             ->checkIF($story->closedReason == 'duplicate', 'duplicateStory', 'notempty')
             ->where('id')->eq($storyID)->exec();
 
-        /* Update parent story status. */
+        /* Update parent story status and stage. */
         if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-        $this->setStage($storyID);
+        $this->setStage($oldStory->parent);
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }
@@ -1591,7 +1596,7 @@ class storyModel extends model
             }
             else
             {
-                die(js::error('story#' . $storyID . dao::getError(true)));
+                return print(js::error('story#' . $storyID . dao::getError(true)));
             }
             if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         }
@@ -1968,6 +1973,7 @@ class storyModel extends model
             ->setDefault('lastEditedBy',   $this->app->user->account)
             ->setDefault('lastEditedDate', $now)
             ->setDefault('assignedDate',   $now)
+            ->setDefault('activatedDate', $now)
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
@@ -2891,6 +2897,7 @@ class storyModel extends model
 
         $stories = $sql->where('t1.deleted')->eq(0)
             ->andWhere('t1.type')->eq($storyType)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($type != 'all')
             ->beginIF($type == 'assignedTo')->andWhere('assignedTo')->eq($account)->fi()
@@ -2899,7 +2906,7 @@ class storyModel extends model
             ->beginIF($type == 'reviewedBy')->andWhere("CONCAT(',', reviewedBy, ',')")->like("%,$account,%")->fi()
             ->beginIF($type == 'closedBy')->andWhere('closedBy')->eq($account)->fi()
             ->fi()
-            ->beginIF($includeLibStories == false and isset($this->config->maxVersion))->andWhere('t1.lib')->eq('0')->fi()
+            ->beginIF($includeLibStories == false and $this->config->edition == 'max')->andWhere('t1.lib')->eq('0')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll('id');
@@ -2927,6 +2934,7 @@ class storyModel extends model
             ->from(TABLE_STORY)
             ->where('deleted')->eq(0)
             ->andWhere('type')->eq($type)
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('assignedTo')->eq($account)
             ->andWhere('product')->ne(0)
             ->beginIF(!empty($skipProductIDList))->andWhere('product')->notin($skipProductIDList)->fi()
@@ -3552,6 +3560,7 @@ class storyModel extends model
         if($action == 'createcase') return $story->type != 'requirement';
         if($action == 'batchcreate' and $story->parent > 0) return false;
         if($action == 'batchcreate' and $story->type == 'requirement' and $story->status != 'closed') return $story->status != 'draft';
+        if($action == 'batchcreate' and $config->vision == 'lite' and ($story->status == 'active' and ($story->stage == 'wait' or $story->stage == 'projected'))) return true;
         if($action == 'batchcreate' and ($story->status != 'active' or $story->stage != 'wait' or !empty($story->plan))) return false;
 
         return true;
@@ -3816,7 +3825,7 @@ class storyModel extends model
             }
 
             echo "<td class='" . $class . "' title='$title' style='$style'>";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('story', $story, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('story', $story, $id);
             switch($id)
             {
             case 'id':
@@ -3902,7 +3911,7 @@ class storyModel extends model
                 }
                 break;
             case 'taskCount':
-                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id");
+                $tasksLink = helper::createLink('story', 'tasks', "storyID=$story->id", '', 'class="iframe"');
                 $storyTasks[$story->id] > 0 ? print(html::a($tasksLink, $storyTasks[$story->id], '', 'class="iframe"')) : print(0);
                 break;
             case 'bugCount':
@@ -3979,9 +3988,9 @@ class storyModel extends model
                     common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
-                    if($story->type != 'requirement') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
-                    if($this->app->rawModule != 'projectstory') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
-                    if($this->app->rawModule == 'projectstory') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
+                    if($story->type != 'requirement' and $this->config->vision != 'lite') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
+                    if($this->app->rawModule != 'projectstory' OR $this->config->vision == 'lite') common::printIcon('story', 'batchCreate', "productID=$story->product&branch=$story->branch&module=$story->module&storyID=$story->id&executionID={$this->session->project}", $story, 'list', 'split', '', '', '', '', $this->lang->story->subdivide);
+                    if($this->app->rawModule == 'projectstory' and $this->config->vision != 'lite') common::printIcon('projectstory', 'unlinkStory', "projectID={$this->session->project}&storyID=$story->id", '', 'list', 'unlink', 'hiddenwin');
                 }
                 else
                 {
@@ -4114,7 +4123,7 @@ class storyModel extends model
                     $stories[$id]->cases = $this->loadModel('testcase')->getStoryCases($id);
                     $stories[$id]->bugs  = $this->loadModel('bug')->getStoryBugs($id);
                     $stories[$id]->tasks = $this->loadModel('task')->getStoryTasks($id);
-                    if(isset($this->config->maxVersion))
+                    if($this->config->edition == 'max')
                     {
                         $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
                         $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
@@ -4184,7 +4193,7 @@ class storyModel extends model
                 $stories[$id]->cases  = $this->loadModel('testcase')->getStoryCases($id);
                 $stories[$id]->bugs   = $this->loadModel('bug')->getStoryBugs($id);
                 $stories[$id]->tasks  = $this->loadModel('task')->getStoryTasks($id);
-                if(isset($this->config->maxVersion))
+                if($this->config->edition == 'max')
                 {
                     $stories[$id]->designs   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
                     $stories[$id]->revisions = $this->dao->select('BID, extra')->from(TABLE_RELATION)
@@ -4224,7 +4233,7 @@ class storyModel extends model
             $track[$id]->bug   = $this->loadModel('bug')->getStoryBugs($id);
             $track[$id]->story = $this->getByID($id);
             $track[$id]->task  = $this->loadModel('task')->getStoryTasks($id);
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $track[$id]->design   = $this->dao->select('id, name')->from(TABLE_DESIGN)->where('story')->eq($id)->fetchAll('id');
                 $track[$id]->revision = $this->dao->select('BID, extra')->from(TABLE_RELATION)->where('AType')->eq('design')->andWhere('BType')->eq('commit')->andWhere('AID')->in(array_keys($track[$id]->design))->fetchPairs();

@@ -157,7 +157,7 @@ class testtask extends control
             $this->lang->scrum->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
             $this->lang->scrum->menu->qa['subMenu']->testtask['subModule'] = '';
 
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $this->lang->waterfall->menu->qa['subMenu']->testcase['subModule'] = 'testtask';
                 $this->lang->waterfall->menu->qa['subMenu']->testtask['subModule'] = '';

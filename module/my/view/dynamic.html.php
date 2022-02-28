@@ -60,7 +60,7 @@
               <?php $tab = '';?>
               <?php if($action->objectType == 'meeting') $tab = $action->project ? "data-app='project'" : "data-app='my'";?>
               <?php
-              if((isset($config->maxVersion) and strpos($config->action->assetType, $action->objectType) !== false) and empty($action->objectName))
+              if(($config->edition == 'max' and strpos($config->action->assetType, $action->objectType) !== false) and empty($action->objectName))
               {
                   echo '#' . $action->objectID;
               }

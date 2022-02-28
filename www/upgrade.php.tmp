@@ -60,5 +60,4 @@ if(($config->version[0] == $config->installedVersion[0] or (is_numeric($config->
 
 /* Run it. */
 $app->parseRequest();
-$common->checkUpgradeStatus();
-$app->loadModule();
+if($common->checkUpgradeStatus()) $app->loadModule();

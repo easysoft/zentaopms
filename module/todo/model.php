@@ -30,6 +30,7 @@ class todoModel extends model
         $todo = fixer::input('post')
             ->add('account', $this->app->user->account)
             ->setDefault('idvalue', 0)
+            ->setDefault('vision', $this->config->vision)
             ->setDefault('assignedTo', $this->app->user->account)
             ->setDefault('assignedBy', $this->app->user->account)
             ->setDefault('assignedDate', helper::now())
@@ -175,6 +176,7 @@ class todoModel extends model
                 $todo->assignedTo   = $this->app->user->account;
                 $todo->assignedBy   = $this->app->user->account;
                 $todo->assignedDate = $now;
+                $todo->vision       = $this->config->vision;
 
                 if(in_array($todo->type, $this->config->todo->moduleList)) $todo->idvalue = isset($todos->{$this->config->todo->objectList[$todo->type]}[$i + 1]) ? $todos->{$this->config->todo->objectList[$todo->type]}[$i + 1] : 0;
 
@@ -186,7 +188,7 @@ class todoModel extends model
                     if(isset($object->title)) $todo->name = $object->title;
                 }
 
-                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $validTodos[] = $todo;
             }
@@ -208,7 +210,7 @@ class todoModel extends model
             if(dao::isError())
             {
                 echo js::error(dao::getError());
-                die(js::reload('parent'));
+                return print(js::reload('parent'));
             }
             $todoID       = $this->dao->lastInsertID();
             $todoIDList[] = $todoID;
@@ -334,7 +336,7 @@ class todoModel extends model
                 {
                     $todo->idvalue = isset($data->{$this->config->todo->objectList[$todo->type]}[$todoID]) ? $data->{$this->config->todo->objectList[$todo->type]}[$todoID] : 0;
                 }
-                if($todo->end < $todo->begin) die(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
+                if($todo->end < $todo->begin) return print(js::alert(sprintf($this->lang->error->gt, $this->lang->todo->end, $this->lang->todo->begin)));
 
                 $todos[$todoID] = $todo;
             }
@@ -367,7 +369,7 @@ class todoModel extends model
                 }
                 else
                 {
-                    die(js::error('todo#' . $todoID . dao::getError(true)));
+                    return print(js::error('todo#' . $todoID . dao::getError(true)));
                 }
             }
         }
@@ -426,10 +428,10 @@ class todoModel extends model
         if($todo->type == 'story')    $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_STORY)->fetch('title');
         if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
         if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
-        if($todo->type == 'issue'  and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-        if($todo->type == 'risk'   and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-        if($todo->type == 'opportunity' and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_OPPORTUNITY)->fetch('name');
-        if($todo->type == 'review' and isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
+        if($todo->type == 'issue'  and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
+        if($todo->type == 'risk'   and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+        if($todo->type == 'opportunity' and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_OPPORTUNITY)->fetch('name');
+        if($todo->type == 'review' and $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
         if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
         $todo->date = str_replace('-', '', $todo->date);
         return $todo;
@@ -500,7 +502,7 @@ class todoModel extends model
         elseif($type == 'before')
         {
             $begin = '1970-01-01';
-            $end   = date::yesterday();
+            $end   = date::today();
         }
         elseif($type == 'cycle')
         {
@@ -515,6 +517,7 @@ class todoModel extends model
 
         $stmt = $this->dao->select('*')->from(TABLE_TODO)
             ->where('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($type == 'assignedtoother')->andWhere('account', true)->eq($account)->fi()
             ->beginIF($type != 'assignedtoother')->andWhere('assignedTo', true)->eq($account)->fi()
             ->orWhere('finishedBy')->eq($account)
@@ -542,10 +545,10 @@ class todoModel extends model
             if($todo->type == 'task')     $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TASK)->fetch('name');
             if($todo->type == 'bug')      $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_BUG)->fetch('title');
             if($todo->type == 'testtask') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_TESTTASK)->fetch('name');
-            if($todo->type == 'issue'  && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
-            if($todo->type == 'risk'   && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
-            if($todo->type == 'opportunity' && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_OPPORTUNITY)->fetch('name');
-            if($todo->type == 'review' && isset($this->config->maxVersion)) $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
+            if($todo->type == 'issue'  && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_ISSUE)->fetch('title');
+            if($todo->type == 'risk'   && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_RISK)->fetch('name');
+            if($todo->type == 'opportunity' && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_OPPORTUNITY)->fetch('name');
+            if($todo->type == 'review' && $this->config->edition == 'max') $todo->name = $this->dao->findById($todo->idvalue)->from(TABLE_REVIEW)->fetch('title');
             $todo->begin = date::formatTime($todo->begin);
             $todo->end   = date::formatTime($todo->end);
 
@@ -799,6 +802,7 @@ class todoModel extends model
         return $this->dao->select('count(*) as count')->from(TABLE_TODO)
             ->where('cycle')->eq('0')
             ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->andWhere('account', true)->eq($account)
             ->orWhere('assignedTo')->eq($account)
             ->orWhere('finishedBy')->eq($account)

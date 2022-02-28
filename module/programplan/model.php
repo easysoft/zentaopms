@@ -516,7 +516,7 @@ class programplanModel extends model
         foreach($datas as $data)
         {
             /* Set planDuration and realDuration. */
-            if(isset($this->config->maxVersion))
+            if($this->config->edition == 'max')
             {
                 $data->planDuration = $this->getDuration($data->begin, $data->end);
                 $data->realDuration = $this->getDuration($data->realBegan, $data->realEnd);
@@ -627,7 +627,7 @@ class programplanModel extends model
             /* If child plans has milestone, update parent plan set milestone eq 0 . */
             if($parentID and $milestone) $this->dao->update(TABLE_PROJECT)->set('milestone')->eq(0)->where('id')->eq($parentID)->exec();
 
-            if(dao::isError()) die(js::error(dao::getError()));
+            if(dao::isError()) return print(js::error(dao::getError()));
         }
     }
 
@@ -710,7 +710,7 @@ class programplanModel extends model
         }
 
         /* Set planDuration and realDuration. */
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $plan->planDuration = $this->getDuration($plan->begin, $plan->end);
             $plan->realDuration = $this->getDuration($plan->realBegan, $plan->realEnd);
@@ -779,7 +779,7 @@ class programplanModel extends model
             if($id == 'actions') $class .= ' c-actions';
 
             echo "<td class='{$class}' {$title}>";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('programplan', $plan, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('programplan', $plan, $id);
             switch($id)
             {
             case 'id':

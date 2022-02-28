@@ -139,6 +139,9 @@ class router extends baseRouter
      */
     public function setCommonLang()
     {
+        if(defined('COMMONLANGSETTED')) return true;
+        define('COMMONLANGSETTED', true);
+
         if(!defined('ITERATION_KEY'))     define('ITERATION_KEY', 0);
         if(!defined('SPRINT_KEY'))        define('SPRINT_KEY', 1);
         if(!defined('PRODUCT_KEY'))       define('PRODUCT_KEY', 0);
@@ -301,6 +304,7 @@ class router extends baseRouter
         /* 初始化数组。Init the variables. */
         $extConfigFiles       = array();
         $commonExtConfigFiles = array();
+        $visionExtConfigFiles = array();
         $siteExtConfigFiles   = array();
 
         /* 先获得模块的主配置文件。Get the main config file for current module first. */
@@ -308,7 +312,12 @@ class router extends baseRouter
 
         /* 查找扩展配置文件。Get extension config files. */
         if($config->framework->extensionLevel > 0) $extConfigPath = $this->getModuleExtPath($appName, $moduleName, 'config');
-        if($config->framework->extensionLevel >= 1 and !empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+        if($config->framework->extensionLevel >= 1)
+        {
+            if(!empty($extConfigPath['common'])) $commonExtConfigFiles = helper::ls($extConfigPath['common'], '.php');
+            if(!empty($extConfigPath['vision'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['vision'], '.php'));
+            if(!empty($extConfigPath['custom'])) $commonExtConfigFiles = array_merge($commonExtConfigFiles, helper::ls($extConfigPath['custom'], '.php'));
+        }
         if($config->framework->extensionLevel == 2 and !empty($extConfigPath['site']))   $siteExtConfigFiles   = helper::ls($extConfigPath['site'], '.php');
         $extConfigFiles = array_merge($commonExtConfigFiles, $siteExtConfigFiles);
 
@@ -429,7 +438,7 @@ class router extends baseRouter
         }
         else
         {
-            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName'")->fetch();
+            $action = $this->dbh->query("SELECT * FROM " . TABLE_WORKFLOWACTION . " WHERE `module` = '$this->moduleName' AND `action` = '$this->methodName' AND `vision` = '{$this->config->vision}'")->fetch();
             if(zget($action, 'extensionType') == 'override')
             {
                 $this->rawModule = $this->moduleName;

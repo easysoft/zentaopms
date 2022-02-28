@@ -99,6 +99,7 @@ $lang->block->productName  = $lang->productCommon . ' Name';
 $lang->block->totalStory   = 'Total Story';
 $lang->block->totalBug     = 'Total Bug';
 $lang->block->totalRelease = 'Release The Number';
+$lang->block->totalTask    = 'The Total ' . $lang->task->common;
 
 $lang->block->totalInvestment = 'Total investment';
 $lang->block->totalPeople     = 'Total number';

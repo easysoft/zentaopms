@@ -29,6 +29,7 @@ $lang->search->me            = '自己';
 $lang->search->noQuery       = '还没有保存查询！';
 $lang->search->onMenuBar     = '显示在菜单栏';
 $lang->search->custom        = '自定义';
+$lang->search->setCommon     = '设为公共查询条件';
 
 $lang->search->account  = '用户名';
 $lang->search->module   = '模块';
@@ -73,6 +74,7 @@ $lang->search->result            = '搜索结果';
 $lang->search->buildSuccessfully = '初始化搜索索引成功';
 $lang->search->executeInfo       = '为您找到相关结果%s个，耗时%s秒';
 $lang->search->buildResult       = "创建 %s 索引, 已创建  <strong class='%scount'>%s</strong> 条记录；";
+$lang->search->queryTips         = "多个id可以使用英文逗号分隔";
 
 $lang->search->modules['all']         = '全部';
 $lang->search->modules['task']        = '任务';

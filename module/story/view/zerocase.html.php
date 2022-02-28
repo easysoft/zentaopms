@@ -33,7 +33,7 @@
           </div>
           <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
         </th>
-        <th class='c-pri'>     <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+        <th class='c-pri' title=<?php echo $lang->story->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
         <th class='w-p30'>     <?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
         <th>                   <?php common::printOrderLink('plan',       $orderBy, $vars, $lang->story->planAB);?></th>
         <th class='thWidth'>   <?php common::printOrderLink('source',     $orderBy, $vars, $lang->story->source);?></th>

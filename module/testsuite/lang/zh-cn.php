@@ -24,6 +24,7 @@ $lang->testsuite->deleted          = '已删除';
 $lang->testsuite->successSaved     = '保存成功';
 
 $lang->testsuite->id             = '编号';
+$lang->testsuite->pri            = '优先级';
 $lang->testsuite->common         = '套件';
 $lang->testsuite->project        = '所属项目';
 $lang->testsuite->product        = '所属' . $lang->productCommon;

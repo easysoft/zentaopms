@@ -276,6 +276,7 @@ function createColumnCreateMenu(options)
     {
         if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&iframe=0&extra=laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canImportBug && vision == 'rnd') items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=" + laneID  + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     }
     return items;
 }
@@ -469,7 +470,7 @@ function renderStoryItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus && item.menus.length)
+        if(!$actions.length && (priv.canEditStory || priv.canActivateStory || priv.canChangeStory || priv.canCreateTask || priv.canBatchCreate || priv.canUnlinkStory))
         {
             $actions = $([
                 '<div class="actions">',
@@ -533,7 +534,7 @@ function renderBugItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus && item.menus.length)
+        if(!$actions.length && (priv.canEditBug || priv.canResolveBug || priv.canConfirmBug || priv.canCopyBug || priv.canToStoryBug))
         {
             $actions = $([
                 '<div class="actions">',
@@ -597,7 +598,7 @@ function renderTaskItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && item.menus && item.menus.length)
+        if(!$actions.length && (priv.canEditTask || priv.canRecordEstimateTask || priv.canCreateTask || priv.canCancelTask))
         {
             $actions = $([
                 '<div class="actions">',
@@ -1037,12 +1038,74 @@ function processMinusBtn()
     }
 }
 
+ /**
+ * Create story menu
+ * @returns {Object[]}
+ */
+function createStoryMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var story = $card.data('item');
+
+    var items      = [];
+    var showAction = story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released';
+    
+    if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canChangeStory && showAction) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask && showAction) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    return items;
+}
+
+ /**
+ * Create task menu
+ * @returns {Object[]}
+ */
+function createTaskMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var task  = $card.data('item');
+    var items = [];
+    if(priv.canEditTask) items.push({label: taskLang.edit, icon: 'edit', url: createLink('task', 'edit', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canRestartTask && task.$col.type == 'pause') items.push({label: taskLang.restart, icon: 'play', url: createLink('task', 'restart', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canPauseTask && task.$col.type == 'developing') items.push({label: taskLang.pause, icon: 'pause', url: createLink('task', 'pause', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canRecordEstimateTask) items.push({label: executionLang.effort, icon: 'time', url: createLink('task', 'recordEstimate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canActivateTask && (task.$col.type == 'developed' || task.$col.type == 'canceled' || task.$col.type == 'closed')) items.push({label: executionLang.activate, icon: 'magic', url: createLink('task', 'activate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCreateTask) items.push({label: taskLang.copy, icon: 'copy', url: createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCancelTask && (task.$col.type == 'wait' || task.$col.type == 'developing' || task.$col.type == 'pause')) items.push({label: taskLang.cancel, icon: 'cancel', url: createLink('task', 'cancel', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    return items;
+}
+
+ /**
+ * Create bug menu
+ * @returns {Object[]}
+ */
+function createBugMenu(options)
+{
+    var $card = options.$trigger.closest('.kanban-item');
+    var bug   = $card.data('item');
+    var items = [];
+    if(priv.canEditBug) items.push({label: bugLang.edit, icon: 'edit', url: createLink('bug', 'edit', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canResolveBug && (bug.$col.type == 'unconfirmed' || bug.$col.type == 'confirmed' || bug.$col.type == 'fixing')) items.push({label: bugLang.resolve, icon: 'checked', url: createLink('bug', 'resolve', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canConfirmBug && (bug.$col.type == 'fixed' || bug.$col.type == 'testing' || bug.$col.type == 'tested')) items.push({label: bugLang.close, icon: 'off', url: createLink('bug', 'close', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canConfirmBug && bug.$col.type == 'unconfirmed') items.push({label: bugLang.confirmBug, icon: 'ok', url: createLink('bug', 'confirmbug', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canCopyBug) items.push({label: bugLang.copy, icon: 'copy', url: createLink('bug', 'create', 'productID=' + productID + '&branch=' + '' + '&extras=bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canToStoryBug && (bug.$col.type != 'closed')) items.push({label: bugLang.toStory, icon: 'lightbulb', url: createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canActivateBug && (bug.$col.type == 'fixed') || bug.$col.type == 'testing' || bug.$col.type == 'tested' || bug.$col.type == 'closed') items.push({label: bugLang.activate, icon: 'magic', url: createLink('bug', 'activate', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    return items;
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
     lane:         createLaneMenu,
     column:       createColumnMenu,
-    columnCreate: createColumnCreateMenu
+    columnCreate: createColumnCreateMenu,
+    task:         createTaskMenu,
+    story:        createStoryMenu,
+    bug:          createBugMenu,
 };
 
 /**

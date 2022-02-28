@@ -157,7 +157,7 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                 <th class='w-70px'> <?php common::printOrderLink('status',     $orderBy, $vars, $lang->statusAB);?></th>
                 <?php else:?>
@@ -172,7 +172,7 @@
                 <?php if($canOrder):?>
                 <th class='w-70px'><?php common::printOrderLink('order', $orderBy, $vars, $lang->productplan->updateOrder);?></th>
                 <?php endif;?>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='w-150px text-left'><?php common::printOrderLink('module',     $orderBy, $vars, $lang->story->module);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',      $orderBy, $vars, $lang->story->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
@@ -452,7 +452,7 @@
                 <th class='c-id text-left'>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='w-100px'><?php common::printOrderLink('status',     $orderBy, $vars, $lang->bug->status);?></th>
                 <?php else:?>
@@ -464,7 +464,7 @@
                   <?php endif;?>
                   <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?>
                 </th>
-                <th class='w-70px'> <?php common::printOrderLink('pri',        $orderBy, $vars, $lang->priAB);?></th>
+                <th class='w-70px' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
                 <th class='text-left'><?php common::printOrderLink('title',    $orderBy, $vars, $lang->bug->title);?></th>
                 <th class='c-user'> <?php common::printOrderLink('openedBy',   $orderBy, $vars, $lang->openedByAB);?></th>
                 <th class='c-user'> <?php common::printOrderLink('assignedTo', $orderBy, $vars, $lang->bug->assignedToAB);?></th>
@@ -613,6 +613,10 @@
                 </tr>
                 <?php endif;?>
                 <?php $this->printExtendFields($plan, 'table', 'inForm=0');?>
+                <tr>
+                  <th><?php echo $lang->productplan->status;?></th>
+                  <td><?php echo $lang->productplan->statusList[$plan->status];?></td>
+                </tr>    
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>
