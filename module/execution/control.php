@@ -2125,6 +2125,7 @@ class execution extends control
         /* Get execution's product. */
         $productID = 0;
         $products  = $this->loadModel('product')->getProducts($executionID);
+        foreach($products as $product) $productNames[$product->id] = $product->name;
         if($products) $productID = key($products);
 
         $plans    = $this->execution->getPlans($products);
@@ -2147,6 +2148,8 @@ class execution extends control
         $this->view->orderBy       = 'id_asc';
         $this->view->executionID   = $executionID;
         $this->view->productID     = $productID;
+        $this->view->productNames  = $productNames;
+        $this->view->productNum    = count($products);
         $this->view->allPlans      = $allPlans;
         $this->view->browseType    = $browseType;
         $this->view->kanbanGroup   = $kanbanGroup;
