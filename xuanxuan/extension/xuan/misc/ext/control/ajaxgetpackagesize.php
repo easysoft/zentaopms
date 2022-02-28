@@ -1,5 +1,4 @@
 <?php
-include '../../control.php';
 class myMisc extends misc
 {
     /**

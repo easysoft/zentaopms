@@ -1,5 +1,4 @@
 <?php
-include '../../control.php';
 class myClient extends client
 {
     public function create()
