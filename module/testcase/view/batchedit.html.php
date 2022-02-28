@@ -82,9 +82,13 @@
                       $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
                   }
                   foreach($branchTagOption as $branchID => $branchName) $branchTagOption[$branchID] = '/' . $product->name . '/' . $branchName;
-              }
 
-              $modules[$caseProductID][$caseBranch] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case', 0, $caseBranch);
+                  $modules[$caseProductID][$caseBranch] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case', 0, $caseBranch);
+              }
+              else
+              {
+                  $modules[$caseProductID][0] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case');
+              }
           }
           $caseProductID = isset($caseProductID) ? $caseProductID : $productID;
           $moduleList    = $modules[$caseProductID];

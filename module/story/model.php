@@ -2607,7 +2607,7 @@ class storyModel extends model
                 if(!empty($normalProducts)) $storyQuery .= " OR ";
                 $storyQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
             }
-            if(empty($branchProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
+            if(empty($normalProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
             $storyQuery .= ') ';
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
