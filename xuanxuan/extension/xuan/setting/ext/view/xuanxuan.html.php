@@ -10,7 +10,7 @@
  * @link        http://www.ranzhico.com
  */
 ?>
-<?php include '../../../common/view/header.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.html.php';?>
 <?php $this->app->loadLang('client')?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
@@ -151,4 +151,4 @@
     <?php endif;?>
   </div>
 </div>
-<?php include '../../../common/view/footer.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

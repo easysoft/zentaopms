@@ -9,7 +9,7 @@
  * @version     $Id: index.html.php 4205 2016-10-24 08:19:13Z liugang $
  * @link        http://xuan.im
  */
-include "../../../common/view/header.html.php";
+include $app->getModuleRoot() . "common/view/header.html.php";
 ?>
 <div id='dashboardWrapper'>
   <div class='panels-container dashboard' id='dashboard'>
@@ -32,4 +32,4 @@ include "../../../common/view/header.html.php";
     </div>
   </div>
 </div>
-<?php include "../../../common/view/footer.html.php"; ?>
+<?php include $app->getModuleRoot() . "common/view/footer.html.php"; ?>
