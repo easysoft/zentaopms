@@ -16,17 +16,13 @@
     <form method='post'>
       <div class='panel-title text-center'>
         <?php
-        if(isset($config->maxVersion))
+        if($this->config->edition == 'max')
         {
             echo $lang->upgrade->toMAXGuide;
         }
-        elseif(isset($config->bizVersion))
+        elseif($this->config->edition == 'biz')
         {
             echo $lang->upgrade->toBIZ5Guide;
-        }
-        elseif(isset($config->proVersion))
-        {
-            echo $lang->upgrade->toPRO10Guide;
         }
         else
         {
