@@ -2149,6 +2149,7 @@ class execution extends control
         $this->view->executionID   = $executionID;
         $this->view->productID     = $productID;
         $this->view->productNames  = $productNames;
+        $this->view->productNum    = count($products);
         $this->view->allPlans      = $allPlans;
         $this->view->browseType    = $browseType;
         $this->view->kanbanGroup   = $kanbanGroup;

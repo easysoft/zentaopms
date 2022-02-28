@@ -803,7 +803,11 @@ function createColumnCreateMenu(options)
     else if(col.laneType == 'bug')
     {
         if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '80%'}});
-        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
+        if(priv.canBatchCreateBug)
+        {
+            if(productNum == 1) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&moduleID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+            if(productNum > 1) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
+        }
     }
     else
     {
