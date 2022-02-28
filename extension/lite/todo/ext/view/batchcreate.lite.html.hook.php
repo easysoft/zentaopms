@@ -1,4 +1,4 @@
-<?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
+<?php $html = '<div class="divider"></div>';?>
 <script>
 $(function()
 {
