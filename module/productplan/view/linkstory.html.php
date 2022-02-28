@@ -47,19 +47,6 @@
           </td>
           <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri)?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri)?></span></td>
           <td class='c-name' title="<?php echo $story->planTitle;?>"><?php echo $story->planTitle;?></td>
-          <?php
-          if(!isset($modules[$story->module]))
-          {
-              $storyModule = '/';
-              $modulePath  = $this->tree->getParents($story->module);
-              foreach($modulePath as $key => $module)
-              {
-                  $storyModule .= $module->name;
-                  if(isset($modulePath[$key + 1])) $storyModule .= '/';
-              }
-              $modules[$story->module] = $storyModule;
-          }
-          ?>
           <td title='<?php echo $modules[$story->module]?>' class='text-left c-name'><?php echo $modules[$story->module];?></td>
           <td class='text-left nobr' title='<?php echo $story->title?>'>
             <?php

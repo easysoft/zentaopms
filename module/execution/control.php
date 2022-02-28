@@ -2789,6 +2789,13 @@ class execution extends control
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
             if($story->parent < 0) unset($allStories[$id]);
+
+            if(!isset($modules[$story->module]))
+            {
+                $storyModule = $this->tree->getModulesName($story->module);
+                $productName = count($products) > 1 ? $products[$story->product]->name : '';
+                $modules[$story->module] = $productName . $storyModule[$story->module];
+            }
         }
 
         /* Pager. */

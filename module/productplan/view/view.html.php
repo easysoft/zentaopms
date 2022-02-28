@@ -220,19 +220,6 @@
                 </td>
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                 <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <?php
-                if(!isset($modulePairs[$story->module]))
-                {
-                    $storyModule = '/';
-                    $modulePath  = $this->tree->getParents($story->module);
-                    foreach($modulePath as $key => $module)
-                    {
-                        $storyModule .= $module->name;
-                        if(isset($modulePath[$key + 1])) $storyModule .= '/';
-                    }
-                    $modulePairs[$story->module] = $storyModule;
-                }
-                ?>
                 <td class='text-left nobr' title='<?php echo zget($modulePairs, $story->module, '');?>'><?php echo zget($modulePairs, $story->module, '');?></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php

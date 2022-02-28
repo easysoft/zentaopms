@@ -362,8 +362,14 @@ class productplan extends control
 
         if($plan->branch > 0) $this->view->branchStatus = $this->loadModel('branch')->getById($plan->branch, $plan->product, 'status');
 
+        $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        foreach($planStories as $story)
+        {
+            if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName($story->module);
+        }
+
         $this->loadModel('datatable');
-        $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        $this->view->modulePairs  = $modulePairs;
         $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
         $this->view->position[]   = $this->lang->productplan->view;
         $this->view->planStories  = $planStories;
@@ -606,6 +612,12 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed', 'story', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
         }
 
+        $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        foreach($allStories as $story)
+        {
+            if(!isset($modules[$story->module])) $modules += $this->tree->getModulesName($story->module);
+        }
+
         $this->view->allStories  = $allStories;
         $this->view->planStories = $planStories;
         $this->view->products    = $products;
@@ -613,7 +625,7 @@ class productplan extends control
         $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType  = $browseType;
-        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        $this->view->modules     = $modules;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
