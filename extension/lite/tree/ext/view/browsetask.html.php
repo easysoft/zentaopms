@@ -161,7 +161,7 @@ $(function()
             var $toggle = $('<span class="module-name" data-id="' + item.id + '">' + link + '</span>');
             if(item.type === 'task')
             {
-                $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
+                // $toggle.append('&nbsp; <span class="text-muted">[T]</span>');
                 $li.addClass('task-item');
             }
             if(item.type === 'story') $li.addClass('story-item');
