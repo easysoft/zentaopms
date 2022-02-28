@@ -2762,7 +2762,7 @@ class execution extends control
             }
             if($product->type != 'normal')
             {
-                $productType  = $product->type;
+                $productType = $product->type;
                 if(isset($branches[$product->id]))
                 {
                     foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
@@ -2781,7 +2781,7 @@ class execution extends control
         }
         else
         {
-            $allStories = $this->story->getProductStories(array_keys($products), isset($branchIDList) ? $branchIDList : 'all', $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
+            $allStories = $this->story->getProductStories(array_keys($products), $branchIDList, $moduleID = '0', $status = 'active', 'story', 'id_desc', $hasParent = false, '', $pager = null);
         }
 
         $linkedStories = $this->story->getExecutionStoryPairs($objectID);
