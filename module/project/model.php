@@ -1131,13 +1131,16 @@ class projectModel extends model
 
             $teamMembers[$account] = $member;
         }
-        $this->dao->delete()->from(TABLE_TEAM)
-            ->where('root')->eq((int)$projectID)
-            ->andWhere('type')->eq('project')
-            ->andWhere('account')->in(array_keys($team))
-            ->andWhere('account')->notin(array_values($members))
-            ->andWhere('account')->ne($oldProject->openedBy)
-            ->exec();
+        if($oldProject->model == 'kanban')
+        {
+            $this->dao->delete()->from(TABLE_TEAM)
+                ->where('root')->eq((int)$projectID)
+                ->andWhere('type')->eq('project')
+                ->andWhere('account')->in(array_keys($team))
+                ->andWhere('account')->notin(array_values($members))
+                ->andWhere('account')->ne($oldProject->openedBy)
+                ->exec();
+        }
         if(!empty($projectID) and !empty($teamMembers)) $this->loadModel('execution')->addProjectMembers($projectID, $teamMembers);
 
         if(!dao::isError())
