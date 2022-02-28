@@ -2074,12 +2074,15 @@ class taskModel extends model
     public function getExecutionTasks($executionID, $productID = 0, $type = 'all', $modules = 0, $orderBy = 'status_asc, id_desc', $pager = null)
     {
         if(is_string($type)) $type = strtolower($type);
-        $tasks = $this->dao->select('DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName')
+        $fields = 'DISTINCT t1.*, t2.id AS storyID, t2.title AS storyTitle, t2.product, t2.branch, t2.version AS latestStoryVersion, t2.status AS storyStatus, t3.realname AS assignedToRealName';
+        $this->config->edition == 'max' && $fields .= ', t6.name as designName, t6.version as latestDesignVersion';
+        $tasks  = $this->dao->select($fields)
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_STORY)->alias('t2')->on('t1.story = t2.id')
             ->leftJoin(TABLE_USER)->alias('t3')->on('t1.assignedTo = t3.account')
             ->leftJoin(TABLE_TEAM)->alias('t4')->on('t4.root = t1.id')
             ->leftJoin(TABLE_MODULE)->alias('t5')->on('t1.module = t5.id')
+            ->beginIF($this->config->edition == 'max')->leftJoin(TABLE_DESIGN)->alias('t6')->on('t1.design= t6.id')->fi()
             ->where('t1.execution')->eq((int)$executionID)
             ->beginIF($type == 'myinvolved')
             ->andWhere("((t4.`account` = '{$this->app->user->account}' AND t4.`type` = 'task') OR t1.`assignedTo` = '{$this->app->user->account}' OR t1.`finishedby` = '{$this->app->user->account}')")
@@ -2119,26 +2122,6 @@ class taskModel extends model
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
 
-        $lanes      = array();
-        $cardsWhere = '';
-        foreach($tasks as $task)
-        {
-            if(empty($cardsWhere))
-            {
-                $cardsWhere = "cards like '%,{$task->id},%'";
-            }
-            else
-            {
-                $cardsWhere .= " or cards like '%,{$task->id},%'";
-            }
-        }
-        $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
-            ->from(TABLE_KANBANCELL)->alias('t1')
-            ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
-            ->where('t1.kanban')->eq($executionID)
-            ->andWhere("($cardsWhere)")
-            ->fetchAll('cards');
-
         foreach($tasks as $task)
         {
             if($task->parent > 0)
@@ -2154,13 +2137,38 @@ class taskModel extends model
                     $task->parentName = $parent->name;
                 }
             }
+        }
 
-            $task->lane = '';
-            if(!empty($lanes))
+        if ($this->config->vision == 'lite') {
+            $lanes      = array();
+            $cardsWhere = '';
+            foreach($tasks as $task)
             {
-                foreach($lanes as $lane)
+                if(empty($cardsWhere))
                 {
-                    if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
+                    $cardsWhere = "cards like '%,{$task->id},%'";
+                }
+                else
+                {
+                    $cardsWhere .= " or cards like '%,{$task->id},%'";
+                }
+            }
+            $lanes = $this->dao->select('t1.lane,t2.name,t1.cards')
+                ->from(TABLE_KANBANCELL)->alias('t1')
+                ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
+                ->where('t1.kanban')->eq($executionID)
+                ->andWhere("($cardsWhere)")
+                ->fetchAll('cards');
+
+            foreach($tasks as $task)
+            {
+                $task->lane = '';
+                if(!empty($lanes))
+                {
+                    foreach($lanes as $lane)
+                    {
+                        if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
+                    }
                 }
             }
         }
