@@ -40,8 +40,8 @@ $lang->action->dynamicAction->task['linkchildtask']       = 'Link child Task';
 $lang->action->label->createchildrenstory   = "Create child story";
 $lang->action->label->linkchildstory        = "Link child story";
 $lang->action->label->unlinkchildrenstory   = "CanceledLink child story";
-$lang->action->label->linkparentstory       = "Link到 parent story";
-$lang->action->label->unlinkparentstory     = "从 parent storyCanceledLink";
+$lang->action->label->linkparentstory       = "Link parent story";
+$lang->action->label->unlinkparentstory     = "From parent storyCanceledLink";
 $lang->action->label->deletechildrenstory   = "Deleted child story";
 
 $lang->action->search->label = array();
