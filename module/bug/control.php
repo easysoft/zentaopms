@@ -996,17 +996,7 @@ class bug extends control
         }
 
         $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $bug->branch);
-        if(!isset($moduleOptionMenu[$bug->module]))
-        {
-            $bugModule  = '/';
-            $modulePath = $this->tree->getParents($bug->module);
-            foreach($modulePath as $key => $module)
-            {
-                $bugModule .= $module->name;
-                if(isset($modulePath[$key + 1])) $bugModule .= '/';
-            }
-            $moduleOptionMenu += array($bug->module => $bugModule);
-        }
+        if(!isset($moduleOptionMenu[$bug->module])) $moduleOptionMenu += $this->tree->getModulesName($bug->module);
 
         $this->view->bug              = $bug;
         $this->view->productID        = $productID;
@@ -1088,57 +1078,58 @@ class bug extends control
             $plans = array('' => '', 'ditto' => $this->lang->bug->ditto) + $plans;
 
             /* Set branches and modules. */
-            $branches        = array();
+            $branches        = 0;
             $branchTagOption = array();
-            $modules  = array();
+            $modules         = array();
             if($product->type != 'normal')
             {
                 $branches = $this->loadModel('branch')->getList($productID, 0 ,'all');
-                foreach($branches as $branchInfo)
-                {
-                    $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                }
-                foreach($branchTagOption as $branchID => $branchName)
-                {
-                    $modules[$productID][$branchID] = $this->tree->getOptionMenu($productID, 'bug', 0, $branchID);
-                }
+                foreach($branches as $branchInfo) $branchTagOption[$productID][$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                $branches = array_keys($branches);
             }
-            else
-            {
-                $modules[$productID][0] = $this->tree->getOptionMenu($productID, 'bug');
-            }
+
+            $modulePairs = $this->tree->getOptionMenu($productID, 'bug', 0, $branches);
+            $modules[$productID] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
 
             /* Set product menu. */
             $this->qa->setMenu($this->products, $productID, $branch);
 
-            $this->view->title           = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
-            $this->view->position[]      = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
-            $this->view->plans           = $plans;
-            $this->view->branchTagOption = $branchTagOption;
-            $this->view->modules         = $modules;
+            $this->view->title      = $product->name . $this->lang->colon . "BUG" . $this->lang->bug->batchEdit;
+            $this->view->position[] = html::a($this->createLink('bug', 'browse', "productID=$productID&branch=$branch"), $this->products[$productID]);
+            $this->view->plans      = $plans;
         }
         /* The bugs of my. */
         else
         {
-            $branchProduct = false;
-            $productIdList = array();
+            $branchProduct   = false;
+            $productIdList   = array();
+            $branchTagOption = array();
             foreach($bugs as $bug) $productIdList[$bug->product] = $bug->product;
-            $products = $this->product->getByIdList($productIdList);
-            foreach($products as $product)
+            $productList = $this->product->getByIdList($productIdList);
+            foreach($productList as $product)
             {
+                $branches = 0;
                 if($product->type != 'normal')
                 {
+                    $branches = $this->loadModel('branch')->getList($product->id, 0 ,'all');
+                    foreach($branches as $branchInfo) $branchTagOption[$product->id][$branchInfo->id] = '/' . $product->name . '/' . $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+
+                    $branches      = array_keys($branches);
                     $branchProduct = true;
-                    break;
                 }
+
+                $modulePairs = $this->tree->getOptionMenu($product->id, 'bug', 0, $branches);
+                $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
             }
 
             $this->app->loadLang('my');
             $this->lang->task->menu = $this->lang->my->menu->work;
             $this->lang->my->menu->work['subModule'] = 'bug';
 
-            $this->view->position[] = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
-            $this->view->title      = "BUG" . $this->lang->bug->batchEdit;
+            $this->view->position[]  = html::a($this->createLink('my', 'bug'), $this->lang->my->bug);
+            $this->view->title       = "BUG" . $this->lang->bug->batchEdit;
+            $this->view->plans       = $this->loadModel('productplan')->getPairs($product->id, $branch);
+            $this->view->productList = $productList;
         }
 
         /* Judge whether the editedBugs is too large and set session. */
@@ -1157,25 +1148,29 @@ class bug extends control
         {
             $appendUsers[$bug->assignedTo] = $bug->assignedTo;
             $appendUsers[$bug->resolvedBy] = $bug->resolvedBy;
+
+            if(!isset($modules[$bug->product][$bug->branch])) $modules[$bug->product][$bug->branch] = $modules[$bug->product][0] + $this->tree->getModulesName($bug->module);
         }
         $users = $this->user->getPairs('devfirst', $appendUsers, $this->config->maxCount);
         $users = array('' => '', 'ditto' => $this->lang->bug->ditto) + $users;
 
         /* Assign. */
-        $this->view->position[]     = $this->lang->bug->common;
-        $this->view->position[]     = $this->lang->bug->batchEdit;
-        $this->view->productID      = $productID;
-        $this->view->branchProduct  = $branchProduct;
-        $this->view->severityList   = array('ditto' => $this->lang->bug->ditto) + $this->lang->bug->severityList;
-        $this->view->typeList       = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->typeList;
-        $this->view->priList        = array('0' => '', 'ditto' => $this->lang->bug->ditto) + $this->lang->bug->priList;
-        $this->view->resolutionList = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->resolutionList;
-        $this->view->statusList     = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->statusList;
-        $this->view->osList         = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->osList;
-        $this->view->browserList    = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->browserList;
-        $this->view->bugs           = $bugs;
-        $this->view->branch         = $branch;
-        $this->view->users          = $users;
+        $this->view->position[]      = $this->lang->bug->common;
+        $this->view->position[]      = $this->lang->bug->batchEdit;
+        $this->view->productID       = $productID;
+        $this->view->branchProduct   = $branchProduct;
+        $this->view->severityList    = array('ditto' => $this->lang->bug->ditto) + $this->lang->bug->severityList;
+        $this->view->typeList        = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->typeList;
+        $this->view->priList         = array('0' => '', 'ditto' => $this->lang->bug->ditto) + $this->lang->bug->priList;
+        $this->view->resolutionList  = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->resolutionList;
+        $this->view->statusList      = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->statusList;
+        $this->view->osList          = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->osList;
+        $this->view->browserList     = array('' => '',  'ditto' => $this->lang->bug->ditto) + $this->lang->bug->browserList;
+        $this->view->bugs            = $bugs;
+        $this->view->branch          = $branch;
+        $this->view->users           = $users;
+        $this->view->modules         = $modules;
+        $this->view->branchTagOption = $branchTagOption;
 
         $this->display();
     }
