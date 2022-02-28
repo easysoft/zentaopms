@@ -1,5 +1,4 @@
 <?php
-include '../../control.php';
 class myIm extends im
 {
     public function downloadXxdPackage($xxdFileName)
