@@ -438,7 +438,6 @@ class kanbanModel extends model
             ->add('kanban', $kanbanID)
             ->add('region', $regionID)
             ->add('group', $groupID)
-            ->add('column', $columnID)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', $now)
             ->add('assignedDate', $now)

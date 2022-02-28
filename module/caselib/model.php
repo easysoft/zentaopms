@@ -572,7 +572,8 @@ class caselibModel extends model
                 $data[$i]->openedDate   = $now;
                 $data[$i]->status       = $forceNotReview ? 'normal' : 'wait';
                 $data[$i]->version      = 1;
-                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa') $data[$i]->project = $this->session->project;
+                $data[$i]->project      = 0;
+                if($this->config->systemMode == 'new' and $this->lang->navGroup->caselib != 'qa' and $this->session->project) $data[$i]->project = $this->session->project;
 
                 $this->dao->insert(TABLE_CASE)->data($data[$i])
                     ->autoCheck()
