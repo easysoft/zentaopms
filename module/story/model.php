@@ -3985,7 +3985,7 @@ class storyModel extends model
 
                     common::printIcon('story', 'change', $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'review', $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
-                    common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
+                    common::printIcon('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $this->lang->story->recall);
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement' and $this->config->vision != 'lite') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");
