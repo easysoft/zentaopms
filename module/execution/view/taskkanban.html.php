@@ -74,7 +74,7 @@
     $checkObject = new stdclass();
     $checkObject->execution = $executionID;
     $canCreateTask       = common::hasPriv('task', 'create', $checkObject);
-    $canBatchCreateTask  = common::hasPriv('task', 'batchCreate', $checkObject);    
+    $canBatchCreateTask  = common::hasPriv('task', 'batchCreate', $checkObject);
     $canCreateBug        = common::hasPriv('bug', 'create');
     $canBatchCreateBug   = common::hasPriv('bug', 'batchCreate');
     $canImportBug        = common::hasPriv('execution', 'importBug');

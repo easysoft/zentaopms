@@ -520,7 +520,7 @@ class execution extends control
             {
                 $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                 $kanbanData = json_encode($kanbanData);
-                    
+
                 return print(js::reload('parent', '', "parent.parent.updateKanban($kanbanData)"));
                 // return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
             }
@@ -2083,6 +2083,8 @@ class execution extends control
         $this->view->productID        = $productID;
         $this->view->branchID         = $branchID;
         $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
+        $this->view->allProducts         = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->view->projectID, 'noclosed');
+        a($this->view->allProducts);
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
