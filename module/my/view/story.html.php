@@ -103,7 +103,7 @@
                 $vars = "story={$story->id}";
                 echo common::buildIconButton('story', 'change', $vars, $story, 'list', 'alter', '', 'iframe', true);
                 echo common::buildIconButton('story', 'review', $vars, $story, 'list', 'search', '', 'iframe', true);
-                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $lang->story->recall);
+                echo common::buildIconButton('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $lang->story->recall);
                 echo common::buildIconButton('story', 'close',  $vars, $story, 'list', '', '', 'iframe', true);
                 echo common::buildIconButton('story', 'edit',   $vars, $story, 'list', '', '', 'iframe', true, "data-width='95%'");
                 echo common::buildIconButton('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', 'iframe', true, "data-width='95%'");
