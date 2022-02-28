@@ -37,7 +37,7 @@ $lang->block->modules['kanban']['index']->availableBlocks->sprint         = $lan
 $lang->block->modules['kanban']['index']->availableBlocks->projectdynamic = 'Dynamics';
 
 $lang->block->modules['project']->availableBlocks = new stdclass();
-$lang->block->modules['project']->availableBlocks->project       = 'Project List';
+$lang->block->modules['project']->availableBlocks->project = 'Project List';
 
 $lang->block->modules['execution'] = new stdclass();
 $lang->block->modules['execution']->availableBlocks = new stdclass();
