@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/sonarqube.class.php';
+su('admin');
 
 /**
 
@@ -15,28 +17,15 @@ pid=1
 
 */
 
-$sonarqube = $tester->loadModel('sonarqube');
-
-$sonarqubeID = 0;
-$projectKey  = '';
-$result      = $sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
-if($result === false) $result = 'return false';
-r($result) && p() && e('return false');    //通过不正确的sonarqubeID、projectKey,删除SonarQube项目
-
 $sonarqubeID = 2;
-$projectKey  = '';
-$result      = $sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
-r($result->errors) && p('0:msg') && e("The 'project' parameter is missing"); //正确的sonarqubeID,空的projectKey,删除SonarQube项目
 
-$projectKey = 'no_project';
-$result     = $sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
-r($result->errors) && p('0:msg') && e("Project 'no_project' not found"); //正确的sonarqubeID,不存在的projectKey,删除SonarQube项目
+$t_empty_projectkey = '';
+$t_no_projectkey    = 'no_project';
+$t_projectkey       = 'new_project';
 
-$projectKey = 'new_project';
-list($apiRoot, $header) = $sonarqube->getApiBase($sonarqubeID);
-$url    = sprintf($apiRoot, "projects/create?name=$projectKey&project=$projectKey");
-commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'POST'), $header);
-
-$result = $sonarqube->apiDeleteProject($sonarqubeID, $projectKey);
-if($result === null) $result = 'return true';
-r($result) && p() && e("return true"); //正确的sonarqubeID、projectKey,删除SonarQube项目
+$sonarqube = new sonarqubeTest();
+r($sonarqube->apiDeleteProjectTest(0, $t_empty_projectkey))            && p()        && e('return false');                       //通过不正确的sonarqubeID、projectKey,删除SonarQube项目
+r($sonarqube->apiDeleteProjectTest($sonarqubeID, $t_empty_projectkey)) && p('0:msg') && e("The 'project' parameter is missing"); //正确的sonarqubeID,空的projectKey,删除SonarQube项目
+r($sonarqube->apiDeleteProjectTest($sonarqubeID, $t_no_projectkey))    && p('0:msg') && e("Project 'no_project' not found");     //正确的sonarqubeID,不存在的projectKey,删除SonarQube项目
+$sonarqube->apiCreateProjectTest($sonarqubeID, array('projectName' => $t_projectkey, 'projectKey' => $t_projectkey));
+r($sonarqube->apiDeleteProjectTest($sonarqubeID, $t_projectkey))       && p()        && e("return true");                        //正确的sonarqubeID、projectKey,删除SonarQube项目

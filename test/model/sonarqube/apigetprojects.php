@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/sonarqube.class.php';
+su('admin');
 
 /**
 
@@ -15,18 +17,11 @@ pid=1
 
 */
 
-$sonarqube = $tester->loadModel('sonarqube');
-
 $sonarqubeID = 2;
-$result      = $sonarqube->apiGetProjects($sonarqubeID);
-r(isset($result[0]->name)) && p() && e('1'); //通过sonarqubeID,获取SonarQube项目列表
-r(count($result) > 0)      && p() && e('1'); //通过sonarqubeID,获取SonarQube项目数量
+$keyword     = '02';
 
-$keyword = '02';
-$result  = $sonarqube->apiGetProjects($sonarqubeID, $keyword);
-r(strpos($result[0]->name, '02') !== false) && p() && e('1'); //通过sonarqubeID,关键字,搜索获取SonarQube项目
-
-$sonarqubeID = 0;
-$result      = $sonarqube->apiGetProjects($sonarqubeID);
-if(empty($result)) $result = 'return empty';
-r($result) && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube项目列表
+$sonarqube = new sonarqubeTest();
+r($sonarqube->apiGetProjectsTest($sonarqubeID))            && p() && e('1');            //通过sonarqubeID,获取SonarQube项目列表
+r(count($sonarqube->apiGetProjectsTest($sonarqubeID)) > 0) && p() && e('1');            //通过sonarqubeID,获取SonarQube项目数量
+r($sonarqube->apiGetProjectsTest($sonarqubeID, $keyword))  && p() && e('1');            //通过sonarqubeID,关键字,搜索获取SonarQube项目
+r($sonarqube->apiGetProjectsTest(0))                       && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube项目列表

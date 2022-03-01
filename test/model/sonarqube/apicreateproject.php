@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/sonarqube.class.php';
+su('admin');
 
 /**
 
@@ -15,24 +17,14 @@ pid=1
 
 */
 
-$sonarqube = $tester->loadModel('sonarqube');
-
-$sonarqubeID = 0;
-$project     = new stdclass();
-
-$result = $sonarqube->apiCreateProject($sonarqubeID, $project);
-if($result === false) $result = 'return false';
-r($result) && p() && e('return false'); //使用空的sonarqubeID、项目对象创建sonarqube项目
-
-$project->projectName = 'unit_test';
-$project->projectKey  = 'unit_test';
-$result = $sonarqube->apiCreateProject($sonarqubeID, $project);
-if($result === false) $result = 'return false';
-r($result) && p() && e('return false'); //使用空的sonarqubeID、正确的项目对象创建sonarqube项目
-
 $sonarqubeID = 2;
-$sonarqube->apiDeleteProject($sonarqubeID, $project->projectKey);
-$result = $sonarqube->apiCreateProject($sonarqubeID, $project);
-r($result) && p('project:key') && e('unit test'); //使用正确的sonarqubeID,项目对象创建sonarqube项目
-$result = $sonarqube->apiCreateProject($sonarqubeID, $project);
-r($result->errors) && p('0:msg') && e("Could not create Project, key already exists: unit_test"); //使用重复的项目对象创建sonarqube项目
+
+$t_empty_project = array();
+$t_project       = array('projectName' => 'unit_test', 'projectKey' => 'unit_test');
+
+$sonarqube = new sonarqubeTest();
+r($sonarqube->apiCreateProjectTest(0, $t_empty_project))      && p()              && e('return false');                                            //使用空的sonarqubeID、项目对象创建sonarqube项目
+r($sonarqube->apiCreateProjectTest(0, $t_project))            && p()              && e('return false');                                            //使用空的sonarqubeID、正确的项目对象创建sonarqube项目
+$sonarqube->apiDeleteProjectTest($sonarqubeID, 'unit_test');
+r($sonarqube->apiCreateProjectTest($sonarqubeID, $t_project)) && p('project:key') && e('unit test');                                               //使用正确的sonarqubeID,项目对象创建sonarqube项目
+r($sonarqube->apiCreateProjectTest($sonarqubeID, $t_project)) && p('0:msg')       && e("Could not create Project, key already exists: unit_test"); //使用重复的项目对象创建sonarqube项目

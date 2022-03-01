@@ -1,6 +1,8 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/sonarqube.class.php';
+su('admin');
 
 /**
 
@@ -14,17 +16,10 @@ pid=1
 
 */
 
-$sonarqube = $tester->loadModel('sonarqube');
-
 $sonarqubeID = 2;
-$result      = $sonarqube->apiGetIssues($sonarqubeID);
-r(isset($result[0]->message)) && p() && e('1'); //通过sonarqubeID,获取SonarQube问题列表
+$projectKey  = 'zentaopms';
 
-$projectKey = 'zentaopms';
-$result     = $sonarqube->apiGetIssues($sonarqubeID, $projectKey);
-r(isset($result[0]->message)) && p() && e('1'); //通过sonarqubeID,项目key获取SonarQube问题列表
-
-$sonarqubeID = 0;
-$result      = $sonarqube->apiGetIssues($sonarqubeID);
-if(empty($result)) $result = 'return empty';
-r($result) && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube问题列表
+$sonarqube = new sonarqubeTest();
+r($sonarqube->apiGetIssuesTest($sonarqubeID))              && p() && e('1');            //通过sonarqubeID,获取SonarQube问题列表
+r($sonarqube->apiGetIssuesTest($sonarqubeID, $projectKey)) && p() && e('1');            //通过sonarqubeID,项目key获取SonarQube问题列表
+r($sonarqube->apiGetIssuesTest(0))                         && p() && e('return empty'); //当sonarqubeID为0时,获取SonarQube问题列表
