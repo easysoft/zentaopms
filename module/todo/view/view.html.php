@@ -77,7 +77,8 @@
                     $createStoryPriv = common::hasPriv('story', 'create');
                     $createTaskPriv  = common::hasPriv('task', 'create');
                     $createBugPriv   = common::hasPriv('bug', 'create');
-                    if($createStoryPriv or $createTaskPriv or $createBugPriv)
+                    $printBtn        = ($config->vision == 'lite' and (($config->systemMode == 'new' and empty($projects) or $config->systemMode == 'classic' and empty($executions)))) ? false : true;
+                    if($printBtn and ($createStoryPriv or $createTaskPriv or $createBugPriv))
                     {
                         $isonlybody = isonlybody();
                         unset($_GET['onlybody']);
