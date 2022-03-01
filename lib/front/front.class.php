@@ -309,7 +309,7 @@ class html extends baseHTML
             else
             {
                 /* Mix of Chinese and English 中英文混合的情况 */
-                $text .= $mbLength <= 2 ? $user->name : mb_substr($user->name, $mbLength - 2, $mbLength, 'utf-8');
+                $text .= $mbLength <= 2 ? $user->name : mb_substr($user->name, 0, 2, 'utf-8');
             }
             $textLength = mb_strlen($text, 'utf-8');
             $html .= "<span class='text text-len-$textLength'>$text</span>";
