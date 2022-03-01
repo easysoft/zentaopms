@@ -966,7 +966,6 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
  */
 function updateKanban(kanbanData, regionID = 0)
 {
-    console.log('1111');
     setTimeout(function()
     {
         if(regionID)
