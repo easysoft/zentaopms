@@ -1240,6 +1240,16 @@ $(function()
         }
     });
 
+    $('#product').change(function()
+    {
+        var product = $('#product').val();
+        if(product)
+        {
+            var link = createLink('bug', 'batchCreate', 'productID=' + product + '&branch=' + branchID + '&executionID=' + executionID);
+            $('#batchCreateBugButton').attr('href', link);
+        }
+    });
+
     $(document).on('click', '#splitTable .btn-plus', function()
     {
         var tr = $(this).closest('tr');
