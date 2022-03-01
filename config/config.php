@@ -186,3 +186,8 @@ if($config->edition != 'open')
     $config->version = $config->edition . $config->{$config->edition . 'Version'};
     if($config->edition != 'max') unset($config->maxVersion);
 }
+else
+{
+    unset($config->bizVersion);
+    unset($config->maxVersion);
+}

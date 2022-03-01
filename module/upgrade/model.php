@@ -42,18 +42,18 @@ class upgradeModel extends model
         $proInstalled = $bizInstalled = $maxInstalled = false;
         if($fromVersion[0] == 'p') 
         {
-            $openVersion  = $this->config->proVersion[$fromVersion];
+            $openVersion  = $this->config->upgrade->proVersion[$fromVersion];
             $proInstalled = true;
         }
         elseif($fromVersion[0] == 'b') 
         {
-            $openVersion  = $this->config->bizVersion[$fromVersion];
+            $openVersion  = $this->config->upgrade->bizVersion[$fromVersion];
             $bizInstalled = true;
             $proInstalled = true;
         }
         elseif($fromVersion[0] == 'm')
         {
-            $openVersion  = $this->config->maxVersion[$fromVersion];
+            $openVersion  = $this->config->upgrade->maxVersion[$fromVersion];
             $maxInstalled = true;
             $bizInstalled = true;
             $proInstalled = true;
@@ -75,7 +75,7 @@ class upgradeModel extends model
             if($proInstalled)
             {
                 $proVersions = array();
-                foreach($this->config->proVersion as $pro => $open)
+                foreach($this->config->upgrade->proVersion as $pro => $open)
                 {
                     if($open == $openVersion) $proVersions[] = $pro;
                 }
@@ -91,7 +91,7 @@ class upgradeModel extends model
             if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $bizInstalled)
             {
                 $bizVersions = array();
-                foreach($this->config->bizVersion as $biz => $open)
+                foreach($this->config->upgrade->bizVersion as $biz => $open)
                 {
                     if($open == $openVersion) $bizVersions[] = $biz;
                 }
@@ -106,7 +106,7 @@ class upgradeModel extends model
 
             if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $maxInstalled)
             {
-                $maxVersion = array_search($openVersion, $this->config->maxVersion);
+                $maxVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
                 $this->saveLogs("Execute $maxVersion");
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
             }
@@ -609,22 +609,22 @@ class upgradeModel extends model
 
         if($fromVersion[0] == 'p')
         {
-            $openVersion     = $this->config->proVersion[$fromVersion];
+            $openVersion     = $this->config->upgrade->proVersion[$fromVersion];
             $confirmContent .= $this->getProConfirm($fromVersion);
         }
         elseif($fromVersion[0] == 'b')
         {
-            $openVersion     = $this->config->bizVersion[$fromVersion];
-            $proVersion      = array_search($openVersion, $this->config->proVersion);
+            $openVersion     = $this->config->upgrade->bizVersion[$fromVersion];
+            $proVersion      = array_search($openVersion, $this->config->upgrade->proVersion);
 
             $confirmContent .= $this->getProConfirm($proVersion);
             $confirmContent .= $this->getBizConfirm($fromVersion);
         }
         elseif($fromVersion[0] == 'm')
         {
-            $openVersion     = $this->config->maxVersion[$fromVersion];
-            $proVersion      = array_search($openVersion, $this->config->proVersion);
-            $bizVersion      = array_search($openVersion, $this->config->bizVersion);
+            $openVersion     = $this->config->upgrade->maxVersion[$fromVersion];
+            $proVersion      = array_search($openVersion, $this->config->upgrade->proVersion);
+            $bizVersion      = array_search($openVersion, $this->config->upgrade->bizVersion);
 
             $confirmContent .= $this->getProConfirm($proVersion);
             $confirmContent .= $this->getBizConfirm($bizVersion);
@@ -1123,8 +1123,8 @@ class upgradeModel extends model
         {
             $xVersion = $version;
             $version  = str_replace('.', '_', $version);
-            if(strpos($version, 'pro') !== false and isset($this->config->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->proVersion[$version]);
-            if(strpos($version, 'biz') !== false and isset($this->config->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->bizVersion[$version]);
+            if(strpos($version, 'pro') !== false and isset($this->config->upgrade->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->upgrade->proVersion[$version]);
+            if(strpos($version, 'biz') !== false and isset($this->config->upgrade->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->upgrade->bizVersion[$version]);
 
             $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
             if(file_exists($xStandardSQL))
