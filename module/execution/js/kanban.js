@@ -1,9 +1,12 @@
-$('#products').change(function()
+$(function()
 {
-  var selectProductID = $('#products').val();
-  var attr            = '/index.php?m=story&f=batchCreate&ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&ex
-  $('#batchCreateStory').children().children().attr('href',attr);
-});
+  $('#products').change(function()
+  {
+    var selectProductID = $('#products').val();
+    var attr            = '/index.php?m=story&f=batchCreate&ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution + '&onlybody=yes';
+    $('#batchCreateStory').children().children().attr('href',attr);
+  });
+})
 /**
  * When execution status change.
  *

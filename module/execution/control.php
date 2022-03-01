@@ -2069,6 +2069,8 @@ class execution extends control
         $this->view->productID        = $productID;
         $this->view->branchID         = $branchID;
         $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
+        $this->view->allProducts      = $this->loadModel('product')->getProductPairsByProject($this->view->projectID, 'noclosed');
+        a(count($this->view->allProducts));
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
