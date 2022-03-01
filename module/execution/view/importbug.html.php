@@ -70,27 +70,18 @@ var browseType = '<?php echo $browseType;?>';
         <?php endforeach;?>
       </tbody>
     </table>
+    <?php if($bugs):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always">
         <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn');?>
       </div>
       <div class='btn-toolbar'>
-        <?php if(isonlybody()):?>
-        <?php echo html::submitButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, 'onclick="goback()"', 'btn');?>
-        <?php else:?>
-        <?php echo html::backButton('','','btn');?>
-        <?php endif;?>
+        <?php echo html::backButton('', '', 'btn');?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
+    <?php endif;?>
   </form>
 </div>
-<script>
-$(function(){parent.$('#triggerModal .modal-content .modal-header .close').hide();})
-function goback()
-{
-    parent.location.reload();
-}
-</script>
 <?php include '../../common/view/footer.html.php';?>

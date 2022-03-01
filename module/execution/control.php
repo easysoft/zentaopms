@@ -515,20 +515,6 @@ class execution extends control
             $mails = $this->execution->importBug($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-            /* If link from no head then reload. */
-            if(isonlybody())
-            {
-                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                $kanbanData = json_encode($kanbanData);
-
-                return print(js::reload('parent', '', "parent.parent.updateKanban($kanbanData)"));
-                // return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-            }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
-            if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
         }
 
@@ -2083,7 +2069,6 @@ class execution extends control
         $this->view->productID        = $productID;
         $this->view->branchID         = $branchID;
         $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
-        $this->view->allProducts         = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($this->view->projectID, 'noclosed');
         $this->view->allPlans         = $allPlans;
         $this->view->kanbanData       = $kanbanData;
         $this->view->executionActions = $executionActions;
