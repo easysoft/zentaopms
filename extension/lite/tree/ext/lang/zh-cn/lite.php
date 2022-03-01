@@ -5,7 +5,7 @@ $lang->tree->allMenu         = $lang->tree->all;
 $lang->tree->manageMenu      = '维护目录';
 
 global $app;
-if ($app->rawMethod == 'tree' and $app->rawMethod == 'browsetask') 
+if ($app->rawModule == 'tree' and $app->rawMethod == 'browsetask') 
 {
     $lang->tree->manage          = '维护目录';
     $lang->tree->common          = '目录维护';
