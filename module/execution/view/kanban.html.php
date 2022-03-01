@@ -104,6 +104,7 @@ js::set('priv',
 js::set('hasStoryButton', $hasStoryButton);
 js::set('hasBugButton', $hasBugButton);
 js::set('hasTaskButton', $hasTaskButton);
+js::set('branch',$branchID);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -219,6 +220,7 @@ js::set('hasTaskButton', $hasTaskButton);
   </div>
 </div>
 <?php endif;?>
+<?php js::set('execution',$execution->id);?>
 <div class="modal fade" id="linkStoryByPlan">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
@@ -244,11 +246,19 @@ js::set('hasTaskButton', $hasTaskButton);
       </div>
       <div class="modal-body">
         <div class='input-group'>
-          <?php echo html::select('plan', $allProducts, '', "class='form-control chosen' id='plan'");?>
-          <span class='input-group-btn'><?php echo html::commonButton(html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='btn-primary iframe' data-width='90%'"), "id='toStoryButton'", 'btn btn-primary');?></span>
+          <?php echo html::select('products', $allProducts, '', "class='form-control chosen' id='products'");?>
+          <span class='input-group-btn', id='chuangjian'><?php echo html::commonButton(html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='btn-primary iframe' data-width='90%'"), "id='toStoryButton'", 'btn btn-primary');?></span>
         </div>
       </div>
     </div>
   </div>
 </div>
+<script>
+  $('.products').change(function(){
+      var selectProductID = $('#products').val();
+      var attr            = 'ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution;
+      alert(attr);
+      $('#chuangjian').children().attr('href','123456');
+  });
+</script>
 <?php include '../../common/view/footer.html.php';?>
