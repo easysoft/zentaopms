@@ -257,7 +257,7 @@ js::set('branch',$branchID);
   $('.products').change(function(){
       var selectProductID = $('#products').val();
       var attr            = 'ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution;
-      alert(attr);
+      alert($('#chuangjian').children());
       $('#chuangjian').children().attr('href','123456');
   });
 </script>
