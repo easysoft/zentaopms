@@ -28,27 +28,9 @@
           <th><?php echo $lang->testcase->stepDesc . '/' . $lang->testcase->stepExpect?></th>
         </tr>
       </thead>
-      <?php $moduleOptionMenu = $productID ? $moduleOptionMenu : array();?>
       <?php foreach($cases as $caseID => $case):?>
       <?php if($case->status == 'wait') continue;?>
-      <?php
-      if(!$productID)
-      {
-          echo html::hidden("caseIDList[$case->id]", $caseID);
-          if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getOptionMenu($case->product, 'case', 0, $case->branch);
-      }
-      if(!isset($moduleOptionMenu[$case->module]))
-      {
-          $caseModule = '/';
-          $modulePath = $this->tree->getParents($cases[$caseID]->module);
-          foreach($modulePath as $key => $module)
-          {
-              $caseModule .= $module->name;
-              if(isset($modulePath[$key + 1])) $caseModule .= '/';
-          }
-          $moduleOptionMenu[$case->module] = $caseModule;
-      }
-      ?>
+      <?php if(!$productID) echo html::hidden("caseIDList[$case->id]", $caseID); ?>
       <tr class='text-center'>
         <td><?php echo $caseID . html::hidden("version[$caseID]", $case->version)?></td>
         <td class='text-left'><?php echo "<span title='" . $moduleOptionMenu[$case->module] . "'>" . $moduleOptionMenu[$case->module] . "</span>"?></td>

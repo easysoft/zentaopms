@@ -718,17 +718,7 @@ class story extends control
         $this->story->replaceURLang($story->type);
 
         /* Process the module when branch products are switched to normal products. */
-        if($product->type == 'normal' and !empty($story->branch))
-        {
-            $storyModule = '/';
-            $modulePath  = $this->tree->getParents($story->module);
-            foreach($modulePath as $key => $module)
-            {
-                $storyModule .= $module->name;
-                if(isset($modulePath[$key + 1])) $storyModule .= '/';
-            }
-            $this->view->moduleOptionMenu += array($story->module => $storyModule);
-        }
+        if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
         $this->view->title            = $this->lang->story->edit . "STORY" . $this->lang->colon . $this->view->story->title;
         $this->view->position[]       = $this->lang->story->edit;
@@ -877,8 +867,6 @@ class story extends control
                 if($storyProduct->type != 'normal') $branchProduct = true;
             }
         }
-        $this->view->branchTagOption = $branchTagOption;
-        $this->view->modules         = $modules;
 
         /* Set ditto option for users. */
         $users = $this->loadModel('user')->getPairs('nodeleted');
@@ -902,6 +890,20 @@ class story extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
+        /* Append module when change product type. */
+        $moduleList = array(0 => '/');
+        foreach($stories as $story)
+        {
+            if(isset($modules[$story->product][$story->branch]))
+            {
+                $moduleList[$story->id] = $modules[$story->product][$story->branch];
+            }
+            else
+            {
+                $moduleList[$story->id] = $modules[$story->product][0] + $this->tree->getModulesName($story->module);
+            }
+        }
+
         $this->view->position[]        = $this->lang->story->common;
         $this->view->position[]        = $this->lang->story->batchEdit;
         $this->view->title             = $this->lang->story->batchEdit;
@@ -919,6 +921,8 @@ class story extends control
         $this->view->storyType         = $storyType;
         $this->view->stories           = $stories;
         $this->view->executionID       = $executionID;
+        $this->view->branchTagOption   = $branchTagOption;
+        $this->view->moduleList        = $moduleList;
         $this->display();
     }
 

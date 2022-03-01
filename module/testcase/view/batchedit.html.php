@@ -66,44 +66,7 @@
         </thead>
         <tbody>
           <?php foreach($caseIDList as $caseID):?>
-          <?php
-          if(!isset($cases[$caseID])) continue;
-          $caseBranch = isset($cases[$caseID]->branch) ? $cases[$caseID]->branch : 0;
-          if(!$productID and !$cases[$caseID]->lib)
-          {
-              $caseProductID   = $cases[$caseID]->product;
-              $product         = $products[$caseProductID];
-              $branchTagOption = array();
-              if($product->type != 'normal')
-              {
-                  $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
-                  foreach($branches as $branchInfo)
-                  {
-                      $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-                  }
-                  foreach($branchTagOption as $branchID => $branchName) $branchTagOption[$branchID] = '/' . $product->name . '/' . $branchName;
-
-                  $modules[$caseProductID][$caseBranch] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case', 0, $caseBranch);
-              }
-              else
-              {
-                  $modules[$caseProductID][0] = $this->tree->getOptionMenu($cases[$caseID]->product, 'case');
-              }
-          }
-          $caseProductID = isset($caseProductID) ? $caseProductID : $productID;
-          $moduleList    = $modules[$caseProductID];
-          if(!isset($moduleList[$caseBranch]))
-          {
-              $caseModule = '/';
-              $modulePath = $this->tree->getParents($cases[$caseID]->module);
-              foreach($modulePath as $key => $module)
-              {
-                  $caseModule .= $module->name;
-                  if(isset($modulePath[$key + 1])) $caseModule .= '/';
-              }
-              $moduleList[$caseBranch] = $modules[$caseProductID][0] + array($cases[$caseID]->module => $caseModule);
-          }
-          ?>
+          <?php if(!isset($cases[$caseID])) continue; ?>
           <tr class='text-center'>
             <td><?php echo $caseID . html::hidden("caseIDList[$caseID]", $caseID);?></td>
             <td class='<?php echo zget($visibleFields, 'pri', 'hidden')?>'>   <?php echo html::select("pris[$caseID]",     $priList, $cases[$caseID]->pri, 'class=form-control');?></td>
@@ -122,12 +85,12 @@
             </td>
             <?php if($branchProduct):?>
             <td class='text-left' style='overflow:visible'>
-              <?php $branchProductID = $productID ? $productID : $product->id;?>
-              <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$caseID]", $branchTagOption, $product->type == 'normal' ? '' : $cases[$caseID]->branch, "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+              <?php $branchProductID = $productID ? $productID : $cases[$caseID]->product;?>
+              <?php $disabled        = $branchProduct ? '' : "disabled='disabled'";?>
+              <?php echo html::select("branches[$caseID]", $branchTagOption[$branchProductID], $branchProduct ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
-            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", $moduleList[$caseBranch], $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
             <td class='text-left<?php echo zget($visibleFields, 'story', ' hidden')?>' style='overflow:visible'><?php echo html::select("story[$caseID]",  $stories,   $cases[$caseID]->story, "class='form-control chosen'");?></td>
             <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
               <div class='input-group'>

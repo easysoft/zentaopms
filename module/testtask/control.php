@@ -1246,7 +1246,6 @@ class testtask extends control
             {
                 $this->loadModel('qa')->setMenu($this->products, $productID, $taskID);
             }
-            $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, 'case', 0, 'all');
 
             $cases = $this->dao->select('*')->from(TABLE_CASE)->where('id')->in($caseIDList)->fetchAll('id');
         }
@@ -1269,10 +1268,12 @@ class testtask extends control
                 ->leftJoin(TABLE_TESTRUN)->alias('t2')->on('t1.id = t2.case')
                 ->where('t2.id')->in($caseIDList)
                 ->fetchAll('id');
-
-            $caseIDList = array();
-            foreach($cases as $case) $caseIDList[] = $case->id;
         }
+
+        /* Set modules. */
+        $moduleOptionMenu = array(0 => '/');
+        foreach($cases as $case) $moduleOptionMenu += $this->tree->getModulesName($case->module);
+        $this->view->moduleOptionMenu = $moduleOptionMenu;
 
         /* If case has changed and not confirmed, remove it. */
         if($from == 'testtask')
