@@ -14,16 +14,16 @@ class bugEntry extends entry
     /**
      * GET method.
      *
-     * @param  int    $id
+     * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function get($id)
+    public function get($bugID)
     {
         $this->resetOpenApp($this->param('tab', 'product'));
 
         $control = $this->loadController('bug', 'view');
-        $control->view($id);
+        $control->view($bugID);
 
         $data = $this->getData();
 
@@ -83,13 +83,13 @@ class bugEntry extends entry
     /**
      * PUT method.
      *
-     * @param  int    $id
+     * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function put($id)
+    public function put($bugID)
     {
-        $oldBug = $this->loadModel('bug')->getByID($id);
+        $oldBug = $this->loadModel('bug')->getByID($bugID);
 
         /* Set $_POST variables. */
         $fields = 'title,project,execution,openedBuild,assignedTo,pri,severity,type,story,resolvedBy,closedBy,resolution,product,plan,task,module,steps';
@@ -97,28 +97,28 @@ class bugEntry extends entry
         $this->setPost('notifyEmail', implode(',', $this->request('notifyEmail', array())));
 
         $control = $this->loadController('bug', 'edit');
-        $control->edit($id);
+        $control->edit($bugID);
 
         $data = $this->getData();
 
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
         if(!isset($data->status)) return $this->sendError(400, 'error');
 
-        $bug = $this->bug->getByID($id);
+        $bug = $this->bug->getByID($bugID);
         $this->send(200, $this->format($bug, 'activatedDate:time,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,mailto:userList,resolvedBy:user,resolvedDate:time,closedBy:user,closedDate:time,lastEditedBy:user,lastEditedDate:time,deadline:date,deleted:bool'));
     }
 
     /**
      * DELETE method.
      *
-     * @param  int    $id
+     * @param  int    $bugID
      * @access public
      * @return void
      */
-    public function delete($id)
+    public function delete($bugID)
     {
         $control = $this->loadController('bug', 'delete');
-        $control->delete($id, 'yes');
+        $control->delete($bugID, 'yes');
 
         $this->getData();
         $this->sendSuccess(200, 'success');
