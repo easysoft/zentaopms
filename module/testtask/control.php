@@ -109,6 +109,8 @@ class testtask extends control
         $sort = common::appendOrder($orderBy);
 
         /* Get tasks. */
+        $product = $this->product->getById($productID);
+        if($product->type == 'normal') $branch = 'all';
         $tasks = $this->testtask->getProductTasks($productID, $branch, $sort, $pager, $scopeAndStatus, $beginTime, $endTime);
 
         $this->view->title      = $this->products[$productID] . $this->lang->colon . $this->lang->testtask->common;
