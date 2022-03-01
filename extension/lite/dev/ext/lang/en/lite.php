@@ -76,7 +76,6 @@ $lang->dev->groupList['my']        = 'My';
 $lang->dev->groupList['project']   = 'Project';
 $lang->dev->groupList['execution'] = $lang->executionCommon;
 $lang->dev->groupList['doc']       = 'Document';
-$lang->dev->groupList['report']    = 'Report';
 $lang->dev->groupList['company']   = 'Company';
 $lang->dev->groupList['api']       = 'API';
 $lang->dev->groupList['message']   = 'Message';

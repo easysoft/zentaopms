@@ -26,6 +26,7 @@ class myTask extends task
             $this->view->regionID = $regionID;
         }
 
+        $this->config->execution->task->allModule = 1;
         $this->view->lanes = $lanes;
 
         if(!empty($_POST))

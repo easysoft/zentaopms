@@ -76,7 +76,6 @@ $lang->dev->groupList['my']        = '我的地盘';
 $lang->dev->groupList['project']   = '项目';
 $lang->dev->groupList['execution'] = $lang->executionCommon;
 $lang->dev->groupList['doc']       = '文档';
-$lang->dev->groupList['report']    = '统计';
 $lang->dev->groupList['company']   = '组织';
 $lang->dev->groupList['api']       = 'API';
 $lang->dev->groupList['message']   = '消息';
