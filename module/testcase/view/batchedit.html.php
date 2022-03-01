@@ -86,8 +86,9 @@
             <?php if($branchProduct):?>
             <td class='text-left' style='overflow:visible'>
               <?php $branchProductID = $productID ? $productID : $cases[$caseID]->product;?>
-              <?php $disabled        = $products[$branchProductID]->type != 'normal' ? '' : "disabled='disabled'";?>
-              <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $products[$branchProductID]->type != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
+              <?php $productType     = $productID ? $product->type : $products[$branchProductID]->type;?>
+              <?php $disabled        = $productType != 'normal' ? '' : "disabled='disabled'";?>
+              <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $productType != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
