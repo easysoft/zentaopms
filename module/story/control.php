@@ -1695,7 +1695,7 @@ class story extends control
         $this->view->position[] = $this->lang->story->assign;
         $this->view->story      = $story;
         $this->view->actions    = $this->action->getList('story', $storyID);
-        $this->view->users      = $this->loadModel('user')->getTeamMemberPairs($this->session->project);
+        $this->view->users      = ($this->config->vision == 'lite') ? $this->loadModel('user')->getTeamMemberPairs($this->session->project) : $this->loadModel('user')->getPairs('nodeleted|noclosed|pofirst|noletter');
         $this->display();
     }
 
