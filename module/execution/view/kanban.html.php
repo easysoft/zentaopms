@@ -253,11 +253,4 @@ js::set('branch',$branchID);
     </div>
   </div>
 </div>
-<script>
-  $('#products').change(function(){
-      var selectProductID = $('#products').val();
-      var attr            = '/index.php?m=story&f=batchCreate&ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution + '&onlybody=yes';
-      $('#chuangjian').children().children().attr('href',attr);
-  });
-</script>
 <?php include '../../common/view/footer.html.php';?>
