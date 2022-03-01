@@ -1220,7 +1220,7 @@ class upgradeModel extends model
             {
                 if(isset($this->config->excludeFiles[$file])) continue;
 
-                $fullPath = $basePath . str_replace('/', DIRECTORY_SEPARATOR, $file);
+                $fullPath = $basePath . str_replace('/', DS, $file);
                 if(file_exists($fullPath))
                 {
                     $isDir = is_dir($fullPath);
@@ -5717,7 +5717,7 @@ class upgradeModel extends model
     }
 
     /**
-     * Get extent files.
+     * Gets the extension file to be moved.
      *
      * @access public
      * @return array
@@ -5725,25 +5725,24 @@ class upgradeModel extends model
     public function getEXTFiles()
     {
         $files       = array();
-        $allModules  = scandir($this->app->moduleRoot);
-        $skipModules = $this->getEncryptModules($allModules);
+        $allModules  = glob($this->app->moduleRoot . '*');
+        $skipModules = $this->getEncryptedModules($allModules);
 
-        foreach($allModules as $module)
+        foreach($allModules as $modulePath)
         {
-            if($module === '.' or $module === '..' or in_array($module, $skipModules)) continue;
+            $module = basename($modulePath);
+            if(in_array($module, $skipModules)) continue;
 
-            $dirPath = in_array($module, $this->config->upgrade->PMSModules) ? $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . 'ext' : $this->app->moduleRoot . $module;
-            $dirs    = scandir($dirPath);
-            foreach($dirs as $dir)
+            $dirRoot = in_array($module, $this->config->upgrade->openModules) ? $modulePath . DS . 'ext' : $modulePath;
+            $dirs    = glob($dirRoot . DS . '*');
+            foreach($dirs as $dirPath)
             {
-                if($dir === '.' or $dir === '..') continue;
-
-                $realPath = is_file($dirPath . DIRECTORY_SEPARATOR . $dir) ? $dirPath : $dirPath . DIRECTORY_SEPARATOR . $dir;
-                $path     = in_array($module, $this->config->upgrade->PMSModules) ? $module . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . $dir : $module . DIRECTORY_SEPARATOR . $dir;
+                $dir      = basename($dirPath);
+                $realPath = is_file($dirPath) ? $dirRoot : $dirPath;
+                $path     = in_array($module, $this->config->upgrade->openModules) ? $module . DS . 'ext' . DS . $dir : $module . DS . $dir;
                 if(is_dir($realPath))
                 {
-                    $extFiles = $this->getPluginFiles($module, $dir, $realPath, $path);
-                    $files += $extFiles;
+                    $files += $this->getPluginFiles($module, $dir, $realPath, $path);
                 }
             }
         }
@@ -5752,23 +5751,22 @@ class upgradeModel extends model
     }
 
     /**
-     * Get encrypt modules.
+     * Get modules that are not open source.
      *
      * @param  array  $allModules
      * @access public
      * @return array
      */
-    public function getEncryptModules($allModules)
+    public function getEncryptedModules($allModules)
     {
         $encryptModules = array();
-        foreach($allModules as $module)
+        foreach($allModules as $modulePath)
         {
-            if($module === '.' or $module === '..') continue;
-
             $customFiles = array();
-            if(in_array($module, $this->config->upgrade->PMSModules))
+            $module      = basename($modulePath);
+            if(in_array($module, $this->config->upgrade->openModules))
             {
-                $extRoot = $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . 'ext';
+                $extRoot = $modulePath . DS . 'ext';
                 if(!is_dir($extRoot))
                 {
                     $encryptModules[] = $module;
@@ -5778,8 +5776,8 @@ class upgradeModel extends model
                 {
                     foreach(array('control', 'model') as $dir)
                     {
-                        $realPath = $extRoot . DIRECTORY_SEPARATOR . $dir;
-                        $path     = $module . DIRECTORY_SEPARATOR . 'ext' . DIRECTORY_SEPARATOR . $dir;
+                        $realPath = $extRoot . DS . $dir;
+                        $path     = $module . DS . 'ext' . DS . $dir;
                         if(!is_dir($realPath)) continue;
                         $customFiles += $this->getPluginFiles($module, $dir, $realPath, $path);
                     }
@@ -5789,11 +5787,10 @@ class upgradeModel extends model
             {
                 foreach(array('control.php', 'model.php') as $file)
                 {
-                    $realPath = $this->app->moduleRoot . $module;
-                    $filePath = $this->app->moduleRoot . $module . DIRECTORY_SEPARATOR . $file;
+                    $filePath = $modulePath . DS . $file;
                     if(!is_file($filePath)) continue;
 
-                    $customFiles += $this->getPluginFiles($module, $file, $realPath, $module);
+                    $customFiles += $this->getPluginFiles($module, $file, $modulePath, $module);
                 }
             }
 
@@ -5814,50 +5811,43 @@ class upgradeModel extends model
      */
     public function getPluginFiles($module, $dir, $realPath, $path)
     {
-        $files    = array();
-        $extFiles = is_file($realPath . DIRECTORY_SEPARATOR . $dir) ? array($dir) : scandir($realPath);
-        foreach($extFiles as $extFile)
+        $pluginFiles = array();
+        $files       = is_file($realPath . DS . $dir) ? array($dir) : glob($realPath . DS . '*');
+        foreach($files as $file)
         {
-            if($extFile === '.' or $extFile === '..') continue;
+            $file     = basename($file);
+            $filePath = $realPath . DS . $file;
+            $fileName = is_file($realPath . DS . $dir) ? $path : $path . DS . $file;
 
-            $filePath = $realPath . DIRECTORY_SEPARATOR . $extFile;
-            $fileName = is_file($realPath . DIRECTORY_SEPARATOR . $dir) ? $path : $path . DIRECTORY_SEPARATOR . $extFile;
-
-            /* If the current point to a directory, traverse the files in the directory. */
+            /* If you are currently pointing to a directory, the files in that directory are traversed. */
             if(is_dir($filePath))
             {
-                $pluginFiles = $this->getPluginFiles($module, $dir, $filePath, $fileName);
-                $files      += $pluginFiles;
+                $pluginFiles += $this->getPluginFiles($module, $dir, $filePath, $fileName);
             }
             else
             {
                 $handle = fopen($filePath, 'r');
-                $i      = 0;
-                $line   = '';
-                while(!feof($handle))
-                {
-                    $line = fgets($handle);
-                    if(++ $i > 1) break;
-                }
+                $line   = fgets($handle);
+                $line   = fgets($handle);
                 fclose($handle);
 
-                /* Determine whether the current file is encrypted. */
+                /* Check whether the current file is encrypted. */
                 if(strpos($line, "extension_loaded('ionCube Loader')") === false)
                 {
                     $maxFiles = file_get_contents('maxfiles.txt');
-                    $maxFiles = str_replace('/', DIRECTORY_SEPARATOR, $maxFiles);
+                    $maxFiles = str_replace('/', DS, $maxFiles);
                     if(strpos($maxFiles, $fileName) !== false) continue;
 
-                    $files[$fileName] = $fileName;
+                    $pluginFiles[$fileName] = $fileName;
                 }
             }
         }
 
-        return $files;
+        return $pluginFiles;
     }
 
     /**
-     * Move extent files.
+     * Move extension files.
      *
      * @access public
      * @return array
@@ -5865,18 +5855,18 @@ class upgradeModel extends model
     public function moveEXTFiles()
     {
         $data       = fixer::input('post')->get();
-        $customRoot = $this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom';
+        $customRoot = $this->app->appRoot . 'extension' . DS . 'custom';
         $response   = array('result' => 'success');
 
         foreach($data->files as $file)
         {
-            $dirRoot  = $customRoot . DIRECTORY_SEPARATOR . dirname($file);
+            $dirRoot  = $customRoot . DS . dirname($file);
             $fileName = basename($file);
             $fromPath = $this->app->getModuleRoot() . $file;
-            $toPath   = $dirRoot . DIRECTORY_SEPARATOR . $fileName;
+            $toPath   = $dirRoot . DS . $fileName;
             if(!is_dir($dirRoot))
             {
-                if(!@mkdir($dirRoot, 0777, true))
+                if(!mkdir($dirRoot, 0777, true))
                 {
                     $response['result']  = 'fail';
                     $response['message'] = $this->lang->upgrade->moveEXTFileFail;;
@@ -5893,21 +5883,21 @@ class upgradeModel extends model
     }
 
     /**
-     * Remove charge directory.
+     * Remove encrypted directories.
      *
      * @access public
      * @return array
      */
-    public function removeChargeDir()
+    public function removeEncryptedDir()
     {
-        $allModules  = scandir($this->app->moduleRoot);
-        $skipModules = $this->getEncryptModules($allModules);
+        $allModules  = glob($this->app->moduleRoot . '*');
+        $skipModules = $this->getEncryptedModules($allModules);
         $zfile       = $this->app->loadClass('zfile');
         $response    = array('result' => 'success');
         $command     = array();
         foreach($skipModules as $module)
         {
-            if(in_array($module, $this->config->upgrade->PMSModules)) continue;
+            if(in_array($module, $this->config->upgrade->openModules)) continue;
 
             $dirPath = $this->app->moduleRoot . $module;
             if(!$zfile->removeDir($dirPath)) $command[] = 'rm -f -r ' . $dirPath;
@@ -5940,8 +5930,8 @@ class upgradeModel extends model
         else
         {
             $dirPath    = dirname($filePath);
-            $dir        = str_replace($this->app->appRoot . 'extension' . DIRECTORY_SEPARATOR . 'custom' .DIRECTORY_SEPARATOR , '', $dirPath);
-            $moduleName = explode(DIRECTORY_SEPARATOR,  $dir)[0];
+            $dir        = str_replace($this->app->appRoot . 'extension' . DS . 'custom' .DS , '', $dirPath);
+            $moduleName = explode(DS,  $dir)[0];
 
             $content = str_replace("include '../../control.php';", "helper::importControl('$moduleName');", $content);
             $content = str_replace("helper::import('../../control.php');", "helper::importControl('$moduleName');", $content);

@@ -45,7 +45,6 @@
       <div class='modal-footer text-center'>
         <?php if($result == 'success') echo html::submitButton($lang->upgrade->next);?>
         <?php if($result == 'fail') echo $errorMessage . ' ' . html::a('#', $this->lang->refresh, '', "class='btn btn-sm' onclick='refreshPage()'");?></div>
-        <?php echo html::hidden('foo'); // Just a hidden var, to make sure $_POST is not empty.?>
       </div>
     </div>
   </form>
