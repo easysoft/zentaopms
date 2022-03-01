@@ -1,8 +1,8 @@
 VERSION     = $(shell head -n 1 VERSION)
-XUANPATH    = $(shell head -n 1 XUANPATH)
-XUANVERSION = $(shell head -n 1 XUANVERSION)
-XVERSION    = $(shell head -n 1 XVERSION)
+XUANVERSION = $(shell head -n 1 xuan/XUANVERSION)
+XVERSION    = $(shell head -n 1 xuan/XVERSION)
 
+XUANPATH     := $(XUANXUAN_SRC_PATH)
 BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 
@@ -46,7 +46,7 @@ common:
 	rm -fr zentaopms/tools
 	# create the restart file for svn.
 	# touch zentaopms/module/svn/restart
-	# delee the unused files.
+	# delete the unused files.
 	find zentaopms -name .gitkeep |xargs rm -fr
 	find zentaopms -name tests |xargs rm -fr
 	# notify.zip.
@@ -229,10 +229,14 @@ enrpm:
 ci:
 	git pull
 	make common
-	make zentaoxx
-	unzip zentaoxx.*.zip
-	cp zentaoxx/* zentaopms/ -r
-	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
+
+        ifneq ($(XUANPATH), )
+	    make zentaoxx
+	    unzip zentaoxx.*.zip
+	    cp zentaoxx/* zentaopms/ -r
+	    cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
+        endif
+
 	make package
 	if [ -d $(BUILD_PATH)/zentaopms ]; then rm -r $(BUILD_PATH)/zentaopms; fi
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
