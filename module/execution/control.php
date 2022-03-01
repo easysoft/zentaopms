@@ -2048,12 +2048,15 @@ class execution extends control
         $productID = 0;
         $branchID  = 0;
         $products  = $this->loadModel('product')->getProducts($executionID);
+        $productNames = array();
         if($products)
         {
             $productID = key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, '', $executionID);
             if($branches) $branchID = key($branches);
         }
+        foreach($products as $product) $productNames[$product->id] = $product->name;
+
 
         $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');
@@ -2066,11 +2069,14 @@ class execution extends control
         $this->view->users            = $users;
         $this->view->regions          = $kanbanData;
         $this->view->execution        = $execution;
+        $this->view->executionID      = $executionID;
         $this->view->userList         = $userList;
         $this->view->browseType       = $browseType;
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
+        $this->view->productNames     = $productNames;
+        $this->view->productNum       = count($products);
         $this->view->branchID         = $branchID;
         $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
         $this->view->allPlans         = $allPlans;
@@ -2123,8 +2129,9 @@ class execution extends control
         $canBeChanged = common::canModify('execution', $execution);
 
         /* Get execution's product. */
-        $productID = 0;
-        $products  = $this->loadModel('product')->getProducts($executionID);
+        $productID    = 0;
+        $products     = $this->loadModel('product')->getProducts($executionID);
+        $productNames = array();
         foreach($products as $product) $productNames[$product->id] = $product->name;
         if($products) $productID = key($products);
 

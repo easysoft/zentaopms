@@ -148,7 +148,7 @@
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('productName', $productNames, '', "class='form-control chosen' id='product'");?>
-          <span class='input-group-btn'><?php echo html::a(helper::createLink('bug', 'batchCreate', 'productID=3&branch=&executionID=', '', true), $lang->bug->batchCreate, '', "id='batchCreateBugButton' class='btn btn-primary iframe'");?></span>
+          <span class='input-group-btn'><?php echo html::a(helper::createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=&executionID=' . $executionID, '', true), $lang->bug->batchCreate, '', "id='batchCreateBugButton' class='btn btn-primary iframe'");?></span>
         </div>
       </div>
     </div>
