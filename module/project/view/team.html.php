@@ -67,7 +67,7 @@
         <tr>
           <td>
           <?php
-          if(common::hasPriv('user', 'view'))
+          if(common::hasPriv('user', 'view') and common::hasPriv('my', 'team'))
           {
               $link = isset($deptUsers[$member->userID]) ? $this->createLink('user', 'view', "userID={$member->userID}") : "javascript: alert(noAccess);";
               echo html::a($link, $member->realname, '', 'data-app="system"');

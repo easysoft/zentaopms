@@ -516,12 +516,15 @@ class docModel extends model
         /* When file change then version add one. */
         $files    = $this->loadModel('file')->getByObject('doc', $docID);
         $docFiles = array();
-        foreach($files as $file)
+        if($docContent)
         {
-            $pathName       = $this->file->getRealPathName($file->pathname);
-            $file->webPath  = $this->file->webPath . $pathName;
-            $file->realPath = $this->file->savePath . $pathName;
-            if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
+            foreach($files as $file)
+            {
+                $pathName       = $this->file->getRealPathName($file->pathname);
+                $file->webPath  = $this->file->webPath . $pathName;
+                $file->realPath = $this->file->savePath . $pathName;
+                if(strpos(",{$docContent->files},", ",{$file->id},") !== false) $docFiles[$file->id] = $file;
+            }
         }
 
         /* Check file change. */

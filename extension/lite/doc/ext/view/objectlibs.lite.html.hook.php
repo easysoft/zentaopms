@@ -10,7 +10,7 @@ $('#pageNav .btn-group #dropMenu .table-col .list-group a[href*="showFiles"]').r
 </script>
 <?php endif;?>
 
-<?php if(!empty($doc) and !$doc->deleted and $doc->version > 1 and common::hasPriv('doc', 'diff')):?>
+<?php if(!empty($doc) and !$doc->deleted and $doc->version > 1 and common::hasPriv('doc', 'diff') and $config->edition != 'open'):?>
 <?php
 $versions = array();
 $i = 1;
