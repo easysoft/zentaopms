@@ -175,20 +175,24 @@ class testcase extends control
             $moduleTree = $this->tree->getTreeMenu($productID, 'case', 0, array('treeModel', 'createCaseLink'), array('projectID' => $projectID, 'productID' => $productID), $projectID ? '' : $branch);
         }
 
-        /* Display of branch label. */
-        $showBranch = $this->loadModel('branch')->showBranch($productID);
+        $product = $this->product->getById($productID);
 
-        /* Display status of branch. */
-        $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+        $showBranch      = false;
         $branchOption    = array();
         $branchTagOption = array();
-        foreach($branches as $branchInfo)
+        if($product and $product->type != 'normal')
         {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
-            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-        }
+            /* Display of branch label. */
+            $showBranch = $this->loadModel('branch')->showBranch($productID);
 
-        $product = $this->product->getById($productID);
+            /* Display status of branch. */
+            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id]    = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
+        }
 
         /* Assign. */
         $tree = $moduleID ? $this->tree->getByID($moduleID) : '';
@@ -871,6 +875,8 @@ class testcase extends control
                 }
             }
 
+            if(!isset($moduleOptionMenu[$case->module])) $moduleOptionMenu += $this->tree->getModulesName($case->module);
+
             /* Get product and branches. */
             $product = $this->product->getById($productID);
             if($this->app->tab == 'execution' or $this->app->tab == 'project')
@@ -960,7 +966,6 @@ class testcase extends control
                 /* Set modules. */
                 $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
 
-                $this->view->modules    = $modules;
                 $this->view->title      = $libraries[$libID] . $this->lang->colon . $this->lang->testcase->batchEdit;
                 $this->view->position[] = html::a($this->createLink('caselib', 'browse', "libID=$libID"), $libraries[$libID]);
             }
@@ -992,8 +997,7 @@ class testcase extends control
                     $modules[$productID][BRANCH_MAIN] = $this->tree->getOptionMenu($productID, 'case');
                 }
 
-                $this->view->branchTagOption = $branchTagOption;
-                $this->view->modules         = $modules;
+                $this->view->branchTagOption = array($productID => $branchTagOption);
                 $this->view->position[]      = html::a($this->createLink('testcase', 'browse', "productID=$productID"), $this->products[$productID]);
                 $this->view->title           = $product->name . $this->lang->colon . $this->lang->testcase->batchEdit;
                 $this->view->product         = $product;
@@ -1021,30 +1025,26 @@ class testcase extends control
             $productIdList = array();
             foreach($cases as $case) $productIdList[$case->product] = $case->product;
 
-            $products = $this->product->getByIdList($productIdList);
+            $branches        = 0;
+            $branchTagOption = array();
+            $products        = $this->product->getByIdList($productIdList);
             foreach($products as $product)
             {
                 if($product->type != 'normal')
                 {
+                    $branches = $this->loadModel('branch')->getList($product->id, 0, 'all');
+                    foreach($branches as $branchInfo) $branchTagOption[$product->id][$branchInfo->id] = '/' . $product->name . '/' . $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+                    $branches      = array_keys($branches);
                     $branchProduct = true;
-                    break;
                 }
-            }
 
-            if($this->app->tab == 'project')
-            {
-                $productBranches = $this->loadModel('execution')->getBranchByProduct(array_keys($products), $this->session->project, 'all');
-            }
-            else
-            {
-                $productBranches = $this->loadModel('branch')->getByProducts(array_keys($products), 'ignoreNormal');
+                $modulePairs = $this->tree->getOptionMenu($product->id, 'case', 0, $branches);
+                $modules[$product->id] = $product->type != 'normal' ? $modulePairs : array(0 => $modulePairs);
             }
 
             $this->view->products        = $products;
-            $this->view->productBranches = $productBranches;
+            $this->view->branchTagOption = $branchTagOption;
         }
-
-        // if(!$this->testcase->forceNotReview()) unset($this->lang->testcase->statusList['wait']); /* Bug#1343 */
 
         /* Judge whether the editedCases is too large and set session. */
         $countInputVars  = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
@@ -1059,6 +1059,21 @@ class testcase extends control
         $this->view->customFields = $customFields;
         $this->view->showFields   = $this->config->testcase->custom->batchEditFields;
 
+        /* Append module when change product type. */
+        $modulePairs = array(0 => '/');
+        foreach($cases as $case)
+        {
+            $caseProduct = $type == 'lib' ? $productID : $case->product;
+            if(isset($modules[$caseProduct][$case->branch]))
+            {
+                $modulePairs[$case->id] = $modules[$caseProduct][$case->branch];
+            }
+            else
+            {
+                $modulePairs[$case->id] = $modules[$caseProduct][0] + $this->tree->getModulesName($case->module);
+            }
+        }
+
         /* Assign. */
         $this->view->position[]     = $this->lang->testcase->common;
         $this->view->position[]     = $this->lang->testcase->batchEdit;
@@ -1069,6 +1084,7 @@ class testcase extends control
         $this->view->typeList       = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $this->lang->testcase->typeList;
         $this->view->cases          = $cases;
         $this->view->forceNotReview = $this->testcase->forceNotReview();
+        $this->view->modulePairs    = $modulePairs;
 
         $this->display();
     }

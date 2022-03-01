@@ -2267,12 +2267,42 @@ class storyModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
-        if(is_array($branch)) $branch = join(',', $branch);
+        $stories        = array();
+        $branchProducts = array();
+        $normalProducts = array();
+        $productList    = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productID)->fetchAll('id');
+        foreach($productList as $product)
+        {
+            if($product->type != 'normal')
+            {
+                $branchProducts[$product->id] = $product->id;
+                continue;
+            }
+
+            $normalProducts[$product->id] = $product->id;
+        }
+
+        $productQuery = '(';
+        if(!empty($normalProducts)) $productQuery .= '`product` ' . helper::dbIN(array_keys($normalProducts));
+        if(!empty($branchProducts))
+        {
+            if(!empty($normalProducts)) $productQuery .= " OR ";
+            $productQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts));
+
+            if($branch !== 'all')
+            {
+                if(is_array($branch)) $branch = join(',', $branch);
+                $productQuery .= " AND `branch` " . helper::dbIN($branch);
+            }
+            $productQuery .= ')';
+        }
+        if(empty($normalProducts) and empty($branchProducts)) $productQuery .= '1 = 1';
+        $productQuery .= ') ';
 
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
+            ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
-            ->beginIF($branch !== 'all')->andWhere("branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
@@ -2537,27 +2567,50 @@ class storyModel extends model
             $storyQuery     = str_replace($allProduct, '1', $storyQuery);
             $queryProductID = 'all';
         }
+
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
+
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
-            $branches = array(BRANCH_MAIN => BRANCH_MAIN);
-            if($branch === '')
+            $normalProducts = array();
+            $branchProducts = array();
+            foreach($products as $product)
             {
-                foreach($products as $product)
+                if($product->type != 'normal')
                 {
-                    foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                    $branchProducts[$product->id] = $product;
+                    continue;
                 }
-            }
-            else
-            {
-                $branches[$branch] = $branch;
+
+                $normalProducts[$product->id] = $product;
             }
 
-            $branches = join(',', $branches);
-            $storyQuery .= " AND `branch`" . helper::dbIN($branches);
+            $storyQuery .= ' AND (';
+            if(!empty($normalProducts)) $storyQuery .= '`product` ' . helper::dbIN(array_keys($normalProducts));
+            if(!empty($branchProducts))
+            {
+                $branches = array(BRANCH_MAIN => BRANCH_MAIN);
+                if($branch === '')
+                {
+                    foreach($branchProducts as $product)
+                    {
+                        foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                    }
+                }
+                else
+                {
+                    $branches[$branch] = $branch;
+                }
+
+                $branches    = join(',', $branches);
+                if(!empty($normalProducts)) $storyQuery .= " OR ";
+                $storyQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
+            }
+            if(empty($normalProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
+            $storyQuery .= ') ';
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {

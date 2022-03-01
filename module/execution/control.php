@@ -2579,8 +2579,8 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
-        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'all');
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal|noclosed');
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal');
 
         $this->display();
     }
@@ -2795,6 +2795,13 @@ class execution extends control
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
             if($story->parent < 0) unset($allStories[$id]);
+
+            if(!isset($modules[$story->module]))
+            {
+                $storyModule = $this->tree->getModulesName($story->module);
+                $productName = count($products) > 1 ? $products[$story->product]->name : '';
+                $modules[$story->module] = $productName . $storyModule[$story->module];
+            }
         }
 
         /* Pager. */
