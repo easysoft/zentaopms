@@ -247,7 +247,7 @@ js::set('branch',$branchID);
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('products', $allProducts, '', "class='form-control chosen' id='products'");?>
-          <span class='input-group-btn', id='chuangjian'><?php echo html::commonButton(html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='btn-primary iframe' data-width='90%'"), "id='toStoryButton'", 'btn btn-primary');?></span>
+          <span class='input-group-btn'><?php echo html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='btn btn-primary iframe' data-width='90%'");?></span>
         </div>
       </div>
     </div>
