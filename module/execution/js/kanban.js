@@ -273,7 +273,7 @@ function createColumnCreateMenu(options)
         if(priv.canBatchCreateBug)
         {
             if(productNum > 1) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
-            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         }
     }
     else if(col.type == 'wait')
@@ -1245,7 +1245,7 @@ $(function()
         var product = $('#product').val();
         if(product)
         {
-            var link = createLink('bug', 'batchCreate', 'productID=' + product + '&branch=' + branchID + '&executionID=' + executionID);
+            var link = createLink('bug', 'batchCreate', 'productID=' + product + '&branch=&executionID=' + executionID, '', true);
             $('#batchCreateBugButton').attr('href', link);
         }
     });
