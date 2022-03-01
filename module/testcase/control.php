@@ -978,7 +978,7 @@ class testcase extends control
                 /* Set branches and modules. */
                 $branches        = array();
                 $branchTagOption = array();
-                $modules  = array();
+                $modules         = array();
                 if($product->type != 'normal')
                 {
                     $branches = $this->loadModel('branch')->getList($productID, 0, 'all');
