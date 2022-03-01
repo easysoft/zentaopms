@@ -40,12 +40,12 @@ class upgradeModel extends model
 
         $openVersion  = $fromVersion;
         $proInstalled = $bizInstalled = $maxInstalled = false;
-        if($fromVersion[0] == 'p') 
+        if($fromVersion[0] == 'p')
         {
             $openVersion  = $this->config->upgrade->proVersion[$fromVersion];
             $proInstalled = true;
         }
-        elseif($fromVersion[0] == 'b') 
+        elseif($fromVersion[0] == 'b')
         {
             $openVersion  = $this->config->upgrade->bizVersion[$fromVersion];
             $bizInstalled = true;
@@ -5834,9 +5834,9 @@ class upgradeModel extends model
                 /* Check whether the current file is encrypted. */
                 if(strpos($line, "extension_loaded('ionCube Loader')") === false)
                 {
-                    $maxFiles = file_get_contents('maxfiles.txt');
-                    $maxFiles = str_replace('/', DS, $maxFiles);
-                    if(strpos($maxFiles, $fileName) !== false) continue;
+                    $systemFiles = file_get_contents('systemfiles.txt');
+                    $systemFiles = str_replace('/', DS, $systemFiles);
+                    if(strpos($systemFiles, $fileName) !== false) continue;
 
                     $pluginFiles[$fileName] = $fileName;
                 }
@@ -5876,7 +5876,7 @@ class upgradeModel extends model
                 }
             }
             copy($fromPath, $toPath);
-            $this->replaceEXTFile($toPath);
+            $this->replaceIncludePath($toPath);
         }
 
         return $response;
@@ -5914,18 +5914,38 @@ class upgradeModel extends model
     }
 
     /**
-     * Replace extent file.
+     * Replace the load path of the file.
      *
      * @param  string $filePath
      * @access public
      * @return void
      */
-    public function replaceEXTFile($filePath)
+    public function replaceIncludePath($filePath)
     {
         $content = file_get_contents($filePath);
         if(strpos(basename($filePath), 'html'))
         {
-            $content = preg_replace("#(include )'((../){2,})([a-z]+/)#", '$1' . '$app->getModuleRoot() . ' . "'$4", $content);
+            $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/)(?!ext/)([a-z]+/)#', '$1' . '$app->getModuleRoot() . ' . '"$5$6', $content);
+
+            $systemFiles = file_get_contents('systemfiles.txt');
+            $systemFiles = str_replace('/', DS, $systemFiles);
+
+            preg_match_all('#(include )(\'|")(../){2,}[a-z]+/ext/[a-z]+/(([a-z]+[.]?)+)#', $content, $matches);
+            foreach($matches[0] as $fileName)
+            {
+                $fileName = preg_replace("#(include )('|\")((../){2,})#", "", $fileName);
+                if(strpos($systemFiles, $fileName) !== false)
+                {
+                    $fileName = basename($fileName);
+                    $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/ext/view/' . $fileName . ')#', '$1' . '$app->appRoot . ' . '$2extension/max/$5', $content);;
+
+                }
+                else
+                {
+                    $fileName = basename($fileName);
+                    $content = preg_replace('#(include )(\'|")((../){2,})([a-z]+/ext/view/' . $fileName . ')#', '$1' . '$app->appRoot . ' . '$2extension/custom/$5', $content);;
+                }
+            }
         }
         else
         {
