@@ -874,7 +874,7 @@ class upgrade extends control
         $errorMessage = '';
         $command      = '';
         $result       = 'success';
-        if(!empty($_POST))
+        if(strtolower($this->server->request_method) == 'post')
         {
             if(!empty($_POST['files']))
             {
@@ -883,7 +883,7 @@ class upgrade extends control
 
                 if($result == 'success')
                 {
-                    $response = $this->upgrade->removeChargeDir();
+                    $response = $this->upgrade->removeEncryptedDir();
                     $result   = $response['result'];
                 }
             }
