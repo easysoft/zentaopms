@@ -2248,7 +2248,6 @@ class taskModel extends model
             ->leftJoin(TABLE_PROJECT)->alias('t4')->on("t1.project = t4.id")
             ->where('t1.deleted')->eq(0)
             ->andWhere('t2.deleted')->eq(0)
-            ->andWhere('t4.deleted')->eq(0)
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
             ->beginIF($type != 'closedBy' and $this->app->moduleName == 'block')->andWhere('t1.status')->ne('closed')->fi()
             ->beginIF($projectID)->andWhere('t1.project')->eq($projectID)->fi()
