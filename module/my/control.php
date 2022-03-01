@@ -1001,9 +1001,7 @@ EOF;
     {
         if($_POST)
         {
-            $data = fixer::input('post')
-                ->setDefault('users', array())
-                ->get();
+            $data = fixer::input('post')->setDefault('users', array())->get();
             if($data->mode == 'new')
             {
                 if(empty($data->newList))
@@ -1015,10 +1013,8 @@ EOF;
                 }
                 $listID = $this->user->createContactList($data->newList, $data->users);
                 $this->user->setGlobalContacts($listID, isset($data->share));
-
                 if(isonlybody()) return print(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
-                return print(js::locate(inlink('manageContacts', "listID=$listID")));
             }
             elseif($data->mode == 'edit')
             {
