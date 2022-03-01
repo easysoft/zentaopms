@@ -519,16 +519,9 @@ class execution extends control
             if(isonlybody())
             {
                 $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
-                $kanbanData = json_encode($kanbanData);
-                    
-                return print(js::reload('parent', '', "parent.parent.updateKanban($kanbanData)"));
-                // return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
+                return print(js::reload('parent'));
             }
-            else
-            {
-                return print(js::reload('parent.parent'));
-            }
-            if(isonlybody()) return print(js::reload('parent.parent'));
+
             return print(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
         }
 

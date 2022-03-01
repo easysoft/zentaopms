@@ -13,10 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<script>
-$(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
-var browseType = '<?php echo $browseType;?>';
-</script>
+<?php js::set('browseType', $browseType);?>
+<?php js::set('isonlybody', isonlybody());?>
 <style>#importBugForm .bug-pri {overflow: visible;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -86,11 +84,4 @@ var browseType = '<?php echo $browseType;?>';
     </div>
   </form>
 </div>
-<script>
-$(function(){parent.$('#triggerModal .modal-content .modal-header .close').hide();})
-function goback()
-{
-    parent.location.reload();
-}
-</script>
 <?php include '../../common/view/footer.html.php';?>
