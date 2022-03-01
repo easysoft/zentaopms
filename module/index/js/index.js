@@ -429,6 +429,20 @@
         if(url === true) url = app.url;
         var iframe = app.$iframe[0];
 
+        /* Fix video stream blocking */
+        if (iframe && iframe.contentWindow.$)
+        {
+            iframe.contentWindow.$('video').each(function()
+            {
+                var $video = $(this);
+                $video[0].pause();
+                $video.prop('src', '');
+                $video.find('source').remove();
+                $video[0].load();
+                $video.remove();
+            });
+        }
+
         try
         {
             if(url) iframe.contentWindow.location.assign(url);
