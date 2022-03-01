@@ -16,11 +16,11 @@
     <form method='post'>
       <div class='panel-title text-center'>
         <?php
-        if($this->config->edition == 'max')
+        if($config->edition == 'max')
         {
             echo $lang->upgrade->toMAXGuide;
         }
-        elseif($this->config->edition == 'biz')
+        elseif($config->edition == 'biz')
         {
             echo $lang->upgrade->toBIZ5Guide;
         }
