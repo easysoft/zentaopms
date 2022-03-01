@@ -10,8 +10,8 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/view/header.lite.html.php';?>
-<?php include '../../common/view/chosen.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/chosen.html.php';?>
 <?php $this->app->loadLang('file');?>
 <style>
 #customFields .panel {border: 1px solid #ddd; background: #fafafa; margin: 0;}
@@ -331,4 +331,4 @@ if($isCustomExport)
     </div>
   </div>
 </main>
-<?php include '../../common/view/footer.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.lite.html.php';?>
