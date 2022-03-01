@@ -254,11 +254,10 @@ js::set('branch',$branchID);
   </div>
 </div>
 <script>
-  $('.products').change(function(){
+  $('#products').change(function(){
       var selectProductID = $('#products').val();
-      var attr            = 'ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution;
-      alert($('#chuangjian').children());
-      $('#chuangjian').children().attr('href','123456');
+      var attr            = '/index.php?m=story&f=batchCreate&ProductID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution + '&onlybody=yes';
+      $('#chuangjian').children().children().attr('href',attr);
   });
 </script>
 <?php include '../../common/view/footer.html.php';?>
