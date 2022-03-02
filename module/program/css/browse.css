@@ -2,7 +2,7 @@
 .main-table tbody>tr>td:first-child, .main-table thead>tr>th:first-child {padding-left: 8px;}
 .table tbody>tr>td .dropdown {display: inline-block; line-height: 1;}
 tbody.sortable > tr > td.sort-handler .table-nest-toggle:before {cursor: pointer !important;}
-.table .avatar {display: inline-block; width: 20px; height: 20px; line-height: 20px; top: 6px;}
+.table .avatar {display: inline-block; top: 6px;}
 
 label[for^="projectIdList"]:before {top: 1px; width:14px; height:14px;}
 label[for^="projectIdList"]:after {width: 14px; height:14px;}

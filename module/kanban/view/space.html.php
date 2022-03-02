@@ -127,13 +127,13 @@
                     $count ++;
                     ?>
                     <div title="<?php echo $users[$member];?>">
-                      <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
+                      <?php echo html::middleAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member, 'name' => $users[$member]), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
                     </div>
                     <?php endforeach;?>
                     <?php if($teamCount > 3):?>
                     <?php if($teamCount > 4) echo '<span>…</span>';?>
                     <div title="<?php echo $users[end($teamPairs)];?>">
-                      <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($teamPairs)], 'account' => end($teamPairs)), 'avatar-circle avatar-' . zget($userIdPairs, end($teamPairs))); ?>
+                      <?php echo html::middleAvatar(array('avatar' => $usersAvatar[end($teamPairs)], 'account' => end($teamPairs), 'name' => $users[end($teamPairs)]), 'avatar-circle avatar-' . zget($userIdPairs, end($teamPairs))); ?>
                     </div>
                     <?php endif;?>
                   </div>

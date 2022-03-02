@@ -237,7 +237,7 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
  */
 function renderUsersAvatar(users, itemID, size)
 {
-    var avatarSizeClass = 'avatar-' + (size || 'sm');
+    var avatarSizeClass = 'avatar-' + (size || 'md');
     //var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
@@ -263,6 +263,7 @@ function renderUsersAvatar(users, itemID, size)
 
         if(typeof user === 'string') user = {account: user};
         if(!user.avatar && window.userList && window.userList[user.account]) user = window.userList[user.account];
+        if(!user.name && window.users && window.users[user.account]) user.name = window.users[user.account];
 
         assignees.push($('<div class="avatar has-text ' + avatarSizeClass + ' avatar-circle iframe"></div>').avatar({user: user}));
     }
