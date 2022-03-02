@@ -753,6 +753,18 @@ class bug extends control
 
         $projectID = $this->lang->navGroup->bug == 'project' ? $this->session->project : (isset($execution) ? $execution->project : 0);
 
+        /* Get branches. */
+        if($executionID)
+        {
+            $productBranches = $product->type != 'normal' ? $this->execution->getBranchByProduct($productID, $executionID) : array();
+            $branches        = isset($productBranches[$productID]) ? $productBranches[$productID] : array();
+            $branch          = key($branches);
+        }
+        else
+        {
+            $branches = $product->type != 'normal' ? $this->loadModel('branch')->getPairs($productID, 'active') : array();
+        }
+
         $this->view->customFields = $customFields;
         $this->view->showFields   = $showFields;
 
@@ -771,7 +783,7 @@ class bug extends control
         $this->view->moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, $branch === 'all' ? 0 : $branch);
         $this->view->moduleID         = $moduleID;
         $this->view->branch           = $branch;
-        $this->view->branches         = $this->loadModel('branch')->getPairs($productID, 'active');
+        $this->view->branches         = $branches;
         $this->display();
     }
 
