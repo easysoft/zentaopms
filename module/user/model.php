@@ -2683,6 +2683,9 @@ class userModel extends model
     public function getVisionList()
     {
         $visionList = $this->lang->visionList;
+
+        if($this->config->systemMode != 'new') unset($visionList['lite']);
+
         foreach($visionList as $visionKey => $visionName)
         {
             if(strpos($this->config->visions, ",{$visionKey},") === false) unset($visionList[$visionKey]);
