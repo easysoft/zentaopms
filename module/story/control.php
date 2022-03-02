@@ -56,6 +56,8 @@ class story extends control
         else if($this->app->tab == 'project')
         {
             $objectID = empty($objectID) ? $this->session->project : $objectID;
+            $objects  = $this->project->getPairsByProgram();
+            $objectID = $this->project->saveState($objectID, $objects);
             $this->project->setMenu($objectID);
         }
         else if($this->app->tab == 'execution')

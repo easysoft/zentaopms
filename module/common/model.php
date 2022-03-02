@@ -506,22 +506,42 @@ class commonModel extends model
     {
         global $app, $config, $lang;
 
-        $html  = "<ul class='dropdown-menu pull-right create-list'>";
+        $html = "<ul class='dropdown-menu pull-right create-list'>";
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
 
         /* Get default product id. */
-        $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
-        $deletedProductIds = array();
-        foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
-
-        $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
-        if(!$productID and $app->user->view->products)
+        if($config->vision == 'rnd')
         {
-            $viewProducts = explode(',', $app->user->view->products);
-            $viewProducts = array_diff($viewProducts, $deletedProductIds);
-            $productID    = current($viewProducts);
+            $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
+            $deletedProductIds = array();
+            foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
+
+            $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
+            if(!$productID and $app->user->view->products)
+            {
+                $viewProducts = explode(',', $app->user->view->products);
+                $viewProducts = array_diff($viewProducts, $deletedProductIds);
+                $productID    = current($viewProducts);
+            }
+        }
+        else
+        {
+            $queryProduct = $app->user->admin ? " where `deleted` = '0' and `vision` = 'lite'" : " where `deleted` = '0' and `vision` = 'lite' and `id` in ({$app->user->view->products})";
+            $product      = $app->dbh->query("select id  FROM " . TABLE_PRODUCT . $queryProduct)->fetch();
+            $productID    = empty($product) ? 0 : $product->id;
+        }
+
+        $object = '';
+        if($config->vision == 'lite')
+        {
+            $condition  = " where `deleted` = '0' ";
+            $condition .= $config->systemMode == 'new' ? "and `model` = 'kanban' " : "and `type` = 'kanban' ";
+            $condition .= (!$app->user->admin and $config->systemMode == 'new') ? "and `id` in({$app->user->view->sprints}) " : '';
+            $condition .= (!$app->user->admin and $config->systemMode == 'classic') ? "and `id` in({$app->user->view->projects}) " : '';
+
+            $object = $app->dbh->query("select id from " . TABLE_PROJECT . $condition)->fetch();
         }
 
         /* Check whether the creation permission is available, and print create buttons. */
@@ -530,6 +550,7 @@ class commonModel extends model
             if($config->edition == 'open' and $objectType == 'effort') continue;
             if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
             if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
+            if($config->vision == 'lite' and empty($object) and in_array($objectType, array('story', 'task', 'execution'))) continue;
 
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
