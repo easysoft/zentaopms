@@ -49,6 +49,7 @@ js::set('colorList', $this->config->kanban->cardColorList);
 js::set('projectID', $projectID);
 js::set('vision', $this->config->vision);
 js::set('productCount', count($allProducts));
+js::set('executionID',$execution->id);
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
@@ -220,7 +221,6 @@ js::set('hasTaskButton', $hasTaskButton);
   </div>
 </div>
 <?php endif;?>
-<?php js::set('executionID',$execution->id);?>
 <div class="modal fade" id="linkStoryByPlan">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
