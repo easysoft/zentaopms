@@ -297,10 +297,10 @@ function changeCardColType(card, fromColType, toColType, kanbanID)
     }
     else if(toColType == 'closed')
     {
-        if(fromColType == 'done')
+        if(fromColType != 'closed')
         {
-            link       = createLink('productplan', 'close', 'planID=' + objectID);
-            showIframe = false;
+            link       = createLink('productplan', 'close', 'planID=' + objectID, '', true);
+            showIframe = true;
         }
     }
 
@@ -469,8 +469,8 @@ if(!window.kanbanDropRules)
 {
     window.kanbanDropRules =
     {
-        wait:   ['doing'],
-        doing:  ['done'],
+        wait:   ['doing', 'closed'],
+        doing:  ['done', 'closed'],
         done:   ['doing', 'closed'],
         closed: ['doing']
     }
