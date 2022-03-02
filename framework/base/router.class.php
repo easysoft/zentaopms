@@ -697,10 +697,17 @@ class baseRouter
         if(empty($account) and isset($_POST['account'])) $account = $_POST['account'];
         if(empty($account) and isset($_GET['account']))  $account = $_GET['account'];
 
-        $vision  = '';
-        if($this->config->installed) $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
-        if($vision) $vision = $vision->value;
-        if(!empty($_SESSION['user']->visions) and empty($vision)) list($vision) = explode(',', $_SESSION['user']->visions);
+        $vision = '';
+        if($this->config->installed)
+        {
+            $vision = $this->dbh->query("SELECT * FROM " . TABLE_CONFIG . " WHERE owner = '$account' AND `key` = 'vision' LIMIT 1")->fetch();
+            if($vision) $vision = $vision->value;
+            if(empty($vision))
+            {
+                $user = $this->dbh->query("SELECT * FROM " . TABLE_USER . " WHERE account = '$account' AND deleted = '0' LIMIT 1")->fetch();
+                if(!empty($user->visions)) list($vision) = explode(',', $user->visions);
+            }
+        }
 
         list($defaultVision) = explode(',', trim($this->config->visions, ','));
         if($vision and strpos($this->config->visions, ",{$vision},") === false) $vision = $defaultVision;
@@ -1377,21 +1384,25 @@ class baseRouter
             $modulePath = $this->getModuleRoot($appName) . $moduleName . DS;
             if(is_dir($modulePath)) return $modulePath;
 
-            /* 2. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
+            /* 2. 尝试查找喧喧是否有此模块。 Try to find the module in xuan. */
+            $modulePath = $this->getExtensionRoot() . 'xuan' . DS . $moduleName . DS;
+            if(is_dir($modulePath)) return $modulePath;
+
+            /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
             if($this->config->edition != 'open')
             {
                 $modulePath = $this->getExtensionRoot() . $this->config->edition . DS . $moduleName . DS;
                 if(is_dir($modulePath)) return $modulePath;
             }
 
-            /* 3. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+            /* 4. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
             if($this->config->vision != 'rnd')
             {
                 $modulePath = $this->getExtensionRoot() . $this->config->vision . DS . $moduleName . DS;
                 if(is_dir($modulePath)) return $modulePath;
             }
 
-            /* 4. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+            /* 5. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
             return $this->getExtensionRoot() . 'custom' . DS . $moduleName . DS;
         }
     }
@@ -1646,7 +1657,7 @@ class baseRouter
         /* 开始拼装代码。Prepare the codes. */
         $modelLines  = "<?php\n";
         $modelLines .= "global \$app;\n";
-        $modelLines .= "helper::import(\$app->getBasePath() . '" . str_replace($this->getBasePath(), '', $this->getModulePath($this->appName, $moduleName)) . "model.php');\n";
+        $modelLines .= "helper::import(\$app->getModulePath('', '$moduleName') . " . "'model.php');\n";
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
@@ -2388,6 +2399,48 @@ class baseRouter
     }
 
     /**
+     * 获取主语言文件。
+     * Get main lang file.
+     *
+     * @param   string $moduleName     the module name
+     * @param   string $appName     the app name
+     * @access  public
+     * @return  string.
+     */
+    private function getMainLangFile($moduleName, $appName = '')
+    {
+        $path = $moduleName . DS . 'lang' . DS . $this->clientLang . '.php';
+
+        /* 1. 如果通用版本里有此模块，优先使用。 If module is in the open edition, use it. */
+        $modulePath = $this->getModuleRoot($appName);
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        /* 2. 尝试查找喧喧是否有此模块。 Try to find the module in other editon. */
+        $modulePath = $this->getExtensionRoot() . 'xuan' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        /* 3. 尝试查找商业版本是否有此模块。 Try to find the module in other editon. */
+        if($this->config->edition != 'open')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->edition . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
+
+        /* 4. 如果设置过vision，尝试在vision中查找。 If vision is set, try to find the module in the vision. */
+        if($this->config->vision != 'rnd')
+        {
+            $modulePath = $this->getExtensionRoot() . $this->config->vision . DS;
+            if(file_exists($modulePath . $path)) return $modulePath . $path;
+        }
+
+        /* 5. 最后尝试在定制开发中寻找。 Finally, try to find the module in the custom dir. */
+        $modulePath = $this->getExtensionRoot() . 'custom' . DS;
+        if(file_exists($modulePath . $path)) return $modulePath . $path;
+
+        return '';
+    }
+
+    /**
      * 加载语言文件，返回全局$lang对象。
      * Load lang and return it as the global lang object.
      *
@@ -2404,8 +2457,8 @@ class baseRouter
         $langFilesToLoad = array();
 
         /* 判断主语言文件是否存在。Whether the main lang file exists or not. */
-        $mainLangFile = $modulePath . 'lang' . DS . $this->clientLang . '.php';
-        if(file_exists($mainLangFile)) $langFilesToLoad[] = $mainLangFile;
+        $mainLangFile = $this->getMainLangFile($moduleName, $appName);
+        if($mainLangFile) $langFilesToLoad[] = $mainLangFile;
 
         /* 获取扩展语言文件。If extensionLevel > 0, get extension lang files. */
         if($this->config->framework->extensionLevel > 0)
@@ -2417,6 +2470,7 @@ class baseRouter
             if($this->config->framework->extensionLevel >= 1)
             {
                 if(!empty($extLangPath['common'])) $commonExtLangFiles = helper::ls($extLangPath['common'] . $this->clientLang, '.php');
+                if(!empty($extLangPath['xuan'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['xuan'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['vision'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['vision'] . $this->clientLang, '.php'));
                 if(!empty($extLangPath['custom'])) $commonExtLangFiles = array_merge($commonExtLangFiles, helper::ls($extLangPath['custom'] . $this->clientLang, '.php'));
             }

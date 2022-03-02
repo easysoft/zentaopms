@@ -300,6 +300,7 @@ class convert extends control
             }
             else
             {
+                $this->convert->deleteJiraFile();
                 $jiraFilePath = $this->app->getTmpRoot() . 'jirafile/';
                 if(!is_readable($jiraFilePath) or !is_writable($jiraFilePath))
                 {
@@ -454,9 +455,8 @@ class convert extends control
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
             if(isset($result['finished']) and $result['finished'])
             {
-                $message = $method == 'db' ? $this->lang->convert->jira->importSuccessfully : $this->lang->convert->jira->importSuccessfully . sprintf($this->lang->convert->jira->removeFile, $this->app->getTmpRoot() . 'jirafile/');
-                return print $this->send(array('result' => 'finished', 'message' => $message));
-            }
+                return print $this->send(array('result' => 'finished', 'message' => $this->lang->convert->jira->importSuccessfully));
+            }   
             else
             {
                 $type = zget($this->lang->convert->jira->objectList, $result['type'], $result['type']);

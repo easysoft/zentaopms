@@ -34,7 +34,7 @@
         <label><?php echo $lang->custom->conceptQuestions['URAndSR']?></label>
         <div class="checkbox"> <?php echo html::radio('URAndSR', $lang->custom->conceptOptions->URAndSR, zget($this->config->custom, 'URAndSR', '0'));?></div>
       </div>
-      <?php if(!isset($config->maxVersion)):?>
+      <?php if($this->config->edition != 'max'):?>
       <div class="form-group">
         <label id='storypoint'><?php echo $lang->custom->conceptQuestions['storypoint'];?></label>
         <div class="checkbox"> <?php echo html::radio('hourPoint', $lang->custom->conceptOptions->hourPoint, zget($this->config->custom, 'hourPoint'))?> </div>

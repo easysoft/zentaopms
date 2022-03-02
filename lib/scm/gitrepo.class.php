@@ -261,13 +261,14 @@ class GitRepo
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision)
+    public function diff($path, $fromRevision, $toRevision, $extra = '')
     {
-        if(!scm::checkRevision($fromRevision)) return array();
-        if(!scm::checkRevision($toRevision))   return array();
+        if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
+        if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
         $path = ltrim($path, DIRECTORY_SEPARATOR);
         chdir($this->root);
@@ -372,7 +373,8 @@ class GitRepo
         $endLine = end($lines);
         if(strpos($endLine, '\ No newline at end of file') === 0) $num -= 1;
 
-        $newFile = false;
+        $newFile  = false;
+        $allFiles = array();
         for($i = 0; $i < $num; $i ++)
         {
             $diffFile = new stdclass();
@@ -380,6 +382,11 @@ class GitRepo
             {
                 $fileInfo = explode(' ',$lines[$i]);
                 $fileName = substr($fileInfo[2], strpos($fileInfo[2], '/') + 1);
+
+                /* Prevent duplicate display of files. */
+                if(in_array($fileName, $allFiles)) continue;
+                $allFiles[] = $fileName;
+
                 $diffFile->fileName = $fileName;
                 for($i++; $i < $num; $i ++)
                 {

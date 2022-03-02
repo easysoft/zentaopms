@@ -552,7 +552,7 @@ class installModel extends model
             $this->dao->update(TABLE_STAGE)->set('name')->eq($value)->where('`type`')->eq($key)->exec();
         }
 
-        if(!empty($this->config->bizVersion))
+        if($this->config->edition != 'open')
         {
             /* Update flowdatasource by lang. */
             foreach($this->lang->install->workflowdatasource as $id => $name)
@@ -567,7 +567,7 @@ class installModel extends model
             }
         }
 
-        if(!empty($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             /* Update process by lang. */
             foreach($this->lang->install->processList as $id => $name)

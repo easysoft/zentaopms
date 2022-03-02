@@ -2118,15 +2118,15 @@ class taskModel extends model
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
-        
+
         $lanes      = array();
         $cardsWhere = '';
-        foreach($tasks as $task) 
+        foreach($tasks as $task)
         {
-            if(empty($cardsWhere)) 
+            if(empty($cardsWhere))
             {
                 $cardsWhere = "cards like '%,{$task->id},%'";
-            } 
+            }
             else
             {
                 $cardsWhere .= " or cards like '%,{$task->id},%'";
@@ -2158,7 +2158,7 @@ class taskModel extends model
             $task->lane = '';
             if(!empty($lanes))
             {
-                foreach($lanes as $lane) 
+                foreach($lanes as $lane)
                 {
                     if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
                 }
@@ -2315,7 +2315,7 @@ class taskModel extends model
             ->from(TABLE_TASK)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on("t1.execution = t2.id")
             ->leftJoin(TABLE_PROJECT)->alias('t3')->on("t1.project = t3.id")
-            ->where('t1.assignedTo')->eq($this->app->user->account)
+            ->where('t1.assignedTo')->eq($account)
             ->andWhere('(t2.status')->eq('suspended')
             ->orWhere('t3.status')->eq('suspended')
             ->markRight(1)
@@ -2555,7 +2555,7 @@ class taskModel extends model
 
         $lastEstimate = $this->dao->select('*')->from(TABLE_TASKESTIMATE)->where('task')->eq($estimate->task)->orderBy('date desc,id desc')->limit(1)->fetch();
         $consumed     = $task->consumed - $estimate->consumed;
-        $left         = $lastEstimate->left ? $lastEstimate->left : $estimate->left;
+        $left         = isset($lastEstimate->left) ? $lastEstimate->left : $estimate->left;
 
         $data = new stdclass();
         $data->consumed = $consumed;
@@ -2580,7 +2580,7 @@ class taskModel extends model
 
         $this->dao->update(TABLE_TASK)->data($data) ->where('id')->eq($estimate->task)->exec();
         if($task->parent > 0) $this->updateParentStatus($task->id);
-        if($task->story)  $this->loadModel('story')->setStage($oldTask->story);
+        if($task->story)  $this->loadModel('story')->setStage($task->story);
 
         $oldTask = new stdClass();
         $oldTask->consumed = $task->consumed;
@@ -3147,7 +3147,7 @@ class taskModel extends model
             }
 
             echo "<td class='" . $class . "'" . $title . ">";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('task', $task, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
             switch($id)
             {
             case 'id':

@@ -59,7 +59,7 @@ class ciModel extends model
      * @access public
      * @return void
      */
-    public function syncCompileStatus($compile, $notCompileMR)
+    public function syncCompileStatus($compile, $notCompileMR = array())
     {
         $MRID = array_search($compile->job, $notCompileMR);
 

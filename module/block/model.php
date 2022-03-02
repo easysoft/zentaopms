@@ -175,7 +175,6 @@ class blockModel extends model
             ->orWhere('t3.status')->ne('suspended')
             ->markRight(1)
             ->andWhere('t1.deleted')->eq('0')
-            ->beginIF($this->config->systemMode == 'new')->andWhere('t2.deleted')->eq('0')->fi()
             ->andWhere('t3.deleted')->eq('0')
             ->fetchAll('id');
         $data['tasks']      = isset($tasks) ? count($tasks) : 0;
@@ -750,7 +749,7 @@ class blockModel extends model
         $params->bugCount['default'] = 20;
         $params->bugCount['control'] = 'input';
 
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $params->riskCount['name']    = $this->lang->block->riskCount;
             $params->riskCount['default'] = 20;

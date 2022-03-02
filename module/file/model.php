@@ -80,6 +80,17 @@ class fileModel extends model
     {
         $file = $this->dao->findById($fileID)->from(TABLE_FILE)->fetch();
         if(empty($file)) return false;
+        if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
+        {
+            $realPathName   = $this->getRealPathName($file->pathname);
+            $file->realPath = $this->savePath . $realPathName;
+            $file->webPath  = $this->webPath . $realPathName;
+        }
+        else
+        {
+            $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
+            $file->webPath  = $this->app->getWebRoot() . 'data/course/' . $file->pathname;
+        }
 
         if($file->objectType != 'traincourse' and $file->objectType != 'traincontents')
         {
@@ -92,6 +103,7 @@ class fileModel extends model
             $file->realPath = $this->app->getWwwRoot() . 'data/course/' . $file->pathname;
             $file->webPath  = 'data/course/' . $file->pathname;
         }
+
         return $file;
     }
 
@@ -537,10 +549,12 @@ class fileModel extends model
      * Paste image in kindeditor at firefox and chrome.
      *
      * @param  string    $data
+     * @param  string    $uid
+     * @param  bool      $safe
      * @access public
      * @return string
      */
-    public function pasteImage($data, $uid = '')
+    public function pasteImage($data, $uid = '', $safe = false)
     {
         if(empty($data)) return '';
         $data = str_replace('\"', '"', $data);
@@ -571,7 +585,7 @@ class fileModel extends model
                 $data = str_replace($out[1][$key], helper::createLink('file', 'read', "fileID=$fileID", $file['extension']), $data);
             }
         }
-        else
+        elseif($safe)
         {
             $data = fixer::stripDataTags(rawurldecode($data));
         }
@@ -954,7 +968,7 @@ class fileModel extends model
         setcookie('downloading', 1, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
 
         /* Only download upload file that is in zentao. */
-        if($type == 'file' and stripos($content, $this->savePath) !== 0) return;
+        if($type == 'file' and stripos($content, $this->savePath) !== 0) helper::end();
 
         /* Append the extension name auto. */
         $extension = '.' . $fileType;
@@ -971,17 +985,17 @@ class fileModel extends model
         header("Content-Disposition: attachment; filename=\"$fileName\"");
         header("Pragma: no-cache");
         header("Expires: 0");
-        if($type == 'content') return print($content);
+        if($type == 'content') helper::end($content);
         if($type == 'file' and file_exists($content))
         {
-            if(stripos($content, $this->app->getBasePath()) !== 0) return;
+            if(stripos($content, $this->app->getBasePath()) !== 0) helper::end();
 
             set_time_limit(0);
             $chunkSize = 10 * 1024 * 1024;
             $handle    = fopen($content, "r");
             while(!feof($handle)) echo fread($handle, $chunkSize);
             fclose($handle);
-            return;
+            helper::end();
         }
     }
 

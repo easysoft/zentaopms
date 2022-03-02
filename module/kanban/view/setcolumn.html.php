@@ -23,7 +23,7 @@
         <tr>
           <th class='w-110px'><?php echo $lang->kanban->columnName;?></th>
           <td colspan='2'>
-            <?php echo html::input('name', $column->name, "class='form-control' disabled");?>
+            <?php echo html::input('name', $column->name, "class='form-control'");?>
           </td>
           <td></td>
         </tr>

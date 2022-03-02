@@ -39,7 +39,7 @@
       <thead>
         <tr class='text-center'>
           <th class='c-id'>        <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></th>
-          <th class='c-severity'>  <?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
+          <th class='c-severity' title=<?php echo $lang->bug->severity;?>><?php common::printOrderLink('severity', $orderBy, $vars, $lang->bug->severityAB);?></th>
           <th class='c-pri' title='<?php echo $lang->pri;?>'><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
           <th class='c-type'>      <?php common::printOrderLink('type', $orderBy, $vars, $lang->typeAB);?></th>
           <th class='text-left'>   <?php common::printOrderLink('title', $orderBy, $vars, $lang->bug->title);?></th>

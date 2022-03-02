@@ -240,11 +240,11 @@ class gitlab
     {
         if(!scm::checkRevision($revision)) return array();
 
-        $path = ltrim($path, DIRECTORY_SEPARATOR);
-        $path = urlencode($path);
-        $api  = "files/$path/blame";
+        $path  = ltrim($path, DIRECTORY_SEPARATOR);
+        $path  = urlencode($path);
+        $api   = "files/$path/blame";
         $param = new stdclass;
-        $param->ref = $this->branch;
+        $param->ref = ($revision and $revision != 'HEAD') ? $revision : $this->branch;
         $results = $this->fetch($api, $param);
 
         $blames   = array();
@@ -262,13 +262,13 @@ class gitlab
             $line['lines']     = count($blame->lines);
             $line['content']   = array_shift($blame->lines);
 
-            $blames[] = $line;
+            $blames[$lineNumber] = $line;
 
             $lineNumber ++;
 
             foreach($blame->lines as $line)
             {
-                $blames[] = array('line' => $lineNumber, 'content' => $line);
+                $blames[$lineNumber] = array('line' => $lineNumber, 'content' => $line);
                 $lineNumber ++;
             }
         }
@@ -282,13 +282,15 @@ class gitlab
      * @param  string $path
      * @param  string $fromRevision
      * @param  string $toRevision
+     * @param  string $fromProject
+     * @param  string $extra
      * @access public
      * @return array
      */
-    public function diff($path, $fromRevision, $toRevision, $fromProject = '')
+    public function diff($path, $fromRevision, $toRevision, $fromProject = '', $extra = '')
     {
-        if(!scm::checkRevision($fromRevision)) return array();
-        if(!scm::checkRevision($toRevision))   return array();
+        if(!scm::checkRevision($fromRevision) and $extra != 'isBranchOrTag') return array();
+        if(!scm::checkRevision($toRevision) and $extra != 'isBranchOrTag')   return array();
 
         $api    = "compare";
         $params = array('from' => $fromRevision, 'to' => $toRevision);
@@ -296,6 +298,8 @@ class gitlab
 
         if($toRevision == 'HEAD' and $this->branch) $params['to'] = $this->branch;
         $results = $this->fetch($api, $params);
+        if(!isset($results->diffs)) return array();
+
         foreach($results->diffs as $key => $diff)
         {
             if($path != '' and strpos($diff->new_path, $path) === false) unset($results->diffs[$key]);
@@ -361,7 +365,7 @@ class gitlab
             $commits = $this->getCommitsByPath($entry);
 
             if(!empty($commits)) $file->revision = zget($commits[0], 'id', '');
-            $info->kind = $file->type == 'tree' ? 'dir' : 'file';
+            $info->kind = (isset($file->type) and $file->type == 'tree') ? 'dir' : 'file';
         }
 
         return $info;
@@ -395,7 +399,8 @@ class gitlab
         $endLine = end($lines);
         if(strpos($endLine, '\ No newline at end of file') === 0) $num -= 1;
 
-        $newFile = false;
+        $newFile  = false;
+        $allFiles = array();
         for($i = 0; $i < $num; $i ++)
         {
             $diffFile = new stdclass();
@@ -403,6 +408,11 @@ class gitlab
             {
                 $fileInfo = explode(' ',$lines[$i]);
                 $fileName = substr($fileInfo[2], strpos($fileInfo[2], '/') + 1);
+
+                /* Prevent duplicate display of files. */
+                if(in_array($fileName, $allFiles)) continue;
+                $allFiles[] = $fileName;
+
                 $diffFile->fileName = $fileName;
                 for($i++; $i < $num; $i ++)
                 {
@@ -531,9 +541,30 @@ class gitlab
     public function getCommits($version = '', $count = 0, $branch = '')
     {
         if(!scm::checkRevision($version)) return array();
-        $api = "commits";
+        $api     = "commits";
+        $commits = array();
+        $files   = array();
 
         if(empty($count)) $count = 10;
+
+        if(!empty($version) and $count == 1)
+        {
+            $api .= '/' . $version;
+            $commit = $this->fetch($api);
+            if(isset($commit->id))
+            {
+                $log = new stdclass;
+                $log->committer = $commit->committer_name;
+                $log->revision  = $commit->id;
+                $log->comment   = $commit->message;
+                $log->time      = date('Y-m-d H:i:s', strtotime($commit->created_at));
+
+                $commits[$commit->id] = $log;
+                $files[$commit->id]   = $this->getFilesByCommit($log->revision);
+
+                return array('commits' => $commits, 'files' => $files);
+            }
+        }
 
         $params = array();
         $params['ref_name'] = $branch;
@@ -564,8 +595,6 @@ class gitlab
 
         $list = $this->fetch($api, $params);
 
-        $commits = array();
-        $files   = array();
         foreach($list as $commit)
         {
             if(!is_object($commit)) continue;
@@ -617,7 +646,7 @@ class gitlab
 
         $param = new stdclass();
         $param->path     = urldecode($path);
-        $param->ref_name = $this->branch;
+        $param->ref_name = $fromRevision ? $fromRevision : $this->branch;
 
         $fromDate = $this->getCommittedDate($fromRevision);
         $toDate   = $this->getCommittedDate($toRevision);

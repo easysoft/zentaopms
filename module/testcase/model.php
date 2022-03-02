@@ -1535,7 +1535,7 @@ class testcaseModel extends model
             if(strpos(',stage,precondition,keywords,story,', ",{$id},") !== false) $class .= ' text-ellipsis';
 
             echo "<td class='{$class}' {$title}>";
-            if(isset($this->config->bizVersion)) $this->loadModel('flow')->printFlowCell('testcase', $case, $id);
+            if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('testcase', $case, $id);
             switch($id)
             {
             case 'id':

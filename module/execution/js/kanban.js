@@ -280,7 +280,11 @@ function createColumnCreateMenu(options)
     else if(col.type == 'unconfirmed')
     {
         if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-        if(priv.canBatchCreateBug) items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+        if(priv.canBatchCreateBug)
+        {
+            if(productNum > 1) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
+            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=&laneID=' + laneID + '&columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+        }
     }
     else if(col.type == 'wait')
     {
@@ -1243,6 +1247,16 @@ $(function()
             var vars = $('.linkStoryByPlanButton').data('lane') != null ? '&extra=laneID='+ $('.linkStoryByPlanButton').data('lane') + ',columnID=' + $('.linkStoryByPlanButton').data('col') : '';
             location.href = createLink('execution', 'importPlanStories', 'executionID=' + executionID + '&planID=' + planID + '&productID=0&fromMethod=kanban' + vars);
             $.closeModal();
+        }
+    });
+
+    $('#product').change(function()
+    {
+        var product = $('#product').val();
+        if(product)
+        {
+            var link = createLink('bug', 'batchCreate', 'productID=' + product + '&branch=&executionID=' + executionID, '', true);
+            $('#batchCreateBugButton').attr('href', link);
         }
     });
 

@@ -62,8 +62,8 @@ h3 {font-size: 16px;}
 #mainContent > #sidebar > .side-body.affix {top: 0px; z-index: 10000;}
 
 /* Pre row */
-.repoCode table > tbody > tr.over td {background: #f8eec7;}
-.repoCode table > tbody > tr.over th {background: #cdcdcd; color: #333;}
+.repoCode table > tbody > tr.over > td {background: #f8eec7;}
+.repoCode table > tbody > tr.over > th {background: #cdcdcd; color: #333;}
 
 /* Comment-btn */
 .comment-btn {position: relative; margin: 0; padding: 0; display: none;}

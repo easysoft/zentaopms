@@ -574,6 +574,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $log = $this->scm->log('', $revision, $revision);
         $log[0]->comment = $this->repo->replaceCommentLink($log[0]->comment);
+        $log[0]->commit  = '';
 
         $history = $this->dao->select('*')->from(TABLE_REPOHISTORY)->where('revision')->eq($log[0]->revision)->andWhere('repo')->eq($repoID)->fetch();
         if($history)
@@ -709,11 +710,14 @@ class repo extends control
      * @param  string $newRevision
      * @param  string $showBug
      * @param  string $encoding
+     * @param  bool   $isBranchOrTag
      * @access public
      * @return void
      */
-    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '0', $newRevision = 'HEAD', $showBug = 'false', $encoding = '')
+    public function diff($repoID, $objectID = 0, $entry = '', $oldRevision = '', $newRevision = '', $showBug = 'false', $encoding = '', $isBranchOrTag = false)
     {
+        $oldRevision = urldecode(urldecode($oldRevision)); //Fix error.
+
         $this->commonAction($repoID, $objectID);
 
         if($this->get->repoPath) $entry = $this->get->repoPath;
@@ -736,16 +740,22 @@ class repo extends control
                 $arrange = $this->post->arrange;
                 setcookie('arrange', $arrange);
             }
-            if($this->post->encoding) $encoding = $this->post->encoding;
+            if($this->post->encoding)      $encoding      = $this->post->encoding;
+            if($this->post->isBranchOrTag) $isBranchOrTag = $this->post->isBranchOrTag;
 
-            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding"));
+            $this->locate($this->repo->createLink('diff', "repoID=$repoID&objectID=$objectID&entry=" . $this->repo->encodePath($entry) . "&oldrevision=$oldRevision&newRevision=$newRevision&showBug=&encoding=$encoding&isBranchOrTag=$isBranchOrTag"));
         }
 
-        $this->scm->setEngine($repo);
+        $info     = new stdClass();
+        $diffs    = array();
         $encoding = empty($encoding) ? $repo->encoding : $encoding;
         $encoding = strtolower(str_replace('_', '-', $encoding));
-        $info     = $this->scm->info($entry, $newRevision);
-        $diffs    = $this->scm->diff($entry, $oldRevision, $newRevision);
+        if($oldRevision !== '')
+        {
+            $this->scm->setEngine($repo);
+            $info  = $this->scm->info($entry, $newRevision);
+            $diffs = $this->scm->diff($entry, $oldRevision, $newRevision, 'yes', $isBranchOrTag ? 'isBranchOrTag': '');
+        }
         foreach($diffs as $diff)
         {
             if($encoding != 'utf-8')
@@ -819,18 +829,25 @@ class repo extends control
      * @param  string $fromRevision
      * @param  string $toRevision
      * @param  string $type
+     * @param  bool   $isBranchOrTag
      * @access public
      * @return void
      */
-    public function download($repoID, $path, $fromRevision = 'HEAD', $toRevision = '', $type = 'file')
+    public function download($repoID, $path, $fromRevision = 'HEAD', $toRevision = '', $type = 'file', $isBranchOrTag = false)
     {
         if($this->get->repoPath) $path = $this->get->repoPath;
         $entry = $this->repo->decodePath($path);
         $repo  = $this->repo->getRepoByID($repoID);
 
+        if($isBranchOrTag)
+        {
+            $fromRevision = urldecode(helper::safe64Decode($fromRevision));
+            $toRevision   = urldecode(helper::safe64Decode($toRevision));
+        }
+
         $this->commonAction($repoID);
         $this->scm->setEngine($repo);
-        $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch');
+        $content = $type == 'file' ? $this->scm->cat($entry, $fromRevision) : $this->scm->diff($entry, $fromRevision, $toRevision, 'patch', $isBranchOrTag ? 'isBranchOrTag': '');
 
         $fileName = basename(urldecode($entry));
         if($type != 'file') $fileName .= "r$fromRevision--r$toRevision.patch";
@@ -891,7 +908,7 @@ class repo extends control
         $this->view->repoID     = $repoID;
         $this->view->objectID   = $objectID;
         $this->view->branch     = $branch;
-        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=$branch&objectID=$objectID", '', false);
+        $this->view->browseLink = $this->repo->createLink('browse', "repoID=" . ($this->app->tab == 'devops' ? $repoID : '') . "&branchID=" . base64_encode($branch) . "&objectID=$objectID", '', false);
         $this->display();
     }
 

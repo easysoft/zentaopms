@@ -983,6 +983,7 @@ CREATE TABLE IF NOT EXISTS `zt_productplan` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   `order` text NOT NULL,
+  `closedReason` varchar(20) NOT NULL
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`),
   KEY `product` (`product`),
@@ -1611,6 +1612,7 @@ CREATE TABLE IF NOT EXISTS `zt_user` (
   `strategy` text NOT NULL,
   `join` date NOT NULL default '0000-00-00',
   `visits` mediumint(8) unsigned NOT NULL default '0',
+  `visions` varchar(20) NOT NULL,
   `ip` char(15) NOT NULL default '',
   `last` int(10) unsigned NOT NULL default '0',
   `fails` tinyint(5) NOT NULL default '0',

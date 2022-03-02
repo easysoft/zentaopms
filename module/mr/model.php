@@ -112,7 +112,17 @@ class mrModel extends model
         {
             if(!$this->app->user->admin and !isset($gitlabUsers[$gitlabID])) continue;
 
-            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false');
+            $minProject = $maxProject = 0;
+            $projectCount = $this->dao->select('min(sourceProject) as minSource,MAX(sourceProject) as maxSource,MIN(targetProject) as minTarget,MAX(targetProject) as maxTarget')->from(TABLE_MR)
+                ->where('deleted')->eq('0')
+                ->andWhere('gitlabID')->eq($gitlabID)
+                ->fetch();
+            if($projectCount)
+            {
+                $minProject = min($projectCount->minSource, $projectCount->minTarget);
+                $maxProject = max($projectCount->maxSource, $projectCount->maxTarget);
+            }
+            $allProjects[$gitlabID] = $this->gitlab->apiGetProjects($gitlabID, 'false', $minProject, $maxProject);
 
             /* If not an administrator, need to obtain group member information. */
             $groupIDList = array(0 => 0);
@@ -1393,9 +1403,9 @@ class mrModel extends model
         if($type == 'task')  $links = $this->post->tasks;
 
         /* Get link action text. */
-        $MR       = $this->getByID($MRID);
-        $users    = $this->loadModel('user')->getPairs('noletter');
-        $MRCreateAction = sprintf($this->lang->mr->createAction, $MR->createdDate, zget($users, $MR->createdBy), helper::createLink('mr', 'view', "mr={$MR->id}"));
+        $MR             = $this->getByID($MRID);
+        $users          = $this->loadModel('user')->getPairs('noletter');
+        $MRCreateAction = $MR->createdDate . '::' . zget($users, $MR->createdBy) . '::' . helper::createLink('mr', 'view', "mr={$MR->id}");
 
         foreach($links as $linkID)
         {
@@ -1429,7 +1439,7 @@ class mrModel extends model
     {
         $this->dao->delete()->from(TABLE_RELATION)->where('product')->eq($productID)->andWhere('AType')->eq('mr')->andWhere('AID')->eq($MRID)->andWhere('BType')->eq($type)->andWhere('BID')->eq($linkID)->exec();
 
-        $this->loadModel('action')->create($type, $linkID, 'deletemr');
+        $this->loadModel('action')->create($type, $linkID, 'deletemr', '', helper::createLink('mr', 'view', "mr={$MRID}"));
     }
 
     /**

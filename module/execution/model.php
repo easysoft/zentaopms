@@ -333,7 +333,7 @@ class executionModel extends model
         if(!empty($sprint->percent)) $this->checkWorkload('create', $sprint->percent);
 
         /* Set planDuration and realDuration. */
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $sprint->planDuration = $this->loadModel('programplan')->getDuration($sprint->begin, $sprint->end);
             if(!empty($sprint->realBegan) and !empty($sprint->realEnd)) $sprint->realDuration = $this->loadModel('programplan')->getDuration($sprint->realBegan, $sprint->realEnd);
@@ -484,7 +484,7 @@ class executionModel extends model
         if(!empty($execution->percent)) $this->checkWorkload('update', $execution->percent, $oldExecution);
 
         /* Set planDuration and realDuration. */
-        if(isset($this->config->maxVersion))
+        if($this->config->edition == 'max')
         {
             $execution->planDuration = $this->loadModel('programplan')->getDuration($execution->begin, $execution->end);
             if(!empty($execution->realBegan) and !empty($execution->realEnd)) $execution->realDuration = $this->programplan->getDuration($execution->realBegan, $execution->realEnd);

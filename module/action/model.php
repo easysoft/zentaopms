@@ -48,7 +48,7 @@ class actionModel extends model
         $action->action     = $actionType;
         $action->date       = helper::now();
         $action->extra      = $extra;
-        $action->vision     = $this->config->vision;
+        if(!defined('IN_UPGRADE')) $action->vision = $this->config->vision;
 
         if($objectType == 'story' and strpos(',reviewpassed,reviewrejected,reviewclarified,', ",$actionType,") !== false) $action->actor = $this->lang->action->system;
 
@@ -733,7 +733,12 @@ class actionModel extends model
             {
                 $desc = $this->lang->$objectType->action->changebychild;
             }
-            elseif(isset($this->config->maxVersion) and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
+            elseif($action->action == 'createmr' and strpos($action->extra, '::') !== false)
+            {
+                list($mrCreatedDate, $mrActor, $mrLink) = explode('::', $action->extra);
+                $desc = sprintf($this->lang->mr->createAction, $mrCreatedDate, $mrActor, $mrLink);
+            }
+            elseif($this->config->edition == 'max' and strpos($this->config->action->assetType, $action->objectType) !== false and $action->action == 'approved')
             {
                 $desc = empty($this->lang->action->approve->{$action->extra}) ? '' : $this->lang->action->approve->{$action->extra};
             }
@@ -1232,7 +1237,7 @@ class actionModel extends model
             if(is_array($objectLabel) and isset($objectLabel[$actionType])) $actionObjectLabel = $objectLabel[$actionType];
         }
 
-        if(isset($this->config->maxVersion) and $objectType == 'assetlib')
+        if($this->config->edition == 'max' and $objectType == 'assetlib')
         {
             $libType = $this->dao->select('type')->from(TABLE_ASSETLIB)->where('id')->eq($objectID)->fetch('type');
             if(strpos('story,issue,risk,opportunity,practice,component', $libType) !== false) $actionObjectLabel = $this->lang->action->label->{$libType . 'assetlib'};
@@ -1265,7 +1270,7 @@ class actionModel extends model
             $action->objectLabel = $objectLabel;
             $action->product     = trim($action->product, ',');
 
-            if(isset($this->config->maxVersion)
+            if($this->config->edition == 'max'
                and strpos($this->config->action->assetType, $action->objectType) !== false
                and empty($action->project) and empty($action->product) and empty($action->execution))
             {

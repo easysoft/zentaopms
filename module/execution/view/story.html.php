@@ -86,7 +86,7 @@
 
             if($common::hasPriv('story', 'create') and common::hasPriv('story', 'batchCreate'))
             {
-                if($param != 0 || count($products) == 1) echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+                if(!($isAllProduct and count($products) > 1)) echo "<button type='button' class='btn btn-secondary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
                 echo "<ul class='dropdown-menu pull-right'>";
                 echo '<li>' . html::a($createStoryLink, $lang->story->create, '', "data-app='execution'") . '</li>';
                 echo '<li>' . html::a($batchCreateLink, $lang->story->batchCreate, '', "data-app='execution'") . '</li>';
@@ -284,7 +284,7 @@
                   if(common::hasPriv('story', 'recall'))
                   {
                       $recallDisabled = empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
-                      common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'back', 'hiddenwin', $recallDisabled, '', '', $lang->story->recall);
+                      common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $lang->story->recall);
                   }
 
                   $lang->task->create = $lang->execution->wbs;
