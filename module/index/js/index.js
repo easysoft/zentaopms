@@ -429,6 +429,12 @@
         if(url === true) url = app.url;
         var iframe = app.$iframe[0];
 
+        /* Add hook to page before reload it */
+        if (iframe && iframe.contentWindow.beforeAppReload)
+        {
+            iframe.contentWindow.beforeAppReload({app: app, url: url});
+        }
+
         try
         {
             if(url) iframe.contentWindow.location.assign(url);
