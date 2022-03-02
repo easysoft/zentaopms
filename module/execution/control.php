@@ -515,7 +515,7 @@ class execution extends control
             $mails = $this->execution->importBug($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
-             /* If link from no head then reload. */
+            /* If link from no head then reload. */
             if(isonlybody())
             {
                 $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
@@ -523,7 +523,7 @@ class execution extends control
 
                 return print(js::reload('parent', '', "parent.parent.updateKanban($kanbanData)"));
                 // return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
-             }
+            }
             else
             {
                 return print(js::reload('parent.parent'));

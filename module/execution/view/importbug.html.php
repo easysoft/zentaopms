@@ -88,9 +88,9 @@ var browseType = '<?php echo $browseType;?>';
 </div>
 <script>
 $(function(){parent.$('#triggerModal .modal-content .modal-header .close').hide();})
-    function goback()
-    {
-            parent.location.reload();
-    }
+function goback()
+{
+    parent.location.reload();
+}
 </script>
 <?php include '../../common/view/footer.html.php';?>
