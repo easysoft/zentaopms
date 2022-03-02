@@ -234,7 +234,6 @@ class productplanModel extends model
             ->andWhere('deleted')->eq(0)
             ->beginIF(strpos($param, 'unexpired') !== false)->andWhere('end')->ge($date)->fi()
             ->beginIF($branch !== 'all' or $branch !== '')->andWhere("branch")->in($branch)->fi()
-            ->beginIF(strpos($param, 'skipparent') !== false)->andWhere('parent')->ne(-1)->fi()
             ->orderBy('begin desc')
             ->fetchAll('id');
 
@@ -243,7 +242,11 @@ class productplanModel extends model
         $parentTitle = array();
         foreach($plans as $plan)
         {
-            if($plan->parent == '-1') $parentTitle[$plan->id] = $plan->title;
+            if($plan->parent == '-1')
+            {
+                $parentTitle[$plan->id] = $plan->title;
+                if(strpos($param, 'skipparent') !== false) continue;
+            }
             if($plan->parent > 0 and isset($parentTitle[$plan->parent])) $plan->title = $parentTitle[$plan->parent] . ' /' . $plan->title;
             $planPairs[$plan->id] = $plan->title . " [{$plan->begin} ~ {$plan->end}]";
             if($plan->begin == $this->config->productplan->future and $plan->end == $this->config->productplan->future) $planPairs[$plan->id] = $plan->title . ' ' . $this->lang->productplan->future;
