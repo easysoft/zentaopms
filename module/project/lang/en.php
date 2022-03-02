@@ -225,7 +225,7 @@ $lang->project->modelList['waterfall'] = "CMMI";
 $lang->project->modelList['kanban']    = "Kanban";
 
 $lang->project->featureBar['all']       = 'All';
-$lang->project->featureBar['doing']     = 'Going';
+$lang->project->featureBar['doing']     = 'Doing';
 $lang->project->featureBar['wait']      = 'Waiting';
 $lang->project->featureBar['suspended'] = 'Suspended';
 $lang->project->featureBar['closed']    = 'Closed';
