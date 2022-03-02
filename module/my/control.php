@@ -1001,13 +1001,21 @@ EOF;
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
+            $data = fixer::input('post')->setDefault('users', array())->get();
             if($data->mode == 'new')
             {
+                if(empty($data->newList))
+                {
+                    dao::$errors['newList'] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                    return $this->send($response);
+                }
                 $listID = $this->user->createContactList($data->newList, $data->users);
                 $this->user->setGlobalContacts($listID, isset($data->share));
                 if(isonlybody()) return print(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
-                return print(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
             }
             elseif($data->mode == 'edit')
             {
@@ -1277,6 +1285,6 @@ EOF;
 
         $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
 
-        echo js::locate($this->createLink('my', 'index'), 'parent');
+        echo js::locate($this->createLink('index', 'index'), 'parent');
     }
 }

@@ -506,7 +506,7 @@ class commonModel extends model
     {
         global $app, $config, $lang;
 
-        $html  = "<ul class='dropdown-menu pull-right create-list'>";
+        $html = "<ul class='dropdown-menu pull-right create-list'>";
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
@@ -524,13 +524,21 @@ class commonModel extends model
             if($product) $productID = $product->id;
         }
 
+        if($config->vision == 'lite')
+        {
+            $condition  = " WHERE `deleted` = '0' AND `vision` = 'lite' AND `model` = 'kanban'";
+            if(!$app->user->admin) $condition .= " AND `id` " . helper::dbIN($app->user->view->projects);
+
+            $object = $app->dbh->query("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
+            if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
+        }
+
+        if($config->edition == 'open') unset($lang->createIcons['effort']);
+        if($config->systemMode == 'classic') unset($lang->createIcons['project'], $lang->createIcons['program']);
+
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            if($config->edition == 'open' and $objectType == 'effort') continue;
-            if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
-            if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
-
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
 
@@ -596,7 +604,7 @@ class commonModel extends model
                             if($config->vision == 'lite')
                             {
                                 $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
-                                $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' ORDER BY `order` desc")->fetchAll();
+                                $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
 
                                 $projectIdList = array();
                                 foreach($projects as $project) $projectIdList[$project->id] = $project->id;

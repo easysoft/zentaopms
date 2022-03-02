@@ -1,12 +1,14 @@
 VERSION     = $(shell head -n 1 VERSION)
-XUANVERSION = $(shell head -n 1 xuan/XUANVERSION)
-XVERSION    = $(shell head -n 1 xuan/XVERSION)
+XUANVERSION = $(shell head -n 1 xuanxuan/XUANVERSION)
+XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 
 XUANPATH     := $(XUANXUAN_SRC_PATH)
 BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 
-all: ci
+all:
+	make clean
+	make ci
 clean:
 	rm -fr zentaopms
 	rm -fr zentaostory

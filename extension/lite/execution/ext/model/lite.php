@@ -87,15 +87,15 @@ public function getTRActions($currentMethod)
     foreach($subMenu as $key => $value)
     {
         $tmpValue = explode('|', $value['link']);
-        $subMenu->$key['name']   = $tmpValue[0];
-        $subMenu->$key['module'] = $tmpValue[1];
-        $subMenu->$key['method'] = $tmpValue[2];
-        $subMenu->$key['vars']   = $tmpValue[3];
+        $subMenu->{$key}['name']   = $tmpValue[0];
+        $subMenu->{$key}['module'] = $tmpValue[1];
+        $subMenu->{$key}['method'] = $tmpValue[2];
+        $subMenu->{$key}['vars']   = $tmpValue[3];
     }
 
     $TRActions  = '';
     $TRActions .= "<div class='dropdown'>";
-    $TRActions .= html::a('javascript:;', "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'></i> " . $subMenu->$currentMethod['name'] . "<span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+    $TRActions .= html::a('javascript:;', "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'></i> " . $subMenu->{$currentMethod}['name'] . "<span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
     $TRActions .= "<ul class='dropdown-menu pull-right'>";
     foreach($subMenu as $subKey => $subName)
     {

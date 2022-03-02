@@ -2158,7 +2158,7 @@ class taskModel extends model
                 ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
                 ->where('t1.kanban')->eq($executionID)
                 ->andWhere("($cardsWhere)")
-                ->fetchAll('cards');
+                ->fetchAll();
 
             foreach($tasks as $task)
             {
@@ -2167,7 +2167,7 @@ class taskModel extends model
                 {
                     foreach($lanes as $lane)
                     {
-                        if(strpos($lane->cards, $task->id) !== false)  $task->lane = $lane->name;
+                        if(strpos($lane->cards, ",{$task->id},") !== false)  $task->lane = $lane->name;
                     }
                 }
             }

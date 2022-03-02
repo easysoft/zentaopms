@@ -395,7 +395,7 @@ class todo extends control
 
         $this->loadModel('user');
 
-        $model = $todo->type == 'opportunity' ? 'waterfall' : 'all';
+        $model    = $todo->type == 'opportunity' ? 'waterfall' : 'all';
         $projects = $this->loadModel('project')->getPairsByModel($model);
         if(!isset($this->session->project)) $this->session->set('project', key($projects));
 

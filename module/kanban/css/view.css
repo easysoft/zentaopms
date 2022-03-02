@@ -57,31 +57,31 @@
 
 .region .kanban-lane-items {overflow: overlay !important; padding-bottom: 10px;}
 
-.region .kanban-item {position: relative}
-.region .kanban-item > .kanban-card > .title {display: block; line-height: 18px;}
-.region .kanban-item > .kanban-card > .title:hover {color: #2272eb}
-.region .kanban-item > .kanban-card > .info {margin-top: 4px; position: relative;}
-.region .kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
-.region .kanban-item > .kanban-card > .info > .estimate{margin-left: 4px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
-.region .kanban-item > .kanban-card > .info > .time {margin-left: 4px; font-size: 12px; background: rgb(242, 242, 242)}
-.region .kanban-item > .kanban-card > .info > .user {position: absolute; right: 0; top: -2px}
-.region .kanban-item > .kanban-card > .info > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
-.region .kanban-item > .kanban-card > .info > .user > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: sticky; border-radius: 50%; top: 3px; margin: 0 7px;}
-.region .kanban-item > .kanban-card > .info > .user > span:before,
-.region .kanban-item > .kanban-card > .info > .user > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
-.region .kanban-item > .kanban-card > .info > .user > span:before {left: -4px;}
-.region .kanban-item > .kanban-card > .info > .user > span:after {right: -4px;}
-.region .kanban-item > .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
-.region .kanban-item > .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
-.region .kanban-item:hover > .actions {opacity: 1;}
-.region .kanban-item .has-color .title,
-.region .kanban-item .has-color .actions .icon-more-v,
-.region .kanban-item .has-color .info > .label-pri,
-.region .kanban-item .has-color .info > .estimate,
-.region .kanban-item .has-color .info > .user .lable-teamSumCount,
-.region .kanban-item .has-color .info > .label-light {color: #FFFFFF;}
-.region .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
-.region .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
+.kanban-item {position: relative}
+.kanban-item > .kanban-card > .title {display: block; line-height: 18px;}
+.kanban-item > .kanban-card > .title:hover {color: #2272eb}
+.kanban-item > .kanban-card > .info {margin-top: 4px; position: relative;}
+.kanban-item > .kanban-card > .info > .pri {height: 14px; border-width: 1px; font-size: 12px; line-height: 12px; min-width: 14px; padding: 0 1px;}
+.kanban-item > .kanban-card > .info > .estimate{margin-left: 4px; color: #999; background-color: rgb(255, 255, 255); padding: 3px 0px}
+.kanban-item > .kanban-card > .info > .time {margin-left: 4px; font-size: 12px; background: rgb(242, 242, 242)}
+.kanban-item > .kanban-card > .info > .user {position: absolute; right: 0; top: -2px}
+.kanban-item > .kanban-card > .info > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
+.kanban-item > .kanban-card > .info > .user > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: sticky; border-radius: 50%; top: 3px; margin: 0 7px;}
+.kanban-item > .kanban-card > .info > .user > span:before,
+.kanban-item > .kanban-card > .info > .user > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
+.kanban-item > .kanban-card > .info > .user > span:before {left: -4px;}
+.kanban-item > .kanban-card > .info > .user > span:after {right: -4px;}
+.kanban-item > .kanban-card > .actions > a {display: block; float: left; width: 20px; height: 20px; line-height: 20px; text-align: center; border-radius: 4px; opacity: .7;}
+.kanban-item > .kanban-card > .actions > a:hover {background-color: rgba(0,0,0,.075); opacity: 1;}
+.kanban-item:hover > .actions {opacity: 1;}
+.kanban-item .has-color .title,
+.kanban-item .has-color .actions .icon-more-v,
+.kanban-item .has-color .info > .label-pri,
+.kanban-item .has-color .info > .estimate,
+.kanban-item .has-color .info > .user .lable-teamSumCount,
+.kanban-item .has-color .info > .label-light {color: #FFFFFF;}
+.kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
+.kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
 .kanban-card {height: auto !important; padding: 8px 14px !important; min-height: 60px;}
 .kanban-card > .title, .kanban-card > .productplanTitle, .kanban-card > .releaseTitle, .kanban-card > .buildTitle {word-break: break-all;}
@@ -112,8 +112,8 @@
 .label-closed, .label-terminate {background: #e5e5e5 !important; color: #b8b8b8;}
 .label-deleted {background: #ff5d5d !important; color: #fff;}
 .label-normal {background: #e1e8d9 !important; color: #9abe76;}
-.region .kanban-item > .kanban-card > .execInfo > .user, .region .kanban-item > .kanban-card > .releaseInfo > .user, .region .kanban-item > .kanban-card > .productplanInfo > .user {position: absolute; right: 13px; bottom: 1px}
-.region .kanban-item > .kanban-card > .execInfo > .user > .avatar, .region .kanban-item > .kanban-card > .releaseInfo > .user > .avatar, .region .kanban-item > .kanban-card > .productplanInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
+.kanban-item > .kanban-card > .execInfo > .user, .kanban-item > .kanban-card > .releaseInfo > .user, .kanban-item > .kanban-card > .productplanInfo > .user {position: absolute; right: 13px; bottom: 1px}
+.kanban-item > .kanban-card > .execInfo > .user > .avatar, .kanban-item > .kanban-card > .releaseInfo > .user > .avatar, .kanban-item > .kanban-card > .productplanInfo > .user > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 0px; margin-left: 2px}
 .kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon, .kanban-card .buildTitle .icon{padding-right: 5px;}
 .kanban-card .label-finish {margin-right: 7px; margin-top: -1px; padding: 3px 5px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}
