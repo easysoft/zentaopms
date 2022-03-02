@@ -479,6 +479,9 @@ class commonModel extends model
         {
             $currentVision = $app->config->vision;
             $userVisions   = array_filter(explode(',', $app->user->visions));
+
+            if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
+
             if(count($userVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
             echo "<ul class='dropdown-menu pull-right'>";
