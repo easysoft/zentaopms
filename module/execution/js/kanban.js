@@ -3,7 +3,7 @@ $(function()
     $('#products').change(function()
     {
         var selectProductID = $('#products').val();
-        var attr            = createLink('story', 'batchCreate', 'productID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution, '', true);
+        var attr            = createLink('story', 'batchCreate', 'productID=' + selectProductID + '&branch=0' + '&moduleID=0&story=0&execution=' + executionID, '', true);
         $('#batchCreateStoryButton').attr('href',attr);
     });
 })

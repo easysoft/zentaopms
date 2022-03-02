@@ -105,7 +105,6 @@ js::set('priv',
 js::set('hasStoryButton', $hasStoryButton);
 js::set('hasBugButton', $hasBugButton);
 js::set('hasTaskButton', $hasTaskButton);
-js::set('branch', $branchID);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -221,7 +220,7 @@ js::set('branch', $branchID);
   </div>
 </div>
 <?php endif;?>
-<?php js::set('execution',$execution->id);?>
+<?php js::set('executionID',$execution->id);?>
 <div class="modal fade" id="linkStoryByPlan">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
