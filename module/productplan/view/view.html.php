@@ -57,8 +57,8 @@
             common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody, $plan);
             $class = $plan->status == 'doing' ? '' : 'disabled';
             common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
-            $class = $plan->status == 'done' ? '' : 'disabled';
-            common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->close}'", '', false, $plan);
+            $class = $plan->status !== 'closed' ? 'iframe' : 'disabled';
+            common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' title='{$lang->productplan->close}'", '', true, $plan);
             $class = in_array($plan->status, array('closed', 'done')) ? '' : 'disabled';
             common::printLink('productplan', 'activate', "planID=$plan->id", "<i class='icon-magic'></i>{$lang->productplan->activateAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->activate}'", '', false, $plan);
         }
@@ -616,7 +616,7 @@
                 <tr>
                   <th><?php echo $lang->productplan->status;?></th>
                   <td><?php echo $lang->productplan->statusList[$plan->status];?></td>
-                </tr>    
+                </tr>
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>
