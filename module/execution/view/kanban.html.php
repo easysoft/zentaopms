@@ -168,7 +168,7 @@ js::set('hasTaskButton', $hasTaskButton);
         <?php
         if($canBatchCreateStory)
         {
-            if(count($allProducts)>1)
+            if(count($allProducts) > 1)
             {
                 echo '<li>' . html::a('#batchCreateStory', $lang->execution->batchCreateStory, '', 'data-toggle="modal"') . '</li>';
             }
