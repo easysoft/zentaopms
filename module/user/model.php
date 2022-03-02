@@ -638,7 +638,7 @@ class userModel extends model
     public function batchEdit()
     {
         $data = fixer::input('post')->get();
-        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) return print(js::alert($this->lang->user->error->verifyPassword));
+        if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand)) helper::end(js::alert($this->lang->user->error->verifyPassword));
 
         $oldUsers     = $this->dao->select('id, account, email')->from(TABLE_USER)->where('id')->in(array_keys($data->account))->fetchAll('id');
         $accountGroup = $this->dao->select('id, account')->from(TABLE_USER)->where('account')->in($data->account)->fetchGroup('account', 'id');
@@ -675,7 +675,7 @@ class userModel extends model
                 if(!isset($users[$id][$field])) continue;
                 if(!empty($users[$id][$field])) continue;
 
-                return print(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
+                helper::end(js::error(sprintf($this->lang->error->notempty, $this->lang->user->$field)));
             }
 
             if(!empty($this->config->user->batchAppendFields))
@@ -690,11 +690,11 @@ class userModel extends model
                 }
             }
 
-            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) return print(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(in_array($account, $accounts)) return print(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
-            if(!validater::checkAccount($users[$id]['account'])) return print(js::error(sprintf($this->lang->user->error->account, $id)));
-            if($users[$id]['realname'] == '') return print(js::error(sprintf($this->lang->user->error->realname, $id)));
-            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) return print(js::error(sprintf($this->lang->user->error->mail, $id)));
+            if(isset($accountGroup[$account]) and count($accountGroup[$account]) > 1) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(in_array($account, $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $id)));
+            if(!validater::checkAccount($users[$id]['account'])) helper::end(js::error(sprintf($this->lang->user->error->account, $id)));
+            if($users[$id]['realname'] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $id)));
+            if($users[$id]['email'] and !validater::checkEmail($users[$id]['email'])) helper::end(js::error(sprintf($this->lang->user->error->mail, $id)));
 
             $accounts[$id] = $account;
             $prev['dept']  = $users[$id]['dept'];
