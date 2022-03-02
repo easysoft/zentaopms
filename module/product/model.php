@@ -360,7 +360,7 @@ class productModel extends model
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')
-            ->fetchAll('id');
+            ->fetchAll();
 
         $products = array();
         foreach($projectProducts as $product)
