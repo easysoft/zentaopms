@@ -13,10 +13,8 @@
 <?php include '../../common/view/header.html.php';?>
 <?php include '../../common/view/datepicker.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
-<script>
-$(function(){$(".preview").modalTrigger({width:1000, type:'iframe'});});
-var browseType = '<?php echo $browseType;?>';
-</script>
+<?php js::set('browseType', $browseType);?>
+<?php js::set('isonlybody', isonlybody());?>
 <style>#importBugForm .bug-pri {overflow: visible;}</style>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
@@ -70,18 +68,20 @@ var browseType = '<?php echo $browseType;?>';
         <?php endforeach;?>
       </tbody>
     </table>
-    <?php if($bugs):?>
     <div class='table-footer'>
       <div class="checkbox-primary check-all"><label><?php echo $lang->selectAll?></label></div>
       <div class="table-actions btn-toolbar show-always">
         <?php echo html::submitButton('<i class="icon icon-import icon-sm"></i> ' . $lang->import, '', 'btn');?>
       </div>
       <div class='btn-toolbar'>
-        <?php echo html::backButton('', '', 'btn');?>
+        <?php if(isonlybody()):?>
+        <?php echo html::submitButton('<i class="icon icon-back icon-sm"></i> ' . $lang->goback, 'onclick="goback()"', 'btn');?>
+        <?php else:?>
+        <?php echo html::backButton('','','btn');?>
+        <?php endif;?>
       </div>
       <?php $pager->show('right', 'pagerjs');?>
     </div>
-    <?php endif;?>
   </form>
 </div>
 <?php include '../../common/view/footer.html.php';?>
