@@ -2130,10 +2130,10 @@ class execution extends control
 
         /* Get execution's product. */
         $productID    = 0;
-        $products     = $this->loadModel('product')->getProducts($executionID);
         $productNames = array();
-        foreach($products as $product) $productNames[$product->id] = $product->name;
+        $products     = $this->loadModel('product')->getProducts($executionID);
         if($products) $productID = key($products);
+        foreach($products as $product) $productNames[$product->id] = $product->name;
 
         $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
