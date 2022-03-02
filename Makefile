@@ -6,7 +6,9 @@ XUANPATH     := $(XUANXUAN_SRC_PATH)
 BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 
-all: ci
+all:
+	make clean
+	make ci
 clean:
 	rm -fr zentaopms
 	rm -fr zentaostory
