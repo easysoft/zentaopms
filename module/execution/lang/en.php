@@ -107,7 +107,7 @@ $lang->execution->unfoldClosed        = 'Unfold Closed';
 $lang->execution->editName            = 'Edit Name';
 $lang->execution->setWIP              = 'WIP Settings';
 $lang->execution->sortColumn          = 'Kanban Card Sorting';
-$lang->execution->batchCreateStroy    = "Batch create {$lang->SRCommon}";
+$lang->execution->batchCreateStory    = "Batch create {$lang->SRCommon}";
 $lang->execution->batchCreateTask     = 'Batch create task';
 $lang->execution->kanbanNoLinkProduct = "Kanban not linked {$lang->productCommon}";
 

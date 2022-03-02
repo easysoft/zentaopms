@@ -107,7 +107,7 @@ $lang->execution->unfoldClosed        = '展开已结束';
 $lang->execution->editName            = '编辑名称';
 $lang->execution->setWIP              = '在制品数量设置（WIP）';
 $lang->execution->sortColumn          = '看板列卡片排序';
-$lang->execution->batchCreateStroy    = "批量新建{$lang->SRCommon}";
+$lang->execution->batchCreateStory    = "批量新建{$lang->SRCommon}";
 $lang->execution->batchCreateTask     = '批量建任务';
 $lang->execution->kanbanNoLinkProduct = "看板没有关联{$lang->productCommon}";
 
@@ -293,7 +293,7 @@ $lang->execution->aboveAllExecution = "以上所有{$lang->executionCommon}";
 
 /* 页面提示。*/
 $lang->execution->linkStoryByPlanTips  = "此操作会将所选计划下面的{$lang->SRCommon}全部关联到此{$lang->executionCommon}中";
-$lang->execution->batchCreateStroyTips = '请选择需要批量新建研发需求的产品';
+$lang->execution->batchCreateStoryTips = '请选择需要批量新建研发需求的产品';
 $lang->execution->selectExecution      = "请选择{$lang->execution->common}";
 $lang->execution->beginAndEnd          = '起止时间';
 $lang->execution->lblStats             = '工时统计';

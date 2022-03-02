@@ -48,6 +48,7 @@ js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
 js::set('projectID', $projectID);
 js::set('vision', $this->config->vision);
+js::set('productCount', count($allProducts));
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
@@ -168,9 +169,9 @@ js::set('branch',$branchID);
             if($canBatchCreateStory)
             {
                 if(count($allProducts)>1)
-                echo '<li>' . html::a('#batchCreateStroy', $lang->execution->batchCreateStroy, '', 'data-toggle="modal"') . '</li>';
+                echo '<li>' . html::a('#batchCreateStory', $lang->execution->batchCreateStory, '', 'data-toggle="modal"') . '</li>';
                 else
-                echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='iframe' data-width='90%'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='iframe' data-width='90%'") . '</li>';
             }
         ?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
@@ -237,17 +238,17 @@ js::set('branch',$branchID);
     </div>
   </div>
 </div>
-<div class="modal fade" id="batchCreateStroy">
+<div class="modal fade" id="batchCreateStory">
   <div class="modal-dialog mw-500px">
     <div class="modal-content">
       <div class="modal-header">
         <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
-        <h4 class="modal-title"><?php echo $lang->execution->batchCreateStroyTips;?></h4>
+        <h4 class="modal-title"><?php echo $lang->execution->batchCreateStoryTips;?></h4>
       </div>
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('products', $allProducts, '', "class='form-control chosen' id='products'");?>
-          <span class='input-group-btn'><?php echo html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='btn btn-primary iframe' data-width='90%'");?></span>
+          <span class='input-group-btn'><?php echo html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='btn btn-primary iframe' data-width='90%' id='batchCreateStoryButton'");?></span>
         </div>
       </div>
     </div>
