@@ -7,6 +7,7 @@ $(function()
         $('#batchCreateStoryButton').attr('href',attr);
     });
 })
+
 /**
  * When execution status change.
  *
