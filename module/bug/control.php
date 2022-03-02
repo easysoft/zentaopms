@@ -677,7 +677,6 @@ class bug extends control
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
                     $kanbanData = json_encode($kanbanData);
                     return print(js::reload('parent.parent'));
-                    return print(js::closeModal('parent.parent', '', "parent.parent.updateKanban($kanbanData)"));
                 }
                 else
                 {
