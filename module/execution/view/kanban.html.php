@@ -105,7 +105,7 @@ js::set('priv',
 js::set('hasStoryButton', $hasStoryButton);
 js::set('hasBugButton', $hasBugButton);
 js::set('hasTaskButton', $hasTaskButton);
-js::set('branch',$branchID);
+js::set('branch', $branchID);
 ?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
