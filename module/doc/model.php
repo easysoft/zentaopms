@@ -2614,7 +2614,11 @@ EOT;
 
             $object = $this->dao->select('id,name,status')->from($table)->where('id')->eq($objectID)->fetch();
 
-            if(empty($object)) return print(js::locate(helper::createLink($type, 'create')));
+            if(empty($object))
+            {
+                $param = ($type == 'project' and $this->config->vision == 'lite') ? 'model=kanban' : '';
+                return print(js::locate(helper::createLink($type, 'create', $param)));
+            }
         }
 
         $tab = strpos(',doc,product,project,execution,', ",{$this->app->tab},") !== false ? $this->app->tab : 'doc';
