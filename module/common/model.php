@@ -512,16 +512,16 @@ class commonModel extends model
         $showCreateList = $needPrintDivider = false;
 
         /* Get default product id. */
-        $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
-        $deletedProductIds = array();
-        foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
-
-        $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
+        $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
+        if($productID)
+        {
+            $product = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
+            if(empty($product)) $productID = 0;
+        }
         if(!$productID and $app->user->view->products)
         {
-            $viewProducts = explode(',', $app->user->view->products);
-            $viewProducts = array_diff($viewProducts, $deletedProductIds);
-            $productID    = current($viewProducts);
+            $product = $app->dbh->query("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
+            if($product) $productID = $product->id;
         }
 
         /* Check whether the creation permission is available, and print create buttons. */
@@ -587,12 +587,24 @@ class commonModel extends model
                     case 'story':
                         if(!$productID and $config->vision == 'lite')
                         {
-                            $module       = 'project';
-                            $params       = "model=kanban";
+                            $module = 'project';
+                            $params = "model=kanban";
                         }
                         else
                         {
                             $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                            if($config->vision == 'lite')
+                            {
+                                $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                                $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' ORDER BY `order` desc")->fetchAll();
+
+                                $projectIdList = array();
+                                foreach($projects as $project) $projectIdList[$project->id] = $project->id;
+                                if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
+                                if(empty($projectID)) $projectID = key($projectIdList);
+
+                                $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
+                            }
                         }
 
                         break;
