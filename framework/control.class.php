@@ -35,7 +35,11 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api')) $this->setPreference();
+        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api'))
+        {
+            $this->setPreference();
+            $this->forceUpgrade();
+        }
 
         if(!isset($this->config->bizVersion)) return false;
 
@@ -121,6 +125,29 @@ class control extends baseControl
         {
             $this->locate(helper::createLink('my', 'preference'));
         }
+    }
+
+    /**
+     * If change the edition, trigger the upgrade process.
+     * 
+     * @access public
+     * @return void
+     */
+    public function forceUpgrade()
+    {
+        $installedVersion = $this->loadModel('setting')->getVersion();
+
+        if(is_numeric($installedVersion[0]) and $this->config->edition == 'max')
+        {
+            if($this->config->systemMode == 'classic' and $this->app->getModuleName() != 'upgrade')
+            {
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'new');
+                $this->loadModel('setting')->setItem('system.common.global.version', $this->config->version);
+                $this->locate(helper::createLink('upgrade', 'mergeTips'));
+            }
+        }
+
+        return true;
     }
 
     /**
