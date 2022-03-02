@@ -1,11 +1,11 @@
 $(function()
 {
-  $('#products').change(function()
-  {
-    var selectProductID = $('#products').val();
-    var attr            = createLink('story', 'batchCreate', 'productID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution, '', true);
-    $('#batchCreateStoryButton').attr('href',attr);
-  });
+    $('#products').change(function()
+    {
+        var selectProductID = $('#products').val();
+        var attr            = createLink('story', 'batchCreate', 'productID=' + selectProductID + '&branch=' + branch + '&moduleID=0&story=0&execution=' + execution, '', true);
+        $('#batchCreateStoryButton').attr('href',attr);
+    });
 })
 /**
  * When execution status change.
@@ -272,7 +272,7 @@ function createColumnCreateMenu(options)
     if(col.type == 'backlog')
     {
         if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStory,url: productCount>1 ? '#batchCreateStory' : $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID + '&plan=0&type=story&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe',attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStory, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID + '&plan=0&type=story&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe',attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&recTotal=0&recPerPage=50,&pageID=1&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         if(priv.canLinkStoryByPlan) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal', 'data-target': '#linkStoryByPlan','data-col' : col.id, 'data-lane' : laneID, 'class' : 'linkStoryByPlanButton'}});
     }
