@@ -3013,21 +3013,37 @@ class storyModel extends model
     }
 
     /**
-     * Get doing projects' members of a story.
+     * Get team members for a project or execution.
      *
      * @param  int    $storyID
+     * @param  string $actionType
      * @access public
      * @return array
      */
-    public function getProjectMembers($storyID)
+    public function getTeamMembers($storyID, $actionType)
     {
-        $projects = $this->dao->select('t1.project')
-            ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.story')->eq((int)$storyID)
-            ->andWhere('t2.status')->eq('doing')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchPairs();
-        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account'));
+        $teamMembers = array();
+        if($actionType == 'changed')
+        {
+            $executions = $this->dao->select('execution')->from(TABLE_TASK)
+                ->where('story')->eq($storyID)
+                ->andWhere('status')->ne('cancel')
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            if($executions) $teamMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($executions)->andWhere('type')->eq('execution')->fetchPairs('account');
+        }
+        else
+        {
+            $projects = $this->dao->select('t1.project')
+                ->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.story')->eq((int)$storyID)
+                ->andWhere('t2.status')->eq('doing')
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs();
+            if($projects) $teamMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account');
+        }
+        return $teamMembers;
     }
 
     /**
@@ -3541,13 +3557,13 @@ class storyModel extends model
         $toList = $story->assignedTo;
         $ccList = str_replace(' ', '', trim($story->mailto, ','));
 
-        /* If the action is changed or reviewed, mail to the project team. */
+        /* If the action is changed or reviewed, mail to the project or execution team. */
         if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
         {
-            $prjMembers = $this->getProjectMembers($story->id);
-            if($prjMembers)
+            $teamMembers = $this->getTeamMembers($story->id, $actionType);
+            if($teamMembers)
             {
-                $ccList .= ',' . join(',', $prjMembers);
+                $ccList .= ',' . join(',', $teamMembers);
                 $ccList = ltrim($ccList, ',');
             }
         }
