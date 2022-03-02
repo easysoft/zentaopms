@@ -431,6 +431,7 @@ class story extends control
                 foreach($mails as $story) $products[$story->storyID] = $productID;
                 $this->execution->linkStory($executionID, $stories, $products, $extra);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
+                return print(js::reload('parent.parent'));
             }
 
             /* If storyID not equal zero, subdivide this story to child stories and close it. */
