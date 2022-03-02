@@ -166,11 +166,14 @@ js::set('hasTaskButton', $hasTaskButton);
       <ul class='dropdown-menu pull-right'>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->createStory, '', "class='iframe'") . '</li>';?>
         <?php
-            if($canBatchCreateStory)
+        if($canBatchCreateStory)
+        {
+            if(count($allProducts)>1)
             {
-                if(count($allProducts)>1)
                 echo '<li>' . html::a('#batchCreateStory', $lang->execution->batchCreateStory, '', 'data-toggle="modal"') . '</li>';
-                else
+            }
+            else
+            {
                 echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='iframe' data-width='90%'") . '</li>';
             }
         ?>
