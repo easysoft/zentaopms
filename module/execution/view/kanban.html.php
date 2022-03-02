@@ -245,7 +245,7 @@ js::set('hasTaskButton', $hasTaskButton);
       <div class="modal-body">
         <div class='input-group'>
           <?php echo html::select('productName', $productNames, '', "class='form-control chosen' id='product'");?>
-          <span class='input-group-btn'><?php echo html::a(helper::createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=' . $branchID . '&executionID=' . $executionID,     '', true), $lang->bug->batchCreate, '', "id='batchCreateBugButton' class='btn btn-primary iframe'");?></span>
+          <span class='input-group-btn'><?php echo html::a(helper::createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=' . $branchID . '&executionID=' . $executionID,     '', true), $lang->bug->batchCreate, '', "id='batchCreateBugButton' class='btn btn-primary iframe' data-dismiss='modal' data-width='90%'");?></span>
         </div>
       </div>
     </div>
