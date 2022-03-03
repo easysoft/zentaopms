@@ -86,16 +86,6 @@ function updateFile(link)
 $(function()
 {
     $('.col-md-6:first').append("<div class='alert alert-info'><p><?php echo $lang->upgrade->needBuild4Add;?></p></div>");
-    searchFinish = true;
-    <?php
-    $condition = array();
-    foreach($needProcess as $processKey => $value) $condition[] = $processKey . 'Finish == true';
-    $condition = join(' && ', $condition);
-    ?>
-    if(<?php echo $condition?>)
-    {
-        $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
-    }
 })
 </script>
 <?php endif;?>
