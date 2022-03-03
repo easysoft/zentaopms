@@ -619,7 +619,7 @@ function notice()
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
-        if(($('#execution').length == 0 || $('#execution').val() == 0) && ($('#project').length == 0 || $('#project').val() == 0))
+        if($('#execution').length == 0 || $('#execution').val() == 0)
         {
             var branch = $('#branch').val();
             if(typeof(branch) == 'undefined') branch = 0;

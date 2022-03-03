@@ -392,7 +392,7 @@ class build extends control
         $isJsonView = $this->app->getViewType() == 'json';
         if($varName == 'openedBuild')
         {
-            if(empty($projectID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
             $params = ($type == 'all') ? 'noempty, withbranch' : 'noempty, noterminate, nodone, withbranch';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $projectID, 'project', $build);
@@ -401,7 +401,7 @@ class build extends control
         }
         if($varName == 'resolvedBuild')
         {
-            if(empty($projectID)) $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
+            if(empty($projectID)) return $this->ajaxGetProductBuilds($productID, $varName, $build, $branch, $index, $type);
 
             $params = ($type == 'all') ? 'withbranch' : 'noterminate, nodone, withbranch';
             $builds = $this->build->getBuildPairs($productID, $branch, $params, $projectID, 'project', $build);
