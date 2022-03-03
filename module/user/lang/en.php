@@ -220,6 +220,7 @@ $lang->user->error = new stdclass();
 $lang->user->error->account        = "ID %s，account must be >= 3 letters, underline or numbers";
 $lang->user->error->accountDupl    = "ID %s，account is used.";
 $lang->user->error->realname       = "ID %s，must be real name";
+$lang->user->error->visions        = "ID %s，must be version type";
 $lang->user->error->password       = "ID %s，password must be >= 6 characters.";
 $lang->user->error->mail           = "ID %s，enter valid Email address";
 $lang->user->error->reserved       = "ID %s，account is reserved.";
