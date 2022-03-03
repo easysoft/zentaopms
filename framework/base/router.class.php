@@ -1660,7 +1660,13 @@ class baseRouter
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
-        foreach($extFiles as $extFile) $modelLines .= self::removePHPTAG($extFile);
+        $fileNames = array();
+        foreach($extFiles as $extFile)
+        {
+            $fileName = basename($extFile);
+            if(!in_array($fileName, $fileNames)) $modelLines .= self::removePHPTAG($extFile);
+            $fileNames[] = $fileName;
+        }
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
         $replaceMark = '//**//';
