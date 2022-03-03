@@ -51,4 +51,4 @@ $app->loadModule();
 $output = ob_get_clean();
 
 /* Flush the buffer. */
-echo helper::removeUTF8Bom($app->formatData($output));
+echo $app->formatData(helper::removeUTF8Bom($output));

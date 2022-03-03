@@ -623,7 +623,6 @@ class baseRouter
         $this->cookie  = new super('cookie');
         $this->session = new super('session', $this->tab);
 
-        unset($GLOBALS);
         unset($_REQUEST);
 
         /* Change for CSRF. */
