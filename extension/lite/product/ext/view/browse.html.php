@@ -112,7 +112,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
         $tab   = $isProjectStory ? 'project' : 'product';
         $class = common::hasPriv('story', 'export') ? '' : "class=disabled";
         $misc  = common::hasPriv('story', 'export') ? "data-toggle='modal' data-type='iframe' class='export' data-app='$tab'" : "class=disabled";
-        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&projectID=0&browseType=$browseType&type=$storyType") : '#';
+        $link  = common::hasPriv('story', 'export') ?  $this->createLink('story', 'export', "productID=$productID&orderBy=$orderBy&executionID=$projectID&browseType=$browseType&type=$storyType") : '#';
         echo "<li $class>" . html::a($link, $lang->story->export, '', $misc) . "</li>";
         ?>
       </ul>
@@ -191,7 +191,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <?php endif;?>
       <?php echo $moduleTree;?>
       <div class="text-center">
-        <?php if($productID) common::printLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID", $lang->tree->manageMenu, '', "class='btn btn-info btn-wide'");?>
+        <?php if($productID) common::printLink('tree', 'browse', "rootID=$productID&view=story&currentModuleID=0&branch=$branchID&from=&projectID=$projectID", $lang->tree->manageMenu, '', "class='btn btn-info btn-wide'");?>
         <hr class="space-sm" />
       </div>
     </div>

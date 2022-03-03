@@ -1014,14 +1014,14 @@ EOF;
                 }
                 $listID = $this->user->createContactList($data->newList, $data->users);
                 $this->user->setGlobalContacts($listID, isset($data->share));
-                if(isonlybody()) return print(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
+                if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
             }
             elseif($data->mode == 'edit')
             {
                 $this->user->updateContactList($data->listID, $data->listName, $data->users);
                 $this->user->setGlobalContacts($data->listID, isset($data->share));
-                return print(js::locate(inlink('manageContacts', "listID={$data->listID}"), 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
             }
         }
 

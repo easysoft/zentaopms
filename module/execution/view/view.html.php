@@ -178,7 +178,7 @@
             <div class="detail">
               <h2 class="detail-title"><span class="label-id"><?php echo $execution->id;?></span> <span class="label label-light label-outline"><?php echo $execution->code;?></span> <?php echo $execution->name;?></h2>
               <div class="detail-content article-content">
-                <p><span class="text-limit" data-limit-size="40"><?php echo $execution->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></p>
+                <div><span class="text-limit" data-limit-size="40"><?php echo $execution->desc;?></span><a class="text-primary text-limit-toggle small" data-text-expand="<?php echo $lang->expand;?>"  data-text-collapse="<?php echo $lang->collapse;?>"></a></div>
                 <p>
                   <?php if($execution->deleted):?>
                   <span class='label label-danger label-outline'><?php echo $lang->execution->deleted;?></span>
@@ -253,7 +253,7 @@
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->totalEstimate;?></th>
-                      <td><?php echo (float)$execution->totalEstimate . $lang->execution->workHour;?></td>                     
+                      <td><?php echo (float)$execution->totalEstimate . $lang->execution->workHour;?></td>
                       <th><?php echo $lang->execution->totalDays;?></th>
                       <td><?php echo $execution->days;?></td>
                     </tr>
@@ -261,11 +261,11 @@
                       <th><?php echo $lang->execution->totalConsumed;?></th>
                       <td><?php echo (float)$execution->totalConsumed . $lang->execution->workHour;?></td>
                       <th><?php echo $lang->execution->totalHours;?></th>
-                      <td><?php echo (float)$execution->totalHours . $lang->execution->workHour;?></td>                     
+                      <td><?php echo (float)$execution->totalHours . $lang->execution->workHour;?></td>
                     </tr>
                     <tr>
                       <th><?php echo $lang->execution->totalLeft;?></th>
-                      <td><?php echo (float)$execution->totalLeft . $lang->execution->workHour;?></td>                    
+                      <td><?php echo (float)$execution->totalLeft . $lang->execution->workHour;?></td>
                     </tr>
                   </tbody>
                 </table>

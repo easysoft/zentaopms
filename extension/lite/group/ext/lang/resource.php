@@ -304,6 +304,7 @@ $lang->resource->kanban->close              = 'close';
 $lang->resource->kanban->delete             = 'delete';
 $lang->resource->kanban->createRegion       = 'createRegion';
 $lang->resource->kanban->editRegion         = 'editRegion';
+$lang->resource->kanban->performable        = 'performable';
 $lang->resource->kanban->sortRegion         = 'sortRegion';
 $lang->resource->kanban->sortGroup          = 'sortGroup';
 $lang->resource->kanban->deleteRegion       = 'deleteRegion';
@@ -330,12 +331,14 @@ $lang->resource->kanban->deleteCard         = 'deleteCard';
 $lang->resource->kanban->moveCard           = 'moveCard';
 $lang->resource->kanban->setCardColor       = 'setCardColor';
 $lang->resource->kanban->laneMove           = 'laneMove';
-$lang->resource->kanban->cardsSort          = 'cardsSort';
 $lang->resource->kanban->viewArchivedColumn = 'viewArchivedColumn';
 $lang->resource->kanban->viewArchivedCard   = 'viewArchivedCard';
 $lang->resource->kanban->restoreCard        = 'restoreCard';
 $lang->resource->kanban->setLaneHeight      = 'setLaneHeight';
+$lang->resource->kanban->setColumnWidth     = 'setColumnWidth';
 $lang->resource->kanban->batchCreateCard    = 'batchCreateCard';
+$lang->resource->kanban->import             = 'import';
+$lang->resource->kanban->enableArchived     = 'enableArchived';
 
 $lang->kanban->methodOrder[5]   = 'space';
 $lang->kanban->methodOrder[10]  = 'createSpace';
@@ -381,6 +384,10 @@ $lang->kanban->methodorder[200] = 'viewArchivedCard';
 $lang->kanban->methodorder[205] = 'archiveColumn';
 $lang->kanban->methodorder[210] = 'restoreCard';
 $lang->kanban->methodorder[215] = 'setLaneHeight';
+$lang->kanban->methodorder[220] = 'setColumnWidth';
+$lang->kanban->methodOrder[225] = 'batchCreateCard';
+$lang->kanban->methodorder[230] = 'import';
+$lang->kanban->methodorder[235] = 'enableArchived';
 
 /* Execution. */
 $lang->resource->execution = new stdclass();
@@ -710,8 +717,8 @@ $lang->resource->user->todo           = 'todo';
 $lang->resource->user->story          = 'story';
 $lang->resource->user->task           = 'task';
 //$lang->resource->user->bug            = 'bug';
-$lang->resource->user->testTask       = 'testTask';
-$lang->resource->user->testCase       = 'testCase';
+//$lang->resource->user->testTask       = 'testTask';
+//$lang->resource->user->testCase       = 'testCase';
 $lang->resource->user->execution      = 'execution';
 $lang->resource->user->dynamic        = 'dynamic';
 $lang->resource->user->cropAvatar     = 'cropAvatar';
@@ -1114,132 +1121,6 @@ if($config->edition == 'biz' or $config->edition == 'max')
 
     $lang->tree->methodOrder[35] = 'editHost';
     $lang->host->methodOrder[40] = 'groupMaintenance';
-
-    $lang->resource->ops = new stdclass();
-    $lang->resource->ops->index    = 'index';
-    $lang->resource->ops->setting  = 'setting';
-
-    $lang->ops->methodOrder[5]  = 'index';
-    $lang->ops->methodOrder[10] = 'setting';
-
-    $lang->resource->host = new stdclass();
-    $lang->resource->host->browse       = 'browse';
-    $lang->resource->host->create       = 'create';
-    $lang->resource->host->edit         = 'editAction';
-    $lang->resource->host->view         = 'view';
-    $lang->resource->host->delete       = 'deleteAction';
-    $lang->resource->host->changeStatus = 'changeStatus';
-    $lang->resource->host->treemap      = 'treemap';
-
-    $lang->host->methodOrder[5]  = 'browse';
-    $lang->host->methodOrder[10] = 'create';
-    $lang->host->methodOrder[15] = 'edit';
-    $lang->host->methodOrder[20] = 'view';
-    $lang->host->methodOrder[25] = 'delete';
-    $lang->host->methodOrder[30] = 'changeStatus';
-    $lang->host->methodOrder[35] = 'treemap';
-
-    $lang->resource->serverroom = new stdclass();
-    $lang->resource->serverroom->browse = 'browse';
-    $lang->resource->serverroom->create = 'create';
-    $lang->resource->serverroom->edit   = 'editAction';
-    $lang->resource->serverroom->view   = 'view';
-    $lang->resource->serverroom->delete = 'delete';
-
-    $lang->serverroom->methodOrder[5]  = 'browse';
-    $lang->serverroom->methodOrder[10] = 'create';
-    $lang->serverroom->methodOrder[15] = 'edit';
-    $lang->serverroom->methodOrder[20] = 'view';
-    $lang->serverroom->methodOrder[25] = 'delete';
-
-    $lang->resource->account = new stdclass();
-    $lang->resource->account->browse       = 'browse';
-    $lang->resource->account->create       = 'create';
-    $lang->resource->account->edit         = 'editAction';
-    $lang->resource->account->view         = 'view';
-    $lang->resource->account->delete       = 'deleteAction';
-
-    $lang->account = new stdclass();
-    $lang->account->methodOrder[5]  = 'browse';
-    $lang->account->methodOrder[10] = 'create';
-    $lang->account->methodOrder[15] = 'edit';
-    $lang->account->methodOrder[20] = 'view';
-    $lang->account->methodOrder[25] = 'delete';
-
-    $lang->resource->domain = new stdclass();
-    $lang->resource->domain->browse       = 'browse';
-    $lang->resource->domain->create       = 'create';
-    $lang->resource->domain->edit         = 'editAction';
-    $lang->resource->domain->view         = 'view';
-    $lang->resource->domain->delete       = 'deleteAction';
-
-    $lang->domain = new stdclass();
-    $lang->domain->methodOrder[5]  = 'browse';
-    $lang->domain->methodOrder[10] = 'create';
-    $lang->domain->methodOrder[15] = 'edit';
-    $lang->domain->methodOrder[20] = 'view';
-    $lang->domain->methodOrder[25] = 'delete';
-
-
-    $lang->resource->service = new stdclass();
-    $lang->resource->service->index  = 'index';
-    $lang->resource->service->create = 'create';
-    $lang->resource->service->edit   = 'edit';
-    $lang->resource->service->view   = 'view';
-    $lang->resource->service->delete = 'delete';
-    $lang->resource->service->manage = 'manage';
-    $lang->resource->service->browse = 'browse';
-
-    $lang->service->methodOrder[5]  = 'index';
-    $lang->service->methodOrder[10] = 'create';
-    $lang->service->methodOrder[15] = 'edit';
-    $lang->service->methodOrder[20] = 'view';
-    $lang->service->methodOrder[25] = 'delete';
-    $lang->service->methodOrder[30] = 'manage';
-    $lang->service->methodOrder[35] = 'browse';
-
-    $lang->resource->deploy = new stdclass();
-    $lang->resource->deploy->browse           = 'browse';
-    $lang->resource->deploy->create           = 'create';
-    $lang->resource->deploy->edit             = 'editAction';
-    $lang->resource->deploy->delete           = 'deleteAction';
-    $lang->resource->deploy->activate         = 'activateAction';
-    $lang->resource->deploy->finish           = 'finishAction';
-    $lang->resource->deploy->scope            = 'scope';
-    $lang->resource->deploy->manageScope      = 'manageScope';
-    $lang->resource->deploy->view             = 'view';
-    $lang->resource->deploy->cases            = 'casesAction';
-    $lang->resource->deploy->linkCases        = 'linkCases';
-    $lang->resource->deploy->unlinkCase       = 'unlinkCase';
-    $lang->resource->deploy->batchUnlinkCases = 'batchUnlinkCases';
-    $lang->resource->deploy->steps            = 'steps';
-    $lang->resource->deploy->manageStep       = 'manageStep';
-    $lang->resource->deploy->finishStep       = 'finishStep';
-    $lang->resource->deploy->assignTo         = 'assignAction';
-    $lang->resource->deploy->viewStep         = 'viewStep';
-    $lang->resource->deploy->editStep         = 'editStep';
-    $lang->resource->deploy->deleteStep       = 'deleteStep';
-
-    $lang->service->methodOrder[5]   = 'browse';
-    $lang->service->methodOrder[10]  = 'create';
-    $lang->service->methodOrder[15]  = 'edit';
-    $lang->service->methodOrder[20]  = 'delete';
-    $lang->service->methodOrder[25]  = 'activate';
-    $lang->service->methodOrder[30]  = 'finish';
-    $lang->service->methodOrder[35]  = 'scope';
-    $lang->service->methodOrder[40]  = 'manageScope';
-    $lang->service->methodOrder[45]  = 'view';
-    $lang->service->methodOrder[50]  = 'cases';
-    $lang->service->methodOrder[55]  = 'linkCases';
-    $lang->service->methodOrder[60]  = 'unlinkCase';
-    $lang->service->methodOrder[65]  = 'batchUnlinkCases';
-    $lang->service->methodOrder[70]  = 'steps';
-    $lang->service->methodOrder[75]  = 'manageStep';
-    $lang->service->methodOrder[80]  = 'finishStep';
-    $lang->service->methodOrder[85]  = 'assignTo';
-    $lang->service->methodOrder[90]  = 'viewStep';
-    $lang->service->methodOrder[95]  = 'editStep';
-    $lang->service->methodOrder[100] = 'deleteStep';
 
     $lang->resource->doc->diff    = 'diffAction';
     $lang->resource->doc->catalog = 'catalogAction';
