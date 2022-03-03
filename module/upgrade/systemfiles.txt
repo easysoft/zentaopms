@@ -3521,15 +3521,6 @@ overtime/view/sendmail.html.php
 overtime/view/setreviewer.html.php
 overtime/view/view.html.php
 overtime/view/x.browse.html.php
-owt/config.php
-owt/control.php
-owt/css/admin.css
-owt/lang/de.php
-owt/lang/en.php
-owt/lang/zh-cn.php
-owt/lang/zh-tw.php
-owt/model.php
-owt/view/admin.html.php
 personnel/config.php
 personnel/control.php
 personnel/css/accessible.css
