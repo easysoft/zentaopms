@@ -10,6 +10,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>
