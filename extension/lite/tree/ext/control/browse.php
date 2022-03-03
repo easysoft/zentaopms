@@ -10,7 +10,7 @@ class myTree extends tree
      * @param  int    $currentModuleID
      * @param  int    $branch
      * @param  string $from
-     * @param  int $projectID
+     * @param  int    $projectID
      * @access public
      * @return void
      */
