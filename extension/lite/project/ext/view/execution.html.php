@@ -80,7 +80,7 @@
                   <?php $teams = $memberGroup[$kanban->id];?>
                   <?php foreach($teams as $member):?>
                   <div title="<?php echo zget($users, $member->account);?>">
-                    <?php echo html::smallAvatar(array('avatar' => zget($usersAvatar, $member->account), 'account' => $member->account)); ?>
+                    <?php echo html::smallAvatar(array('avatar' => zget($usersAvatar, $member->account), 'account' => $member->account, 'name' => isset($member->realname) ? $member->realname : '')); ?>
                   </div>
                   <?php endforeach;?>
                 </div>

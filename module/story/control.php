@@ -2461,7 +2461,7 @@ class story extends control
         }
         else
         {
-            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $productName = $productID ? $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
                 $browseType = $this->lang->product->featureBar['browse'][$browseType];

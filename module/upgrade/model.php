@@ -5794,7 +5794,7 @@ class upgradeModel extends model
                 }
             }
 
-            if(empty($customFiles)) $encryptModules[] = $module;
+            if(empty($customFiles) or $module == 'owt') $encryptModules[] = $module;
         }
         return $encryptModules;
     }
