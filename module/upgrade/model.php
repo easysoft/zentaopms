@@ -461,6 +461,7 @@ class upgradeModel extends model
         }
 
         $this->deletePatch();
+        $this->adjustPRJ4Task();
         return true;
     }
 
@@ -5957,5 +5958,25 @@ class upgradeModel extends model
             $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
         }
         file_put_contents($filePath, $content);
+    }
+
+    /**
+     * Adjust the project field of the zt_task.
+     *
+     * @access public
+     * @return bool
+     */
+    public function adjustPRJ4Task()
+    {
+        $executionPairs = $this->dao->select('id,project')->from(TABLE_PROJECT)->where('type')->in('sprint,stage,kanban')->fetchPairs();
+        $noProjectTasks = $this->dao->select('*')->from(TABLE_TASK)->where('project')->eq(0)->fetchAll('id');
+        foreach($noProjectTasks as $taskID => $task)
+        {
+            if(!$task->execution) continue;
+            $projectID = zget($executionPairs, $task->execution, 0);
+            $this->dao->update(TABLE_TASK)->set('project')->eq($projectID)->where('id')->eq($taskID)->exec();
+        }
+
+        return true;
     }
 }
