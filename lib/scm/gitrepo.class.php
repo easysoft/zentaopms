@@ -517,7 +517,7 @@ class GitRepo
         if(!scm::checkRevision($version)) return array();
 
         if($version == 'HEAD' and $branch) $version = $branch;
-        $revision = empty($version) ? $revision : $version;
+        $revision = $version;
         $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
         $count    = $count == 0 ? '' : "-n $count";
 
