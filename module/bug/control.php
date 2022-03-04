@@ -1835,10 +1835,11 @@ class bug extends control
      *
      * @param  int    $bugID
      * @param  string $confirm  yes|no
+     * @param  string $extra
      * @access public
      * @return void
      */
-    public function delete($bugID, $confirm = 'no')
+    public function delete($bugID, $confirm = 'no', $extra = '')
     {
         $bug = $this->bug->getById($bugID);
         if($confirm == 'no')
@@ -1863,6 +1864,12 @@ class bug extends control
             $this->executeHooks($bugID);
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
+
+            if($this->app->tab == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getByID($bug->execution);
+                if($execution->type == 'kanban') js::console.log(isonlybody() ? '1' : '2');//return print(js::reload(isonlybody() ? 'parent.parent' : 'parent'));
+            }
 
             $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
             return print(js::locate($locateLink, 'parent'));
