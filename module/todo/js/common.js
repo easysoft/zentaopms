@@ -51,11 +51,9 @@ function loadList(type, id)
     }
 
 
-    nameBoxLabel = typeof(nameBoxLabel) == "undefined" ? '' : nameBoxLabel;
-    if(nameBoxLabel)
+    if(typeof(nameBoxLabel) != "undefined")
     {
-        vision = typeof(vision) == "undefined" ? '' : vision;
-        if(type == 'custom' || (vision && vision == 'rnd'))
+        if(type == 'custom' || (typeof(vision) != "undefined" && vision == 'rnd'))
         {
             $('#nameBoxLabel').text(nameBoxLabel.custom);
         }
