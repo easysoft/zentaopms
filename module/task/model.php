@@ -3221,7 +3221,7 @@ class taskModel extends model
                 $this->printAssignedHtml($task, $users);
                 break;
             case 'lane':
-                echo substr($task->lane, 0, 8);
+                echo mb_substr($task->lane, 0, 8);
                 break;
             case 'assignedDate':
                 echo substr($task->assignedDate, 5, 11);
