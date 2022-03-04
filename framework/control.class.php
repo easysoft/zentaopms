@@ -137,7 +137,7 @@ class control extends baseControl
     {
         $installedVersion = $this->loadModel('setting')->getVersion();
 
-        if(is_numeric($installedVersion[0]) and $this->config->edition == 'max')
+        if($installedVersion[0] != 'm' and $this->config->edition == 'max')
         {
             if($this->config->systemMode == 'classic' and $this->app->getModuleName() != 'upgrade')
             {
