@@ -3023,13 +3023,13 @@ class upgradeModel extends model
         if(strpos($fromVersion, 'max') === false and strpos($fromVersion, 'biz') === false and (strpos($fromVersion, 'pro') === false ? version_compare($fromVersion, '8.3', '<') : version_compare($fromVersion, 'pro5.4', '<'))) $needProcess['updateFile'] = true;
         if(strpos($fromVersion, 'max') === false and $this->config->systemMode == 'new')
         {
-            if(strpos($fromVersion, 'pro') !== false and version_compare($fromVersion, 'pro10.0', '<'))
+            if(strpos($fromVersion, 'pro') !== false)
             {
-                $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'pro10.0', '<')) $needProcess['search'] = true;
             }
-            elseif(strpos($fromVersion, 'biz') !== false and version_compare($fromVersion, 'biz5.0', '<'))
+            elseif(strpos($fromVersion, 'biz') !== false)
             {
-                $needProcess['search'] = true;
+                if(version_compare($fromVersion, 'biz5.0', '<')) $needProcess['search'] = true;
             }
             elseif(version_compare($fromVersion, '15.0.rc1', '<'))
             {
@@ -5794,7 +5794,7 @@ class upgradeModel extends model
                 }
             }
 
-            if(empty($customFiles)) $encryptModules[] = $module;
+            if(empty($customFiles) or $module == 'owt') $encryptModules[] = $module;
         }
         return $encryptModules;
     }

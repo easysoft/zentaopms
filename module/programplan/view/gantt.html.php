@@ -10,7 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
-<?php include '../../common/ext/view/gantt.html.php';?>
+<?php include '../../common/view/gantt.html.php';?>
 <style>
 #ganttView {height: 600px;}
 #mainContent:before {background: #fff;}

@@ -36,8 +36,8 @@
       </h2>
     </div>
 
-    <form method='post' target='hiddenwin' id='dataform'>
-      <table class='table table-form'> 
+    <form method='post' target='hiddenwin' id='dataform' class='main-form form-ajax' enctype='multipart/form-data'>
+      <table class='table table-form'>
         <tr>
           <th class='w-80px'><?php echo $lang->user->contacts->listName;?></th>
           <td class='w-300px'>

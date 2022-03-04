@@ -42,7 +42,7 @@
 #cards .project-members {float: left; height: 24px; line-height: 24px;}
 #cards .project-members > a {display: inline-block; height: 24px;}
 #cards .project-members > a + a {margin-left: -5px;}
-#cards .project-members > a > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 1px;}
+#cards .project-members > a > .avatar {display: inline-block; margin-right: 1px;}
 #cards .project-members > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: relative; border-radius: 50%; top: 3px; margin: 0 3px;}
 #cards .project-members > span:before,
 #cards .project-members > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
@@ -155,13 +155,13 @@
                 $count ++;
                 ?>
                 <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
+                  <?php echo html::middleAvatar(array('avatar' => $usersAvatar[$member], 'account' => $member, 'name' => $users[$member]), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
                 </a>
                 <?php endforeach;?>
                 <?php if($project->teamCount > 3):?>
                 <?php if($project->teamCount > 4) echo '<span>…</span>';?>
                 <a href='<?php echo helper::createLink('project', 'team', "projectID=$projectID");?>' title="<?php echo $users[$member];?>">
-                  <?php echo html::smallAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
+                  <?php echo html::middleAvatar(array('avatar' => $usersAvatar[end($project->teamMembers)], 'account' => $member, 'name' => $users[$member]), 'avatar-circle avatar-' . zget($userIdPairs, $member)); ?>
                 </a>
                 <?php endif;?>
               </div>

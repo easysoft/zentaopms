@@ -408,12 +408,22 @@ EOF;
         /* Get tasks. */
         $tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
 
-        $parents = array();
+        $parents         = array();
+        $executionIDList = array();
         foreach($tasks as $task)
         {
+            if($this->config->systemMode == 'new') $executionIDList[$task->execution] = $task->execution;
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+
+        if($this->config->systemMode == 'new')
+        {
+            $projects = $this->dao->select('t1.id,t1.name,t2.id as execution')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.parent')
+                ->where('t2.id')->in($executionIDList)
+                ->fetchAll('execution');
+        }
 
         foreach($tasks as $task)
         {
@@ -447,10 +457,10 @@ EOF;
         $this->view->recPerPage = $recPerPage;
         $this->view->pageID     = $pageID;
         $this->view->orderBy    = $orderBy;
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
         $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->view->pager      = $pager;
         $this->view->mode       = 'task';
+        $this->view->projects   = isset($projects) ? $projects : array();
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
@@ -1001,19 +1011,27 @@ EOF;
     {
         if($_POST)
         {
-            $data = fixer::input('post')->get();
+            $data = fixer::input('post')->setDefault('users', array())->get();
             if($data->mode == 'new')
             {
+                if(empty($data->newList))
+                {
+                    dao::$errors['newList'] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
+
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                    return $this->send($response);
+                }
                 $listID = $this->user->createContactList($data->newList, $data->users);
                 $this->user->setGlobalContacts($listID, isset($data->share));
-                if(isonlybody()) return print(js::closeModal('parent.parent', '', ' function(){parent.parent.ajaxGetContacts(\'#mailto\')}'));
-                return print(js::locate(inlink('manageContacts', "listID=$listID"), 'parent'));
+                if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'closeModal' => true, 'callback' => "parent.parent.ajaxGetContacts('#mailto')"));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
             }
             elseif($data->mode == 'edit')
             {
                 $this->user->updateContactList($data->listID, $data->listName, $data->users);
                 $this->user->setGlobalContacts($data->listID, isset($data->share));
-                return print(js::locate(inlink('manageContacts', "listID={$data->listID}"), 'parent'));
+                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
             }
         }
 
@@ -1277,6 +1295,6 @@ EOF;
 
         $_SESSION['user']->rights = $this->loadModel('user')->authorize($this->app->user->account);
 
-        echo js::locate($this->createLink('my', 'index'), 'parent');
+        echo js::locate($this->createLink('index', 'index'), 'parent');
     }
 }

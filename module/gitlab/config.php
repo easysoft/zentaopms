@@ -1,4 +1,4 @@
-﻿<?php
+<?php
 $config->gitlab->create = new stdclass;
 $config->gitlab->create->requiredFields = 'name,url,token';
 

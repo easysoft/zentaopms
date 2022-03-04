@@ -479,6 +479,9 @@ class commonModel extends model
         {
             $currentVision = $app->config->vision;
             $userVisions   = array_filter(explode(',', $app->user->visions));
+
+            if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
+
             if(count($userVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
             echo "<ul class='dropdown-menu pull-right'>";
@@ -506,31 +509,39 @@ class commonModel extends model
     {
         global $app, $config, $lang;
 
-        $html  = "<ul class='dropdown-menu pull-right create-list'>";
+        $html = "<ul class='dropdown-menu pull-right create-list'>";
 
         /* Initialize the default values. */
         $showCreateList = $needPrintDivider = false;
 
         /* Get default product id. */
-        $deletedProducts   = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '1'")->fetchAll();
-        $deletedProductIds = array();
-        foreach($deletedProducts as $product) $deletedProductIds[] = $product->id;
-
-        $productID = (isset($_SESSION['product']) and !in_array($_SESSION['product'], $deletedProductIds)) ? $_SESSION['product'] : 0;
+        $productID = isset($_SESSION['product']) ? $_SESSION['product'] : 0;
+        if($productID)
+        {
+            $product = $app->dbh->query("SELECT id  FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id = '{$productID}'")->fetch();
+            if(empty($product)) $productID = 0;
+        }
         if(!$productID and $app->user->view->products)
         {
-            $viewProducts = explode(',', $app->user->view->products);
-            $viewProducts = array_diff($viewProducts, $deletedProductIds);
-            $productID    = current($viewProducts);
+            $product = $app->dbh->query("SELECT id FROM " . TABLE_PRODUCT . " WHERE `deleted` = '0' and vision = '{$config->vision}' and id " . helper::dbIN($app->user->view->products) . " order by `order` desc limit 1")->fetch();
+            if($product) $productID = $product->id;
         }
+
+        if($config->vision == 'lite')
+        {
+            $condition  = " WHERE `deleted` = '0' AND `vision` = 'lite' AND `model` = 'kanban'";
+            if(!$app->user->admin) $condition .= " AND `id` " . helper::dbIN($app->user->view->projects);
+
+            $object = $app->dbh->query("select id from " . TABLE_PROJECT . $condition . ' LIMIT 1')->fetch();
+            if(empty($object)) unset($lang->createIcons['story'], $lang->createIcons['task'], $lang->createIcons['execution']);
+        }
+
+        if($config->edition == 'open') unset($lang->createIcons['effort']);
+        if($config->systemMode == 'classic') unset($lang->createIcons['project'], $lang->createIcons['program']);
 
         /* Check whether the creation permission is available, and print create buttons. */
         foreach($lang->createIcons as $objectType => $objectIcon)
         {
-            if($config->edition == 'open' and $objectType == 'effort') continue;
-            if($config->systemMode == 'classic' and strpos('project|program', $objectType) !== false) continue;
-            if(!empty($_COOKIE['feedbackView']) and strpos('todo|effort', $objectType) === false) continue;
-
             /* Change icon when object type is execution and mode is classic. */
             if($config->systemMode == 'classic' and $objectType == 'execution') $objectIcon = 'project';
 
@@ -587,12 +598,24 @@ class commonModel extends model
                     case 'story':
                         if(!$productID and $config->vision == 'lite')
                         {
-                            $module       = 'project';
-                            $params       = "model=kanban";
+                            $module = 'project';
+                            $params = "model=kanban";
                         }
                         else
                         {
                             $params = "productID=$productID&branch=0&moduleID=0&storyID=0&objectID=0&bugID=0&planID=0&todoID=0&extra=from=global";
+                            if($config->vision == 'lite')
+                            {
+                                $projectID = isset($_SESSION['project']) ? $_SESSION['project'] : 0;
+                                $projects  = $app->dbh->query("SELECT t2.id FROM " . TABLE_PROJECTPRODUCT . " AS t1 LEFT JOIN " . TABLE_PROJECT . " AS t2 ON t1.project = t2.id WHERE t1.`product` = '{$productID}' and t2.`type` = 'project' and t2.id " . helper::dbIN($app->user->view->projects) . " ORDER BY `order` desc")->fetchAll();
+
+                                $projectIdList = array();
+                                foreach($projects as $project) $projectIdList[$project->id] = $project->id;
+                                if($projectID and !isset($projectIdList[$projectID])) $projectID = 0;
+                                if(empty($projectID)) $projectID = key($projectIdList);
+
+                                $params = "productID={$productID}&branch=0&moduleID=0&storyID=0&objectID={$projectID}&bugID=0&planID=0&todoID=0&extra=from=global";
+                            }
                         }
 
                         break;
@@ -650,7 +673,7 @@ class commonModel extends model
         echo "<ul class='dropdown-menu pull-left'>";
 
         $manualUrl = ((!empty($config->isINT)) ? $config->manualUrl['int'] : $config->manualUrl['home']) . '&theme=' . $_COOKIE['theme'];
-        echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='open-in-app' id='helpLink' data-app='help'") . '</li>';
+        echo '<li>' . html::a($manualUrl, $lang->manual, '', "class='show-in-app' id='helpLink' data-app='help'") . '</li>';
 
         echo '<li>' . html::a(helper::createLink('misc', 'changeLog'), $lang->changeLog, '', "class='iframe' data-width='800' data-headerless='true' data-backdrop='true' data-keyboard='true'") . '</li>';
         echo "</ul></li>\n";
@@ -2171,8 +2194,6 @@ EOD;
 
         if(isset($this->app->user))
         {
-            if(in_array($module, $this->config->programPriv->waterfall)) return true;
-
             $this->app->user = $this->session->user;
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }

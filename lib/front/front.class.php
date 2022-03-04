@@ -254,6 +254,14 @@ class html extends baseHTML
         {
             $userObj->avatar  = $user['avatar'];
             $userObj->account = $user['account'];
+            $userObj->name    = isset($user['name']) ? $user['name'] : (isset($user['realname']) ? $user['realname'] : $user['account']);
+            $user = $userObj;
+        }
+        elseif(is_object($user))
+        {
+            $userObj->avatar  = $user->avatar;
+            $userObj->account = $user->account;
+            $userObj->name    = isset($user->name) ? $user->name : (isset($user->realname) ? $user->realname : $user->account);
             $user = $userObj;
         }
 
@@ -272,13 +280,40 @@ class html extends baseHTML
         {
             $colorHue = (html::stringToCode($user->account) * $hueDistance) % 360;
             $style   .= "background: hsl($colorHue, $saturation, $lightness);";
-            if(is_numeric($size)) $style .= 'font-size: ' . round($size * 2 / 3) . 'px;';
+            if(is_numeric($size)) $style .= 'font-size: ' . round($size / 2) . 'px;';
         }
 
         if(!empty($style)) $style = "style='$style'";
 
         $html  = "<$tag class='avatar$extraClassName $className' $attrib $style>";
-        $html .= $hasImage ? html::image($user->avatar) : '<span>' . strtoupper($user->account[0]) . '</span>';
+        if($hasImage)
+        {
+            $html .= html::image($user->avatar);
+        }
+        else
+        {
+            $mbLength = mb_strlen($user->name, 'utf-8');
+            $strLength = strlen($user->name);
+
+            $text = '';
+            if($strLength === $mbLength)
+            {
+                /* Pure alphabet or numbers 纯英文情况 */
+                $text .= strtoupper($user->name[0]);
+            }
+            else if($strLength % $mbLength == 0 && $strLength % 3 == 0)
+            {
+                /* Pure chinese characters 纯中文的情况 */
+                $text .= $mbLength <= 2 ? $user->name : mb_substr($user->name, $mbLength - 2, $mbLength, 'utf-8');
+            }
+            else
+            {
+                /* Mix of Chinese and English 中英文混合的情况 */
+                $text .= $mbLength <= 2 ? $user->name : mb_substr($user->name, 0, 2, 'utf-8');
+            }
+            $textLength = mb_strlen($text, 'utf-8');
+            $html .= "<span class='text text-len-$textLength'>$text</span>";
+        }
         $html .= "</$tag>";
 
         return $html;
@@ -298,6 +333,22 @@ class html extends baseHTML
     static public function smallAvatar($user, $className = 'avatar-circle', $attrib = '', $tag = 'div')
     {
         return html::avatar($user, 'sm', $className, $attrib, $tag);
+    }
+
+    /**
+     * Create a middle size user avatar.
+     *
+     * @param  string|object $user      User object or user avatar url or user account
+     * @param  string        $className Avatar element class name, default is "avatar-circle"
+     * @param  string        $attrib    Extra attributes on avatar element
+     * @param  string        $tag       Avatar element tag name, default is "div"
+     * @static
+     * @access public
+     * @return string
+     */
+    static public function middleAvatar($user, $className = 'avatar-circle', $attrib = '', $tag = 'div')
+    {
+        return html::avatar($user, 'md', $className, $attrib, $tag);
     }
 
     /**

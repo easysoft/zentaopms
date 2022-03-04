@@ -56,6 +56,8 @@ class story extends control
         else if($this->app->tab == 'project')
         {
             $objectID = empty($objectID) ? $this->session->project : $objectID;
+            $objects  = $this->project->getPairsByProgram();
+            $objectID = $this->project->saveState($objectID, $objects);
             $this->project->setMenu($objectID);
         }
         else if($this->app->tab == 'execution')
@@ -2459,7 +2461,7 @@ class story extends control
         }
         else
         {
-            $productName = $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name');
+            $productName = $productID ? $this->dao->findById($productID)->from(TABLE_PRODUCT)->fetch('name') : $this->lang->product->all;
             if(isset($this->lang->product->featureBar['browse'][$browseType]))
             {
                 $browseType = $this->lang->product->featureBar['browse'][$browseType];

@@ -35,7 +35,11 @@ class control extends baseControl
 
         $this->app->setOpenApp();
 
-        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api')) $this->setPreference();
+        if(defined('IN_USE') or (defined('RUN_MODE') and RUN_MODE != 'api'))
+        {
+            $this->setPreference();
+            $this->forceUpgrade();
+        }
 
         if(!isset($this->config->bizVersion)) return false;
 
@@ -121,6 +125,29 @@ class control extends baseControl
         {
             $this->locate(helper::createLink('my', 'preference'));
         }
+    }
+
+    /**
+     * If change the edition, trigger the upgrade process.
+     *
+     * @access public
+     * @return void
+     */
+    public function forceUpgrade()
+    {
+        $installedVersion = $this->loadModel('setting')->getVersion();
+
+        if($installedVersion[0] != 'm' and $this->config->edition == 'max')
+        {
+            if($this->config->systemMode == 'classic' and $this->app->getModuleName() != 'upgrade')
+            {
+                $this->loadModel('setting')->setItem('system.common.global.mode', 'new');
+                $this->loadModel('setting')->setItem('system.common.global.version', $this->config->version);
+                $this->locate(helper::createLink('upgrade', 'mergeTips'));
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -360,6 +387,10 @@ class control extends baseControl
     {
         if($this->config->edition == 'open') return false;
         if(empty($_POST)) return false;
+
+        $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
+        if(empty($action)) return false;
+        if($action->extensionType == 'none' and $action->buildin == 1) return false;
 
         $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
         $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);

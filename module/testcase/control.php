@@ -780,7 +780,7 @@ class testcase extends control
         {
             $changes = array();
             $files   = array();
-            if($comment == false)
+            if($comment == false or $comment == 'false')
             {
                 $changes = $this->testcase->update($caseID);
                 if(dao::isError()) return print(js::error(dao::getError()));

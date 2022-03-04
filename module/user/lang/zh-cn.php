@@ -220,6 +220,7 @@ $lang->user->error = new stdclass();
 $lang->user->error->account        = "【ID %s】的用户名应该为：三位以上的英文、数字或下划线的组合";
 $lang->user->error->accountDupl    = "【ID %s】的用户名已经存在";
 $lang->user->error->realname       = "【ID %s】的真实姓名必须填写";
+$lang->user->error->visions        = "【ID %s】的版本类型必须填写";
 $lang->user->error->password       = "【ID %s】的密码必须为六位以上";
 $lang->user->error->mail           = "【ID %s】的邮箱地址不正确";
 $lang->user->error->reserved       = "【ID %s】的用户名已被系统预留";

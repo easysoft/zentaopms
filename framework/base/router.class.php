@@ -623,7 +623,6 @@ class baseRouter
         $this->cookie  = new super('cookie');
         $this->session = new super('session', $this->tab);
 
-        unset($GLOBALS);
         unset($_REQUEST);
 
         /* Change for CSRF. */
@@ -1661,7 +1660,9 @@ class baseRouter
         $modelLines .= "class $tmpModelClass extends $modelClass \n{\n";
 
         /* 将扩展文件的代码合并到代码中。Cycle all the extension files and merge them into model lines. */
-        foreach($extFiles as $extFile) $modelLines .= self::removePHPTAG($extFile);
+        $extModels = array();
+        foreach($extFiles  as $extFile)  $extModels[basename($extFile)] = $extFile;
+        foreach($extModels as $extModel) $modelLines .= self::removePHPTAG($extModel);
 
         /* 做个标记，方便后面替换代码使用。Make a mark for replacing codes. */
         $replaceMark = '//**//';

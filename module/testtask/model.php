@@ -68,9 +68,10 @@ class testtaskModel extends model
      * @access public
      * @return array
      */
-    public function getProductTasks($productID, $branch = 0, $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
+    public function getProductTasks($productID, $branch = 'all', $orderBy = 'id_desc', $pager = null, $scopeAndStatus = array(), $beginTime = 0, $endTime = 0)
     {
         $products = $scopeAndStatus[0] == 'all' ? $this->app->user->view->products : array();
+        $branch   = $scopeAndStatus[0] == 'all' ? 'all' : $branch;
 
         return $this->dao->select("t1.*, t2.name AS productName, t3.name AS executionName, t4.name AS buildName, t4.branch AS branch")
             ->from(TABLE_TESTTASK)->alias('t1')

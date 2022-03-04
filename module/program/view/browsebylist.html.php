@@ -66,9 +66,9 @@
         <td class='c-status'><span class="status-program status-<?php echo $program->status?>"><?php echo zget($lang->project->statusList, $program->status, '');?></span></td>
         <td>
           <?php if(!empty($program->PM)):?>
-          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM), 'avatar-circle avatar-' . zget($userIdPairs, $program->PM)); ?>
-          <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php $userName = zget($users, $program->PM);?>
+          <?php echo html::smallAvatar(array('avatar' => $usersAvatar[$program->PM], 'account' => $program->PM, 'name' => $userName), 'avatar-circle avatar-' . zget($userIdPairs, $program->PM)); ?>
+          <?php $userID   = isset($PMList[$program->PM]) ? $PMList[$program->PM]->id : '';?>
           <?php echo html::a($this->createLink('user', 'profile', "userID=$userID", '', true), $userName, '', "title='{$userName}' data-toggle='modal' data-type='iframe' data-width='600'");?>
           <?php endif;?>
         </td>
@@ -118,15 +118,16 @@
             </ul>
           </div>
           <?php endif;?>
+          <?php $class = $program->model == 'kanban' ? 'disabled' : '';?>
           <?php common::printIcon('project', 'edit', "projectID=$program->id", $program, 'list', 'edit', '', 'iframe', true, '', '', $program->id);?>
-          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', '', '', 'data-app="project"', '', $program->id);?>
-          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', '', '', 'data-app="project"', '', $program->id);?>
+          <?php common::printIcon('project', 'manageMembers', "projectID=$program->id", $program, 'list', 'group', '', "$class", '', 'data-app="project"', '', $program->id);?>
+          <?php common::printIcon('project', 'group',         "projectID=$program->id", $program, 'list', 'lock', '', "$class", '', 'data-app="project"', '', $program->id);?>
           <?php if(common::hasPriv('project', 'manageProducts') || common::hasPriv('project', 'whitelist') || common::hasPriv('project', 'delete')):?>
           <div class='btn-group'>
             <button type='button' class='btn dropdown-toggle' data-toggle='dropdown' title="<?php echo $this->lang->more;?>"><i class='icon-more-alt'></i></button>
             <ul class='dropdown-menu pull-right text-center' role='menu'>
-              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', '', '', "data-app='project'", '', $program->id);?>
-              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', '', '', "data-app='project'", '', $program->id);?>
+              <?php common::printIcon('project', 'manageProducts', "projectID=$program->id&from=browse", $program, 'list', 'link', '', "$class", '', "data-app='project'", '', $program->id);?>
+              <?php common::printIcon('project', 'whitelist',      "projectID=$program->id&module=project&from=browse", $program, 'list', 'shield-check', '', "$class", '', "data-app='project'", '', $program->id);?>
               <?php if(common::hasPriv('project','delete')) echo html::a($this->createLink("project", "delete", "projectID=$program->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn' title='{$this->lang->delete}' data-group='program'");?>
             </ul>
           </div>

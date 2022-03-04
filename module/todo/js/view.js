@@ -80,8 +80,8 @@ function createProject()
 
     var link = createLink('project', 'create');
 
-    config.onlybody      = onlybody;
-    parent.location.href = link;
+    config.onlybody = onlybody;
+    window.parent.$.apps.open(link, 'project');
 }
 
 /**
@@ -97,8 +97,8 @@ function createExecution()
 
     var link = createLink('execution', 'create');
 
-    config.onlybody      = onlybody;
-    parent.location.href = link;
+    config.onlybody = onlybody;
+    window.parent.$.apps.open(link, 'execution');
 }
 
 /**

@@ -1,12 +1,14 @@
 VERSION     = $(shell head -n 1 VERSION)
-XUANVERSION = $(shell head -n 1 xuan/XUANVERSION)
-XVERSION    = $(shell head -n 1 xuan/XVERSION)
+XUANVERSION = $(shell head -n 1 xuanxuan/XUANVERSION)
+XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 
 XUANPATH     := $(XUANXUAN_SRC_PATH)
 BUILD_PATH   := $(if $(ZENTAO_BUILD_PATH),$(ZENTAO_BUILD_PATH),$(shell pwd))
 RELEASE_PATH := $(if $(ZENTAO_RELEASE_PATH),$(ZENTAO_RELEASE_PATH),$(shell pwd))
 
-all: ci
+all:
+	make clean
+	make ci
 clean:
 	rm -fr zentaopms
 	rm -fr zentaostory
@@ -60,7 +62,7 @@ zentaoxx:
 	mkdir -p zentaoxx/db
 	mkdir -p zentaoxx/www
 	mkdir -p zentaoxx/extension/xuan/common/ext/model/
-	cd $(XUANPATH); git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
+	cd $(XUANPATH); git pull; git archive --format=zip --prefix=xuan/ $(XUANVERSION) > xuan.zip
 	mv $(XUANPATH)/xuan.zip .
 	unzip xuan.zip
 	cp xuan/xxb/config/ext/_0_xuanxuan.php zentaoxx/config/ext/
@@ -70,7 +72,7 @@ zentaoxx:
 	cp -r xuan/xxb/module/im zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/client zentaoxx/extension/xuan/
 	cp -r xuan/xxb/module/license zentaoxx/extension/xuan/
-	cp -r xuan/xxb/module/owt zentaoxx/extension/xuan/
+	cp -r xuan/xxb/module/conference zentaoxx/extension/xuan/
 	mkdir -p zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/header.modal.html.php zentaoxx/extension/xuan/common/view
 	cp -r xuan/xxb/module/common/view/marked.html.php zentaoxx/extension/xuan/common/view
@@ -144,7 +146,6 @@ package:
 	chmod 777 zentaopms/www
 	chmod a+rx zentaopms/bin/*
 	if [ ! -d "zentaopms/config/ext" ]; then mkdir zentaopms/config/ext; fi
-	for module in `ls zentaopms/module/`; do if [ -d "zentaopms/module/$$module" ] && [ ! -d "zentaopms/module/$$module/ext" ]; then mkdir zentaopms/module/$$module/ext; fi done
 	find zentaopms/ -name ext |xargs chmod -R 777
 	mkdir zentaopms/tools; cp tools/cn2tw.php zentaopms/tools; cd zentaopms/tools; php cn2tw.php
 	#rm -r zentaopms/module/misc/ext

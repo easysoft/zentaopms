@@ -26,7 +26,7 @@
 .kanbans .kanban-members {float: left; height: 24px; line-height: 24px;}
 .kanbans .kanban-members > div {display: inline-block; height: 24px;}
 .kanbans .kanban-members > div + div {margin-left: -5px;}
-.kanbans .kanban-members > div > .avatar {display: inline-block; width: 24px; height: 24px; line-height: 24px; margin-right: 1px;}
+.kanbans .kanban-members > div > .avatar {display: inline-block; margin-right: 1px;}
 .kanbans .kanban-members > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position: relative; border-radius: 50%; top: 3px; margin: 0 3px;}
 .kanbans .kanban-members > span:before,
 .kanbans .kanban-members > span:after {content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0; border-radius: 50%}
