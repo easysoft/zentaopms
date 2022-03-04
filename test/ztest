@@ -24,6 +24,8 @@ switch($argv[1])
         break;
     case 'task':
         ztfRun('model/task');
+    case 'execution':
+        ztfRun('model/execution');
         break;
     case 'model':
         ztfRun('model');

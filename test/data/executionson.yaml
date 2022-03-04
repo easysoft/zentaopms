@@ -6,15 +6,15 @@ fields:
     note: "名称"
     fields:
     - field: name1
-      range: 迭代{30},阶段{30},看板{30}
+      range: 子阶段
     - field: name2
       range: 1-10000
   - field: project
-    range: 11-100
+    range: 41-70
   - field: model
     range: []
   - field: type
-    range: sprint{30},stage{30},kanban{30}
+    range: stage
   - field: status
     range: wait,doing
   - field: percent
@@ -25,15 +25,40 @@ fields:
     range: 1-10000
     prefix: "迭代描述"
   - field: grade
-    range: 1
+    range: 2
   - field: parent
-    range: 11-40,41-70,71-100
+    range: 131-160
   - field: path
-    prefix: ","
-    postfix: ","
-    range: 101-700
+    fields:
+     - field: grade1
+       prefix: ","
+       postfix: ","
+       range: 131-160
+     - field: self
+       postfix: ","
+       range: 701-730
   - field: acl
     range: open{4},private{4}
+  - field: PO
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: PM
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: QD
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: RD
+    range: admin
+    prefix: ""
+    postfix: ""
+    format: ""
   - field: whitelist
     froms:
       - from: common.user.v1.yaml

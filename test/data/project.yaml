@@ -45,11 +45,15 @@ fields:
     range: 1-10000
     prefix: "project"
   - field: begin
-    from: common.date.v1.yaml
-    use: date
+    range: "(-2M)-(+M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: end
-    from: common.date.v1.yaml
-    use: date
+    range: "(+1w)-(+2M):1D"
+    type: timestamp
+    format: "YY/MM/DD"
+    postfix: "\t"
   - field: PO
     range:
   - field: PM
