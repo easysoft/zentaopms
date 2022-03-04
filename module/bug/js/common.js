@@ -359,6 +359,7 @@ function loadExecutionRelated(executionID)
         loadTestTasks($('#product').val());
         loadProjectTeamMembers($('#project').val());
     }
+    notice();
 }
 
 /**
@@ -615,7 +616,6 @@ function loadTestTasks(productID, executionID)
  */
 function notice()
 {
-    $('#buildBoxActions').empty().hide();
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
@@ -642,7 +642,6 @@ function notice()
         if($bba.length)
         {
             $bba.html(html);
-            $bba.show();
         }
         else
         {
