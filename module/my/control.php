@@ -408,12 +408,22 @@ EOF;
         /* Get tasks. */
         $tasks = $this->loadModel('task')->getUserTasks($this->app->user->account, $type, 0, $pager, $sort);
 
-        $parents = array();
+        $parents         = array();
+        $executionIDList = array();
         foreach($tasks as $task)
         {
+            if($this->config->systemMode == 'new') $executionIDList[$task->execution] = $task->execution;
             if($task->parent > 0) $parents[$task->parent] = $task->parent;
         }
         $parents = $this->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+
+        if($this->config->systemMode == 'new')
+        {
+            $projectPairs = $this->dao->select('t2.id,t1.name')->from(TABLE_PROJECT)->alias('t1')
+                ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.parent')
+                ->where('t2.id')->in($executionIDList)
+                ->fetchPairs();
+        }
 
         foreach($tasks as $task)
         {
@@ -436,21 +446,21 @@ EOF;
         $this->app->loadLang('story');
 
         /* Assign. */
-        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
-        $this->view->position[] = $this->lang->my->task;
-        $this->view->tabID      = 'task';
-        $this->view->tasks      = $tasks;
-        $this->view->summary    = $this->loadModel('execution')->summary($tasks);
-        $this->view->type       = $type;
-        $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
-        $this->view->recTotal   = $recTotal;
-        $this->view->recPerPage = $recPerPage;
-        $this->view->pageID     = $pageID;
-        $this->view->orderBy    = $orderBy;
-        $this->view->projects   = $this->loadModel('project')->getPairsByProgram();
-        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager      = $pager;
-        $this->view->mode       = 'task';
+        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
+        $this->view->position[]   = $this->lang->my->task;
+        $this->view->tabID        = 'task';
+        $this->view->tasks        = $tasks;
+        $this->view->summary      = $this->loadModel('execution')->summary($tasks);
+        $this->view->type         = $type;
+        $this->view->kanbanList   = $this->execution->getPairs(0, 'kanban');
+        $this->view->recTotal     = $recTotal;
+        $this->view->recPerPage   = $recPerPage;
+        $this->view->pageID       = $pageID;
+        $this->view->orderBy      = $orderBy;
+        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager        = $pager;
+        $this->view->mode         = 'task';
+        $this->view->projectPairs = isset($projectPairs) ? $projectPairs : array();
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();

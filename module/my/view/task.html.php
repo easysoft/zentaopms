@@ -100,7 +100,7 @@
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <?php if($config->systemMode == 'new'):?>
-          <td class='c-project' title="<?php echo $task->projectName;?>"><?php echo html::a($this->createLink('project', 'index', "projectID=$task->project"), $task->projectName);?></td>
+          <td class='c-project' title="<?php echo zget($projectPairs, $task->execution, '');?>"><?php echo html::a($this->createLink('project', 'index', "projectID=$task->project"), zget($projectPairs, $task->execution, ''));?></td>
           <?php endif;?>
           <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?></td>
           <?php if($type != 'openedBy'): ?>
