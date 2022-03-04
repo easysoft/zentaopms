@@ -389,6 +389,7 @@ class control extends baseControl
         if(empty($_POST)) return false;
 
         $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
+        if(empty($action)) return false;
         if($action->extensionType == 'none' and $action->buildin == 1) return false;
 
         $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
