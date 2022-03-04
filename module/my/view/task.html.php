@@ -100,7 +100,11 @@
             <?php if(!empty($task->children)) echo '<a class="task-toggle" data-id="' . $task->id . '"><i class="icon icon-angle-double-right"></i></a>';?>
           </td>
           <?php if($config->systemMode == 'new'):?>
-          <td class='c-project' title="<?php echo zget($projectPairs, $task->execution, '');?>"><?php echo html::a($this->createLink('project', 'index', "projectID=$task->project"), zget($projectPairs, $task->execution, ''));?></td>
+          <?php $projectName = isset($projects[$task->execution]->name) ? $projects[$task->execution]->name : '';?>
+          <?php $projectID   = isset($projects[$task->execution]->id) ? $projects[$task->execution]->id : 0;?>
+          <td class='c-project' title="<?php echo $projectName?>">
+            <?php echo ($projectName and $projectID) ? html::a($this->createLink('project', 'index', "projectID=$projectID"), $projectName) : '';?>
+          </td>
           <?php endif;?>
           <td class='c-project' title="<?php echo $task->executionName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$task->execution"), $task->executionName, '');?></td>
           <?php if($type != 'openedBy'): ?>
@@ -166,7 +170,11 @@
               <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color'");?>
             </td>
             <?php if($config->systemMode == 'new'):?>
-            <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('project', 'view', "projectID=$child->project"), $child->projectName);?></td>
+           <?php $projectName = isset($projects[$child->execution]->name) ? $projects[$child->execution]->name : '';?>
+           <?php $projectID   = isset($projects[$child->execution]->id) ? $projects[$child->execution]->id : 0;?>
+            <td class='c-project' title="<?php echo $projectName;?>">
+              <?php echo ($projectName and $projectID) ? html::a($this->createLink('project', 'view', "projectID=$projectID"), $projectName) : '';?>
+            </td>
             <?php endif;?>
             <td class='c-project' title="<?php echo $child->projectName;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID=$child->project"), $child->executionName, '');?></td>
             <?php if($type != 'openedBy'): ?>
