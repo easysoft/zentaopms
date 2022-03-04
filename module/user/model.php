@@ -102,6 +102,7 @@ class userModel extends model
             ->beginIF(strpos($params, 'nodeleted') !== false or empty($this->config->user->showDeleted))->andWhere('deleted')->eq('0')->fi()
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($accounts)->andWhere('account')->in($accounts)->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->beginIF($maxCount)->limit($maxCount)->fi()
             ->fetchAll($keyField);

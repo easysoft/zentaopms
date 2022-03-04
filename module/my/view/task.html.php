@@ -170,8 +170,8 @@
               <?php echo html::a($this->createLink('task', 'view', "taskID=$child->id", '', '', $child->project), $child->name, null, "style='color: $child->color'");?>
             </td>
             <?php if($config->systemMode == 'new'):?>
-           <?php $projectName = isset($projects[$child->execution]->name) ? $projects[$child->execution]->name : '';?>
-           <?php $projectID   = isset($projects[$child->execution]->id) ? $projects[$child->execution]->id : 0;?>
+            <?php $projectName = isset($projects[$child->execution]->name) ? $projects[$child->execution]->name : '';?>
+            <?php $projectID   = isset($projects[$child->execution]->id) ? $projects[$child->execution]->id : 0;?>
             <td class='c-project' title="<?php echo $projectName;?>">
               <?php echo ($projectName and $projectID) ? html::a($this->createLink('project', 'view', "projectID=$projectID"), $projectName) : '';?>
             </td>
