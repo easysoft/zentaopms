@@ -389,7 +389,7 @@ class control extends baseControl
         if(empty($_POST)) return false;
 
         $action = $this->dao->select('*')->from(TABLE_WORKFLOWACTION)->where('module')->eq($this->moduleName)->andWhere('action')->eq($this->methodName)->fetch();
-        if($action->extensionType == 'none' and $action->buildin == 1) return false;
+        if(!empty($action) and $action->extensionType == 'none' and $action->buildin == 1) return false;
 
         $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
         $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
