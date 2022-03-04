@@ -335,13 +335,12 @@
     function hideTab(appCode)
     {
         var app = openedApps[appCode];
+        app.$app.trigger('hideapp', app);
         if(!app || !app.show) return;
 
         app.$app.hide();
         app.show = false;
         lastOpenedApp = null;
-
-        app.$app.trigger('hideapp', app);
 
         /* Active last app */
         var lastApp = getLastApp(true) || getLastApp();
