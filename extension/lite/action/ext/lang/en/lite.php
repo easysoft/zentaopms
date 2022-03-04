@@ -15,6 +15,15 @@ unset($lang->action->dynamicAction->case);
 unset($lang->action->dynamicAction->testreport);
 unset($lang->action->dynamicAction->testsuite);
 unset($lang->action->dynamicAction->caselib);
+unset($lang->action->dynamicAction->issue);
+unset($lang->action->dynamicAction->risk);
+unset($lang->action->dynamicAction->opportunity);
+unset($lang->action->dynamicAction->researchplan);
+unset($lang->action->dynamicAction->researchreport);
+unset($lang->action->dynamicAction->meeting);
+unset($lang->action->dynamicAction->auditplan);
+unset($lang->action->dynamicAction->pssp);
+unset($lang->action->dynamicAction->nc);
 
 $lang->action->dynamicAction->task = array();
 $lang->action->dynamicAction->task['opened']              = 'Create Task';

@@ -419,10 +419,10 @@ EOF;
 
         if($this->config->systemMode == 'new')
         {
-            $projectPairs = $this->dao->select('t2.id,t1.name')->from(TABLE_PROJECT)->alias('t1')
+            $projects = $this->dao->select('t1.id,t1.name,t2.id as execution')->from(TABLE_PROJECT)->alias('t1')
                 ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.id=t2.parent')
                 ->where('t2.id')->in($executionIDList)
-                ->fetchPairs();
+                ->fetchAll('execution');
         }
 
         foreach($tasks as $task)
@@ -446,21 +446,21 @@ EOF;
         $this->app->loadLang('story');
 
         /* Assign. */
-        $this->view->title        = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
-        $this->view->position[]   = $this->lang->my->task;
-        $this->view->tabID        = 'task';
-        $this->view->tasks        = $tasks;
-        $this->view->summary      = $this->loadModel('execution')->summary($tasks);
-        $this->view->type         = $type;
-        $this->view->kanbanList   = $this->execution->getPairs(0, 'kanban');
-        $this->view->recTotal     = $recTotal;
-        $this->view->recPerPage   = $recPerPage;
-        $this->view->pageID       = $pageID;
-        $this->view->orderBy      = $orderBy;
-        $this->view->users        = $this->loadModel('user')->getPairs('noletter');
-        $this->view->pager        = $pager;
-        $this->view->mode         = 'task';
-        $this->view->projectPairs = isset($projectPairs) ? $projectPairs : array();
+        $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->task;
+        $this->view->position[] = $this->lang->my->task;
+        $this->view->tabID      = 'task';
+        $this->view->tasks      = $tasks;
+        $this->view->summary    = $this->loadModel('execution')->summary($tasks);
+        $this->view->type       = $type;
+        $this->view->kanbanList = $this->execution->getPairs(0, 'kanban');
+        $this->view->recTotal   = $recTotal;
+        $this->view->recPerPage = $recPerPage;
+        $this->view->pageID     = $pageID;
+        $this->view->orderBy    = $orderBy;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
+        $this->view->pager      = $pager;
+        $this->view->mode       = 'task';
+        $this->view->projects   = isset($projects) ? $projects : array();
 
         if($this->app->viewType == 'json') $this->view->tasks = array_values($this->view->tasks);
         $this->display();
