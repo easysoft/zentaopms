@@ -364,7 +364,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
   </div>
 </div>
 <?php js::set('bugModule', $lang->bug->module);?>
-<?php js::set('bugExecution', $lang->bug->execution);?>
+<?php js::set('bugExecution', (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution);?>
 <?php js::set('systemMode', $config->systemMode);?>
 <script>
 $(function(){parent.$('body.hide-modal-close').removeClass('hide-modal-close');})
