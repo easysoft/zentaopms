@@ -137,7 +137,7 @@ class control extends baseControl
     {
         $installedVersion = $this->loadModel('setting')->getVersion();
 
-        if(is_numeric($installedVersion[0]) and $this->config->edition == 'max')
+        if($installedVersion[0] != 'm' and $this->config->edition == 'max')
         {
             if($this->config->systemMode == 'classic' and $this->app->getModuleName() != 'upgrade')
             {
@@ -393,7 +393,7 @@ class control extends baseControl
         if($action->extensionType == 'none' and $action->buildin == 1) return false;
 
         $flow    = $this->dao->select('*')->from(TABLE_WORKFLOW)->where('module')->eq($this->moduleName)->fetch();
-        $fields  = $this->workflowaction->getFields($this->moduleName, $this->methodName);
+        $fields  = $this->loadModel('workflowaction')->getFields($this->moduleName, $this->methodName);
         $layouts = $this->loadModel('workflowlayout')->getFields($this->moduleName, $this->methodName);
         $rules   = $this->dao->select('*')->from(TABLE_WORKFLOWRULE)->orderBy('id_desc')->fetchAll('id');
 

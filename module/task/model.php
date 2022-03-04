@@ -326,7 +326,7 @@ class taskModel extends model
             $data[$i]->openedBy   = $this->app->user->account;
             $data[$i]->openedDate = $now;
             $data[$i]->parent     = $tasks->parent[$i];
-            $data[$i]->vision     = isset($tasks->vision[$i]) ? $tasks->vision[$i] : 'common';
+            $data[$i]->vision     = isset($tasks->vision[$i]) ? $tasks->vision[$i] : 'rnd';
             if($story) $data[$i]->storyVersion = $this->loadModel('story')->getVersion($data[$i]->story);
             if($assignedTo) $data[$i]->assignedDate = $now;
             if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
@@ -3152,6 +3152,7 @@ class taskModel extends model
                 $value = round($task->$id, 1);
                 $title = " title='{$value} {$this->lang->execution->workHour}'";
             }
+            if($id == 'lane') $title = " title='{$task->lane}'";
 
             echo "<td class='" . $class . "'" . $title . ">";
             if($this->config->edition != 'open') $this->loadModel('flow')->printFlowCell('task', $task, $id);
@@ -3220,7 +3221,7 @@ class taskModel extends model
                 $this->printAssignedHtml($task, $users);
                 break;
             case 'lane':
-                echo trim($task->lane);
+                echo mb_substr($task->lane, 0, 8);
                 break;
             case 'assignedDate':
                 echo substr($task->assignedDate, 5, 11);

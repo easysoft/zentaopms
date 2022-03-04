@@ -1227,7 +1227,7 @@ class productModel extends model
         $executions = $this->dao->select('t2.id,t2.project,t2.name,t2.grade,t2.parent')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
-            ->andWhere('t2.type')->in('stage,sprint')
+            ->andWhere('t2.type')->in('stage,sprint,kanban')
             ->beginIF($branch)->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t2.deleted')->eq('0')
@@ -1712,7 +1712,7 @@ class productModel extends model
         $executionListKey = $this->config->systemMode == 'new' ? 'project' : 'productID';
         $executionList    = $this->dao->select('t1.product as productID,t2.*')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project=t2.id')
-            ->where('type')->in('stage,sprint')
+            ->where('type')->in('stage,sprint,kanban')
             ->beginIF($this->config->systemMode == 'new')->andWhere('t2.project')->in(array_keys($projectList))->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t1.project')->in($this->app->user->view->sprints)->fi()
             ->andWhere('t1.product')->in(array_keys($productList))

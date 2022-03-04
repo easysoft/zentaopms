@@ -117,3 +117,5 @@
 .kanban-card .releaseTitle .icon, .kanban-card .title .icon, .kanban-card .productplanTitle .icon, .kanban-card .title .icon, .kanban-card .buildTitle .icon{padding-right: 5px;}
 .kanban-card .label-finish {margin-right: 7px; margin-top: -1px; padding: 3px 5px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}
+
+@-moz-document url-prefix(){ .region .kanban-lane-items{scrollbar-width:thin; padding:5px 0px 5px 5px !important;} .region .kanban-card .info .user{right: -6px !important;}}

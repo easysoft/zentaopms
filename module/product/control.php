@@ -973,6 +973,12 @@ class product extends control
      */
     public function ajaxGetExecutions($productID, $projectID = 0, $branch = 0, $number = '', $executionID = 0)
     {
+        if($this->app->tab == 'execution' and $this->session->execution)
+        {
+            $execution = $this->loadModel('execution')->getByID($this->session->execution);
+            if($execution->type == 'kanban') $projectID = $execution->project;
+        }
+
         $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID);
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
