@@ -17,6 +17,7 @@
 <?php js::set('moduleList', $config->todo->moduleList)?>
 <?php js::set('objectsMethod', $config->todo->getUserObjectsMethod)?>
 <?php js::set('nameBoxLabel', array('custom' => $lang->todo->name, 'idvalue' => $lang->todo->idvalue));?>
+<?php js::set('vision', $config->vision);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

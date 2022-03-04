@@ -50,9 +50,12 @@ function loadList(type, id)
         $(divClass).html($(divID).html());
     }
 
+
+    nameBoxLabel = typeof(nameBoxLabel) == "undefined" ? '' : nameBoxLabel;
     if(nameBoxLabel)
     {
-        if(type == 'custom')
+        vision = typeof(vision) == "undefined" ? '' : vision;
+        if(type == 'custom' || (vision && vision == 'rnd'))
         {
             $('#nameBoxLabel').text(nameBoxLabel.custom);
         }
