@@ -213,6 +213,7 @@ $lang->searchObjects['task']      = '任务';
 $lang->searchObjects['doc']       = '文档';
 $lang->searchObjects['project']   = '项目';
 $lang->searchObjects['execution'] = '看板';
+$lang->searchObjects['user']      = '用户';
 
 if($config->edition != 'open') $lang->searchObjects['feedback'] = '反馈';
 if($config->visions == ',lite,') unset($lang->searchObjects['feedback']);
@@ -230,7 +231,6 @@ unset($lang->searchObjects['testtask']);
 unset($lang->searchObjects['caselib']);
 unset($lang->searchObjects['testreport']);
 unset($lang->searchObjects['program']);
-unset($lang->searchObjects['user']);
 
 /* biz search. */
 unset($lang->searchObjects['service']);
