@@ -12,6 +12,7 @@
 ?>
 <?php include '../../common/view/header.html.php';?>
 <?php js::set('flow', $config->global->flow);?>
+<?php js::set('ditto', $lang->testcase->ditto);?>
 <div id='mainMenu' class='clearfix'>
   <div class='btn-toolbar pull-left'>
     <div class='input-group w-300px'>
@@ -46,7 +47,7 @@
       <tbody>
         <?php $i = 0;?>
         <?php foreach($cases as $case):?>
-        <tr>
+        <tr id='<?php echo $case->id;?>'>
           <td class='c-id'>
             <div class="checkbox-primary">
               <input type='checkbox' name='caseIdList[<?php echo $case->id?>]' value='<?php echo $case->id;?>' />
@@ -55,7 +56,8 @@
             <?php printf('%03d', $case->id);?>
           </td>
           <?php if($product->type != 'normal'):?>
-          <td><?php echo html::select("branch[{$case->id}]", $branches, $branch, "class='form-control' onchange='loadModules($productID, this.value, $case->id)'")?></td>
+          <?php if($i > 0) $branches['ditto'] = $lang->testcase->ditto;?>
+          <td><?php echo html::select("branch[{$case->id}]", $branches, $i == 0 ? $branch : 'ditto', "class='form-control' onchange='updateModules($productID, this.value, $case->id)'")?></td>
           <?php endif;?>
           <td><span class='label-pri <?php echo 'label-pri-' . $case->pri;?>' title='<?php echo zget($lang->testcase->priList, $case->pri, $case->pri);?>'><?php echo $case->pri == '0' ? '' : zget($lang->testcase->priList, $case->pri, $case->pri);?></span></td>
           <td class='text-left nobr'><?php if(!common::printLink('testcase', 'view', "caseID=$case->id", $case->title)) echo $case->title;?></td>
