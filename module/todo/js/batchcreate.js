@@ -15,4 +15,14 @@ function updateAction(date)
 $(function()
 {
     setBeginsAndEnds();
+    $('.main-header #date').change(function()
+    {
+        $('#todoBatchAddForm #date').val($(this).val());
+    });
+    $('.main-header #switchDate').change(function()
+    {
+        var value = $(this).prop('checked') ? 'on' : '';
+        $('#todoBatchAddForm #switchDate').val(value);
+    });
+    $('.main-header #date').change();
 });
