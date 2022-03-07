@@ -512,11 +512,11 @@ class GitRepo
      * @access public
      * @return array
      */
-    public function getCommits($rversion = '', $count = 0, $branch = '')
+    public function getCommits($revision = '', $count = 0, $branch = '')
     {
-        if(!scm::checkRevision($rversion)) return array();
+        if(!scm::checkRevision($revision)) return array();
 
-        if($rversion == 'HEAD' and $branch) $rversion = $branch;
+        if($revision == 'HEAD' and $branch) $revision = $branch;
         $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
         $count    = $count == 0 ? '' : "-n $count";
 
