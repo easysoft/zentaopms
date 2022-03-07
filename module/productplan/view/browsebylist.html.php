@@ -120,7 +120,7 @@
           }
 
           echo "<div class='plan-name has-prefix {$class}'>";
-          if($plan->parent > 0 and !isset($plans[$plan->parent])) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
+          if($plan->parent > 0) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if(!empty($expired)) echo $expired;
           if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
