@@ -32,8 +32,10 @@ $lang->productplan->plan       = '计划';
 $lang->productplan->allAB      = '所有';
 $lang->productplan->to         = '至';
 $lang->productplan->more       = '更多操作';
+$lang->productplan->comment    = '备注';
 
 $lang->productplan->batchUnlink       = "批量移除";
+$lang->productplan->batchClose        = "批量关闭";
 $lang->productplan->batchChangeStatus = "批量修改状态";
 $lang->productplan->unlinkAB          = "移除";
 $lang->productplan->linkStory         = "关联{$lang->SRCommon}";
@@ -57,6 +59,7 @@ $lang->productplan->unexpired        = "未过期";
 $lang->productplan->all              = "所有计划";
 $lang->productplan->setDate          = "设置计划起止时间";
 $lang->productplan->expired          = "已过期";
+$lang->productplan->closedReason     = "关闭原因";
 
 $lang->productplan->confirmDelete      = "您确认删除该计划吗？";
 $lang->productplan->confirmUnlinkStory = "您确认移除该{$lang->SRCommon}吗？";
@@ -99,6 +102,9 @@ $lang->productplan->statusList['wait']   = '未开始';
 $lang->productplan->statusList['doing']  = '进行中';
 $lang->productplan->statusList['done']   = '已完成';
 $lang->productplan->statusList['closed'] = '已关闭';
+
+$lang->productplan->closedReasonList['done']   = '已完成';
+$lang->productplan->closedReasonList['cancel'] = '已取消';
 
 $lang->productplan->parentActionList['startedbychild']   = '系统判断由于子计划 <strong>开始</strong> ，将计划状态置为 <strong>进行中</strong> 。';
 $lang->productplan->parentActionList['finishedbychild']  = '系统判断由于子计划 <strong>全部完成</strong> ，将计划状态置为 <strong>已完成</strong> 。';

@@ -537,13 +537,17 @@ class productplanModel extends model
 
         $plan = new stdclass();
         $plan->status = $status;
+        if($status == 'closed' and $this->post->closedReason) $plan->closedReason = $this->post->closedReason;
+        if($status !== 'closed') $plan->closedReason = '';
 
         $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->where('id')->eq($planID)->exec();
 
         if(dao::isError()) return false;
 
         $changes  = common::createChanges($oldPlan, $plan);
-        $actionID = $this->loadModel('action')->create('productplan', $planID, $action);
+
+        $comment = $this->post->comment ? $this->post->comment : '';
+        $actionID = $this->loadModel('action')->create('productplan', $planID, $action, $comment);
         $this->action->logHistory($actionID, $changes);
 
         if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
@@ -707,21 +711,45 @@ class productplanModel extends model
      * @access public
      * @return array
      */
-    public function batchChangeStatus($planIDList, $status)
+    public function batchChangeStatus($status)
     {
-        $now = helper::now();
+        $this->loadModel('action');
         $allChanges = array();
+
+        $planIDList = $this->post->planIDList;
+        if($status == 'closed') $closedReasons = $this->post->closedReasons;
+
         $oldPlans = $this->getByIDList($planIDList, $status);
+
         foreach($planIDList as $planID)
         {
             $oldPlan = $oldPlans[$planID];
             if($status == $oldPlan->status) continue;
 
             $plan = new stdclass();
-            $plan->status         = $status;
+            $plan->status = $status;
+            if($status == 'closed')  $plan->closedReason = $closedReasons[$planID];
+            if($status !== 'closed') $plan->closedReason = '';
 
             $this->dao->update(TABLE_PRODUCTPLAN)->data($plan)->autoCheck()->where('id')->eq((int)$planID)->exec();
-            if(!dao::isError()) $allChanges[$planID] = common::createChanges($oldPlan, $plan);
+
+            if($oldPlan->parent > 0) $this->updateParentStatus($oldPlan->parent);
+
+            if(!dao::isError())
+            {
+                $allChanges[$planID] = common::createChanges($oldPlan, $plan);
+            }
+            else
+            {
+                return print(js::error(dao::getError()));
+            }
+        }
+
+        foreach($allChanges as $planID => $changes)
+        {
+            $comment = $this->post->comments[$planID] ? $this->post->comments[$planID] : '';
+            $actionID = $this->action->create('productplan', $planID, 'edited', $comment);
+            $this->action->logHistory($actionID, $changes);
         }
         return $allChanges;
     }
@@ -981,7 +1009,7 @@ class productplanModel extends model
                 if($plan->status != 'doing' or $plan->parent < 0) return false;
                 break;
             case 'close' :
-                if($plan->status != 'done' or $plan->parent < 0) return false;
+                if($plan->status == 'closed' or $plan->parent < 0) return false;
                 break;
             case 'activate' :
                 if($plan->status == 'wait' or $plan->status == 'doing' or $plan->parent < 0) return false;

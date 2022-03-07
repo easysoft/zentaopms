@@ -1380,10 +1380,16 @@ class testcaseModel extends model
         $data = fixer::input('post')->get();
 
         $prevModule = 0;
+        $prevBranch = 0;
         foreach($data->module as $i => $module)
         {
             if($module != 'ditto') $prevModule = $module;
             if($module == 'ditto') $data->module[$i] = $prevModule;
+        }
+        foreach($data->branch as $i => $branch)
+        {
+            if($branch != 'ditto') $prevBranch = $branch;
+            if($branch == 'ditto') $data->branch[$i] = $prevBranch;
         }
 
         $libCases = $this->dao->select('*')->from(TABLE_CASE)->where('deleted')->eq(0)->andWhere('id')->in($data->caseIdList)->fetchAll('id');

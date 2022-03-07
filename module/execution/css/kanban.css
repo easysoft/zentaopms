@@ -106,4 +106,5 @@
 
 #mainMenu .divider {margin: 10px}
 
-.kanbanRegion {margin:5px}
+.kanbanRegion {margin: 5px}
+.modal-header {padding: 15px 0;}

@@ -107,7 +107,7 @@ $lang->execution->unfoldClosed     = '展開已結束';
 $lang->execution->editName         = '編輯名稱';
 $lang->execution->setWIP           = '在製品數量設置（WIP）';
 $lang->execution->sortColumn       = '看板列卡片排序';
-$lang->execution->batchCreateStroy = "批量新建{$lang->SRCommon}";
+$lang->execution->batchCreateStory = "批量新建{$lang->SRCommon}";
 $lang->execution->batchCreateTask  = '批量建任務';
 
 /* Fields of zt_team. */

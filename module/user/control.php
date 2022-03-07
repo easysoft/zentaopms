@@ -596,13 +596,14 @@ class user extends control
 
         $title      = $this->lang->company->common . $this->lang->colon . $this->lang->user->batchCreate;
         $position[] = $this->lang->user->batchCreate;
-        $this->view->title     = $title;
-        $this->view->position  = $position;
-        $this->view->depts     = $this->dept->getOptionMenu();
-        $this->view->deptID    = $deptID;
-        $this->view->groupList = $groupList;
-        $this->view->roleGroup = $roleGroup;
-        $this->view->rand      = $this->user->updateSessionRandom();
+        $this->view->title      = $title;
+        $this->view->position   = $position;
+        $this->view->depts      = $this->dept->getOptionMenu();
+        $this->view->deptID     = $deptID;
+        $this->view->groupList  = $groupList;
+        $this->view->roleGroup  = $roleGroup;
+        $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->visionList = $this->user->getVisionList();
 
         $this->display();
     }
@@ -639,8 +640,9 @@ class user extends control
         $this->view->userGroups = implode(',', array_keys($userGroups));
         $this->view->companies  = $this->loadModel('company')->getOutsideCompanies();
         $this->view->groups     = $this->dao->select('id, name')->from(TABLE_GROUP)->where('project')->eq(0)->fetchPairs('id', 'name');
+        $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->visionList = $this->user->getVisionList();
 
-        $this->view->rand = $this->user->updateSessionRandom();
         $this->display();
     }
 
@@ -686,6 +688,7 @@ class user extends control
         $this->view->position[] = $this->lang->user->batchEdit;
         $this->view->depts      = $this->dept->getOptionMenu();
         $this->view->rand       = $this->user->updateSessionRandom();
+        $this->view->visionList = $this->user->getVisionList();
 
         $this->display();
     }
