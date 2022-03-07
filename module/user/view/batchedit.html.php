@@ -82,8 +82,8 @@
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control'");?></td>
           <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
-          <?php $multiple = $config->systemMode == 'new' ? 'multiple' : '';?>
-          <td class='text-left'><?php echo html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' $multiple");?></td>
+          <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>"><?php echo $config->systemMode == 'new' ? html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' multiple") : $visionList['rnd'];?></td>
+          <?php if($config->systemMode == 'classic') echo html::hidden("visions[$user->id][]", 'rnd');?>
           <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
           <td><?php echo html::select("type[$user->id]",    $lang->user->typeList, $type, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>
