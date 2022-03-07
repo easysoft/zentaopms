@@ -14,6 +14,7 @@ $lang->resource->im->notifyMSG          = 'notifyMSG';
 $lang->resource->im->sendNotification   = 'sendNotification';
 $lang->resource->im->sendChatMessage    = 'sendChatMessage';
 $lang->resource->im->downloadXxdPackage = 'downloadXXD';
+$lang->resource->im->debug              = 'debug';
 
 $lang->resource->client = new stdclass();
 $lang->resource->client->browse       = 'browse';

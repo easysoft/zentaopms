@@ -139,7 +139,7 @@
               <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=package'), $lang->im->downloadXXD, 'hiddenwin', "class='btn btn-primary download download-package $disabled'");?>
               <?php echo html::a(helper::createLink('setting', 'downloadXXD', 'type=config'), $lang->im->downloadConfig, 'hiddenwin', "class='btn btn-primary download $disabled'");?>
               <?php echo html::a(helper::createLink('setting', 'xuanxuan', 'type=edit'), $lang->im->changeSetting, '', "class='btn'");?>
-              <?php if($debug) echo html::a(helper::createLink('im', 'debug', 'source=setting'), $lang->im->viewDebug, '', "class='btn viewDebug' data-toggle='modal'");?>
+              <?php if($debug and common::hasPriv('im', 'debug')) echo html::a(helper::createLink('im', 'debug', 'source=setting'), $lang->im->viewDebug, '', "class='btn viewDebug iframe' data-height=220");?>
               <?php echo html::a('http://www.zentao.net/book/zentaopmshelp/302.html', $lang->im->help, '_blank', "class='btn'");?>
             <?php endif;?>
           </td>

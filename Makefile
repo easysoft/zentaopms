@@ -17,6 +17,7 @@ clean:
 	rm -fr *.tar.gz
 	rm -fr *.zip
 	rm -fr build/linux/lampp
+	rm -rf buildroot/
 	rm -fr lampp
 	rm -fr zentaoxx
 common:
@@ -191,14 +192,18 @@ en:
 	cd zentaopms/; grep -rl 'zentao.net'|xargs sed -i 's/zentao.net/zentao.pm/g';
 	cd zentaopms/; grep -rl 'http://www.zentao.pm'|xargs sed -i 's/http:\/\/www.zentao.pm/https:\/\/www.zentao.pm/g';
 	cd zentaopms/config/; echo >> config.php; echo '$$config->isINT = true;' >> config.php
+	make zentaoxx
+	unzip zentaoxx.*.zip
+	cp zentaoxx/* zentaopms/ -r
+	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
 	make package
 	mv zentaopms zentaoalm
 	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
 	rm -fr zentaoalm
-	echo $(VERSION).int > VERSION
-	make endeb
-	make enrpm
-	echo $(VERSION) > VERSION
+	#echo $(VERSION).int > VERSION
+	#make endeb
+	#make enrpm
+	#echo $(VERSION) > VERSION
 endeb:
 	mkdir buildroot
 	cp -r build/debian/DEBIAN buildroot
@@ -239,9 +244,13 @@ ci:
         endif
 
 	make package
-	if [ -d $(BUILD_PATH)/zentaopms ]; then rm -r $(BUILD_PATH)/zentaopms; fi
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	mv zentaopms $(BUILD_PATH)
-	make deb; make rpm; make en
+	#make deb; make rpm; make en
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
-	mv *.zip *.deb *.rpm $(BUILD_PATH)
+	make en
+	rm -fr zentaopms zentaoxx zentaoxx.*.zip
+	php tools/mergezentaopms.php $(VERSION)
+	rm zentaobiz*.zip zentaomax*.zip
+	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH) 
+	rm -f $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm
+	mv *.zip *.deb *.rpm $(RELEASE_PATH)
