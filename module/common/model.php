@@ -473,16 +473,18 @@ class commonModel extends model
      */
     public static function printVisionSwitcher()
     {
-        global $lang, $app;
+        global $lang, $app, $config;
 
         if(isset($app->user))
         {
             $currentVision = $app->config->vision;
             $userVisions   = array_filter(explode(',', $app->user->visions));
+            $configVisions = array_filter(explode(',', trim($config->visions, ',')));
 
             if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
 
-            if(count($userVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
+            if(count($userVisions) < 2)   return print("<div>{$lang->visionList[$currentVision]}</div>");
+            if(count($configVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
             echo "<ul class='dropdown-menu pull-right'>";
             echo "<li class='text-gray switchTo'>{$lang->switchTo}</li>";

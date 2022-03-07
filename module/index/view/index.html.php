@@ -82,10 +82,17 @@ js::set('showFeatures', $showFeatures);
   <ul id='bars' class='nav nav-default'></ul>
   <div id='poweredBy'>
     <div id="globalBarLogo">
+      <?php if($config->vision == 'lite'):?>
+      <?php $version     = $config->liteVersion;?>
+      <?php $versionName = $lang->liteName . $config->liteVersion;?>
+      <?php else:?>
+      <?php $version     = $config->version;?>
+      <?php $versionName = $lang->pmsName . $config->version;?>
       <a href='javascript:void(0)' id='bizLink' class='btn btn-link' style='color: #B57D4F;'><span class='upgrade'><?php echo $lang->bizName;?></span> <i class='text-danger icon-pro-version'></i></a>
-      <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $config->version;?>'>
+      <?php endif;?>
+      <a href='<?php echo $lang->website;?>' class="btn btn-sm btn-link" target='_blank' title='<?php echo $version;?>'>
         <i class="icon icon-zentao" style="font-size: 24px;"></i>
-        <span class='version'><?php echo $lang->pmsName . $config->version;?></span>
+        <span class='version'><?php echo $versionName;?></span>
       </a>
       <div id="globalSearchDiv">
         <div class="input-group">
