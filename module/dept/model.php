@@ -383,6 +383,8 @@ class deptModel extends model
             ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
             ->beginIF($deptID)->andWhere('dept')->in($deptID)->fi()
+            ->beginIF($this->config->vision == 'lite')->andWhere('visions')->eq('lite')->fi()
+            ->beginIF($this->config->vision != 'lite')->andWhere('visions')->ne('lite')->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -408,6 +410,8 @@ class deptModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
+            ->beginIF($this->config->vision == 'lite')->andWhere('visions')->eq('lite')->fi()
+            ->beginIF($this->config->vision != 'lite')->andWhere('visions')->ne('lite')->fi()
             ->orderBy('account')
             ->fetchPairs();
     }
