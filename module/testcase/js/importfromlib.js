@@ -53,7 +53,8 @@ function updateModules(productID, branch, caseID)
     if(branch !== 'ditto')
     {
         loadModules(tr, caseID, moduleLink);
-        tr.nextAll().each(function(){
+        tr.nextAll().each(function()
+        {
             var nextCaseID = $(this).attr('id');
             var nextBranch = $('#branch' + nextCaseID + ' option:selected').val();
             if(nextBranch !== 'ditto') return false;
@@ -64,7 +65,8 @@ function updateModules(productID, branch, caseID)
     else
     {
         var branchID = '';
-        tr.prevAll().each(function(){
+        tr.prevAll().each(function()
+        {
             var prevCaseID = $(this).attr('id');
             var prevBranch = $('#branch' + prevCaseID + ' option:selected').val();
             if(prevBranch !== 'ditto')
@@ -75,7 +77,8 @@ function updateModules(productID, branch, caseID)
         });
         link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
         loadModules(tr, caseID, link, true);
-        tr.nextAll().each(function(){
+        tr.nextAll().each(function()
+        {
             var nextCaseID = $(this).attr('id');
             var nextBranch = $('#branch' + nextCaseID + ' option:selected').val();
             if(nextBranch !== 'ditto') return false;
@@ -116,6 +119,6 @@ function loadModules(tr, caseID, link, isAddDitto)
  */
 function addDittoOption(caseID)
 {
-    $('#module' + caseID).append("<option value='ditto' selected='selected'>同上</option>");
+    $('#module' + caseID).append("<option value='ditto' selected='selected'>" + ditto + "</option>");
     $('#module' + caseID).trigger('chosen:updated');
 }
