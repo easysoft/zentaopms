@@ -63,10 +63,10 @@
         <?php endif;?>
         <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-        <th class='c-story'><?php echo $lang->productplan->stories;?></th>
-        <th class='c-bug'><?php echo $lang->productplan->bugs;?></th>
-        <th class='c-hour'><?php echo $lang->productplan->hour;?></th>
-        <th class='c-execution'><?php echo $lang->productplan->execution;?></th>
+        <th class='c-story text-center'><?php echo $lang->productplan->stories;?></th>
+        <th class='c-bug text-center'><?php echo $lang->productplan->bugs;?></th>
+        <th class='c-hour text-center'><?php echo $lang->productplan->hour;?></th>
+        <th class='c-execution text-center'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
