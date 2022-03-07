@@ -1840,6 +1840,23 @@ class kanbanModel extends model
     }
 
     /**
+     * Get lane by region id.
+     *
+     * @param  array  $regionID
+     * @param  string $type all|story|task|bug|common
+     * @access public
+     * @return array
+     */
+    public function getLaneGroupByRegion($regionID, $type = 'all')
+    {
+        return $this->dao->select('*')->from(TABLE_KANBANLANE)
+            ->where('deleted')->eq('0')
+            ->andWhere('region')->in($regionID)
+            ->beginIF($type != 'all')->andWhere('type')->eq($type)->fi()
+            ->fetchGroup('region');
+    }
+
+    /**
      * Create a lane.
      *
      * @param  int    $kanbanID

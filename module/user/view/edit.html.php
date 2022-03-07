@@ -82,8 +82,8 @@
           <th><?php echo $lang->user->commiter;?></th>
           <td><?php echo html::input('commiter', $user->commiter, "class='form-control'");?></td>
           <th><?php echo $lang->user->visions;?></th>
-          <?php $visionList = $this->user->getVisionList();?>
-          <td><?php echo html::select('visions[]', $visionList, $user->visions, "class='form-control chosen' multiple");?></td>
+          <?php $multiple = $config->systemMode == 'new' ? 'multiple' : '';?>
+          <td><?php echo html::select('visions[]', $visionList, $user->visions, "class='form-control chosen' $multiple");?></td>
         </tr>
       </table>
       <table align='center' class='table table-form'>
