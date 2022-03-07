@@ -506,18 +506,17 @@ class GitRepo
     /**
      * Get commits.
      *
-     * @param  string $version
+     * @param  string $rversion
      * @param  int    $count
      * @param  string $branch
      * @access public
      * @return array
      */
-    public function getCommits($version = '', $count = 0, $branch = '')
+    public function getCommits($rversion = '', $count = 0, $branch = '')
     {
-        if(!scm::checkRevision($version)) return array();
+        if(!scm::checkRevision($rversion)) return array();
 
-        if($version == 'HEAD' and $branch) $version = $branch;
-        $revision = $version;
+        if($rversion == 'HEAD' and $branch) $rversion = $branch;
         $revision = is_numeric($revision) ? "--skip=$revision $branch" : $revision;
         $count    = $count == 0 ? '' : "-n $count";
 
