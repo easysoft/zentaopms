@@ -80,7 +80,7 @@
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$i]", '', "class='form-control account_$i' onchange='changeEmail($i)'");?></td>
           <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>
-          <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>"><?php echo $config->systemMode == 'new' ? html::select("visions[$i][]", $visionList, $i > 0 ? 'ditto' : key($visionList), "class='form-control chosen' $multiple") : $visionList['rnd'];?></td>
+          <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>"><?php echo $config->systemMode == 'new' ? html::select("visions[$i][]", $visionList, $i > 0 ? 'ditto' : key($visionList), "class='form-control chosen' multiple") : $visionList['rnd'];?></td>
           <?php if($config->systemMode == 'classic') echo html::hidden("visions[$i][]", 'rnd');?>
           <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 0 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
           <td class='text-left' style='overflow:visible'><?php echo html::select("group[$i]", $groupList, $i > 0 ? 'ditto' : '', "class='form-control chosen'");?></td>
