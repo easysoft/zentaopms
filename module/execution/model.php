@@ -2483,6 +2483,7 @@ class executionModel extends model
             ->where('t1.root')->eq((int)$executionID)
             ->andWhere('t1.type')->eq('execution')
             ->andWhere('t2.deleted')->eq('0')
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', t2.visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->fetchAll('account');
     }
 

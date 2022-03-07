@@ -68,6 +68,8 @@ class webhook extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('browse')));
         }
 
+        unset($this->lang->webhook->typeList['']);
+
         $this->app->loadLang('action');
         $this->view->title      = $this->lang->webhook->api . $this->lang->colon . $this->lang->webhook->create;
         $this->view->products   = $this->loadModel('product')->getPairs();
