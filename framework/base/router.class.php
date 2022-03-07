@@ -715,6 +715,20 @@ class baseRouter
     }
 
     /**
+     * Get installed version.
+     *
+     * @access public
+     * @return string
+     */
+    public function getInstalledVersion()
+    {
+        $version = $this->dbh->query("SELECT value FROM " . TABLE_CONFIG . " WHERE owner = 'system' AND `key` = 'version' LIMIT 1")->fetch();
+        $version = $version ? $version->value : '0.3.beta';                  // No version, set as 0.3.beta.
+        if($version == '3.0.stable') $version = '3.0';    // convert 3.0.stable to 3.0.
+        return $version;
+    }
+
+    /**
      * 设置错误处理句柄。
      * Set the error handler.
      *
