@@ -1733,6 +1733,7 @@ class block extends control
             $objects    = $this->dao->select('*')->from($table)
                 ->where('deleted')->eq(0)
                 ->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'story')->andWhere('type')->eq('story')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('cycle')->eq(0)->fi()
                 ->beginIF($objectType == 'todo')->andWhere('status')->eq('wait')->fi()
                 ->beginIF($objectType != 'todo')->andWhere('status')->ne('closed')->fi()
