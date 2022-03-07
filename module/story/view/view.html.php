@@ -203,6 +203,7 @@
         <?php if(!$story->deleted):?>
         <?php
         common::printIcon('story', 'change', "storyID=$story->id", $story, 'button', 'alter', '', 'showinonlybody');
+        common::printIcon('story', 'recall', "storyID=$story->id", $story, 'button', 'undo', '', 'showinonlybody');
         common::printIcon('story', 'review', "storyID=$story->id", $story, 'button', 'search', '', 'showinonlybody');
         if($story->status == 'active' and $story->stage == 'wait' and $story->parent <= 0 and !isonlybody())
         {

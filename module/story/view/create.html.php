@@ -169,7 +169,7 @@
             <th><?php echo $lang->story->title;?></th>
             <td colspan="4">
               <div class='table-row'>
-                <div class='table-col'>
+                <div class='table-col input-size'>
                   <div class="input-control has-icon-right">
                     <?php echo html::input('title', $storyTitle, "class='form-control' required");?>
                     <div class="colorpicker">

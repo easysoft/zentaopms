@@ -1,6 +1,5 @@
 <?php
-/**
- * The browsebylist view file of plan module of ZenTaoPMS.
+/** * The browsebylist view file of plan module of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2015 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -64,10 +63,10 @@
         <?php endif;?>
         <th class='c-date'><?php common::printOrderLink('begin', $orderBy, $vars, $lang->productplan->begin);?></th>
         <th class='c-date'><?php common::printOrderLink('end',   $orderBy, $vars, $lang->productplan->end);?></th>
-        <th class='c-story'><?php echo $lang->productplan->stories;?></th>
-        <th class='c-bug'><?php echo $lang->productplan->bugs;?></th>
-        <th class='c-hour'><?php echo $lang->productplan->hour;?></th>
-        <th class='c-execution'><?php echo $lang->productplan->execution;?></th>
+        <th class='c-story text-center'><?php echo $lang->productplan->stories;?></th>
+        <th class='c-bug text-center'><?php echo $lang->productplan->bugs;?></th>
+        <th class='c-hour text-center'><?php echo $lang->productplan->hour;?></th>
+        <th class='c-execution text-center'><?php echo $lang->productplan->execution;?></th>
         <th><?php echo $lang->productplan->desc;?></th>
         <?php
         $extendFields = $this->productplan->getFlowExtendFields();
@@ -121,7 +120,7 @@
           }
 
           echo "<div class='plan-name has-prefix {$class}'>";
-          if($plan->parent > 0 and !isset($plans[$plan->parent])) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
+          if($plan->parent > 0) echo "<span class='label label-badge label-light' title='{$this->lang->productplan->children}'>{$this->lang->productplan->childrenAB}</span>";
           echo html::a(inlink('view', "id=$plan->id"), $plan->title);
           if(!empty($expired)) echo $expired;
           if(isset($plan->children)) echo '<a class="task-toggle" data-id="' . $plan->id . '"><i class="icon icon-angle-double-right"></i></a>';
@@ -152,7 +151,7 @@
               $attr = "target='hiddenwin'";
               common::printIcon('productplan', 'start', "planID=$plan->id", $plan, 'list', 'play', '', '', false, $attr);
               common::printIcon('productplan', 'finish', "planID=$plan->id", $plan, 'list', 'checked', '', '', false, $attr);
-              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', '', false, $attr);
+              common::printIcon('productplan', 'close', "planID=$plan->id", $plan, 'list', 'off', '', 'iframe', true);
           }
 
           $attr  = $plan->expired ? "disabled='disabled'" : '';
@@ -224,8 +223,10 @@
             <?php
             foreach($lang->productplan->statusList as $key => $status)
             {
-                $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key");
-                echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin')\"");
+                $isHiddenwin = $key == 'closed' ? '' : 'hiddenwin';
+
+                $actionLink = $this->createLink('productplan', 'batchChangeStatus', "status=$key&productID=$product->id");
+                echo html::a('javascript:;', $status, '', "onclick=\"setFormAction('$actionLink', '$isHiddenwin')\"");
             }
             ?>
           </div>

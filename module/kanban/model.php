@@ -1419,7 +1419,7 @@ class kanbanModel extends model
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
 
-        $columns = $this->dao->select('t1.*, t2.`type` as columnType')->from(TABLE_KANBANCELL)->alias('t1')
+        $columns = $this->dao->select('t1.*, t2.`type` as columnType, t2.limit, t2.name as columnName')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.`type`')->eq($browseType)
@@ -1441,7 +1441,6 @@ class kanbanModel extends model
         {
             $laneData   = array();
             $columnData = array();
-            $columnList = $this->lang->kanban->{$browseType . 'Column'};
 
             $laneData['id']              = $groupBy . $laneID;
             $laneData['laneID']          = $groupBy . $laneID;
@@ -1451,24 +1450,24 @@ class kanbanModel extends model
             $laneData['defaultCardType'] = $browseType;
 
             /* Construct kanban column data. */
-            foreach($columnList as $columnID => $columnName)
+            foreach($columns as $column)
             {
                 $parentColumn = '';
-                if(in_array($columnID, array('developing', 'developed'))) $parentColumn = 'develop';
-                if(in_array($columnID, array('testing', 'tested')))       $parentColumn = 'test';
-                if(in_array($columnID, array('fixing', 'fixed')))         $parentColumn = 'resolving';
+                if(in_array($column->columnType, array('developing', 'developed'))) $parentColumn = 'develop';
+                if(in_array($column->columnType, array('testing', 'tested')))       $parentColumn = 'test';
+                if(in_array($column->columnType, array('fixing', 'fixed')))         $parentColumn = 'resolving';
 
-                $columnData[$columnID]['id']         = $columnID;
-                $columnData[$columnID]['type']       = $columnID;
-                $columnData[$columnID]['name']       = $columnName;
-                $columnData[$columnID]['color']      = '#333';
-                $columnData[$columnID]['limit']      = -1;
-                $columnData[$columnID]['laneType']   = $browseType;
-                $columnData[$columnID]['asParent']   = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
-                $columnData[$columnID]['parentType'] = $parentColumn;
+                $columnData[$column->column]['id']         = $column->column;
+                $columnData[$column->column]['type']       = $column->columnType;
+                $columnData[$column->column]['name']       = $column->columnName;
+                $columnData[$column->column]['color']      = '#333';
+                $columnData[$column->column]['limit']      = $column->limit;
+                $columnData[$column->column]['laneType']   = $browseType;
+                $columnData[$column->column]['asParent']   = in_array($column->columnType, array('develop', 'test', 'resolving')) ? true : false;
+                $columnData[$column->column]['parentType'] = $parentColumn;
 
                 $cardOrder = 1;
-                $objects   = zget($cardGroup, $columnID, array());
+                $objects   = zget($cardGroup, $column->columnType, array());
                 foreach($objects as $object)
                 {
                     if(empty($object)) continue;
@@ -1494,10 +1493,10 @@ class kanbanModel extends model
                         $cardData['title'] = $object->title;
                     }
 
-                    $laneData['cards'][$columnID][] = $cardData;
+                    $laneData['cards'][$column->columnType][] = $cardData;
                     $cardOrder ++;
                 }
-                if(!isset($laneData['cards'][$columnID])) $laneData['cards'][$columnID] = array();
+                if(!isset($laneData['cards'][$column->columnType])) $laneData['cards'][$column->columnType] = array();
             }
 
             $kanbanGroup[$groupBy]['id']              = $groupBy . $laneID;

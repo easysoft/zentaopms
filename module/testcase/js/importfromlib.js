@@ -36,7 +36,7 @@ function reload(libID)
 }
 
 /**
- * Load modules.
+ * Update modules.
  *
  * @param  int $productID
  * @param  int $branch
@@ -44,15 +44,81 @@ function reload(libID)
  * @access public
  * @return void
  */
-function loadModules(productID, branch, caseID)
+function updateModules(productID, branch, caseID)
 {
     if(typeof(branch) == 'undefined') branch = 0;
 
-    moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
-    var $tr = $('#module' + caseID).closest('tr');
-    $('#module' + caseID).parent('td').load(moduleLink, function(data)
+    var moduleLink = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branch + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+    var tr = $('#module' + caseID).closest('tr');
+    if(branch !== 'ditto')
     {
-        $tr.find('#module').chosen();
-        $tr.find('#module').attr({"id": 'module' + caseID, "name": 'module[' + caseID + ']'});
+        loadModules(tr, caseID, moduleLink);
+        tr.nextAll().each(function()
+        {
+            var nextCaseID = $(this).attr('id');
+            var nextBranch = $('#branch' + nextCaseID + ' option:selected').val();
+            if(nextBranch !== 'ditto') return false;
+            var nextTr = $('#module' + nextCaseID).closest('tr');
+            loadModules(nextTr, nextCaseID, moduleLink, true);
+        });
+    }
+    else
+    {
+        var branchID = '';
+        tr.prevAll().each(function()
+        {
+            var prevCaseID = $(this).attr('id');
+            var prevBranch = $('#branch' + prevCaseID + ' option:selected').val();
+            if(prevBranch !== 'ditto')
+            {
+                branchID = prevBranch;
+                return false;
+            }
+        });
+        link = createLink('tree', 'ajaxGetOptionMenu', 'productID=' + productID + '&viewtype=case&branch=' + branchID + '&rootModuleID=0&returnType=html&fieldID=&needManage=true');
+        loadModules(tr, caseID, link, true);
+        tr.nextAll().each(function()
+        {
+            var nextCaseID = $(this).attr('id');
+            var nextBranch = $('#branch' + nextCaseID + ' option:selected').val();
+            if(nextBranch !== 'ditto') return false;
+            var nextTr = $('#module' + nextCaseID).closest('tr');
+            loadModules(nextTr, nextCaseID, link, true);
+        });
+    }
+}
+
+/**
+ * Load modules.
+ *
+ * @param  object  $tr
+ * @param  int     $caseID
+ * @param  string  $link
+ * @param  boolean $isAddDitto
+ * @access public
+ * @return void
+ */
+function loadModules(tr, caseID, link, isAddDitto)
+{
+    var isAddDitto = (typeof(isAddDitto) === 'undefined') ? false : true;
+
+    $('#module' + caseID).parent('td').load(link, function(data)
+    {
+        tr.find('#module').chosen();
+        tr.find('#module').attr({"id": 'module' + caseID, "name": 'module[' + caseID + ']'});
+        if(isAddDitto == true) addDittoOption(caseID);
     });
+}
+
+/**
+ * add ditto option in select.
+ *
+ * @param  int    $caseID
+ * @access public
+ * @return void
+ */
+function addDittoOption(caseID)
+{
+    $('#module' + caseID).append("<option value='ditto' selected='selected'>" + ditto + "</option>");
+    $('#module' + caseID).trigger('chosen:updated');
 }

@@ -135,9 +135,18 @@ class product extends control
     public function browse($productID = 0, $branch = '', $browseType = '', $param = 0, $storyType = 'story', $orderBy = '', $recTotal = 0, $recPerPage = 20, $pageID = 1, $projectID = 0)
     {
         $productID = $this->app->tab != 'project' ? $this->product->saveState($productID, $this->products) : $productID;
-        $branches  = $this->loadModel('branch')->getList($productID, $projectID, 'all');
-        $branch    = ($this->cookie->preBranch !== '' and $branch === '' and isset($branches[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
-        $branchID  = $branch;
+        $product   = $this->product->getById($productID);
+
+        if($product and $product->type != 'normal')
+        {
+            $branchPairs = $this->loadModel('branch')->getPairs($productID, 'all');
+            $branch      = ($this->cookie->preBranch !== '' and $branch === '' and isset($branchPairs[$this->cookie->preBranch])) ? $this->cookie->preBranch : $branch;
+            $branchID    = $branch;
+        }
+        else
+        {
+            $branchID = $branch = 'all';
+        }
 
         /* Set menu. */
         if($this->app->tab == 'product')
@@ -224,8 +233,6 @@ class product extends control
         /* Display of branch label. */
         $showBranch = $this->loadModel('branch')->showBranch($productID);
 
-        $product = $this->product->getById($productID);
-
         /* Get stories. */
         if($this->app->rawModule == 'projectstory')
         {
@@ -248,10 +255,14 @@ class product extends control
         /* Display status of branch. */
         $branchOption    = array();
         $branchTagOption = array();
-        foreach($branches as $branchInfo)
+        if($product and $product->type != 'normal')
         {
-            $branchOption[$branchInfo->id]    = $branchInfo->name;
-            $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            $branches = $this->loadModel('branch')->getList($productID, $projectID, 'all');
+            foreach($branches as $branchInfo)
+            {
+                $branchOption[$branchInfo->id]    = $branchInfo->name;
+                $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
+            }
         }
 
         /* Process the sql, get the conditon partion, save it to session. */
@@ -984,7 +995,7 @@ class product extends control
 
         if($number === '')
         {
-            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            return print(html::select('execution', array('' => '') + $executions, empty($executionID) ? key(array_filter($executions)) : $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {

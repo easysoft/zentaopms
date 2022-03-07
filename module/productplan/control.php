@@ -188,21 +188,31 @@ class productplan extends control
      * @access public
      * @return void
      */
-    public function batchChangeStatus($status)
+    public function batchChangeStatus($status, $productID)
     {
-        if($this->post->planIDList)
+        $this->loadModel('product')->setMenu($productID);
+        $this->loadModel('action');
+        $planIDList = $this->post->planIDList;
+
+        if($status !== 'closed')
         {
-            $planIDList = $this->post->planIDList;
-            unset($_POST['planIDList']);
-            $allChanges = $this->productplan->batchChangeStatus($planIDList, $status);
-            if(dao::isError()) die(js::error(dao::getError()));
-            foreach($allChanges as $planID => $changes)
+            $this->productplan->batchChangeStatus($status);
+            return print(js::reload('parent'));
+        }
+        else
+        {
+            if($this->post->comments)
             {
-                $this->loadModel('action');
-                $actionID = $this->action->create('productplan', $planID, 'edited');
-                $this->action->logHistory($actionID, $changes);
+                $allChanges = $this->productplan->batchChangeStatus($status);
+                return print(js::locate(inlink('browse', "product=$productID"), 'parent'));
             }
-            die(js::reload('parent'));
+
+            $plans = $this->dao->select('*')->from(TABLE_PRODUCTPLAN)->where('id')->in($planIDList)->fetchAll('id');
+
+            $this->view->reasonList  = $this->lang->productplan->closedReasonList;
+            $this->view->plans       = $plans;
+            $this->view->productID   = $productID;
+            $this->display();
         }
     }
 
@@ -387,8 +397,14 @@ class productplan extends control
 
         if($plan->branch > 0) $this->view->branchStatus = $this->loadModel('branch')->getById($plan->branch, $plan->product, 'status');
 
+        $modulePairs = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        foreach($planStories as $story)
+        {
+            if(!isset($modulePairs[$story->module])) $modulePairs += $this->tree->getModulesName($story->module);
+        }
+
         $this->loadModel('datatable');
-        $this->view->modulePairs  = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        $this->view->modulePairs  = $modulePairs;
         $this->view->title        = "PLAN #$plan->id $plan->title/" . zget($products, $plan->product, '');
         $this->view->position[]   = $this->lang->productplan->view;
         $this->view->planStories  = $planStories;
@@ -466,23 +482,25 @@ class productplan extends control
      * Close a plan.
      *
      * @param  int    $planID
-     * @param  string $confirm
      * @access public
      * @return void
      */
-    public function close($planID, $confirm = 'no')
+    public function close($planID)
     {
-        if($confirm == 'no')
-        {
-            die(js::confirm($this->lang->productplan->confirmClose, $this->createLink('productplan', 'close', "planID=$planID&confirm=yes"), 'parent'));
-        }
-        else
+        $plan = $this->productplan->getById($planID);
+
+        if(!empty($_POST))
         {
             $this->productplan->updateStatus($planID, 'closed', 'closed');
-
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent.parent'));
         }
+
+        $this->view->productplan = $plan;
+        $this->view->reasonList  = $this->lang->productplan->closedReasonList;
+        $this->view->actions     = $this->loadModel('action')->getList('productplan', $planID);
+        $this->view->users       = $this->loadModel('user')->getPairs();
+        $this->display();
     }
 
     /**
@@ -631,6 +649,12 @@ class productplan extends control
             $allStories = $this->story->getProductStories($this->view->product->id, $plan->branch ? "0,{$plan->branch}" : 0, $moduleID = '0', $status = 'draft,active,changed', 'story', 'id_desc', $hasParent = false, array_keys($planStories), $pager);
         }
 
+        $modules = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        foreach($allStories as $story)
+        {
+            if(!isset($modules[$story->module])) $modules += $this->tree->getModulesName($story->module);
+        }
+
         $this->view->allStories  = $allStories;
         $this->view->planStories = $planStories;
         $this->view->products    = $products;
@@ -638,7 +662,7 @@ class productplan extends control
         $this->view->plans       = $this->dao->select('id, end')->from(TABLE_PRODUCTPLAN)->fetchPairs();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter');
         $this->view->browseType  = $browseType;
-        $this->view->modules     = $this->loadModel('tree')->getOptionMenu($plan->product, 'story', 0, 'all');
+        $this->view->modules     = $modules;
         $this->view->param       = $param;
         $this->view->orderBy     = $orderBy;
         $this->view->pager       = $pager;
