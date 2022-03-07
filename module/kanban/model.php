@@ -1420,7 +1420,7 @@ class kanbanModel extends model
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
 
-        $columns = $this->dao->select('t1.*, t2.`type` as columnType, t2.limit')->from(TABLE_KANBANCELL)->alias('t1')
+        $columns = $this->dao->select('t1.*, t2.`type` as columnType, t2.limit, t2.name as columnName')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.`type`')->eq($browseType)
@@ -1442,7 +1442,6 @@ class kanbanModel extends model
         {
             $laneData   = array();
             $columnData = array();
-            $columnList = $this->lang->kanban->{$browseType . 'Column'};
 
             $laneData['id']              = $groupBy . $laneID;
             $laneData['laneID']          = $groupBy . $laneID;
@@ -1461,7 +1460,7 @@ class kanbanModel extends model
 
                 $columnData[$column->column]['id']         = $column->column;
                 $columnData[$column->column]['type']       = $column->columnType;
-                $columnData[$column->column]['name']       = $columnList[$column->columnType];
+                $columnData[$column->column]['name']       = $column->columnName;
                 $columnData[$column->column]['color']      = '#333';
                 $columnData[$column->column]['limit']      = $column->limit;
                 $columnData[$column->column]['laneType']   = $browseType;
