@@ -86,6 +86,32 @@ class task extends control
         $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
 
+        if($execution->type == 'kanban')
+        {
+            $this->loadModel('kanban');
+
+            $cardPositions = $this->kanban->getCardPositions($executionID, 'task', 'wait');
+
+            $kanbanLanePairs = array();
+            if($output)
+            {
+                $lane = $this->kanban->getLaneByID($output['laneID']);
+                $kanbanLanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'task');
+            }
+            else
+            {
+                foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
+            }
+
+            if($this->post->kanbanLane)
+            {
+                $output['laneID'] = $this->post->kanbanLane;
+                $output['columnID'] =$cardPositions[$this->post->kanbanLane]->columnID;
+            }
+
+            $this->view->kanbanLanePairs = $kanbanLanePairs;
+        }
+
         /* Set menu. */
         $this->execution->setMenu($execution->id);
 

@@ -1084,6 +1084,27 @@ class kanbanModel extends model
     }
 
     /**
+     * Get object card positions.
+     *
+     * @param int $kanbanID
+     * @param string $laneType
+     * @param string $columnType
+     * @access public
+     * @return array
+     */
+    public function getCardPositions($kanbanID, $laneType, $columnType)
+    {
+        return $this->dao->select('t1.name as name, t2.id as laneID, t2.name as laneName, t3.id as columnID')
+            ->from(TABLE_KANBANREGION)->alias('t1')
+            ->leftjoin(TABLE_KANBANLANE)->alias('t2')->on('t1.id=t2.region')
+            ->leftjoin(TABLE_KANBANCOLUMN)->alias('t3')->on('t1.id=t3.region')
+            ->where('kanban')->eq($kanbanID)
+            ->andWhere('t2.type')->eq($laneType)
+            ->andWhere('t3.type')->eq($columnType)
+            ->fetchAll('laneID');
+    }
+
+    /**
      * Get imported cards.
      *
      * @param  int    $kanbanID
@@ -1827,8 +1848,8 @@ class kanbanModel extends model
     /**
      * Get lane pairs by region id.
      *
-     * @param  array  $regionID
-     * @param  string $type all|story|task|bug|common
+     * @param  array|int $regionID
+     * @param  string    $type all|story|task|bug|common
      * @access public
      * @return array
      */

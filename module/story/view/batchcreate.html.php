@@ -48,6 +48,9 @@
             <?php if(!isonlybody()):?>
             <th class='c-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
             <?php endif;?>
+            <?php if(isset($kanbanLanePairs)):?>
+            <th class='c-lane'><?php echo $lang->kanbancard->lane;?></th>
+            <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->story->title;?></th>
             <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?>'><?php echo $lang->story->spec;?></th>
             <th class='c-source<?php echo zget($visibleFields, 'source', ' hidden') . zget($requiredFields, 'source', '', ' required');?>'><?php echo $lang->story->source;?></th>
@@ -70,6 +73,9 @@
             <td class='text-left' style='overflow:visible'><?php echo html::select('module[$id]', $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
             <?php if(!isonlybody()):?>
             <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select('plan[$id]', $plans, $planID, "class='form-control chosen'");?></td>
+            <?php endif;?>
+            <?php if(isset($kanbanLanePairs)):?>
+            <td class='text-left'><?php echo html::select('kanbanLanes[$id]', $kanbanLanePairs, '', "class='form-control chosen' id='lane_\$id'");?>
             <?php endif;?>
             <td style='overflow:visible'>
               <div class="input-group">

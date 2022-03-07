@@ -197,6 +197,16 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php endif;?>
+          <?php if(isset($kanbanLanePairs)):?>
+          <tr>
+            <th><?php echo $lang->kanbancard->lane;?></th>
+            <td colspan='2'>
+              <div class='input-group'>
+                <?php echo html::select('kanbanLane', $kanbanLanePairs, '', "class='form control chosen'");?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->bug->title;?></th>
             <td colspan='2'>

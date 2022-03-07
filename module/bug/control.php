@@ -322,6 +322,28 @@ class bug extends control
         if($this->app->tab == 'execution')
         {
             if(isset($output['executionID'])) $this->loadModel('execution')->setMenu($output['executionID']);
+            $execution = $this->dao->findById((int)$output['executionID'])->from(TABLE_EXECUTION)->fetch();
+            if($execution->type == 'kanban')
+            {
+                $this->loadModel('kanban');
+
+                $cardPositions = $this->kanban->getCardPositions($output['executionID'], 'bug', 'unconfirmed');
+
+                $kanbanLanePairs = array();
+                if(isset($output['laneID']))
+                {
+                    $lane = $this->kanban->getLaneByID($output['laneID']);
+                    $kanbanLanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'bug');
+                }
+                else
+                {
+                    foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
+                }
+
+                if($this->post->kanbanLane) $extras = 'laneID=' . "{$this->post->kanbanLane}" . ",columnID=" . $cardPositions[$this->post->kanbanLane]->columnID . ",executionID=" . $output['executionID'];
+
+                $this->view->kanbanLanePairs = $kanbanLanePairs;
+            }
         }
         else if($this->app->tab == 'project')
         {

@@ -62,11 +62,35 @@ class story extends control
         {
             $objectID = empty($objectID) ? $this->session->execution : $objectID;
             $this->execution->setMenu($objectID);
+            $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
         }
 
         /* Whether there is a object to transfer story, for example feedback. */
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
+
+        if($execution->type == 'kanban')
+        {
+            $this->loadModel('kanban');
+
+            $cardPositions = $this->kanban->getCardPositions($execution->id, 'story', 'backlog');
+
+            $kanbanLanePairs = array();
+            if($output)
+            {
+                $lane = $this->kanban->getLaneByID($output['laneID']);
+                $kanbanLanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'story');
+            }
+            else
+            {
+                foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
+            }
+
+            if($this->post->kanbanLane) $extra = 'laneID=' . "{$this->post->kanbanLane}" . "&columnID=" . $cardPositions[$this->post->kanbanLane]->columnID;
+
+            $this->view->kanbanLanePairs = $kanbanLanePairs;
+        }
+
         foreach($output as $paramKey => $paramValue)
         {
             if(isset($this->config->story->fromObjects[$paramKey]))
@@ -392,11 +416,26 @@ class story extends control
             }
             else
             {
+                if($execution->type == 'kanban')
+                {
+                    $this->loadModel('kanban');
+
+                    $cardPositions = $this->kanban->getCardPositions($executionID, 'story', 'backlog');
+
+                    $kanbanLanePairs = array();
+
+                    foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
+
+                    $this->view->kanbanLanePairs = $kanbanLanePairs;
+                }
+
                 $this->execution->setMenu($executionID);
                 $this->app->rawModule = 'execution';
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
+
+
         }
         else
         {

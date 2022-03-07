@@ -139,6 +139,14 @@
           </td>
         </tr>
         <?php endif;?>
+        <?php if(isset($kanbanLanePairs)):?>
+        <tr>
+          <th><?php echo $lang->kanbancard->lane;?></th>
+          <td colspan='3'>
+            <div class="input group"><?php echo html::select('kanbanLane', $kanbanLanePairs, '', "class='form-control chosen'");?></div>
+          </td>
+        </tr>
+        <?php endif;?>
         <tr>
           <th><?php echo $lang->task->name;?></th>
           <td colspan='3'>
