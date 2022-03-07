@@ -1241,7 +1241,7 @@ class bug extends control
         }
         else
         {
-            $users = $this->user->getPairs('noclosed|nofeedback', $bug->assignedTo);
+            $users = $this->user->getPairs('noclosed', $bug->assignedTo);
         }
 
         $this->view->title      = $this->products[$bug->product] . $this->lang->colon . $this->lang->bug->assignedTo;
