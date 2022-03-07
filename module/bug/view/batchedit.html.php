@@ -74,24 +74,6 @@
           <?php foreach($bugs as $bugID => $bug):?>
           <?php
           if(!empty($this->config->user->moreLink)) $this->config->moreLinks["assignedTos[$bugID]"] = $this->config->user->moreLink;
-          if(!$productID)
-          {
-              $branchTagOption = array();
-              $product         = $this->product->getByID($bug->product);
-              $plans           = $this->loadModel('productplan')->getPairs($bug->product, $branch);
-              $branches        = $product->type == 'normal' ? array() : $this->loadModel('branch')->getList($product->id, 0 ,'all');
-              foreach($branches as $branchInfo)
-              {
-                  $branchTagOption[$branchInfo->id] = $branchInfo->name . ($branchInfo->status == 'closed' ? ' (' . $this->lang->branch->statusList['closed'] . ')' : '');
-              }
-
-              $modules[$bug->product][0] = $this->tree->getOptionMenu($bug->product, 'bug');
-              if($product->type != 'normal')
-              {
-                  foreach($branchTagOption as $branchID => $branchName) $branchTagOption[$branchID] = '/' . $product->name . '/' . $branchName;
-                  $modules[$bug->product][$bug->branch] = $this->tree->getOptionMenu($bug->product, 'bug', 0, $bug->branch);
-              }
-          }
           ?>
           <tr>
             <td><?php echo $bugID . html::hidden("bugIDList[$bugID]", $bugID);?></td>
@@ -114,12 +96,11 @@
             </td>
             <?php if($branchProduct):?>
             <td style='overflow:visible'>
-              <?php $branchProductID = $productID ? $productID : $product->id;?>
-              <?php $disabled        = (isset($product) and $product->type == 'normal') ? "disabled='disabled'" : '';?>
-              <?php echo html::select("branches[$bugID]", $branchTagOption, $bug->branch, "class='form-control chosen' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
+              <?php $disabled = (isset($productList) and $productList[$bug->product]->type == 'normal') ? "disabled='disabled'" : '';?>
+              <?php echo html::select("branches[$bugID]", !empty($disabled) ? array() : $branchTagOption[$bug->product], $bug->branch, "class='form-control chosen' $disabled onchange='setBranchRelated(this.value, $bug->product, $bug->id)'");?>
             </td>
             <?php endif;?>
-            <td><?php echo html::select("modules[$bugID]", $modules[$bug->product][$bug->branch], $bug->module, "class='form-control chosen'");?></td>
+            <td><?php echo html::select("modules[$bugID]", isset($modules[$bug->product][$bug->branch]) ? $modules[$bug->product][$bug->branch] : array(0 => '/'), $bug->module, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'productplan', ' hidden')?>' style='overflow:visible'><?php echo html::select("plans[$bugID]", $plans, $bug->plan, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'assignedTo', ' hidden')?>' style='overflow:visible'><?php echo html::select("assignedTos[$bugID]", $users, $bug->assignedTo, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'deadline', ' hidden')?>' style='overflow:visible'><?php echo html::input("deadlines[$bugID]", $bug->deadline, "class='form-control form-date'");?></td>

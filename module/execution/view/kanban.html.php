@@ -43,11 +43,14 @@ js::set('noAssigned', $lang->kanbancard->noAssigned);
 js::set('users', $users);
 js::set('entertime', time());
 js::set('displayCards', $execution->displayCards);
+js::set('productNum', $productNum);
 js::set('fluidBoard', $execution->fluidBoard);
 js::set('colorListLang', $lang->kanbancard->colorList);
 js::set('colorList', $this->config->kanban->cardColorList);
 js::set('projectID', $projectID);
 js::set('vision', $this->config->vision);
+js::set('productCount', count($productNames));
+js::set('executionID', $execution->id);
 
 $canSortRegion       = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion       = commonModel::hasPriv('kanban', 'editRegion');
@@ -163,12 +166,30 @@ js::set('hasTaskButton', $hasTaskButton);
       <button class='btn btn-primary' type='button' data-toggle='dropdown'><i class='icon icon-plus'></i> <?php echo $this->lang->create;?> <span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
         <?php if($canCreateStory) echo '<li>' . html::a(helper::createLink('story', 'create', "productID=$productID&branch=0&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->createStory, '', "class='iframe'") . '</li>';?>
-        <?php if($canBatchCreateStory) echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStroy, '', "class='iframe' data-width='90%'") . '</li>';?>
+        <?php
+        if($canBatchCreateStory)
+        {
+            if(count($productNames) > 1)
+            {
+                echo '<li>' . html::a('#batchCreateStory', $lang->execution->batchCreateStory, '', 'data-toggle="modal"') . '</li>';
+            }
+            else
+            {
+                echo '<li>' . html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='iframe' data-width='90%'") . '</li>';
+            }
+        }
+        ?>
         <?php if($canLinkStory) echo '<li>' . html::a(helper::createLink('execution', 'linkStory', "execution=$execution->id", '', true), $lang->execution->linkStory, '', "class='iframe' data-width='90%'") . '</li>';?>
         <?php if($canLinkStoryByPlan) echo '<li>' . html::a('#linkStoryByPlan', $lang->execution->linkStoryByPlan, '', 'data-toggle="modal"') . '</li>';?>
         <?php if($hasStoryButton and $hasBugButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'create', "productID=$productID&branch=0&extra=executionID=$execution->id", '', true), $lang->bug->create, '', "class='iframe'") . '</li>';?>
-        <?php if($canBatchCreateBug) echo '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';?>
+        <?php if($canBatchCreateBug)
+        {
+
+            $batchCreateBugLink = '<li>' . html::a(helper::createLink('bug', 'batchCreate', "productID=$productID&branch=$branchID&executionID=$execution->id", '', true), $lang->bug->batchCreate, '', "class='iframe'") . '</li>';
+            if($productNum > 1) $batchCreateBugLink = '<li>' . html::a('#batchCreateBug', $lang->bug->batchCreate, '', "data-toggle='modal'") . '</li>';
+            echo $batchCreateBugLink;
+        }?>
         <?php if(($hasStoryButton or $hasBugButton) and $hasTaskButton) echo '<li class="divider"></li>';?>
         <?php if($canCreateTask) echo '<li>' . html::a(helper::createLink('task', 'create', "execution=$execution->id", '', true), $lang->task->create, '', "class='iframe'") . '</li>';?>
         <?php if($canImportBug) echo '<li>' . html::a(helper::createLink('execution', 'importBug', "executionID=$execution->id", '', true), $lang->execution->importBug, '', "class='iframe' data-width=80%") . '</li>';?>
@@ -222,6 +243,38 @@ js::set('hasTaskButton', $hasTaskButton);
         <div class='input-group'>
           <?php echo html::select('plan', $allPlans, '', "class='form-control chosen' id='plan'");?>
           <span class='input-group-btn'><?php echo html::commonButton($lang->execution->linkStory, "id='toStoryButton'", 'btn btn-primary');?></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="batchCreateStory">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->execution->batchCreateStoryTips;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('products', $productNames, '', "class='form-control chosen' id='products'");?>
+          <span class='input-group-btn'><?php echo html::a(helper::createLink('story', 'batchCreate', "productID=$productID&branch=$branchID&moduleID=0&story=0&execution=$execution->id", '', true), $lang->execution->batchCreateStory, '', "class='btn btn-primary iframe' data-width='90%' id='batchCreateStoryButton' data-dismiss='modal'");?></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="modal fade" id="batchCreateBug">
+  <div class="modal-dialog mw-500px">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true"><i class="icon icon-close"></i></button>
+        <h4 class="modal-title"><?php echo $lang->bug->product;?></h4>
+      </div>
+      <div class="modal-body">
+        <div class='input-group'>
+          <?php echo html::select('productName', $productNames, '', "class='form-control chosen' id='product'");?>
+          <span class='input-group-btn'><?php echo html::a(helper::createLink('bug', 'batchCreate', 'productID=' . key($productNames) . '&branch=' . $branchID . '&executionID=' . $executionID,     '', true), $lang->bug->batchCreate, '', "id='batchCreateBugButton' class='btn btn-primary iframe' data-dismiss='modal' data-width='90%'");?></span>
         </div>
       </div>
     </div>
