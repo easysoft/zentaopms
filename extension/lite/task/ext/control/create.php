@@ -11,7 +11,15 @@ class myTask extends task
             die(js::locate(helper::createLink('execution', 'create')));
         }
 
-        $regionList = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
+        $regionList   = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
+        $regionIDList = array_keys($regionList);
+
+        /* Filter Kanban without Lane. */
+        $lanes = $this->kanban->getLaneGroupByRegion($regionIDList, 'task');
+        foreach($regionList as $key => $region)
+        {
+            if(!isset($lanes[$key])) unset($regionList[$key]);
+        }
 
         $this->view->regionList = $regionList;
         $this->view->laneList   = array();

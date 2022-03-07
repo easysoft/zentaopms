@@ -24,3 +24,6 @@ ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL AFTER `lastEdited
 
 ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
+
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
+('lite', '迅捷版用户分组', 'liteUser', '迅捷版用户分组');

@@ -141,7 +141,7 @@
               <div class='input-group'>
                 <?php
                 echo html::input("estStarted[$i]", '', "class='form-control text-center form-date' onkeyup='toggleCheck(this)'");
-                if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                if($i != 1) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                 ?>
               </div>
             </td>
@@ -149,7 +149,7 @@
               <div class='input-group'>
                 <?php
                 echo html::input("deadline[$i]", '', "class='form-control text-center form-date' onkeyup='toggleCheck(this)'");
-                if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                if($i != 1) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i > 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                 ?>
               </div>
             </td>
