@@ -241,7 +241,8 @@ class router extends baseRouter
             if(!defined('IN_UPGRADE'))
             {
                 /* Get story concept in project and product. */
-                $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$this->clientLang}\"")->fetchAll();
+                $clientLang = $this->clientLang == 'zh-tw' ? 'zh-cn' : $this->clientLang;
+                $URSRList   = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `lang` = \"{$clientLang}\"")->fetchAll();
                 if(empty($URSRList)) $URSRList = $this->dbh->query('SELECT `key`, `value` FROM' . TABLE_LANG . "WHERE module = 'custom' and section = 'URSRList' and `key` = \"{$config->URSR}\"")->fetchAll();
 
                 /* Get UR pairs and SR pairs. */
