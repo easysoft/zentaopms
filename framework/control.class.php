@@ -137,12 +137,22 @@ class control extends baseControl
     {
         $installedVersion = $this->loadModel('setting')->getVersion();
 
+        /* Means open source upgrade to biz or max. */
+        if(is_numeric($installedVersion[0]) and $this->config->edition != 'open')
+        {
+            $this->loadModel('setting')->setItem('system.common.global.version', $this->config->version);
+            $this->loadModel('effort')->convertEstToEffort();
+            $this->loadModel('upgrade')->importBuildinModules();
+            $this->upgrade->addSubStatus();
+        }
+
+        /* Max only has new system mode. */
         if($installedVersion[0] != 'm' and $this->config->edition == 'max')
         {
+            $this->loadModel('setting')->setItem('system.common.global.version', $this->config->version);
             if($this->config->systemMode == 'classic' and $this->app->getModuleName() != 'upgrade')
             {
                 $this->loadModel('setting')->setItem('system.common.global.mode', 'new');
-                $this->loadModel('setting')->setItem('system.common.global.version', $this->config->version);
                 $this->locate(helper::createLink('upgrade', 'mergeTips'));
             }
         }
