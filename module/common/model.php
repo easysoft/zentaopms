@@ -1638,10 +1638,11 @@ EOD;
         $executionPairs = array();
         $userCondition  = !$app->user->admin ? " AND `id` " . helper::dbIN($app->user->view->sprints) : '';
         $orderBy        = $object->type == 'stage' ? 'ORDER BY `id` ASC' : 'ORDER BY `id` DESC';
-        $executionList  = $app->dbh->query("SELECT id,name FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
+        $executionList  = $app->dbh->query("SELECT id,name,parent FROM " . TABLE_EXECUTION . " WHERE `project` = '{$object->project}' AND `deleted` = '0' $userCondition $orderBy")->fetchAll();
         foreach($executionList as $execution)
         {
             if($execution->id == $executionID) continue;
+            if(isset($executionPairs[$execution->parent])) unset($executionPairs[$execution->parent]);
             $executionPairs[$execution->id] = $execution->name;
         }
 

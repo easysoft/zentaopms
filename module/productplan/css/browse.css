@@ -15,7 +15,7 @@ td.c-branch {overflow: hidden; text-align: left !important; text-overflow: ellip
 .main-table tbody > tr.table-children > td:first-child::before {width: 3px;}
 @-moz-document url-prefix() {.main-table tbody > tr.table-children > td:first-child::before {width: 4px;};}
 
-.c-title {width: 250px;}
+.c-title {width: 160px;}
 .c-branch {width: 100px;}
 .c-story, .c-status {width: 80px;}
 .c-execution {width: 60px !important;}

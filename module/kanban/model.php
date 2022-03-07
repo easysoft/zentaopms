@@ -87,13 +87,13 @@ class kanbanModel extends model
                 ->add('createdDate', helper::now())
                 ->trim('name')
                 ->get();
-            if($from == 'kanban') $region->space = $kanban->space;
+            $region->space = $from == 'kanban' ? $kanban->space : 0;
         }
 
         $region->order = $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
-            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0'")
+            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space='$region->space'")
             ->autoCheck()
             ->exec();
 
