@@ -245,6 +245,7 @@ class customModel extends model
                 list($label, $module, $method) = $link;
                 $hasPriv = commonModel::hasPriv($module, $method);
                 if($module == 'execution' and $method == 'more') $hasPriv = true;
+                if($module == 'project' and $method == 'other')  $hasPriv = true;
             }
 
             if($isTutorialMode || $hasPriv)

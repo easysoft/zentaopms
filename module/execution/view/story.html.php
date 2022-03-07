@@ -284,7 +284,7 @@
                   if(common::hasPriv('story', 'recall'))
                   {
                       $recallDisabled = empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) ? '' : 'disabled';
-                      common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'back', 'hiddenwin', $recallDisabled, '', '', $lang->story->recall);
+                      common::printIcon('story', 'recall', "story={$story->id}", $story, 'list', 'undo', 'hiddenwin', $recallDisabled, '', '', $lang->story->recall);
                   }
 
                   $lang->task->create = $lang->execution->wbs;

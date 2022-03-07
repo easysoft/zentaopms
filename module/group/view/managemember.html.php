@@ -40,7 +40,7 @@
             </th>
             <td id='group' class='pv-10px'><?php $i = 1;?>
               <?php foreach($groupUsers as $account => $realname):?>
-              <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), $account);?></div>
+              <div class='group-item' title='<?php echo $realname;?>'><?php echo html::checkbox('members', array($account => $realname), $account);?></div>
               <?php endforeach;?>
             </td>
           </tr>
@@ -54,7 +54,7 @@
             </th>
             <td id='other' class='pv-10px'><?php $i = 1;?>
               <?php foreach($otherUsers as $account => $realname):?>
-              <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
+              <div class='group-item' title='<?php echo $realname;?>'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
               <?php endforeach;?>
             </td>
           </tr>
@@ -68,7 +68,7 @@
             </th>
             <td id='outside' class='pv-10px'><?php $i = 1;?>
               <?php foreach($outsideUsers as $account => $realname):?>
-              <div class='group-item'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
+              <div class='group-item' title='<?php echo $realname;?>'><?php echo html::checkbox('members', array($account => $realname), '');?></div>
               <?php endforeach;?>
             </td>
           </tr>

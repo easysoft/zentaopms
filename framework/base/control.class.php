@@ -413,25 +413,23 @@ class baseControl
          * 首先找sitecode下的扩展文件，如果没有，再找ext下的扩展文件。
          * Find extViewFile in ext/_$siteCode/view first, then try ext/view/.
          */
-        if($this->app->siteCode)
-        {
-            $extPath     = dirname(dirname(realpath($viewFile))) . "/ext/_{$this->app->siteCode}/view";
-            $extViewFile = $extPath . basename($viewFile);
+        $moduleName = basename(dirname(dirname(realpath($viewFile))));
+        $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
 
-            if(file_exists($extViewFile))
+        $checkedOrder = array('site', 'common', 'xuan', 'vision', 'custom');
+        foreach($checkedOrder as $checkedType)
+        {
+            if(!empty($extPath[$checkedType]))
             {
-                helper::cd($extPath);
-                return $extViewFile;
+                $extViewFile = $extPath[$checkedType] . basename($viewFile);
+                if(file_exists($extViewFile))
+                {
+                    helper::cd($extPath[$checkedType]);
+                    return $extViewFile;
+                }
             }
         }
 
-        $extPath     = dirname(dirname(realpath($viewFile))) . '/ext/view/';
-        $extViewFile = $extPath . basename($viewFile);
-        if(file_exists($extViewFile))
-        {
-            helper::cd($extPath);
-            return $extViewFile;
-        }
         return false;
     }
 

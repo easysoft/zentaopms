@@ -11,6 +11,7 @@
  */
 ?>
 <?php include '../../common/view/header.html.php';?>
+<?php include '../../common/view/kindeditor.html.php';?>
 <?php include '../../common/view/sortable.html.php';?>
 <?php include '../../common/view/tablesorter.html.php';?>
 <?php js::set('confirmUnlinkStory', $lang->productplan->confirmUnlinkStory)?>
@@ -57,8 +58,8 @@
             common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody, $plan);
             $class = $plan->status == 'doing' ? '' : 'disabled';
             common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
-            $class = $plan->status == 'done' ? '' : 'disabled';
-            common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->close}'", '', false, $plan);
+            $class = $plan->status !== 'closed' ? 'iframe' : 'disabled';
+            common::printLink('productplan', 'close', "planID=$plan->id", "<i class='icon-off'></i>{$lang->productplan->closeAB}", '', "class='btn btn-link {$class}' title='{$lang->productplan->close}'", '', true, $plan);
             $class = in_array($plan->status, array('closed', 'done')) ? '' : 'disabled';
             common::printLink('productplan', 'activate', "planID=$plan->id", "<i class='icon-magic'></i>{$lang->productplan->activateAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->activate}'", '', false, $plan);
         }
@@ -220,7 +221,7 @@
                 </td>
                 <?php if($canOrder):?><td class='sort-handler'><i class='icon-move'></i></td><?php endif;?>
                 <td><span class='label-pri <?php echo 'label-pri-' . $story->pri;?>' title='<?php echo zget($lang->story->priList, $story->pri, $story->pri);?>'><?php echo zget($lang->story->priList, $story->pri, $story->pri);?></span></td>
-                <td class='text-left nobr'><?php echo zget($modulePairs, $story->module, '');?></td>
+                <td class='text-left nobr' title='<?php echo zget($modulePairs, $story->module, '');?>'><?php echo zget($modulePairs, $story->module, '');?></td>
                 <td class='text-left nobr' title='<?php echo $story->title?>'>
                   <?php
                   if($story->parent > 0) echo "<span class='label label-badge label-light' title={$lang->story->children}>{$lang->story->childrenAB}</span>";
@@ -616,7 +617,7 @@
                 <tr>
                   <th><?php echo $lang->productplan->status;?></th>
                   <td><?php echo $lang->productplan->statusList[$plan->status];?></td>
-                </tr>    
+                </tr>
                 <tr>
                   <th><?php echo $lang->productplan->desc;?></th>
                   <td><?php echo $plan->desc;?></td>

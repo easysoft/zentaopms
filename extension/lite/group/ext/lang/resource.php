@@ -636,6 +636,7 @@ $lang->resource->custom->editStoryConcept   = 'editStoryConcept';
 $lang->resource->custom->browseStoryConcept = 'browseStoryConcept';
 $lang->resource->custom->setDefaultConcept  = 'setDefaultConcept';
 $lang->resource->custom->deleteStoryConcept = 'deleteStoryConcept';
+if($config->edition != 'open') $lang->resource->custom->libreoffice = 'libreOffice';
 
 $lang->custom->methodOrder[5]  = 'index';
 $lang->custom->methodOrder[10] = 'set';
@@ -651,6 +652,7 @@ $lang->custom->methodOrder[55] = 'editStoryConcept';
 $lang->custom->methodOrder[60] = 'browseStoryConcept';
 $lang->custom->methodOrder[65] = 'setDefaultConcept';
 $lang->custom->methodOrder[70] = 'deleteStoryConcept';
+$lang->custom->methodOrder[75] = 'libreoffice';
 
 $lang->resource->datatable = new stdclass();
 $lang->resource->datatable->setGlobal = 'setGlobal';

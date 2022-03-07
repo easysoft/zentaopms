@@ -1349,7 +1349,7 @@ class project extends control
         }
 
         $project      = $this->project->getById($projectID);
-        $users        = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback');
+        $users        = $this->user->getPairs('noclosed|nodeleted|devfirst');
         $roles        = $this->user->getUserRoles(array_keys($users));
         $deptUsers    = $dept === '' ? array() : $this->dept->getDeptUserPairs($dept);
         $userInfoList = $this->user->getUserDisplayInfos(array_keys($users), $dept);

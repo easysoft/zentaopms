@@ -68,7 +68,7 @@ class block extends control
             if(strpos(",$closedBlock,", ",|flowchart,") === false and $this->config->global->flow == 'full') $modules['flowchart'] = $this->lang->block->lblFlowchart;
             if(strpos(",$closedBlock,", ",|welcome,") === false and $this->config->global->flow == 'full') $modules['welcome'] = $this->lang->block->welcome;
             if(strpos(",$closedBlock,", ",|html,") === false) $modules['html'] = 'HTML';
-            if(strpos(",$closedBlock,", ",|contribute,") === false) $modules['contribute'] = $this->lang->block->contribute;
+            if(strpos(",$closedBlock,", ",|contribute,") === false and $this->config->vision == 'rnd') $modules['contribute'] = $this->lang->block->contribute;
             $modules = array('' => '') + $modules;
 
             $hiddenBlocks = $this->block->getHiddenBlocks();
@@ -1733,6 +1733,7 @@ class block extends control
             $objects    = $this->dao->select('*')->from($table)
                 ->where('deleted')->eq(0)
                 ->andWhere('assignedTo')->eq($this->app->user->account)->fi()
+                ->beginIF($objectType == 'story')->andWhere('type')->eq('story')->fi()
                 ->beginIF($objectType == 'todo')->andWhere('cycle')->eq(0)->fi()
                 ->beginIF($objectType == 'todo')->andWhere('status')->eq('wait')->fi()
                 ->beginIF($objectType != 'todo')->andWhere('status')->ne('closed')->fi()

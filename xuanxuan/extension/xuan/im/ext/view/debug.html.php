@@ -19,8 +19,8 @@
         return;
     }
 ?>
-<?php if($this->app->user->admin != 'super'):?>
 <?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
+<?php if($this->app->user->admin != 'super'):?>
 <div class='container' id='debugContainer'>
   <div class='notice text-center' style='font-size:24px;'>
     <?php $_SERVER['SCRIPT_NAME'] = '/index.php';?>
@@ -29,7 +29,6 @@
   </div>
 </div>
 <?php else:?>
-<?php include $app->getModuleRoot() . 'common/view/header.modal.html.php';?>
 <script>
 if(!window.v) window.v = {};
 window.v.showLog = <?php echo $config->xuanxuan->debug;?>;

@@ -13,6 +13,13 @@ class myTask extends task
 
         $regionList = $this->loadModel('kanban')->getRegionPairs($executionID, 0, 'execution');
 
+        /* Filter Kanban without Lane. */
+        $lanes = $this->kanban->getLaneGroupByRegion(array_keys($regionList), 'task');
+        foreach($regionList as $key => $region)
+        {
+            if(!isset($lanes[$key])) unset($regionList[$key]);
+        }
+
         $this->view->regionList = $regionList;
         $this->view->extra      = $extra;
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);

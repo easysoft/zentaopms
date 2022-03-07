@@ -19,6 +19,9 @@
 #customFields .panel {position: relative;}
 #customFields .panel:before, #customFields .panel:after {content: ' '; display: block; width: 0; height: 0; border-style: solid; border-width: 0 10px 10px 10px; border-color: transparent transparent #f1f1f1 transparent; position: absolute; left: 315px; top: -9px;}
 #customFields .panel:before {border-color: transparent transparent #ddd transparent; top: -10px;}
+
+#mainContent .c-name {width:120px;}
+#mainContent .c-fileName {width:300px;}
 </style>
 <script>
 function setDownloading()
@@ -109,7 +112,7 @@ function deleteTemplate()
 
 /**
  * Toggle export template box.
- * 
+ *
  * @access public
  * @return void
  */
@@ -120,7 +123,7 @@ function setExportTPL()
 
 /**
  * Set whether part download.
- * 
+ *
  * @param  input target
  * @access public
  * @return void
@@ -141,7 +144,7 @@ var partQueue = new Array();
 
 /**
  * Set part down and begin the first part down.
- * 
+ *
  * @access public
  * @return void
  */
@@ -165,7 +168,7 @@ function setPartDownloading()
 
 /**
  * Start follow-up part down.
- * 
+ *
  * @access public
  * @return void
  */
@@ -187,7 +190,7 @@ function startPartDownloading()
             $.cookie('downloading', null);
             clearInterval(time);
         }
-    } 
+    }
 }
 
 $(document).ready(function()
@@ -247,7 +250,7 @@ if($isCustomExport)
         if(!$hasDefaultField)$selectedFields[] = $field;
     }
     js::set('defaultExportFields', join(',', $selectedFields));
-} 
+}
 ?>
 <main id="main">
   <div class="container">
@@ -259,8 +262,8 @@ if($isCustomExport)
         <table class="table table-form">
           <tbody>
             <tr>
-              <th class='w-230px'><?php echo $lang->file->fileName;?></th>
-              <td class="w-300px"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
+              <th class='c-name'><?php echo $lang->file->fileName;?></th>
+              <td class="c-fileName"><?php echo html::input('fileName', isset($fileName) ? $fileName : '', "class='form-control' autofocus placeholder='{$lang->file->untitled}'");?></td>
               <td></td>
             </tr>
             <tr>

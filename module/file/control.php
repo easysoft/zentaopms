@@ -340,7 +340,7 @@ class file extends control
      */
     public function ajaxPasteImg($uid = '')
     {
-        if($_POST) return print($this->file->pasteImage($this->post->editor, $uid));
+        if($_POST) return print($this->file->pasteImage($this->post->editor, $uid, $safe = true));
     }
 
     /**

@@ -73,7 +73,7 @@ class feishuapi
             $pageToken = '';
             while(true)
             {
-                $response = $this->queryAPI($this->apiUrl . "contact/v3/users?department_id={$deptID}" . ($pageToken ? "&page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+                $response = $this->queryAPI($this->apiUrl . "contact/v3/users?department_id={$deptID}&page_size=50" . ($pageToken ? "&page_token={$pageToken}" : ''), '', array(CURLOPT_CUSTOMREQUEST => "GET"));
                 if(isset($response->data->items))
                 {
                     foreach($response->data->items as $user) $users[$user->name] = $user->open_id;
@@ -164,7 +164,7 @@ class feishuapi
         $index     = 0;
         while(true)
         {
-            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
+            $response = $this->queryAPI($this->apiUrl . "contact/v3/departments?parent_department_id=0" . ($pageToken ? "&page_token={$pageToken}" : '') . "&fetch_child=true&page_size=50", '', array(CURLOPT_CUSTOMREQUEST => "GET"));
             if(isset($response->data->items))
             {
                 foreach($response->data->items as $key => $dept)

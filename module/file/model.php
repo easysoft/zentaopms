@@ -549,10 +549,12 @@ class fileModel extends model
      * Paste image in kindeditor at firefox and chrome.
      *
      * @param  string    $data
+     * @param  string    $uid
+     * @param  bool      $safe
      * @access public
      * @return string
      */
-    public function pasteImage($data, $uid = '')
+    public function pasteImage($data, $uid = '', $safe = false)
     {
         if(empty($data)) return '';
         $data = str_replace('\"', '"', $data);
@@ -583,7 +585,7 @@ class fileModel extends model
                 $data = str_replace($out[1][$key], helper::createLink('file', 'read', "fileID=$fileID", $file['extension']), $data);
             }
         }
-        else
+        elseif($safe)
         {
             $data = fixer::stripDataTags(rawurldecode($data));
         }

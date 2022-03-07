@@ -85,7 +85,13 @@
         <?php endfor;?>
       </tbody>
       <tfoot>
-        <tr><td class='text-center form-actions' colspan='<?php echo isset($visibleFields['beginAndEnd']) ? $columns + 1 : $columns;?>'><?php echo html::submitButton() . html::backButton();?></td></tr>
+        <tr>
+          <td class='text-center form-actions' colspan='<?php echo isset($visibleFields['beginAndEnd']) ? $columns + 1 : $columns;?>'>
+            <?php echo html::hidden('date');?>
+            <?php echo html::hidden('switchDate');?>
+            <?php echo html::submitButton() . html::backButton();?>
+          </td>
+        </tr>
       </tfoot>
     </table>
   </form>

@@ -2269,12 +2269,42 @@ class storyModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getStories();
 
-        if(is_array($branch)) $branch = join(',', $branch);
+        $stories        = array();
+        $branchProducts = array();
+        $normalProducts = array();
+        $productList    = $this->dao->select('*')->from(TABLE_PRODUCT)->where('id')->in($productID)->fetchAll('id');
+        foreach($productList as $product)
+        {
+            if($product->type != 'normal')
+            {
+                $branchProducts[$product->id] = $product->id;
+                continue;
+            }
+
+            $normalProducts[$product->id] = $product->id;
+        }
+
+        $productQuery = '(';
+        if(!empty($normalProducts)) $productQuery .= '`product` ' . helper::dbIN(array_keys($normalProducts));
+        if(!empty($branchProducts))
+        {
+            if(!empty($normalProducts)) $productQuery .= " OR ";
+            $productQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts));
+
+            if($branch !== 'all')
+            {
+                if(is_array($branch)) $branch = join(',', $branch);
+                $productQuery .= " AND `branch` " . helper::dbIN($branch);
+            }
+            $productQuery .= ')';
+        }
+        if(empty($normalProducts) and empty($branchProducts)) $productQuery .= '1 = 1';
+        $productQuery .= ') ';
 
         $stories = $this->dao->select('*')->from(TABLE_STORY)
             ->where('product')->in($productID)
+            ->andWhere($productQuery)
             ->beginIF(!$hasParent)->andWhere("parent")->ge(0)->fi()
-            ->beginIF($branch !== 'all')->andWhere("branch")->in($branch)->fi()
             ->beginIF(!empty($moduleIdList))->andWhere('module')->in($moduleIdList)->fi()
             ->beginIF(!empty($excludeStories))->andWhere('id')->notIN($excludeStories)->fi()
             ->beginIF($status and $status != 'all')->andWhere('status')->in($status)->fi()
@@ -2539,27 +2569,50 @@ class storyModel extends model
             $storyQuery     = str_replace($allProduct, '1', $storyQuery);
             $queryProductID = 'all';
         }
+
         $storyQuery = $storyQuery . ' AND `product` ' . helper::dbIN(array_keys($products));
+
         if($excludeStories) $storyQuery = $storyQuery . ' AND `id` NOT ' . helper::dbIN($excludeStories);
         if($this->app->moduleName == 'productplan') $storyQuery .= " AND `status` NOT IN ('closed') AND `parent` >= 0 ";
         $allBranch = "`branch` = 'all'";
         if($executionID != '')
         {
-            $branches = array(BRANCH_MAIN => BRANCH_MAIN);
-            if($branch === '')
+            $normalProducts = array();
+            $branchProducts = array();
+            foreach($products as $product)
             {
-                foreach($products as $product)
+                if($product->type != 'normal')
                 {
-                    foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                    $branchProducts[$product->id] = $product;
+                    continue;
                 }
-            }
-            else
-            {
-                $branches[$branch] = $branch;
+
+                $normalProducts[$product->id] = $product;
             }
 
-            $branches = join(',', $branches);
-            $storyQuery .= " AND `branch`" . helper::dbIN($branches);
+            $storyQuery .= ' AND (';
+            if(!empty($normalProducts)) $storyQuery .= '`product` ' . helper::dbIN(array_keys($normalProducts));
+            if(!empty($branchProducts))
+            {
+                $branches = array(BRANCH_MAIN => BRANCH_MAIN);
+                if($branch === '')
+                {
+                    foreach($branchProducts as $product)
+                    {
+                        foreach($product->branches as $branchID) $branches[$branchID] = $branchID;
+                    }
+                }
+                else
+                {
+                    $branches[$branch] = $branch;
+                }
+
+                $branches    = join(',', $branches);
+                if(!empty($normalProducts)) $storyQuery .= " OR ";
+                $storyQuery .= "(`product` " . helper::dbIN(array_keys($branchProducts)) . " AND `branch` " . helper::dbIN($branches) . ")";
+            }
+            if(empty($normalProducts) and empty($branchProducts)) $storyQuery .= '1 = 1';
+            $storyQuery .= ') ';
 
             if($this->app->moduleName == 'release' or $this->app->moduleName == 'build')
             {
@@ -2962,21 +3015,37 @@ class storyModel extends model
     }
 
     /**
-     * Get doing projects' members of a story.
+     * Get team members for a project or execution.
      *
      * @param  int    $storyID
+     * @param  string $actionType
      * @access public
      * @return array
      */
-    public function getProjectMembers($storyID)
+    public function getTeamMembers($storyID, $actionType)
     {
-        $projects = $this->dao->select('t1.project')
-            ->from(TABLE_PROJECTSTORY)->alias('t1')->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
-            ->where('t1.story')->eq((int)$storyID)
-            ->andWhere('t2.status')->eq('doing')
-            ->andWhere('t2.deleted')->eq(0)
-            ->fetchPairs();
-        if($projects) return($this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account'));
+        $teamMembers = array();
+        if($actionType == 'changed')
+        {
+            $executions = $this->dao->select('execution')->from(TABLE_TASK)
+                ->where('story')->eq($storyID)
+                ->andWhere('status')->ne('cancel')
+                ->andWhere('deleted')->eq(0)
+                ->fetchPairs();
+            if($executions) $teamMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($executions)->andWhere('type')->eq('execution')->fetchPairs('account');
+        }
+        else
+        {
+            $projects = $this->dao->select('t1.project')
+                ->from(TABLE_PROJECTSTORY)->alias('t1')
+                ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                ->where('t1.story')->eq((int)$storyID)
+                ->andWhere('t2.status')->eq('doing')
+                ->andWhere('t2.deleted')->eq(0)
+                ->fetchPairs();
+            if($projects) $teamMembers = $this->dao->select('account')->from(TABLE_TEAM)->where('root')->in($projects)->andWhere('type')->eq('project')->fetchPairs('account');
+        }
+        return $teamMembers;
     }
 
     /**
@@ -3490,13 +3559,13 @@ class storyModel extends model
         $toList = $story->assignedTo;
         $ccList = str_replace(' ', '', trim($story->mailto, ','));
 
-        /* If the action is changed or reviewed, mail to the project team. */
+        /* If the action is changed or reviewed, mail to the project or execution team. */
         if(strtolower($actionType) == 'changed' or strtolower($actionType) == 'reviewed')
         {
-            $prjMembers = $this->getProjectMembers($story->id);
-            if($prjMembers)
+            $teamMembers = $this->getTeamMembers($story->id, $actionType);
+            if($teamMembers)
             {
-                $ccList .= ',' . join(',', $prjMembers);
+                $ccList .= ',' . join(',', $teamMembers);
                 $ccList = ltrim($ccList, ',');
             }
         }
@@ -3544,7 +3613,7 @@ class storyModel extends model
     {
         $action = strtolower($action);
 
-        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change') return false;
+        if($story->parent < 0 and $action != 'edit' and $action != 'batchcreate' and $action != 'change' and $action != 'review') return false;
 
         global $app, $config;
 
@@ -3555,7 +3624,7 @@ class storyModel extends model
 
         if($action == 'change')     return ($isSuperReviewer !== false or count($story->reviewer) == 0 or count($story->notReview) == 0) and $story->status != 'closed';
         if($action == 'review')     return (($isSuperReviewer !== false or in_array($app->user->account, $story->notReview)) and ($story->status == 'draft' or $story->status == 'changed'));
-        if($action == 'recall')     return empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer);
+        if($action == 'recall')     return empty($story->reviewedBy) and strpos('draft,changed', $story->status) !== false and !empty($story->reviewer) and ($app->user->account == $story->openedBy);
         if($action == 'close')      return $story->status != 'closed';
         if($action == 'activate')   return $story->status == 'closed';
         if($action == 'assignto')   return $story->status != 'closed';
@@ -3987,7 +4056,7 @@ class storyModel extends model
 
                     common::printIcon('story', 'change', $vars . "&from=$story->from", $story, 'list', 'alter', '', '', false, "data-group=$story->from");
                     common::printIcon('story', 'review', $vars . "&from=$story->from", $story, 'list', 'search', '', '', false, "data-group=$story->from");
-                    common::printIcon('story', 'recall', $vars, $story, 'list', 'back', 'hiddenwin', '', '', '', $this->lang->story->recall);
+                    common::printIcon('story', 'recall', $vars, $story, 'list', 'undo', 'hiddenwin', '', '', '', $this->lang->story->recall);
                     common::printIcon('story', 'close', $vars, $story, 'list', '', '', 'iframe', true);
                     common::printIcon('story', 'edit', $vars . "&from=$story->from", $story, 'list', '', '', '', false, "data-group=$story->from");
                     if($story->type != 'requirement' and $this->config->vision != 'lite') common::printIcon('story', 'createCase', "productID=$story->product&branch=$story->branch&module=0&from=&param=0&$vars", $story, 'list', 'sitemap', '', '', false, "data-app='qa'");

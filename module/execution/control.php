@@ -515,6 +515,13 @@ class execution extends control
             $mails = $this->execution->importBug($executionID);
             if(dao::isError()) return print(js::error(dao::getError()));
 
+            /* If link from no head then reload. */
+            if(isonlybody())
+            {
+                $kanbanData = $this->loadModel('kanban')->getRDKanban($executionID, $this->session->execLaneType ? $this->session->execLaneType : 'all');
+                return print(js::reload('parent'));
+            }
+
             return print(js::locate($this->createLink('execution', 'importBug', "executionID=$executionID"), 'parent'));
         }
 
@@ -2048,12 +2055,15 @@ class execution extends control
         $productID = 0;
         $branchID  = 0;
         $products  = $this->loadModel('product')->getProducts($executionID);
+        $productNames = array();
         if($products)
         {
             $productID = key($products);
             $branches  = $this->loadModel('branch')->getPairs($productID, '', $executionID);
             if($branches) $branchID = key($branches);
         }
+        foreach($products as $product) $productNames[$product->id] = $product->name;
+
 
         $plans    = $this->execution->getPlans($products, 'skipParent', $executionID);
         $allPlans = array('' => '');
@@ -2066,11 +2076,14 @@ class execution extends control
         $this->view->users            = $users;
         $this->view->regions          = $kanbanData;
         $this->view->execution        = $execution;
+        $this->view->executionID      = $executionID;
         $this->view->userList         = $userList;
         $this->view->browseType       = $browseType;
         $this->view->orderBy          = $orderBy;
         $this->view->groupBy          = $groupBy;
         $this->view->productID        = $productID;
+        $this->view->productNames     = $productNames;
+        $this->view->productNum       = count($products);
         $this->view->branchID         = $branchID;
         $this->view->projectID        = $this->loadModel('task')->getProjectID($execution->id);
         $this->view->allPlans         = $allPlans;
@@ -2123,9 +2136,11 @@ class execution extends control
         $canBeChanged = common::canModify('execution', $execution);
 
         /* Get execution's product. */
-        $productID = 0;
-        $products  = $this->loadModel('product')->getProducts($executionID);
+        $productID    = 0;
+        $productNames = array();
+        $products     = $this->loadModel('product')->getProducts($executionID);
         if($products) $productID = key($products);
+        foreach($products as $product) $productNames[$product->id] = $product->name;
 
         $plans    = $this->execution->getPlans($products);
         $allPlans = array('' => '');
@@ -2147,6 +2162,8 @@ class execution extends control
         $this->view->orderBy       = 'id_asc';
         $this->view->executionID   = $executionID;
         $this->view->productID     = $productID;
+        $this->view->productNames  = $productNames;
+        $this->view->productNum    = count($products);
         $this->view->allPlans      = $allPlans;
         $this->view->browseType    = $browseType;
         $this->view->kanbanGroup   = $kanbanGroup;
@@ -2576,8 +2593,8 @@ class execution extends control
         $this->view->unmodifiableProducts = $unmodifiableProducts;
         $this->view->unmodifiableBranches = $unmodifiableBranches;
         $this->view->linkedBranches       = $linkedBranches;
-        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0);
-        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'all');
+        $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal|noclosed');
+        $this->view->allBranches          = $this->execution->getBranchByProduct(array_keys($allProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'ignoreNormal');
 
         $this->display();
     }
@@ -2605,7 +2622,7 @@ class execution extends control
         $this->loadModel('dept');
 
         $execution   = $this->execution->getById($executionID);
-        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', '', $this->config->maxCount);
+        $users     = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
         $roles     = $this->user->getUserRoles(array_keys($users));
         $deptUsers = empty($dept) ? array() : $this->dept->getDeptUserPairs($dept);
 
@@ -2620,7 +2637,7 @@ class execution extends control
         foreach($members2Import as $member) $appendUsers[$member->account] = $member->account;
         foreach($deptUsers as $deptAccount => $userName) $appendUsers[$deptAccount] = $deptAccount;
 
-        $users = $this->user->getPairs('noclosed|nodeleted|devfirst|nofeedback', $appendUsers, $this->config->maxCount);
+        $users = $this->user->getPairs('noclosed|nodeleted|devfirst', $appendUsers, $this->config->maxCount);
         $roles = $this->user->getUserRoles(array_keys($users));
 
         /* Set menu. */
@@ -2792,6 +2809,13 @@ class execution extends control
         {
             if(isset($linkedStories[$story->id])) unset($allStories[$id]);
             if($story->parent < 0) unset($allStories[$id]);
+
+            if(!isset($modules[$story->module]))
+            {
+                $storyModule = $this->tree->getModulesName($story->module);
+                $productName = count($products) > 1 ? $products[$story->product]->name : '';
+                $modules[$story->module] = $productName . $storyModule[$story->module];
+            }
         }
 
         /* Pager. */
