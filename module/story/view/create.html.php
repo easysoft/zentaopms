@@ -184,7 +184,7 @@
                 <?php if(strpos(",$showFields,", ',pri,') !== false): // begin print pri selector?>
                 <div class='table-col w-150px'>
                   <div class="input-group">
-                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->type;?></span>
+                    <span class="input-group-addon fix-border br-0"><?php echo $lang->story->category;?></span>
                     <?php echo html::select('category', $lang->story->categoryList, 'feature', "class='form-control chosen'");?>
                   </div>
                 </div>
