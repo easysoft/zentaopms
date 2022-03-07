@@ -26,7 +26,6 @@
       }
       else
       {
-
           printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), '###'); echo $lang->doc->accessDenied;
       }
       ?>
