@@ -194,7 +194,7 @@ $lang->doc->noArticle            = '暂时没有文章。';
 $lang->doc->noLib                = '暂时没有文档库。';
 $lang->doc->noBook               = 'WIKI库还未创建手册，请新建 ：）';
 $lang->doc->cannotCreateOffice   = '<p>对不起，企业版才能创建%s文档。<p><p>试用企业版，请联系我们：4006-8899-23 &nbsp; 0532-86893032。</p>';
-$lang->doc->notSetOffice         = "<p>创建%s文档，需要配置<a href='%s'>Office转换设置</a>。<p>";
+$lang->doc->notSetOffice         = "创建%s文档，需要配置<a href='%s'>Office转换设置</a>。";
 $lang->doc->noSearchedDoc        = '没有搜索到任何文档。';
 $lang->doc->noEditedDoc          = '您还没有编辑任何文档。';
 $lang->doc->noOpenedDoc          = '您还没有创建任何文档。';

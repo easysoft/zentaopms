@@ -706,7 +706,7 @@ class searchModel extends model
         $index->title      = $object->{$fields->title};
         $index->addedDate  = isset($object->{$fields->addedDate}) ? $object->{$fields->addedDate} : '0000-00-00 00:00:00';
         $index->editedDate = isset($object->{$fields->editedDate}) ? $object->{$fields->editedDate} : '0000-00-00 00:00:00';
-        $index->vision     = $this->config->vision;
+        $index->vision     = isset($object->vision) ? $object->vision : 'rnd';
 
         $index->content = '';
         $contentFields  = explode(',', $fields->content . ',comment');
