@@ -1032,6 +1032,9 @@ class commonModel extends model
                     $module = '';
                     $method = '';
                     $link   = commonModel::createMenuLink($menuItem, $tab);
+
+                    if($menuItem->link['module'] == 'project' and $menuItem->link['method'] == 'other') $link = 'javascript:void(0);';
+
                     if(is_array($menuItem->link))
                     {
                         if(isset($menuItem->link['target'])) $target = $menuItem->link['target'];
@@ -1046,6 +1049,7 @@ class commonModel extends model
 
                     $label    = $menuItem->text;
                     $dropMenu = '';
+                    $misc     = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
 
                     /* Print drop menus. */
                     if(isset($menuItem->dropMenu))
@@ -1059,6 +1063,8 @@ class commonModel extends model
                             if(is_array($dropMenuItem) and isset($dropMenuItem['link'])) $dropMenuLink = $dropMenuLink['link'];
 
                             list($subLabel, $subModule, $subMethod, $subParams) = explode('|', $dropMenuLink);
+                            if(!common::hasPriv($subModule, $subMethod)) continue;
+
                             $subLink = helper::createLink($subModule, $subMethod, $subParams);
 
                             $subActive = '';
@@ -1085,14 +1091,15 @@ class commonModel extends model
 
                         if(empty($dropMenu)) continue;
 
-                        $label   .= "<span class='caret'></span>";
+                        $label    .= "<span class='caret'></span>";
                         $dropMenu  = "<ul class='dropdown-menu'>{$dropMenu}</ul>";
+
+                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
                     }
-
-                    $misc = (isset($lang->navGroup->$module) and $tab != $lang->navGroup->$module) ? "data-app='$tab'" : '';
-                    $menuItemHtml = "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . $dropMenu . "</li>\n";
-
-                    echo $menuItemHtml;
+                    else
+                    {
+                        echo "<li class='$class $active' data-id='$menuItem->name'>" . html::a($link, $label, $target, $misc) . "</li>\n";
+                    }
                 }
                 else
                 {
@@ -1100,6 +1107,7 @@ class commonModel extends model
                 }
             }
         }
+
         echo "</ul>\n";
 
         return $activeMenu;
