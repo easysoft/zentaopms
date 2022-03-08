@@ -67,7 +67,8 @@ class upgradeModel extends model
         }
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
-        $updateStructure = $openVersion != $this->config->upgrade->{$this->config->edition . 'Version'}[$this->config->version];
+        $currentVersion  = str_replace('.', '_', $this->config->version);
+        $updateStructure = $openVersion != $this->config->upgrade->{$this->config->edition . 'Version'}[$currentVersion];
 
         /* Execute. */
         foreach($versions as $openVersion => $chargedVersions)
@@ -106,7 +107,7 @@ class upgradeModel extends model
         }
 
         /* Means open source upgrade to biz or max. */
-        if($fromEdtion == 'open' and $this->config->edition != 'open')
+        if($fromEdition == 'open' and $this->config->edition != 'open')
         {
             $this->loadModel('effort')->convertEstToEffort();
             $this->importBuildinModules();
