@@ -126,7 +126,7 @@ class execution extends control
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
 
-        if($execution->type == 'kanban' and $this->config->vision != 'lite') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' and $this->config->vision != 'lite' and defined('RUN_MODE') and RUN_MODE != 'api') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Get products by execution. */
         $products = $this->product->getProductPairsByProject($executionID);
@@ -1961,7 +1961,7 @@ class execution extends control
     {
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
-        if(empty($execution) || strpos('stage,sprint', $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
+        if(empty($execution) || strpos('stage,sprint', $execution->type) === false and defined('RUN_MODE') and RUN_MODE != 'api') return print(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
 
