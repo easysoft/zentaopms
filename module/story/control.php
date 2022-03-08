@@ -48,11 +48,11 @@ class story extends control
     {
         if($productID == 0 and $objectID == 0) $this->locate($this->createLink('product', 'create'));
         
+        /* Get product id according to the project id when lite vision todo transfer story */
         if($this->config->vision == 'lite' and $productID == 0) 
         {
-            
-            $project = $this->loadModel('product')->getProductPairsByProject($objectID);
-            if(!empty($project)) $productID = key($project);
+            $product = $this->loadModel('product')->getProductPairsByProject($objectID);
+            if(!empty($project)) $productID = key($product);
         }
         
         $this->story->replaceURLang($type);

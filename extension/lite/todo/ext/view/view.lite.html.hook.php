@@ -38,7 +38,7 @@ $('#toStoryButtonByProject').click(function()
 {
     var onlybody  = config.onlybody == 'yes';
     var projectID = $('#projectToStory').val();    
-    var link      = createLink('story', 'create', 'productID=0&branch=0&moduleID=0&storyID=0&projectID='+projectID+'&bugID=0&planID=0&todoID=' + todoID, config.defaultView, onlybody);
+    var link      = createLink('story', 'create', 'productID=0&branch=0&moduleID=0&storyID=0&projectID=' + projectID + '&bugID=0&planID=0&todoID=' + todoID, config.defaultView, onlybody);
 
     if(!onlybody) window.parent.$.apps.open(link, 'project');
     if(onlybody) location.href = link;
@@ -52,13 +52,13 @@ $('#toStoryButtonByProject').click(function()
  * @return void
  */
 function getProgramByProject(projectID)
- {
-     link = createLink('todo', 'ajaxGetProgramID', "projectID=" + projectID + '&type=project');
-     $.post(link, function(data)
-     {
+{
+    link = createLink('todo', 'ajaxGetProgramID', "projectID=" + projectID + '&type=project');
+    $.post(link, function(data)
+    {
         $('#projectProgram').val(data);
-     })
- }
+    })
+}
 
 /**
  * Link to create project.
