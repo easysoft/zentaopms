@@ -372,7 +372,7 @@ class product extends control
             $moduleName = $tab == 'program'? 'program' : $this->moduleName;
             $methodName = $tab == 'program'? 'product' : 'browse';
             $param      = $tab == 'program' ? "programID=$programID" : "productID=$productID";
-            $locate     = $this->createLink($moduleName, $methodName, $param);
+            $locate     = isonlybody() ? 'parent' : $this->createLink($moduleName, $methodName, $param);
             if($tab == 'doc') $locate = $this->createLink('doc', 'objectLibs', 'type=product');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
