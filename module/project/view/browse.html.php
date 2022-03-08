@@ -21,6 +21,7 @@ js::set('orderBy', $orderBy);
 js::set('recTotal', $recTotal);
 js::set('recPerPage', $recPerPage);
 js::set('pageID', $pageID);
+js::set('useDatatable', false);
 ?>
 <?php
 if($projectType == 'bycard')

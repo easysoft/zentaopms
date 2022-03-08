@@ -782,12 +782,9 @@ class baseControl
              */
             $file2Included = $moduleControlFile;
 
-            $commonActionExtFile = $actionExtPath['custom'] . strtolower($methodName) . '.php';
-            if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
-
-            if(!empty($actionExtPath['vision']))
+            if(!empty($actionExtPath['common']))
             {
-                $commonActionExtFile = $actionExtPath['vision'] . strtolower($methodName) . '.php';
+                $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
@@ -797,11 +794,14 @@ class baseControl
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
 
-            if(!empty($actionExtPath['common']))
+            if(!empty($actionExtPath['vision']))
             {
-                $commonActionExtFile = $actionExtPath['common'] . strtolower($methodName) . '.php';
+                $commonActionExtFile = $actionExtPath['vision'] . strtolower($methodName) . '.php';
                 if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
             }
+
+            $commonActionExtFile = $actionExtPath['custom'] . strtolower($methodName) . '.php';
+            if(file_exists($commonActionExtFile)) $file2Included = $commonActionExtFile;
 
             if(!empty($actionExtPath['site']))
             {

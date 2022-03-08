@@ -184,6 +184,7 @@ class programplan extends control
     public function edit($planID = 0, $projectID = 0)
     {
         $this->app->loadLang('project');
+        $this->app->loadLang('execution');
         $plan = $this->programplan->getByID($planID);
         if($_POST)
         {
