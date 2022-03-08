@@ -86,11 +86,11 @@
                         echo "<ul class='dropdown-menu pull-right' role='menu'>";
                         if($createStoryPriv and $config->vision == 'lite')
                         {
-                          echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+                            echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#projectModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
                         }
                         else
                         {
-                          echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
+                            echo '<li>' . html::a('###', $lang->todo->reasonList['story'], '', "data-toggle='modal' data-target='#productModal' data-backdrop='false' data-moveable='true' data-position='center' id='toStoryLink'") . '</li>';
                         }
                         if($createTaskPriv)  echo '<li>' . html::a('###', $lang->todo->reasonList['task'], '', "data-toggle='modal' data-target='#executionModal' data-backdrop='false' data-moveable='true' data-position='center' id='toTaskLink'") . '</li>';
                         if($createBugPriv and $config->vision == 'rnd') echo '<li>' . html::a('###', $lang->todo->reasonList['bug'], '', "data-toggle='modal' data-target='#projectProductModal' data-backdrop='false' data-moveable='true' data-position='center' id='toBugLink'") . '</li>';
