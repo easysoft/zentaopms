@@ -165,10 +165,16 @@
           </tr>
           <?php endif;?>
           <?php endif;?>
-          <?php if (isset($kanbanLanePairs)):?>
+          <?php if (isset($lanePairs) and isset($regionPairs)):?>
           <tr>
-            <th><?php echo $lang->kanbancard->lane;?>
-            <td colspan="4"><?php echo html::select('kanbanLane', $kanbanLanePairs, '', "class='form-control chosen'")?></td>
+            <th><?php echo $lang->kanbancard->region;?>
+            <td colspan="2"><?php echo html::select('region', $regionPairs, isset($regionID) ? $regionID : '', "onchange='loadLanes(this.value)' class='form-control chosen'");?></td>
+            <td colspan="2">
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
+                <?php echo html::select('lane', $lanePairs, isset($laneID) ? $laneID : '', "class='form-control chosen'");?>
+              </div>
+            </td>
           </tr>
           <?php endif;?>
           <tr>

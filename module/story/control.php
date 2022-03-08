@@ -69,26 +69,31 @@ class story extends control
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
-        if($execution->type == 'kanban')
+        if(isset($execution) and $execution->type == 'kanban')
         {
             $this->loadModel('kanban');
 
-            $cardPositions = $this->kanban->getCardPositions($execution->id, 'story', 'backlog');
+            $lanePairs = array();
+            $regionPairs = array();
+            $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
 
-            $kanbanLanePairs = array();
             if($output)
             {
-                $lane = $this->kanban->getLaneByID($output['laneID']);
-                $kanbanLanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'story');
+                $lane      = $this->kanban->getLaneByID($output['laneID']);
+                $lanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'story');
+                $this->view->regionID = $lane->region;
+                $this->view->laneID   = $lane->id;
             }
-            else
+            else $lanePairs = $this->kanban->getLanePairsByRegion(array_keys($regionPairs)[0], 'story');
+
+            if($this->post->lane and $this->post->region)
             {
-                foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
+                $columnID = $this->kanban->getColumnIDByLaneID($this->post->lane, 'backlog');
+                $extra   = 'laneID=' . $this->post->lane . ',columnID=' . $columnID;
             }
 
-            if($this->post->kanbanLane) $extra = 'laneID=' . "{$this->post->kanbanLane}" . "&columnID=" . $cardPositions[$this->post->kanbanLane]->columnID;
-
-            $this->view->kanbanLanePairs = $kanbanLanePairs;
+            $this->view->regionPairs = $regionPairs;
+            $this->view->lanePairs   = $lanePairs;
         }
 
         foreach($output as $paramKey => $paramValue)
@@ -2145,6 +2150,14 @@ class story extends control
         }
 
         echo json_encode($result);
+    }
+
+    public function ajaxGetLanesByRegionID($regionID)
+    {
+        $this->loadModel('kanban');
+        $lanePairs = $this->kanban->getLanePairsByRegion($regionID, 'story');
+
+        return print(html::select('lane', $lanePairs, '', "class='form-control chosen'"));
     }
 
     /**

@@ -48,6 +48,18 @@ function refreshPlan()
     $('a.refresh').click();
 }
 
+function loadLanes(regionID)
+{
+    var link = createLink('story', 'ajaxGetLanesByRegionID', 'regionID=' + regionID);
+    $.post(link, function(data)
+    {
+        console.log(data);
+        $('#lane').replaceWith(data);
+        $('#lane_chosen').remove();
+        $('#lane').chosen();
+    });
+}
+
 $(window).unload(function(){
     if(blockID) window.parent.refreshBlock($('#block' + blockID));
 });
