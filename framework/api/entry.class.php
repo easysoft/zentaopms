@@ -286,7 +286,20 @@ class baseEntry
              * 引入该模块的control文件。
              * Include the control file of the module.
              **/
+
             $file2Included = $app->setActionExtFile() ? $app->extActionFile : $app->controlFile;
+
+            $isExt = $app->setActionExtFile();
+            if($isExt)
+            {
+                $controlFile = $app->controlFile;
+                spl_autoload_register(function($class) use ($moduleName, $controlFile)
+                {
+                    if($class == $moduleName) include $controlFile;
+                });
+            }
+
+            $file2Included = $isExt ? $app->extActionFile : $app->controlFile;
             chdir(dirname($file2Included));
             helper::import($file2Included);
         }
