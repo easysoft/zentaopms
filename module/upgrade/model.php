@@ -102,7 +102,7 @@ class upgradeModel extends model
                         $this->saveLogs("Execute $maxVersion");
                         if($updateStructure) $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
                     }
-                }
+            }
         }
 
         /* Means open source upgrade to biz or max. */
