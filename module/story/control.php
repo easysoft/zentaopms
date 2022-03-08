@@ -47,7 +47,14 @@ class story extends control
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         if($productID == 0 and $objectID == 0) $this->locate($this->createLink('product', 'create'));
-
+        
+        /* Get product id according to the project id when lite vision todo transfer story */
+        if($this->config->vision == 'lite' and $productID == 0) 
+        {
+            $product = $this->loadModel('product')->getProductPairsByProject($objectID);
+            if(!empty($project)) $productID = key($product);
+        }
+        
         $this->story->replaceURLang($type);
         if($this->app->tab == 'product')
         {
