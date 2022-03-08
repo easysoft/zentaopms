@@ -416,12 +416,13 @@ class baseControl
         $moduleName = basename(dirname(dirname(realpath($viewFile))));
         $extPath    = $this->app->getModuleExtPath('', $moduleName, 'view');
 
-        $checkedOrder = array('site', 'common', 'xuan', 'vision', 'custom');
+        $checkedOrder = array('site', 'custom', 'vision', 'xuan', 'common');
+        $fileName     = basename($viewFile);
         foreach($checkedOrder as $checkedType)
         {
             if(!empty($extPath[$checkedType]))
             {
-                $extViewFile = $extPath[$checkedType] . basename($viewFile);
+                $extViewFile = $extPath[$checkedType] . $fileName;
                 if(file_exists($extViewFile))
                 {
                     helper::cd($extPath[$checkedType]);
