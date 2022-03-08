@@ -39,7 +39,7 @@ class upgradeModel extends model
         set_time_limit(0);
 
         $editions    = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
-        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editons[$fromVersion[0]];
+        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
         $openVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition}[$fromVersion];
 
         /* Get versions to be updated. */
