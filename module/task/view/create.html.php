@@ -15,7 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
-<?php js::set('teamMember', $lang->task->error->teamMember);?>
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
