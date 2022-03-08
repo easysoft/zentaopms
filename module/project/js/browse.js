@@ -14,7 +14,7 @@ $(function()
         window.location.reload();
     });
 
-    if(projectType == 'bylist' && !useDatatable) resetNameWidth();
+    if(!useDatatable) resetNameWidth();
 });
 
 function resetNameWidth()
