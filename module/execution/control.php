@@ -2502,13 +2502,6 @@ class execution extends control
             return print(js::reload('parent'));
         }
     }
-    //public function deleteBug($bugID, $confirm = 'no')
-    //{
-    //    if($confirm == 'no')
-    //    {
-    //        return print();
-    //    }
-    //}
 
     /**
      * Manage products.
