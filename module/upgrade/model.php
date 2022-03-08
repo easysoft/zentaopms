@@ -44,6 +44,7 @@ class upgradeModel extends model
 
         /* Get versions to be updated. */
         $versions = array();
+        $edition  = $this->config->edition;
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
         {
             if(!is_numeric($version[0])) continue;
