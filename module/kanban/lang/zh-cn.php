@@ -332,6 +332,7 @@ $lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->legendBasicInfo = '基本信息';
 $lang->kanbancard->legendLifeTime  = '卡片的一生';
 $lang->kanbancard->space           = '所属空间';
+$lang->kanbancard->region          = '所属区域';
 $lang->kanbancard->kanban          = '所属看板';
 $lang->kanbancard->lane            = '所属泳道';
 $lang->kanbancard->column          = '所属看板列';
