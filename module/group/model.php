@@ -373,8 +373,6 @@ class groupModel extends model
 
         if(isset($actions['actions']['project']['started']))   $actions['actions']['project']['syncproject'] = 'syncproject';
         if(isset($actions['actions']['execution']['started'])) $actions['actions']['execution']['syncexecution'] = 'syncexecution';
-        if(empty($actions['actions']['project']['started']) and !empty($actions['actions']['project']['syncproject']))       unset($actions['actions']['project']['syncproject']);
-        if(empty($actions['actions']['execution']['started']) and !empty($actions['actions']['execution']['syncexecution'])) unset($actions['actions']['execution']['syncexecution']);
 
         $dynamic = $actions['actions'];
         if(!isset($_POST['allchecker']))
