@@ -138,3 +138,4 @@
     <?php endif;?>
   </div>
 </div>
+<?php js::set('useDatatable', $useDatatable);?>

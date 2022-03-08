@@ -13,7 +13,20 @@ $(function()
         $.cookie('projectType', projectType, {expires:config.cookieLife, path:config.webRoot});
         window.location.reload();
     });
+
+    if(projectType == 'bylist' && !useDatatable) resetNameWidth();
 });
+
+function resetNameWidth()
+{
+    $name = $('#projectForm thead th.c-name');
+    if($name.width() < 150) $name.width(150);
+}
+
+$('#mainContent .sidebar-toggle').click(function()
+{
+    if(!useDatatable) setTimeout("resetNameWidth()", 100);
+})
 
 /**
  * Change program.
