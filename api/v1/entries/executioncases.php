@@ -35,7 +35,7 @@ class executionCasesEntry extends entry
             $result = array();
             foreach($cases as $case)
             {
-                $case->statusName = 'name' => $this->lang->testcase->statusList[$case->status];
+                $case->statusName = $this->lang->testcase->statusList[$case->status];
                 $result[] = $this->format($case, 'openedDate:time,reviewedDate:date,lastEditedDate:time,lastRunDate:time');
             }
 
