@@ -54,6 +54,7 @@ class productEntry extends Entry
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;
 
+                    $users   = $this->loadModel('user')->getPairs();
                     $actions = $data->data->actions;
                     $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
                     break;
