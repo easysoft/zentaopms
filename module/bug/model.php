@@ -200,6 +200,7 @@ class bugModel extends model
             $bug->os          = $data->oses[$i];
             $bug->browser     = $data->browsers[$i];
             $bug->keywords    = $data->keywords[$i];
+            $bug->laneID      = $data->lanes[$i];
 
             if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
 
@@ -236,6 +237,9 @@ class bugModel extends model
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         foreach($bugs as $i => $bug)
         {
+            $laneID = isset($bug->laneID) ? $bug->laneID : $output['laneID'];
+            unset($bug->laneID);
+
             if(!empty($data->uploadImage[$i]))
             {
                 $fileName = $data->uploadImage[$i];
@@ -274,8 +278,10 @@ class bugModel extends model
 
             if($bug->execution)
             {
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($bug->execution, 'bug');
+                $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
+                $columnID         = empty($columnIDByLaneID) ? $output['columnID'] : $columnIDByLaneID;
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
+                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
 
             }
             /* When the bug is created by uploading the image, add the image to the file of the bug. */
@@ -290,7 +296,7 @@ class bugModel extends model
                 unset($file);
             }
 
-            if(dao::isError()) return print(js::error('bug#' . ($i+1) . dao::getError(true)));
+            if(dao::isError()) return print(js::error('bug#' . ($i) . dao::getError(true)));
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
 

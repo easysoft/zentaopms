@@ -684,6 +684,9 @@ class bug extends control
      */
     public function batchCreate($productID, $branch = '', $executionID = 0, $moduleID = 0, $extra = '')
     {
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if(!empty($_POST))
         {
             $actions = $this->bug->batchCreate($productID, $branch, $extra);
@@ -696,9 +699,6 @@ class bug extends control
             }
 
             setcookie('bugModule', 0, 0, $this->config->webRoot, '', $this->config->cookieSecure, false);
-
-            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-            parse_str($extra, $output);
 
             /* If link from no head then reload. */
             if(isonlybody() and $executionID)
@@ -731,6 +731,20 @@ class bug extends control
             $builds    = $this->loadModel('build')->getBuildPairs($productID, $branch, 'noempty', $executionID, 'execution');
             $stories   = $this->story->getExecutionStoryPairs($executionID);
             $execution = $this->loadModel('execution')->getById($executionID);
+            if($execution->type == 'kanban')
+            {
+                $this->loadModel('kanban');
+                $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+                $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
+                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+                $this->view->executionType = $execution->type;
+                $this->view->regionID      = $regionID;
+                $this->view->laneID        = $laneID;
+                $this->view->regionPairs   = $regionPairs;
+                $this->view->lanePairs     = $lanePairs;
+            }
         }
         else
         {

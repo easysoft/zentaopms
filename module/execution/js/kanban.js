@@ -265,10 +265,11 @@ function createColumnMenu(options)
  */
 function createColumnCreateMenu(options)
 {
-    var $col   = options.$trigger.closest('.kanban-col');
-    var col    = $col.data('col');
-    var items  = [];
-    var laneID = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var $col     = options.$trigger.closest('.kanban-col');
+    var col      = $col.data('col');
+    var items    = [];
+    var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var regionID = col.$kanbanData.region;
 
     if(col.type == 'backlog')
     {
@@ -283,7 +284,7 @@ function createColumnCreateMenu(options)
         if(priv.canBatchCreateBug)
         {
             if(productNum > 1) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
-            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=&laneID=' + laneID + '&columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=regionID=' + regionID + ',laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         }
     }
     else if(col.type == 'wait')
