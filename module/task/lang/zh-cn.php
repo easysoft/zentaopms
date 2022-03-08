@@ -234,6 +234,7 @@ $lang->task->error->consumedSmall     = '"总计消耗"必须大于之前消耗'
 $lang->task->error->consumedThisTime  = '请填写"工时"';
 $lang->task->error->left              = '请填写"剩余"';
 $lang->task->error->work              = '"备注"必须小于%d个字符';
+$lang->task->error->teamMember        = '团队成员必须不少于2人';
 $lang->task->error->skipClose         = '任务：%s 不是“已完成”或“已取消”状态，确定要关闭吗？';
 $lang->task->error->consumed          = '任务：%s工时不能小于0，忽略该任务工时的改动';
 $lang->task->error->assignedTo        = '当前状态的多人任务不能指派给任务团队外的成员。';

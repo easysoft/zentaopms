@@ -546,10 +546,19 @@ $('#modalTeam .btn').click(function()
         {
             time += estimate;
         }
-
+        
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
+    var a = team.split(" ");
+    if(a.length <= 2)
+    {
+        alert(teamMember);
+    }
+    else
+    {
+        $('.close').click();
+    }
 });
 
 $(window).unload(function(){
