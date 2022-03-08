@@ -196,6 +196,7 @@ $lang->admin->menu->system['subMenu']->safe        = array('link' => "$lang->sec
 $lang->admin->menu->system['subMenu']->cron        = array('link' => "{$lang->admin->cron}|cron|index", 'subModule' => 'cron');
 $lang->admin->menu->system['subMenu']->timezone    = array('link' => "$lang->timezone|custom|timezone");
 $lang->admin->menu->system['subMenu']->buildIndex  = array('link' => "{$lang->admin->buildIndex}|search|buildindex|");
+if($config->visions != ',lite,') unset($lang->admin->menu->system['subMenu']->buildIndex);
 
 if($config->edition != 'open')
 {

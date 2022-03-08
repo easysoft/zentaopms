@@ -156,7 +156,6 @@ pms:
 	make zentaoxx
 	unzip zentaoxx.*.zip
 	cp zentaoxx/* zentaopms/ -r
-	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
 	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
@@ -195,7 +194,6 @@ en:
 	make zentaoxx
 	unzip zentaoxx.*.zip
 	cp zentaoxx/* zentaopms/ -r
-	cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
 	make package
 	mv zentaopms zentaoalm
 	zip -r -9 ZenTaoALM.$(VERSION).int.zip zentaoalm
@@ -240,7 +238,6 @@ ci:
 	    make zentaoxx
 	    unzip zentaoxx.*.zip
 	    cp zentaoxx/* zentaopms/ -r
-	    cat zentaoxx/db/xuanxuan.sql >> zentaopms/db/zentao.sql
         endif
 
 	make package
