@@ -550,6 +550,15 @@ $('#modalTeam .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
+    var teamList = team.split(" ");
+    if(teamList.length <= 2)
+    {
+        alert(teamMemberError);
+    }
+    else
+    {
+        $('.close').click();
+    }
 });
 
 $(window).unload(function(){
