@@ -3307,6 +3307,23 @@ class kanbanModel extends model
     }
 
     /**
+     * Get column ID by lane ID.
+     *
+     * @param  int    $laneID
+     * @param  string $columnType
+     * @access public
+     * @return int
+     */
+    public function getColumnIDByLaneID($laneID, $columnType)
+    {
+        return $this->dao->select('t1.column')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t1.lane')->eq($laneID)
+            ->andWhere('t2.type')->eq($columnType)
+            ->fetch('column');
+    }
+
+    /**
      * Get lane by id.
      *
      * @param  int    $laneID
