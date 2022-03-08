@@ -109,6 +109,7 @@ class taskEntry extends Entry
         $control->edit($taskID);
 
         $this->getData();
+        if($data->status != 'success' and $data->data->result == 'fail') return $this->sendError(zget($data, 'code', 400), $data->data->message);
         $task = $this->task->getByID($taskID);
         $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
