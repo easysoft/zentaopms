@@ -1156,12 +1156,7 @@ function initKanban($kanban)
         onRenderLaneName:  renderLaneName,
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop,
-            mouseButton: 'left'
-        }
+        droppable:         groupBy == 'default' ? {target: findDropColumns, finish:handleFinishDrop, mouseButton: 'left'} : false,
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);
