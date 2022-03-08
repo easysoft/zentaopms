@@ -77,8 +77,9 @@ $lang->kanban->teamSumCount   = '共%s人';
 $lang->kanban->createColumnOnLeft  = '在左側添加看板列';
 $lang->kanban->createColumnOnRight = '在右側添加看板列';
 
-$lang->kanban->accessDenied  = '您無權訪問該看板';
-$lang->kanban->confirmDelete = '您確認刪除嗎？';
+$lang->kanban->accessDenied        = '您無權訪問該看板';
+$lang->kanban->confirmDeleteSpace  = '您確認要删除該空間嗎？';
+$lang->kanban->confirmDeleteKanban = '您確認要删除該看板嗎？';
 
 $lang->kanban->aclGroup['open']    = '公開';
 $lang->kanban->aclGroup['private'] = '私有';

@@ -101,9 +101,10 @@ $lang->kanban->cardCount      = '卡片数量';
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 
-$lang->kanban->accessDenied  = '您无权访问该看板';
-$lang->kanban->confirmDelete = '您确认删除吗？';
-$lang->kanban->cardCountTip  = '请输入卡片数量';
+$lang->kanban->accessDenied        = '您无权访问该看板';
+$lang->kanban->confirmDeleteSpace  = '您确认要删除该空间吗？';
+$lang->kanban->confirmDeleteKanban = '您确认要删除该看板吗？';
+$lang->kanban->cardCountTip        = '请输入卡片数量';
 
 $lang->kanban->selectedKanban  = '请选择看板';
 $lang->kanban->selectedProduct = '请选择产品';
