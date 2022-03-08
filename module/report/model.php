@@ -391,6 +391,7 @@ class reportModel extends model
                     $workload[$user]['total']['manhour'] = isset($workload[$user]['total']['manhour']) ? $workload[$user]['total']['manhour'] + $task->left : $task->left;
                 }
 
+                if(empty($project)) continue;
                 $workload[$user]['task']['project'] = $project;
             }
         }
