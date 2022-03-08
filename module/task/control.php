@@ -1583,6 +1583,14 @@ class task extends control
             if($task->story) $this->loadModel('story')->setStage($task->story);
 
             $this->executeHooks($taskID);
+            if($this->app->tab == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getByID($task->execution);
+                if($execution->type == 'kanban')
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
 
             $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
             return print(js::locate($locateLink, 'parent'));

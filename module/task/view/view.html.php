@@ -187,7 +187,7 @@
         if(!isonlybody()) echo "<div class='divider'></div>";
         common::printIcon('task', 'edit', "taskID=$task->id", $task, 'button', '', '', 'showinonlybody');
         common::printIcon('task', 'create', "projctID={$task->execution}&storyID=0&moduleID=0&taskID=$task->id", $task, 'button', 'copy');
-        common::printIcon('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin');
+        common::printIcon('task', 'delete', "executionID=$task->execution&taskID=$task->id", $task, 'button', 'trash', 'hiddenwin', 'showinonlybody', true);
         if($task->parent > 0) echo html::a(helper::createLink('task', 'view', "taskID=$task->parent"), "<i class='icon icon-chevron-double-up'></i>", '', "class='btn btn-link' title='{$lang->task->parent}'");
         ?>
         <?php endif;?>
