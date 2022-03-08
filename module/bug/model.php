@@ -200,7 +200,8 @@ class bugModel extends model
             $bug->os          = $data->oses[$i];
             $bug->browser     = $data->browsers[$i];
             $bug->keywords    = $data->keywords[$i];
-            $bug->laneID      = $data->lanes[$i];
+
+            if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
 
             if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
 
@@ -237,8 +238,12 @@ class bugModel extends model
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         foreach($bugs as $i => $bug)
         {
-            $laneID = isset($bug->laneID) ? $bug->laneID : $output['laneID'];
-            unset($bug->laneID);
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(isset($bug->laneID))
+            {
+                $laneID = $bug->laneID;
+                unset($bug->laneID);
+            }
 
             if(!empty($data->uploadImage[$i]))
             {
@@ -278,8 +283,13 @@ class bugModel extends model
 
             if($bug->execution)
             {
-                $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-                $columnID         = empty($columnIDByLaneID) ? $output['columnID'] : $columnIDByLaneID;
+                $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+                if(!empty($laneID))
+                {
+                    $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
+                    $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
+                }
+
                 if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
                 if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
 

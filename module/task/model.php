@@ -331,6 +331,7 @@ class taskModel extends model
             if($assignedTo) $data[$i]->assignedDate = $now;
             if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
             if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $data[$i]->deadline   = '';
+            if(isset($tasks->lanes[$i])) $data[$i]->laneID = $tasks->lanes[$i];
 
             foreach($extendFields as $extendField)
             {
@@ -387,6 +388,13 @@ class taskModel extends model
 
         foreach($data as $i => $task)
         {
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(isset($task->laneID))
+            {
+                $laneID = $task->laneID;
+                unset($task->laneID);
+            }
+
             $task->version = 1;
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -418,7 +426,14 @@ class taskModel extends model
             }
             else
             {
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+                $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+                if(!empty($laneID))
+                {
+                    $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
+                    $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
+                }
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
             }
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');

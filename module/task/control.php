@@ -389,6 +389,23 @@ class task extends control
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
 
+        if($execution->type == 'kanban')
+        {
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
+
+            $this->loadModel('kanban');
+            $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+            $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+            $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
+            $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+            $this->view->regionID    = $regionID;
+            $this->view->laneID      = $laneID;
+            $this->view->regionPairs = $regionPairs;
+            $this->view->lanePairs   = $lanePairs;
+        }
+
         $title      = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
         $position[] = html::a($taskLink, $execution->name);
         $position[] = $this->lang->task->common;
