@@ -424,14 +424,15 @@ class story extends control
                 if($execution->type == 'kanban')
                 {
                     $this->loadModel('kanban');
+                    $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+                    $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                    $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+                    $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
-                    $cardPositions = $this->kanban->getCardPositions($executionID, 'story', 'backlog');
-
-                    $kanbanLanePairs = array();
-
-                    foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
-
-                    $this->view->kanbanLanePairs = $kanbanLanePairs;
+                    $this->view->regionID    = $regionID;
+                    $this->view->laneID      = $laneID;
+                    $this->view->regionPairs = $regionPairs;
+                    $this->view->lanePairs   = $lanePairs;
                 }
 
                 $this->execution->setMenu($executionID);
@@ -439,8 +440,6 @@ class story extends control
                 $this->lang->navGroup->story = 'execution';
             }
             $this->view->execution = $execution;
-
-
         }
         else
         {
@@ -468,12 +467,18 @@ class story extends control
             $stories = array();
             foreach($mails as $mail) $stories[] = $mail->storyID;
 
+            $lanes = array();
+            if(isset($_POST['lanes']))
+            {
+                foreach($mails as $i => $mail) $lanes[$mail->storyID] = $_POST['lanes'][$i];
+            }
+
             /* Project or execution linked stories. */
             if($executionID)
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products, $extra);
+                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 

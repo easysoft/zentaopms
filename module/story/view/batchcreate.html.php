@@ -48,8 +48,9 @@
             <?php if(!isonlybody()):?>
             <th class='c-plan<?php echo zget($visibleFields, 'plan', ' hidden') . zget($requiredFields, 'plan', '', ' required');?>'><?php echo $lang->story->plan;?></th>
             <?php endif;?>
-            <?php if(isset($kanbanLanePairs)):?>
-            <th class='c-lane'><?php echo $lang->kanbancard->lane;?></th>
+            <?php if(isset($execution) and $execution->type == 'kanban'):?>
+            <th class='c-branch'><?php echo $lang->kanbancard->region;?></th>
+            <th class='c-branch'><?php echo $lang->kanbancard->lane;?></th>
             <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->story->title;?></th>
             <th class='c-spec<?php echo zget($visibleFields, 'spec', ' hidden') . zget($requiredFields, 'spec', '', ' required');?>'><?php echo $lang->story->spec;?></th>
@@ -74,8 +75,9 @@
             <?php if(!isonlybody()):?>
             <td class='text-left<?php echo zget($visibleFields, 'plan', ' hidden')?>' style='overflow:visible'><?php echo html::select('plan[$id]', $plans, $planID, "class='form-control chosen'");?></td>
             <?php endif;?>
-            <?php if(isset($kanbanLanePairs)):?>
-            <td class='text-left'><?php echo html::select('kanbanLanes[$id]', $kanbanLanePairs, '', "class='form-control chosen' id='lane_\$id'");?>
+            <?php if(isset($execution) and $execution->type == 'kanban'):?>
+            <td class='text-left'><?php echo html::select('regions[$id]', $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, \$id)'");?>
+            <td class='text-left'><?php echo html::select('lanes[$id]', $lanePairs, $laneID, "class='form-control chosen'");?>
             <?php endif;?>
             <td style='overflow:visible'>
               <div class="input-group">
