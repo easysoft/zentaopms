@@ -20,7 +20,7 @@ $(function()
 function resetNameWidth()
 {
     $name = $('#projectForm thead th.c-name');
-    if($name.width() < 150) $name.width(150);
+    if($name.width() < 350) $name.width(350);
 }
 
 $('#mainContent .sidebar-toggle').click(function()
