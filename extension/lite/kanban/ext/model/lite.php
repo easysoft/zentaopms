@@ -2,7 +2,7 @@
 public function __construct($appName = '')
 {
     parent::__construct($appName);
-    $this->lang->kanban->menu = new stdclass();
+    if($this->app->getModuleName() == 'kanban') $this->lang->kanban->menu = new stdclass();
 }
 
 public function getKanban4Group($executionID, $browseType, $groupBy)
