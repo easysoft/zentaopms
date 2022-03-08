@@ -55,7 +55,7 @@
           <tr>
             <th><?php echo $lang->project->acl;?> </th>
             <?php $class = $plan->grade == 2 ? "disabled='disabled'" : '';?>
-            <td colspan='2'><?php echo html::select('acl', $lang->project->aclList, $plan->acl, "class='form-control' $class");?></td>
+            <td colspan='2'><?php echo html::select('acl', $lang->execution->aclList, $plan->acl, "class='form-control' $class");?></td>
           </tr>
           <tr>
             <th><?php echo $lang->programplan->planDateRange;?> </th>
