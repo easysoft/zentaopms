@@ -18,3 +18,5 @@ th.c-name {min-width: 240px;}
     th.c-name {width: auto;}
 }
 [lang^='en'] .project-name > .label-warning {width: 55px !important;}
+
+.table-responsive {overflow: auto !important;}
