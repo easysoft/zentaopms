@@ -1139,7 +1139,6 @@ function createBugMenu(options)
     if(priv.canCopyBug) items.push({label: bugLang.copy, icon: 'copy', url: createLink('bug', 'create', 'productID=' + productID + '&branch=' + '' + '&extras=bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canToStoryBug && (bug.$col.type != 'closed')) items.push({label: bugLang.toStory, icon: 'lightbulb', url: createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateBug && (bug.$col.type == 'fixed') || bug.$col.type == 'testing' || bug.$col.type == 'tested' || bug.$col.type == 'closed') items.push({label: bugLang.activate, icon: 'magic', url: createLink('bug', 'activate', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canDeleteBug) items.push({label: bugLang.delete, icon: 'trash', url: createLink('bug', 'delete', 'bugID=' + bug.id, '', 'false'), attrs: {'target': 'hiddenwin'}});
     if(priv.canDeleteBug) items.push({label: bugLang.delete, icon: 'trash', onClick: function(){deleteCard('bug', bug.id, bug.$lane.region)}});
     return items;
 }
