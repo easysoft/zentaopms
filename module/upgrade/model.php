@@ -54,22 +54,22 @@ class upgradeModel extends model
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(!isset($versions[$open])) continue;
-            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $edition == 'pro') $versions[$open]['pro'][] = $pro;
+            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $fromEdition == 'pro') $versions[$open]['pro'][] = $pro;
         }
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(!isset($versions[$open])) continue;
-            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $edition == 'biz') $versions[$open]['biz'][] = $biz;
+            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $fromEdition == 'biz') $versions[$open]['biz'][] = $biz;
         }
         foreach($this->config->upgrade->maxVersion as $max => $open)
         {
             if(!isset($versions[$open])) continue;
-            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $edition == 'max') $versions[$open]['max'][] = $max;
+            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $fromEdition == 'max') $versions[$open]['max'][] = $max;
         }
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
-        $updateStructure = $openVersion != $this->config->upgrade->{$this->config->edition . 'Version'}[$currentVersion];
+        $updateStructure = $openVersion != ($this->config->edition == 'open' ? $currentVersion : $this->config->upgrade->{$this->config->edition . 'Version'}[$currentVersion]);
 
         /* Execute. */
         foreach($versions as $openVersion => $chargedVersions)
@@ -598,9 +598,7 @@ class upgradeModel extends model
     public function getConfirm($fromVersion)
     {
         $confirmContent = '';
-
-        $openVersion     = $fromVersion;
-        $confirmContent .= $this->getOpenConfirm($openVersion, $fromVersion);
+        $openVersion    = $fromVersion;
 
         if($fromVersion[0] == 'p')
         {
@@ -626,6 +624,7 @@ class upgradeModel extends model
             $confirmContent .= $this->getMaxConfirm($fromVersion);
         }
 
+        $confirmContent = $this->getOpenConfirm($openVersion, $fromVersion) . $confirmContent;
         return str_replace('zt_', $this->config->db->prefix, $confirmContent);
     }
 
