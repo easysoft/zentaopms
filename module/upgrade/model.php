@@ -5840,6 +5840,27 @@ class upgradeModel extends model
     }
 
     /**
+     * Get custom modules.
+     *
+     * @param  array  $allModules
+     * @access public
+     * @return array
+     */
+    public function getCustomModules($allModules)
+    {
+        $customModules = array();
+        $systemFiles   = file_get_contents('systemfiles.txt');
+        $systemFiles   = str_replace('/', DS, $systemFiles);
+        foreach($allModules as $modulePath)
+        {
+            $customFiles = array();
+            $module      = basename($modulePath);
+            if(!in_array($module, $this->config->upgrade->openModules) and !preg_match("#$module(/[a-z]*)*(/[a-z]+.[a-z]+)+#", $systemFiles)) $customModules[$module] = $module;
+        }
+        return $customModules;
+    }
+
+    /**
      * Move extension files.
      *
      * @access public
@@ -5883,12 +5904,14 @@ class upgradeModel extends model
      */
     public function removeEncryptedDir()
     {
-        $allModules  = glob($this->app->moduleRoot . '*');
-        $skipModules = $this->getEncryptedModules($allModules);
-        $zfile       = $this->app->loadClass('zfile');
-        $response    = array('result' => 'success');
-        $command     = array();
-        foreach($skipModules as $module)
+        $allModules    = glob($this->app->moduleRoot . '*');
+        $skipModules   = $this->getEncryptedModules($allModules);
+        $customModules = $this->getCustomModules($allModules);
+        $modules       = $skipModules + $customModules;
+        $zfile         = $this->app->loadClass('zfile');
+        $response      = array('result' => 'success');
+        $command       = array();
+        foreach($modules as $module)
         {
             if(in_array($module, $this->config->upgrade->openModules)) continue;
 
