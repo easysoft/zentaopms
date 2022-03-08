@@ -6,15 +6,15 @@ fields:
     note: "名称"
     fields:
     - field: name1
-      range: 迭代{30},阶段{30},看板{30}
+      range: 父阶段
     - field: name2
       range: 1-10000
   - field: project
-    range: 11-100
+    range: 41-70
   - field: model
     range: []
   - field: type
-    range: sprint{30},stage{30},kanban{30}
+    range: stage
   - field: status
     range: wait,doing
   - field: percent
@@ -27,11 +27,11 @@ fields:
   - field: grade
     range: 1
   - field: parent
-    range: 11-40,41-70,71-100
+    range: -1
   - field: path
     prefix: ","
     postfix: ","
-    range: 101-700
+    range: 701-730
   - field: acl
     range: open{4},private{4}
   - field: whitelist
