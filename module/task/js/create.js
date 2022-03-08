@@ -546,7 +546,7 @@ $('#modalTeam .btn').click(function()
         {
             time += estimate;
         }
-        
+
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
