@@ -156,7 +156,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDeleteSpace, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
         }
         else
         {
@@ -324,7 +324,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDeleteKanban, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
         }
         else
         {
