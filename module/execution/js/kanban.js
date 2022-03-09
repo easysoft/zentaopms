@@ -280,7 +280,7 @@ function createColumnCreateMenu(options)
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=regionID=' + regionID + 'laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=regionID=' + regionID + ',laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         if(priv.canBatchCreateBug)
         {
             if(productNum > 1) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
@@ -289,7 +289,7 @@ function createColumnCreateMenu(options)
     }
     else if(col.type == 'wait')
     {
-        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=regionID=" + regionID + "laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=regionID=" + regionID + ",laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&iframe=0&extra=regionID=" + regionID + ",laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         if(priv.canImportBug && vision == 'rnd') items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=" + laneID  + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     }
