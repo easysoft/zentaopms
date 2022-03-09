@@ -890,6 +890,18 @@ class kanbanModel extends model
     }
 
     /**
+     * Get kanban id by region id.
+     *
+     * @param  int $regionID
+     * @access public
+     * @return int
+     */
+    public function getKanbanIDByRegion($regionID)
+    {
+        return $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
+    }
+
+    /**
      * Get kanban group by regions.
      *
      * @param  array $regions
