@@ -5,31 +5,31 @@ version: "1.0"
 fields:
   - field: id
     note: "id"
-    range: 601-1000
+    range: 901-910
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: parent
     note: "父任务"
-    range: 0
+    range: 601-603
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: project
     note: "所属项目"
-    range: 11-100{3}
+    range: 11
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: execution
     note: "所属执行"
-    range: 101-700{3}
+    range: 101
   - field: module
     note: "所属模块"
-    range: 21-1820:3
+    range: 21
     prefix: ""
     postfix: ""
     loop: 0
@@ -73,9 +73,9 @@ fields:
     note: "任务名称"
     fields:
     - field: name1
-      range: "更多任务"
+      range: "子任务"
     - field: name2
-      range: 1-300
+      range: 1-10
     prefix: ""
     postfix: ""
     loop: 0
@@ -205,7 +205,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: realStarted
     note: "实际开始"
     from: common.date.v1.yaml
@@ -213,7 +214,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: finishedBy
     note: "由谁完成"
     from: common.user.v1.yaml

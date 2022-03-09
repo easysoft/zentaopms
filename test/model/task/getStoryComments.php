@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=taskModel->getProjectID();
+title=taskModel->getStoryComments();
 cid=1
 pid=1
 
@@ -14,8 +14,8 @@ pid=1
 
 */
 
-$executionID = '101';
+$storyID = '2';
 
 $task = new taskTest();
-r($task->getProjectIDTest($executionID)) && p('project') && e('11'); //根据executionID查找projectID
+r($task->getStoryCommentsTest($storyID)) && p('comment') && e('这是一个系统日志测试备注' . $storyID); //根据executionID查找projectID
 system("./ztest init");

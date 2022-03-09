@@ -2171,7 +2171,7 @@ class taskModel extends model
                     $task->parentName = $parent->name;
                 }
             }
-        }        
+        }
 
         return $this->processTasks($tasks);
     }
