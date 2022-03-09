@@ -73,7 +73,7 @@ function renderDeadline(deadline)
 function renderStoryItem(item, $item, col)
 {
     var scaleSize = window.kanbanScaleSize;
-    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
+    if($item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
     if(scaleSize <= 3)
     {
@@ -135,7 +135,7 @@ function renderStoryItem(item, $item, col)
 function renderBugItem(item, $item, col)
 {
     var scaleSize = window.kanbanScaleSize;
-    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
+    if($item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
     if(scaleSize <= 3)
     {
@@ -199,7 +199,7 @@ function renderBugItem(item, $item, col)
 function renderTaskItem(item, $item, col)
 {
     var scaleSize = window.kanbanScaleSize;
-    if(+$item.attr('data-scale-size') !== scaleSize)  $item.empty().attr('data-scale-size', scaleSize);
+    if($item.attr('data-scale-size') !== scaleSize)  $item.empty().attr('data-scale-size', scaleSize);
 
     if(scaleSize <= 3)
     {
@@ -298,6 +298,8 @@ function renderColumnCount($count, count, col)
 function renderHeaderCol($col, col, $header, kanban)
 {
     if(col.asParent) $col = $col.children('.kanban-header-col');
+    if($col.children('.actions').context != undefined) return;
+
     var $actions = $('<div class="actions" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
     if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlan) printStoryButton = true;
