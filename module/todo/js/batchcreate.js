@@ -25,4 +25,5 @@ $(function()
         $('#todoBatchAddForm #switchDate').val(value);
     });
     $('.main-header #date').change();
+    parent.$('#triggerModal .modal-content .modal-header .close').hide();
 });

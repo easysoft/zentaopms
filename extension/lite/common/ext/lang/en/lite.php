@@ -68,6 +68,7 @@ $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
 if($config->edition != 'open') $lang->my->menuOrder[11] = 'effort';
 $lang->my->menuOrder[20] = 'task';
+$lang->my->menuOrder[25] = 'contacts';
 
 $lang->my->dividerMenu = ',calendar,';
 

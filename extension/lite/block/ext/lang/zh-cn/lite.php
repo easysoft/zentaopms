@@ -19,7 +19,9 @@ $lang->block->story = '目标';
 
 $lang->block->storyCount = '目标数';
 
+/* unset contribute and projectteam. */
 unset($lang->block->default['full']['my']['9']);
+unset($lang->block->default['full']['my']['6']);
 
 $lang->block->default['full']['my']['5']['title']  = '看板列表';
 $lang->block->default['full']['my']['5']['block']  = 'scrumlist';
