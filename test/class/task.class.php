@@ -563,4 +563,36 @@ class taskTest
             return $object;
         }
     }
+
+    public function getStoryComments($storyID)
+    {
+        $object = $this->objectModel->getStoryComments($storyID);
+
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function computeWorkingHoursTest($taskID)
+    {
+        $result = $this->objectModel->computeWorkingHours($taskID);
+
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($taskID);
+            if($object->parent) $parentObject = $this->objectModel->getById($object->parent);
+            return isset($parentObject) ? $parentObject : $object;
+        }
+    }
 }

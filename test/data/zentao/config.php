@@ -4,6 +4,7 @@ $builder = new stdclass();
 $builder->company   = array('rows' => 1,    'extends' => array('company'));
 $builder->user      = array('rows' => 1000, 'extends' => array('user'));
 $builder->dept      = array('rows' => 100,  'extends' => array('dept'));
+$builder->action    = array('rows' => 100,  'extends' => array('action'));
 
 $builder->program       = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project       = array('rows' => 90, 'extends' => array('project', 'project'));
@@ -16,6 +17,7 @@ $builder->taskmore      = array('rows' => 300, 'extends' => array('task','moreta
 $builder->taskspec      = array('rows' => 600, 'extends' => array('taskspec'));
 $builder->taskmodule    = array('rows' => 1800, 'extends' => array('module','taskmodule'));
 $builder->taskestimate  = array('rows' => 600, 'extends' => array('taskestimate'));
+$builder->taskson       = array('rows' => 10,  'extends' => array('task', 'taskson'));
 $builder->case          = array('rows' => 400, 'extends' => array('case'));
 $builder->bug           = array('rows' => 300, 'extends' => array('bug'));
 
