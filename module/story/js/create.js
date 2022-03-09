@@ -48,14 +48,22 @@ function refreshPlan()
     $('a.refresh').click();
 }
 
-function loadLanes(regionID)
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function setLane(regionID)
 {
-    var link = createLink('story', 'ajaxGetLanesByRegionID', 'regionID=' + regionID);
-    $.post(link, function(data)
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lane');
+    $.get(laneLink, function(lane)
     {
-        console.log(data);
-        $('#lane').replaceWith(data);
-        $('#lane_chosen').remove();
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
+        $('#lane').replaceWith(lane);
+        $('#lane' + "_chosen").remove();
+        $('#lane').next('.picker').remove();
         $('#lane').chosen();
     });
 }

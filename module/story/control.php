@@ -46,6 +46,10 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
+        /* Whether there is a object to transfer story, for example feedback. */
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if($productID == 0 and $objectID == 0) $this->locate($this->createLink('product', 'create'));
 
         $this->story->replaceURLang($type);
@@ -63,37 +67,20 @@ class story extends control
             $objectID = empty($objectID) ? $this->session->execution : $objectID;
             $this->execution->setMenu($objectID);
             $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
-        }
-
-        /* Whether there is a object to transfer story, for example feedback. */
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
-
-        if(isset($execution) and $execution->type == 'kanban')
-        {
-            $this->loadModel('kanban');
-
-            $lanePairs = array();
-            $regionPairs = array();
-            $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
-
-            if($output)
+            if($execution->type == 'kanban')
             {
-                $lane      = $this->kanban->getLaneByID($output['laneID']);
-                $lanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'story');
-                $this->view->regionID = $lane->region;
-                $this->view->laneID   = $lane->id;
-            }
-            else $lanePairs = $this->kanban->getLanePairsByRegion(array_keys($regionPairs)[0], 'story');
+                $this->loadModel('kanban');
+                $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+                $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
-            if($this->post->lane and $this->post->region)
-            {
-                $columnID = $this->kanban->getColumnIDByLaneID($this->post->lane, 'backlog');
-                $extra   = 'laneID=' . $this->post->lane . ',columnID=' . $columnID;
+                $this->view->executionType = $execution->type;
+                $this->view->regionID      = $regionID;
+                $this->view->laneID        = $laneID;
+                $this->view->regionPairs   = $regionPairs;
+                $this->view->lanePairs     = $lanePairs;
             }
-
-            $this->view->regionPairs = $regionPairs;
-            $this->view->lanePairs   = $lanePairs;
         }
 
         foreach($output as $paramKey => $paramValue)
