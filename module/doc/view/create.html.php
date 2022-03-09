@@ -19,22 +19,19 @@
     </div>
     <?php if($this->config->edition != 'open'):?>
     <div class='alert alert-warning strong'>
-      <?php
-      if(common::hasPriv('custom', 'libreoffice'))
-      {
-          printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), $this->createLink('custom', 'libreoffice', 'onlybody=yes'));
-      }
-      else
-      {
-          printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), '###'); echo $lang->doc->accessDenied;
-      }
-      ?>
+      <?php printf($lang->doc->notSetOffice, zget($lang->doc->typeList, $docType), common::hasPriv('custom', 'libreoffice') ? $this->createLink('custom', 'libreoffice', '', '', true) : '###');?>
     </div>
     <?php else:?>
     <div class='alert alert-warning strong'><?php printf($lang->doc->cannotCreateOffice, zget($lang->doc->typeList, $docType));?></div>
     <?php endif;?>
   </div>
 </div>
+<script>
+$("a[href^='###']").click(function()
+{
+    alert('<?php echo $lang->doc->accessDenied;?>');
+});
+</script>
 </body>
 </html>
 <?php else:?>
