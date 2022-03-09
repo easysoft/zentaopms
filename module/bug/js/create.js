@@ -37,7 +37,7 @@ function loadExecutionTeamMembers(productID, changeProduct)
         $('#assignedTo').replaceWith(data);
         $('#assignedTo_chosen').remove();
         $('#assignedTo').chosen();
-        if(typeof(changeProduct) != undefined && changeProduct)setAssignedTo();
+        if(typeof(changeProduct) != undefined && changeProduct) setAssignedTo();
     })
 }
 
