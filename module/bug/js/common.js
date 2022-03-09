@@ -32,7 +32,7 @@ function loadAll(productID)
     if(page == 'create')
     {
         loadExecutionTeamMembers(productID);
-        setAssignedTo();
+        setTimeout("setAssignedTo()", 50);
     }
 
     if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
@@ -485,7 +485,7 @@ function loadExecutionBuilds(executionID)
  */
 function loadProjectTeamMembers(projectID)
 {
-    link = createLink('bug', 'ajaxGetProjectTeamMembers', 'projectID=' + projectID);
+    link = createLink('bug', 'ajaxGetProjectTeamMembers', 'projectID=' + projectID + '&selectedUser=' + $('#assignedTo').val());
     $.get(link, function(data)
     {
         if(!data) data = '<select id="assignedTo" name="assignedTo" class="form-control"></select>';
