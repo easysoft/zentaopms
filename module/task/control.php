@@ -1559,17 +1559,18 @@ class task extends control
      * @param  int    $executionID
      * @param  int    $taskID
      * @param  string $confirm yes|no
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function delete($executionID, $taskID, $confirm = 'no')
+    public function delete($executionID, $taskID, $confirm = 'no', $from = '')
     {
         $task = $this->task->getById($taskID);
         if($task->parent < 0) return print(js::alert($this->lang->task->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes")));
+            return print(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes&from=$from")));
         }
         else
         {
@@ -1583,14 +1584,9 @@ class task extends control
             if($task->story) $this->loadModel('story')->setStage($task->story);
 
             $this->executeHooks($taskID);
-            if($this->app->tab == 'execution')
-            {
-                $execution = $this->loadModel('execution')->getByID($task->execution);
-                if($execution->type == 'kanban')
-                {
-                    return print(js::reload('parent.parent'));
-                }
-            }
+
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            if($from == 'taskkanban') return print(js::reload('parent'));
 
             $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
             return print(js::locate($locateLink, 'parent'));

@@ -1153,17 +1153,18 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $confirm  yes|no
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function delete($storyID, $confirm = 'no')
+    public function delete($storyID, $confirm = 'no', $from = '')
     {
         $story = $this->story->getById($storyID);
         if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), ''));
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from"), ''));
         }
         else
         {
@@ -1177,14 +1178,10 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
-            if($this->app->tab == 'execution')
-            {
-                $execution = $this->loadModel('execution')->getByID(key($story->executions));
-                if($execution->type == 'kanban')
-                {
-                    return print(js::reload('parent.parent'));
-                }
-            }
+
+            if($this->app->tab == 'execution' and $from == 'taskkanban') return print(js::reload('parent'));
+
+            if(isonlybody()) return print(js::reload('parent.parent'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));
