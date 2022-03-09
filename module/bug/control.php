@@ -326,23 +326,17 @@ class bug extends control
             if($execution->type == 'kanban')
             {
                 $this->loadModel('kanban');
+                $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+                $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'bug');
+                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
-                $cardPositions = $this->kanban->getCardPositions($output['executionID'], 'bug', 'unconfirmed');
+                $this->view->executionType = $execution->type;
+                $this->view->regionID      = $regionID;
+                $this->view->laneID        = $laneID;
+                $this->view->regionPairs   = $regionPairs;
+                $this->view->lanePairs     = $lanePairs;
 
-                $kanbanLanePairs = array();
-                if(isset($output['laneID']))
-                {
-                    $lane = $this->kanban->getLaneByID($output['laneID']);
-                    $kanbanLanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'bug');
-                }
-                else
-                {
-                    foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
-                }
-
-                if($this->post->kanbanLane) $extras = 'laneID=' . "{$this->post->kanbanLane}" . ",columnID=" . $cardPositions[$this->post->kanbanLane]->columnID . ",executionID=" . $output['executionID'];
-
-                $this->view->kanbanLanePairs = $kanbanLanePairs;
             }
         }
         else if($this->app->tab == 'project')
