@@ -934,27 +934,6 @@ class kanban extends control
     }
 
     /**
-     * Delete a card.
-     *
-     * @param  string $objectType story|task|bug
-     * @param  int    $objectID
-     * @param  int    $regionID
-     * @access public
-     * @return void
-     */
-    public function deleteObjectCard($objectType, $objectID, $regionID)
-    {
-        $table = 'TABLE_' . strtoupper($objectType);
-        $this->loadModel($objectType)->delete(constant($table), $objectID);
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-        $kanbanID = $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
-
-        $kanbanGroup = $this->kanban->getRDKanban($kanbanID);
-        return print(json_encode($kanbanGroup));
-    }
-
-    /**
      * View a card.
      *
      * @param  int    $cardID
@@ -1399,6 +1378,28 @@ class kanban extends control
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));
         }
+    }
+
+    /**
+     * Delete a card.
+     *
+     * @param  string $objectType story|task|bug
+     * @param  int    $objectID
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function deleteObjectCard($objectType, $objectID, $regionID)
+    {
+        if(!($objectType == 'task' or $objectType == 'story' or $objectType == 'bug')) return false;
+        $table = 'TABLE_' . strtoupper($objectType);
+        $this->loadModel($objectType)->delete(constant($table), $objectID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
+
+        $kanbanGroup = $this->kanban->getRDKanban($kanbanID);
+        return print(json_encode($kanbanGroup));
     }
 
     /**
