@@ -247,6 +247,18 @@ class baseEntry
     }
 
     /**
+     * Send 400 response.
+     *
+     * @param  string message
+     * @access public
+     * @return void
+     */
+    public function send400($message = 'error')
+    {
+        $this->sendError(400, $message);
+    }
+
+    /**
      * Send 404 response.
      *
      * @access public
