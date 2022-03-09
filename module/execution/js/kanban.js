@@ -969,6 +969,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         modalTrigger.show();
     }
 }
+
 /**
  * Delete a card.
  *

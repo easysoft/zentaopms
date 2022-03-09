@@ -859,6 +859,7 @@ function createStoryMenu(options)
         if(this.size) item.attrs['data-width'] = this.size;
 
         if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
+        if(this.icon == 'trash')  item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
         items.push(item);
     });
 
