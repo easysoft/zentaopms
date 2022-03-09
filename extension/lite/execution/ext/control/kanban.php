@@ -12,6 +12,9 @@ class myExecution extends execution
         $this->loadModel('project')->setMenu($execution->project);
         $this->lang->kanban->menu->execution['subMenu'] = new stdClass();
 
+        $this->session->set('kanbanview', $currentMethod);
+        setcookie('kanbanview', $currentMethod, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         /* change subMenu to sub select menu */
         $TRActions  = $this->execution->getTRActions($currentMethod);
 
