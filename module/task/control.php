@@ -143,19 +143,19 @@ class task extends control
                 $this->action->create('task', $taskID, 'Opened', '');
             }
 
+            /* Create task in kanban. */
             $kanbanID = $execution->type == 'kanban' ? $executionID : $_POST['execution'];
-            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-            if(isset($_POST['lane'])) $laneID = $_POST['lane'];
 
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            if(!empty($laneID))
-            {
-                $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
-                $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
-            }
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
+
+            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
+            if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($kanbanID, $laneID, $columnID, 'task', $taskID);
             if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($kanbanID, 'task');
 
+            /* To do status. */
             if($todoID > 0)
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();

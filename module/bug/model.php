@@ -109,14 +109,10 @@ class bugModel extends model
                 $this->loadModel('kanban');
 
                 $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
-                if(isset($_POST['lane'])) $laneID = $_POST['lane'];
+                if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
 
-                $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-                if(!empty($laneID))
-                {
-                    $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-                    $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
-                }
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
                 if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
                 if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
@@ -294,12 +290,8 @@ class bugModel extends model
 
             if($bug->execution)
             {
-                $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-                if(!empty($laneID))
-                {
-                    $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
-                    $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
-                }
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
                 if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
                 if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');

@@ -426,12 +426,8 @@ class taskModel extends model
             }
             else
             {
-                $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-                if(!empty($laneID))
-                {
-                    $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
-                    $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
-                }
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
                 if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
             }

@@ -290,12 +290,8 @@ class storyModel extends model
                 $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
                 if(isset($_POST['lane'])) $laneID = $_POST['lane'];
 
-                $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-                if(!empty($laneID))
-                {
-                    $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
-                    $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
-                }
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
                 if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
                 if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');

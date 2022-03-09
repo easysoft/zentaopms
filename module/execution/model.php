@@ -2297,15 +2297,11 @@ class executionModel extends model
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
-            $laneID   = isset($output['laneID']) ? $output['laneID'] : 0;
-            if(isset($lanes[$storyID])) $laneID = $lanes[$storyID];
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
 
-            if(!empty($laneID))
-            {
-                $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
-                $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
-            }
+            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+            if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
 
             if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
 
