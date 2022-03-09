@@ -86,30 +86,19 @@ class task extends control
         $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
 
+        $this->loadModel('kanban');
         if($execution->type == 'kanban')
         {
-            $this->loadModel('kanban');
+            $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+            $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+            $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
+            $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
-            $cardPositions = $this->kanban->getCardPositions($executionID, 'task', 'wait');
-
-            $kanbanLanePairs = array();
-            if($output)
-            {
-                $lane = $this->kanban->getLaneByID($output['laneID']);
-                $kanbanLanePairs = $this->kanban->getLanePairsByRegion($lane->region, 'task');
-            }
-            else
-            {
-                foreach($cardPositions as $cardPosition) $kanbanLanePairs[$cardPosition->laneID] = $cardPosition->name . ' / ' . $cardPosition->laneName;
-            }
-
-            if($this->post->kanbanLane)
-            {
-                $output['laneID'] = $this->post->kanbanLane;
-                $output['columnID'] =$cardPositions[$this->post->kanbanLane]->columnID;
-            }
-
-            $this->view->kanbanLanePairs = $kanbanLanePairs;
+            $this->view->executionType = $execution->type;
+            $this->view->regionID      = $regionID;
+            $this->view->laneID        = $laneID;
+            $this->view->regionPairs   = $regionPairs;
+            $this->view->lanePairs     = $lanePairs;
         }
 
         /* Set menu. */
@@ -155,10 +144,18 @@ class task extends control
                 $this->action->create('task', $taskID, 'Opened', '');
             }
 
-            $this->loadModel('kanban');
             $kanbanID = $execution->type == 'kanban' ? $executionID : $_POST['execution'];
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($kanbanID, $output['laneID'], $output['columnID'], 'task', $taskID);
-            if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'task');
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(isset($_POST['lane'])) $laneID = $_POST['lane'];
+
+            $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+            if(!empty($laneID))
+            {
+                $columnIDByLaneID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
+                $columnID         = empty($columnIDByLaneID) ? $columnID : $columnIDByLaneID;
+            }
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($kanbanID, $laneID, $columnID, 'task', $taskID);
+            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($kanbanID, 'task');
 
             if($todoID > 0)
             {

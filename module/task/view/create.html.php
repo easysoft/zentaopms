@@ -139,11 +139,17 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if(isset($kanbanLanePairs)):?>
+        <?php if(isset($executionType) and $executionType == 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->kanbancard->region;?></th>
+          <td colspan='3'>
+            <div class="input group"><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></div>
+          </td>
+        </tr>
         <tr>
           <th><?php echo $lang->kanbancard->lane;?></th>
           <td colspan='3'>
-            <div class="input group"><?php echo html::select('kanbanLane', $kanbanLanePairs, '', "class='form-control chosen'");?></div>
+            <div class="input group"><?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?></div>
           </td>
         </tr>
         <?php endif;?>

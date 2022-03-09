@@ -67,7 +67,7 @@ function setLane(regionID)
     laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lane');
     $.get(laneLink, function(lane)
     {
-        if(!lane) lane = "<select id='lane' name='lane' class='form-control'>select>";
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
         $('#lane').replaceWith(lane);
         $("#lane" + "_chosen").remove();
         $("#lane").next('.picker').remove();
