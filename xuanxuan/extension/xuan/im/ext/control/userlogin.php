@@ -1,5 +1,6 @@
 <?php
-class myIm extends im 
+helper::import('../../control.php');
+class myIm extends im
 {
     public function userLogin($account = '', $password = '', $options = 0, $userID = 0, $version = '', $device = 'desktop')
     {

@@ -1,4 +1,5 @@
 <?php
+helper::import('../../control.php');
 class myClient extends client
 {
     public function create()
