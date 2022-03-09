@@ -336,7 +336,6 @@ class bug extends control
                 $this->view->laneID        = $laneID;
                 $this->view->regionPairs   = $regionPairs;
                 $this->view->lanePairs     = $lanePairs;
-
             }
         }
         else if($this->app->tab == 'project')
