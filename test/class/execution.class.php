@@ -721,4 +721,26 @@ class executionTest
         }
     }
 
+    public function unlinkStoryTest($executionID, $count)
+    {
+        global $tester;
+        $tester->dbh->query("delete from zt_projectstory where project = $executionID");
+
+        $this->objectModel->unlinkStory($executionID);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
+            return count($object);
+        }
+        else
+        {
+            $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
+            return $object;
+        }
+    }
 }
