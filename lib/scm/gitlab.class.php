@@ -646,7 +646,7 @@ class gitlab
 
         $param = new stdclass();
         $param->path     = urldecode($path);
-        $param->ref_name = $toRevision ? $toRevision : $this->branch;
+        $param->ref_name = ($toRevision != 'HEAD' and $toRevision) ? $toRevision : $this->branch;
 
         $fromDate = $this->getCommittedDate($fromRevision);
         $toDate   = $this->getCommittedDate($toRevision);

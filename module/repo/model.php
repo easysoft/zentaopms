@@ -882,7 +882,7 @@ class repoModel extends model
         $scm = $this->app->loadClass('scm');
         $scm->setEngine($repo);
 
-        $logs = $scm->log('', $lastInDB ? $lastInDB->revision : 0, '');
+        $logs = $scm->log('', $lastInDB ? $lastInDB->revision : 0);
         if(empty($logs)) return false;
 
         /* Process logs. */
