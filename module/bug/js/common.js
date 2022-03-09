@@ -29,11 +29,7 @@ $(function()
  */
 function loadAll(productID)
 {
-    if(page == 'create')
-    {
-        loadExecutionTeamMembers(productID);
-        setTimeout("setAssignedTo()", 50);
-    }
+    if(page == 'create') loadExecutionTeamMembers(productID, true);
 
     if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
     {
