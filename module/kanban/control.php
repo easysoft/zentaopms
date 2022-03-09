@@ -1397,8 +1397,8 @@ class kanban extends control
         if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
         $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
-
         $kanbanGroup = $this->kanban->getRDKanban($kanbanID);
+        
         return print(json_encode($kanbanGroup));
     }
 
