@@ -333,6 +333,7 @@ $lang->kanbancard->name            = 'Card Name';
 $lang->kanbancard->legendBasicInfo = 'Basic Info';
 $lang->kanbancard->legendLifeTime  = 'Card Life';
 $lang->kanbancard->space           = 'Space';
+$lang->kanbancard->region          = 'Region';
 $lang->kanbancard->kanban          = 'Kanban';
 $lang->kanbancard->lane            = 'Lane';
 $lang->kanbancard->column          = 'Column';

@@ -77,6 +77,16 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <?php if($execution->type == 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->kanbancard->region;?></th>
+          <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->lane;?></th>
+          <td><?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?></td>
+        </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>

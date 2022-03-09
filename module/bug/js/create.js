@@ -55,6 +55,27 @@ function loadModuleRelated()
 }
 
 /**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function setLane(regionID)
+{
+    console.log(regionID);
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lane');
+    $.get(laneLink, function(lane)
+    {
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
+        $('#lane').replaceWith(lane);
+        $("#lane" + "_chosen").remove();
+        $("#lane").next('.picker').remove();
+        $("#lane").chosen();
+    });
+}
+
+/**
  * Set the assignedTo field.
  *
  * @param  int    $moduleID

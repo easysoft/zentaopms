@@ -1838,8 +1838,8 @@ class kanbanModel extends model
     /**
      * Get lane pairs by region id.
      *
-     * @param  array  $regionID
-     * @param  string $type all|story|task|bug|common
+     * @param  array|int $regionID
+     * @param  string    $type all|story|task|bug|common
      * @access public
      * @return array
      */
@@ -3294,6 +3294,23 @@ class kanbanModel extends model
             ->beginIF($deleted != '')->andWhere('deleted')->eq($deleted)->fi()
             ->orderBy('order')
             ->fetchAll('id');
+    }
+
+    /**
+     * Get column ID by lane ID.
+     *
+     * @param  int    $laneID
+     * @param  string $columnType
+     * @access public
+     * @return int
+     */
+    public function getColumnIDByLaneID($laneID, $columnType)
+    {
+        return $this->dao->select('t1.column')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t1.lane')->eq($laneID)
+            ->andWhere('t2.type')->eq($columnType)
+            ->fetch('column');
     }
 
     /**
