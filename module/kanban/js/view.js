@@ -976,6 +976,7 @@ function handleDropTask($element, event, kanban)
     var regionID = $card.closest('.region').data('id');
     var kanbanID = $card.closest('#kanban').data('id');
 
+    if(!oldCol || !newCol || !newLane || !oldLane) return false;
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID = $card.data().id;
