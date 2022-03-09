@@ -1101,17 +1101,17 @@ class upgradeModel extends model
     /**
      * Check consistency.
      *
-     * @param  string $fromVersion
+     * @param  string $version
      * @access public
      * @return string
      */
-    public function checkConsistency($fromVersion = '')
+    public function checkConsistency($version = '')
     {
-        if(empty($fromVersion)) $fromVersion = $this->config->installedVersion;
+        if(empty($version)) $version = $this->config->installedVersion;
 
         $editions    = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
-        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
-        $openVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition}[$fromVersion];
+        $fromEdition = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+        $openVersion = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
         $openVersion = str_replace('_', '.', $openVersion);
 
         $alterSQL    = '';

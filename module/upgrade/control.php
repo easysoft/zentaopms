@@ -703,7 +703,7 @@ class upgrade extends control
      */
     public function afterExec($fromVersion, $processed = 'no', $skipMoveFile = 'no')
     {
-        $alterSQL = $this->upgrade->checkConsistency($fromVersion);
+        $alterSQL = $this->upgrade->checkConsistency($this->config->version);
         if(!empty($alterSQL))
         {
             $this->view->title    = $this->lang->upgrade->consistency;
