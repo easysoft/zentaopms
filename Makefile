@@ -242,12 +242,10 @@ ci:
 
 	make package
 	zip -rq -9 ZenTaoPMS.$(VERSION).zip zentaopms
-	#make deb; make rpm; make en
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 	make en
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 	php tools/mergezentaopms.php $(VERSION)
-	rm zentaobiz*.zip zentaomax*.zip
+	rm zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH) 
-	rm -f $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm
 	mv *.zip *.deb *.rpm $(RELEASE_PATH)
