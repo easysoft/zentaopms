@@ -1381,6 +1381,28 @@ class kanban extends control
     }
 
     /**
+     * Delete a card.
+     *
+     * @param  string $objectType story|task|bug
+     * @param  int    $objectID
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function deleteObjectCard($objectType, $objectID, $regionID)
+    {
+        if(!($objectType == 'task' or $objectType == 'story' or $objectType == 'bug')) return false;
+        $table = 'TABLE_' . strtoupper($objectType);
+        $this->loadModel($objectType)->delete(constant($table), $objectID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
+        $kanbanGroup = $this->kanban->getRDKanban($kanbanID);
+        
+        return print(json_encode($kanbanGroup));
+    }
+
+    /**
      * Set WIP.
      *
      * @param  int    $columnID

@@ -1864,6 +1864,16 @@ class bug extends control
 
             if($this->viewType == 'json') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess));
 
+            if($this->app->tab == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getByID($bug->execution);
+                if($execution->type == 'kanban')
+                {
+                    $locateLink = $this->createLink("execution", "kanban", "executionID={$bug->execution}");
+                    return print(js::locate($locateLink, 'parent.parent'));
+                }
+            }
+
             $locateLink = $this->session->bugList ? $this->session->bugList : inlink('browse', "productID={$bug->product}");
             return print(js::locate($locateLink, 'parent'));
         }

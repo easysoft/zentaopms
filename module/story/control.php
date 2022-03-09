@@ -1177,6 +1177,14 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+            if($this->app->tab == 'execution')
+            {
+                $execution = $this->loadModel('execution')->getByID(key($story->executions));
+                if($execution->type == 'kanban')
+                {
+                    return print(js::reload('parent.parent'));
+                }
+            }
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));

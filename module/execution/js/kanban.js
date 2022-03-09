@@ -548,7 +548,7 @@ function renderBugItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && (priv.canEditBug || priv.canResolveBug || priv.canConfirmBug || priv.canCopyBug || priv.canToStoryBug))
+        if(!$actions.length && (priv.canEditBug || priv.canResolveBug || priv.canConfirmBug || priv.canCopyBug || priv.canToStoryBug || priv.canDeleteBug))
         {
             $actions = $([
                 '<div class="actions">',
@@ -969,6 +969,35 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         modalTrigger.show();
     }
 }
+/**
+ * Delete a card.
+ *
+ * @param string objectType
+ * @param int    objectID
+ * @param int    regionID
+ * @access public
+ * @return void
+ */
+function deleteCard(objectType, objectID, regionID)
+{
+    var objectLang = objectType + 'Lang';
+    var result = confirm(window[objectLang].confirmDelete) ? true : false;
+
+    if(!result) return false;
+    if(!objectID) return false;
+
+    var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
+    return $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:      url,
+        success: function(data)
+        {
+          updateRegion(regionID, data[regionID]);
+        }
+    });
+}
 
 /**
  * Close modal and update kanban data.
@@ -1070,6 +1099,7 @@ function createStoryMenu(options)
     if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    if(priv.canDeleteStory) items.push({label: storyLang.delete, icon: 'trash', onClick: function(){deleteCard('story', story.id, story.$lane.region)}});
     return items;
 }
 
@@ -1090,6 +1120,7 @@ function createTaskMenu(options)
     if(priv.canActivateTask && (task.$col.type == 'developed' || task.$col.type == 'canceled' || task.$col.type == 'closed')) items.push({label: executionLang.activate, icon: 'magic', url: createLink('task', 'activate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCreateTask) items.push({label: taskLang.copy, icon: 'copy', url: createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCancelTask && (task.$col.type == 'wait' || task.$col.type == 'developing' || task.$col.type == 'pause')) items.push({label: taskLang.cancel, icon: 'cancel', url: createLink('task', 'cancel', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canDeleteTask) items.push({label: taskLang.delete, icon: 'trash', onClick: function(){deleteCard('task', task.id, task.$lane.region)}});
     return items;
 }
 
@@ -1109,6 +1140,7 @@ function createBugMenu(options)
     if(priv.canCopyBug) items.push({label: bugLang.copy, icon: 'copy', url: createLink('bug', 'create', 'productID=' + productID + '&branch=' + '' + '&extras=bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canToStoryBug && (bug.$col.type != 'closed')) items.push({label: bugLang.toStory, icon: 'lightbulb', url: createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateBug && (bug.$col.type == 'fixed') || bug.$col.type == 'testing' || bug.$col.type == 'tested' || bug.$col.type == 'closed') items.push({label: bugLang.activate, icon: 'magic', url: createLink('bug', 'activate', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canDeleteBug) items.push({label: bugLang.delete, icon: 'trash', onClick: function(){deleteCard('bug', bug.id, bug.$lane.region)}});
     return items;
 }
 
