@@ -2144,14 +2144,6 @@ class story extends control
         echo json_encode($result);
     }
 
-    public function ajaxGetLanesByRegionID($regionID)
-    {
-        $this->loadModel('kanban');
-        $lanePairs = $this->kanban->getLanePairsByRegion($regionID, 'story');
-
-        return print(html::select('lane', $lanePairs, '', "class='form-control chosen'"));
-    }
-
     /**
      * AJAX: get spec and verify of a story. for web app.
      *

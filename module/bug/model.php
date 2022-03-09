@@ -76,7 +76,7 @@ class bugModel extends model
             ->trim('title')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
-            ->remove('files,labels,uid,oldTaskID,contactListMenu,column,region,lane')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
             ->get();
 
         if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');

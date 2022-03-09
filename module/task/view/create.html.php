@@ -139,7 +139,7 @@
           </td>
         </tr>
         <?php endif;?>
-        <?php if(isset($executionType) and $executionType == 'kanban'):?>
+        <?php if($execution->type == 'kanban'):?>
         <tr>
           <th><?php echo $lang->kanbancard->region;?></th>
           <td colspan='3'>

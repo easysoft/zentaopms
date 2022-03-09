@@ -200,11 +200,11 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
           <?php if(isset($executionType) and $executionType == 'kanban'):?>
           <tr>
             <th><?php echo $lang->kanbancard->region;?></th>
-            <td colspan="1"><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
-            <td colspan='1'>
+            <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+            <td>
               <div class='input-group'>
                 <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
-                <?php echo html::select('lane', $lanePairs, $laneID, "class='form control chosen'");?>
+                <?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?>
               </div>
             </td>
           </tr>

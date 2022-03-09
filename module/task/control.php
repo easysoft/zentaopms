@@ -94,11 +94,10 @@ class task extends control
             $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
             $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
 
-            $this->view->executionType = $execution->type;
-            $this->view->regionID      = $regionID;
-            $this->view->laneID        = $laneID;
-            $this->view->regionPairs   = $regionPairs;
-            $this->view->lanePairs     = $lanePairs;
+            $this->view->regionID    = $regionID;
+            $this->view->laneID      = $laneID;
+            $this->view->regionPairs = $regionPairs;
+            $this->view->lanePairs   = $lanePairs;
         }
 
         /* Set menu. */
