@@ -532,4 +532,35 @@ class taskTest
             return $object;
         }
     }
+
+    public function createTaskFromGitlabIssueTest($task, $executionID)
+    {
+        $objectID = $this->objectModel->createTaskFromGitlabIssue($task, $executionID);
+
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($objectID);
+            return $object;
+        }
+    }
+
+    public function getProjectIDTest($executionID)
+    {
+        $object = $this->objectModel->getProjectID($executionID);
+
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
 }
