@@ -273,7 +273,7 @@ function loadModuleRelated()
 /* Get select of stories.*/
 function setStories(moduleID, executionID)
 {
-    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID);
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&number=&type=full&status=unclosed');
     $.get(link, function(stories)
     {
         var storyID = $('#story').val();
