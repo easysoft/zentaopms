@@ -33,7 +33,7 @@ $task3->name      = 'gitlab中新建的问题03';
 $task3->execution = $executionID;
 
 $task4 = new stdclass();
-$task4->name      = 'gitlab中新建的问题06';
+$task4->name      = 'gitlab中新建的问题04';
 $task4->execution = '';
 
 $task5 = new stdclass();
