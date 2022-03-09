@@ -1101,25 +1101,27 @@ class upgradeModel extends model
     /**
      * Check consistency.
      *
-     * @param  string $version
+     * @param  string $fromVersion
      * @access public
      * @return string
      */
-    public function checkConsistency($version = '')
+    public function checkConsistency($fromVersion = '')
     {
-        if(empty($version)) $version = $this->config->installedVersion;
+        if(empty($fromVersion)) $fromVersion = $this->config->installedVersion;
+
+        $editions    = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
+        $openVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition}[$fromVersion];
+        $openVersion = str_replace('_', '.', $openVersion);
+
         $alterSQL    = '';
-        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $version . '.sql';
+        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $openVersion . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
         $lines = file($standardSQL);
         if(empty($this->config->isINT))
         {
-            $xVersion = $version;
-            $version  = str_replace('.', '_', $version);
-            if(strpos($version, 'pro') !== false and isset($this->config->upgrade->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->upgrade->proVersion[$version]);
-            if(strpos($version, 'biz') !== false and isset($this->config->upgrade->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->upgrade->bizVersion[$version]);
-
+            $xVersion     = $openVersion;
             $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
             if(file_exists($xStandardSQL))
             {
