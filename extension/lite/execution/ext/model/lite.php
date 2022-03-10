@@ -40,7 +40,17 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
 
     if(strpos('|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") !== false) $this->lang->TRActions = $this->getTRActions($lowerMethod);
     if(strpos('|relation|maintainrelation|', "|{$lowerMethod}|") !== false) $this->lang->TRActions = $this->getTRActions('gantt');
-    if($lowerModule == 'task' || ($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") === false)) $this->lang->TRActions = $this->getTRActions($this->session->kanbanview);
+    if($lowerModule == 'task' or ($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") === false))
+    {
+        if($this->session->kanbanview)
+        {
+            $this->lang->TRActions = $this->getTRActions($this->session->kanbanview);
+        }
+        elseif($this->cookie->kanbanview)
+        {
+            $this->lang->TRActions = $this->getTRActions($this->cookie->kanbanview);
+        }
+    }
 
     $this->lang->modulePageNav = $modulePageNav;
 }
