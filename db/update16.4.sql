@@ -31,3 +31,5 @@ INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('lite', '迅捷版用户分组', 'liteUser', '迅捷版用户分组');
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
+
+update zt_config set `value` = concat(`value`, ',visions') where module = 'user' and `key` = 'requiredFields' and section in ('create', 'edit');

@@ -1,0 +1,67 @@
+title: table zt_kanbanspace
+desc: "看板空间"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    fields:
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: type
+    note: "类型"
+    range: cooperation,private,public
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: team
+    note: "团队"
+    range: admin
+    prefix: ","
+    postfix: ""
+    format: ""
+  - field: owner
+    note: "所属者"
+    fields:
+      - field: account1
+        range: admin{10},user{10},test{10},pm{10},po{10}
+      - field: account2
+        range: [],3-100,1-100,1-100,1-100
+    prefix: ""
+    postfix: ""
+  - field: acl
+    note: "权限"
+    range: open,private
+    prefix: ""
+    postfix: ""
+  - field: createdBy
+    note: "创建者"
+    range: admin
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: createdDate
+    note: "创建日期"
+    range: "(-1M)-(+M):1D"
+    prefix: "\t"
+    type: timestamp
+    format: "YYYY-MM-DD"
+  - field: lastEditedDate
+    note: "最后编辑日期"
+    range: ""
+    prefix: ""
+    postfix: ""
+    tampoop: 0
+  - field: closedDate
+    note: "关闭时间"
+    range: ""
+    prefix: ""
+    postfix: ""
+  - field: deleted
+    note: ""
+    range: 0
+    prefix: ""
+    postfix: ""

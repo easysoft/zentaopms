@@ -1,24 +1,24 @@
 title: table zt_productplan
 desc: "产品计划"
-author: sgm 
+author: sgm
 version: "1.0"
 fields:
   - field: id
     note: "ID"
     range: 1-10000
-  - field: product 
+  - field: product
     note: "所属产品"
-    range: 1-120{3}
-  - field: branch 
+    range: 1-10{3}
+  - field: branch
     note: "所属分支"
     range: 0
-  - field: parent 
+  - field: parent
     note: "父计划"
     range: 0
-  - field: title 
+  - field: title
     note: "名称"
     range: [1.0,1.1,长名称好长好长好长好长好长好长好长好长好长好长好长好好长好长好长好长好长好好长好长好长好长好长好好长好长好长好长好长好的名字啊！@ase!!@#%@^&#!]
-  - field: desc 
+  - field: desc
     note: "描述"
     range: <div>
              <p>asdxxxfa阿萨德开机as家世界发卡机发设计费啥登记卡设计费卡加斯加附件阿峰</p>
@@ -27,19 +27,19 @@ fields:
              <p>IUIG是DAU发加速度快哦哦阿萨德几年内发，，，奥斯丁，，，切，，，请问加十多年你</p>
              <p>IU风格就叫阿萨德奥斯丁哦IG是DAU，，，奥斯丁，，，切，，，请问加十多年你</p>
            </div>
-  - field: begin 
+  - field: begin
     note: "开始日期"
     range: "(-10M)-(-7M):7D"
     type: timestamp
     format: "YYYY-MM-DD"
-  - field: end 
+  - field: end
     note: "结束日期"
     range: "(-6M)-(+6M):7D"
     type: timestamp
     format: "YYYY-MM-DD"
-  - field: order 
+  - field: order
     note: "排序"
     value: "$id * 5"
-  - field: deleted 
+  - field: deleted
     note: "是否删除"
-    range: 0{359},1 
+    range: 0{359},1

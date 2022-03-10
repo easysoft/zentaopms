@@ -81,7 +81,7 @@
         <?php if(common::hasPriv('group', 'managemember')):?>
         <tr>
           <th><?php echo $lang->user->group;?></th>
-          <td><?php echo html::select('group', $groupList, '', "class='form-control chosen'");?></td>
+          <td><?php echo html::select('group[]', $groupList, '', "multiple=multiple class='form-control chosen'");?></td>
           <td><?php echo $lang->user->placeholder->group?></td>
         </tr>
         <?php endif;?>

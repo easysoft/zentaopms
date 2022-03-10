@@ -34,10 +34,9 @@ class upgradeModel extends model
      * @access public
      * @return array
      */
-    public function getVersionsToUpdate($openVersion)
+    public function getVersionsToUpdate($openVersion, $fromEdition)
     {
         $versions = array();
-        $edition  = $this->config->edition;
 
         /* Always update open. */
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
@@ -46,21 +45,21 @@ class upgradeModel extends model
             if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
             $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
         }
-        if($edition == 'open') return $versions;
+        if($fromEdition == 'open') return $versions;
 
         /* Update to pro|biz|max. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
         }
-        if($edition == 'pro') return $versions;
+        if($fromEdition == 'pro') return $versions;
 
         /* Update to biz|max. */
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
         }
-        if($edition != 'max') return $versions;
+        if($fromEdition == 'biz') return $versions;
 
         /* Update to max. */
         foreach($this->config->upgrade->maxVersion as $max => $open)
@@ -90,7 +89,7 @@ class upgradeModel extends model
 
         /* Execute. */
         $fromOpenVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition . 'Version'}[$fromVersion];
-        $versions        = $this->getVersionsToUpdate($fromOpenVersion);
+        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
             $executeXuanxuan = false;
@@ -127,12 +126,15 @@ class upgradeModel extends model
             }
         }
 
-        /* Means open source upgrade to biz or max. */
-        if($fromEdition == 'open' and $this->config->edition != 'open')
+        /* Means open source/pro upgrade to biz or max. */
+        if($this->config->edition != 'open')
         {
-            $this->loadModel('effort')->convertEstToEffort();
-            $this->importBuildinModules();
-            $this->addSubStatus();
+            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
+            if($fromEdition == 'open' or $fromEdition == 'pro')
+            {
+                $this->importBuildinModules();
+                $this->addSubStatus();
+            }
         }
     }
 
@@ -354,7 +356,6 @@ class upgradeModel extends model
                 break;
             case '11_7':
                 $this->adjustPriv12_0();
-                $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
                 break;
             case '12_0_1':
                 $this->importRepoFromConfig();
@@ -1130,6 +1131,7 @@ class upgradeModel extends model
         if(empty($version)) $version = $this->config->installedVersion;
 
         $editions    = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $version     = str_replace('.', '_', $version);
         $fromEdition = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
         $openVersion = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
         $openVersion = str_replace('_', '.', $openVersion);

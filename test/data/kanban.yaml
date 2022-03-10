@@ -1,0 +1,54 @@
+title: table zt_kanban
+desc: "看板表"
+author: automated export
+version: "1.0"
+fields:
+    - field: space
+      range: 1-50{2}
+    - field: name
+      fields:
+        - field: name1
+          range: 通用看板
+        - field: name2
+          range: 1-10000
+    - field: owner
+      range: admin
+    - field: team
+      range: ""
+    - field: desc
+      range: "看板详情"
+    - field: acl
+      range: extend,open
+    - field: whitelist
+      range: ""
+    - field: archived
+      range: "1"
+    - field: performable
+      range: "0"
+    - field: status
+      range: "active"
+    - field: order
+      range: 5-10000:5
+    - field: displayCards
+      range: "0"
+    - field: fluidBoard
+      range: "0"
+    - field: object
+      range: ""
+    - field: createdBy
+      range: "admin"
+    - field: createdDate
+      range: "(-1M)-(+M):1D"
+      type: timestamp
+      format: "YYYY-MM-DD"
+      prefix: "\t"
+    - field: lastEditedBy
+      range: ""
+    - field: lastEditedDate
+      range: ""
+    - field: closedBy
+      range: ""
+    - field: closedDate
+      range: ""
+    - field: deleted
+      range: "0"

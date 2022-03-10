@@ -537,7 +537,6 @@ class taskTest
     {
         $objectID = $this->objectModel->createTaskFromGitlabIssue($task, $executionID);
 
-        unset($_POST);
         if(dao::isError())
         {
             return dao::getError();
@@ -553,7 +552,6 @@ class taskTest
     {
         $object = $this->objectModel->getProjectID($executionID);
 
-        unset($_POST);
         if(dao::isError())
         {
             return dao::getError();
@@ -564,11 +562,10 @@ class taskTest
         }
     }
 
-    public function getStoryComments($storyID)
+    public function getStoryCommentsTest($storyID)
     {
         $object = $this->objectModel->getStoryComments($storyID);
 
-        unset($_POST);
         if(dao::isError())
         {
             return dao::getError();
@@ -583,7 +580,6 @@ class taskTest
     {
         $result = $this->objectModel->computeWorkingHours($taskID);
 
-        unset($_POST);
         if(dao::isError())
         {
             return dao::getError();
@@ -591,8 +587,39 @@ class taskTest
         else
         {
             $object = $this->objectModel->getById($taskID);
-            if($object->parent) $parentObject = $this->objectModel->getById($object->parent);
+            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
             return isset($parentObject) ? $parentObject : $object;
+        }
+    }
+
+    public function computeBeginAndEndTest($taskID)
+    {
+        $result = $this->objectModel->computeBeginAndEnd($taskID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($taskID);
+            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
+            return isset($parentObject) ? $parentObject : $object;
+        }
+    }
+
+    public function computeHours4MultipleTest($oldTask, $task = null, $team = array(), $autoStatus = true)
+    {
+        $result = $this->objectModel->computeHours4Multiple($oldTask, $task, $team, $autoStatus);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($oldTask->id);
+            return !empty($team) ? $result : $object;
         }
     }
 }

@@ -1752,7 +1752,13 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (13, 'PROJECTADMIN', 'projectAdmin', 'Project Admins manage project privileges');
 
 INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
-(14, 'lite', '迅捷版用户分组', 'liteUser', '迅捷版用户分组');
+(14, 'lite', '管理员', 'liteUser', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
+(15, 'lite', '项目管理', 'liteUser', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
+(16, 'lite', '团队成员', 'liteUser', '迅捷版用户分组');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'action','comment'),

@@ -68,3 +68,4 @@ ALTER TABLE `zt_bug` ADD `entry` varchar(255) COLLATE 'utf8_general_ci' NOT NULL
 ALTER TABLE `zt_repobranch` ADD INDEX `revision` (`revision`);
 
 DELETE FROM `zt_grouppriv` WHERE `module` = 'api' AND `method` = 'sql';
+REPLACE INTO `zt_config` set `owner` = 'system', `module` = 'common', `section` = 'global', `key` = 'showAnnual', `value` = '1';
