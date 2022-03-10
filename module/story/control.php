@@ -1470,7 +1470,6 @@ class story extends control
             {
                 $this->lang->story->menu      = $this->lang->my->menu;
                 $this->lang->story->menuOrder = $this->lang->my->menuOrder;
-                $this->loadModel('my')->setMenu();
 
                 if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
