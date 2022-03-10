@@ -457,7 +457,6 @@ class upgradeModel extends model
             case '16_4':
                 set_time_limit(0);
                 $this->updateActivatedDate();
-                $this->updateUserRequired();
 
                 if($fromVersion[0] == 'm') break;
                 $this->execSQL($this->getUpgradeFile('maxinstall'));
@@ -5997,28 +5996,5 @@ class upgradeModel extends model
             $content = str_replace('helper::import(dirname(dirname(dirname(__FILE__))) . "/control.php");', "helper::importControl('$moduleName');", $content);
         }
         file_put_contents($filePath, $content);
-    }
-
-    /**
-     * Update user's required settings.
-     *
-     * @access public
-     * @return bool
-     */
-    public function updateUserRequired()
-    {
-        $requiredConfigs = $this->dao->select('*')->from(TABLE_CONFIG)
-            ->where('module')->eq('user')
-            ->andWhere('`key`')->eq('requiredFields')
-            ->andWhere('section')->in('create,edit')
-            ->fetchAll();
-
-        foreach($requiredConfigs as $requiredConfig)
-        {
-            $requiredField = $requiredConfig->value . ',visions';
-            $this->dao->update(TABLE_CONFIG)->set('value')->eq($requiredField)->where('id')->eq($requiredConfig->id)->exec();
-        }
-
-        return true;
     }
 }
