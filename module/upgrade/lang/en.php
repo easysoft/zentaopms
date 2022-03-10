@@ -27,7 +27,7 @@ $lang->upgrade->warnningContent = <<<EOT
 2. Use mysqlCommand to backup.
    $> mysqldump -u <span class='text-danger'>username</span> -p <span class='text-danger'>dbname</span> > <span class='text-danger'>filename</span>
    Change the red text into corresponding Username and Database name.
-   e.g. mysqldump -u root -p zentao >zentao.bak
+   e.g. mysqldump -u root -p zentao > zentao.bak
 </pre>
 EOT;
 

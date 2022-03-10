@@ -1,0 +1,13 @@
+title: table zt_kanbangroup
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: id
+      range: 101-10000
+    - field: kanban
+      range: 161-190,251-180,341-370,431-460,521-550,611-640
+    - field: region
+      range: 101-10000{3}
+    - field: order
+      range: 1-3

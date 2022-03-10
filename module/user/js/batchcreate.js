@@ -1,8 +1,8 @@
 /**
  * Change group by role.
- * 
- * @param  string $role 
- * @param  int    $i 
+ *
+ * @param  string $role
+ * @param  int    $i
  * @access public
  * @return void
  */
@@ -10,20 +10,20 @@ function changeGroup(role, i)
 {
     if(role && roleGroup[role])
     {
-        $('#group' + i).val(roleGroup[role]); 
+        $('#group' + i).val(roleGroup[role]);
     }
     else
     {
-        $('#group' + i).val(''); 
+        $('#group' + i).val('');
     }
     $('#group' + i).trigger('chosen:updated');
 }
 
 /**
  * Toggle checkbox and check password strength.
- * 
- * @param  object $obj 
- * @param  int    $i 
+ *
+ * @param  object $obj
+ * @param  int    $i
  * @access public
  * @return void
  */
@@ -49,7 +49,10 @@ function toggleCheck(obj, i)
     }
 }
 
-$(document).ready(removeDitto());//Remove 'ditto' in first row.
+$(function()
+{
+    removeDitto(); //Remove 'ditto' in first row.
+})
 
 $(document).on('click', '.chosen-with-drop', function()
 {
@@ -67,5 +70,14 @@ $(document).on('click', '.chosen-with-drop', function()
         }
         $(select).val(value);
         $(select).trigger("chosen:updated");
+    }
+})
+
+$(document).on('change', '[id^=visions]', function()
+{
+    if($.inArray('ditto', $(this).val()) > 0)
+    {
+        $(this).val('ditto');
+        $(this).trigger("chosen:updated");
     }
 })

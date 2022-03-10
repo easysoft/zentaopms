@@ -19,7 +19,9 @@ $lang->block->story = 'Target';
 
 $lang->block->storyCount = 'Target Count';
 
+/* unset contribute and projectteam. */
 unset($lang->block->default['full']['my']['9']);
+unset($lang->block->default['full']['my']['6']);
 
 $lang->block->default['full']['my']['5']['title']  = 'Kanban List';
 $lang->block->default['full']['my']['5']['block']  = 'scrumlist';

@@ -282,8 +282,7 @@ class userModel extends model
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
-            ->beginIF($this->config->vision == 'lite')->andWhere('visions')->eq('lite')->fi()
-            ->beginIF($this->config->vision != 'lite')->andWhere('visions')->ne('lite')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -394,7 +393,7 @@ class userModel extends model
                 if(in_array($users->account[$i], $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
                 if(!validater::checkAccount($users->account[$i])) helper::end(js::error(sprintf($this->lang->user->error->account, $i + 1)));
                 if($users->realname[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $i + 1)));
-                if($users->visions[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->visions, $i + 1)));
+                if(empty($users->visions[$i])) helper::end(js::error(sprintf($this->lang->user->error->visions, $i + 1)));
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) helper::end(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) helper::end(js::error(sprintf($this->lang->user->error->password, $i + 1)));
