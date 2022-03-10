@@ -409,8 +409,7 @@ class deptModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($params, 'all') === false)->andWhere('type')->eq($type)->fi()
             ->beginIF($childDepts)->andWhere('dept')->in($childDepts)->fi()
-            ->beginIF($this->config->vision == 'lite')->andWhere("find_in_set('lite', visions)")->fi()
-            ->beginIF($this->config->vision != 'lite')->andWhere("not find_in_set('lite', visions)")->fi()
+            ->beginIF($this->config->vision)->andWhere("visions")->like("%{$this->config->vision}%")->fi()
             ->orderBy('account')
             ->fetchPairs();
     }
