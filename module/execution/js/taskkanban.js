@@ -73,7 +73,7 @@ function renderDeadline(deadline)
 function renderStoryItem(item, $item, col)
 {
     var scaleSize = window.kanbanScaleSize;
-    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
+    if($item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
     if(scaleSize <= 3)
     {
@@ -135,7 +135,7 @@ function renderStoryItem(item, $item, col)
 function renderBugItem(item, $item, col)
 {
     var scaleSize = window.kanbanScaleSize;
-    if(+$item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
+    if($item.attr('data-scale-size') !== scaleSize) $item.empty().attr('data-scale-size', scaleSize);
 
     if(scaleSize <= 3)
     {
@@ -199,7 +199,7 @@ function renderBugItem(item, $item, col)
 function renderTaskItem(item, $item, col)
 {
     var scaleSize = window.kanbanScaleSize;
-    if(+$item.attr('data-scale-size') !== scaleSize)  $item.empty().attr('data-scale-size', scaleSize);
+    if($item.attr('data-scale-size') !== scaleSize)  $item.empty().attr('data-scale-size', scaleSize);
 
     if(scaleSize <= 3)
     {
@@ -298,6 +298,8 @@ function renderColumnCount($count, count, col)
 function renderHeaderCol($col, col, $header, kanban)
 {
     if(col.asParent) $col = $col.children('.kanban-header-col');
+    if($col.children('.actions').context != undefined) return;
+
     var $actions = $('<div class="actions" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
     if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlan) printStoryButton = true;
@@ -717,6 +719,7 @@ function handleDropTask($element, event, kanban)
     var newLane  = $newCol.closest('.kanban-lane').data('lane');
     var cardType = $card.find('.kanban-card').data('type');
 
+    if(!oldCol || !newCol || !newLane || !oldLane) return false;
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID      = $card.data().id;
@@ -796,7 +799,7 @@ function createColumnCreateMenu(options)
     if(col.laneType == 'story')
     {
         if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID, '', true), className: 'iframe'});
-        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStroy, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStory, url: $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-width': '90%'}});
         if(priv.canLinkStoryByPlan) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal'}});
     }

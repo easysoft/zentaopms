@@ -3,7 +3,7 @@ author: Zhu Jinyong
 version: "1.0"
 fields:
   - field: project
-    range: 0
+    range: 1-10
   - field: model
     range: scrum{30},waterfall{30},kanban{30}
   - field: name

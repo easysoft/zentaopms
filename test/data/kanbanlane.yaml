@@ -1,0 +1,27 @@
+title: table zt_kanbanlane
+desc: "看板泳道"
+author: automated export
+version: "1.0"
+fields:
+    - field: execution
+      range: "0"
+    - field: type
+      range: "common"
+    - field: region
+      range: 1-100
+    - field: group
+      range: 1-100
+    - field: groupby
+      range: ""
+    - field: extra
+      range: ""
+    - field: name
+      range: "默认泳道"
+    - field: color
+      range: "#7ec5ff"
+    - field: order
+      range: 5-10000:5
+    - field: lastEditedTime
+      range: ""
+    - field: deleted
+      range: "0"

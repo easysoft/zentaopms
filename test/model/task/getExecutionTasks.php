@@ -11,7 +11,7 @@ cid=1
 pid=1
 
 根据执行id获取任务列表 >> 开发任务11
-根据执行id获取任务数量 >> 1
+根据执行id获取任务数量 >> 4
 
 */
 
@@ -20,5 +20,5 @@ $count       = array('0','1');
 
 $task = new taskTest();
 r($task->getExecutionTasksTest($executionID,$count[0])) && p('1:name') && e('开发任务11'); //根据执行id获取任务列表
-r($task->getExecutionTasksTest($executionID,$count[1])) && p()         && e('1');          //根据执行id获取任务数量
+r($task->getExecutionTasksTest($executionID,$count[1])) && p()         && e('4');          //根据执行id获取任务数量
 system("./ztest init");

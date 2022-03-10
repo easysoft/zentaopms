@@ -1,5 +1,6 @@
 <?php
-class myIm extends im 
+helper::import('../../control.php');
+class myIm extends im
 {
     /**
      * Get serverInfo api.

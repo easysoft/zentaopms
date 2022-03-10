@@ -29,8 +29,18 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
     }
     $modulePageNav .= "</ul></div></div>";
 
-    if(in_array($this->app->rawMethod, array('task', 'calendar', 'gantt', 'tree', 'grouptask'))) $this->lang->TRActions = $this->getTRActions($this->app->rawMethod);
-    if(in_array($this->app->rawMethod, array('relation', 'maintainrelation'))) $this->lang->TRActions = $this->getTRActions('gantt');
+    $lowerModule = strtolower($this->app->rawModule);
+    $lowerMethod = strtolower($this->app->rawMethod);
+
+    if($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") !== false)
+    {
+        $this->session->set('kanbanview', $lowerMethod);
+        setcookie('kanbanview', $lowerMethod, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+    }
+
+    if(strpos('|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") !== false) $this->lang->TRActions = $this->getTRActions($lowerMethod);
+    if(strpos('|relation|maintainrelation|', "|{$lowerMethod}|") !== false) $this->lang->TRActions = $this->getTRActions('gantt');
+    if($lowerModule == 'task' || ($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") === false)) $this->lang->TRActions = $this->getTRActions($this->session->kanbanview);
 
     $this->lang->modulePageNav = $modulePageNav;
 }
@@ -94,12 +104,14 @@ public function getTRActions($currentMethod)
     }
 
     $TRActions  = '';
-    $TRActions .= "<div class='dropdown'>";
-    $TRActions .= html::a('javascript:;', "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'></i> " . $subMenu->{$currentMethod}['name'] . "<span class='caret'></span>", '', "data-toggle='dropdown' class='btn btn-link'");
+    $TRActions .= "<div class='btn-group dropdown'>";
+    $TRActions .= html::a(helper::createLink('execution', $subMenu->{$currentMethod}['method'], $subMenu->{$currentMethod}['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'> </i>" . $subMenu->{$currentMethod}['name'], '', "class='btn btn-link'");
+    $TRActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
     $TRActions .= "<ul class='dropdown-menu pull-right'>";
     foreach($subMenu as $subKey => $subName)
     {
-        $TRActions .=  '<li>' . html::a(helper::createLink('execution', $subName['method'], $subName['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$subName['method']] . "'></i> " . $subName['name']) . '</li>';
+        $active = $this->session->kanbanview == $subKey ? "class='active'" : '';
+        $TRActions .=  "<li $active>" . html::a(helper::createLink('execution', $subName['method'], $subName['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$subName['method']] . "'></i> " . $subName['name']) . '</li>';
     }
 
     $TRActions .= "</ul></div>";

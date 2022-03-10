@@ -792,6 +792,7 @@ function handleDropTask($element, event, kanban)
     var newLane  = $newCol.closest('.kanban-lane').data('lane');
     var cardType = $card.find('.kanban-card').data('type');
 
+    if(!oldCol || !newCol || !newLane || !oldLane) return false;
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID      = $card.data().id;

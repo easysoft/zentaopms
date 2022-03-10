@@ -206,11 +206,13 @@ class install extends control
             if($this->post->importDemoData) $this->install->importDemoData();
             if(dao::isError()) echo js::alert($this->lang->install->errorImportDemoData);
 
-            $this->loadModel('setting')->updateVersion($this->config->version);
-            $this->loadModel('setting')->setItem('system.common.global.flow', $this->post->flow);
-            $this->loadModel('setting')->setItem('system.common.safe.mode', '1');
-            $this->loadModel('setting')->setItem('system.common.safe.changeWeak', '1');
-            $this->loadModel('setting')->setItem('system.common.global.cron', 1);
+            $this->loadModel('setting');
+            $this->setting->updateVersion($this->config->version);
+            $this->setting->setSN();
+            $this->setting->setItem('system.common.global.flow', $this->post->flow);
+            $this->setting->setItem('system.common.safe.mode', '1');
+            $this->setting->setItem('system.common.safe.changeWeak', '1');
+            $this->setting->setItem('system.common.global.cron', 1);
 
             if(strpos($this->app->getClientLang(), 'zh') === 0) $this->loadModel('api')->createDemoData($this->lang->api->zentaoAPI, 'http://' . $_SERVER['HTTP_HOST'] . $this->app->config->webRoot . 'api.php/v1', '16.0');
             return print(js::locate(inlink('step6'), 'parent'));

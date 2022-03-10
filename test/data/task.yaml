@@ -117,11 +117,12 @@ fields:
     format: ""
   - field: deadline
     note: "截止日期"
-    range: "2022-02-27"
+    range: "(+1w)-(-1M):-1D"
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    type: timestamp
+    format: "YY/MM/DD"
   - field: status
     note: "任务状态"
     range: wait,doing,done,pause,cancel,closed
@@ -204,7 +205,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    type: timestamp
+    format: "YY/MM/DD"
   - field: realStarted
     note: "实际开始"
     from: common.date.v1.yaml
@@ -212,7 +214,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: finishedBy
     note: "由谁完成"
     from: common.user.v1.yaml
@@ -228,7 +231,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: finishedList
     note: "完成者列表"
     from: common.user.v1.yaml
@@ -252,7 +256,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: closedBy
     note: "由谁关闭"
     from: common.user.v1.yaml
@@ -268,7 +273,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: realDuration
     note: "实际持续时长"
     range: 1
@@ -305,7 +311,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: activatedDate
     note: "重新激活日期"
     from: common.date.v1.yaml
@@ -313,7 +320,8 @@ fields:
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    format: "YY/MM/DD"
+    type: timestamp
   - field: deleted
     note: "是否删除"
     range: 0

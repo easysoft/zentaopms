@@ -49,7 +49,10 @@ function toggleCheck(obj, i)
     }
 }
 
-$(document).ready(removeDitto());//Remove 'ditto' in first row.
+$(function()
+{
+    removeDitto(); //Remove 'ditto' in first row.
+})
 
 $(document).on('click', '.chosen-with-drop', function()
 {
