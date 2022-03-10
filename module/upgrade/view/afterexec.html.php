@@ -46,6 +46,11 @@
   </div>
 </div>
 <script>
+$(function()
+{
+    $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
+})
+
 <?php
 foreach($needProcess as $processKey => $value) echo 'var ' . $processKey . "Finish = false;\n";
 if(isset($needProcess['updateFile'])):?>
