@@ -510,7 +510,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                    echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey title='{$module}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                 }
                 ?>
               </div>
