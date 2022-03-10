@@ -135,6 +135,13 @@ fields:
     postfix: ""
     loop: 0
     format: ""
+  - field: visions
+    note: "版本"
+    range: rnd
+    prefix: ""
+    postfix: ",lite"
+    loop: 0
+    format: ""
   - field: ip
     note: "最后IP"
     format: ""

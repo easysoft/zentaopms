@@ -721,7 +721,7 @@ class upgrade extends control
             $this->view->title      = $this->lang->upgrade->result;
             $this->view->position[] = $this->lang->upgrade->common;
 
-            $needProcess = $this->upgrade->checkProcess($fromVersion);
+            $needProcess = $this->upgrade->checkProcess();
             $this->view->needProcess = $needProcess;
             $this->view->fromVersion = $fromVersion;
             $this->display();
