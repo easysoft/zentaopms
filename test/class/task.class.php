@@ -607,4 +607,19 @@ class taskTest
             return isset($parentObject) ? $parentObject : $object;
         }
     }
+
+    public function computeHours4MultipleTest($oldTask, $task = null, $team = array(), $autoStatus = true)
+    {
+        $result = $this->objectModel->computeHours4Multiple($oldTask, $task, $team, $autoStatus);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($oldTask->id);
+            return !empty($team) ? $result : $object;
+        }
+    }
 }
