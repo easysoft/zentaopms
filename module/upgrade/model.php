@@ -354,7 +354,6 @@ class upgradeModel extends model
                 break;
             case '11_7':
                 $this->adjustPriv12_0();
-                $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
                 break;
             case '12_0_1':
                 $this->importRepoFromConfig();
