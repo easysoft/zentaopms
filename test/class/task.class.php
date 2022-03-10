@@ -537,7 +537,6 @@ class taskTest
     {
         $objectID = $this->objectModel->createTaskFromGitlabIssue($task, $executionID);
 
-        unset($_POST);
         if(dao::isError())
         {
             return dao::getError();
@@ -553,7 +552,6 @@ class taskTest
     {
         $object = $this->objectModel->getProjectID($executionID);
 
-        unset($_POST);
         if(dao::isError())
         {
             return dao::getError();
@@ -561,6 +559,52 @@ class taskTest
         else
         {
             return $object;
+        }
+    }
+
+    public function getStoryCommentsTest($storyID)
+    {
+        $object = $this->objectModel->getStoryComments($storyID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function computeWorkingHoursTest($taskID)
+    {
+        $result = $this->objectModel->computeWorkingHours($taskID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($taskID);
+            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
+            return isset($parentObject) ? $parentObject : $object;
+        }
+    }
+
+    public function computeBeginAndEndTest($taskID)
+    {
+        $result = $this->objectModel->computeBeginAndEnd($taskID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $object = $this->objectModel->getById($taskID);
+            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
+            return isset($parentObject) ? $parentObject : $object;
         }
     }
 }

@@ -163,7 +163,7 @@ class custom extends control
                 foreach($_POST['keys'] as $index => $key)
                 {
                     if(!empty($key)) $key = trim($key);
-                    /* Invalid key. It should be numbers. (It includes severityList in bug module and priList in stroy, task, bug, testcasea, testtask and todo module.) */
+                    /* Invalid key. It should be numbers. (It includes severityList in bug module and priList in story, task, bug, testcasea, testtask and todo module.) */
                     if($field == 'priList' or $field == 'severityList')
                     {
                         if(!is_numeric($key) or $key > 255) return $this->send(array('result' => 'fail', 'message' => $this->lang->custom->notice->invalidNumberKey));
