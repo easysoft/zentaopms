@@ -654,6 +654,7 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->join('reviewer', ',')

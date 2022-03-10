@@ -681,6 +681,7 @@ class docModel extends model
 
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
+            ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('users', '')
             ->setDefault('groups', '')
