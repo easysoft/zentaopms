@@ -131,7 +131,7 @@ zentaoxx:
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/control.php
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
-	sed -i "s/\$this->app->getModuleRoot() . 'im/apischeme.json'/\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'/g" zentaoxx/extension/xuan/im/model.php
+	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
 	sed -i "/getModuleExtPath(/ r tools/fixxuan" zentaoxx/framework/xuanxuan.class.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
@@ -248,6 +248,6 @@ ci:
 	make en
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 	php tools/mergezentaopms.php $(VERSION)
-	rm zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm
+	rm -f zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm
 	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH) 
 	mv *.zip *.deb *.rpm $(RELEASE_PATH)
