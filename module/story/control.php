@@ -1101,8 +1101,6 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->tab;
-        $this->product->setMenu($story->product, $story->branch);
-
         if($from == 'execution')
         {
             $this->execution->setMenu($param);
@@ -1115,6 +1113,10 @@ class story extends control
         {
             $products = $this->product->getProductPairsByProject(0, 'noclosed');
             $this->loadModel('qa')->setMenu($products, $story->product);
+        }
+        else
+        {
+            $this->product->setMenu($story->product, $story->branch);
         }
 
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
