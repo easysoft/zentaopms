@@ -721,12 +721,20 @@ class executionTest
         }
     }
 
-    public function unlinkStoryTest($executionID, $count)
+    public function unlinkStoryTest($executionID, $count, $storyID, $param = array())
     {
         global $tester;
+        $stories  = array();
+        $products = array();
+        $createFields = array('stories' => $stories, 'products' => $products);
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
         $tester->dbh->query("delete from zt_projectstory where project = $executionID");
 
-        $this->objectModel->unlinkStory($executionID);
+        $this->objectModel->linkStory($executionID);
+        unset($_POST);
+        $this->objectModel->unlinkStory($executionID, $storyID);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -740,6 +748,88 @@ class executionTest
         else
         {
             $object = $tester->dbh->query("select * from zt_projectstory where project = $executionID")->fetchAll();
+            if(isset($object))
+            {
+                return $object;
+            }
+            else
+            {
+                return "全部需求已解除";
+            }
+        }
+    }
+
+    public function unlinkCasesTest($executionID, $productID, $storyID)
+    {
+        global $tester;
+        $tester->dbh->query("delete from zt_projectcase where project = $executionID");
+
+        $this->objectModel->linkCases($executionID, $productID, $storyID);
+        $this->objectModel->unlinkCases($executionID, $storyID);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            $object = $tester->dbh->query("select * from zt_projectcase where project = $executionID")->fetchAll();
+            return $object;
+        }
+    }
+
+    public function getTeamMembersTest($executionID, $count)
+    {
+        $object = $this->objectModel->getTeamMembers($executionID);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getMembersByIdListTest($executionIdList, $count)
+    {
+        $object = $this->objectModel->getMembersByIdList($executionIdList);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getTeamSkipTest($taskID, $begin, $end, $count)
+    {
+        global $tester;
+        $teams = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
+        $object = $this->objectModel->getTeamSkip($teams, $begin, $end);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
             return $object;
         }
     }
