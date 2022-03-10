@@ -282,8 +282,7 @@ class userModel extends model
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
-            ->beginIF($this->config->vision == 'lite')->andWhere('visions')->eq('lite')->fi()
-            ->beginIF($this->config->vision != 'lite')->andWhere('visions')->ne('lite')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();

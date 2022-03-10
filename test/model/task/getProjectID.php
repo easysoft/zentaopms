@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=taskModel->getByList();
+title=taskModel->getProjectID();
 cid=1
 pid=1
 

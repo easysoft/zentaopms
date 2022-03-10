@@ -96,8 +96,11 @@
     </table>
   </form>
 </div>
+<?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
 
 <script>
+$('#mainContent .main-header .pull-right.btn-toolbar').append(<?php echo json_encode($html)?>);
+
 var $form = $('#todoBatchAddForm').on('change', '.control-time-switch', function()
 {
     var $checkbox = $(this);

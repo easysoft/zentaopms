@@ -499,7 +499,7 @@ EOF;
         $this->view->position[]  = $this->lang->my->bug;
         $this->view->bugs        = $bugs;
         $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->tabID       = 'bug';
         $this->view->type        = $type;
         $this->view->recTotal    = $recTotal;

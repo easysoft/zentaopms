@@ -25,10 +25,11 @@ function loadAllUsers()
   * Load team members of the latest execution of a product as assignedTo list.
   *
   * @param  int    $productID
+  * @param  bool   $changeProduct
   * @access public
   * @return void
   */
-function loadExecutionTeamMembers(productID)
+function loadExecutionTeamMembers(productID, changeProduct)
 {
     var link = createLink('bug', 'ajaxLoadExecutionTeamMembers', 'productID=' + productID + '&selectedUser=' + $('#assignedTo').val());
     $.post(link, function(data)
@@ -36,6 +37,7 @@ function loadExecutionTeamMembers(productID)
         $('#assignedTo').replaceWith(data);
         $('#assignedTo_chosen').remove();
         $('#assignedTo').chosen();
+        if(typeof(changeProduct) != undefined && changeProduct) setAssignedTo();
     })
 }
 
