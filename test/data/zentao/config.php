@@ -28,6 +28,7 @@ $builder->branch         = array('rows' => 240, 'extends' => array('branch'));
 $builder->projectproduct = array('rows' => 200, 'extends' => array('projectproduct'));
 
 $builder->team              = array('rows' => 400, 'extends' => array('team'));
+$builder->teamtask          = array('rows' => 20, 'extends' => array('team', 'teamtask'));
 $builder->stakeholder       = array('rows' => 1, 'extends' => array('stakeholder'));
 $builder->stageson          = array('rows' => 30, 'extends' => array('project', 'executionson'));
 
