@@ -126,12 +126,15 @@ class upgradeModel extends model
             }
         }
 
-        /* Means open source upgrade to biz or max. */
-        if($fromEdition == 'open' and $this->config->edition != 'open')
+        /* Means open source/pro upgrade to biz or max. */
+        if($this->config->edition != 'open')
         {
-            $this->loadModel('effort')->convertEstToEffort();
-            $this->importBuildinModules();
-            $this->addSubStatus();
+            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
+            if($fromEdition == 'open' or $fromEdition == 'pro')
+            {
+                $this->importBuildinModules();
+                $this->addSubStatus();
+            }
         }
     }
 
