@@ -309,7 +309,7 @@ class userModel extends model
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->join('visions', ',')
-            ->remove('new, groups, password1, password2, verifyPassword, passwordStrength')
+            ->remove('new, group, password1, password2, verifyPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -353,9 +353,9 @@ class userModel extends model
             $userID = $this->dao->lastInsertID();
 
             /* Set usergroup for account. */
-            if(isset($_POST['groups']))
+            if(isset($_POST['group']))
             {
-                foreach($this->post->groups as $groupID)
+                foreach($this->post->group as $groupID)
                 {
                     $data          = new stdclass();
                     $data->account = $this->post->account;
@@ -387,7 +387,7 @@ class userModel extends model
         $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
-        for($i = 0; $i < $this->config->user->batchCreate; $i++)
+        for($i = 1; $i < $this->config->user->batchCreate; $i++)
         {
             $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
@@ -419,7 +419,7 @@ class userModel extends model
                 $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
-                $data[$i]->group    = $users->group[$i] == 'ditto' ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
+                $data[$i]->group    = in_array('ditto', $users->group[$i]) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
@@ -475,12 +475,15 @@ class userModel extends model
         $userIDList = array();
         foreach($data as $user)
         {
-            if($user->group)
+            if(is_array($user->group))
             {
-                $group = new stdClass();
-                $group->account = $user->account;
-                $group->group   = $user->group;
-                $this->dao->replace(TABLE_USERGROUP)->data($group)->exec();
+                foreach($user->group as $group)
+                {
+                    $groups = new stdClass();
+                    $groups->account = $user->account;
+                    $groups->group   = $group;
+                    $this->dao->insert(TABLE_USERGROUP)->data($groups)->exec();
+                }
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();

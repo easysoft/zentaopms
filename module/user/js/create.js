@@ -37,11 +37,10 @@ function changeVision()
     var link = createLink('user', 'ajaxGetGroup', 'visions=' + visions);
     $.post(link, function(data)
     {
-        $('#groups').replaceWith(data);
-        $('#groups_chosen').remove();
-        $('#groups').chosen();
+        $('#group').replaceWith(data);
+        $('#group_chosen').remove();
+        $('#group').chosen();
     })
-    console.log(visions);
 }
 
 /**
@@ -55,13 +54,13 @@ function changeGroup(role)
 {
     if(role && roleGroup[role])
     {
-        $('#groups').val(roleGroup[role]);
+        $('#group').val(roleGroup[role]);
     }
     else
     {
-        $('#groups').val('');
+        $('#group').val('');
     }
-    $('#groups').trigger("chosen:updated");
+    $('#group').trigger("chosen:updated");
 }
 
 /**
