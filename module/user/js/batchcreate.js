@@ -72,7 +72,7 @@ $(document).on('click', '.chosen-with-drop', function()
 
 $('select[id^="visions"]').each(function()
 {
-    var i = $(this).attr('id').replace(/[^0-9]/ig, '');
+    var i      = $(this).attr('id').replace(/[^0-9]/ig, '');
     var vision = $('#visions1 option:selected').val();
 
     $.post(createLink('user', 'ajaxGetGroup', "visions=" + vision + '&i=' + i), function(data){
@@ -84,7 +84,7 @@ $('select[id^="visions"]').each(function()
 
 $("select[id^='visions']").change(function()
 {
-    var i = $(this).attr('id').replace(/[^0-9]/ig, '');
+    var i       = $(this).attr('id').replace(/[^0-9]/ig, '');
     var visions = [];
 
     $('select[id="visions' + i + '"] option:selected').each(function()

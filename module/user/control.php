@@ -1289,14 +1289,15 @@ class user extends control
     /**
      * Ajax get group by vision.
      *
-     * @param  array  $visions
+     * @param  array  $visions rnd|lite
+     * @param  int    $i
      * @access public
      * @return string
      */
     public function ajaxGetGroup($visions, $i = 0)
     {
-        $visions = explode(',', $visions);
-        $groupList  = $this->user->getGroupsByVisions($visions);
+        $visions   = explode(',', $visions);
+        $groupList = $this->user->getGroupsByVisions($visions);
         if($i)
         {
             if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
