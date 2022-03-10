@@ -244,7 +244,7 @@ class customModel extends model
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
                 $hasPriv = commonModel::hasPriv($module, $method);
-                /* Fix bug#20464 */
+                /* Fix bug #20464 */
                 if(!$hasPriv and is_array($item) and isset($item['subMenu']))
                 {
                     foreach($item['subMenu'] as $subMenu)
@@ -252,7 +252,7 @@ class customModel extends model
                         if(!isset($subMenu['link'])) continue;
                         list($subLabel, $module, $method) = explode('|', $subMenu['link']);
                         $hasPriv = commonModel::hasPriv($module, $method);
-                        if($hasPriv == true) break;
+                        if($hasPriv) break;
                     }
                 }
 
