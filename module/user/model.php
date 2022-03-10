@@ -309,7 +309,7 @@ class userModel extends model
             ->setIF($this->post->password1 == false, 'password', '')
             ->setIF($this->post->email != false, 'email', trim($this->post->email))
             ->join('visions', ',')
-            ->remove('new, group, password1, password2, verifyPassword, passwordStrength')
+            ->remove('new, groups, password1, password2, verifyPassword, passwordStrength')
             ->get();
 
         if(empty($_POST['verifyPassword']) or $this->post->verifyPassword != md5($this->app->user->password . $this->session->rand))
@@ -351,12 +351,17 @@ class userModel extends model
         if(!dao::isError())
         {
             $userID = $this->dao->lastInsertID();
-            if($this->post->group)
+
+            /* Set usergroup for account. */
+            if(isset($_POST['groups']))
             {
-                $data = new stdClass();
-                $data->account = $this->post->account;
-                $data->group   = $this->post->group;
-                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                foreach($this->post->groups as $groupID)
+                {
+                    $data          = new stdclass();
+                    $data->account = $this->post->account;
+                    $data->group   = $groupID;
+                    $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                }
             }
 
             $this->computeUserView($user->account);
@@ -1111,6 +1116,32 @@ class userModel extends model
     public function getGroups($account)
     {
         return $this->dao->findByAccount($account)->from(TABLE_USERGROUP)->fields('`group`')->fetchPairs();
+    }
+
+    /**
+     * Get groups by visions.
+     *
+     * @param  array $visions
+     * @access public
+     * @return array
+     */
+    public function getGroupsByVisions($visions)
+    {
+        if(!is_array($visions)) return array();
+        $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->in($visions)
+            ->fetchAll('id');
+
+        $visionList = $this->getVisionList();
+
+        foreach($groups as $key => $group)
+        {
+            $groups[$key] = $group->name;
+            if(count($visions) > 1) $groups[$key] = $visionList[$group->vision] . ' / ' . $group->name;
+        }
+
+        return $groups;
     }
 
     /**

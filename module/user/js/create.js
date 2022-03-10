@@ -1,5 +1,7 @@
 $(function()
 {
+    changeVision();
+
     $("input[name='new[]']").change(function()
     {
         if($(this).prop('checked'))
@@ -19,6 +21,29 @@ $(function()
     })
 })
 
+$("input[name='visions[]']").change(function()
+{
+    changeVision();
+});
+
+function changeVision()
+{
+    var visions = [];
+    $('input[name="visions[]"]:checked').each(function()
+    {
+        visions.push($(this).val());
+    });
+
+    var link = createLink('user', 'ajaxGetGroup', 'visions=' + visions);
+    $.post(link, function(data)
+    {
+        $('#groups').replaceWith(data);
+        $('#groups_chosen').remove();
+        $('#groups').chosen();
+    })
+    console.log(visions);
+}
+
 /**
  * Change group when change role.
  *
@@ -30,13 +55,13 @@ function changeGroup(role)
 {
     if(role && roleGroup[role])
     {
-        $('#group').val(roleGroup[role]); 
+        $('#groups').val(roleGroup[role]);
     }
     else
     {
-        $('#group').val(''); 
+        $('#groups').val('');
     }
-    $('#group').trigger("chosen:updated");
+    $('#groups').trigger("chosen:updated");
 }
 
 /**
