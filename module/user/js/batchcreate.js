@@ -81,3 +81,46 @@ $(document).on('change', '[id^=visions]', function()
         $(this).trigger("chosen:updated");
     }
 })
+
+$('select[id^="visions"]').each(function()
+{
+    var i      = $(this).attr('id').replace(/[^0-9]/ig, '');
+    var vision = $('#visions1 option:selected').val();
+
+    $.post(createLink('user', 'ajaxGetGroup', "visions=" + vision + '&i=' + i), function(data){
+         $('#group' + i).replaceWith(data);
+         $('#group' + i + '_chosen').remove();
+         $('#group' + i).chosen();
+    })
+})
+
+$("select[id^='visions']").change(function()
+{
+    var i       = $(this).attr('id').replace(/[^0-9]/ig, '');
+    var visions = [];
+
+    $('select[id="visions' + i + '"] option:selected').each(function()
+    {
+        visions.push($(this).val());
+    });
+
+    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + i), function(data){
+        $('#group' + i).replaceWith(data);
+        $('#group' + i + '_chosen').remove();
+        $('#group' + i).chosen();
+    })
+
+    for(n = i; n <= batchCreateCount; n++)
+    {
+        if($('select[id="visions' + n + '"] option:selected').val() != 'ditto' && n != i) break;
+
+        ((function(n)
+        {
+            $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + n), function(data){
+                $('#group' + n).replaceWith(data);
+                $('#group' + n + '_chosen').remove();
+                $('#group' + n).chosen();
+            })
+        }(n)));
+    }
+});

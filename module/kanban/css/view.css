@@ -118,6 +118,10 @@
 .kanban-card .label-finish {margin-right: 7px; margin-top: -1px; padding: 3px 5px; float: left; background-color:#2a5f29;}
 .kanban-card .releaseTitle, .kanban-card .productplanTitle {width: 100%; float: left;}
 
+.progress-box {display: flex; flex-direction: row; margin-top: 10px;}
+.progress {flex: auto; margin: 5px auto 5px;}
+.progress-number {padding-left: 5px;}
+
 @-moz-document url-prefix(){ .region .kanban-lane-items{scrollbar-width:thin; padding:5px 0px 5px 5px !important;} .region .kanban-card .info .user{right: -6px !important;}}
 #archivedCards .table-empty-tip {border-style: hidden;}
 #archivedColumns .table-empty-tip {border-style: hidden;}

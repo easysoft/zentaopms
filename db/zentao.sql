@@ -731,6 +731,7 @@ CREATE TABLE `zt_kanbancard` (
   `begin` date NOT NULL,
   `end` date NOT NULL,
   `estimate` float unsigned NOT NULL,
+  `progress` float unsigned NOT NULL DEFAULT '0',
   `color` char(7) NOT NULL,
   `acl` char(30) NOT NULL DEFAULT 'open',
   `whitelist` text NOT NULL,
@@ -1751,7 +1752,13 @@ INSERT INTO `zt_group` (`id`, `name`, `role`, `desc`) VALUES
 (13, 'PROJECTADMIN', 'projectAdmin', 'Project Admins manage project privileges');
 
 INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
-(14, 'lite', '迅捷版用户分组', 'liteUser', '迅捷版用户分组');
+(14, 'lite', '管理员', 'liteUser', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
+(15, 'lite', '项目管理', 'liteUser', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`id`, `vision`, `name`, `role`, `desc`) VALUES
+(16, 'lite', '团队成员', 'liteUser', '迅捷版用户分组');
 
 INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'action','comment'),
@@ -8584,8 +8591,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 -- DROP TABLE IF EXISTS `zt_workflow`;
 CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `parent` varchar(30) NOT NULL, 
-  `child` varchar(30) NOT NULL, 
+  `parent` varchar(30) NOT NULL,
+  `child` varchar(30) NOT NULL,
   `type` varchar(10) NOT NULL DEFAULT 'flow',
   `app` varchar(20) NOT NULL,
   `position` varchar(30) NOT NULL,
@@ -8659,7 +8666,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `type` enum('system', 'sql', 'func', 'option', 'lang', 'category') NOT NULL DEFAULT 'option',
   `name` varchar(30) NOT NULL,
   `code` varchar(30) NOT NULL,
-  `datasource` text NOT NULL, 
+  `datasource` text NOT NULL,
   `view` varchar(20) NOT NULL,
   `keyField` varchar(50) NOT NULL,
   `valueField` varchar(50) NOT NULL,
@@ -8687,7 +8694,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `rules` varchar(255) NOT NULL,
   `placeholder` varchar(100) NOT NULL,
   `order` smallint(5) unsigned NOT NULL,
-  `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0', 
+  `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `exportOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `canExport` enum('0', '1') NOT NULL DEFAULT '0',
   `canSearch` enum('0', '1') NOT NULL DEFAULT '0',
@@ -8760,7 +8767,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
 -- DROP TABLE IF EXISTS `zt_workflowrelation`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrelation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `prev` varchar(30) NOT NULL, 
+  `prev` varchar(30) NOT NULL,
   `next` varchar(30) NOT NULL,
   `field` varchar(50) NOT NULL,
   `actions` varchar(20) NOT NULL,
@@ -8792,7 +8799,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('system', 'regex', 'func') NOT NULL DEFAULT 'regex',
   `name` varchar(30) NOT NULL,
-  `rule` text NOT NULL, 
+  `rule` text NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,

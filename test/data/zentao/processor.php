@@ -149,6 +149,11 @@ class Processor
      */
     private function initTask()
     {
+        $parentList   = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchAll('parent');
+        $parentIDList = array_keys($parentList);
+        $parentID     = implode(',', $parentIDList);
+
+        $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->in($parentID)->andWhere('deleted')->eq(0)->exec();
     }
 
     /**

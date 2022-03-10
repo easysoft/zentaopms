@@ -45,6 +45,7 @@ $builder->kanbancellproject   = array('rows' => 4860, 'extends' => array('kanban
 
 
 $builder->team              = array('rows' => 400, 'extends' => array('team'));
+$builder->teamtask          = array('rows' => 20, 'extends' => array('team', 'teamtask'));
 $builder->stakeholder       = array('rows' => 1, 'extends' => array('stakeholder'));
 $builder->stageson          = array('rows' => 30, 'extends' => array('project', 'executionson'));
 

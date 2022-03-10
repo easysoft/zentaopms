@@ -22,6 +22,8 @@ ALTER TABLE `zt_story` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id
 ALTER TABLE `zt_story` ADD `activatedDate` datetime NOT NULL AFTER `closedReason`;
 ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL AFTER `lastEditedDate`;
 
+ALTER TABLE `zt_kanbancard` ADD `progress` float unsigned NOT NULL DEFAULT '0' AFTER `estimate`;
+
 ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
 
