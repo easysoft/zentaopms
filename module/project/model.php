@@ -789,6 +789,7 @@ class projectModel extends model
     public function create()
     {
         $project = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('status', 'wait')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
@@ -1034,6 +1035,7 @@ class projectModel extends model
         $_POST['products'] = isset($_POST['products']) ? array_filter($_POST['products']) : $linkedProducts;
 
         $project = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())

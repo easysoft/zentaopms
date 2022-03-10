@@ -572,6 +572,7 @@ class productModel extends model
     public function create()
     {
         $product = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('status', 'normal')
             ->setDefault('line', 0)
             ->setDefault('createdBy', $this->app->user->account)
@@ -653,6 +654,7 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->join('reviewer', ',')
