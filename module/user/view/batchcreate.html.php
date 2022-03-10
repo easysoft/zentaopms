@@ -80,7 +80,7 @@
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$i]", $depts, $i > 0 ? 'ditto' : $deptID, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$i]", '', "class='form-control account_$i' onchange='changeEmail($i)'");?></td>
           <td><?php echo html::input("realname[$i]", '', "class='form-control'");?></td>
-          <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>">
+          <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>" style='overflow:visible'>
             <?php if($config->systemMode == 'new')     echo html::select("visions[$i][]", $visionList, $i > 0 ? 'ditto' : (isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList)), "class='form-control chosen' multiple");?>
             <?php if($config->systemMode == 'classic') echo $visionList['rnd'] . html::hidden("visions[$i][]", 'rnd');?>
           </td>
