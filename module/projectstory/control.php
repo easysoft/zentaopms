@@ -110,7 +110,7 @@ class projectStory extends control
      * Batch unlink story.
      *
      * @param  int    $projectID
-     * @param  string $stroyIdList
+     * @param  string $storyIdList
      * @access public
      * @return string
      */
