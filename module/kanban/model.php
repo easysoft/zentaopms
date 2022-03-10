@@ -2661,6 +2661,22 @@ class kanbanModel extends model
             ->andWhere('groupby')->eq('')
             ->exec();
     }
+    /**
+     * Activate a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function activateCard($cardID)
+    {
+        if($this->post->progress > 100 or $this->post->progress < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
+            return false;
+        }
+        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+    }
 
     /**
      * Update a card.
@@ -2680,6 +2696,12 @@ class kanbanModel extends model
         if($this->post->end && ($this->post->begin > $this->post->end))
         {
             dao::$errors[] = $this->lang->kanbancard->error->endSmall;
+            return false;
+        }
+
+        if($this->post->progress > 100 or $this->post->progress < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
             return false;
         }
 
@@ -2902,7 +2924,7 @@ class kanbanModel extends model
 
             }
             if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=30%") . '</li>';
-            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link' data-width=30%") . '</li>';
+            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';
