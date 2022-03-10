@@ -1184,7 +1184,7 @@ function createColumnCreateMenu(options)
     var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
     var columnID = col.id;
 
-    if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
+    if(privs.includes('createCard')) items.push({label: kanbanLang.createCard, url: $.createLink('kanban', 'createCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('batchCreateCard')) items.push({label: kanbanLang.batchCreateCard, url: $.createLink('kanban', 'batchCreateCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&laneID=' + laneID + '&columnID=' + columnID), attrs: {'data-width': '80%'}});
     if(privs.includes('import') && kanban.object.indexOf('cards') != -1) items.push({label: kanbanLang.importCard, url: $.createLink('kanban', 'importCard', 'kanbanID=' + kanbanID + '&regionID=' + regionID + '&groupID=' + groupID + '&columnID=' + columnID), className: 'iframe', attrs: {'data-toggle': 'modal'}});
     if(privs.includes('import') && kanban.object && kanban.object != 'cards') items.push({className: 'parentDivider'});
