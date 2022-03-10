@@ -584,6 +584,7 @@ class docModel extends model
     {
         $now = helper::now();
         $doc = fixer::input('post')
+            ->callFunc('title', 'trim')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->add('editedBy', $this->app->user->account)
