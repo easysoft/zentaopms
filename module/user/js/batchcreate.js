@@ -73,6 +73,15 @@ $(document).on('click', '.chosen-with-drop', function()
     }
 })
 
+$(document).on('change', '[id^=visions]', function()
+{
+    if($.inArray('ditto', $(this).val()) > 0)
+    {
+        $(this).val('ditto');
+        $(this).trigger("chosen:updated");
+    }
+})
+
 $('select[id^="visions"]').each(function()
 {
     var i      = $(this).attr('id').replace(/[^0-9]/ig, '');
