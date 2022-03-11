@@ -724,7 +724,7 @@ CREATE TABLE `zt_kanbancard` (
   `fromID` mediumint(8) unsigned NOT NULL,
   `fromType` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `status` varchar(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'doing',
   `pri` mediumint(8) unsigned NOT NULL,
   `assignedTo` text NOT NULL,
   `desc` text NOT NULL,
@@ -786,7 +786,6 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `lane` mediumint(8) NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
@@ -795,7 +794,6 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `color` char(30) NOT NULL,
   `limit` smallint(6) NOT NULL DEFAULT '-1',
   `order` mediumint(8) NOT NULL DEFAULT '0',
-  `cards` text NULL,
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
@@ -9614,7 +9612,6 @@ CREATE TABLE IF NOT EXISTS `zt_trainplan` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-ALTER TABLE `zt_todo` CHANGE `type` `type` char(15) NOT NULL AFTER `feedback`;
 
 -- DROP TABLE IF EXISTS `zt_gapanalysis`;
 CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
