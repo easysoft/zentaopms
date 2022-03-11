@@ -23,4 +23,3 @@ $count = array('0','1');
 $task = new taskTest();
 r($task->getTasksByModuleTest($executionID,$moduleIdList,$count[0])) && p('0:name') && e('子任务10'); //根据模块获取任务列表
 r($task->getTasksByModuleTest($executionID,$moduleIdList,$count[1])) && p()         && e('1');        //根据模块获取任务数量
-system("./ztest init");
