@@ -889,6 +889,18 @@ class kanbanModel extends model
     }
 
     /**
+     * Get kanban id by region id.
+     *
+     * @param  int $regionID
+     * @access public
+     * @return int
+     */
+    public function getKanbanIDByRegion($regionID)
+    {
+        return $this->dao->select('kanban')->from(TABLE_KANBANREGION)->where('id')->eq($regionID)->fetch('kanban');
+    }
+
+    /**
      * Get kanban group by regions.
      *
      * @param  array $regions
@@ -1826,8 +1838,8 @@ class kanbanModel extends model
     /**
      * Get lane pairs by region id.
      *
-     * @param  array  $regionID
-     * @param  string $type all|story|task|bug|common
+     * @param  array|int $regionID
+     * @param  string    $type all|story|task|bug|common
      * @access public
      * @return array
      */
@@ -3285,6 +3297,23 @@ class kanbanModel extends model
     }
 
     /**
+     * Get column ID by lane ID.
+     *
+     * @param  int    $laneID
+     * @param  string $columnType
+     * @access public
+     * @return int
+     */
+    public function getColumnIDByLaneID($laneID, $columnType)
+    {
+        return $this->dao->select('t1.column')->from(TABLE_KANBANCELL)->alias('t1')
+            ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column = t2.id')
+            ->where('t1.lane')->eq($laneID)
+            ->andWhere('t2.type')->eq($columnType)
+            ->fetch('column');
+    }
+
+    /**
      * Get lane by id.
      *
      * @param  int    $laneID
@@ -3436,6 +3465,7 @@ class kanbanModel extends model
                     if(common::hasPriv('task', 'batchCreate') and $toTaskPriv)                                 $menu[] = array('label' => $this->lang->execution->batchWBS, 'icon' => 'pluses', 'url' => helper::createLink('task', 'batchCreate', "executionID=$executionID&storyID=$story->id&moduleID=0&taskID=0&iframe=true", '', true), 'size' => '95%');
                     if(common::hasPriv('story', 'activate') and $this->story->isClickable($story, 'activate')) $menu[] = array('label' => $this->lang->story->activate, 'icon' => 'magic', 'url' => helper::createLink('story', 'activate', "storyID=$story->id", '', true));
                     if(common::hasPriv('execution', 'unlinkStory'))                                            $menu[] = array('label' => $this->lang->execution->unlinkStory, 'icon' => 'unlink', 'url' => helper::createLink('execution', 'unlinkStory', "executionID=$executionID&storyID=$story->story&confirm=no", '', true));
+                    if(common::hasPriv('story', 'delete'))                                                     $menu[] = array('label' => $this->lang->story->delete, 'icon' => 'trash', 'url' => helper::createLink('story', 'delete', "storyID=$story->id&confirm=no&from=taskkanban"));
 
                     $menus[$story->id] = $menu;
                 }
@@ -3454,6 +3484,7 @@ class kanbanModel extends model
                     if(common::hasPriv('bug', 'create') and $this->bug->isClickable($bug, 'create'))         $menu[] = array('label' => $this->lang->bug->copy, 'icon' => 'copy', 'url' => helper::createLink('bug', 'create', "productID=$bug->product&branch=$bug->branch&extras=bugID=$bug->id", '', true), 'size' => '95%');
                     if(common::hasPriv('bug', 'activate') and $this->bug->isClickable($bug, 'activate'))     $menu[] = array('label' => $this->lang->bug->activate, 'icon' => 'magic', 'url' => helper::createLink('bug', 'activate', "bugID=$bug->id", '', true));
                     if(common::hasPriv('story', 'create') and $bug->status != 'closed')                      $menu[] = array('label' => $this->lang->bug->toStory, 'icon' => 'lightbulb', 'url' => helper::createLink('story', 'create', "product=$bug->product&branch=$bug->branch&module=0&story=0&execution=0&bugID=$bug->id", '', true), 'size' => '95%');
+                    if(common::hasPriv('bug', 'delete'))                                                     $menu[] = array('label' => $this->lang->bug->delete, 'icon' => 'trash', 'url' => helper::createLink('bug', 'delete', "bugID=$bug->id&confirm=no&from=taskkanban"));
 
                     $menus[$bug->id] = $menu;
                 }
@@ -3473,6 +3504,7 @@ class kanbanModel extends model
                     if(common::hasPriv('task', 'batchCreate') and $this->task->isClickable($task, 'batchCreate'))       $menu[] = array('label' => $this->lang->task->children, 'icon' => 'split', 'url' => helper::createLink('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", '', true), 'size' => '95%');
                     if(common::hasPriv('task', 'create') and $this->task->isClickable($task, 'create'))                 $menu[] = array('label' => $this->lang->task->copy, 'icon' => 'copy', 'url' => helper::createLink('task', 'create', "projctID=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id", '', true), 'size' => '95%');
                     if(common::hasPriv('task', 'cancel') and $this->task->isClickable($task, 'cancel'))                 $menu[] = array('label' => $this->lang->task->cancel, 'icon' => 'ban-circle', 'url' => helper::createLink('task', 'cancel', "taskID=$task->id", '', true));
+                    if(common::hasPriv('task', 'delete'))                                                     $menu[] = array('label' => $this->lang->task->delete, 'icon' => 'trash', 'url' => helper::createLink('task', 'delete', "executionID=$task->execution&taskID=$task->id&confirm=no&from=taskkanban"));
 
                     $menus[$task->id] = $menu;
                 }

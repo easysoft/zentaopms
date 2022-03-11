@@ -197,6 +197,18 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
             </td>
           </tr>
           <?php endif;?>
+          <?php if(isset($executionType) and $executionType == 'kanban'):?>
+          <tr>
+            <th><?php echo $lang->kanbancard->region;?></th>
+            <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
+                <?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
           <tr>
             <th><?php echo $lang->bug->title;?></th>
             <td colspan='2'>

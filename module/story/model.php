@@ -217,7 +217,7 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
             ->get();
 
         /* Check repeat story. */
@@ -286,8 +286,15 @@ class storyModel extends model
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
 
                 $this->loadModel('kanban');
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
+
+                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+                if(isset($_POST['lane'])) $laneID = $_POST['lane'];
+
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))

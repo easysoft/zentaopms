@@ -789,6 +789,7 @@ class projectModel extends model
     public function create()
     {
         $project = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('status', 'wait')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
@@ -1034,6 +1035,7 @@ class projectModel extends model
         $_POST['products'] = isset($_POST['products']) ? array_filter($_POST['products']) : $linkedProducts;
 
         $project = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -1530,6 +1532,9 @@ class projectModel extends model
         $projectType = 'project';
         $accounts    = array_unique($accounts);
         $limited     = array_values($limited);
+        $roles       = array_values($roles);
+        $days        = array_values($days);
+        $hours       = array_values($hours);
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
@@ -1538,7 +1543,7 @@ class projectModel extends model
         {
             if(empty($account)) continue;
 
-            $member = new stdclass();
+            $member          = new stdclass();
             $member->role    = $roles[$key];
             $member->days    = $days[$key];
             $member->hours   = $hours[$key];

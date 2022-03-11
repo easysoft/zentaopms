@@ -101,9 +101,10 @@ $lang->kanban->cardCount      = 'Card Count';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
 
-$lang->kanban->accessDenied  = "You have no access to the kanban.";
-$lang->kanban->confirmDelete = 'Do you want to delete this?';
-$lang->kanban->cardCountTip  = 'Please enter the number of cards';
+$lang->kanban->accessDenied        = "You have no access to the kanban.";
+$lang->kanban->confirmDeleteSpace  = 'Do you want to delete this Space?';
+$lang->kanban->confirmDeleteKanban = 'Do you want to delete this Kanban?';
+$lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
@@ -332,6 +333,7 @@ $lang->kanbancard->name            = 'Card Name';
 $lang->kanbancard->legendBasicInfo = 'Basic Info';
 $lang->kanbancard->legendLifeTime  = 'Card Life';
 $lang->kanbancard->space           = 'Space';
+$lang->kanbancard->region          = 'Region';
 $lang->kanbancard->kanban          = 'Kanban';
 $lang->kanbancard->lane            = 'Lane';
 $lang->kanbancard->column          = 'Column';

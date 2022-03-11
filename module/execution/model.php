@@ -2269,11 +2269,12 @@ class executionModel extends model
      * @param array  $stories
      * @param array  $products
      * @param string $extra
+     * @param array  $lanes
      *
      * @access public
      * @return bool
      */
-    public function linkStory($executionID, $stories = array(), $products = array(), $extra = '')
+    public function linkStory($executionID, $stories = array(), $products = array(), $extra = '', $lanes = array())
     {
         if(empty($executionID)) return false;
         if(empty($stories)) $stories = $this->post->stories;
@@ -2296,7 +2297,13 @@ class executionModel extends model
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
+
+            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+            if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
 
             $data = new stdclass();
             $data->project = $executionID;

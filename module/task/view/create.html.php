@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
@@ -76,6 +77,16 @@
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <?php if($execution->type == 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->kanbancard->region;?></th>
+          <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->lane;?></th>
+          <td><?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?></td>
+        </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -286,7 +297,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
+                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>

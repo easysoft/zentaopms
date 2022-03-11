@@ -51,6 +51,10 @@
             <th class='c-execution<?php echo zget($visibleFields, 'execution', ' hidden') . zget($requiredFields, 'execution', '', ' required');?>'><?php echo (isset($project->model) and $project->model == 'kanban') ? $lang->bug->kanban : $lang->bug->execution;?></th>
             <th class='c-build required'><?php echo $lang->bug->openedBuild;?></th>
             <th class='c-title required'><?php echo $lang->bug->title;?></th>
+            <?php if(isset($executionType) and $executionType == 'kanban'):?>
+            <th class='c-execution'><?php echo $lang->kanbancard->region;?></th>
+            <th class='c-execution'><?php echo $lang->kanbancard->lane;?></th>
+            <?php endif;?>
             <th class='c-date<?php echo zget($visibleFields, 'deadline', ' hidden') . zget($requiredFields, 'deadline', '', ' required');?>'><?php echo $lang->bug->deadline;?></th>
             <th class='c-steps<?php echo zget($visibleFields, 'steps', ' hidden') . zget($requiredFields, 'steps', '', ' required');?>'><?php echo $lang->bug->steps;?></th>
             <th class='c-type<?php echo zget($visibleFields, 'type', ' hidden') . zget($requiredFields, 'type', '', ' required');?>'><?php echo $lang->typeAB;?></th>
@@ -74,19 +78,19 @@
           $lang->bug->osList      += array('ditto' => $lang->bug->ditto);
           $lang->bug->browserList += array('ditto' => $lang->bug->ditto);
           ?>
-          <?php $i = 0; ?>
+          <?php $i = 1; ?>
           <?php if(!empty($titles)):?>
           <?php foreach($titles as $bugTitle => $fileName):?>
           <?php
-          $moduleID    = $i == 0 ? $moduleID : 'ditto';
-          $executionID = $i == 0 ? $executionID : 'ditto';
-          $type        = $i == 0 ? '' : 'ditto';
-          $pri         = $i == 0 ? 0  : 'ditto';
-          $os          = $i == 0 ? '' : 'ditto';
-          $browser     = $i == 0 ? '' : 'ditto';
+          $moduleID    = $i == 1 ? $moduleID : 'ditto';
+          $executionID = $i == 1 ? $executionID : 'ditto';
+          $type        = $i == 1 ? '' : 'ditto';
+          $pri         = $i == 1 ? 0  : 'ditto';
+          $os          = $i == 1 ? '' : 'ditto';
+          $browser     = $i == 1 ? '' : 'ditto';
           ?>
           <tr>
-            <td class='text-center'><?php echo $i+1;?></td>
+            <td class='text-center'><?php echo $i;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
@@ -105,6 +109,10 @@
                 </div>
               </div>
             </td>
+            <?php if(isset($executionType) and $executionType == 'kanban'):?>
+            <td><?php echo html::select("regions[$i]", $regionPairs, $regionID, "class='form-control chosen'");?></td>
+            <td><?php echo html::select("lanes[$i]", $lanePairs, $laneID, "class='form-control chosen'");?></td>
+            <?php endif;?>
             <td class='<?php echo zget($visibleFields, 'deadline', 'hidden')?>'><?php echo html::input("deadlines[$i]", '', "class='form-control form-date'");?></td>
             <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'><?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?></td>
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>' style='overflow:visible'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control chosen'");?></td>
@@ -119,7 +127,7 @@
           <?php endforeach;?>
           <?php endif;?>
           <?php $nextStart = $i;?>
-          <?php for($i = $nextStart; $i < $config->bug->batchCreate; $i++):?>
+          <?php for($i = $nextStart; $i <= $config->bug->batchCreate; $i++):?>
           <?php
           $moduleID    = $i - $nextStart == 0 ? $moduleID : 'ditto';
           $executionID = $i - $nextStart == 0 ? $executionID : 'ditto';
@@ -129,7 +137,7 @@
           $browser     = $i - $nextStart == 0 ? '' : 'ditto';
           ?>
           <tr>
-            <td><?php echo $i+1;?></td>
+            <td><?php echo $i;?></td>
             <td class='<?php echo zget($visibleFields, $product->type, ' hidden')?>' style='overflow:visible'><?php echo html::select("branches[$i]", $branches, $branch, "class='form-control chosen' onchange='setBranchRelated(this.value, $productID, $i)'");?></td>
             <td><?php echo html::select("modules[$i]", $moduleOptionMenu, $moduleID, "class='form-control chosen'");?></td>
             <td class='<?php echo zget($visibleFields, 'execution', ' hidden')?>' style='overflow:visible'><?php echo html::select("executions[$i]", $executions, $executionID, "class='form-control chosen' onchange='loadExecutionBuilds($productID, this.value, $i)'");?></td>
@@ -148,6 +156,10 @@
                 </div>
               </div>
             </td>
+            <?php if(isset($executionType) and $executionType == 'kanban'):?>
+            <td><?php echo html::select("regions[$i]", $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, $i)'");?></td>
+            <td><?php echo html::select("lanes[$i]", $lanePairs, $laneID, "class='form-control chosen'");?></td>
+            <?php endif;?>
             <td class='<?php echo zget($visibleFields, 'deadline', 'hidden')?>'><?php echo html::input("deadlines[$i]", '', "class='form-control form-date'");?></td>
             <td class='<?php echo zget($visibleFields, 'steps', 'hidden')?>'><?php echo html::textarea("stepses[$i]", '', "rows='1' class='form-control autosize'");?></td>
             <td class='<?php echo zget($visibleFields, 'type', 'hidden')?>' style='overflow:visible'>    <?php echo html::select("types[$i]", $lang->bug->typeList, $type, "class='form-control chosen'");?></td>

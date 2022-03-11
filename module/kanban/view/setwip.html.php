@@ -44,7 +44,7 @@
           <td colspan='2'>
             <div class="table-col">
               <?php $attr = $column->limit == -1 ? 'disabled' : '';?>
-              <?php echo html::input('WIPCount', $column->limit != -1 ? $column->limit : '', "class='form-control' $attr onchange='wipValueChange(this.value)'");?>
+              <?php echo html::input('WIPCount', $column->limit != -1 ? $column->limit : '', "class='form-control' $attr");?>
             </div>
             <div class="table-col w-50px">
               <?php echo html::hidden('limit', $column->limit, "class='form-control'");?>

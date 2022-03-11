@@ -270,6 +270,26 @@ function loadModuleRelated()
     setStories(moduleID, executionID);
 }
 
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function setLane(regionID)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lane');
+    $.get(laneLink, function(lane)
+    {
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
+        $('#lane').replaceWith(lane);
+        $("#lane" + "_chosen").remove();
+        $("#lane").next('.picker').remove();
+        $("#lane").chosen();
+    });
+}
+
 /* Get select of stories.*/
 function setStories(moduleID, executionID)
 {
@@ -550,6 +570,15 @@ $('#modalTeam .btn').click(function()
         $('#teamMember').val(team);
         $('#estimate').val(time);
     })
+    var teamList = team.split(" ");
+    if(teamList.length <= 2)
+    {
+        alert(teamMemberError);
+    }
+    else
+    {
+        $('.close').click();
+    }
 });
 
 $(window).unload(function(){

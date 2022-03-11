@@ -117,7 +117,7 @@
         {
             common::printIcon('bug', 'create', $copyParams, $bug, 'button', 'copy');
         }
-        common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin');
+        common::printIcon('bug', 'delete', $params, $bug, 'button', 'trash', 'hiddenwin', 'showinonlybody');
         ?>
         <?php endif;?>
       </div>
