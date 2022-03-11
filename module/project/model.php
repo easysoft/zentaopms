@@ -1546,6 +1546,7 @@ class projectModel extends model
             $member->days    = $days[$key];
             $member->hours   = $hours[$key];
             $member->limited = $limited[$key];
+
             $member->root    = $projectID;
             $member->account = $account;
             $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
