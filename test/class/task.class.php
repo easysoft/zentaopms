@@ -622,4 +622,19 @@ class taskTest
             return !empty($team) ? $result : $object;
         }
     }
+
+    public function getParentTaskPairsTest($executionID, $append = '')
+    {
+        $objectList = $this->objectModel->getParentTaskPairs($executionID, $append);
+        $objectList = count($objectList) == 1 ? array('name' => 0): $objectList;
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objectList;
+        }
+    }
 }

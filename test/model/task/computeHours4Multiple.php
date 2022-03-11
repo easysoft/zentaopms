@@ -80,12 +80,12 @@ $user1->consumed = 1;
 $user1->left     = 1;
 
 $user2 = new stdclass();
-$user2->account = 'user93';
+$user2->account = 'user92';
 $user2->estimate = 2;
 $user2->consumed = 2;
 $user2->left     = 2;
 
-$team = array('po82' => $user1, 'user93' => $user2);
+$team = array('po82' => $user1, 'user92' => $user2);
 
 $autoStatusList = array(true, false);
 
