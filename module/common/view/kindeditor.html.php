@@ -34,7 +34,7 @@ $uid = uniqid('');
     'emoticons', 'image', 'insertfile', 'hr', '|', 'link', 'unlink', '/',
     'undo', 'redo', '|', 'selectall', 'cut', 'copy', 'paste', '|', 'plainpaste', 'wordpaste', '|', 'removeformat', 'clearhtml','quickformat', '|',
     'indent', 'outdent', 'subscript', 'superscript', '|',
-    'table', 'code', '|', 'pagebreak', 'anchor', '|',
+    'table', 'code', 'pagebreak',
     'fullscreen', 'source', 'preview', 'about'];
     var editorToolsMap = {fullTools: fullTools, simpleTools: simpleTools, bugTools: bugTools};
 
