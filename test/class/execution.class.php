@@ -814,11 +814,32 @@ class executionTest
         }
     }
 
-    public function getTeamSkipTest($taskID, $begin, $end, $count)
+    public function getTeamSkipTest($taskID, $begin, $end)
     {
         global $tester;
         $teams = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
         $object = $this->objectModel->getTeamSkip($teams, $begin, $end);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            if(empty($object))
+            {
+                return '无跳转数据';
+            }
+            else
+            {
+                return $object;
+            }
+        }
+    }
+
+    public function getTeams2ImportTest($account, $currentExecution, $count)
+    {
+        $object = $this->objectModel->getTeams2Import($account, $currentExecution);
         if(dao::isError())
         {
             $error = dao::getError();
@@ -830,7 +851,100 @@ class executionTest
         }
         else
         {
-            return $object;
+            if(empty($object))
+            {
+                return '无数据';
+            }
+            else
+            {
+                return $object;
+            }
+        }
+    }
+
+    public function getMembers2ImportTest($execution, $currentMembers, $count)
+    {
+        $object = $this->objectModel->getMembers2Import($execution, $currentMembers);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            if(empty($object))
+            {
+                return '无数据';
+            }
+            else
+            {
+                return $object;
+            }
+        }
+    }
+
+    public function getCanCopyObjectsTest($projectID = 0, $count)
+    {
+        $object = $this->objectModel->getCanCopyObjects($projectID);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            if(empty($object))
+            {
+                return '无数据';
+            }
+            else
+            {
+                return $object;
+            }
+        }
+    }
+
+    public function manageMembersTest($executionID, $count, $param = array())
+    {
+        $realnames = array();
+        $roles     = array();
+        $days      = array();
+        $hours     = array();
+        $accounts  = array();
+        $limited   = array();
+        $createFields = array('realnames' => $realnames, 'roles' => $roles, 'hours' => $hours, 'accounts' => $accounts,
+            'limited' => $limited, 'days' => $days);
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+        $object = $this->objectModel->manageMembers($executionID);
+        unset($_POST);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            if(empty($object))
+            {
+                return '无数据';
+            }
+            else
+            {
+                return $object;
+            }
         }
     }
 }

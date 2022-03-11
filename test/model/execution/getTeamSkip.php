@@ -19,14 +19,11 @@ pid=1
 
 */
 
-$teamList = array('test2', 'test12', 'test15');
-$begin    = 'test2';
-$end      = 'test17';
-$count    = array('0','1');
+$taskID = 901;
+$begin  = 'admin';
+$end    = 'user92';
 
 $execution = new executionTest();
-var_dump($execution->getTeamSkipTest($teamList, $teamList[0], $end, $count[0]));die;
-r($execution->getTeamSkipTest($teamList, $begin, $end, $count[0])) && p('0:root,account,realname') && e('101,po82,研发主管82');// 批量查询敏捷执行team
-r($execution->getTeamSkipTest($executionIDList, $count[0])[$executionIDList[1]]) && p('0:root,account,realname') && e('131,test22,开发22');  // 批量查询瀑布执行team
-r($execution->getTeamSkipTest($executionIDList, $count[0])[$executionIDList[2]]) && p('0:root,account,realname') && e('161,test52,开发52');  // 批量查询看板执行team
-r($execution->getTeamSkipTest($executionIDList, $count[1]))                      && p()                          && e('3');                  // 批量查询执行team统计
+r($execution->getTeamSkipTest($taskID, $begin, $end))   && p('admin:root,account,role') && e('901,admin,研发'); // 正常跳过
+r($execution->getTeamSkipTest($taskID, $begin, $begin)) && p()                        && e('无跳转数据');     // begin与end一致
+r($execution->getTeamSkipTest($taskID, $end, $end))     && p()                        && e('无跳转数据');     // end与begin一致
