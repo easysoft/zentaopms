@@ -22,11 +22,19 @@ ALTER TABLE `zt_story` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id
 ALTER TABLE `zt_story` ADD `activatedDate` datetime NOT NULL AFTER `closedReason`;
 ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL AFTER `lastEditedDate`;
 
+ALTER TABLE `zt_kanbancard` ADD `progress` float unsigned NOT NULL DEFAULT '0' AFTER `estimate`;
+
 ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '迅捷版用户分组', 'liteUser', '迅捷版用户分组');
+('lite', '管理员', 'liteUser', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
+('lite', '项目管理', 'liteUser', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
+('lite', '团队成员', 'liteUser', '迅捷版用户分组');
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
 

@@ -357,6 +357,11 @@ function renderKanbanItem(item, $item)
                 '<div class="user"></div>',
             '</div>'
         ].join('')).appendTo($item);
+        if(kanban.performable == 1)
+        {
+            var $progress = $item.children('.progress-box');
+            if(!$progress.length) $progress = $('<div class="progress-box"><div class="progress"><div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: ' + item.progress + '%;"></div></div><div class="progress-number">' + item.progress + '%</div></div>').appendTo($item);
+        }
 
         $item.data('card', item);
 
@@ -366,6 +371,11 @@ function renderKanbanItem(item, $item)
         $info.children('.pri')
             .attr('class', 'pri label-pri label-pri-' + item.pri)
             .text(item.pri);
+        if(kanban.performable == 1)
+        {
+            $progress.find('.progress-bar').css('width', item.progress + '%');
+            $progress.find('.progress-number').html(item.progress + '%');
+        }
 
         $item.css('background-color', item.color);
         $item.toggleClass('has-color', item.color != '#fff' && item.color != '');
@@ -809,31 +819,6 @@ function finishCard(cardID, kanbanID, regionID)
 }
 
 /**
- * Activate a card.
- *
- * @param  int $cardID
- * @param  int $kanbanID
- * @param  int $regionID
- * @access public
- * @return void
- */
-function activateCard(cardID, kanbanID, regionID)
-{
-    if(!cardID) return false;
-    var url = createLink('kanban', 'activateCard', 'cardID=' + cardID + '&kanbanID=' + kanbanID);
-    return $.ajax(
-    {
-        method:   'post',
-        dataType: 'json',
-        url:       url,
-        success: function(data)
-        {
-            updateRegion(regionID, data[regionID]);
-        }
-    });
-}
-
-/**
  * Update a region.
  *
  * @param  int      regionID
@@ -1091,7 +1076,7 @@ function createCardMenu(options)
     {
         if(card.status == 'done')
         {
-            items.push({label: kanbanLang.activateCard, icon: 'magic', onClick: function(){activateCard(card.id, card.kanban, card.region);}});
+            items.push({label: kanbanLang.activateCard, icon: 'magic', url: createLink('kanban', 'activateCard', 'cardID=' + card.id + '&kanbanID=' + card.kanban, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         }
         else
         {

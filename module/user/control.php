@@ -1287,6 +1287,27 @@ class user extends control
     }
 
     /**
+     * Ajax get group by vision.
+     *
+     * @param  string  $visions rnd|lite
+     * @param  int     $i
+     * @param  string  $selected
+     * @access public
+     * @return string
+     */
+    public function ajaxGetGroup($visions, $i = 0, $selected = '')
+    {
+        $visions   = explode(',', $visions);
+        $groupList = $this->user->getGroupsByVisions($visions);
+        if($i)
+        {
+            if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
+            return print(html::select("group[$i][]", $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
+        }
+        return print(html::select('group[]', $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
+    }
+
+    /**
      * Refresh random for login
      *
      * @access public

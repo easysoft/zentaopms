@@ -1029,9 +1029,21 @@ EOF;
             }
             elseif($data->mode == 'edit')
             {
+                $response['result']  = 'success';
+                $response['message'] = $this->lang->saveSuccess;
+
                 $this->user->updateContactList($data->listID, $data->listName, $data->users);
                 $this->user->setGlobalContacts($data->listID, isset($data->share));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
+
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                    return $this->send($response);
+                }
+
+                $response['locate'] = inlink('manageContacts', "listID=$listID");
+                return $this->send($response);
             }
         }
 

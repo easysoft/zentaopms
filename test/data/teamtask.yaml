@@ -28,9 +28,9 @@ fields:
     note: "用户账号"
     fields:
       - field: account1
-        range: po,user,admin
+        range: po,user,user,po
       - field: account2
-        range: 82,92,''
+        range: 82,92,92,82
     prefix: ""
     postfix: ""
     loop: 0

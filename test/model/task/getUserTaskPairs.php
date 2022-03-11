@@ -19,4 +19,3 @@ $assignedTo = 'user95';
 
 $task = new taskTest();
 r($task->getUserTaskPairsTest($taskID,$assignedTo)) && p('3') && e('迭代3 / 开发任务13'); // 根据指派人员查看执行和任务对应关系
-system("./ztest init");

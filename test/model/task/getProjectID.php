@@ -18,4 +18,3 @@ $executionID = '101';
 
 $task = new taskTest();
 r($task->getProjectIDTest($executionID)) && p('project') && e('11'); //根据executionID查找projectID
-system("./ztest init");

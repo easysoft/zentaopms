@@ -114,6 +114,10 @@
                   <th><?php echo $lang->kanbancard->estimate;?></th>
                   <td><?php echo round($card->estimate, 2) . ' ' . $lang->kanbancard->lblHour;?></td>
                 </tr>
+                <tr>
+                  <th><?php echo $lang->kanbancard->progress;?></th>
+                  <td><?php echo round($card->progress, 2) . ' %';?></td>
+                </tr>
               </tbody>
             </table>
           </div>
