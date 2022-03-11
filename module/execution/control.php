@@ -2718,6 +2718,16 @@ class execution extends control
         $this->loadModel('story');
         $this->loadModel('product');
 
+        /* Init objectID */
+        $originObjectID = $objectID;
+
+        /* Transfer object id when version lite */
+        if($this->config->vision == 'lite')
+        {
+            $kanban  = $this->project->getByID($objectID, 'kanban');
+            $objectID = $kanban->project;
+        }
+
         /* Get projects, executions and products. */
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
@@ -2825,10 +2835,10 @@ class execution extends control
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title      = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
-        $this->view->position[] = html::a($browseLink, $object->name);
-        $this->view->position[] = $this->lang->execution->linkStory;
-
+        $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
+        $this->view->position[]   = html::a($browseLink, $object->name);
+        $this->view->position[]   = $this->lang->execution->linkStory;
+        $this->view->objectID     = $originObjectID;
         $this->view->object       = $object;
         $this->view->products     = $products;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
