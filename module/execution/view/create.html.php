@@ -145,7 +145,7 @@
               <?php endforeach;?>
               <div class='col-sm-4'>
                 <div class="input-group <?php if(in_array($project->model, array('kanban', 'waterfall'))) echo 'required';?>">
-                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                  <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen'  required  onchange='loadBranches(this)'");?>
                   <span class='input-group-addon fix-border'></span>
                 </div>
               </div>
