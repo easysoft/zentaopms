@@ -20,7 +20,7 @@
     <span class='btn btn-link btn-active-text'><span class='text'><?php echo $lang->execution->linkStory;?></span></span>
   </div>
   <div class='btn-toolbar pull-right'>
-    <?php common::printBack($this->createLink($this->app->rawModule, 'story', "objectID=$object->id"), 'btn btn-link');?>
+    <?php common::printBack($this->createLink($this->app->rawModule, 'story', "objectID=$objectID"), 'btn btn-link');?>
   </div>
 </div>
 <div id="mainContent">
