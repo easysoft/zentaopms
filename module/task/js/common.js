@@ -13,8 +13,8 @@ function setStoryModule()
                 $("#module").trigger("chosen:updated");
 
                 $('#storyEstimate').val(storyInfo.estimate);
-                $('#storyPri'     ).val(storyInfo.pri);
-                $('#storyDesc'    ).val(storyInfo.spec);
+                $('#storyPri').val(storyInfo.pri);
+                $('#storyDesc').val(storyInfo.spec);
             }
         });
     }
