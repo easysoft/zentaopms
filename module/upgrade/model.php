@@ -38,7 +38,7 @@ class upgradeModel extends model
     {
         $versions = array();
 
-        /* Always update open. */
+        /* Always update open sql. */
         foreach($this->lang->upgrade->fromVersions as $version => $versionName)
         {
             if(!is_numeric($version[0])) continue;
@@ -47,21 +47,21 @@ class upgradeModel extends model
         }
         if($fromEdition == 'open') return $versions;
 
-        /* Update to pro|biz|max. */
+        /* Update pro sql from pro|biz|max. */
         foreach($this->config->upgrade->proVersion as $pro => $open)
         {
             if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
         }
         if($fromEdition == 'pro') return $versions;
 
-        /* Update to biz|max. */
+        /* Update biz sql from biz|max. */
         foreach($this->config->upgrade->bizVersion as $biz => $open)
         {
             if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
         }
         if($fromEdition == 'biz') return $versions;
 
-        /* Update to max. */
+        /* Update max sql only from max. */
         foreach($this->config->upgrade->maxVersion as $max => $open)
         {
             if(isset($versions[$open])) $versions[$open]['max'][] = $max;
