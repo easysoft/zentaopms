@@ -1,0 +1,26 @@
+title: zt_vmtemplate
+author: Zeng gang
+version: "1.0"
+fields:
+  - field: id
+    range: 1
+  - field: name
+    range: 模板1
+  - field: hostID
+    range: 1
+  - field: templateName
+    range: [tmpl-win10-pro-x64-zh_cn-desktop]
+  - field: osType
+    range: winServer
+  - field: osCategory
+    range: windows
+  - field: osVersion
+    range: 2008
+  - field: osLang
+    range: zh_cn
+  - field: cpuCoreNum
+    range: 1
+  - field: memorySize
+    range: 512
+  - field: diskSize
+    range: 10240
