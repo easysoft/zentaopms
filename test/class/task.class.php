@@ -637,4 +637,32 @@ class taskTest
             return $objectList;
         }
     }
+
+    public function processTaskTest($task)
+    {
+        $object = $this->objectModel->processTask($task);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function processTasksTest($tasks)
+    {
+        $object = $this->objectModel->processTasks($tasks);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
 }

@@ -18,4 +18,3 @@ $executionID = '102';
 
 $task = new taskTest();
 r($task->getExecutionTaskPairsTest($executionID)) && p('2') && e('2::开发任务12'); //根据执行id查出任务id与name
-system("./ztest init");
