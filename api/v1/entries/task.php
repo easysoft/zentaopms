@@ -102,7 +102,7 @@ class taskEntry extends Entry
         $oldTask = $this->loadModel('task')->getByID($taskID);
 
         /* Set $_POST variables. */
-        $fields = 'name,type,assignedTo,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline';
+        $fields = 'name,type,assignedTo,pri,estimate,left,consumed,story,parent,execution,module,closedReason,status,estStarted,deadline';
         $this->batchSetPost($fields, $oldTask);
 
         $control = $this->loadController('task', 'edit');
