@@ -1302,7 +1302,6 @@ class user extends control
         if($i)
         {
             if($i > 1) $groupList = $groupList + array('ditto' => $this->lang->user->ditto);
-            if(empty($selected)) $selected = $i > 1 ? 'ditto' : '';
             return print(html::select("group[$i][]", $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));
         }
         return print(html::select('group[]', $groupList, $selected, 'size=3 multiple=multiple class="form-control chosen"'));

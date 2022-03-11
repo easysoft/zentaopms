@@ -75,7 +75,7 @@ $(document).on('click', '.chosen-with-drop', function()
 
 $(document).on('change', '[id^=visions]', function()
 {
-    if($.inArray('ditto', $(this).val()) > 0)
+    if($.inArray('ditto', $(this).val()) >= 0)
     {
         $(this).val('ditto');
         $(this).trigger("chosen:updated");
@@ -95,30 +95,29 @@ $('select[id^="visions"]').each(function()
     })
 })
 
-$("select[id^='visions']").change(function()
+$(document).on('change', "select[id^='visions']", function()
 {
-    var i       = $(this).attr('id').replace(/[^0-9]/ig, '');
-    var visions = [];
+    var i       = parseInt($(this).attr('id').replace(/[^0-9]/ig, ''));
+    var visions = $('select[id="visions' + i + '"]').val();
 
-    $('select[id="visions' + i + '"] option:selected').each(function()
-    {
-        visions.push($(this).val());
-    });
+    var groups  = $('#group' + i).val();
+    if($.inArray('ditto', groups) >= 0) groups = '';
 
-    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + i + '&selected=' + $('#group' + i).val()), function(data)
+    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + i + '&selected=' + groups), function(data)
     {
         $('#group' + i).replaceWith(data);
         $('#group' + i + '_chosen').remove();
         $('#group' + i).chosen();
     })
 
-    for(n = i; n <= batchCreateCount; n++)
+    for(n = i + 1; n <= batchCreateCount; n++)
     {
-        if($('select[id="visions' + n + '"] option:selected').val() != 'ditto' && n != i) break;
+        if(n == i) continue;
+        if($.inArray('ditto', $('select[id="visions' + n + '"]').val()) < 0) break;
 
         ((function(n)
         {
-            $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + n + '&selected=' + $('#group' + i).val()), function(data)
+            $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + n + '&selected=' + $('#group' + n).val()), function(data)
             {
                 $('#group' + n).replaceWith(data);
                 $('#group' + n + '_chosen').remove();
