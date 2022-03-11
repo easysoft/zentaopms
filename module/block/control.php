@@ -1528,7 +1528,7 @@ class block extends control
             count(assignedTo = '{$this->app->user->account}' or null) as assignedToMe,
             count(status != 'closed' or null) as unclosed,
             count((status != 'closed' and status != 'resolved') or null) as unresolved,
-            count(confirmed = '0' or null) as unconfirmed,
+            count((confirmed = '0' and toStory = '0') or null) as unconfirmed,
             count((resolvedDate >= '$yesterday' and resolvedDate < '$today') or null) as yesterdayResolved,
             count((closedDate >= '$yesterday' and closedDate < '$today') or null) as yesterdayClosed")
             ->from(TABLE_BUG)
