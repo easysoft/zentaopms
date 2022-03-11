@@ -87,7 +87,7 @@ function copyStoryTitle(num)
 function setStoryRelated(num)
 {
     var storyID = $('#story' + num).val();
-    if(storyID && storyID != 'ditto')
+    if(storyID && storyID != 0  && storyID != 'ditto')
     {
         var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
         $.getJSON(link, function(storyInfo)
