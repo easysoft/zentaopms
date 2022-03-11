@@ -1478,13 +1478,13 @@ class userModel extends model
         if(empty($data->listName))
         {
             dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            return print(js::error(dao::getError()));
+            return false;
         }
 
         $this->dao->update(TABLE_USERCONTACT)->data($data)
             ->where('id')->eq($listID)
             ->exec();
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
     }
 
     /**
