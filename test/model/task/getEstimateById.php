@@ -18,4 +18,3 @@ $estimateID = '1';
 
 $task = new taskTest();
 r($task->getEstimateByIdTest($estimateID)) && p('work') && e('这里是工作内容1'); // 根据estimateID查看预计工时
-system("./ztest init");

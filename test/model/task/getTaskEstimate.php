@@ -20,4 +20,3 @@ $waitstart   = array('assignedTo' => 'user92','consumed' => '10');
 $task = new taskTest();
 $task->startTest($taskID,$waitstart);
 r($task->getTaskEstimateTest($taskID)) && p('0:task') && e('55'); // 查看任务预计
-system("./ztest init");

@@ -18,4 +18,3 @@ $taskID = '50';
 
 $task = new taskTest();
 r($task->getByIdTest($taskID)) && p('name') && e('开发任务60'); //根据taskID查找任务详情
-system("./ztest init");
