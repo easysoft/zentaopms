@@ -48,7 +48,7 @@
 <script>
 $(function()
 {
-    $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes")?>');
+    $.get('<?php echo inlink('afterExec', "fromVersion=$fromVersion&processed=yes&skipMoveFile=yes")?>');
 })
 
 <?php
