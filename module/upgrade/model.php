@@ -470,6 +470,16 @@ class upgradeModel extends model
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                     $this->execSQL($xuanxuanSql);
                 }
+                else
+                {
+                    if(!$executeXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
 
                 if($fromVersion[0] == 'p') break;
                 $this->execSQL($this->getUpgradeFile('proinstall'));
