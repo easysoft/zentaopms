@@ -92,14 +92,14 @@ class upgradeModel extends model
         $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
-            $executeXuanxuan = false;
+            $executedXuanxuan = false;
 
             /* Execute open. */
-            if(str_replace('_', '.', $openVersion) == '10.1') $executeXuanxuan = true;
+            if(str_replace('_', '.', $openVersion) == '10.1') $executedXuanxuan = true;
 
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-            $this->executeOpen($openVersion, $fromVersion, $executeXuanxuan);
+            $this->executeOpen($openVersion, $fromVersion, $executedXuanxuan);
 
             /* Execute pro. */
             foreach($chargedVersions['pro'] as $proVersion)
@@ -114,7 +114,7 @@ class upgradeModel extends model
             {
                 $this->saveLogs("Execute $bizVersion");
                 $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
-                $this->executeBiz($bizVersion, $executeXuanxuan);
+                $this->executeBiz($bizVersion, $executedXuanxuan);
             }
 
             /* Execute max. */
@@ -143,11 +143,11 @@ class upgradeModel extends model
      *
      * @param  string $openVersion
      * @param  string $fromVersion
-     * @param  bool   $executeXuanxuan
+     * @param  bool   $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeOpen($openVersion, $fromVersion, $executeXuanxuan)
+    public function executeOpen($openVersion, $fromVersion, $executedXuanxuan)
     {
         switch($openVersion)
         {
@@ -277,7 +277,7 @@ class upgradeModel extends model
             case '10_1':
                 $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                 $this->execSQL($xuanxuanSql);
-                $executeXuanxuan = true;
+                $executedXuanxuan = true;
             case '10_3_1':
                 $this->removeCustomMenu();
                 break;
@@ -285,7 +285,7 @@ class upgradeModel extends model
                 $this->changeTaskParentValue();
                 break;
             case '10_6':
-                if(!$executeXuanxuan)
+                if(!$executedXuanxuan)
                 {
                     $this->saveLogs('Execute 10_6');
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
@@ -298,7 +298,7 @@ class upgradeModel extends model
             case '11_1':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                         $this->execSQL($xuanxuanSql);
@@ -317,7 +317,7 @@ class upgradeModel extends model
                 $this->addPriv11_5();
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
                         $this->execSQL($xuanxuanSql);
@@ -343,7 +343,7 @@ class upgradeModel extends model
 
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
                         $this->execSQL($xuanxuanSql);
@@ -363,7 +363,7 @@ class upgradeModel extends model
             case '12_1':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                         $this->execSQL($xuanxuanSql);
@@ -392,7 +392,7 @@ class upgradeModel extends model
             case '15_0_rc3':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.3.sql';
                         $this->execSQL($xuanxuanSql);
@@ -431,7 +431,7 @@ class upgradeModel extends model
             case '15_4':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
                         $this->execSQL($xuanxuanSql);
@@ -469,6 +469,17 @@ class upgradeModel extends model
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                     $this->execSQL($xuanxuanSql);
+                    $executedXuanxuan = true;
+                }
+                else
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
                 }
 
                 if($fromVersion[0] == 'p') break;
@@ -522,11 +533,11 @@ class upgradeModel extends model
      * Process data for biz.
      *
      * @param  int   $bizVersion
-     * @param  bool  $executeXuanxuan
+     * @param  bool  $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeBiz($bizVersion, $executeXuanxuan)
+    public function executeBiz($bizVersion, $executedXuanxuan)
     {
         switch($bizVersion)
         {
@@ -534,7 +545,7 @@ class upgradeModel extends model
                 $this->adjustFeedbackViewData();
                 break;
             case 'biz3_0':
-                if(!empty($this->config->isINT) and !$executeXuanxuan)
+                if(!empty($this->config->isINT) and !$executedXuanxuan)
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                     $this->execSQL($xuanxuanSql);
@@ -545,7 +556,7 @@ class upgradeModel extends model
             case 'biz3_2_1':
                 if(!empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
                         $this->execSQL($xuanxuanSql);
@@ -573,7 +584,7 @@ class upgradeModel extends model
                 $this->processWorkflowLayout();
                 $this->processWorkflowLabel();
                 $this->processWorkflowCondition();
-                if(!empty($this->config->isINT) and !$executeXuanxuan)
+                if(!empty($this->config->isINT) and !$executedXuanxuan)
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                     $this->execSQL($xuanxuanSql);
