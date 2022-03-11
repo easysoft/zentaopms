@@ -19,7 +19,7 @@ pid=1
 $taskIDList = array('1', '901', '100001');
 
 $task = new taskTest();
-r($task->computeBeginAndEndTest($taskIDList[0])) && p('id,estStarted,realStarted,deadline') && e('1,2022-03-11,0000-00-00 00:00:00,2022-03-18');   //根据taskID计算没有父计划的开始结束时间
-r($task->computeBeginAndEndTest($taskIDList[1])) && p('id,estStarted,realStarted,deadline') && e('601,,0000-00-00 00:00:00,2022-03-04'); //根据taskID计算有父计划的父开始结束时间
-r($task->computeBeginAndEndTest($taskIDList[2])) && p('id,estStarted,realStarted,deadline') && e('0');            //根据不存在的taskID计算开始结束时间
+r($task->computeBeginAndEndTest($taskIDList[0])) && p('id,estStarted,realStarted,deadline') && e('1,2022-03-11,0000-00-00 00:00:00,2022-03-18'); //根据taskID计算没有父计划的开始结束时间
+r($task->computeBeginAndEndTest($taskIDList[1])) && p('id,estStarted,realStarted,deadline') && e('601,,0000-00-00 00:00:00,2022-03-04');         //根据taskID计算有父计划的父开始结束时间
+r($task->computeBeginAndEndTest($taskIDList[2])) && p('id,estStarted,realStarted,deadline') && e('0');                                           //根据不存在的taskID计算开始结束时间
 system("./ztest init");
