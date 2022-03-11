@@ -1265,7 +1265,7 @@ class docModel extends model
                 ->beginIF($type == 'book')->orderBy('id_desc')->fi()
                 ->fetchAll('id');
         }
-        else if($type != 'product' and $type != 'project' and $type != 'execution')
+        elseif($type != 'product' and $type != 'project' and $type != 'execution')
         {
             return false;
         }
@@ -1389,6 +1389,7 @@ class docModel extends model
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
