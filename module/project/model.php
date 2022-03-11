@@ -1529,7 +1529,11 @@ class projectModel extends model
         $projectID   = (int)$projectID;
         $projectType = 'project';
         $accounts    = array_unique($accounts);
+        //a('111');
+        //a($limited);
         $limited     = array_values($limited);
+        //a('222');
+        //a($limited);
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
@@ -1542,7 +1546,10 @@ class projectModel extends model
             $member->role    = $roles[$key];
             $member->days    = $days[$key];
             $member->hours   = $hours[$key];
-            $member->limited = $limited[$key];
+            //a('333');
+            //a($key);
+            //a($limited[$key]);
+            if(!empty(limited[$key])) $member->limited = $limited[$key];
 
             $member->root    = $projectID;
             $member->account = $account;
