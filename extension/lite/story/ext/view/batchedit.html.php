@@ -51,7 +51,7 @@
         <tr>
           <td><?php echo $storyID . html::hidden("storyIdList[$storyID]", $storyID);?></td>
           <td class='text-left'>
-            <?php echo html::select("modules[$storyID]", isset($modules[$story->product][$story->branch]) ? $modules[$story->product][$story->branch] : array('0' => '/'), $story->module, "class='form-control chosen'");?>
+            <?php echo html::select("modules[$storyID]", isset($moduleList[$story->id]) ? $moduleList[$story->id] : array('0' => '/'), $story->module, "class='form-control chosen'");?>
           </td>
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
