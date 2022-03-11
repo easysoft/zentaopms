@@ -46,10 +46,8 @@
         <div class='panel-heading not-move-handler'>
           <?php if($project->model === 'waterfall'): ?>
           <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
-          <?php elseif($project->model === 'kanban'): ?>
-          <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->kanban; ?></span>
           <?php else: ?>
-          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
+          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->{$project->model}; ?></span>
           <?php endif; ?>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <nav class='panel-actions nav nav-default'>
