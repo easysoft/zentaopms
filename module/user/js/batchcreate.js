@@ -87,7 +87,8 @@ $('select[id^="visions"]').each(function()
     var i      = $(this).attr('id').replace(/[^0-9]/ig, '');
     var vision = $('#visions1 option:selected').val();
 
-    $.post(createLink('user', 'ajaxGetGroup', "visions=" + vision + '&i=' + i), function(data){
+    $.post(createLink('user', 'ajaxGetGroup', "visions=" + vision + '&i=' + i + '&selected=' + $('#group' + i).val()), function(data)
+    {
          $('#group' + i).replaceWith(data);
          $('#group' + i + '_chosen').remove();
          $('#group' + i).chosen();
@@ -104,7 +105,8 @@ $("select[id^='visions']").change(function()
         visions.push($(this).val());
     });
 
-    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + i), function(data){
+    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + i + '&selected=' + $('#group' + i).val()), function(data)
+    {
         $('#group' + i).replaceWith(data);
         $('#group' + i + '_chosen').remove();
         $('#group' + i).chosen();
@@ -116,7 +118,8 @@ $("select[id^='visions']").change(function()
 
         ((function(n)
         {
-            $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + n), function(data){
+            $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + n + '&selected=' + $('#group' + i).val()), function(data)
+            {
                 $('#group' + n).replaceWith(data);
                 $('#group' + n + '_chosen').remove();
                 $('#group' + n).chosen();

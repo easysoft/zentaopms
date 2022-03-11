@@ -34,7 +34,7 @@ function changeVision()
         visions.push($(this).val());
     });
 
-    var link = createLink('user', 'ajaxGetGroup', 'visions=' + visions);
+    var link = createLink('user', 'ajaxGetGroup', 'visions=' + visions + '&i=0&selected=' + $('#group').val());
     $.post(link, function(data)
     {
         $('#group').replaceWith(data);
