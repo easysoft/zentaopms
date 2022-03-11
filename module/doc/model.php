@@ -501,7 +501,11 @@ class docModel extends model
      */
     public function getById($docID, $version = 0, $setImgSize = false)
     {
-        $doc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
+        $doc = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('id')->eq((int)$docID)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch();
+
         if(!$doc) return false;
         if(!$this->checkPrivDoc($doc))
         {

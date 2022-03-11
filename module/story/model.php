@@ -24,7 +24,10 @@ class storyModel extends model
      */
     public function getById($storyID, $version = 0, $setImgSize = false)
     {
-        $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+        $story = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('id')->eq($storyID)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch();
         if(!$story) return false;
         if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
         if($version == 0) $version = $story->version;
