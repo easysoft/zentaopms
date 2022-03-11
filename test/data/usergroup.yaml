@@ -7,9 +7,9 @@ fields:
     note: "用户名"
     fields:
     - field: account1
-      range: test{100},dev{200},pm{10},po{10},td{2},pd{2},qd{2},top{6},test,dev,pm,po,td,pd,qd,other{10}
+      range: test{99},dev{100},pm,po{54},td{100},pd{47},qd{7},top{100},outside{92}
     - field: account2
-      range: 1-100,1-200,1-10,1-10,1-2,1-2,1-2,1-5,1{8},1-10
+      range: 2-100,1-100,1,48-100,1-100,1-47,94-100,1-100,2-93
   - field: group
     note: "分组名称"
     range: 3{100},2{200},4{10},5{10},6{2},7{2},8{2},9{5},1{8},12{10}

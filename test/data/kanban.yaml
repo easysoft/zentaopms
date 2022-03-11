@@ -12,15 +12,41 @@ fields:
         - field: name2
           range: 1-10000
     - field: owner
-      range: admin
+      fields:
+        - field: owner1
+          range: po{10},user{10},test{10},pm{10},po{10}
+        - field: owner2
+          range: 15-100{2},3-100{2},1-100{2},1-100{2},1-100{2}
     - field: team
-      range: ""
+      fields:
+        - field: team1
+          prefix: ","
+          range: user{10},test{10},pm{10},po{10},po{10}
+        - field: team2
+          range: 3-100{2},1-100{2},1-100{2},1-100{2},35-100{2}
+          postfix: ","
+        - field: team3
+          range: po{10},pm{10},test{10},user[10],user{10}
+        - field: team4
+          range: 15-100{2},15-100{2},15-100{2},15-100{2},35-100{2}
+          postfix: ","
     - field: desc
       range: "看板详情"
     - field: acl
       range: extend,open
     - field: whitelist
-      range: ""
+      note: "白名单"
+      fields:
+        - field: whitelist1
+          prefix: ","
+          range: user{10},test{10},pm{10},po{10},po{10}
+        - field: whitelist2
+          range: 3-100{2},1-100{2},1-100{2},1-100{2},35-100{2}
+          postfix: ","
+        - field: whitelist3
+          range: po{10},pm{10},test{10},user[10],user{10}
+        - field: whitelist4
+          range: 15-100{2},15-100{2},15-100{2},15-100{2},35-100{2}
     - field: archived
       range: "1"
     - field: performable

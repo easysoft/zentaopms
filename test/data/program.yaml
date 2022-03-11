@@ -2,6 +2,8 @@ title: program
 author: Zhu Jinyong
 version: "1.0"
 fields:
+  - field: id
+    range: 1-10
   - field: project
     range: 0
   - field: model
@@ -19,6 +21,17 @@ fields:
     range: wait
   - field: parent
     range: 0
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 1-10
+      - field: path2
+        range: []
+        postfix: ","
+      - field: path3
+        range: []
+        postfix: ","
   - field: grade
     range: 1
   - field: code
