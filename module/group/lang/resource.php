@@ -777,8 +777,6 @@ $lang->resource->execution->tree              = 'treeAction';
 $lang->resource->execution->treeTask          = 'treeOnlyTask';
 $lang->resource->execution->treeStory         = 'treeOnlyStory';
 $lang->resource->execution->all               = 'allExecutionAB';
-$lang->resource->execution->kanbanHideCols    = 'kanbanHideCols';
-$lang->resource->execution->kanbanColsColor   = 'kanbanColsColor';
 $lang->resource->execution->export            = 'exportAction';
 $lang->resource->execution->storyKanban       = 'storyKanban';
 $lang->resource->execution->storySort         = 'storySort';
@@ -787,7 +785,6 @@ $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->executionkanban   = 'kanbanAction';
-$lang->resource->execution->kanban            = 'RDKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
@@ -831,8 +828,6 @@ $lang->execution->methodOrder[180] = 'batchUnlinkStory';
 $lang->execution->methodOrder[185] = 'updateOrder';
 $lang->execution->methodOrder[190] = 'taskKanban';
 $lang->execution->methodOrder[195] = 'printKanban';
-$lang->execution->methodOrder[200] = 'kanbanHideCols';
-$lang->execution->methodOrder[205] = 'kanbanColsColor';
 $lang->execution->methodOrder[210] = 'tree';
 $lang->execution->methodOrder[215] = 'treeTask';
 $lang->execution->methodOrder[220] = 'treeStory';
@@ -845,7 +840,6 @@ $lang->execution->methodOrder[250] = 'addWhitelist';
 $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[265] = 'executionkanban';
-$lang->execution->methodOrder[270] = 'kanban';
 
 /* Task. */
 $lang->resource->task = new stdclass();
