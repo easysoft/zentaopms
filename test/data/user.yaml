@@ -19,8 +19,7 @@ fields:
     format: ""
   - field: dept
     note: "所属部门"
-    from: dept.yaml
-    use: id
+    range: 1-100{10}
   - field: account
     note: "用户名"
     fields:

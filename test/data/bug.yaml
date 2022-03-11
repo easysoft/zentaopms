@@ -49,7 +49,7 @@ fields:
   - field: found
     range: []
   - field: steps
-    range: ["<p>【步骤】</p><br/><p>【结果】</p><br/><p>【期望】</p><br/>","【步骤】进入成果展示<br/>【结果】乱码<br/>【期望】正常显示<br/>"]
+    range: [<p>【步骤】</p><br/><p>【结果】</p><br/><p>【期望】</p><br/>,【步骤】进入成果展示<br/>【结果】乱码<br/>【期望】正常显示<br/>]
   - field: status
     range: active{50},resolved{30},closed{20}
   - field: subStatus

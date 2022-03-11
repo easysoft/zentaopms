@@ -914,6 +914,8 @@ class executionTest
 
     public function manageMembersTest($executionID, $count, $param = array())
     {
+        global $tester;
+        $tester->dbh->query("delete from zt_team where root = $executionID");
         $realnames = array();
         $roles     = array();
         $days      = array();
@@ -926,6 +928,7 @@ class executionTest
         foreach($param as $key => $value) $_POST[$key] = $value;
         $object = $this->objectModel->manageMembers($executionID);
         unset($_POST);
+        $object = $tester->dbh->query("select * from zt_team where root = $executionID")->fetchAll();
         if(dao::isError())
         {
             $error = dao::getError();

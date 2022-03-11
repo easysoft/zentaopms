@@ -3,6 +3,7 @@ $builder = new stdclass();
 
 $builder->company   = array('rows' => 1,    'extends' => array('company'));
 $builder->user      = array('rows' => 1000, 'extends' => array('user'));
+$builder->usergroup = array('rows' => 600, 'extends' => array('usergroup'));
 $builder->dept      = array('rows' => 100,  'extends' => array('dept'));
 $builder->action    = array('rows' => 100,  'extends' => array('action'));
 
