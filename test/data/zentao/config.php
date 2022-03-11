@@ -57,3 +57,8 @@ $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
 $builder->mr       = array('rows' => 1,  'extends' => array('mr'));
 $builder->oauth    = array('rows' => 90, 'extends' => array('oauth'));
+
+$builder->vm         = array('rows' => 1,  'extends' => array('vm'));
+$builder->vmtemplate = array('rows' => 1,  'extends' => array('vmtemplate'));
+$builder->host       = array('rows' => 1,  'extends' => array('host'));
+$builder->asset      = array('rows' => 1,  'extends' => array('asset'));
