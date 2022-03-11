@@ -1529,11 +1529,10 @@ class projectModel extends model
         $projectID   = (int)$projectID;
         $projectType = 'project';
         $accounts    = array_unique($accounts);
-        //a('111');
-        //a($limited);
         $limited     = array_values($limited);
-        //a('222');
-        //a($limited);
+        $roles       = array_values($roles);
+        $days        = array_values($days);
+        $hours       = array_values($hours);
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
@@ -1542,15 +1541,11 @@ class projectModel extends model
         {
             if(empty($account)) continue;
 
-            $member = new stdclass();
+            $member          = new stdclass();
             $member->role    = $roles[$key];
             $member->days    = $days[$key];
             $member->hours   = $hours[$key];
-            //a('333');
-            //a($key);
-            //a($limited[$key]);
-            if(!empty(limited[$key])) $member->limited = $limited[$key];
-
+            $member->limited = $limited[$key];
             $member->root    = $projectID;
             $member->account = $account;
             $member->join    = isset($oldJoin[$account]) ? $oldJoin[$account] : helper::today();
