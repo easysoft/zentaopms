@@ -12887,14 +12887,14 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11,'workloadbudget','unlink'),
 (11,'workloadbudget','view');
 
-Insert into `zt_grouppriv`(`module`, `method`,`group`)
-select `module`, `method`,14 as `group` from `zt_grouppriv` where `group` in  (select `group` from `zt_grouppriv` where `group` = 1);
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`, 14 from `zt_grouppriv` where `group` = 1;
 
-Insert into `zt_grouppriv`(`module`, `method`,`group`)
-select `module`, `method`,15 as `group` from `zt_grouppriv` where `group` in  (select `group` from `zt_grouppriv` where `group` = 4);
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`, 15 from `zt_grouppriv` where `group` = 4;
 
-Insert into `zt_grouppriv`(`module`, `method`,`group`)
-select `module`, `method`,16 as `group` from `zt_grouppriv` where `group` in  (select `group` from `zt_grouppriv` where `group` = 9);
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`, 16 from `zt_grouppriv` where `group` = 9;
 
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
