@@ -154,6 +154,7 @@ class Processor
         $parentID     = implode(',', $parentIDList);
 
         $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->in($parentID)->andWhere('deleted')->eq(0)->exec();
+        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('po82')->where('id')->eq(1)->andWhere('deleted')->eq(0)->exec();
     }
 
     /**
