@@ -26,7 +26,7 @@
           </tr>
           <tr>
             <th><?php echo $lang->upgrade->toVersion;?></th>
-            <td><?php echo $config->version;?></td>
+            <td><?php echo ucfirst($config->version);?></td>
           </tr>
         </table>
       </div>

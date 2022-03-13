@@ -81,6 +81,8 @@ class upgradeModel extends model
     {
         set_time_limit(0);
 
+        $this->loadModel('user')->su();
+
         $editions    = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
         $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
 
