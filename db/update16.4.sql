@@ -24,7 +24,7 @@ ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL AFTER `lastEdited
 
 ALTER TABLE `zt_kanbancard` ADD `progress` float unsigned NOT NULL DEFAULT '0' AFTER `estimate`;
 
-ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
+ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
