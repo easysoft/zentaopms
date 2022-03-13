@@ -21,24 +21,26 @@ class weeklyModel extends model
      */
     public function getPageNav($project, $date)
     {
-        $date  = date('Ymd', strtotime($this->getThisMonday($date)));
+        $date       = date('Ymd', strtotime($this->getThisMonday($date)));
+        $today      = helper::today();
+        $thisSunday = date('Ymd', strtotime($this->getThisSunday($today)));
         switch($project->status)
         {
         case 'wait':
             $begin = helper::now();
-            $end = $begin;
+            $end   = $begin;
             break;
         case 'doing':
             $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $date;
-            $end = $date;
+            $end   = $thisSunday;
             break;
         case 'suspended':
             $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->suspendedDate;
-            $end = $project->suspendedDate;
+            $end   = $project->suspendedDate;
             break;
         case 'closed':
             $begin = $project->realBegan != '0000-00-00' ? $project->realBegan : $project->realEnd;
-            $end = $project->realEnd;
+            $end   = $project->realEnd;
             break;
         }
 
@@ -72,12 +74,12 @@ class weeklyModel extends model
     {
         $sn = $end != '' ? $this->getWeekSN($begin, $end) : $this->getWeekSN($begin, date('Y-m-d'));
         $weeks = array();
-        for($i = 0; $i <= $sn; $i++)
+        for($i = 0; $i < $sn; $i++)
         {
             $monday = $this->getThisMonday($begin);
             $sunday = $this->getThisSunday($begin);
-            $begin = date('Y-m-d', strtotime("$begin +7 days"));
-            $key = date('Ymd', strtotime($monday));
+            $begin  = date('Y-m-d', strtotime("$begin +7 days"));
+            $key    = date('Ymd', strtotime($monday));
             $weeks[$key] = sprintf($this->lang->weekly->weekDesc, $i + 1, $monday, $sunday);
         }
         krsort($weeks);
