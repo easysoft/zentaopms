@@ -99,7 +99,7 @@ class upgradeModel extends model
 
             $this->saveLogs("Execute $openVersion");
             $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-            $this->executeOpen($openVersion, $fromVersion, $executedXuanxuan);
+            $this->executeOpen($openVersion, $fromEdition, $executedXuanxuan);
 
             /* Execute pro. */
             foreach($chargedVersions['pro'] as $proVersion)
@@ -142,12 +142,12 @@ class upgradeModel extends model
      * Process data for open source.
      *
      * @param  string $openVersion
-     * @param  string $fromVersion
+     * @param  string $fromEdition
      * @param  bool   $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeOpen($openVersion, $fromVersion, $executedXuanxuan)
+    public function executeOpen($openVersion, $fromEdition, $executedXuanxuan)
     {
         switch($openVersion)
         {
@@ -459,31 +459,32 @@ class upgradeModel extends model
                 set_time_limit(0);
                 $this->updateActivatedDate();
 
-                if($fromVersion[0] == 'm') break;
-                $this->execSQL($this->getUpgradeFile('maxinstall'));
-                $this->execSQL($this->getUpgradeFile('functions'));
-
-                if($fromVersion[0] == 'b') break;
-                $this->execSQL($this->getUpgradeFile('bizinstall'));
-                if(!empty($this->config->isINT))
+                switch($fromEdition)
                 {
-                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
-                    $this->execSQL($xuanxuanSql);
-                    $executedXuanxuan = true;
+                    case 'open':
+                        $this->execSQL($this->getUpgradeFile('proinstall'));
+                    case 'pro':
+                        $this->execSQL($this->getUpgradeFile('bizinstall'));
+                        if(!empty($this->config->isINT))
+                        {
+                            $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
+                            $this->execSQL($xuanxuanSql);
+                            $executedXuanxuan = true;
+                        }
+                        else
+                        {
+                            if(!$executedXuanxuan)
+                            {
+                                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
+                                $this->execSQL($xuanxuanSql);
+                                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
+                                $this->execSQL($xuanxuanSql);
+                            }
+                        }
+                    case 'biz':
+                        $this->execSQL($this->getUpgradeFile('maxinstall'));
+                        $this->execSQL($this->getUpgradeFile('functions'));
                 }
-                else
-                {
-                    if(!$executedXuanxuan)
-                    {
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
-                        $this->execSQL($xuanxuanSql);
-                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
-                        $this->execSQL($xuanxuanSql);
-                    }
-                }
-
-                if($fromVersion[0] == 'p') break;
-                $this->execSQL($this->getUpgradeFile('proinstall'));
                 break;
         }
 
