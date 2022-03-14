@@ -1986,6 +1986,9 @@ class storyModel extends model
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+
+        if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+
         $this->setStage($storyID);
 
         /* Update parent story status. */
