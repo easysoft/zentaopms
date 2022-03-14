@@ -2945,7 +2945,7 @@ class bugModel extends model
                 echo $bug->activatedCount;
                 break;
             case 'activatedDate':
-                echo substr($bug->activatedDate, 5, 11);
+                echo helper::isZeroDate($bug->activatedDate) ? '' : substr($bug->activatedDate, 5, 11);
                 break;
             case 'keywords':
                 echo $bug->keywords;
