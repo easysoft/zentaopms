@@ -141,8 +141,7 @@ class repo extends control
 
         $this->app->loadLang('action');
 
-        $products = $this->loadModel('product')->getProductPairsByProject($objectID);
-
+        $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
         $productID = count($products) > 0 ? key($products) : '';
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
