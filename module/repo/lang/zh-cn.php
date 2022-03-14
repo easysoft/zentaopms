@@ -185,6 +185,7 @@ $lang->repo->error->encoding      = "编码可能错误，请更换编码重试�
 $lang->repo->error->deleted       = "删除版本库失败，当前版本库有提交记录与设计关联";
 $lang->repo->error->linkedJob     = "删除版本库失败，当前版本库与构建有关联，请取消关联或删除构建。";
 $lang->repo->error->clientPath    = "客户端安装目录不能有空格！";
+$lang->repo->error->notFound      = "版本库『%s』路径 %s 不存在，请确认此版本库是否已在本地服务器被删除";
 
 $lang->repo->syncTips          = '请参照<a target="_blank" href="https://www.zentao.net/book/zentaopmshelp/207.html">这里</a>，设置版本库定时同步。';
 $lang->repo->encodingsTips     = "提交日志的编码，可以用逗号连接起来的多个，比如utf-8。";

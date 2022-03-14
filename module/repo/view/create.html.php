@@ -29,12 +29,12 @@
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
-            <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
+            <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control chosen'"); ?></td>
             <td class="tips-git"><?php echo $lang->repo->syncTips; ?></td>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control chosen' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabProject;?></th>
