@@ -117,8 +117,8 @@ $lang->action->objectTypes['entry']            = 'Entry';
 $lang->action->objectTypes['webhook']          = 'Webhook';
 $lang->action->objectTypes['team']             = 'Team';
 $lang->action->objectTypes['whitelist']        = 'Whitelist';
-$lang->action->objectTypes['pipeline']         = 'GitLab';
-$lang->action->objectTypes['gitlab']           = 'GitLab';
+$lang->action->objectTypes['pipeline']         = 'GitLab Server';
+$lang->action->objectTypes['gitlab']           = 'GitLab Server';
 $lang->action->objectTypes['jenkins']          = 'Jenkins';
 $lang->action->objectTypes['mr']               = 'Merge Request';
 $lang->action->objectTypes['gitlabproject']    = 'GitLab Project';
@@ -642,6 +642,7 @@ $lang->action->label->kanbancolumn = 'Kanban Column|execution|kanban|execution=%
 $lang->action->label->kanbanlane   = 'Kanban Lane|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = 'Kanban Card|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = 'Merge Request|mr|view|id=%s';
+$lang->action->label->gitlab       = 'GitLab|gitlab|view|id=%s';
 
 /* Object type. */
 $lang->action->search = new stdclass();

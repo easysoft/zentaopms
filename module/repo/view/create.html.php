@@ -25,7 +25,7 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->repo->product; ?></th>
-            <td class='required'><?php echo html::select('product[]', $products, '', "class='form-control chosen' multiple"); ?></td>
+            <td class='required'><?php echo html::select('product[]', $products, $productID, "class='form-control chosen' multiple"); ?></td>
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>

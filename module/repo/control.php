@@ -141,11 +141,15 @@ class repo extends control
 
         $this->app->loadLang('action');
 
+        $products  = $this->loadModel('product')->getProductPairsByProject($objectID);
+        $productID = count($products) > 0 ? key($products) : '';
+
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[]  = $this->lang->repo->create;
         $this->view->groups      = $this->loadModel('group')->getPairs();
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
-        $this->view->products    = $this->loadModel('product')->getProductPairsByProject($objectID);
+        $this->view->products    = $products;
+        $this->view->productID   = $productID;
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
 
         $this->display();

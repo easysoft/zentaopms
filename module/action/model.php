@@ -1086,7 +1086,7 @@ class actionModel extends model
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
             /* Get gitlab objectname. */
-            if(substr($objectType, 0,6) == 'gitlab') $action->objectName = $action->extra;
+            if(empty($action->objectName) and substr($objectType, 0, 6) == 'gitlab') $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             if(!$this->setObjectLink($action, $deptUsers))
@@ -1094,6 +1094,9 @@ class actionModel extends model
                 unset($actions[$i]);
                 continue;
             }
+
+            /* Set merge request link. */
+            if(empty($action->objectName) and $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
