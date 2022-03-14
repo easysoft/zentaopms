@@ -448,10 +448,10 @@ class executionModel extends model
         }
 
         $products = array_filter($this->post->products);
-        $noLink = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
+        $noLinkTip = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
         if(empty($products))
         {
-            dao::$errors['message'][] =$noLink;
+            dao::$errors['message'][] = $noLinkTip;
             return false;
         }
         /* Get the data from the post. */
