@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `vision` varchar(10) NOT NULL DEFAULT '',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `owner` char(30) NOT NULL default '',
   `module` varchar(30) NOT NULL,
   `section` char(30) NOT NULL default '',
