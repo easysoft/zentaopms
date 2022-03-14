@@ -72,12 +72,14 @@ class settingModel extends model
         if($replace) $owner = $account;
 
         $item = new stdclass();
-        $item->vision  = $vision;
         $item->owner   = $owner;
         $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
+
+        /* The setting of system.common has no vision. */
+        if($owner != 'system' or $module != 'common') $item->vision = $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
