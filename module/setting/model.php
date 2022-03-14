@@ -51,8 +51,8 @@ class settingModel extends model
     {
         /* Determine vision of config item. */
         $pathVision = explode('@', $path);
-        $vision = isset($pathVision[1]) ? $pathVision[1] : '';
-        $path   = $pathVision[0];
+        $vision     = isset($pathVision[1]) ? $pathVision[1] : '';
+        $path       = $pathVision[0];
 
         /* fix bug when account has dot. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
@@ -78,8 +78,7 @@ class settingModel extends model
         $item->key     = $key;
         $item->value   = $value;
 
-        /* If in upgrade, skip vision. */
-        if(!defined('IN_UPGRADE')) $item->vision = $vision;
+        if($vision) $item->vision = $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
