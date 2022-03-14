@@ -448,18 +448,12 @@ class executionModel extends model
         }
 
         $products = array_filter($this->post->products);
-        if($oldExecution->type == 'stage'|| $oldExecution->type == 'sprint' and empty($products))
+        $noLink = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
+        if(empty($products))
         {
-            dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
+            dao::$errors['message'][] =$noLink;
             return false;
         }
-
-        if($oldExecution->type == 'kanban' and empty($products))
-        {
-            dao::$errors['message'][] = $this->lang->execution->kanbanNoLinkProduct;
-            return false;
-        }
-
         /* Get the data from the post. */
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
