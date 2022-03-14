@@ -134,7 +134,7 @@ CREATE TABLE `zt_apistruct` (
   `lib` int(10) unsigned NOT NULL DEFAULT '0',
   `name` varchar(30) NOT NULL DEFAULT '',
   `type` varchar(50) NOT NULL DEFAULT '',
-  `desc` varchar(255) NOT NULL DEFAULT '',
+  `desc` text NOT NULL DEFAULT '',
   `version` smallint(5) unsigned NOT NULL DEFAULT '0',
   `attribute` text,
   `addedBy` varchar(30) NOT NULL DEFAULT '0',
@@ -3367,61 +3367,61 @@ CREATE TABLE `zt_zoutput` (
 /*!40101 SET character_set_client = @saved_cs_client */;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_dayactions` AS SELECT 
+/*!50001 CREATE VIEW `ztv_dayactions` AS SELECT
  1 AS `actions`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_daybugopen` AS SELECT 
+/*!50001 CREATE VIEW `ztv_daybugopen` AS SELECT
  1 AS `bugopen`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_daybugresolve` AS SELECT 
+/*!50001 CREATE VIEW `ztv_daybugresolve` AS SELECT
  1 AS `bugresolve`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_dayeffort` AS SELECT 
+/*!50001 CREATE VIEW `ztv_dayeffort` AS SELECT
  1 AS `consumed`,
  1 AS `date`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_daystoryclose` AS SELECT 
+/*!50001 CREATE VIEW `ztv_daystoryclose` AS SELECT
  1 AS `storyclose`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_daystoryopen` AS SELECT 
+/*!50001 CREATE VIEW `ztv_daystoryopen` AS SELECT
  1 AS `storyopen`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_daytaskfinish` AS SELECT 
+/*!50001 CREATE VIEW `ztv_daytaskfinish` AS SELECT
  1 AS `taskfinish`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_daytaskopen` AS SELECT 
+/*!50001 CREATE VIEW `ztv_daytaskopen` AS SELECT
  1 AS `taskopen`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_dayuserlogin` AS SELECT 
+/*!50001 CREATE VIEW `ztv_dayuserlogin` AS SELECT
  1 AS `userlogin`,
  1 AS `day`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_executionsummary` AS SELECT 
+/*!50001 CREATE VIEW `ztv_executionsummary` AS SELECT
  1 AS `execution`,
  1 AS `estimate`,
  1 AS `consumed`,
@@ -3432,7 +3432,7 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_productbugs` AS SELECT 
+/*!50001 CREATE VIEW `ztv_productbugs` AS SELECT
  1 AS `product`,
  1 AS `bugs`,
  1 AS `resolutions`,
@@ -3440,14 +3440,14 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_productstories` AS SELECT 
+/*!50001 CREATE VIEW `ztv_productstories` AS SELECT
  1 AS `product`,
  1 AS `stories`,
  1 AS `undone`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_projectbugs` AS SELECT 
+/*!50001 CREATE VIEW `ztv_projectbugs` AS SELECT
  1 AS `execution`,
  1 AS `bugs`,
  1 AS `resolutions`,
@@ -3455,14 +3455,14 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_projectstories` AS SELECT 
+/*!50001 CREATE VIEW `ztv_projectstories` AS SELECT
  1 AS `execution`,
  1 AS `stories`,
  1 AS `undone`*/;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_projectsummary` AS SELECT 
+/*!50001 CREATE VIEW `ztv_projectsummary` AS SELECT
  1 AS `project`,
  1 AS `estimate`,
  1 AS `consumed`,
@@ -3473,7 +3473,7 @@ SET character_set_client = utf8;
 SET character_set_client = @saved_cs_client;
 SET @saved_cs_client     = @@character_set_client;
 SET character_set_client = utf8;
-/*!50001 CREATE VIEW `ztv_projectteams` AS SELECT 
+/*!50001 CREATE VIEW `ztv_projectteams` AS SELECT
  1 AS `execution`,
  1 AS `teams`*/;
 SET character_set_client = @saved_cs_client;

@@ -98,7 +98,7 @@ CREATE TABLE `zt_apistruct` (
   `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(30)  NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
-  `desc` varchar(255) NOT NULL DEFAULT '',
+  `desc` text NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT 0,
   `attribute` text NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
