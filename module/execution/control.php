@@ -1961,7 +1961,8 @@ class execution extends control
     {
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
-        if(empty($execution) || strpos($this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban', $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
+        $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
+        if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
 
