@@ -3286,6 +3286,9 @@ class taskModel extends model
             case 'lastEditedDate':
                 echo substr($task->lastEditedDate, 5, 11);
                 break;
+            case 'activatedDate':
+                echo substr($task->activatedDate, 5, 11);
+                break;
             case 'actions':
                 if($storyChanged)
                 {
