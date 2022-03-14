@@ -950,4 +950,116 @@ class executionTest
             }
         }
     }
+
+    public function addProjectMembersTest($projectID = 0, $executionID, $count)
+    {
+        global $tester;
+        $tester->dbh->query("delete from zt_team where root = $projectID");
+        $executionMembers = $tester->dao->select('`root`,`account`,`join`,`role`,`days`,`type`,`hours`')->from(TABLE_TEAM)->where('root')->eq($executionID)->fetchAll('account');
+        $this->objectModel->addProjectMembers($projectID, $executionMembers);
+        $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($projectID)->fetchAll();
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function unlinkMemberTest($sprintID, $account, $count)
+    {
+        global $tester;
+        $oldObject = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($sprintID)->fetchAll();
+        $this->objectModel->unlinkMember($sprintID, $account);
+        $object = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($sprintID)->fetchAll();
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($oldObject);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function computeBurnTest($count)
+    {
+        $object = $this->objectModel->computeBurn();
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function fixFirstTest($executionID, $count, $param = array())
+    {
+        global $tester;
+        $date = date('Y-m-d');
+        $createFields = array('estimate' => '');
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+        $this->objectModel->computeBurn();
+        $this->objectModel->fixFirst($executionID);
+        unset($_POST);
+        $object = $tester->dao->select('*')->from(TABLE_BURN)->where('execution')->eq($executionID)->andWhere('date')->eq($date)->fetchAll();
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            if(empty($object))
+            {
+                return '无数据';
+            }
+            else
+            {
+                return $object;
+            }
+        }
+    }
+
+    public function getBurnDataFlotTest($executionID = 0, $count)
+    {
+        $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
 }

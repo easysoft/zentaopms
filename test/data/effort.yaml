@@ -1,0 +1,90 @@
+title: table zt_effort
+desc: "任务工时记录"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: "1-10000"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectType
+    note: "对象类型"
+    range: "custom"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: objectID
+    note: "对象ID"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "产品ID"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: project
+    note: "项目ID"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户账号"
+    fields:
+      - field: account1
+        range: admin,user{99}
+      - field: account2
+        range: [],1-99
+    format: ""
+  - field: work
+    note: "工作内容"
+    range: "1-10000"
+    prefix: "这是工作内容"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: date
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    prefix: "DateTime"
+    postfix: ""
+    format: "YY/MM/DD"
+  - field: left
+    note: "剩余"
+    range: "0"
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: consumed
+    note: "消耗"
+    range: 1-100:5
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: begin
+    note: "开始"
+    range: 1000-1059:2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: end
+    note: "结束"
+    range: 1400-1459:2
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
