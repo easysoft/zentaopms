@@ -179,4 +179,26 @@ class userTest
             return $objects;
         }
     }
+
+    /**
+     * Test get user by id.
+     * 
+     * @param  int|string $userID 
+     * @param  string     $field 
+     * @access public
+     * @return void
+     */
+    public function getByIdTest($userID, $field = 'account')
+    {
+        $objects = $this->objectModel->getById($userID, $field);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        else
+        {
+            return $objects;
+        }
+    }
 }
