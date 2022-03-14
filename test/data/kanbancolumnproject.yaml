@@ -5,8 +5,6 @@ version: "1.0"
 fields:
     - field: id
       range: 401-100000
-    - field: lane
-      range: "0"
     - field: parent
       range: "0"
     - field: type
@@ -23,8 +21,6 @@ fields:
       range: ""
     - field: order
       range: "0"
-    - field: cards
-      range: ""
     - field: archived
       range: "0"
     - field: deleted

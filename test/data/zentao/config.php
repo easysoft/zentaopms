@@ -3,6 +3,8 @@ $builder = new stdclass();
 
 $builder->company   = array('rows' => 1,    'extends' => array('company'));
 $builder->user      = array('rows' => 1000, 'extends' => array('user'));
+$builder->todo      = array('rows' => 2000, 'extends' => array('todo'));
+$builder->effort    = array('rows' => 100, 'extends' => array('effort'));
 $builder->usergroup = array('rows' => 600, 'extends' => array('usergroup'));
 $builder->dept      = array('rows' => 100,  'extends' => array('dept'));
 $builder->action    = array('rows' => 100,  'extends' => array('action'));
@@ -28,6 +30,8 @@ $builder->productline    = array('rows' => 20,  'extends' => array('module', 'pr
 $builder->productplan    = array('rows' => 30, 'extends' => array('productplan'));
 $builder->branch         = array('rows' => 240, 'extends' => array('branch'));
 $builder->projectproduct = array('rows' => 200, 'extends' => array('projectproduct'));
+$builder->projectstory   = array('rows' => 200, 'extends' => array('projectstory'));
+$builder->executionstory = array('rows' => 180, 'extends' => array('projectstory','executionstory'));
 
 $builder->kanbanspace  = array('rows' => 50, 'extends' => array('kanbanspace'));
 $builder->kanban       = array('rows' => 100, 'extends' => array('kanban'));

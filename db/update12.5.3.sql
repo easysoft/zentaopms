@@ -23,6 +23,9 @@ ALTER TABLE `zt_project` ADD `output` text NOT NULL AFTER `milestone`;
 ALTER TABLE `zt_project` ADD `lastEditedBy` varchar(30) NOT NULL DEFAULT '' AFTER `openedVersion`;
 ALTER TABLE `zt_project` ADD `lastEditedDate` datetime NOT NULL AFTER `lastEditedBy`;
 
+ALTER TABLE `zt_case` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
+ALTER TABLE `zt_case` ADD `execution` mediumint(8) unsigned NOT NULL AFTER `project`;
+
 ALTER TABLE `zt_action` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_bug` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_build` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
@@ -30,7 +33,6 @@ ALTER TABLE `zt_burn` CHANGE `project` `execution` mediumint(8) unsigned NOT NUL
 ALTER TABLE `zt_doc` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_relation` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_relation` CHANGE `program` `project` mediumint(8) unsigned NOT NULL;
-ALTER TABLE `zt_case` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_doclib` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_task` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
 ALTER TABLE `zt_testreport` CHANGE `project` `execution` mediumint(8) unsigned NOT NULL;
@@ -43,7 +45,6 @@ ALTER TABLE `zt_doclib` ADD `project` mediumint(8) unsigned NOT NULL AFTER `prod
 ALTER TABLE `zt_doc` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_story` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_bug` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
-ALTER TABLE `zt_case` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_testtask` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_testreport` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
 ALTER TABLE `zt_testsuite` ADD `project` mediumint(8) unsigned NOT NULL AFTER `id`;
