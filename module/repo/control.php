@@ -143,8 +143,7 @@ class repo extends control
 
         $products = $this->loadModel('product')->getProductPairsByProject($objectID);
 
-        $productID = '';
-        if(count($products) > 0) $productID = key($products);
+        $productID = count($products) > 0 ? key($products) : '';
 
         $this->view->title       = $this->lang->repo->common . $this->lang->colon . $this->lang->repo->create;
         $this->view->position[]  = $this->lang->repo->create;
