@@ -68,7 +68,9 @@ $routes['/tasks']                = 'tasks';
 $routes['/tasks/:id']            = 'task';
 $routes['/tasks/:id/assignto']   = 'taskAssignTo';
 $routes['/tasks/:id/start']      = 'taskStart';
+$routes['/tasks/:id/pause']      = 'taskPause';
 $routes['/tasks/:id/finish']     = 'taskFinish';
+$routes['/tasks/:id/close']      = 'taskClose';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';
