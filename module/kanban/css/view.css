@@ -81,6 +81,7 @@
 .kanban-item .has-color .info > .user .lable-teamSumCount,
 .kanban-item .has-color .info > .label-light {color: #FFFFFF;}
 .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
+.kanban-item .has-color .progress-box > .progress-number {color: #FFFFFF;}
 .kanban-item .item-more {position: absolute; right: 6px; top: 0px;}
 
 .kanban-card {height: auto !important; padding: 8px 14px !important; min-height: 60px;}
