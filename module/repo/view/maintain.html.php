@@ -36,7 +36,7 @@
           <td class='text-center'><?php echo $repo->id; ?></td>
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
           <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}&branchID=&objectID=$objectID"), $repo->name);?></td>
-          <td class='text'>
+          <td class='text product-line'>
           <?php
           $productList = explode(',', str_replace(' ', '', $repo->product));
           if(isset($productList) and $productList[0])
