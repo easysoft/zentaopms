@@ -44,11 +44,8 @@
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <?php if($project->model === 'waterfall'): ?>
-          <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
-          <?php else: ?>
-          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
-          <?php endif; ?>
+        <?php $labelClass = $project->model == 'waterfall' ? 'label-warning' : 'label-info';?>
+          <span class='project-type-label label <?php echo $labelClass;?> label-outline'><?php echo $lang->project->{$project->model};?></span>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
