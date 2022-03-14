@@ -2736,4 +2736,17 @@ class userModel extends model
 
         return $visionList;
     }
+
+    /**
+     * Switch admin of ZenTao.
+     *
+     * @access public
+     * @return void
+     */
+    public function su()
+    {
+        $company = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch();
+        $admins  = explode(',', trim($company->admins, ','));
+        $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($admins[0])->fetch();
+    }
 }

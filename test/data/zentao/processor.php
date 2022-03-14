@@ -246,6 +246,8 @@ class Processor
     private function initUpdateKanban()
     {
         $this->dao->query("update zt_kanbancolumn set `limit` = '-1' where id >= 1 and id <= 400");
+        $this->dao->query("update zt_kanbanspace set `whitelist` = '' where type in ('cooperation','public')");
+        $this->dao->query("update zt_kanbanspace set `team` = '' where type = 'private'");
 
         $kanban = $this->dao->select('id,type,region,name,color,`limit`,`order`')->from(TABLE_KANBANCOLUMN)->where('id')->gt('400')->fetchAll();
         $group = 101;

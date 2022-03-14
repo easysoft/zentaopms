@@ -640,6 +640,7 @@ class taskTest
 
     public function processTaskTest($task)
     {
+        $task->deadline = $task->deadline == '-1day' ? date('Y-m-d',strtotime('-1 day')) : date('Y-m-d',strtotime('+1 day'));
         $object = $this->objectModel->processTask($task);
 
         if(dao::isError())
@@ -652,9 +653,238 @@ class taskTest
         }
     }
 
-    public function processTasksTest($tasks)
+    public function processTasksTest($executionID)
     {
+        global $tester;
+        $tasks = $tester->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($executionID)->andWhere('deleted')->eq('0')->fetchAll('id');
+        $parents = '0';
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) $parents .= ",$task->parent";
+        }
+        $parents = $tester->dao->select('*')->from(TABLE_TASK)->where('`id`')->in($parents)->andWhere('deleted')->eq('0')->fetchAll('id');
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                    unset($tasks[$task->id]);
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
+                }
+            }
+        }
+
         $object = $this->objectModel->processTasks($tasks);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function processData4ReportTest($tasks, $children, $field)
+    {
+        $object = $this->objectModel->processData4Report($tasks, $children, $field);
+
+        $object['void'] = isset($object['']) ? $object[''] : 'void';
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if($field == 'deadline')
+            {
+                $dateList = array(date('Y-m-d',strtotime('-8 day')), date('Y-m-d',strtotime('-15 day')));
+                return array($object[$dateList[0]], $object[$dateList[1]]);
+            }
+            return count($object) == 0 ? array('void' => 'void') : $object;
+        }
+    }
+
+    public function getDataOfTasksPerExecutionTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerExecution();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerModuleTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerModule();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerAssignedToTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerAssignedTo();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerTypeTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerType();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerPriTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerPri();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerDeadlineTest($dateID)
+    {
+        $dateList = array(date('Y-m-d',strtotime('+1 day')), date('Y-m-d',strtotime('+2 day')), date('Y-m-d',strtotime('+3 day')), date('Y-m-d',strtotime('+4 day')), date('Y-m-d',strtotime('-1 day')), date('Y-m-d',strtotime('-2 day')), date('Y-m-d',strtotime('-3 day')), date('Y-m-d',strtotime('-4 day')));
+        $object = $this->objectModel->getDataOfTasksPerDeadline();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return array($dateID => $object[$dateList[$dateID]]);
+        }
+    }
+
+    public function getDataOfTasksPerEstimateTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerEstimate();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerLeftTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerLeft();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerConsumedTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerConsumed();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerFinishedByTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerFinishedBy();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerClosedReasonTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerClosedReason();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOffinishedTasksPerDayTest()
+    {
+        $object = $this->objectModel->getDataOffinishedTasksPerDay();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getDataOfTasksPerStatusTest()
+    {
+        $object = $this->objectModel->getDataOfTasksPerStatus();
 
         if(dao::isError())
         {

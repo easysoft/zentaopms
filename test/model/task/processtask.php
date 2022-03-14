@@ -19,11 +19,9 @@ pid=1
 
 */
 
-$now = helper::now();
-
 $task1 = new stdclass();
 $task1->status             = 'wait';
-$task1->deadline           = date("Y-m-d",strtotime("+1 day"));
+$task1->deadline           = '+1day';
 $task1->storyStatus        = 'draft';
 $task1->latestStoryVersion = '1';
 $task1->storyVersion       = '1';
@@ -34,7 +32,7 @@ $task1->left               = '1';
 
 $task2 = new stdclass();
 $task2->status             = 'doing';
-$task2->deadline           = date("Y-m-d",strtotime("-1 day"));
+$task2->deadline           = '-1day';
 $task2->storyStatus        = 'draft';
 $task2->latestStoryVersion = '1';
 $task2->storyVersion       = '1';
@@ -45,7 +43,7 @@ $task2->left               = '1';
 
 $task3 = new stdclass();
 $task3->status             = 'doing';
-$task3->deadline           = date("Y-m-d",strtotime("-1 day"));
+$task3->deadline           = '-1day';
 $task3->storyStatus        = 'draft';
 $task3->latestStoryVersion = '1';
 $task3->storyVersion       = '1';
@@ -56,7 +54,7 @@ $task3->left               = '1';
 
 $task4 = new stdclass();
 $task4->status             = 'doing';
-$task4->deadline           = date("Y-m-d",strtotime("+1 day"));
+$task4->deadline           = '+1day';
 $task4->storyStatus        = 'draft';
 $task4->latestStoryVersion = '1';
 $task4->storyVersion       = '1';
@@ -67,8 +65,7 @@ $task4->left               = '1';
 
 $task5 = new stdclass();
 $task5->status             = 'done';
-$task5->deadline           = date("Y-m-d",strtotime("-1 day"));
-$task5->deadline           = '2022-03-10';
+$task5->deadline           = '-1day';
 $task5->storyStatus        = 'draft';
 $task5->latestStoryVersion = '1';
 $task5->storyVersion       = '1';
@@ -79,7 +76,7 @@ $task5->left               = '0';
 
 $task6 = new stdclass();
 $task6->status             = 'done';
-$task6->deadline           = date("Y-m-d",strtotime("+1 day"));
+$task6->deadline           = '+1day';
 $task6->storyStatus        = 'draft';
 $task6->latestStoryVersion = '1';
 $task6->storyVersion       = '1';

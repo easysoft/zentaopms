@@ -98,7 +98,7 @@ CREATE TABLE `zt_apistruct` (
   `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(30)  NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
-  `desc` varchar(255) NOT NULL DEFAULT '',
+  `desc` text NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT 0,
   `attribute` text NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `vision` varchar(10) NOT NULL DEFAULT '',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `owner` char(30) NOT NULL default '',
   `module` varchar(30) NOT NULL,
   `section` char(30) NOT NULL default '',
@@ -724,7 +724,7 @@ CREATE TABLE `zt_kanbancard` (
   `fromID` mediumint(8) unsigned NOT NULL,
   `fromType` varchar(30) NOT NULL,
   `name` varchar(255) NOT NULL,
-  `status` varchar(30) NOT NULL,
+  `status` varchar(30) NOT NULL DEFAULT 'doing',
   `pri` mediumint(8) unsigned NOT NULL,
   `assignedTo` text NOT NULL,
   `desc` text NOT NULL,
@@ -786,7 +786,6 @@ CREATE TABLE IF NOT EXISTS `zt_kanbanlane` (
 -- DROP TABLE IF EXISTS `zt_kanbancolumn`;
 CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `id` int(8) NOT NULL AUTO_INCREMENT,
-  `lane` mediumint(8) NOT NULL DEFAULT '0',
   `parent` mediumint(8) NOT NULL DEFAULT '0',
   `type` char(30) NOT NULL,
   `region` mediumint(8) unsigned NOT NULL,
@@ -795,7 +794,6 @@ CREATE TABLE IF NOT EXISTS `zt_kanbancolumn` (
   `color` char(30) NOT NULL,
   `limit` smallint(6) NOT NULL DEFAULT '-1',
   `order` mediumint(8) NOT NULL DEFAULT '0',
-  `cards` text NULL,
   `archived` enum('0', '1') NOT NULL DEFAULT '0',
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
@@ -5979,232 +5977,6 @@ INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11,'user','view'),
 (12,'my','limited');
 
-INSERT INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
-(14,'action','comment'),
-(14,'action','editComment'),
-(14,'action','trash'),
-(14,'action','undelete'),
-(14,'admin','checkWeak'),
-(14,'admin','index'),
-(14,'admin','safe'),
-(14,'api','debug'),
-(14,'company','browse'),
-(14,'company','dynamic'),
-(14,'company','edit'),
-(14,'company','index'),
-(14,'company','view'),
-(14,'custom','execution'),
-(14,'custom','flow'),
-(14,'custom','index'),
-(14,'custom','product'),
-(14,'custom','restore'),
-(14,'custom','set'),
-(14,'custom','setPublic'),
-(14,'datatable','setGlobal'),
-(14,'dept','browse'),
-(14,'dept','delete'),
-(14,'dept','edit'),
-(14,'dept','manageChild'),
-(14,'dept','updateOrder'),
-(14,'dev','api'),
-(14,'dev','db'),
-(14,'dev','editor'),
-(14,'doc','allLibs'),
-(14,'doc','browse'),
-(14,'doc','collect'),
-(14,'doc','create'),
-(14,'doc','createLib'),
-(14,'doc','delete'),
-(14,'doc','deleteFile'),
-(14,'doc','deleteLib'),
-(14,'doc','edit'),
-(14,'doc','editLib'),
-(14,'doc','index'),
-(14,'doc','objectLibs'),
-(14,'doc','showFiles'),
-(14,'doc','tableContents'),
-(14,'doc','view'),
-(14,'execution','all'),
-(14,'execution','browse'),
-(14,'execution','bug'),
-(14,'execution','build'),
-(14,'execution','burn'),
-(14,'execution','burnData'),
-(14,'execution','computeBurn'),
-(14,'execution','doc'),
-(14,'execution','dynamic'),
-(14,'execution','executionkanban'),
-(14,'execution','fixFirst'),
-(14,'execution','grouptask'),
-(14,'execution','kanban'),
-(14,'execution','manageMembers'),
-(14,'execution','printKanban'),
-(14,'execution','story'),
-(14,'execution','storyEstimate'),
-(14,'execution','storyKanban'),
-(14,'execution','task'),
-(14,'execution','team'),
-(14,'execution','tree'),
-(14,'execution','treeStory'),
-(14,'execution','treeTask'),
-(14,'execution','view'),
-(14,'execution','whitelist'),
-(14,'file','delete'),
-(14,'file','download'),
-(14,'file','edit'),
-(14,'file','setPublic'),
-(14,'file','uploadImages'),
-(14,'group','browse'),
-(14,'index','index'),
-(14,'message','browser'),
-(14,'message','index'),
-(14,'message','setting'),
-(14,'misc','ping'),
-(14,'my','bug'),
-(14,'my','calendar'),
-(14,'my','changePassword'),
-(14,'my','contribute'),
-(14,'my','deleteContacts'),
-(14,'my','doc'),
-(14,'my','dynamic'),
-(14,'my','editProfile'),
-(14,'my','execution'),
-(14,'my','index'),
-(14,'my','manageContacts'),
-(14,'my','preference'),
-(14,'my','profile'),
-(14,'my','project'),
-(14,'my','score'),
-(14,'my','story'),
-(14,'my','task'),
-(14,'my','team'),
-(14,'my','todo'),
-(14,'my','uploadAvatar'),
-(14,'my','work'),
-(14,'personnel','accessible'),
-(14,'personnel','invest'),
-(14,'personnel','whitelist'),
-(14,'product','all'),
-(14,'product','browse'),
-(14,'product','build'),
-(14,'product','dashboard'),
-(14,'product','dynamic'),
-(14,'product','index'),
-(14,'product','kanban'),
-(14,'product','project'),
-(14,'product','roadmap'),
-(14,'product','view'),
-(14,'product','whitelist'),
-(14,'productplan','browse'),
-(14,'productplan','view'),
-(14,'program','browse'),
-(14,'program','kanban'),
-(14,'program','product'),
-(14,'program','project'),
-(14,'program','stakeholder'),
-(14,'program','view'),
-(14,'project','browse'),
-(14,'project','bug'),
-(14,'project','build'),
-(14,'project','create'),
-(14,'project','dynamic'),
-(14,'project','edit'),
-(14,'project','execution'),
-(14,'project','index'),
-(14,'project','kanban'),
-(14,'project','manageMembers'),
-(14,'project','programTitle'),
-(14,'project','qa'),
-(14,'project','team'),
-(14,'project','testcase'),
-(14,'project','testreport'),
-(14,'project','testtask'),
-(14,'project','view'),
-(14,'project','whitelist'),
-(14,'projectbuild','browse'),
-(14,'projectrelease','browse'),
-(14,'projectrelease','view'),
-(14,'projectstory','story'),
-(14,'projectstory','track'),
-(14,'projectstory','view'),
-(14,'report','bugAssign'),
-(14,'report','bugCreate'),
-(14,'report','index'),
-(14,'report','productSummary'),
-(14,'report','projectDeviation'),
-(14,'report','workload'),
-(14,'search','buildForm'),
-(14,'search','buildIndex'),
-(14,'search','buildQuery'),
-(14,'search','deleteQuery'),
-(14,'search','index'),
-(14,'search','saveQuery'),
-(14,'search','select'),
-(14,'story','bugs'),
-(14,'story','cases'),
-(14,'story','report'),
-(14,'story','tasks'),
-(14,'story','track'),
-(14,'story','view'),
-(14,'task','activate'),
-(14,'task','assignTo'),
-(14,'task','batchAssignTo'),
-(14,'task','batchCancel'),
-(14,'task','batchChangeModule'),
-(14,'task','batchClose'),
-(14,'task','batchCreate'),
-(14,'task','batchEdit'),
-(14,'task','cancel'),
-(14,'task','close'),
-(14,'task','confirmStoryChange'),
-(14,'task','create'),
-(14,'task','delete'),
-(14,'task','deleteEstimate'),
-(14,'task','edit'),
-(14,'task','editEstimate'),
-(14,'task','export'),
-(14,'task','finish'),
-(14,'task','pause'),
-(14,'task','recordEstimate'),
-(14,'task','report'),
-(14,'task','restart'),
-(14,'task','start'),
-(14,'task','view'),
-(14,'todo','activate'),
-(14,'todo','assignTo'),
-(14,'todo','batchClose'),
-(14,'todo','batchCreate'),
-(14,'todo','batchEdit'),
-(14,'todo','batchFinish'),
-(14,'todo','close'),
-(14,'todo','create'),
-(14,'todo','createcycle'),
-(14,'todo','delete'),
-(14,'todo','edit'),
-(14,'todo','export'),
-(14,'todo','finish'),
-(14,'todo','import2Today'),
-(14,'todo','start'),
-(14,'todo','view'),
-(14,'tree','browse'),
-(14,'tree','browseTask'),
-(14,'tree','delete'),
-(14,'tree','edit'),
-(14,'tree','fix'),
-(14,'tree','manageChild'),
-(14,'tree','updateOrder'),
-(14,'user','batchEdit'),
-(14,'user','cropAvatar'),
-(14,'user','dynamic'),
-(14,'user','execution'),
-(14,'user','issue'),
-(14,'user','profile'),
-(14,'user','risk'),
-(14,'user','story'),
-(14,'user','task'),
-(14,'user','todo'),
-(14,'user','view');
-
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('zh-cn', 'custom', 'URSRList', '1', '{\"SRName\":\"\\u8f6f\\u4ef6\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),('zh-cn', 'custom', 'URSRList', '2', '{\"SRName\":\"\\u7814\\u53d1\\u9700\\u6c42\",\"URName\":\"\\u7528\\u6237\\u9700\\u6c42\"}', '1'),
 ('zh-cn', 'custom', 'URSRList', '3', '{\"SRName\":\"\\u8f6f\\u9700\",\"URName\":\"\\u7528\\u9700\"}', '1'),('zh-cn', 'custom', 'URSRList', '4', '{\"SRName\":\"\\u6545\\u4e8b\",\"URName\":\"\\u53f2\\u8bd7\"}', '1'),
@@ -7039,8 +6811,6 @@ ALTER TABLE `zt_story` ADD `feedback` mediumint(8) unsigned NOT NULL DEFAULT '0'
 ALTER TABLE `zt_user`  ADD `feedback` enum('0', '1') NOT NULL DEFAULT '0' AFTER `locked`;
 ALTER TABLE `zt_group` ADD `developer` enum('0', '1') NOT NULL DEFAULT '1' AFTER `acl`;
 
-INSERT INTO `zt_group` (`name`, `role`, `desc`, `acl`, `developer`) VALUES ('FEEDBACK', 'feedback', 'Feedback', '', '0');
-
 -- DROP TABLE IF EXISTS `zt_feedbackproduct`;
 CREATE TABLE IF NOT EXISTS `zt_feedbackview` (
   `account` char(30) NOT NULL,
@@ -7585,7 +7355,7 @@ CREATE VIEW `view_datasource_5`  AS select `id`,`name` from `zt_task` where `del
 DROP VIEW IF EXISTS `view_datasource_46`;
 CREATE VIEW `view_datasource_46` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 
-UPDATE `zt_user` SET `visions` = 'lite' WHERE `feedback` = '1';
+UPDATE `zt_user` SET `visions` = 'lite', `feedback` = '0' WHERE `feedback` = '1';
 
 REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (1,'account','browse'),
@@ -9842,7 +9612,6 @@ CREATE TABLE IF NOT EXISTS `zt_trainplan` (
   `deleted` enum('0','1') NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
-ALTER TABLE `zt_todo` CHANGE `type` `type` char(15) NOT NULL AFTER `feedback`;
 
 -- DROP TABLE IF EXISTS `zt_gapanalysis`;
 CREATE TABLE IF NOT EXISTS `zt_gapanalysis` (
@@ -13118,6 +12887,15 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 (11,'workloadbudget','unlink'),
 (11,'workloadbudget','view');
 
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`, 14 from `zt_grouppriv` where `group` = 1;
+
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`, 15 from `zt_grouppriv` where `group` = 4;
+
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`, 16 from `zt_grouppriv` where `group` = 9;
+
 REPLACE INTO `zt_lang` (`lang`, `module`, `section`, `key`, `value`, `system`) VALUES
 ('all', 'process', 'classify', 'support', '支持过程', '1'),
 ('all', 'process', 'classify', 'engineering', '工程支持', '1'),
@@ -13411,3 +13189,442 @@ CREATE TABLE IF NOT EXISTS `zt_sqlview` (
   `deleted` enum('0','1') NOT NULL default '0',
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+SET global log_bin_trust_function_creators = 1;
+SET global sql_mode = '';
+USE `__TABLE__`;
+
+DROP FUNCTION IF EXISTS `get_monday`;
+CREATE FUNCTION `get_monday`(day date) RETURNS date
+  begin if date_format(day, '%w') = 0 then return subdate(day, date_format(day, '%w') - 6)__DELIMITER__
+  else  return subdate(day, date_format(day, '%w') -1)__DELIMITER__
+  end if__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `get_sunday`;
+CREATE FUNCTION `get_sunday`(day date) RETURNS date
+begin
+  if date_format(day, '%w') = 0 then return day__DELIMITER__
+  else return subdate(day, date_format(day, '%w') - 7)__DELIMITER__
+  end if__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_cminited`;
+CREATE FUNCTION qc_cminited($project int, $category varchar(30)) returns int
+begin
+    declare products int default 0__DELIMITER__
+    declare objects  int default 0__DELIMITER__
+    select count(*) from zt_projectproduct where project = $project into products__DELIMITER__
+    select count(distinct product) from zt_object where project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) into objects__DELIMITER__
+    IF products = objects THEN
+    return 1__DELIMITER__
+    ELSEIF products != objects THEN
+    return 0__DELIMITER__
+    END IF__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_initscale`;
+CREATE FUNCTION qc_initscale($project int, $category varchar(30), $estimateType varchar(30)) RETURNS float(10,2)
+BEGIN
+    declare $estimate int default 0__DELIMITER__
+    declare $storyEst varchar(30) default 'storyEst'__DELIMITER__
+    declare $requestEst varchar(30) default 'requestEst'__DELIMITER__
+    if($estimateType = $storyEst) THEN SELECT sum(storyEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+    end if__DELIMITER__
+    if($estimateType = $requestEst) THEN SELECT sum(requestEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = $category and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+    end if__DELIMITER__
+    RETURN @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmplanscale`;
+CREATE FUNCTION `qc_pgmplanscale`($project int) RETURNS float(10,2)
+BEGIN
+   declare programScale float (10,2) default 0__DELIMITER__
+   select `scale` from zt_workestimation where project = $project into @programScale__DELIMITER__
+   return @programScale__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmsrinitscale`;
+CREATE FUNCTION `qc_pgmsrinitscale`($project int) RETURNS float(10,2)
+begin
+    declare scale int default 0__DELIMITER__
+    declare inited int default 0__DELIMITER__
+    select qc_cminited($project, 'SRS') into inited__DELIMITER__
+    IF inited = 1 THEN
+    select qc_initscale($project, 'SRS', 'storyEst') into scale __DELIMITER__
+    return scale __DELIMITER__
+    ELSE
+    return 0__DELIMITER__
+    END IF__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmsrrealscale`;
+CREATE FUNCTION `qc_pgmsrrealscale`($project int) RETURNS float(10,2)
+BEGIN
+  declare totalEstimate float(10,2) default 0__DELIMITER__
+  select CAST(sum(estimate) as DECIMAL(10,2)) as estimate from zt_story where id in (select story from zt_projectstory where project=$project) and type='story' and deleted='0' and closedReason not in ('subdivided', 'duplicate', 'willnotdo', 'cancel', 'bydesign') into totalEstimate__DELIMITER__
+  return totalEstimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmurinitscale`;
+CREATE FUNCTION `qc_pgmurinitscale`($project int) RETURNS float(10,2)
+begin
+    declare scale int default 0__DELIMITER__
+    declare inited int default 0__DELIMITER__
+    select qc_cminited($project, 'URS') into inited__DELIMITER__
+    IF inited = 1 THEN
+    select qc_initscale($project, 'URS', 'requestEst') into scale__DELIMITER__
+    return scale__DELIMITER__
+    ELSE
+    return 0__DELIMITER__
+    END IF__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmurrealscale`;
+CREATE FUNCTION `qc_pgmurrealscale`($project int) RETURNS float(10,2)
+BEGIN
+  declare totalEstimate float(10,2) default 0__DELIMITER__
+  select CAST(sum(estimate) as DECIMAL(10,2)) as estimate from zt_story where project=$project and type='requirement' and deleted='0' and closedReason not in ('subdivided', 'duplicate', 'willnotdo', 'cancel', 'bydesign') into totalEstimate__DELIMITER__
+  return totalEstimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmallrequirementstage`;
+CREATE FUNCTION `qc_pgmallrequirementstage`($project int) RETURNS int(1)
+BEGIN
+    -- 获取项目产品总数
+    select count(*) as products from zt_projectproduct where project = $project into @totalproduct__DELIMITER__
+    -- 获取已经设置需求阶段的产品总数
+    select count(*) as product from (select product from zt_projectproduct where project in (select id from zt_project where project = $project and type = 'stage' and attribute = 'request' and deleted = '0') GROUP BY product) as product into @product__DELIMITER__
+    -- 让项目产品总数和已设置需求阶段产品总数比较,都设置返回1,否则返回0
+    if @totalproduct = @product then return 1__DELIMITER__
+    end if__DELIMITER__
+    RETURN 0__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdesigntplandays`;
+CREATE FUNCTION `qc_pgmdesigntplandays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeplanneddays($project,'design') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdesigntrealdays`;
+CREATE FUNCTION `qc_pgmdesigntrealdays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeactualdays($project,'design') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdevelplandays`;
+CREATE FUNCTION `qc_pgmdevelplandays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeplanneddays($project,'dev') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdevelrealdays`;
+CREATE FUNCTION `qc_pgmdevelrealdays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeactualdays($project,'dev') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrequestplandays`;
+CREATE FUNCTION `qc_pgmrequestplandays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeplanneddays($project,'request') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrequestrealdays`;
+CREATE FUNCTION `qc_pgmrequestrealdays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeactualdays($project,'request') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmspecifiedtypeactualdays`;
+CREATE FUNCTION `qc_pgmspecifiedtypeactualdays`($project int,$attribute varchar(50)) RETURNS int(10)
+BEGIN
+    -- 查询某类型的阶段总数
+    select count(*) from zt_project where project = $project and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @totalstory__DELIMITER__
+    -- 查询某类型已设置实际工期的阶段总数
+    select count(*) from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @setstory__DELIMITER__
+    -- 查询项目下某类型阶段实际工期总数
+    select sum(realDuration) as realDuration from zt_project where project = $project and attribute = $attribute and deleted = '0' and realDuration > 0 and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @days__DELIMITER__
+    -- 判断项目下某类型的阶段是否都已设置实际工期
+    if @totalstory != @setstory then
+        set @days = 0__DELIMITER__
+    end if__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmspecifiedtypeplanneddays`;
+CREATE FUNCTION `qc_pgmspecifiedtypeplanneddays`($project int,$attribute varchar(50)) RETURNS int(10)
+BEGIN
+    select sum(planDuration) as planDuration from zt_project where project = $project and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where project = $project and attribute = $attribute and grade = 2 group by parent) into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmstageactualduration`;
+CREATE FUNCTION `qc_pgmstageactualduration`($product int, $attribute varchar(50)) RETURNS int(10)
+BEGIN
+    -- 查找某类型的阶段总数
+    select count(*) as totalduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) into @totalduration__DELIMITER__
+    -- 查某类型阶段已设置实际工期的总数
+    select count(*) as setduration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @setduration__DELIMITER__
+    -- 指定产品下某类型的阶段实际工期总和
+    select sum(realDuration) as duration from zt_project where id in (select project from zt_projectproduct where product = $product) and type = 'stage' and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and realDuration > 0 into @duration__DELIMITER__
+    -- 需要判断该类型阶段都已设置实际工期,否则不统计
+    if @totalduration != @setduration then
+        set @duration = 0__DELIMITER__
+    end if__DELIMITER__
+    return @duration__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmstageplannedduration`;
+CREATE FUNCTION `qc_pgmstageplannedduration`($product int, $attribute varchar(50)) RETURNS int(10)
+BEGIN
+    -- 查找某产品对应阶段
+    select sum(planDuration) as duration from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and deleted = '0' and id not in (select parent from zt_project where id in (select project from zt_projectproduct where product = $product) and attribute = $attribute and grade = 2 group by parent) and planDuration > 0 into @duration__DELIMITER__
+    RETURN @duration__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmtestplandays`;
+CREATE FUNCTION `qc_pgmtestplandays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeplanneddays($project,'qa') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmtestrealdays`;
+CREATE FUNCTION `qc_pgmtestrealdays`($project int) RETURNS int(10)
+BEGIN
+    select qc_pgmspecifiedtypeactualdays($project,'qa') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prddesigntplandays`;
+CREATE FUNCTION `qc_prddesigntplandays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageplannedduration($project, $product, 'design') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prddesigntrealdays`;
+CREATE FUNCTION `qc_prddesigntrealdays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageactualduration($project, $product, 'design') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prddevelplandays`;
+CREATE FUNCTION `qc_prddevelplandays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageplannedduration($project, $product, 'dev') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prddevelrealdays`;
+CREATE FUNCTION `qc_prddevelrealdays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageactualduration($project, $product, 'dev') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prdrequestplandays`;
+CREATE FUNCTION `qc_prdrequestplandays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageplannedduration($project, $product, 'request') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prdrequestrealdays`;
+CREATE FUNCTION `qc_prdrequestrealdays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageactualduration($project, $product, 'request') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prdtestplandays`;
+CREATE FUNCTION `qc_prdtestplandays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageplannedduration($project, $product, 'qa') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_prdtestrealdays`;
+CREATE FUNCTION `qc_prdtestrealdays`($project int, $product int) RETURNS int(10)
+BEGIN
+    select qc_pgmstageactualduration($project, $product, 'qa') as days into @days__DELIMITER__
+    return @days__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdesgignrealesthours`;
+CREATE FUNCTION `qc_pgmdesgignrealesthours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmesthoursbytype($project, 'design')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdesignrealhours`;
+CREATE FUNCTION `qc_pgmdesignrealhours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmrealhoursbytype($project, 'design')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdevelrealesthours`;
+CREATE FUNCTION `qc_pgmdevelrealesthours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmesthoursbytype($project, 'devel')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmdevelrealhours`;
+CREATE FUNCTION `qc_pgmdevelrealhours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmrealhoursbytype($project, 'devel')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrealesthours`;
+CREATE FUNCTION `qc_pgmrealesthours`($project int) RETURNS float(10,2)
+BEGIN
+  select CAST(sum(estimate) as DECIMAL(10,2)) as estimate from zt_task where project=$project and parent >= 0 and status != 'cancel' and deleted = '0' into @estimate__DELIMITER__
+  return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmesthoursbytype`;
+CREATE FUNCTION `qc_pgmesthoursbytype`($project int, $type char(30)) RETURNS float(10,2)
+BEGIN
+  select CAST(sum(estimate) as DECIMAL(10,2)) as estimate from zt_task where project=$project and type = $type and parent >= 0 and status != 'cancel' and deleted = '0' into @estimate__DELIMITER__
+  return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrealhours`;
+CREATE FUNCTION `qc_pgmrealhours`($project int) RETURNS float(10,2)
+BEGIN
+  select CAST(sum(consumed) as DECIMAL(10,2)) as consumed from zt_task where project=$project and parent >= 0 and status != 'cancel' and deleted = '0' into @consumed__DELIMITER__
+  return @consumed__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrealhoursbytype`;
+CREATE FUNCTION `qc_pgmrealhoursbytype`($project int, $type char(30)) RETURNS float(10,2)
+BEGIN
+  select CAST(sum(consumed) as DECIMAL(10,2)) as consumed from zt_task where project=$project and type = $type and parent >= 0 and status != 'cancel' and deleted = '0' into @consumed__DELIMITER__
+  return @consumed__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrequestrealesthours`;
+CREATE FUNCTION `qc_pgmrequestrealesthours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmesthoursbytype($project, 'request')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmrequestrealhours`;
+CREATE FUNCTION `qc_pgmrequestrealhours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmrealhoursbytype($project, 'request')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmtestrealesthours`;
+CREATE FUNCTION `qc_pgmtestrealesthours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmesthoursbytype($project, 'test')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmtestrealhours`;
+CREATE FUNCTION `qc_pgmtestrealhours`($project int) RETURNS float(10,2)
+BEGIN
+return qc_pgmrealhoursbytype($project, 'test')__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getdevelfirstesthours`;
+CREATE FUNCTION `qc_getdevelfirstesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(devEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getdesignfirstesthours`;
+CREATE FUNCTION `qc_getdesignfirstesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(designEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getstoryfirstesthours`;
+CREATE FUNCTION `qc_getstoryfirstesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(requestEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_gettestfirstesthours`;
+CREATE FUNCTION `qc_gettestfirstesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(testEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getfirstesthours`;
+CREATE FUNCTION `qc_getfirstesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(taskEst) as estimate FROM zt_object WHERE id in(SELECT MIN(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getdevlastesthours`;
+CREATE FUNCTION `qc_getdevlastesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(devEst) as estimate FROM zt_object WHERE id in(SELECT MAX(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getrequestlastesthours`;
+CREATE FUNCTION `qc_getrequestlastesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(requestEst) as estimate FROM zt_object WHERE id in(SELECT MAX(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_gettestlastesthours`;
+CREATE FUNCTION `qc_gettestlastesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(testEst) as estimate FROM zt_object WHERE id in(SELECT MAX(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getdesignlastesthours`;
+CREATE FUNCTION `qc_getdesignlastesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(designEst) as estimate FROM zt_object WHERE id in(SELECT MAX(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_getlastesthours`;
+CREATE FUNCTION `qc_getlastesthours`($project int) RETURNS float(10,2)
+BEGIN
+    SELECT sum(taskEst) as estimate FROM zt_object WHERE id in(SELECT MAX(id) FROM zt_object WHERE project = $project and category = 'PP' and type = 'taged' and product in (select product from zt_projectproduct where project = $project) group by `product`) into @estimate__DELIMITER__
+
+    return @estimate__DELIMITER__
+END;
+
+DROP FUNCTION IF EXISTS `qc_pgmlastesthours`;
+CREATE FUNCTION `qc_pgmlastesthours`($project int) RETURNS float(10,2)
+BEGIN
+    declare estimate float(10,2) default 0__DELIMITER__
+    declare inited int default 0__DELIMITER__
+    select qc_cminited($project,'PP') into inited__DELIMITER__
+    IF inited = 1 THEN
+    select qc_getlastesthours($project) into estimate__DELIMITER__
+    return estimate__DELIMITER__
+    ELSE
+    return 0__DELIMITER__
+    END IF__DELIMITER__
+END;

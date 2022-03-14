@@ -18,14 +18,14 @@ pid=1
 测试修改任务状态 >> status,cancel,doing
 测试修改任务优先级 >> pri,2,1
 测试修改任务所属执行 >> execution,107,101
-测试修改任务预计开始时间 >> estStarted,2022-03-11,2022-02-27
-测试修改任务截止时间 >> deadline,2022-03-10,2022-03-11
+测试修改任务预计开始时间 >> estStarted,2022-03-14,2022-02-27
+测试修改任务截止时间 >> deadline,2022-03-13,2022-03-29
 测试修改任务关闭原因 >>  『关闭原因』必须为空。
 
 */
 
 $estStarted = '2022-02-27';
-$deadline   = '2022-03-11';
+$deadline   = '2022-03-29';
 $taskIDList = array('1','2','3','4','5','6','7','8','9');
 
 $changename       = array('name' => '任务名修改','estStarted' => $estStarted,'deadline' => $deadline);
@@ -48,8 +48,8 @@ r($task->updateObject($taskIDList[3], $changetype))       && p('0:field,old,new'
 r($task->updateObject($taskIDList[4], $changestatus))     && p('0:field,old,new') && e('status,cancel,doing');              // 测试修改任务状态
 r($task->updateObject($taskIDList[5], $changepri))        && p('0:field,old,new') && e('pri,2,1');                          // 测试修改任务优先级
 r($task->updateObject($taskIDList[6], $changeexecution))  && p('0:field,old,new') && e('execution,107,101');                // 测试修改任务所属执行
-r($task->updateObject($taskIDList[7], $changeestStarted)) && p('0:field,old,new') && e('estStarted,2022-03-11,2022-02-27'); // 测试修改任务预计开始时间
-r($task->updateObject($taskIDList[8], $changedeadline))   && p('0:field,old,new') && e('deadline,2022-03-10,2022-03-11');   // 测试修改任务截止时间
+r($task->updateObject($taskIDList[7], $changeestStarted)) && p('0:field,old,new') && e('estStarted,2022-03-14,2022-02-27'); // 测试修改任务预计开始时间
+r($task->updateObject($taskIDList[8], $changedeadline))   && p('0:field,old,new') && e('deadline,2022-03-13,2022-03-29');   // 测试修改任务截止时间
 r($task->updateObject($taskIDList[0], $ckclosedReason))   && p('closedReason:0')  && e(' 『关闭原因』必须为空。');          // 测试修改任务关闭原因
 
 system("./ztest init");

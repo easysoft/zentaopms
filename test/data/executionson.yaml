@@ -2,6 +2,8 @@ title: table zt_execution
 author: Zhu Jinyong
 version: "1.0"
 fields:
+  - field: id
+    range: 701-730
   - field: name
     note: "名称"
     fields:
@@ -30,13 +32,16 @@ fields:
     range: 131-160
   - field: path
     fields:
-     - field: grade1
+     - field: path1
        prefix: ","
-       postfix: ","
+       range: 41-70
+     - field: path2
+       prefix: ","
        range: 131-160
-     - field: self
+     - field: path6
+       prefix: ","
+       range: [701-730]
        postfix: ","
-       range: 701-730
   - field: acl
     range: open{4},private{4}
   - field: PO

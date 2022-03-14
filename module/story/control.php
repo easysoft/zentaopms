@@ -1233,7 +1233,6 @@ class story extends control
         /* Set menu. */
         if($this->app->tab == 'project')
         {
-            $this->app->rawModule = 'projectstory';
             $this->loadModel('project')->setMenu($this->session->project);
         }
         elseif($this->app->tab == 'product')

@@ -2670,7 +2670,7 @@ class kanbanModel extends model
      */
     public function activateCard($cardID)
     {
-        if($this->post->progress > 100 or $this->post->progress < 0)
+        if($this->post->progress >= 100 or $this->post->progress < 0)
         {
             dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
             return false;
@@ -2721,8 +2721,8 @@ class kanbanModel extends model
             ->remove('uid')
             ->get();
 
-        if(isset($card->assignedTo))  $card->assignedTo = trim($card->assignedTo, ',');
-        if(!isset($card->assignedTo)) $card->assignedTo = '';
+        $card->assignedTo = isset($card->assignedTo) ? trim($card->assignedTo, ',') : '';
+        $card->status     = $this->post->progress == 100 ? 'done' : 'doing';
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->editcard['id'], $this->post->uid);
 

@@ -3,6 +3,7 @@ $builder = new stdclass();
 
 $builder->company   = array('rows' => 1,    'extends' => array('company'));
 $builder->user      = array('rows' => 1000, 'extends' => array('user'));
+$builder->usergroup = array('rows' => 600, 'extends' => array('usergroup'));
 $builder->dept      = array('rows' => 100,  'extends' => array('dept'));
 $builder->action    = array('rows' => 100,  'extends' => array('action'));
 
@@ -57,3 +58,8 @@ $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
 $builder->mr       = array('rows' => 1,  'extends' => array('mr'));
 $builder->oauth    = array('rows' => 90, 'extends' => array('oauth'));
+
+$builder->vm         = array('rows' => 1,  'extends' => array('vm'));
+$builder->vmtemplate = array('rows' => 1,  'extends' => array('vmtemplate'));
+$builder->host       = array('rows' => 1,  'extends' => array('host'));
+$builder->asset      = array('rows' => 1,  'extends' => array('asset'));

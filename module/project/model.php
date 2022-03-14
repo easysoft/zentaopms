@@ -672,11 +672,12 @@ class projectModel extends model
 
         $projects = $this->dao->select('id, name, path')->from(TABLE_PROJECT)
             ->where('type')->eq('project')
+            ->andWhere('deleted')->eq('0')
+            ->andWhere('vision')->eq($this->config->vision)
             ->beginIF($programID)->andWhere('parent')->eq($programID)->fi()
             ->beginIF($this->config->vision)->andWhere('vision')->eq($this->config->vision)->fi()
             ->beginIF($model != 'all')->andWhere('model')->eq($model)->fi()
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->andWhere('deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->projects)->fi()
             ->orderBy('id_desc')
             ->fetchAll();
