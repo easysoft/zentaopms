@@ -8,5 +8,7 @@ title=测试 projectModel::checkHasContent;
 cid=1
 pid=1
 
+
+
 */
 $project = $tester->loadModel('project');
