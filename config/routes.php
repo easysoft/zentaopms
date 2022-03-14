@@ -95,6 +95,7 @@ $routes['/builds/:id']            = 'build';
 $routes['/products/:id/testcases']   = 'testcases';
 $routes['/projects/:id/testcases']   = 'projectCases';
 $routes['/executions/:id/testcases'] = 'executionCases';
+$routes['/executions/:id/members']   = 'executionMembers';
 $routes['/testcases']                = 'testcases';
 $routes['/testcases/:id']            = 'testcase';
 
