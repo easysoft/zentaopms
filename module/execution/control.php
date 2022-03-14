@@ -219,6 +219,7 @@ class execution extends control
 
         /* Assign. */
         $this->view->tasks        = $tasks;
+        a($tasks);
         $this->view->summary      = $this->execution->summary($tasks);
         $this->view->tabID        = 'task';
         $this->view->pager        = $pager;
