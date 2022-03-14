@@ -1144,14 +1144,15 @@ class upgradeModel extends model
     {
         if(empty($version)) $version = $this->config->installedVersion;
 
-        $editions    = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
-        $version     = str_replace('.', '_', $version);
-        $fromEdition = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
-        $openVersion = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
-        $openVersion = str_replace('_', '.', $openVersion);
+        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $version      = str_replace('.', '_', $version);
+        $fromEdition  = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+        $openVersion  = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
+        $openVersion  = str_replace('_', '.', $openVersion);
+        $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
 
         $alterSQL    = '';
-        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $openVersion . '.sql';
+        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
         $lines = file($standardSQL);

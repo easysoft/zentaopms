@@ -78,8 +78,8 @@ class settingModel extends model
         $item->key     = $key;
         $item->value   = $value;
 
-        /* The setting of system.common has no vision. */
-        if($owner != 'system' or $module != 'common') $item->vision = $vision;
+        /* If in upgrade, skip vision. */
+        if(!defined('IN_UPGRADE')) $item->vision = $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }
