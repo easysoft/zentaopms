@@ -252,6 +252,10 @@ class executionModel extends model
         if(!isset($executions[$executionID]))
         {
             $this->session->set('execution', key($executions), $this->app->tab);
+
+            $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
+            if(empty($execution)) return js::error($this->lang->notFound);
+
             if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
         }
 
