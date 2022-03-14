@@ -1086,7 +1086,7 @@ class actionModel extends model
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
             /* Get gitlab objectname. */
-            if(empty($action->objectName) and substr($objectType, 0,6) == 'gitlab') $action->objectName = $action->extra;
+            if(empty($action->objectName) and substr($objectType, 0, 6) == 'gitlab') $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             if(!$this->setObjectLink($action, $deptUsers))
