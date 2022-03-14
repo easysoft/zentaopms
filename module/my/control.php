@@ -1236,14 +1236,13 @@ EOF;
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort = common::appendOrder($orderBy);
 
         /* The header and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
         $this->view->position[] = $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
         if(empty($recTotal)) $originTotal = $pager->recTotal;
 
         /* Assign. */

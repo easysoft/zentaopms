@@ -98,7 +98,7 @@ CREATE TABLE `zt_apistruct` (
   `lib` int UNSIGNED NOT NULL DEFAULT 0,
   `name` varchar(30)  NOT NULL DEFAULT '',
   `type` varchar(50)  NOT NULL DEFAULT '',
-  `desc` varchar(255) NOT NULL DEFAULT '',
+  `desc` text NOT NULL DEFAULT '',
   `version` smallint unsigned NOT NULL DEFAULT 0,
   `attribute` text NULL,
   `addedBy` varchar(30) NOT NULL DEFAULT 0,
@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `vision` varchar(10) NOT NULL DEFAULT '',
+  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
   `owner` char(30) NOT NULL default '',
   `module` varchar(30) NOT NULL,
   `section` char(30) NOT NULL default '',

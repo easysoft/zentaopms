@@ -11,7 +11,7 @@ ALTER TABLE `zt_doc` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_doclib` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `type`;
 ALTER TABLE `zt_action` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `read`;
 ALTER TABLE `zt_searchindex` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
-ALTER TABLE `zt_config` ADD `vision` varchar(10) NOT NULL DEFAULT '' AFTER `id`;
+ALTER TABLE `zt_config` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id`;
 ALTER TABLE `zt_config` DROP INDEX `unique`, ADD UNIQUE `unique` (`vision`,`owner`,`module`,`section`,`key`);
 ALTER TABLE `zt_todo` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `deleted`;
 ALTER TABLE `zt_block` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `account`;
@@ -48,3 +48,10 @@ SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `name` = '团队成�
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
 
 update zt_config set `value` = concat(`value`, ',visions') where module = 'user' and `key` = 'requiredFields' and section in ('create', 'edit');
+
+ALTER TABLE `zt_kanban` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `zt_kanbancolumn` CHANGE `group` `group` mediumint NOT NULL DEFAULT '0' AFTER `region`;
+ALTER TABLE `zt_kanbancard` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `whitelist`;
+ALTER TABLE `zt_kanbanregion` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_kanbanspace` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `zt_projectstory` CHANGE `branch` `branch` mediumint unsigned NOT NULL AFTER `product`;

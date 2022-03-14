@@ -840,7 +840,6 @@ class project extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = common::appendOrder($orderBy);
 
         /* Set the pager. */
         $this->app->loadClass('pager', $static = true);
@@ -855,7 +854,7 @@ class project extends control
         }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', $projectID, 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', $projectID, 'all', $date, $direction);
 
         /* The header and position. */
         $project = $this->project->getByID($projectID);

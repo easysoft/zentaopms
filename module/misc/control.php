@@ -74,7 +74,7 @@ class misc extends control
 
         $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
         $lang   = str_replace('-', '_', $this->app->getClientLang());
-        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang.html";
+        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
         $latestVersionList = common::http($link);
 

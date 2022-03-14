@@ -461,28 +461,29 @@ class upgradeModel extends model
                 set_time_limit(0);
                 $this->updateActivatedDate();
 
+                if(!empty($this->config->isINT))
+                {
+                    $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
+                    $this->execSQL($xuanxuanSql);
+                    $executedXuanxuan = true;
+                }
+                else
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
+                }
+
                 switch($fromEdition)
                 {
                     case 'open':
                         $this->execSQL($this->getUpgradeFile('proinstall'));
                     case 'pro':
                         $this->execSQL($this->getUpgradeFile('bizinstall'));
-                        if(!empty($this->config->isINT))
-                        {
-                            $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
-                            $this->execSQL($xuanxuanSql);
-                            $executedXuanxuan = true;
-                        }
-                        else
-                        {
-                            if(!$executedXuanxuan)
-                            {
-                                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
-                                $this->execSQL($xuanxuanSql);
-                                $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
-                                $this->execSQL($xuanxuanSql);
-                            }
-                        }
                     case 'biz':
                         $this->execSQL($this->getUpgradeFile('maxinstall'));
                         $this->execSQL($this->getUpgradeFile('functions'));
@@ -5827,7 +5828,7 @@ class upgradeModel extends model
                 }
             }
 
-            if(empty($customFiles) or $module == 'owt') $encryptModules[] = $module;
+            if(empty($customFiles) or $module == 'owt') $encryptModules[$module] = $module;
         }
         return $encryptModules;
     }
