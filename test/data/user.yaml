@@ -50,12 +50,20 @@ fields:
     note: "昵称"
   - field: commiter
     note: "源代码帐号"
+    fields:
+    - field: commiter1 
+      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100},others{100},a,bb,ccc,qwuiadsd?!2as@#%$aasd~aj1!@#1
+    - field: commiter2
+      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,[]{4}
   - field: avatar
     note: ""
-    range: 0
+    fields:
+    - field: avatar1 
+      range: /home/z/tmp/,/home/z/user/
+    - field: avatar2
+      range: 1-10,10-20
     prefix: ""
-    postfix: ""
-    loop: 0
+    postfix: ".png"
     format: ""
   - field: birthday
     note: "生日"
