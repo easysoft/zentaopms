@@ -7,25 +7,25 @@ basePath=$(cd "$(dirname "$0")"; pwd)
 if [ ! -n "$1" ]; then
   while :; do
     echo "Please input your php path:(example: /usr/bin/php)"
-    read phpcli 
-    if [ ! -f $phpcli ]; then 
+    read phpcli
+    if [ ! -f $phpcli ]; then
       echo "php path is error";
     elif [ "$phpcli"x != ""x ]; then
       break;
     fi
   done
-fi 
+fi
 if [ ! -n "$2" ]; then
   while :; do
     echo "Please input zentao url:(example: http://localhost:88/zentao or http://localhost)"
-    read pmsRoot 
+    read pmsRoot
     if [ -z "$pmsRoot" ]; then
-      echo "zentao url is error"; 
+      echo "zentao url is error";
     else
       break;
     fi
   done
-fi 
+fi
 
 pmsRoot=`echo "$pmsRoot" | sed 's/[/]$//g'`
 cat $basePath/../config/my.php |awk '$1!~/^\/\//&& $1~/\$config\->requestType/{requestType = $0} END{print requestType}'| grep -c 'PATH_INFO' > ./init.tmp
@@ -52,18 +52,18 @@ echo "backup.sh ok"
 
 # computeburn
 if [ $requestType == 'PATH_INFO' ]; then
-  computeburn="$phpcli $basePath/ztcli '$pmsRoot/project-computeburn'";
+  computeburn="$phpcli $basePath/ztcli '$pmsRoot/execution-computeburn'";
 else
-  computeburn="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=project&f=computeburn'";
+  computeburn="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=execution&f=computeburn'";
 fi
 echo $computeburn > $basePath/computeburn.sh
 echo "computeburn.sh ok"
 
 # compute task effort.
 if [ $requestType == 'PATH_INFO' ]; then
-  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/project-computetaskeffort'";
+  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/execution-computetaskeffort'";
 else
-  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=project&f=computetaskeffort'";
+  computetaskeffort="$phpcli $basePath/ztcli '$pmsRoot/index.php?m=execution&f=computetaskeffort'";
 fi
 echo $computetaskeffort > $basePath/computetaskeffort.sh
 echo "computetaskeffort.sh ok"
