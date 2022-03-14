@@ -372,5 +372,5 @@ $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));

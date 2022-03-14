@@ -2196,6 +2196,8 @@ EOD;
 
         if(isset($this->app->user))
         {
+            if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project') return true;
+
             $this->app->user = $this->session->user;
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
