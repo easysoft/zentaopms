@@ -22,6 +22,12 @@ switch($argv[1])
     case 'program':
         ztfRun('model/program');
         break;
+    case 'product':
+        ztfRun('model/product');
+        break;
+    case 'project':
+        ztfRun('model/project');
+        break;
     case 'task':
         ztfRun('model/task');
         break;
@@ -31,6 +37,7 @@ switch($argv[1])
     case 'model':
         ztfRun('model');
         break;
+
     default:
         ztfExtract($argv[1]);
         system("php " . $argv[1]);

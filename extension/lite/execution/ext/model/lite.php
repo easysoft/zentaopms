@@ -116,7 +116,7 @@ public function getTRActions($currentMethod)
     $TRActions  = '';
     $TRActions .= "<div class='btn-group dropdown'>";
     $TRActions .= html::a(helper::createLink('execution', $subMenu->{$currentMethod}['method'], $subMenu->{$currentMethod}['vars']), "<i class='icon icon-" . $this->lang->execution->icons[$currentMethod]."'> </i>" . $subMenu->{$currentMethod}['name'], '', "class='btn btn-link'");
-    $TRActions .= "<button type='button' class='btn btn-link dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>";
+    $TRActions .= "<button type='button' class='btn btn-link' data-toggle='dropdown'><span class='caret'></span></button>";
     $TRActions .= "<ul class='dropdown-menu pull-right'>";
     foreach($subMenu as $subKey => $subName)
     {

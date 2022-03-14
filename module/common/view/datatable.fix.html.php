@@ -98,7 +98,7 @@ $(function()
               <td class='w-150px'><?php echo $lang->datatable->showModule;?></td>
               <td><?php echo html::radio('showModule', $lang->datatable->showModuleList, isset($config->datatable->$datatableId->showModule) ? $config->datatable->$datatableId->showModule : '');?></td>
             </tr>
-            <?php if($app->moduleName == 'execution' and $app->methodName == 'task'):?>
+            <?php if($app->moduleName == 'execution' and $app->methodName == 'task' and $this->config->vision != 'lite'):?>
             <tr>
               <td><?php echo $lang->datatable->showAllModule;?></td>
               <td><?php echo html::radio('showAllModule', $lang->datatable->showAllModuleList, isset($config->execution->task->allModule) ? $config->execution->task->allModule : 0);?></td>
