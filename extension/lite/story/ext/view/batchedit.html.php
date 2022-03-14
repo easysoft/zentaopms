@@ -36,7 +36,6 @@
           <th class='c-pri'> <?php echo $lang->priAB;?></th>
           <th class='c-user'> <?php echo $lang->story->assignedTo;?></th>
           <th class='c-status'><?php echo $lang->story->status;?></th>
-          <th class='c-stage'> <?php echo $lang->story->stageAB;?></th>
           <th class='c-user-box'><?php echo $lang->story->closedBy;?></th>
           <th class='c-reason'> <?php echo $lang->story->closedReason;?></th>
           <th class='c-keywords'><?php echo $lang->story->keywords;?></th>
@@ -74,7 +73,6 @@
           <td><?php echo html::select("pris[$storyID]",     $priList, $story->pri, 'class=form-control');?></td>
           <td class='text-left'><?php echo html::select("assignedTo[$storyID]",     $users, $story->assignedTo, "class='form-control chosen'");?></td>
           <td class='story-<?php echo $story->status;?>'><?php echo $this->processStatus('story', $story);?></td>
-          <td><?php echo html::select("stages[$storyID]", $stageList, $story->stage, 'class="form-control"' . ($story->status == 'draft' ? ' disabled="disabled"' : ''));?></td>
           <td class='text-left'><?php echo html::select("closedBys[$storyID]",     $users, $story->closedBy, "class='form-control" . ($story->status == 'closed' ? " chosen'" : "' disabled='disabled'"));?></td>
 
           <?php if($story->status == 'closed'):?>
@@ -103,7 +101,7 @@
       </tbody>
       <tfoot>
         <tr>
-          <td colspan='11' class='text-center form-actions'>
+          <td colspan='10' class='text-center form-actions'>
             <?php echo html::submitButton();?>
             <?php echo $this->app->tab == 'product' ? html::a($this->session->storyList, $lang->goback, '', "class='btn btn-back btn-wide'") : html::backButton();?>
           </td>
