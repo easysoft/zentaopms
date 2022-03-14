@@ -773,12 +773,20 @@ class execution extends control
         {
             foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
         }
-        foreach($productModules as $branchID => $moduleList)
+
+        if(defined('TUTORIAL'))
         {
-            foreach($moduleList as $moduleID => $moduleName)
+            $modules = $this->loadModel('tutorial')->getModulePairs();
+        }
+        else
+        {
+            foreach($productModules as $branchID => $moduleList)
             {
-                if($moduleID and !isset($executionModules[$moduleID])) continue;
-                $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+                foreach($moduleList as $moduleID => $moduleName)
+                {
+                    if($moduleID and !isset($executionModules[$moduleID])) continue;
+                    $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+                }
             }
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
@@ -2717,11 +2725,14 @@ class execution extends control
     {
         $this->loadModel('story');
         $this->loadModel('product');
+        $this->loadModel('tree');
+        $this->loadModel('branch');
 
         /* Get projects, executions and products. */
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
+        $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 
@@ -2759,33 +2770,37 @@ class execution extends control
         {
             $this->project->setMenu($object->id);
         }
-        else if($object->type == 'sprint' or $object->type == 'stage')
+        elseif($object->type == 'sprint' or $object->type == 'stage')
         {
             $this->execution->setMenu($object->id);
         }
-
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Set modules and branches. */
         $modules      = array();
         $branchIDList = array(BRANCH_MAIN);
         $branches     = $this->project->getBranchesByProject($objectID);
         $productType  = 'normal';
-        $this->loadModel('tree');
-        $this->loadModel('branch');
-        foreach($products as $product)
+
+        if(defined('TUTORIAL'))
         {
-            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
-            foreach($productModules as $branch => $branchModules)
+            $modules = $this->loadModel('tutorial')->getModulePairs();
+        }
+        else
+        {
+            foreach($products as $product)
             {
-                foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
-            }
-            if($product->type != 'normal')
-            {
-                $productType = $product->type;
-                if(isset($branches[$product->id]))
+                $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
+                foreach($productModules as $branch => $branchModules)
                 {
-                    foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
+                    foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
+                }
+                if($product->type != 'normal')
+                {
+                    $productType = $product->type;
+                    if(isset($branches[$product->id]))
+                    {
+                        foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
+                    }
                 }
             }
         }

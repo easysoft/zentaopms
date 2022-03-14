@@ -2688,12 +2688,12 @@ EOD;
             $response->errcode = $this->config->entry->errcode[$code];
             $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-            return print(urldecode(json_encode($response)));
+            die(urldecode(json_encode($response)));
         }
         else
         {
             $response->error = $code;
-            return print(urldecode(json_encode($response)));
+            die(urldecode(json_encode($response)));
         }
     }
 
