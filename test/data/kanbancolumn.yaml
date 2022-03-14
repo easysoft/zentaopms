@@ -3,8 +3,6 @@ desc: ""
 author: automated export
 version: "1.0"
 fields:
-    - field: lane
-      range: "0"
     - field: parent
       range: "0"
     - field: type
@@ -22,8 +20,6 @@ fields:
       range: ""
     - field: order
       range: 1-4
-    - field: cards
-      range: ""
     - field: archived
       range: "0"
     - field: deleted
