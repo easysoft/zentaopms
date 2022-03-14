@@ -26,7 +26,7 @@
     <div class="cell">
       <div class="detail">
         <div class="detail-title"><?php echo $lang->gitlab->url;?></div>
-        <div class="detail-content article-content"><?php echo $gitlab->url;?></div>
+        <div class="detail-content article-content"><?php echo html::a($gitlab->url, $gitlab->url, '_target');?></div>
       </div>
     </div>
     <div class='cell action-cell'><?php include '../../common/view/action.html.php';?></div>
