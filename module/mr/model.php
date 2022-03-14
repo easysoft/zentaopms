@@ -747,9 +747,13 @@ class mrModel extends model
      */
     public function apiAcceptMR($gitlabID, $projectID, $MRID, $sudo = "")
     {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/merge");
-        if($sudo != "") return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: {$sudo}")));
-        return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $apiRoot    = $this->gitlab->getApiRoot($gitlabID);
+        $approveUrl = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/approved");
+        commonModel::http($approveUrl, null, array(CURLOPT_CUSTOMREQUEST => 'POST'));
+
+        $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/merge");
+        if($sudo != "") return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: {$sudo}")));
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**

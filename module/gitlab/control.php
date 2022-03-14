@@ -252,7 +252,7 @@ class gitlab extends control
         $user = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token, true);
 
         if(!is_object($user)) return $this->send(array('result' => 'fail', 'message' => array('url' => array(sprintf($this->lang->gitlab->hostError, $this->config->gitlab->minCompatibleVersion)))));
-        if(!isset($user->is_admin) or !$user->is_admin) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
+        if(isset($user->error)) return $this->send(array('result' => 'fail', 'message' => array('token' => array($this->lang->gitlab->tokenError))));
 
         /* Verify version compatibility. */
         $result = $this->gitlab->getVersion($gitlab->url, $gitlab->token);
