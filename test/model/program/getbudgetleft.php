@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
 
 /**
 
@@ -8,27 +9,12 @@ title=测试 programModel::getBudgetLeft();
 cid=1
 pid=1
 
+查看父项目集id=1的预算剩余 >> 0
+
 */
 
-class Tester
-{
-    public function __construct($user)
-    {
-        global $tester;
+$parentProjectSet = new Program('admin');
 
-        su($user);
-        $this->program = $tester->loadModel('program');
-    }
+$t_itemsid = array('1');
 
-    public function getBudgetLeft($programID)
-    {
-        $program = $this->program->getById(1);
-
-        return $this->program->getBudgetLeft($program);
-    }
-}
-
-$t = new Tester('admin');
-
-/* GetBudgetLeft($program). */
-r($t->getBudgetLeft(1)) && p() && e('0'); // 查看父项目集id=1的预算剩余
+r($parentProjectSet->getBudgetLeft($t_itemsid[0])) && p() && e('0');  // 查看父项目集id=1的预算剩余
