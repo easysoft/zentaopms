@@ -448,7 +448,7 @@ class executionModel extends model
         }
 
         $products = array_filter($this->post->products);
-        if($oldExecution->type == 'stage' and empty($products))
+        if($oldExecution->type == 'stage'|| $oldExecution->type == 'sprint' and empty($products))
         {
             dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
             return false;
