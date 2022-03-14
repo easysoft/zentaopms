@@ -29,7 +29,7 @@
 <script>
 $("a[href^='###']").click(function()
 {
-    alert('<?php echo $lang->doc->accessDenied;?>');
+    alert('<?php echo $lang->doc->noLibreOffice;?>');
 });
 </script>
 </body>
