@@ -5,3 +5,4 @@
 #mainContent .detail-content {padding: 0;}
 #mainContent .detail .form-actions {padding-bottom: 20px;}
 #mainContent .main-header h2 .input-group {margin-top: 1px;}
+.text-left {max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
