@@ -205,7 +205,6 @@ class company extends control
 
         /* Append id for secend sort. */
         $order = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort  = common::appendOrder($order);
 
         $queryID = ($browseType == 'bysearch') ? (int)$param : 0;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
@@ -245,11 +244,11 @@ class company extends control
             if(!$productID) $productID = 'all';
             if(!$projectID) $projectID = 'all';
             if(!$executionID) $executionID = 'all';
-            $actions = $this->action->getDynamic($account, $browseType, $sort, $pager, $productID, $projectID, $executionID, $date, $direction);
+            $actions = $this->action->getDynamic($account, $browseType, $orderBy, $pager, $productID, $projectID, $executionID, $date, $direction);
         }
         else
         {
-            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $sort, $pager, $date, $direction);
+            $actions = $this->action->getDynamicBySearch($products, $projects, $executions, $queryID, $orderBy, $pager, $date, $direction);
         }
 
         /* Build search form. */
