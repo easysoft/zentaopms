@@ -785,7 +785,7 @@ $lang->resource->execution->addWhitelist      = 'addWhitelist';
 $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 $lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->executionkanban   = 'kanbanAction';
-$lang->resource->execution->kanban            = 'kanban';
+$lang->resource->execution->kanban            = 'RDKanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
 
 //$lang->execution->methodOrder[0]   = 'index';
