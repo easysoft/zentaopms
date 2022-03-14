@@ -232,14 +232,7 @@ class task extends control
             if(!isset($moduleOptionMenu[$task->module])) $task->module = 0;
         }
 
-        /* Fix bug #2737. When moduleID is not story module. */
-        $moduleIdList = array();
-        if($task->module)
-        {
-            $moduleID     = $this->tree->getStoryModule($task->module);
-            $moduleIdList = $this->tree->getAllChildID($moduleID);
-        }
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleIdList, 'full', 'unclosed');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed');
 
         if($this->config->vision == 'lite') $stories = $stories + array('', '');
 

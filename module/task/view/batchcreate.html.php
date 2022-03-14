@@ -106,7 +106,7 @@
           <tr>
             <td class='text-center'><?php echo $i;?></td>
             <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
-              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id, $i)'")?>
+              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>
             </td>
             <?php if($execution->type != 'ops'):?>
