@@ -128,6 +128,17 @@ class gitModel extends model
         $branches = $this->repo->getBranches($repo);
         $commits  = $repo->commits;
 
+        $gitlabAccountPairs = array();
+        if($repo->SCM == 'Gitlab')
+        {
+            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitlab);
+            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitlab);
+            foreach($gitlabUserList as $gitlabUser)
+            {
+                if(isset($acountIDPairs[$gitlabUser->id])) $gitlabAccountPairs[$gitlabUser->realname] = $acountIDPairs[$gitlabUser->id];
+            }
+        }
+
         /* Update code commit history. */
         foreach($branches as $branch)
         {
@@ -166,31 +177,7 @@ class gitModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        if($repo->SCM == 'Gitlab')
-                        {
-                            if(!isset($gitlabAccountPairs))
-                            {
-                                $gitlabAccountPairs = array();
-                                $gitlabUserList     = $this->loadModel('gitlab')->apiGetUsers($repo->gitlab);
-                                $acountIDPairs      = $this->gitlab->getUserIdAccountPairs($repo->gitlab);
-                                foreach($acountIDPairs as $openID => $account)
-                                {
-                                    foreach($gitlabUserList as $gitlabUser)
-                                    {
-                                        if($gitlabUser->id == $openID)
-                                        {
-                                            $gitlabAccountPairs[$gitlabUser->realname] = $account;
-                                            break;
-                                        }
-                                    }
-                                }
-                            }
-                            $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $gitlabAccountPairs);
-                        }
-                        else
-                        {
-                            $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');
-                        }
+                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $gitlabAccountPairs);
                     }
                     else
                     {
