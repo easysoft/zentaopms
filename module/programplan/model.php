@@ -430,6 +430,7 @@ class programplanModel extends model
             $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl       = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM        = empty($PM[$key]) ? '' : $PM[$key];
+            $plan->openedBy  = $this->app->user->account;
 
             $datas[] = $plan;
         }
@@ -598,7 +599,7 @@ class programplanModel extends model
                     $member->account = $account;
                     $member->role    = $this->lang->user->roleList[$this->app->user->role];
                     $member->join    = $now;
-                    $member->type    = $data->type;
+                    $member->type    = 'execution';
                     $member->days    = $data->days;
                     $member->hours   = $this->config->execution->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
