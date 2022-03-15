@@ -958,6 +958,7 @@ class taskTest
             return $object ? 1 : 2;
         }
     }
+
     public function addTaskEstimateTest($data)
     {
         $data->date = date("Y-m-d");
@@ -966,6 +967,58 @@ class taskTest
         global $tester;
         $objectID = $tester->dao->lastInsertID();
         $object   = $this->objectModel->getEstimateById($objectID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getToAndCcListTest($taskID, $skipMailto = false)
+    {
+        $task = $this->objectModel->getByID($taskID);
+        if(empty($task)) return 0;
+        if($skipMailto) $task->mailto = '';
+
+        $object = $this->objectModel->getToAndCcList($task);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if(isset($object[0])) $object[2] = $object[0];
+            if(isset($object[1]) and $object[1] == '') $object[1] = 0;
+            return $object;
+        }
+    }
+
+    public function getNextUserTest($users, $current)
+    {
+        $object = $this->objectModel->getNextUser($users, $current);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getMemberPairsTest($taskID)
+    {
+        $task = $this->objectModel->getByID($taskID);
+        if(empty($task)) return 0;
+
+        $object = $this->objectModel->getMemberPairs($task);
+        $object['count'] = count($object);
 
         if(dao::isError())
         {
