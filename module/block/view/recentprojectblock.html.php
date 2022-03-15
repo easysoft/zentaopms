@@ -11,7 +11,7 @@
 #cards .panel-heading {padding: 12px 24px 10px 16px;}
 #cards .panel-body {padding: 0 16px 16px;}
 #cards .panel-actions {padding: 7px 0; z-index: 0}
-#cards .project-type-label {padding: 1px 2px;}
+#cards .project-type-label {padding: 2px 2px; margin-bottom: 3px;}
 #cards .project-name {font-size: 16px; font-weight: normal; display: inline-block; max-width: 75%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; vertical-align: middle;}
 #cards .project-infos {font-size: 12px; padding: 0 15px;}
 #cards .project-infos > span {display: inline-block; line-height: 12px;}
@@ -44,11 +44,10 @@
     <div class='col'>
       <div class='panel-content'>
         <div class='panel-heading not-move-handler'>
-          <?php if($project->model === 'waterfall'): ?>
-          <span class='project-type-label label label-warning label-outline'><?php echo $lang->project->waterfall; ?></span>
-          <?php else: ?>
-          <span class='project-type-label label label-info label-outline'><?php echo $lang->project->scrum; ?></span>
-          <?php endif; ?>
+          <?php if($config->systemMode == 'new'):?>
+          <?php $projectLabel = $project->model == 'waterfall' ? 'label-warning' : 'label-info';?>
+          <span class="project-type-label label <?php echo $projectLabel;?> label-outline"><?php echo $lang->project->{$project->model};?></span>
+          <?php endif;?>
           <strong class='project-name' title='<?php echo $project->name;?>'> <?php echo html::a($viewLink, $project->name);?> </strong>
           <nav class='panel-actions nav nav-default'>
             <li class='dropdown'>
@@ -98,7 +97,7 @@
           <?php else: ?>
           <?php $project = empty($project->executions ) ? '' : end($project->executions);?>
           <div class='project-detail project-iteration'>
-            <p class='text-muted'><?php echo $lang->project->lastIteration; ?></p>
+            <p class='text-muted'><?php echo $project->model == 'scrum' ? $lang->project->lastIteration : $lang->project->lastKanban;?></p>
             <?php if($project):?>
             <div class='row'>
               <div class='col-xs-5 execution-name' title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
