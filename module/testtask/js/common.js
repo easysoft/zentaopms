@@ -11,6 +11,10 @@ $(document).ready(function()
                     parent.$.cookie('selfClose', 1);
                     setTimeout(function(){parent.$.closeModal(null, 'this')}, 1200);
                 }
+                else if(response.locate == 'parent.parent')
+                {
+                    setTimeout(function(){parent.location.reload();}, 1200);
+                }
                 else
                 {
                     setTimeout(function(){window.location.href = response.locate;}, 1200);
