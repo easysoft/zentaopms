@@ -58,3 +58,5 @@ ALTER TABLE `zt_projectstory` CHANGE `branch` `branch` mediumint unsigned NOT NU
 
 INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'unitList', 'CNY,USD');
 INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'defaultCurrency', 'CNY');
+
+ALTER TABLE `zt_apistruct` CHANGE `desc` `desc` text COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `type`;

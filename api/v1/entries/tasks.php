@@ -66,6 +66,7 @@ class tasksEntry extends entry
 
         $assignedTo = $this->request('assignedTo');
         if($assignedTo and !is_array($assignedTo)) $this->setPost('assignedTo', array($assignedTo));
+        $this->setPost('execution', $executionID);
 
         $control = $this->loadController('task', 'create');
         $this->requireFields('name,assignedTo,type,estStarted,deadline');

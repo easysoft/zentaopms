@@ -18,5 +18,5 @@ $project = new Project('admin');
 
 $getNu = array(11, array('admin', 'pm92'), 11, array('admin'), true);
 
-r($project->getTeamMembers($getNu[0], $getNu[1]))              && p() && e('0'); //获取id为11的项目团队成员个数
+r($project->getTeamMembers($getNu[0], $getNu[1]))              && p() && e('2'); //获取id为11的项目团队成员个数
 r($project->getTeamMembers($getNu[2], $getNu[3], $getNu[4]))   && p() && e('1'); //获取id为11的项目团队成员个数，开启新手引导
