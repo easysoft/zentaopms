@@ -161,7 +161,7 @@ $lang->admin->menuOrder[30] = 'dev';
 $lang->admin->menuOrder[35] = 'system';
 
 $lang->admin->menu->message['subMenu']          = new stdclass();
-$lang->admin->menu->message['subMenu']->message = new stdclass();
+$lang->admin->menu->message['subMenu']->message = array();
 $lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
 $lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
 
