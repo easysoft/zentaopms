@@ -603,8 +603,15 @@ class taskTest
         else
         {
             $object = $this->objectModel->getById($taskID);
-            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
-            return isset($parentObject) ? $parentObject : $object;
+
+            if(empty($object)) return 0;
+
+            if($object->parent > 0) $object = $this->objectModel->getById($object->parent);
+
+
+            $estStartedDiff = date_diff(date_create($object->estStarted), date_create(helper::now()));
+            $deadlineDiff   = date_diff(date_create($object->deadline), date_create(helper::now()));
+            return array('estStartedDiff' => $estStartedDiff->d, 'deadlineDiff' => $deadlineDiff->d);
         }
     }
 
@@ -692,8 +699,35 @@ class taskTest
         }
     }
 
-    public function processData4ReportTest($tasks, $children, $field)
+    public function processData4ReportTest($children, $field)
     {
+        global $tester;
+        $tasks = $tester->dao->select('*')->from(TABLE_TASK)->where('`execution`')->eq('101')->andWhere('deleted')->eq(0)->fetchAll('id');
+        $parents = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
+        }
+        $parents = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
+                }
+            }
+            $task->date = '0000-00-00';
+        }
+
+        $children = $children ? $tasks[601]->children + $tasks[602]->children + $tasks[603]->children : array();
+
         $object = $this->objectModel->processData4Report($tasks, $children, $field);
 
         $object['void'] = isset($object['']) ? $object[''] : 'void';
@@ -885,6 +919,53 @@ class taskTest
     public function getDataOfTasksPerStatusTest()
     {
         $object = $this->objectModel->getDataOfTasksPerStatus();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function updateParentStatusTest($taskID, $parentID = 0, $createAction = true)
+    {
+        $object = $this->objectModel->updateParentStatus($taskID, $parentID, $createAction);
+        if(!$object) $object = $this->objectModel->getByID($taskID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function isClickableTest($task, $action)
+    {
+        $object = $this->objectModel->isClickable($task, $action);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
+    public function addTaskEstimateTest($data)
+    {
+        $data->date = date("Y-m-d");
+        $this->objectModel->addTaskEstimate($data);
+
+        global $tester;
+        $objectID = $tester->dao->lastInsertID();
+        $object   = $this->objectModel->getEstimateById($objectID);
 
         if(dao::isError())
         {
