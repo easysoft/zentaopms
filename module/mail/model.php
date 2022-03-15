@@ -691,6 +691,7 @@ class mailModel extends model
         $nameFields = $this->config->action->objectNameFields[$objectType];
         $title      = zget($object, $nameFields, '');
         $subject    = $this->getSubject($objectType, $object, $title, $action->action);
+        $domain     = defined('RUN_MODE') && RUN_MODE == 'api' ? '' : zget($this->config->mail, 'domain', common::getSysURL());
 
         if($objectType == 'review' and empty($object->auditedBy)) return;
 
