@@ -2475,7 +2475,7 @@ EOT;
                 {
                     $li .= "<div class='tree-actions'>";
                     if(common::hasPriv('tree', 'edit'))   $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
-                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
+                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editChildType}");
                     $li .= '</div>';
                 }
                 $li .= '</div>';
