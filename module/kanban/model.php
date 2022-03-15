@@ -87,7 +87,7 @@ class kanbanModel extends model
                 ->add('createdDate', helper::now())
                 ->trim('name')
                 ->get();
-            if($from == 'kanban') $region->space = $kanban->space;
+            $region->space = $from == 'kanban' ? $kanban->space : 0;
         }
 
         $region->order = $order;
