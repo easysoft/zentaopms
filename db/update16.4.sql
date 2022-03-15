@@ -26,3 +26,5 @@ ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
+
+ALTER TABLE `zt_stage` ADD UNIQUE (`type`);
