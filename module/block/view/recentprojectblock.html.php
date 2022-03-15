@@ -97,8 +97,8 @@
           <?php else: ?>
           <?php $project = empty($project->executions ) ? '' : end($project->executions);?>
           <div class='project-detail project-iteration'>
-            <p class='text-muted'><?php echo $project->model == 'scrum' ? $lang->project->lastIteration : $lang->project->lastKanban;?></p>
             <?php if($project):?>
+            <p class='text-muted'><?php echo $project->type == 'kanban' ? $lang->project->lastKanban : $lang->project->lastIteration;?></p>
             <div class='row'>
               <div class='col-xs-5 execution-name' title="<?php echo $project->name;?>"><?php echo html::a($this->createLink('execution', 'task', "executionID={$project->id}"), $project->name);?></div>
               <div class='col-xs-7'>
