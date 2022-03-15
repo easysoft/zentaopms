@@ -7,4 +7,4 @@
 -
 -#cases .pager {margin: 0px;}
 -#cases .pager li .btn.dropdown-toggle {border: 0px; padding-top: 3px;}
-.text-left {max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+.title {max-width: 100px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}

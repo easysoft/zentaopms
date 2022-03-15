@@ -13,7 +13,7 @@
     <?php foreach($builds as $build):?>
     <tr>
       <td><?php echo sprintf('%03d', $build->id) . html::hidden('builds[]', $build->id)?></td>
-      <td class='text-left' title='<?php echo $build->name?>'><?php echo html::a($sysURL . $this->createLink('build', 'view', "buildID=$build->id", '', true), $build->name, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
+      <td class='text-left title' title='<?php echo $build->name?>'><?php echo html::a($sysURL . $this->createLink('build', 'view', "buildID=$build->id", '', true), $build->name, '', "data-toggle='modal' data-type='iframe' data-width='90%'");?></td>
       <td><?php echo zget($users, $build->builder);?></td>
       <td><?php echo $build->date;?></td>
     </tr>
