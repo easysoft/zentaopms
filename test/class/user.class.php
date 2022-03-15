@@ -271,12 +271,160 @@ class userTest
         else
         {
             $users = array();
-            foreach($userIDList as $userID)
+            foreach($userIDList as $userID) $users[] = $this->objectModel->getByID($userID, 'id');
+
+            return $users;
+        }
+    }
+
+    /**
+     * Test edit a user.
+     * 
+     * @param  int   $userID
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function updateUserTest($userID, $params = array())
+    {
+        $_POST = $params;
+        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+
+        $this->objectModel->update($userID);
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->getByID($userID, 'id');
+        }
+    }
+
+    /**
+     * Test batch edit users.
+     * 
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function batchEditUserTest($params = array())
+    {
+        $_POST = $params;
+        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+
+        $this->objectModel->batchEdit($params);
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $users      = array();
+            $userIDList = array_keys($params['account']);
+            foreach($userIDList as $userID) 
             {
-                $users[] = $this->objectModel->getByID($userID, 'id');
+                $user = $this->objectModel->getByID($userID, 'id');
+                $users[$user->id] = $user;
             }
 
             return $users;
         }
+    }
+
+    /**
+     * Test edit a user password.
+     * 
+     * @param  int   $userID
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function updatePasswordTest($userID, $params = array())
+    {
+        $_POST = $params;
+
+        $this->objectModel->updatePassword($userID);
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->getByID($userID, 'id');
+        }
+    }
+
+    /**
+     * Reset user password.
+     * 
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function resetPasswordTest($params = array())
+    {
+        $_POST = $params;
+
+        $this->objectModel->resetPassword();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            $account = $params['account'];
+            return $this->objectModel->getByID($account, 'account');
+        }
+    }
+
+    /**
+     * Check user password.
+     * 
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function checkPasswordTest($params = array())
+    {
+        $_POST = $params;
+
+        $this->objectModel->checkPassword();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return '无报错';
+        }
+    }
+
+    /**
+     * Identify user.
+     * 
+     * @param  string $account
+     * @param  string $password
+     * @access public
+     * @return void
+     */
+    public function identifyTest($account, $password)
+    {
+        $_POST = $params;
+
+        $user = $this->objectModel->identify($account, $password);
+        unset($_POST);
+
+        return $user;
     }
 }

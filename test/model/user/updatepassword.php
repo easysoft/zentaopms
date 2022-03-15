@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->batchCreateTest();
+title=userModel->updatePasswordTest();
 cid=1
 pid=1
 
@@ -23,14 +23,19 @@ Visions为空的情况 >> 『版本类型』不能为空。
 
 $user = new userTest();
 $normalUser = array();
-$normalUser['account']  = array(1 => 'newtestuser1', 2 => 'newtestuser2', 3 => 'newtestuser3');
-$normalUser['realname'] = array(1 => '新测试用户1', 2 => '新测试用户2', 3 => '新测试用户3');
-$normalUser['visions']  = array(1 => 'rnd', 2 => 'rnd,lite', 3 => 'lite');
-$normalUser['role']     = array(1 => 'qa', 2 => 'dev', 3 => 'pm');
-$normalUser['email']    = array(1 => 'testasd@163.com', 2 => '', 3 => '11773@qq.com');
-$normalUser['password'] = array(1 => 'e10adc3949ba59abbe56e057f20f883e', 2 => 'e10adc3949ba59abbe56e057f20f883e', 3 => 'e10adc3949ba59abbe56e057f20f883e');
+$normalUser['originalPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+$normalUser['password1']        = 'dcf859ce8dd8f998bdfe4ae6c22c329e';
+$normalUser['password2']        = 'dcf859ce8dd8f998bdfe4ae6c22c329e';
+$normalUser['passwordStrength'] = 1;
 
-r($user->batchCreateUserTest($normalUser)) && p('0:account')  && e('newtestuser1'); //获取插入的第一个用户的account
-r($user->batchCreateUserTest($normalUser)) && p('2:realname') && e('新测试用户3');  //获取插入的最后一个用户的realname
+$weakPassword = $normalUser;
+$weakPassword['passwordStrength'] = 0;
+
+$differentPassword = $normalUser;
+$differentPassword['password2'] = 'asdasfasf!@#!@#asfasf';
+
+r($user->updatePasswordTest(1000, $normalUser))         && p('password')    && e('dcf859ce8dd8f998bdfe4ae6c22c329e'); //编辑用户密码，返回编辑后的密码
+r($user->updatePasswordTest(1000, $differentPassword))  && p('password:0')  && e('两次密码应该相同。');               //两次密码不相同的情况
+r($user->updatePasswordTest(1000, $weakPassword))       && p('password1:0') && e('您的密码强度小于系统设定。');       //密码小于设定强度的情况
 
 system("./ztest init");

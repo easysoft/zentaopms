@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->batchCreateTest();
+title=userModel->batchEditTest();
 cid=1
 pid=1
 
@@ -23,14 +23,14 @@ Visions为空的情况 >> 『版本类型』不能为空。
 
 $user = new userTest();
 $normalUser = array();
-$normalUser['account']  = array(1 => 'newtestuser1', 2 => 'newtestuser2', 3 => 'newtestuser3');
-$normalUser['realname'] = array(1 => '新测试用户1', 2 => '新测试用户2', 3 => '新测试用户3');
-$normalUser['visions']  = array(1 => 'rnd', 2 => 'rnd,lite', 3 => 'lite');
-$normalUser['role']     = array(1 => 'qa', 2 => 'dev', 3 => 'pm');
-$normalUser['email']    = array(1 => 'testasd@163.com', 2 => '', 3 => '11773@qq.com');
-$normalUser['password'] = array(1 => 'e10adc3949ba59abbe56e057f20f883e', 2 => 'e10adc3949ba59abbe56e057f20f883e', 3 => 'e10adc3949ba59abbe56e057f20f883e');
+$normalUser['account']  = array(998 => 'newtestuser1', 999 => 'newtestuser2', 1000 => 'newtestuser3');
+$normalUser['realname'] = array(998 => '新测试用户1', 999 => '新测试用户2', 1000 => '新测试用户3');
+$normalUser['visions']  = array(998 => 'rnd', 999 => 'rnd,lite', 1000 => 'lite');
+$normalUser['role']     = array(998 => 'qa', 999 => 'dev', 1000 => 'pm');
+$normalUser['email']    = array(998 => 'testasd@163.com', 999 => '', 1000 => '11773@qq.com');
+$normalUser['password'] = array(998 => 'e10adc3949ba59abbe56e057f20f883e', 999 => 'e10adc3949ba59abbe56e057f20f883e', 1000 => 'e10adc3949ba59abbe56e057f20f883e');
 
-r($user->batchCreateUserTest($normalUser)) && p('0:account')  && e('newtestuser1'); //获取插入的第一个用户的account
-r($user->batchCreateUserTest($normalUser)) && p('2:realname') && e('新测试用户3');  //获取插入的最后一个用户的realname
+r($user->batchEditUserTest($normalUser)) && p('998:account')   && e('newtestuser1'); //获取编辑后的第一个用户的account
+r($user->batchEditUserTest($normalUser)) && p('1000:realname') && e('新测试用户3');  //获取编辑的最后一个用户的真实姓名
 
 system("./ztest init");
