@@ -34,12 +34,12 @@
 .region .kanban-header {border-bottom: none!important; min-width: max-content; min-width: -moz-max-content;}
 .region .kanban-header-col > .title {max-width: 80% !important;}
 .region .kanban-header-col > .title {margin: 0}
-.region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial; max-width: 60px !important;}
+.region .kanban-header-col > .title > span {display: inline-block; overflow: hidden; padding-right:2px; position: initial; max-width: 140px !important;}
 .region .kanban-header-col > .title > .text-grey {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 2px; font-size: 10px; padding-top: 1px; padding-right: 2px;}
 .kanban-affixed .kanban-header-col > .title > .text {color: #fff!important}
-.region .kanban-header-col > .actions {position: relative; right: -30px;}
+.region .kanban-header-col > .actions {position: relative; right: -5px;}
 .region .kanban-header-parent-col > .actions {position: absolute; right: 0px;}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px;}
 
@@ -97,6 +97,7 @@
 
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
+.kanban-col {padding-right: 0px !important;}
 .kanban-item .title {padding-right: 10px;}
 .gray .actions {display:none;}
 
