@@ -21,7 +21,6 @@ class buildsEntry extends entry
     public function get($projectID = 0)
     {
         if(empty($projectID)) $projectID = $this->param('project', 0);
-        if(empty($projectID)) return $this->sendError(400, "Need project id.");
 
         $control = $this->loadController('project', 'build');
         $control->build($projectID, $this->param('type', 'all'), $this->param('param', 0), $this->param('order', 't1.date_desc,t1.id_desc'));
