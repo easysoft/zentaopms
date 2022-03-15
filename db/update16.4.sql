@@ -28,22 +28,22 @@ ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTE
 UPDATE `zt_user` SET `visions`='rnd,lite';
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '管理员', 'liteUser', '迅捷版用户分组');
+('lite', '管理员', 'liteAdmin', '迅捷版用户分组');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '项目管理', 'liteUser', '迅捷版用户分组');
+('lite', '项目管理', 'liteProject', '迅捷版用户分组');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '团队成员', 'liteUser', '迅捷版用户分组');
+('lite', '团队成员', 'liteTeam', '迅捷版用户分组');
 
 REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `name` = '管理员' and `vision` = 'lite') from `zt_grouppriv` where `group` = 1;
+SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteAdmin' and `vision` = 'lite') from `zt_grouppriv` where `group` = 1;
 
 REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `name` = '项目管理' and `vision` = 'lite') from `zt_grouppriv` where `group` = 4;
+SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteProject' and `vision` = 'lite') from `zt_grouppriv` where `group` = 4;
 
 REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `name` = '团队成员' and `vision` = 'lite') from `zt_grouppriv` where `group` = 9;
+SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteTeam' and `vision` = 'lite') from `zt_grouppriv` where `group` = 9;
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
 
