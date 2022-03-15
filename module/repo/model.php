@@ -1533,11 +1533,16 @@ class repoModel extends model
      * @param  array    $objects
      * @param  object   $log
      * @param  string   $repoRoot
+     * @param  string   $encodings
+     * @param  string   $scm
+     * @param  array    $gitlabAccountPairs
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn')
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array())
     {
+        $log->author = isset($gitlabAccountPairs[$log->author]) ? $gitlabAccountPairs[$log->author] : $log->author;
+
         if(isset($this->app->user))
         {
             $account = $this->app->user->account;
