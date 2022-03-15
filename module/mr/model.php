@@ -555,6 +555,9 @@ class mrModel extends model
                         ->fetch();
                     if(empty($todoDesc))
                     {
+                        $acountPairs = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+                        $author      = isset($acountPairs[$rawTodo->author->id]) ? $acountPairs[$rawTodo->author->id] : $rawTodo->author->name;
+
                         $todo = new stdClass;
                         $todo->account      = $this->app->user->account;
                         $todo->assignedTo   = $account;
@@ -567,7 +570,7 @@ class mrModel extends model
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $rawTodo->target->assignee->name . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
+                        $todo->desc         = $author . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
 
