@@ -554,9 +554,6 @@ class bug extends control
             if($user) $productMembers[$assignedTo] = $user->realname;
         }
 
-        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
-        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
-
         /* Get products and projects. */
         $products = $this->config->CRProduct ? $this->products : $this->product->getPairs('noclosed', 0, 'program_asc');
         $projects = array(0 => '');
@@ -588,6 +585,11 @@ class bug extends control
         {
             $projects += $this->product->getProjectPairsByProduct($productID, $branch);
         }
+
+        if(!empty($products) and !isset($products[$productID])) $productID = key($products);
+        $moduleOptionMenu = $this->tree->getOptionMenu($productID, $viewType = 'bug', $startModuleID = 0, ($branch === 'all' or !isset($branches[$branch])) ? 0 : $branch);
+        if(empty($moduleOptionMenu)) return print(js::locate(helper::createLink('tree', 'browse', "productID=$productID&view=story")));
+
 
         /* Get block id of assinge to me. */
         $blockID = 0;
