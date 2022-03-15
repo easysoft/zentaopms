@@ -79,8 +79,7 @@
             <td>
               <div class='input-group'>
                 <?php echo html::password('password', $repo->password, "class='form-control'");?>
-                <span class='input-group-addon fix-border fix-padding'></span>
-                <?php echo html::select('encrypt', $lang->repo->encryptList, $repo->encrypt, "class='form-control'");?>
+                <?php echo html::select('encrypt', $lang->repo->encryptList, $repo->encrypt, "class='form-control chosen'");?>
               </div>
             </td>
             <td></td>
