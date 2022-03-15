@@ -1277,12 +1277,17 @@ class storyModel extends model
      */
     public function review($storyID)
     {
-        if($this->post->result == false)   return print(js::alert($this->lang->story->mustChooseResult));
         if($this->post->result == 'revert' and $this->post->preVersion == false) return print(js::alert($this->lang->story->mustChoosePreVersion));
 
         if(strpos($this->config->story->review->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
+        }
+
+        if($this->post->result == false)
+        {
+            dao::$errors[] = $this->lang->story->mustChooseResult;
             return false;
         }
 
