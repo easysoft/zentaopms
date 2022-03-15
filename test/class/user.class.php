@@ -201,4 +201,78 @@ class userTest
             return $objects;
         }
     }
+
+    /**
+     * Test get user by query.
+     * 
+     * @param  string $browseType 
+     * @param  string $query 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function getByQueryTest($browseType = 'inside', $query = '', $orderBy = 'id')
+    {
+        $objects = $this->objectModel->getByQuery($browseType, $query, null, $orderBy);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test create a user.
+     * 
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function createUserTest($params = array())
+    {
+        $_POST  = $params;
+        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+
+        $userID = $this->objectModel->create();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->getByID($userID, 'id');
+        }
+    }
+
+    /**
+     * Test batch create users.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchCreateUserTest($params = array())
+    {
+        $_POST  = $params;
+        $_POST['verifyPassword'] = 'e79f8fb9726857b212401e42e5b7e18b';
+
+        $userIDList = $this->objectModel->batchCreate();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            a($userIDList);die;
+            $query = "id in $userIDList";
+            return $this->objectModel->getByQuery('', $query);
+        }
+    }
 }
