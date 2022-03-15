@@ -489,5 +489,29 @@ class Project
         $projects = $this->project->getWorkhour($projectID);
     }
 
+    public function getInfoList($status)
+    {
+        $projects = $this->project->getInfoList($status);
+        return $projects;
+    }
+
+    public function getStatData($projectID)
+    {
+        $projects = $this->project->getStatData($projectID);
+        return $projects;
+    }
+
+    public function getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all')
+    {
+        $projects = $this->project->getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all');
+        return $projects;
+    }
+
+
+
+
+
+
+
 }
 ?>
