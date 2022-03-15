@@ -2872,6 +2872,7 @@ class kanbanModel extends model
                 ->where('t1.kanban')->eq($kanban->id)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->eq('common')
                 ->fetch('count');
 
             if($laneCount > 1) $printSetHeightBtn = true;
