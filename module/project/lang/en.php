@@ -264,6 +264,7 @@ $lang->project->nextStep               = 'Next step';
 $lang->project->hoursUnit              = '%s hours';
 $lang->project->membersUnit            = '%s men';
 $lang->project->lastIteration          = "Recent {$lang->executionCommon}";
+$lang->project->lastKanban             = 'Recent Kanban';
 $lang->project->ongoingStage           = 'Ongoing stage';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = 'Waterfall';
