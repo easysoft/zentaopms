@@ -1550,11 +1550,11 @@ class repoModel extends model
         }
 
         $action  = new stdclass();
-        $action->actor   = $log->author;
-        $action->date    = $log->date;
+        $action->actor = $log->author;
+        $action->date  = $log->date;
+        $action->extra = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 
-        $action->comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
-        $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
+        $comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
 
         $this->loadModel('action');
         $actions = $objects['actions'];
@@ -1571,7 +1571,7 @@ class repoModel extends model
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndExecutions[$taskID]['product'];
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
-                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $action->comment;
+                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $comment;
                 foreach($taskActions as $taskAction => $params)
                 {
                     $_POST = array();
