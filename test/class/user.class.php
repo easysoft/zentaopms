@@ -270,9 +270,13 @@ class userTest
         }
         else
         {
-            a($userIDList);die;
-            $query = "id in $userIDList";
-            return $this->objectModel->getByQuery('', $query);
+            $users = array();
+            foreach($userIDList as $userID)
+            {
+                $users[] = $this->objectModel->getByID($userID, 'id');
+            }
+
+            return $users;
         }
     }
 }
