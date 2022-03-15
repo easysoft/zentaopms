@@ -62,12 +62,12 @@ function setRole(account, roleID)
  */
 function addItem(obj)
 {
-    var item = $('#addItem').html().replace(/%i%/g, i);
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex);
     var $tr  = $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
     $tr.find('select:first')
         .trigger('liszt:updated')
         .picker({type: 'user'});
-    i++;
+    itemIndex++;
 }
 
 /**

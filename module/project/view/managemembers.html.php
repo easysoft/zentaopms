@@ -125,7 +125,7 @@
         </tr>
       </tfoot>
     </table>
-    <?php js::set('i', $i);?>
+    <?php js::set('itemIndex', $i);?>
   </form>
 </div>
 <div>
