@@ -55,3 +55,6 @@ ALTER TABLE `zt_kanbancard` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0
 ALTER TABLE `zt_kanbanregion` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `name`;
 ALTER TABLE `zt_kanbanspace` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `status`;
 ALTER TABLE `zt_projectstory` CHANGE `branch` `branch` mediumint unsigned NOT NULL AFTER `product`;
+
+INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'unitList', 'CNY,USD');
+INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'defaultCurrency', 'CNY');
