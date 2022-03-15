@@ -427,4 +427,19 @@ class userTest
 
         return $user;
     }
+
+    /**
+     * Test authorize user.
+     * 
+     * @param  string $account
+     * @param  string $password
+     * @access public
+     * @return void
+     */
+    public function authorizeTest($account)
+    {
+        $user = $this->objectModel->authorize($account);
+
+        return $user;
+    }
 }
