@@ -26,6 +26,6 @@ $withLeft          = array('estimate' => '21', 'withLeft' => '1');
 $waterfallEstimate = array('estimate' => '17', 'withLeft' => '1');
 
 $execution = new executionTest();
-r($execution->fixFirstTest($executionIDList[0], $scrumEstimate))     && p('0:estimate') && e('26'); // 敏捷执行更新首日工时
+r($execution->fixFirstTest($executionIDList[0], $scrumEstimate))     && p('0:estimate') && e('26'); // 不传入withLeft
 r($execution->fixFirstTest($executionIDList[0], $withLeft))          && p('0:estimate') && e('26'); // 敏捷执行更新首日剩余工时
 r($execution->fixFirstTest($executionIDList[1], $waterfallEstimate)) && p('0:left')     && e('17'); // 瀑布执行更新首日剩余工时

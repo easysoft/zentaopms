@@ -1012,7 +1012,7 @@ class executionTest
         }
     }
 
-    public function fixFirstTest($executionID, $count, $param = array())
+    public function fixFirstTest($executionID, $param = array())
     {
         global $tester;
         $date = date('Y-m-d');
@@ -1027,10 +1027,6 @@ class executionTest
         {
             $error = dao::getError();
             return $error;
-        }
-        elseif($count == "1")
-        {
-            return count($object);
         }
         else
         {
@@ -1054,6 +1050,233 @@ class executionTest
             return $error;
         }
         elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function processBurnDataTest($executionID, $itemCounts, $begin, $end, $count)
+    {
+        global $tester;
+        $sets = $tester->dao->select('execution, `date` as name, `left` as value')->from(TABLE_BURN)->where('execution')->eq($executionID)->fetchAll('name');
+        $object = $this->objectModel->processBurnData($sets, $itemCounts, $begin, $end);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == "1")
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function summaryTest($executionID)
+    {
+        global $tester;
+        $execution  = $tester->dbh->query("select * from zt_project where id = $executionID")->fetch();
+        $executions = array($executionID => $execution->name);
+        $page       = 'NULL';
+        $tasks = $this->objectModel->getTasks('0', $executionID, $executions,'all', '0', '0', 'status,id_desc', $page);
+        $object = $this->objectModel->summary($tasks);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function isClickableTest($execution, $action)
+    {
+        $object = $this->objectModel->isClickable($execution, $action);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        else
+        {
+            if($object == true)
+            {
+                return "检查通过";
+            }
+            else
+            {
+                return "检查不通过";
+            }
+        }
+    }
+
+    public function getDateListTest($begin, $end, $type, $count, $interval = 0)
+    {
+        $object = $this->objectModel->getDateList($begin, $end, $type, $interval);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        elseif($count == "1")
+        {
+            return count($object[0]);
+        }
+        else
+        {
+            if(empty($object[0]))
+            {
+                return '无数据';
+            }
+            else
+            {
+                return $object;
+            }
+        }
+    }
+
+    public function getTotalEstimateTest($executionID)
+    {
+        $object = $this->objectModel->getTotalEstimate($executionID);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error[0];
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function fixOrderTest()
+    {
+        global $tester;
+        $this->objectModel->fixOrder();
+        $object = $tester->dao->select('id,`order`')->from(TABLE_EXECUTION)->fetchAll('id');
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getKanbanTasksTest($executionID, $count)
+    {
+        $object = $this->objectModel->getKanbanTasks($executionID);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == 1)
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getKanbanSettingTest($count)
+    {
+        $object = $this->objectModel->getKanbanSetting();
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == 1)
+        {
+            return count($object->colorList);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getKanbanColumnsTest($count)
+    {
+        $kanbanSetting = $this->objectModel->getKanbanSetting();
+        $object = $this->objectModel->getKanbanColumns($kanbanSetting);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == 1)
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getKanbanStatusMapTest($count)
+    {
+        $kanbanSetting = $this->objectModel->getKanbanSetting();
+        $object = $this->objectModel->getKanbanStatusMap($kanbanSetting);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == 1)
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getKanbanStatusListTest($count)
+    {
+        $kanbanSetting = $this->objectModel->getKanbanSetting();
+        $object = $this->objectModel->getKanbanStatusList($kanbanSetting);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == 1)
+        {
+            return count($object);
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    public function getKanbanColorListTest($count)
+    {
+        $kanbanSetting = $this->objectModel->getKanbanSetting();
+        $object = $this->objectModel->getKanbanColorList($kanbanSetting);
+        if(dao::isError())
+        {
+            $error = dao::getError();
+            return $error;
+        }
+        elseif($count == 1)
         {
             return count($object);
         }
