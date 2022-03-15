@@ -11,6 +11,7 @@ h3 {font-size: 16px;}
 .mini-icon {display: inline-block; height: 16px; width: 16px; background-color: transparent; background-position: 0 0; background-repeat: no-repeat; vertical-align: text-bottom;}
 .action {float: left;}
 .input-group select#encrypt {border-left: 0px;}
+.input-group #encrypt_chosen {width: 40% !important;}
 .arrange {float: right;}
 .versions {position: relative;}
 #diffRepo {position: absolute; left: 20px; z-index: 1000;}

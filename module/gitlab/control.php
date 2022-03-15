@@ -227,8 +227,8 @@ class gitlab extends control
         $this->loadModel('action');
         $this->gitlab->delete(TABLE_PIPELINE, $id);
 
+        $actionID = $this->dao->lastInsertID();
         $gitLab   = $this->gitlab->getByID($id);
-        $actionID = $this->action->create('gitlab', $id, 'deleted');
         $changes  = common::createChanges($oldGitLab, $gitLab);
         $this->action->logHistory($actionID, $changes);
         echo js::reload('parent');
