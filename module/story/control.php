@@ -1148,7 +1148,8 @@ class story extends control
 
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
         $reviewedBy         = trim($story->reviewedBy, ',');
-        $checkSuperReviewed = empty($reviewedBy) ? false : strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $reviewedBy . ',');
+        $superReviewers     = trim(zget($this->config->story, 'superReviewers', ''), ',');
+        $checkSuperReviewed = empty($reviewedBy) ? false : strpos(',$superReviewers,', ',$reviewedBy,');
 
         $this->executeHooks($storyID);
 
