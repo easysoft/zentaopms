@@ -23,7 +23,7 @@ function setRole(account, roleID)
 
 function addItem(obj)
 {
-    var item = $('#addItem').html().replace(/%i%/g, i);
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex);
     $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
     var $accounts = $('#hours' + i).closest('tr').find('select:first')
 
@@ -37,7 +37,7 @@ function addItem(obj)
         var pickerremote = $accounts.attr('data-pickerremote');
         $accounts.picker({chosenMode: true, remote: pickerremote});
     }
-    i ++;
+    itemIndex ++;
 }
 
 function deleteItem(obj)
