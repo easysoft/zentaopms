@@ -1029,4 +1029,18 @@ class taskTest
             return $object;
         }
     }
+
+    public function needUpdateBugStatusTest($task)
+    {
+        $object = $this->objectModel->needUpdateBugStatus($task);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
 }
