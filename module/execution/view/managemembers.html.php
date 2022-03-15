@@ -122,7 +122,7 @@
       </tbody>
       <tfoot><tr><td colspan='6' class='text-center form-actions'><?php echo html::submitButton() . ' ' . html::backButton(); ?></td></tr></tfoot>
     </table>
-    <?php js::set('i', $i);?>
+    <?php js::set('itemIndex', $i);?>
   </form>
 </div>
 <div>
