@@ -154,7 +154,7 @@ class Processor
         $parentID     = implode(',', $parentIDList);
 
         $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->in($parentID)->andWhere('deleted')->eq(0)->exec();
-        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('po82')->set('mailto')->eq('user1,user2,user3')->where('id')->eq(1)->andWhere('deleted')->eq(0)->exec();
+        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('po82')->set('mailto')->eq('user1,user2,user3')->set('frombug')->eq('1')->where('id')->eq(1)->andWhere('deleted')->eq(0)->exec();
     }
 
     /**
