@@ -38,11 +38,11 @@ fields:
       - field: path2
         prefix: ","
         range: 101-700
-      - field: path3
-        range: []
         postfix: ","
   - field: acl
     range: open{4},private{4}
+  - field: openedVersion
+    range: "16.5"
   - field: whitelist
     froms:
       - from: common.user.v1.yaml

@@ -1,13 +1,14 @@
 <?php
 $builder = new stdclass();
 
-$builder->company   = array('rows' => 1,    'extends' => array('company'));
-$builder->user      = array('rows' => 1000, 'extends' => array('user'));
-$builder->todo      = array('rows' => 2000, 'extends' => array('todo'));
-$builder->effort    = array('rows' => 100, 'extends' => array('effort'));
-$builder->usergroup = array('rows' => 600, 'extends' => array('usergroup'));
-$builder->dept      = array('rows' => 100,  'extends' => array('dept'));
-$builder->action    = array('rows' => 100,  'extends' => array('action'));
+$builder->company     = array('rows' => 1,    'extends' => array('company'));
+$builder->user        = array('rows' => 1000, 'extends' => array('user'));
+$builder->todo        = array('rows' => 2000, 'extends' => array('todo'));
+$builder->effort      = array('rows' => 100, 'extends' => array('effort'));
+$builder->usergroup   = array('rows' => 600, 'extends' => array('usergroup'));
+$builder->usercontact = array('rows' => 61, 'extends' => array('usercontact'));
+$builder->dept        = array('rows' => 100,  'extends' => array('dept'));
+$builder->action      = array('rows' => 100,  'extends' => array('action'));
 
 $builder->program       = array('rows' => 10, 'extends' => array('project', 'program'));
 $builder->project       = array('rows' => 90, 'extends' => array('project', 'project'));

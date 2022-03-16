@@ -89,6 +89,8 @@ class Processor
         $users['user2'] = array('account' => 'noprogram1', 'realname' => '不在项目集1用户');
 
         foreach($users as $account => $user) $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($account)->exec();
+
+        $this->dao->update(TABLE_USERCONTACT)->set('account')->eq('admin')->where('account')->like('admin%')->exec();
     }
 
     /**
