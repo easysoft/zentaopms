@@ -25,6 +25,7 @@ $lang->stage->type    = '阶段分类';
 $lang->stage->percent = '工作量占比';
 $lang->stage->setType = '阶段类型';
 
+$lang->stage->typeList['']        = '';
 $lang->stage->typeList['request'] = '需求';
 $lang->stage->typeList['design']  = '设计';
 $lang->stage->typeList['dev']     = '开发';
