@@ -1372,7 +1372,7 @@ class repoModel extends model
                 {
                     $tasks[$id] = $id;
                     $actions['task'][$id]['start']['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['start']['left']     = $matches[16][$i];
+                    $actions['task'][$id]['start']['left']     = $matches[17][$i];
                 }
             }
         }

@@ -185,6 +185,7 @@ class gitlab extends control
 
                 $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
             }
+            $this->loadModel('action')->create('gitlab', $gitlabID, 'binduser');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
 

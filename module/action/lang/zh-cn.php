@@ -344,6 +344,7 @@ $lang->action->label->importedrelease       = '导入了';
 $lang->action->label->importedexecution     = '导入了';
 $lang->action->label->importedbuild         = '导入了';
 $lang->action->label->fromsonarqube         = '由SonarQube问题创建';
+$lang->action->label->binduser              = '绑定用户了';
 
 /* 动态信息按照对象分组 */
 $lang->action->dynamicAction                    = new stdclass();
@@ -823,3 +824,4 @@ $lang->action->desc->deletemr                     = '$date, 由 <strong>$actor</
 $lang->action->desc->mergedmr                     = '$date, 由 <strong>$actor</strong> 合并了 <a href="$extra">代码</a>。';
 $lang->action->desc->approve                      = '$date, 由 <strong>$actor</strong> 审核通过。';
 $lang->action->desc->reject                       = '$date, 由 <strong>$actor</strong> 拒绝。';
+$lang->action->desc->binduser                     = '$date, 由 <strong>$actor</strong> 修改了绑定用户。';
