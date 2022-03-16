@@ -72,7 +72,7 @@ body.menu-hide {padding-left: 0;}
 #flodNav .dropdown-submenu:focus > a, #flodNav .dropdown-submenu:hover > a {background-color: rgba(0,0,0,.2);}
 #poweredBy {width: 40%; position: absolute; top: 4px; right: 0; padding: 0;}
 
-#globalSearchDiv {width: 52%; float: right; margin-right: 4px;}
+#globalSearchDiv {width: 200px; float: right; margin-right: 4px;}
 #globalSearchDiv .input-group {width: 194px; float: right; margin-top: 2px;}
 #searchbox .dropdown-menu.show-quick-go.with-active {min-width: 270px;}
 #searchbox .dropdown-menu.show-quick-go > li {padding: 0 5px;}
