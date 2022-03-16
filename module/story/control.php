@@ -754,8 +754,6 @@ class story extends control
         $productReviewers = $product->reviewer;
         if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
 
-        $this->story->replaceURLang($story->type);
-
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
 
