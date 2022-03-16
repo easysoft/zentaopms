@@ -1385,7 +1385,7 @@ class repoModel extends model
                 {
                     $tasks[$id] = $id;
                     $actions['task'][$id]['effort']['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['effort']['left']     = $matches[16][$i];
+                    $actions['task'][$id]['effort']['left']     = $matches[17][$i];
                 }
             }
         }
@@ -1506,8 +1506,8 @@ class repoModel extends model
         $storyReg = "(($storyModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $taskReg  = "(($taskModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $bugReg   = "(($bugModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
-        $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
-        $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
+        $costReg  = "($costs) *(($costMarks)([0-9]+(\.?[0-9]+)?)($costUnit))";
+        $leftReg  = "($lefts) *(($leftMarks)([0-9]+(\.?[0-9]+)?)($leftUnit))";
 
         $startTaskReg  = "({$startAction}) *{$taskReg}.*$costReg.*$leftReg";
         $effortTaskReg = "({$effortAction}) *{$taskReg}.*$costReg.*$leftReg";
