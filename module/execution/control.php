@@ -1406,6 +1406,12 @@ class execution extends control
                 }
             }
 
+            if(!empty($projectID) and $project->model == 'kanban')
+            {
+                $execution = $this->execution->getById($executionID);
+                $this->loadModel('kanban')->createRDKanban($execution);
+            }
+
             if(!empty($planID))
             {
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID&copyExecutionID=&planID=$planID&confirm=no")));
@@ -1414,9 +1420,6 @@ class execution extends control
             {
                 if(!empty($projectID) and $project->model == 'kanban')
                 {
-                    $execution = $this->execution->getById($executionID);
-                    $this->loadModel('kanban')->createRDKanban($execution);
-
                     if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
                     $link = $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
