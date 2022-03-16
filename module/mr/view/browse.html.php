@@ -59,6 +59,7 @@
           <th class='w-200px text-left'><?php common::printOrderLink('targetBranch', $orderBy, $vars, $lang->mr->targetBranch);?></th>
           <th class='w-120px text-left'><?php common::printOrderLink('mergeStatus', $orderBy, $vars, $lang->mr->mergeStatus);?></th>
           <th class='w-120px text-left'><?php common::printOrderLink('approvalStatus', $orderBy, $vars, $lang->mr->approvalStatus);?></th>
+          <th class='w-120px text-left'><?php common::printOrderLink('createdBy', $orderBy, $vars, $lang->mr->author);?></th>
           <th class='w-120px c-actions-3'><?php echo $lang->actions;?></th>
         </tr>
       </thead>
@@ -82,6 +83,7 @@
           <?php else:?>
             <td><?php echo empty($MR->approvalStatus) ? $lang->mr->approvalStatusList['notReviewed'] : $lang->mr->approvalStatusList[$MR->approvalStatus];?></td>
           <?php endif;?>
+          <td class='text' title='<?php echo zget($users, $MR->createdBy);?>'><?php echo zget($users, $MR->createdBy);?></td>
           <td class='c-actions'>
             <?php
             $canDelete = ($app->user->admin or (isset($projects[$MR->gitlabID][$MR->sourceProject]->owner->id) and $projects[$MR->gitlabID][$MR->sourceProject]->owner->id == $openIDList[$MR->gitlabID])) ? '' : 'disabled';
