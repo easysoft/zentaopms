@@ -430,7 +430,6 @@ class programplanModel extends model
             $plan->output    = empty($output[$key]) ? '' : implode(',', $output[$key]);
             $plan->acl       = empty($parentID) ? $acl[$key] : $parentACL;
             $plan->PM        = empty($PM[$key]) ? '' : $PM[$key];
-            $plan->openedBy  = $this->app->user->account;
 
             $datas[] = $plan;
         }
