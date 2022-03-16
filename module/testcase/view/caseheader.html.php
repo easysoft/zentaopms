@@ -12,6 +12,7 @@
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 </style>
 <div id='mainMenu' class='clearfix'>
+  <?php if(!($this->app->rawMethod == 'groupcase' or $this->app->rawMethod == 'zerocase')):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -31,6 +32,7 @@
       ?>
     </div>
   </div>
+  <?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php
     $hasBrowsePriv = $isProjectApp ? common::hasPriv('project', 'testcase') : common::hasPriv('testcase', 'browse');
