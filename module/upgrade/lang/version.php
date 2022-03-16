@@ -154,7 +154,7 @@ $lang->upgrade->fromVersions['16_1']       = '16.1';
 $lang->upgrade->fromVersions['16_2']       = '16.2';
 $lang->upgrade->fromVersions['16_3']       = '16.3';
 $lang->upgrade->fromVersions['16_4']       = '16.4';
-$lang->upgrade->fromVersions['16_5']       = '16.5';
+$lang->upgrade->fromVersions['16_5_beta1'] = '16.5.beta1';
 
 /* Pro. */
 $lang->upgrade->fromVersions['pro1_0']        = 'Pro1.0';
@@ -307,7 +307,7 @@ $lang->upgrade->fromVersions['biz6_1']       = 'Biz6.1';
 $lang->upgrade->fromVersions['biz6_2']       = 'Biz6.2';
 $lang->upgrade->fromVersions['biz6_3']       = 'Biz6.3';
 $lang->upgrade->fromVersions['biz6_4']       = 'Biz6.4';
-$lang->upgrade->fromVersions['biz6_5']       = 'Biz6.5';
+$lang->upgrade->fromVersions['biz6_5_beta1'] = 'Biz6.5.beta1';
 
 /* Max. */
 $lang->upgrade->fromVersions['max2_0_beta4'] = 'Max2.0.beta4';
