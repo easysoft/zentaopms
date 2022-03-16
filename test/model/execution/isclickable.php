@@ -10,12 +10,30 @@ title=测试executionModel->isClickableTest();
 cid=1
 pid=1
 
-敏捷执行关联用例 >> 101,1,1
-瀑布执行关联用例 >> 131,43,169
-看板执行关联用例 >> 161,68,269
-敏捷执行关联用例统计 >> 4
-瀑布执行关联用例统计 >> 4
-看板执行关联用例统计 >> 4
+wait状态执行start按钮检查 >> 检查通过
+wait状态执行close按钮检查 >> 检查通过
+wait状态执行suspend按钮检查 >> 检查通过
+wait状态执行putoff按钮检查 >> 检查通过
+wait状态执行activate按钮检查 >> 检查不通过
+wait状态执行delete按钮检查 >> 检查通过
+doing状态执行start按钮检查 >> 检查不通过
+doing状态执行close按钮检查 >> 检查通过
+doing状态执行suspend按钮检查 >> 检查通过
+doing状态执行putoff按钮检查 >> 检查通过
+doing状态执行activate按钮检查 >> 检查不通过
+doing状态执行delete按钮检查 >> 检查通过
+suspended状态执行start按钮检查 >> 检查不通过
+suspended状态执行close按钮检查 >> 检查通过
+suspended状态执行suspend按钮检查 >> 检查不通过
+suspended状态执行putoff按钮检查 >> 检查不通过
+suspended状态执行activate按钮检查 >> 检查通过
+suspended状态执行delete按钮检查 >> 检查不通过
+closed状态执行start按钮检查 >> 检查不通过
+closed状态执行close按钮检查 >> 检查不通过
+closed状态执行suspend按钮检查 >> 检查不通过
+closed状态执行putoff按钮检查 >> 检查不通过
+closed状态执行activate按钮检查 >> 检查通过
+closed状态执行delete按钮检查 >> 检查不通过
 
 */
 
