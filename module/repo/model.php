@@ -206,6 +206,8 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setIf($this->post->SCM == 'Git', 'account', '')
+            ->setIf($this->post->SCM == 'Git', 'password', '')
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
@@ -1967,5 +1969,21 @@ class repoModel extends model
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
 
         $this->fixCommit($repoID);
+    }
+
+    /**
+     * Get execution pairs.
+     *
+     * @param  int    $product
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getExecutionPairs($product, $branch = 0)
+    {
+        $pairs = array();
+        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
+        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        return $pairs;
     }
 }
