@@ -87,13 +87,13 @@ class kanbanModel extends model
                 ->add('createdDate', helper::now())
                 ->trim('name')
                 ->get();
-            if($from == 'kanban') $region->space = $kanban->space;
+            $region->space = $from == 'kanban' ? $kanban->space : 0;
         }
 
         $region->order = $order;
         $this->dao->insert(TABLE_KANBANREGION)->data($region)
             ->batchCheck($this->config->kanban->require->createregion, 'notempty')
-            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0'")
+            ->check('name', 'unique', "kanban = {$kanban->id} AND deleted = '0' AND space='$region->space'")
             ->autoCheck()
             ->exec();
 
@@ -2872,6 +2872,7 @@ class kanbanModel extends model
                 ->where('t1.kanban')->eq($kanban->id)
                 ->andWhere('t1.deleted')->eq(0)
                 ->andWhere('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->eq('common')
                 ->fetch('count');
 
             if($laneCount > 1) $printSetHeightBtn = true;
