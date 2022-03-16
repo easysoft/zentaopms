@@ -452,7 +452,8 @@ class extensionModel extends model
             }
             else
             {
-                if(!@mkdir($path, 0755, true))
+                $parentDir = mb_substr($path, 0, strripos($path, '/'));
+                if(!is_writable($parentDir) or !@mkdir($path, 0777, true))
                 {
                     $return->errors .= sprintf($this->lang->extension->errorTargetPathNotExists, $path) . '<br />';
                     $return->mkdirCommands .= "mkdir -p $path<br />";
