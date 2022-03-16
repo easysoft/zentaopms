@@ -37,6 +37,9 @@ switch($argv[1])
     case 'user':
         ztfRun('model/user');
         break;
+    case 'bug':
+        ztfRun('model/bug');
+        break;
     case 'model':
         ztfRun('model');
         break;
