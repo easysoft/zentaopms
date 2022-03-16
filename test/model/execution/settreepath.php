@@ -10,10 +10,9 @@ title=测试executionModel->setTreePathTest();
 cid=1
 pid=1
 
-敏捷执行关闭 >> status,wait,setTreePathd
-瀑布执行关闭 >> status,doing,setTreePathd
-看板执行关闭 >> status,doing,setTreePathd
-不输入实际完成时间校验 >> 『realEnd』不能为空。
+子阶段设置path >> 41,131,,41,131,701,
+子阶段设置path >> 11,11,,11,101,
+子阶段设置path >> 41,41,,41,131,
 
 */
 

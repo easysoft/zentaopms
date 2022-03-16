@@ -10,10 +10,9 @@ title=测试executionModel->getPlansTest();
 cid=1
 pid=1
 
-敏捷执行关闭 >> status,wait,getPlansd
-瀑布执行关闭 >> status,doing,getPlansd
-看板执行关闭 >> status,doing,getPlansd
-不输入实际完成时间校验 >> 『realEnd』不能为空。
+全部执行计划查询 >> 长名称
+执行计划查询 >> 1.1 [2021-05-23 ~ 2021-09-23]
+全部执行计划查询 >> 2
 
 */
 

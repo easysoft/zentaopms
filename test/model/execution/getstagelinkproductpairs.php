@@ -10,10 +10,12 @@ title=测试executionModel->getStageLinkProductPairsTest();
 cid=1
 pid=1
 
-敏捷执行关闭 >> status,wait,getStageLinkProductPairsd
-瀑布执行关闭 >> status,doing,getStageLinkProductPairsd
-看板执行关闭 >> status,doing,getStageLinkProductPairsd
-不输入实际完成时间校验 >> 『realEnd』不能为空。
+敏捷执行产品查询 >> 多平台产品91
+瀑布执行产品查询 >> 已关闭的正常产品31
+看板执行产品查询 >> 已关闭的多分支产品61
+敏捷执行产品统计 >> 3
+瀑布执行产品统计 >> 3
+看板执行产品统计 >> 3
 
 */
 
