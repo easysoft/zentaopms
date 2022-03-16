@@ -48,7 +48,7 @@
               }
           }
           ?>
-          <td class='text product-line' title='<?php echo $productNames;?>'><?php echo $productNames;?></td>
+          <td class='text' title='<?php echo $productNames;?>'><?php echo $productNames;?></td>
           <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
