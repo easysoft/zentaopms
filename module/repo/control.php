@@ -1266,4 +1266,18 @@ class repo extends control
     {
         return $this->send(array('status' => 'success', 'rules' => $this->config->repo->rules));
     }
+
+    /**
+     * Ajax get executions.
+     *
+     * @param  int    $productID
+     * @param  int    $branch
+     * @access public
+     * @return void
+     */
+    public function ajaxGetExecutions($productID, $branch = 0)
+    {
+        $executions = $this->repo->getExecutionPairs($productID, $branch);
+        echo html::select('execution', array('' => '') + $executions, '', 'class="form-control chosen"');
+    }
 }
