@@ -15,7 +15,7 @@ $(function()
     {
         var $content = $(this).find('td.content');
         var content  = $content.find('div').html();
-        if(content.indexOf('<br') >= 0)
+        if(content.indexOf('<br') >= 0 || content.indexOf('<img') >= 0)
         {
             $content.append("<a href='###' class='more'><i class='icon icon-chevron-double-down'></i></a>");
         }
