@@ -78,7 +78,10 @@ class misc extends control
 
         $latestVersionList = common::http($link);
 
-        $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
+        if(!isset($this->config->global->latestVersionList) or $this->config->global->latestVersionList != $latestVersionList)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
+        }
     }
 
     /**

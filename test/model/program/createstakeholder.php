@@ -17,3 +17,4 @@ $Stakeholder = new Program('admin');
 $t_Stakeholder = array('1');
 
 r($Stakeholder->createStakeholder($t_Stakeholder[0])) && p('0:account;1:account') && e('dev2;dev1'); // 创建id=1的项目集的干系人dev1,dev2并查看。
+system("./ztest init");

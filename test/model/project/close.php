@@ -24,3 +24,4 @@ $realEnd1 = array('realEnd' => '2022-03-11');
 r($project->checkStatusOff($closeId[0], $realEnd1)) && p() && e('1'); //关闭id为20状态不是closed的项目
 r($project->checkStatusOff($closeId[1], $realEnd1)) && p() && e('0'); //关闭id为26状态是closed的项目
 r($project->checkStatusOff($closeId[2], $realEnd1)) && p() && e('0'); //关闭id为41状态是suspended的项目
+system("./ztest init");

@@ -24,3 +24,4 @@ r($project->checkStatusBegin($statusId[0])) && p() && e('1'); // 开始id为81�
 r($project->checkStatusBegin($statusId[1])) && p() && e('1'); // 开始id为83状态是wait的项目
 r($project->checkStatusBegin($statusId[2])) && p() && e('0'); // 开始id为82状态是closed的项目
 r($project->checkStatusBegin($statusId[3])) && p() && e('0'); // 开始id为85状态是doing的项目
+system("./ztest init");

@@ -264,6 +264,7 @@ $lang->project->nextStep               = '下一步';
 $lang->project->hoursUnit              = '%s 工时';
 $lang->project->membersUnit            = '%s人';
 $lang->project->lastIteration          = "近期{$lang->executionCommon}";
+$lang->project->lastKanban             = '近期看板';
 $lang->project->ongoingStage           = '进行中的阶段';
 $lang->project->scrum                  = 'Scrum';
 $lang->project->waterfall              = '瀑布';

@@ -8,6 +8,14 @@ class taskTest
         $this->objectModel = $tester->loadModel('task');
     }
 
+    /**
+     * Test create a task.
+     *
+     * @param  array  $param
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
     public function createObject($param = array(), $executionID = '')
     {
         $assignedTo = array('');
@@ -39,6 +47,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test update a task.
+     *
+     * @param  int   $objectID
+     * @param  array $param
+     * @access public
+     * @return array|string
+     */
     public function updateObject($objectID, $param = array())
     {
         global $tester;
@@ -70,6 +86,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test batch create tasks.
+     *
+     * @param  array  $param
+     * @param  int    $executionID
+     * @access public
+     * @return object
+     */
     public function batchCreateObject($param = array(), $executionID = '')
     {
         $modul = array('','','');
@@ -110,6 +134,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test batch update tasks.
+     *
+     * @param  array  $param
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
     public function batchUpdateObject($param = array(), $taskID = '')
     {
         $taskIDList = array($taskID => $taskID);
@@ -149,6 +181,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test batch change module.
+     *
+     * @param  array  $taskIDList
+     * @param  int    $moduleID
+     * @access public
+     * @return array
+     */
     public function batchChangeModuleTest($taskIDList, $moduleID)
     {
         $object = $this->objectModel->batchChangeModule($taskIDList, $moduleID);
@@ -180,6 +220,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test record estimate and left of task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function recordEstimateTest($taskID, $param = array())
     {
         $todate   = date("Y-m-d");
@@ -203,6 +251,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test activate a task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function activateTest($taskID, $param = array())
     {
         $createFields = array('status' => 'doing', 'comment' => '单元测试','assignedTo' => '', 'left' => '3');
@@ -221,6 +277,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test assign a task to a user again.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function assignTest($taskID, $param = array())
     {
         $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '');
@@ -238,6 +302,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test cancel a task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function cancelTest($taskID, $param = array())
     {
         $createFields = array('status' => 'cancel', 'comment' => '单元测试');
@@ -256,6 +328,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test close a task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function closeTest($taskID, $param = array())
     {
         $createFields = array('status' => 'closed', 'comment' => '单元测试');
@@ -274,6 +354,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test finish a task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function finishTest($taskID, $param = array())
     {
         $todate = date("Y-m-d h:i:s");
@@ -295,6 +383,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get task info by Id.
+     *
+     * @param  int   $taskID
+     * @access public
+     * @return object
+     */
     public function getByIdTest($taskID)
     {
         $object = $this->objectModel->getById($taskID);
@@ -309,6 +404,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get task info by Id List.
+     *
+     * @param  int|array|string $taskID
+     * @access public
+     * @return array
+     */
     public function getByListTest($taskID)
     {
         $object = $this->objectModel->getByList($taskID);
@@ -323,6 +425,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get execution tasks pairs..
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
     public function getExecutionTaskPairsTest($executionID)
     {
         $object = $this->objectModel->getExecutionTaskPairs($executionID);
@@ -337,6 +446,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get tasks of a execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
     public function getExecutionTasksTest($executionID,$count)
     {
         $object = $this->objectModel->getExecutionTasks($executionID);
@@ -355,6 +471,15 @@ class taskTest
         }
     }
 
+    /**
+     * Test get tasks list of a execution.
+     *
+     * @param  int    $executionID
+     * @param  array  $moduleIdList
+     * @param  int    $count
+     * @access public
+     * @return array
+     */
     public function getTasksByModuleTest($executionID, $moduleIdList, $count)
     {
         $object = $this->objectModel->getTasksByModule($executionID, $moduleIdList);
@@ -373,6 +498,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test get tasks of a user.
+     *
+     * @param  int    $taskID
+     * @param  string $assignedTo
+     * @access public
+     * @return array
+     */
     public function getUserTasksTest($taskID, $assignedTo)
     {
         $createFields = array('assignedTo' => $assignedTo, 'status' => 'doing', 'comment' => '');
@@ -390,6 +523,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test pause a task.
+     *
+     * @param  int    $taskID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function pauseTest($taskID, $param = array())
     {
         $createFields = array('status' => 'pause', 'comment' => '单元测试');
@@ -408,6 +549,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test get tasks pairs of a user.
+     *
+     * @param  int    $taskID
+     * @param  string $assignedTo
+     * @access public
+     * @return array
+     */
     public function getUserTaskPairsTest($taskID, $assignedTo)
     {
         $createFields = array('assignedTo' => $assignedTo, 'status' => 'doing', 'comment' => '');
@@ -425,6 +574,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test get suspended tasks of a user.
+     *
+     * @param  int    $taskID
+     * @param  string $assignedTo
+     * @access public
+     * @return array
+     */
     public function getUserSuspendedTasksTest($taskID, $assignedTo)
     {
         $createFields = array('assignedTo' => $assignedTo, 'status' => 'doing', 'comment' => '');
@@ -442,6 +599,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test get task pairs of a story.
+     *
+     * @param  int    $storyID
+     * @param  int    $count
+     * @access public
+     * @return array
+     */
     public function getStoryTasksTest($storyID, $count)
     {
         $object = $this->objectModel->getStoryTasks($storyID);
@@ -460,6 +625,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get counts of some stories' tasks.
+     *
+     * @param  array  $storyIDList
+     * @access public
+     * @return int
+     */
     public function getStoryTaskCountsTest($storyIDList)
     {
         $object = $this->objectModel->getStoryTaskCounts($storyIDList);
@@ -474,6 +646,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get task estimate.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return object
+     */
     public function getTaskEstimateTest($taskID)
     {
         $object = $this->objectModel->getTaskEstimate($taskID);
@@ -488,6 +667,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get estimate by id.
+     *
+     * @param  int    $estimateID
+     * @access public
+     * @return object
+     */
     public function getEstimateByIdTest($estimateID)
     {
         $object = $this->objectModel->getEstimateById($estimateID);
@@ -502,6 +688,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test update estimate.
+     *
+     * @param  int    $estimateID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
     public function updateEstimateTest($estimateID, $param = array())
     {
         $createFields = array('date' => '0000-00-00', 'consumed' => '1', 'left' => '1', 'work' => '这里是工作内容1');
@@ -519,6 +713,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test delete estimate.
+     *
+     * @param  int    $estimateID
+     * @access public
+     * @return array
+     */
     public function deleteEstimateTest($estimateID)
     {
         $object = $this->objectModel->deleteEstimate($estimateID);
@@ -533,6 +734,14 @@ class taskTest
         }
     }
 
+    /**
+     * Test create task from gitlab issue.
+     *
+     * @param  array  $task
+     * @param  int    $executionID
+     * @access public
+     * @return int
+     */
     public function createTaskFromGitlabIssueTest($task, $executionID)
     {
         $objectID = $this->objectModel->createTaskFromGitlabIssue($task, $executionID);
@@ -548,6 +757,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get project id by execution id.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
     public function getProjectIDTest($executionID)
     {
         $object = $this->objectModel->getProjectID($executionID);
@@ -562,6 +778,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test get story comments.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return array
+     */
     public function getStoryCommentsTest($storyID)
     {
         $object = $this->objectModel->getStoryComments($storyID);
@@ -576,6 +799,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test compute parent task working hours.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return object
+     */
     public function computeWorkingHoursTest($taskID)
     {
         $result = $this->objectModel->computeWorkingHours($taskID);
@@ -592,6 +822,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test compute begin and end for parent task.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
     public function computeBeginAndEndTest($taskID)
     {
         $result = $this->objectModel->computeBeginAndEnd($taskID);
@@ -603,11 +840,28 @@ class taskTest
         else
         {
             $object = $this->objectModel->getById($taskID);
-            if(!empty($object) and $object->parent > 0) $parentObject = $this->objectModel->getById($object->parent);
-            return isset($parentObject) ? $parentObject : $object;
+
+            if(empty($object)) return 0;
+
+            if($object->parent > 0) $object = $this->objectModel->getById($object->parent);
+
+
+            $estStartedDiff = date_diff(date_create($object->estStarted), date_create(helper::now()));
+            $deadlineDiff   = date_diff(date_create($object->deadline), date_create(helper::now()));
+            return array('estStartedDiff' => $estStartedDiff->d, 'deadlineDiff' => $deadlineDiff->d);
         }
     }
 
+    /**
+     * Test compute hours for multiple task.
+     *
+     * @param  object $oldTask
+     * @param  object $task
+     * @param  array  $team
+     * @param  bool   $autoStatus
+     * @access public
+     * @return array
+     */
     public function computeHours4MultipleTest($oldTask, $task = null, $team = array(), $autoStatus = true)
     {
         $result = $this->objectModel->computeHours4Multiple($oldTask, $task, $team, $autoStatus);
@@ -638,6 +892,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test process a task, judge it's status.
+     *
+     * @param  object $task
+     * @access public
+     * @return object
+     */
     public function processTaskTest($task)
     {
         $task->deadline = $task->deadline == '-1day' ? date('Y-m-d',strtotime('-1 day')) : date('Y-m-d',strtotime('+1 day'));
@@ -653,6 +914,13 @@ class taskTest
         }
     }
 
+    /**
+     * Test batch process tasks.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return array
+     */
     public function processTasksTest($executionID)
     {
         global $tester;
@@ -692,8 +960,43 @@ class taskTest
         }
     }
 
-    public function processData4ReportTest($tasks, $children, $field)
+    /**
+     * Test process data for report.
+     *
+     * @param  bool  $children
+     * @param  array $field
+     * @access public
+     * @return array
+     */
+    public function processData4ReportTest($children, $field)
     {
+        global $tester;
+        $tasks = $tester->dao->select('*')->from(TABLE_TASK)->where('`execution`')->eq('101')->andWhere('deleted')->eq(0)->fetchAll('id');
+        $parents = array();
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0) $parents[$task->parent] = $task->parent;
+        }
+        $parents = $tester->dao->select('*')->from(TABLE_TASK)->where('id')->in($parents)->fetchAll('id');
+        foreach($tasks as $task)
+        {
+            if($task->parent > 0)
+            {
+                if(isset($tasks[$task->parent]))
+                {
+                    $tasks[$task->parent]->children[$task->id] = $task;
+                }
+                else
+                {
+                    $parent = $parents[$task->parent];
+                    $task->parentName = $parent->name;
+                }
+            }
+            $task->date = '0000-00-00';
+        }
+
+        $children = $children ? $tasks[601]->children + $tasks[602]->children + $tasks[603]->children : array();
+
         $object = $this->objectModel->processData4Report($tasks, $children, $field);
 
         $object['void'] = isset($object['']) ? $object[''] : 'void';
@@ -713,6 +1016,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per execution.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerExecutionTest()
     {
         $object = $this->objectModel->getDataOfTasksPerExecution();
@@ -727,6 +1036,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per module.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerModuleTest()
     {
         $object = $this->objectModel->getDataOfTasksPerModule();
@@ -741,6 +1056,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per assignedto.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerAssignedToTest()
     {
         $object = $this->objectModel->getDataOfTasksPerAssignedTo();
@@ -755,6 +1076,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per type.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerTypeTest()
     {
         $object = $this->objectModel->getDataOfTasksPerType();
@@ -769,6 +1096,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per priority.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerPriTest()
     {
         $object = $this->objectModel->getDataOfTasksPerPri();
@@ -783,6 +1116,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per deadline.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerDeadlineTest($dateID)
     {
         $dateList = array(date('Y-m-d',strtotime('+1 day')), date('Y-m-d',strtotime('+2 day')), date('Y-m-d',strtotime('+3 day')), date('Y-m-d',strtotime('+4 day')), date('Y-m-d',strtotime('-1 day')), date('Y-m-d',strtotime('-2 day')), date('Y-m-d',strtotime('-3 day')), date('Y-m-d',strtotime('-4 day')));
@@ -798,6 +1137,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per estimate.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerEstimateTest()
     {
         $object = $this->objectModel->getDataOfTasksPerEstimate();
@@ -812,6 +1157,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per left.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerLeftTest()
     {
         $object = $this->objectModel->getDataOfTasksPerLeft();
@@ -826,6 +1177,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per consumed.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerConsumedTest()
     {
         $object = $this->objectModel->getDataOfTasksPerConsumed();
@@ -840,6 +1197,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per finishedBy.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerFinishedByTest()
     {
         $object = $this->objectModel->getDataOfTasksPerFinishedBy();
@@ -854,6 +1217,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per closed reason.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerClosedReasonTest()
     {
         $object = $this->objectModel->getDataOfTasksPerClosedReason();
@@ -868,6 +1237,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of finished tasks per day.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOffinishedTasksPerDayTest()
     {
         $object = $this->objectModel->getDataOffinishedTasksPerDay();
@@ -882,6 +1257,12 @@ class taskTest
         }
     }
 
+    /**
+     * Test get report data of tasks per status.
+     *
+     * @access public
+     * @return array
+     */
     public function getDataOfTasksPerStatusTest()
     {
         $object = $this->objectModel->getDataOfTasksPerStatus();
@@ -893,6 +1274,174 @@ class taskTest
         else
         {
             return $object;
+        }
+    }
+
+    /**
+     * Test update parent status by taskID.
+     *
+     * @param  int   $taskID
+     * @param  int   $parentID
+     * @param  bool  $createAction
+     * @access public
+     * @return object
+     */
+    public function updateParentStatusTest($taskID, $parentID = 0, $createAction = true)
+    {
+        $object = $this->objectModel->updateParentStatus($taskID, $parentID, $createAction);
+        if(!$object) $object = $this->objectModel->getByID($taskID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test judge an action is clickable or not.
+     *
+     * @param  object $task
+     * @param  string $action
+     * @access public
+     * @return int
+     */
+    public function isClickableTest($task, $action)
+    {
+        $object = $this->objectModel->isClickable($task, $action);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
+
+    /**
+     * Test add task estimate.
+     *
+     * @param  object  $data
+     * @access public
+     * @return object
+     */
+    public function addTaskEstimateTest($data)
+    {
+        $data->date = date("Y-m-d");
+        $this->objectModel->addTaskEstimate($data);
+
+        global $tester;
+        $objectID = $tester->dao->lastInsertID();
+        $object   = $this->objectModel->getEstimateById($objectID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get toList and ccList.
+     *
+     * @param  int    $taskID
+     * @param  bool   $skipMailto
+     * @access public
+     * @return array
+     */
+    public function getToAndCcListTest($taskID, $skipMailto = false)
+    {
+        $task = $this->objectModel->getByID($taskID);
+        if(empty($task)) return 0;
+        if($skipMailto) $task->mailto = '';
+
+        $object = $this->objectModel->getToAndCcList($task);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            if(isset($object[0])) $object[2] = $object[0];
+            if(isset($object[1]) and $object[1] == '') $object[1] = 0;
+            return $object;
+        }
+    }
+
+    /**
+     * Test get next user.
+     *
+     * @param  array  $users
+     * @param  string $current
+     * @access public
+     * @return string
+     */
+    public function getNextUserTest($users, $current)
+    {
+        $object = $this->objectModel->getNextUser($users, $current);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get task's team member pairs.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function getMemberPairsTest($taskID)
+    {
+        $task = $this->objectModel->getByID($taskID);
+        if(empty($task)) return 0;
+
+        $object = $this->objectModel->getMemberPairs($task);
+        $object['count'] = count($object);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test check whether need update status of bug.
+     *
+     * @param  object $task
+     * @access public
+     * @return int
+     */
+    public function needUpdateBugStatusTest($task)
+    {
+        $object = $this->objectModel->needUpdateBugStatus($task);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
         }
     }
 }

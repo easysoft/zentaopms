@@ -413,14 +413,14 @@ class bug extends control
                 }
                 else
                 {
-                    $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
+                    $executionID = $this->post->execution ? $this->post->execution : zget($output, 'executionID', $this->session->execution);
                     $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
                 }
 
             }
             elseif($this->app->tab == 'project')
             {
-                $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
+                $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
             }
             else
             {

@@ -89,6 +89,7 @@ $lang->doc->diffAction       = '对比文档';
 $lang->doc->sort             = '文档排序';
 $lang->doc->manageType       = '维护目录';
 $lang->doc->editType         = '编辑目录';
+$lang->doc->editChildType    = '编辑子目录';
 $lang->doc->deleteType       = '删除目录';
 $lang->doc->addType          = '增加目录';
 $lang->doc->childType        = '子目录';
