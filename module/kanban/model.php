@@ -1431,11 +1431,11 @@ class kanbanModel extends model
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
 
-        $columns = $this->dao->select('t1.*, t2.`type` as columnType')->from(TABLE_KANBANCELL)->alias('t1')
+        $columns = $this->dao->select('t1.*, t2.`type` as columnType, t2.name, t2.color, t2.limit')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.`type`')->eq($browseType)
-            ->fetchAll();
+            ->fetchAll('columnType');
 
         $cardGroup = array();
         foreach($columns as $column)
@@ -1466,15 +1466,16 @@ class kanbanModel extends model
             foreach($columnList as $columnID => $columnName)
             {
                 $parentColumn = '';
+                $column       = zget($columns, $columnID, '');
                 if(in_array($columnID, array('developing', 'developed'))) $parentColumn = 'develop';
                 if(in_array($columnID, array('testing', 'tested')))       $parentColumn = 'test';
                 if(in_array($columnID, array('fixing', 'fixed')))         $parentColumn = 'resolving';
 
                 $columnData[$columnID]['id']         = $columnID;
                 $columnData[$columnID]['type']       = $columnID;
-                $columnData[$columnID]['name']       = $columnName;
-                $columnData[$columnID]['color']      = '#333';
-                $columnData[$columnID]['limit']      = -1;
+                $columnData[$columnID]['name']       = isset($column->name) ? $column->name : $columnName;
+                $columnData[$columnID]['color']      = isset($column->color) ? $column->color : '#333';
+                $columnData[$columnID]['limit']      = isset($column->limit) ? $column->limit : -1;
                 $columnData[$columnID]['laneType']   = $browseType;
                 $columnData[$columnID]['asParent']   = in_array($columnID, array('develop', 'test', 'resolving')) ? true : false;
                 $columnData[$columnID]['parentType'] = $parentColumn;
