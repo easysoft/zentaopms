@@ -22,7 +22,7 @@
 .region .kanban-header-sub-cols .kanban-header-col > .title {max-width: 100% !important;min-width:240px;}
 .region .sort .region-header {cursor: move;}
 
-.region .kanban {padding: 0px 10px 10px 10px; min-height: unset; overflow:auto; width: 100%}
+.region .kanban {padding: 0px 5px 10px 10px; min-height: unset; overflow:auto; width: 100%}
 .region .kanban .form-actions {margin: 0;}
 .region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
 
