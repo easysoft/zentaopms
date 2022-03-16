@@ -39,6 +39,7 @@
           <tr>
             <td class='text-center'><?php echo $i + 1;?></td>
             <td class='text-center'><?php echo html::input("name[$i]", '', "class='form-control title-import'");?></td>
+            <?php if($i > 0) $lanePairs['ditto'] = $this->lang->kanbancard->ditto;?>
             <td style='overflow:visible'><?php echo html::select("lane[$i]", $lanePairs, key($lanePairs), "class='form-control chosen'")?></td>
             <td style='overflow:visible'><?php echo html::select("assignedTo[$i][]", $users, $app->user->account, "class='form-control chosen' multiple");?></td>
             <td><?php echo html::input("estimate[$i]", '', "class='form-control text-center'");?></td>

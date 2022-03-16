@@ -830,13 +830,9 @@ class kanban extends control
         $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
         $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
-        $lanePairs = $this->kanban->getLanePairsByGroup($groupID);
-
-        $lanePairs['ditto'] = $this->lang->kanbancard->ditto;
-
         $this->view->title     = $this->lang->kanban->batchCreateCard;
         $this->view->users     = $users;
-        $this->view->lanePairs = $lanePairs;
+        $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
         $this->display();
     }
