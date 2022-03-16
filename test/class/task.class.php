@@ -18,7 +18,7 @@ class taskTest
      */
     public function createObject($param = array(), $executionID = '')
     {
-        $assignedTo = array('');
+        $assignedTo   = array('');
         $createFields = array('module' => '', 'story' => '', 'name' => '', 'type' => '', 'assignedTo' => $assignedTo,
             'pri' => 3, 'estimate' => '', 'estStarted' => '2021-01-10', 'deadline' => '2021-03-19', 'desc' => '');
 
