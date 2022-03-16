@@ -10,6 +10,7 @@
  * @link        http://www.zentao.net
  */
 ?>
+<?php chdir(__DIR__);?>
 <?php include '../../common/view/gantt.html.php';?>
 <style>
 #ganttView {height: 600px;}

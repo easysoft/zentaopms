@@ -1,6 +1,13 @@
 <?php
 class Project
 {
+    /**
+     * __construct
+     *
+     * @param mixed $user
+     * @access public
+     * @return void
+     */
     public function __construct($user)
     {
         global $tester;
@@ -10,12 +17,12 @@ class Project
     }
 
     /**
-     *      * Check project status after activate a project.▫
-     *           *▫
-     *                * @param  int    $projectID▫
-     *                     * @access public
-     *                          * @return bool
-     *                               */
+     * checkStatus
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function checkStatus($projectID)
     {
         $oldProject = $this->project->getById($projectID);
@@ -29,17 +36,25 @@ class Project
         return true;
     }
 
+    /**
+     * checkHasChildren
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function checkHasChildren($projectID)
     {
         return $this->project->checkHasChildren($projectID);
     }
 
     /**
-     * Check project status after close a project.
+     * checkStatusOff
      *
-     * @param  int    $projectID
+     * @param  int    mixed $projectID
+     * @param  array  $closeTime
      * @access public
-     * @return bool
+     * @return void
      */
     public function checkStatusOff($projectID, $closeTime = array())
     {
@@ -60,11 +75,12 @@ class Project
     }
 
     /**
-     * Check budget unit list.
+     * checkBudgetUnitList
      *
-     * @param  string $checkList▫
+     * @param  string $checkList
+     * @param  'USD' => '美元') $'USD' => '美元')
      * @access public
-     * @return bool
+     * @return void
      */
     public function checkBudgetUnitList($checkList = array('CNY' => '人民币', 'USD' => '美元'))
     {
@@ -77,13 +93,13 @@ class Project
     }
 
     /**
-     *      * Check projectList get from getByIdList.
-     *           *
-     *                * @param  array  $projectIdList
-     *                     * @param  int    $count
-     *                          * @access public
-     *                               * @return array
-     *                                    */
+     * getByIdList
+     *
+     * @param  array  mixed $projectIdList
+     * @param  int    mixed $count
+     * @access public
+     * @return void
+     */
     public function getByIdList($projectIdList, $count)
     {
         $projectList = $this->project->getByIdList($projectIdList);
@@ -92,73 +108,73 @@ class Project
     }
 
     /**
-     *      * Get project by ID.
-     *           *
-     *                * @param  int $projectID
-     *                     * @access public
-     *                          * @return object
-     *                               */
+     * getProjectByID
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getProjectByID($projectID)
     {
         return $this->project->getByID($projectID);
     }
 
     /**
-     *      * Get program by ID.
-     *           *
-     *                * @param  int $programID
-     *                     * @access public
-     *                          * @return object
-     *                               */
+     * getProgramByID
+     *
+     * @param  int    mixed $programID
+     * @access public
+     * @return void
+     */
     public function getProgramByID($programID)
     {
         return $this->project->getByID($programID, 'program');
     }
 
-    /**
-     *      * Get sprint by ID.
-     *           *
-     *                * @param  int $sprintID
-     *                     * @access public
-     *                          * @return object
-     *                               */
 
+    /**
+     * getSprintByID
+     *
+     * @param  int    mixed $sprintID
+     * @access public
+     * @return void
+     */
     public function getSprintByID($sprintID)
     {
         return $this->project->getByID($sprintID, 'sprint');
     }
 
     /**
-     *      * Get stage by ID.
-     *           *
-     *                * @param  int $stageID
-     *                     * @access public
-     *                          * @return object
-     *                               */
+     * getStageByID
+     *
+     * @param  int    mixed $stageID
+     * @access public
+     * @return void
+     */
     public function getStageByID($stageID)
     {
         return $this->project->getByID($stageID, 'stage');
     }
 
     /**
-     *      * Get Kanban by ID,
-     *           *
-     *                * @param  int $kanbanID
-     *                     * @access public
-     *                          * @return void
-     *                               */
+     * getKanbanByID
+     *
+     * @param  int    mixed $kanbanID
+     * @access public
+     * @return void
+     */
     public function getKanbanByID($kanbanID)
     {
         return $this->project->getByID($kanbanID, 'kanban');
     }
 
     /**
-     *      * Get project by status.
-     *           *
-     *                * @param  string $status
-     *                     * @access public
-     *                          * @return int
-     *                               */
+     * getBystatus
+     *
+     * @param  string mixed $status
+     * @access public
+     * @return void
+     */
     public function getBystatus($status)
     {
         $projects = $this->project->getOverviewList('byStatus', $status);
@@ -189,12 +205,12 @@ class Project
     }
 
     /**
-     *      * Get project list by order.
-     *           *
-     *                * @param  string $orderBy
-     *                     * @access public
-     *                          * @return void
-     *                               */
+     * getListByOrder
+     *
+     * @param  string mixed $orderBy
+     * @access public
+     * @return void
+     */
     public function getListByOrder($orderBy)
     {
         $projects = $this->project->getOverviewList('byStatus', 'wait', $orderBy);
@@ -202,24 +218,24 @@ class Project
     }
 
     /**
-     *      * Get project by ID.
-     *           *
-     *                * @param  int $projectID
-     *                     * @access public
-     *                          * @return void
-     *                               */
+     * getByID
+     *
+     * @param  mixed  $projectID
+     * @access public
+     * @return void
+     */
     public function getByID($projectID)
     {
         return $this->project->getOverviewList('byID', $projectID);
     }
 
     /**
-     *      * Get project pairs by ID list.
-     *           *
-     *                * @param  array $IDList
-     *                     * @access public
-     *                          * @return int
-     *                               */
+     * getByIdListFind
+     *
+     * @param  array  mixed $IDList
+     * @access public
+     * @return void
+     */
     public function getByIdListFind($IDList)
     {
         $projects = $this->project->getPairsByIdList($IDList);
@@ -248,12 +264,12 @@ class Project
     }
 
     /**
-     *      * Get parentName.
-     *           *▫
-     *                * @param  int    $projectID▫
-     *                     * @access public
-     *                          * @return array
-     *                               */
+     * getParentName
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getParentName($projectID)
     {
         $program = $this->project->getParentName($projectID);
@@ -262,12 +278,12 @@ class Project
     }
 
     /**
-     *      * Get team member pairs.▫
-     *           *▫
-     *                * @param  int    $projectID▫
-     *                     * @access public
-     *                          * @return int
-     *                               */
+     * getTeamMemberPairs
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getTeamMemberPairs($projectID)
     {
         $members = array_filter($this->project->getTeamMemberPairs($projectID));
@@ -276,14 +292,13 @@ class Project
     }
 
     /**
-     *     /**
-     *          * Check members.▫
-     *               *▫
-     *                    * @param  array  $members▫
-     *                         * @param  array  $users▫
-     *                              * @access public
-     *                                   * @return bool
-     *                                        */
+     * checkMembers
+     *
+     * @param  int    mixed $members
+     * @param  string mixed $users
+     * @access public
+     * @return void
+     */
     public function checkMembers($members, $users)
     {
         foreach($users as $user)
@@ -294,14 +309,14 @@ class Project
     }
 
     /**
-           * Get team memberm.
-                *▫
-                     * @param  int    $projectID▫
-                          * @param  array  $users▫
-                               * @param  bool   $tutorial▫
-                                    * @access public
-                                         * @return int
-                                              */
+     * getTeamMembers
+     *
+     * @param  int     mixed $projectID
+     * @param  striong mixed $users
+     * @param  boolean mixed $tutorial
+     * @access public
+     * @return void
+     */
     public function getTeamMembers($projectID, $users, $tutorial = false)
     {
         if($tutorial) define('TUTORIAL', true);
@@ -311,12 +326,12 @@ class Project
         return count($members);
     }
 
-    /*
-     * Check project status after start a project.
-     *▫
-     * @param  int    $projectID▫
+    /**
+     * checkStatusBegin
+     *
+     * @param  int    mixed $projectID
      * @access public
-     * @return bool
+     * @return void
      */
     public function checkStatusBegin($projectID)
     {
@@ -330,12 +345,12 @@ class Project
         return true;
     }
 
-    /*
-     * Check project status after suspend a project.
+    /**
+     * checkStatusStop
      *
-     * @param  int    $projectID▫
+     * @param  int    mixed $projectID
      * @access public
-     * @return bool
+     * @return void
      */
     public function checkStatusStop($projectID)
     {
@@ -349,6 +364,14 @@ class Project
         return true;
     }
 
+    /**
+     * getExecutionData
+     *
+     * @param  int    mixed $projectID
+     * @param  string $type
+     * @access public
+     * @return void
+     */
     public function getExecutionData($projectID, $type = '')
     {
         $table = 'zt_project';
@@ -358,12 +381,12 @@ class Project
     }
 
     /**
-     *      * Get builds from getDataByProject.
-     *           *
-     *                * @param  int    $projectID
-     *                     * @access public
-     *                          * @return array
-     *                               */
+     * getBuildData
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getBuildData($projectID)
     {
         $builds = $this->project->getDataByProject(TABLE_BUILD, $projectID);
@@ -372,12 +395,12 @@ class Project
     }
 
     /**
-     *      * Get releases from getDataByProject.
-     *           *
-     *                * @param  int    $projectID
-     *                     * @access public
-     *                          * @return array
-     *                               */
+     * getReleaseData
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getReleaseData($projectID)
     {
         $releases = $this->project->getDataByProject(TABLE_RELEASE, $projectID);
@@ -385,6 +408,13 @@ class Project
         return $releases;
     }
 
+    /**
+     * getByProgram
+     *
+     * @param  int    mixed $programID
+     * @access public
+     * @return void
+     */
     public function getByProgram($programID)
     {
         $projects = $this->project->getPairsByProgram($programID);
@@ -401,13 +431,12 @@ class Project
     }
 
     /**
-     * Get project pairs by status.
+     * getByStatusPairs
      *
-     * @param  string $status
+     * @param  string mixed $status
      * @access public
-     * @return int
+     * @return void
      */
-
     public function getByStatusPairs($status)
     {
         $projects = $this->project->getPairsByProgram(2, $status);
@@ -424,19 +453,25 @@ class Project
     }
 
     /**
-     * Get project list by order.
+     * getConsumed
      *
-     * @param  string $orderBy
+     * @param  array  mixed $projectIdList
      * @access public
-     * @return int
+     * @return void
      */
-
     public function getConsumed($projectIdList)
     {
         $projects = $this->project->getProjectsConsumed($projectIdList, $time = '');
         return $projects;
     }
 
+    /**
+     * getByStatusExe
+     *
+     * @param  string mixed $status
+     * @access public
+     * @return void
+     */
     public function getByStatusExe($status)
     {
         $executions = $this->project->getStats(0, $status);
@@ -451,12 +486,12 @@ class Project
         return count($executions);
     }
 
-    /*
-     * Get executions by project.
+    /**
+     * getByProject
      *
-     * @param  int    $projectID
+     * @param  int    mixed $projectID
      * @access public
-     * @return int
+     * @return void
      */
     public function getByProject($projectID)
     {
@@ -469,49 +504,88 @@ class Project
         return count($executions);
     }
 
-    /*
-     * Get executions by order.
+    /**
+     * getTotalBugBy
      *
-     * @param  string $orderBy
-
+     * @param  array  mixed $projectIdList
+     * @param  string mixed $status
      * @access public
-     * @return bool
+     * @return void
      */
-
     public function getTotalBugBy($projectIdList, $status)
     {
         $projects = $this->project->getTotalBugByProject($projectIdList, $status);
         return $projects;
     }
 
+    /**
+     * getWorkHour
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getWorkHour($projectID)
     {
         $projects = $this->project->getWorkhour($projectID);
+        return $projects;
     }
 
+    /**
+     * getInfoList
+     *
+     * @param  string mixed $status
+     * @access public
+     * @return void
+     */
     public function getInfoList($status)
     {
         $projects = $this->project->getInfoList($status);
         return $projects;
     }
 
+    /**
+     * getStatData
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
     public function getStatData($projectID)
     {
         $projects = $this->project->getStatData($projectID);
         return $projects;
     }
 
+    /**
+     * getTotalStoriesByProject
+     *
+     * @param  int    $projectID
+     * @param  array  $productIdList
+     * @param  string $type
+     * @param  string $status
+     * @access public
+     * @return void
+     */
     public function getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all')
     {
         $projects = $this->project->getTotalStoriesByProject($projectID = 0, $productIdList = array(), $type = 'story', $status = 'all');
         return $projects;
     }
 
-
-
-
-
-
+    /**
+     * saveState
+     *
+     * @param  int    mixed $projectID
+     * @access public
+     * @return void
+     */
+    public function saveState($projectID)
+    {
+        $projects = $this->project->getPairsByProgram();
+        $object = $this->project->saveState($projectID, $projects);
+        return $object;
+    }
 
 }
 ?>
