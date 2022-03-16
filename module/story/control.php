@@ -1378,7 +1378,7 @@ class story extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this'));
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
                 }
             }
 

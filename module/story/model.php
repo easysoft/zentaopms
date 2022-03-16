@@ -1542,8 +1542,11 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
 
         /* Update parent story status and stage. */
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-        $this->setStage($oldStory->parent);
+        if($oldStory->parent > 0)
+        {
+            $this->updateParentStatus($storyID, $oldStory->parent);
+            $this->setStage($oldStory->parent);
+        }
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }

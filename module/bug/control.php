@@ -1701,7 +1701,7 @@ class bug extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent'));
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
                 }
             }
             if(defined('RUN_MODE') && RUN_MODE == 'api')
