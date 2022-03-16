@@ -219,8 +219,9 @@ class repoModel extends model
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($data);
-            $info = $scm->info('');
-            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $data->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $data->path)), '/');
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
 
@@ -280,8 +281,9 @@ class repoModel extends model
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($data);
-            $info = $scm->info('');
-            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $data->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $data->path)), '/');
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
         elseif($data->SCM != $repo->SCM and $data->SCM == 'Git')
@@ -1246,7 +1248,7 @@ class repoModel extends model
                     dao::$errors['client'] = $this->lang->repo->error->clientVersion;
                     return false;
                 }
-                if(preg_match('/[^\:\/\\A-Za-z0-9_\-\'\"\.]/', $path))
+                if(preg_match('/[^\:\/A-Za-z0-9_\-\'\"\.]/', $path))
                 {
                     dao::$errors['encoding'] = $this->lang->repo->error->encoding . "<br />" . nl2br($message);
                     return false;

@@ -36,19 +36,19 @@
           <td class='text-center'><?php echo $repo->id; ?></td>
           <td class='text'><?php echo zget($lang->repo->scmList, $repo->SCM); ?></td>
           <td class='text' title='<?php echo $repo->name; ?>'><?php echo html::a($this->createLink('repo', 'browse', "repoID={$repo->id}&branchID=&objectID=$objectID"), $repo->name);?></td>
-          <td class='text product-line'>
           <?php
-          $productList = explode(',', str_replace(' ', '', $repo->product));
+          $productNames = '';
+          $productList  = explode(',', str_replace(' ', '', $repo->product));
           if(isset($productList) and $productList[0])
           {
               foreach($productList as $productID)
               {
                   if(!isset($products[$productID])) continue;
-                  echo ' ' . html::a($this->createLink('product', 'browse', "productID=$productID"), zget($products, $productID, $productID));
+                  $productNames .= ' ' . zget($products, $productID, $productID);
               }
           }
           ?>
-          </td>
+          <td class='text' title='<?php echo $productNames;?>'><?php echo $productNames;?></td>
           <td class='text' title='<?php echo $repo->path; ?>'><?php echo $repo->path; ?></td>
           <td class='text-left c-actions'>
             <?php
