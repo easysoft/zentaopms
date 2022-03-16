@@ -20,3 +20,4 @@ $beginId = array(66, 67);
 
 r($project->checkStatus($beginId[0])) && p() && e('1'); //开始id为66状态不是closed的项目
 r($project->checkStatus($beginId[1])) && p() && e('0'); //开始id为67状态是closed的项目
+system("./ztest init");

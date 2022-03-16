@@ -19,7 +19,7 @@ pid=1
 
 $tester = new Product('admin');
 
-$t_return = array('1', '101', '15', '701');
+$t_return = array('1', '101', '15', '7010');
 
 r($tester->getProjectPairsByProductID($t_return[0]))   && p('11') && e('项目1');    // 返回产品1关联的项目11名字
 r($tester->getProjectPairsByProductID($t_return[0]))   && p('21') && e('项目11');   // 返回产品1关联的项目21名字

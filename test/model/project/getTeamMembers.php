@@ -9,7 +9,7 @@ title=测试 projectModel::getTeamMembers();
 cid=1
 pid=1
 
-获取id为11的项目团队成员个数 >> 0
+获取id为11的项目团队成员个数 >> 2
 获取id为11的项目团队成员个数，开启新手引导 >> 1
 
 */
