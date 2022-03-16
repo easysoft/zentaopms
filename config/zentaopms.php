@@ -367,7 +367,7 @@ $config->objectTables['sonarqube']    = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
 
-$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
+$config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
