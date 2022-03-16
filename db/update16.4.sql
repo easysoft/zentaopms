@@ -60,3 +60,4 @@ INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) 
 INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'defaultCurrency', 'CNY');
 
 ALTER TABLE `zt_apistruct` CHANGE `desc` `desc` text COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `type`;
+ALTER TABLE `zt_review` ADD `doc` mediumint NULL AFTER `template`;
