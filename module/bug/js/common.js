@@ -618,6 +618,8 @@ function loadTestTasks(productID, executionID)
  */
 function notice()
 {
+    if(page == 'edit') return;
+
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
