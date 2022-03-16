@@ -3,7 +3,7 @@ Version: 6.1
 Section: utils
 Priority: optional
 Architecture: all
-Depends: apache2, libapache2-mod-php | libapache2-mod-phpfilter | php-cgi | php-fpm | php, php-cli, php-common, php-mysql, php-json, php-ldap, mysql-server 
+Depends: apache2, libapache2-mod-php | libapache2-mod-phpfilter | php-cgi | php-fpm | php, php-cli, php-common, php-mysql, php-json, mysql-server
 Recommends: php-gd
 Installed-Size: 512
 Maintainer: [url=www.zentao.net]

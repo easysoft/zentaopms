@@ -36,9 +36,6 @@
         <tr>
           <td><?php echo html::a($executionLink, $execution->id);?></td>
           <td>
-            <?php if(isset($config->maxVersion)):?>
-            <span class='project-type-label label label-info label-outline'><?php echo zget($lang->user->executionTypeList, $execution->type);?></span>
-            <?php endif;?>
             <?php echo html::a($executionLink, $execution->name);?>
           </td>
           <?php if(isset($execution->delay)):?>

@@ -185,6 +185,7 @@ $lang->repo->error->encoding      = "The encoding might be wrong. Please change 
 $lang->repo->error->deleted       = "Deletion of the repository failed. The current repository has a commit record associated with the design.";
 $lang->repo->error->linkedJob     = "Deletion of the repository failed. The current repository has associated with the Compile.";
 $lang->repo->error->clientPath    = "The client installation directory cannot have spaces!";
+$lang->repo->error->notFound      = "The repository %s’s URL %s does not exist. Please confirm if this repository has been deleted from the local server.";
 
 $lang->repo->syncTips          = '<strong>You may find the reference about how to set Git sync from <a target="_blank" href="https://www.zentao.pm/book/zentaomanual/free-open-source-project-management-software-git-105.html">here</a>.</strong>';
 $lang->repo->encodingsTips     = "The encodings of comments can be comma separated values, e.g. utf-8.";

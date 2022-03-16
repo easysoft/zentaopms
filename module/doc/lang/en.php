@@ -89,6 +89,7 @@ $lang->doc->diffAction       = 'Diff Document';
 $lang->doc->sort             = 'Rank Document';
 $lang->doc->manageType       = 'Manage Category';
 $lang->doc->editType         = 'Edit';
+$lang->doc->editChildType    = 'Edit';
 $lang->doc->deleteType       = 'Delete';
 $lang->doc->addType          = 'Add';
 $lang->doc->childType        = 'Directory';

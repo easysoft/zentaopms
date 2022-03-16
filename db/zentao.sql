@@ -359,7 +359,7 @@ CREATE TABLE IF NOT EXISTS `zt_compile` (
 -- DROP TABLE IF EXISTS `zt_config`;
 CREATE TABLE IF NOT EXISTS `zt_config` (
   `id` mediumint(8) unsigned NOT NULL auto_increment,
-  `vision` varchar(10) NOT NULL DEFAULT 'rnd',
+  `vision` varchar(10) NOT NULL DEFAULT '',
   `owner` char(30) NOT NULL default '',
   `module` varchar(30) NOT NULL,
   `section` char(30) NOT NULL default '',
@@ -8797,20 +8797,6 @@ CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` wh
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
 CREATE VIEW `view_datasource_46` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
 
-INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
-('system',      '项目',           'liteprojects',        '1', 'lite', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '任务',           'litetasks',           '1', 'lite', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_46',    'id',   'name'),
-('system',      '权限分组',       'litegroups',          '1', 'lite', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
-('system',      '用户',           'liteusers',           '1', 'lite', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
-('sql',         '模块',           'litemodules',         '1', 'lite', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
-('lang',        '项目类型',       'liteprojectType',     '1', 'lite', 'projectType',    '',     '',     ''),
-('lang',        '项目状态',       'liteprojectStatus',   '1', 'lite', 'projectStatus',  '',     '',     ''),
-('lang',        '项目访问控制',   'liteprojectAcl',      '1', 'lite', 'projectAcl',     '',     '',     ''),
-('lang',        '任务类型',       'litetaskType',        '1', 'lite', 'taskType',       '',     '',     ''),
-('lang',        '任务优先级',     'litetaskPri',         '1', 'lite', 'taskPri',        '',     '',     ''),
-('lang',        '任务状态',       'litetaskStatus',      '1', 'lite', 'taskStatus',     '',     '',     ''),
-('lang',        '反馈状态',       'litefeedbackStatus',  '1', 'lite', 'feedbackStatus', '',     '',     ''),
-('system',      '反馈分支',       'litefeedbackModules', '1', 'lite', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     '');
 ALTER TABLE `zt_doc` ADD `template` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `lib`;
 ALTER TABLE `zt_doc` ADD `templateType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `template`;
 ALTER TABLE `zt_doc` ADD `chapterType` varchar(30) COLLATE 'utf8_general_ci' NOT NULL AFTER `templateType`;
@@ -9324,6 +9310,7 @@ CREATE TABLE IF NOT EXISTS `zt_review` (
   `title` varchar(255) NOT NULL,
   `object` mediumint(8) NOT NULL,
   `template` mediumint(8) NOT NULL,
+  `doc` mediumint(8) DEFAULT NULL,
   `status` char(30) NOT NULL,
   `reviewedBy` varchar(255) NOT NULL,
   `auditedBy` varchar(255) NOT NULL,

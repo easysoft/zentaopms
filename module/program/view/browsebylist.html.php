@@ -151,6 +151,7 @@
 #programTableList .icon-project:before {content: '\e99c';}
 #programTableList .icon-scrum:before {content: '\e9a2';}
 #programTableList .icon-waterfall:before {content: '\e9a4';}
+#programTableList .icon-kanban:before {content: '\e983';}
 </style>
 <?php js::set('originOrders', $originOrders);?>
 <script>
