@@ -1981,7 +1981,7 @@ class repoModel extends model
      */
     public function getExecutionPairs($product, $branch = 0)
     {
-        $pairs = array();
+        $pairs      = array();
         $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
         foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
         return $pairs;
