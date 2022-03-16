@@ -1,6 +1,1 @@
-<script>
-$(function()
-{
-    $('#begin, #end, #hours').parent().addClass('required');
-})
-</script>
+<?php include $this->app->getExtensionRoot() . 'biz/leave/ext/view/' . basename(__FILE__);?>

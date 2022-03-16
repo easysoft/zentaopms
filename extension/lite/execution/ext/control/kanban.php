@@ -19,7 +19,7 @@ class myExecution extends execution
         $TRActions  = $this->execution->getTRActions($currentMethod);
 
         $TRActions .= "<div class='dropdown'>";
-        $TRActions .= html::a('javascript:;', $this->lang->execution->kanbanGroup[$groupBy] . "<span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
+        $TRActions .= html::a('javascript:;', $this->lang->execution->kanbanGroup[$groupBy] . " <span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
         $TRActions .= "<ul class='dropdown-menu pull-right course-groupBy'>";
         foreach($this->lang->execution->kanbanGroup as $groupKey => $groupName)
         {
