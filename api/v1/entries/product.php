@@ -51,6 +51,9 @@ class productEntry extends Entry
                         $product->modules = $data->data->tree;
                     }
                     break;
+                case 'moduleoptionmenu':
+                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'bug', 0, 'all');
+                    break;
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;
 
