@@ -597,6 +597,8 @@ var oldTestTask      = $("#testtask").find("option:selected").val();
  */
 function loadTestTasks(productID, executionID)
 {
+    if(!$('#testtaskBox').length) return;
+
     if(typeof(executionID) == 'undefined') executionID = 0;
     link = createLink('testtask', 'ajaxGetTestTasks', 'productID=' + productID + '&executionID=' + executionID);
     $.get(link, function(data)
@@ -616,6 +618,8 @@ function loadTestTasks(productID, executionID)
  */
 function notice()
 {
+    if(page == 'edit') return;
+
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
