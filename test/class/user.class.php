@@ -432,7 +432,6 @@ class userTest
      * Test authorize user.
      * 
      * @param  string $account
-     * @param  string $password
      * @access public
      * @return void
      */
@@ -446,8 +445,7 @@ class userTest
     /**
      * Test login user.
      * 
-     * @param  string $account
-     * @param  string $password
+     * @param  object $user
      * @access public
      * @return void
      */
@@ -455,6 +453,195 @@ class userTest
     {
         $user = $this->objectModel->login($user);
 
-        return $user;
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $user;
+        }
+    }
+
+    /**
+     * Test get groups by user.
+     * 
+     * @param  string $account
+     * @param  string $password
+     * @access public
+     * @return void
+     */
+    public function getGroupsTest($account)
+    {
+        $groups = $this->objectModel->getGroups($account);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $groups;
+        }
+    }
+
+    /**
+     * Test get groups by visions.
+     * 
+     * @param  string $visions 
+     * @access public
+     * @return void
+     */
+    public function getGroupsByVisionsTest($visions)
+    {
+        $groups = $this->objectModel->getGroupsByVisions($visions);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $groups;
+        }
+    }
+
+    /**
+     * Test get my objects.
+     * 
+     * @param  string $account 
+     * @param  string $type 
+     * @param  string $status 
+     * @param  string $orderBy 
+     * @access public
+     * @return void
+     */
+    public function getObjectsTest($account, $type, $status, $orderBy)
+    {
+        $myObjects = $this->objectModel->getObjects($account, $type, $status, $orderBy);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $myObjects;
+        }
+    }
+
+    /**
+     * Test get contact list.
+     * 
+     * @param  string $account 
+     * @param  string $params
+     * @access public
+     * @return void
+     */
+    public function getContactListsTest($account = '', $params = '')
+    {
+        $contacts = $this->objectModel->getContactLists($account, $params);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $contacts;
+        }
+    }
+
+    /**
+     * Test get list by account method.
+     * 
+     * @param  string $account 
+     * @access public
+     * @return void
+     */
+    public function getListByAccountTest($account)
+    {
+        return $this->objectModel->getListByAccount($account);
+    }
+
+    /**
+     * Test get parent stage authed users.
+     * 
+     * @param  int    $stageID 
+     * @access public
+     * @return void
+     */
+    public function getParentStageAuthedUsersTest($stageID)
+    {
+        return $this->objectModel->getParentStageAuthedUsers($stageID);
+    }
+
+    /**
+     * Test get contact list by id.
+     * 
+     * @param  int    $listID 
+     * @access public
+     * @return void
+     */
+    public function getContactListByIDTest($listID)
+    {
+        return $this->objectModel->getContactListByID($listID);
+    }
+
+    /**
+     * Test get contact user pairs.
+     * 
+     * @param  array $accountList 
+     * @access public
+     * @return void
+     */
+    public function getContactUserPairsTest($accountList)
+    {
+        return $this->objectModel->getContactListByID($listID);
+    }
+
+    /**
+     * Test create contact list.
+     * 
+     * @param  string $listName 
+     * @param  array  $userList 
+     * @access public
+     * @return void
+     */
+    public function createContactListTest($listName = '', $userList = array())
+    {
+        $listID = $this->objectModel->createContactList($listName, $userList); 
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $listID;
+        }
+    }
+
+    /**
+     * Test update contact list.
+     * 
+     * @param  int    $listID 
+     * @param  string $listName 
+     * @param  array  $userList 
+     * @access public
+     * @return void
+     */
+    public function updateContactListTest($listID = 0, $listName = '', $userList = array())
+    {
+        $this->objectModel->updateContactList($listID, $listName, $userList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $this->objectModel->getContactListByID($listID);
+        }
     }
 }

@@ -1,0 +1,18 @@
+#!/usr/bin/env php
+<?php
+include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/user.class.php';
+su('admin');
+
+/**
+
+title=测试 userModel::getGroupsTest();
+cid=1
+pid=1
+
+*/
+$user = new userTest();
+
+r($user->getGroupsTest('admin'))        && p() && e('0'); // 获取admin所在的分组,为空
+r(count($user->getGroupsTest('test2'))) && p() && e('1'); // 通过test2所在的分组数量，1个
+r($user->getGroupsTest(''))             && p() && e('0'); // 传空用户名，返回空

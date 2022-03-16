@@ -12,14 +12,18 @@ pid=1
 
 */
 
-$user = new stdclass();
-$user->id      = 1;
-$user->account = 'admin';
-
 $userClass = new userTest();
-$user = $userClass->loginTest($user);
 
-r($rights['rights'])                 && p('action:comment')    && e('1'); //获取用户的权限，返回权限列表
-r($rights['rights'])                 && p('testtask:activate') && e('1'); //获取用户的权限，返回权限列表
-r($user->authorizeTest('sadf!!@#a')) && p('projects')          && e('');  //获取不存在的用户的权限，返回空
-r($user->authorizeTest(''))          && p('')                  && e('0'); //获取空用户名的权限，返回空
+$admin = new stdclass();
+$admin->id      = 1;
+$admin->account = 'admin';
+$admin          = $userClass->loginTest($admin);
+
+$emptyAccount = new stdclass();
+$emptyAccount->id      = 0;
+$emptyAccount->account = '';
+$emptyAccount          = $userClass->loginTest($emptyAccount);
+
+r($admin)                       && p('admin') && e('1'); //使用admin登录，返回此用户为超级管理员
+r(count($admin->rights))        && p()        && e('3'); //使用Admin登录，返回权限列表的数量
+r(count($emptyAccount->group))  && p()        && e('0'); //使用空账号登录，返回权限列表数量为0
