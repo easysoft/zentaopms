@@ -27,12 +27,11 @@
         <th><?php echo $lang->kanbanspace->name;?></th>
         <td><?php echo html::input('name', '', "class='form-control'");?></td>
       </tr>
-      <?php if($type != 'private'):?>
-      <tr>
+      <tr id='ownerBox' class="<?php echo $type == 'private' ? 'hidden' : '';?>">
         <th><?php echo $lang->kanbanspace->owner;?></th>
         <td><?php echo html::select('owner', $users, '', "class='form-control chosen'");?></td>
       </tr>
-      <tr>
+      <tr id='teamBox' class="<?php echo $type == 'private' ? 'hidden' : '';?>">
         <th><?php echo $lang->kanbanspace->team;?></th>
         <td colspan='2'>
           <div class="input-group">
@@ -41,7 +40,6 @@
           </div>
         </td>
       </tr>
-      <?php endif;?>
       <tr>
         <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
@@ -49,12 +47,10 @@
           <?php echo html::textarea('desc', '', "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <?php if($type == 'private'):?>
-      <tr id="whitelistBox">
+      <tr id="whitelistBox" class="<?php echo $type == 'private' ? '' : 'hidden';?>">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, '', 'class="form-control chosen" multiple');?></td>
       </tr>
-      <?php endif;?>
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>
