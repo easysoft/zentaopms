@@ -114,6 +114,14 @@ class Processor
         $userViews->projects = $projects;
         $userViews->sprints  = $sprints;
         $this->dao->insert(TABLE_USERVIEW)->data($userViews)->exec();
+
+        $guestViews = new stdclass();
+        $guestViews->account  = 'guest';
+        $guestViews->programs = '';
+        $guestViews->products = '';
+        $guestViews->projects = '';
+        $guestViews->sprints  = '';
+        $this->dao->insert(TABLE_USERVIEW)->data($guestViews)->exec();
     }
 
     /**
