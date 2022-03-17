@@ -676,7 +676,7 @@ class executionModel extends model
             }
             if($execution->end > $project->end)
             {
-                dao::$errors['end']   = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
                 return false;
             }
 
