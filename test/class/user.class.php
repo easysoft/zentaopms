@@ -520,14 +520,8 @@ class userTest
     {
         $myObjects = $this->objectModel->getObjects($account, $type, $status, $orderBy);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $myObjects;
-        }
+        if(dao::isError()) return dao::getError();
+        return $myObjects;
     }
 
     /**
@@ -542,14 +536,8 @@ class userTest
     {
         $contacts = $this->objectModel->getContactLists($account, $params);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $contacts;
-        }
+        if(dao::isError()) return dao::getError();
+        return $contacts;
     }
 
     /**
@@ -597,7 +585,7 @@ class userTest
      */
     public function getContactUserPairsTest($accountList)
     {
-        return $this->objectModel->getContactListByID($listID);
+        return $this->objectModel->getContactUserPairs($accountList);
     }
 
     /**
@@ -612,14 +600,8 @@ class userTest
     {
         $listID = $this->objectModel->createContactList($listName, $userList); 
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $listID;
-        }
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getContactListByID($listID);
     }
 
     /**
@@ -635,13 +617,97 @@ class userTest
     {
         $this->objectModel->updateContactList($listID, $listName, $userList);
 
-        if(dao::isError())
-        {
-            return dao::getError();
-        }
-        else
-        {
-            return $this->objectModel->getContactListByID($listID);
-        }
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getContactListByID($listID);
+    }
+
+    /**
+     * Test delete a contact list.
+     * 
+     * @param  int    $listID 
+     * @access public
+     * @return void
+     */
+    public function deleteContactListTest($listID)
+    {
+        $this->objectModel->deleteContactList($listID);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getContactListByID($listID);
+    }
+
+    /**
+     * Test delete a contact list.
+     * 
+     * @param  object $user
+     * @access public
+     * @return void
+     */
+    public function getDataInJSONTest($user)
+    {
+        $user = $this->objectModel->getDataInJSON($user);
+
+        if(dao::isError()) return dao::getError();
+        return $user;
+    }
+
+    /**
+     * Test get weak users. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function getWeakUsersTest()
+    {
+        $users = $this->objectModel->getWeakUsers();
+
+        if(dao::isError()) return dao::getError();
+        return $users;
+    }
+
+    /**
+     * Test compute password strength. 
+     * 
+     * @access public
+     * @return void
+     */
+    public function computePasswordStrengthTest($password)
+    {
+        $strength = $this->objectModel->computePasswordStrength($password);
+
+        if(dao::isError()) return dao::getError();
+        return $strength;
+    }
+
+    /**
+     * Test compute user view.
+     * 
+     * @param  string $account 
+     * @param  bool   $force 
+     * @access public
+     * @return void
+     */
+    public function computeUserViewTest($account, $force = false)
+    {
+        $userview = $this->objectModel->computeUserView($account, $force);
+
+        if(dao::isError()) return dao::getError();
+        return $userview;
+    }
+
+    /**
+     * Test get product members.
+     * 
+     * @param  string $account 
+     * @param  bool   $force 
+     * @access public
+     * @return void
+     */
+    public function getProductMembersTest($allProducts)
+    {
+        $members = $this->objectModel->getProductMembers($allProducts);
+
+        if(dao::isError()) return dao::getError();
+        return $members;
     }
 }
