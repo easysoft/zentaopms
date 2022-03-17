@@ -8,8 +8,9 @@ class myClient extends client
         if($statusFile)
         {
             $this->app->loadLang('extension');
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace('\\', '/', $statusFile));
-            die($this->display('client', 'safe'));
+            $statusFile = str_replace('\\', '/', $statusFile);
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
+            return print($this->display('client', 'safe'));
         }
 
         if($_POST) $_POST['desc'] = mb_substr($this->post->desc, 0, 100);
