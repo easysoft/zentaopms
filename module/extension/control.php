@@ -29,7 +29,8 @@ class extension extends control
             $this->view->title      = $this->lang->extension->browse;
             $this->view->position[] = $this->lang->extension->browse;
 
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, str_replace('\\', '/', $statusFile));
+            $statusFile = str_replace('\\', '/', $statusFile);
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
             $this->display('extension', 'safe');
             helper::end();
         }
@@ -148,7 +149,7 @@ class extension extends control
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile);
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
             return $this->display();
         }
         /* Get the package file name. */
@@ -421,7 +422,7 @@ class extension extends control
         $statusFile = $this->loadModel('common')->checkSafeFile();
         if($statusFile)
         {
-            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile);
+            $this->view->error = sprintf($this->lang->extension->noticeOkFile, $statusFile, $statusFile);
             return $this->display();
         }
 
