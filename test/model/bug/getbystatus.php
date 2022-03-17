@@ -54,12 +54,12 @@ r($bug->getByStatusTest($productIDList[0], $moduleIDList[1], $statusList[1])) &&
 r($bug->getByStatusTest($productIDList[0], $moduleIDList[1], $statusList[2])) && p('title') && e('0');         // 查询产品1 3 不存在的产品10001 与模块1821状态为toclosed下未确认的bug
 r($bug->getByStatusTest($productIDList[0], $moduleIDList[2], $statusList[0])) && p('title') && e('0');         // 查询产品1 3 不存在的产品10001 与不存在的模块1000001 状态为unclosed下未确认的bug
 r($bug->getByStatusTest($productIDList[0], $moduleIDList[2], $statusList[1])) && p('title') && e('0');         // 查询产品1 3 不存在的产品10001 与不存在的模块1000001 状态为unresolved下未确认的bug
-r($bug->getByStatusTest($productIDList[0], $moduleIDList[2], $statusList[2])) && p('title') && e('BUG1');      // 查询产品1 3 不存在的产品10001 与不存在的模块1000001 状态为toclosed下未确认的bug
+r($bug->getByStatusTest($productIDList[0], $moduleIDList[2], $statusList[2])) && p('title') && e('0');         // 查询产品1 3 不存在的产品10001 与不存在的模块1000001 状态为toclosed下未确认的bug
 r($bug->getByStatusTest($productIDList[1], $moduleIDList[0], $statusList[0])) && p('title') && e('BUG1');      // 查询产品1 与模块1821, 1832 不存在的模块1000001 状态为unclosed下未确认的bug
-r($bug->getByStatusTest($productIDList[1], $moduleIDList[0], $statusList[1])) && p('title') && e('0');         // 查询产品1 与模块1821, 1832 不存在的模块1000001 状态为unresolved下未确认的bug
-r($bug->getByStatusTest($productIDList[1], $moduleIDList[0], $statusList[2])) && p('title') && e('BUG1');      // 查询产品1 与模块1821, 1832 不存在的模块1000001 状态为toclosed下未确认的bug
+r($bug->getByStatusTest($productIDList[1], $moduleIDList[0], $statusList[1])) && p('title') && e('BUG1');      // 查询产品1 与模块1821, 1832 不存在的模块1000001 状态为unresolved下未确认的bug
+r($bug->getByStatusTest($productIDList[1], $moduleIDList[0], $statusList[2])) && p('title') && e('0');         // 查询产品1 与模块1821, 1832 不存在的模块1000001 状态为toclosed下未确认的bug
 r($bug->getByStatusTest($productIDList[1], $moduleIDList[1], $statusList[0])) && p('title') && e('BUG1');      // 查询产品1 与模块1821状态为unclosed下未确认的bug
-r($bug->getByStatusTest($productIDList[1], $moduleIDList[1], $statusList[1])) && p('title') && e('0');         // 查询产品1 与模块1821状态为unresolved下未确认的bug
+r($bug->getByStatusTest($productIDList[1], $moduleIDList[1], $statusList[1])) && p('title') && e('BUG1');      // 查询产品1 与模块1821状态为unresolved下未确认的bug
 r($bug->getByStatusTest($productIDList[1], $moduleIDList[1], $statusList[2])) && p('title') && e('0');         // 查询产品1 与模块1821状态为toclosed下未确认的bug
 r($bug->getByStatusTest($productIDList[1], $moduleIDList[2], $statusList[0])) && p('title') && e('0');         // 查询产品1 与不存在的模块1000001 状态为unclosed下未确认的bug
 r($bug->getByStatusTest($productIDList[1], $moduleIDList[2], $statusList[1])) && p('title') && e('0');         // 查询产品1 与不存在的模块1000001 状态为unresolved下未确认的bug

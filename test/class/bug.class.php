@@ -199,7 +199,7 @@ class bugTest
     /**
      * Test check delay bugs.
      *
-     * @param  array  $productIDList
+     * @param  string $productIDList
      * @access public
      * @return string
      */
@@ -235,8 +235,8 @@ class bugTest
     /**
      * Test get bugs of a module.
      *
-     * @param  array  $productIDList
-     * @param  array  $moduleIDList
+     * @param  string $productIDList
+     * @param  string $moduleIDList
      * @access public
      * @return string
      */
@@ -268,8 +268,8 @@ class bugTest
     /**
      * Test get all bugs.
      *
-     * @param  array  $productIDList
-     * @param  array  $moduleIDList
+     * @param  string $productIDList
+     * @param  string $moduleIDList
      * @access public
      * @return string
      */
@@ -301,8 +301,8 @@ class bugTest
     /**
      * Test get bugs of assign to me.
      *
-     * @param  array  $productIDList
-     * @param  array  $moduleIDList
+     * @param  string $productIDList
+     * @param  string $moduleIDList
      * @access public
      * @return string
      */
@@ -334,8 +334,8 @@ class bugTest
     /**
      * Test get bugs of opened by me.
      *
-     * @param  array  $productIDList
-     * @param  array  $moduleIDList
+     * @param  string $productIDList
+     * @param  string $moduleIDList
      * @access public
      * @return string
      */
@@ -367,8 +367,7 @@ class bugTest
     /**
      * Test get bugs of resolved by me.
      *
-     * @param  array  $productIDList
-     * @param  array  $moduleIDList
+     * @param  string $productIDList
      * @access public
      * @return string
      */
@@ -400,8 +399,7 @@ class bugTest
     /**
      * Test get bugs of nobody to do.
      *
-     * @param  array  $productIDList
-     * @param  array  $moduleIDList
+     * @param  string $productIDList
      * @access public
      * @return string
      */
@@ -433,8 +431,8 @@ class bugTest
     /**
      * Test get unconfirmed bugs.
      *
-     * @param  array  $productIDList
-     * @param  array  $modules
+     * @param  string $productIDList
+     * @param  string $modules
      * @access public
      * @return string
      */
@@ -466,8 +464,8 @@ class bugTest
     /**
      * Test get bugs the overdueBugs is active or unclosed.
      *
-     * @param  array  $productIDList
-     * @param  array  $modules
+     * @param  string $productIDList
+     * @param  string $modules
      * @access public
      * @return string
      */
@@ -500,8 +498,8 @@ class bugTest
     /**
      * Test get bugs the status is active or unclosed.
      *
-     * @param  array  $productIDList
-     * @param  array  $modules
+     * @param  string $productIDList
+     * @param  string $modules
      * @access public
      * @return string
      */
@@ -533,8 +531,8 @@ class bugTest
     /**
      * Test get unclosed bugs for long time.
      *
-     * @param  array  $productIDList
-     * @param  array  $modules
+     * @param  string $productIDList
+     * @param  string $modules
      * @access public
      * @return string
      */
@@ -544,6 +542,70 @@ class bugTest
         $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
 
         $bugs = $this->objectModel->getByLonglifebugs($productIDList, 'all', $modules, $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get postponed bugs.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function getByPostponedbugsTest($productIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByPostponedbugs($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs need confirm.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function getByNeedconfirmTest($productIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByNeedconfirm($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
 
         $title = '';
         foreach($bugs as $bug)
