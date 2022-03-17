@@ -1054,9 +1054,6 @@ class testcase extends control
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
 
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
-        $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
-
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;
         $this->view->customFields = $customFields;
