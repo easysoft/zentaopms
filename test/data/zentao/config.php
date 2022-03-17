@@ -7,6 +7,7 @@ $builder->todo        = array('rows' => 2000, 'extends' => array('todo'));
 $builder->effort      = array('rows' => 100, 'extends' => array('effort'));
 $builder->usergroup   = array('rows' => 600, 'extends' => array('usergroup'));
 $builder->usercontact = array('rows' => 61, 'extends' => array('usercontact'));
+$builder->userview    = array('rows' => 400, 'extends' => array('userview'));
 $builder->dept        = array('rows' => 100,  'extends' => array('dept'));
 $builder->action      = array('rows' => 100,  'extends' => array('action'));
 

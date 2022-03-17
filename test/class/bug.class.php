@@ -46,6 +46,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test batch create bugs.
+     *
+     * @param  int    $productID
+     * @param  array  $param
+     * @access public
+     * @return object
+     */
     public function batchCreateObject($productID, $param = array())
     {
         $modules      = array('0', '0', '0');
@@ -108,7 +116,7 @@ class bugTest
      * @param  array  $bug
      * @param  int    $executionID
      * @access public
-     * @return int
+     * @return object|int
      */
     public function createBugFromGitlabIssueTest($bug, $executionID)
     {
@@ -129,7 +137,7 @@ class bugTest
      * Test get bugs.
      *
      * @access public
-     * @return int
+     * @return string
      */
     public function getBugsTest($product, $branch, $browseType, $module)
     {
@@ -149,6 +157,463 @@ class bugTest
         $title = '';
         foreach($bugs as $bug) $title .= ',' . $bug->title;
         $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test check delay bug.
+     *
+     * @param  object $bug
+     * @param  string $status
+     * @access public
+     * @return object
+     */
+    public function checkDelayBugTest($bug, $status)
+    {
+        $bug->status       = $status;
+        $bug->deadline     = $bug->deadline     ? date('Y-m-d',strtotime("$bug->deadline day"))     : '0000-00-00';
+        $bug->resolvedDate = $bug->resolvedDate ? date('Y-m-d',strtotime("$bug->resolvedDate day")) : '0000-00-00';
+
+        $object = $this->objectModel->checkDelayBug($bug);
+        if(!isset($object->delay)) $object->delay = 0;
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test check delay bugs.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function checkDelayedBugsTest($productID)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        /* Load pager. */
+        $tester->app->loadClass('pager', $static = true);
+        $pager = new pager(0, 20 ,1);
+
+        $bugs = $this->objectModel->getAllBugs($productID, 0, 0, $executions, 'id_asc', $pager, 0);
+        $bugs = $this->objectModel->checkDelayedBugs($bugs);
+
+        $delay = '';
+        foreach($bugs as $bug)
+        {
+            $delay .= ',' . (!isset($bug->delay) ? 0 : $bug->delay);
+        }
+        $delay = trim($delay, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $delay;
+        }
+    }
+
+    /**
+     * Test get bugs of a module.
+     *
+     * @param  string $productIDList
+     * @param  string $moduleIDList
+     * @access public
+     * @return string
+     */
+    public function getModuleBugsTest($productIDList, $moduleIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getModuleBugs($productIDList, 'all', $moduleIDList, $executions);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get all bugs.
+     *
+     * @param  string $productIDList
+     * @param  string $moduleIDList
+     * @access public
+     * @return string
+     */
+    public function getAllBugsTest($productIDList, $moduleIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getAllBugs($productIDList, 'all', $moduleIDList, $executions, 'id_desc');
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs of assign to me.
+     *
+     * @param  string $productIDList
+     * @param  string $moduleIDList
+     * @access public
+     * @return string
+     */
+    public function getByAssigntomeTest($productIDList, $moduleIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByAssigntome($productIDList, 'all', $moduleIDList, $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs of opened by me.
+     *
+     * @param  string $productIDList
+     * @param  string $moduleIDList
+     * @access public
+     * @return string
+     */
+    public function getByOpenedbymeTest($productIDList, $moduleIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByOpenedbyme($productIDList, 'all', $moduleIDList, $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs of resolved by me.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function getByResolvedbymeTest($productIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByResolvedbyme($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs of nobody to do.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function getByAssigntonullTest($productIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByAssigntonull($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get unconfirmed bugs.
+     *
+     * @param  string $productIDList
+     * @param  string $modules
+     * @access public
+     * @return string
+     */
+    public function getUnconfirmedTest($productIDList, $modules)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getUnconfirmed($productIDList, 'all', $modules, $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs the overdueBugs is active or unclosed.
+     *
+     * @param  string $productIDList
+     * @param  string $modules
+     * @access public
+     * @return string
+     */
+    public function getOverdueBugsTest($productIDList, $modules)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getOverdueBugs($productIDList, 'all', $modules, $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+
+    /**
+     * Test get bugs the status is active or unclosed.
+     *
+     * @param  string $productIDList
+     * @param  string $modules
+     * @access public
+     * @return string
+     */
+    public function getByStatusTest($productIDList, $modules, $status)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByStatus($productIDList, 'all', $modules, $executions, $status, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get unclosed bugs for long time.
+     *
+     * @param  string $productIDList
+     * @param  string $modules
+     * @access public
+     * @return string
+     */
+    public function getByLonglifebugsTest($productIDList, $modules)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByLonglifebugs($productIDList, 'all', $modules, $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get postponed bugs.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function getByPostponedbugsTest($productIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByPostponedbugs($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs need confirm.
+     *
+     * @param  string $productIDList
+     * @access public
+     * @return string
+     */
+    public function getByNeedconfirmTest($productIDList)
+    {
+        global $tester;
+        $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
+
+        $bugs = $this->objectModel->getByNeedconfirm($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
 
         if(dao::isError())
         {
