@@ -1693,11 +1693,10 @@ class kanbanModel extends model
             ->where('deleted')->eq(0)
             ->beginIF(strpos($param, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
             ->fetchAll('id');
-        if($this->app->user->admin) return array_keys($objects);
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
-        if($this->app->user->admin and $param != 'involved') return array_keys($objects);
+        if($this->app->user->admin and strpos('private,involved', $param) === false) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
