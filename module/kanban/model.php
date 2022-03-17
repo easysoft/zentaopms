@@ -2744,7 +2744,7 @@ class kanbanModel extends model
             {
                 if($childColumn->limit == -1)
                 {
-                    dao::$errors['limit'] = $this->lang->kanban->error->parentLimitNote;
+                    dao::$errors['limit'] = $this->lang->kanban->error->childLimitEmpty;
                     return false;
                 }
 

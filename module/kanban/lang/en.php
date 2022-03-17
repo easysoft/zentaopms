@@ -185,10 +185,11 @@ $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 
 $lang->kanban->error = new stdclass();
-$lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
-$lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
-$lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
+$lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
+$lang->kanban->error->parentLimitNote   = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
+$lang->kanban->error->childLimitNote    = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
+$lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
