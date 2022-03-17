@@ -367,6 +367,7 @@ $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 $config->objectTables['sonarqube']    = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
+$config->objectTables['stage']        = TABLE_STAGE;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme');
 

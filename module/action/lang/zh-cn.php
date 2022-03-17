@@ -642,6 +642,7 @@ $lang->action->label->kanbancolumn = '看板列|execution|kanban|execution=%s';
 $lang->action->label->kanbanlane   = '看板泳道|execution|kanban|execution=%s&type=all';
 $lang->action->label->kanbancard   = '看板卡片|kanban|view|kanbanID=%s';
 $lang->action->label->mr           = '合并请求|mr|view|id=%s';
+$lang->action->label->stage        = '瀑布模型的阶段|stage|browse|';
 
 /* Object type. */
 $lang->action->search = new stdclass();
