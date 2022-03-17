@@ -301,7 +301,6 @@ class repo extends control
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 8, 1);
 
-        $commiters = $this->loadModel('user')->getCommiters();
         $logType   = 'file';
         $revisions = $this->repo->getCommits($repo, '/' . $entry, 'HEAD', $logType, $pager);
 
@@ -310,7 +309,6 @@ class repo extends control
         {
             if($revision == 'HEAD' and $i == 0) $revision = $log->revision;
             if($revision == $log->revision) $revisionName = strpos($repo->SCM, 'Git') !== false ?  $this->repo->getGitRevisionName($log->revision, $log->commit) : $log->revision;
-            $log->committer = zget($commiters, $log->committer, $log->committer);
             $i++;
         }
         if(!isset($revisionName))
@@ -477,11 +475,6 @@ class repo extends control
         /* Synchronous commit only in root path. */
         if(strpos($repo->SCM, 'Git') !== false and empty($path) and $infos and empty($revisions)) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID&objectID=$objectID&branch=" . base64_encode($this->cookie->repoBranch)));
 
-        /* Set committers. */
-        $commiters = $this->loadModel('user')->getCommiters();
-        foreach($infos as $info) $info->committer = zget($commiters, $info->account, $info->account);
-        foreach($revisions as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
-
         $this->view->title     = $this->lang->repo->common;
         $this->view->repo      = $repo;
         $this->view->repos     = $this->repos;
@@ -539,9 +532,7 @@ class repo extends control
         $this->scm->setEngine($repo);
         $info = $this->scm->info($entry, $revision);
 
-        $logs      = $this->repo->getCommits($repo, $entry, $revision, $type, $pager);
-        $commiters = $this->loadModel('user')->getCommiters();
-        foreach($logs as $log) $log->committer = zget($commiters, $log->committer, $log->committer);
+        $logs = $this->repo->getCommits($repo, $entry, $revision, $type, $pager);
 
         $this->view->repo       = $repo;
         $this->view->title      = $this->lang->repo->common;
@@ -1084,9 +1075,7 @@ class repo extends control
 
         $repo      = $this->repo->getRepoByID($repoID);
         $path      = $this->repo->decodePath($path);
-        $commiters = $this->loadModel('user')->getCommiters();
         $revisions = $this->repo->getCommits($repo, $path, 'HEAD', $type, $pager);
-        foreach($revisions as $revision) $revision->committer = zget($commiters, $revision->committer, $revision->committer);
 
         $this->view->repo       = $this->repo->getRepoByID($repoID);
         $this->view->revisions  = $revisions;
