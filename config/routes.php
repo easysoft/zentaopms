@@ -45,6 +45,7 @@ $routes['/projects/:id/stories']   = 'projectStories';
 $routes['/executions/:id/stories'] = 'executionStories';
 $routes['/stories/:id']            = 'story';
 $routes['/stories/:id/change']     = 'storyChange';
+
 $routes['/stories/:id/active']     = 'storyActive';
 
 $routes['/module/:id/stories'] = 'moduleStories';
