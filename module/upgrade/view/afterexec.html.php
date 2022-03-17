@@ -11,7 +11,7 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
-  <div class='modal-dialog'>
+  <div class='modal-dialog result-box'>
     <div class='modal-header'>
       <strong><?php echo $lang->upgrade->result;?></strong>
     </div>
