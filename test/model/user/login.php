@@ -10,6 +10,10 @@ title=userModel->loginTest();
 cid=1
 pid=1
 
+使用admin登录，返回此用户为超级管理员 >> 1
+使用Admin登录，返回权限列表的数量 >> 3
+使用空账号登录，返回权限列表数量为0 >> 0
+
 */
 
 $userClass = new userTest();

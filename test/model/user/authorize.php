@@ -10,6 +10,10 @@ title=userModel->authorizeTest();
 cid=1
 pid=1
 
+获取用户的权限，返回权限列表 >> 1
+获取用户的权限，返回权限列表 >> 1
+获取空用户名的权限，返回空 >> 0
+
 */
 
 $user   = new userTest();

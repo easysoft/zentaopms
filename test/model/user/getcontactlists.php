@@ -10,6 +10,8 @@ title=测试 userModel::getContactListsTest();
 cid=1
 pid=1
 
+获取admin的联系人列表 >> 0
+
 */
 $user = new userTest();
 $adminContactList1 = $user->getContactListsTest('admin', 'withempty|withnote');

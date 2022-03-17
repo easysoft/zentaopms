@@ -10,6 +10,10 @@ title=测试 userModel::getListByAccount();
 cid=1
 pid=1
 
+获取admin的联系人列表 >> 0
+获取admin的联系人列表 >> 0
+获取admin的联系人列表 >> 0
+
 */
 $user = new userTest();
 $adminContactList = $user->getListByAccountTest('admin');

@@ -10,6 +10,10 @@ title=userModel->identifyTest();
 cid=1
 pid=1
 
+用户名密码皆正确，返回验证登录的用户 >> admin
+验证一个不存在的用户，返回空 >> 0
+验证一个不传用户名和密码的用户，返回空 >> 0
+
 */
 
 $user = new userTest();
