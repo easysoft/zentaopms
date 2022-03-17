@@ -149,9 +149,12 @@ class gitlab extends control
         $user   = $this->gitlab->apiGetCurrentUser($gitlab->url, $gitlab->token);
         if(!isset($user->is_admin) or !$user->is_admin) return print(js::alert($this->lang->gitlab->tokenLimit) . js::locate($this->createLink('gitlab', 'edit', array('gitlabID' => $gitlabID))));
 
+        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
+
         if($_POST)
         {
             $users       = $this->post->zentaoUsers;
+            $gitlabNames = $this->post->gitlabUserNames;
             $accountList = array();
             $repeatUsers = array();
             foreach($users as $openID => $user)
@@ -167,29 +170,32 @@ class gitlab extends control
             $user->providerID   = $gitlabID;
             $user->providerType = 'gitlab';
 
-            /* Delete binded users and save new relationship. */
-            $this->dao->delete()->from(TABLE_OAUTH)->where('providerType')->eq($user->providerType)->andWhere('providerID')->eq($user->providerID)->exec();
+            $oldUsers = $this->dao->select('*')->from(TABLE_OAUTH)->where('providerType')->eq($user->providerType)->andWhere('providerID')->eq($user->providerID)->fetchAll('openID');
             foreach($users as $openID => $account)
             {
-                if(!$account) continue;
-                $user->account = $account;
-                $user->openID  = $openID;
+                $existAccount = isset($oldUsers[$openID]) ? $oldUsers[$openID] : '';
 
-                $this->dao->delete()
-                    ->from(TABLE_OAUTH)
-                    ->where('openID')->eq($user->openID)
-                    ->andWhere('providerType')->eq($user->providerType)
-                    ->andWhere('providerID')->eq($user->providerID)
-                    ->andWhere('account')->eq($user->account)
-                    ->exec();
-
-                $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
+                if($existAccount and $existAccount->account != $account)
+                {
+                    $this->dao->delete()
+                        ->from(TABLE_OAUTH)
+                        ->where('openID')->eq($openID)
+                        ->andWhere('providerType')->eq($user->providerType)
+                        ->andWhere('providerID')->eq($user->providerID)
+                        ->exec();
+                    $this->loadModel('action')->create('gitlabuser', $openID, 'unbind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$existAccount->account]->realname));
+                }
+                if(!$existAccount or $existAccount->account != $account)
+                {
+                    if(!$account) continue;
+                    $user->account = $account;
+                    $user->openID  = $openID;
+                    $this->dao->insert(TABLE_OAUTH)->data($user)->exec();
+                    $this->loadModel('action')->create('gitlabuser', $openID, 'bind', '', sprintf($this->lang->gitlab->bindDynamic, $gitlabNames[$openID], $zentaoUsers[$account]->realname));
+                }
             }
-            $this->loadModel('action')->create('gitlab', $gitlabID, 'binduser');
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->server->http_referer));
         }
-
-        $zentaoUsers = $this->dao->select('account,email,realname')->from(TABLE_USER)->fetchAll('account');
 
         $this->view->title         = $this->lang->gitlab->bindUser;
         $this->view->userPairs     = $userPairs;

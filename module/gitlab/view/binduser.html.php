@@ -28,6 +28,7 @@
         <tbody>
           <?php foreach($gitlabUsers as $gitlabUser):?>
           <?php if(isset($gitlabUser->zentaoAccount)) continue;?>
+          <?php echo html::hidden("gitlabUserNames[$gitlabUser->id]", $gitlabUser->realname);?>
           <tr>
             <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td class='text-left'>
@@ -42,6 +43,7 @@
           <?php endforeach;?>
           <?php foreach($gitlabUsers as $gitlabUser):?>
           <?php if(!isset($gitlabUser->zentaoAccount)) continue;?>
+          <?php echo html::hidden("gitlabUserNames[$gitlabUser->id]", $gitlabUser->realname);?>
           <tr>
             <td class='w-60px'><?php echo html::image($gitlabUser->avatar, "height=40");?></td>
             <td>

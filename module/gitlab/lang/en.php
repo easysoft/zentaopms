@@ -18,6 +18,7 @@ $lang->gitlab->bindingStatus     = 'Binding Status';
 $lang->gitlab->notBind           = 'Not bind';
 $lang->gitlab->binded            = 'Binded';
 $lang->gitlab->bindedError       = 'The bound user has been deleted or modified. Please bind again.';
+$lang->gitlab->bindDynamic       = '%s and Zentao user %s';
 $lang->gitlab->serverFail        = 'Connect to GitLab server failed, please check the GitLab server.';
 $lang->gitlab->lastUpdate        = 'Last Update';
 $lang->gitlab->confirmAddWebhook = 'Are you sure about creating Webhook？';

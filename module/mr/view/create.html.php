@@ -77,6 +77,15 @@
             <td colspan='1' class='required'><?php echo html::select('jobID', array(''), '', "class='form-control chosen'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->mr->squash;?></th>
+            <td colspan='1'>
+              <div class="checkbox-primary">
+                <input type="checkbox" name="squash" value="1" id="squash">
+                <label for="squash"></label>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th><?php echo $lang->mr->assignee;?></th>
             <td><?php echo html::select('assignee', $users, '', "class='form-control chosen'");?></td>
           </tr>
