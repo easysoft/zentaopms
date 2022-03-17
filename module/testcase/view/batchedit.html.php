@@ -90,8 +90,7 @@
               <?php echo html::select("branches[$caseID]", !empty($disabled) ? array() : $branchTagOption[$branchProductID], $productType != 'normal' ? $cases[$caseID]->branch : '', "class='form-control chosen' onchange='loadBranches($branchProductID, this.value, $caseID)', $disabled");?>
             </td>
             <?php endif;?>
-             <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
-            <td style='overflow:visible' title='<?php echo $cases[$caseID]->title?>'>
+            <td class='text-left<?php echo zget($visibleFields, 'module', ' hidden')?>' style='overflow:visible'><?php echo html::select("modules[$caseID]", zget($modulePairs, $caseID, array(0 => '/')), $cases[$caseID]->module, "class='form-control chosen' onchange='loadStories($productID, this.value, $caseID)'");?></td>
               <div class='input-group'>
                 <div class="input-control has-icon-right">
                   <?php echo html::input("title[$caseID]", $cases[$caseID]->title, "class='form-control'");?>
