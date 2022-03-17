@@ -662,6 +662,7 @@ $lang->navGroup->entry     = 'admin';
 $lang->navGroup->extension = 'admin';
 $lang->navGroup->action    = 'admin';
 $lang->navGroup->convert   = 'admin';
+$lang->navGroup->stage     = 'admin';
 
 $lang->navGroup->search  = 'search';
 $lang->navGroup->index   = 'index';
