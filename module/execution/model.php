@@ -660,8 +660,8 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
-            if($execution->begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorBegin, $project->begin);
-            if($execution->end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorEnd, $project->end);
+            if($execution->begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+            if($execution->end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorGreaterProject, $project->end);
             if(dao::isError()) return print(js::error(dao::getError()));
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
