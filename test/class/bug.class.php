@@ -597,15 +597,16 @@ class bugTest
      * Test get bugs need confirm.
      *
      * @param  string $productIDList
+     * @param  string $modules
      * @access public
      * @return string
      */
-    public function getByNeedconfirmTest($productIDList)
+    public function getByNeedconfirmTest($productIDList, $modules)
     {
         global $tester;
         $executions = $tester->loadModel('execution')->getPairs('0', 'all', 'empty|withdelete');
 
-        $bugs = $this->objectModel->getByNeedconfirm($productIDList, 'all', '0', $executions, 'id_desc', null, 0);
+        $bugs = $this->objectModel->getByNeedconfirm($productIDList, 'all', $modules, $executions, 'id_desc', null, 0);
 
         $title = '';
         foreach($bugs as $bug)
@@ -622,6 +623,166 @@ class bugTest
         else
         {
             return $title;
+        }
+    }
+
+    /**
+     * Test get bug list of a plan.
+     *
+     * @param  string $productIDList
+     * @param  string $modules
+     * @access public
+     * @return string
+     */
+    public function getPlanBugsTest($planID, $status)
+    {
+        $bugs = $this->objectModel->getPlanBugs($planID, $status, 'id_desc', null);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bug by id.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return object
+     */
+    public function getByIdTest($bugID)
+    {
+        $object = $this->objectModel->getById($bugID);
+        if(isset($object->title)) $object->title = str_replace("'", '', $object->title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test get bug by id list.
+     *
+     * @param  string $bugIDList
+     * @access public
+     * @return array
+     */
+    public function getByListTest($bugIDList)
+    {
+        $bugs = $this->objectModel->getByList($bugIDList);
+
+        foreach($bugs as $bug)
+        {
+            if(isset($bug->title)) $bug->title = str_replace("'", '', $bug->title);
+        }
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $bugs;
+        }
+    }
+
+    /**
+     * Test get active bugs.
+     *
+     * @param  string $products
+     * @param  string $excludeBugs
+     * @access public
+     * @return string
+     */
+    public function getActiveBugsTest($products, $excludeBugs)
+    {
+        $bugs = $this->objectModel->getActiveBugs($products, 'all', '', $excludeBugs);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get active and postponed bugs.
+     *
+     * @param  string $bugIDList
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function getActiveAndPostponedBugsTest($products, $executionID)
+    {
+        $bugs = $this->objectModel->getActiveAndPostponedBugs($products, $executionID);
+
+        $title = '';
+        foreach($bugs as $bug)
+        {
+            $title .= ',' . $bug->title;
+        }
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get module owner.
+     *
+     * @param  int    $moduleID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getModuleOwnerTest($moduleID, $productID)
+    {
+        $owner = $this->objectModel->getModuleOwner($moduleID, $productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $owner;
         }
     }
 }
