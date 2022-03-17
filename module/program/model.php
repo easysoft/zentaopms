@@ -679,7 +679,7 @@ class programModel extends model
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->future, 'budget', 0)
             ->setIF($this->post->budget != 0, 'budget', round($this->post->budget, 2))
-            ->setIF(!isset($this->post->budgetUnit), 'budgetUnit', $oldProgram->budgetUnit)
+            ->setIF(!isset($_POST['budgetUnit']), 'budgetUnit', $oldProgram->budgetUnit)
             ->join('whitelist', ',')
             ->stripTags($this->config->program->editor->edit['id'], $this->config->allowedTags)
             ->remove('uid,delta,future,syncPRJUnit,exchangeRate,contactListMenu')
