@@ -492,7 +492,8 @@
               {
                   foreach($story->executions as $executionID => $execution)
                   {
-                      echo "<li title='$execution->name'>" . html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'") . '</li>';
+                      $html = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                      echo "<li title='$execution->name'>" . $html . '</li>';
                   }
               }
               ?>
