@@ -12,7 +12,7 @@
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 </style>
 <div id='mainMenu' class='clearfix'>
-  <?php if(!($this->app->rawMethod == 'groupcase' or $this->app->rawMethod == 'zerocase')):?>
+  <?php if(!($this->app->rawMethod == 'groupcase')):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
