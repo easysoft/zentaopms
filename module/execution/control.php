@@ -1617,6 +1617,8 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $execution->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $project = $this->project->getById($execution->project);
+
         $this->view->title                = $title;
         $this->view->position             = $position;
         $this->view->executions           = $executions;
@@ -1626,8 +1628,8 @@ class execution extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->allProjects          = $this->project->getPairsByModel('all', 0, 'noclosed');
-        $this->view->project              = $this->project->getById($execution->project);
+        $this->view->allProjects          = $this->project->getPairsByModel($project->model, 0, 'noclosed');
+        $this->view->project              = $project;
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
