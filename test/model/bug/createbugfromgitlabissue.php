@@ -10,12 +10,12 @@ title=bugModel->createBugFromGitlabIssue ();
 cid=1
 pid=1
 
-测试正常的创建来源于gitlab issue的bug title     >> 问题1
-测试短时间内重复创建来源于gitlab issue的bug     >> 0
-测试正常的创建来源于gitlab issue的bug execution >> 101
-测试正常的创建来源于gitlab issue的bug pri       >> 3
-测试正常的创建来源于gitlab issue的bug severity  >> 3
-测试创建没有标题 来源于gitlab issue的异常bug    >> 『Bug标题』不能为空。
+测试正常的创建来源于gitlab issue的bug的title     >> 问题1
+测试正常的创建来源于gitlab issue的bug的execution >> 101
+测试正常的创建来源于gitlab issue的bug的pri       >> 3
+测试正常的创建来源于gitlab issue的bug的severity  >> 3
+测试创建没有标题 来源于gitlab issue的异常bug     >> 『Bug标题』不能为空。
+测试短时间内重复创建来源于gitlab issue的bug      >> 0
 
 */
 
@@ -43,11 +43,11 @@ $bug5->title     = '';
 $bug5->execution = $executionID;
 
 $bug=new bugTest();
-r($bug->createBugFromGitlabIssueTest($bug1, $executionID))    && p('title')     && e('问题1');                 // 测试正常的创建来源于gitlab issue的bug title
-r($bug->createBugFromGitlabIssueTest($bug1, $executionID))    && p('task')      && e('0');                     // 测试短时间内重复创建来源于gitlab issue的bug
-r($bug->createBugFromGitlabIssueTest($bug2, $executionID))    && p('execution') && e($executionID);            // 测试正常的创建来源于gitlab issue的bug execution
-r($bug->createBugFromGitlabIssueTest($bug3, $executionID))    && p('pri')       && e('3');                     // 测试正常的创建来源于gitlab issue的bug pri
-r($bug->createBugFromGitlabIssueTest($bug4, $executionID))    && p('severity')  && e('3');                     // 测试正常的创建来源于gitlab issue的bug severity
+r($bug->createBugFromGitlabIssueTest($bug1, $executionID))    && p('title')     && e('问题1');                 // 测试正常的创建来源于gitlab issue的bug的title
+r($bug->createBugFromGitlabIssueTest($bug2, $executionID))    && p('execution') && e("$executionID");          // 测试正常的创建来源于gitlab issue的bug的execution
+r($bug->createBugFromGitlabIssueTest($bug3, $executionID))    && p('pri')       && e('3');                     // 测试正常的创建来源于gitlab issue的bug的pri
+r($bug->createBugFromGitlabIssueTest($bug4, $executionID))    && p('severity')  && e('3');                     // 测试正常的创建来源于gitlab issue的bug的severity
 r($bug->createBugFromGitlabIssueTest($bug5, $executionID))    && p('title:0')   && e('『Bug标题』不能为空。'); // 测试创建没有标题 来源于gitlab issue的异常bug
+r($bug->createBugFromGitlabIssueTest($bug1, $executionID))    && p('task')      && e('0');                     // 测试短时间内重复创建来源于gitlab issue的bug
 
 system("./ztest init");
