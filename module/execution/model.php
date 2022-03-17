@@ -653,7 +653,12 @@ class executionModel extends model
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
-                if($message) return print(js::alert($message));
+
+                if($message)
+                {
+                    dao::$errors['message'][] = $message;
+                    return false;
+                }
             }
         }
 
