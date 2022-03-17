@@ -34,7 +34,7 @@ doing任务查询统计 >> 1
 undone任务查询统计 >> 3
 done任务查询统计 >> 1
 根据查询条件查询任务统计 >> 1
-根据模块查询任务统计 >> 2
+根据模块查询任务统计 >> 8
 name_asc,id_asc排序查询统计 >> 4
 id_asc排序查询统计 >> 4
 pri_desc,id_desc排序查询统计 >> 4
@@ -74,7 +74,7 @@ r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[3],
 r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[4],$queryID[0],$moduleID[0],$sort[0],$count[1])) && p()                        && e('3');              // undone任务查询统计
 r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[5],$queryID[0],$moduleID[0],$sort[0],$count[1])) && p()                        && e('1');              // done任务查询统计
 r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[7],$queryID[1],$moduleID[0],$sort[0],$count[1])) && p()                        && e('1');              // 根据查询条件查询任务统计
-r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[0],$queryID[0],$moduleID[1],$sort[0],$count[1])) && p()                        && e('2');              // 根据模块查询任务统计
+r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[0],$queryID[0],$moduleID[1],$sort[0],$count[1])) && p()                        && e('8');              // 根据模块查询任务统计
 r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[0],$queryID[0],$moduleID[0],$sort[1],$count[1])) && p()                        && e('4');              // name_asc,id_asc排序查询统计
 r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[0],$queryID[0],$moduleID[0],$sort[2],$count[1])) && p()                        && e('4');              // id_asc排序查询统计
 r($execution->getTasksTest($productIDList[0],$executionIDList[1],$browseType[0],$queryID[0],$moduleID[0],$sort[3],$count[1])) && p()                        && e('4');              // pri_desc,id_desc排序查询统计
