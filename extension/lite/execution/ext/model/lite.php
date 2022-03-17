@@ -25,11 +25,11 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
     $modulePageNav .= "<ul class='dropdown-menu'>";
     foreach($kanbanList as $kanbanID => $kanban)
     {
-        if($this->session->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->session->kanbanview}|"))
+        if($this->session->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->session->kanbanview}|") !== false)
         {
             $method = $this->session->kanbanview;
         }
-        elseif($this->cookie->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->cookie->kanbanview}|"))
+        elseif($this->cookie->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->cookie->kanbanview}|") !== false)
         {
             $method = $this->cookie->kanbanview;
         }
