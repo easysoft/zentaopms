@@ -38,7 +38,7 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
             $method = 'kanban';
         }
 
-        $modulePageNav .=  '<li>' . html::a(helper::createLink('execution',$method, "execution=$kanban->id"), $kanban->name) . '</li>';
+        $modulePageNav .=  '<li>' . html::a(helper::createLink('execution', $method, "execution=$kanban->id"), $kanban->name) . '</li>';
     }
     $modulePageNav .= "</ul></div></div>";
 
