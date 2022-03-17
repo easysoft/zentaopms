@@ -196,6 +196,13 @@ class bugTest
         }
     }
 
+    /**
+     * Test check delay bugs.
+     *
+     * @param  array  $productIDList
+     * @access public
+     * @return string
+     */
     public function checkDelayedBugsTest($productID)
     {
         global $tester;
@@ -225,6 +232,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get bugs of a module.
+     *
+     * @param  array  $productIDList
+     * @param  array  $moduleIDList
+     * @access public
+     * @return string
+     */
     public function getModuleBugsTest($productIDList, $moduleIDList)
     {
         global $tester;
@@ -250,6 +265,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get all bugs.
+     *
+     * @param  array  $productIDList
+     * @param  array  $moduleIDList
+     * @access public
+     * @return string
+     */
     public function getAllBugsTest($productIDList, $moduleIDList)
     {
         global $tester;
@@ -275,6 +298,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get bugs of assign to me.
+     *
+     * @param  array  $productIDList
+     * @param  array  $moduleIDList
+     * @access public
+     * @return string
+     */
     public function getByAssigntomeTest($productIDList, $moduleIDList)
     {
         global $tester;
@@ -300,6 +331,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get bugs of opened by me.
+     *
+     * @param  array  $productIDList
+     * @param  array  $moduleIDList
+     * @access public
+     * @return string
+     */
     public function getByOpenedbymeTest($productIDList, $moduleIDList)
     {
         global $tester;
@@ -325,6 +364,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get bugs of resolved by me.
+     *
+     * @param  array  $productIDList
+     * @param  array  $moduleIDList
+     * @access public
+     * @return string
+     */
     public function getByResolvedbymeTest($productIDList)
     {
         global $tester;
@@ -350,6 +397,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get bugs of nobody to do.
+     *
+     * @param  array  $productIDList
+     * @param  array  $moduleIDList
+     * @access public
+     * @return string
+     */
     public function getByAssigntonullTest($productIDList)
     {
         global $tester;
@@ -375,6 +430,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get unconfirmed bugs.
+     *
+     * @param  array  $productIDList
+     * @param  array  $modules
+     * @access public
+     * @return string
+     */
     public function getUnconfirmedTest($productIDList, $modules)
     {
         global $tester;
@@ -400,6 +463,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get bugs the overdueBugs is active or unclosed.
+     *
+     * @param  array  $productIDList
+     * @param  array  $modules
+     * @access public
+     * @return string
+     */
     public function getOverdueBugsTest($productIDList, $modules)
     {
         global $tester;
@@ -425,6 +496,15 @@ class bugTest
         }
     }
 
+
+    /**
+     * Test get bugs the status is active or unclosed.
+     *
+     * @param  array  $productIDList
+     * @param  array  $modules
+     * @access public
+     * @return string
+     */
     public function getByStatusTest($productIDList, $modules, $status)
     {
         global $tester;
@@ -450,6 +530,14 @@ class bugTest
         }
     }
 
+    /**
+     * Test get unclosed bugs for long time.
+     *
+     * @param  array  $productIDList
+     * @param  array  $modules
+     * @access public
+     * @return string
+     */
     public function getByLonglifebugsTest($productIDList, $modules)
     {
         global $tester;
