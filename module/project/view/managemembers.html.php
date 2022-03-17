@@ -132,7 +132,7 @@
   <?php $i = '%i%';?>
   <table class='hidden'>
     <tr id='addItem' class='hidden'>
-      <td><?php echo html::select("accounts[]", $users, '', "class='form-control' onchange='setRole(this.value, $i)'");?></td>
+      <td><?php echo html::select("accounts[$i]", $users, '', "class='form-control' onchange='setRole(this.value, $i)'");?></td>
       <td><?php echo html::input("roles[$i]", '', "class='form-control'");?></td>
       <td><?php echo html::input("days[$i]", $project->days, "class='form-control'");?></td>
       <td><?php echo html::input("hours[$i]", $config->execution->defaultWorkhours, "class='form-control'");?></td>
