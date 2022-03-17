@@ -20,7 +20,8 @@ class executionEntry extends Entry
      */
     public function get($executionID)
     {
-        $fields = $this->param('fields');
+        $fields    = $this->param('fields');
+        $productID = $this->param('productID');
 
         $control = $this->loadController('execution', 'view');
         $control->view($executionID);
@@ -63,14 +64,8 @@ class executionEntry extends Entry
         {
             switch($field)
             {
-                case 'modules':
-                    $control = $this->loadController('tree', 'browsetask');
-                    $control->browsetask($executionID);
-                    $data = $this->getData();
-                    if(isset($data->status) and $data->status == 'success')
-                    {
-                        $execution->modules = $data->data->tree;
-                    }
+                case 'builds':
+                    $execution->builds  = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone', $executionID, 'execution');
                     break;
                 case 'moduleoptionmenu':
                     $execution->moduleOptionMenu = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, 'allModule');

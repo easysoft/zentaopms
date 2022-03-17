@@ -1,6 +1,6 @@
 <?php
 /**
- * The story close entry point of ZenTaoPMS.
+ * The story assignto entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -9,7 +9,7 @@
  * @version     1
  * @link        http://www.zentao.net
  */
-class storyCloseEntry extends Entry
+class storyAssignToEntry extends Entry
 {
     /**
      * PUT method.
@@ -20,13 +20,13 @@ class storyCloseEntry extends Entry
      */
     public function put($storyID)
     {
-        $story = $this->loadModel('story')->getByID($storyID);
+        $task = $this->loadModel('story')->getByID($storyID);
 
-        $fields = 'closedReason,duplicateStory,childStories,comment';
+        $fields = 'assignedTo';
         $this->batchSetPost($fields);
 
-        $control = $this->loadController('story', 'close');
-        $control->close($storyID);
+        $control = $this->loadController('story', 'assignTo');
+        $control->assignTo($storyID);
 
         $data = $this->getData();
         if(!$data) return $this->send400('error');
