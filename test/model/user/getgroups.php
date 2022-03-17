@@ -10,6 +10,10 @@ title=测试 userModel::getGroupsTest();
 cid=1
 pid=1
 
+获取admin所在的分组,为空 >> 0
+通过test2所在的分组数量，1个 >> 1
+传空用户名，返回空 >> 0
+
 */
 $user = new userTest();
 

@@ -1263,6 +1263,7 @@ class executionTest
     public function getTeamSkipTest($taskID, $begin, $end)
     {
         global $tester;
+
         $teams = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
 
         $object = $this->objectModel->getTeamSkip($teams, $begin, $end);
@@ -1591,7 +1592,11 @@ class executionTest
      */
     public function getBurnDataFlotTest($executionID = 0, $count)
     {
+        $date   = date("Y-m-d");
         $object = $this->objectModel->getBurnDataFlot($executionID, $burnBy = 'left');
+
+        $todayData = array();
+        foreach ($object[$date] as $key => $value) $todayData[$key] = $value;
 
         if(dao::isError())
         {
@@ -1600,7 +1605,7 @@ class executionTest
         }
         elseif($count == "1")
         {
-            return count($object);
+            return sizeof($todayData);
         }
         else
         {
