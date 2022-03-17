@@ -17,7 +17,7 @@ fields:
   - field: plan
     range: 0
   - field: story
-    range: 0
+    range: 2-400:4
   - field: storyVersion
     range: 1
   - field: task
