@@ -963,6 +963,9 @@ class testcase extends control
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
 
+                /* Set caselib menu. */
+                if($this->app->tab == 'qa') $this->caselib->setLibMenu($libraries, $libID);
+
                 /* Set modules. */
                 $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
 
