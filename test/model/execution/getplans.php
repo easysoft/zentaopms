@@ -11,7 +11,7 @@ cid=1
 pid=1
 
 全部执行计划查询 >> 长名称
-执行计划查询 >> 1.1 [2021-05-23 ~ 2021-09-23]
+执行计划查询 >> 1.1
 全部执行计划查询 >> 2
 
 */
@@ -21,6 +21,6 @@ $executionIDList = array('0','101');
 $count           = array('0','1');
 
 $execution = new executionTest();
-r($execution->getPlansTest($productIDList, $executionIDList[0], $count[0])) && p('1:3')  && e('长名称');                        // 全部执行计划查询
-r($execution->getPlansTest($productIDList, $executionIDList[1], $count[0])) && p('1:2')  && e('1.1 [2021-05-23 ~ 2021-09-23]'); // 执行计划查询
-r($execution->getPlansTest($productIDList, $executionIDList[0], $count[1])) && p()       && e('2');                             // 全部执行计划查询
+r($execution->getPlansTest($productIDList, $executionIDList[0], $count[0])) && p('1:3')  && e('长名称'); // 全部执行计划查询
+r($execution->getPlansTest($productIDList, $executionIDList[1], $count[0])) && p('1:2')  && e('1.1');    // 执行计划查询
+r($execution->getPlansTest($productIDList, $executionIDList[0], $count[1])) && p()       && e('2');      // 全部执行计划查询
