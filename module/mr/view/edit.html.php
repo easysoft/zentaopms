@@ -101,6 +101,16 @@
             <td colspan='1' class='required'><?php echo html::select('jobID', $jobList, $MR->jobID, "class='form-control chosen'");?></td>
           </tr>
           <tr>
+            <th><?php echo $lang->mr->squash;?></th>
+            <td colspan='1'>
+              <div class="checkbox-primary">
+                <?php $checked = $MR->squash == '1' ? 'checked' : '' ?>
+                <input type="checkbox" <?php echo $checked;?> name="squash" value="1" id="squash">
+                <label for="squash"></label>
+              </div>
+            </td>
+          </tr>
+          <tr>
             <th><?php echo $lang->mr->assignee;?></th>
             <td><?php echo html::select('assignee', $users, $assignee, "class='form-control chosen'");?></td>
           </tr>

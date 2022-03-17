@@ -344,7 +344,8 @@ $lang->action->label->importedrelease       = 'imported';
 $lang->action->label->importedexecution     = 'imported';
 $lang->action->label->importedbuild         = 'imported';
 $lang->action->label->fromsonarqube         = 'created a bug from SonarQube Issue named:';
-$lang->action->label->binduser              = 'bind user';
+$lang->action->label->bind                  = 'bound';
+$lang->action->label->unbind                = 'unbound';
 
 /* Dynamic information is grouped by object. */
 $lang->action->dynamicAction                    = new stdclass;
@@ -824,4 +825,3 @@ $lang->action->desc->deletemr                     = '$date, <strong>$actor</stro
 $lang->action->desc->mergedmr                     = '$date, <strong>$actor</strong> merged <a href="$extra">code</a>.';
 $lang->action->desc->approve                      = '$date, <strong>$actor</strong> approved.';
 $lang->action->desc->reject                       = '$date, <strong>$actor</strong> rejected.';
-$lang->action->desc->binduser                     = '$date, <strong>$actor</strong> modified bound user.';
