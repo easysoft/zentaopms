@@ -710,4 +710,163 @@ class userTest
         if(dao::isError()) return dao::getError();
         return $members;
     }
+
+    /**
+     * Test get product members.
+     * 
+     * @param  string $account 
+     * @param  bool   $force 
+     * @access public
+     * @return void
+     */
+    public function grantUserViewTest($account = '', $acls = array(), $projects = '')
+    {
+        $userView = $this->objectModel->grantUserView($account, $acls, $projects);
+
+        if(dao::isError()) return dao::getError();
+        return $userView;
+    }
+
+    /**
+     * Test update program view.
+     * 
+     * @param  array  $programIdList 
+     * @param  array  $users 
+     * @access public
+     * @return void
+     */
+    public function updateProgramViewTest($programIdList = array(), $users = array())
+    {
+        $this->objectModel->updateProgramView($programIdList, $users);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->grantUserView(current($users));
+    }
+
+    /**
+     * Test check program priv.
+     * 
+     * @param  object $program
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @access public
+     * @return void
+     */
+    public function checkProgramPrivTest($program, $account, $stakeholders, $whiteList)
+    {
+        return $this->objectModel->checkProgramPriv($program, $account, $stakeholders, $whiteList);
+    }
+
+    /**
+     * Test check project priv.
+     * 
+     * @param  object $project
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @access public
+     * @return void
+     */
+    public function checkProjectPrivTest($project, $account, $stakeholders, $teams, $whiteList)
+    {
+        return $this->objectModel->checkProjectPriv($project, $account, $stakeholders, $teams, $whiteList);
+    }
+    /**
+     * Test check sprint priv.
+     * 
+     * @param  object $sprint
+     * @param  string $account
+     * @param  array  $stakeholders
+     * @param  array  $teams
+     * @param  array  $whiteList
+     * @access public
+     * @return void
+     */
+    public function checkSprintPrivTest($sprint, $account, $stakeholders, $teams, $whiteList)
+    {
+        return $this->objectModel->checkSprintPriv($sprint, $account, $stakeholders, $teams, $whiteList);
+    }
+    /**
+     * Test check product priv.
+     * 
+     * @param  object $program
+     * @param  string $account
+     * @param  array  $groups
+     * @param  array  $teams
+     * @param  array  $stakeholders
+     * @param  array  $whiteList
+     * @access public
+     * @return void
+     */
+    public function checkProductPrivTest($product, $account, $groups, $teams, $stakeholders, $whiteList)
+    {
+        return $this->objectModel->checkProductPriv($product, $account, $groups, $teams, $stakeholders, $whiteList);
+    }
+
+    /**
+     * Test get project authed users.
+     * 
+     * @param  int    $projectID 
+     * @param  array  $stakeholders 
+     * @param  array  $teams 
+     * @param  array  $whiteList 
+     * @access public
+     * @return void
+     */
+    public function getProjectAuthedUsersTest($projectID, $stakeholders, $teams, $whiteList)
+    {
+        global $tester;
+        $project = $tester->loadModel('project')->getByID($projectID);
+        return $this->objectModel->getProjectAuthedUsers($project, $stakeholders, $teams, $whiteList);
+    }
+
+    /**
+     * Test get program authed users.
+     * 
+     * @param  int    $projectID 
+     * @param  array  $stakeholders 
+     * @param  array  $whiteList 
+     * @access public
+     * @return void
+     */
+    public function getProgramAuthedUsersTest($programID, $stakeholders, $whiteList)
+    {
+        global $tester;
+        $program = $tester->loadModel('program')->getByID($programID);
+        return $this->objectModel->getProgramAuthedUsers($program, $stakeholders, $whiteList);
+    }
+
+    /**
+     * Test get product view list users.
+     * 
+     * @param  int    $productID 
+     * @param  array  $teams 
+     * @param  array  $stakeholders 
+     * @param  array  $whiteList 
+     * @access public
+     * @return void
+     */
+    public function getProductViewListUsersTest($productID, $teams, $stakeholders, $whiteList)
+    {
+        global $tester;
+        $product = $tester->loadModel('product')->getByID($productID);
+        return $this->objectModel->getProductViewListUsers($product, $teams, $stakeholders, $whiteList);
+    }
+
+    /**
+     * Test get product view list users.
+     * 
+     * @param  int    $productID 
+     * @param  string $type
+     * @param  string $params
+     * @param  array  $usersToAppended
+     * @access public
+     * @return void
+     */
+    public function getTeamMemberPairsTest($objectID, $type, $params, $usersToAppended)
+    {
+        return $this->objectModel->getTeamMemberPairs($objectID, $type, $params, $usersToAppended);
+    }
 }
