@@ -1397,7 +1397,7 @@ class kanban extends control
 
         $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
         $kanbanGroup = $this->kanban->getRDKanban($kanbanID);
-        
+
         return print(json_encode($kanbanGroup));
     }
 
