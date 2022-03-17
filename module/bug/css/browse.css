@@ -4,7 +4,7 @@
 .confirm0 {color: gray;}
 .confirm1 {color: green;}
 td.delayed {color: #fff; background: #e84e0f !important;}
-.setting {height: 25px;}
+#bugForm .setting {height: 25px;}
 
 .datatable-wrapper .table-datatable .datatable-row td {height: 37px;}
 
