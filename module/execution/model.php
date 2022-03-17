@@ -633,11 +633,16 @@ class executionModel extends model
             if($projectModel == 'scrum' and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
+                return false;
             }
             elseif(!empty($executionCode))
             {
                 /* Check unique code for edited executions. */
-                if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                if(isset($codeList[$executionCode]))
+                {
+                    dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                    return false;
+                }
                 $codeList[$executionCode] = $executionCode;
             }
 
@@ -651,7 +656,6 @@ class executionModel extends model
                 if($message) return print(js::alert($message));
             }
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
 
         foreach($executions as $executionID => $execution)
         {
@@ -660,9 +664,16 @@ class executionModel extends model
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
             $project      = $this->project->getByID($projectID);
 
-            if($execution->begin < $project->begin) dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
-            if($execution->end > $project->end)     dao::$errors['end']   = sprintf($this->lang->execution->errorGreaterProject, $project->end);
-            if(dao::isError()) return print(js::error(dao::getError()));
+            if($execution->begin < $project->begin)
+            {
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+                return false;
+            }
+            if($execution->end > $project->end)
+            {
+                dao::$errors['end']   = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                return false;
+            }
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
