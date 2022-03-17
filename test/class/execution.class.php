@@ -1263,7 +1263,6 @@ class executionTest
     public function getTeamSkipTest($taskID, $begin, $end)
     {
         global $tester;
-        //$tester->dao->update(TABLE_TEAM)->set('account')->eq('admin')->where('root')->eq($taskID)->andWhere('type')->eq('task')->exec();
 
         $teams = $tester->dao->select('*')->from(TABLE_TEAM)->where('root')->eq($taskID)->andWhere('type')->eq('task')->orderBy('order')->fetchAll('account');
 
