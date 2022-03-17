@@ -1,0 +1,41 @@
+title: table zt_usercontact
+desc: "用户联系人"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: account
+    note: "用户名"
+    fields:
+      - field: account1
+        range: user,dev,test,admin
+      - field: account2
+        range: 1-20,1-20,1-20,""
+    prefix: ""
+    postfix: ""
+    format: ""
+  - field: listName
+    note: "列表名称"
+    range: 1-10000
+    prefix: "联系人列表"
+    postfix: ""
+    format: ""
+  - field: userList
+    note: "用户列表"
+    fields:
+      - field: userList1
+        range: user,dev,test
+      - field: userList2
+        range: 20-30,20-30,20-30
+        postfix: ","
+      - field: userList3
+        range: user,dev,test
+      - field: userList4
+        range: 40-50,40-5040-50
+    format: ""

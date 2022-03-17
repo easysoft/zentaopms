@@ -79,5 +79,7 @@ fields:
     range: open,private,custom
   - field: order
     range: 5-10000:5
+  - field: openedVersion
+    range: "16.5"
   - field: deleted
     range: 0

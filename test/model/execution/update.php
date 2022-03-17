@@ -16,7 +16,7 @@ pid=1
 测试修改迭代项目为看板项目 >> project,41,71
 测试修改迭代code >> code,project31,code修改
 测试修改迭代工作日 >> days,0,5
-测试修改迭代类型 >> Lifetime,,long
+测试修改迭代类型 >> lifetime,,long
 测试修改迭代状态为wait >> status,wait,doing
 测试修改迭代状态为closed >> status,doing,closed
 测试修改名称为空 >> 『阶段名称』不能为空。
