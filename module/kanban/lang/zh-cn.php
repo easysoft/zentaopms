@@ -189,6 +189,7 @@ $lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。'
 $lang->kanban->error->parentLimitNote   = '父列的在制品数量不能小于子列在制品数量之和';
 $lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大于父列的在制品数量';
 $lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
+$lang->kanban->error->childLimitEmpty   = '请先设置子列的在制品数量后再操作';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = '不启用导入功能';
