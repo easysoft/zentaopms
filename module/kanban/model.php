@@ -412,27 +412,15 @@ class kanbanModel extends model
     /**
      * Create a kanban card.
      *
-     * @param  int $kanbanID
-     * @param  int $regionID
-     * @param  int $groupID
-     * @param  int $columnID
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
      * @access public
-     * @return void
+     * @return bool|int
      */
     public function createCard($kanbanID, $regionID, $groupID, $columnID)
     {
-        if($this->post->estimate < 0)
-        {
-            dao::$errors[] = $this->lang->kanbancard->error->recordMinus;
-            return false;
-        }
-
-        if($this->post->end && $this->post->begin > $this->post->end)
-        {
-            dao::$errors[] = $this->lang->kanbancard->error->endSmall;
-            return false;
-        }
-
         $now  = helper::now();
         $card = fixer::input('post')
             ->add('kanban', $kanbanID)
@@ -442,13 +430,25 @@ class kanbanModel extends model
             ->add('createdDate', $now)
             ->add('assignedDate', $now)
             ->add('color', '#fff')
-            ->trim('name')
+            ->trim('name,estimate')
             ->setDefault('estimate', 0)
             ->stripTags($this->config->kanban->editor->createcard['id'], $this->config->allowedTags)
             ->join('assignedTo', ',')
             ->setIF(is_numeric($this->post->estimate), 'estimate', (float)$this->post->estimate)
             ->remove('uid,lane')
             ->get();
+
+        if($card->estimate < 0)
+        {
+            dao::$errors['estimate'] = $this->lang->kanbancard->error->recordMinus;
+            return false;
+        }
+
+        if($card->end && $card->begin > $card->end)
+        {
+            dao::$errors['end'] = $this->lang->kanbancard->error->endSmall;
+            return false;
+        }
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->createcard['id'], $this->post->uid);
 
@@ -553,10 +553,15 @@ class kanbanModel extends model
         return false;
     }
 
-    /*
+    /**
      * Batch create kanban cards.
+     *
+     * @param  int    $kanbanID
+     * @param  int    $regionID
+     * @param  int    $groupID
+     * @param  int    $columnID
      * @access public
-     * @return void
+     * @return bool
      */
     public function batchCreateCard($kanbanID, $regionID, $groupID, $columnID)
     {
@@ -564,6 +569,9 @@ class kanbanModel extends model
         {
             if($_POST['name'][$index] and isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = implode(',', $_POST['assignedTo'][$index]);
             if(!isset($_POST['assignedTo'][$index])) $_POST['assignedTo'][$index] = '';
+
+            $_POST['estimate'][$index] = trim($_POST['estimate'][$index]);
+            if(empty($_POST['estimate'][$index])) $_POST['estimate'][$index] = 0;
         }
         $cards = fixer::input('post')->get();
 
