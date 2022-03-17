@@ -686,7 +686,6 @@ class executionModel extends model
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
-            if(dao::isError()) return print(js::error('execution#' . $executionID . dao::getError(true)));
 
             if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {
