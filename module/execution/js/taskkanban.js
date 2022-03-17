@@ -313,11 +313,15 @@ function renderHeaderCol($col, col, $header, kanban)
         ].join(''));
     }
 
-    $actions.append([
-            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
-            '<i class="icon icon-ellipsis-v"></i>',
-            '</a>'
-    ].join(''));
+    if(priv.canSetWIP || priv.canEditName)
+    {
+        $actions.append([
+                '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+                '</a>'
+        ].join(''));
+    }
+
     $actions.appendTo($col);
 }
 
