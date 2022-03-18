@@ -1342,6 +1342,8 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
             $link = $this->createLink('project', 'team', "projectID=$projectID");
