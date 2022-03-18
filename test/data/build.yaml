@@ -6,7 +6,7 @@ fields:
     range: 1-1000
 
   - field: project
-    range: 131{5},132{2},0
+    range: 31{5},32{2},0
 
   - field: product
     range: [1,41]{2!},1{2},42,2
@@ -15,7 +15,7 @@ fields:
     range: [0,1]{2!},0{2},2,0
 
   - field: execution
-    range: 391{2},392{2},393,396{2},0
+    range: 391{2},121{2},661,122{2},0
 
   - field: name
     fields:

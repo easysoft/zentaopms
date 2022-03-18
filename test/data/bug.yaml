@@ -35,9 +35,9 @@ fields:
   - field: keywords
     range: []
   - field: severity
-    range: 1-4:R
+    range: 1-4
   - field: pri
-    range: 1-4:R
+    range: 1-4
   - field: type
     range: [codeerror,config,install,security,performance,standard,automation,designdefect,others]
   - field: os
@@ -97,7 +97,7 @@ fields:
     loop: 0
     format: "YYYY-MM-DD"
   - field: closedBy
-    range: []{80},admin{20}
+    range: []{50},admin{30}
   - field: closedDate
     range:
   - field: duplicateBug

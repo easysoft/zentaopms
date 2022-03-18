@@ -18,6 +18,7 @@ $builder->sprint        = array('rows' => 600, 'extends' => array('project', 'ex
 $builder->story        = array('rows' => 400, 'extends' => array('story'));
 $builder->storymodule  = array('rows' => 800, 'extends' => array('module','storymodule'));
 $builder->storyplan    = array('rows' => 400, 'extends' => array('planstory'));
+$builder->storyspec    = array('rows' => 60, 'extends' => array('storyspec'));
 $builder->task         = array('rows' => 600, 'extends' => array('task','task'));
 $builder->taskmore     = array('rows' => 300, 'extends' => array('task','moretask'));
 $builder->taskspec     = array('rows' => 600, 'extends' => array('taskspec'));
@@ -29,7 +30,7 @@ $builder->bug          = array('rows' => 300, 'extends' => array('bug'));
 
 $builder->product        = array('rows' => 100, 'extends' => array('product'));
 $builder->productline    = array('rows' => 20,  'extends' => array('module', 'productline'));
-$builder->productplan    = array('rows' => 30, 'extends' => array('productplan'));
+$builder->productplan    = array('rows' => 70, 'extends' => array('productplan'));
 $builder->branch         = array('rows' => 240, 'extends' => array('branch'));
 $builder->projectproduct = array('rows' => 200, 'extends' => array('projectproduct'));
 $builder->projectstory   = array('rows' => 200, 'extends' => array('projectstory'));
