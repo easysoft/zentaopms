@@ -8,6 +8,5 @@ $productplan = new Productplan('admin');
 $List = array();
 $List[0] = 0;
 
-//var_dump($productplan->getList(1, 0, 'all', null, 'begin_desc', 'kipparent'));die;
 r($productplan->getList(1, 0, 'all', null, 'begin_desc', 'kipparent')) && p('') && e('0'); //返回空数组
 ?>
