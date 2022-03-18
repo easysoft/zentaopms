@@ -574,6 +574,7 @@ class executionModel extends model
     public function batchUpdate()
     {
         $this->loadModel('user');
+        $this->loadModel('project');
 
         $executions    = array();
         $allChanges    = array();
@@ -629,11 +630,16 @@ class executionModel extends model
             if($projectModel == 'scrum' and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
+                return false;
             }
             elseif(!empty($executionCode))
             {
                 /* Check unique code for edited executions. */
-                if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                if(isset($codeList[$executionCode]))
+                {
+                    dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                    return false;
+                }
                 $codeList[$executionCode] = $executionCode;
             }
 
@@ -644,29 +650,44 @@ class executionModel extends model
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
-                if($message) return print(js::alert($message));
+
+                if($message)
+                {
+                    dao::$errors['message'][] = $message;
+                    return false;
+                }
             }
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
 
         foreach($executions as $executionID => $execution)
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
+            $project      = $this->project->getByID($projectID);
+
+            if($execution->begin < $project->begin)
+            {
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+                return false;
+            }
+            if($execution->end > $project->end)
+            {
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                return false;
+            }
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
                 ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
-                ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
+                ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
                 ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
-            if(dao::isError()) return print(js::error('execution#' . $executionID . dao::getError(true)));
 
             if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {

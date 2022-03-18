@@ -1658,6 +1658,8 @@ class execution extends control
         if($this->post->names)
         {
             $allChanges = $this->execution->batchUpdate();
+            if(dao::isError()) return print(js::error(dao::getError()));
+
             if(!empty($allChanges))
             {
                 foreach($allChanges as $executionID => $changes)
