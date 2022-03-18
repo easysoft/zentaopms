@@ -1504,7 +1504,7 @@ function initSortable()
                 var groupID = e.element.closest('.kanban-board').data('id');
                 e.list.each(function(index, data)
                 {
-                  if(data.item.hasClass('kanban-col') && (data.item.hasClass('sort')|| data.item.children().hasClass('sort')) && groupID == data.item.data().col.group) orders.push(data.item.data('id'));
+                  if(data.item.hasClass('kanban-col') && (data.item.hasClass('sort') || data.item.children().hasClass('sort')) && groupID == data.item.data().col.group) orders.push(data.item.data('id'));
                 });
 
                 regionID = e.element.closest('.region').data('id');
