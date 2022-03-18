@@ -15,9 +15,6 @@ pid=1
 $user = new userTest();
 
 $programIdList = array('1', '2');
-a($user->grantUserViewTest('user10'));
-a($user->updateProgramViewTest('', array('user10')));
-die;
 
-r()      && p()  && e('');      //
-system("./ztest init");
+//r()      && p()  && e('');      //
+//system("./ztest init");
