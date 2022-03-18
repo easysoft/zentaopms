@@ -86,7 +86,7 @@ class baseValidater
      */
     public static function checkNotInt($var)
     {
-        return !self::checkInt($var);
+        return !empty($var);
     }
 
     /**
