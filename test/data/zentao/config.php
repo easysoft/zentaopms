@@ -1,7 +1,7 @@
 <?php
 $builder = new stdclass();
 
-$builder->company     = array('rows' => 1,    'extends' => array('company'));
+$builder->company     = array('rows' => 2,    'extends' => array('company'));
 $builder->user        = array('rows' => 1000, 'extends' => array('user'));
 $builder->todo        = array('rows' => 2000, 'extends' => array('todo'));
 $builder->effort      = array('rows' => 100, 'extends' => array('effort'));
