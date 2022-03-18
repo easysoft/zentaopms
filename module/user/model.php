@@ -158,10 +158,11 @@ class userModel extends model
     /**
      * Get commiters from the user table.
      *
+     * @param  string  $field
      * @access public
      * @return array
      */
-    public function getCommiters()
+    public function getCommiters($field = 'realname')
     {
         $rawCommiters = $this->dao->select('commiter, account, realname')->from(TABLE_USER)->where('commiter')->ne('')->fetchAll();
         if(!$rawCommiters) return array();
@@ -172,7 +173,7 @@ class userModel extends model
             $userCommiters = explode(',', $commiter->commiter);
             foreach($userCommiters as $userCommiter)
             {
-                $commiters[$userCommiter] = $commiter->realname ? $commiter->realname : $commiter->account;
+                $commiters[$userCommiter] = $commiter->$field ? $commiter->$field : $commiter->account;
             }
         }
 

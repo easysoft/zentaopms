@@ -91,7 +91,7 @@
           </td>
           <td align='center'><?php echo $repo->SCM == 'Subversion' ? $info->revision : substr($info->revision, 0, 10);?></td>
           <td><?php echo substr($info->date, 0, 10)?></td>
-          <td><?php echo $info->committer?></td>
+          <td><?php echo $info->account?></td>
           <?php $comment = htmlSpecialString($info->comment, ENT_QUOTES);?>
           <td class='comment' title='<?php echo $comment?>'><?php echo $comment?></td>
         </tr>

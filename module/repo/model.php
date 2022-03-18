@@ -1545,6 +1545,11 @@ class repoModel extends model
      */
     public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array())
     {
+        if(empty($gitlabAccountPairs))
+        {
+            $commiters   = $this->loadModel('user')->getCommiters('account');
+            $log->author = zget($commiters, $log->author);
+        }
         $log->author = isset($gitlabAccountPairs[$log->author]) ? $gitlabAccountPairs[$log->author] : $log->author;
 
         if(isset($this->app->user))
