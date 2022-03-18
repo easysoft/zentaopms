@@ -1,5 +1,3 @@
-<script>
-<?php if(!$canEditor): ?>
-    $('#name').attr("disabled", true);
+<?php if(!$canEdit): ?>
+    <script>$('#name').attr("disabled", true);</script>
 <?php endif; ?>
-</script>
