@@ -49,6 +49,7 @@ $routes['/stories/:id/close']          = 'storyClose';
 $routes['/stories/:id/active']         = 'storyActive';
 $routes['/stories/:id/assign']         = 'storyAssignto';
 $routes['/stories/:id/recordEstimate'] = 'storyRecordEstimate';
+$routes['/stories/:id/child']          = 'storyChild';
 
 $routes['/module/:id/stories'] = 'moduleStories';
 
