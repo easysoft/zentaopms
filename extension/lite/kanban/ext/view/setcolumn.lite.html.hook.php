@@ -1,6 +1,7 @@
+<?php js::set('edition',$edition);?>
 <script>
 $(function()
 {
-    $('#name').attr("disabled", true);
+    if(!edition) $('#name').attr("disabled", true); 
 })
 </script>

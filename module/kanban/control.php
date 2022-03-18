@@ -1497,8 +1497,9 @@ class kanban extends control
             return $this->sendSuccess(array('locate' => 'parent'));
         }
 
-        $this->view->column = $column;
-        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
+        $this->view->edition = $from == 'RDKanban' ? 0 : 1;
+        $this->view->column  = $column;
+        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 
