@@ -2239,8 +2239,11 @@ EOD;
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
         /* If is the program admin, have all program privs. */
-        $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
+        if($app->config->vision != 'lite')
+        {
+            $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
+            if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
+        }
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];
