@@ -36,7 +36,6 @@ class productplansEntry extends entry
 
             foreach($plans as $plan)
             {
-                $plan->name = $plan->title;
                 if($plan->parent > 0 and isset($result[$plan->parent]))
                 {
                     $parentPlan = $result[$plan->parent];
