@@ -263,6 +263,7 @@ class testcase extends control
         {
             if($groupBy == 'story')
             {
+                if($case->storyDeleted) continue;
                 $groupCases[$case->story][] = $case;
                 $groupByList[$case->story]  = $case->storyTitle;
             }
