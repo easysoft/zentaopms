@@ -5869,7 +5869,6 @@ class upgradeModel extends model
                 if(!mkdir($dirRoot, 0777, true))
                 {
                     $response['result']  = 'fail';
-                    $response['message'] = $this->lang->upgrade->moveEXTFileFail;;
                     $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
 
                     return $response;
