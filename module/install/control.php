@@ -181,10 +181,18 @@ class install extends control
             return print(js::locate(inlink('step5'), 'parent'));
         }
 
-        $this->app->loadLang('upgrade');
+        if(!isset($this->config->installed) or !$this->config->installed)
+        {
+            $this->view->error = $this->lang->install->errorNotSaveConfig;
+            $this->display();
+        }
+        else
+        {
+            $this->app->loadLang('upgrade');
 
-        $this->view->title = $this->lang->install->introduction;
-        $this->display();
+            $this->view->title = $this->lang->install->introduction;
+            $this->display();
+        }
     }
 
     /**

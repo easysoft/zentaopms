@@ -12,6 +12,22 @@
 ?>
 <?php include '../../common/view/header.lite.html.php';?>
 <div class='container'>
+  <?php if(isset($error)):?>
+  <div class='modal-dialog'>
+    <div class='modal-header'>
+      <strong><?php echo $lang->install->error;?></strong>
+    </div>
+    <div class='modal-body'>
+      <div class='alert alert-danger alert-pure with-icon'>
+        <i class='icon-exclamation-sign'></i>
+        <div class='content'><?php echo $error;?></div>
+      </div>
+    </div>
+    <div class='modal-footer'>
+      <?php echo html::commonButton($lang->install->pre, "onclick='javascript:history.back(-1)'");?>
+    </div>
+  </div>
+  <?php else:?>
   <div class='panel' style='padding:50px 300px'>
     <form method='post'>
       <h1 class='text-center'><?php echo $title;?></h1>
@@ -35,5 +51,6 @@
       </div>
     </form>
   </div>
+  <?php endif;?>
 </div>
 <?php include '../../common/view/footer.lite.html.php';?>
