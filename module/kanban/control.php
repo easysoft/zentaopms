@@ -1498,8 +1498,8 @@ class kanban extends control
         }
 
         $this->view->canEdit = $from == 'RDKanban' ? 0 : 1;
-        $this->view->column    = $column;
-        $this->view->title     = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
+        $this->view->column  = $column;
+        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 
