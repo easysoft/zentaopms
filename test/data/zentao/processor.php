@@ -45,6 +45,7 @@ class Processor
         $this->initStakeholder();
         $this->initUserquery();
         $this->initUpdateKanban();
+        $this->initStory();
 
         $this->dao->commit();
     }
@@ -142,6 +143,17 @@ class Processor
      */
     private function initProduct()
     {
+    }
+
+    /**
+     * Init Story.
+     *
+     * @access private
+     * @return void
+     */
+    private function initStory()
+    {
+        $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
     }
 
     /**

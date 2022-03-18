@@ -18,6 +18,7 @@ $builder->sprint        = array('rows' => 600, 'extends' => array('project', 'ex
 $builder->story        = array('rows' => 400, 'extends' => array('story'));
 $builder->storymodule  = array('rows' => 800, 'extends' => array('module','storymodule'));
 $builder->storyplan    = array('rows' => 400, 'extends' => array('planstory'));
+$builder->storyspec    = array('rows' => 60, 'extends' => array('storyspec'));
 $builder->task         = array('rows' => 600, 'extends' => array('task','task'));
 $builder->taskmore     = array('rows' => 300, 'extends' => array('task','moretask'));
 $builder->taskspec     = array('rows' => 600, 'extends' => array('taskspec'));
