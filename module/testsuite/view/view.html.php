@@ -61,7 +61,7 @@
                 <?php common::printOrderLink('id', $orderBy, $vars, $lang->idAB);?></nobr>
               </th>
               <th class='c-pri w-50px' title=<?php echo $lang->testsuite->pri;?>><?php common::printOrderLink('pri', $orderBy, $vars, $lang->priAB);?></th>
-              <th class='w-90px'><?php common::printOrderLink('module',       $orderBy, $vars, $lang->testcase->module);?></th>
+              <th class='w-90px'><?php common::printOrderLink('module',        $orderBy, $vars, $lang->testcase->module);?></th>
               <th class='c-name'><?php common::printOrderLink('title',         $orderBy, $vars, $lang->testcase->title);?></th>
               <th class='w-90px'><?php common::printOrderLink('type',          $orderBy, $vars, $lang->testcase->type);?></th>
               <th class='c-status'><?php common::printOrderLink('status',      $orderBy, $vars, $lang->statusAB);?></th>
