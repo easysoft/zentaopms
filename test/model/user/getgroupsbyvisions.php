@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 userModel::getGroupsByVisionsTest();
+title=测试 userModel::getGroupsByVisions();
 cid=1
 pid=1
 

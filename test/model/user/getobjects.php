@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 userModel::getObjectsTest();
+title=测试 userModel::getObjects();
 cid=1
 pid=1
 

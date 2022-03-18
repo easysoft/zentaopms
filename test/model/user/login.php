@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->loginTest();
+title=测试 userModel->login();
 cid=1
 pid=1
 

@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->deleteContactListTest();
+title=测试 userModel->deleteContactList();
 cid=1
 pid=1
 

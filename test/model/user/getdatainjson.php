@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->getDataInJSON();
+title=测试 userModel->getDataInJSON();
 cid=1
 pid=1
 

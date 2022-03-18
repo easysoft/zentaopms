@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->batchCreateTest();
+title=测试 userModel->batchCreate();
 cid=1
 pid=1
 
