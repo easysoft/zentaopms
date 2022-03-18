@@ -10,8 +10,6 @@ $IDlist[0] = 1;
 $IDlist[1] = 1000;
 $IDlist[2] = 3;
 
-//var_dump($productplan->getByIDList($IDlist));die;
-
 r($productplan->getByIDList($IDlist))    && p('3:id') && e('3'); //传入一个数组，取值id为3的数据
 r($productplan->getByIDList($IDlist))    && p('1:id') && e('1'); //传入一个数组，取值id为1的数据
 r($productplan->getByIDList($IDlist[0])) && p('1:id') && e('1'); //传入一个数值，正常取值
