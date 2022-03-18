@@ -575,7 +575,7 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         {
             if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
-                var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                var link = createLink('task', 'restart', 'taskID=' + objectID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
