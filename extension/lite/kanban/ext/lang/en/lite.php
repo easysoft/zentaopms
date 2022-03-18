@@ -6,3 +6,5 @@ $lang->kanban->taskColumn['developed']  = 'Developed';
 $lang->kanban->taskColumn['pause']      = 'Pause';
 $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
+
+$lang->kanban->common = 'Common Kanban';
