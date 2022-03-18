@@ -243,6 +243,7 @@ class commonModel extends model
             $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
             $user->groups     = array('group');
+            $user->visions    = $this->config->vision;
             if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
