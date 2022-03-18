@@ -170,7 +170,7 @@ class my extends control
             $riskCount = $pager->recTotal;
 
             /* Get the number of reviews assigned to me. */
-            $reviewList  = $this->review->getUserReviews('wait', 'id_desc', $pager);
+            $reviewList  = $this->review->getUserReviews('needreview', 'id_desc', $pager);
             $reviewCount = $pager->recTotal;
 
             /* Get the number of nc assigned to me. */
@@ -803,7 +803,7 @@ EOF;
      * @access public
      * @return void
      */
-    public function audit($browseType = 'wait', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
+    public function audit($browseType = 'needreview', $orderBy = 't1.id_desc', $recTotal = 0, $recPerPage = 15, $pageID = 1)
     {
         $this->loadModel('datatable');
         $this->loadModel('baseline');
