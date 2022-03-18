@@ -35,7 +35,6 @@ class storiesEntry extends entry
         $result  = array();
         foreach($stories as $story)
         {
-            $story->name =$story->title;
             if(isset($story->children)) $story->children = array_values((array)$story->children);
             $result[] = $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList');
         }
