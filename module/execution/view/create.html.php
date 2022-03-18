@@ -11,7 +11,6 @@
  */
 ?>
 <?php if(isset($tips)):?>
-<?php $defaultURL = $this->createLink('execution', 'task', 'executionID=' . $executionID);?>
 <?php include '../../common/view/header.html.php';?>
 <body>
   <div class='modal-dialog mw-500px' id='tipsModal'>

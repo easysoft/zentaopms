@@ -1317,6 +1317,7 @@ class execution extends control
 
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
+            $this->view->defaultURL  = isset($this->session->closeTipsList) ? $this->session->closeTipsList : $this->createLink('execution', 'task', 'executionID=' . $executionID);
             $this->view->executionID = $executionID;
             $this->view->projectID   = $projectID;
             $this->view->project     = $project;
@@ -3255,6 +3256,8 @@ class execution extends control
      */
     public function all($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
+        $this->session->set('closeTipsList', $this->app->getURI(true));
+
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('stage');
