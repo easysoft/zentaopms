@@ -5906,7 +5906,6 @@ class upgradeModel extends model
         if(!empty($command))
         {
             $response['result']  = 'fail';
-            $response['message'] = $this->lang->upgrade->afterDeleted;
             $response['command'] = $command;
          }
 

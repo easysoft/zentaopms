@@ -712,7 +712,7 @@ class upgrade extends control
         }
 
         $extFiles = $this->upgrade->getExtFiles();
-        if(!empty($extFiles) and $skipMoveFile == 'no') $this->locate(inlink('moveExtFiles', "fromVersion=$fromVersion"));
+        if(!empty($extFiles) and $skipMoveFile == 'no') return $this->locate(inlink('moveExtFiles', "fromVersion=$fromVersion"));
 
         $response = $this->upgrade->removeEncryptedDir();
         if($response['result'] == 'fail')
@@ -882,7 +882,6 @@ class upgrade extends control
      */
     public function moveExtFiles($fromVersion)
     {
-        $errorMessage = '';
         $command      = '';
         $result       = 'success';
         if(strtolower($this->server->request_method) == 'post')
@@ -891,11 +890,7 @@ class upgrade extends control
             {
                 $response = $this->upgrade->moveExtFiles();
                 $result   = $response['result'];
-                if($result == 'fail')
-                {
-                    $errorMessage = $response['message'];
-                    $command      = $response['command'];
-                }
+                if($result == 'fail') $command = $response['command'];
             }
 
             if($result == 'success') $this->locate($this->inlink('afterExec', "fromVersion=$fromVersion&processed=no&skipMoveFile=yes"));
@@ -904,7 +899,6 @@ class upgrade extends control
         $this->view->title        = $this->lang->upgrade->common;
         $this->view->files        = $this->upgrade->getExtFiles();
         $this->view->result       = $result;
-        $this->view->errorMessage = $errorMessage;
         $this->view->command      = $command;
         $this->view->fromVersion  = $fromVersion;
 
