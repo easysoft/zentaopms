@@ -11,7 +11,7 @@
  */
 ?>
 
-<?php include '../../common/view/header.lite.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/header.lite.html.php';?>
 <?php js::set('enableImport', $enableImport);?>
 <?php js::set('vision', $this->config->vision);?>
 <div id='mainContent' class='main-content'>
@@ -35,12 +35,10 @@
           <td colspan='2'>
             <label class="radio-inline">
               <input type='radio' name='import' value='on' <?php echo $enableImport == 'on' ? "checked='checked'" : ''; ?> id='importon'/>
-              <?php echo $lang->kanban->importList['on'];?>
+              <?php echo $lang->kanban->importCards;?>
+              <input type='hidden' name='importObjectList[]' value='cards'/>
             </label>
           </td>
-        </tr>
-        <tr>
-          <td colspan='2'><?php echo html::checkbox('importObjectList', $lang->kanban->importObjectList, $importObjects);?></td>
         </tr>
         <tr id='emptyTip' class='hidden'><td colspan='3' style='color: red;'><?php echo $lang->kanban->error->importObjNotEmpty;?></td></tr>
         <tr>
@@ -50,4 +48,5 @@
     </form>
   </div>
 </div>
-<?php include '../../common/view/footer.html.php';?>
+<?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>
+
