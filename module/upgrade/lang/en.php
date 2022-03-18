@@ -87,7 +87,8 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <h4>2. Independent {$lang->projectCommon}</h4>
 <p>Choose several {$lang->projectCommon}s and migrate them to one Program, or migrate them separately.</p>
 <h4>4. Link {$lang->projectCommon}s of several {$lang->productCommon}s</h4>
-<p>You can set {$lang->projectCommon}s as one new project.</p>
+<p>After selecting a historical {$lang->projectCommon} as a project upgrade, the user can select the program to which this project belongs or create a new program.</p>
+<p>After selecting a historical {$lang->projectCommon} as the iterative upgrade, the user can select the project and program to which the execution belongs or create a new project and program.</p>
 EOD;
 
 $lang->upgrade->to15Mode['classic'] = 'Keep the classic mode';

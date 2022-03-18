@@ -87,7 +87,8 @@ $lang->upgrade->mergeProgramDesc = <<<EOD
 <h4>情况三：独立的{$lang->projectCommon}</h4>
 <p>可以选择若干个{$lang->projectCommon}迁移到一个项目集中，也可以独立迁移。</p>
 <h4>情况四：关联多个{$lang->productCommon}的{$lang->projectCommon}</h4>
-<p>可以选择这些{$lang->projectCommon}归属于某个新项目下。</p>
+<p>选择历史{$lang->projectCommon}作为项目升级后，用户可以选择这个项目所属的项目集或新建项目集。</p>
+<p>选择历史{$lang->projectCommon}作为迭代升级后，用户可以选择这个执行所属的项目集、项目或新建项目集、项目。</p>
 EOD;
 
 $lang->upgrade->to15Mode['classic'] = '经典管理模式';

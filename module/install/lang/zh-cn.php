@@ -157,7 +157,10 @@ $lang->install->getPriv            = '设置帐号';
 $lang->install->company            = '公司名称';
 $lang->install->account            = '管理员帐号';
 $lang->install->password           = '管理员密码';
-$lang->install->errorEmptyPassword = '密码不能为空';
+
+$lang->install->errorEmpty['company']  = "{$lang->install->company}不能为空";
+$lang->install->errorEmpty['account']  = "{$lang->install->account}不能为空";
+$lang->install->errorEmpty['password'] = "{$lang->install->password}不能为空";
 
 $lang->install->processList['11'] = '立项管理';
 $lang->install->processList['12'] = '项目规划';

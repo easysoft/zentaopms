@@ -502,13 +502,21 @@ class installModel extends model
      */
     public function grantPriv()
     {
-        if($this->post->password == '') return print(js::error($this->lang->install->errorEmptyPassword));
+        $requiredFields = explode(',', $this->config->install->step5RequiredFields);
+        foreach($requiredFields as $field)
+        {
+            if(empty($this->post->{$field}))
+            {
+                dao::$errors[] = $this->lang->install->errorEmpty[$field];
+                return false;
+            }
+        }
 
         /* Insert a company. */
         $company = new stdclass();
         $company->name   = $this->post->company;
         $company->admins = ",{$this->post->account},";
-        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->batchCheck('name', 'notempty')->exec();
+        $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(!dao::isError())
         {
             /* Set admin. */
@@ -518,7 +526,7 @@ class installModel extends model
             $admin->password = md5($this->post->password);
             $admin->gender   = 'f';
             $admin->visions  = 'rnd,lite';
-            $this->dao->replace(TABLE_USER)->data($admin)->check('account', 'notempty')->exec();
+            $this->dao->replace(TABLE_USER)->data($admin)->exec();
         }
     }
 
