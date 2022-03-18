@@ -711,8 +711,19 @@ class upgrade extends control
             return print($this->display('upgrade', 'consistency'));
         }
 
-        $EXTfiles = $this->upgrade->getEXTFiles();
-        if(!empty($EXTfiles) and $skipMoveFile == 'no') $this->locate(inlink('moveEXTFiles', "fromVersion=$fromVersion"));
+        $extFiles = $this->upgrade->getExtFiles();
+        if(!empty($extFiles) and $skipMoveFile == 'no') return $this->locate(inlink('moveExtFiles', "fromVersion=$fromVersion"));
+
+        $response = $this->upgrade->removeEncryptedDir();
+        if($response['result'] == 'fail')
+        {
+            $this->view->title  = $this->lang->upgrade->common;
+            $this->view->errors = $response['command'];
+            $this->view->result = 'fail';
+
+            return $this->display('upgrade', 'execute');
+        }
+
         unset($_SESSION['user']);
 
         if($processed == 'no')
@@ -869,38 +880,25 @@ class upgrade extends control
      * @access public
      * @return void
      */
-    public function moveEXTFiles($fromVersion)
+    public function moveExtFiles($fromVersion)
     {
-        $errorMessage = '';
         $command      = '';
         $result       = 'success';
         if(strtolower($this->server->request_method) == 'post')
         {
             if(!empty($_POST['files']))
             {
-                $response = $this->upgrade->moveEXTFiles();
+                $response = $this->upgrade->moveExtFiles();
                 $result   = $response['result'];
-
-                if($result == 'success')
-                {
-                    $response = $this->upgrade->removeEncryptedDir();
-                    $result   = $response['result'];
-                }
-            }
-
-            if($result == 'fail')
-            {
-                $errorMessage = $response['message'];
-                $command      = $response['command'];
+                if($result == 'fail') $command = $response['command'];
             }
 
             if($result == 'success') $this->locate($this->inlink('afterExec', "fromVersion=$fromVersion&processed=no&skipMoveFile=yes"));
         }
 
         $this->view->title        = $this->lang->upgrade->common;
-        $this->view->files        = $this->upgrade->getEXTFiles();
+        $this->view->files        = $this->upgrade->getExtFiles();
         $this->view->result       = $result;
-        $this->view->errorMessage = $errorMessage;
         $this->view->command      = $command;
         $this->view->fromVersion  = $fromVersion;
 
