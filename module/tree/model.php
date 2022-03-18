@@ -124,7 +124,15 @@ class treeModel extends model
     public function getOptionMenu($rootID, $type = 'story', $startModule = 0, $branch = 0)
     {
         if(empty($branch)) $branch = 0;
-        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getModulePairs();
+        if(defined('TUTORIAL'))
+        {
+            $modulePairs = $this->loadModel('tutorial')->getModulePairs();
+            if(!is_array($branch)) return $modulePairs;
+
+            $modules = array();
+            foreach($branch as $b) $modules[$b] = $modulePairs;
+            return $modules;
+        }
 
         /* If type of $branch is array, get modules of these branches. */
         if(gettype($branch) == 'array')
