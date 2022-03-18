@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->getProductMembersTest();
+title=测试 userModel->getProductMembers();
 cid=1
 pid=1
 

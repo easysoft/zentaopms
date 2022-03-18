@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->createContactListTest();
+title=测试 userModel->createContactList();
 cid=1
 pid=1
 

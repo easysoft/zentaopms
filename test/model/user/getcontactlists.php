@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 userModel::getContactListsTest();
+title=测试 userModel::getContactLists();
 cid=1
 pid=1
 
