@@ -1,7 +1,7 @@
 Name:zentaopms
 Version:7.1.stable
 Release:1
-Summary:This is ZenTao PMS software.	
+Summary:This is ZenTao PMS software.
 
 Group:utils
 License:ZPL
@@ -9,7 +9,7 @@ URL:http://www.zentao.net
 Source0:%{name}-%{version}.tar.gz
 BuildRoot:%{_tmppath}/%{name}-%{version}-root
 BuildArch:noarch
-Requires:httpd, php-cli, php, php-common, php-pdo, php-json, php-ldap, mysql
+Requires:httpd, php-cli, php, php-common, php-pdo, php-json, mysql
 Requires:/usr/lib64/php/modules/pdo_mysql.so
 
 %description
@@ -26,7 +26,7 @@ chmod 777 %{_builddir}/%{name}-%{version}/opt/zentao/module
 chmod 777 %{_builddir}/%{name}-%{version}/opt/zentao/www
 chmod a+rx %{_builddir}/%{name}-%{version}/opt/zentao/bin/*
 find %{_builddir}/%{name}-%{version}/opt/zentao/ -name ext |xargs chmod -R 777
-cp -a %{_builddir}/%{name}-%{version}/* $RPM_BUILD_ROOT 
+cp -a %{_builddir}/%{name}-%{version}/* $RPM_BUILD_ROOT
 
 %clean
 rm -rf $RPM_BUILD_ROOT

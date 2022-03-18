@@ -25,7 +25,20 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
     $modulePageNav .= "<ul class='dropdown-menu'>";
     foreach($kanbanList as $kanbanID => $kanban)
     {
-        $modulePageNav .=  '<li>' . html::a(helper::createLink($this->app->rawModule, $this->app->rawMethod, "execution=$kanban->id"), $kanban->name) . '</li>';
+        if($this->session->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->session->kanbanview}|") !== false)
+        {
+            $method = $this->session->kanbanview;
+        }
+        elseif($this->cookie->kanbanview && strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$this->cookie->kanbanview}|") !== false)
+        {
+            $method = $this->cookie->kanbanview;
+        }
+        else
+        {
+            $method = 'kanban';
+        }
+
+        $modulePageNav .=  '<li>' . html::a(helper::createLink('execution', $method, "execution=$kanban->id"), $kanban->name) . '</li>';
     }
     $modulePageNav .= "</ul></div></div>";
 

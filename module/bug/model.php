@@ -542,7 +542,7 @@ class bugModel extends model
     }
 
     /**
-     * getActiveBugs
+     * Get active bugs.
      *
      * @param  array    $products
      * @param  int      $branch

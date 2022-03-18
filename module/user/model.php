@@ -249,13 +249,16 @@ class userModel extends model
     /**
      * Get user info by ID.
      *
-     * @param  mix    $userID
-     * @param  string    $field id|account
+     * @param  mix     $userID
+     * @param  string  $field id|account
      * @access public
      * @return object|bool
      */
     public function getById($userID, $field = 'account')
     {
+        /* Return current user when user is guest or empty to make sure pages in dashboard work fine. */
+        if(empty($userID) && $this->app->user->account == 'guest') return $this->app->user;
+
         if($field == 'id') $userID = (int)$userID;
         if($field == 'account') $userID = str_replace(' ', '', $userID);
 

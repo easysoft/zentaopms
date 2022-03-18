@@ -42,6 +42,8 @@ fields:
     prefix: "项目集描述"
   - field: acl
     range: open{4},private{4}
+  - field: openedVersion
+    range: "16.5"
   - field: whitelist
     froms:
       - from: common.user.v1.yaml

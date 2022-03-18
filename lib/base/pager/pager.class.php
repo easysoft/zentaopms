@@ -5,7 +5,7 @@
  *
  * The author disclaims copyright to this source code.  In place of
  * a legal notice, here is a blessing:
- * 
+ *
  *  May you do good and not evil.
  *  May you find forgiveness for yourself and forgive others.
  *  May you share freely, never taking more than you give.
@@ -13,7 +13,7 @@
 /**
  * pager类.
  * Pager class.
- * 
+ *
  * @package framework
  */
 class basePager
@@ -29,7 +29,7 @@ class basePager
     /**
      * 总个数。
      * The total counts.
-     * 
+     *
      * @var int
      * @access public
      */
@@ -38,7 +38,7 @@ class basePager
     /**
      * 每页的记录数。
      * Record count per page.
-     * 
+     *
      * @var int
      * @access public
      */
@@ -46,7 +46,7 @@ class basePager
 
     /**
      * The cookie name of recPerPage.
-     * 
+     *
      * @var string
      * @access public
      */
@@ -55,7 +55,7 @@ class basePager
     /**
      * 总页面数。
      * Page count.
-     * 
+     *
      * @var string
      * @access public
      */
@@ -64,7 +64,7 @@ class basePager
     /**
      * 当前页码。
      * Current page id.
-     * 
+     *
      * @var string
      * @access public
      */
@@ -73,7 +73,7 @@ class basePager
     /**
      * 全局变量$app。
      * The global $app.
-     * 
+     *
      * @var object
      * @access public
      */
@@ -82,7 +82,7 @@ class basePager
     /**
      * 全局变量$lang。
      * The global $lang.
-     * 
+     *
      * @var object
      * @access public
      */
@@ -91,7 +91,7 @@ class basePager
     /**
      * 当前的模块名。
      * Current module name.
-     * 
+     *
      * @var string
      * @access public
      */
@@ -100,7 +100,7 @@ class basePager
     /**
      * 当前的方法名。
      * Current method.
-     * 
+     *
      * @var string
      * @access public
      */
@@ -117,10 +117,10 @@ class basePager
     /**
      * 构造方法。
      * The construct function.
-     * 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return void
      */
@@ -140,10 +140,10 @@ class basePager
     /**
      * 构造方法。
      * The factory function.
-     * 
-     * @param  int    $recTotal 
-     * @param  int    $recPerPage 
-     * @param  int    $pageID 
+     *
+     * @param  int    $recTotal
+     * @param  int    $recPerPage
+     * @param  int    $pageID
      * @access public
      * @return object
      */
@@ -155,8 +155,8 @@ class basePager
     /**
      * 设置总记录数。
      * Set the recTotal property.
-     * 
-     * @param  int    $recTotal 
+     *
+     * @param  int    $recTotal
      * @access public
      * @return void
      */
@@ -168,8 +168,8 @@ class basePager
     /**
      * 设置每页记录数。
      * Set the recPerPage property.
-     * 
-     * @param  int    $recPerPage 
+     *
+     * @param  int    $recPerPage
      * @access public
      * @return void
      */
@@ -185,7 +185,7 @@ class basePager
     /**
      * 设置总页数。
      * Set the pageTotal property.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -197,8 +197,8 @@ class basePager
     /**
      * 设置页码。
      * Set the page id.
-     * 
-     * @param  int $pageID 
+     *
+     * @param  int $pageID
      * @access public
      * @return void
      */
@@ -217,7 +217,7 @@ class basePager
     /**
      * 设置全局变量$app。
      * Set the $app property;
-     * 
+     *
      * @access public
      * @return void
      */
@@ -230,7 +230,7 @@ class basePager
     /**
      * 设置全局变量$lang。
      * Set the $lang property.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -243,7 +243,7 @@ class basePager
     /**
      * 设置模块名。
      * Set the $moduleName property.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -255,7 +255,7 @@ class basePager
     /**
      * 设置方法名。
      * Set the $methodName property.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -267,7 +267,7 @@ class basePager
     /**
      * 从请求网址中获取记录总数、每页记录数、页码。
      * Get recTotal, recPerpage, pageID from the request params, and add them to params.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -295,7 +295,7 @@ class basePager
     /**
      * 创建limit语句。
      * Create the limit string.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -307,11 +307,11 @@ class basePager
     }
 
     /**
-     * 向页面显示分页信息。 
+     * 向页面显示分页信息。
      * Print the pager's html.
-     * 
-     * @param  string $align 
-     * @param  string $type 
+     *
+     * @param  string $align
+     * @param  string $type
      * @access public
      * @return void
      */
@@ -330,7 +330,7 @@ class basePager
     /**
      * 获取优化后的分页。
      * Get the justify pager html string
-     * 
+     *
      * @access public
      * @return [type] [description]
      */
@@ -370,7 +370,7 @@ class basePager
     {
         /* 如果记录个数为0，返回没有记录。 */
         /* If the RecTotal is zero, return with no record. */
-        if($this->recTotal == 0) return $type == 'mobile' ? '' : "<div style='float:$align; clear:none;' class='page'>{$this->lang->pager->noRecord}</div>"; 
+        if($this->recTotal == 0) return $type == 'mobile' ? '' : "<div style='float:$align; clear:none;' class='page'>{$this->lang->pager->noRecord}</div>";
 
         /* Set the params. */
         $this->setParams();
@@ -411,7 +411,7 @@ class basePager
     /**
      * 生成分页摘要信息。
      * Create the digest code.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -423,7 +423,7 @@ class basePager
     /**
      * 创建首页链接。
      * Create the first page.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -437,8 +437,8 @@ class basePager
     /**
      * 创建前一页链接。
      * Create the pre page html.
-     * 
-     * @param  string $type 
+     *
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -456,13 +456,13 @@ class basePager
             $this->params['pageID'] = $this->pageID - 1;
             return $this->createLink($this->lang->pager->pre);
         }
-    }    
+    }
 
     /**
      * 创建下一页链接。
      * Create the next page html.
-     * 
-     * @param  string $type 
+     *
+     * @param  string $type
      * @access public
      * @return string
      */
@@ -484,8 +484,8 @@ class basePager
 
     /**
      * 创建最后一页链接。
-     * Create the last page 
-     * 
+     * Create the last page
+     *
      * @access public
      * @return string
      */
@@ -494,18 +494,18 @@ class basePager
         if($this->pageID == $this->pageTotal) return $this->lang->pager->last . ' ';
         $this->params['pageID'] = $this->pageTotal;
         return $this->createLink($this->lang->pager->last);
-    }    
+    }
 
     /**
      * 创建每页显示记录数的select标签。
      * Create the select object of record perpage.
-     * 
+     *
      * @access public
      * @return string
      */
     public function createRecPerPageJS()
     {
-        /* 
+        /*
          * 替换recTotal, recPerPage, pageID为特殊的字符串，然后用js代码替换掉。
          * Replace the recTotal, recPerPage, pageID to special string, and then replace them with values by JS.
          **/
@@ -554,8 +554,8 @@ EOT;
 
     /**
      * 生成每页显示记录数的select列表。
-     * Create the select list of RecPerPage. 
-     * 
+     * Create the select list of RecPerPage.
+     *
      * @access public
      * @return string
      */
@@ -579,7 +579,7 @@ EOT;
     /**
      * 生成跳转到指定页码的部分。
      * Create the goto part html.
-     * 
+     *
      * @access public
      * @return string
      */
@@ -590,13 +590,13 @@ EOT;
         $goToHtml .= "<input type='text'   id='_pageID'    value='$this->pageID' style='text-align:center;width:30px;' class='form-control' /> \n";
         $goToHtml .= "<input type='button' id='goto'       value='{$this->lang->pager->locate}' onclick='submitPage(\"changePageID\");' class='btn'/>";
         return $goToHtml;
-    }    
+    }
 
     /**
      * 创建链接。
      * Create link.
-     * 
-     * @param  string    $title 
+     *
+     * @param  string    $title
      * @access public
      * @return string
      */

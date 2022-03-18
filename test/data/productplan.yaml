@@ -8,10 +8,10 @@ fields:
     range: 1-10000
   - field: product
     note: "所属产品"
-    range: 1-10{3}
+    range: 1-10{3},41-60{2}
   - field: branch
     note: "所属分支"
-    range: 0
+    range: 0{30},1-40
   - field: parent
     note: "父计划"
     range: 0

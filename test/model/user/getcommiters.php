@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->getPairs();
+title=测试 userModel->getPairs();
 cid=1
 pid=1
 

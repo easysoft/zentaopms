@@ -88,11 +88,14 @@ $lang->misc->feature->tutorial       = '新手引导教程';
 $lang->misc->feature->tutorialImage  = 'theme/default/images/main/tutorial.png';
 $lang->misc->feature->youngBlueTheme = '全新青春蓝主题';
 $lang->misc->feature->youngBlueImage = 'theme/default/images/main/new_theme.png';
+$lang->misc->feature->visions        = "不同场景界面切换";
 $lang->misc->feature->nextStep       = '下一步';
 $lang->misc->feature->close          = '关闭';
 $lang->misc->feature->downloadFile   = '下载新版本功能介绍文档';
 $lang->misc->feature->tutorialDesc   = "<p>禅道15系列新增了多项功能，您可以通过“<strong>新手引导教程</strong>”快速了解禅道的基本使用方法。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-新手引导</span>]，点击新手引导，即可进入新手引导教程。</p>";
 $lang->misc->feature->themeDesc      = "<p>禅道15系列上线了全新的“青春蓝”主题，页面呈现更加美观，体验更加友好。</p><p>通过鼠标经过 [<span style='color: #0c60e1'>头像-主题-青春蓝</span>]，点击青春蓝，即可设置成功。</p>";
+$lang->misc->feature->visionsDesc    = "<p>从16.5开始增加了界面概念，用户可以在<span style='color:#0c60e1'>[研发综合界面]</span>中处理研发事务、在<span style='color:#0c60e1'>[迅捷界面]</span>处理日常办公事务。</p><p>在头像右侧即可查看当前所处界面，点击当前界面名称可查看和切换其他的界面。</p>";
+$lang->misc->feature->visionsImage   = 'theme/default/images/main/visions.png';
 
 $lang->misc->releaseDate['16.5.beta1']  = '2022-03-16';
 $lang->misc->releaseDate['16.4']        = '2022-02-15';

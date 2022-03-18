@@ -11,13 +11,13 @@ fields:
   - field: branch
     range: 0
   - field: module
-    range: 0
+    range: 1821-1823,1825-1827,1831-1833,0{1000000}
   - field: execution
     range: 101-700{3}
   - field: plan
-    range: 0
+    range: 1{3},4{3},7{3},0{1111111}
   - field: story
-    range: 0
+    range: 2-400:4
   - field: storyVersion
     range: 1
   - field: task
@@ -35,9 +35,9 @@ fields:
   - field: keywords
     range: []
   - field: severity
-    range: 1-4:R
+    range: 1-4
   - field: pri
-    range: 1-4:R
+    range: 1-4
   - field: type
     range: [codeerror,config,install,security,performance,standard,automation,designdefect,others]
   - field: os
@@ -57,7 +57,7 @@ fields:
   - field: color
     range: [#3da7f5,#75c941,#2dbdb2,#797ec9,#ffaf38,#ff4e3e]
   - field: confirmed
-    range: [0,1]:R
+    range: 0,1
   - field: activatedCount
     range: 0
   - field: mailto
@@ -77,8 +77,11 @@ fields:
     type: timestamp
     format: "YYYY-MM-DD"
   - field: deadline
-    range: "(+2w):60"
+    range: "(-1M)-(+1w):-1D"
     type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
     format: "YYYY-MM-DD"
   - field: resolvedBy
     range: []{50},$assignedTo{30},admin{20}
@@ -87,9 +90,14 @@ fields:
   - field: resolvedBuild
     range: []{55},trunk{15},[]{25},trunk{5}
   - field: resolvedDate
-    range:
+    range: "(+1w)-(-2w):-1D"
+    type: timestamp
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: "YYYY-MM-DD"
   - field: closedBy
-    range: []{80},admin{20}
+    range: []{50},admin{30}
   - field: closedDate
     range:
   - field: duplicateBug

@@ -45,6 +45,7 @@ class Processor
         $this->initStakeholder();
         $this->initUserquery();
         $this->initUpdateKanban();
+        $this->initStory();
 
         $this->dao->commit();
     }
@@ -89,6 +90,39 @@ class Processor
         $users['user2'] = array('account' => 'noprogram1', 'realname' => '不在项目集1用户');
 
         foreach($users as $account => $user) $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($account)->exec();
+
+        $this->dao->update(TABLE_USERCONTACT)->set('account')->eq('admin')->where('account')->like('admin%')->exec();
+
+        $productIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->fetchAll();
+        $projectIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll();
+        $sprintIDList  = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->in('sprint,stage,kanban')->fetchAll();
+
+        $product = array();
+        $project = array();
+        $sprint  = array();
+        foreach($productIDList as $productID) $product[] = $productID->id;
+        foreach($projectIDList as $projectID) $project[] = $projectID->id;
+        foreach($sprintIDList as $sprintID)   $sprint[]  = $sprintID->id;
+
+        $products = ",".join(",",$product);
+        $projects = ",".join(",",$project);
+        $sprints  = ",".join(",",$sprint);
+
+        $userViews = new stdclass();
+        $userViews->account  = 'admin';
+        $userViews->programs = ',1,2,3,4,5,6,7,8,9,10';
+        $userViews->products = $products;
+        $userViews->projects = $projects;
+        $userViews->sprints  = $sprints;
+        $this->dao->insert(TABLE_USERVIEW)->data($userViews)->exec();
+
+        $guestViews = new stdclass();
+        $guestViews->account  = 'guest';
+        $guestViews->programs = '';
+        $guestViews->products = '';
+        $guestViews->projects = '';
+        $guestViews->sprints  = '';
+        $this->dao->insert(TABLE_USERVIEW)->data($guestViews)->exec();
     }
 
     /**
@@ -109,6 +143,17 @@ class Processor
      */
     private function initProduct()
     {
+    }
+
+    /**
+     * Init Story.
+     *
+     * @access private
+     * @return void
+     */
+    private function initStory()
+    {
+        $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
     }
 
     /**

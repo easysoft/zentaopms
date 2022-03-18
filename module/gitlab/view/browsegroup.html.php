@@ -48,7 +48,7 @@
           <td class='text-center'><?php echo $gitlabGroup->id;?></td>
           <td class='text-c-name' title='<?php echo $gitlabGroup->name;?>'>
             <?php $groupName = current(common::convert2Pinyin(array($gitlabGroup->name))); ?>
-            <?php echo html::avatar($groupName[0], 20); ?>
+            <?php echo html::avatar(array('avatar' => $gitlabGroup->avatar_url, 'account' => $groupName), 20); ?>
             <span><?php echo $gitlabGroup->name;?></span>
           </td>
           <td class='text' title='<?php echo $gitlabGroup->path;?>'><?php echo html::a($gitlab->url . '/' . $gitlabGroup->path, $gitlabGroup->path, '_target');?></td>
