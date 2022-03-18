@@ -828,10 +828,12 @@ class bugTest
     }
 
     /**
-     * Test batch update tasks.
+     * Test batch update bugs.
      *
-     * @param  array  $param
-     * @param  int    $taskID
+     * @param  array  $bugIDList
+     * @param  string $title
+     * @param  string $type
+     * @param  int    $bugID
      * @access public
      * @return array
      */
@@ -886,6 +888,178 @@ class bugTest
         else
         {
             return $object[$bugID];
+        }
+    }
+
+    /**
+     * Test batch activate bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function batchActivateObject($bugIDList)
+    {
+        $statusList      = array('1' => 'active', '53' => 'resolved', '82' => 'closed');
+        $assignedToList  = array('1' => 'admin',  '53' => 'admin',    '82' => 'admin');
+        $openedBuildList = array('1' => 'trunk',  '53' => 'trunk',    '82' => 'trunk');
+        $commentList     = array('1' => '',       '53' => '',         '82' => '');
+
+        $batchActivateFields['bugIDList']       = $bugIDList;
+        $batchActivateFields['statusList']      = $statusList;
+        $batchActivateFields['assignedToList']  = $assignedToList;
+        $batchActivateFields['openedBuildList'] = $openedBuildList;
+        $batchActivateFields['commentList']     = $commentList;
+
+        foreach($batchActivateFields as $field => $value) $_POST[$field] = $value;
+
+        $object = $this->objectModel->batchActivate();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test assign a bug to a user again.
+     *
+     * @param  int    $bugID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function assignTest($bugID, $param = array())
+    {
+        $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '');
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+        $object = $this->objectModel->assign($bugID);
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test confirm a bug.
+     *
+     * @param  int    $bugID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function confirmTest($bugID, $param = array())
+    {
+        $createFields = array('assignedTo' => '', 'status' => '', 'comment' => '', 'pri' => '1');
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+        $object = $this->objectModel->confirm($bugID);
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test batch confirm bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function batchConfirmTest($bugIDList)
+    {
+        $this->objectModel->batchConfirm($bugIDList);
+
+        $bugs = $this->objectModel->getByList($bugIDList);
+
+        $confirm = '';
+        foreach($bugs as $bug) $confirm .= ',' . $bug->confirmed;
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $confirm;
+        }
+    }
+
+    /**
+     * Test confirm a bug.
+     *
+     * @param  int    $bugID
+     * @param  array  $param
+     * @access public
+     * @return array
+     */
+    public function resolveTest($bugID, $param = array())
+    {
+        $createFields['duplicateBug']   = '';
+        $createFields['buildExecution'] = '0';
+        $createFields['resolvedBuild']  = 'trunk';
+        $createFields['buildName']      = '';
+        $createFields['resolvedDate']   = helper::now();
+        $createFields['assignedTo']     = '';
+        $createFields['status']         = 'resolved';
+        $createFields['labels']         = array('');
+        $createFields['comment']        = '';
+        $createFields['resolution']     = '';
+
+        foreach($createFields as $field => $defaultValue) $_POST[$field] = $defaultValue;
+        foreach($param as $key => $value) $_POST[$key] = $value;
+
+        $object = $this->objectModel->resolve($bugID);
+
+        unset($_POST);
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
+
+    /**
+     * Test batch change branch.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $branchID
+     * @access public
+     * @return array
+     */
+    public function batchChangeBranchTest($bugIDList, $branchID, $bugID)
+    {
+        $bugs = $this->objectModel->getByList($bugIDList);
+
+        $object = $this->objectModel->batchChangeBranch($bugIDList, $branchID, $bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
         }
     }
 }
