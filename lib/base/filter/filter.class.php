@@ -86,7 +86,7 @@ class baseValidater
      */
     public static function checkNotInt($var)
     {
-        return !empty($var);
+        return !self::checkInt($var);
     }
 
     /**
@@ -329,7 +329,7 @@ class baseValidater
      */
     public static function checkNotEmpty($var)
     {
-        return strlen(trim($var)) !== 0;
+        return !empty($var);
     }
 
     /**
