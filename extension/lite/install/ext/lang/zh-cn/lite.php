@@ -1,5 +1,4 @@
 <?php
-
 $lang->install->license  = '禅道迅捷版软件使用 Z PUBLIC LICENSE(ZPL) 1.2 授权协议';
 $lang->install->welcome  = '欢迎使用禅道迅捷版！';
 $lang->install->desc     = <<<EOT

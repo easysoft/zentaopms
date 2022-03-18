@@ -1,7 +1,5 @@
-<?php js::set('edition',$edition);?>
 <script>
-$(function()
-{
-    if(!edition) $('#name').attr("disabled", true); 
-})
+<?php if(!$canEditor): ?>
+    $('#name').attr("disabled", true);
+<?php endif; ?>
 </script>
