@@ -785,4 +785,107 @@ class bugTest
             return $owner;
         }
     }
+
+    /**
+     * Test update a bug.
+     *
+     * @param mixed $bugID
+     * @param array $param
+     * @access public
+     * @return void
+     */
+    public function updateObject($bugID, $param = array())
+    {
+        global $tester;
+        $object = $tester->dbh->query("SELECT * FROM " . TABLE_BUG  ." WHERE id = $bugID")->fetch();
+
+        foreach($object as $field => $value)
+        {
+            if(in_array($field, array_keys($param)))
+            {
+                $_POST[$field] = $param[$field];
+            }
+            else
+            {
+                $_POST[$field] = $value;
+            }
+        }
+        $_POST['closedDate'] = '';
+
+
+        $change = $this->objectModel->update($bugID);
+        if($change == array()) $change = '没有数据更新';
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $change;
+        }
+    }
+
+    /**
+     * Test batch update tasks.
+     *
+     * @param  array  $param
+     * @param  int    $taskID
+     * @access public
+     * @return array
+     */
+    public function batchUpdateObject($bugIDList, $title, $type, $bugID)
+    {
+        $titles       = array('1' => 'BUG1', '2' => 'BUG2', '3' => 'BUG3');
+        $types        = array('1' => 'codeerror', '2' => 'config', '3' => 'install');
+        $severities   = array('1' => '1', '2' => '2', '3' => '3');
+        $pris         = array('1' => '1', '2' => '2', '3' => '3');
+        $colors       = array('1' => '#3da7f5', '2' => '#75c941', '3' => '#2dbdb2');
+        $module       = array('1' => '1821', '2' => '1822', '3' => '1823');
+        $plan         = array('1' => '1', '2' => '1', '3' => '1');
+        $assignedTo   = array('1' => 'admin', '2' => 'admin', '3' => 'admin');
+        $deadline     = array('1' => date('Y-m-d',strtotime('-1 month')), '2' => date('Y-m-d',strtotime('-1 month +1 day')), '3' => date('Y-m-d',strtotime('-1 month +2 day')));
+        $os           = array('1' => '', '2' => '', '3' => 'all');
+        $browser      = array('1' => '', '2' => '', '3' => '');
+        $keyword      = array('1' => '', '2' => '', '3' => '');
+        $resolvedBy   = array('1' => '', '2' => '', '3' => '');
+        $resolution   = array('1' => '', '2' => '', '3' => '');
+        $duplicateBug = array('1' => '', '2' => '', '3' => '');
+
+        $titles[$bugID] = $title;
+        $types[$bugID]  = $type;
+
+
+        $batchUpdateFields['bugIDList']     = $bugIDList;
+        $batchUpdateFields['types']         = $types;
+        $batchUpdateFields['severities']    = $severities;
+        $batchUpdateFields['pris']          = $pris;
+        $batchUpdateFields['titles']        = $titles;
+        $batchUpdateFields['colors']        = $colors;
+        $batchUpdateFields['modules']       = $module;
+        $batchUpdateFields['plans']         = $plan;
+        $batchUpdateFields['assignedTos']   = $assignedTo;
+        $batchUpdateFields['deadlines']     = $deadline;
+        $batchUpdateFields['os']            = $os;
+        $batchUpdateFields['browsers']      = $browser;
+        $batchUpdateFields['keywords']      = $keyword;
+        $batchUpdateFields['resolvedBys']   = $resolvedBy;
+        $batchUpdateFields['resolutions']   = $resolution;
+        $batchUpdateFields['duplicateBugs'] = $duplicateBug;
+
+        foreach($batchUpdateFields as $field => $value) $_POST[$field] = $value;
+
+        $object = $this->objectModel->batchUpdate();
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object[$bugID];
+        }
+    }
 }
