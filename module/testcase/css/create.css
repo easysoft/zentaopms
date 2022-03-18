@@ -24,7 +24,6 @@
 
 .dropdown-pris > .btn {background-color: #fff; text-shadow: none;}
 
-#moduleIdBox .input-group-btn > .btn {margin-left: -1px !important;}
 #moduleIdBox .input-group-btn > .btn:first-child {border-left: none;}
 
 .chosen-container {max-width: 1000px;}
