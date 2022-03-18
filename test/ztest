@@ -40,6 +40,9 @@ switch($argv[1])
     case 'bug':
         ztfRun('model/bug');
         break;
+    case 'company':
+        ztfRun('model/company');
+        break;
     case 'model':
         ztfRun('model');
         break;
