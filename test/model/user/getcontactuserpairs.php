@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->getContactUserPairsTest();
+title=userModel->getContactUserPairs();
 cid=1
 pid=1
 

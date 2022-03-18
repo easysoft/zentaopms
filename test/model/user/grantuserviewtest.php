@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->grantUserViewTest();
+title=测试 userModel->grantUserView();
 cid=1
 pid=1
 

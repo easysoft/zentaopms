@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->updatePasswordTest();
+title=测试 userModel->updatePassword();
 cid=1
 pid=1
 

@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->checkProgramPrivTest();
+title=测试 userModel->checkProgramPriv();
 cid=1
 pid=1
 

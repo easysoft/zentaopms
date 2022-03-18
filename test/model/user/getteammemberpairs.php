@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->getTeamMemberPairsTest();
+title=测试 userModel->getTeamMemberPairs();
 cid=1
 pid=1
 

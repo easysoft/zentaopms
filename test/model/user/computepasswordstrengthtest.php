@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->computePasswordStrengthTest();
+title=测试 userModel->computePasswordStrength();
 cid=1
 pid=1
 

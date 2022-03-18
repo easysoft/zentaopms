@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->updateUserTest();
+title=测试 userModel->updateUser();
 cid=1
 pid=1
 

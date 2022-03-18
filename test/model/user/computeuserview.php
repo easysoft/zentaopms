@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->computeUserViewTest();
+title=测试 userModel->computeUserView();
 cid=1
 pid=1
 

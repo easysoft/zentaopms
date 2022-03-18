@@ -869,4 +869,67 @@ class userTest
     {
         return $this->objectModel->getTeamMemberPairs($objectID, $type, $params, $usersToAppended);
     }
+
+    /**
+     * Test save user template.
+     * 
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function saveUserTemplate($type)
+    {
+        global $tester;
+        $this->objectModel->saveUserTemplate($type);
+
+        if(dao::isError()) return dao::getError();
+        return $this->objectModel->getUserTemplates($type);
+    }
+
+    /**
+     * Test get user templates.
+     * 
+     * @param  string $type
+     * @access public
+     * @return void
+     */
+    public function getUserTemplates($type)
+    {
+        return $this->objectModel->getUserTemplates($type);
+    }
+
+    /**
+     * Test get person data.
+     * 
+     * @param  string $account
+     * @access public
+     * @return void
+     */
+    public function getPersonalDataTest($account)
+    {
+        return $this->objectModel->getPersonalData($account);
+    }
+
+    /**
+     * Test get user details for api.
+     * 
+     * @param  array $userList
+     * @access public
+     * @return void
+     */
+    public function getUserDetailsForAPITest($userList)
+    {
+        return $this->objectModel->getUserDetailsForAPI($userList);
+    }
+
+    /**
+     * Test get vision list.
+     * 
+     * @access public
+     * @return void
+     */
+    public function getVisionListTest()
+    {
+        return $this->objectModel->getVisionList();
+    }
 }

@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=测试 userModel::getParentStageAuthedUsersTest();
+title=测试 userModel::getParentStageAuthedUsers();
 cid=1
 pid=1
 

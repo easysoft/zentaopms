@@ -6,7 +6,7 @@ su('admin');
 
 /**
 
-title=userModel->createUserTest();
+title=测试 userModel->createUser();
 cid=1
 pid=1
 
