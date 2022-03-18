@@ -2,9 +2,9 @@
 $lang->install->license  = 'ZenTao Lite is under Z PUBLIC LICENSE(ZPL) 1.2';
 $lang->install->welcome  = 'Thanks for choosing ZenTao Lite!';
 $lang->install->desc     = <<<EOT
-ZenTao Lite is a lightweight project management software from Nature EasySoft.ltd, which is mainly designed to be a project management tool available for every single of us. ZenTao Lite covers project 
+ZenTao Lite is a lightweight project management software from Nature EasySoft.ltd, which is mainly designed to be a project management tool available for every single of us. ZenTao Lite covers project
 
-management, Kanban management, attendance management, Doc management, system management, custom workflow and many other practical features, tailored for small and medium-sized 
+management, Kanban management, attendance management, Doc management, system management, custom workflow and many other practical features, tailored for small and medium-sized
 
 enterprises. It enables every department and every employee in the company to manage projects well and improve efficiency.
 
@@ -27,3 +27,4 @@ $lang->install->successNoticeLabel = "<p>You have installed ZenTao Lite %s.<stro
 $lang->install->joinZentao         = <<<EOT
 <p>Note: In order to get the latest news of ZenTao Lite, please sign up on ZenTao Community(<a href='https://www.zentao.pm' class='alert-link' target='_blank'>www.zentao.pm</a>).</p>
 EOT;
+
