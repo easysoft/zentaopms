@@ -12,15 +12,15 @@
 
 class storyActiveEntry extends Entry
 {
-    /** 
+    /**
      * POST method.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function put($storyID)
-    {   
+    public function post($storyID)
+    {
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         $fields = 'assignedTo,status,comment';
@@ -37,6 +37,6 @@ class storyActiveEntry extends Entry
         $story = $this->loadModel('story')->getByID($storyID);
 
         $this->send(200, $story);
-    }   
+    }
 }
 

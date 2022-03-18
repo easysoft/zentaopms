@@ -12,13 +12,13 @@
 class storyCloseEntry extends Entry
 {
     /**
-     * PUT method.
+     * POST method.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function put($storyID)
+    public function post($storyID)
     {
         $story = $this->loadModel('story')->getByID($storyID);
 

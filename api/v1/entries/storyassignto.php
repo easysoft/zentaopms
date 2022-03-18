@@ -12,13 +12,13 @@
 class storyAssignToEntry extends Entry
 {
     /**
-     * PUT method.
+     * POST method.
      *
      * @param  int    $storyID
      * @access public
      * @return void
      */
-    public function put($storyID)
+    public function post($storyID)
     {
         $task = $this->loadModel('story')->getByID($storyID);
 

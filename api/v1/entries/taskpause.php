@@ -12,13 +12,13 @@
 class taskPauseEntry extends Entry
 {
     /**
-     * PUT method.
+     * POST method.
      *
      * @param  int    $taskID
      * @access public
      * @return void
      */
-    public function put($taskID)
+    public function post($taskID)
     {
         $task = $this->loadModel('task')->getByID($taskID);
 
