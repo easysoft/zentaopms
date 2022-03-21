@@ -276,7 +276,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
     <?php else:?>
     <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
       <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
+        <nav class="btn-toolbar pull-right setting"></nav>
       </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
