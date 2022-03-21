@@ -1351,7 +1351,7 @@ class story extends control
 
             if(defined('RUN_MODE') && RUN_MODE == 'api')
             {
-                return print(array('status' => 'success', 'data' => $storyID));
+                return $this->send(array('status' => 'success', 'data' => $storyID));
             }
             else
             {

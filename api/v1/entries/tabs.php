@@ -28,6 +28,7 @@ class tabsEntry extends baseEntry
 
             foreach($tabs as $menuKey)
             {
+                if(!isset($this->lang->my->$menuKey)) continue;
                 if(!common::hasPriv('my', $menuKey)) continue;
                 $label = $this->lang->my->$menuKey;
                 if($menuKey == 'calendar') $label = $this->lang->my->calendarAction;

@@ -8,8 +8,9 @@
  * @package     entries
  * @version     1
  * @link        http://www.zentao.net
- */
-class storyChangeEntry extends Entry
+ **/
+
+class storyActiveEntry extends Entry
 {
     /**
      * POST method.
@@ -22,22 +23,12 @@ class storyChangeEntry extends Entry
     {
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
-        $fields = 'reviewer,comment';
+        $fields = 'assignedTo,status,comment';
         $this->batchSetPost($fields);
-        $fields = 'title,spec,verify';
-        $this->batchSetPost($fields, $oldStory);
 
-        /* If reviewer is not post, set needNotReview. */
-        if(empty($this->request('reviewer')))
-        {
-            $this->setPost('reviewer', array());
-            $this->setPost('needNotReview', 1);
-        }
+        $control = $this->loadController('story', 'activate');
 
-        $control = $this->loadController('story', 'change');
-        $this->requireFields('title');
-
-        $control->change($storyID);
+        $control->activate($storyID);
 
         $data = $this->getData();
         if(!$data or !isset($data->status)) return $this->send400('error');
@@ -45,6 +36,7 @@ class storyChangeEntry extends Entry
 
         $story = $this->loadModel('story')->getByID($storyID);
 
-        $this->send(200, $this->format($story, 'openedDate:time,assignedDate:time,reviewedDate:time,lastEditedDate:time,closedDate:time'));
+        $this->send(200, $story);
     }
 }
+
