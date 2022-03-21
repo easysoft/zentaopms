@@ -376,29 +376,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                   echo "<li $class>" . html::a('javascript:;', $lang->story->review,  '', $class) . '</li>';
               }
 
-
-              if($storyType == 'story')
-              {
-                  if($canBatchChangeStage)
-                  {
-                      echo "<li class='dropdown-submenu'>";
-                      echo html::a('javascript:;', $lang->story->stageAB, '', "id='stageItem'");
-                      echo "<ul class='dropdown-menu'>";
-                      foreach($lang->story->stageList as $key => $stage)
-                      {
-                          if(empty($key)) continue;
-                          if(strpos('tested|verified|released|closed', $key) === false) continue;
-                          $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                          echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"") . "</li>";
-                      }
-                      echo '</ul></li>';
-                  }
-                  else
-                  {
-                      $class= "class='disabled'";
-                      echo "<li $class>" . html::a('javascript:;', $lang->story->stageAB, '', $class) . '</li>';
-                  }
-              }
               ?>
             </ul>
           </div>
@@ -462,9 +439,6 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           </div>
           <?php endif;?>
 
-          <?php if($canBatchImportToLib):?>
-          <?php echo html::a('#batchImportToLib', $lang->story->importToLib, '', 'class="btn" data-toggle="modal" id="importToLib"');?>
-          <?php endif;?>
         </div>
         <div class="table-statistic"><?php echo $summary;?></div>
         <?php $pager->show('right', 'pagerjs');?>

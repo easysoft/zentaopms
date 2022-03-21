@@ -51,8 +51,8 @@ class settingModel extends model
     {
         /* Determine vision of config item. */
         $pathVision = explode('@', $path);
-        $vision = isset($pathVision[1]) ? $pathVision[1] : '';
-        $path   = $pathVision[0];
+        $vision     = isset($pathVision[1]) ? $pathVision[1] : '';
+        $path       = $pathVision[0];
 
         /* fix bug when account has dot. */
         $account = isset($this->app->user->account) ? $this->app->user->account : '';
@@ -72,12 +72,13 @@ class settingModel extends model
         if($replace) $owner = $account;
 
         $item = new stdclass();
-        $item->vision  = $vision;
         $item->owner   = $owner;
         $item->module  = $module;
         $item->section = $section;
         $item->key     = $key;
         $item->value   = $value;
+
+        if($vision) $item->vision = $vision;
 
         $this->dao->replace(TABLE_CONFIG)->data($item)->exec();
     }

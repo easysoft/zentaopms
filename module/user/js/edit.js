@@ -39,6 +39,7 @@ $(function()
     })
 
     changeType(type);
+    $('#visions').change();
 });
 
 /**
@@ -63,3 +64,18 @@ function changeType(type)
         $('#dept, #commiter').closest('tr').addClass('hide');
     }
 }
+
+var groups = $('#groups').val();
+$(document).on('change', '#groups', function(){groups = $('#groups').val()});
+
+$("#visions").change(function()
+{
+    visions = $(this).val();
+    $.post(createLink('user', 'ajaxGetGroup', "visions=" + visions + '&i=' + 0 + '&selected=' + groups), function(data)
+    {
+        $('#groups').replaceWith(data);
+        $('#groups' + '_chosen').remove();
+        $('#group').attr('id', 'groups').attr('name', 'groups[]');
+        $('#groups').chosen();
+    });
+});

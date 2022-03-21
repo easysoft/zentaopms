@@ -17,8 +17,9 @@ if($contactLists)
 }
 else
 {
+    $width = isonlybody() ? 'data-width=100%' : '';
     echo '<span class="input-group-btn">';
-    echo '<a title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new", '', true) . "\" target='_blank' data-icon='cog' data-title='{$lang->user->contacts->manage}' class='btn btn-icon iframe'><i class='icon icon-cog'></i></a>";
+    echo '<a title="' . $lang->user->contacts->manage . '" href="' . $this->createLink('my', 'managecontacts', "listID=0&mode=new", '', true) . "\" target='_blank' data-icon='cog' data-title='{$lang->user->contacts->manage}' class='btn btn-icon iframe' $width><i class='icon icon-cog'></i></a>";
     echo '</span>';
     echo '<span class="input-group-btn">';
     echo '<button type="button" title="' . $lang->refresh . '" class="btn btn-icon"' . "onclick=\"ajaxGetContacts(this, '$dropdownName')\"" . '><i class="icon icon-refresh"></i></button>';

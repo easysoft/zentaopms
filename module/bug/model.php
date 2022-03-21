@@ -83,7 +83,7 @@ class bugModel extends model
 
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
 
@@ -542,7 +542,7 @@ class bugModel extends model
     }
 
     /**
-     * getActiveBugs
+     * Get active bugs.
      *
      * @param  array    $products
      * @param  int      $branch
@@ -885,7 +885,6 @@ class bugModel extends model
         /* Update bugs. */
         foreach($activateBugs as $bugID => $bug)
         {
-            $oldBug = $bugs[$bugID];
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(dao::isError()) return print(js::error('bug#' . $bugID . dao::getError(true)));
 

@@ -1583,8 +1583,8 @@ REPLACE INTO `zt_grouppriv` (`group`, `module`, `method`) VALUES
 -- DROP TABLE IF EXISTS `zt_workflow`;
 CREATE TABLE IF NOT EXISTS `zt_workflow` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `parent` varchar(30) NOT NULL, 
-  `child` varchar(30) NOT NULL, 
+  `parent` varchar(30) NOT NULL,
+  `child` varchar(30) NOT NULL,
   `type` varchar(10) NOT NULL DEFAULT 'flow',
   `app` varchar(20) NOT NULL,
   `position` varchar(30) NOT NULL,
@@ -1658,7 +1658,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowdatasource` (
   `type` enum('system', 'sql', 'func', 'option', 'lang', 'category') NOT NULL DEFAULT 'option',
   `name` varchar(30) NOT NULL,
   `code` varchar(30) NOT NULL,
-  `datasource` text NOT NULL, 
+  `datasource` text NOT NULL,
   `view` varchar(20) NOT NULL,
   `keyField` varchar(50) NOT NULL,
   `valueField` varchar(50) NOT NULL,
@@ -1686,7 +1686,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowfield` (
   `rules` varchar(255) NOT NULL,
   `placeholder` varchar(100) NOT NULL,
   `order` smallint(5) unsigned NOT NULL,
-  `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0', 
+  `searchOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `exportOrder` smallint(5) unsigned NOT NULL DEFAULT '0',
   `canExport` enum('0', '1') NOT NULL DEFAULT '0',
   `canSearch` enum('0', '1') NOT NULL DEFAULT '0',
@@ -1759,7 +1759,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowlinkdata` (
 -- DROP TABLE IF EXISTS `zt_workflowrelation`;
 CREATE TABLE IF NOT EXISTS `zt_workflowrelation` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
-  `prev` varchar(30) NOT NULL, 
+  `prev` varchar(30) NOT NULL,
   `next` varchar(30) NOT NULL,
   `field` varchar(50) NOT NULL,
   `actions` varchar(20) NOT NULL,
@@ -1791,7 +1791,7 @@ CREATE TABLE IF NOT EXISTS `zt_workflowrule` (
   `id` mediumint(8) unsigned NOT NULL AUTO_INCREMENT,
   `type` enum('system', 'regex', 'func') NOT NULL DEFAULT 'regex',
   `name` varchar(30) NOT NULL,
-  `rule` text NOT NULL, 
+  `rule` text NOT NULL,
   `createdBy` char(30) NOT NULL,
   `createdDate` datetime NOT NULL,
   `editedBy` char(30) NOT NULL,
@@ -2024,18 +2024,3 @@ CREATE VIEW `view_datasource_11` AS select `id`,`name` from `zt_module` where `d
 CREATE VIEW `view_datasource_12` AS select `id`,`title` from `zt_productplan` where `deleted` = '0';
 CREATE VIEW `view_datasource_41` AS select `id`,`title` from `zt_case` where `deleted` = '0';
 CREATE VIEW `view_datasource_46` AS select `id`,`name` from `zt_task` where `deleted` = '0' and vision = 'lite';
-
-INSERT INTO `zt_workflowdatasource` (`type`, `name`, `code`, `buildin`, `vision`, `datasource`, `view`, `keyField`, `valueField`) VALUES
-('system',      '项目',           'liteprojects',        '1', 'lite', '{\"app\":\"system\",\"module\":\"project\",\"method\":\"getPairsByModel\",\"methodDesc\":\"Get project pairs by model and project.\",\"params\":[{\"name\":\"model\",\"type\":\"string\",\"desc\":\"all|scrum|waterfall\",\"value\":\"all\"},{\"name\":\"programID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"param\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',  '',     '',     ''),
-('sql',         '任务',           'litetasks',           '1', 'lite', 'select id,name from zt_task where deleted=\"0\" and vision=\"lite\"',      'view_datasource_46',    'id',   'name'),
-('system',      '权限分组',       'litegroups',          '1', 'lite', '{\"app\":\"system\",\"module\":\"group\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[]}',  '',     '',     ''),
-('system',      '用户',           'liteusers',           '1', 'lite', '{\"app\":\"system\",\"module\":\"user\",\"method\":\"getPairs\",\"methodDesc\":\"\",\"params\":[{\"name\":\"params\",\"type\":\"\",\"desc\":\"\",\"value\":\"noclosed|noletter\"},{\"name\":\"usersToAppended\",\"type\":\"\",\"desc\":\"\",\"value\":\"\"}]}',        '',     '',     ''),
-('sql',         '模块',           'litemodules',         '1', 'lite', 'select id,name from zt_module where deleted=\"0\"',    'view_datasource_11',   'id',   'name'),
-('lang',        '项目类型',       'liteprojectType',     '1', 'lite', 'projectType',    '',     '',     ''),
-('lang',        '项目状态',       'liteprojectStatus',   '1', 'lite', 'projectStatus',  '',     '',     ''),
-('lang',        '项目访问控制',   'liteprojectAcl',      '1', 'lite', 'projectAcl',     '',     '',     ''),
-('lang',        '任务类型',       'litetaskType',        '1', 'lite', 'taskType',       '',     '',     ''),
-('lang',        '任务优先级',     'litetaskPri',         '1', 'lite', 'taskPri',        '',     '',     ''),
-('lang',        '任务状态',       'litetaskStatus',      '1', 'lite', 'taskStatus',     '',     '',     ''),
-('lang',        '反馈状态',       'litefeedbackStatus',  '1', 'lite', 'feedbackStatus', '',     '',     ''),
-('system',      '反馈分支',       'litefeedbackModules', '1', 'lite', '{\"app\":\"system\",\"module\":\"tree\",\"method\":\"getOptionMenu\",\"methodDesc\":\"Create an option menu in html.\",\"params\":[{\"name\":\"rootID\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"type\",\"type\":\"string\",\"desc\":\"\",\"value\":\"feedback\"},{\"name\":\"startModule\",\"type\":\"int\",\"desc\":\"\",\"value\":\"0\"},{\"name\":\"branch\",\"type\":\"\",\"desc\":\"\",\"value\":\"0\"}]}',   '',     '',     '');

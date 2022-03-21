@@ -42,6 +42,11 @@
           <?php echo $lang->misc->feature->themeDesc;?>
           <img class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->youngBlueImage;?>' />
         </div>
+        <?php elseif($feature == 'visions'):?>
+        <div class='text-center'>
+          <?php echo $lang->misc->feature->visionsDesc;?>
+          <img class='text-center' src='<?php echo $config->webRoot . $lang->misc->feature->visionsImage;?>' />
+        </div>
         <?php endif;?>
       </div>
       <?php endforeach;?>

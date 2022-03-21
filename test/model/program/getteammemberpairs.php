@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
 
 /**
 
@@ -8,38 +9,15 @@ title=测试 programModel::getTeamMemberPairs();
 cid=1
 pid=1
 
+获取项目集下所有团队成员 >> P:产品经理92
+获取项目集下所有团队成员 >> 19
+
 */
 
-class Tester
-{
-    public function __construct($user)
-    {
-        global $tester;
+$program = new Program('admin');
 
-        su($user);
-        $this->program = $tester->loadModel('program');
-    }
+$t_Tnumber = array(1);
 
-    public function getById($programID)
-    {
-        if(empty($this->program->getTeamMemberPairs($programID)))
-        {
-            return array('code' => 'fail', 'message' => 'Not Found');
-        }
-        else
-        {
-            return $this->program->getTeamMemberPairs($programID);
-        }
-    }
-
-    public function getCount($programID)
-    {
-        return count($this->program->getTeamMemberPairs($programID));
-    }
-}
-
-$t = new Tester('admin');
-
-/* GetTeamMemberPairs($programID). */
-r($t->getById(1)) && p('user89') && e('U:测试89'); //获取项目集下所有团队成员
-r($t->getCount(1)) && p() && e('181'); // 获取项目集下所有团队成员
+//var_dump($program->getById2($t_Tnumber[0]));die;
+r($program->getById2($t_Tnumber[0]))  && p('pm92') && e('P:产品经理92'); //获取项目集下所有团队成员
+r($program->getCount6($t_Tnumber[0])) && p()         && e('19');      // 获取项目集下所有团队成员

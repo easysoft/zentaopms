@@ -499,7 +499,7 @@ EOF;
         $this->view->position[]  = $this->lang->my->bug;
         $this->view->bugs        = $bugs;
         $this->view->users       = $this->user->getPairs('noletter');
-        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted');
+        $this->view->memberPairs = $this->user->getPairs('noletter|nodeleted|noclosed');
         $this->view->tabID       = 'bug';
         $this->view->type        = $type;
         $this->view->recTotal    = $recTotal;
@@ -1029,9 +1029,21 @@ EOF;
             }
             elseif($data->mode == 'edit')
             {
+                $response['result']  = 'success';
+                $response['message'] = $this->lang->saveSuccess;
+
                 $this->user->updateContactList($data->listID, $data->listName, $data->users);
                 $this->user->setGlobalContacts($data->listID, isset($data->share));
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('manageContacts', "listID=$listID")));
+
+                if(dao::isError())
+                {
+                    $response['result']  = 'fail';
+                    $response['message'] = dao::getError();
+                    return $this->send($response);
+                }
+
+                $response['locate'] = inlink('manageContacts', "listID=$listID");
+                return $this->send($response);
             }
         }
 
@@ -1224,14 +1236,13 @@ EOF;
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort = common::appendOrder($orderBy);
 
         /* The header and position. */
         $this->view->title      = $this->lang->my->common . $this->lang->colon . $this->lang->my->dynamic;
         $this->view->position[] = $this->lang->my->dynamic;
 
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $sort, $pager, 'all', 'all', 'all', $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($this->app->user->account, $type, $orderBy, $pager, 'all', 'all', 'all', $date, $direction);
         if(empty($recTotal)) $originTotal = $pager->recTotal;
 
         /* Assign. */

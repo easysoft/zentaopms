@@ -169,28 +169,6 @@ function setStoryRelated()
     setStoryModule();
 }
 
-/* Set the story module. */
-function setStoryModule()
-{
-    var storyID = $('#story').val();
-    if(storyID)
-    {
-        var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
-        $.getJSON(link, function(storyInfo)
-        {
-            if(storyInfo)
-            {
-                $('#module').val(storyInfo.moduleID);
-                $("#module").trigger("chosen:updated");
-
-                $('#storyEstimate').val(storyInfo.estimate);
-                $('#storyPri'     ).val(storyInfo.pri);
-                $('#storyDesc'    ).val(storyInfo.spec);
-            }
-        });
-    }
-}
-
 /* Set the story priview link. */
 function setPreview()
 {
@@ -273,7 +251,7 @@ function loadModuleRelated()
 /* Get select of stories.*/
 function setStories(moduleID, executionID)
 {
-    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID);
+    link = createLink('story', 'ajaxGetExecutionStories', 'executionID=' + executionID + '&productID=0&branch=all&moduleID=' + moduleID + '&storyID=0&number=&type=full&status=unclosed');
     $.get(link, function(stories)
     {
         var storyID = $('#story').val();
@@ -297,6 +275,13 @@ function setStories(moduleID, executionID)
         {
             $('#storyBox').removeClass('hidden');
             $('#story').parent().addClass('hidden');
+
+            /* change link when lite */
+            if(vision == 'lite')
+            {
+                config.onlybody = 'no';
+                $('#storyBox > a:first').attr('href', createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=' + moduleID + '&storyID=0&projectID=' + projectID + '&bugID=0&planID=0&todoID=0&extra=&type=story') + '#_single');
+            }
         }
     });
 }

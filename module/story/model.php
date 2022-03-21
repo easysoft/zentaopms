@@ -24,7 +24,10 @@ class storyModel extends model
      */
     public function getById($storyID, $version = 0, $setImgSize = false)
     {
-        $story = $this->dao->findById((int)$storyID)->from(TABLE_STORY)->fetch();
+        $story = $this->dao->select('*')->from(TABLE_STORY)
+            ->where('id')->eq($storyID)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch();
         if(!$story) return false;
         if(substr($story->closedDate, 0, 4) == '0000') $story->closedDate = '';
         if($version == 0) $version = $story->version;
@@ -647,9 +650,9 @@ class storyModel extends model
 
         $story = fixer::input('post')->stripTags($this->config->story->editor->change['id'], $this->config->allowedTags)->get();
 
-        $oldStroyReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
+        $oldStoryReviewers  = $this->getReviewerPairs($storyID, $oldStory->version);
         $_POST['reviewer']  = isset($_POST['reviewer']) ? $_POST['reviewer'] : array();
-        $reviewerHasChanged = (array_diff(array_keys($oldStroyReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStroyReviewers)));
+        $reviewerHasChanged = (array_diff(array_keys($oldStoryReviewers), $_POST['reviewer']) or array_diff($_POST['reviewer'], array_keys($oldStoryReviewers)));
         if($story->spec != $oldStory->spec or $story->verify != $oldStory->verify or $story->title != $oldStory->title or $this->loadModel('file')->getCount() or $reviewerHasChanged) $specChanged = true;
 
         $now   = helper::now();
@@ -3925,7 +3928,7 @@ class storyModel extends model
                 }
                 if($storyType == 'requirement') echo '<span class="label label-badge label-light">SR</span> ';
                 if($story->parent > 0 and isset($story->parentName)) $story->title = "{$story->parentName} / {$story->title}";
-                if(isset($branches[$story->branch]) and $showBranch) echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
+                if(isset($branches[$story->branch]) and $showBranch and $this->config->vision == 'rnd') echo "<span class='label label-outline label-badge'>{$branches[$story->branch]}</span> ";
                 if($story->module and isset($modulePairs[$story->module])) echo "<span class='label label-gray label-badge'>{$modulePairs[$story->module]}</span> ";
                 if($story->parent > 0) echo '<span class="label label-badge label-light" title="' . $this->lang->story->children . '">' . $this->lang->story->childrenAB . '</span> ';
                 echo $canView ? html::a($storyLink, $story->title, '', "style='color: $story->color' data-app='$tab'") : "<span style='color: $story->color'>{$story->title}</span>";

@@ -22,10 +22,41 @@ ALTER TABLE `zt_story` ADD `vision` varchar(10) NOT NULL DEFAULT 'rnd' AFTER `id
 ALTER TABLE `zt_story` ADD `activatedDate` datetime NOT NULL AFTER `closedReason`;
 ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL AFTER `lastEditedDate`;
 
-ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL AFTER `visits`;
+ALTER TABLE `zt_kanbancard` ADD `progress` float unsigned NOT NULL DEFAULT '0' AFTER `estimate`;
+
+ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
-('lite', '迅捷版用户分组', 'liteUser', '迅捷版用户分组');
+('lite', '管理员', 'liteAdmin', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
+('lite', '项目管理', 'liteProject', '迅捷版用户分组');
+
+INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
+('lite', '团队成员', 'liteTeam', '迅捷版用户分组');
+
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteAdmin' and `vision` = 'lite') from `zt_grouppriv` where `group` = 1;
+
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteProject' and `vision` = 'lite') from `zt_grouppriv` where `group` = 4;
+
+REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
+SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteTeam' and `vision` = 'lite') from `zt_grouppriv` where `group` = 9;
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
+
+update zt_config set `value` = concat(`value`, ',visions') where module = 'user' and `key` = 'requiredFields' and section in ('create', 'edit');
+
+ALTER TABLE `zt_kanban` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `zt_kanbancolumn` CHANGE `group` `group` mediumint NOT NULL DEFAULT '0' AFTER `region`;
+ALTER TABLE `zt_kanbancard` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `whitelist`;
+ALTER TABLE `zt_kanbanregion` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `name`;
+ALTER TABLE `zt_kanbanspace` CHANGE `order` `order` mediumint NOT NULL DEFAULT '0' AFTER `status`;
+ALTER TABLE `zt_projectstory` CHANGE `branch` `branch` mediumint unsigned NOT NULL AFTER `product`;
+
+INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'unitList', 'CNY,USD');
+INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'defaultCurrency', 'CNY');
+
+ALTER TABLE `zt_apistruct` CHANGE `desc` `desc` text COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `type`;

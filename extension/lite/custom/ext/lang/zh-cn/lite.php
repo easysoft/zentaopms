@@ -15,7 +15,8 @@ $lang->custom->object['user']      = '用户';
 $lang->custom->object['block']     = '区块';
 
 $lang->custom->task = new stdClass();
-$lang->custom->task->fields['priList'] = '优先级';
+$lang->custom->task->fields['priList']  = '优先级';
+$lang->custom->task->fields['typeList'] = '类型';
 
 $lang->custom->story = new stdClass();
 $lang->custom->story->fields['priList']          = '优先级';

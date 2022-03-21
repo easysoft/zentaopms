@@ -2,8 +2,10 @@ title: table zt_project
 author: Zhu Jinyong
 version: "1.0"
 fields:
+  - field: id
+    range: 11-100
   - field: project
-    range: 0
+    range: 1-10
   - field: model
     range: scrum{30},waterfall{30},kanban{30}
   - field: name
@@ -39,8 +41,17 @@ fields:
     range:
   - field: parent
     range: 1-10
+  - field: path
+    fields:
+      - field: path1
+        prefix: ","
+        range: 1-10
+      - field: path2
+        prefix: ","
+        range: 11-100
+        postfix: ","
   - field: grade
-    range:
+    range: "2"
   - field: code
     range: 1-10000
     prefix: "project"
@@ -68,5 +79,7 @@ fields:
     range: open,private,custom
   - field: order
     range: 5-10000:5
+  - field: openedVersion
+    range: "16.5"
   - field: deleted
     range: 0

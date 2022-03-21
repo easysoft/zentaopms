@@ -888,7 +888,7 @@ class kanban extends control
         $this->loadModel('action');
 
         $oldCard = $this->kanban->getCardByID($cardID);
-        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
+        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq(100)->set('status')->eq('done')->where('id')->eq($cardID)->exec();
         $card = $this->kanban->getCardByID($cardID);
 
         $changes = common::createChanges($oldCard, $card);
@@ -915,22 +915,26 @@ class kanban extends control
     public function activateCard($cardID, $kanbanID)
     {
         $this->loadModel('action');
+        if(!empty($_POST))
+        {
+            $oldCard = $this->kanban->getCardByID($cardID);
+            $this->kanban->activateCard($cardID);
+            $card = $this->kanban->getCardByID($cardID);
 
-        $oldCard = $this->kanban->getCardByID($cardID);
-        $this->dao->update(TABLE_KANBANCARD)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
-        $card = $this->kanban->getCardByID($cardID);
+            $changes = common::createChanges($oldCard, $card);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
-        $changes = common::createChanges($oldCard, $card);
+            $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
+            $this->action->logHistory($actionID, $changes);
 
-        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+            return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+        }
 
-        $actionID = $this->action->create('kanbanCard', $cardID, 'activated');
-        $this->action->logHistory($actionID, $changes);
+        $this->view->card    = $this->kanban->getCardByID($cardID);
+        $this->view->actions = $this->action->getList('kanbancard', $cardID);
+        $this->view->users   = $this->loadModel('user')->getPairs('noclosed|nodeleted');
 
-        if(isonlybody()) return print(js::reload('parent.parent'));
-
-        $kanbanGroup = $this->kanban->getKanbanData($kanbanID);
-        return print(json_encode($kanbanGroup));
+        $this->display();
     }
 
     /**
@@ -1493,8 +1497,9 @@ class kanban extends control
             return $this->sendSuccess(array('locate' => 'parent'));
         }
 
-        $this->view->column = $column;
-        $this->view->title  = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
+        $this->view->canEdit = $from == 'RDKanban' ? 0 : 1;
+        $this->view->column  = $column;
+        $this->view->title   = $column->name . $this->lang->colon . $this->lang->kanban->setColumn;
         $this->display();
     }
 

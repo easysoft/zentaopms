@@ -243,6 +243,7 @@ class commonModel extends model
             $user->admin      = false;
             $user->rights     = $this->loadModel('user')->authorize('guest');
             $user->groups     = array('group');
+            $user->visions    = $this->config->vision;
             if(!defined('IN_UPGRADE')) $user->view = $this->user->grantUserView($user->account, $user->rights['acls']);
             $this->session->set('user', $user);
             $this->app->user = $this->session->user;
@@ -359,7 +360,7 @@ class commonModel extends model
         {
             echo js::locate($denyLink);
         }
-        helper::end();
+        die;
     }
 
     /**
@@ -2205,6 +2206,8 @@ EOD;
 
         if(isset($this->app->user))
         {
+            if(in_array($module, $this->config->programPriv->waterfall) and $this->app->tab == 'project') return true;
+
             $this->app->user = $this->session->user;
             if(!commonModel::hasPriv($module, $method)) $this->deny($module, $method);
         }
@@ -2237,8 +2240,11 @@ EOD;
         if(!empty($app->user->admin) || strpos($app->company->admins, ",{$app->user->account},") !== false) return true;
 
         /* If is the program admin, have all program privs. */
-        $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
-        if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
+        if($app->config->vision != 'lite')
+        {
+            $inProject = isset($lang->navGroup->$module) && $lang->navGroup->$module == 'project';
+            if($inProject && $app->session->project && strpos(",{$app->user->rights['projects']},", ",{$app->session->project},") !== false) return true;
+        }
 
         /* If not super admin, check the rights. */
         $rights = $app->user->rights['rights'];

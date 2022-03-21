@@ -1419,7 +1419,7 @@ class kanbanModel extends model
         $lanes = $this->getLanes4Group($executionID, $browseType, $groupBy, $cardList);
         if(empty($lanes)) return array();
 
-        $columns = $this->dao->select('t1.*, t2.`type` as columnType, t2.limit, t2.name as columnName')->from(TABLE_KANBANCELL)->alias('t1')
+        $columns = $this->dao->select('t1.*, t2.`type` as columnType, t2.limit, t2.name as columnName, t2.color')->from(TABLE_KANBANCELL)->alias('t1')
             ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.`column` = t2.id')
             ->where('t1.kanban')->eq($executionID)
             ->andWhere('t1.`type`')->eq($browseType)
@@ -1460,7 +1460,7 @@ class kanbanModel extends model
                 $columnData[$column->column]['id']         = $column->column;
                 $columnData[$column->column]['type']       = $column->columnType;
                 $columnData[$column->column]['name']       = $column->columnName;
-                $columnData[$column->column]['color']      = '#333';
+                $columnData[$column->column]['color']      = $column->color;
                 $columnData[$column->column]['limit']      = $column->limit;
                 $columnData[$column->column]['laneType']   = $browseType;
                 $columnData[$column->column]['asParent']   = in_array($column->columnType, array('develop', 'test', 'resolving')) ? true : false;
@@ -2661,6 +2661,22 @@ class kanbanModel extends model
             ->andWhere('groupby')->eq('')
             ->exec();
     }
+    /**
+     * Activate a card.
+     *
+     * @param  int    $cardID
+     * @access public
+     * @return array
+     */
+    public function activateCard($cardID)
+    {
+        if($this->post->progress >= 100 or $this->post->progress < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
+            return false;
+        }
+        $this->dao->update(TABLE_KANBANCARD)->set('progress')->eq($this->post->progress)->set('status')->eq('doing')->where('id')->eq($cardID)->exec();
+    }
 
     /**
      * Update a card.
@@ -2683,6 +2699,12 @@ class kanbanModel extends model
             return false;
         }
 
+        if($this->post->progress > 100 or $this->post->progress < 0)
+        {
+            dao::$errors[] = $this->lang->kanbancard->error->progressIllegal;
+            return false;
+        }
+
         $cardID  = (int)$cardID;
         $oldCard = $this->getCardByID($cardID);
 
@@ -2699,8 +2721,8 @@ class kanbanModel extends model
             ->remove('uid')
             ->get();
 
-        if(isset($card->assignedTo))  $card->assignedTo = trim($card->assignedTo, ',');
-        if(!isset($card->assignedTo)) $card->assignedTo = '';
+        $card->assignedTo = isset($card->assignedTo) ? trim($card->assignedTo, ',') : '';
+        $card->status     = $this->post->progress == 100 ? 'done' : 'doing';
 
         $card = $this->loadModel('file')->processImgURL($card, $this->config->kanban->editor->editcard['id'], $this->post->uid);
 
@@ -2902,7 +2924,7 @@ class kanbanModel extends model
 
             }
             if(common::hasPriv('kanban', 'setColumnWidth')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'setColumnWidth', "kanbanID=$kanban->id", '', true), '<i class="icon icon-size-width"></i>' . $this->lang->kanban->columnWidth, '', "class='iframe btn btn-link' data-width=30%") . '</li>';
-            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->doneFunction, '', "class='iframe btn btn-link' data-width=30%") . '</li>';
+            if(common::hasPriv('kanban', 'performable')) $actions .= '<li>' . html::a(helper::createLink('kanban', 'performable', "kanbanID=$kanban->id", '', true), '<i class="icon icon-checked"></i>' . $this->lang->kanban->manageProgress, '', "class='iframe btn btn-link' data-width=40%") . '</li>';
 
             $kanbanActions = '';
             $attr          = $kanban->status == 'closed' ? "disabled='disabled'" : '';

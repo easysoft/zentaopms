@@ -12,11 +12,14 @@ class myExecution extends execution
         $this->loadModel('project')->setMenu($execution->project);
         $this->lang->kanban->menu->execution['subMenu'] = new stdClass();
 
+        $this->session->set('kanbanview', $currentMethod);
+        setcookie('kanbanview', $currentMethod, $this->config->cookieLife, $this->config->webRoot, '', false, true);
+
         /* change subMenu to sub select menu */
         $TRActions  = $this->execution->getTRActions($currentMethod);
 
         $TRActions .= "<div class='dropdown'>";
-        $TRActions .= html::a('javascript:;', $this->lang->execution->kanbanGroup[$groupBy] . "<span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
+        $TRActions .= html::a('javascript:;', $this->lang->execution->kanbanGroup[$groupBy] . " <span class='caret'></span>", '', "data-toggle='dropdown' data- class='btn btn-link'");
         $TRActions .= "<ul class='dropdown-menu pull-right course-groupBy'>";
         foreach($this->lang->execution->kanbanGroup as $groupKey => $groupName)
         {

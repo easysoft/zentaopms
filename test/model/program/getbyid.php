@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
 
 /**
 
@@ -8,33 +9,14 @@ title=测试 programModel::getById();
 cid=1
 pid=1
 
+通过id字段获取id=1的项目集并验证它的name。 >> 项目集1
+通过id字段获取id=1000的项目集并验证它的name。 >> Not Found
+
 */
 
-class Tester
-{
-    public function __construct($user)
-    {
-        global $tester;
+$getIdName = new Program('admin');
 
-        su($user);
-        $this->program = $tester->loadModel('program');
-    }
+$t_verification = array('1', '1000');
 
-    public function getById($programID)
-    {
-        if(empty($this->program->getById($programID)))
-        {
-            return array('code' => 'fail', 'message' => 'Not Found');
-        }
-        else
-        {
-            return $this->program->getById($programID);
-        }
-    }
-}
-
-$t = new Tester('admin');
-
-/* GetById($programID). */
-r($t->getById(1))    && p('name')    && e('项目集1'); // 通过id字段获取id=1的项目集并验证它的name。
-r($t->getById(1000)) && p('message') && e('Not Found'); // 通过id字段获取id=1000的项目集并验证它的name。
+r($getIdName->getById($t_verification[0]))    && p('name')    && e('项目集1');    // 通过id字段获取id=1的项目集并验证它的name。
+r($getIdName->getById($t_verification[1]))    && p('message') && e('Not Found');  // 通过id字段获取id=1000的项目集并验证它的name。

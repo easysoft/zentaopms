@@ -117,11 +117,12 @@ fields:
     format: ""
   - field: deadline
     note: "截止日期"
-    range: "2022-02-27"
+    range: "(-1w)-(-1M):-1D"
     prefix: ""
     postfix: ""
     loop: 0
-    format: ""
+    type: timestamp
+    format: "YY/MM/DD"
   - field: status
     note: "任务状态"
     range: wait,doing,done,pause,cancel,closed

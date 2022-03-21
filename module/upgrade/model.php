@@ -28,6 +28,49 @@ class upgradeModel extends model
     }
 
     /**
+     * Get versions to update
+     *
+     * @param  mixed $openVersion
+     * @access public
+     * @return array
+     */
+    public function getVersionsToUpdate($openVersion, $fromEdition)
+    {
+        $versions = array();
+
+        /* Always update open sql. */
+        foreach($this->lang->upgrade->fromVersions as $version => $versionName)
+        {
+            if(!is_numeric($version[0])) continue;
+            if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
+            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
+        }
+        if($fromEdition == 'open') return $versions;
+
+        /* Update pro sql from pro|biz|max. */
+        foreach($this->config->upgrade->proVersion as $pro => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['pro'][] = $pro;
+        }
+        if($fromEdition == 'pro') return $versions;
+
+        /* Update biz sql from biz|max. */
+        foreach($this->config->upgrade->bizVersion as $biz => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['biz'][] = $biz;
+        }
+        if($fromEdition == 'biz') return $versions;
+
+        /* Update max sql only from max. */
+        foreach($this->config->upgrade->maxVersion as $max => $open)
+        {
+            if(isset($versions[$open])) $versions[$open]['max'][] = $max;
+        }
+
+        return $versions;
+    }
+
+    /**
      * The execute method. According to the $fromVersion call related methods.
      *
      * @param  string $fromVersion
@@ -38,81 +81,62 @@ class upgradeModel extends model
     {
         set_time_limit(0);
 
-        $editions    = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
-        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
-        $openVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition}[$fromVersion];
+        if(!isset($this->app->user)) $this->loadModel('user')->su();
 
-        /* Get versions to be updated. */
-        $versions = array();
-        $edition  = $this->config->edition;
-        foreach($this->lang->upgrade->fromVersions as $version => $versionName)
-        {
-            if(!is_numeric($version[0])) continue;
-            if(version_compare(str_replace('_', '.', $version), str_replace('_', '.', $openVersion)) < 0) continue;
-            $versions[$version] = array('pro' => array(), 'biz' => array(), 'max' => array());
-        }
-        foreach($this->config->upgrade->proVersion as $pro => $open)
-        {
-            if(!isset($versions[$open])) continue;
-            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $fromEdition == 'pro') $versions[$open]['pro'][] = $pro;
-        }
-        foreach($this->config->upgrade->bizVersion as $biz => $open)
-        {
-            if(!isset($versions[$open])) continue;
-            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $fromEdition == 'biz') $versions[$open]['biz'][] = $biz;
-        }
-        foreach($this->config->upgrade->maxVersion as $max => $open)
-        {
-            if(!isset($versions[$open])) continue;
-            if(version_compare(str_replace('_', '.', $openVersion), '16.4', '>=') or $fromEdition == 'max') $versions[$open]['max'][] = $max;
-        }
+        $editions    = array('p' => 'pro', 'b' => 'biz', 'm' => 'max');
+        $fromEdition = is_numeric($fromVersion[0]) ? 'open' : $editions[$fromVersion[0]];
 
         /* If the 'current openVersion' is not equal the 'from openVersion', must update structure. */
         $currentVersion  = str_replace('.', '_', $this->config->version);
-        $updateStructure = $openVersion != ($this->config->edition == 'open' ? $currentVersion : $this->config->upgrade->{$this->config->edition . 'Version'}[$currentVersion]);
 
         /* Execute. */
+        $fromOpenVersion = is_numeric($fromVersion[0]) ? $fromVersion : $this->config->upgrade->{$fromEdition . 'Version'}[$fromVersion];
+        $versions        = $this->getVersionsToUpdate($fromOpenVersion, $fromEdition);
         foreach($versions as $openVersion => $chargedVersions)
         {
-            $executeXuanxuan = false;
-            switch($fromEdition)
-            {
-                case 'open':
-                    if(str_replace('_', '.', $openVersion) == '10.1') $executeXuanxuan = true;
+            $executedXuanxuan = false;
 
-                    $this->saveLogs("Execute $openVersion");
-                    $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
-                    $this->executeOpen($openVersion, $fromVersion, $executeXuanxuan);
-                case 'pro':
-                    foreach($chargedVersions['pro'] as $proVersion)
-                    {
-                        $this->saveLogs("Execute $proVersion");
-                        if($updateStructure) $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
-                        if($this->config->edition != 'open') $this->executePro($proVersion);
-                    }
-                case 'biz':
-                    foreach($chargedVersions['biz'] as $bizVersion)
-                    {
-                        $this->saveLogs("Execute $bizVersion");
-                        if($updateStructure) $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
-                        if($this->config->edition != 'open') $this->executeBiz($bizVersion, $executeXuanxuan);
-                    }
-                case 'max':
-                    foreach($chargedVersions['max'] as $maxVersion)
-                    {
-                        $maxVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
-                        $this->saveLogs("Execute $maxVersion");
-                        if($updateStructure) $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
-                    }
+            /* Execute open. */
+            if(str_replace('_', '.', $openVersion) == '10.1') $executedXuanxuan = true;
+
+            $this->saveLogs("Execute $openVersion");
+            $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $openVersion)));
+            $this->executeOpen($openVersion, $fromEdition, $executedXuanxuan);
+
+            /* Execute pro. */
+            foreach($chargedVersions['pro'] as $proVersion)
+            {
+                $this->saveLogs("Execute $proVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $proVersion)));
+                $this->executePro($proVersion);
+            }
+
+            /* Execute biz. */
+            foreach($chargedVersions['biz'] as $bizVersion)
+            {
+                $this->saveLogs("Execute $bizVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $bizVersion)));
+                $this->executeBiz($bizVersion, $executedXuanxuan);
+            }
+
+            /* Execute max. */
+            foreach($chargedVersions['max'] as $maxVersion)
+            {
+                $maxVersion = array_search($openVersion, $this->config->upgrade->maxVersion);
+                $this->saveLogs("Execute $maxVersion");
+                $this->execSQL($this->getUpgradeFile(str_replace('_', '.', $maxVersion)));
             }
         }
 
-        /* Means open source upgrade to biz or max. */
-        if($fromEdition == 'open' and $this->config->edition != 'open')
+        /* Means open source/pro upgrade to biz or max. */
+        if($this->config->edition != 'open')
         {
-            $this->loadModel('effort')->convertEstToEffort();
-            $this->importBuildinModules();
-            $this->addSubStatus();
+            if($fromEdition == 'open') $this->loadModel('effort')->convertEstToEffort();
+            if($fromEdition == 'open' or $fromEdition == 'pro')
+            {
+                $this->importBuildinModules();
+                $this->addSubStatus();
+            }
         }
     }
 
@@ -120,12 +144,12 @@ class upgradeModel extends model
      * Process data for open source.
      *
      * @param  string $openVersion
-     * @param  string $fromVersion
-     * @param  bool   $executeXuanxuan
+     * @param  string $fromEdition
+     * @param  bool   $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeOpen($openVersion, $fromVersion, $executeXuanxuan)
+    public function executeOpen($openVersion, $fromEdition, $executedXuanxuan)
     {
         switch($openVersion)
         {
@@ -255,7 +279,7 @@ class upgradeModel extends model
             case '10_1':
                 $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                 $this->execSQL($xuanxuanSql);
-                $executeXuanxuan = true;
+                $executedXuanxuan = true;
             case '10_3_1':
                 $this->removeCustomMenu();
                 break;
@@ -263,7 +287,7 @@ class upgradeModel extends model
                 $this->changeTaskParentValue();
                 break;
             case '10_6':
-                if(!$executeXuanxuan)
+                if(!$executedXuanxuan)
                 {
                     $this->saveLogs('Execute 10_6');
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.1.0.sql';
@@ -276,7 +300,7 @@ class upgradeModel extends model
             case '11_1':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                         $this->execSQL($xuanxuanSql);
@@ -295,7 +319,7 @@ class upgradeModel extends model
                 $this->addPriv11_5();
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
                         $this->execSQL($xuanxuanSql);
@@ -321,7 +345,7 @@ class upgradeModel extends model
 
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.5.7.sql';
                         $this->execSQL($xuanxuanSql);
@@ -334,7 +358,6 @@ class upgradeModel extends model
                 break;
             case '11_7':
                 $this->adjustPriv12_0();
-                $this->loadModel('setting')->setItem('system.common.global.showAnnual', '1');
                 break;
             case '12_0_1':
                 $this->importRepoFromConfig();
@@ -342,7 +365,7 @@ class upgradeModel extends model
             case '12_1':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                         $this->execSQL($xuanxuanSql);
@@ -371,7 +394,7 @@ class upgradeModel extends model
             case '15_0_rc3':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.3.sql';
                         $this->execSQL($xuanxuanSql);
@@ -410,7 +433,7 @@ class upgradeModel extends model
             case '15_4':
                 if(empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.2.sql';
                         $this->execSQL($xuanxuanSql);
@@ -438,20 +461,33 @@ class upgradeModel extends model
                 set_time_limit(0);
                 $this->updateActivatedDate();
 
-                if($fromVersion[0] == 'm') break;
-                $this->execSQL($this->getUpgradeFile('maxinstall'));
-                $this->execSQL($this->getUpgradeFile('functions'));
-
-                if($fromVersion[0] == 'b') break;
-                $this->execSQL($this->getUpgradeFile('bizinstall'));
                 if(!empty($this->config->isINT))
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'xuanxuan.sql';
                     $this->execSQL($xuanxuanSql);
+                    $executedXuanxuan = true;
+                }
+                else
+                {
+                    if(!$executedXuanxuan)
+                    {
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan4.6.sql';
+                        $this->execSQL($xuanxuanSql);
+                        $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan5.1.sql';
+                        $this->execSQL($xuanxuanSql);
+                    }
                 }
 
-                if($fromVersion[0] == 'p') break;
-                $this->execSQL($this->getUpgradeFile('proinstall'));
+                switch($fromEdition)
+                {
+                    case 'open':
+                        $this->execSQL($this->getUpgradeFile('proinstall'));
+                    case 'pro':
+                        $this->execSQL($this->getUpgradeFile('bizinstall'));
+                    case 'biz':
+                        $this->execSQL($this->getUpgradeFile('maxinstall'));
+                        $this->execSQL($this->getUpgradeFile('functions'));
+                }
                 break;
         }
 
@@ -501,11 +537,11 @@ class upgradeModel extends model
      * Process data for biz.
      *
      * @param  int   $bizVersion
-     * @param  bool  $executeXuanxuan
+     * @param  bool  $executedXuanxuan
      * @access public
      * @return void
      */
-    public function executeBiz($bizVersion, $executeXuanxuan)
+    public function executeBiz($bizVersion, $executedXuanxuan)
     {
         switch($bizVersion)
         {
@@ -513,7 +549,7 @@ class upgradeModel extends model
                 $this->adjustFeedbackViewData();
                 break;
             case 'biz3_0':
-                if(!empty($this->config->isINT) and !$executeXuanxuan)
+                if(!empty($this->config->isINT) and !$executedXuanxuan)
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.3.0.sql';
                     $this->execSQL($xuanxuanSql);
@@ -524,7 +560,7 @@ class upgradeModel extends model
             case 'biz3_2_1':
                 if(!empty($this->config->isINT))
                 {
-                    if(!$executeXuanxuan)
+                    if(!$executedXuanxuan)
                     {
                         $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan2.4.0.sql';
                         $this->execSQL($xuanxuanSql);
@@ -552,7 +588,7 @@ class upgradeModel extends model
                 $this->processWorkflowLayout();
                 $this->processWorkflowLabel();
                 $this->processWorkflowCondition();
-                if(!empty($this->config->isINT) and !$executeXuanxuan)
+                if(!empty($this->config->isINT) and !$executedXuanxuan)
                 {
                     $xuanxuanSql = $this->app->getAppRoot() . 'db' . DS . 'upgradexuanxuan3.1.1.sql';
                     $this->execSQL($xuanxuanSql);
@@ -1108,18 +1144,22 @@ class upgradeModel extends model
     public function checkConsistency($version = '')
     {
         if(empty($version)) $version = $this->config->installedVersion;
+
+        $editions     = array('p' => 'proVersion', 'b' => 'bizVersion', 'm' => 'maxVersion');
+        $version      = str_replace('.', '_', $version);
+        $fromEdition  = is_numeric($version[0]) ? 'open' : $editions[$version[0]];
+        $openVersion  = is_numeric($version[0]) ? $version : $this->config->upgrade->{$fromEdition}[$version];
+        $openVersion  = str_replace('_', '.', $openVersion);
+        $checkVersion = version_compare($openVersion, '16.5', '<') ? str_replace('_', '.', $version) : $openVersion;
+
         $alterSQL    = '';
-        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $version . '.sql';
+        $standardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'zentao' . $checkVersion . '.sql';
         if(!file_exists($standardSQL)) return $alterSQL;
 
         $lines = file($standardSQL);
         if(empty($this->config->isINT))
         {
-            $xVersion = $version;
-            $version  = str_replace('.', '_', $version);
-            if(strpos($version, 'pro') !== false and isset($this->config->upgrade->proVersion[$version])) $xVersion = str_replace('_', '.', $this->config->upgrade->proVersion[$version]);
-            if(strpos($version, 'biz') !== false and isset($this->config->upgrade->bizVersion[$version])) $xVersion = str_replace('_', '.', $this->config->upgrade->bizVersion[$version]);
-
+            $xVersion     = $openVersion;
             $xStandardSQL = $this->app->getAppRoot() . 'db' . DS . 'standard' . DS . 'xuanxuan' . $xVersion . '.sql';
             if(file_exists($xStandardSQL))
             {
@@ -5788,7 +5828,7 @@ class upgradeModel extends model
                 }
             }
 
-            if(empty($customFiles) or $module == 'owt') $encryptModules[] = $module;
+            if(empty($customFiles) or $module == 'owt') $encryptModules[$module] = $module;
         }
         return $encryptModules;
     }

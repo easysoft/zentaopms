@@ -34,7 +34,7 @@ fields:
     format: ""
   - field: account
     note: "操作账号"
-    range: "admin"
+    range: po82{1},admin{1111111}
     prefix: ""
     postfix: ""
     loop: 0

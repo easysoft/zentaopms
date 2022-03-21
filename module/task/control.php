@@ -261,7 +261,8 @@ class task extends control
         $this->view->members          = $members;
         $this->view->blockID          = $blockID;
         $this->view->moduleOptionMenu = $moduleOptionMenu;
-
+        $this->view->projectID        = $projectID;
+        $this->view->productID        = $this->loadModel('product')->getProductIDByProject($projectID);;
         $this->display();
     }
 

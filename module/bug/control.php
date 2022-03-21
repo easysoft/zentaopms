@@ -413,14 +413,14 @@ class bug extends control
                 }
                 else
                 {
-                    $executionID = $this->post->execution ? $this->post->execution : $output['executionID'];
+                    $executionID = $this->post->execution ? $this->post->execution : zget($output, 'executionID', $this->session->execution);
                     $location    = $this->createLink('execution', 'bug', "executionID=$executionID");
                 }
 
             }
             elseif($this->app->tab == 'project')
             {
-                $location = $this->createLink('project', 'bug', "projectID={$output['projectID']}");
+                $location = $this->createLink('project', 'bug', "projectID=" . zget($output, 'projectID', $this->session->project));
             }
             else
             {
@@ -2236,15 +2236,17 @@ class bug extends control
      * Ajax get project team members.
      *
      * @param  int    $projectID
+     * @param  string $$selectedUser
      * @access public
-     * @return void
+     * @return string
      */
-    public function ajaxGetProjectTeamMembers($projectID)
+    public function ajaxGetProjectTeamMembers($projectID, $selectedUser = '')
     {
         $users       = $this->loadModel('user')->getPairs('noclosed');
         $teamMembers = empty($projectID) ? array() : $this->loadModel('project')->getTeamMemberPairs($projectID);
         foreach($teamMembers as $account => $member) $teamMembers[$account] = $users[$account];
-        return print(html::select('assignedTo', $teamMembers, '', 'class="form-control"'));
+
+        return print(html::select('assignedTo', $teamMembers, $selectedUser, 'class="form-control"'));
     }
 
 
