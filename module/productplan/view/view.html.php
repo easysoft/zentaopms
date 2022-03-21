@@ -47,14 +47,8 @@
         {
             $attr       = "target='hiddenwin'";
             $isOnlyBody = false;
-            $class      = '';
-            if($plan->begin == $config->productplan->future or $plan->end == $config->productplan->future)
-            {
-                $class      = 'iframe';
-                $attr       = "data-toggle='modal' data-id='{$plan->id}' data-width='550px'";
-                $isOnlyBody = true;
-            }
-            $class = $plan->status == 'wait' ? $class : 'disabled';
+            $class      = $plan->status == 'wait' ? '' : 'disabled';
+
             common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', $isOnlyBody, $plan);
             $class = $plan->status == 'doing' ? '' : 'disabled';
             common::printLink('productplan', 'finish', "planID=$plan->id", "<i class='icon-checked'></i>{$lang->productplan->finishAB}", '', "class='btn btn-link {$class}' target='hiddenwin' title='{$lang->productplan->finish}'", '', false, $plan);
