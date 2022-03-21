@@ -147,6 +147,7 @@ class repo extends control
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|noempty|nodeleted');
         $this->view->products    = $this->loadModel('product')->getProductPairsByProject($objectID);
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID    = $objectID;
 
         $this->display();
     }
