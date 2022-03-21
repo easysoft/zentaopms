@@ -26,6 +26,9 @@ ALTER TABLE `zt_kanbancard` ADD `progress` float unsigned NOT NULL DEFAULT '0' A
 
 ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
+UPDATE `zt_group` SET `vision`='lite' WHERE `role` = 'feedback';
+
+DELETE FROM `zt_group` WHERE `vision` = 'lite' AND `role` IN ('liteAdmin','liteProject','liteTeam');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('lite', '管理员', 'liteAdmin', '迅捷版用户分组');
@@ -35,15 +38,6 @@ INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('lite', '团队成员', 'liteTeam', '迅捷版用户分组');
-
-REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteAdmin' and `vision` = 'lite') from `zt_grouppriv` where `group` = 1;
-
-REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteProject' and `vision` = 'lite') from `zt_grouppriv` where `group` = 4;
-
-REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteTeam' and `vision` = 'lite') from `zt_grouppriv` where `group` = 9;
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
 
