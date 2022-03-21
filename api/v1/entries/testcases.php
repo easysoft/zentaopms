@@ -23,8 +23,17 @@ class testcasesEntry extends entry
         if(empty($productID)) $productID = $this->param('product', 0);
         if(empty($productID)) return $this->sendError(400, 'Need product id.');
 
+        $type     = 'all';
+        $param    = 0;
+        $moduleID = $this->param('module', 0);
+        if($moduleID)
+        {
+            $type  = 'byModule';
+            $param = $moduleID;
+        }
+
         $control = $this->loadController('testcase', 'browse');
-        $control->browse($productID, $this->param('branch', ''), $this->param('status', 'all'), 0, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
+        $control->browse($productID, $this->param('branch', ''), $type, $param, $this->param('order', 'id_desc'), 0, $this->param('limit', 20), $this->param('page', 1));
 
         $data = $this->getData();
 

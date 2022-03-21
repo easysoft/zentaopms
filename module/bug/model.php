@@ -83,7 +83,7 @@ class bugModel extends model
 
         /* Check repeat bug. */
         $result = $this->loadModel('common')->removeDuplicate('bug', $bug, "product={$bug->product}");
-        if($result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
+        if($result and $result['stop']) return array('status' => 'exists', 'id' => $result['duplicate']);
 
         $bug = $this->loadModel('file')->processImgURL($bug, $this->config->bug->editor->create['id'], $this->post->uid);
 
