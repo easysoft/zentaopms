@@ -8,4 +8,4 @@ $lang->kanban->taskColumn['canceled']   = 'Canceled';
 $lang->kanban->taskColumn['closed']     = 'Closed';
 
 $lang->kanban->importCards = 'Enable the import function, you can only import cards that you have permission to view.';
-$lang->kanban->common = 'Common Kanban';
+$lang->kanban->common = 'Kanban';
