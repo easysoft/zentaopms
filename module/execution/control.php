@@ -2786,7 +2786,7 @@ class execution extends control
         $this->loadModel('branch');
         foreach($products as $product)
         {
-            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
+            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, defined('TUTORIAL') ? array(0 => 0) : array_keys($branches[$product->id]));
             foreach($productModules as $branch => $branchModules)
             {
                 foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
@@ -2825,7 +2825,7 @@ class execution extends control
             {
                 $storyModule = $this->tree->getModulesName($story->module);
                 $productName = count($products) > 1 ? $products[$story->product]->name : '';
-                $modules[$story->module] = $productName . $storyModule[$story->module];
+                $modules[$story->module] = $productName . zget($storyModule, $story->module, '');
             }
         }
 
