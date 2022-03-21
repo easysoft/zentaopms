@@ -51,7 +51,7 @@ class projectrelease extends control
 
         $this->view->products = $this->products;
         $this->view->product  = $product;
-        $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID);
+        $this->view->branches = (isset($product->type) and $product->type == 'normal') ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
         $this->view->branch   = $branch;
         $this->view->project  = $this->project->getByID($projectID);
     }
