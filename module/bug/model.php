@@ -885,7 +885,6 @@ class bugModel extends model
         /* Update bugs. */
         foreach($activateBugs as $bugID => $bug)
         {
-            $oldBug = $bugs[$bugID];
             $this->dao->update(TABLE_BUG)->data($bug, $skipFields = 'comment')->autoCheck()->where('id')->eq((int)$bugID)->exec();
             if(dao::isError()) return print(js::error('bug#' . $bugID . dao::getError(true)));
 
