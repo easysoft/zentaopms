@@ -9,6 +9,7 @@
 .dropdown-list > li > a {display: block; padding: 3px 20px; clear: both; font-weight: normal; line-height: 1.53846154; color: #141414; white-space: nowrap;}
 .dropdown-list > li > a:hover,
 .dropdown-list > li > a:focus {color: #1a4f85; text-decoration: none; background-color: #ddd;}
+#productStoryForm .setting {height: 25px;}
 
 .pl-5px {padding-left: 5px;}
 .popoverStage {position: relative;}
