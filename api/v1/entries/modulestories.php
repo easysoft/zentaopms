@@ -15,16 +15,15 @@ class moduleStoriesEntry extends Entry
     {
         $executionID = $this->param('executionID', 0);
         if(empty($executionID)) return $this->sendError(400, 'Need execution id.');
-        $control = $this->loadController('story', 'ajaxGetExecutionStories');
-        $control->ajaxGetExecutionStories($executionID, $this->param('productID', 0), $this->param('branchID', 0), $moduleID);
+
+        $control = $this->loadController('execution', 'story');
+        $control->story($executionID, 'order_desc', 'byModule', $moduleID);
 
         $data = $this->getData();
-        $this->loadModel('story');
+
         $result = [];
-        foreach($data as $storyID => $storyName)
+        foreach($data->data->stories as $story)
         {
-            if(empty($storyID)) continue;
-            $story = $this->story->getById($storyID);
             $result[] = $this->filterFields($story, 'id,title,module,pri,status,stage,estimate');
         }
         return $this->send(200, array('stories' => $result));

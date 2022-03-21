@@ -20,7 +20,7 @@ class taskComponentEntry extends Entry
      */
     public function post($taskID)
     {
-        $fields = 'name,type,assignedTo,parent,estimate,story,module,pri,desc,estStarted,deadline';
+        $fields = 'name,color,type,assignedTo,parent,estimate,story,module,pri,desc,estStarted,deadline';
         $this->batchSetPost($fields);
 
         $fields = explode(',', $fields);
