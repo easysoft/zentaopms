@@ -1574,7 +1574,8 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->edit;
 
-        $allProducts = array(0 => '') + $this->product->getProducts($execution->project, 'noclosed', '', false);
+        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProducts($execution->project, 'noclosed', '', false);
+        $allProducts = array(0 => '') + $allProducts;
 
         $this->loadModel('productplan');
         $productPlans     = array(0 => '');
@@ -1629,7 +1630,6 @@ class execution extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->allProjects          = $this->project->getPairsByModel($project->model, 0, 'noclosed');
         $this->view->project              = $project;
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
@@ -1642,6 +1642,7 @@ class execution extends control
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
+        if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed');
         $this->display();
     }
 
