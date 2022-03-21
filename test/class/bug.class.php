@@ -1290,4 +1290,159 @@ class bugTest
             return count($array);
         }
     }
+
+    /**
+     * Test get bugs of a project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getProjectBugsTest($projectID)
+    {
+        $array = $this->objectModel->getProjectBugs($projectID);
+
+        foreach($array as $bug) $bug->title = str_replace("'", '', $bug->title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get bugs of a execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function getExecutionBugsTest($executionID)
+    {
+        $array = $this->objectModel->getExecutionBugs($executionID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get product left bugs.
+     *
+     * @param  int    $buildID
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getProductLeftBugsTest($buildID, $productID)
+    {
+        $array = $this->objectModel->getProductLeftBugs($buildID, $productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bug pairs of a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getProductBugPairsTest($productID)
+    {
+        $array = $this->objectModel->getProductBugPairs($productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bug member of a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getProductMemberPairsTest($productID)
+    {
+        $array = $this->objectModel->getProductMemberPairs($productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs according to buildID and productID.
+     *
+     * @param  int    $buildID
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getReleaseBugsTest($buildID, $productID)
+    {
+        $array = $this->objectModel->getReleaseBugs($buildID, $productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
 }
