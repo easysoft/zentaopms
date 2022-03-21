@@ -68,10 +68,12 @@ $routes['/projects/:id/executions'] = 'executions';
 $routes['/executions']              = 'executions';
 $routes['/executions/:id']          = 'execution';
 
+$routes['/executions/:id/tasks/batchCreate'] = 'taskBatchCreate';
+$routes['/tasks/batchCreate']                = 'taskBatchCreate';
+
 $routes['/executions/:id/tasks']     = 'tasks';
 $routes['/tasks']                    = 'tasks';
 $routes['/tasks/:id']                = 'task';
-$routes['/tasks/:id/component']      = 'taskComponent';
 $routes['/tasks/:id/assignto']       = 'taskAssignTo';
 $routes['/tasks/:id/start']          = 'taskStart';
 $routes['/tasks/:id/pause']          = 'taskPause';
