@@ -45,8 +45,8 @@
 
         if($plan->parent >= 0)
         {
-            $attr       = "target='hiddenwin'";
-            $class      = $plan->status == 'wait' ? '' : 'disabled';
+            $attr  = "target='hiddenwin'";
+            $class = $plan->status == 'wait' ? '' : 'disabled';
 
             common::printLink('productplan', 'start', "planID=$plan->id", "<i class='icon-play'></i>{$lang->productplan->startAB}", '', "class='btn btn-link {$class}'{$attr} title='{$lang->productplan->start}'", '', false, $plan);
             $class = $plan->status == 'doing' ? '' : 'disabled';
