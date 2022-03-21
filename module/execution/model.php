@@ -3056,7 +3056,6 @@ class executionModel extends model
         if($action == 'suspend')  return $execution->status == 'wait' or $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' or $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' or $execution->status == 'closed';
-        if($action == 'delete')   return $execution->status == 'wait' or $execution->status == 'doing';
 
         return true;
     }
