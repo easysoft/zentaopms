@@ -74,7 +74,6 @@ class taskBatchCreateEntry extends Entry
         $control = $this->loadController('task', 'batchCreate');
         $control->batchCreate($executionID, $storyID, $moduleID, $taskID);
 
-        exit;
         $data = $this->getData();
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
