@@ -5798,7 +5798,6 @@ class upgradeModel extends model
                     $sql .= "'$priv->method'), ";
                 }
             }
-
         }
 
         $sql = rtrim($sql, ', ') . ';';
