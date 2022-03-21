@@ -44,6 +44,8 @@ class Processor
         $this->initRelease();
         $this->initStakeholder();
         $this->initUserquery();
+        $this->initUpdateKanban();
+        $this->initStory();
 
         $this->dao->commit();
     }
@@ -88,6 +90,39 @@ class Processor
         $users['user2'] = array('account' => 'noprogram1', 'realname' => '不在项目集1用户');
 
         foreach($users as $account => $user) $this->dao->update(TABLE_USER)->data($user)->where('account')->eq($account)->exec();
+
+        $this->dao->update(TABLE_USERCONTACT)->set('account')->eq('admin')->where('account')->like('admin%')->exec();
+
+        $productIDList = $this->dao->select('id')->from(TABLE_PRODUCT)->fetchAll();
+        $projectIDList = $this->dao->select('id')->from(TABLE_PROJECT)->where('type')->eq('project')->fetchAll();
+        $sprintIDList  = $this->dao->select('id')->from(TABLE_EXECUTION)->where('type')->in('sprint,stage,kanban')->fetchAll();
+
+        $product = array();
+        $project = array();
+        $sprint  = array();
+        foreach($productIDList as $productID) $product[] = $productID->id;
+        foreach($projectIDList as $projectID) $project[] = $projectID->id;
+        foreach($sprintIDList as $sprintID)   $sprint[]  = $sprintID->id;
+
+        $products = ",".join(",",$product);
+        $projects = ",".join(",",$project);
+        $sprints  = ",".join(",",$sprint);
+
+        $userViews = new stdclass();
+        $userViews->account  = 'admin';
+        $userViews->programs = ',1,2,3,4,5,6,7,8,9,10';
+        $userViews->products = $products;
+        $userViews->projects = $projects;
+        $userViews->sprints  = $sprints;
+        $this->dao->insert(TABLE_USERVIEW)->data($userViews)->exec();
+
+        $guestViews = new stdclass();
+        $guestViews->account  = 'guest';
+        $guestViews->programs = '';
+        $guestViews->products = '';
+        $guestViews->projects = '';
+        $guestViews->sprints  = '';
+        $this->dao->insert(TABLE_USERVIEW)->data($guestViews)->exec();
     }
 
     /**
@@ -108,6 +143,17 @@ class Processor
      */
     private function initProduct()
     {
+    }
+
+    /**
+     * Init Story.
+     *
+     * @access private
+     * @return void
+     */
+    private function initStory()
+    {
+        $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
     }
 
     /**
@@ -148,6 +194,12 @@ class Processor
      */
     private function initTask()
     {
+        $parentList   = $this->dao->select('parent')->from(TABLE_TASK)->where('parent')->gt(0)->fetchAll('parent');
+        $parentIDList = array_keys($parentList);
+        $parentID     = implode(',', $parentIDList);
+
+        $this->dao->update(TABLE_TASK)->set('parent')->eq(-1)->where('id')->in($parentID)->andWhere('deleted')->eq(0)->exec();
+        $this->dao->update(TABLE_TASK)->set('assignedTo')->eq('po82')->set('mailto')->eq('user1,user2,user3')->set('frombug')->eq('1')->where('id')->eq(1)->andWhere('deleted')->eq(0)->exec();
     }
 
     /**
@@ -228,5 +280,70 @@ class Processor
         $this->dao->query("DELETE FROM `zt_userquery`;");
         $this->dao->query("INSERT INTO `zt_userquery` (`id`, `account`, `module`, `title`, `form`, `sql`, `shortcut`) VALUES (1, 'admin',    'task', '任务查询测试条件',   'a:60:{s:9:\"fieldname\";s:0:\"\";s:11:\"fieldstatus\";s:0:\"\";s:9:\"fielddesc\";s:0:\"\";s:15:\"fieldassignedTo\";s:0:\"\";s:8:\"fieldpri\";s:1:\"0\";s:14:\"fieldexecution\";s:0:\"\";s:11:\"fieldmodule\";s:4:\"ZERO\";s:13:\"fieldestimate\";s:0:\"\";s:9:\"fieldleft\";s:0:\"\";s:13:\"fieldconsumed\";s:0:\"\";s:9:\"fieldtype\";s:0:\"\";s:12:\"fieldfromBug\";s:0:\"\";s:17:\"fieldclosedReason\";s:0:\"\";s:13:\"fieldopenedBy\";s:0:\"\";s:15:\"fieldfinishedBy\";s:0:\"\";s:13:\"fieldclosedBy\";s:0:\"\";s:13:\"fieldcancelBy\";s:1:\"0\";s:17:\"fieldlastEditedBy\";s:0:\"\";s:11:\"fieldmailto\";s:0:\"\";s:17:\"fieldfinishedList\";s:0:\"\";s:15:\"fieldopenedDate\";s:0:\"\";s:13:\"fielddeadline\";s:0:\"\";s:15:\"fieldestStarted\";s:0:\"\";s:16:\"fieldrealStarted\";s:0:\"\";s:17:\"fieldassignedDate\";s:0:\"\";s:17:\"fieldfinishedDate\";s:0:\"\";s:15:\"fieldclosedDate\";s:0:\"\";s:17:\"fieldcanceledDate\";s:0:\"\";s:19:\"fieldlastEditedDate\";s:0:\"\";s:7:\"fieldid\";s:0:\"\";s:15:\"fieldcanceledBy\";s:0:\"\";s:6:\"andOr1\";s:3:\"AND\";s:6:\"field1\";s:4:\"name\";s:9:\"operator1\";s:7:\"include\";s:6:\"value1\";s:2:\"aa\";s:6:\"andOr2\";s:3:\"and\";s:6:\"field2\";s:2:\"id\";s:9:\"operator2\";s:1:\"=\";s:6:\"value2\";s:0:\"\";s:6:\"andOr3\";s:3:\"and\";s:6:\"field3\";s:6:\"status\";s:9:\"operator3\";s:1:\"=\";s:6:\"value3\";s:0:\"\";s:10:\"groupAndOr\";s:3:\"and\";s:6:\"andOr4\";s:3:\"AND\";s:6:\"field4\";s:4:\"desc\";s:9:\"operator4\";s:7:\"include\";s:6:\"value4\";s:0:\"\";s:6:\"andOr5\";s:3:\"and\";s:6:\"field5\";s:10:\"assignedTo\";s:9:\"operator5\";s:1:\"=\";s:6:\"value5\";s:0:\"\";s:6:\"andOr6\";s:3:\"and\";s:6:\"field6\";s:3:\"pri\";s:9:\"operator6\";s:1:\"=\";s:6:\"value6\";s:1:\"0\";s:6:\"module\";s:4:\"task\";s:9:\"actionURL\";s:77:\"/index.php?m=execution&f=task&executionID=101&status=bySearch&param=myQueryID\";s:10:\"groupItems\";s:1:\"3\";s:8:\"formType\";s:4:\"lite\";}',  '(( 1   AND `name`  LIKE \'%11%\' ) AND ( 1  )) AND deleted = \'0\'',   '0');");
         $this->dao->query("INSERT INTO `zt_userquery` (`id`, `account`, `module`, `title`, `form`, `sql`, `shortcut`) VALUES (2, 'admin',    'executionStory',   '需求查找条件', 'a:56:{s:10:\"fieldtitle\";s:0:\"\";s:13:\"fieldkeywords\";s:0:\"\";s:11:\"fieldstatus\";s:0:\"\";s:10:\"fieldstage\";s:0:\"\";s:8:\"fieldpri\";s:1:\"0\";s:12:\"fieldproduct\";s:1:\"0\";s:11:\"fieldbranch\";s:0:\"\";s:11:\"fieldmodule\";s:4:\"ZERO\";s:9:\"fieldplan\";s:0:\"\";s:13:\"fieldestimate\";s:0:\"\";s:11:\"fieldsource\";s:0:\"\";s:15:\"fieldsourceNote\";s:0:\"\";s:12:\"fieldfromBug\";s:0:\"\";s:13:\"fieldopenedBy\";s:0:\"\";s:15:\"fieldreviewedBy\";s:0:\"\";s:15:\"fieldassignedTo\";s:0:\"\";s:13:\"fieldclosedBy\";s:0:\"\";s:17:\"fieldlastEditedBy\";s:0:\"\";s:11:\"fieldmailto\";s:0:\"\";s:17:\"fieldclosedReason\";s:0:\"\";s:12:\"fieldversion\";s:0:\"\";s:15:\"fieldopenedDate\";s:0:\"\";s:17:\"fieldreviewedDate\";s:0:\"\";s:17:\"fieldassignedDate\";s:0:\"\";s:15:\"fieldclosedDate\";s:0:\"\";s:19:\"fieldlastEditedDate\";s:0:\"\";s:7:\"fieldid\";s:0:\"\";s:6:\"andOr1\";s:3:\"AND\";s:6:\"field1\";s:5:\"title\";s:9:\"operator1\";s:7:\"include\";s:6:\"value1\";s:3:\"362\";s:6:\"andOr2\";s:3:\"and\";s:6:\"field2\";s:2:\"id\";s:9:\"operator2\";s:1:\"=\";s:6:\"value2\";s:0:\"\";s:6:\"andOr3\";s:3:\"and\";s:6:\"field3\";s:8:\"keywords\";s:9:\"operator3\";s:7:\"include\";s:6:\"value3\";s:0:\"\";s:10:\"groupAndOr\";s:3:\"and\";s:6:\"andOr4\";s:3:\"AND\";s:6:\"field4\";s:5:\"stage\";s:9:\"operator4\";s:1:\"=\";s:6:\"value4\";s:0:\"\";s:6:\"andOr5\";s:3:\"and\";s:6:\"field5\";s:6:\"status\";s:9:\"operator5\";s:1:\"=\";s:6:\"value5\";s:0:\"\";s:6:\"andOr6\";s:3:\"and\";s:6:\"field6\";s:3:\"pri\";s:9:\"operator6\";s:1:\"=\";s:6:\"value6\";s:1:\"0\";s:6:\"module\";s:14:\"executionStory\";s:9:\"actionURL\";s:95:\"/index.php?m=execution&f=story&executionID=101&orderBy=pri_desc&type=bySearch&queryID=myQueryID\";s:10:\"groupItems\";s:1:\"3\";s:8:\"formType\";s:4:\"lite\";}',    '(( 1   AND `title`  LIKE \'%362%\' ) AND ( 1  ))', '0');");
+        $this->dao->query("INSERT INTO `zt_userquery` (`id`, `account`, `module`, `title`, `form`, `sql`, `shortcut`) VALUES (3, 'admin',    'user', '用户测试条件', 'a:48:{s:13:\"fieldrealname\";s:0:\"\";s:10:\"fieldemail\";s:0:\"\";s:9:\"fielddept\";s:0:\"\";s:12:\"fieldaccount\";s:0:\"\";s:9:\"fieldrole\";s:0:\"\";s:10:\"fieldphone\";s:0:\"\";s:9:\"fieldjoin\";s:0:\"\";s:12:\"fieldvisions\";s:3:\"rnd\";s:7:\"fieldid\";s:0:\"\";s:13:\"fieldcommiter\";s:1:\"0\";s:11:\"fieldgender\";s:1:\"m\";s:7:\"fieldqq\";s:0:\"\";s:10:\"fieldskype\";s:0:\"\";s:13:\"fielddingding\";s:0:\"\";s:11:\"fieldweixin\";s:0:\"\";s:10:\"fieldslack\";s:0:\"\";s:13:\"fieldwhatsapp\";s:0:\"\";s:12:\"fieldaddress\";s:0:\"\";s:12:\"fieldzipcode\";s:0:\"\";s:6:\"andOr1\";s:3:\"AND\";s:6:\"field1\";s:8:\"realname\";s:9:\"operator1\";s:7:\"include\";s:6:\"value1\";s:9:\"白名单\";s:6:\"andOr2\";s:3:\"and\";s:6:\"field2\";s:5:\"email\";s:9:\"operator2\";s:7:\"include\";s:6:\"value2\";s:0:\"\";s:6:\"andOr3\";s:3:\"and\";s:6:\"field3\";s:4:\"dept\";s:9:\"operator3\";s:6:\"belong\";s:6:\"value3\";s:0:\"\";s:10:\"groupAndOr\";s:3:\"and\";s:6:\"andOr4\";s:3:\"AND\";s:6:\"field4\";s:7:\"account\";s:9:\"operator4\";s:7:\"include\";s:6:\"value4\";s:0:\"\";s:6:\"andOr5\";s:3:\"and\";s:6:\"field5\";s:4:\"role\";s:9:\"operator5\";s:1:\"=\";s:6:\"value5\";s:0:\"\";s:6:\"andOr6\";s:3:\"and\";s:6:\"field6\";s:5:\"phone\";s:9:\"operator6\";s:7:\"include\";s:6:\"value6\";s:0:\"\";s:6:\"module\";s:4:\"user\";s:9:\"actionURL\";s:74:\"/index.php?m=company&f=browse&browseType=all&param=myQueryID&type=bysearch\";s:10:\"groupItems\";s:1:\"3\";s:8:\"formType\";s:4:\"lite\";}',  '(( 1   AND `realname`  LIKE \'%白名单%\' ) AND ( 1  ))',   '0');");
+    }
+
+    /**
+     * Init initUpdateKanban.
+     *
+     * @access public
+     * @return void
+     */
+    private function initUpdateKanban()
+    {
+        $this->dao->query("update zt_kanbancolumn set `limit` = '-1' where id >= 1 and id <= 400");
+        $this->dao->query("update zt_kanbanspace set `whitelist` = '' where type in ('cooperation','public')");
+        $this->dao->query("update zt_kanbanspace set `team` = '' where type = 'private'");
+
+        $kanban = $this->dao->select('id,type,region,name,color,`limit`,`order`')->from(TABLE_KANBANCOLUMN)->where('id')->gt('400')->fetchAll();
+        $group = 101;
+        foreach($kanban as $key => $value)
+        {
+            $id = $value->id;
+
+            $value->limit = '-1';
+            if(!isset($value->parent)) $value->parent = 0;
+
+            if(in_array($value->type, ['develop', 'test', 'resolving']))
+            {
+                $value->parent = '-1';
+                $kanban[$key+1]->parent = $value->id;
+                $kanban[$key+2]->parent = $value->id;
+            }
+
+            $value->group = $group;
+            if($value->type == 'closed')
+            {
+                $group++;
+            }
+            unset($value->id);
+            $this->dao->update(TABLE_KANBANCOLUMN)->data($value)->where('id')->eq($id)->exec();
+        }
+
+        $kanbancell = $this->dao->select('id,type')->from(TABLE_KANBANCELL)->where('id')->gt('400')->fetchAll();
+        $kanbanlane = 101;
+        foreach($kanbancell as $key => $value)
+        {
+            $id = $value->id;
+
+            $value->lane = $kanbanlane;
+
+            if($value->type == 'story' && isset($kanbancell[$key+1]) && $kanbancell[$key+1]->type == 'bug')
+            {
+                $kanbanlane++;
+            }
+
+            if($value->type == 'bug' && isset($kanbancell[$key+1]) && $kanbancell[$key+1]->type == 'task')
+            {
+                $kanbanlane++;
+            }
+            if($value->type == 'task' && isset($kanbancell[$key+1]) && $kanbancell[$key+1]->type == 'story')
+            {
+                $kanbanlane++;
+            }
+            unset($value->id);
+            $this->dao->update(TABLE_KANBANCELL)->data($value)->where('id')->eq($id)->exec();
+        }
+        $this->dao->query("update zt_kanbancell set `cards` = '' where  id > 400");
     }
 }

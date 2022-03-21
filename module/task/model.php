@@ -1980,6 +1980,7 @@ class taskModel extends model
             ->leftJoin(TABLE_USER)->alias('t3')
             ->on('t1.assignedTo = t3.account')
             ->where('t1.id')->eq((int)$taskID)
+            ->andWhere('t1.vision')->eq($this->config->vision)
             ->fetch();
         if(!$task) return false;
 
@@ -2171,7 +2172,7 @@ class taskModel extends model
                     $task->parentName = $parent->name;
                 }
             }
-        }        
+        }
 
         return $this->processTasks($tasks);
     }
@@ -3291,7 +3292,7 @@ class taskModel extends model
 
                 common::printIcon('task', 'recordEstimate', "taskID=$task->id", $task, 'list', 'time', '', 'iframe', true);
                 common::printIcon('task', 'edit',   "taskID=$task->id", $task, 'list');
-                common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', '', $this->lang->task->children);
+                if($this->config->vision == 'rnd') common::printIcon('task', 'batchCreate', "execution=$task->execution&storyID=$task->story&moduleID=$task->module&taskID=$task->id&ifame=0", $task, 'list', 'split', '', '', '', '', $this->lang->task->children);
                 break;
             }
             echo '</td>';

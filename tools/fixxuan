@@ -1,0 +1,13 @@
+        if(!empty($moduleExtPaths))
+        {
+            $extActionFile = $moduleExtPaths['common'] . $methodName . '.php';
+            if(file_exists($extActionFile))
+            {
+                $control = $extActionFile;
+            }
+            else
+            {
+                $extActionFile = $moduleExtPaths['xuan'] . $methodName . '.php';
+                if(file_exists($extActionFile)) $control = $extActionFile;
+            }
+        }

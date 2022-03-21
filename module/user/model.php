@@ -249,13 +249,16 @@ class userModel extends model
     /**
      * Get user info by ID.
      *
-     * @param  mix    $userID
-     * @param  string    $field id|account
+     * @param  mix     $userID
+     * @param  string  $field id|account
      * @access public
      * @return object|bool
      */
     public function getById($userID, $field = 'account')
     {
+        /* Return current user when user is guest or empty to make sure pages in dashboard work fine. */
+        if(empty($userID) && $this->app->user->account == 'guest') return $this->app->user;
+
         if($field == 'id') $userID = (int)$userID;
         if($field == 'account') $userID = str_replace(' ', '', $userID);
 
@@ -282,8 +285,7 @@ class userModel extends model
             ->beginIF($query)->andWhere($query)->fi()
             ->beginIF($browseType == 'inside')->andWhere('type')->eq('inside')->fi()
             ->beginIF($browseType == 'outside')->andWhere('type')->eq('outside')->fi()
-            ->beginIF($this->config->vision == 'lite')->andWhere('visions')->eq('lite')->fi()
-            ->beginIF($this->config->vision != 'lite')->andWhere('visions')->ne('lite')->fi()
+            ->beginIF($this->config->vision)->andWhere("CONCAT(',', visions, ',')")->like("%,{$this->config->vision},%")->fi()
             ->orderBy($orderBy)
             ->page($pager)
             ->fetchAll();
@@ -352,12 +354,17 @@ class userModel extends model
         if(!dao::isError())
         {
             $userID = $this->dao->lastInsertID();
-            if($this->post->group)
+
+            /* Set usergroup for account. */
+            if(isset($_POST['group']))
             {
-                $data = new stdClass();
-                $data->account = $this->post->account;
-                $data->group   = $this->post->group;
-                $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                foreach($this->post->group as $groupID)
+                {
+                    $data          = new stdclass();
+                    $data->account = $this->post->account;
+                    $data->group   = $groupID;
+                    $this->dao->insert(TABLE_USERGROUP)->data($data)->exec();
+                }
             }
 
             $this->computeUserView($user->account);
@@ -383,7 +390,7 @@ class userModel extends model
         $users    = fixer::input('post')->get();
         $data     = array();
         $accounts = array();
-        for($i = 0; $i < $this->config->user->batchCreate; $i++)
+        for($i = 1; $i < $this->config->user->batchCreate; $i++)
         {
             $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
@@ -394,7 +401,7 @@ class userModel extends model
                 if(in_array($users->account[$i], $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
                 if(!validater::checkAccount($users->account[$i])) helper::end(js::error(sprintf($this->lang->user->error->account, $i + 1)));
                 if($users->realname[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $i + 1)));
-                if($users->visions[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->visions, $i + 1)));
+                if(empty($users->visions[$i])) helper::end(js::error(sprintf($this->lang->user->error->visions, $i + 1)));
                 if($users->email[$i] and !validater::checkEmail($users->email[$i])) helper::end(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
                 if(!validater::checkReg($users->password[$i], '|(.){6,}|')) helper::end(js::error(sprintf($this->lang->user->error->password, $i + 1)));
@@ -415,7 +422,7 @@ class userModel extends model
                 $data[$i]->type     = 'inside';
                 $data[$i]->realname = $users->realname[$i];
                 $data[$i]->role     = $role;
-                $data[$i]->group    = $users->group[$i] == 'ditto' ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
+                $data[$i]->group    = in_array('ditto', $users->group[$i]) ? (isset($prev['group']) ? $prev['group'] : '') : $users->group[$i];
                 $data[$i]->email    = $users->email[$i];
                 $data[$i]->gender   = $users->gender[$i];
                 $data[$i]->password = md5(trim($users->password[$i]));
@@ -471,12 +478,15 @@ class userModel extends model
         $userIDList = array();
         foreach($data as $user)
         {
-            if($user->group)
+            if(is_array($user->group))
             {
-                $group = new stdClass();
-                $group->account = $user->account;
-                $group->group   = $user->group;
-                $this->dao->replace(TABLE_USERGROUP)->data($group)->exec();
+                foreach($user->group as $group)
+                {
+                    $groups = new stdClass();
+                    $groups->account = $user->account;
+                    $groups->group   = $group;
+                    $this->dao->insert(TABLE_USERGROUP)->data($groups)->exec();
+                }
             }
             unset($user->group);
             $this->dao->insert(TABLE_USER)->data($user)->autoCheck()->exec();
@@ -1115,6 +1125,32 @@ class userModel extends model
     }
 
     /**
+     * Get groups by visions.
+     *
+     * @param  array $visions
+     * @access public
+     * @return array
+     */
+    public function getGroupsByVisions($visions)
+    {
+        if(!is_array($visions)) return array();
+        $groups = $this->dao->select('id, name, vision')->from(TABLE_GROUP)
+            ->where('project')->eq(0)
+            ->andWhere('vision')->in($visions)
+            ->fetchAll('id');
+
+        $visionList = $this->getVisionList();
+
+        foreach($groups as $key => $group)
+        {
+            $groups[$key] = $group->name;
+            if(count($visions) > 1) $groups[$key] = $visionList[$group->vision] . ' / ' . $group->name;
+        }
+
+        return $groups;
+    }
+
+    /**
      * Get the project or execution in which the user participates..
      *
      * @param  string $account
@@ -1445,13 +1481,13 @@ class userModel extends model
         if(empty($data->listName))
         {
             dao::$errors['listName'][] = sprintf($this->lang->error->notempty, $this->lang->user->contacts->listName);
-            return print(js::error(dao::getError()));
+            return false;
         }
 
         $this->dao->update(TABLE_USERCONTACT)->data($data)
             ->where('id')->eq($listID)
             ->exec();
-        if(dao::isError()) return print(js::error(dao::getError()));
+        if(dao::isError()) return false;
     }
 
     /**
@@ -2702,5 +2738,18 @@ class userModel extends model
         }
 
         return $visionList;
+    }
+
+    /**
+     * Switch admin of ZenTao.
+     *
+     * @access public
+     * @return void
+     */
+    public function su()
+    {
+        $company = $this->dao->select('admins')->from(TABLE_COMPANY)->fetch();
+        $admins  = explode(',', trim($company->admins, ','));
+        $this->app->user = $this->dao->select('*')->from(TABLE_USER)->where('account')->eq($admins[0])->fetch();
     }
 }

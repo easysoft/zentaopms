@@ -1,6 +1,7 @@
 #!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
+include dirname(dirname(dirname(__FILE__))) . '/class/program.class.php';
 
 /**
 
@@ -8,30 +9,14 @@ title=测试 programModel::getTopPairs();
 cid=1
 pid=1
 
+查看id=1的父项目集 >> 项目集1
+查看父项目集的个数 >> 6
+
 */
 
-class Tester
-{
-    public function __construct($user)
-    {   
-        global $tester;
+$program = new Program('admin');
 
-        su($user);
-        $this->program = $tester->loadModel('program');
-    }   
+$t_checkId = 'count';
 
-    public function getTopPairs($count = '')
-    {
-        if($count == 'count') return count($this->program->getTopPairs());
-        return $this->program->getTopPairs();
-    }
-}
-
-$t = new Tester('admin');
-
-/* getTopPairs(). */
-r($t->getTopPairs())        && p('1') && e('项目集1'); // 查看id=1的父项目集
-
-/* Count(). */
-r($t->getTopPairs('count')) && p()    && e('10'); // 查看父项目集的个数
-
+r($program->getTopPairs())        && p('1') && e('项目集1'); // 查看id=1的父项目集
+r($program->getTopPairs($t_checkId)) && p()    && e('6'); // 查看父项目集的个数

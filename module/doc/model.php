@@ -501,7 +501,11 @@ class docModel extends model
      */
     public function getById($docID, $version = 0, $setImgSize = false)
     {
-        $doc = $this->dao->select('*')->from(TABLE_DOC)->where('id')->eq((int)$docID)->fetch();
+        $doc = $this->dao->select('*')->from(TABLE_DOC)
+            ->where('id')->eq((int)$docID)
+            ->andWhere('vision')->eq($this->config->vision)
+            ->fetch();
+
         if(!$doc) return false;
         if(!$this->checkPrivDoc($doc))
         {
@@ -1265,7 +1269,7 @@ class docModel extends model
                 ->beginIF($type == 'book')->orderBy('id_desc')->fi()
                 ->fetchAll('id');
         }
-        else if($type != 'product' and $type != 'project' and $type != 'execution')
+        elseif($type != 'product' and $type != 'project' and $type != 'execution')
         {
             return false;
         }
@@ -1389,6 +1393,7 @@ class docModel extends model
             $executions = $this->dao->select('*')->from(TABLE_EXECUTION)
                 ->where('deleted')->eq(0)
                 ->andWhere('type')->in('sprint,stage,kanban')
+                ->andWhere('vision')->eq($this->config->vision)
                 ->beginIF(!$this->app->user->admin)->andWhere('id')->in($this->app->user->view->sprints)->fi()
                 ->orderBy('order_asc')
                 ->fetchAll('id');
@@ -2470,7 +2475,7 @@ EOT;
                 {
                     $li .= "<div class='tree-actions'>";
                     if(common::hasPriv('tree', 'edit'))   $li .= html::a(helper::createLink('tree', 'edit', "module=$module->id&type=doc"), "<i class='icon icon-edit'></i>", '', "data-toggle='modal' title={$this->lang->doc->editType}");
-                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editType}");
+                    if(common::hasPriv('tree', 'browse')) $li .= html::a(helper::createLink('tree', 'browse', "rootID=$libID&type=doc&module=$module->id", '', 1), "<i class='icon icon-split'></i>", '', "class='iframe' title={$this->lang->doc->editChildType}");
                     $li .= '</div>';
                 }
                 $li .= '</div>';

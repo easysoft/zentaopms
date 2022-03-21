@@ -58,6 +58,7 @@ $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
 $lang->my->menu->contacts = array('link' => "$lang->contact|my|managecontacts|");
+if($config->systemScore) $lang->my->menu->score = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
 
 global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => '日志|effort|calendar|', 'exclude' => 'my-todo');
@@ -68,6 +69,7 @@ $lang->my->menuOrder[5]  = 'index';
 $lang->my->menuOrder[10] = 'calendar';
 if($config->edition != 'open') $lang->my->menuOrder[11] = 'effort';
 $lang->my->menuOrder[20] = 'task';
+$lang->my->menuOrder[25] = 'contacts';
 
 $lang->my->dividerMenu = ',calendar,';
 
@@ -159,7 +161,7 @@ $lang->admin->menuOrder[30] = 'dev';
 $lang->admin->menuOrder[35] = 'system';
 
 $lang->admin->menu->message['subMenu']          = new stdclass();
-$lang->admin->menu->message['subMenu']->message = new stdclass();
+$lang->admin->menu->message['subMenu']->message = array();
 $lang->admin->menu->message['subMenu']->mail    = array('link' => "{$lang->mail->common}|mail|index", 'subModule' => 'mail');
 $lang->admin->menu->message['subMenu']->webhook = array('link' => "Webhook|webhook|browse", 'subModule' => 'webhook');
 

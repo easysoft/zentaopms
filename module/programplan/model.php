@@ -908,14 +908,16 @@ class programplanModel extends model
      * Get milestone by product.
      *
      * @param  int    $productID
+     * @param  int    $projectID
      * @access public
      * @return object
      */
-    public function getMilestoneByProduct($productID)
+    public function getMilestoneByProduct($productID, $projectID)
     {
         return $this->dao->select('t1.id, t1.name')->from(TABLE_PROJECT)->alias('t1')
             ->leftJoin(TABLE_PROJECTPRODUCT)->alias('t2')->on('t1.id=t2.project')
             ->where('t2.product')->eq($productID)
+            ->andWhere('t1.project')->eq($projectID)
             ->andWhere('t1.type')->eq('stage')
             ->andWhere('t1.milestone')->eq(1)
             ->andWhere('t1.deleted')->eq(0)

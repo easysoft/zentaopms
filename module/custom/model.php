@@ -76,7 +76,8 @@ class customModel extends model
         $item->key     = $key;
         $item->value   = $value;
         $item->system  = $system;
-        $item->vision  = $this->config->vision;
+
+        if(!defined('IN_UPGRADE')) $item->vision = $this->config->vision;
 
         $this->dao->replace(TABLE_LANG)->data($item)->exec();
     }
@@ -244,6 +245,18 @@ class customModel extends model
                 $link = explode('|', $link);
                 list($label, $module, $method) = $link;
                 $hasPriv = commonModel::hasPriv($module, $method);
+                /* Fix bug #20464 */
+                if(!$hasPriv and is_array($item) and isset($item['subMenu']))
+                {
+                    foreach($item['subMenu'] as $subMenu)
+                    {
+                        if(!isset($subMenu['link'])) continue;
+                        list($subLabel, $module, $method) = explode('|', $subMenu['link']);
+                        $hasPriv = commonModel::hasPriv($module, $method);
+                        if($hasPriv) break;
+                    }
+                }
+
                 if($module == 'execution' and $method == 'more') $hasPriv = true;
                 if($module == 'project' and $method == 'other')  $hasPriv = true;
             }

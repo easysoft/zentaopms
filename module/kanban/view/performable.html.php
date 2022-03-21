@@ -19,8 +19,8 @@
     <form class='main-form form-ajax' method='post' enctype='multipart/form-data' id='dataform'>
       <table class='table table-form'>
         <tr>
-          <th id='c-done'><?php echo $lang->kanban->doneFunction;?></th>
-          <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableFinished, $kanban->performable));?></td>
+          <th id='c-title'><?php echo $lang->kanban->manageProgress;?></th>
+          <td><?php echo nl2br(html::radio('performable', $lang->kanban->enableList, $kanban->performable));?></td>
         </tr>
         <tr>
           <td colspan='2' class='text-center form-actions'>

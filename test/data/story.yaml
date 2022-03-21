@@ -260,7 +260,7 @@ fields:
     format: ""
   - field: version
     note: "版本号"
-    range: 1
+    range: 3{20},2{80},1{300}
     prefix: ""
     postfix: ""
     loop: 0

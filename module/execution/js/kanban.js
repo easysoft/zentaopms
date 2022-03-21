@@ -792,6 +792,7 @@ function handleDropTask($element, event, kanban)
     var newLane  = $newCol.closest('.kanban-lane').data('lane');
     var cardType = $card.find('.kanban-card').data('type');
 
+    if(!oldCol || !newCol || !newLane || !oldLane) return false;
     if(oldCol.id === newCol.id && newLane.id === oldLane.id) return false;
 
     var cardID      = $card.data().id;
@@ -1086,7 +1087,6 @@ function createTaskMenu(options)
     if(priv.canRestartTask && task.$col.type == 'pause') items.push({label: taskLang.restart, icon: 'play', url: createLink('task', 'restart', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canPauseTask && task.$col.type == 'developing') items.push({label: taskLang.pause, icon: 'pause', url: createLink('task', 'pause', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canRecordEstimateTask) items.push({label: executionLang.effort, icon: 'time', url: createLink('task', 'recordEstimate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-    if(priv.canBatchCreateTask && vision == 'lite') items.push({label: taskLang.children, icon:'split', url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + '&storyID=0&moduleID=0&taskID=' + task.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateTask && (task.$col.type == 'developed' || task.$col.type == 'canceled' || task.$col.type == 'closed')) items.push({label: executionLang.activate, icon: 'magic', url: createLink('task', 'activate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCreateTask) items.push({label: taskLang.copy, icon: 'copy', url: createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCancelTask && (task.$col.type == 'wait' || task.$col.type == 'developing' || task.$col.type == 'pause')) items.push({label: taskLang.cancel, icon: 'cancel', url: createLink('task', 'cancel', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1156,12 +1156,7 @@ function initKanban($kanban)
         onRenderLaneName:  renderLaneName,
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
-        droppable:
-        {
-            target:       findDropColumns,
-            finish:       handleFinishDrop,
-            mouseButton: 'left'
-        }
+        droppable:         groupBy == 'default' ? {target: findDropColumns, finish:handleFinishDrop, mouseButton: 'left'} : false,
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);

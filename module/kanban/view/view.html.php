@@ -39,11 +39,7 @@ js::set('colorList', $this->config->kanban->cardColorList);
 js::set('displayCards', $kanban->displayCards);
 js::set('fluidBoard', $kanban->fluidBoard);
 js::set('mode', $config->systemMode);
-
-js::set('priv',
-    array(
-        'canAssignCard' => common::hasPriv('kanban', 'assigncard'),
-    ));
+js::set('priv', array('canAssignCard' => common::hasPriv('kanban', 'assigncard')));
 
 $canSortRegion   = commonModel::hasPriv('kanban', 'sortRegion') && count($regions) > 1;
 $canEditRegion   = commonModel::hasPriv('kanban', 'editRegion');

@@ -30,15 +30,15 @@
       <div class="row tiles">
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->undone?></div>
-          <div class="tile-amount"><?php echo empty($data) ? 0 : html::a($this->createLink('my', 'work', 'mode=task'), (int)$data['undone']);?></div>
+          <div class="tile-amount"><?php echo empty($data) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=task&type=assignedTo'), (int)$data['undone']);?></div>
         </div>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->delaying?></div>
-          <div class="tile-amount"><?php echo empty($data) ? 0 : html::a($this->createLink('my', 'work', 'mode=task'), (int)$data['delaying']);?></div>
+          <div class="tile-amount"><?php echo empty($data) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=task&type=assignedTo'), (int)$data['delaying']);?></div>
         </div>
         <div class="col tile">
           <div class="tile-title"><?php echo $lang->block->delayed?></div>
-          <div class="tile-amount"><?php echo empty($data) ? 0 : html::a($this->createLink('my', 'work', 'mode=task'), (int)$data['delayed']);?></div>
+          <div class="tile-amount"><?php echo empty($data) ? 0 : html::a($this->createLink('my', 'contribute', 'mode=task&type=assignedTo'), (int)$data['delayed']);?></div>
         </div>
       </div>
     </div>

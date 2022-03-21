@@ -59,12 +59,26 @@
                   <td><?php echo html::input('end', helper::isZeroDate($card->end) ? '' : $card->end, "class='form-control form-date'");?></td>
                 </tr>
                 <tr>
-                  <th><?php echo $lang->kanbancard->estimate;?></th>
-                  <td><?php echo html::input('estimate', $card->estimate, "class='form-control' placeholder='{$lang->kanbancard->lblHour}'");?></td>
-                </tr>
-                <tr>
                   <th><?php echo $lang->kanbancard->pri;?></th>
                   <td><?php echo html::select('pri', $lang->kanbancard->priList, $card->pri, "class='form-control'");?></td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->kanbancard->estimate;?></th>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input('estimate', $card->estimate, "class='form-control'");?>
+                      <span class='input-group-addon'>h</span>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <th><?php echo $lang->kanbancard->progress;?></th>
+                  <td>
+                    <div class='input-group'>
+                      <?php echo html::input('progress', $card->progress, "class='form-control'");?>
+                      <span class='input-group-addon'>%</span>
+                    </div>
+                  </td>
                 </tr>
               </table>
             </div>

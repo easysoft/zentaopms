@@ -13,6 +13,7 @@
 
 <?php include '../../common/view/header.lite.html.php';?>
 <?php js::set('enableImport', $enableImport);?>
+<?php js::set('vision', $this->config->vision);?>
 <div id='mainContent' class='main-content'>
   <div class='center-block'>
     <div class='main-header'>

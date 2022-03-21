@@ -34,6 +34,7 @@ foreach(array('zh-cn', 'en') as $langType)
 
     foreach(array('5.3_5.6', '7.0', '7.1', '7.2_7.4') as $phpVersion)
     {
+        echo "zip $packPrefix.{$version}.php{$phpVersion}.zip\n";
         `unzip $packPrefix.{$version}.zip`;
         `unzip zentaobiz.php{$phpVersion}.zip`;
         `unzip zentaomax.php{$phpVersion}.zip`;
@@ -52,6 +53,7 @@ foreach(array('zh-cn', 'en') as $langType)
 //
 //    foreach(array('5.3_5.6', '7.0', '7.1', '7.2_7.4') as $phpVersion)
 //    {
+//	    echo "dpkg {$packPrefix}_{$version}_{$phpVersion}_1_all.deb\n";
 //	    `mkdir buildroot`;
 //	    `cp -r build/debian/DEBIAN buildroot`;
 //	    `sed -i '/^Version/cVersion: $version' buildroot/DEBIAN/control`;
@@ -74,6 +76,7 @@ foreach(array('zh-cn', 'en') as $langType)
 //
 //    foreach(array('5.3_5.6', '7.0', '7.1', '7.2_7.4') as $phpVersion)
 //    {
+//	    echo "rpmbuild {$dirName}-{$version}-php{$phpVersion}-1.noarch.rpm\n";
 //	    `mkdir ~/rpmbuild/SPECS -p`;
 //	    `mkdir ~/rpmbuild/SOURCES`;
 //	    `mkdir ~/rpmbuild/SOURCES/etc/httpd/conf.d/ -p`;

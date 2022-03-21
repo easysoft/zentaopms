@@ -9,4 +9,4 @@ fields:
   - field: branch
     range: 0
   - field: plan
-    range: 0
+    range: 1-360:3

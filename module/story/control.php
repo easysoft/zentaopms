@@ -47,7 +47,14 @@ class story extends control
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
         if($productID == 0 and $objectID == 0) $this->locate($this->createLink('product', 'create'));
-
+        
+        /* Get product id according to the project id when lite vision todo transfer story */
+        if($this->config->vision == 'lite' and $productID == 0) 
+        {
+            $product = $this->loadModel('product')->getProductPairsByProject($objectID);
+            if(!empty($project)) $productID = key($product);
+        }
+        
         $this->story->replaceURLang($type);
         if($this->app->tab == 'product')
         {
@@ -1094,8 +1101,6 @@ class story extends control
 
         /* Set the menu. */
         $from = $this->app->tab;
-        $this->product->setMenu($story->product, $story->branch);
-
         if($from == 'execution')
         {
             $this->execution->setMenu($param);
@@ -1108,6 +1113,10 @@ class story extends control
         {
             $products = $this->product->getProductPairsByProject(0, 'noclosed');
             $this->loadModel('qa')->setMenu($products, $story->product);
+        }
+        else
+        {
+            $this->product->setMenu($story->product, $story->branch);
         }
 
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
@@ -1224,7 +1233,6 @@ class story extends control
         /* Set menu. */
         if($this->app->tab == 'project')
         {
-            $this->app->rawModule = 'projectstory';
             $this->loadModel('project')->setMenu($this->session->project);
         }
         elseif($this->app->tab == 'product')
@@ -1461,7 +1469,6 @@ class story extends control
             {
                 $this->lang->story->menu      = $this->lang->my->menu;
                 $this->lang->story->menuOrder = $this->lang->my->menuOrder;
-                $this->loadModel('my')->setMenu();
 
                 if($from == 'work')       $this->lang->my->menu->work['subModule']       = 'story';
                 if($from == 'contribute') $this->lang->my->menu->contribute['subModule'] = 'story';
@@ -1981,20 +1988,23 @@ class story extends control
      *
      * @param  int    $executionID
      * @param  int    $productID
+     * @param  int    $branch
+     * @param  int    $moduleID
      * @param  int    $storyID
      * @param  string $number
-     * @param  string $type
+     * @param  string $type full
+     * @param  string $status all|unclosed
      * @access public
      * @return void
      */
-    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type= 'full')
+    public function ajaxGetExecutionStories($executionID, $productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $number = '', $type = 'full', $status = 'all')
     {
         if($moduleID)
         {
             $moduleID = $this->loadModel('tree')->getStoryModule($moduleID);
             $moduleID = $this->tree->getAllChildID($moduleID);
         }
-        $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type);
+        $stories = $this->story->getExecutionStoryPairs($executionID, $productID, $branch, $moduleID, $type, $status);
         if($this->app->getViewType() === 'json')
         {
             return print(json_encode($stories));

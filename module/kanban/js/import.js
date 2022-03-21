@@ -24,7 +24,7 @@ $(function()
         var enableImport     = $("input:checked[name='import']").val();
         var objectListLength = $("input:checked[name^=importObjectList]").length;
 
-        if(enableImport == 'on' && objectListLength == 0)
+        if(enableImport == 'on' && objectListLength == 0 && vision != 'lite')
         {
             $('#emptyTip').removeClass('hidden');
             return false;

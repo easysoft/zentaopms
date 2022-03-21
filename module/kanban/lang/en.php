@@ -44,8 +44,8 @@ $lang->kanban->assigntoCard        = 'Assign';
 $lang->kanban->setting             = 'Setting';
 $lang->kanban->enableArchived      = 'Enable Archived';
 $lang->kanban->archive             = 'Archive';
-$lang->kanban->performable         = 'Set done function';
-$lang->kanban->doneFunction        = 'Done function';
+$lang->kanban->performable         = 'Set progress management';
+$lang->kanban->manageProgress      = 'Manage Progress';
 $lang->kanban->splitColumn         = 'Split Column';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
@@ -120,8 +120,8 @@ $lang->kanban->aclList['private'] = 'Private (For the kanban team, whitelist mem
 $lang->kanban->archiveList['0'] = 'Disable';
 $lang->kanban->archiveList['1'] = 'Enable';
 
-$lang->kanban->enableFinished['0'] = 'Disable';
-$lang->kanban->enableFinished['1'] = 'Enable';
+$lang->kanban->enableList['0'] = 'Disable';
+$lang->kanban->enableList['1'] = 'Enable';
 
 $lang->kanban->type = array();
 $lang->kanban->type['all']   = "All KanBan";
@@ -184,9 +184,9 @@ $lang->kanban->my                 = 'My';
 $lang->kanban->other              = 'Other';
 
 $lang->kanban->error = new stdclass();
-$lang->kanban->error->mustBeInt       = 'The WIPs must be positive integer.';
-$lang->kanban->error->parentLimitNote = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
-$lang->kanban->error->childLimitNote  = 'The sum of products in the child column cannot be > the number of products in the parent column.';
+$lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
+$lang->kanban->error->parentLimitNote   = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
+$lang->kanban->error->childLimitNote    = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
 
 $lang->kanban->importList = array();
@@ -340,6 +340,7 @@ $lang->kanbancard->beginAndEnd     = 'Begin & End';
 $lang->kanbancard->begin           = 'Begin';
 $lang->kanbancard->end             = 'End';
 $lang->kanbancard->pri             = 'Priority';
+$lang->kanbancard->progress        = 'Progress';
 $lang->kanbancard->desc            = 'Description';
 $lang->kanbancard->estimate        = 'Estimate';
 $lang->kanbancard->createdBy       = 'Created By';
@@ -373,5 +374,6 @@ $lang->kanbancard->colorList['#cfa227'] = 'Warning';
 $lang->kanbancard->colorList['#2a5f29'] = 'Urgent';
 
 $lang->kanbancard->error = new stdClass();
-$lang->kanbancard->error->recordMinus = 'Estimate cannot be negative!';
-$lang->kanbancard->error->endSmall    = '"End Date" cannot be less than "Begin Date"';
+$lang->kanbancard->error->recordMinus     = 'Estimate cannot be negative!';
+$lang->kanbancard->error->endSmall        = '"End Date" cannot be less than "Begin Date"';
+$lang->kanbancard->error->progressIllegal = 'Please input correct progress.';

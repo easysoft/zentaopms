@@ -1961,7 +1961,8 @@ class execution extends control
     {
         $executionID = $this->execution->saveState((int)$executionID, $this->executions);
         $execution   = $this->execution->getById($executionID, true);
-        if(empty($execution) || strpos('stage,sprint', $execution->type) === false and defined('RUN_MODE') and RUN_MODE != 'api') return print(js::error($this->lang->notFound) . js::locate('back'));
+        $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
+        if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
         $this->app->loadLang('program');
 
@@ -2718,6 +2719,16 @@ class execution extends control
         $this->loadModel('story');
         $this->loadModel('product');
 
+        /* Init objectID */
+        $originObjectID = $objectID;
+
+        /* Transfer object id when version lite */
+        if($this->config->vision == 'lite')
+        {
+            $kanban  = $this->project->getByID($objectID, 'kanban');
+            $objectID = $kanban->project;
+        }
+
         /* Get projects, executions and products. */
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
@@ -2825,10 +2836,10 @@ class execution extends control
         $allStories = array_chunk($allStories, $pager->recPerPage);
 
         /* Assign. */
-        $this->view->title      = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
-        $this->view->position[] = html::a($browseLink, $object->name);
-        $this->view->position[] = $this->lang->execution->linkStory;
-
+        $this->view->title        = $object->name . $this->lang->colon . $this->lang->execution->linkStory;
+        $this->view->position[]   = html::a($browseLink, $object->name);
+        $this->view->position[]   = $this->lang->execution->linkStory;
+        $this->view->objectID     = $originObjectID;
         $this->view->object       = $object;
         $this->view->products     = $products;
         $this->view->allStories   = empty($allStories) ? $allStories : $allStories[$pageID - 1];
@@ -2946,7 +2957,6 @@ class execution extends control
 
         /* Append id for secend sort. */
         $orderBy = $direction == 'next' ? 'date_desc' : 'date_asc';
-        $sort    = common::appendOrder($orderBy);
 
         /* Set the menu. If the executionID = 0, use the indexMenu instead. */
         $this->execution->setMenu($executionID);
@@ -2964,7 +2974,7 @@ class execution extends control
         }
         $period  = $type == 'account' ? 'all'  : $type;
         $date    = empty($date) ? '' : date('Y-m-d', $date);
-        $actions = $this->loadModel('action')->getDynamic($account, $period, $sort, $pager, 'all', 'all', $executionID, $date, $direction);
+        $actions = $this->loadModel('action')->getDynamic($account, $period, $orderBy, $pager, 'all', 'all', $executionID, $date, $direction);
 
         /* The header and position. */
         $execution = $this->execution->getByID($executionID);

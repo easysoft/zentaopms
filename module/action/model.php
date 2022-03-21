@@ -877,6 +877,17 @@ class actionModel extends model
         $actionCondition = $this->getActionCondition();
         if(!$actionCondition and !$this->app->user->admin and isset($this->app->user->rights['acls']['actions'])) return array();
 
+        /* Restrict query data in this year when no limit for big data. */
+        $beginDate = '';
+        if($period == 'all')
+        {
+            $year = date('Y');
+            $beginDate = $year . '-01-01';
+
+            /* When query all dynamic then query the data of the last two years at most. */
+            if($this->app->getMethodName() == 'dynamic') $beginDate = $year - 1 . '-01-01';
+        }
+
         /* Get actions. */
         $actions = $this->dao->select('*')->from(TABLE_ACTION)
             ->where('objectType')->notIN('kanbanregion,kanbanlane,kanbancolumn')
@@ -885,6 +896,7 @@ class actionModel extends model
             ->beginIF($period != 'all')->andWhere('date')->lt($end)->fi()
             ->beginIF($date)->andWhere('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'")->fi()
             ->beginIF($account != 'all')->andWhere('actor')->eq($account)->fi()
+            ->beginIF($beginDate)->andWhere('date')->ge($beginDate)->fi()
             ->beginIF(is_numeric($productID))->andWhere('product')->like("%,$productID,%")->fi()
             ->andWhere()
             ->markLeft(1)

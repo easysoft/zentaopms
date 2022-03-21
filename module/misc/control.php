@@ -74,11 +74,14 @@ class misc extends control
 
         $source = isset($this->config->qcVersion) ? 'qucheng' : 'zentao';
         $lang   = str_replace('-', '_', $this->app->getClientLang());
-        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang.html";
+        $link   = $website . "/updater-getLatest-{$this->config->version}-$source-$lang-$sn.html";
 
         $latestVersionList = common::http($link);
 
-        $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
+        if(!isset($this->config->global->latestVersionList) or $this->config->global->latestVersionList != $latestVersionList)
+        {
+            $this->loadModel('setting')->setItem('system.common.global.latestVersionList', $latestVersionList);
+        }
     }
 
     /**

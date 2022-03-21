@@ -374,6 +374,11 @@ class repo extends control
 
         /* Get repo and synchronous commit. */
         $repo = $this->repo->getRepoByID($repoID);
+        if($repo->SCM == 'Git' and !is_dir($repo->path))
+        {
+            $error = sprintf($this->lang->repo->error->notFound, $repo->name, $repo->path);
+            return print(js::error($error) . js::locate($this->repo->createLink('maintain')));
+        }
         if(!$repo->synced) $this->locate($this->repo->createLink('showSyncCommit', "repoID=$repoID"));
 
         /* Set branch for git. */
