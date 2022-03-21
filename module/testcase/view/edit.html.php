@@ -19,6 +19,7 @@
 <?php js::set('caseID', $case->id);?>
 <?php js::set('executionID', $case->execution);?>
 <?php js::set('tab', $this->app->tab);?>
+<?php js::set('isLibCase', $isLibCase);?>
 <?php if($this->app->tab == 'execution') js::set('objectID', $case->execution);?>
 <?php if($this->app->tab == 'project') js::set('objectID', $case->project);?>
 <div id='mainContent' class='main-content'>
