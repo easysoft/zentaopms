@@ -46,7 +46,7 @@
           <th><?php echo $lang->task->type;?></th>
           <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td>
           <td>
-            <div class="checkbox-primary hidden" id='selectTestStoryBox'>
+            <div class="checkbox-primary c-selectStory hidden" id='selectTestStoryBox'>
               <input type="checkbox" name='selectTestStory' id="selectTestStory" value='1' onchange='toggleSelectTestStory()' /><label for="selectTestStory" class="no-margin"><?php echo $lang->task->selectTestStory;?></label>
             </div>
           </td>
@@ -55,7 +55,7 @@
           <th><?php echo $lang->task->module;?></th>
           <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen'");?></td>
           <td>
-            <div class="checkbox-primary">
+            <div class="checkbox-primary c-modulel">
               <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
             </div>
           </td>
@@ -71,7 +71,7 @@
             </div>
           </td>
           <td>
-            <div class="checkbox-primary affair">
+            <div class="checkbox-primary c-multipleTask affair">
               <input type="checkbox" name="multiple" value="1" id="multipleBox"><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>

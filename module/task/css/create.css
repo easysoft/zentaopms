@@ -19,3 +19,7 @@
 .chosen-results > li.has-new-test {position: relative; color: #388E3C;}
 .chosen-results > li.has-test.highlighted,
 .chosen-results > li.has-new-test.highlighted {color: #fff;}
+
+.c-multipleTask {width: 110px;}
+.c-modulel {width: 110px;}
+.c-selectStory {width: 120px;}
