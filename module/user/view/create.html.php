@@ -60,9 +60,9 @@
           <th><?php echo $lang->user->password2;?></th>
           <td><?php echo html::password('password2', '', "class='form-control'");?></td>
         </tr>
-        <tr>
+        <?php $visionList = $this->user->getVisionList();?>
+        <tr <?php if(count($visionList) < 2) echo "class='hide'";?>>
           <th><?php echo $lang->user->visions;?></th>
-          <?php $visionList = $this->user->getVisionList();?>
           <td><?php echo html::checkbox('visions', $visionList, isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList), "class='form-control'");?></td>
         </tr>
         <tr>

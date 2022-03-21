@@ -38,6 +38,7 @@
       }
   }
   $minWidth = (count($visibleFields) > 7) ? 'w-120px' : '';
+  $showVisionList = count($visionList) > 1;
   ?>
   <form method='post' class='load-indicator main-form' enctype='multipart/form-data' target='hiddenwin' id="batchCreateForm">
     <div class="table-responsive">
@@ -48,7 +49,9 @@
             <th class='w-150px<?php echo zget($visibleFields, 'dept', ' hidden')?>'>         <?php echo $lang->user->dept;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->account;?></th>
             <th class='<?php echo $minWidth?> required'><?php echo $lang->user->realname;?></th>
-            <th class='w-130px required'><?php echo $lang->user->visions;?></th>
+            <?php if($showVisionList):?>
+              <th class='w-130px required'><?php echo $lang->user->visions;?></th>
+            <?php endif;?>
             <th class='w-120px'><?php echo $lang->user->role;?></th>
             <th class='w-120px'><?php echo $lang->user->type;?></th>
             <th class='<?php echo $minWidth . zget($visibleFields, 'commiter', ' hidden')?>'><?php echo $lang->user->commiter;?></th>
@@ -82,7 +85,9 @@
           <td class='text-left<?php echo zget($visibleFields, 'dept', ' hidden')?>' style='overflow:visible'><?php echo html::select("dept[$user->id]", $depts, $dept, "class='form-control chosen'");?></td>
           <td><?php echo html::input("account[$user->id]",  $user->account, "class='form-control'");?></td>
           <td><?php echo html::input("realname[$user->id]", $user->realname, "class='form-control'");?></td>
-          <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>"><?php echo $config->systemMode == 'new' ? html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' multiple") : $visionList['rnd'];?></td>
+          <?php if($showVisionList):?>
+            <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>"><?php echo $config->systemMode == 'new' ? html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' multiple") : $visionList['rnd'];?></td>
+          <?php endif;?>
           <?php if($config->systemMode == 'classic') echo html::hidden("visions[$user->id][]", 'rnd');?>
           <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
           <td><?php echo html::select("type[$user->id]",    $lang->user->typeList, $type, "class='form-control'");?></td>
