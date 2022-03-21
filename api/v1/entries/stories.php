@@ -35,7 +35,6 @@ class storiesEntry extends entry
         $result  = array();
         foreach($stories as $story)
         {
-            $story->name =$story->title;
             if(isset($story->children)) $story->children = array_values((array)$story->children);
             $result[] = $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList');
         }
@@ -55,7 +54,7 @@ class storiesEntry extends entry
         if(!$productID and isset($this->requestBody->product)) $productID = $this->requestBody->product;
         if(!$productID) return $this->sendError(400, 'Need product id.');
 
-        $fields = 'title,spec,verify,reviewer,type,plan,module,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords';
+        $fields = 'title,spec,verify,reviewer,type,plan,module,moduleOptionMenu,source,sourceNote,category,pri,estimate,mailto,keywords,notifyemail';
         $this->batchSetPost($fields);
 
         /* If reviewer is not post, set needNotReview. */

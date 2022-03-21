@@ -50,6 +50,7 @@ $routes['/stories/:id/active']         = 'storyActive';
 $routes['/stories/:id/assign']         = 'storyAssignto';
 $routes['/stories/:id/recordEstimate'] = 'storyRecordEstimate';
 $routes['/stories/:id/child']          = 'storyChild';
+$routes['/stories/:id/recall']         = 'storyRecall';
 
 $routes['/module/:id/stories'] = 'moduleStories';
 

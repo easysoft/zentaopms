@@ -23,7 +23,7 @@ $config->cookieLife    = time() + 2592000;     // Cookie的生存时间。The co
 $config->timezone      = 'Asia/Shanghai';      // 时区设置。        The time zone setting, for more see http://www.php.net/manual/en/timezones.php.
 $config->webRoot       = '';                   // URL根目录。       The root path of the url.
 $config->customSession = false;                // 是否开启自定义session的存储路径。Whether custom the session save path.
-$config->edition       = 'open';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
+$config->edition       = 'max';               // 设置系统的edition，可选值：open|biz|max。Set edition, optional: open|biz|max.
 
 /* 框架路由相关设置。Routing settings. */
 $config->requestType = 'PATH_INFO';               // 请求类型：PATH_INFO|PATHINFO2|GET。    The request type: PATH_INFO|PATH_INFO2|GET.
