@@ -488,6 +488,8 @@ class upgradeModel extends model
                         $this->execSQL($this->getUpgradeFile('maxinstall'));
                         $this->execSQL($this->getUpgradeFile('functions'));
                 }
+
+                $this->updateGroup4Lite();
                 break;
         }
 
@@ -5747,6 +5749,61 @@ class upgradeModel extends model
 
             $this->dao->update($table)->set('activatedDate')->eq($action->date)->where('id')->eq($action->objectID)->exec();
         }
+        return true;
+    }
+
+    /**
+     * Update group date for lite.
+     *
+     * @access public
+     * @return bool
+     * */
+    public function updateGroup4Lite()
+    {
+        $privTable  = $this->config->db->prefix . 'grouppriv';
+        $adminPrivs = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('1')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $pmPrivs    = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('4')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $topPrivs   = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('9')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $liteGroup  = $this->dao->select('*')->from(TABLE_GROUP)->where('vision')->eq('lite')->fetchAll();
+
+        $sql = 'REPLACE INTO ' . TABLE_GROUPPRIV . ' VALUES ';
+        foreach($liteGroup as $group)
+        {
+            if($group->role == 'liteAdmin' and !empty($adminPrivs))
+            {
+                foreach($adminPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+
+            if($group->role == 'liteProject' and !empty($pmPrivs))
+            {
+                foreach($pmPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+
+            if($group->role == 'liteTeam' and !empty($topPrivs))
+            {
+                foreach($topPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+        }
+
+        $sql = rtrim($sql, ', ') . ';';
+
+        $this->dao->exec($sql);
+
         return true;
     }
 
