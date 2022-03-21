@@ -27,9 +27,9 @@ $bug51 = array('assignedTo' => 'dev1'  , 'status' => 'active', 'type' => 'standa
 $bug81 = array('assignedTo' => 'test1' , 'status' => 'active', 'type' => 'others',    'pri' => '1');
 
 $bug = new bugTest();
-r($bug->confirmTest($bugIDlist[0],$bug1))  && p('0:field,old,new;1:field,old,new') && e('assignedTo,admin,user92'); // 确认指派人变化的bug
-r($bug->confirmTest($bugIDlist[1],$bug3))  && p('0:field,old,new;1:field,old,new') && e('assignedTo,admin,user94'); // 确认类型变化的bug
-r($bug->confirmTest($bugIDlist[2],$bug4))  && p('0:field,old,new')                 && e('assignedTo,admin,user95'); // 确认已确认的bug
-r($bug->confirmTest($bugIDlist[3],$bug51)) && p('0:field,old,new;1:field,old,new') && e('assignedTo,dev1,user96');  // 确认优先级变化的bug
-r($bug->confirmTest($bugIDlist[4],$bug81)) && p('0:field,old,new')                 && e('assignedTo,test1,user97'); // 确认bug
+r($bug->confirmTest($bugIDlist[0],$bug1))  && p('0:field,old,new;1:field,old,new') && e('assignedTo,admin,user92;confirmed,0,1'); // 确认指派人变化的bug
+r($bug->confirmTest($bugIDlist[1],$bug3))  && p('0:field,old,new;1:field,old,new') && e('assignedTo,admin,user94;confirmed,0,1'); // 确认类型变化的bug
+r($bug->confirmTest($bugIDlist[2],$bug4))  && p('0:field,old,new')                 && e('assignedTo,admin,user95');               // 确认已确认的bug
+r($bug->confirmTest($bugIDlist[3],$bug51)) && p('0:field,old,new;1:field,old,new') && e('assignedTo,dev1,user96;pri,3,2');        // 确认优先级变化的bug
+r($bug->confirmTest($bugIDlist[4],$bug81)) && p('0:field,old,new')                 && e('assignedTo,test1,user97');               // 确认bug
 system("./ztest init");

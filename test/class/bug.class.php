@@ -789,8 +789,8 @@ class bugTest
     /**
      * Test update a bug.
      *
-     * @param mixed $bugID
-     * @param array $param
+     * @param  int    $bugID
+     * @param  array  $param
      * @access public
      * @return void
      */
@@ -1044,6 +1044,7 @@ class bugTest
      *
      * @param  array  $bugIDList
      * @param  int    $branchID
+     * @param  int    $bugID
      * @access public
      * @return array
      */
@@ -1060,6 +1061,233 @@ class bugTest
         else
         {
             return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test batch change module.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $moduleID
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function batchChangeModuleTest($bugIDList, $moduleID, $bugID)
+    {
+        $bugs = $this->objectModel->getByList($bugIDList);
+
+        $object = $this->objectModel->batchChangeModule($bugIDList, $moduleID, $bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test batch change plan.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $planID
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function batchChangePlanTest($bugIDList, $planID, $bugID)
+    {
+        $object = $this->objectModel->batchChangePlan($bugIDList, $planID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test batch resolve bugs.
+     *
+     * @param  array  $bugIDList
+     * @param  string $resolution
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function batchResolveTest($bugIDList, $resolution, $bugID)
+    {
+        $object = $this->objectModel->batchResolve($bugIDList, $resolution, 'trunk');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test activate a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function activateObject($bugID)
+    {
+        $change = $this->objectModel->activate($bugID, '');
+        $_POST['assignedTo'] = 'admin';
+
+        if($change == array()) $change = '没有数据更新';
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $change;
+        }
+    }
+
+    /**
+     * Test close a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function closeObject($bugID)
+    {
+        $change = $this->objectModel->close($bugID, '');
+
+        if($change == array()) $change = '没有数据更新';
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $change;
+        }
+    }
+
+    /**
+     * Test process the openedBuild and resolvedBuild fields for bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function processBuildForBugsTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->processBuildForBugs($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test extract accounts from some bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function extractAccountsFromListTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->extractAccountsFromList($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test extract accounts from a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function extractAccountsFromSingleTest($bugID)
+    {
+        $bug   = $this->objectModel->getByID($bugID);
+        $array = $this->objectModel->extractAccountsFromSingle($bug);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get user bugs.
+     *
+     * @param  string $account
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getUserBugsTest($account, $type = 'assignedTo')
+    {
+        $array = $this->objectModel->getUserBugs($account, $type);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($array);
+        }
+    }
+
+    /**
+     * Test get bug pairs of a user.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getUserBugPairsTest($account)
+    {
+        $array = $this->objectModel->getUserBugPairs($account);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($array);
         }
     }
 }
