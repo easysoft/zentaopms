@@ -337,8 +337,8 @@
 <?php js::set('executionID', $execution->id);?>
 <?php if(isonlybody()):?>
 <style>
-.body-modal .main-header{padding-right:0px;}
-.btn-toolbar>.dropdown{margin:0px;}
+.body-modal .main-header {padding-right: 0px; z-index: 1100;}
+.btn-toolbar > .dropdown {margin: 0px;}
 </style>
 <?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
 <script>
