@@ -1870,7 +1870,7 @@ class bugTest
      * @param  object $bug
      * @param  string $action
      * @access public
-     * @return array
+     * @return int
      */
     public function isClickableTest($bug, $action)
     {
@@ -1940,7 +1940,7 @@ class bugTest
      * Test get id list of all projects.
      *
      * @access public
-     * @return object
+     * @return array
      */
     public function getAllProjectIdsTest()
     {
