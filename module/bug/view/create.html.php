@@ -124,9 +124,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               <div class='input-group' id='buildBox'>
                 <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
                 <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='chosen form-control'");?>
-                <?php if(count($builds) < 2):?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
-                <?php endif;?>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>
             </td>
