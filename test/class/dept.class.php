@@ -155,17 +155,17 @@ class deptTest
         return $objects;
     }
 
-    public function traingoalMemberLinkTest($dept, $planID)
+    /**
+     * function createGroupManageMemberLink test by dept
+     *
+     * @param  string $deptID
+     * @param  string $groupID
+     * @access public
+     * @return string
+     */
+    public function createGroupManageMemberLinkTest($deptID, $groupID)
     {
-        $objects = $this->objectModel->traingoalMemberLink($dept, $planID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function createGroupManageMemberLinkTest($dept, $groupID)
-    {
+        $dept    = $this->objectModel->getByID($deptID);
         $objects = $this->objectModel->createGroupManageMemberLink($dept, $groupID);
 
         if(dao::isError()) return dao::getError();
@@ -173,8 +173,17 @@ class deptTest
         return $objects;
     }
 
-    public function createManageProjectAdminLinkTest($dept, $groupID)
+    /**
+     * function createManageProjectAdminLink test by dept
+     *
+     * @param  string $deptID
+     * @param  string $groupID
+     * @access public
+     * @return string
+     */
+    public function createManageProjectAdminLinkTest($deptID, $groupID)
     {
+        $dept    = $this->objectModel->getByID($deptID);
         $objects = $this->objectModel->createManageProjectAdminLink($dept, $groupID);
 
         if(dao::isError()) return dao::getError();
@@ -182,20 +191,30 @@ class deptTest
         return $objects;
     }
 
-    public function getSonsTest($deptID)
+    /**
+     * function getSons test by dept
+     *
+     * @param  string $deptID
+     * @param  string $count
+     * @access public
+     * @return array
+     */
+    public function getSonsTest($deptID, $count)
     {
         $objects = $this->objectModel->getSons($deptID);
 
         if(dao::isError()) return dao::getError();
+        if($count == '1')  return count($objects);
 
         return $objects;
     }
 
-    public function getAllChildIdTest($deptID)
+    public function getAllChildIdTest($deptID, $count)
     {
         $objects = $this->objectModel->getAllChildId($deptID);
 
         if(dao::isError()) return dao::getError();
+        if($count == '1')  return count($objects);
 
         return $objects;
     }

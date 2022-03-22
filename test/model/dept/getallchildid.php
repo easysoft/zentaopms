@@ -11,6 +11,11 @@ pid=1
 
 */
 
-$dept = new deptTest();
+$deptIDList = array('2', '5');
+$count      = array('0', '1');
 
-r() && p() && e();
+$dept = new deptTest();
+r($dept->getAllChildIdTest($deptIDList[0], $count[0]))    && p('1') && e('5'); //有子部门查询
+r($dept->getAllChildIdTest($deptIDList[1], $count[0])[0]) && p()    && e('5'); //无子部门查询
+r($dept->getAllChildIdTest($deptIDList[0], $count[1]))    && p()    && e('3'); //子部门数量统计
+r($dept->getAllChildIdTest($deptIDList[1], $count[1]))    && p()    && e('1'); //无子部门数量统计

@@ -11,6 +11,10 @@ pid=1
 
 */
 
-$dept = new deptTest();
+$deptIDList  = array('2', '5');
+$groupIDList = array('2', '12');
 
-r() && p() && e();
+$dept = new deptTest();
+r($dept->createManageProjectAdminLinkTest($deptIDList[0], $groupIDList[0])) && p() && e('开发部');  //权限分组2开发部链接组成
+r($dept->createManageProjectAdminLinkTest($deptIDList[1], $groupIDList[1])) && p() && e('开发部1'); //权限分组2开发部链接组成
+
