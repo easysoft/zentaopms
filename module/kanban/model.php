@@ -946,6 +946,7 @@ class kanbanModel extends model
             foreach($lanes as $lane)
             {
                 $lane->actions = array();
+                $lane->name    = htmlspecialchars_decode($lane->name);
                 foreach($actions as $action)
                 {
                     if($this->isClickable($lane, $action)) $lane->actions[] = $action;
@@ -998,7 +999,9 @@ class kanbanModel extends model
         {
             foreach($columns as $column)
             {
+                $column->name    = htmlspecialchars_decode($column->name);
                 $column->actions = array();
+
                 /* Judge column action priv. */
                 foreach($actions as $action)
                 {
@@ -1075,6 +1078,7 @@ class kanbanModel extends model
                 $card         = zget($cards, $cardID);
                 $card->column = $cell->column;
                 $card->lane   = $cell->lane;
+                $card->name   = htmlspecialchars_decode($card->name);
 
                 $card->actions = array();
                 foreach($actions as $action)
