@@ -365,6 +365,13 @@ function loadLaneGroup(regionID)
         $('#otherLane').replaceWith(data);
         $('#otherLane_chosen').remove();
         $('#otherLane').chosen();
+
+        /* Hide region and lane select if there are only one of each. */
+        if($('#otherLane').children().length < 2 && $('#region').children().length < 2)
+        {
+            $('#region').parent().parent().addClass('hide');
+            $('#otherLane').parent().parent().addClass('hide');
+        }
     })
 }
 </script>
