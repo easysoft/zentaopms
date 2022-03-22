@@ -79,7 +79,7 @@
 .kanban-item .has-color .actions .icon-more-v,
 .kanban-item .has-color .info > .label-pri,
 .kanban-item .has-color .info > .estimate,
-.kanban-item .has-color .info > .user .lable-teamSumCount,
+.kanban-item .has-color .info > .user .label-teamSumCount,
 .kanban-item .has-color .info > .label-light {color: #FFFFFF;}
 .kanban-item .has-color .info > .label-pri {border-color: #FFFFFF;}
 .kanban-item .has-color .progress-box > .progress-number {color: #FFFFFF;}

@@ -130,10 +130,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
     }
 
-    var regionID     = $column.closest('.kanban').data('id');
-    var groupID      = $column.closest('.kanban-board').data('id');
     var laneID       = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
-    var columnID     = $column.closest('.kanban-col').data('id');
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('createColumn') || columnPrivs.includes('copyColumn') || columnPrivs.includes('archiveColumn') || columnPrivs.includes('deleteColumn') || columnPrivs.includes('splitColumn'));
 
     /* Render more menu. */
@@ -238,7 +235,6 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 function renderUsersAvatar(users, itemID, size)
 {
     var avatarSizeClass = 'avatar-' + (size || 'md');
-    //var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
@@ -1354,7 +1350,6 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
-
     /* Init sortable */
     initSortable();
 
@@ -1377,18 +1372,19 @@ function initSortable()
         },
         targetSelector: function($ele)
         {
+            var $parent = $ele.parent();
             /* Sort regions. */
             if($ele.hasClass('region'))
             {
                 sortType = 'region';
-                return $ele.parent().children('.region');
+                return $parent.children('.region');
             }
 
             /* Sort boards. */
             if($ele.hasClass('kanban-board'))
             {
                 sortType = 'board';
-                return $ele.parent().children('.kanban-board');
+                return $parent.children('.kanban-board');
             }
 
             /* Sort lanes. */
@@ -1397,21 +1393,21 @@ function initSortable()
                 sortType = 'lane';
                 $cards   = $ele.find('.kanban-item');
 
-                return $ele.parent().children('.kanban-lane');
+                return $parent.children('.kanban-lane');
             }
 
             /* Sort columns. */
             if($ele.hasClass('kanban-col'))
             {
                 sortType = 'column';
-                return $ele.parent().children('.kanban-col');
+                return $parent.children('.kanban-col');
             }
 
             /* Sort cards. */
             if($ele.hasClass('kanban-item'))
             {
                 sortType = 'card';
-                return $ele.parent().children('.kanban-item');
+                return $parent.children('.kanban-item');
             }
         },
         start: function(e)
@@ -1428,13 +1424,12 @@ function initSortable()
                 $('.region').find('.kanban').hide();
                 hideKanbanAction();
             }
-
-            if(sortType == 'column')
+            else if(sortType === 'column')
             {
                 $('.kanban-item').addClass('hidden');
             }
 
-            if(sortType == 'card')
+            else if(sortType == 'card')
             {
                 oldLaneID = e.element.closest('.kanban-lane').data('id');
                 oldColID  = e.element.closest('.kanban-col').data('id');
@@ -1464,7 +1459,7 @@ function initSortable()
 
                 url = createLink('kanban', 'sortRegion', 'regions=' + orders.join(','));
             }
-            if(sortType == 'board')
+            else if(sortType == 'board')
             {
                 regionID = e.element.closest('.region').data('id');
                 e.list.each(function(index, data)
@@ -1474,7 +1469,7 @@ function initSortable()
 
                 url = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
             }
-            if(sortType == 'lane')
+            else if(sortType == 'lane')
             {
                 var groupID = e.element.closest('.kanban-board').data('id');
                 e.list.each(function(index, data)
@@ -1485,7 +1480,7 @@ function initSortable()
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortLane', 'region=' + regionID + '&lanes=' + orders.join(','));
             }
-            if(sortType == 'column')
+            else if(sortType == 'column')
             {
                 var groupID = e.element.closest('.kanban-board').data('id');
                 e.list.each(function(index, data)
@@ -1496,7 +1491,7 @@ function initSortable()
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortColumn', 'region=' + regionID + '&kanbanID=' + kanban.id + '&columns=' + orders.join(','));
             }
-            if(sortType == 'card')
+            else if(sortType == 'card')
             {
                 var newLaneID = e.element.closest('.kanban-lane').data('id');
                 var newColID  = e.element.closest('.kanban-col').data('id');
