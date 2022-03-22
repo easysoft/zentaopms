@@ -1055,7 +1055,16 @@ class bugModel extends model
             if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
 
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
-            if(empty($bug->buildExecution)) dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $this->lang->bug->execution);
+            if(empty($bug->buildExecution))
+            {
+                $executionLang = $this->lang->bug->execution;
+                if($oldBug->execution)
+                {
+                    $execution = $this->loadModel('execution')->getByID($oldBug->execution);
+                    if($execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+                }
+                dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
+            }
             if(dao::isError()) return false;
 
             $buildData = new stdclass();

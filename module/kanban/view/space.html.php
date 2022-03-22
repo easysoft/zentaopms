@@ -147,7 +147,7 @@
       <?php endforeach;?>
       </div>
       <?php else:?>
-      <div class="table-empty-tip">
+      <div class="table-empty-tip <?php if($this->cookie->theme == 'blue') echo 'noBorder';?>">
         <p><span class="text-muted"><?php echo $lang->kanban->empty;?></span></p>
       </div>
       <?php endif;?>
