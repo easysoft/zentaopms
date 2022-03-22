@@ -8,3 +8,4 @@ td.acl {white-space: nowrap;}
 .c-product ,.c-release ,.c-code  {width: 100px !important;}
 .c-openedBy ,.c-acl ,.c-prs ,.c-common {width:110px !important;}
 .c-bugs ,.c-type {width:120px !important;}
+.c-release {padding-right: 20px !important;}
