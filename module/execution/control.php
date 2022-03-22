@@ -2895,11 +2895,7 @@ class execution extends control
             $this->execution->unlinkStory($executionID, $storyID);
 
             /* if kanban then reload and if ajax request then send result. */
-            if(isonlybody())
-            {
-                return print(js::reload('parent'));
-            }
-            elseif(helper::isAjaxRequest())
+            if(helper::isAjaxRequest())
             {
                 if(dao::isError())
                 {
@@ -2913,7 +2909,7 @@ class execution extends control
                 }
                 return $this->send($response);
             }
-            return print(js::locate($this->app->session->storyList, 'parent'));
+            return print(js::reload('parent'));
         }
     }
 
