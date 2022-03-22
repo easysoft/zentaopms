@@ -180,9 +180,6 @@
       </ul>
       <?php endif;?>
     </div>
-    <?php if($this->app->rawMethod == 'browseunits' and (empty($productID) or common::canModify('product', $product))):?>
-      <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
-    <?php endif;?>
     <?php else:?>
     <div class='btn-group dropdown-hover'>
       <?php
@@ -200,6 +197,9 @@
         </li>
       </ul>
     </div>
+    <?php endif;?>
+    <?php if($this->app->rawMethod == 'browseunits' and (empty($productID) or common::canModify('product', $product))):?>
+      <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
     <?php endif;?>
     <?php endif;?>
   </div>
