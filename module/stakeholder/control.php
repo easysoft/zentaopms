@@ -87,7 +87,6 @@ class stakeholder extends control
             if(in_array($account, array_keys($stakeholders)))
             {
                 unset($this->view->members[$account]);
-
             }
         }
 
