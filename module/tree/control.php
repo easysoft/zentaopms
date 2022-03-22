@@ -50,7 +50,12 @@ class tree extends control
         if(strpos('story|bug|case', $viewType) !== false)
         {
             $product = $this->loadModel('product')->getById($rootID);
-            if(empty($product)) $this->locate($this->createLink('product', 'create'));
+            if(empty($product))
+            {
+                if($this->viewType == 'json' or (defined('RUN_MODE') && RUN_MODE == 'api')) return $this->send(array('result' => 'fail', 'message' => 'No product.'));
+                $this->locate($this->createLink('product', 'create'));
+            }
+
             if(!empty($product->type) && $product->type != 'normal')
             {
                 $branches = $this->loadModel('branch')->getPairs($product->id);
