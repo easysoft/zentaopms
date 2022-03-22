@@ -18,7 +18,7 @@
       <tr>
         <td style='padding: 10px; background-color: #F8FAFE; border: none; font-size: 14px; font-weight: 500; border-bottom: 1px solid #e5e5e5;'>
           <?php $color = empty($object->color) ? '#333' : $object->color;?>
-          <?php echo html::a(zget($this->config->mail, 'domain', common::getSysURL()) . helper::createLink('task', 'view', "taskID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
+          <?php echo html::a($domain . helper::createLink('task', 'view', "taskID=$object->id", 'html'), $mailTitle, '', "style='color: {$color}; text-decoration: underline;'");?>
         </td>
       </tr>
     </table>

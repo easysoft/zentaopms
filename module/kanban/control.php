@@ -156,7 +156,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDeleteSpace, $this->createLink('kanban', 'deleteSpace', "spaceID=$spaceID&confirm=yes")));
         }
         else
         {
@@ -324,7 +324,7 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->kanban->confirmDelete, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
+            return print(js::confirm($this->lang->kanban->confirmDeleteKanban, $this->createLink('kanban', 'delete', "kanbanID=$kanbanID&confirm=yes")));
         }
         else
         {
@@ -830,13 +830,9 @@ class kanban extends control
         $kanbanUsers = $kanbanID == 0 ? ',' : trim($kanban->owner) . ',' . trim($kanban->team);
         $users       = $this->loadModel('user')->getPairs('noclosed|nodeleted', '', 0, $kanbanUsers);
 
-        $lanePairs = $this->kanban->getLanePairsByGroup($groupID);
-
-        $lanePairs['ditto'] = $this->lang->kanbancard->ditto;
-
         $this->view->title     = $this->lang->kanban->batchCreateCard;
         $this->view->users     = $users;
-        $this->view->lanePairs = $lanePairs;
+        $this->view->lanePairs = $this->kanban->getLanePairsByGroup($groupID);
 
         $this->display();
     }
@@ -1341,8 +1337,11 @@ class kanban extends control
     {
         if($confirm == 'no')
         {
-            $card   = $this->kanban->getCardByID($cardID);
-            $column = $this->dao->select('*')->from(TABLE_KANBANCOLUMN)->where('id')->eq($card->column)->fetch();
+            $column = $this->dao->select('t2.*')->from(TABLE_KANBANCELL)->alias('t1')
+                ->leftJoin(TABLE_KANBANCOLUMN)->alias('t2')->on('t1.column=t2.id')
+                ->where('t1.cards')->like("%,$cardID,%")
+                ->andWhere('t1.type')->eq('common')
+                ->fetch();
             if($column->archived or $column->deleted) return print(js::alert(sprintf($this->lang->kanbancard->confirmRestoreTip, $column->name)));
 
             return print(js::confirm(sprintf($this->lang->kanbancard->confirmRestore, $column->name), $this->createLink('kanban', 'restoreCard', "cardID=$cardID&confirm=yes"), ''));
@@ -1382,6 +1381,28 @@ class kanban extends control
             if(isonlybody()) return print(js::reload('parent.parent'));
             return print(js::reload('parent'));
         }
+    }
+
+    /**
+     * Delete a card.
+     *
+     * @param  string $objectType story|task|bug
+     * @param  int    $objectID
+     * @param  int    $regionID
+     * @access public
+     * @return void
+     */
+    public function deleteObjectCard($objectType, $objectID, $regionID)
+    {
+        if(!($objectType == 'task' or $objectType == 'story' or $objectType == 'bug')) return false;
+        $table = 'TABLE_' . strtoupper($objectType);
+        $this->loadModel($objectType)->delete(constant($table), $objectID);
+        if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+        $kanbanID = $this->kanban->getKanbanIDByregion($regionID);
+        $kanbanGroup = $this->kanban->getRDKanban($kanbanID);
+
+        return print(json_encode($kanbanGroup));
     }
 
     /**

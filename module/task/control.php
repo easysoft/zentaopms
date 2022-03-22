@@ -86,6 +86,20 @@ class task extends control
         $execution = $this->execution->getById($executionID);
         $taskLink  = $this->createLink('execution', 'browse', "executionID=$executionID&tab=task");
 
+        $this->loadModel('kanban');
+        if($execution->type == 'kanban')
+        {
+            $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+            $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+            $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
+            $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+            $this->view->regionID    = $regionID;
+            $this->view->laneID      = $laneID;
+            $this->view->regionPairs = $regionPairs;
+            $this->view->lanePairs   = $lanePairs;
+        }
+
         /* Set menu. */
         $this->execution->setMenu($execution->id);
 
@@ -129,11 +143,19 @@ class task extends control
                 $this->action->create('task', $taskID, 'Opened', '');
             }
 
-            $this->loadModel('kanban');
+            /* Create task in kanban. */
             $kanbanID = $execution->type == 'kanban' ? $executionID : $_POST['execution'];
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($kanbanID, $output['laneID'], $output['columnID'], 'task', $taskID);
-            if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($kanbanID, 'task');
 
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
+
+            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
+            if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($kanbanID, $laneID, $columnID, 'task', $taskID);
+            if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($kanbanID, 'task');
+
+            /* To do status. */
             if($todoID > 0)
             {
                 $this->dao->update(TABLE_TODO)->set('status')->eq('done')->where('id')->eq($todoID)->exec();
@@ -210,14 +232,7 @@ class task extends control
             if(!isset($moduleOptionMenu[$task->module])) $task->module = 0;
         }
 
-        /* Fix bug #2737. When moduleID is not story module. */
-        $moduleIdList = array();
-        if($task->module)
-        {
-            $moduleID     = $this->tree->getStoryModule($task->module);
-            $moduleIdList = $this->tree->getAllChildID($moduleID);
-        }
-        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', $moduleIdList, 'full', 'unclosed');
+        $stories = $this->story->getExecutionStoryPairs($executionID, 0, 'all', '', 'full', 'unclosed');
 
         if($this->config->vision == 'lite') $stories = $stories + array('', '');
 
@@ -363,6 +378,23 @@ class task extends control
         $members       = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution', 'nodeleted');
         $showAllModule = isset($this->config->execution->task->allModule) ? $this->config->execution->task->allModule : '';
         $modules       = $this->loadModel('tree')->getTaskOptionMenu($executionID, 0, 0, $showAllModule ? 'allModule' : '');
+
+        if($execution->type == 'kanban')
+        {
+            $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+            parse_str($extra, $output);
+
+            $this->loadModel('kanban');
+            $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+            $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+            $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'task');
+            $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+            $this->view->regionID    = $regionID;
+            $this->view->laneID      = $laneID;
+            $this->view->regionPairs = $regionPairs;
+            $this->view->lanePairs   = $lanePairs;
+        }
 
         $title      = $execution->name . $this->lang->colon . $this->lang->task->batchCreate;
         $position[] = html::a($taskLink, $execution->name);
@@ -1560,17 +1592,18 @@ class task extends control
      * @param  int    $executionID
      * @param  int    $taskID
      * @param  string $confirm yes|no
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function delete($executionID, $taskID, $confirm = 'no')
+    public function delete($executionID, $taskID, $confirm = 'no', $from = '')
     {
         $task = $this->task->getById($taskID);
         if($task->parent < 0) return print(js::alert($this->lang->task->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes")));
+            return print(js::confirm($this->lang->task->confirmDelete, inlink('delete', "executionID=$executionID&taskID=$taskID&confirm=yes&from=$from")));
         }
         else
         {
@@ -1584,6 +1617,9 @@ class task extends control
             if($task->story) $this->loadModel('story')->setStage($task->story);
 
             $this->executeHooks($taskID);
+
+            if(isonlybody()) return print(js::reload('parent.parent'));
+            if($from == 'taskkanban') return print(js::reload('parent'));
 
             $locateLink = $this->session->taskList ? $this->session->taskList : $this->createLink('execution', 'task', "executionID={$task->execution}");
             return print(js::locate($locateLink, 'parent'));

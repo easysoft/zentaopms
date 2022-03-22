@@ -678,7 +678,7 @@ class testtask extends control
         if($groupBy == 'story' && $task->build)
         {
             $buildStoryIdList = $this->dao->select('stories')->from(TABLE_BUILD)->where('id')->eq($task->build)->fetch('stories');
-            $buildStories     = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($buildStoryIdList)->andWhere('id')->notin(array_keys($groupCases))->fetchAll('id');
+            $buildStories     = $this->dao->select('id,title')->from(TABLE_STORY)->where('id')->in($buildStoryIdList)->andWhere('deleted')->eq(0)->andWhere('id')->notin(array_keys($groupCases))->fetchAll('id');
             foreach($buildStories as $buildStory)
             {
                 $groupCases[$buildStory->id][] = $buildStory;
@@ -876,7 +876,7 @@ class testtask extends control
 
             $this->executeHooks($taskID);
 
-            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent'));
+            if(isonlybody()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => 'parent.parent'));
             return $this->send(array('result' => 'success', 'message' => $this->lang->success, 'locate' => $this->createLink('testtask', 'view', "taskID=$taskID")));
         }
 

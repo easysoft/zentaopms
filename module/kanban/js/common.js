@@ -85,3 +85,26 @@ function locateView(module, objectID)
     if(module == 'build') dataApp = 'project';
     parent.$.apps.open(createLink(module, 'view', 'objectID=' + objectID), dataApp);
 }
+
+/**
+ * When type change.
+ *
+ * @param  string type
+ * @access public
+ * @return void
+ */
+function changeType(type)
+{
+    if(type == 'private')
+    {
+        $('#ownerBox').addClass('hidden');
+        $('#teamBox').addClass('hidden');
+        $('#whitelistBox').removeClass('hidden');
+    }
+    else
+    {
+        $('#ownerBox').removeClass('hidden');
+        $('#teamBox').removeClass('hidden');
+        $('#whitelistBox').addClass('hidden');
+    }
+}

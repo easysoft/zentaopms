@@ -4,6 +4,7 @@ body {margin-bottom: 25px;}
 
 #createActionMenu .dropdown-menu {width: 100%;}
 #caseForm table tbody tr td {overflow: hidden; text-overflow: ellipsis; white-space: nowrap;}
+#caseForm .setting {height: 25px;}
 
 .dropdown-menu.with-search {padding: 0; min-width: 150px; overflow: hidden; max-height: 302px;}
 .dropdown-menu > .menu-search .input-group {width: 100%;}

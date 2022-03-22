@@ -23,9 +23,9 @@ function setRole(account, roleID)
 
 function addItem(obj)
 {
-    var item = $('#addItem').html().replace(/%i%/g, i);
-    $(obj).closest('tr').after('<tr class="addedItem">' + item  + '</tr>');
-    var $accounts = $('#hours' + i).closest('tr').find('select:first')
+    var item = $('#addItem').html().replace(/%i%/g, itemIndex);
+    $('<tr class="addedItem">' + item  + '</tr>').insertAfter($(obj).closest('tr'));
+    var $accounts = $('#hours' + itemIndex).closest('tr').find('select:first')
 
     if($accounts.attr('data-pickertype') != 'remote')
     {
@@ -37,7 +37,7 @@ function addItem(obj)
         var pickerremote = $accounts.attr('data-pickerremote');
         $accounts.picker({chosenMode: true, remote: pickerremote});
     }
-    i ++;
+    itemIndex ++;
 }
 
 function deleteItem(obj)

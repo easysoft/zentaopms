@@ -155,15 +155,27 @@
               <div class='input-group' id='moduleIdBox'>
                 <div class="input-group-addon"><?php echo $lang->story->parent;?></div>
                 <?php echo html::select('parent', $stories, '', "class='form-control chosen'");?>
-              </div>  
+              </div>
             </td>
-          </tr> 
+          </tr>
           <?php else:?>
           <tr>
             <th><?php echo $lang->story->parent;?></th>
             <td colspan="4"><?php echo html::select('parent', $stories, '', "class='form-control chosen'");?></td>
           </tr>
           <?php endif;?>
+          <?php endif;?>
+          <?php if (isset($executionType) and $executionType == 'kanban'):?>
+          <tr>
+            <th><?php echo $lang->kanbancard->region;?>
+            <td colspan="2"><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+            <td colspan="2">
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
+                <?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?>
+              </div>
+            </td>
+          </tr>
           <?php endif;?>
           <tr>
             <th><?php echo $lang->story->title;?></th>

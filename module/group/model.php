@@ -372,6 +372,9 @@ class groupModel extends model
         if(isset($_POST['allchecker']))$actions['views']   = array();
         if(!isset($actions['actions']))$actions['actions'] = array();
 
+        if(isset($actions['actions']['project']['started']))   $actions['actions']['project']['syncproject'] = 'syncproject';
+        if(isset($actions['actions']['execution']['started'])) $actions['actions']['execution']['syncexecution'] = 'syncexecution';
+
         $dynamic = $actions['actions'];
         if(!isset($_POST['allchecker']))
         {

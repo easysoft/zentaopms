@@ -115,3 +115,24 @@ function toggleCheck(obj)
         $ditto.closest('.input-group-addon').hide();
     }
 }
+
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=story&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
+    });
+}

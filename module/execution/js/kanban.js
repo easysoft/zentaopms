@@ -265,31 +265,32 @@ function createColumnMenu(options)
  */
 function createColumnCreateMenu(options)
 {
-    var $col   = options.$trigger.closest('.kanban-col');
-    var col    = $col.data('col');
-    var items  = [];
-    var laneID = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var $col     = options.$trigger.closest('.kanban-col');
+    var col      = $col.data('col');
+    var items    = [];
+    var laneID   = col.$kanbanData.lanes[0].id ? col.$kanbanData.lanes[0].id : 0;
+    var regionID = col.$kanbanData.region;
 
     if(col.type == 'backlog')
     {
-        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStory, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID + '&plan=0&type=story&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe',attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+        if(priv.canCreateStory) items.push({label: storyLang.create, url: $.createLink('story', 'create', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&objectID=' + executionID + '&bugID=0&planID=0&todoID=0&extra=regionID=' + regionID + ',laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateStory) items.push({label: executionLang.batchCreateStory, url: productCount > 1 ? '#batchCreateStory' : $.createLink('story', 'batchcreate', 'productID=' + productID + '&branch=0&moduleID=0&storyID=0&executionID=' + executionID + '&plan=0&type=story&extra=regionID=' + regionID + ',laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe',attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         if(priv.canLinkStory) items.push({label: executionLang.linkStory, url: $.createLink('execution', 'linkStory', 'executionID=' + executionID + '&browseType=&param=0&recTotal=0&recPerPage=50,&pageID=1&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         if(priv.canLinkStoryByPlan) items.push({label: executionLang.linkStoryByPlan, url: '#linkStoryByPlan', 'attrs' : {'data-toggle': 'modal', 'data-target': '#linkStoryByPlan','data-col' : col.id, 'data-lane' : laneID, 'class' : 'linkStoryByPlanButton'}});
     }
     else if(col.type == 'unconfirmed')
     {
-        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=0&moduleID=0&extra=laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canCreateBug) items.push({label: bugLang.create, url: $.createLink('bug', 'create', 'productID=' + productID + '&moduleID=0&extra=regionID=' + regionID + ',laneID=' + laneID + ',columnID=' + col.id + ',executionID=' + executionID, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         if(priv.canBatchCreateBug)
         {
             if(productNum > 1) items.push({label: bugLang.batchCreate, url: '#batchCreateBug', 'attrs' : {'data-toggle': 'modal'}});
-            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
+            else items.push({label: bugLang.batchCreate, url: $.createLink('bug', 'batchcreate', 'productID=' + productID + '&branch=&executionID=' + executionID + '&module=0&extra=regionID=' + regionID + ',laneID=' + laneID + ',columnID=' + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '90%'}});
         }
     }
     else if(col.type == 'wait')
     {
-        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
-        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&iframe=0&extra=laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canCreateTask) items.push({label: taskLang.create, url: $.createLink('task', 'create', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=regionID=" + regionID + ",laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+        if(priv.canBatchCreateTask) items.push({label: taskLang.batchCreate, url: $.createLink('task', 'batchcreate', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&iframe=0&extra=regionID=" + regionID + ",laneID=" + laneID + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
         if(priv.canImportBug && vision == 'rnd') items.push({label: executionLang.importBug, url: $.createLink('execution', 'importBug', 'executionID=' + executionID + "&storyID=0&moduleID=0&taskID=0&todoID=0&extra=laneID=" + laneID  + ",columnID=" + col.id, '', true), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     }
     return items;
@@ -548,7 +549,7 @@ function renderBugItem(item, $item, col)
     if(scaleSize <= 1)
     {
         var $actions = $item.find('.actions');
-        if(!$actions.length && (priv.canEditBug || priv.canResolveBug || priv.canConfirmBug || priv.canCopyBug || priv.canToStoryBug))
+        if(!$actions.length && (priv.canEditBug || priv.canResolveBug || priv.canConfirmBug || priv.canCopyBug || priv.canToStoryBug || priv.canDeleteBug))
         {
             $actions = $([
                 '<div class="actions">',
@@ -862,9 +863,14 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         }
         else if(toColType == 'developing')
         {
-            if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
                 var link = createLink('task', 'activate', 'taskID=' + objectID + '&extra=fromColID=' + fromColID + ',toColID=' + toColID + ',fromLaneID=' + fromLaneID + ',toLaneID=' + toLaneID + ',regionID=' + regionID, '', true);
+                showIframe = true;
+            }
+            if(fromColType == 'pause' && priv.canActivateTask)
+            {
+                var link = createLink('task', 'restart', 'taskID=' + objectID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
@@ -972,6 +978,36 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
 }
 
 /**
+ * Delete a card.
+ *
+ * @param string objectType
+ * @param int    objectID
+ * @param int    regionID
+ * @access public
+ * @return void
+ */
+function deleteCard(objectType, objectID, regionID)
+{
+    var objectLang = objectType + 'Lang';
+    var result = confirm(window[objectLang].confirmDelete) ? true : false;
+
+    if(!result) return false;
+    if(!objectID) return false;
+
+    var url = createLink('kanban', 'deleteObjectCard', 'objectType=' + objectType + '&objectID=' + objectID + '&regionID=' + regionID);
+    return $.ajax(
+    {
+        method:   'post',
+        dataType: 'json',
+        url:      url,
+        success: function(data)
+        {
+          updateRegion(regionID, data[regionID]);
+        }
+    });
+}
+
+/**
  * Close modal and update kanban data.
  *
  * @param  string kanbanData
@@ -1071,6 +1107,7 @@ function createStoryMenu(options)
     if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateStory && story.$col.type == 'closed') items.push({label: executionLang.activate, icon: 'magic', url: createLink('story', 'activate', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canUnlinkStory) items.push({label: executionLang.unlinkStory, icon: 'unlink', url: createLink('execution', 'unlinkStory', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'false'), attrs: {target: 'hiddenwin'}});
+    if(priv.canDeleteStory) items.push({label: storyLang.delete, icon: 'trash', onClick: function(){deleteCard('story', story.id, story.$lane.region)}});
     return items;
 }
 
@@ -1090,6 +1127,7 @@ function createTaskMenu(options)
     if(priv.canActivateTask && (task.$col.type == 'developed' || task.$col.type == 'canceled' || task.$col.type == 'closed')) items.push({label: executionLang.activate, icon: 'magic', url: createLink('task', 'activate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCreateTask) items.push({label: taskLang.copy, icon: 'copy', url: createLink('task', 'create', 'executionID=' + executionID + '&storyID=' + '0' + '&moduleID=' + '0' + '&taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCancelTask && (task.$col.type == 'wait' || task.$col.type == 'developing' || task.$col.type == 'pause')) items.push({label: taskLang.cancel, icon: 'cancel', url: createLink('task', 'cancel', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canDeleteTask) items.push({label: taskLang.delete, icon: 'trash', onClick: function(){deleteCard('task', task.id, task.$lane.region)}});
     return items;
 }
 
@@ -1109,6 +1147,7 @@ function createBugMenu(options)
     if(priv.canCopyBug) items.push({label: bugLang.copy, icon: 'copy', url: createLink('bug', 'create', 'productID=' + productID + '&branch=' + '' + '&extras=bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canToStoryBug && (bug.$col.type != 'closed')) items.push({label: bugLang.toStory, icon: 'lightbulb', url: createLink('story', 'create', 'product=' + productID + '&branch=' + '0' + '&module=' + '0' + '&story=' + '0' + '&execution=' + '0' + '&bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canActivateBug && (bug.$col.type == 'fixed') || bug.$col.type == 'testing' || bug.$col.type == 'tested' || bug.$col.type == 'closed') items.push({label: bugLang.activate, icon: 'magic', url: createLink('bug', 'activate', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canDeleteBug) items.push({label: bugLang.delete, icon: 'trash', onClick: function(){deleteCard('bug', bug.id, bug.$lane.region)}});
     return items;
 }
 

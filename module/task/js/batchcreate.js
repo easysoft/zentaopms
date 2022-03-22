@@ -87,7 +87,7 @@ function copyStoryTitle(num)
 function setStoryRelated(num)
 {
     var storyID = $('#story' + num).val();
-    if(storyID && storyID != 'ditto')
+    if(storyID != 0  && storyID != 'ditto')
     {
         var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
         $.getJSON(link, function(storyInfo)
@@ -181,6 +181,27 @@ function markStoryTask()
                 $li.toggleClass('has-new-task', !!storiesHasTask[$li.data('data')]);
             });
         }, 100);
+    });
+}
+
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
     });
 }
 

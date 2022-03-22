@@ -101,9 +101,10 @@ $lang->kanban->cardCount      = '卡片数量';
 $lang->kanban->createColumnOnLeft  = '在左侧添加看板列';
 $lang->kanban->createColumnOnRight = '在右侧添加看板列';
 
-$lang->kanban->accessDenied  = '您无权访问该看板';
-$lang->kanban->confirmDelete = '您确认删除吗？';
-$lang->kanban->cardCountTip  = '请输入卡片数量';
+$lang->kanban->accessDenied        = '您无权访问该看板';
+$lang->kanban->confirmDeleteSpace  = '您确认要删除该空间吗？';
+$lang->kanban->confirmDeleteKanban = '您确认要删除该看板吗？';
+$lang->kanban->cardCountTip        = '请输入卡片数量';
 
 $lang->kanban->selectedKanban  = '请选择看板';
 $lang->kanban->selectedProduct = '请选择产品';
@@ -188,6 +189,7 @@ $lang->kanban->error->mustBeInt         = '在制品数量必须是正整数。'
 $lang->kanban->error->parentLimitNote   = '父列的在制品数量不能小于子列在制品数量之和';
 $lang->kanban->error->childLimitNote    = '子列在制品数量之和不能大于父列的在制品数量';
 $lang->kanban->error->importObjNotEmpty = '请至少选择一个导入对象';
+$lang->kanban->error->childLimitEmpty   = '请先设置子列的在制品数量后再操作';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = '不启用导入功能';
@@ -332,6 +334,7 @@ $lang->kanbancard->name            = '卡片名称';
 $lang->kanbancard->legendBasicInfo = '基本信息';
 $lang->kanbancard->legendLifeTime  = '卡片的一生';
 $lang->kanbancard->space           = '所属空间';
+$lang->kanbancard->region          = '所属区域';
 $lang->kanbancard->kanban          = '所属看板';
 $lang->kanbancard->lane            = '所属泳道';
 $lang->kanbancard->column          = '所属看板列';

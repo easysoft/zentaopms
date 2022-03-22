@@ -790,6 +790,7 @@ class projectModel extends model
     public function create()
     {
         $project = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('status', 'wait')
             ->setIF($this->post->delta == 999, 'end', LONG_TIME)
             ->setIF($this->post->delta == 999, 'days', 0)
@@ -1035,6 +1036,7 @@ class projectModel extends model
         $_POST['products'] = isset($_POST['products']) ? array_filter($_POST['products']) : $linkedProducts;
 
         $project = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('team', substr($this->post->name, 0, 30))
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->setDefault('lastEditedDate', helper::now())
@@ -1530,20 +1532,35 @@ class projectModel extends model
         $projectID   = (int)$projectID;
         $projectType = 'project';
         $accounts    = array_unique($accounts);
-        $limited     = array_values($limited);
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
+
+        foreach($accounts as $key => $account)
+        {
+            if(empty($account)) continue;
+
+            if((int)$days[$key] > $project->days)
+            {
+                dao::$errors['message'][]  = sprintf($this->lang->project->daysGreaterProject, $project->days);
+                return false;
+            }
+            if((float)$hours[$key] > 24)
+            {
+                dao::$errors['message'][]  = $this->lang->project->errorHours;
+                return false;
+            }
+        }
 
         $projectMember = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
 
-            $member = new stdclass();
+            $member          = new stdclass();
             $member->role    = $roles[$key];
             $member->days    = $days[$key];
             $member->hours   = $hours[$key];
-            $member->limited = $limited[$key];
+            $member->limited = isset($limited[$key]) ? $limited[$key] : 'no';
 
             $member->root    = $projectID;
             $member->account = $account;

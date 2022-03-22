@@ -315,11 +315,15 @@ function renderHeaderCol($col, col, $header, kanban)
         ].join(''));
     }
 
-    $actions.append([
-            '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
-            '<i class="icon icon-ellipsis-v"></i>',
-            '</a>'
-    ].join(''));
+    if(priv.canSetWIP || priv.canEditName)
+    {
+        $actions.append([
+                '<a data-contextmenu="column" title="' + kanbanLang.moreAction + '" data-type="' + col.type + '" data-kanban="' + kanban.id + '" data-parent="' + (col.parentType || '') +  '">',
+                '<i class="icon icon-ellipsis-v"></i>',
+                '</a>'
+        ].join(''));
+    }
+
     $actions.appendTo($col);
 }
 
@@ -571,9 +575,14 @@ function changeCardColType(cardID, fromColID, toColID, fromLaneID, toLaneID, car
         }
         else if(toColType == 'developing')
         {
-            if((fromColType == 'pause' || fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
+            if((fromColType == 'canceled' || fromColType == 'closed' || fromColType == 'developed') && priv.canActivateTask)
             {
                 var link = createLink('task', 'activate', 'taskID=' + objectID, '', true);
+                showIframe = true;
+            }
+            if(fromColType == 'pause' && priv.canActivateTask)
+            {
+                var link = createLink('task', 'restart', 'taskID=' + objectID, '', true);
                 showIframe = true;
             }
             if(fromColType == 'wait' && priv.canStartTask)
@@ -861,7 +870,7 @@ function createStoryMenu(options)
         var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
         if(this.size) item.attrs['data-width'] = this.size;
 
-        if(this.icon == 'unlink') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
+        if(this.icon == 'unlink' || this.icon == 'trash') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
         items.push(item);
     });
 
@@ -883,6 +892,7 @@ function createBugMenu(options)
         var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
         if(this.size) item.attrs['data-width'] = this.size;
 
+        if(this.icon == 'trash') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
         items.push(item);
     });
 
@@ -904,6 +914,7 @@ function createTaskMenu(options)
         var item = {label: this.label, icon: this.icon, url: this.url, attrs: {'data-toggle': 'modal', 'data-type': 'iframe'}};
         if(this.size) item.attrs['data-width'] = this.size;
 
+        if(this.icon == 'trash') item = {label: this.label, icon: this.icon, url: this.url, attrs: {'target': 'hiddenwin'}};
         items.push(item);
     });
 

@@ -44,7 +44,7 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $story->executions = $this->dao->select('t1.project, t2.name, t2.status')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq($storyID)
             ->andWhere('t2.type')->in('sprint,stage,kanban')
@@ -220,7 +220,7 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
             ->get();
 
         /* Check repeat story. */
@@ -289,8 +289,15 @@ class storyModel extends model
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
 
                 $this->loadModel('kanban');
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
+
+                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+                if(isset($_POST['lane'])) $laneID = $_POST['lane'];
+
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
@@ -1273,12 +1280,17 @@ class storyModel extends model
      */
     public function review($storyID)
     {
-        if($this->post->result == false)   return print(js::alert($this->lang->story->mustChooseResult));
         if($this->post->result == 'revert' and $this->post->preVersion == false) return print(js::alert($this->lang->story->mustChoosePreVersion));
 
         if(strpos($this->config->story->review->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
+        }
+
+        if($this->post->result == false)
+        {
+            dao::$errors[] = $this->lang->story->mustChooseResult;
             return false;
         }
 
@@ -1533,8 +1545,11 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
 
         /* Update parent story status and stage. */
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-        $this->setStage($oldStory->parent);
+        if($oldStory->parent > 0)
+        {
+            $this->updateParentStatus($storyID, $oldStory->parent);
+            $this->setStage($oldStory->parent);
+        }
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }
@@ -1982,6 +1997,9 @@ class storyModel extends model
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+
+        if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+
         $this->setStage($storyID);
 
         /* Update parent story status. */
@@ -2849,7 +2867,7 @@ class storyModel extends model
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
-            ->fetchAll();
+            ->fetchAll('id');
         return empty($stories) ? array() : $this->formatStories($stories, $type);
     }
 

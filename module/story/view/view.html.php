@@ -244,7 +244,7 @@
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
         common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', '', "data-width='1050'");
-        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
+        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody',true);
         ?>
         <?php endif;?>
       </div>
@@ -492,7 +492,8 @@
               {
                   foreach($story->executions as $executionID => $execution)
                   {
-                      echo "<li title='$execution->name'>" . html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'") . '</li>';
+                      $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                      echo "<li title='$execution->name'>" . $execName . '</li>';
                   }
               }
               ?>

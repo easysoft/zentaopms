@@ -18,7 +18,6 @@ html[lang='en'] #deadlineTd .input-group-addon {padding: 5px 18px;}
 
 .dropdown-pris > .btn {background-color: #fff; text-shadow: none;}
 
-#contactListGroup .input-group-btn > .btn {margin-left: -1px !important;}
 #contactListGroup .chosen-container-single a {border-left-width: 0px;}
 
 .minw-80px {min-width: 80px;}

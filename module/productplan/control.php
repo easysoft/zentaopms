@@ -444,14 +444,14 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes"), 'parent'));
+            return print(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
         }
         else
         {
             $this->productplan->updateStatus($planID, 'doing', 'started');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent'));
         }
     }
 
@@ -467,14 +467,14 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes"), 'parent'));
+            return print(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes")));
         }
         else
         {
             $this->productplan->updateStatus($planID, 'done', 'finished');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent'));
         }
     }
 

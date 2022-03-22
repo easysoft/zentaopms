@@ -5813,7 +5813,7 @@ class upgradeModel extends model
      * @access public
      * @return array
      */
-    public function getEXTFiles()
+    public function getExtFiles()
     {
         $files       = array();
         $allModules  = glob($this->app->moduleRoot . '*');
@@ -5927,7 +5927,7 @@ class upgradeModel extends model
                 {
                     $systemFiles = file_get_contents('systemfiles.txt');
                     $systemFiles = str_replace('/', DS, $systemFiles);
-                    if(strpos($systemFiles, $fileName) !== false) continue;
+                    if(strpos($systemFiles, ",$fileName,") !== false) continue;
 
                     $pluginFiles[$fileName] = $fileName;
                 }
@@ -5964,7 +5964,7 @@ class upgradeModel extends model
      * @access public
      * @return array
      */
-    public function moveEXTFiles()
+    public function moveExtFiles()
     {
         $data       = fixer::input('post')->get();
         $customRoot = $this->app->appRoot . 'extension' . DS . 'custom';
@@ -5981,7 +5981,6 @@ class upgradeModel extends model
                 if(!mkdir($dirRoot, 0777, true))
                 {
                     $response['result']  = 'fail';
-                    $response['message'] = $this->lang->upgrade->moveEXTFileFail;;
                     $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
 
                     return $response;
@@ -6020,7 +6019,6 @@ class upgradeModel extends model
         if(!empty($command))
         {
             $response['result']  = 'fail';
-            $response['message'] = $this->lang->upgrade->afterDeleted;
             $response['command'] = $command;
          }
 

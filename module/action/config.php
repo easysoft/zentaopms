@@ -42,6 +42,7 @@ $config->action->objectNameFields['kanban']       = 'name';
 $config->action->objectNameFields['kanbancard']   = 'name';
 $config->action->objectNameFields['sonarqube']    = 'name';
 $config->action->objectNameFields['gitlab']       = 'name';
+$config->action->objectNameFields['stage']        = 'name';
 
 $config->action->commonImgSize = 870;
 

@@ -151,6 +151,7 @@ class repo extends control
         $this->view->products    = $products;
         $this->view->productID   = $productID;
         $this->view->gitlabHosts = $this->loadModel('gitlab')->getPairs();
+        $this->view->objectID    = $objectID;
 
         $this->display();
     }

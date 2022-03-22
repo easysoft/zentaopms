@@ -232,6 +232,7 @@ $lang->task->error->leftNumber        = '"Left" must be numbers.';
 $lang->task->error->recordMinus       = 'Work hours should not be negative number.';
 $lang->task->error->consumedSmall     = '"Total Cost" must be > the last number.';
 $lang->task->error->consumedThisTime  = 'Please enter "Hours Cost"';
+$lang->task->error->teamMember        = 'Team members must be at least 2 people';
 $lang->task->error->left              = 'Please enter "Hours Left"';
 $lang->task->error->work              = '"Comment" must be <  %d characters.';
 $lang->task->error->skipClose         = 'Task: %s is not “Finished” or “Cancelled”. Do you want to close it?';

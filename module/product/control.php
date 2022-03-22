@@ -634,13 +634,13 @@ class product extends control
         $this->lang->program->switcherMenu = $this->loadModel('program')->getSwitcher($programID, true);
 
         $this->loadModel('user');
-        $poUsers = $this->user->getPairs('nodeleted|pofirst', $appendPoUsers);
+        $poUsers = $this->user->getPairs('nodeleted|noclosed|pofirst', $appendPoUsers);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["PO"] = $this->config->user->moreLink;
 
-        $qdUsers = $this->user->getPairs('nodeleted|qdfirst', $appendQdUsers);
+        $qdUsers = $this->user->getPairs('nodeleted|noclosed|qdfirst', $appendQdUsers);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["QD"] = $this->config->user->moreLink;
 
-        $rdUsers = $this->user->getPairs('nodeleted|devfirst', $appendRdUsers);
+        $rdUsers = $this->user->getPairs('nodeleted|noclosed|devfirst', $appendRdUsers);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
         $programs             = array();
@@ -994,7 +994,7 @@ class product extends control
 
         if($number === '')
         {
-            return print(html::select('execution', array('' => '') + $executions, empty($executionID) ? key(array_filter($executions)) : $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {

@@ -216,6 +216,7 @@ $config->openMethods[] = 'kanban.importexecution';
 $config->openMethods[] = 'kanban.importbuild';
 $config->openMethods[] = 'kanban.activatecard';
 $config->openMethods[] = 'kanban.finishcard';
+$config->openMethods[] = 'kanban.deleteobjectcard';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
@@ -366,10 +367,11 @@ $config->objectTables['kanbancard']   = TABLE_KANBANCARD;
 $config->objectTables['sonarqube']    = TABLE_PIPELINE;
 $config->objectTables['gitlab']       = TABLE_PIPELINE;
 $config->objectTables['jebkins']      = TABLE_PIPELINE;
+$config->objectTables['stage']        = TABLE_STAGE;
 
 $config->newFeatures = array('introduction', 'tutorial', 'youngBlueTheme', 'visions');
 
 /* Program privs.*/
 $config->programPriv = new stdclass();
-$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
+$config->programPriv->scrum     = array('story', 'projectstory', 'projectrelease', 'project', 'execution', 'build', 'bug', 'testcase', 'testreport', 'doc', 'repo', 'meeting', 'stakeholder', 'testtask');
 $config->programPriv->waterfall = array_merge($config->programPriv->scrum, array('workestimation', 'durationestimation', 'budget', 'programplan', 'review', 'reviewissue', 'weekly', 'cm', 'milestone', 'design', 'issue', 'risk', 'opportunity', 'measrecord', 'auditplan', 'trainplan', 'gapanalysis', 'pssp', 'researchplan', 'researchreport'));

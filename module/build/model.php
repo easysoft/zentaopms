@@ -323,7 +323,7 @@ class buildModel extends model
         $buildID  = (int)$buildID;
         $oldBuild = $this->dao->select('*')->from(TABLE_BUILD)->where('id')->eq($buildID)->fetch();
         $build    = fixer::input('post')->stripTags($this->config->build->editor->edit['id'], $this->config->allowedTags)
-            ->setIF(!isset($this->post->branch), 'branch', $oldBuild->branch)
+            ->setIF(!isset($_POST['branch']), 'branch', $oldBuild->branch)
             ->setDefault('product', $oldBuild->product)
             ->cleanInt('product,branch,execution')
             ->remove('allchecker,resolvedBy,files,labels,uid')

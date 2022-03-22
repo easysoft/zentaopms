@@ -46,6 +46,10 @@ class story extends control
      */
     public function create($productID = 0, $branch = 0, $moduleID = 0, $storyID = 0, $objectID = 0, $bugID = 0, $planID = 0, $todoID = 0, $extra = '', $type = 'story')
     {
+        /* Whether there is a object to transfer story, for example feedback. */
+        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
+        parse_str($extra, $output);
+
         if($productID == 0 and $objectID == 0) $this->locate($this->createLink('product', 'create'));
         
         /* Get product id according to the project id when lite vision todo transfer story */
@@ -71,11 +75,23 @@ class story extends control
         {
             $objectID = empty($objectID) ? $this->session->execution : $objectID;
             $this->execution->setMenu($objectID);
+            $execution = $this->dao->findById((int)$objectID)->from(TABLE_EXECUTION)->fetch();
+            if($execution->type == 'kanban')
+            {
+                $this->loadModel('kanban');
+                $regionPairs = $this->kanban->getRegionPairs($execution->id, 0, 'execution');
+                $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+                $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+                $this->view->executionType = $execution->type;
+                $this->view->regionID      = $regionID;
+                $this->view->laneID        = $laneID;
+                $this->view->regionPairs   = $regionPairs;
+                $this->view->lanePairs     = $lanePairs;
+            }
         }
 
-        /* Whether there is a object to transfer story, for example feedback. */
-        $extra = str_replace(array(',', ' '), array('&', ''), $extra);
-        parse_str($extra, $output);
         foreach($output as $paramKey => $paramValue)
         {
             if(isset($this->config->story->fromObjects[$paramKey]))
@@ -401,6 +417,20 @@ class story extends control
             }
             else
             {
+                if($execution->type == 'kanban')
+                {
+                    $this->loadModel('kanban');
+                    $regionPairs = $this->kanban->getRegionPairs($executionID, 0, 'execution');
+                    $regionID    = isset($output['regionID']) ? $output['regionID'] : key($regionPairs);
+                    $lanePairs   = $this->kanban->getLanePairsByRegion($regionID, 'story');
+                    $laneID      = isset($output['laneID']) ? $output['laneID'] : key($lanePairs);
+
+                    $this->view->regionID    = $regionID;
+                    $this->view->laneID      = $laneID;
+                    $this->view->regionPairs = $regionPairs;
+                    $this->view->lanePairs   = $lanePairs;
+                }
+
                 $this->execution->setMenu($executionID);
                 $this->app->rawModule = 'execution';
                 $this->lang->navGroup->story = 'execution';
@@ -433,12 +463,18 @@ class story extends control
             $stories = array();
             foreach($mails as $mail) $stories[] = $mail->storyID;
 
+            $lanes = array();
+            if(isset($_POST['lanes']))
+            {
+                foreach($mails as $i => $mail) $lanes[$mail->storyID] = $_POST['lanes'][$i];
+            }
+
             /* Project or execution linked stories. */
             if($executionID)
             {
                 $products = array();
                 foreach($mails as $story) $products[$story->storyID] = $productID;
-                $this->execution->linkStory($executionID, $stories, $products, $extra);
+                $this->execution->linkStory($executionID, $stories, $products, $extra, $lanes);
                 if($executionID != $this->session->project) $this->execution->linkStory($this->session->project, $stories, $products);
             }
 
@@ -724,8 +760,6 @@ class story extends control
         /* Get product reviewers. */
         $productReviewers = $product->reviewer;
         if(!$productReviewers and $product->acl != 'open') $productReviewers = $this->loadModel('user')->getProductViewListUsers($product, '', '', '');
-
-        $this->story->replaceURLang($story->type);
 
         /* Process the module when branch products are switched to normal products. */
         if($product->type == 'normal' and !empty($story->branch)) $this->view->moduleOptionMenu += $this->tree->getModulesName($story->module);
@@ -1120,7 +1154,9 @@ class story extends control
         }
 
         $reviewers          = $this->story->getReviewerPairs($storyID, $story->version);
-        $checkSuperReviewed = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . trim($story->reviewedBy, ',') . ',');
+        $reviewedBy         = trim($story->reviewedBy, ',');
+        $superReviewers     = trim(zget($this->config->story, 'superReviewers', ''), ',');
+        $checkSuperReviewed = empty($reviewedBy) ? false : strpos(",$superReviewers,", ",$reviewedBy,");
 
         $this->executeHooks($storyID);
 
@@ -1162,17 +1198,18 @@ class story extends control
      *
      * @param  int    $storyID
      * @param  string $confirm  yes|no
+     * @param  string $from taskkanban
      * @access public
      * @return void
      */
-    public function delete($storyID, $confirm = 'no')
+    public function delete($storyID, $confirm = 'no', $from = '')
     {
         $story = $this->story->getById($storyID);
         if($story->parent < 0) return print(js::alert($this->lang->story->cannotDeleteParent));
 
         if($confirm == 'no')
         {
-            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes"), ''));
+            return print(js::confirm($this->lang->story->confirmDelete, $this->createLink('story', 'delete', "story=$storyID&confirm=yes&from=$from"), ''));
         }
         else
         {
@@ -1186,6 +1223,10 @@ class story extends control
             $this->executeHooks($storyID);
 
             if(defined('RUN_MODE') && RUN_MODE == 'api') return $this->send(array('status' => 'success'));
+
+            if($this->app->tab == 'execution' and $from == 'taskkanban') return print(js::reload('parent'));
+
+            if(isonlybody()) return print(js::reload('parent.parent'));
 
             $locateLink = $this->session->storyList ? $this->session->storyList : $this->createLink('product', 'browse', "productID={$story->product}");
             return print(js::locate($locateLink, 'parent'));
@@ -1345,7 +1386,7 @@ class story extends control
                 }
                 else
                 {
-                    return print(js::closeModal('parent.parent', 'this'));
+                    return print(js::closeModal('parent.parent', 'this', "function(){parent.parent.location.reload();}"));
                 }
             }
 
