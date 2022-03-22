@@ -217,19 +217,16 @@ class projectreleaseModel extends model
                 $this->loadModel('story');
                 $this->loadModel('action');
 
-                $storyIDList = explode(',', $release->stories);
-                $product = $this->loadModel('product')->getById($release->product);
+                $storyIDList = array_filter(explode(',', $release->stories));
+                $product     = $this->loadModel('product')->getById($release->product);
                 foreach($storyIDList as $storyID)
                 {
-                    if($storyID)
-                    {
-                        $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
-                        if($product and $product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
+                    $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
+                    if($product and $product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
 
-                        $this->story->setStage($storyID);
+                    $this->story->setStage($storyID);
 
-                        $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
-                    }
+                    $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
                 }
             }
 
