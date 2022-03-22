@@ -22,25 +22,6 @@ $(function()
 });
 
 /**
- * Ajax change execution name.
- *
- * @param  int projectID
- * @access public
- * @return void
- */
-function changeExecutionName(projectID)
-{
-    if(parseInt(projectID))
-    {
-        var link = createLink('bug', 'ajaxGetExecutionLang', 'projectID=' + projectID);
-        $.post(link, function(executionLang)
-        {
-            $('#executionBox').html(executionLang);
-        })
-    }
-}
-
-/**
  * Set duplicate field.
  *
  * @param  string $resolution

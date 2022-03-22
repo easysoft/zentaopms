@@ -995,7 +995,7 @@ class product extends control
 
         if($number === '')
         {
-            return print(html::select('execution', array('' => '') + $executions, empty($executionID) ? key(array_filter($executions)) : $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
+            return print(html::select('execution', array('' => '') + $executions, $executionID, "class='form-control' onchange='loadExecutionRelated(this.value)'"));
         }
         else
         {

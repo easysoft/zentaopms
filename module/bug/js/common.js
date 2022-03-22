@@ -29,12 +29,6 @@ $(function()
  */
 function loadAll(productID)
 {
-    if(page == 'create')
-    {
-        loadExecutionTeamMembers(productID);
-        setAssignedTo();
-    }
-
     if(typeof(changeProductConfirmed) != 'undefined' && !changeProductConfirmed)
     {
         firstChoice = confirm(confirmChangeProduct);
@@ -54,9 +48,7 @@ function loadAll(productID)
     {
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
         $('#task').chosen();
-        var param = '';
-        if(page == 'create') param = 'active';
-        loadProductBranches(productID, param)
+        loadProductBranches(productID)
     }
 }
 
@@ -270,7 +262,7 @@ function loadProductProjects(productID)
 function loadProductExecutions(productID, projectID = 0)
 {
     required = $('#execution_chosen').hasClass('required');
-    branch = $('#branch').val();
+    branch   = $('#branch').val();
     if(typeof(branch) == 'undefined') branch = 0;
 
     link = createLink('product', 'ajaxGetExecutions', 'productID=' + productID + '&projectID=' + projectID + '&branch=' + branch);
@@ -279,9 +271,10 @@ function loadProductExecutions(productID, projectID = 0)
         $(this).find('select').chosen();
         if(typeof(bugExecution) == 'string' && systemMode != 'classic') $('#executionIdBox').prepend("<span class='input-group-addon' id='executionBox' style='border-left-width: 0px;'>" + bugExecution + "</span>");
         if(required) $(this).addClass('required');
-        changeExecutionName(projectID);
+        changeAssignedTo(projectID);
     });
-    loadProjectBuilds(projectID);
+
+    projectID != 0 ? loadProjectBuilds(projectID) : loadProductBuilds(productID);
 }
 
 /**
@@ -353,13 +346,16 @@ function loadExecutionRelated(executionID)
     }
     else
     {
+        var currentProjectID = $('#project').val();
+        var currentProductID = $('#product').val();
+
         $('#taskIdBox').innerHTML = '<select id="task"></select>';  // Reset the task.
-        loadProductStories($('#product').val());
-        loadProductBuilds($('#product').val());
-        loadTestTasks($('#product').val());
-        loadProjectTeamMembers($('#project').val());
+        loadProductStories(currentProductID);
+        loadTestTasks(currentProductID);
+        loadProjectTeamMembers(currentProjectID);
+
+        currentProjectID != 0 ? loadProjectBuilds(currentProjectID) : loadProductBuilds(currentProductID);
     }
-    notice();
 }
 
 /**
@@ -532,7 +528,8 @@ function loadProductBranches(productID, param)
     $('#branch_chosen').remove();
     $('#branch').next('.picker').remove();
 
-    var param = "productID=" + productID + "&oldBranch=0&param=" + param;
+    var branchStatus = page == 'create' ? 'active' : 'all';
+    var param        = "productID=" + productID + "&oldBranch=0&param=" + branchStatus;
     if(typeof(tab) != 'undefined' && (tab == 'execution' || tab == 'project')) param += "&projectID=" + objectID;
     $.get(createLink('branch', 'ajaxGetBranches', param), function(data)
     {
@@ -545,15 +542,10 @@ function loadProductBranches(productID, param)
 
         loadProductModules(productID);
         loadProductProjects(productID);
-        loadProductBuilds(productID);
         loadProductplans(productID);
         loadProductStories(productID);
     })
 }
-
-
-var oldAssignedToTitle = $("#assignedTo").find("option:selected").text();
-var oldAssignedTo      = $("#assignedTo").find("option:selected").val();
 
 /**
  * Load team members of the execution as assignedTo list.
@@ -568,18 +560,9 @@ function loadAssignedTo(executionID, selectedUser)
     link = createLink('bug', 'ajaxLoadAssignedTo', 'executionID=' + executionID + '&selectedUser=' + selectedUser);
     $.get(link, function(data)
     {
-        var defaultOption = '<option title="' + oldAssignedToTitle + '" value="' + oldAssignedTo + '" selected="selected">' + oldAssignedToTitle + '</option>';
-        var defaultAssignedTo = $('#assignedTo').val();
-
         $('#assignedTo_chosen').remove();
         $('#assignedTo').next('.picker').remove();
         $('#assignedTo').replaceWith(data);
-
-        if(defaultAssignedTo !== oldAssignedTo && selectedUser == '')
-        {
-            if($('#assignedTo option[value="' + oldAssignedTo + '"]').length > 0) $('#assignedTo option[value="' + oldAssignedTo + '"]').remove();
-            $('#assignedTo').append(defaultOption);
-        }
         $('#assignedTo').chosen();
     });
 }
@@ -620,6 +603,7 @@ function notice()
 {
     if(page == 'edit') return;
 
+    $('#buildBoxActions').empty().hide();
     if($('#openedBuild').find('option').length <= 1)
     {
         var html = '';
@@ -646,6 +630,7 @@ function notice()
         if($bba.length)
         {
             $bba.html(html);
+            $bba.show();
         }
         else
         {

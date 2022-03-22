@@ -128,12 +128,16 @@ $(function()
     {
         loadExecutionRelated($('#execution').val());
     }
+    else if(parseInt($('#project').val()))
+    {
+        loadProjectBuilds($('#project').val());
+        loadProjectTeamMembers($('#project').val());
+    }
     else
     {
-        if(parseInt($('#project').val())) loadProjectTeamMembers($('#project').val());
+        if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     }
 
-    if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
 
     $('[data-toggle=tooltip]').tooltip();
@@ -187,7 +191,7 @@ $(function()
  * @access public
  * @return void
  */
-function changeExecutionName(projectID)
+function changeAssignedTo(projectID)
 {
     if(parseInt(projectID))
     {
@@ -198,9 +202,13 @@ function changeExecutionName(projectID)
             $('#executionBox').html(executionLang);
         })
     }
+    else if($('#execution').val() != 0)
+    {
+        loadAssignedTo($('#execution').val());
+    }
     else
     {
-        loadExecutionTeamMembers($('#product').val());
+        setAssignedTo();
     }
 }
 
