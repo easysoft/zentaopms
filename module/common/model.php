@@ -483,7 +483,7 @@ class commonModel extends model
             $configVisions = array_filter(explode(',', trim($config->visions, ',')));
 
             /* The standalone lite version removes the lite interface button */
-            if(isset($configVisions[0]) && $configVisions[0] == 'lite') return true;
+            if(trim($config->visions, ',') == 'lite') return true;
             
             if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
 
