@@ -25,16 +25,16 @@
         <table class='table table-form'>
           <tr>
             <th><?php echo $lang->repo->product; ?></th>
-            <td class='required'><?php echo html::select('product[]', $products, '', "class='form-control chosen' multiple"); ?></td>
+            <td class='required'><?php echo html::select('product[]', $products, $productID, "class='form-control chosen' multiple"); ?></td>
           </tr>
           <tr>
             <th class='thWidth'><?php echo $lang->repo->type; ?></th>
-            <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control'"); ?></td>
+            <td style="width:550px"><?php echo html::select('SCM', $lang->repo->scmList, 'Gitlab', "onchange='scmChanged(this.value)' class='form-control chosen'"); ?></td>
             <td class="tips-git"><?php echo $lang->repo->syncTips; ?></td>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabHost;?></th>
-            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
+            <td class='required'><?php echo html::select('gitlabHost', $gitlabHosts, '', "class='form-control chosen' placeholder='{$lang->repo->placeholder->gitlabHost}'");?>
           </tr>
           <tr class='gitlab hide'>
             <th><?php echo $lang->repo->gitlabProject;?></th>
@@ -75,8 +75,7 @@
             <td>
               <div class='input-group'>
                 <?php echo html::password('password', '', "class='form-control'");?>
-                <span class='input-group-addon fix-border fix-padding'></span>
-                <?php echo html::select('encrypt', $lang->repo->encryptList, 'base64', "class='form-control'");?>
+                <?php echo html::select('encrypt', $lang->repo->encryptList, 'base64', "class='form-control chosen'");?>
               </div>
             </td>
           </tr>

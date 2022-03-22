@@ -162,6 +162,7 @@ class mrModel extends model
             ->setDefault('repoID', 0)
             ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
+            ->setDefault('squash', 0)
             ->add('createdBy', $this->app->user->account)
             ->add('createdDate', helper::now())
             ->get();
@@ -184,7 +185,6 @@ class mrModel extends model
         $this->dao->insert(TABLE_MR)->data($MR, $this->config->mr->create->skippedFields)
             ->batchCheck($this->config->mr->create->requiredFields, 'notempty')
             ->checkIF($MR->needCI, 'jobID',  'notempty')
-            ->autoCheck()
             ->exec();
         if(dao::isError()) return array('result' => 'fail', 'message' => dao::getError());
 
@@ -198,6 +198,7 @@ class mrModel extends model
         $MRObject->title                = $MR->title;
         $MRObject->description          = $MR->description;
         $MRObject->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+        $MRObject->squash               = $MR->squash == '1' ? 1 : 0;
         if($MR->assignee)
         {
             $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($this->post->gitlabID, $MR->assignee);
@@ -341,6 +342,7 @@ class mrModel extends model
             ->setDefault('repoID', 0)
             ->setDefault('removeSourceBranch','0')
             ->setDefault('needCI', 0)
+            ->setDefault('squash', 0)
             ->setDefault('editedBy', $this->app->user->account)
             ->setDefault('editedDate', helper::now())
             ->setIF($this->post->needCI == 0, 'jobID', 0)
@@ -369,6 +371,7 @@ class mrModel extends model
         $newMR->description          = $MR->description;
         $newMR->target_branch        = $MR->targetBranch;
         $newMR->remove_source_branch = $MR->removeSourceBranch == '1' ? true : false;
+        $newMR->squash               = $MR->squash == '1' ? 1 : 0;
         if($MR->assignee)
         {
             $gitlabAssignee = $this->gitlab->getUserIDByZentaoAccount($oldMR->gitlabID, $MR->assignee);
@@ -555,6 +558,9 @@ class mrModel extends model
                         ->fetch();
                     if(empty($todoDesc))
                     {
+                        $acountPairs = $this->gitlab->getUserIdRealnamePairs($gitlabID);
+                        $author      = isset($acountPairs[$rawTodo->author->id]) ? $acountPairs[$rawTodo->author->id] : $rawTodo->author->name;
+
                         $todo = new stdClass;
                         $todo->account      = $this->app->user->account;
                         $todo->assignedTo   = $account;
@@ -567,7 +573,7 @@ class mrModel extends model
                         $todo->idvalue      = $rawTodo->id;
                         $todo->pri          = 3;
                         $todo->name         = $this->lang->mr->common . ": " . $rawTodo->target->title;
-                        $todo->desc         = $rawTodo->target->assignee->name . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
+                        $todo->desc         = $author . '&nbsp;' . $this->lang->mr->at . '&nbsp;' . '<a href="' . $this->gitlab->apiGetSingleProject($gitlabID, $projectID)->web_url . '" target="_blank">' . $rawTodo->project->path .'</a>' . '&nbsp;' . $this->lang->mr->todomessage . '<a href="' . $rawTodo->target->web_url . '" target="_blank">' . '&nbsp;' . $this->lang->mr->common .'</a>' . '。';
                         $todo->status       = 'wait';
                         $todo->finishedBy   = '';
 
@@ -747,9 +753,13 @@ class mrModel extends model
      */
     public function apiAcceptMR($gitlabID, $projectID, $MRID, $sudo = "")
     {
-        $url = sprintf($this->gitlab->getApiRoot($gitlabID), "/projects/$projectID/merge_requests/$MRID/merge");
-        if($sudo != "") return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: {$sudo}")));
-        return json_decode(commonModel::http($url, $data = null, $options = array(CURLOPT_CUSTOMREQUEST => 'PUT')));
+        $apiRoot    = $this->gitlab->getApiRoot($gitlabID);
+        $approveUrl = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/approved");
+        commonModel::http($approveUrl, null, array(CURLOPT_CUSTOMREQUEST => 'POST'));
+
+        $url = sprintf($apiRoot, "/projects/$projectID/merge_requests/$MRID/merge");
+        if($sudo != "") return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT'), $headers = array("sudo: {$sudo}")));
+        return json_decode(commonModel::http($url, null, array(CURLOPT_CUSTOMREQUEST => 'PUT')));
     }
 
     /**

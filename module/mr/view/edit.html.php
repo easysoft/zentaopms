@@ -50,10 +50,17 @@
              <th style="white-space: nowrap;"><?php echo $lang->mr->targetProject;?></th>
              <td>
                <div class='input-group'>
+                 <?php if($MR->status == 'merged' or $MR->status == 'closed'):?>
+                 <span class='fix-border text-left'>
+                 <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>:
+                 <?php echo $MR->targetBranch;?>
+                 </span>
+                 <?php else:?>
                  <span class='input-group-addon fix-border'>
                  <?php echo $this->loadModel('gitlab')->apiGetSingleProject($MR->gitlabID, $MR->targetProject)->name_with_namespace;?>
                  </span>
                  <?php echo html::select('targetBranch', $targetBranchList, $MR->targetBranch, "class='form-control chosen'");?>
+                 <?php endif;?>
                </div>
              </td>
           </tr>
@@ -92,6 +99,16 @@
           <tr>
             <th><?php echo $lang->job->common;?></th>
             <td colspan='1' class='required'><?php echo html::select('jobID', $jobList, $MR->jobID, "class='form-control chosen'");?></td>
+          </tr>
+          <tr>
+            <th><?php echo $lang->mr->squash;?></th>
+            <td colspan='1'>
+              <div class="checkbox-primary">
+                <?php $checked = $MR->squash == '1' ? 'checked' : '' ?>
+                <input type="checkbox" <?php echo $checked;?> name="squash" value="1" id="squash">
+                <label for="squash"></label>
+              </div>
+            </td>
           </tr>
           <tr>
             <th><?php echo $lang->mr->assignee;?></th>

@@ -275,8 +275,11 @@ class tutorialModel extends model
         $execution->name          = 'Test execution';
         $execution->code          = 'test';
         $execution->lifetime      = '';
+        $execution->attribute     = '';
         $execution->begin         = date('Y-m-d', strtotime('-7 days'));
         $execution->end           = date('Y-m-d', strtotime('+7 days'));
+        $execution->realBegan     = '';
+        $execution->realEnd       = '';
         $execution->days          = 10;
         $execution->status        = 'wait';
         $execution->pri           = '1';

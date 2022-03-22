@@ -69,3 +69,5 @@
 .card.ad > .card-reveal > .card-heading {padding: 12px 10px 10px 15px;}
 .card.ad > .card-reveal {color: #333;}
 .card.ad > .card-reveal li {line-height: 1.5; font-size: 12px;}
+
+.result-box {height: 400px; position: fixed; left: 50%; top: 50%; margin-left: -400px; margin-top: -200px;}

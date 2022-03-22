@@ -157,7 +157,7 @@ class baseValidater
      */
     public static function checkMobile($var)
     {
-        return preg_match("/^1[3-5,7,8]{1}[0-9]{9}$/", $var) ? true : false;
+        return preg_match("/^1[3-9]{1}[0-9]{9}$/", $var) ? true : false;
     }
 
     /**

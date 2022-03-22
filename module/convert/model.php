@@ -15,14 +15,14 @@ class convertModel extends model
 {
     /**
      * Connect to db.
-     * 
+     *
      * @access public
      * @return void
      */
     public function connectDB($dbName = '')
     {
         $dsn = "mysql:host={$this->config->db->host}; port={$this->config->db->port};dbname={$dbName}";
-        try 
+        try
         {
             $dbh = new PDO($dsn, $this->config->db->user, $this->config->db->password);
             $dbh->setAttribute(PDO::ATTR_DEFAULT_FETCH_MODE, PDO::FETCH_OBJ);
@@ -36,10 +36,10 @@ class convertModel extends model
             return $exception->getMessage();
         }
     }
- 
+
     /**
      * Check database exits or not.
-     * 
+     *
      * @access public
      * @return bool
      */
@@ -51,7 +51,7 @@ class convertModel extends model
 
     /**
      * Check table exits or not.
-     * 
+     *
      * @param  string  $table
      * @access public
      * @return bool
@@ -79,7 +79,7 @@ class convertModel extends model
 
     /**
      * Save the max id of every table. Thus when we convert again, when can delete id larger then the saved max id.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -112,8 +112,8 @@ class convertModel extends model
 
     /**
      * Get jira data from db.
-     * 
-     * @param  string $module 
+     *
+     * @param  string $module
      * @param  int    $lastID
      * @param  int    $limit
      * @access public
@@ -185,10 +185,10 @@ class convertModel extends model
 
     /**
      * Get jira data from file.
-     * 
-     * @param  sting  $module 
-     * @param  int    $lastID 
-     * @param  int    $limit 
+     *
+     * @param  sting  $module
+     * @param  int    $lastID
+     * @param  int    $limit
      * @access public
      * @return void
      */
@@ -203,7 +203,7 @@ class convertModel extends model
 
         $xmlContent = file_get_contents($filePath);
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
-        $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
+        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $dataList  = array();
         $parsedXML = $this->object2Array($parsedXML);
@@ -234,7 +234,7 @@ class convertModel extends model
             }
         }
 
-        if($limit) 
+        if($limit)
         {
             $dataList = array_slice($dataList, $lastID, $limit, true);
             if(empty($dataList)) return array();
@@ -297,7 +297,7 @@ class convertModel extends model
             {
                 $issueLink = new stdclass();
                 $issueLink->LINKTYPE    = $data['linktype'];
-                $issueLink->SOURCE      = $data['source']; 
+                $issueLink->SOURCE      = $data['source'];
                 $issueLink->DESTINATION = $data['destination'];
 
                 $dataList[$key] = $issueLink;
@@ -332,7 +332,7 @@ class convertModel extends model
 
     /**
      * Get version group from jira file.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -340,7 +340,7 @@ class convertModel extends model
     {
         $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/nodeassociation.xml');
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
-        $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
+        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $dataList  = array();
         $parsedXML = $this->object2Array($parsedXML);
@@ -364,8 +364,8 @@ class convertModel extends model
 
     /**
      * Convert object to array.
-     * 
-     * @param  object $parsedXML 
+     *
+     * @param  object $parsedXML
      * @access public
      * @return void
      */
@@ -386,9 +386,9 @@ class convertModel extends model
 
     /**
      * Import jira from db.
-     * 
-     * @param  string $type 
-     * @param  int    $lastID 
+     *
+     * @param  string $type
+     * @param  int    $lastID
      * @access public
      * @return void
      */
@@ -435,9 +435,9 @@ class convertModel extends model
 
     /**
      * Import jira from file.
-     * 
-     * @param  string   $type 
-     * @param  int      $lastID 
+     *
+     * @param  string   $type
+     * @param  int      $lastID
      * @param  bool     $createTable
      * @access public
      * @return void
@@ -484,8 +484,8 @@ class convertModel extends model
 
     /**
      * Import jira user.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -512,7 +512,7 @@ class convertModel extends model
             $this->dao->dbh($this->dbh)->replace(TABLE_USER)->data($user, 'group')->exec();
 
             if(!dao::isError())
-            {   
+            {
                 $data = new stdclass();
                 $data->account = $user->account;
                 $data->group   = $user->group;
@@ -524,8 +524,8 @@ class convertModel extends model
 
     /**
      * Import jira project.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -654,16 +654,16 @@ class convertModel extends model
             $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($projectID)->set('product')->eq($productID)->exec();
             $this->dao->dbh($this->dbh)->replace(TABLE_PROJECTPRODUCT)->set('project')->eq($executionID)->set('product')->eq($productID)->exec();
 
-            $projectRelation['AType'] = 'jproject'; 
-            $projectRelation['BType'] = 'zproject'; 
-            $projectRelation['AID']   = $id; 
-            $projectRelation['BID']   = $projectID; 
+            $projectRelation['AType'] = 'jproject';
+            $projectRelation['BType'] = 'zproject';
+            $projectRelation['AID']   = $id;
+            $projectRelation['BID']   = $projectID;
             $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($projectRelation)->exec();
 
-            $executionRelation['AType'] = 'jproject'; 
-            $executionRelation['BType'] = 'zexecution'; 
-            $executionRelation['AID']   = $id; 
-            $executionRelation['BID']   = $executionID; 
+            $executionRelation['AType'] = 'jproject';
+            $executionRelation['BType'] = 'zexecution';
+            $executionRelation['AID']   = $id;
+            $executionRelation['BID']   = $executionID;
             $this->dao->dbh($this->dbh)->insert(JIRA_TMPRELATION)->data($executionRelation)->exec();
 
             $keyRelation['AType'] = 'joldkey';
@@ -677,8 +677,8 @@ class convertModel extends model
 
     /**
      * Import jira issue.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -728,7 +728,7 @@ class convertModel extends model
             $issueType    = isset($issueTypeList[$data->issuetype]) ? $issueTypeList[$data->issuetype] : 'task';
             $issueID      = $data->ID;
             $issueProject = $data->PROJECT;
-            
+
             if(!isset($projectRelation[$issueProject])) continue;
 
             $projectID   = $projectRelation[$issueProject];
@@ -854,7 +854,7 @@ class convertModel extends model
                 $bug->pri         = $data->PRIORITY;
                 $bug->status      = $this->convertStatus('bug', $data->issuestatus);
                 $bug->steps       = $data->DESCRIPTION;
-                $bug->openedBy    = $this->getJiraAccount($data->CREATOR, $method); 
+                $bug->openedBy    = $this->getJiraAccount($data->CREATOR, $method);
                 $bug->openedDate  = substr($data->CREATED, 0, 19);
                 $bug->openedBuild = 'trunk';
                 $bug->assignedTo  = $this->getJiraAccount($data->ASSIGNEE, $method);
@@ -905,8 +905,8 @@ class convertModel extends model
 
     /**
      * Import jira build.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -995,8 +995,8 @@ class convertModel extends model
 
     /**
      * Import jira issue link.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -1043,7 +1043,7 @@ class convertModel extends model
             if(!isset($issueStories[$source])) continue;
             $parentID = $issueStories[$source];
             $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
-            foreach($dest as $childID) 
+            foreach($dest as $childID)
             {
                 if(!isset($issueStories[$childID])) continue;
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('parent')->eq($parentID)->where('id')->eq($issueStories[$childID])->exec();
@@ -1055,7 +1055,7 @@ class convertModel extends model
             if(!isset($issueTasks[$source])) continue;
             $parentID = $issueTasks[$source];
             $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq('-1')->where('id')->eq($parentID)->exec();
-            foreach($dest as $childID) 
+            foreach($dest as $childID)
             {
                 if(!isset($issueTasks[$childID])) continue;
                 $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('parent')->eq($parentID)->where('id')->eq($issueTasks[$childID])->exec();
@@ -1071,12 +1071,12 @@ class convertModel extends model
 
             if(!isset($relation[$objectType][$source]) or !isset($relation[$objectType][$dest])) continue;
 
-            if($objectType == 'story') 
+            if($objectType == 'story')
             {
                 if(empty($issueStories[$dest]) or empty($issueStories[$source])) continue;
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set('duplicateStory')->eq($$issueStories[$dest])->where('id')->eq($issueStories[$source])->exec();
             }
-            elseif($objectType == 'bug')   
+            elseif($objectType == 'bug')
             {
                 if(empty($issueBugs[$dest]) or empty($issueBugs[$source])) continue;
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('duplicateBug')->eq($issueBugs[$dest])->where('id')->eq($issueBugs[$source])->exec();
@@ -1090,15 +1090,15 @@ class convertModel extends model
             $sourceObjectType = $issueObjectType[$source];
             $destObjectType   = $issueObjectType[$dest];
 
-            if($sourceObjectType == 'task' and $destObjectType == 'story') 
+            if($sourceObjectType == 'task' and $destObjectType == 'story')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$dest])->where('id')->eq($issueTasks[$source])->exec();
             }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'task') 
+            elseif($sourceObjectType == 'story' and $destObjectType == 'task')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_TASK)->set('story')->eq($issueStories[$source])->where('id')->eq($issueTasks[$dest])->exec();
             }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'bug')  
+            elseif($sourceObjectType == 'story' and $destObjectType == 'bug')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$source])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$dest])->exec();
             }
@@ -1106,7 +1106,7 @@ class convertModel extends model
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_BUG)->set('story')->eq($issueStories[$dest])->set('storyVersion')->eq(1)->where('id')->eq($issueBugs[$source])->exec();
             }
-            elseif($sourceObjectType == 'story' and $destObjectType == 'story') 
+            elseif($sourceObjectType == 'story' and $destObjectType == 'story')
             {
                 $this->dao->dbh($this->dbh)->update(TABLE_STORY)->set("linkStories=concat(linkStories, ',{$issueStories[$dest]}')")->where('id')->eq($issueStories[$source])->exec();
             }
@@ -1119,8 +1119,8 @@ class convertModel extends model
 
     /**
      * Import jira action.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -1186,8 +1186,8 @@ class convertModel extends model
 
     /**
      * Import jira file.
-     * 
-     * @param  object $dataList 
+     *
+     * @param  object $dataList
      * @param  string $method
      * @access public
      * @return void
@@ -1256,9 +1256,9 @@ class convertModel extends model
 
     /**
      * Convert jira status.
-     * 
-     * @param  string $objectType 
-     * @param  string $jiraStatus 
+     *
+     * @param  string $objectType
+     * @param  string $jiraStatus
      * @access public
      * @return void
      */
@@ -1279,8 +1279,8 @@ class convertModel extends model
 
     /**
      * Convert stage.
-     * 
-     * @param  string $jiraStatus 
+     *
+     * @param  string $jiraStatus
      * @access public
      * @return void
      */
@@ -1299,8 +1299,8 @@ class convertModel extends model
 
     /**
      * Get jira account.
-     * 
-     * @param  string $userKey 
+     *
+     * @param  string $userKey
      * @param  string $method
      * @access public
      * @return void
@@ -1311,7 +1311,7 @@ class convertModel extends model
 
         if($method == 'db')
         {
-            return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name'); 
+            return $this->dao->dbh($this->sourceDBH)->select('lower_user_name')->from(JIRA_USER)->where('user_key')->eq($userKey)->fetch('lower_user_name');
         }
         else
         {
@@ -1322,7 +1322,7 @@ class convertModel extends model
 
     /**
      * Get jira app user pairs.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1330,7 +1330,7 @@ class convertModel extends model
     {
         $xmlContent = file_get_contents($this->app->getTmpRoot() . 'jirafile/applicationuser.xml');
         $xmlContent = preg_replace ('/[^\x{0009}\x{000a}\x{000d}\x{0020}-\x{D7FF}\x{E000}-\x{FFFD}]+/u', ' ', $xmlContent);
-        $parsedXML  = simplexml_load_string($xmlContent, SimpleXMLElement::class, LIBXML_NOCDATA);
+        $parsedXML  = simplexml_load_string($xmlContent, 'SimpleXMLElement', LIBXML_NOCDATA);
 
         $pairs = array();
         $parsedXML = $this->object2Array($parsedXML);
@@ -1360,7 +1360,7 @@ class convertModel extends model
 
     /**
      * Split jira file.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1389,11 +1389,11 @@ class convertModel extends model
                 {
                     $end = $footerList[$object];
                     while(true)
-                    {   
+                    {
                         $followItemStr = fgets($handle);
                         $itemStr      .= $followItemStr;
                         if(strpos($itemStr, $end) !== false) break;
-                    } 
+                    }
                 }
 
                 $object = str_replace('<', '', $object);
@@ -1417,7 +1417,7 @@ class convertModel extends model
 
     /**
      * Create tmp table for import jira.
-     * 
+     *
      * @access public
      * @return void
      */
@@ -1436,17 +1436,17 @@ CREATE TABLE `jiratmprelation`(
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 EOT;
 
-        try  
-        {    
+        try
+        {
             $this->dbh->exec($sql);
-        }    
+        }
         catch(Exception $e){}
     }
 
     /**
      * After exec.
-     * 
-     * @param  string $method 
+     *
+     * @param  string $method
      * @access public
      * @return void
      */
@@ -1456,8 +1456,8 @@ EOT;
         $minDate            = date('Y-m-d', time() - 30 * 24 * 3600);
         $executionProject   = $this->dao->dbh($this->dbh)->select('id,project')->from(TABLE_PROJECT)->where('type')->eq('sprint')->andWhere('project')->ne(0)->fetchPairs();
         $minOpenedDatePairs = $this->dao->dbh($this->dbh)->select('execution,min(openedDate) as minOpenedDate')->from(TABLE_TASK)->where('execution')->in(array_keys($executionProject))->fetchPairs('execution', 'minOpenedDate');
-    
-        foreach($executionProject  as $executionID => $projectID) 
+
+        foreach($executionProject  as $executionID => $projectID)
         {
             $minOpenedDate = isset($minOpenedDatePairs[$executionID]) ? $minOpenedDatePairs[$executionID] : $minDate;
             $minOpenedDate = substr($minOpenedDate, 0, 11);
@@ -1466,13 +1466,13 @@ EOT;
         }
 
         if($method == 'file') $this->deleteJiraFile();
-    
+
         $this->dbh->exec("DROP TABLE" . JIRA_TMPRELATION);
     }
 
     /**
      * Delete jira backip file.
-     * 
+     *
      * @access public
      * @return void
      */
