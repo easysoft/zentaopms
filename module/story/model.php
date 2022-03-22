@@ -2152,10 +2152,11 @@ class storyModel extends model
          * Judge stage according to the devel and test tasks' status.
          *
          * 1. one doing devel task, all test tasks waiting, set stage as developing.
-         * 2. all devel tasks done, all test tasks waiting, set stage as developed.
-         * 3. one test task doing, set stage as testing.
-         * 4. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
-         * 5. all test tasks done, all devel tasks done, set stage as tested.
+         * 2. some devel tasks done, all test tasks not done, set stage as developing.
+         * 3. all devel tasks done, all test tasks waiting, set stage as developed.
+         * 4. one test task doing, set stage as testing.
+         * 5. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
+         * 6. all test tasks done, all devel tasks done, set stage as tested.
          */
         foreach($branchStatusList as $branch => $statusList)
         {
@@ -2164,6 +2165,7 @@ class storyModel extends model
             $develTasks = isset($branchDevelTasks[$branch]) ? $branchDevelTasks[$branch] : 0;
             if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
             if($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
+            if(($statusList['devel']['doing'] > 0 or ($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0)) and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'developing';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'testing';
             if($statusList['test']['doing'] > 0 or $statusList['test']['pause'] > 0) $stage = 'testing';
