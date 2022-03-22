@@ -91,23 +91,23 @@ class productplan extends control
         if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
         $branchesPair = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
 
-        /*get default branch*/
+        /*Get default branch.*/
         $branchesList = $this->loadModel('branch')->getList($productID);
         foreach($branchesList as $branchList)
         {
-            if($branchList->default) $default = $branchList->id;
+            if($branchList->default) $defaultBranch = $branchList->id;
         }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->position[] = $this->lang->productplan->common;
         $this->view->position[] = $this->lang->productplan->create;
 
-        $this->view->productID = $productID;
-        $this->view->lastPlan  = $lastPlan;
-        $this->view->branch    = $branchID;
-        $this->view->branches  = $branchesPair;
-        $this->view->default   = $default;
-        $this->view->parent    = $parent;
+        $this->view->productID     = $productID;
+        $this->view->lastPlan      = $lastPlan;
+        $this->view->branch        = $branchID;
+        $this->view->branches      = $branchesPair;
+        $this->view->defaultBranch = $defaultBranch;
+        $this->view->parent        = $parent;
         $this->display();
     }
 
