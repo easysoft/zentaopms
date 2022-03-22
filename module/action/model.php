@@ -1292,14 +1292,15 @@ class actionModel extends model
                 if($action->objectType == 'doc')
                 {
                     $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
-                    $method       = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
+                    if($assetLibType) $method = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
                 }
                 else
                 {
                     $method = $this->config->action->assetViewMethod[$action->objectType];
                 }
 
-                $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
+                $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                if(isset($method)) $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
             }
             else
             {
