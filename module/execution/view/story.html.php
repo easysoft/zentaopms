@@ -218,7 +218,7 @@
           <?php
           $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$execution->id");
           $totalEstimate += $story->estimate;
-?>
+          ?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
               <?php if($canBatchAction):?>
@@ -353,25 +353,18 @@
           <?php if(common::hasPriv('story', 'batchChangeStage')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
-            <?php
-            if(sizeof($stories) == 1)
-            {
-                echo "<ul class='dropdown-menu stageBox'>";
-            }
-            else
-            {
-                echo "<ul class='dropdown-menu'>";
-            }
-            $lang->story->stageList[''] = $lang->null;
-            foreach($lang->story->stageList as $key => $stage)
-            {
-                if(empty($key)) continue;
-                if(strpos('wait|planned|projected', $key) !== false) continue;
-                $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#storyList')\"") . "</li>";
-            }
-            echo '</ul>';
-            ?>
+              <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>
+              <?php
+              $lang->story->stageList[''] = $lang->null;
+              foreach($lang->story->stageList as $key => $stage)
+              {
+                  if(empty($key)) continue;
+                  if(strpos('wait|planned|projected', $key) !== false) continue;
+                  $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
+                  echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#storyList')\"") . "</li>";
+              }
+              ?>
+              </ul>
           </div>
           <?php endif;?>
           <?php
