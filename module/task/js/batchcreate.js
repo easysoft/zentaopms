@@ -266,7 +266,7 @@ $(function()
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
     markStoryTask();
 
-    if(storyID != 0) setStoryRelated(1);
+    if(storyID != 0) setStoryRelated($('#batchCreateForm table tbody tr:first [id^=story]:first').attr('id').replace('story', ''));
 
     $(document).keydown(function(event)
     {
