@@ -81,6 +81,16 @@ class stakeholder extends control
             $this->view->members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
         }
 
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
+        foreach($this->view->members as $account => $realname)
+        {
+            if(in_array($account, array_keys($stakeholders)))
+            {
+                unset($this->view->members[$account]);
+
+            }
+        }
+
         $this->view->title      = $this->lang->stakeholder->create;
         $this->view->position[] = $this->lang->stakeholder->create;
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
