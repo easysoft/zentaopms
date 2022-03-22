@@ -88,7 +88,9 @@
           <?php if($showVisionList):?>
             <td class="<?php echo $config->systemMode == 'new' ? 'text-left' : 'text-center';?>"><?php echo $config->systemMode == 'new' ? html::select("visions[$user->id][]", $visionList, $user->visions, "class='form-control chosen' multiple") : $visionList['rnd'];?></td>
             <?php if($config->systemMode == 'classic') echo html::hidden("visions[$user->id][]", 'rnd');?>
-          <?php else: echo html::hidden("visions[$user->id][]", $this->config->vision); endif;?>
+          <?php else:?>
+            <?php echo html::hidden("visions[$user->id][]", $this->config->vision);?>
+          <?php endif;?>
           <td><?php echo html::select("role[$user->id]",    $lang->user->roleList, $role, "class='form-control'");?></td>
           <td><?php echo html::select("type[$user->id]",    $lang->user->typeList, $type, "class='form-control'");?></td>
           <td class='<?php echo zget($visibleFields, 'commiter', 'hidden')?>'><?php echo html::input("commiter[$user->id]", $user->commiter, "class='form-control'");?></td>

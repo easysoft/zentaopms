@@ -88,6 +88,8 @@
               <?php if($config->systemMode == 'new')     echo html::select("visions[$i][]", $visionList, $i > 1 ? 'ditto' : (isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList)), "class='form-control chosen' multiple");?>
               <?php if($config->systemMode == 'classic') echo $visionList['rnd'] . html::hidden("visions[$i][]", 'rnd');?>
             </td>
+          <?php else:?>
+            <?php echo html::hidden("visions[$i][]", $this->config->vision);?>
           <?php endif;?>
           <td><?php echo html::select("role[$i]", $lang->user->roleList, $i > 1 ? 'ditto' : '', "class='form-control' onchange='changeGroup(this.value, $i)'");?></td>
           <td class='text-left' style='overflow:visible'><?php echo html::select("group[$i][]", $groupList, $i > 1 ? 'ditto' : '', "class='form-control chosen' multiple");?></td>
@@ -96,7 +98,6 @@
           <td align='left'>
             <div class='input-group'>
             <?php
-            if(!$showVisionList) echo html::hidden("visions[$i][]", $this->config->vision);
             echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)'");
             echo "<span class='input-group-addon passwordStrength'></span>";
             if($i != 1) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
