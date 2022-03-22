@@ -2378,7 +2378,7 @@ EOT;
                     if(common::hasPriv('doc', 'edit'))
                     {
                         $treeMenu[0] .= "<div class='tree-actions'>";
-                        $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
+                        $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
                         $treeMenu[0] .= '</div></div>';
                     }
                 }
