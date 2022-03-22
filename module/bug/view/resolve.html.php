@@ -44,7 +44,7 @@ js::set('productID' , $bug->product);
           <th><?php echo $lang->bug->resolvedBuild;?></th>
           <td id='newBuildExecutionBox' class='hidden'>
             <div class='input-group'>
-              <span class='input-group-addon'><?php echo (!empty($execution) and $execution->type == 'kanban' and $app->tab == 'execution') ? $lang->bug->kanban : $lang->build->execution;?></span>
+              <span class='input-group-addon'><?php echo (!empty($execution) and $execution->type == 'kanban') ? $lang->bug->kanban : $lang->build->execution;?></span>
               <?php echo html::select('buildExecution', $executions, '', "class='form-control chosen'");?>
             </div>
           </td>

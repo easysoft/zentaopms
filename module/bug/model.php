@@ -1057,16 +1057,13 @@ class bugModel extends model
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
             if(empty($bug->buildExecution))
             {
-                $executionField = $this->lang->bug->execution;
+                $executionLang = $this->lang->bug->execution;
                 if($oldBug->execution)
                 {
                     $execution = $this->loadModel('execution')->getByID($oldBug->execution);
-                    if($execution->type == 'kanban' and $this->app->tab == 'execution')
-                    {
-                        $executionField = $this->lang->bug->kanban;
-                    }
+                    if($execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
                 }
-                dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionField);
+                dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
             }
             if(dao::isError()) return false;
 
