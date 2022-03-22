@@ -247,6 +247,7 @@ class storyModel extends model
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
+
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();

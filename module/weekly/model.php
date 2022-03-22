@@ -114,6 +114,8 @@ class weeklyModel extends model
      */
     public function save($project, $date)
     {
+        $this->dao->delete()->from(TABLE_WEEKLYREPORT)->where('project')->eq($project)->exec();
+
         $report = new stdclass;
         $report->pv        = $this->getPV($project, $date);
         $report->ev        = $this->getEV($project, $date);
