@@ -28,7 +28,7 @@
 .region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
 
 .region .kanban-board + .kanban-board {margin-top: 20px;}
-.region .kanban-board > .kanban-header > .kanban-group-header {padding: 8px 2px; width: 20px;}
+.region .kanban-board > .kanban-header > .kanban-group-header {padding: 7px 0; width: 20px; text-align: center;}
 .region .kanban-board > .kanban-header > .kanban-group-header:hover {cursor: move;}
 .region .kanban-board.sort > .kanban-header {padding-left: 0;}
 
@@ -40,7 +40,7 @@
 .region .kanban-header-col > .title > .count {opacity: .5; font-weight: bold; color: #8b91a2;}
 .region .kanban-header-col > .title > .error {color: #333333; padding-left: 2px; font-size: 10px; padding-top: 1px; padding-right: 2px;}
 .kanban-affixed .kanban-header-col > .title > .text {color: #fff!important}
-.region .kanban-header-col > .actions {position: relative; right: -5px;}
+.region .kanban-header-col > .actions {position: relative;}
 .region .kanban-header-parent-col > .actions {position: absolute; right: 0px;}
 .region .kanban-header-sub-cols .actions {position: absolute; right: 0px;}
 
@@ -55,8 +55,6 @@
 
 .region .kanban-lane-col {max-height: unset !important; overflow: auto; position: relative;}
 .region .kanban-lane-col.has-scrollbar > .kanban-lane-actions {position: absolute; background-color: inherit; bottom: 0; left: 0; right: 0;}
-
-.region .kanban-lane-items {overflow: overlay !important; padding-bottom: 10px;}
 
 .kanban-item {position: relative}
 .kanban-item > .kanban-card > .title {display: block; line-height: 18px;}
@@ -100,8 +98,14 @@
 .kanban-col[data-type=ADD] {display: none;}
 .kanban-col[data-type=EMPTY] {display: none;}
 .kanban-col {padding-right: 0px !important;}
+.kanban-col.drag-shadow {background-color: #ededed !important; border-color: #ededed!important; box-shadow: 0 4px 10px 0 rgb(0,0,0, 0.05), 0 4px 20px 0 rgb(0,0,0, .3); min-height: 30px!important;}
+.kanban-col.drag-shadow .kanban-header-col {min-height: 30px!important;}
+.kanban-header-has-parent .kanban-header-cols > .kanban-col.drag-shadow,
+.kanban-col.kanban-header-parent-col.drag-shadow {min-height: 64px!important;}
+.kanban-col.drag-shadow > .actions {visibility: hidden!important;}
 .kanban-item .title {padding-right: 10px;}
 .gray .actions {display:none;}
+.kanban-cols-sorting .kanban-item {visibility: hidden!important;}
 
 .kanban-card .header .executionName {display: flex; width: 100%; float: left;}
 .kanban-card .header .executionName .title {padding-right: 0px; margin-right: 5px; overflow: hidden; white-space: nowrap;}

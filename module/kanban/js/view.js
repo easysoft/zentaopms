@@ -40,7 +40,7 @@ function fullScreen()
             $('.action').hide();
             $('.kanban-group-header').hide();
             $(".title").attr("disabled", true).css("pointer-events", "none");
-            $('#kanban').sortable('destroy');
+            window.sortableDisabled = true;
             $.cookie('isFullScreen', 1);
         };
 
@@ -82,7 +82,7 @@ function exitFullScreen()
     $('.action').show();
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
-    initSortable();
+    window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
 }
 
@@ -143,7 +143,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         var $actions = $column.children('.actions');
         if(column.parent != -1)
         {
-            addItemBtn  = ['<a data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="text-primary">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+            addItemBtn  = ['<button data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="btn btn-link">', '<i class="icon icon-expand-alt text-primary"></i>', '</button>'].join('');
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
@@ -1410,6 +1410,9 @@ function initSortable()
                 return $parent.children('.kanban-item');
             }
         },
+        before: function() {
+            return !window.sortableDisabled;
+        },
         start: function(e)
         {
             if(sortType == 'region')
@@ -1426,14 +1429,14 @@ function initSortable()
             }
             else if(sortType === 'column')
             {
-                $('.kanban-item').addClass('hidden');
+                e.element.closest('.kanban-board').addClass('kanban-cols-sorting');
             }
-
             else if(sortType == 'card')
             {
                 oldLaneID = e.element.closest('.kanban-lane').data('id');
                 oldColID  = e.element.closest('.kanban-col').data('id');
             }
+            $('#kanban').attr('data-sort-by', sortType);
         },
         finish: function(e)
         {
@@ -1514,12 +1517,12 @@ function initSortable()
                 {
                     updateRegion(regionID, response[regionID]);
                 }
-                $('.kanban-item').removeClass('hidden');
             });
         },
         always: function(e)
         {
             if(sortType == 'lane') $cards.show();
+            $('#kanban').find('.kanban-cols-sorting').removeClass('kanban-cols-sorting');
         }
     });
 }
