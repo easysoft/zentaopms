@@ -354,7 +354,7 @@
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
             <?php
-            echo "<ul class='dropdown-menu'>";
+            echo "<ul class='dropdown-menu stageBox'>";
             $lang->story->stageList[''] = $lang->null;
             foreach($lang->story->stageList as $key => $stage)
             {
