@@ -22,7 +22,7 @@ fields:
   - field: percent
     range: 0
   - field: auth
-    range:
+    range: "extend"
   - field: desc
     range: 1-10000
     prefix: "迭代描述"
