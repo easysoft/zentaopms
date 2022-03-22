@@ -16,6 +16,10 @@
 <?php if(!empty($config->safe->mode)) $lang->user->placeholder->password1 = $lang->user->placeholder->passwordStrength[$config->safe->mode]?>
 <?php js::set('holders', $lang->user->placeholder);?>
 <?php js::set('roleGroup', $roleGroup);?>
+<?php
+$visionList     = $this->user->getVisionList();
+$showVisionList = count($visionList) > 1;
+?>
 <div id="mainContent" class="main-content">
   <div class="center-block">
     <div class="main-header">
@@ -60,8 +64,7 @@
           <th><?php echo $lang->user->password2;?></th>
           <td><?php echo html::password('password2', '', "class='form-control'");?></td>
         </tr>
-        <?php $visionList = $this->user->getVisionList();?>
-        <tr <?php if(count($visionList) < 2) echo "class='hide'";?>>
+        <tr <?php if(!$showVisionList) echo "class='hide'";?>>
           <th><?php echo $lang->user->visions;?></th>
           <td><?php echo html::checkbox('visions', $visionList, isset($visionList[$this->config->vision]) ? $this->config->vision : key($visionList), "class='form-control'");?></td>
         </tr>
@@ -106,6 +109,7 @@
         <tr>
           <th></th>
           <td class='text-center form-actions'>
+            <?php if(!$showVisionList) echo html::hidden("visions[]", $this->config->vision);?>
             <?php echo html::submitButton();?>
             <?php echo html::backButton();?>
           </td>

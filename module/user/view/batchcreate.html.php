@@ -96,6 +96,7 @@
           <td align='left'>
             <div class='input-group'>
             <?php
+            if(!$showVisionList) echo html::hidden("visions[$i][]", $this->config->vision);
             echo html::input("password[$i]", '', "class='form-control' onkeyup='toggleCheck(this, $i)'");
             echo "<span class='input-group-addon passwordStrength'></span>";
             if($i != 1) echo "<span class='input-group-addon passwordBox'><input type='checkbox' name='ditto[$i]' id='ditto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->user->ditto}</span>";
