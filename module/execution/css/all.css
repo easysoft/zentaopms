@@ -20,7 +20,7 @@ td.flex span.project-type-label {margin-left: 5px; min-width: 36px;}
 .c-status, .c-date, .c-percent, .c-attribute {width: 80px;}
 .c-estimate, .c-consumed, .c-left, .c-pm {width: 70px;}
 .c-progress, .c-burn {width: 60px;}
-.c-percent, .c-realBegan, .c-end, .c-begin, .c-realEnd{width: 100px;}
+.c-code, .c-percent, .c-realBegan, .c-end, .c-begin, .c-realEnd{width: 100px;}
 .c-action {text-align: center;}
 .c-name > span {margin-right: 2px;}
 td.flex span.project-type-label {min-width: 40px;}

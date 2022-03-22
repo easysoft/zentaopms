@@ -86,6 +86,18 @@ function copyStoryTitle(num)
 /* Set the story module. */
 function setStoryRelated(num)
 {
+    setPreview(num);
+}
+
+/**
+ * Set preview.
+ *
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setPreview(num)
+{
     var storyID = $('#story' + num).val();
     if(storyID != 0  && storyID != 'ditto')
     {
@@ -224,6 +236,7 @@ $(document).on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-dr
         $(select).trigger("change");
     }
 })
+
 $(document).on('mousedown', 'select', function()
 {
     if($(this).val() == 'ditto')
@@ -253,7 +266,7 @@ $(function()
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
     markStoryTask();
 
-    if(storyID != 0) setStoryRelated(0);
+    if(storyID != 0) setStoryRelated($('#batchCreateForm table tbody tr:first [id^=story]:first').attr('id').replace('story', ''));
 
     $(document).keydown(function(event)
     {

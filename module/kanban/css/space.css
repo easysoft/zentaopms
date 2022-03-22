@@ -36,3 +36,5 @@
 .kanbans .kanbanAcl {position: absolute; right: 0px; bottom: 2px; color: #838a9d;}
 
 a.disabled {pointer-events: none;}
+
+.noBorder{border: 0px;}

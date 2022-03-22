@@ -19,6 +19,7 @@ $builder->story        = array('rows' => 400, 'extends' => array('story'));
 $builder->storymodule  = array('rows' => 800, 'extends' => array('module','storymodule'));
 $builder->storyplan    = array('rows' => 400, 'extends' => array('planstory'));
 $builder->storyspec    = array('rows' => 60, 'extends' => array('storyspec'));
+$builder->relation     = array('rows' => 12, 'extends' => array('relation'));
 $builder->task         = array('rows' => 600, 'extends' => array('task','task'));
 $builder->taskmore     = array('rows' => 300, 'extends' => array('task','moretask'));
 $builder->taskspec     = array('rows' => 600, 'extends' => array('taskspec'));
@@ -26,7 +27,13 @@ $builder->taskmodule   = array('rows' => 1800, 'extends' => array('module','task
 $builder->taskestimate = array('rows' => 600, 'extends' => array('taskestimate'));
 $builder->taskson      = array('rows' => 10,  'extends' => array('task', 'taskson'));
 $builder->case         = array('rows' => 400, 'extends' => array('case'));
+$builder->casestep     = array('rows' => 400, 'extends' => array('casestep'));
 $builder->bug          = array('rows' => 300, 'extends' => array('bug'));
+$builder->morebug      = array('rows' => 15, 'extends' => array('bug','morebug'));
+
+$builder->testtask   = array('rows' => 10, 'extends' => array('testtask'));
+$builder->testresult = array('rows' => 40, 'extends' => array('testresult'));
+$builder->testrun    = array('rows' => 40, 'extends' => array('testrun'));
 
 $builder->product        = array('rows' => 100, 'extends' => array('product'));
 $builder->productline    = array('rows' => 20,  'extends' => array('module', 'productline'));
@@ -61,7 +68,7 @@ $builder->doclib     = array('rows' => 900, 'extends' => array('doclib'));
 $builder->doc        = array('rows' => 900, 'extends' => array('doc'));
 $builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
 
-$builder->build   = array('rows' => 8, 'extends' => array('build'));
+$builder->build   = array('rows' => 20, 'extends' => array('build'));
 $builder->release = array('rows' => 8, 'extends' => array('release'));
 
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));

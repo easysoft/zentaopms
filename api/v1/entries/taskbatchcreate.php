@@ -56,7 +56,7 @@ class taskBatchCreateEntry extends Entry
             $estStarted[] = isset($task->estStarted) ? $task->estStarted : 0;
             $deadlines[]  = isset($task->deadline)   ? $task->deadline   : null;
             $desc[]       = isset($task->desc)       ? $task->desc       : '';
-            $pri[]        = isset($task->pri)        ? $task->pri        : '';
+            $pri[]        = isset($task->pri)        ? $task->pri        : 0;
             $stories[]    = isset($task->story)      ? $task->story      : $storyID;
         }
         $this->setPost('module',     $modules);
@@ -78,11 +78,9 @@ class taskBatchCreateEntry extends Entry
         if(!$data) return $this->send400('error');
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
-        $this->send(200, array());
+        if(!$taskID) return $this->send(200, array());
+        $task = $this->loadModel('task')->getById($taskID);
+        return $this->send(200, array('task' => $task));
     }
 
-    public function setArrayPost($field)
-    {
-        $_POST[$field] = array('0' => $_POST[$field]);
-    }
 }

@@ -64,6 +64,14 @@ class executionEntry extends Entry
         {
             switch($field)
             {
+                case 'modules':
+                    $control = $this->loadController('tree', 'browsetask');
+                    $control->browsetask($executionID);
+                    $data = $this->getData();
+                    if(isset($data->status) and $data->status == 'success')
+                    {
+                        $execution->modules = $data->data->tree;
+                    }
                 case 'builds':
                     $execution->builds  = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone', $executionID, 'execution');
                     break;

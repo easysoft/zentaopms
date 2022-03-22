@@ -5,29 +5,41 @@ include dirname(dirname(dirname(__FILE__))) . '/class/bug.class.php';
 
 /**
 
-title=bugModel->getExecutionBugs();
+title=bugModel->getBugInfoFromResult();
 cid=1
 pid=1
 
-测试获取执行ID为101的bug  >> BUG3,BUG2,BUG1
-测试获取执行ID为102的bug  >> BUG6,BUG5,BUG4
-测试获取执行ID为103的bug  >> BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7
-测试获取执行ID为104的bug  >> BUG12,BUG11,BUG10
-测试获取执行ID为105的bug  >> 缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,BUG14,BUG13
-测试获取执行ID为106的bug  >> BUG18,BUG17,bug16
-测试获取不存在的执行的bug >> 0
+测试获取runID为0 caseID为2的bug   >> 这个是测试用例2
+测试获取runID为0 caseID为6的bug   >> 这个是测试用例6
+测试获取runID为0 caseID为10的bug  >> 这个是测试用例10
+测试获取runID为2 caseID为2的bug   >> 这个是测试用例2
+测试获取runID为2 caseID为6的bug   >> 这个是测试用例6
+测试获取runID为2 caseID为10的bug  >> 这个是测试用例10
+测试获取runID为6 caseID为2的bug   >> 这个是测试用例2
+测试获取runID为6 caseID为6的bug   >> 这个是测试用例6
+测试获取runID为6 caseID为10的bug  >> 这个是测试用例10
+测试获取runID为10 caseID为2的bug  >> 这个是测试用例2
+测试获取runID为10 caseID为6的bug  >> 这个是测试用例6
+测试获取runID为10 caseID为10的bug >> 这个是测试用例10
 
 
 */
 
 
-$executionIDList = array('101', '102', '103', '104', '105', '106', '1000001');
+$runIDList       = array('0', '2', '6', '10');
+$caseIDList      = array('0', '2', '6', '10');
 
 $bug=new bugTest();
-r($bug->getExecutionBugsTest($executionIDList[0])) && p() && e('BUG3,BUG2,BUG1');     // 测试获取执行ID为101的bug
-r($bug->getExecutionBugsTest($executionIDList[1])) && p() && e('BUG6,BUG5,BUG4');     // 测试获取执行ID为102的bug
-r($bug->getExecutionBugsTest($executionIDList[2])) && p() && e('BUG9,bug8,缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;7');    // 测试获取执行ID为103的bug
-r($bug->getExecutionBugsTest($executionIDList[3])) && p() && e('BUG12,BUG11,BUG10');  // 测试获取执行ID为104的bug
-r($bug->getExecutionBugsTest($executionIDList[4])) && p() && e('缺陷!@()(){}|+=%^&*$#测试bug名称到底可以有多长！@#￥%&*":.<>。?/（）;15,BUG14,BUG13'); // 测试获取执行ID为105的bug
-r($bug->getExecutionBugsTest($executionIDList[5])) && p() && e('BUG18,BUG17,bug16');  // 测试获取执行ID为106的bug
-r($bug->getExecutionBugsTest($executionIDList[6])) && p() && e('0');                  // 测试获取不存在的执行的bug
+
+r($bug->getBugInfoFromResultTest($runIDList[0], $caseIDList[1])) && p() && e('这个是测试用例2');  // 测试获取runID为0 caseID为2的bug
+r($bug->getBugInfoFromResultTest($runIDList[0], $caseIDList[2])) && p() && e('这个是测试用例6');  // 测试获取runID为0 caseID为6的bug
+r($bug->getBugInfoFromResultTest($runIDList[0], $caseIDList[3])) && p() && e('这个是测试用例10'); // 测试获取runID为0 caseID为10的bug
+r($bug->getBugInfoFromResultTest($runIDList[1], $caseIDList[1])) && p() && e('这个是测试用例2');  // 测试获取runID为2 caseID为2的bug
+r($bug->getBugInfoFromResultTest($runIDList[1], $caseIDList[2])) && p() && e('这个是测试用例6');  // 测试获取runID为2 caseID为6的bug
+r($bug->getBugInfoFromResultTest($runIDList[1], $caseIDList[3])) && p() && e('这个是测试用例10'); // 测试获取runID为2 caseID为10的bug
+r($bug->getBugInfoFromResultTest($runIDList[2], $caseIDList[1])) && p() && e('这个是测试用例2');  // 测试获取runID为6 caseID为2的bug
+r($bug->getBugInfoFromResultTest($runIDList[2], $caseIDList[2])) && p() && e('这个是测试用例6');  // 测试获取runID为6 caseID为6的bug
+r($bug->getBugInfoFromResultTest($runIDList[2], $caseIDList[3])) && p() && e('这个是测试用例10'); // 测试获取runID为6 caseID为10的bug
+r($bug->getBugInfoFromResultTest($runIDList[3], $caseIDList[1])) && p() && e('这个是测试用例2');  // 测试获取runID为10 caseID为2的bug
+r($bug->getBugInfoFromResultTest($runIDList[3], $caseIDList[2])) && p() && e('这个是测试用例6');  // 测试获取runID为10 caseID为6的bug
+r($bug->getBugInfoFromResultTest($runIDList[3], $caseIDList[3])) && p() && e('这个是测试用例10'); // 测试获取runID为10 caseID为10的bug

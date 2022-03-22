@@ -75,7 +75,18 @@ class messageModel extends model
                 /* If it is an api call, get the request method set by the user. */
                 global $config;
                 $requestType = $config->requestType;
-                if(defined('RUN_MODE') and RUN_MODE == 'api') include $this->app->getConfigRoot() . 'config.php';
+                if(defined('RUN_MODE') and RUN_MODE == 'api')
+                {
+                    $configRoot = $this->app->getConfigRoot();
+                    if(file_exists($configRoot . 'my.php'))
+                    {
+                        include $configRoot . 'my.php';
+                    }
+                    else
+                    {
+                        include $configRoot . 'config.php';
+                    }
+                }
 
                 $moduleName = $objectType == 'case' ? 'testcase' : $objectType;
                 $this->loadModel('mail')->sendmail($objectID, $actionID);

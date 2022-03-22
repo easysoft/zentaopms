@@ -1505,6 +1505,8 @@ class bug extends control
     public function resolve($bugID, $extra = '')
     {
         $bug = $this->bug->getById($bugID);
+        if($bug->execution) $execution = $this->loadModel('execution')->getByID($bug->execution);
+
         if(!empty($_POST))
         {
             $changes = $this->bug->resolve($bugID, $extra);
@@ -1536,7 +1538,6 @@ class bug extends control
             parse_str($extra, $output);
             if(isonlybody())
             {
-                $execution = $this->loadModel('execution')->getByID($bug->execution);
                 if(isset($execution->type) and $execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
@@ -1577,6 +1578,7 @@ class bug extends control
         $this->view->executions = $this->loadModel('product')->getExecutionPairsByProduct($productID, $bug->branch ? "0,{$bug->branch}" : 0, 'id_desc', $projectID);
         $this->view->builds     = $this->loadModel('build')->getBuildPairs($productID, $bug->branch, 'withbranch');
         $this->view->actions    = $this->action->getList('bug', $bugID);
+        $this->view->execution  = isset($execution) ? $execution : '';
         $this->display();
     }
 

@@ -71,7 +71,7 @@ function setLane(regionID, num)
 function loadExecutionBuilds(productID, executionID, index)
 {
     branch = $('#branches' + index).val();
-    if(executionID)
+    if(executionID != 0)
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
     }

@@ -900,5 +900,12 @@ $(document).ready(function()
     $('#globalCreate').hover(function()
     {
         $(this).prev().removeClass('open');
+        $(this).addClass('dropdown-hover');
+    });
+
+    /* Hide create button when global create menu is clicked. */
+    $('#globalCreate').click(function()
+    {
+        $(this).removeClass('dropdown-hover');
     });
 });

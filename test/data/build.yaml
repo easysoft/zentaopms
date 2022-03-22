@@ -6,27 +6,27 @@ fields:
     range: 1-1000
 
   - field: project
-    range: 31{5},32{2},0
+    range: 11-20,0{630}
 
   - field: product
-    range: [1,41]{2!},1{2},42,2
+    range: 1-10
 
   - field: branch
-    range: [0,1]{2!},0{2},2,0
+    range: 0
 
   - field: execution
-    range: 391{2},121{2},661,122{2},0
+    range: 0{10}, 101-110
 
   - field: name
     fields:
       - field: name1
-        range: 迭代{7},无相关迭代的
+        range: 项目{10},执行{10}
 
       - field: name2
-        range: 131{5},132{2},[]
+        range: 11-20,101-110
 
       - field: name2
-        range: 版本{6},`版本!@()[]{}|\+=%^&*$#测试版本名称到底可以有多长！@#￥%&*'":.<>。?/（）;`,版本
+        range: 版本
 
       - field: name3
         range: 1-1000

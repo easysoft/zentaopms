@@ -627,6 +627,27 @@ class bugTest
     }
 
     /**
+     * Test get by Sonarqube id.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return int
+     */
+    public function getBySonarqubeIDTest($sonarqubeID)
+    {
+        $array = $this->objectModel->getBySonarqubeID($sonarqubeID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($array);
+        }
+    }
+
+    /**
      * Test get bug list of a plan.
      *
      * @param  string $productIDList
@@ -1523,6 +1544,28 @@ class bugTest
     }
 
     /**
+     * Test get bug info from a result.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @access public
+     * @return string
+     */
+    public function getBugInfoFromResultTest($resultID, $caseID = 0)
+    {
+        $array = $this->objectModel->getBugInfoFromResult($resultID, $caseID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return isset($array['title']) ? $array['title'] : 0;
+        }
+    }
+
+    /**
      * Test get report data of bugs per execution.
      *
      * @access public
@@ -1831,6 +1874,146 @@ class bugTest
     public function getDataOfBugsPerAssignedToTest()
     {
         $array = $this->objectModel->getDataOfBugsPerAssignedTo();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test form customed bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function formCustomedBugsTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->formCustomedBugs($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test adjust the action is clickable.
+     *
+     * @param  object $bug
+     * @param  string $action
+     * @access public
+     * @return int
+     */
+    public function isClickableTest($bug, $action)
+    {
+        $object = $this->objectModel->isClickable($bug, $action);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
+
+    /**
+     * Test link bug to build and release.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $resolvedBuild
+     * @access public
+     * @return object
+     */
+    public function linkBugToBuildTest($bugIDList, $resolvedBuild)
+    {
+        $this->objectModel->linkBugToBuild($bugIDList, $resolvedBuild);
+
+        global $tester;
+        $release = $tester->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $release;
+        }
+    }
+
+    /**
+     * Test get toList and ccList.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return string
+     */
+    public function getToAndCcListTest($bugID)
+    {
+        $bug   = $this->objectModel->getByID($bugID);
+        $array = $this->objectModel->getToAndCcList($bug);
+
+        $account = '';
+        foreach($array as $value) $account .= ',' . $value;
+        $account = trim($account, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $account;
+        }
+    }
+
+    /**
+     * Test get project list.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProjectsTest($productID)
+    {
+        $array = $this->objectModel->getProjects($productID);
+
+        $title = '';
+        foreach($array as $id => $project) $title .= ',' . $project;
+        $title = trim($title, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get id list of all projects.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllProjectIdsTest()
+    {
+        $array = $this->objectModel->getAllProjectIds();
 
         if(dao::isError())
         {
