@@ -53,14 +53,17 @@ class userEntry extends Entry
      */
     private function getInfo($fields = '')
     {
+        global $app, $config;
+
         $info = new stdclass();
 
         $profile = $this->loadModel('user')->getById($this->app->user->account);
         unset($profile->password);
 
         $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
-        $info->profile->role  = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
-        $info->profile->admin = strpos($this->app->company->admins, ",{$profile->account},") !== false;
+        $info->profile->role          = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
+        $info->profile->admin         = strpos($this->app->company->admins, ",{$profile->account},") !== false;
+        $info->profile->superReviewer = strpos(',' . trim(zget($config->story, 'superReviewers', ''), ',') . ',', ',' . $app->user->account . ',');
 
         if(!$fields) return $this->send(200, $info);
 

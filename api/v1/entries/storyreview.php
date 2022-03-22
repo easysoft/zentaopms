@@ -23,7 +23,7 @@ class storyReviewEntry extends Entry
     {
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
-        $fields = 'reviewedDate,result,closedReason,pri,estimate,';
+        $fields = 'reviewedDate,result,closedReason,pri,estimate,comment';
         $this->batchSetPost($fields);
 
         $control = $this->loadController('story', 'review');
