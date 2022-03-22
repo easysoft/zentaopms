@@ -1000,7 +1000,7 @@ class product extends control
         {
             $executionsName = "executions[$number]";
             $executions     = empty($executions) ? array('' => '') : $executions;
-            return print(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($executionID, this.value, $number)'"));
+            return print(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'"));
         }
     }
 
