@@ -135,9 +135,7 @@
               <a class="plan-toggle" data-id="<?php echo $execution->id;?>"><i class="icon icon-angle-double-right"></i></a>
             <?php endif;?>
           </td>
-          <td class='c-code' title='<?php echo $execution->code;?>' >
-            <?php echo $execution->code?>
-          </td>
+          <td title='<?php echo $execution->code;?>'><?php echo $execution->code;?></td>
           <?php if($config->systemMode == 'new' and $this->app->tab == 'execution'):?>
           <td class='c-begin' title='<?php echo $execution->projectName;?>'>
              <span class="status-execution status-<?php echo $execution->projectName?>"><?php echo $execution->projectName;?></span>
