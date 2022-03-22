@@ -1587,3 +1587,8 @@ function resetRegionHeight(fold)
         $('.region').css('height', regionHeaderHeight);
     }
 }
+
+$('.dropdown-menu').click(function()
+{
+    $.zui.ContextMenu.hide();
+})

@@ -140,6 +140,8 @@ $routes['/docs/:id']     = 'doc';
 $routes['/repos']       = 'repos';
 $routes['/repos/rules'] = 'reporules';
 
+$routes['/modules'] = 'modules';
+
 $routes['/reports'] = 'reports';
 
 $routes['/z/folders']           = 'zfolders';
