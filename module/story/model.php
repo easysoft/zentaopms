@@ -208,7 +208,7 @@ class storyModel extends model
             ->callFunc('title', 'trim')
             ->add('version', 1)
             ->add('status', 'draft')
-            ->setDefault('plan,verify', '')
+            ->setDefault('plan,verify,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->post->needNotReview, 'status', 'active')
@@ -247,6 +247,7 @@ class storyModel extends model
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
+
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -763,7 +764,7 @@ class storyModel extends model
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->setDefault('plan', '')
+            ->setDefault('plan,notifyEmail', '')
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)

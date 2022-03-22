@@ -1317,7 +1317,6 @@ class execution extends control
 
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
-            $this->view->defaultURL  = $this->session->closeTipsList ? $this->session->closeTipsList : $this->createLink('execution', 'task', 'executionID=' . $executionID);
             $this->view->executionID = $executionID;
             $this->view->projectID   = $projectID;
             $this->view->project     = $project;
@@ -1583,7 +1582,7 @@ class execution extends control
         $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
@@ -1978,6 +1977,8 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
+        if($execution->type == 'kanban') return $this->locate(inlink('kanban', "executionID=$executionID"));
+
         $this->app->loadLang('program');
 
         /* Execution not found to prevent searching for .*/
@@ -2044,7 +2045,9 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
 
         $this->lang->execution->menu = new stdclass();
-        $execution        = $this->commonAction($executionID);
+        $execution = $this->commonAction($executionID);
+        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
+
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
 
@@ -3263,8 +3266,6 @@ class execution extends control
      */
     public function all($status = 'all', $projectID = 0, $orderBy = 'order_asc', $productID = 0, $recTotal = 0, $recPerPage = 10, $pageID = 1)
     {
-        $this->session->set('closeTipsList', $this->app->getURI(true));
-
         $this->app->loadLang('my');
         $this->app->loadLang('product');
         $this->app->loadLang('stage');

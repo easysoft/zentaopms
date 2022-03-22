@@ -12,5 +12,12 @@ pid=1
 */
 
 $story = new storyTest();
+global $tester;
 
-r() && p() && e();
+$oldStory = $tester->loadModel('story')->getByID(1);
+$tester->story->updateStoryProduct(1, 2);
+$newStory = $tester->story->getByID(1);
+
+r($oldStory) && p('product') && e('1'); // 判断需求变更所属产品之前的产品ID
+r($newStory) && p('product') && e('2'); // 判断需求变更所属产品之后的产品ID
+system("./ztest init");

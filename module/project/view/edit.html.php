@@ -102,8 +102,8 @@
           <?php $deltaValue = $project->end == LONG_TIME ? 999 : (strtotime($project->end) - strtotime($project->begin)) / 3600 / 24 + 1;?>
           <td colspan='2'><?php echo html::radio('delta', $lang->project->endList , $deltaValue, "onclick='computeEndDate(this.value)'");?></td>
         </tr>
-        <?php if($project->model == 'scrum'):?>
-        <tr id='daysBox' <?php if($project->end == LONG_TIME) echo "class='hidden'";?>>
+        <?php $hidden = ($model != 'scrum' or $project->end == LONG_TIME) ? "class='hidden'" : '';?>
+        <tr id='daysBox' <?php echo $hidden;?>>
           <th><?php echo $lang->project->days;?></th>
           <td>
             <div class='input-group'>
@@ -114,7 +114,6 @@
           <td></td>
           <td></td>
         </tr>
-        <?php endif;?>
         <tr>
           <th><?php echo $lang->project->manageProducts;?></th>
           <td class='text-left' id='productsBox' colspan="3">

@@ -9,10 +9,10 @@ title=bugModel->getDataOfOpenedBugsPerDay();
 cid=1
 pid=1
 
-获取创建的数据 >> 300
+获取创建的数据 >> 315
 
 */
 
 
 $bug=new bugTest();
-r($bug->getDataOfOpenedBugsPerDayTest()) && p('0:value') && e('300');   // 获取创建的数据
+r($bug->getDataOfOpenedBugsPerDayTest()) && p('0:value') && e('315');   // 获取创建的数据

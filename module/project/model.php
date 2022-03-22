@@ -1535,6 +1535,7 @@ class projectModel extends model
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
+        $projectMember = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1549,12 +1550,6 @@ class projectModel extends model
                 dao::$errors['message'][]  = $this->lang->project->errorHours;
                 return false;
             }
-        }
-
-        $projectMember = array();
-        foreach($accounts as $key => $account)
-        {
-            if(empty($account)) continue;
 
             $member          = new stdclass();
             $member->role    = $roles[$key];
@@ -1760,6 +1755,8 @@ class projectModel extends model
                     }
                     else
                     {
+                        common::printIcon($moduleName, 'manageMembers', "projectID=$project->id", $project, 'list', 'group', '', '', '', $dataApp, $this->lang->execution->team);
+                        if($this->config->systemMode == 'new') common::printIcon('project', 'whitelist', "projectID=$project->id&module=project&from=$from", $project, 'list', 'shield-check', '', 'btn-action', '', $dataApp);
                         if(common::hasPriv($moduleName, 'delete')) echo html::a(helper::createLink($moduleName, "delete", "projectID=$project->id"), "<i class='icon-trash'></i>", 'hiddenwin', "class='btn btn-action' title='{$this->lang->project->delete}'");
                     }
                     break;

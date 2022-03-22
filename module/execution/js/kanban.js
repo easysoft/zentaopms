@@ -768,6 +768,7 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     $region.data('zui.kanban').render(regionData.groups);
+    resetRegionHeight('open');
     return true;
 }
 
@@ -1101,7 +1102,7 @@ function createStoryMenu(options)
     var items      = [];
     var showAction = story.$col.type == 'backlog' || story.$col.type == 'ready' || story.$col.type == 'developing' || story.$col.type == 'developed' || story.$col.type == 'testing' || story.$col.type == 'tested' || story.$col.type == 'verified' || story.$col.type == 'released';
 
-    if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canEditStory) items.push({label: storyLang.edit, icon: 'edit', url: createLink('story', 'edit', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canChangeStory && showAction) items.push({label: storyLang.change, icon: 'change', url: createLink('story', 'change', 'storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canCreateTask && showAction) items.push({label: executionLang.wbs, icon: 'plus', url: createLink('task', 'create', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canBatchCreateTask && showAction) items.push({label: executionLang.batchWBS, icon: 'pluses', url: createLink('task', 'batchCreate', 'executionID=' + execution.id + '&storyID=' + story.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1120,7 +1121,7 @@ function createTaskMenu(options)
     var $card = options.$trigger.closest('.kanban-item');
     var task  = $card.data('item');
     var items = [];
-    if(priv.canEditTask) items.push({label: taskLang.edit, icon: 'edit', url: createLink('task', 'edit', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canEditTask) items.push({label: taskLang.edit, icon: 'edit', url: createLink('task', 'edit', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canRestartTask && task.$col.type == 'pause') items.push({label: taskLang.restart, icon: 'play', url: createLink('task', 'restart', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canPauseTask && task.$col.type == 'developing') items.push({label: taskLang.pause, icon: 'pause', url: createLink('task', 'pause', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canRecordEstimateTask) items.push({label: executionLang.effort, icon: 'time', url: createLink('task', 'recordEstimate', 'taskID=' + task.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1140,7 +1141,7 @@ function createBugMenu(options)
     var $card = options.$trigger.closest('.kanban-item');
     var bug   = $card.data('item');
     var items = [];
-    if(priv.canEditBug) items.push({label: bugLang.edit, icon: 'edit', url: createLink('bug', 'edit', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
+    if(priv.canEditBug) items.push({label: bugLang.edit, icon: 'edit', url: createLink('bug', 'edit', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '95%'}});
     if(priv.canResolveBug && (bug.$col.type == 'unconfirmed' || bug.$col.type == 'confirmed' || bug.$col.type == 'fixing')) items.push({label: bugLang.resolve, icon: 'checked', url: createLink('bug', 'resolve', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canConfirmBug && (bug.$col.type == 'fixed' || bug.$col.type == 'testing' || bug.$col.type == 'tested')) items.push({label: bugLang.close, icon: 'off', url: createLink('bug', 'close', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
     if(priv.canConfirmBug && bug.$col.type == 'unconfirmed') items.push({label: bugLang.confirmBug, icon: 'ok', url: createLink('bug', 'confirmbug', 'bugID=' + bug.id, '', 'true'), className: 'iframe', attrs: {'data-toggle': 'modal', 'data-width': '80%'}});
@@ -1236,6 +1237,7 @@ $(function()
         $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
+        resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
     });
 
     $('.region-header').on('click', '.action', hideKanbanAction);
@@ -1458,6 +1460,8 @@ $(function()
             });
         }, 10000);
     }
+
+    resetRegionHeight('open');
 });
 
 /** Calculate column height */
@@ -1471,3 +1475,62 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
     return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
 }
+
+/**
+ * Reset region height according to window height.
+ *
+ * @param  string fold
+ * @access public
+ * @return void
+ */
+ function resetRegionHeight(fold)
+ {
+     var regionCount = 0;
+     if($.isEmptyObject(regions)) return false;
+     for(var i in regions)
+     {
+         regionCount += 1;
+         if(regionCount > 1) return false;
+     }
+ 
+     var regionID   = Object.keys(regions)[0];
+     var region     = regions[regionID].groups;
+     var groupCount = 0;
+ 
+     if($.isEmptyObject(region)) return false;
+     for(var j in region)
+     {
+         groupCount += 1;
+         if(groupCount > 1) return false;
+     }
+ 
+     var group     = region[0];
+     var laneCount = 0;
+ 
+     if($.isEmptyObject(group.lanes)) return false;
+     for(var h in group.lanes)
+     {
+         laneCount += 1;
+         if(laneCount > 1) return false;
+     }
+ 
+     var regionHeaderHeight = $('.region-header').outerHeight();
+     if(fold == 'open')
+     {
+         var windowHeight  = $(window).height();
+         var headerHeight  = $('#mainHeader').outerHeight();
+         var mainPadding   = $('#main').css('padding-top');
+         var panelBorder   = $('.panel').css('border-top-width');
+         var bodyPadding   = $('.panel-body').css('padding-top');
+         var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
+         var regionPadding = $('.kanban').css('padding-bottom');
+         var columnHeight  = $('.kanban-header').outerHeight();
+ 
+         $('.region').css('height', height);
+         $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
+     }
+     else
+     {
+         $('.region').css('height', regionHeaderHeight);
+     }
+ }

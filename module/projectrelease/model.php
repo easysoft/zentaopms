@@ -211,6 +211,21 @@ class projectreleaseModel extends model
             $this->file->saveUpload('release', $releaseID);
             $this->loadModel('score')->create('release', 'create', $releaseID);
 
+            /* Set stage to released. */
+            if($release->stories)
+            {
+                $this->loadModel('story');
+                $this->loadModel('action');
+
+                $storyIDList = array_filter(explode(',', $release->stories));
+                foreach($storyIDList as $storyID)
+                {
+                    $this->story->setStage($storyID);
+
+                    $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
+                }
+            }
+
             return $releaseID;
         }
 
@@ -333,13 +348,13 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Judge btn is clickable or not. 
-     * 
-     * @param  int    $release 
-     * @param  string $action 
+     * Judge btn is clickable or not.
+     *
+     * @param  int    $release
+     * @param  string $action
      * @static
      * @access public
-     * @return bool 
+     * @return bool
      */
     public static function isClickable($release, $action)
     {

@@ -9,7 +9,7 @@ title=bugModel->getDataOfBugsPerType();
 cid=1
 pid=1
 
-获取类型为codeerror的数据    >> 代码错误,34
+获取类型为codeerror的数据    >> 代码错误,49
 获取类型为config的数据       >> 配置相关,34
 获取类型为install的数据      >> 安装部署,34
 获取类型为security的数据     >> 安全相关,33
@@ -23,7 +23,7 @@ pid=1
 
 
 $bug=new bugTest();
-r($bug->getDataOfBugsPerTypeTest()) && p('codeerror:name,value')    && e('代码错误,34');   // 获取类型为codeerror的数据
+r($bug->getDataOfBugsPerTypeTest()) && p('codeerror:name,value')    && e('代码错误,49');   // 获取类型为codeerror的数据
 r($bug->getDataOfBugsPerTypeTest()) && p('config:name,value')       && e('配置相关,34');   // 获取类型为config的数据
 r($bug->getDataOfBugsPerTypeTest()) && p('install:name,value')      && e('安装部署,34');   // 获取类型为install的数据
 r($bug->getDataOfBugsPerTypeTest()) && p('security:name,value')     && e('安全相关,33');   // 获取类型为security的数据

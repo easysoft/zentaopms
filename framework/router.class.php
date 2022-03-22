@@ -183,6 +183,9 @@ class router extends baseRouter
             if($setting->key == 'mode' and $setting->section == 'global') $mode = $setting->value;
             if($setting->key == 'scoreStatus' and $setting->section == 'global') $score = $setting->value;
         }
+        
+        /* Lite Version is compatible with classic modes */
+        if($config->vision == 'lite') $mode = 'new';
 
         /* Record system mode. */
         $config->systemMode = $mode;

@@ -50,6 +50,8 @@ $routes['/stories/:id/active']         = 'storyActive';
 $routes['/stories/:id/assign']         = 'storyAssignto';
 $routes['/stories/:id/recordEstimate'] = 'storyRecordEstimate';
 $routes['/stories/:id/child']          = 'storyChild';
+$routes['/stories/:id/recall']         = 'storyRecall';
+$routes['/stories/:id/review']         = 'storyReview';
 
 $routes['/module/:id/stories'] = 'moduleStories';
 
@@ -80,6 +82,7 @@ $routes['/tasks/:id/pause']          = 'taskPause';
 $routes['/tasks/:id/finish']         = 'taskFinish';
 $routes['/tasks/:id/close']          = 'taskClose';
 $routes['/tasks/:id/recordEstimate'] = 'taskRecordEstimate';
+$routes['/tasks/:id/getEstimate']    = 'taskRecordEstimate';
 
 $routes['/users']     = 'users';
 $routes['/users/:id'] = 'user';

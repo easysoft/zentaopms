@@ -80,9 +80,11 @@ class testcasesEntry extends entry
             $stepType = array();
             foreach($this->requestBody->steps as $step)
             {
+                $type = isset($step->type) ? $step->type : 'step';
+
                 $steps[]    = $step->desc;
-                $expects[]  = $step->expect;
-                $stepType[] = 'item';
+                $expects[]  = $type == 'group' ? '' : $step->expect;
+                $stepType[] = $type;
             }
             $this->setPost('steps',    $steps);
             $this->setPost('expects',  $expects);

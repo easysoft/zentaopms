@@ -989,7 +989,7 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID);
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, empty($this->config->CRExecution) ? 'noclosed' : '');
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')
@@ -1000,7 +1000,7 @@ class product extends control
         {
             $executionsName = "executions[$number]";
             $executions     = empty($executions) ? array('' => '') : $executions;
-            return print(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($executionID, this.value, $number)'"));
+            return print(html::select($executionsName, $executions, '', "class='form-control' onchange='loadExecutionBuilds($productID, this.value, $number)'"));
         }
     }
 

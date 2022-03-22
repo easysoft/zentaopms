@@ -1023,4 +1023,20 @@ class fileModel extends model
             return array($info->ImageWidth->value, $info->ImageHeight->value, 'img');
         }
     }
+
+    /**
+     * Get file pairs.
+     *
+     * @param  int    $IDs
+     * @param  string $value
+     * @access public
+     * @return void
+     */
+    public function getPairs($IDs, $value = 'title')
+    {
+        return $this->dao->select("id,$value")->from(TABLE_FILE)
+            ->where('id')->in($IDs)
+            ->andWhere('deleted')->eq('0')
+            ->fetchPairs();
+    }
 }

@@ -2152,6 +2152,7 @@ class taskModel extends model
                 ->from(TABLE_KANBANCELL)->alias('t1')
                 ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
                 ->where('t1.kanban')->eq($executionID)
+                ->andWhere('t2.deleted')->eq(0)
                 ->andWhere("($cardsWhere)")
                 ->fetchAll();
 
