@@ -1647,14 +1647,14 @@ class kanbanModel extends model
     public function getSpacePairs($browseType = 'private')
     {
         $account     = $this->app->user->account;
-        $spaceIdList = $this->getCanViewObjects('kanbanspace');
+        $spaceIdList = $this->getCanViewObjects('kanbanspace', $browseType);
 
         return $this->dao->select('id,name')->from(TABLE_KANBANSPACE)
             ->where('deleted')->eq(0)
+            ->andWhere('id')->in($spaceIdList)
             ->beginIF(in_array($browseType, array('private', 'cooperation', 'public')))->andWhere('type')->eq($browseType)->fi()
             ->beginIF($browseType == 'involved')->andWhere('owner')->ne($account)->fi()
             ->beginIF($this->cookie->showClosed == 0 and $browseType != 'showClosed')->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin)->andWhere('id')->in($spaceIdList)->fi()
             ->orderBy('id_desc')
             ->fetchPairs('id');
     }
@@ -1694,7 +1694,7 @@ class kanbanModel extends model
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
-        if($this->app->user->admin and strpos('private,involved', $param) === false) return array_keys($objects);
+        if($param and $this->app->user->admin and strpos('private,involved', $param) === false) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
