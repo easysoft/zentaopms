@@ -25,4 +25,4 @@ $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
 
-$lang->custom->system = array('required', 'flow'); // remove score from menu
+$lang->custom->system = array('required');
