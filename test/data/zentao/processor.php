@@ -46,6 +46,7 @@ class Processor
         $this->initUserquery();
         $this->initUpdateKanban();
         $this->initStory();
+        $this->initBug();
 
         $this->dao->commit();
     }
@@ -154,6 +155,11 @@ class Processor
     private function initStory()
     {
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
+    }
+
+    private function initBug()
+    {
+        $this->dao->update(TABLE_BUG)->set('`issueKey`')->eq('2:AX-W7K3_L7H_36P3H4le')->where('issueKey')->eq('17')->exec();
     }
 
     /**
