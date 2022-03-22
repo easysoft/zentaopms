@@ -217,12 +217,8 @@ class releaseModel extends model
                 $this->loadModel('action');
 
                 $storyIDList = array_filter(explode(',', $release->stories));
-                $product     = $this->loadModel('product')->getById($release->product);
                 foreach($storyIDList as $storyID)
                 {
-                    $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
-                    if($product and $product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
-
                     $this->story->setStage($storyID);
 
                     $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
