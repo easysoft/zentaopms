@@ -84,10 +84,7 @@ class stakeholder extends control
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
         foreach($this->view->members as $account => $realname)
         {
-            if(in_array($account, array_keys($stakeholders)))
-            {
-                unset($this->view->members[$account]);
-            }
+            if(in_array($account, array_keys($stakeholders))) unset($this->view->members[$account]);
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
