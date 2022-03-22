@@ -767,6 +767,7 @@ function updateRegion(regionID, regionData = [])
     if(!regionData) regionData = regions[regionID];
 
     $region.data('zui.kanban').render(regionData.groups);
+    resetRegionHeight('open');
     return true;
 }
 
@@ -1197,6 +1198,7 @@ $(function()
         $(this).toggleClass('icon-chevron-double-up icon-chevron-double-down');
         $(this).parents('.region').find('.kanban').toggle();
         hideKanbanAction();
+        resetRegionHeight($(this).hasClass('icon-chevron-double-up') ? 'open' : 'close');
     });
 
     $('.region-header').on('click', '.action', hideKanbanAction);
@@ -1419,6 +1421,8 @@ $(function()
             });
         }, 10000);
     }
+
+    resetRegionHeight('open');
 });
 
 /** Calculate column height */
@@ -1432,3 +1436,62 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
     if (typeof displayCards !== 'number' || displayCards < 2) displayCards = 2;
     return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
 }
+
+/**
+ * Reset region height according to window height.
+ *
+ * @param  string fold
+ * @access public
+ * @return void
+ */
+ function resetRegionHeight(fold)
+ {
+     var regionCount = 0;
+     if($.isEmptyObject(regions)) return false;
+     for(var i in regions)
+     {
+         regionCount += 1;
+         if(regionCount > 1) return false;
+     }
+ 
+     var regionID   = Object.keys(regions)[0];
+     var region     = regions[regionID].groups;
+     var groupCount = 0;
+ 
+     if($.isEmptyObject(region)) return false;
+     for(var j in region)
+     {
+         groupCount += 1;
+         if(groupCount > 1) return false;
+     }
+ 
+     var group     = region[0];
+     var laneCount = 0;
+ 
+     if($.isEmptyObject(group.lanes)) return false;
+     for(var h in group.lanes)
+     {
+         laneCount += 1;
+         if(laneCount > 1) return false;
+     }
+ 
+     var regionHeaderHeight = $('.region-header').outerHeight();
+     if(fold == 'open')
+     {
+         var windowHeight  = $(window).height();
+         var headerHeight  = $('#mainHeader').outerHeight();
+         var mainPadding   = $('#main').css('padding-top');
+         var panelBorder   = $('.panel').css('border-top-width');
+         var bodyPadding   = $('.panel-body').css('padding-top');
+         var height        = windowHeight - (parseInt(mainPadding) * 2) - (parseInt(bodyPadding) * 2) - headerHeight - (parseInt(panelBorder) * 2);
+         var regionPadding = $('.kanban').css('padding-bottom');
+         var columnHeight  = $('.kanban-header').outerHeight();
+ 
+         $('.region').css('height', height);
+         $('.kanban-lane').css('height', height - regionHeaderHeight - parseInt(regionPadding) - columnHeight);
+     }
+     else
+     {
+         $('.region').css('height', regionHeaderHeight);
+     }
+ }
