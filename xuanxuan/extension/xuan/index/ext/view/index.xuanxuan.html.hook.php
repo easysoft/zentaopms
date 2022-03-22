@@ -23,7 +23,11 @@ updateAppMenu();
 
 $(document).on('showapp', function(e, app)
 {
-    window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
+    window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + encodeURIComponent(JSON.stringify({id: app.code, openedApps:Object.keys($.apps.openedApps)})));
+});
+$(document).on('hideapp', function(e, app)
+{
+    window.open('xxc://extension.zentao-integrated.hideAppMenuItem/' + encodeURIComponent(JSON.stringify({id: app.code, openedApps:Object.keys($.apps.openedApps)})));
 });
 </script>
 <?php else: ?>
@@ -48,7 +52,7 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon)
 <style>
 #chatBtn {padding: 3px; position: relative;}
 #chatBtn .icon {font-size: 24px;}
-#chatNoticeBadge {position: absolute; top: -4px; right: -2px; line-height: 14px; height: 14px; width: 14px; text-align: center; display: block; font-size: 12px; border-radius: 50%; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity;}
+#chatNoticeBadge {position: absolute; top: -4px; right: -2px; line-height: 14px; height: 14px; min-width: 14px; text-align: center; display: inline-block; font-size: 12px; border-radius: 7px; opacity: 0; transform: scale(0); transition: .2s; transition-property: transform, opacity; padding: 0 2px;}
 #chatNoticeBadge.show {opacity: 1; transform: scale(1);}
 #xx-embed-container {bottom: 40px!important; z-index: 1010!important;}
 #xx-embed-container .xx-embed-has-animation {transition: min-width .5s ease-out, min-height .5s ease-out, transform, opacity!important;}

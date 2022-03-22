@@ -18,6 +18,10 @@ if(window.navigator.userAgent.indexOf('xuanxuan') > 0)
 
     $(document).on('showapp', function(e, app)
     {
-        window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + app.code);
+        window.open('xxc://extension.zentao-integrated.activeAppMenuItem/' + encodeURIComponent(JSON.stringify({id: app.code, openedApps:Object.keys($.apps.openedApps)})));
+    });
+    $(document).on('hideapp', function(e, app)
+    {
+        window.open('xxc://extension.zentao-integrated.hideAppMenuItem/' + encodeURIComponent(JSON.stringify({id: app.code, openedApps:Object.keys($.apps.openedApps)})));
     });
 }

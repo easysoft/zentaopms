@@ -192,7 +192,7 @@ class xuanxuanIm extends imModel
     }
 
     /**
-     * Merge notifications with same actor, objectType, actionType.
+     * Merge notifications with same actor, objectType, actionType. Notifications with contentType of 'text' won't be merged.
      *
      * @param  array  $notificationData
      * @access public
@@ -209,11 +209,16 @@ class xuanxuanIm extends imModel
                 /* Group by $message->content->content->objectType, ...->parentType, ...->action, ...->actor */
                 $contentData = json_decode($message->content);
                 $contentData = json_decode($contentData->content);
+                if($contentData->contentType == 'text')
+                {
+                    $messageGroups[$contentData->contentType][] = $message;
+                    continue;
+                }
                 $messageGroups["$contentData->objectType-$contentData->parentType-$contentData->action-$contentData->actor"][] = $message;
             }
             foreach($messageGroups as $groupKey => $messages)
             {
-                if(count($messages) < 2) continue;
+                if(count($messages) < 2 || $groupKey == 'text') continue;
 
                 $notification = current($messages);
                 array_shift($messages);
