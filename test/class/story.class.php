@@ -58,6 +58,13 @@ class storyTest
         return $objects;
     }
 
+    /**
+     * Test get story specs.
+     * 
+     * @param  array $storyIdList 
+     * @access public
+     * @return void
+     */
     public function getStorySpecsTest($storyIdList)
     {
         $objects = $this->objectModel->getStorySpecs($storyIdList);
@@ -67,85 +74,144 @@ class storyTest
         return $objects;
     }
 
-    public function getAffectedScopeTest($story)
+    /**
+     * Test get affected scope.
+     * 
+     * @param  int    $storyID
+     * @access public
+     * @return void
+     */
+    public function getAffectedScopeTest($storyID)
     {
-        $objects = $this->objectModel->getAffectedScope($story);
+        global $tester;
+        $story = $tester->loadModel('story')->getById($storyID); 
+        $scope = $this->objectModel->getAffectedScope($story);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $scope;
     }
 
+    /**
+     * Test get requierements.
+     * 
+     * @param  int    $productID 
+     * @access public
+     * @return void
+     */
     public function getRequierementsTest($productID)
     {
-        $objects = $this->objectModel->getRequierements($productID);
+        $requirements = $this->objectModel->getRequierements($productID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $requirements;
     }
 
-    public function createTest($executionID = 0, $bugID = 0, $from = '', $extra = '')
+    /**
+     * Test create story.
+     * 
+     * @param  int    $executionID 
+     * @param  int    $bugID 
+     * @param  string $from 
+     * @param  string $extra 
+     * @access public
+     * @return void
+     */
+    public function createTest($executionID = 0, $bugID = 0, $from = '', $extra = '', $params)
     {
-        $objects = $this->objectModel->create($executionID = 0, $bugID = 0, $from = '', $extra = '');
+        $_POST  = $params;
+        $result = $this->objectModel->create($executionID, $bugID, $from, $extra);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        $storyID = $result['id'];
+        return $tester->loadModel('story')->getById($storyID); 
     }
 
+    /**
+     * Test create story from gitlab issue.
+     * 
+     * @param  int    $story 
+     * @param  int    $executionID 
+     * @access public
+     * @return void
+     */
     public function createStoryFromGitlabIssueTest($story, $executionID)
     {
-        $objects = $this->objectModel->createStoryFromGitlabIssue($story, $executionID);
+        $storyID = $this->objectModel->createStoryFromGitlabIssue($story, $executionID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        return $tester->loadModel('story')->getById($storyID); 
     }
 
-    public function batchCreateTest($productID = 0, $branch = 0, $type = 'story')
+    /**
+     * Test batch create stories.
+     * 
+     * @param  int    $productID 
+     * @param  int    $branch 
+     * @param  string $type 
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function batchCreateTest($productID = 0, $branch = 0, $type = 'story', $params)
     {
-        $objects = $this->objectModel->batchCreate($productID = 0, $branch = 0, $type = 'story');
+        $_POST   = $params;
+        $results = $this->objectModel->batchCreate($productID, $branch, $type);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        foreach($results as $result) $storyIdList[] = $result->storyID;
+
+        global $tester;
+        $stories = $tester->loadModel('story')->getByList($storyIdList);
+        return $stories;
     }
 
-    public function changeTest($storyID)
+    /**
+     * Test change story.
+     * 
+     * @param  int    $storyID 
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function changeTest($storyID, $params)
     {
-        $objects = $this->objectModel->change($storyID);
+        $_POST = $params;
+        $this->objectModel->change($storyID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        return $tester->loadModel('story')->getById($storyID);
     }
 
-    public function updateTest($storyID)
+    /**
+     * Test update story.
+     * 
+     * @param  int    $storyID 
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function updateTest($storyID, $params)
     {
-        $objects = $this->objectModel->update($storyID);
+        $_POST = $params;
+        $this->objectModel->update($storyID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function updateStoryProductTest($storyID, $productID)
-    {
-        $objects = $this->objectModel->updateStoryProduct($storyID, $productID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function updateParentStatusTest($storyID, $parentID = 0, $createAction = true)
-    {
-        $objects = $this->objectModel->updateParentStatus($storyID, $parentID = 0, $createAction = true);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        global $tester;
+        return $tester->loadModel('story')->getById($storyID);
     }
 
     public function updateStoryVersionTest($story)
