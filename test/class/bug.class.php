@@ -1841,4 +1841,118 @@ class bugTest
             return $array;
         }
     }
+
+    /**
+     * Test form customed bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function formCustomedBugsTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->formCustomedBugs($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test adjust the action is clickable.
+     *
+     * @param  object $bug
+     * @param  string $action
+     * @access public
+     * @return array
+     */
+    public function isClickableTest($bug, $action)
+    {
+        $object = $this->objectModel->isClickable($bug, $action);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
+
+    /**
+     * Test link bug to build and release.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $resolvedBuild
+     * @access public
+     * @return object
+     */
+    public function linkBugToBuildTest($bugIDList, $resolvedBuild)
+    {
+        $this->objectModel->linkBugToBuild($bugIDList, $resolvedBuild);
+
+        global $tester;
+        $release = $tester->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $release;
+        }
+    }
+
+    /**
+     * Test get project list.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProjectsTest($productID)
+    {
+        $array = $this->objectModel->getProjects($productID);
+
+        $title = '';
+        foreach($array as $id => $project) $title .= ',' . $project;
+        $title = trim($title, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get id list of all projects.
+     *
+     * @access public
+     * @return object
+     */
+    public function getAllProjectIdsTest()
+    {
+        $array = $this->objectModel->getAllProjectIds();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
 }
