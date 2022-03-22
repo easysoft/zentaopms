@@ -12,4 +12,4 @@ th.c-pri{width:50px;}
 .c-category {width: 80px;}
 .c-actions-7 {width: 190px;}
 .closed-story {color: #e5e5e5;}
-.stageBox {height: 180px; overflow: scroll;}
+.stageBox {height: 180px; overflow: scroll; background: white;}

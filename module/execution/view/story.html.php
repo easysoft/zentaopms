@@ -218,7 +218,7 @@
           <?php
           $storyLink      = $this->createLink('story', 'view', "storyID=$story->id&version=$story->version&param=$execution->id");
           $totalEstimate += $story->estimate;
-          ?>
+?>
           <tr id="story<?php echo $story->id;?>" data-id='<?php echo $story->id;?>' data-order='<?php echo $story->order ?>' data-estimate='<?php echo $story->estimate?>' data-cases='<?php echo zget($storyCases, $story->id, 0)?>'>
             <td class='cell-id'>
               <?php if($canBatchAction):?>
@@ -354,7 +354,14 @@
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
             <?php
-            echo "<ul class='dropdown-menu stageBox'>";
+            if(sizeof($stories) == 1)
+            {
+                echo "<ul class='dropdown-menu stageBox'>";
+            }
+            else
+            {
+                echo "<ul class='dropdown-menu'>";
+            }
             $lang->story->stageList[''] = $lang->null;
             foreach($lang->story->stageList as $key => $stage)
             {
