@@ -1978,7 +1978,7 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($execution->type == 'kanban' and $this->app->tab == 'execution') return $this->locate(inlink('kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban') return $this->locate(inlink('kanban', "executionID=$executionID"));
 
         $this->app->loadLang('program');
 
@@ -2047,7 +2047,7 @@ class execution extends control
 
         $this->lang->execution->menu = new stdclass();
         $execution = $this->commonAction($executionID);
-        if($execution->type != 'kanban' and $this->app->tab == 'execution') return $this->locate(inlink('view', "executionID=$executionID"));
+        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
 
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
