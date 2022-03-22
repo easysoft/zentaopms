@@ -459,6 +459,10 @@ class task extends control
                 $changes = $this->task->update($taskID);
                 if(dao::isError()) return print(js::error(dao::getError()));
                 $files = $this->loadModel('file')->saveUpload('task', $taskID);
+                if(empty($files) and $this->post->uid != '')
+                {
+                    $files = $this->file->getPairs($_SESSION['album']['used'][$this->post->uid]);
+                }
             }
 
             $task = $this->task->getById($taskID);
