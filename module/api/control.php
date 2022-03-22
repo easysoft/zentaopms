@@ -325,16 +325,8 @@ class api extends control
                 return $this->sendSuccess(array('locate' => $this->createLink('api', 'index', "libID=$libID")));
             }
 
-            $lib = fixer::input('post')
-                ->join('groups', ',')
-                ->join('users', ',')
-                ->get();
-
-            if($lib->acl == 'private') $lib->users = $this->app->user->account;
-            if($lib->acl == 'custom' && strpos($lib->users, $this->app->user->account) === false) $lib->users .= ',' . $this->app->user->account;
-
             /* save api doc library */
-            $libID = $this->doc->createApiLib($lib);
+            $libID = $this->doc->createApiLib();
             if(dao::isError())
             {
                 return $this->sendError(dao::getError());

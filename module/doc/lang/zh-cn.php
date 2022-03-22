@@ -229,15 +229,16 @@ $lang->doc->ge      = '个';
 $lang->doc->point   = '、';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name      = '文档库名称';
-$lang->doclib->control   = '访问控制';
-$lang->doclib->group     = '分组';
-$lang->doclib->user      = '用户';
-$lang->doclib->files     = '附件库';
-$lang->doclib->all       = '所有文档库';
-$lang->doclib->select    = '选择文档库';
-$lang->doclib->execution = $lang->executionCommon . '库';
-$lang->doclib->product   = $lang->productCommon . '库';
+$lang->doclib->name       = '文档库名称';
+$lang->doclib->control    = '访问控制';
+$lang->doclib->group      = '分组';
+$lang->doclib->user       = '用户';
+$lang->doclib->files      = '附件库';
+$lang->doclib->all        = '所有文档库';
+$lang->doclib->select     = '选择文档库';
+$lang->doclib->execution  = $lang->executionCommon . '库';
+$lang->doclib->product    = $lang->productCommon . '库';
+$lang->doclib->apiLibName = '接口库名称';
 
 $lang->doclib->aclListA['default'] = '默认';
 $lang->doclib->aclListA['custom']  = '自定义';
