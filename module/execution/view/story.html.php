@@ -353,8 +353,8 @@
           <?php if(common::hasPriv('story', 'batchChangeStage')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
+            <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>
             <?php
-            echo "<ul class='dropdown-menu'>";
             $lang->story->stageList[''] = $lang->null;
             foreach($lang->story->stageList as $key => $stage)
             {
@@ -363,8 +363,8 @@
                 $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
                 echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#storyList')\"") . "</li>";
             }
-            echo '</ul>';
             ?>
+            </ul>
           </div>
           <?php endif;?>
           <?php
