@@ -86,9 +86,9 @@ class my extends control
      */
     public function work($mode = 'task', $type = 'assignedTo', $orderBy = 'id_desc', $recTotal = 0, $recPerPage = 20, $pageID = 1)
     {
-        $this->showWorkCount($recTotal, $recPerPage, $pageID);
-
         echo $this->fetch('my', $mode, "type=$type&orderBy=$orderBy&recTotal=$recTotal&recPerPage=$recPerPage&pageID=$pageID");
+
+        $this->showWorkCount($recTotal, $recPerPage, $pageID);
     }
 
     /**
