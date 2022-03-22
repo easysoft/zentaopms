@@ -300,7 +300,7 @@ function renderHeaderCol($col, col, $header, kanban)
     if(col.asParent) $col = $col.children('.kanban-header-col');
     if($col.children('.actions').context != undefined) return;
 
-    var $actions = $('<div class="actions" />');
+    var $actions = $('<div class="actions createButton" />');
     var printStoryButton =  printTaskButton = printBugButton = false;
     if(priv.canCreateStory || priv.canBatchCreateStory || priv.canLinkStory || priv.canLinkStoryByPlan) printStoryButton = true;
     if(priv.canCreateTask  || priv.canBatchCreateTask) printTaskButton = true;
