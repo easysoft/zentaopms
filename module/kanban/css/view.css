@@ -19,7 +19,7 @@
 .region .region-header label {color: #999; background: transparent; border: 1px solid #ddd; margin-left: 10px; margin-right: 10px}
 .region .region-header .action {float: right}
 .region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
-.region .kanban-header-sub-cols {border-right: 2px solid #fff;margin-left:0;}
+.region .kanban-header-sub-cols {margin-left:0;}
 .region .kanban-header-sub-cols .kanban-header-col > .title {max-width: 100% !important;min-width:240px;}
 .region .sort .region-header {cursor: move;}
 
