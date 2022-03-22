@@ -77,13 +77,14 @@ class messageModel extends model
                 $requestType = $config->requestType;
                 if(defined('RUN_MODE') and RUN_MODE == 'api')
                 {
-                    if(file_exists($this->app->getConfigRoot() . 'my.php'))
+                    $configRoot = $this->app->getConfigRoot();
+                    if(file_exists($configRoot . 'my.php'))
                     {
-                        include $this->app->getConfigRoot() . 'my.php';
+                        include $configRoot . 'my.php';
                     }
                     else
                     {
-                        include $this->app->getConfigRoot() . 'config.php';
+                        include $configRoot . 'config.php';
                     }
                 }
 
