@@ -1955,6 +1955,9 @@ class bug extends control
     {
         $executionMembers = $this->user->getTeamMemberPairs($executionID, 'execution', '', $selectedUser);
 
+        $execution = $this->loadModel('execution')->getByID($executionID);
+        if(empty($selectedUser)) $selectedUser = $execution->QD;
+
         return print(html::select('assignedTo', $executionMembers, $selectedUser, 'class="form-control"'));
     }
 
