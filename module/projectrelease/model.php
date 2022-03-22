@@ -211,6 +211,28 @@ class projectreleaseModel extends model
             $this->file->saveUpload('release', $releaseID);
             $this->loadModel('score')->create('release', 'create', $releaseID);
 
+            /* Reset story stagedBy field for auto compute stage. */
+            if($release->stories)
+            {
+                $this->loadModel('story');
+                $this->loadModel('action');
+
+                $storyIDList = explode(',', $release->stories);
+                $product = $this->loadModel('product')->getById($release->product);
+                foreach($storyIDList as $storyID)
+                {
+                    if($storyID)
+                    {
+                        $this->dao->update(TABLE_STORY)->set('stagedBy')->eq('')->where('id')->eq($storyID)->exec();
+                        if($product and $product->type != 'normal') $this->dao->update(TABLE_STORYSTAGE)->set('stagedBy')->eq('')->where('story')->eq($storyID)->andWhere('branch')->eq($release->branch)->exec();
+
+                        $this->story->setStage($storyID);
+
+                        $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
+                    }
+                }
+            }
+
             return $releaseID;
         }
 
@@ -333,13 +355,13 @@ class projectreleaseModel extends model
     }
 
     /**
-     * Judge btn is clickable or not. 
-     * 
-     * @param  int    $release 
-     * @param  string $action 
+     * Judge btn is clickable or not.
+     *
+     * @param  int    $release
+     * @param  string $action
      * @static
      * @access public
-     * @return bool 
+     * @return bool
      */
     public static function isClickable($release, $action)
     {
