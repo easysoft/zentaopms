@@ -71,6 +71,7 @@
                     </div>
                   </td>
                 </tr>
+                <?php if($card->progress):?>
                 <tr>
                   <th><?php echo $lang->kanbancard->progress;?></th>
                   <td>
@@ -80,6 +81,7 @@
                     </div>
                   </td>
                 </tr>
+                <?php endif;?>
               </table>
             </div>
           </div>
