@@ -210,7 +210,7 @@ class releaseModel extends model
             $this->file->saveUpload('release', $releaseID);
             $this->loadModel('score')->create('release', 'create', $releaseID);
 
-            /* Reset story stagedBy field for auto compute stage. */
+            /* Set stage to released. */
             if($release->stories)
             {
                 $this->loadModel('story');
