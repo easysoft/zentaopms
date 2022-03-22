@@ -50,8 +50,10 @@ class tabsEntry extends baseEntry
                 if($menuKey == 'requirement' and empty($this->config->URAndSR)) continue;
                 if(isset($this->lang->product->menu->$menuKey))
                 {
-                    if(!isset($this->lang->product->menu->$menuKey['link'])) continue;
-                    list($label, $module, $method) = explode('|', $this->lang->product->menu->$menuKey['link']);
+                    $menuName = $this->lang->product->menu->$menuKey;
+                    if(!isset($menuName['link'])) continue;
+
+                    list($label, $module, $method) = explode('|', $menuName['link']);
                     if(!common::hasPriv($module, $method)) continue;
                 }
                 else
