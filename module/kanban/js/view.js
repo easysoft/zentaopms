@@ -1015,19 +1015,20 @@ function handleKanbanAction(action, $element, event, kanban)
 
 function processMinusBtn()
 {
-    var columnCount = $('#splitTable .child-column').size();
+    var $table = $('#splitTable');
+    var columnCount = $table.find('.child-column').length;
     if(columnCount > 2 && columnCount < 10)
     {
-        $('#splitTable .btn-plus').show();
-        $('#splitTable .btn-close').show();
+        $table.find('.btn-plus').show();
+        $table.find('.btn-close').show();
     }
     else if(columnCount <= 2)
     {
-        $('#splitTable .btn-close').hide();
+        $table.find('.btn-close').hide();
     }
     else if(columnCount >= 10)
     {
-        $('#splitTable .btn-plus').hide();
+        $table.find('.btn-plus').hide();
     }
 }
 
