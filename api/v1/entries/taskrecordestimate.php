@@ -12,6 +12,35 @@
 class taskRecordEstimateEntry extends Entry
 {
     /**
+     * GET method.
+     *
+     * @param  int    $taskID
+     * @access public
+     * @return void
+     */
+    public function get($taskID)
+    {
+        if($this->config->edition != 'open')
+        {
+            $control = $this->loadController('effort', 'createForObject');
+            $control->createForObject('task', $taskID);
+        }
+        else
+        {
+            $control = $this->loadController('task', 'recordEstimate');
+            $control->recordEstimate($taskID);
+        }
+
+        $data = $this->getData();
+        if(!$data) return $this->error('error');
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
+
+        $effort = $this->config->edition != 'open' ? ($data->data->efforts ? $data->data->efforts : array()) : ($data->data->estimates ? $data->data->estimates : array());
+        $this->send(200, $effort);
+
+    }
+
+    /**
      * POST method.
      *
      * @param  int    $taskID
