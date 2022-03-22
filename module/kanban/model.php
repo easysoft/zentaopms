@@ -1694,7 +1694,7 @@ class kanbanModel extends model
 
         $spaceList = $objectType == 'kanban' ? $this->dao->select('id,owner,type')->from(TABLE_KANBANSPACE)->fetchAll('id') : array();
 
-        if($this->app->user->admin and strpos('private,involved', $param) === false) return array_keys($objects);
+        if($param and $this->app->user->admin and strpos('private,involved', $param) === false) return array_keys($objects);
 
         $account = $this->app->user->account;
         foreach($objects as $objectID => $object)
