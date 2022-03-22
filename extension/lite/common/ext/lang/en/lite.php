@@ -58,7 +58,6 @@ $lang->my->menu->index    = array('link' => "$lang->dashboard|my|index");
 $lang->my->menu->calendar = array('link' => "$lang->calendar|my|calendar|", 'subModule' => 'todo', 'alias' => 'todo');
 $lang->my->menu->task     = array('link' => "{$lang->task->common}|my|contribute|mode=task&type=assignedTo", 'subModule' => 'task');
 $lang->my->menu->contacts = array('link' => "$lang->contact|my|managecontacts|");
-if($config->systemScore) $lang->my->menu->score = array('link' => "{$lang->score->shortCommon}|my|score|", 'subModule' => 'score');
 
 global $config;
 if($config->edition != 'open') $lang->my->menu->effort = array('link' => 'Effort|effort|calendar|', 'exclude' => 'my-todo');

@@ -92,13 +92,14 @@ $lang->extension->viewInstalled            = 'Installed Extensions';
 $lang->extension->viewAvailable            = 'Available Extensions';
 $lang->extension->viewDeactivated          = 'Deactivated Extensions';
 $lang->extension->backDBFile               = 'This extension data has been backed up to %s!';
-$lang->extension->noticeOkFile             = '<h5>For security reasons, your Admin account has to be confirmed.</h5>
+$lang->extension->noticeOkFile             = "<h5>For security reasons, your Admin account has to be confirmed.</h5>
     <h5>Plese login your ZenTao server and create %s.</h5>
+    <p>Execute command: echo '' > %s</p>
     <p>Note</p>
     <ol>
     <li>The file you will create is empty.</li>
     <li>If such file exists, delete it first, and then create one.</li>
-    </ol>'; 
+    </ol>"; 
 
 $lang->extension->upgradeExt     = 'Upgrade';
 $lang->extension->installExt     = 'Install';

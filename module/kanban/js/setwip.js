@@ -27,16 +27,3 @@ function setWIPLimit()
 
     $('#limit').val(count);
 }
-
-/**
- * When WIPCount value change.
- *
- * @param  int    value
- * @access public
- * @return void
- */
-function wipValueChange(value)
-{
-    if(value == '') $('#submit').addClass('disabled');
-    if(value) $('#submit').removeClass('disabled');
-}

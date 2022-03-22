@@ -158,10 +158,11 @@ class userModel extends model
     /**
      * Get commiters from the user table.
      *
+     * @param  string  $field
      * @access public
      * @return array
      */
-    public function getCommiters()
+    public function getCommiters($field = 'realname')
     {
         $rawCommiters = $this->dao->select('commiter, account, realname')->from(TABLE_USER)->where('commiter')->ne('')->fetchAll();
         if(!$rawCommiters) return array();
@@ -172,7 +173,7 @@ class userModel extends model
             $userCommiters = explode(',', $commiter->commiter);
             foreach($userCommiters as $userCommiter)
             {
-                $commiters[$userCommiter] = $commiter->realname ? $commiter->realname : $commiter->account;
+                $commiters[$userCommiter] = $commiter->$field ? $commiter->$field : $commiter->account;
             }
         }
 
@@ -395,25 +396,25 @@ class userModel extends model
             $users->account[$i] = trim($users->account[$i]);
             if($users->account[$i] != '')
             {
-                if(strtolower($users->account[$i]) == 'guest') helper::end(js::error(sprintf($this->lang->user->error->reserved, $i + 1)));
+                if(strtolower($users->account[$i]) == 'guest') helper::end(js::error(sprintf($this->lang->user->error->reserved, $i)));
                 $account = $this->dao->select('account')->from(TABLE_USER)->where('account')->eq($users->account[$i])->fetch();
-                if($account) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
-                if(in_array($users->account[$i], $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i + 1)));
-                if(!validater::checkAccount($users->account[$i])) helper::end(js::error(sprintf($this->lang->user->error->account, $i + 1)));
-                if($users->realname[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $i + 1)));
-                if(empty($users->visions[$i])) helper::end(js::error(sprintf($this->lang->user->error->visions, $i + 1)));
-                if($users->email[$i] and !validater::checkEmail($users->email[$i])) helper::end(js::error(sprintf($this->lang->user->error->mail, $i + 1)));
+                if($account) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i)));
+                if(in_array($users->account[$i], $accounts)) helper::end(js::error(sprintf($this->lang->user->error->accountDupl, $i)));
+                if(!validater::checkAccount($users->account[$i])) helper::end(js::error(sprintf($this->lang->user->error->account, $i)));
+                if($users->realname[$i] == '') helper::end(js::error(sprintf($this->lang->user->error->realname, $i)));
+                if(empty($users->visions[$i])) helper::end(js::error(sprintf($this->lang->user->error->visions, $i)));
+                if($users->email[$i] and !validater::checkEmail($users->email[$i])) helper::end(js::error(sprintf($this->lang->user->error->mail, $i)));
                 $users->password[$i] = (isset($prev['password']) and $users->ditto[$i] == 'on' and !$this->post->password[$i]) ? $prev['password'] : $this->post->password[$i];
-                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) helper::end(js::error(sprintf($this->lang->user->error->password, $i + 1)));
+                if(!validater::checkReg($users->password[$i], '|(.){6,}|')) helper::end(js::error(sprintf($this->lang->user->error->password, $i)));
                 $role    = $users->role[$i] == 'ditto' ? (isset($prev['role']) ? $prev['role'] : '') : $users->role[$i];
                 $visions = in_array('ditto', $users->visions[$i]) ? (isset($prev['visions']) ? $prev['visions'] : array()) : $users->visions[$i];
 
                 /* Check weak and common weak password. */
-                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) helper::end(js::error(sprintf($this->lang->user->error->weakPassword, $i + 1)));
+                if(isset($this->config->safe->mode) and $this->computePasswordStrength($users->password[$i]) < $this->config->safe->mode) helper::end(js::error(sprintf($this->lang->user->error->weakPassword, $i)));
                 if(!empty($this->config->safe->changeWeak))
                 {
                     if(!isset($this->config->safe->weak)) $this->app->loadConfig('admin');
-                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) helper::end(js::error(sprintf($this->lang->user->error->dangerPassword, $i + 1, $this->config->safe->weak)));
+                    if(strpos(",{$this->config->safe->weak},", ",{$users->password[$i]},") !== false) helper::end(js::error(sprintf($this->lang->user->error->dangerPassword, $i, $this->config->safe->weak)));
                 }
 
                 $data[$i] = new stdclass();

@@ -170,7 +170,7 @@
         </tfoot>
       </table>
     </div>
-    <?php js::set('i', $i);?>
+    <?php js::set('itemIndex', $i);?>
   </form>
 </div>
 <div>

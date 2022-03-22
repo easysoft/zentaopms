@@ -24,7 +24,6 @@
 
 .dropdown-pris > .btn {background-color: #fff; text-shadow: none;}
 
-#moduleIdBox .input-group-btn > .btn {margin-left: -1px !important;}
 #moduleIdBox .input-group-btn > .btn:first-child {border-left: none;}
 
 .chosen-container {max-width: 1000px;}
@@ -42,4 +41,4 @@
 .pri-selector > .btn {padding: 5px 8px !important; width: 100%;}
 .pri-selector > .dropdown-menu {padding: 10px;}
 
-.title-group .has-icon-right {min-width: 700px;}
+.title-group .has-icon-right {min-width: 600px;}

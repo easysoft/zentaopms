@@ -22,7 +22,9 @@
   <div class='main-header'>
     <h2>
       <?php
-      printf($lang->admin->info->version, $config->version);
+      $versionName = $config->version;
+      if($config->vision == 'lite') $versionName = $lang->liteName . $config->liteVersion;
+      printf($lang->admin->info->version, $versionName);
       if($bind) echo sprintf($lang->admin->info->account, '<span class="red">' . $account . '</span>');
       echo $lang->admin->info->links;
       ?>

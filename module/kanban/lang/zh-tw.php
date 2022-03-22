@@ -77,8 +77,9 @@ $lang->kanban->teamSumCount   = '共%s人';
 $lang->kanban->createColumnOnLeft  = '在左側添加看板列';
 $lang->kanban->createColumnOnRight = '在右側添加看板列';
 
-$lang->kanban->accessDenied  = '您無權訪問該看板';
-$lang->kanban->confirmDelete = '您確認刪除嗎？';
+$lang->kanban->accessDenied        = '您無權訪問該看板';
+$lang->kanban->confirmDeleteSpace  = '您確認要删除該空間嗎？';
+$lang->kanban->confirmDeleteKanban = '您確認要删除該看板嗎？';
 
 $lang->kanban->aclGroup['open']    = '公開';
 $lang->kanban->aclGroup['private'] = '私有';
@@ -266,6 +267,7 @@ $lang->kanbancard->name            = '卡片名稱';
 $lang->kanbancard->legendBasicInfo = '基本信息';
 $lang->kanbancard->legendLifeTime  = '卡片的一生';
 $lang->kanbancard->space           = '所屬空間';
+$lang->kanbancard->region          = '所屬區域';
 $lang->kanbancard->kanban          = '所屬看板';
 $lang->kanbancard->lane            = '所屬泳道';
 $lang->kanbancard->column          = '所屬看板列';

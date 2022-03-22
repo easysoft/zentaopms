@@ -106,7 +106,7 @@ js::set('revision', '');
         <td>
           <div class='input-group'>
           <?php echo $productSelect?>
-          <?php if($branches) echo html::select('branch', $branches, '', "class='form-control' style='width:95px'");?>
+          <?php if($branches) echo html::select('branch', $branches, '', "class='form-control' style='width:95px' onchange='loadBranch(this)'");?>
           </div>
         </td>
         <th><?php echo $lang->repo->module?></th>

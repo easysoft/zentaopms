@@ -19,5 +19,5 @@
 .dynamic.collapsed .dynamic-btn > .icon:before {content: '\f0d8';}
 
 .c-project, .c-product, .c-execution {width: 110px !important; overflow: unset;}
-.c-user, .c-order {width: 90px !important; overflow: unset;}
+.c-user, .c-order {width: 96px !important; overflow: unset;}
 .c-date {width: 200px;}

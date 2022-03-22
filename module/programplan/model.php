@@ -598,7 +598,7 @@ class programplanModel extends model
                     $member->account = $account;
                     $member->role    = $this->lang->user->roleList[$this->app->user->role];
                     $member->join    = $now;
-                    $member->type    = $data->type;
+                    $member->type    = 'execution';
                     $member->days    = $data->days;
                     $member->hours   = $this->config->execution->defaultWorkhours;
                     $this->dao->insert(TABLE_TEAM)->data($member)->exec();
@@ -864,7 +864,7 @@ class programplanModel extends model
      */
     public function isCreateTask($planID)
     {
-        $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->limit(1)->fetch();
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->andWhere('deleted')->eq('0')->limit(1)->fetch();
         return empty($task) ? true : false;
     }
 

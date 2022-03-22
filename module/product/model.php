@@ -572,6 +572,7 @@ class productModel extends model
     public function create()
     {
         $product = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('status', 'normal')
             ->setDefault('line', 0)
             ->setDefault('createdBy', $this->app->user->account)
@@ -653,6 +654,7 @@ class productModel extends model
         if($oldProduct->bind) $this->config->product->edit->requiredFields = 'name';
 
         $product = fixer::input('post')
+            ->callFunc('name', 'trim')
             ->setDefault('line', 0)
             ->join('whitelist', ',')
             ->join('reviewer', ',')
@@ -1005,12 +1007,14 @@ class productModel extends model
      */
     public function getProjectPairsByProduct($productID, $branch = 0, $appendProject = 0)
     {
+        $product = $this->getById($productID);
+
         $projects = $this->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.product')->eq($productID)
             ->andWhere('t2.type')->eq('project')
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->projects)->fi()
-            ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
+            ->beginIF($product->type != 'normal' and $branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy('order_asc')
             ->fetchPairs('id', 'name');
@@ -1180,6 +1184,7 @@ class productModel extends model
             ->andWhere('t2.project')->eq($projectID)
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');

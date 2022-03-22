@@ -124,9 +124,7 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
               <div class='input-group' id='buildBox'>
                 <span class="input-group-addon"><?php echo $lang->bug->openedBuild?></span>
                 <?php echo html::select('openedBuild[]', $builds, empty($buildID) ? '' : $buildID, "multiple=multiple class='chosen form-control'");?>
-                <?php if(count($builds) < 2):?>
                 <span class='input-group-addon fix-border' id='buildBoxActions'></span>
-                <?php endif;?>
                 <div class='input-group-btn'><?php echo html::commonButton($lang->bug->allBuilds, "class='btn' id='all' data-toggle='tooltip' onclick='loadAllBuilds()'")?></div>
               </div>
             </td>
@@ -195,6 +193,18 @@ if($this->app->tab == 'project')   js::set('objectID', $projectID);
                   </div>
                 </div>
                 <?php endif;?>
+              </div>
+            </td>
+          </tr>
+          <?php endif;?>
+          <?php if(isset($executionType) and $executionType == 'kanban'):?>
+          <tr>
+            <th><?php echo $lang->kanbancard->region;?></th>
+            <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+            <td>
+              <div class='input-group'>
+                <div class="input-group-addon"><?php echo $lang->kanbancard->lane;?></div>
+                <?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?>
               </div>
             </td>
           </tr>

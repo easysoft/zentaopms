@@ -12,6 +12,7 @@
 .body-modal #mainMenu>.btn-toolbar {width: auto;}
 </style>
 <div id='mainMenu' class='clearfix'>
+  <?php if(!($this->app->rawMethod == 'groupcase')):?>
   <div id="sidebarHeader">
     <div class="title">
       <?php
@@ -31,6 +32,7 @@
       ?>
     </div>
   </div>
+  <?php endif;?>
   <div class='btn-toolbar pull-left'>
     <?php
     $hasBrowsePriv = $isProjectApp ? common::hasPriv('project', 'testcase') : common::hasPriv('testcase', 'browse');
@@ -180,9 +182,6 @@
       </ul>
       <?php endif;?>
     </div>
-    <?php if($this->app->rawMethod == 'browseunits' and (empty($productID) or common::canModify('product', $product))):?>
-      <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
-    <?php endif;?>
     <?php else:?>
     <div class='btn-group dropdown-hover'>
       <?php
@@ -200,6 +199,9 @@
         </li>
       </ul>
     </div>
+    <?php endif;?>
+    <?php if($this->app->rawMethod == 'browseunits' and (empty($productID) or common::canModify('product', $product))):?>
+      <?php common::printLink('testtask', 'importUnitResult', "product=$productID", "<i class='icon icon-import'></i> " . $lang->testtask->importUnitResult, '', "class='btn btn-primary' data-app='{$this->app->tab}'");?>
     <?php endif;?>
     <?php endif;?>
   </div>

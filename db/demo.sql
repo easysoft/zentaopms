@@ -244,8 +244,8 @@ INSERT INTO `zt_dept` (`id`, `name`, `parent`, `path`, `grade`, `order`, `positi
 INSERT INTO `zt_doclib` (`id`, `type`, `product`, `project`, `execution`, `name`, `acl`, `groups`, `users`, `main`, `collector`, `order`, `deleted`) VALUES
 (1, 'product', 1, 0, 0, '产品库', 'default', '', '', '1', '', 0, '0'),
 (2, 'product', 2, 0, 0, '产品库', 'default', '', '', '1', '', 0, '0'),
-(3, 'project', 0, 0, 1, '项目库', 'default', '', '', '1', '', 0, '0'),
-(4, 'project', 0, 0, 2, '项目库', 'default', '', '', '1', '', 0, '0'),
+(3, 'execution', 0, 0, 1, '项目库', 'default', '', '', '1', '', 0, '0'),
+(4, 'execution', 0, 0, 2, '项目库', 'default', '', '', '1', '', 0, '0'),
 (5, 'project', 0, 7, 0, '项目主库', 'default', '', '', '1', '', 0, '0');
 INSERT INTO `zt_history` (`id`, `action`, `field`, `old`, `new`, `diff`) VALUES
 (1, 14, 'version', '1', '2', ''),

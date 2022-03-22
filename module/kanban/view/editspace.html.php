@@ -20,7 +20,7 @@
     <table class='table table-form'>
       <tr>
         <th><?php echo $lang->kanbanspace->type;?></th>
-        <td><?php echo html::select('type', $typeList, $defaultType, "onchange='changeType($spaceID, this.value)' class='form-control chosen'");?></td>
+        <td><?php echo html::select('type', $typeList, $defaultType, "onchange='changeType(this.value)' class='form-control chosen'");?></td>
         <td></td>
       </tr>
       <tr>
@@ -28,12 +28,11 @@
         <td><?php echo html::input('name', $space->name, "class='form-control'");?></td>
         <td></td>
       </tr>
-      <?php if($space->type != 'private' or $type == 'cooperation' or $type == 'public'):?>
-      <tr>
+      <tr id='ownerBox' class="<?php echo $space->type == 'private' ? 'hidden' : '';?>">
         <th><?php echo $lang->kanbanspace->owner;?></th>
         <td><?php echo html::select('owner', $users, $space->owner, "class='form-control chosen'");?></td>
       </tr>
-      <tr>
+      <tr id='teamBox' class="<?php echo $space->type == 'private' ? 'hidden' : '';?>">
         <th><?php echo $lang->kanbanspace->team;?></th>
         <td colspan='2'>
           <div class="input-group">
@@ -42,7 +41,6 @@
           </div>
         </td>
       </tr>
-      <?php endif;?>
       <tr>
         <th><?php echo $lang->kanbanspace->desc;?></th>
         <td colspan='2'>
@@ -50,12 +48,10 @@
           <?php echo html::textarea('desc', $space->desc, "rows='10' class='form-control'");?>
         </td>
       </tr>
-      <?php if($space->type == 'private' and $type != 'cooperation' and $type != 'public'):?>
-      <tr id="whitelistBox">
+      <tr id="whitelistBox" class="<?php echo $space->type == 'private' ? '' : 'hidden';?>">
         <th><?php echo $lang->whitelist;?></th>
         <td><?php echo html::select('whitelist[]', $users, $space->whitelist, 'class="form-control chosen" multiple');?></td>
       </tr>
-      <?php endif;?>
       <tr>
         <td colspan='3' class='text-center form-actions'>
           <?php echo html::submitButton();?>

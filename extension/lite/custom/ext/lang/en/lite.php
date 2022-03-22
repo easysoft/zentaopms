@@ -25,4 +25,4 @@ $lang->custom->story->fields['reviewRules']      = 'Review Rules';
 $lang->custom->story->fields['reviewResultList'] = 'Review Result';
 $lang->custom->story->fields['review']           = 'Need Review';
 
-if($this->config->edition != 'open') $lang->custom->system = array('required', 'score');
+$lang->custom->system = array('required');

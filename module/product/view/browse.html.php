@@ -269,14 +269,14 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
       <p>
         <span class="text-muted"><?php echo $storyType == 'story' ? $lang->story->noStory : $lang->story->noRequirement;?></span>
         <?php if(common::canModify('product', $product) and common::hasPriv('story', 'create')):?>
-        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->createCommon, '', "class='btn btn-info' data-app='$from'");?>
+        <?php echo html::a($this->createLink('story', 'create', "productID={$productID}&branch={$branch}&moduleID={$moduleID}&storyID=0&projectID=$projectID&bugID=0&planID=0&todoID=0&extra=&type=$storyType"), "<i class='icon icon-plus'></i> " . $lang->story->create, '', "class='btn btn-info' data-app='$from'");?>
         <?php endif;?>
       </p>
     </div>
     <?php else:?>
     <form class="main-table table-story skip-iframe-modal" method="post" id='productStoryForm'>
       <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
+        <nav class="btn-toolbar pull-right setting"></nav>
       </div>
       <?php
       $datatableId  = $this->moduleName . ucfirst($this->methodName);
@@ -510,7 +510,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
                 {
                     $searchKey = $withSearch ? ('data-key="' . zget($modulesPinYin, $module, '') . '"') : '';
                     $actionLink = $this->createLink('story', 'batchChangeModule', "moduleID=$moduleId");
-                    echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
+                    echo html::a('#', empty($module) ? '/' : $module, '', "$searchKey title='{$module}' onclick=\"setFormAction('$actionLink', 'hiddenwin', '#productStoryForm')\"");
                 }
                 ?>
               </div>

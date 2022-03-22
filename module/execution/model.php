@@ -252,6 +252,10 @@ class executionModel extends model
         if(!isset($executions[$executionID]))
         {
             $this->session->set('execution', key($executions), $this->app->tab);
+
+            $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($executionID)->andWhere('type')->in('sprint,stage,kanban')->fetch();
+            if(empty($execution)) return js::error($this->lang->notFound);
+
             if($executionID && strpos(",{$this->app->user->view->sprints},", ",{$executionID},") === false) $this->accessDenied();
         }
 
@@ -448,18 +452,12 @@ class executionModel extends model
         }
 
         $products = array_filter($this->post->products);
-        if($oldExecution->type == 'stage' and empty($products))
+        $noLinkTip = $oldExecution->type != 'kanban' ? $this->lang->execution->noLinkProduct : $this->lang->execution->kanbanNoLinkProduct;
+        if(empty($products))
         {
-            dao::$errors['message'][] = $this->lang->execution->noLinkProduct;
+            dao::$errors['message'][] = $noLinkTip;
             return false;
         }
-
-        if($oldExecution->type == 'kanban' and empty($products))
-        {
-            dao::$errors['message'][] = $this->lang->execution->kanbanNoLinkProduct;
-            return false;
-        }
-
         /* Get the data from the post. */
         $execution = fixer::input('post')
             ->setDefault('lastEditedBy', $this->app->user->account)
@@ -547,11 +545,8 @@ class executionModel extends model
             ->exec();
         if(isset($execution->project) and $execution->project) $this->addProjectMembers($execution->project, $teamMembers);
 
-        if(!empty($execution->whitelist))
-        {
-            $whitelist = explode(',', $execution->whitelist);
-            $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
-        }
+        $whitelist = explode(',', $execution->whitelist);
+        $this->loadModel('personnel')->updateWhitelist($whitelist, 'sprint', $executionID);
 
         /* Fix bug#3074, Update views for team members. */
         if($execution->acl != 'open') $this->updateUserView($executionID, 'sprint', $changedAccounts);
@@ -579,6 +574,7 @@ class executionModel extends model
     public function batchUpdate()
     {
         $this->loadModel('user');
+        $this->loadModel('project');
 
         $executions    = array();
         $allChanges    = array();
@@ -634,11 +630,16 @@ class executionModel extends model
             if($projectModel == 'scrum' and empty($executionCode))
             {
                 dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->notempty, $this->lang->project->code);
+                return false;
             }
             elseif(!empty($executionCode))
             {
                 /* Check unique code for edited executions. */
-                if(isset($codeList[$executionCode])) dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                if(isset($codeList[$executionCode]))
+                {
+                    dao::$errors['code'][] = 'execution#' . $executionID .  sprintf($this->lang->error->unique, $this->lang->project->code, $executionCode);
+                    return false;
+                }
                 $codeList[$executionCode] = $executionCode;
             }
 
@@ -649,29 +650,44 @@ class executionModel extends model
 
                 $executions[$executionID]->{$extendField->field} = htmlSpecialString($executions[$executionID]->{$extendField->field});
                 $message = $this->checkFlowRule($extendField, $executions[$executionID]->{$extendField->field});
-                if($message) return print(js::alert($message));
+
+                if($message)
+                {
+                    dao::$errors['message'][] = $message;
+                    return false;
+                }
             }
         }
-        if(dao::isError()) return print(js::error(dao::getError()));
 
         foreach($executions as $executionID => $execution)
         {
             $oldExecution = $oldExecutions[$executionID];
             $team         = $this->loadModel('user')->getTeamMemberPairs($executionID, 'execution');
             $projectID    = isset($execution->project) ? $execution->project : $oldExecution->project;
+            $project      = $this->project->getByID($projectID);
+
+            if($execution->begin < $project->begin)
+            {
+                dao::$errors['begin'] = sprintf($this->lang->execution->errorLetterProject, $project->begin);
+                return false;
+            }
+            if($execution->end > $project->end)
+            {
+                dao::$errors['end'] = sprintf($this->lang->execution->errorGreaterProject, $project->end);
+                return false;
+            }
 
             $this->dao->update(TABLE_EXECUTION)->data($execution)
                 ->autoCheck($skipFields = 'begin,end')
                 ->batchcheck($this->config->execution->edit->requiredFields, 'notempty')
                 ->checkIF($execution->begin != '', 'begin', 'date')
                 ->checkIF($execution->end != '', 'end', 'date')
-                ->checkIF($execution->end != '', 'end', 'gt', $execution->begin)
+                ->checkIF($execution->end != '', 'end', 'ge', $execution->begin)
                 ->checkIF((!empty($execution->name) and $this->config->systemMode == 'new'), 'name', 'unique', "id != $executionID and type in ('sprint','stage') and `project` = $projectID")
                 ->checkIF(!empty($execution->code), 'code', 'unique', "id != $executionID and type in ('sprint','stage')")
                 ->where('id')->eq($executionID)
                 ->limit(1)
                 ->exec();
-            if(dao::isError()) return print(js::error('execution#' . $executionID . dao::getError(true)));
 
             if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {
@@ -2269,11 +2285,12 @@ class executionModel extends model
      * @param array  $stories
      * @param array  $products
      * @param string $extra
+     * @param array  $lanes
      *
      * @access public
      * @return bool
      */
-    public function linkStory($executionID, $stories = array(), $products = array(), $extra = '')
+    public function linkStory($executionID, $stories = array(), $products = array(), $extra = '', $lanes = array())
     {
         if(empty($executionID)) return false;
         if(empty($stories)) $stories = $this->post->stories;
@@ -2296,7 +2313,13 @@ class executionModel extends model
             if(strpos($notAllowedStatus, $storyList[$storyID]->status) !== false) continue;
             if(isset($linkedStories[$storyID])) continue;
 
-            if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(!empty($lanes[$storyID])) $laneID = $lanes[$storyID];
+
+            $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+            if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+            if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
 
             $data = new stdclass();
             $data->project = $executionID;
@@ -3056,7 +3079,6 @@ class executionModel extends model
         if($action == 'suspend')  return $execution->status == 'wait' or $execution->status == 'doing';
         if($action == 'putoff')   return $execution->status == 'wait' or $execution->status == 'doing';
         if($action == 'activate') return $execution->status == 'suspended' or $execution->status == 'closed';
-        if($action == 'delete')   return $execution->status == 'wait' or $execution->status == 'doing';
 
         return true;
     }

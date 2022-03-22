@@ -1,7 +1,7 @@
 /**
  * Get story list.
- * 
- * @param  string $module 
+ *
+ * @param  string $module
  * @access public
  * @return void
  */
@@ -15,6 +15,13 @@ function getList()
 
 $(document).ready(function()
 {
+    /* Set secondary menu highlighting. */
+    if(isLibCase)
+    {
+      $('#navbar li[data-id=caselib]').addClass('active');
+      $('#navbar li[data-id=testcase]').removeClass('active');
+    }
+
     $(document).on('change', '[name^=steps], [name^=expects]', function()
     {
         var steps   = [];
@@ -29,14 +36,14 @@ $(document).ready(function()
             $('#status').val(status).change();
         });
     });
-    
+
     initSteps();
 });
 
 /**
  * Load lib modules.
- * 
- * @param  int $libID 
+ *
+ * @param  int $libID
  * @access public
  * @return void
  */

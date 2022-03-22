@@ -229,15 +229,16 @@ $lang->doc->ge      = ':';
 $lang->doc->point   = '.';
 
 $lang->doclib = new stdclass();
-$lang->doclib->name      = 'Name';
-$lang->doclib->control   = 'Access Control';
-$lang->doclib->group     = 'Group';
-$lang->doclib->user      = 'User';
-$lang->doclib->files     = 'Attachments';
-$lang->doclib->all       = 'All Libraries';
-$lang->doclib->select    = 'Select';
-$lang->doclib->execution = $lang->executionCommon . ' Library';
-$lang->doclib->product   = $lang->productCommon . ' Library';
+$lang->doclib->name       = 'Name';
+$lang->doclib->control    = 'Access Control';
+$lang->doclib->group      = 'Group';
+$lang->doclib->user       = 'User';
+$lang->doclib->files      = 'Attachments';
+$lang->doclib->all        = 'All Libraries';
+$lang->doclib->select     = 'Select';
+$lang->doclib->execution  = $lang->executionCommon . ' Library';
+$lang->doclib->product    = $lang->productCommon . ' Library';
+$lang->doclib->apiLibName = 'Api Library Name';
 
 $lang->doclib->aclListA['default'] = 'Default';
 $lang->doclib->aclListA['custom']  = 'Custom';

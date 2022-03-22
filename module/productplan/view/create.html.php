@@ -22,7 +22,7 @@
       <h2> <?php echo $parent ? $lang->productplan->createChildren : $lang->productplan->create;?></h2>
     </div>
     <form class='load-indicator main-form form-ajax' method='post' target='hiddenwin' id='dataform'>
-      <table class='table table-form'> 
+      <table class='table table-form'>
         <tbody>
           <?php if($parent):?>
           <tr>
@@ -40,7 +40,7 @@
           <?php if($product->type != 'normal'):?>
           <tr>
             <th><?php echo $lang->product->branch;?></th>
-            <td><?php echo html::select('branch', $branches, $branch, "class='form-control chosen'");?></td><td></td><td></td>
+            <td><?php echo html::select('branch', $branches, $defaultBranch, "class='form-control chosen'");?></td><td></td><td></td>
           </tr>
           <?php endif;?>
           <?php endif;?>

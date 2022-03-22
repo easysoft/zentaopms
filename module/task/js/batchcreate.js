@@ -86,8 +86,20 @@ function copyStoryTitle(num)
 /* Set the story module. */
 function setStoryRelated(num)
 {
+    setPreview(num);
+}
+
+/**
+ * Set preview.
+ *
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setPreview(num)
+{
     var storyID = $('#story' + num).val();
-    if(storyID && storyID != 'ditto')
+    if(storyID != 0  && storyID != 'ditto')
     {
         var link = createLink('story', 'ajaxGetInfo', 'storyID=' + storyID);
         $.getJSON(link, function(storyInfo)
@@ -184,6 +196,27 @@ function markStoryTask()
     });
 }
 
+/**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
+    });
+}
+
 $(document).on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-drop', function()
 {
     var select = $(this).closest('td').find('select');
@@ -203,6 +236,7 @@ $(document).on('chosen:showing_dropdown', 'select[name^="story"],.chosen-with-dr
         $(select).trigger("change");
     }
 })
+
 $(document).on('mousedown', 'select', function()
 {
     if($(this).val() == 'ditto')
@@ -232,7 +266,7 @@ $(function()
     if($.cookie('zeroTask') == 'true') toggleZeroTaskStory();
     markStoryTask();
 
-    if(storyID != 0) setStoryRelated(0);
+    if(storyID != 0) setStoryRelated($('#batchCreateForm table tbody tr:first [id^=story]:first').attr('id').replace('story', ''));
 
     $(document).keydown(function(event)
     {

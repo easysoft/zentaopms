@@ -198,7 +198,7 @@ $(function()
         if($e.css('display') !== 'none')
         {
             if(!$e.data('zui.tooltip')) $e.addClass('tooltip-tutorial').attr('data-toggle', 'tooltip').tooltip(options);
-            $e.tooltip('show');
+            $e.tooltip('show', text);
             if($e[0].getBoundingClientRect().top > $(window).height() || $e[0].getBoundingClientRect().top < 0) $e[0].scrollIntoView();
         }
         else if($e.parent().is('#menuMainNav'))
@@ -303,6 +303,7 @@ $(function()
                     {
                         if(status.waitField)
                         {
+                            if(status.waitField.hasClass("chosen-controled")) status.waitField = status.waitField.next();
                             var fieldName = status.waitField.closest('td').prev('th').text();
                             if(!fieldName) fieldName = status.waitField.closest('.input-group').find('.input-group-addon:first').text();
                             if(fieldName) showToolTip(status.waitField, lang.requiredTip.replace('%s', fieldName));
@@ -544,6 +545,10 @@ $(function()
         $(document).on('click', '.btn-task', function()
         {
             showTask($(this).data('name'));
+
+            /* Code for task #51133. */
+            var status = checkTask();
+            if(status.submitOK) window.location.reload();
         }).on('click', '.btn-open-target-page', function()
         {
             appsWindow.$.apps.open(tasks[current].url);

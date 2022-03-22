@@ -95,14 +95,19 @@ class storyEntry extends Entry
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
         /* Set $_POST variables. */
-        $fields = 'type';
+        $fields = 'title,product,reviewer,type,plan,module,source,sourceNote,category,pri,estimate,mailto,keywords,uid';
         $this->batchSetPost($fields, $oldStory);
         $this->setPost('parent', 0);
 
         $control = $this->loadController('story', 'edit');
         $control->edit($storyID);
 
-        $this->getData();
+
+        $data = $this->getData();
+
+        if(isset($data->status) and $data->status == 'fail') return $this->sendError(400, $data->message);
+        if(!isset($data->status)) return $this->sendError(400, 'error');
+
         $story = $this->story->getByID($storyID);
         $this->send(200, $this->format($story, 'openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,reviewedBy:user,reviewedDate:time,lastEditedBy:user,lastEditedDate:time,closedBy:user,closedDate:time,deleted:bool,mailto:userList'));
     }

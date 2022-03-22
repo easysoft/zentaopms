@@ -59,8 +59,9 @@ class userEntry extends Entry
         unset($profile->password);
 
         $info->profile = $this->format($profile, 'last:time,locked:time,birthday:date,join:date');
-        $info->profile->role  = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
-        $info->profile->admin = strpos($this->app->company->admins, ",{$profile->account},") !== false;
+        $info->profile->role          = array('code' => $info->profile->role, 'name' => $this->lang->user->roleList[$info->profile->role]);
+        $info->profile->admin         = strpos($this->app->company->admins, ",{$profile->account},") !== false;
+        $info->profile->superReviewer = isset($this->config->story) ? strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',') : false;
 
         if(!$fields) return $this->send(200, $info);
 

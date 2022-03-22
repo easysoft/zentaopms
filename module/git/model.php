@@ -128,6 +128,14 @@ class gitModel extends model
         $branches = $this->repo->getBranches($repo);
         $commits  = $repo->commits;
 
+        $gitlabAccountPairs = array();
+        if($repo->SCM == 'Gitlab')
+        {
+            $gitlabUserList = $this->loadModel('gitlab')->apiGetUsers($repo->gitlab);
+            $acountIDPairs  = $this->gitlab->getUserIdAccountPairs($repo->gitlab);
+            foreach($gitlabUserList as $gitlabUser) $gitlabAccountPairs[$gitlabUser->realname] = zget($acountIDPairs, $gitlabUser->id, $gitlabUser->realname);
+        }
+
         /* Update code commit history. */
         foreach($branches as $branch)
         {
@@ -166,7 +174,7 @@ class gitModel extends model
                             ' task:' . join(' ', $objects['tasks']) .
                             ' bug:'  . join(',', $objects['bugs']));
 
-                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git');
+                        $this->repo->saveAction2PMS($objects, $log, $this->repoRoot, $repo->encoding, 'git', $gitlabAccountPairs);
                     }
                     else
                     {

@@ -57,6 +57,27 @@ function loadModuleRelated()
 }
 
 /**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @access public
+ * @return void
+ */
+function setLane(regionID)
+{
+    console.log(regionID);
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lane');
+    $.get(laneLink, function(lane)
+    {
+        if(!lane) lane = "<select id='lane' name='lane' class='form-control'></select>";
+        $('#lane').replaceWith(lane);
+        $("#lane" + "_chosen").remove();
+        $("#lane").next('.picker').remove();
+        $("#lane").chosen();
+    });
+}
+
+/**
  * Set the assignedTo field.
  *
  * @param  int    $moduleID
@@ -109,12 +130,16 @@ $(function()
     {
         loadExecutionRelated($('#execution').val());
     }
+    else if(parseInt($('#project').val()))
+    {
+        loadProjectBuilds($('#project').val());
+        loadProjectTeamMembers($('#project').val());
+    }
     else
     {
-        if(parseInt($('#project').val())) loadProjectTeamMembers($('#project').val());
+        if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     }
 
-    if(!assignedto) setTimeout(function(){setAssignedTo(moduleID, productID)}, 500);
     notice();
 
     $('[data-toggle=tooltip]').tooltip();
@@ -168,7 +193,7 @@ $(function()
  * @access public
  * @return void
  */
-function changeExecutionName(projectID)
+function changeAssignedTo(projectID)
 {
     if(parseInt(projectID))
     {
@@ -179,9 +204,13 @@ function changeExecutionName(projectID)
             $('#executionBox').html(executionLang);
         })
     }
+    else if($('#execution').val() != 0)
+    {
+        loadAssignedTo($('#execution').val());
+    }
     else
     {
-        loadExecutionTeamMembers($('#product').val());
+        setAssignedTo();
     }
 }
 

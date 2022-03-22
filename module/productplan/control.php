@@ -89,16 +89,25 @@ class productplan extends control
         }
         $this->view->begin = $lastPlan ? $begin : date('Y-m-d');
         if($parent) $this->view->parentPlan = $this->productplan->getById($parent);
+        $branchPairs = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
+
+        /*Get default branch.*/
+        $branchList = $this->loadModel('branch')->getList($productID);
+        foreach($branchList as $branch)
+        {
+            if($branch->default) $defaultBranch = $branch->id;
+        }
 
         $this->view->title      = $this->view->product->name . $this->lang->colon . $this->lang->productplan->create;
         $this->view->position[] = $this->lang->productplan->common;
         $this->view->position[] = $this->lang->productplan->create;
 
-        $this->view->productID = $productID;
-        $this->view->lastPlan  = $lastPlan;
-        $this->view->branch    = $branchID;
-        $this->view->branches  = $product->type == 'normal' ? array() : $this->loadModel('branch')->getPairs($productID, 'active');
-        $this->view->parent    = $parent;
+        $this->view->productID     = $productID;
+        $this->view->lastPlan      = $lastPlan;
+        $this->view->branch        = $branchID;
+        $this->view->branches      = $branchPairs;
+        $this->view->defaultBranch = $defaultBranch;
+        $this->view->parent        = $parent;
         $this->display();
     }
 
@@ -444,14 +453,14 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes"), 'parent'));
+            return print(js::confirm($this->lang->productplan->confirmStart, $this->createLink('productplan', 'start', "planID=$planID&confirm=yes")));
         }
         else
         {
             $this->productplan->updateStatus($planID, 'doing', 'started');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent'));
         }
     }
 
@@ -467,14 +476,14 @@ class productplan extends control
     {
         if($confirm == 'no')
         {
-            die(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes"), 'parent'));
+            return print(js::confirm($this->lang->productplan->confirmFinish, $this->createLink('productplan', 'finish', "planID=$planID&confirm=yes")));
         }
         else
         {
             $this->productplan->updateStatus($planID, 'done', 'finished');
 
-            if(dao::isError()) die(js::error(dao::getError()));
-            die(js::reload('parent'));
+            if(dao::isError()) return print(js::error(dao::getError()));
+            return print(js::reload('parent'));
         }
     }
 

@@ -244,7 +244,7 @@
         echo "<div class='divider'></div>";
         common::printIcon('story', 'edit', "storyID=$story->id", $story);
         common::printIcon('story', 'create', "productID=$story->product&branch=$story->branch&moduleID=$story->module&storyID=$story->id&executionID=0&bugID=0&planID=0&todoID=0&extra=&type=$story->type", $story, 'button', 'copy', '', '', '', "data-width='1050'");
-        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin');
+        common::printIcon('story', 'delete', "storyID=$story->id", $story, 'button', 'trash', 'hiddenwin', 'showinonlybody',true);
         ?>
         <?php endif;?>
       </div>
@@ -485,14 +485,17 @@
                       $taskInfo      = $task->id . '&nbsp<span class="label label-success label-outline">' . $this->lang->task->statusList[$task->status]  . '</span>&nbsp' . $task->name;
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
                       echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'");
-                      echo html::a($this->createLink('execution', 'browse', "executionID=$task->execution"), $executionName, '', "class='text-muted'") . '</li>';
+                      $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
+                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executionName, '', "class='text-muted'");
+                      echo $execName . '</li>';
                   }
               }
               if(count($story->tasks) == 0)
               {
                   foreach($story->executions as $executionID => $execution)
                   {
-                      echo "<li title='$execution->name'>" . html::a($this->createLink('execution', 'browse', "executionID=$executionID"), $execution->name, '', "class='text-muted'") . '</li>';
+                      $execName = ($execution->type == 'kanban' and isonlybody()) ? $execution->name : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $execution->name, '', "class='text-muted'");
+                      echo "<li title='$execution->name'>" . $execName . '</li>';
                   }
               }
               ?>

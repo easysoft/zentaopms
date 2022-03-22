@@ -44,7 +44,7 @@ class storyModel extends model
         if($setImgSize) $story->spec   = $this->file->setImgSize($story->spec);
         if($setImgSize) $story->verify = $this->file->setImgSize($story->verify);
 
-        $story->executions = $this->dao->select('t1.project, t2.name, t2.status')->from(TABLE_PROJECTSTORY)->alias('t1')
+        $story->executions = $this->dao->select('t1.project, t2.name, t2.status, t2.type')->from(TABLE_PROJECTSTORY)->alias('t1')
             ->leftJoin(TABLE_EXECUTION)->alias('t2')->on('t1.project = t2.id')
             ->where('t1.story')->eq($storyID)
             ->andWhere('t2.type')->in('sprint,stage,kanban')
@@ -208,7 +208,7 @@ class storyModel extends model
             ->callFunc('title', 'trim')
             ->add('version', 1)
             ->add('status', 'draft')
-            ->setDefault('plan,verify', '')
+            ->setDefault('plan,verify,notifyEmail', '')
             ->setDefault('openedBy', $this->app->user->account)
             ->setDefault('openedDate', $now)
             ->setIF($this->post->needNotReview, 'status', 'active')
@@ -220,7 +220,7 @@ class storyModel extends model
             ->setIF($bugID > 0, 'fromBug', $bugID)
             ->join('mailto', ',')
             ->stripTags($this->config->story->editor->create['id'], $this->config->allowedTags)
-            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS')
+            ->remove('files,labels,reviewer,needNotReview,newStory,uid,contactListMenu,URS,region,lane')
             ->get();
 
         /* Check repeat story. */
@@ -247,6 +247,7 @@ class storyModel extends model
             ->checkIF($story->notifyEmail, 'notifyEmail', 'email')
             ->batchCheck($requiredFields, 'notempty')
             ->exec();
+
         if(!dao::isError())
         {
             $storyID = $this->dao->lastInsertID();
@@ -289,8 +290,15 @@ class storyModel extends model
                 if($this->config->systemMode == 'new' and $executionID != $this->session->project) $this->linkStory($this->session->project, $this->post->product, $storyID);
 
                 $this->loadModel('kanban');
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'story', $storyID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($executionID, 'story');
+
+                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+                if(isset($_POST['lane'])) $laneID = $_POST['lane'];
+
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'backlog');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'story', $storyID);
+                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($executionID, 'story');
             }
 
             if(is_array($this->post->URS))
@@ -756,7 +764,7 @@ class storyModel extends model
             ->setDefault('assignedDate', $oldStory->assignedDate)
             ->setDefault('lastEditedBy', $this->app->user->account)
             ->add('lastEditedDate', $now)
-            ->setDefault('plan', '')
+            ->setDefault('plan,notifyEmail', '')
             ->setDefault('status', $oldStory->status)
             ->setDefault('product', $oldStory->product)
             ->setDefault('branch', $oldStory->branch)
@@ -1273,12 +1281,17 @@ class storyModel extends model
      */
     public function review($storyID)
     {
-        if($this->post->result == false)   return print(js::alert($this->lang->story->mustChooseResult));
         if($this->post->result == 'revert' and $this->post->preVersion == false) return print(js::alert($this->lang->story->mustChoosePreVersion));
 
         if(strpos($this->config->story->review->requiredFields, 'comment') !== false and !$this->post->comment)
         {
             dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->comment);
+            return false;
+        }
+
+        if($this->post->result == false)
+        {
+            dao::$errors[] = $this->lang->story->mustChooseResult;
             return false;
         }
 
@@ -1533,8 +1546,11 @@ class storyModel extends model
             ->where('id')->eq($storyID)->exec();
 
         /* Update parent story status and stage. */
-        if($oldStory->parent > 0) $this->updateParentStatus($storyID, $oldStory->parent);
-        $this->setStage($oldStory->parent);
+        if($oldStory->parent > 0)
+        {
+            $this->updateParentStatus($storyID, $oldStory->parent);
+            $this->setStage($oldStory->parent);
+        }
         if(!dao::isError()) $this->loadModel('score')->create('story', 'close', $storyID);
         return common::createChanges($oldStory, $story);
     }
@@ -1982,6 +1998,9 @@ class storyModel extends model
             ->remove('comment')
             ->get();
         $this->dao->update(TABLE_STORY)->data($story)->autoCheck()->where('id')->eq($storyID)->exec();
+
+        if($this->post->status == 'active') $this->dao->delete()->from(TABLE_STORYREVIEW)->where('story')->eq($storyID)->exec();
+
         $this->setStage($storyID);
 
         /* Update parent story status. */
@@ -2134,10 +2153,11 @@ class storyModel extends model
          * Judge stage according to the devel and test tasks' status.
          *
          * 1. one doing devel task, all test tasks waiting, set stage as developing.
-         * 2. all devel tasks done, all test tasks waiting, set stage as developed.
-         * 3. one test task doing, set stage as testing.
-         * 4. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
-         * 5. all test tasks done, all devel tasks done, set stage as tested.
+         * 2. some devel tasks done, all test tasks not done, set stage as developing.
+         * 3. all devel tasks done, all test tasks waiting, set stage as developed.
+         * 4. one test task doing, set stage as testing.
+         * 5. all test tasks done, still some devel tasks not done(wait, doing), set stage as testing.
+         * 6. all test tasks done, all devel tasks done, set stage as tested.
          */
         foreach($branchStatusList as $branch => $statusList)
         {
@@ -2146,6 +2166,7 @@ class storyModel extends model
             $develTasks = isset($branchDevelTasks[$branch]) ? $branchDevelTasks[$branch] : 0;
             if($statusList['devel']['doing'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
             if($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developing';
+            if(($statusList['devel']['doing'] > 0 or ($statusList['devel']['wait'] > 0 and $statusList['devel']['done'] > 0)) and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'developing';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] == $testTasks) $stage = 'developed';
             if($statusList['devel']['done'] == $develTasks and $develTasks > 0 and $statusList['test']['wait'] > 0 and $statusList['test']['done'] > 0) $stage = 'testing';
             if($statusList['test']['doing'] > 0 or $statusList['test']['pause'] > 0) $stage = 'testing';
@@ -2849,7 +2870,7 @@ class storyModel extends model
             ->beginIF($moduleIdList)->andWhere('t2.module')->in($moduleIdList)->fi()
             ->beginIF($status == 'unclosed')->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy('t1.`order` desc')
-            ->fetchAll();
+            ->fetchAll('id');
         return empty($stories) ? array() : $this->formatStories($stories, $type);
     }
 

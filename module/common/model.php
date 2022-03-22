@@ -399,7 +399,7 @@ class commonModel extends model
             {
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='600' class='iframe $noRole'" . '>';
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='700' class='iframe $noRole'" . '>';
                 echo html::avatar($app->user, '', 'avatar-circle', 'id="menu-avatar"');
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
@@ -407,7 +407,7 @@ class commonModel extends model
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
 
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='700'") . '</li>';
 
                 if($app->config->vision === 'rnd')
                 {
@@ -484,7 +484,9 @@ class commonModel extends model
 
             /* The standalone lite version removes the lite interface button */
             if(trim($config->visions, ',') == 'lite') return true;
-            
+
+            if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
+
             if(count($userVisions) < 2)   return print("<div>{$lang->visionList[$currentVision]}</div>");
             if(count($configVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
@@ -957,7 +959,17 @@ class commonModel extends model
             $item->moduleName = $currentModule;
             $item->methodName = $currentMethod;
             $item->vars       = $vars;
-            $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+
+            $isTutorialMode = commonModel::isTutorialMode();
+            if($isTutorialMode && $currentModule == 'project')
+            {
+                if(!empty($vars)) $vars = helper::safe64Encode($vars);
+                $item->url = helper::createLink('tutorial', 'wizard', "module={$currentModule}&method={$currentMethod}&params=$vars", '', 0, 0, 1);
+            }
+            else
+            {
+                $item->url = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+            }
 
             $items[] = $item;
         }
@@ -2200,7 +2212,12 @@ EOD;
             $method = $this->app->rawMethod;
         }
 
-        if(!empty($this->app->user->modifyPassword) and (($module != 'user' or $method != 'deny') and ($module != 'my' or $method != 'changepassword') and ($module != 'user' or $method != 'logout'))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
+        $beforeValidMethods = array(
+            'user'    => array('deny', 'logout'),
+            'my'      => array('changepassword'),
+            'message' => array('ajaxgetmessage'),
+        );
+        if(!empty($this->app->user->modifyPassword) and (!isset($beforeValidMethods[$module]) or !in_array($method, $beforeValidMethods[$module]))) return print(js::locate(helper::createLink('my', 'changepassword', '', '', true)));
         if($this->isOpenMethod($module, $method)) return true;
         if(!$this->loadModel('user')->isLogon() and $this->server->php_auth_user) $this->user->identifyByPhpAuth();
         if(!$this->loadModel('user')->isLogon() and $this->cookie->za) $this->user->identifyByCookie();
@@ -2704,12 +2721,12 @@ EOD;
             $response->errcode = $this->config->entry->errcode[$code];
             $response->errmsg  = urlencode($this->lang->entry->errmsg[$code]);
 
-            return print(urldecode(json_encode($response)));
+            die(urldecode(json_encode($response)));
         }
         else
         {
             $response->error = $code;
-            return print(urldecode(json_encode($response)));
+            die(urldecode(json_encode($response)));
         }
     }
 

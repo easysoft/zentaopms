@@ -488,6 +488,8 @@ class upgradeModel extends model
                         $this->execSQL($this->getUpgradeFile('maxinstall'));
                         $this->execSQL($this->getUpgradeFile('functions'));
                 }
+
+                $this->updateGroup4Lite();
                 break;
         }
 
@@ -5751,12 +5753,67 @@ class upgradeModel extends model
     }
 
     /**
+     * Update group date for lite.
+     *
+     * @access public
+     * @return bool
+     * */
+    public function updateGroup4Lite()
+    {
+        $privTable  = $this->config->db->prefix . 'grouppriv';
+        $adminPrivs = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('1')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $pmPrivs    = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('4')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $topPrivs   = $this->dao->select('module,method')->from($privTable)->where('`group`')->eq('9')->andWhere('module')->notin($this->config->upgrade->unsetModules)->fetchAll();
+        $liteGroup  = $this->dao->select('*')->from(TABLE_GROUP)->where('vision')->eq('lite')->fetchAll();
+
+        $sql = 'REPLACE INTO ' . TABLE_GROUPPRIV . ' VALUES ';
+        foreach($liteGroup as $group)
+        {
+            if($group->role == 'liteAdmin' and !empty($adminPrivs))
+            {
+                foreach($adminPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+
+            if($group->role == 'liteProject' and !empty($pmPrivs))
+            {
+                foreach($pmPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+
+            if($group->role == 'liteTeam' and !empty($topPrivs))
+            {
+                foreach($topPrivs as $priv)
+                {
+                    $sql .= "($group->id, ";
+                    $sql .= "'$priv->module', ";
+                    $sql .= "'$priv->method'), ";
+                }
+            }
+        }
+
+        $sql = rtrim($sql, ', ') . ';';
+
+        $this->dao->exec($sql);
+
+        return true;
+    }
+
+    /**
      * Gets the extension file to be moved.
      *
      * @access public
      * @return array
      */
-    public function getEXTFiles()
+    public function getExtFiles()
     {
         $files       = array();
         $allModules  = glob($this->app->moduleRoot . '*');
@@ -5870,7 +5927,7 @@ class upgradeModel extends model
                 {
                     $systemFiles = file_get_contents('systemfiles.txt');
                     $systemFiles = str_replace('/', DS, $systemFiles);
-                    if(strpos($systemFiles, $fileName) !== false) continue;
+                    if(strpos($systemFiles, ",$fileName,") !== false) continue;
 
                     $pluginFiles[$fileName] = $fileName;
                 }
@@ -5907,7 +5964,7 @@ class upgradeModel extends model
      * @access public
      * @return array
      */
-    public function moveEXTFiles()
+    public function moveExtFiles()
     {
         $data       = fixer::input('post')->get();
         $customRoot = $this->app->appRoot . 'extension' . DS . 'custom';
@@ -5924,7 +5981,6 @@ class upgradeModel extends model
                 if(!mkdir($dirRoot, 0777, true))
                 {
                     $response['result']  = 'fail';
-                    $response['message'] = $this->lang->upgrade->moveEXTFileFail;;
                     $response['command'] = 'chmod o=rwx -R '. $this->app->appRoot . 'extension/custom';
 
                     return $response;
@@ -5963,7 +6019,6 @@ class upgradeModel extends model
         if(!empty($command))
         {
             $response['result']  = 'fail';
-            $response['message'] = $this->lang->upgrade->afterDeleted;
             $response['command'] = $command;
          }
 

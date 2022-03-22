@@ -64,7 +64,7 @@ class taskModel extends model
             ->cleanINT('execution,story,module')
             ->stripTags($this->config->task->editor->create['id'], $this->config->allowedTags)
             ->join('mailto', ',')
-            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region')
+            ->remove('after,files,labels,assignedTo,uid,storyEstimate,storyDesc,storyPri,team,teamEstimate,teamMember,multiple,teams,contactListMenu,selectTestStory,testStory,testPri,testEstStarted,testDeadline,testAssignedTo,testEstimate,sync,otherLane,region,lane')
             ->add('version', 1)
             ->get();
 
@@ -331,6 +331,7 @@ class taskModel extends model
             if($assignedTo) $data[$i]->assignedDate = $now;
             if(strpos($this->config->task->create->requiredFields, 'estStarted') !== false and empty($estStarted)) $data[$i]->estStarted = '';
             if(strpos($this->config->task->create->requiredFields, 'deadline') !== false and empty($deadline))     $data[$i]->deadline   = '';
+            if(isset($tasks->lanes[$i])) $data[$i]->laneID = $tasks->lanes[$i];
 
             foreach($extendFields as $extendField)
             {
@@ -387,6 +388,13 @@ class taskModel extends model
 
         foreach($data as $i => $task)
         {
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(isset($task->laneID))
+            {
+                $laneID = $task->laneID;
+                unset($task->laneID);
+            }
+
             $task->version = 1;
             $this->dao->insert(TABLE_TASK)->data($task)
                 ->autoCheck()
@@ -418,7 +426,10 @@ class taskModel extends model
             }
             else
             {
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($executionID, $output['laneID'], $output['columnID'], 'task', $taskID);
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'wait');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($executionID, $laneID, $columnID, 'task', $taskID);
             }
 
             $actionID = $this->action->create('task', $taskID, 'Opened', '');
@@ -2141,6 +2152,7 @@ class taskModel extends model
                 ->from(TABLE_KANBANCELL)->alias('t1')
                 ->leftJoin(TABLE_KANBANLANE)->alias('t2')->on('t1.lane = t2.id')
                 ->where('t1.kanban')->eq($executionID)
+                ->andWhere('t2.deleted')->eq(0)
                 ->andWhere("($cardsWhere)")
                 ->fetchAll();
 
@@ -3277,6 +3289,9 @@ class taskModel extends model
                 break;
             case 'lastEditedDate':
                 echo substr($task->lastEditedDate, 5, 11);
+                break;
+            case 'activatedDate':
+                echo helper::isZeroDate($task->activatedDate) ? '' : substr($task->activatedDate, 5, 11);
                 break;
             case 'actions':
                 if($storyChanged)

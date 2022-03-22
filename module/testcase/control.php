@@ -59,7 +59,8 @@ class testcase extends control
             }
             else
             {
-                $products = $this->product->getPairs();
+                $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
+                $products = $this->product->getPairs($mode);
             }
             if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=testcase&objectID=$objectID")));
         }
@@ -263,6 +264,7 @@ class testcase extends control
         {
             if($groupBy == 'story')
             {
+                if($case->storyDeleted) continue;
                 $groupCases[$case->story][] = $case;
                 $groupByList[$case->story]  = $case->storyTitle;
             }
@@ -963,6 +965,9 @@ class testcase extends control
                 $libID     = $productID;
                 $libraries = $this->loadModel('caselib')->getLibraries();
 
+                /* Set caselib menu. */
+                $this->caselib->setLibMenu($libraries, $libID);
+
                 /* Set modules. */
                 $modules[$productID][$branch] = $this->tree->getOptionMenu($libID, 'caselib', 0, $branch);
 
@@ -1050,9 +1055,6 @@ class testcase extends control
         $countInputVars  = count($cases) * (count(explode(',', $this->config->testcase->custom->batchEditFields)) + 3);
         $showSuhosinInfo = common::judgeSuhosinSetting($countInputVars);
         if($showSuhosinInfo) $this->view->suhosinInfo = extension_loaded('suhosin') ? sprintf($this->lang->suhosinInfo, $countInputVars) : sprintf($this->lang->maxVarsInfo, $countInputVars);
-
-        $stories = $this->loadModel('story')->getProductStoryPairs($productID, $branch);
-        $this->view->stories = array('' => '', 'ditto' => $this->lang->testcase->ditto) + $stories;
 
         /* Set custom. */
         foreach(explode(',', $this->config->testcase->customBatchEditFields) as $field) $customFields[$field] = $this->lang->testcase->$field;

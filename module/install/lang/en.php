@@ -157,7 +157,10 @@ $lang->install->getPriv            = 'Set Admin';
 $lang->install->company            = 'Company Name';
 $lang->install->account            = 'Admin Account';
 $lang->install->password           = 'Admin Password';
-$lang->install->errorEmptyPassword = 'Password should not be blank.';
+
+$lang->install->errorEmpty['company']  = "{$lang->install->company} should not be blank.";
+$lang->install->errorEmpty['account']  = "{$lang->install->account} should not be blank.";
+$lang->install->errorEmpty['password'] = "{$lang->install->password} should not be blank.";
 
 $lang->install->processList['11'] = 'Project management';
 $lang->install->processList['12'] = 'Project planning';

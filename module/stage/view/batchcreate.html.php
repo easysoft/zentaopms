@@ -31,7 +31,7 @@
           <td><?php echo $i;?></td>
           <td><?php echo html::input("name[$i]", '',  "class='form-control'");?></td>
           <td><?php echo html::input("percent[$i]", '',  "class='form-control'");?></td>
-          <td><?php echo html::select("type[$i]", $lang->stage->typeList, '',  "class='form-control chosen'");?></td>
+          <td><?php echo html::select("type[$i]", array('' => '') + $lang->stage->typeList, '',  "class='form-control chosen'");?></td>
         </tr>
         <?php endfor;?>
         <tr>

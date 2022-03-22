@@ -196,20 +196,29 @@ class docModel extends model
     /**
      * creat a api doc library.
      *
-     * @param  stdClass $data form data.
      * @return int
      * @author thanatos thanatos915@163.com
      */
-    public function createApiLib($data)
+    public function createApiLib()
     {
         /* replace doc library name */
-        $this->lang->doclib->name = '接口库名称';
+        $this->lang->doclib->name = $this->lang->doclib->apiLibName;
+
+        $data = fixer::input('post')
+            ->trim('name')
+            ->join('groups', ',')
+            ->join('users', ',')
+            ->get();
+
+        if($data->acl == 'private') $data->users = $this->app->user->account;
+        if($data->acl == 'custom' && strpos($data->users, $this->app->user->account) === false) $data->users .= ',' . $this->app->user->account;
 
         $data->type = static::DOC_TYPE_API;
         $this->dao->insert(TABLE_DOCLIB)->data($data)->autoCheck()
             ->batchCheck($this->config->api->createlib->requiredFields, 'notempty')
             ->check('name', 'unique', "`type` = '" . static::DOC_TYPE_API . "'")
             ->exec();
+
         return $this->dao->lastInsertID();
     }
 
@@ -588,6 +597,7 @@ class docModel extends model
     {
         $now = helper::now();
         $doc = fixer::input('post')
+            ->callFunc('title', 'trim')
             ->add('addedBy', $this->app->user->account)
             ->add('addedDate', $now)
             ->add('editedBy', $this->app->user->account)
@@ -684,6 +694,7 @@ class docModel extends model
 
         $now = helper::now();
         $doc = fixer::input('post')->setDefault('module', 0)
+            ->callFunc('title', 'trim')
             ->stripTags($this->config->doc->editor->edit['id'], $this->config->allowedTags)
             ->setDefault('users', '')
             ->setDefault('groups', '')
@@ -2376,7 +2387,7 @@ EOT;
                     if(common::hasPriv('doc', 'edit'))
                     {
                         $treeMenu[0] .= "<div class='tree-actions'>";
-                        $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit}");
+                        $treeMenu[0] .= html::a(helper::createLink('doc', 'edit', "docID={$doc->id}&comment=false&objectType=$type&objectID=$objectID&libID=$rootID"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
                         $treeMenu[0] .= '</div></div>';
                     }
                 }

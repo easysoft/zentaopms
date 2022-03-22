@@ -206,6 +206,8 @@ class repoModel extends model
             ->setIf($this->post->SCM == 'Gitlab', 'client', $this->post->gitlabHost)
             ->setIf($this->post->SCM == 'Gitlab', 'extra', $this->post->gitlabProject)
             ->setIf($this->post->SCM == 'Gitlab', 'prefix', '')
+            ->setIf($this->post->SCM == 'Git', 'account', '')
+            ->setIf($this->post->SCM == 'Git', 'password', '')
             ->skipSpecial('path,client,account,password')
             ->setDefault('product', '')
             ->join('product', ',')
@@ -219,8 +221,9 @@ class repoModel extends model
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($data);
-            $info = $scm->info('');
-            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $data->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $data->path)), '/');
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
 
@@ -280,8 +283,9 @@ class repoModel extends model
         {
             $scm = $this->app->loadClass('scm');
             $scm->setEngine($data);
-            $info = $scm->info('');
-            $data->prefix = empty($info->root) ? '' : trim(str_ireplace($info->root, '', str_replace('\\', '/', $data->path)), '/');
+            $info     = $scm->info('');
+            $infoRoot = urldecode($info->root);
+            $data->prefix = empty($infoRoot) ? '' : trim(str_ireplace($infoRoot, '', str_replace('\\', '/', $data->path)), '/');
             if($data->prefix) $data->prefix = '/' . $data->prefix;
         }
         elseif($data->SCM != $repo->SCM and $data->SCM == 'Git')
@@ -1246,7 +1250,7 @@ class repoModel extends model
                     dao::$errors['client'] = $this->lang->repo->error->clientVersion;
                     return false;
                 }
-                if(preg_match('/[^\:\/\\A-Za-z0-9_\-\'\"\.]/', $path))
+                if(preg_match('/[^\:\/A-Za-z0-9_\-\'\"\.]/', $path))
                 {
                     dao::$errors['encoding'] = $this->lang->repo->error->encoding . "<br />" . nl2br($message);
                     return false;
@@ -1370,7 +1374,7 @@ class repoModel extends model
                 {
                     $tasks[$id] = $id;
                     $actions['task'][$id]['start']['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['start']['left']     = $matches[16][$i];
+                    $actions['task'][$id]['start']['left']     = $matches[17][$i];
                 }
             }
         }
@@ -1385,7 +1389,7 @@ class repoModel extends model
                 {
                     $tasks[$id] = $id;
                     $actions['task'][$id]['effort']['consumed'] = $matches[11][$i];
-                    $actions['task'][$id]['effort']['left']     = $matches[16][$i];
+                    $actions['task'][$id]['effort']['left']     = $matches[17][$i];
                 }
             }
         }
@@ -1506,8 +1510,8 @@ class repoModel extends model
         $storyReg = "(($storyModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $taskReg  = "(($taskModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
         $bugReg   = "(($bugModule) *(({$idMarks})[0-9]+(({$idSplits})[0-9]+)*))";
-        $costReg  = "($costs) *(($costMarks)([0-9]+)($costUnit))";
-        $leftReg  = "($lefts) *(($leftMarks)([0-9]+)($leftUnit))";
+        $costReg  = "($costs) *(($costMarks)([0-9]+(\.?[0-9]+)?)($costUnit))";
+        $leftReg  = "($lefts) *(($leftMarks)([0-9]+(\.?[0-9]+)?)($leftUnit))";
 
         $startTaskReg  = "({$startAction}) *{$taskReg}.*$costReg.*$leftReg";
         $effortTaskReg = "({$effortAction}) *{$taskReg}.*$costReg.*$leftReg";
@@ -1533,11 +1537,21 @@ class repoModel extends model
      * @param  array    $objects
      * @param  object   $log
      * @param  string   $repoRoot
+     * @param  string   $encodings
+     * @param  string   $scm
+     * @param  array    $gitlabAccountPairs
      * @access public
      * @return void
      */
-    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn')
+    public function saveAction2PMS($objects, $log, $repoRoot = '', $encodings = 'utf-8', $scm = 'svn', $gitlabAccountPairs = array())
     {
+        if(empty($gitlabAccountPairs))
+        {
+            $commiters   = $this->loadModel('user')->getCommiters('account');
+            $log->author = zget($commiters, $log->author);
+        }
+        $log->author = isset($gitlabAccountPairs[$log->author]) ? $gitlabAccountPairs[$log->author] : $log->author;
+
         if(isset($this->app->user))
         {
             $account = $this->app->user->account;
@@ -1545,11 +1559,11 @@ class repoModel extends model
         }
 
         $action  = new stdclass();
-        $action->actor   = $log->author;
-        $action->date    = $log->date;
+        $action->actor = $log->author;
+        $action->date  = $log->date;
+        $action->extra = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
 
-        $action->comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
-        $action->extra   = $scm == 'svn' ? $log->revision : substr($log->revision, 0, 10);
+        $comment = htmlSpecialString($this->iconvComment($log->msg, $encodings));
 
         $this->loadModel('action');
         $actions = $objects['actions'];
@@ -1566,7 +1580,7 @@ class repoModel extends model
                 $action->objectID   = $taskID;
                 $action->product    = $productsAndExecutions[$taskID]['product'];
                 $action->execution  = $productsAndExecutions[$taskID]['execution'];
-                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $action->comment;
+                $action->comment    = $this->lang->repo->revisionA . ': #' . $action->extra . "<br />" . $comment;
                 foreach($taskActions as $taskAction => $params)
                 {
                     $_POST = array();
@@ -1960,5 +1974,21 @@ class repoModel extends model
         $this->dao->update(TABLE_REPO)->set('commits=commits + ' . $commitCount)->where('id')->eq($repoID)->exec();
 
         $this->fixCommit($repoID);
+    }
+
+    /**
+     * Get execution pairs.
+     *
+     * @param  int    $product
+     * @param  int    $branch
+     * @access public
+     * @return array
+     */
+    public function getExecutionPairs($product, $branch = 0)
+    {
+        $pairs      = array();
+        $executions = $this->loadModel('execution')->getList(0, 'all', 'undone', 0, $product, $branch);
+        foreach($executions as $execution) $pairs[$execution->id] = $execution->name;
+        return $pairs;
     }
 }

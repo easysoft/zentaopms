@@ -46,6 +46,8 @@ class Processor
         $this->initUserquery();
         $this->initUpdateKanban();
         $this->initStory();
+        $this->initBug();
+        $this->initTest();
 
         $this->dao->commit();
     }
@@ -154,6 +156,34 @@ class Processor
     private function initStory()
     {
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
+    }
+
+    /**
+     * Init Test.
+     *
+     * @access private
+     * @return void
+     */
+    private function initBug()
+    {
+        $this->dao->update(TABLE_BUG)->set('`issueKey`')->eq('2:AX-W7K3_L7H_36P3H4le')->where('issueKey')->eq('17')->exec();
+    }
+
+    private function initTest()
+    {
+        $testResults = $this->dao->select('*')->from(TABLE_TESTRESULT)->fetchAll();
+
+        foreach($testResults as $testResult)
+        {
+            if($testResult->caseResult == 'fail')
+            {
+                $this->dao->update(TABLE_TESTRESULT)->set('`stepResults`')->eq('a:1:{i:'.$testResult->run.';a:2:{s:6:\"result\";s:4:\"fail\";s:4:\"real\";s:0:\"\";}}')->where('id')->eq($testResult->id)->exec();
+            }
+            else
+            {
+                $this->dao->update(TABLE_TESTRESULT)->set('`stepResults`')->eq('a:1:{i:'.$testResult->run.';a:2:{s:6:\"result\";s:4:\"pass\";s:4:\"real\";s:0:\"\";}}')->where('id')->eq($testResult->id)->exec();
+            }
+        }
     }
 
     /**

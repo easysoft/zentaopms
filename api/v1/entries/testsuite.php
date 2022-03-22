@@ -29,11 +29,11 @@ class testsuiteEntry extends entry
         if(!isset($data->data->suite)) $this->sendError(400, 'error');
 
         $suite = $this->format($data->data->suite, 'addedBy:user,addedDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool');
-        $suite->cases = array();
+        $suite->testcases = array();
 
         foreach($data->data->cases as $case)
         {
-            $suite->cases[] = $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool');
+            $suite->testcases[] = $this->format($case, 'openedBy:user,openedDate:time,lastEditedBy:user,lastEditedDate:time,lastRunDate:time,scriptedDate:date,reviewedBy:user,reviewedDate:date,deleted:bool');
         }
 
         $this->send(200, $suite);

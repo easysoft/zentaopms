@@ -65,6 +65,7 @@ class mr extends control
         $this->view->objectID   = $objectID;
         $this->view->orderBy    = $orderBy;
         $this->view->openIDList = $openIDList;
+        $this->view->users      = $this->loadModel('user')->getPairs('noletter');
         $this->display();
     }
 

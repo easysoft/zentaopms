@@ -51,9 +51,16 @@ class productEntry extends Entry
                         $product->modules = $data->data->tree;
                     }
                     break;
+                case 'moduleoptionmenu':
+                    $product->moduleOptionMenu = $this->loadModel('tree')->getOptionMenu($productID, 'bug', 0, 'all');
+                    break;
+                case 'builds':
+                    $product->builds = $this->loadModel('build')->getBuildPairs($productID, 'all', 'noempty,noterminate,nodone,withbranch');
+                    break;
                 case 'actions':
                     $product->addComment = common::hasPriv('action', 'comment') ? true : false;
 
+                    $users   = $this->loadModel('user')->getPairs();
                     $actions = $data->data->actions;
                     $product->actions = $this->loadModel('action')->processActionForAPI($actions, $users, $this->lang->product);
                     break;

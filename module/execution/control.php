@@ -126,7 +126,7 @@ class execution extends control
         $execution   = $this->commonAction($executionID, $status);
         $executionID = $execution->id;
 
-        if($execution->type == 'kanban' and $this->config->vision != 'lite') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban' and $this->config->vision != 'lite' and defined('RUN_MODE') and RUN_MODE != 'api') $this->locate($this->createLink('execution', 'kanban', "executionID=$executionID"));
 
         /* Get products by execution. */
         $products = $this->product->getProductPairsByProject($executionID);
@@ -773,12 +773,20 @@ class execution extends control
         {
             foreach($products as $product) $productModules += $this->tree->getOptionMenu($product->id, 'story', 0, $product->branches);
         }
-        foreach($productModules as $branchID => $moduleList)
+
+        if(defined('TUTORIAL'))
         {
-            foreach($moduleList as $moduleID => $moduleName)
+            $modules = $this->loadModel('tutorial')->getModulePairs();
+        }
+        else
+        {
+            foreach($productModules as $branchID => $moduleList)
             {
-                if($moduleID and !isset($executionModules[$moduleID])) continue;
-                $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+                foreach($moduleList as $moduleID => $moduleName)
+                {
+                    if($moduleID and !isset($executionModules[$moduleID])) continue;
+                    $modules[$moduleID] = ((count($products) >= 2 and $moduleID) ? $product->name : '') . $moduleName;
+                }
             }
         }
         $actionURL    = $this->createLink('execution', 'story', "executionID=$executionID&orderBy=$orderBy&type=bySearch&queryID=myQueryID");
@@ -1304,8 +1312,8 @@ class execution extends control
                 }
             }
 
-            if(!empty($projectID) and $project->model == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
-            if(!empty($projectID) and $project->model == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+            if(!empty($projectID) and $project->model == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
+            if(!empty($projectID) and $project->model == 'kanban') return $this->send(array('result' => 'success', 'locate' => inlink('kanban', "executionID=$executionID")));
 
             $this->view->title       = $this->lang->execution->tips;
             $this->view->tips        = $this->fetch('execution', 'tips', "executionID=$executionID");
@@ -1402,13 +1410,6 @@ class execution extends control
             {
                 $execution = $this->execution->getById($executionID);
                 $this->loadModel('kanban')->createRDKanban($execution);
-
-                if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
-
-                $link= $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
-                if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
-
-                return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
             }
 
             if(!empty($planID))
@@ -1417,8 +1418,15 @@ class execution extends control
             }
             else
             {
-                if(!empty($projectID) and $project->model == 'kanban' and $this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $this->createLink('project', 'index', "projectID=$projectID")));
-                if(!empty($projectID) and $project->model == 'kanban') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+                if(!empty($projectID) and $project->model == 'kanban')
+                {
+                    if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
+                    $link = $this->config->vision != 'lite' ? $this->createLink('project', 'index', "projectID=$projectID") : $this->createLink('project', 'execution', "status=all&projectID=$projectID");
+                    if($this->app->tab == 'project') return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $link));
+
+                    return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('kanban', "executionID=$executionID")));
+                }
                 return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => inlink('create', "projectID=$projectID&executionID=$executionID")));
             }
         }
@@ -1565,7 +1573,8 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->edit;
 
-        $allProducts = array(0 => '') + $this->product->getProducts($execution->project, 'noclosed', '', false);
+        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProducts($execution->project, 'noclosed', '', false);
+        $allProducts = array(0 => '') + $allProducts;
 
         $this->loadModel('productplan');
         $productPlans     = array(0 => '');
@@ -1573,7 +1582,7 @@ class execution extends control
         $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
@@ -1609,6 +1618,8 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', $execution->RD, $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $project = $this->project->getById($execution->project);
+
         $this->view->title                = $title;
         $this->view->position             = $position;
         $this->view->executions           = $executions;
@@ -1618,8 +1629,7 @@ class execution extends control
         $this->view->qdUsers              = $qdUsers;
         $this->view->rdUsers              = $rdUsers;
         $this->view->users                = $this->user->getPairs('nodeleted|noclosed');
-        $this->view->allProjects          = $this->project->getPairsByModel('all', 0, 'noclosed');
-        $this->view->project              = $this->project->getById($execution->project);
+        $this->view->project              = $project;
         $this->view->groups               = $this->loadModel('group')->getPairs();
         $this->view->allProducts          = $allProducts;
         $this->view->linkedProducts       = $linkedProducts;
@@ -1631,6 +1641,7 @@ class execution extends control
         $this->view->productPlans         = $productPlans;
         $this->view->branchGroups         = $this->execution->getBranchByProduct(array_keys($linkedProducts), $this->config->systemMode == 'new' ? $execution->project : 0, 'noclosed', $linkedBranchList);
         $this->view->teamMembers          = $this->execution->getTeamMembers($executionID);
+        if($this->config->systemMode == 'new') $this->view->allProjects = $this->project->getPairsByModel($project->model, 0, 'noclosed');
         $this->display();
     }
 
@@ -1648,6 +1659,8 @@ class execution extends control
         if($this->post->names)
         {
             $allChanges = $this->execution->batchUpdate();
+            if(dao::isError()) return print(js::error(dao::getError()));
+
             if(!empty($allChanges))
             {
                 foreach($allChanges as $executionID => $changes)
@@ -1964,6 +1977,8 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
+        if($execution->type == 'kanban') return $this->locate(inlink('kanban', "executionID=$executionID"));
+
         $this->app->loadLang('program');
 
         /* Execution not found to prevent searching for .*/
@@ -2030,7 +2045,9 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
 
         $this->lang->execution->menu = new stdclass();
-        $execution        = $this->commonAction($executionID);
+        $execution = $this->commonAction($executionID);
+        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
+
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
 
@@ -2718,6 +2735,8 @@ class execution extends control
     {
         $this->loadModel('story');
         $this->loadModel('product');
+        $this->loadModel('tree');
+        $this->loadModel('branch');
 
         /* Init objectID */
         $originObjectID = $objectID;
@@ -2733,6 +2752,7 @@ class execution extends control
         $object     = $this->project->getByID($objectID, $this->app->tab == 'project' ? 'project' : 'sprint,stage,kanban');
         $products   = $this->product->getProducts($objectID);
         $browseLink = $this->createLink($this->app->tab == 'project' ? 'projectstory' : 'execution', 'story', "objectID=$objectID");
+        $queryID    = ($browseType == 'bySearch') ? (int)$param : 0;
 
         $this->session->set('storyList', $this->app->getURI(true), $this->app->tab); // Save session.
 
@@ -2770,33 +2790,37 @@ class execution extends control
         {
             $this->project->setMenu($object->id);
         }
-        else if($object->type == 'sprint' or $object->type == 'stage')
+        elseif($object->type == 'sprint' or $object->type == 'stage')
         {
             $this->execution->setMenu($object->id);
         }
-
-        $queryID = ($browseType == 'bySearch') ? (int)$param : 0;
 
         /* Set modules and branches. */
         $modules      = array();
         $branchIDList = array(BRANCH_MAIN);
         $branches     = $this->project->getBranchesByProject($objectID);
         $productType  = 'normal';
-        $this->loadModel('tree');
-        $this->loadModel('branch');
-        foreach($products as $product)
+
+        if(defined('TUTORIAL'))
         {
-            $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
-            foreach($productModules as $branch => $branchModules)
+            $modules = $this->loadModel('tutorial')->getModulePairs();
+        }
+        else
+        {
+            foreach($products as $product)
             {
-                foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
-            }
-            if($product->type != 'normal')
-            {
-                $productType = $product->type;
-                if(isset($branches[$product->id]))
+                $productModules = $this->tree->getOptionMenu($product->id, 'story', 0, array_keys($branches[$product->id]));
+                foreach($productModules as $branch => $branchModules)
                 {
-                    foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
+                    foreach($branchModules as $moduleID => $moduleName) $modules[$moduleID] = ((count($products) >= 2 and $moduleID != 0) ? $product->name : '') . $moduleName;
+                }
+                if($product->type != 'normal')
+                {
+                    $productType = $product->type;
+                    if(isset($branches[$product->id]))
+                    {
+                        foreach($branches[$product->id] as $branchID => $branch) $branchIDList[$branchID] = $branchID;
+                    }
                 }
             }
         }
@@ -2825,7 +2849,7 @@ class execution extends control
             {
                 $storyModule = $this->tree->getModulesName($story->module);
                 $productName = count($products) > 1 ? $products[$story->product]->name : '';
-                $modules[$story->module] = $productName . $storyModule[$story->module];
+                $modules[$story->module] = $productName . zget($storyModule, $story->module, '');
             }
         }
 
@@ -2874,11 +2898,7 @@ class execution extends control
             $this->execution->unlinkStory($executionID, $storyID);
 
             /* if kanban then reload and if ajax request then send result. */
-            if(isonlybody())
-            {
-                return print(js::reload('parent'));
-            }
-            elseif(helper::isAjaxRequest())
+            if(helper::isAjaxRequest())
             {
                 if(dao::isError())
                 {
@@ -2892,7 +2912,7 @@ class execution extends control
                 }
                 return $this->send($response);
             }
-            return print(js::locate($this->app->session->storyList, 'parent'));
+            return print(js::reload('parent'));
         }
     }
 

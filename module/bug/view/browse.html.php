@@ -237,7 +237,7 @@ $currentBrowseType = isset($lang->bug->mySelects[$browseType]) && in_array($brow
     <form class='main-table table-bug' method='post' id='bugForm' <?php if(!$useDatatable) echo "data-ride='table'";?>>
     <?php endif;?>
       <div class="table-header fixed-right">
-        <nav class="btn-toolbar pull-right"></nav>
+        <nav class="btn-toolbar pull-right setting"></nav>
       </div>
       <?php
       $vars = "productID=$productID&branch=$branch&browseType=$browseType&param=$param&orderBy=%s&recTotal={$pager->recTotal}&recPerPage={$pager->recPerPage}";

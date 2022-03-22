@@ -578,7 +578,7 @@ class project extends control
         $linkedProducts   = $this->loadModel('product')->getProducts($projectID);
         $parentProject    = $this->program->getByID($project->parent);
         $branches         = $this->project->getBranchesByProject($projectID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $projectStories   = $this->project->getStoriesByProject($projectID);
         $projectBranches  = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
@@ -1342,6 +1342,8 @@ class project extends control
         if(!empty($_POST))
         {
             $this->project->manageMembers($projectID);
+            if(dao::isError()) $this->send(array('result' => 'fail', 'message' => dao::getError()));
+
             $this->loadModel('action')->create('team', $projectID, 'ManagedTeam');
 
             $link = $this->createLink('project', 'team', "projectID=$projectID");

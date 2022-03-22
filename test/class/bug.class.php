@@ -627,6 +627,27 @@ class bugTest
     }
 
     /**
+     * Test get by Sonarqube id.
+     *
+     * @param  int    $sonarqubeID
+     * @access public
+     * @return int
+     */
+    public function getBySonarqubeIDTest($sonarqubeID)
+    {
+        $array = $this->objectModel->getBySonarqubeID($sonarqubeID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($array);
+        }
+    }
+
+    /**
      * Test get bug list of a plan.
      *
      * @param  string $productIDList
@@ -789,8 +810,8 @@ class bugTest
     /**
      * Test update a bug.
      *
-     * @param mixed $bugID
-     * @param array $param
+     * @param  int    $bugID
+     * @param  array  $param
      * @access public
      * @return void
      */
@@ -1044,6 +1065,7 @@ class bugTest
      *
      * @param  array  $bugIDList
      * @param  int    $branchID
+     * @param  int    $bugID
      * @access public
      * @return array
      */
@@ -1060,6 +1082,946 @@ class bugTest
         else
         {
             return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test batch change module.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $moduleID
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function batchChangeModuleTest($bugIDList, $moduleID, $bugID)
+    {
+        $bugs = $this->objectModel->getByList($bugIDList);
+
+        $object = $this->objectModel->batchChangeModule($bugIDList, $moduleID, $bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test batch change plan.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $planID
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function batchChangePlanTest($bugIDList, $planID, $bugID)
+    {
+        $object = $this->objectModel->batchChangePlan($bugIDList, $planID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test batch resolve bugs.
+     *
+     * @param  array  $bugIDList
+     * @param  string $resolution
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function batchResolveTest($bugIDList, $resolution, $bugID)
+    {
+        $object = $this->objectModel->batchResolve($bugIDList, $resolution, 'trunk');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return !empty($object[$bugID]) ? $object[$bugID] : 0;
+        }
+    }
+
+    /**
+     * Test activate a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function activateObject($bugID)
+    {
+        $change = $this->objectModel->activate($bugID, '');
+        $_POST['assignedTo'] = 'admin';
+
+        if($change == array()) $change = '没有数据更新';
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $change;
+        }
+    }
+
+    /**
+     * Test close a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function closeObject($bugID)
+    {
+        $change = $this->objectModel->close($bugID, '');
+
+        if($change == array()) $change = '没有数据更新';
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $change;
+        }
+    }
+
+    /**
+     * Test process the openedBuild and resolvedBuild fields for bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function processBuildForBugsTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->processBuildForBugs($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test extract accounts from some bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function extractAccountsFromListTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->extractAccountsFromList($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test extract accounts from a bug.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return array
+     */
+    public function extractAccountsFromSingleTest($bugID)
+    {
+        $bug   = $this->objectModel->getByID($bugID);
+        $array = $this->objectModel->extractAccountsFromSingle($bug);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get user bugs.
+     *
+     * @param  string $account
+     * @param  string $type
+     * @access public
+     * @return array
+     */
+    public function getUserBugsTest($account, $type = 'assignedTo')
+    {
+        $array = $this->objectModel->getUserBugs($account, $type);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($array);
+        }
+    }
+
+    /**
+     * Test get bug pairs of a user.
+     *
+     * @param  string $account
+     * @access public
+     * @return array
+     */
+    public function getUserBugPairsTest($account)
+    {
+        $array = $this->objectModel->getUserBugPairs($account);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return count($array);
+        }
+    }
+
+    /**
+     * Test get bugs of a project.
+     *
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getProjectBugsTest($projectID)
+    {
+        $array = $this->objectModel->getProjectBugs($projectID);
+
+        foreach($array as $bug) $bug->title = str_replace("'", '', $bug->title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get bugs of a execution.
+     *
+     * @param  int    $executionID
+     * @access public
+     * @return string
+     */
+    public function getExecutionBugsTest($executionID)
+    {
+        $array = $this->objectModel->getExecutionBugs($executionID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get product left bugs.
+     *
+     * @param  int    $buildID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProductLeftBugsTest($buildID, $productID)
+    {
+        $array = $this->objectModel->getProductLeftBugs($buildID, $productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bug pairs of a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProductBugPairsTest($productID)
+    {
+        $array = $this->objectModel->getProductBugPairs($productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bug member of a product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProductMemberPairsTest($productID)
+    {
+        $array = $this->objectModel->getProductMemberPairs($productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs according to buildID and productID.
+     *
+     * @param  int    $buildID
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getReleaseBugsTest($buildID, $productID)
+    {
+        $array = $this->objectModel->getReleaseBugs($buildID, $productID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get bugs of a story.
+     *
+     * @param  int    $storyID
+     * @access public
+     * @return string
+     */
+    public function getStoryBugsTest($storyID)
+    {
+        $array = $this->objectModel->getStoryBugs($storyID);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get case bugs.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @param  int    $version
+     * @access public
+     * @return string
+     */
+    public function getCaseBugsTest($runID, $caseID = 0, $version = 0)
+    {
+        $array = $this->objectModel->getCaseBugs($runID, $caseID, $version);
+
+        $title = '';
+        foreach($array as $bug) $title .= ',' . $bug->title;
+        $title = trim($title, ',');
+        $title = str_replace("'", '', $title);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get counts of some stories' bugs.
+     *
+     * @param  array  $storyIDList
+     * @param  int    $storyID
+     * @access public
+     * @return int
+     */
+    public function getStoryBugCountsTest($storyIDList, $storyID)
+    {
+        $array = $this->objectModel->getStoryBugCounts($storyIDList);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return isset($array[$storyID]) ? $array[$storyID] : 0;
+        }
+    }
+
+    /**
+     * Test get bug info from a result.
+     *
+     * @param  int    $runID
+     * @param  int    $caseID
+     * @access public
+     * @return string
+     */
+    public function getBugInfoFromResultTest($resultID, $caseID = 0)
+    {
+        $array = $this->objectModel->getBugInfoFromResult($resultID, $caseID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return isset($array['title']) ? $array['title'] : 0;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per execution.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerExecutionTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerExecution();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per build.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerBuildTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerBuild();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per module.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerModuleTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerModule();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of opened bugs per day.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfOpenedBugsPerDayTest()
+    {
+        $array = $this->objectModel->getDataOfOpenedBugsPerDay();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of resolved bugs per day.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfResolvedBugsPerDayTest()
+    {
+        $array = $this->objectModel->getDataOfResolvedBugsPerDay();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of closed bugs per day.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfClosedBugsPerDayTest()
+    {
+        $array = $this->objectModel->getDataOfClosedBugsPerDay();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of openeded bugs per user.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfOpenedBugsPerUserTest()
+    {
+        $array = $this->objectModel->getDataOfOpenedBugsPerUser();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of resolved bugs per user.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfResolvedBugsPerUserTest()
+    {
+        $array = $this->objectModel->getDataOfResolvedBugsPerUser();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of closed bugs per user.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfClosedBugsPerUserTest()
+    {
+        $array = $this->objectModel->getDataOfClosedBugsPerUser();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per severity.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerSeverityTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerSeverity();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per resolution.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerResolutionTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerResolution();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per status.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerStatusTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerStatus();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per pri.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerPriTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerPri();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per status.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerActivatedCountTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerActivatedCount();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per type.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerTypeTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerType();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test get report data of bugs per assignedTo.
+     *
+     * @access public
+     * @return array
+     */
+    public function getDataOfBugsPerAssignedToTest()
+    {
+        $array = $this->objectModel->getDataOfBugsPerAssignedTo();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test form customed bugs.
+     *
+     * @param  array  $bugIDList
+     * @access public
+     * @return array
+     */
+    public function formCustomedBugsTest($bugIDList)
+    {
+        $bugs  = $this->objectModel->getByList($bugIDList);
+        $array = $this->objectModel->formCustomedBugs($bugs);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
+        }
+    }
+
+    /**
+     * Test adjust the action is clickable.
+     *
+     * @param  object $bug
+     * @param  string $action
+     * @access public
+     * @return int
+     */
+    public function isClickableTest($bug, $action)
+    {
+        $object = $this->objectModel->isClickable($bug, $action);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object ? 1 : 2;
+        }
+    }
+
+    /**
+     * Test link bug to build and release.
+     *
+     * @param  array  $bugIDList
+     * @param  int    $resolvedBuild
+     * @access public
+     * @return object
+     */
+    public function linkBugToBuildTest($bugIDList, $resolvedBuild)
+    {
+        $this->objectModel->linkBugToBuild($bugIDList, $resolvedBuild);
+
+        global $tester;
+        $release = $tester->dao->select('id,bugs')->from(TABLE_RELEASE)->where('build')->eq($resolvedBuild)->andWhere('deleted')->eq('0')->fetch();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $release;
+        }
+    }
+
+    /**
+     * Test get toList and ccList.
+     *
+     * @param  int    $bugID
+     * @access public
+     * @return string
+     */
+    public function getToAndCcListTest($bugID)
+    {
+        $bug   = $this->objectModel->getByID($bugID);
+        $array = $this->objectModel->getToAndCcList($bug);
+
+        $account = '';
+        foreach($array as $value) $account .= ',' . $value;
+        $account = trim($account, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $account;
+        }
+    }
+
+    /**
+     * Test get project list.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return string
+     */
+    public function getProjectsTest($productID)
+    {
+        $array = $this->objectModel->getProjects($productID);
+
+        $title = '';
+        foreach($array as $id => $project) $title .= ',' . $project;
+        $title = trim($title, ',');
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $title;
+        }
+    }
+
+    /**
+     * Test get id list of all projects.
+     *
+     * @access public
+     * @return array
+     */
+    public function getAllProjectIdsTest()
+    {
+        $array = $this->objectModel->getAllProjectIds();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $array;
         }
     }
 }

@@ -76,7 +76,7 @@ class bugModel extends model
             ->trim('title')
             ->join('openedBuild', ',')
             ->join('mailto', ',')
-            ->remove('files, labels,uid,oldTaskID,contactListMenu')
+            ->remove('files,labels,uid,oldTaskID,contactListMenu,region,lane')
             ->get();
 
         if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
@@ -107,8 +107,15 @@ class bugModel extends model
             if($bug->execution)
             {
                 $this->loadModel('kanban');
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($bug->execution, 'bug');
+
+                $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+                if(!empty($_POST['lane'])) $laneID = $_POST['lane'];
+
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
+                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
             }
 
             /* Callback the callable method to process the related data for object that is transfered to bug. */
@@ -201,6 +208,8 @@ class bugModel extends model
             $bug->browser     = $data->browsers[$i];
             $bug->keywords    = $data->keywords[$i];
 
+            if(isset($data->lanes[$i])) $bug->laneID = $data->lanes[$i];
+
             if($bug->execution != 0) $bug->project = $this->dao->select('parent')->from(TABLE_EXECUTION)->where('id')->eq($bug->execution)->fetch('parent');
 
             /* Assign the bug to the person in charge of the module. */
@@ -236,6 +245,13 @@ class bugModel extends model
         /* When the bug is created by uploading an image, add the image to the step of the bug. */
         foreach($bugs as $i => $bug)
         {
+            $laneID = isset($output['laneID']) ? $output['laneID'] : 0;
+            if(isset($bug->laneID))
+            {
+                $laneID = $bug->laneID;
+                unset($bug->laneID);
+            }
+
             if(!empty($data->uploadImage[$i]))
             {
                 $fileName = $data->uploadImage[$i];
@@ -274,8 +290,11 @@ class bugModel extends model
 
             if($bug->execution)
             {
-                if(isset($output['laneID']) and isset($output['columnID'])) $this->kanban->addKanbanCell($bug->execution, $output['laneID'], $output['columnID'], 'bug', $bugID);
-                if(!isset($output['laneID']) or !isset($output['columnID'])) $this->kanban->updateLane($bug->execution, 'bug');
+                $columnID = $this->kanban->getColumnIDByLaneID($laneID, 'unconfirmed');
+                if(empty($columnID)) $columnID = isset($output['columnID']) ? $output['columnID'] : 0;
+
+                if(!empty($laneID) and !empty($columnID)) $this->kanban->addKanbanCell($bug->execution, $laneID, $columnID, 'bug', $bugID);
+                if(empty($laneID) or empty($columnID)) $this->kanban->updateLane($bug->execution, 'bug');
 
             }
             /* When the bug is created by uploading the image, add the image to the file of the bug. */
@@ -290,7 +309,7 @@ class bugModel extends model
                 unset($file);
             }
 
-            if(dao::isError()) return print(js::error('bug#' . ($i+1) . dao::getError(true)));
+            if(dao::isError()) return print(js::error('bug#' . ($i) . dao::getError(true)));
             $actions[$bugID] = $this->action->create('bug', $bugID, 'Opened');
         }
 
@@ -1036,7 +1055,16 @@ class bugModel extends model
             if($bug->resolution == 'duplicate' and !$this->post->duplicateBug) dao::$errors[] = sprintf($this->lang->error->notempty, $this->lang->bug->duplicateBug);
 
             if(empty($bug->buildName)) dao::$errors['buildName'][] = sprintf($this->lang->error->notempty, $this->lang->bug->placeholder->newBuildName);
-            if(empty($bug->buildExecution)) dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $this->lang->bug->execution);
+            if(empty($bug->buildExecution))
+            {
+                $executionLang = $this->lang->bug->execution;
+                if($oldBug->execution)
+                {
+                    $execution = $this->loadModel('execution')->getByID($oldBug->execution);
+                    if($execution->type == 'kanban') $executionLang = $this->lang->bug->kanban;
+                }
+                dao::$errors['buildExecution'][] = sprintf($this->lang->error->notempty, $executionLang);
+            }
             if(dao::isError()) return false;
 
             $buildData = new stdclass();
@@ -2925,7 +2953,7 @@ class bugModel extends model
                 echo $bug->activatedCount;
                 break;
             case 'activatedDate':
-                echo substr($bug->activatedDate, 5, 11);
+                echo helper::isZeroDate($bug->activatedDate) ? '' : substr($bug->activatedDate, 5, 11);
                 break;
             case 'keywords':
                 echo $bug->keywords;

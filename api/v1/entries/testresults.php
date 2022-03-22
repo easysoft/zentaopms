@@ -21,8 +21,8 @@ class testresultsEntry extends entry
     public function get($caseID = 0)
     {
         if(!$caseID) return $this->sendError(400, 'Need case id.');
-        $version = $this->request('version', 0);
-        $runID   = $this->request('runID', 0);
+        $version = $this->param('version', 0);
+        $runID   = $this->param('runID', 0);
 
         $control = $this->loadController('testtask', 'results');
         $control->results($runID, $caseID, $version);

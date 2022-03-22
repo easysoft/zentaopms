@@ -35,7 +35,7 @@ class storyChangeEntry extends Entry
         }
 
         $control = $this->loadController('story', 'change');
-        $this->requireFields('title,spec,verify');
+        $this->requireFields('title');
 
         $control->change($storyID);
 

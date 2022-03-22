@@ -1098,7 +1098,7 @@ class actionModel extends model
             if($actionType == 'svncommited' or $actionType == 'gitcommited') $action->actor = zget($commiters, $action->actor);
 
             /* Get gitlab objectname. */
-            if(substr($objectType, 0,6) == 'gitlab') $action->objectName = $action->extra;
+            if(empty($action->objectName) and substr($objectType, 0, 6) == 'gitlab') $action->objectName = $action->extra;
 
             /* Other actions, create a link. */
             if(!$this->setObjectLink($action, $deptUsers))
@@ -1106,6 +1106,9 @@ class actionModel extends model
                 unset($actions[$i]);
                 continue;
             }
+
+            /* Set merge request link. */
+            if(empty($action->objectName) and $action->objectType == 'mr') $action->objectLink = '';
 
             $action->major = (isset($this->config->action->majorList[$action->objectType]) && in_array($action->action, $this->config->action->majorList[$action->objectType])) ? 1 : 0;
         }
@@ -1289,14 +1292,15 @@ class actionModel extends model
                 if($action->objectType == 'doc')
                 {
                     $assetLibType = $this->dao->select('assetLibType')->from(TABLE_DOC)->where('id')->eq($action->objectID)->fetch('assetLibType');
-                    $method       = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
+                    if($assetLibType) $method = $assetLibType == 'practice' ? 'practiceView' : 'componentView';
                 }
                 else
                 {
                     $method = $this->config->action->assetViewMethod[$action->objectType];
                 }
 
-                $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
+                $action->objectLink = helper::createLink($moduleName, $methodName, sprintf($vars, $action->objectID));
+                if(isset($method)) $action->objectLink = helper::createLink('assetlib', $method, sprintf($vars, $action->objectID));
             }
             else
             {

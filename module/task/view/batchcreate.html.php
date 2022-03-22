@@ -64,6 +64,10 @@
             <th class='c-story<?php echo zget($visibleFields, 'story', ' hidden') . zget($requiredFields, 'story', '', ' required');?>'><?php echo $lang->task->story;?></th>
             <?php endif;?>
             <th class='c-name required has-btn'><?php echo $lang->task->name;?></span></th>
+            <?php if($execution->type == 'kanban'):?>
+            <th class='c-module'><?php echo $lang->kanbancard->region;?></th>
+            <th class='c-module'><?php echo $lang->kanbancard->lane;?></th>
+            <?php endif;?>
             <th class='c-type required'><?php echo $lang->typeAB;?></span></th>
             <th class='c-assigned<?php echo zget($visibleFields, 'assignedTo', ' hidden') . zget($requiredFields, 'assignedTo', '', ' required');?>'><?php echo $lang->task->assignedTo;?></th>
             <th class='c-estimate<?php  echo zget($visibleFields, 'estimate', ' hidden') . zget($requiredFields, 'estimate', '', ' required');?>'><?php echo $lang->task->estimateAB;?></th>
@@ -85,9 +89,9 @@
           $modules['ditto'] = $lang->task->ditto;
           if($execution->type == 'ops') $colspan = $colspan - 1;
           ?>
-          <?php for($i = 0; $i < $config->task->batchCreate; $i++):?>
+          <?php for($i = 1; $i <= $config->task->batchCreate; $i++):?>
           <?php
-          if($i == 0)
+          if($i == 1)
           {
               $currentStory = $storyID;
               $type         = '';
@@ -100,9 +104,9 @@
           ?>
           <?php $pri = 3;?>
           <tr>
-            <td class='text-center'><?php echo $i + 1;?></td>
+            <td class='text-center'><?php echo $i;?></td>
             <td <?php echo zget($visibleFields, 'module', "class='hidden'")?> style='overflow:visible'>
-              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen' onchange='setStories(this.value, $execution->id, $i)'")?>
+              <?php echo html::select("module[$i]", $modules, $moduleID, "class='form-control chosen'")?>
               <?php echo html::hidden("parent[$i]", $parent);?>
             </td>
             <?php if($execution->type != 'ops'):?>
@@ -129,6 +133,10 @@
                 </div>
               </div>
             </td>
+            <?php if($execution->type == 'kanban'):?>
+            <td><?php echo html::select("regions[$i]", $regionPairs, $regionID, "class='form-control chosen' onchange='setLane(this.value, $i)'");?></td>
+            <td><?php echo html::select("lanes[$i]", $lanePairs, $laneID, "class='form-control chosen'");?></td>
+            <?php endif;?>
             <td><?php echo html::select("type[$i]", $lang->task->typeList, $type, 'class=form-control');?></td>
             <td <?php echo zget($visibleFields, 'assignedTo', "class='hidden'")?> style='overflow:visible'><?php echo html::select("assignedTo[$i]", $members, $member, "class='form-control chosen'");?></td>
             <td <?php echo zget($visibleFields, 'estimate', "class='hidden'")?>><?php echo html::input("estimate[$i]", '', "class='form-control text-center'");?></td>
@@ -136,7 +144,7 @@
               <div class='input-group'>
                 <?php
                 echo html::input("estStarted[$i]", '', "class='form-control text-center form-date' onkeyup='toggleCheck(this)'");
-                if($i != 0) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                if($i != 1) echo "<span class='input-group-addon estStartedBox'><input type='checkbox' name='estStartedDitto[$i]' id='estStartedDitto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                 ?>
               </div>
             </td>
@@ -144,7 +152,7 @@
               <div class='input-group'>
                 <?php
                 echo html::input("deadline[$i]", '', "class='form-control text-center form-date' onkeyup='toggleCheck(this)'");
-                if($i != 0) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i> 0 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
+                if($i != 1) echo "<span class='input-group-addon deadlineBox'><input type='checkbox' name='deadlineDitto[$i]' id='deadlineDitto$i' " . ($i > 1 ? "checked" : '') . " /> {$lang->task->ditto}</span>";
                 ?>
               </div>
             </td>

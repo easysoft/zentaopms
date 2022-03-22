@@ -337,8 +337,8 @@
 <?php js::set('executionID', $execution->id);?>
 <?php if(isonlybody()):?>
 <style>
-.body-modal .main-header{padding-right:0px;}
-.btn-toolbar>.dropdown{margin:0px;}
+.body-modal .main-header {padding-right: 0px; z-index: 1100;}
+.btn-toolbar > .dropdown {margin: 0px;}
 </style>
 <?php $html = '<div class="divider"></div><button id="closeModal" type="button" class="btn btn-link" data-dismiss="modal"><i class="icon icon-close"></i></button>';?>
 <script>
@@ -365,6 +365,13 @@ function loadLaneGroup(regionID)
         $('#otherLane').replaceWith(data);
         $('#otherLane_chosen').remove();
         $('#otherLane').chosen();
+
+        /* Hide region and lane select if there are only one of each. */
+        if($('#otherLane').children().length < 2 && $('#region').children().length < 2)
+        {
+            $('#region').parent().parent().addClass('hide');
+            $('#otherLane').parent().parent().addClass('hide');
+        }
     })
 }
 </script>

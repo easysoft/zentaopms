@@ -23,9 +23,13 @@ ALTER TABLE `zt_story` ADD `activatedDate` datetime NOT NULL AFTER `closedReason
 ALTER TABLE `zt_task` MODIFY `activatedDate` datetime NOT NULL AFTER `lastEditedDate`;
 
 ALTER TABLE `zt_kanbancard` ADD `progress` float unsigned NOT NULL DEFAULT '0' AFTER `estimate`;
+UPDATE `zt_kanbancard` SET `progress`='100' WHERE `status` = 'done' and `fromtype` = '';
 
 ALTER TABLE `zt_user` ADD `visions` varchar(20) NOT NULL DEFAULT 'rnd,lite' AFTER `visits`;
 UPDATE `zt_user` SET `visions`='rnd,lite';
+UPDATE `zt_group` SET `vision`='lite' WHERE `role` = 'feedback';
+
+DELETE FROM `zt_group` WHERE `vision` = 'lite' AND `role` IN ('liteAdmin','liteProject','liteTeam');
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('lite', '管理员', 'liteAdmin', '迅捷版用户分组');
@@ -35,15 +39,6 @@ INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 
 INSERT INTO `zt_group` (`vision`, `name`, `role`, `desc`) VALUES
 ('lite', '团队成员', 'liteTeam', '迅捷版用户分组');
-
-REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteAdmin' and `vision` = 'lite') from `zt_grouppriv` where `group` = 1;
-
-REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteProject' and `vision` = 'lite') from `zt_grouppriv` where `group` = 4;
-
-REPLACE INTO `zt_grouppriv`(`module`, `method`,`group`)
-SELECT `module`, `method`,(SELECT `id` FROM zt_group WHERE `role` = 'liteTeam' and `vision` = 'lite') from `zt_grouppriv` where `group` = 9;
 
 ALTER TABLE `zt_productplan` ADD `closedReason` varchar(20) NOT NULL AFTER `order`;
 
@@ -60,3 +55,5 @@ INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) 
 INSERT INTO `zt_config` (`vision`,`owner`, `module`, `section`, `key`, `value`) VALUES ('lite','system', 'project', '', 'defaultCurrency', 'CNY');
 
 ALTER TABLE `zt_apistruct` CHANGE `desc` `desc` text COLLATE 'utf8_general_ci' NOT NULL DEFAULT '' AFTER `type`;
+
+ALTER TABLE `zt_mr` ADD `squash` ENUM('0','1') NOT NULL DEFAULT '0' AFTER `removeSourceBranch`;

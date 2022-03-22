@@ -15,6 +15,7 @@
 <?php include '../../common/view/sortable.html.php';?>
 <?php js::set('toTaskList', !empty($task->id));?>
 <?php js::set('blockID', $blockID);?>
+<?php js::set('teamMemberError', $lang->task->error->teamMember);?>
 <?php if(!empty($storyID)):?>
 <style> .title-group.required > .required:after {right: 110px;}</style>
 <?php endif;?>
@@ -45,16 +46,16 @@
           <th><?php echo $lang->task->type;?></th>
           <td><?php echo html::select('type', $lang->task->typeList, $task->type, "class='form-control chosen' onchange='setOwners(this.value)' required");?></td>
           <td>
-            <div class="checkbox-primary hidden" id='selectTestStoryBox'>
+            <div class="checkbox-primary c-selectStory hidden" id='selectTestStoryBox'>
               <input type="checkbox" name='selectTestStory' id="selectTestStory" value='1' onchange='toggleSelectTestStory()' /><label for="selectTestStory" class="no-margin"><?php echo $lang->task->selectTestStory;?></label>
             </div>
           </td>
         </tr>
         <tr>
           <th><?php echo $lang->task->module;?></th>
-          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen' onchange='setStories(this.value, $execution->id)'");?></td>
+          <td id='moduleIdBox'><?php echo html::select('module', $moduleOptionMenu, $task->module, "class='form-control chosen'");?></td>
           <td>
-            <div class="checkbox-primary">
+            <div class="checkbox-primary c-modulel">
               <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
             </div>
           </td>
@@ -70,12 +71,22 @@
             </div>
           </td>
           <td>
-            <div class="checkbox-primary affair">
+            <div class="checkbox-primary c-multipleTask affair">
               <input type="checkbox" name="multiple" value="1" id="multipleBox"><label for="multipleBox" class="no-margin"><?php echo $lang->task->multiple;?></label>
             </div>
             <button id='selectAllUser' type="button" class="btn btn-link<?php if($task->type !== 'affair') echo ' hidden';?>"><?php echo $lang->task->selectAllUser;?></button>
           </td>
         </tr>
+        <?php if($execution->type == 'kanban'):?>
+        <tr>
+          <th><?php echo $lang->kanbancard->region;?></th>
+          <td><?php echo html::select('region', $regionPairs, $regionID, "onchange='setLane(this.value)' class='form-control chosen'");?></td>
+        </tr>
+        <tr>
+          <th><?php echo $lang->kanbancard->lane;?></th>
+          <td><?php echo html::select('lane', $lanePairs, $laneID, "class='form-control chosen'");?></td>
+        </tr>
+        <?php endif;?>
         <tr class='hide'>
           <th><?php echo $lang->task->status;?></th>
           <td><?php echo html::hidden('status', 'wait');?></td>
@@ -87,7 +98,7 @@
           <td colspan='3'>
             <span id='storyBox' class="<?php if(!empty($stories)) echo 'hidden';?> "><?php printf($lang->task->noticeLinkStory, html::a($this->createLink('execution', 'linkStory', "executionID=$execution->id"), $lang->execution->linkStory, '_blank', 'class="text-primary"'), html::a("javascript:loadStories($execution->id)", $lang->refresh, '', 'class="text-primary"'));?></span>
             <div class='input-group <?php if(empty($stories)) echo "hidden";?>'>
-              <?php echo html::select('story', array($task->story => empty($stories) ? '': $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
+              <?php echo html::select('story', array($task->story => (empty($stories) or !isset($stories[$task->story])) ? '': $stories[$task->story]), $task->story, "class='form-control chosen' onchange='setStoryRelated();'");?>
               <span class='input-group-btn' id='preview'><a href='#' class='btn iframe'><?php echo $lang->preview;?></a></span>
             </div>
           </td>
@@ -237,7 +248,7 @@
           <th><?php echo $lang->story->mailto;?></th>
           <td colspan='3'>
             <div class="input-group">
-              <?php echo html::select('mailto[]', $execution->acl == 'private' ? $members : $users, str_replace(' ', '', $task->mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
+              <?php echo html::select('mailto[]', $users, str_replace(' ', '', $task->mailto), "class='form-control chosen' data-placeholder='{$lang->chooseUsersToMail}' multiple");?>
               <?php if($execution->acl != 'private') echo $this->fetch('my', 'buildContactLists');?>
             </div>
           </td>
@@ -286,7 +297,7 @@
                 </tbody>
                 <tfoot>
                   <tr>
-                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary' data-dismiss='modal'");?></td>
+                    <td colspan='3' class='text-center'><?php echo html::a('javascript:void(0)', $lang->confirm, '', "class='btn btn-primary'");?></td>
                   </tr>
                 </tfoot>
               </table>

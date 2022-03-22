@@ -101,9 +101,10 @@ $lang->kanban->cardCount      = 'Card Count';
 $lang->kanban->createColumnOnLeft  = 'Create Column On Left';
 $lang->kanban->createColumnOnRight = 'Create Column On Right';
 
-$lang->kanban->accessDenied  = "You have no access to the kanban.";
-$lang->kanban->confirmDelete = 'Do you want to delete this?';
-$lang->kanban->cardCountTip  = 'Please enter the number of cards';
+$lang->kanban->accessDenied        = "You have no access to the kanban.";
+$lang->kanban->confirmDeleteSpace  = 'Do you want to delete this Space?';
+$lang->kanban->confirmDeleteKanban = 'Do you want to delete this Kanban?';
+$lang->kanban->cardCountTip        = 'Please enter the number of cards';
 
 $lang->kanban->selectedKanban  = 'Please select Kanban';
 $lang->kanban->selectedProduct = 'Please select Product';
@@ -188,6 +189,7 @@ $lang->kanban->error->mustBeInt         = 'The WIPs must be positive integer.';
 $lang->kanban->error->parentLimitNote   = 'The WIPs in the parent column cannot be < the sum of the WIPs in the child column.';
 $lang->kanban->error->childLimitNote    = 'The sum of products in the child column cannot be > the number of products in the parent column.';
 $lang->kanban->error->importObjNotEmpty = 'Please select at least one import object.';
+$lang->kanban->error->childLimitEmpty   = 'Please set the WIP quantity of the sub column before operation.';
 
 $lang->kanban->importList = array();
 $lang->kanban->importList['off'] = 'Import is not enabled';
@@ -332,6 +334,7 @@ $lang->kanbancard->name            = 'Card Name';
 $lang->kanbancard->legendBasicInfo = 'Basic Info';
 $lang->kanbancard->legendLifeTime  = 'Card Life';
 $lang->kanbancard->space           = 'Space';
+$lang->kanbancard->region          = 'Region';
 $lang->kanbancard->kanban          = 'Kanban';
 $lang->kanbancard->lane            = 'Lane';
 $lang->kanbancard->column          = 'Column';

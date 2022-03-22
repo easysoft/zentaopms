@@ -61,7 +61,7 @@ fields:
   - field: activatedCount
     range: 0
   - field: mailto
-    range: []
+    range: admin{100},[]{200}
   - field: openedBy
     range: admin
   - field: openedDate

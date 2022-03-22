@@ -39,6 +39,27 @@ function setOpenedBuilds(link, index)
 }
 
 /**
+ * Set lane.
+ *
+ * @param  int $regionID
+ * @param  int $num
+ * @access public
+ * @return void
+ */
+function setLane(regionID, num)
+{
+    laneLink = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=bug&field=lanes&i=' + num);
+    $.get(laneLink, function(lanes)
+    {
+        if(!lanes) lanes = '<select id="lanes' + num + '" name="lanes[' + num + ']" class="form-control"></select>';
+        $('#lanes' + num).replaceWith(lanes);
+        $("#lanes" + num + "_chosen").remove();
+        $("#lanes" + num).next('.picker').remove();
+        $("#lanes" + num).chosen();
+    });
+}
+
+/**
  * Load execution builds
  *
  * @param  int $productID
@@ -50,7 +71,7 @@ function setOpenedBuilds(link, index)
 function loadExecutionBuilds(productID, executionID, index)
 {
     branch = $('#branches' + index).val();
-    if(executionID)
+    if(executionID != 0)
     {
         link = createLink('build', 'ajaxGetExecutionBuilds', 'executionID=' + executionID + '&productID=' + productID + "&varName=openedBuilds&build=&branch=" + branch + "&index=" + index);
     }

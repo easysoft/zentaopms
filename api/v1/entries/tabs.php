@@ -28,6 +28,7 @@ class tabsEntry extends baseEntry
 
             foreach($tabs as $menuKey)
             {
+                if(!isset($this->lang->my->$menuKey)) continue;
                 if(!common::hasPriv('my', $menuKey)) continue;
                 $label = $this->lang->my->$menuKey;
                 if($menuKey == 'calendar') $label = $this->lang->my->calendarAction;
@@ -49,7 +50,10 @@ class tabsEntry extends baseEntry
                 if($menuKey == 'requirement' and empty($this->config->URAndSR)) continue;
                 if(isset($this->lang->product->menu->$menuKey))
                 {
-                    list($label, $module, $method) = explode('|', $this->lang->product->menu->$menuKey['link']);
+                    $menuName = $this->lang->product->menu->$menuKey;
+                    if(!isset($menuName['link'])) continue;
+
+                    list($label, $module, $method) = explode('|', $menuName['link']);
                     if(!common::hasPriv($module, $method)) continue;
                 }
                 else
