@@ -1511,6 +1511,9 @@ class actionModel extends model
         {
             $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
             if($execution->deleted and empty($execution->project)) return print(js::error($this->lang->action->undeletedTips));
+
+            $projectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->andWhere('deleted')->eq('0')->fetch('count');
+            if((int)$projectCount == 0) return print(js::error($this->lang->action->executionNoProject));
         }
 
         if($action->objectType == 'product')
