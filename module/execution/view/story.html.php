@@ -353,18 +353,18 @@
           <?php if(common::hasPriv('story', 'batchChangeStage')):?>
           <div class="btn-group dropup">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->stageAB;?> <span class="caret"></span></button>
-              <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>
-              <?php
-              $lang->story->stageList[''] = $lang->null;
-              foreach($lang->story->stageList as $key => $stage)
-              {
-                  if(empty($key)) continue;
-                  if(strpos('wait|planned|projected', $key) !== false) continue;
-                  $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
-                  echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#storyList')\"") . "</li>";
-              }
-              ?>
-              </ul>
+            <ul class='dropdown-menu <?php echo count($stories) == 1 ? 'stageBox' : '';?>'>
+            <?php
+            $lang->story->stageList[''] = $lang->null;
+            foreach($lang->story->stageList as $key => $stage)
+            {
+                if(empty($key)) continue;
+                if(strpos('wait|planned|projected', $key) !== false) continue;
+                $actionLink = $this->createLink('story', 'batchChangeStage', "stage=$key");
+                echo "<li>" . html::a('#', $stage, '', "onclick=\"setFormAction('$actionLink', 'hiddenwin', '#storyList')\"") . "</li>";
+            }
+            ?>
+            </ul>
           </div>
           <?php endif;?>
           <?php
