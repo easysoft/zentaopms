@@ -989,7 +989,7 @@ class product extends control
             if($execution->type == 'kanban') $projectID = $execution->project;
         }
 
-        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID);
+        $executions = $this->product->getExecutionPairsByProduct($productID, $branch, 'id_desc', $projectID, empty($this->config->CRExecution) ? 'noclosed' : '');
         if($this->app->getViewType() == 'json') return print(json_encode($executions));
 
         if($number === '')

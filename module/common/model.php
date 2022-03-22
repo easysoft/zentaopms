@@ -399,7 +399,7 @@ class commonModel extends model
             {
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='600' class='iframe $noRole'" . '>';
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='700' class='iframe $noRole'" . '>';
                 echo html::avatar($app->user, '', 'avatar-circle', 'id="menu-avatar"');
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
@@ -407,7 +407,7 @@ class commonModel extends model
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
 
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='700'") . '</li>';
 
                 if($app->config->vision === 'rnd')
                 {
@@ -484,7 +484,9 @@ class commonModel extends model
 
             /* The standalone lite version removes the lite interface button */
             if(trim($config->visions, ',') == 'lite') return true;
-            
+
+            if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
+
             if(count($userVisions) < 2)   return print("<div>{$lang->visionList[$currentVision]}</div>");
             if(count($configVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
