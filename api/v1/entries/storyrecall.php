@@ -1,6 +1,6 @@
 <?php
 /**
- * The story entry point of ZenTaoPMS.
+ * The story recall entry point of ZenTaoPMS.
  *
  * @copyright   Copyright 2009-2021 青岛易软天创网络科技有限公司(QingDao Nature Easy Soft Network Technology Co,LTD, www.cnezsoft.com)
  * @license     ZPL (http://zpl.pub/page/zplv12.html)
@@ -12,7 +12,7 @@
 class storyRecallEntry extends Entry
 {
     /**
-     * Recall method.
+     * Delete method.
      *
      * @param  int    $storyID
      * @access public
