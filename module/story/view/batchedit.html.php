@@ -84,7 +84,7 @@ foreach(explode(',', $showFields) as $field)
           </td>
           <td title='<?php echo $story->title?>'>
             <div class="input-group">
-              <div class="input-control has-icon-right">
+              <div class="input-control has-icon-right story-input">
                 <?php echo html::input("", $story->title, "class='form-control input-story-title' disabled"); ?>
                 <?php echo html::hidden("titles[$storyID]", $story->title); ?>
 
