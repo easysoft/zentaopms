@@ -957,7 +957,17 @@ class commonModel extends model
             $item->moduleName = $currentModule;
             $item->methodName = $currentMethod;
             $item->vars       = $vars;
-            $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+
+            $isTutorialMode = commonModel::isTutorialMode();
+            if($isTutorialMode && $currentModule == 'project')
+            {
+                if(!empty($vars)) $vars = helper::safe64Encode($vars);
+                $item->url = helper::createLink('tutorial', 'wizard', "module={$currentModule}&method={$currentMethod}&params=$vars", '', 0, 0, 1);
+            }
+            else
+            {
+                $item->url = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+            }
 
             $items[] = $item;
         }
