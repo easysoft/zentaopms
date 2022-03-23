@@ -1189,6 +1189,28 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
     return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
 }
 
+/** Handle sort cards */
+function handleSortCards(event)
+{
+    var newLaneID = event.element.closest('.kanban-lane').data('id');
+    var newColID  = event.element.closest('.kanban-col').data('id');
+    var orders = [];
+    event.list.each(function(_, item){orders.push(item.item.data('id'));});
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+
+    $.getJSON(url, function(response)
+    {
+        if(response.result === 'fail')
+        {
+            if(typeof response.message === 'string' && response.message.length)
+            {
+                bootbox.alert(response.message);
+            }
+            setTimeout(function(){return location.reload()}, 3000);
+        }
+    });
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -1225,12 +1247,13 @@ function initKanban($kanban)
         onRenderLaneName:  renderLaneName,
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
+        sortable:          handleSortCards,
         droppable:
         {
             target:       findDropColumns,
             finish:       handleFinishDrop,
             mouseButton: 'left'
-        }
+        },
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);
@@ -1360,13 +1383,11 @@ $(function()
 function initSortable()
 {
     var sortType  = '';
-    var oldLaneID = '';
-    var oldColID  = '';
     var $cards    = null;
     $('#kanban').sortable(
     {
-        selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort, .kanban-col',
-        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort, .kanban-header-col.sort',
+        selector: '.region, .kanban-board, .kanban-lane, .kanban-col',
+        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-header-col.sort',
         container: function($ele)
         {
             return $ele.parent();
@@ -1403,13 +1424,6 @@ function initSortable()
                 sortType = 'column';
                 return $parent.children('.kanban-col');
             }
-
-            /* Sort cards. */
-            if($ele.hasClass('kanban-item'))
-            {
-                sortType = 'card';
-                return $parent.children('.kanban-item');
-            }
         },
         before: function() {
             return !window.sortableDisabled;
@@ -1431,11 +1445,6 @@ function initSortable()
             else if(sortType === 'column')
             {
                 e.element.closest('.kanban-board').addClass('kanban-cols-sorting');
-            }
-            else if(sortType == 'card')
-            {
-                oldLaneID = e.element.closest('.kanban-lane').data('id');
-                oldColID  = e.element.closest('.kanban-col').data('id');
             }
             $('#kanban').attr('data-sort-by', sortType);
         },
@@ -1495,23 +1504,16 @@ function initSortable()
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortColumn', 'region=' + regionID + '&kanbanID=' + kanban.id + '&columns=' + orders.join(','));
             }
-            else if(sortType == 'card')
-            {
-                var newLaneID = e.element.closest('.kanban-lane').data('id');
-                var newColID  = e.element.closest('.kanban-col').data('id');
-                e.list.each(function(index, data)
-                {
-                    if(data.item.data('item') != undefined && data.item.data('item').column == newColID && data.item.data('item').lane == newLaneID) orders.push(data.item.data('item').id);
-                });
-                if(newLaneID == oldLaneID && newColID == oldColID && orders.length > 0) url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
-            }
             if(!url) return true;
 
             $.getJSON(url, function(response)
             {
-                if(response.result == 'fail' && response.message.length)
+                if(response.result == 'fail')
                 {
-                    bootbox.alert(response.message);
+                    if(typeof response.message === 'string' && response.message.length)
+                    {
+                        bootbox.alert(response.message);
+                    }
                     setTimeout(function(){return location.reload()}, 3000);
                 }
                 else if (sortType == 'column')
