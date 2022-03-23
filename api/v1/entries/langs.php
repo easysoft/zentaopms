@@ -33,12 +33,40 @@ class langsEntry extends entry
         {
             if($module == 'all')
             {
+                $loadedModule = array();
                 foreach(glob($this->app->getModuleRoot() . '*') as $modulePath)
                 {
                     if(!is_dir($modulePath)) continue;
 
                     $moduleName = basename($modulePath);
                     $this->app->loadLang($moduleName);
+
+                    $loadedModule[$moduleName] = $moduleName;
+                }
+
+                foreach(glob($this->app->getExtensionRoot() . '*') as $extensionPath)
+                {
+                    if(!is_dir($extensionPath)) continue;
+
+                    $edition = basename($extensionPath);
+                    if($edition == 'lite')  continue;
+                    if($edition == 'biz' or $edition == 'max')
+                    {
+                        if($this->config->edition == 'open') continue;
+                        if($this->config->edition != 'open' and $this->config->edition != $edition) continue;
+                    }
+
+                    foreach(glob($extensionPath . '/*') as $modulePath)
+                    {
+                        if(!is_dir($modulePath)) continue;
+
+                        $moduleName = basename($modulePath);
+                        if(isset($loadedModule[$moduleName])) continue;
+
+                        $this->app->loadLang($moduleName);
+
+                        $loadedModule[$moduleName] = $moduleName;
+                    }
                 }
                 break;
             }
