@@ -3750,9 +3750,7 @@ class upgradeModel extends model
     public function initUserView()
     {
         $this->saveLogs('Run Method ' . __FUNCTION__);
-        $users = $this->dao->select('account')->from(TABLE_USER)->fetchAll();
-        $this->loadModel('user');
-        foreach($users as $user) $this->user->computeUserView($user->account, $force = true);
+        $this->dao->delete()->from(TABLE_USERVIEW)->exec();
         return true;
     }
 
