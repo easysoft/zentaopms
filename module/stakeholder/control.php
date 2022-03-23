@@ -243,7 +243,7 @@ class stakeholder extends control
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
 
-        $users = $this->loadModel('user')->getPairs('noclosed');
+        $users        = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
         foreach($companyUsers as $account => $realname)
@@ -262,7 +262,7 @@ class stakeholder extends control
      */
     public function ajaxGetOutsideUser($objectID = 0)
     {
-        $users = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
+        $users        = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
         $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
         foreach($users as $account => $realname)
         {
