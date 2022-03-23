@@ -82,5 +82,4 @@ class taskBatchCreateEntry extends Entry
         $task = $this->loadModel('task')->getById($taskID);
         return $this->send(200, array('task' => $task));
     }
-
 }
