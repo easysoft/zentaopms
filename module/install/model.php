@@ -514,7 +514,7 @@ class installModel extends model
 
         /* Insert a company. */
         $company = new stdclass();
-        $company->name   = $this->post->company;
+        $company->name   = strip_tags($this->post->company);
         $company->admins = ",{$this->post->account},";
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(!dao::isError())
