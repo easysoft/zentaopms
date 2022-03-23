@@ -33,7 +33,7 @@ $(function()
             $('#user').closest('tr').find('.input-group-addon').removeClass('hidden');
             if($('input[name*=newUser]').prop('checked')) $('.user-info').removeClass('hidden');
             var objectID = programID ? programID : projectID;
-            var link = createLink('stakeholder', 'ajaxGetOutsideUser','objectID=' + objectID);
+            var link = createLink('stakeholder', 'ajaxGetOutsideUser', 'objectID=' + objectID);
             $.post(link, function(data)
             {
                 $('#user').replaceWith(data);
