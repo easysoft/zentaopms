@@ -101,7 +101,7 @@
                 <td>
                   <div class='table-row'>
                     <span class='table-col' id="moduleIdBox"><?php echo html::select('module', $modules, $task->module, 'class="form-control chosen" onchange="loadModuleRelated()"');?></span>
-                    <span class='table-col w-100px text-middle pl-10px'>
+                    <span class='table-col text-middle pl-10px' id='showAllModuleBox'>
                       <div class="checkbox-primary">
                         <input type="checkbox" id="showAllModule" <?php if($showAllModule) echo 'checked';?>><label for="showAllModule" class="no-margin"><?php echo $lang->task->allModule;?></label>
                       </div>
