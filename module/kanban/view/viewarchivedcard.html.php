@@ -123,7 +123,7 @@
           <?php if($kanban->performable):?>
           <div class='progress-box'>
             <div class='progress'>
-              <div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($card->progress, 2) . ' %';?>"></div>
+              <div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($card->progress, 2) . '%';?>"></div>
             </div>
             <div class='progress-number'><?php echo round($card->progress, 2) . ' %';?></div>
           </div>
