@@ -212,6 +212,9 @@ class stakeholder extends control
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
+        foreach($members as $account => $realname) if(in_array($account, array_keys($stakeholders))) unset($members[$account]);
+
         echo html::select('user', $members, $user, "class='form-control chosen'");
     }
 
@@ -237,6 +240,8 @@ class stakeholder extends control
 
         $users = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
+        foreach($companyUsers as $account => $realname) if(in_array($account, array_keys($stakeholders))) unset($companyUsers[$account]);
 
         echo html::select('user', $companyUsers, $user, "class='form-control chosen'");
     }
@@ -247,9 +252,12 @@ class stakeholder extends control
      * @access public
      * @return void
      */
-    public function ajaxGetOutsideUser()
+    public function ajaxGetOutsideUser($objectID = 0)
     {
         $users = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
+        foreach($users as $account => $realname) if(in_array($account, array_keys($stakeholders))) unset($users[$account]);
+
 
         echo html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);");
     }
