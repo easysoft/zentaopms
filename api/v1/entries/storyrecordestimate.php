@@ -14,7 +14,7 @@ class storyRecordEstimateEntry extends Entry
     /**
      * GET method.
      *
-     * @param  int    $taskID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
@@ -37,7 +37,7 @@ class storyRecordEstimateEntry extends Entry
     /**
      * POST method.
      *
-     * @param  int    $taskID
+     * @param  int    $storyID
      * @access public
      * @return void
      */
