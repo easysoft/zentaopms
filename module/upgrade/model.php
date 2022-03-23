@@ -3774,7 +3774,7 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_CONFIG)->set('module')->eq('common')->set('section')->eq('xuanxuan')->where('id')->eq($keyID)->exec();
             $this->saveLogs($this->dao->get());
-            $this->setting->setItem('system.common.xuanxuan.turnon', '1');
+            $this->setting->setItem('system.common.xuanxuan.turnon', '0');
             $this->setting->setItem('system.common.xxserver.noticed', '1');
         }
 

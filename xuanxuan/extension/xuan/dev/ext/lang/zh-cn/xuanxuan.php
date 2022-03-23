@@ -1,11 +1,11 @@
 <?php
-$lang->dev->groupList['xuanxuan']= '客户端';
+$lang->dev->groupList['xuanxuan']= '聊天';
 
-$lang->dev->tableList['im_chatuser']         = '客户端用户';
-$lang->dev->tableList['im_message']          = '客户端消息';
-$lang->dev->tableList['im_messagestatus']    = '客户端状态';
-$lang->dev->tableList['im_chat']             = '客户端会话';
-$lang->dev->tableList['im_client']           = '客户端版本更新';
+$lang->dev->tableList['im_chatuser']         = '聊天用户';
+$lang->dev->tableList['im_message']          = '聊天消息';
+$lang->dev->tableList['im_messagestatus']    = '聊天状态';
+$lang->dev->tableList['im_chat']             = '聊天会话';
+$lang->dev->tableList['im_client']           = '聊天版本更新';
 $lang->dev->tableList['im_conference']       = '音视频会议';
-$lang->dev->tableList['im_conferenceaction'] = '会议action';
-$lang->dev->tableList['im_queue']            = '客户端推送';
+$lang->dev->tableList['im_conferenceaction'] = '会议动作';
+$lang->dev->tableList['im_queue']            = '聊天推送';
