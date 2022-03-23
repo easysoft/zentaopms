@@ -232,6 +232,8 @@ class executionModel extends model
      */
     public function saveState($executionID, $executions)
     {
+        if(defined('TUTORIAL')) return $executionID;
+
         /* When the cookie and session do not exist, get it from the database. */
         if(empty($executionID) and isset($this->config->execution->lastExecution) and isset($executions[$this->config->execution->lastExecution]))
         {

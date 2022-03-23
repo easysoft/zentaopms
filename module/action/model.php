@@ -431,7 +431,7 @@ class actionModel extends model
                 $name = $this->dao->select('name')->from(TABLE_TESTTASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('testtask', 'view') ? html::a(helper::createLink('testtask', 'view', "taskID=$action->extra"), $name) : $name;
             }
-            elseif($actionName == 'tostory')
+            elseif($action->objectType != 'feedback' and $actionName == 'tostory')
             {
                 $title = $this->dao->select('title')->from(TABLE_STORY)->where('id')->eq($action->extra)->fetch('title');
                 if($title) $action->extra = common::hasPriv('story', 'view') ? html::a(helper::createLink('story', 'view', "storyID=$action->extra"), "#$action->extra " . $title) : "#$action->extra " . $title;
@@ -462,7 +462,7 @@ class actionModel extends model
                 }
                 $action->extra = trim(trim($action->extra), ',');
             }
-            elseif($actionName == 'totask' or $actionName == 'linkchildtask' or $actionName == 'unlinkchildrentask' or $actionName == 'linkparenttask' or $actionName == 'unlinkparenttask' or $actionName == 'deletechildrentask')
+            elseif($action->objectType != 'feedback' and (strpos(',totask,linkchildtask,unlinkchildrentask,linkparenttask,unlinkparenttask,deletechildrentask,', ",$actionName,") !== false))
             {
                 $name = $this->dao->select('name')->from(TABLE_TASK)->where('id')->eq($action->extra)->fetch('name');
                 if($name) $action->extra = common::hasPriv('task', 'view') ? html::a(helper::createLink('task', 'view', "taskID=$action->extra"), "#$action->extra " . $name) : "#$action->extra " . $name;
@@ -1511,6 +1511,9 @@ class actionModel extends model
         {
             $execution = $this->dao->select('*')->from(TABLE_EXECUTION)->where('id')->eq($action->objectID)->fetch();
             if($execution->deleted and empty($execution->project)) return print(js::error($this->lang->action->undeletedTips));
+
+            $projectCount = $this->dao->select('count(*) as count')->from(TABLE_PROJECT)->where('id')->eq($execution->project)->andWhere('deleted')->eq('0')->fetch('count');
+            if((int)$projectCount == 0) return print(js::error($this->lang->action->executionNoProject));
         }
 
         if($action->objectType == 'product')

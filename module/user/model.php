@@ -126,7 +126,7 @@ class userModel extends model
             }
             else
             {
-                $firstLetter = ucfirst(substr($user->account, 0, 1)) . ':';
+                $firstLetter = ucfirst(mb_substr($user->account, 0, 1)) . ':';
                 if(strpos($params, 'noletter') !== false or !empty($this->config->isINT)) $firstLetter = '';
                 $users[$account] =  $firstLetter . (($user->deleted and strpos($params, 'realname') === false) ? $user->account : ($user->realname ? $user->realname : $user->account));
             }

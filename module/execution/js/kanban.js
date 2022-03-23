@@ -1020,6 +1020,7 @@ function updateKanban(kanbanData, regionID = 0)
 {
     setTimeout(function()
     {
+        $.zui.closeModal();
         if(regionID)
         {
             updateRegion(regionID, kanbanData[regionID]);

@@ -1444,12 +1444,15 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $this->loadModel('product');
+        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($projectID, 'noclosed');
+
         $this->view->title               = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]          = $this->view->title;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->executions          = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups              = $this->loadModel('group')->getPairs();
-        $this->view->allProducts         = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
+        $this->view->allProducts         = array(0 => '') + $allProducts;
         $this->view->acl                 = $acl;
         $this->view->plan                = $plan;
         $this->view->name                = $name;

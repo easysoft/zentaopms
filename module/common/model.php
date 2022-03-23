@@ -1644,6 +1644,8 @@ EOD;
      */
     public static function buildMoreButton($executionID)
     {
+        if(defined('TUTORIAL')) return;
+
         global $lang, $app;
 
         $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();
