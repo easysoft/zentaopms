@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/dept.class.php';
@@ -8,6 +9,10 @@ su('admin');
 title=测试 deptModel->getDeptPairs();
 cid=1
 pid=1
+
+查询全部部门统计 >> 100
+查询id为2的部门 >> 开发部
+查询id为2的部门数量 >> 100
 
 */
 
