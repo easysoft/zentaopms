@@ -40,7 +40,7 @@ function fullScreen()
             $('.action').hide();
             $('.kanban-group-header').hide();
             $(".title").attr("disabled", true).css("pointer-events", "none");
-            $('#kanban').sortable('destroy');
+            window.sortableDisabled = true;
             $.cookie('isFullScreen', 1);
         };
 
@@ -82,7 +82,7 @@ function exitFullScreen()
     $('.action').show();
     $('.kanban-group-header').show();
     $(".title").attr("disabled", false).css("pointer-events", "auto");
-    initSortable();
+    window.sortableDisabled = false;
     $.cookie('isFullScreen', 0);
 }
 
@@ -130,10 +130,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         }
     }
 
-    var regionID     = $column.closest('.kanban').data('id');
-    var groupID      = $column.closest('.kanban-board').data('id');
     var laneID       = column.$kanbanData.lanes[0].id ? column.$kanbanData.lanes[0].id : 0;
-    var columnID     = $column.closest('.kanban-col').data('id');
     var printMoreBtn = (columnPrivs.includes('setColumn') || columnPrivs.includes('setWIP') || columnPrivs.includes('createColumn') || columnPrivs.includes('copyColumn') || columnPrivs.includes('archiveColumn') || columnPrivs.includes('deleteColumn') || columnPrivs.includes('splitColumn'));
 
     /* Render more menu. */
@@ -146,7 +143,7 @@ function renderHeaderCol($column, column, $header, kanbanData)
         var $actions = $column.children('.actions');
         if(column.parent != -1)
         {
-            addItemBtn  = ['<a data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="text-primary">', '<i class="icon icon-expand-alt"></i>', '</a>'].join('');
+            addItemBtn  = ['<button data-contextmenu="columnCreate" data-action="addItem" data-column="' + column.id + '" data-lane="' + laneID + '" class="btn btn-link">', '<i class="icon icon-expand-alt text-primary"></i>', '</button>'].join('');
         }
 
         var moreAction = ' <button class="btn btn-link action"  title="' + kanbanLang.moreAction + '" data-contextmenu="column" data-column="' + column.id + '"><i class="icon icon-ellipsis-v"></i></button>';
@@ -238,7 +235,6 @@ function renderLaneName($lane, lane, $kanban, columns, kanban)
 function renderUsersAvatar(users, itemID, size)
 {
     var avatarSizeClass = 'avatar-' + (size || 'md');
-    //var link = createLink('kanban', 'assigncard', 'id=' + itemID, '', true);
 
     if(users.length == 0 || (users.length == 1 && users[0] == ''))
     {
@@ -1019,19 +1015,20 @@ function handleKanbanAction(action, $element, event, kanban)
 
 function processMinusBtn()
 {
-    var columnCount = $('#splitTable .child-column').size();
+    var $table = $('#splitTable');
+    var columnCount = $table.find('.child-column').length;
     if(columnCount > 2 && columnCount < 10)
     {
-        $('#splitTable .btn-plus').show();
-        $('#splitTable .btn-close').show();
+        $table.find('.btn-plus').show();
+        $table.find('.btn-close').show();
     }
     else if(columnCount <= 2)
     {
-        $('#splitTable .btn-close').hide();
+        $table.find('.btn-close').hide();
     }
     else if(columnCount >= 10)
     {
-        $('#splitTable .btn-plus').hide();
+        $table.find('.btn-plus').hide();
     }
 }
 
@@ -1192,6 +1189,28 @@ function calcColHeight(col, lane, colCards, colHeight, kanban)
     return (displayCards * (options.cardHeight + options.cardSpace) + options.cardSpace);
 }
 
+/** Handle sort cards */
+function handleSortCards(event)
+{
+    var newLaneID = event.element.closest('.kanban-lane').data('id');
+    var newColID  = event.element.closest('.kanban-col').data('id');
+    var orders = [];
+    event.list.each(function(_, item){orders.push(item.item.data('id'));});
+    var url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
+
+    $.getJSON(url, function(response)
+    {
+        if(response.result === 'fail')
+        {
+            if(typeof response.message === 'string' && response.message.length)
+            {
+                bootbox.alert(response.message);
+            }
+            setTimeout(function(){return location.reload()}, 3000);
+        }
+    });
+}
+
 /* Define menu creators */
 window.menuCreators =
 {
@@ -1228,12 +1247,13 @@ function initKanban($kanban)
         onRenderLaneName:  renderLaneName,
         onRenderHeaderCol: renderHeaderCol,
         onRenderCount:     renderCount,
+        sortable:          handleSortCards,
         droppable:
         {
             target:       findDropColumns,
             finish:       handleFinishDrop,
             mouseButton: 'left'
-        }
+        },
     });
 
     $kanban.on('click', '.action-cancel', hideKanbanAction);
@@ -1354,7 +1374,6 @@ $(function()
         $('.color0 .cardcolor').css('border', '1px solid #fff');
     });
 
-
     /* Init sortable */
     initSortable();
 
@@ -1364,31 +1383,30 @@ $(function()
 function initSortable()
 {
     var sortType  = '';
-    var oldLaneID = '';
-    var oldColID  = '';
     var $cards    = null;
     $('#kanban').sortable(
     {
-        selector: '.region, .kanban-board, .kanban-lane, .kanban-item.sort, .kanban-col',
-        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-item.sort, .kanban-header-col.sort',
+        selector: '.region, .kanban-board, .kanban-lane, .kanban-col',
+        trigger: '.region.sort > .region-header, .kanban-board.sort > .kanban-header > .kanban-group-header, .kanban-lane.sort > .kanban-lane-name, .kanban-header-col.sort',
         container: function($ele)
         {
             return $ele.parent();
         },
         targetSelector: function($ele)
         {
+            var $parent = $ele.parent();
             /* Sort regions. */
             if($ele.hasClass('region'))
             {
                 sortType = 'region';
-                return $ele.parent().children('.region');
+                return $parent.children('.region');
             }
 
             /* Sort boards. */
             if($ele.hasClass('kanban-board'))
             {
                 sortType = 'board';
-                return $ele.parent().children('.kanban-board');
+                return $parent.children('.kanban-board');
             }
 
             /* Sort lanes. */
@@ -1397,22 +1415,18 @@ function initSortable()
                 sortType = 'lane';
                 $cards   = $ele.find('.kanban-item');
 
-                return $ele.parent().children('.kanban-lane');
+                return $parent.children('.kanban-lane');
             }
 
             /* Sort columns. */
             if($ele.hasClass('kanban-col'))
             {
                 sortType = 'column';
-                return $ele.parent().children('.kanban-col');
+                return $parent.children('.kanban-col');
             }
-
-            /* Sort cards. */
-            if($ele.hasClass('kanban-item'))
-            {
-                sortType = 'card';
-                return $ele.parent().children('.kanban-item');
-            }
+        },
+        before: function() {
+            return !window.sortableDisabled;
         },
         start: function(e)
         {
@@ -1428,17 +1442,11 @@ function initSortable()
                 $('.region').find('.kanban').hide();
                 hideKanbanAction();
             }
-
-            if(sortType == 'column')
+            else if(sortType === 'column')
             {
-                $('.kanban-item').addClass('hidden');
+                e.element.closest('.kanban-board').addClass('kanban-cols-sorting');
             }
-
-            if(sortType == 'card')
-            {
-                oldLaneID = e.element.closest('.kanban-lane').data('id');
-                oldColID  = e.element.closest('.kanban-col').data('id');
-            }
+            $('#kanban').attr('data-sort-by', sortType);
         },
         finish: function(e)
         {
@@ -1464,7 +1472,7 @@ function initSortable()
 
                 url = createLink('kanban', 'sortRegion', 'regions=' + orders.join(','));
             }
-            if(sortType == 'board')
+            else if(sortType == 'board')
             {
                 regionID = e.element.closest('.region').data('id');
                 e.list.each(function(index, data)
@@ -1474,7 +1482,7 @@ function initSortable()
 
                 url = createLink('kanban', 'sortGroup', 'region=' + regionID + '&groups=' + orders.join(','));
             }
-            if(sortType == 'lane')
+            else if(sortType == 'lane')
             {
                 var groupID = e.element.closest('.kanban-board').data('id');
                 e.list.each(function(index, data)
@@ -1485,7 +1493,7 @@ function initSortable()
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortLane', 'region=' + regionID + '&lanes=' + orders.join(','));
             }
-            if(sortType == 'column')
+            else if(sortType == 'column')
             {
                 var groupID = e.element.closest('.kanban-board').data('id');
                 e.list.each(function(index, data)
@@ -1496,35 +1504,28 @@ function initSortable()
                 regionID = e.element.closest('.region').data('id');
                 url      = createLink('kanban', 'sortColumn', 'region=' + regionID + '&kanbanID=' + kanban.id + '&columns=' + orders.join(','));
             }
-            if(sortType == 'card')
-            {
-                var newLaneID = e.element.closest('.kanban-lane').data('id');
-                var newColID  = e.element.closest('.kanban-col').data('id');
-                e.list.each(function(index, data)
-                {
-                    if(data.item.data('item') != undefined && data.item.data('item').column == newColID && data.item.data('item').lane == newLaneID) orders.push(data.item.data('item').id);
-                });
-                if(newLaneID == oldLaneID && newColID == oldColID && orders.length > 0) url = createLink('kanban', 'sortCard', 'kanbanID=' + kanbanID + '&laneID=' + newLaneID + '&columnID=' + newColID + '&cards=' + orders.join(','));
-            }
             if(!url) return true;
 
             $.getJSON(url, function(response)
             {
-                if(response.result == 'fail' && response.message.length)
+                if(response.result == 'fail')
                 {
-                    bootbox.alert(response.message);
+                    if(typeof response.message === 'string' && response.message.length)
+                    {
+                        bootbox.alert(response.message);
+                    }
                     setTimeout(function(){return location.reload()}, 3000);
                 }
                 else if (sortType == 'column')
                 {
                     updateRegion(regionID, response[regionID]);
                 }
-                $('.kanban-item').removeClass('hidden');
             });
         },
         always: function(e)
         {
             if(sortType == 'lane') $cards.show();
+            $('#kanban').find('.kanban-cols-sorting').removeClass('kanban-cols-sorting');
         }
     });
 }
