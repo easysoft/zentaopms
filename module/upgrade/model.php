@@ -1260,7 +1260,7 @@ class upgradeModel extends model
                 if(file_exists($fullPath))
                 {
                     $isDir = is_dir($fullPath);
-                    if(!is_writable($fullPath) or ($isDir  and !$zfile->removeDir($fullPath)) or
+                    if(!is_writable($fullPath) or ($isDir and !$zfile->removeDir($fullPath)) or
                        (!$isDir and !$zfile->removeFile($fullPath)))
                     {
                         $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
