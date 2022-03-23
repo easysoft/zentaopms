@@ -502,10 +502,14 @@ class installModel extends model
      */
     public function grantPriv()
     {
+        $data = fixer::input('post')
+            ->stripTags('company')
+            ->get();
+
         $requiredFields = explode(',', $this->config->install->step5RequiredFields);
         foreach($requiredFields as $field)
         {
-            if($this->post->{$field} == '')
+            if(empty($data->{$field}))
             {
                 dao::$errors[] = $this->lang->install->errorEmpty[$field];
                 return false;
@@ -514,7 +518,7 @@ class installModel extends model
 
         /* Insert a company. */
         $company = new stdclass();
-        $company->name   = $this->post->company;
+        $company->name   = $data->company;
         $company->admins = ",{$this->post->account},";
         $this->dao->insert(TABLE_COMPANY)->data($company)->autoCheck()->exec();
         if(!dao::isError())
