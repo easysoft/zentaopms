@@ -2507,8 +2507,7 @@ class kanbanModel extends model
         $otherCardList = '';
         $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.id')->ne($lane->id)
+            ->where('t1.id')->ne($lane->id)
             ->andWhere('t1.execution')->eq($executionID)
             ->andWhere('t2.`type`')->eq($lane->type)
             ->fetchPairs();
