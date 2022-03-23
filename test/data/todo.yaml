@@ -23,10 +23,11 @@ fields:
     format: ""
   - field: date
     note: "日期"
-    range: "(M)-(w)"
-    type: timestamp
-    prefix: "DateTime"
+    range: "(-1M)-(+1w):-1D"
+    prefix: ""
     postfix: ""
+    loop: 0
+    type: timestamp
     format: "YY/MM/DD"
   - field: begin
     note: "开始"
