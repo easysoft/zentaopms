@@ -2305,10 +2305,16 @@ EOT;
             foreach($moduleDocs[0] as $doc)
             {
                 $treeMenu[0] .= '<li' . ($doc->id == $docID ? ' class="active"' : ' class="independent"') . '>';
+                $treeMenu[0] .=  "<div class='tree-group'><span class='module-name'>" . html::a(inlink('index', "libID=$rootID&moduelID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'") . '</span>';
 
-                $treeMenu[0] .= html::a(inlink('index', "libID=$rootID&moduelID=0&apiID={$doc->id}"), "<i class='icon icon-file-text text-muted'></i> &nbsp;" . $doc->title, '', "data-app='{$this->app->tab}' class='doc-title' title='{$doc->title}'");
+                if(common::hasPriv('api', 'edit'))
+                {
+                    $treeMenu[0] .= "<div class='tree-actions'>";
+                    $treeMenu[0] .= html::a(helper::createLink('api', 'edit', "docID={$doc->id}"), "<i class='icon icon-edit'></i>", '', "title={$this->lang->doc->edit} data-app='{$this->app->tab}'");
+                    $treeMenu[0] .= '</div>';
+                }
 
-                $treeMenu[0] .= '</li>';
+                $treeMenu[0] .= '</div></li>';
             }
         }
 

@@ -70,15 +70,22 @@ class stakeholder extends control
             return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => $locate));
         }
 
+        $members = array();
         if($this->app->tab == 'program')
         {
             $this->loadModel('program')->setMenu($objectID);
-            $this->view->members = $this->loadModel('program')->getTeamMemberPairs($objectID);
+            $members = $this->loadModel('program')->getTeamMemberPairs($objectID);
         }
         else
         {
             $this->loadModel('project')->setMenu($objectID);
-            $this->view->members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
+            $members = $this->loadModel('user')->getTeamMemberPairs($objectID, 'project');
+        }
+
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
+        foreach($members as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($members[$account]);
         }
 
         $this->view->title      = $this->lang->stakeholder->create;
@@ -86,6 +93,7 @@ class stakeholder extends control
         $this->view->companys   = $this->loadModel('company')->getOutsideCompanies();
         $this->view->programID  = $this->app->tab == 'program' ? $objectID : 0;
         $this->view->projectID  = $this->app->tab == 'project' ? $objectID : 0;
+        $this->view->members    = $members;
 
         $this->display();
     }
@@ -206,6 +214,12 @@ class stakeholder extends control
         {
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
+        foreach($members as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($members[$account]);
+        }
+
         echo html::select('user', $members, $user, "class='form-control chosen'");
     }
 
@@ -229,8 +243,13 @@ class stakeholder extends control
             $members = $this->loadModel('user')->getTeamMemberPairs($projectID, 'project');
         }
 
-        $users = $this->loadModel('user')->getPairs('noclosed');
+        $users        = $this->loadModel('user')->getPairs('noclosed');
         $companyUsers = array('' => '') + array_diff($users, $members);
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($programID ? $programID : $projectID);
+        foreach($companyUsers as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($companyUsers[$account]);
+        }
 
         echo html::select('user', $companyUsers, $user, "class='form-control chosen'");
     }
@@ -241,9 +260,14 @@ class stakeholder extends control
      * @access public
      * @return void
      */
-    public function ajaxGetOutsideUser()
+    public function ajaxGetOutsideUser($objectID = 0)
     {
-        $users = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
+        $users        = $this->loadModel('user')->getPairs('noclosed|outside|noletter');
+        $stakeholders = $this->loadModel('stakeholder')->getStakeHolderPairs($objectID);
+        foreach($users as $account => $realname)
+        {
+            if(isset($stakeholders[$account])) unset($users[$account]);
+        }
 
         echo html::select('user', $users, '', "class='form-control chosen' onchange=changeUser(this.value);");
     }

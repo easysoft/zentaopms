@@ -486,7 +486,7 @@
                       $class         = isonlybody() ? 'showinonlybody' : 'iframe';
                       echo "<li title='$task->name'>" . html::a($this->createLink('task', 'view', "taskID=$task->id", '', true), $taskInfo, '', "class=$class data-width='80%'");
                       $execution = isset($story->executions[$task->execution]) ? $story->executions[$task->execution] : '';
-                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$executionID"), $executionName, '', "class='text-muted'");
+                      $execName  = (isset($execution->type) and $execution->type == 'kanban' and isonlybody()) ? $executionName : html::a($this->createLink('execution', 'view', "executionID=$task->execution"), $executionName, '', "class='text-muted'");
                       echo $execName . '</li>';
                   }
               }

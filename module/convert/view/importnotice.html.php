@@ -35,7 +35,7 @@ li .form-control {margin-top: 10px}
         <li>
           <?php echo $lang->convert->jira->importSteps[$method][5];?>
           <?php if($method == 'db'):?>
-          <?php echo html::input('dbName', '', "class='form-control w-200px' placeholder={$lang->convert->jira->dbNameNotice}");?>
+          <div class='required w-250px'><?php echo html::input('dbName', '', "class='form-control' placeholder='{$lang->convert->jira->dbNameNotice}'");?></div>
           <?php endif;?>
         </li>
       </ol>

@@ -1,3 +1,5 @@
+%define __os_install_post %{nil}
+
 Name:zentaopms
 Version:7.1.stable
 Release:1
