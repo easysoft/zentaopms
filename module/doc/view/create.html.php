@@ -45,6 +45,9 @@ $("a[href^='###']").click(function()
     <div class='main-header'>
       <h2><?php echo $lang->doc->create;?></h2>
     </div>
+    <?php if($objectType == 'custom' and empty($libs)):?>
+    <?php echo html::a(helper::createLink('doc', 'createLib', "type=custom&objectID=$objectID"), '<i class="icon icon-plus"></i> ' . $lang->doc->createLib, '', 'class="iframe hidden createCustomLib"');?>
+    <?php endif;?>
     <form class="load-indicator main-form form-ajax" id="dataform" method='post' enctype='multipart/form-data'>
       <table class='table table-form'>
         <tbody>

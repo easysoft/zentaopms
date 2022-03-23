@@ -59,6 +59,8 @@ $(function()
             }
         }, 200);
     });
+
+    if($(".createCustomLib").length == 1) $(".createCustomLib").click(); // Fix bug #15139.
 })
 
 function toggleEditor(type)

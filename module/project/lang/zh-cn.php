@@ -167,7 +167,7 @@ $lang->project->typeList['other'] = '其他项目';
 
 $lang->project->waitProjects    = '未开始的项目';
 $lang->project->doingProjects   = '进行中的项目';
-$lang->project->doingExecutions = '进行中的执行';
+$lang->project->doingExecutions = '进行中的执行(最近1个)';
 $lang->project->closedProjects  = '已关闭的项目(最近2个)';
 $lang->project->noProgram       = '无项目集归属项目';
 

@@ -613,7 +613,7 @@ class execution extends control
         $bugModules = array();
         foreach($products as $productID => $productName)
         {
-            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0);
+            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0, 'all');
             foreach($productModules as $moduleID => $moduleName)
             {
                 if(empty($moduleID))
@@ -2549,8 +2549,6 @@ class execution extends control
             if($executionType == 'stage')
             {
                 if(!isset($_POST['products'])) return print(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
-
-                if(count($_POST['products']) > 1) return print(js::alert($this->lang->execution->oneProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
             }
 
             $oldProducts = $this->product->getProducts($executionID);

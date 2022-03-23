@@ -36,8 +36,8 @@ class taskRecordEstimateEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $effort = array();
-        if($this->config->edition != 'open' and $data->data->efforts)    $effort = $data->data->efforts;
-        if($this->config->edition == 'open' and $data->data->esitimates) $effort = $data->data->esitimates;
+        if($this->config->edition != 'open' and $data->data->efforts)   $effort = $data->data->efforts;
+        if($this->config->edition == 'open' and $data->data->estimates) $effort = $data->data->estimates;
         $this->send(200, array('effort' => $effort));
 
     }
@@ -71,6 +71,7 @@ class taskRecordEstimateEntry extends Entry
         if(isset($data->status) and $data->status == 'fail') return $this->sendError(zget($data, 'code', 400), $data->message);
 
         $task = $this->loadModel('task')->getById($taskID);
+
         $this->send(200, $this->format($task, 'deadline:date,openedBy:user,openedDate:time,assignedTo:user,assignedDate:time,realStarted:time,finishedBy:user,finishedDate:time,closedBy:user,closedDate:time,canceledBy:user,canceledDate:time,lastEditedBy:user,lastEditedDate:time,deleted:bool,mailto:userList'));
     }
 }

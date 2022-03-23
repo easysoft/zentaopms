@@ -71,7 +71,7 @@
                     </div>
                   </td>
                 </tr>
-                <?php if($card->progress):?>
+                <?php if($kanban->performable):?>
                 <tr>
                   <th><?php echo $lang->kanbancard->progress;?></th>
                   <td>

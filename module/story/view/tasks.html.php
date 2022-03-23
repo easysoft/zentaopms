@@ -28,7 +28,7 @@ include '../../common/view/chart.html.php';
         <?php foreach($tasks as $key => $task):?>
         <tr class='text-center'>
           <td><?php echo $task->id;?></td>
-          <td class='text-left' title="<?php echo $task->name?>"><?php echo $task->name;?></td>
+          <td title="<?php echo $task->name?>"><?php echo $task->name;?></td>
           <td><span class='<?php echo 'pri' . zget($lang->task->priList, $task->pri, $task->pri)?>'><?php echo $task->pri == '0' ? '' : zget($lang->task->priList, $task->pri, $task->pri);?></span></td>
           <td><?php echo $this->processStatus('task', $task);?></td>
           <td><?php echo zget($users, $task->assignedTo, $task->assignedTo);?></td>

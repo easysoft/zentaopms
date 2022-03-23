@@ -1783,6 +1783,8 @@ class bugModel extends model
 
     public function getProductMemberPairs($productID)
     {
+        if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getTeamMembersPairs();
+
         $projects = $this->loadModel('product')->getProjectPairsByProduct($productID);
 
         $users = $this->dao->select("t2.id, t2.account, t2.realname")->from(TABLE_TEAM)->alias('t1')

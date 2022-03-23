@@ -351,6 +351,8 @@ class doc extends control
 
         $this->view->title = $libName . $this->lang->doc->create;
 
+        $this->view->objectType       = $objectType;
+        $this->view->objectID         = $objectID;
         $this->view->libID            = $libID;
         $this->view->libs             = $libs;
         $this->view->gobackLink       = $gobackLink;

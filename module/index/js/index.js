@@ -267,6 +267,7 @@
         var $bar  = $('#appBar-' + appCode);
         if(!$bar.length)
         {
+            if (typeof(app.text) == 'undefined') return false;
             var $link= $('<a data-pos="bar"></a>')
                 .attr('data-app', appCode)
                 .attr('class', 'show-in-app')

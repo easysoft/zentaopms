@@ -127,6 +127,8 @@ class tutorial extends control
             if(($module == 'story' or $module == 'task' or $module == 'bug') and $method == 'create') $target = 'self';
             if($module == 'execution' and $method == 'linkStory') $target = 'self';
             if($module == 'execution' and $method == 'managemembers') $target = 'self';
+
+            if(helper::isAjaxRequest()) return $this->send(array('result' => 'success', 'message' => $this->lang->saveSuccess, 'locate' => helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params))));
             return print(js::locate(helper::createLink('tutorial', 'wizard', "module=$module&method=$method&params=" . helper::safe64Encode($params)), $target));
         }
         echo $this->fetch($module, $method, $params);

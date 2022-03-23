@@ -485,8 +485,6 @@ class commonModel extends model
             /* The standalone lite version removes the lite interface button */
             if(trim($config->visions, ',') == 'lite') return true;
 
-            if($app->config->systemMode != 'new') return print("<div>{$lang->visionList['rnd']}</div>");
-
             if(count($userVisions) < 2)   return print("<div>{$lang->visionList[$currentVision]}</div>");
             if(count($configVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
@@ -579,7 +577,7 @@ class commonModel extends model
                         $params       = "objectType=&objectID=0&libID=0";
                         $createMethod = 'selectLibType';
                         $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='650px'";
+                        $attr         = "class='iframe' data-width='700px'";
                         break;
                     case 'project':
                         if($config->vision == 'lite')

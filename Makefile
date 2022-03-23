@@ -1,4 +1,5 @@
 VERSION     = $(shell head -n 1 VERSION)
+LITEVERSION = $(shell head -n 1 extension/lite/LITEVERSION)
 XUANVERSION = $(shell head -n 1 xuanxuan/XUANVERSION)
 XVERSION    = $(shell head -n 1 xuanxuan/XVERSION)
 
@@ -20,6 +21,8 @@ clean:
 	rm -rf buildroot/
 	rm -fr lampp
 	rm -fr zentaoxx
+	rm -fr tmp/
+	rm -f  *.sh
 common:
 	mkdir zentaopms
 	cp -fr api zentaopms/
@@ -132,7 +135,8 @@ zentaoxx:
 	sed -i 's/commonModel::getLicensePropertyValue/extCommonModel::getLicensePropertyValue/g' zentaoxx/extension/xuan/im/model/conference.php
 	sed -i 's/xxb_/zt_/g' zentaoxx/db/*.sql
 	sed -i "s#\$this->app->getModuleRoot() . 'im/apischeme.json'#\$this->app->getExtensionRoot() . 'xuan/im/apischeme.json'#g" zentaoxx/extension/xuan/im/model.php
-	sed -i "/getModuleExtPath(/ r tools/fixxuan" zentaoxx/framework/xuanxuan.class.php
+	sed -i "s/'..\/..\/common\/view\/header.html.php'/\$$app->getModuleRoot() . 'common\/view\/header.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
+	sed -i "s/'..\/..\/common\/view\/footer.html.php'/\$$app->getModuleRoot() . 'common\/view\/footer.html.php'/g" zentaoxx/extension/xuan/conference/view/admin.html.php
 	echo "ALTER TABLE \`zt_user\` ADD \`pinyin\` varchar(255) NOT NULL DEFAULT '' AFTER \`realname\`;" >> zentaoxx/db/xuanxuan.sql
 	mkdir zentaoxx/tools; cp tools/cn2tw.php zentaoxx/tools; cd zentaoxx/tools; php cn2tw.php
 	cp tools/en2de.php zentaoxx/tools; cd zentaoxx/tools; php en2de.php ../
@@ -232,7 +236,7 @@ enrpm:
 	rpmbuild -ba ~/rpmbuild/SPECS/zentaopms.spec
 	cp ~/rpmbuild/RPMS/noarch/zentaoalm-${VERSION}-1.noarch.rpm ./
 	rm -rf ~/rpmbuild
-ci:
+ciCommon:
 	git pull
 	make common
 
@@ -247,7 +251,23 @@ ci:
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
 	make en
 	rm -fr zentaopms zentaoxx zentaoxx.*.zip
-	php tools/mergezentaopms.php $(VERSION)
-	rm -f zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm
-	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH) 
+ci:
+	make ciCommon
+	php tools/packZip.php $(VERSION)
+	sh zip.sh
+	rm -rf tmp/
+	php tools/packDeb.php $(VERSION)
+	sh deb.sh
+	rm -rf tmp/
+	php tools/packRpm.php $(VERSION)
+	sh rpm.sh
+	rm -rf tmp/
+	rm -f zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/*.deb $(RELEASE_PATH)/*.rpm *.sh
+	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
 	mv *.zip *.deb *.rpm $(RELEASE_PATH)
+lite:
+	make ciCommon
+	php tools/packZip.php $(VERSION) $(LITEVERSION)
+	rm -f zentaobiz*.zip zentaomax*.zip $(BUILD_PATH)/ZenTaoPMS.$(VERSION).zip $(RELEASE_PATH)/ZenTaoALM.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(VERSION)*.zip $(RELEASE_PATH)/ZenTaoALM.$(LITEVERSION)*.zip $(RELEASE_PATH)/ZenTaoPMS.$(LITEVERSION)*.zip *.sh
+	cp ZenTaoPMS.$(VERSION).zip $(BUILD_PATH)
+	mv *.zip $(RELEASE_PATH)

@@ -4,6 +4,7 @@ $builder = new stdclass();
 $builder->company     = array('rows' => 2,    'extends' => array('company'));
 $builder->user        = array('rows' => 1000, 'extends' => array('user'));
 $builder->todo        = array('rows' => 2000, 'extends' => array('todo'));
+$builder->todocycle   = array('rows' => 5, 'extends' => array('todo','todocycle'));
 $builder->effort      = array('rows' => 100, 'extends' => array('effort'));
 $builder->usergroup   = array('rows' => 600, 'extends' => array('usergroup'));
 $builder->usercontact = array('rows' => 61, 'extends' => array('usercontact'));
@@ -16,9 +17,10 @@ $builder->project       = array('rows' => 90, 'extends' => array('project', 'pro
 $builder->sprint        = array('rows' => 600, 'extends' => array('project', 'execution'));
 
 $builder->story        = array('rows' => 400, 'extends' => array('story'));
+$builder->childstory   = array('rows' => 50, 'extends' => array('story','childstory'));
 $builder->storymodule  = array('rows' => 800, 'extends' => array('module','storymodule'));
 $builder->storyplan    = array('rows' => 400, 'extends' => array('planstory'));
-$builder->storyspec    = array('rows' => 60, 'extends' => array('storyspec'));
+$builder->storyspec    = array('rows' => 80, 'extends' => array('storyspec'));
 $builder->relation     = array('rows' => 12, 'extends' => array('relation'));
 $builder->task         = array('rows' => 600, 'extends' => array('task','task'));
 $builder->taskmore     = array('rows' => 300, 'extends' => array('task','moretask'));

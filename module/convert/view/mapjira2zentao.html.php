@@ -26,19 +26,9 @@
         </li>
         <?php endforeach;?>
       </ul>
-      <div class='btn-toolbar pull-right'>
-        <?php 
-        if($step != 1)
-        {
-            $preStep = $step - 1;
-            echo html::a(inlink('mapJira2Zentao', "method=$method&dnname=$dbName&preStep=$preStep"), $lang->goback, '', "class='btn btn-wide'");
-        }
-        ?>
-        <?php echo html::submitButton($lang->convert->jira->next, "data-placement='bottom'");?>
-      </div>
     </div>
-    <?php if($step == 1):?>
     <table class='table table-form'>
+      <?php if($step == 1):?>
       <thead>
         <tr class='text-center'>
           <th><?php echo $lang->convert->jira->jiraObject;?></th>
@@ -54,11 +44,8 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-    </table>
-    <hr />
-    <?php endif;?>
-    <?php if($step == 2):?>
-    <table class='table table-form'>
+      <?php endif;?>
+      <?php if($step == 2):?>
       <thead>
         <tr class='text-center'>
           <th><?php echo $lang->convert->jira->jiraLinkType;?></th>
@@ -74,11 +61,8 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-    </table>
-    <hr />
-    <?php endif;?>
-    <?php if($step == 3):?>
-    <table class='table table-form'>
+      <?php endif;?>
+      <?php if($step == 3):?>
       <thead>
         <tr class='text-center'>
           <th><?php echo $lang->convert->jira->jiraResolution;?></th>
@@ -96,11 +80,8 @@
         </tr>
         <?php endforeach;?>
       </tbody>
-    </table>
-    <hr />
-    <?php endif;?>
-    <?php if($step == 4):?>
-    <table class='table table-form'>
+      <?php endif;?>
+      <?php if($step == 4):?>
       <thead>
         <tr class='text-center'>
           <th><?php echo $lang->convert->jira->jiraStatus;?></th>
@@ -122,7 +103,21 @@
         </tr>
         <?php endforeach;?>
       </tbody>
+      <?php endif;?>
+      <tfoot>
+        <tr>
+          <td colspan='<?php echo $step == 1 ? 2 : ($step == 4 ? 5 : $step);?>' class='text-center form-actions'>
+            <?php echo html::submitButton($lang->convert->jira->next, "data-placement='bottom'");?>
+            <?php
+            if($step != 1)
+            {
+                $preStep = $step - 1;
+                echo html::a(inlink('mapJira2Zentao', "method=$method&dnname=$dbName&preStep=$preStep"), $lang->goback, '', "class='btn btn-wide'");
+            }
+            ?>
+          </td>
+        </tr>
+      </tfoot>
     </table>
-    <?php endif;?>
   </form>
 </div>

@@ -23,10 +23,11 @@ fields:
     format: ""
   - field: date
     note: "日期"
-    range: "(M)-(w)"
-    type: timestamp
-    prefix: "DateTime"
+    range: "(-1M)-(+1w):-1D"
+    prefix: ""
     postfix: ""
+    loop: 0
+    type: timestamp
     format: "YY/MM/DD"
   - field: begin
     note: "开始"
@@ -125,9 +126,9 @@ fields:
     note: "指派日期"
     range: "(M)-(w):60m"
     type: timestamp
-    prefix: "DateTime"
+    prefix: ""
     postfix: ""
-    format: "YY/MM/DD hh:mm:ss"
+    format: "YY-MM-DD hh:mm:ss"
   - field: finishedBy
     note: "由谁完成"
     from: common.user.v1.yaml

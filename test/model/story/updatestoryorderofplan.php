@@ -12,5 +12,11 @@ pid=1
 */
 
 $story = new storyTest();
+$planStories1 = $story->updateStoryOrderOfPlanTest(1, 1);
+$planStories2 = $story->updateStoryOrderOfPlanTest(1, 2, 1);
 
-r() && p() && e();
+r($planStories1)        && p("0:plan,story,order") && e('1,1,21'); // 把需求1迁移到计划1下，获取更新后的planstory
+r(count($planStories1)) && p()                     && e('4');      // 把需求1迁移到计划1下，获取更新后的planstory数量
+r($planStories2)        && p("0:plan,story,order") && e('2,1,1');  // 把需求1迁移到计划2下，获取更新后的planstory
+r(count($planStories2)) && p()                     && e('1');      // 把需求1迁移到计划2下，获取更新后的planstory数量
+system("./ztest init");

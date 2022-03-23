@@ -5,7 +5,7 @@ $xxConfig = array();
 foreach($xxItems as $xxItem) $xxConfig[$xxItem->key] = $xxItem->value;
 if(empty($xxConfig['key']))
 {
-    $this->setting->setItem('system.common.xuanxuan.turnon', 1);
+    $this->setting->setItem('system.common.xuanxuan.turnon', 0);
     $this->setting->setItem('system.common.xuanxuan.key', $this->setting->computeSN());
 }
 if(!isset($xxConfig['chatPort']))       $this->setting->setItem('system.common.xuanxuan.chatPort', 11444);

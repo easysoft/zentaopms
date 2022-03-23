@@ -1,5 +1,5 @@
 <?php
-$lang->message->typeList['xuanxuan'] = '客户端';
+$lang->message->typeList['xuanxuan'] = '聊天';
 
 $lang->message->sender = '禅道项目管理';
 

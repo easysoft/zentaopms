@@ -23,14 +23,14 @@
           <td>
             <input type='password' style="display:none"> <!-- for disable autocomplete all browser -->
             <span class='input-group'>
-              <?php echo html::password('password1', '', "class='form-control'");?>
+              <?php echo html::password('password1', '', "class='form-control' required");?>
             </span>
           </td>
           <td><?php echo $lang->convert->jira->passwordNotice;?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->password2;?></th>
-          <td><?php echo html::password('password2', '', "class='form-control'");?></td>
+          <td><?php echo html::password('password2', '', "class='form-control' required");?></td>
         </tr>
         <tr>
           <th><?php echo $lang->user->group;?></th>

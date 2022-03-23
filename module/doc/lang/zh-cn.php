@@ -127,6 +127,8 @@ if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = '项目文
 $lang->doc->libTypeList['execution'] = $lang->execution->common . '文档库';
 $lang->doc->libTypeList['custom']    = '自定义文档库';
 
+$lang->doc->libGlobalList['api'] = '接口文档库';
+
 $lang->doc->libIconList['product']   = 'icon-product';
 $lang->doc->libIconList['execution'] = 'icon-stack';
 $lang->doc->libIconList['custom']    = 'icon-folder-o';

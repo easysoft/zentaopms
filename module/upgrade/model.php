@@ -1260,7 +1260,7 @@ class upgradeModel extends model
                 if(file_exists($fullPath))
                 {
                     $isDir = is_dir($fullPath);
-                    if(($isDir  and !$zfile->removeDir($fullPath)) or
+                    if(!is_writable($fullPath) or ($isDir and !$zfile->removeDir($fullPath)) or
                        (!$isDir and !$zfile->removeFile($fullPath)))
                     {
                         $result[] = 'rm -f ' . ($isDir ? '-r ' : '') . $fullPath;
@@ -3774,7 +3774,7 @@ class upgradeModel extends model
 
             $this->dao->update(TABLE_CONFIG)->set('module')->eq('common')->set('section')->eq('xuanxuan')->where('id')->eq($keyID)->exec();
             $this->saveLogs($this->dao->get());
-            $this->setting->setItem('system.common.xuanxuan.turnon', '1');
+            $this->setting->setItem('system.common.xuanxuan.turnon', '0');
             $this->setting->setItem('system.common.xxserver.noticed', '1');
         }
 

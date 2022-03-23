@@ -867,6 +867,7 @@ class kanban extends control
         $this->view->card     = $card;
         $this->view->actions  = $this->action->getList('kanbancard', $cardID);
         $this->view->users    = $users;
+        $this->view->kanban   = $kanban;
 
         $this->display();
     }
@@ -1317,6 +1318,9 @@ class kanban extends control
      */
     public function viewArchivedCard($regionID)
     {
+        $region = $this->kanban->getRegionByID($regionID);
+
+        $this->view->kanban      = $this->kanban->getByID($region->kanban);
         $this->view->cards       = $this->kanban->getCardsByObject('region', $regionID, 1);
         $this->view->users       = $this->loadModel('user')->getPairs('noletter|nodeleted');
         $this->view->userIdPairs = $this->user->getPairs('noletter|nodeleted|showid');
