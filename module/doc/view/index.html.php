@@ -23,6 +23,11 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=byediteddate"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
+          <?php if(empty($latestEditedDocs)):?>
+          <div class="table-empty-tip">
+            <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+          </div>
+          <?php else:?>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
@@ -45,6 +50,7 @@
               </tbody>
             </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
       <div class="col-sm-5">
@@ -129,6 +135,11 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=openedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
+          <?php if(!empty($myDocs)):?>
+          <div class="table-empty-tip">
+            <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+          </div>
+          <?php else:?>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
@@ -151,6 +162,7 @@
               </tbody>
             </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
       <div class="col-sm-5">
@@ -161,6 +173,11 @@
               <li><?php echo html::a($this->createLink('doc', 'browse', "browseType=collectedbyme"), '<i class="icon icon-more icon-sm"></i>', '', "title='{$lang->more}'");?></li>
             </nav>
           </div>
+          <?php if(empty($collectedDocs)):?>
+          <div class="table-empty-tip">
+            <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
+          </div>
+          <?php else:?>
           <div class="panel-body has-table">
             <table class="table table-borderless table-fixed-head table-hover">
               <thead>
@@ -181,6 +198,7 @@
               </tbody>
             </table>
           </div>
+          <?php endif;?>
         </div>
       </div>
     </div>
