@@ -1,3 +1,4 @@
+#!/usr/bin/env php
 <?php
 include dirname(dirname(dirname(__FILE__))) . '/lib/init.php';
 include dirname(dirname(dirname(__FILE__))) . '/class/dept.class.php';
@@ -8,6 +9,10 @@ su('admin');
 title=测试 deptModel->getSons();
 cid=1
 pid=1
+
+有子部门查询 >> 开发部1,2,,2,5,
+无子部门查询 >> 0
+子部门数量统计 >> 2
 
 */
 
