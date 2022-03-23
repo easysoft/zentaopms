@@ -1542,7 +1542,7 @@ class projectModel extends model
         {
             if(empty($account)) continue;
 
-            if((int)$days[$key] > $project->days)
+            if(!empty($project->days) and (int)$days[$key] > $project->days)
             {
                 dao::$errors['message'][]  = sprintf($this->lang->project->daysGreaterProject, $project->days);
                 return false;
