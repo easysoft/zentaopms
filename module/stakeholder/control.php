@@ -219,6 +219,7 @@ class stakeholder extends control
         {
             if(isset($stakeholders[$account])) unset($members[$account]);
         }
+
         echo html::select('user', $members, $user, "class='form-control chosen'");
     }
 
@@ -249,6 +250,7 @@ class stakeholder extends control
         {
             if(isset($stakeholders[$account])) unset($companyUsers[$account]);
         }
+
         echo html::select('user', $companyUsers, $user, "class='form-control chosen'");
     }
 
