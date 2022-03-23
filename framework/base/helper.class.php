@@ -297,9 +297,10 @@ class baseHelper
         if(!empty($config->encryptSecret) and $password)
         {
             $secret = $config->encryptSecret;
+            $iv     = str_repeat("\0", 8);
             if(function_exists('mcrypt_encrypt'))
             {
-                $encrypted = base64_encode(@mcrypt_encrypt(MCRYPT_DES, substr($secret, 0, 8), $password, MCRYPT_MODE_CBC));
+                $encrypted = base64_encode(mcrypt_encrypt(MCRYPT_DES, substr($secret, 0, 8), $password, MCRYPT_MODE_CBC, $iv));
             }
             elseif(function_exists('openssl_encrypt'))
             {
@@ -307,7 +308,7 @@ class baseHelper
                 $oversize = strlen($password) % 8;
                 if($oversize != 0) $password .= str_repeat("\0", 8 - $oversize);
 
-                $encrypted = @openssl_encrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING);
+                $encrypted = openssl_encrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING, $iv);
             }
         }
         if(empty($encrypted)) $encrypted = $password;
@@ -331,13 +332,14 @@ class baseHelper
         if(!empty($config->encryptSecret) and $password)
         {
             $secret = $config->encryptSecret;
+            $iv     = str_repeat("\0", 8);
             if(function_exists('mcrypt_decrypt'))
             {
-                $decryptedPassword = @mcrypt_decrypt(MCRYPT_DES, substr($secret, 0, 8), base64_decode($password), MCRYPT_MODE_CBC);
+                $decryptedPassword = trim(mcrypt_decrypt(MCRYPT_DES, substr($secret, 0, 8), base64_decode($password), MCRYPT_MODE_CBC, $iv));
             }
             elseif(function_exists('openssl_decrypt'))
             {
-                $decryptedPassword = openssl_decrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING);
+                $decryptedPassword = trim(openssl_decrypt($password, 'DES-CBC', substr($secret, 0, 8), OPENSSL_ZERO_PADDING, $iv));
             }
 
             /* Check decrypted password. Judge whether there is garbled code. */

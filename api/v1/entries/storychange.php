@@ -22,7 +22,7 @@ class storyChangeEntry extends Entry
     {
         $oldStory = $this->loadModel('story')->getByID($storyID);
 
-        $fields = 'reviewer,comment';
+        $fields = 'reviewer,comment,executions,bugs,cases,tasks';
         $this->batchSetPost($fields);
         $fields = 'title,spec,verify';
         $this->batchSetPost($fields, $oldStory);

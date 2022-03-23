@@ -117,6 +117,8 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
+        if(defined('TUTORIAL')) return $projectID;
+
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
         if($projectID == 0 and $this->session->project == '') $projectID = key($projects);
         $this->session->set('project', (int)$projectID, $this->app->tab);
