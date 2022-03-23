@@ -505,7 +505,7 @@ class installModel extends model
         $requiredFields = explode(',', $this->config->install->step5RequiredFields);
         foreach($requiredFields as $field)
         {
-            if(empty($this->post->{$field}))
+            if($this->post->{$field} == '')
             {
                 dao::$errors[] = $this->lang->install->errorEmpty[$field];
                 return false;

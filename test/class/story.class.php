@@ -210,28 +210,35 @@ class storyTest
 
         if(dao::isError()) return dao::getError();
 
-        global $tester;
-        return $tester->loadModel('story')->getById($storyID);
+        return $this->objectModel->getById($storyID);
     }
 
-    public function updateStoryVersionTest($story)
-    {
-        $objects = $this->objectModel->updateStoryVersion($story);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test update story order of plan.
+     * 
+     * @param  int    $storyID 
+     * @param  string $planIDList 
+     * @param  string $oldPlanIDList 
+     * @access public
+     * @return void
+     */
     public function updateStoryOrderOfPlanTest($storyID, $planIDList = '', $oldPlanIDList = '')
     {
-        $objects = $this->objectModel->updateStoryOrderOfPlan($storyID, $planIDList = '', $oldPlanIDList = '');
+        $this->objectModel->updateStoryOrderOfPlan($storyID, $planIDList, $oldPlanIDList);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        return $tester->dao->select('*')->from(TABLE_PLANSTORY)->where('plan')->in($planIDList)->fetchAll();
     }
 
+    /**
+     * Test compute estimate.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function computeEstimateTest($storyID)
     {
         $objects = $this->objectModel->computeEstimate($storyID);
@@ -241,13 +248,22 @@ class storyTest
         return $objects;
     }
 
-    public function batchUpdateTest()
+    /**
+     * Test batch update stories.
+     * 
+     * @access public
+     * @return void
+     */
+    public function batchUpdateTest($params)
     {
-        $objects = $this->objectModel->batchUpdate();
+        $_POST      = $params;
+        $allStories = $this->objectModel->batchUpdate();
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($allStories);
+        return $this->objectModel->getByList($storyIdList);
     }
 
     public function reviewTest($storyID)
