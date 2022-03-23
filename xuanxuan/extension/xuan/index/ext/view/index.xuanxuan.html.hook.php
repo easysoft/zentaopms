@@ -42,7 +42,7 @@ if(isset($this->config->xuanxuan->turnon) && $this->config->xuanxuan->turnon && 
     $backendUrl  = $this->im->getServer('zentao');
 
     $xuanConfig->clientUrl = $clientUrl;
-    $xuanConfig->server    = ($this->config->xuanxuan->https == 'on' ? 'https' : 'http') . '://' . parse_url($backendUrl, PHP_URL_HOST) . $this->config->xuanxuan->commonPort;
+    $xuanConfig->server    = ($this->config->xuanxuan->https == 'on' ? 'https' : 'http') . '://' . parse_url($backendUrl, PHP_URL_HOST) . ':' . $this->config->xuanxuan->commonPort;
     $xuanConfig->account   = $this->app->user->account;
     $xuanConfig->authKey   = $token->token;
     $xuanConfig->debug     = $this->config->debug;
