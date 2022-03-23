@@ -577,7 +577,7 @@ class commonModel extends model
                         $params       = "objectType=&objectID=0&libID=0";
                         $createMethod = 'selectLibType';
                         $isOnlyBody   = true;
-                        $attr         = "class='iframe' data-width='650px'";
+                        $attr         = "class='iframe' data-width='700px'";
                         break;
                     case 'project':
                         if($config->vision == 'lite')

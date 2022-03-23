@@ -21,7 +21,8 @@
     <table class='table table-form'>
       <tr>
         <th class='w-80px'><?php echo $lang->doc->libType;?></th>
-        <td class='w-p85'><?php echo html::radio('objectType', $lang->doc->libTypeList, key($lang->doc->libTypeList));?></td>
+        <?php $globalList = $lang->doc->libTypeList + $lang->doc->libGlobalList;?>
+        <td class='w-p90'><?php echo html::radio('objectType', $globalList, key($globalList));?></td>
       </tr>
       <tr>
         <td colspan='3' class='text-center form-actions'><?php echo html::submitButton($lang->confirm);?></td>

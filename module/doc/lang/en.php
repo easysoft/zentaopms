@@ -127,6 +127,8 @@ if($config->systemMode == 'new') $lang->doc->libTypeList['project'] = 'Project L
 $lang->doc->libTypeList['execution'] = $lang->execution->common . ' Library';
 $lang->doc->libTypeList['custom']    = 'Custom Library';
 
+$lang->doc->libGlobalList['api'] = 'Api Libray';
+
 $lang->doc->libIconList['product']   = 'icon-product';
 $lang->doc->libIconList['execution'] = 'icon-stack';
 $lang->doc->libIconList['custom']    = 'icon-folder-o';
