@@ -375,6 +375,9 @@ class router extends baseRouter
         $view = json_decode($view);
         $view->rand = $this->session->random;
         $this->session->set('rand', $this->session->random);
+
+        $view->sprintConcept  = $this->config->custom->sprintConcept;
+        $view->URAndSR        = $this->config->custom->URAndSR;
         echo json_encode($view);
     }
 
