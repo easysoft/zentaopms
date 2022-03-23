@@ -46,14 +46,15 @@ $lang->action->comment     = 'Comment';
 $lang->action->undeleteAction = 'Reset Data';
 $lang->action->hideOneAction  = 'Hide Data';
 
-$lang->action->trashTips      = 'Note: Delete in ZenTao is logic.';
-$lang->action->textDiff       = 'Text Format';
-$lang->action->original       = 'Original Format';
-$lang->action->confirmHideAll = 'Do you want to hide all the records?';
-$lang->action->needEdit       = '%s that you want to restore. Please edit it.';
-$lang->action->historyEdit    = 'The history EditBy cannot be empty.';
-$lang->action->noDynamic      = 'No dynamics. ';
-$lang->action->undeletedTips  = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
+$lang->action->trashTips          = 'Note: Delete in ZenTao is logic.';
+$lang->action->textDiff           = 'Text Format';
+$lang->action->original           = 'Original Format';
+$lang->action->confirmHideAll     = 'Do you want to hide all the records?';
+$lang->action->needEdit           = '%s that you want to restore. Please edit it.';
+$lang->action->historyEdit        = 'The history EditBy cannot be empty.';
+$lang->action->noDynamic          = 'No dynamics. ';
+$lang->action->undeletedTips      = 'This data did not participate in the merging process during the version upgrade process, so restore is not supported.';
+$lang->action->executionNoProject = 'The execution does not belong to a project,please restore the project first';
 
 $lang->action->history = new stdclass();
 $lang->action->history->action = 'Link';

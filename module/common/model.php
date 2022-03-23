@@ -399,7 +399,7 @@ class commonModel extends model
             {
                 $noRole = (!empty($app->user->role) && isset($lang->user->roleList[$app->user->role])) ? '' : ' no-role';
                 echo '<li class="user-profile-item">';
-                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='600' class='iframe $noRole'" . '>';
+                echo "<a href='" . helper::createLink('my', 'profile', '', '', true) . "' data-width='700' class='iframe $noRole'" . '>';
                 echo html::avatar($app->user, '', 'avatar-circle', 'id="menu-avatar"');
                 echo '<div class="user-profile-name">' . (empty($app->user->realname) ? $app->user->account : $app->user->realname) . '</div>';
                 if(isset($lang->user->roleList[$app->user->role])) echo '<div class="user-profile-role">' . $lang->user->roleList[$app->user->role] . '</div>';
@@ -407,7 +407,7 @@ class commonModel extends model
 
                 $vision = $app->config->vision == 'lite' ? 'rnd' : 'lite';
 
-                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='600'") . '</li>';
+                echo '<li>' . html::a(helper::createLink('my', 'profile', '', '', true), "<i class='icon icon-account'></i> " . $lang->profile, '', "class='iframe' data-width='700'") . '</li>';
 
                 if($app->config->vision === 'rnd')
                 {
@@ -484,7 +484,7 @@ class commonModel extends model
 
             /* The standalone lite version removes the lite interface button */
             if(trim($config->visions, ',') == 'lite') return true;
-            
+
             if(count($userVisions) < 2)   return print("<div>{$lang->visionList[$currentVision]}</div>");
             if(count($configVisions) < 2) return print("<div>{$lang->visionList[$currentVision]}</div>");
 
@@ -957,7 +957,17 @@ class commonModel extends model
             $item->moduleName = $currentModule;
             $item->methodName = $currentMethod;
             $item->vars       = $vars;
-            $item->url        = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+
+            $isTutorialMode = commonModel::isTutorialMode();
+            if($isTutorialMode && $currentModule == 'project')
+            {
+                if(!empty($vars)) $vars = helper::safe64Encode($vars);
+                $item->url = helper::createLink('tutorial', 'wizard', "module={$currentModule}&method={$currentMethod}&params=$vars", '', 0, 0, 1);
+            }
+            else
+            {
+                $item->url = helper::createLink($currentModule, $currentMethod, $vars, '', 0, 0, 1);
+            }
 
             $items[] = $item;
         }
@@ -1632,6 +1642,8 @@ EOD;
      */
     public static function buildMoreButton($executionID)
     {
+        if(defined('TUTORIAL')) return;
+
         global $lang, $app;
 
         $object = $app->dbh->query('SELECT project,type FROM ' . TABLE_EXECUTION . " WHERE `id` = '$executionID'")->fetch();

@@ -148,6 +148,8 @@ class productModel extends model
      */
     public function saveState($productID, $products)
     {
+        if(defined('TUTORIAL')) return $productID;
+
         if($productID == 0 and $this->cookie->preProductID)   $productID = $this->cookie->preProductID;
         if(($productID == 0 and $this->session->product == '') or !isset($products[$productID])) $productID = key($products);
         $this->session->set('product', (int)$productID, $this->app->tab);
@@ -1184,6 +1186,7 @@ class productModel extends model
             ->andWhere('t2.project')->eq($projectID)
             ->beginIF($branch !== '')->andWhere('t1.branch')->in($branch)->fi()
             ->beginIF(!$this->app->user->admin)->andWhere('t2.id')->in($this->app->user->view->sprints)->fi()
+            ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->andWhere('t2.deleted')->eq('0')
             ->orderBy($orderBy)
             ->fetchAll('id');

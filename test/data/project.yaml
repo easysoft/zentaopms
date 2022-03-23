@@ -38,7 +38,7 @@ fields:
     range:
   - field: auth
     note: "Only project has auth"
-    range:
+    range: "extend"
   - field: parent
     range: 1-10
   - field: path
@@ -76,7 +76,7 @@ fields:
   - field: team
     range:
   - field: acl
-    range: open,private,custom
+    range: open,private,program
   - field: order
     range: 5-10000:5
   - field: openedVersion

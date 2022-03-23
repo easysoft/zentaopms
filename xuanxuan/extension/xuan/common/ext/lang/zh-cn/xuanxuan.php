@@ -12,6 +12,15 @@ $lang->admin->menu->xuanxuan['menuOrder'][0]  = 'index';
 $lang->admin->menu->xuanxuan['menuOrder'][5]  = 'setting';
 $lang->admin->menu->xuanxuan['menuOrder'][10] = 'update';
 
+global $config;
+if($config->edition != 'open')
+{
+    $lang->admin->menu->xuanxuan['subModule']           = 'client,setting,conference';
+    $lang->admin->menu->xuanxuan['subMenu']->conference = array('link' => '音视频|conference|admin');
+    $lang->admin->menu->xuanxuan['menuOrder'][7]        = 'conference';
+    $lang->navGroup->conference                         = 'admin';
+}
+
 $lang->navGroup->im      = 'admin';
 $lang->navGroup->setting = 'admin';
 $lang->navGroup->client  = 'admin';

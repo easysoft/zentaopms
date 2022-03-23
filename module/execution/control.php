@@ -613,7 +613,7 @@ class execution extends control
         $bugModules = array();
         foreach($products as $productID => $productName)
         {
-            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0);
+            $productModules = $this->tree->getOptionMenu($productID, 'bug', 0, 'all');
             foreach($productModules as $moduleID => $moduleName)
             {
                 if(empty($moduleID))
@@ -1444,12 +1444,15 @@ class execution extends control
         $rdUsers = $this->user->getPairs('noclosed|nodeleted|devfirst', '', $this->config->maxCount);
         if(!empty($this->config->user->moreLink)) $this->config->moreLinks["RD"] = $this->config->user->moreLink;
 
+        $this->loadModel('product');
+        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed') : $this->product->getProductPairsByProject($projectID, 'noclosed');
+
         $this->view->title               = (($this->app->tab == 'execution') and ($this->config->systemMode == 'new')) ? $this->lang->execution->createExec : $this->lang->execution->create;
         $this->view->position[]          = $this->view->title;
         $this->view->gobackLink          = (isset($output['from']) and $output['from'] == 'global') ? $this->createLink('execution', 'all') : '';
         $this->view->executions          = array('' => '') + $this->execution->getList($projectID);
         $this->view->groups              = $this->loadModel('group')->getPairs();
-        $this->view->allProducts         = array(0 => '') + $this->loadModel('product')->getProductPairsByProject($projectID, 'noclosed');
+        $this->view->allProducts         = array(0 => '') + $allProducts;
         $this->view->acl                 = $acl;
         $this->view->plan                = $plan;
         $this->view->name                = $name;
@@ -1582,7 +1585,7 @@ class execution extends control
         $linkedBranchList = array();
         $linkedProducts   = $this->product->getProducts($executionID);
         $branches         = $this->project->getBranchesByProject($executionID);
-        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent');
+        $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
@@ -1977,6 +1980,8 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
+        if($execution->type == 'kanban') return $this->locate(inlink('kanban', "executionID=$executionID"));
+
         $this->app->loadLang('program');
 
         /* Execution not found to prevent searching for .*/
@@ -2043,7 +2048,9 @@ class execution extends control
         $this->session->set('execLaneType', $browseType);
 
         $this->lang->execution->menu = new stdclass();
-        $execution        = $this->commonAction($executionID);
+        $execution = $this->commonAction($executionID);
+        if($execution->type != 'kanban') return $this->locate(inlink('view', "executionID=$executionID"));
+
         $kanbanData       = $this->loadModel('kanban')->getRDKanban($executionID, $browseType, $orderBy, 0, $groupBy);
         $executionActions = array();
 
@@ -2542,8 +2549,6 @@ class execution extends control
             if($executionType == 'stage')
             {
                 if(!isset($_POST['products'])) return print(js::alert($this->lang->execution->noLinkProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
-
-                if(count($_POST['products']) > 1) return print(js::alert($this->lang->execution->oneProduct) . js::locate($this->createLink('execution', 'manageProducts', "executionID=$executionID&from=$from")));
             }
 
             $oldProducts = $this->product->getProducts($executionID);

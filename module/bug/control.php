@@ -59,7 +59,8 @@ class bug extends control
             }
             else
             {
-                $products = $this->product->getPairs('', 0, 'program_asc');
+                $mode     = ($this->app->methodName == 'create' and empty($this->config->CRProduct)) ? 'noclosed' : '';
+                $products = $this->product->getPairs($mode, 0, 'program_asc');
             }
             if(empty($products) and !helper::isAjaxRequest()) return print($this->locate($this->createLink('product', 'showErrorNone', "moduleName=$tab&activeMenu=bug&objectID=$objectID")));
         }
@@ -627,7 +628,7 @@ class bug extends control
         $this->view->productName      = isset($this->products[$productID]) ? $this->products[$productID] : '';
         $this->view->moduleOptionMenu = $moduleOptionMenu;
         $this->view->stories          = $stories;
-        $this->view->projects         = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProject() : $projects;
+        $this->view->projects         = defined('TUTORIAL') ? $this->loadModel('tutorial')->getProjectPairs() : $projects;
         $this->view->project          = $project;
         $this->view->executions       = defined('TUTORIAL') ? $this->loadModel('tutorial')->getExecutionPairs() : $executions;
         $this->view->builds           = $builds;

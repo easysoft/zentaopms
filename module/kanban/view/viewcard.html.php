@@ -44,11 +44,11 @@
             echo "<div class='divider'></div>";
         }
 
-        common::printLink('kanban', 'editCard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link iframe' data-width='80%' title='{$lang->kanbancard->edit}'",  true, true);
+        common::printLink('kanban', 'editCard',   "cardID=$card->id", '<i class="icon icon-edit"></i>',  '', "class='btn btn-link' data-width='80%' title='{$lang->kanbancard->edit}'",  true, true);
 
         if($kanban->performable)
         {
-            if($card->status == 'done') echo html::a(helper::createLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-magic"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->activateCard}'");
+            if($card->status == 'done') echo html::a(helper::createLink('kanban', 'activateCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-magic"></i>', '', "class='btn btn-link' title='{$lang->kanban->activateCard}'");
             if($card->status == 'doing') echo html::a(helper::createLink('kanban', 'finishCard', "cardID={$card->id}&kanbanID={$kanban->id}"), '<i class="icon icon-checked"></i>', '', "class='btn btn-link iframe' title='{$lang->kanban->finishCard}'");
         }
 
@@ -114,7 +114,7 @@
                   <th><?php echo $lang->kanbancard->estimate;?></th>
                   <td><?php echo round($card->estimate, 2) . ' ' . $lang->kanbancard->lblHour;?></td>
                 </tr>
-                <?php if($card->progress):?>
+                <?php if($kanban->performable):?>
                 <tr>
                   <th><?php echo $lang->kanbancard->progress;?></th>
                   <td><?php echo round($card->progress, 2) . ' %';?></td>

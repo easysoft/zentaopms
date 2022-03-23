@@ -1262,6 +1262,7 @@ class story extends control
             if(isonlybody()) return print(js::reload('parent.parent'));
 
             $module = $from == 'project' ? 'projectstory' : 'story';
+            if(defined('RUN_MODE') and RUN_MODE == 'api') return $this->send(array('status' => 'success', 'data' => $storyID));
             return print(js::locate($this->createLink($module, 'view', "storyID=$storyID"), 'parent'));
         }
 

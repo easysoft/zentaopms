@@ -449,8 +449,9 @@ class productplanModel extends model
                     $stories = $this->dao->select('*')->from(TABLE_STORY)->where("CONCAT(',', plan, ',')")->like("%,{$plan->parent},%")->fetchAll('id');
                     foreach($stories as $storyID => $story)
                     {
-                        $storyPlan = trim($story->plan, ',');
-                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$storyPlan,");
+                        $storyPlan = str_replace(",{$plan->parent},", ",$planID,", ",$story->plan,");
+                        $storyPlan = trim($storyPlan, ',');
+
                         $this->dao->update(TABLE_STORY)->set('plan')->eq($storyPlan)->where('id')->eq($storyID)->exec();
                     }
                 }

@@ -149,7 +149,15 @@ body {margin-bottom: 25px;}
     <?php if($canBeChanged and (common::hasPriv('task', 'batchCreate', $checkObject) or common::hasPriv('task', 'create', $checkObject))):?>
     <div class='btn-group dropdown'>
       <?php
-      $actionLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+      if(commonModel::isTutorialMode())
+      {
+          $wizardParams = helper::safe64Encode("executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+          $actionLink   = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
+      }
+      else
+      {
+          $actionLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+      }
       echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>

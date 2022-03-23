@@ -8,7 +8,12 @@ $sessionString .= session_name() . '=' . session_id();
     <div class="cell" id="content">
       <div class="detail no-padding">
         <div class="detail-title no-padding doc-title">
-          <div class="title" title="<?php echo $doc->title;?>"><?php echo $doc->title;?></div>
+          <div class="title" title="<?php echo $doc->title;?>">
+            <?php echo $doc->title;?>
+            <?php if($doc->deleted):?>
+            <span class='label label-danger'><?php echo $lang->doc->deleted;?></span>
+            <?php endif;?>
+          </div>
           <div class="info">
             <div class="version">
               <div class='btn-group'>

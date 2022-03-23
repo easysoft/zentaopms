@@ -210,6 +210,21 @@ class releaseModel extends model
             $this->file->saveUpload('release', $releaseID);
             $this->loadModel('score')->create('release', 'create', $releaseID);
 
+            /* Set stage to released. */
+            if($release->stories)
+            {
+                $this->loadModel('story');
+                $this->loadModel('action');
+
+                $storyIDList = array_filter(explode(',', $release->stories));
+                foreach($storyIDList as $storyID)
+                {
+                    $this->story->setStage($storyID);
+
+                    $this->action->create('story', $storyID, 'linked2release', '', $releaseID);
+                }
+            }
+
             return $releaseID;
         }
 

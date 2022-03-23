@@ -47,10 +47,10 @@ class admin extends control
      */
     public function ignore()
     {
+        $account = $this->app->user->account;
         $this->loadModel('setting');
-        $this->setting->deleteItems('owner=system&module=common&section=global&key=community');
         $this->setting->deleteItems('owner=system&module=common&section=global&key=ztPrivateKey');
-        $this->setting->setItem('system.common.global.community', 'na');
+        $this->setting->setItem("$account.common.global.community", 'na');
         echo js::locate(inlink('index'), 'parent');
     }
 

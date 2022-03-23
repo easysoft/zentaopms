@@ -864,7 +864,7 @@ class programplanModel extends model
      */
     public function isCreateTask($planID)
     {
-        $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->limit(1)->fetch();
+        $task = $this->dao->select('*')->from(TABLE_TASK)->where('execution')->eq($planID)->andWhere('deleted')->eq('0')->limit(1)->fetch();
         return empty($task) ? true : false;
     }
 

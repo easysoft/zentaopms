@@ -946,6 +946,7 @@ class kanbanModel extends model
             foreach($lanes as $lane)
             {
                 $lane->actions = array();
+                $lane->name    = htmlspecialchars_decode($lane->name);
                 foreach($actions as $action)
                 {
                     if($this->isClickable($lane, $action)) $lane->actions[] = $action;
@@ -998,7 +999,9 @@ class kanbanModel extends model
         {
             foreach($columns as $column)
             {
+                $column->name    = htmlspecialchars_decode($column->name);
                 $column->actions = array();
+
                 /* Judge column action priv. */
                 foreach($actions as $action)
                 {
@@ -1075,6 +1078,7 @@ class kanbanModel extends model
                 $card         = zget($cards, $cardID);
                 $card->column = $cell->column;
                 $card->lane   = $cell->lane;
+                $card->name   = htmlspecialchars_decode($card->name);
 
                 $card->actions = array();
                 foreach($actions as $action)
@@ -2503,8 +2507,7 @@ class kanbanModel extends model
         $otherCardList = '';
         $otherLanes    = $this->dao->select('t2.id, t2.cards')->from(TABLE_KANBANLANE)->alias('t1')
             ->leftJoin(TABLE_KANBANCELL)->alias('t2')->on('t1.id=t2.lane')
-            ->where('t1.deleted')->eq(0)
-            ->andWhere('t1.id')->ne($lane->id)
+            ->where('t1.id')->ne($lane->id)
             ->andWhere('t1.execution')->eq($executionID)
             ->andWhere('t2.`type`')->eq($lane->type)
             ->fetchPairs();

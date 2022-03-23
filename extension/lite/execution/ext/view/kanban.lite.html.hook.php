@@ -7,8 +7,5 @@
 </style>
 <script>
 $('#mainMenu').remove();
-if(laneCount === 1)
-{
-    $("#kanbanActionMenu li:eq(1)").remove();
-}
+if(laneCount === 1) $("#kanbanActionMenu li:eq(1)").remove();
 </script>

@@ -25,6 +25,7 @@
 [lang^='en'] #archivedCards .card-actions > .btn {width: 55px;}
 #archivedCards .card-actions > .btn + .btn {margin-top: 10px;}
 #archivedCards .info > .time {background-color: rgba(0, 0, 0, 0.15);}
+#archivedCards .info > .users {padding-right: 10px;}
 #archivedCards .info > .users > span {display: inline-block; color: transparent; width: 2px; height: 2px; background-color: #8990a2; position:sticky; top: 3px; margin: 0 7px; border-radius: 50%; line-height: 32px;}
 #archivedCards .info > .users > span:before {left: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
 #archivedCards .info > .users > span:after {right: -4px; content: ''; display: block; position: absolute; width: 2px; height: 2px; background-color: #8990a2; top: 0px; border-radius: 50%;}
@@ -40,6 +41,8 @@
 #archivedCards .card-item .has-color .info > .estimate,
 #archivedCards .card-item .has-color .info > .label-light {color: #FFFFFF;}
 #archivedCards .card-item .has-color .info > .label-pri {border-color: #FFFFFF;}
+#archivedCards .progress-box {width: 97%;}
+#performable {padding: 25px 10px !important;}
 </style>
 <div class='panel'>
   <div class='panel-heading text-center'>
@@ -117,9 +120,17 @@
             </div>
             <?php endif;?>
           </div>
+          <?php if($kanban->performable):?>
+          <div class='progress-box'>
+            <div class='progress'>
+              <div class="progress-bar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo round($card->progress, 2) . ' %';?>"></div>
+            </div>
+            <div class='progress-number'><?php echo round($card->progress, 2) . ' %';?></div>
+          </div>
+          <?php endif;?>
         </div>
       </div>
-      <div class='col-xs-2 card-actions'>
+      <div class='col-xs-2 card-actions' <?php if($kanban->performable) echo "id='performable'";?>>
         <?php
         $canRestore = commonModel::hasPriv('kanban', 'restoreCard');
         $canDelete  = commonModel::hasPriv('kanban', 'deleteCard');

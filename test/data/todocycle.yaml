@@ -5,30 +5,25 @@ version: "1.0"
 fields:
   - field: id
     note: "ID"
-    range: 1-10000
+    range: 2001-10000
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: account
     note: "用户名"
-    fields:
-    - field: account1
-      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100}
-    - field: account2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100
+    range: admin
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: date
     note: "日期"
-    range: "(-1M)-(+1w):-1D"
+    range: "(M)-(w)"
+    type: timestamp
     prefix: ""
     postfix: ""
-    loop: 0
-    type: timestamp
-    format: "YY/MM/DD"
+    format: "YY-MM-DD"
   - field: begin
     note: "开始"
     range: "1000-1059:2"
@@ -45,34 +40,33 @@ fields:
     format: ""
   - field: type
     note: "类型"
-    range: custom,bug,task,story,testtask
+    range: cycle
     prefix: ""
     postfix: ""
-    loop: 0
-    format: ""
+  - field: cycle
+    note: "周期"
+    range: 1,0
+    prefix: ""
+    postfix: ""
   - field: idvalue
     note: "关联编号"
-    range: 0,1-20,1-20,1-20,1-20
+    range: 0,2001,0,2003,0
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: pri
     note: "优先级"
-    range: 1-4
+    range: 3
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: name
     note: "待办名称"
-    fields:
-      - field: name1
-        range: 自定义,BUG,任务,需求,测试单
-      - field: name2
-        range: 1-200,1-200,1-200,1-200.1-200
+    range: 天周期{2},周周期{2},月周期
     prefix: ""
-    postfix: "的待办"
+    postfix: "待办"
     loop: 0
     format: ""
   - field: desc
@@ -84,14 +78,14 @@ fields:
     format: ""
   - field: status
     note: "状态"
-    range: wait,doing,done,closed
+    range: wait
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: private
     note: "私人事务"
-    range: 1{10},0{10}
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
@@ -104,21 +98,13 @@ fields:
     format: ""
   - field: assignedTo
     note: "指派给"
-    fields:
-    - field: ass1
-      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100}
-    - field: ass2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100
+    range: admin
     prefix: ""
     postfix: ""
     format: ""
   - field: assignedBy
     note: "由谁指派"
-    fields:
-    - field: ass1
-      range: admin,user{99},test{100},dev{100},pm{100},po{100},td{100},pd{100},qd{100},top{100},outside{100}
-    - field: ass2
-      range: [],1-99,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100,1-100
+    range: admin
     prefix: ""
     postfix: ""
     format: ""
@@ -128,7 +114,7 @@ fields:
     type: timestamp
     prefix: ""
     postfix: ""
-    format: "YY-MM-DD hh:mm:ss"
+    format: "YY/MM/DD hh:mm:ss"
   - field: finishedBy
     note: "由谁完成"
     from: common.user.v1.yaml

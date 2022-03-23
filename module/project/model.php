@@ -117,6 +117,8 @@ class projectModel extends model
      */
     public function saveState($projectID = 0, $projects = array())
     {
+        if(defined('TUTORIAL')) return $projectID;
+
         if($projectID == 0 and $this->cookie->lastProject) $projectID = $this->cookie->lastProject;
         if($projectID == 0 and $this->session->project == '') $projectID = key($projects);
         $this->session->set('project', (int)$projectID, $this->app->tab);
@@ -1535,6 +1537,7 @@ class projectModel extends model
         $oldJoin     = $this->dao->select('`account`, `join`')->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->fetchPairs();
         $this->dao->delete()->from(TABLE_TEAM)->where('root')->eq($projectID)->andWhere('type')->eq($projectType)->exec();
 
+        $projectMember = array();
         foreach($accounts as $key => $account)
         {
             if(empty($account)) continue;
@@ -1549,12 +1552,6 @@ class projectModel extends model
                 dao::$errors['message'][]  = $this->lang->project->errorHours;
                 return false;
             }
-        }
-
-        $projectMember = array();
-        foreach($accounts as $key => $account)
-        {
-            if(empty($account)) continue;
 
             $member          = new stdclass();
             $member->role    = $roles[$key];

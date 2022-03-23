@@ -146,9 +146,6 @@
         </tr>
       </table>
     </form>
-    <?php if($type != 'edit'):?>
-    <div class='alert alert-info mg-0'><?php echo $lang->im->info;?></div>
-    <?php endif;?>
   </div>
 </div>
 <?php include $app->getModuleRoot() . 'common/view/footer.html.php';?>

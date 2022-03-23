@@ -14,6 +14,7 @@
 <?php include $this->app->getModuleRoot() . '/common/view/datepicker.html.php';?>
 <?php js::set('taskConsumed', $taskConsumed);?>
 <?php js::set('addChildTask', $lang->task->addChildTask);?>
+<?php js::set('regionID', $regionID);?>
 <style>.c-lane,.c-region{width:150px;}</style>
 <div id="mainContent" class="main-content fade">
   <div class="main-header clearfix">
@@ -241,12 +242,31 @@ function loadLaneGroup(regionID, num)
         $('#lane' + num).replaceWith(data);
         $('#lane' + num + '_chosen').remove();
         $('#lane' + num).chosen();
-    })
-        console.log($('#lane' + num).val());
+    });
 }
 $(function()
 {
-    $("select[id^='region']").change();
+    /* Initial fetch of kanban lanes. */
+    var link = createLink('kanban', 'ajaxGetLanes', 'regionID=' + regionID + '&type=task&field=lane&i=1');
+    $.post(link, function(data)
+    {
+        for(var num = 1; num <= 10; num++)
+        {
+            $('#lane' + num).replaceWith(data.replace('lane1', 'lane' + num));
+            $('#lane' + num + '_chosen').remove();
+            $('#lane' + num).chosen();
+        }
+        if($('#lane1').children().length < 2 && $('#region1').children().length < 2)
+        {
+            $('.c-region').addClass('hide');
+            $('.c-lane').addClass('hide');
+            for(var num = 1; num <= 10; num++)
+            {
+                $('#region' + num).parent().addClass('hide');
+                $('#lane' + num).parent().addClass('hide');
+            }
+        }
+    });
 })
 </script>
 <?php if(isonlybody()):?>
