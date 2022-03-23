@@ -178,7 +178,7 @@ class blockModel extends model
             ->andWhere('t3.deleted')->eq('0')
             ->beginIF(!$this->app->user->admin)->andWhere('t1.execution')->in($this->app->user->view->sprints)->fi()
             ->beginIF($this->config->vision)->andWhere('t1.vision')->eq($this->config->vision)->fi()
-            ->beginIF($this->config->vision)->andWhere('t2.vision')->eq($this->config->vision)->fi()
+            ->beginIF($this->config->vision)->andWhere('t3.vision')->eq($this->config->vision)->fi()
             ->fetchAll('id');
         $data['tasks']      = isset($tasks) ? count($tasks) : 0;
         $data['doneTasks']  = (int)$this->dao->select('count(*) AS count')->from(TABLE_TASK)->where('assignedTo')->eq($this->app->user->account)->andWhere('deleted')->eq(0)->andWhere('status')->eq('done')->fetch('count');
