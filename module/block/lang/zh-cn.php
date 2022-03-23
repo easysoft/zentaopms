@@ -586,3 +586,4 @@ $lang->block->zentaoapp->createEffort         = '记日志';
 $lang->block->zentaoapp->createDoc            = '建文档';
 $lang->block->zentaoapp->createTodo           = '建待办';
 $lang->block->zentaoapp->workbench            = '工作台';
+$lang->block->zentaoapp->notSupportKanban     = '移动端暂不支持研发看板模式';
