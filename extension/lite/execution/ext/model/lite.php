@@ -19,6 +19,9 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
         die(js::locate(helper::createLink('project', 'execution', "status=all&projectID={$execution->project}")));
     }
 
+    $lowerModule = strtolower($this->app->rawModule);
+    $lowerMethod = strtolower($this->app->rawMethod);
+
     $modulePageNav  = "";
     $modulePageNav .= "<div class='btn-group angle-btn active'><div class='btn-group'>";
     $modulePageNav .= "<button data-toggle='dropdown' type='button' class='btn' style='border-radius: 4px;'>{$currentKanban->name} <span class='caret'></span></button>";
@@ -38,12 +41,17 @@ public function setMenu($executionID, $buildID = 0, $extra = '')
             $method = 'kanban';
         }
 
-        $modulePageNav .=  '<li>' . html::a(helper::createLink('execution', $method, "execution=$kanban->id"), $kanban->name) . '</li>';
+        $module = 'execution';
+
+        if($lowerModule == 'task' and $lowerMethod == 'create')
+        {
+            $module = 'task';
+            $method = 'create';
+        }
+
+        $modulePageNav .=  '<li>' . html::a(helper::createLink($module, $method, "execution=$kanban->id"), $kanban->name) . '</li>';
     }
     $modulePageNav .= "</ul></div></div>";
-
-    $lowerModule = strtolower($this->app->rawModule);
-    $lowerMethod = strtolower($this->app->rawMethod);
 
     if($lowerModule == 'execution' and strpos('|kanban|task|calendar|gantt|tree|grouptask|', "|{$lowerMethod}|") !== false)
     {
