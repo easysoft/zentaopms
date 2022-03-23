@@ -232,6 +232,13 @@ class storyTest
         return $tester->dao->select('*')->from(TABLE_PLANSTORY)->where('plan')->in($planIDList)->fetchAll();
     }
 
+    /**
+     * Test compute estimate.
+     * 
+     * @param  int    $storyID 
+     * @access public
+     * @return void
+     */
     public function computeEstimateTest($storyID)
     {
         $objects = $this->objectModel->computeEstimate($storyID);
