@@ -113,3 +113,12 @@
 
 .paramsTable th {text-align: left!important; font-size: 14px;}
 .paramsTable td {text-align: left;}
+
+.tree-group {position: relative;}
+.tree-group > .module-name {white-space: nowrap; overflow: hidden; text-overflow: ellipsis; width: 100%; display: block;}
+.tree li.active > .tree-group a {font-weight: 700; color: #0c64eb;}
+.tree-actions {display: inline-block; margin-left: 5px; vertical-align: middle;}
+.tree-group .tree-actions {display: none; position: absolute; right: 0; top: 0; background-color: #fff; white-space: nowrap;}
+.tree-group:hover .tree-actions {display: block}
+.tree-actions a {display: inline-block; margin-left: 5px; font-size: 13px; opacity: .6;}
+.tree li.active > .tree-group a {font-weight: 700; color: #0c64eb;}
