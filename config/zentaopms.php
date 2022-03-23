@@ -217,6 +217,7 @@ $config->openMethods[] = 'kanban.importbuild';
 $config->openMethods[] = 'kanban.activatecard';
 $config->openMethods[] = 'kanban.finishcard';
 $config->openMethods[] = 'kanban.deleteobjectcard';
+$config->openMethods[] = 'admin.ignore';
 
 /* Define the tables. */
 define('TABLE_COMPANY',       '`' . $config->db->prefix . 'company`');
