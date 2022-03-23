@@ -540,6 +540,25 @@ class programplanModel extends model
                     ->where('id')->eq($stageID)
                     ->exec();
 
+                /* Add PM to stage teams and project teams. */
+                if(!empty($data->PM))
+                {
+                    $team = $this->user->getTeamMemberPairs($stageID, 'execution');
+                    if(isset($team[$data->PM])) continue;
+
+                    $roles  = $this->user->getUserRoles($data->PM);
+                    $member = new stdclass();
+                    $member->root    = $stageID;
+                    $member->account = $data->PM;
+                    $member->role    = zget($roles, $data->PM, '');
+                    $member->join    = $now;
+                    $member->type    = 'execution';
+                    $member->days    = $data->days;
+                    $member->hours   = $this->config->execution->defaultWorkhours;
+                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                    $this->execution->addProjectMembers($data->project, array($data->PM => $member));
+                }
+
                 if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
 
                 /* Record version change information. */
@@ -592,17 +611,26 @@ class programplanModel extends model
                     $lib->acl       = 'default';
                     $this->dao->insert(TABLE_DOCLIB)->data($lib)->exec();
 
-                    /* Add creators to stage teams and execution teams. */
-                    $member = new stdclass();
-                    $member->root    = $stageID;
-                    $member->account = $account;
-                    $member->role    = $this->lang->user->roleList[$this->app->user->role];
-                    $member->join    = $now;
-                    $member->type    = 'execution';
-                    $member->days    = $data->days;
-                    $member->hours   = $this->config->execution->defaultWorkhours;
-                    $this->dao->insert(TABLE_TEAM)->data($member)->exec();
-                    $this->execution->addProjectMembers($data->project, array($member));
+                    /* Add creators and PM to stage teams and project teams. */
+                    $teamMembers = array();
+                    $members     = array($account, $data->PM);
+                    $roles       = $this->user->getUserRoles(array_values($members));
+                    foreach($members as $account)
+                    {
+                        if(empty($account)) continue;
+
+                        $member = new stdclass();
+                        $member->root    = $stageID;
+                        $member->account = $account;
+                        $member->role    = zget($roles, $account, '');
+                        $member->join    = $now;
+                        $member->type    = 'execution';
+                        $member->days    = $data->days;
+                        $member->hours   = $this->config->execution->defaultWorkhours;
+                        $this->dao->insert(TABLE_TEAM)->data($member)->exec();
+                        $teamMembers[$account] = $member;
+                    }
+                    $this->execution->addProjectMembers($data->project, $teamMembers);
 
                     $this->setTreePath($stageID);
                     if($data->acl != 'open') $this->user->updateUserView($stageID, 'sprint');
