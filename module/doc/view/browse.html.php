@@ -19,16 +19,7 @@
     <div class="panel block-files block-sm no-margin">
       <?php if(empty($docs)):?>
       <div class="table-empty-tip">
-        <p>
-          <span class="text-muted"><?php echo $lang->doc->noDoc;?></span>
-          <?php if($browseType == 'byediteddate'):?>
-          <span class="text-muted"><?php echo $lang->doc->noEditedDoc;?></span>
-          <?php elseif($browseType == 'openedbyme'):?>
-          <span class="text-muted"><?php echo $lang->doc->noOpenedDoc;?></span>
-          <?php elseif($browseType == 'collectedbyme'):?>
-          <span class="text-muted"><?php echo $lang->doc->noCollectedDoc;?></span>
-          <?php endif;?>
-        </p>
+        <p><span class="text-muted"><?php echo $lang->doc->noDoc;?></span></p>
       </div>
       <?php else:?>
       <div class="panel-body">
