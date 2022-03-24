@@ -173,14 +173,6 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = 'Résultat des CasTest
 $lang->testtask->report->charts['testTaskPerType']      = 'Type de CasTests';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Module CasTests';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'CasTests joués par';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Distribution Bug Sévérité';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Distribution Bug Statuts';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Distribution signalement de Bug';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Distribution Résolus par';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Distribution Résolution';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Distribution Bug Module';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug Priority Distribution';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Distribution of daily bug processing';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();
