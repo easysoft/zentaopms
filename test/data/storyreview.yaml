@@ -1,0 +1,15 @@
+title: table zt_storyreview
+desc: ""
+author: automated export
+version: "1.0"
+fields:
+    - field: story
+      range: 301-400
+    - field: version
+      range: "1"
+    - field: reviewer
+      range: admin{50},dev3{50}
+    - field: result
+      range: ""
+    - field: reviewDate
+      range: ""

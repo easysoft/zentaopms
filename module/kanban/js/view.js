@@ -822,8 +822,9 @@ function finishCard(cardID, kanbanID, regionID)
  * @access public
  * @return boolean
  */
-function updateRegion(regionID, regionData = [])
+function updateRegion(regionID, regionData)
 {
+    if(typeof(regionData) == 'undefined') regionData = [];
     if(!regionID) return false;
 
     var $region = $('#kanban'+ regionID).kanban();
@@ -1251,8 +1252,7 @@ function initKanban($kanban)
         droppable:
         {
             target:       findDropColumns,
-            finish:       handleFinishDrop,
-            mouseButton: 'left'
+            finish:       handleFinishDrop
         },
     });
 

@@ -273,14 +273,18 @@ class productModel extends model
     /**
      * Get product pairs.
      *
-     * @param  string $mode
-     * @param  string $programID
+     * @param  string       $mode
+     * @param  string       $programID
+     * @param  string|array $append
      * @return array
      */
-    public function getPairs($mode = '', $programID = 0)
+    public function getPairs($mode = '', $programID = 0, $append = '')
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
+        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+
+        $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
@@ -288,7 +292,7 @@ class productModel extends model
             ->beginIF(strpos($mode, 'all') === false)->andWhere('deleted')->eq(0)->fi()
             ->beginIF($programID)->andWhere('program')->eq($programID)->fi()
             ->beginIF(strpos($mode, 'noclosed') !== false)->andWhere('status')->ne('closed')->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('id')->in($views)->fi()
             ->andWhere('vision')->eq($this->config->vision)
             ->orderBy($orderBy)
             ->fetchPairs('id', 'name');
@@ -298,14 +302,15 @@ class productModel extends model
     /**
      * Get product pairs by project.
      *
-     * @param  int    $projectID
-     * @param  string $status   all|noclosed
+     * @param  int          $projectID
+     * @param  string       $status   all|noclosed
+     * @param  string|array $append
      * @access public
      * @return array
      */
-    public function getProductPairsByProject($projectID = 0, $status = 'all')
+    public function getProductPairsByProject($projectID = 0, $status = 'all', $append = '')
     {
-        $products = empty($projectID) ? $this->getList() : $this->getProducts($projectID, $status);
+        $products = empty($projectID) ? $this->getList() : $this->getProducts($projectID, $status, '', true, $append);
         $pairs    = array();
         if(!empty($products))
         {
@@ -337,14 +342,15 @@ class productModel extends model
     /**
      * Get products by project.
      *
-     * @param  int    $projectID
-     * @param  int    $status   all|noclosed
-     * @param  string $orderBy
-     * @param  bool   $withBranch
+     * @param  int          $projectID
+     * @param  string       $status   all|noclosed
+     * @param  string       $orderBy
+     * @param  bool         $withBranch
+     * @param  string|array $append
      * @access public
      * @return array
      */
-    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true)
+    public function getProducts($projectID = 0, $status = 'all', $orderBy = '', $withBranch = true, $append = '')
     {
         if(defined('TUTORIAL'))
         {
@@ -352,13 +358,16 @@ class productModel extends model
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
 
+        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+
+        $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
             ->on('t1.product = t2.id')
             ->where('t2.deleted')->eq(0)
             ->beginIF(!empty($projectID))->andWhere('t1.project')->eq($projectID)->fi()
-            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($this->app->user->view->products)->fi()
+            ->beginIF(!$this->app->user->admin and $this->config->vision == 'rnd')->andWhere('t2.id')->in($views)->fi()
             ->andWhere('t2.vision')->eq($this->config->vision)
             ->beginIF(strpos($status, 'noclosed') !== false)->andWhere('t2.status')->ne('closed')->fi()
             ->orderBy($orderBy . 't2.order asc')

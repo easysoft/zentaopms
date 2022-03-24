@@ -5,14 +5,14 @@ version: "1.0"
 fields:
   - field: story
     note: "需求ID"
-    range: 1-30
+    range: 1-450,1-100,1-20
     prefix: ""
     postfix: ""
     loop: 0
     format: ""
   - field: version
     note: "版本"
-    range: 1{30},2{30},3{20}
+    range: 1{450},2{100},3{20}
     prefix: ""
     postfix: ""
     loop: 0

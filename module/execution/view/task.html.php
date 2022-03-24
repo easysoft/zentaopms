@@ -151,18 +151,18 @@ body {margin-bottom: 25px;}
       <?php
       if(commonModel::isTutorialMode())
       {
-          $wizardParams = helper::safe64Encode("executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
-          $actionLink   = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
+          $wizardParams   = helper::safe64Encode("executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+          $taskCreateLink = $this->createLink('tutorial', 'wizard', "module=task&method=create&params=$wizardParams");
       }
       else
       {
-          $actionLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
+          $taskCreateLink = $this->createLink('task', 'create', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : ""));
       }
-      echo html::a($actionLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
+      echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> {$lang->task->create}", '', "class='btn btn-primary'");
       ?>
       <button type='button' class='btn btn-primary dropdown-toggle' data-toggle='dropdown'><span class='caret'></span></button>
       <ul class='dropdown-menu pull-right'>
-        <li><?php echo html::a($actionLink, $lang->task->create);?></li>
+        <li><?php echo html::a($taskCreateLink, $lang->task->create);?></li>
         <li><?php echo html::a($this->createLink('task', 'batchCreate', "executionID=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), $lang->task->batchCreate);?></li>
       </ul>
     </div>
@@ -217,7 +217,7 @@ body {margin-bottom: 25px;}
       <p>
         <span class="text-muted"><?php echo $lang->task->noTask;?></span>
         <?php if($canBeChanged and common::hasPriv('task', 'create')):?>
-        <?php echo html::a($this->createLink('task', 'create', "execution=$executionID" . (isset($moduleID) ? "&storyID=0&moduleID=$moduleID" : "")), "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
+        <?php echo html::a($taskCreateLink, "<i class='icon icon-plus'></i> " . $lang->task->create, '', "class='btn btn-info'");?>
         <?php endif;?>
       </p>
     </div>

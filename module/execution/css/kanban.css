@@ -15,14 +15,15 @@
 .region {border: 1px solid #dcdcdc; background-color: #fff;}
 .region + .region {margin-top: 20px;}
 .region .region-header {padding: 10px;}
-.region .region-header span {font-size: 14px; color: #999EAB}
+.region .region-header strong {font-size: 14px; color: #999EAB}
 .region .region-header label {color: #999; background: transparent; border: 1px solid #ddd; margin-left: 10px; margin-right: 10px}
 .region .region-header .action {float: right}
+.region .region-actions {float: right; position: relative; top: -6px; right: -6px;}
 .region .region-header .icon-double-angle-up,.icon-double-angle-down {cursor: pointer;}
 .region .kanban-header-sub-cols .kanban-header-col > .title {max-width: 100% !important;min-width:240px;}
 .region .sort .region-header {cursor: move;}
 
-.region .kanban {padding: 0px 10px 10px 10px; min-height: unset; overflow: auto}
+.region .kanban {padding: 0px 10px 10px 10px; min-height: unset; overflow: auto; width: 100%;}
 .region .kanban .form-actions {margin: 0;}
 .region .kanban .form-actions .btn {margin-right: 10px; min-width: 50px;}
 
@@ -107,5 +108,4 @@
 
 #mainMenu .divider {margin: 10px}
 
-.kanbanRegion {margin: 5px}
 .modal-header {padding: 15px 0;}
