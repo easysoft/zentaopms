@@ -414,12 +414,13 @@ class webhookModel extends model
         static $users = array();
         if(empty($users)) $users = $this->loadModel('user')->getList();
 
-        $object   = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
-        $field    = $this->config->action->objectNameFields[$objectType];
-        $host     = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
-        $viewLink = $this->getViewLink($objectType, $objectID);
-        $title    = $this->app->user->realname . $this->lang->action->label->$actionType . $this->lang->action->objectTypes[$objectType];
-        $text     = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
+        $object         = $this->dao->select('*')->from($this->config->objectTables[$objectType])->where('id')->eq($objectID)->fetch();
+        $field          = $this->config->action->objectNameFields[$objectType];
+        $host           = empty($webhook->domain) ? common::getSysURL() : $webhook->domain;
+        $viewLink       = $this->getViewLink($objectType, $objectID);
+        $objectTypeName = ($objectType == 'story' and $object->type == 'requirement') ? $this->lang->action->objectTypes['requirement'] : $this->lang->action->objectTypes[$objectType];
+        $title          = $this->app->user->realname . $this->lang->action->label->$actionType . $objectTypeName;
+        $text           = $title . ' ' . "[#{$objectID}::{$object->$field}](" . $host . $viewLink . ")";
 
         $mobile = '';
         $email  = '';

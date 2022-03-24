@@ -84,6 +84,7 @@ $lang->action->periods['lastmonth'] = $lang->action->dynamic->lastMonth;
 $lang->action->objectTypes['product']          = $lang->productCommon;
 $lang->action->objectTypes['branch']           = '分支';
 $lang->action->objectTypes['story']            = $lang->SRCommon;
+$lang->action->objectTypes['requirement']      = $lang->URCommon;
 $lang->action->objectTypes['design']           = '設計';
 $lang->action->objectTypes['productplan']      = '計劃';
 $lang->action->objectTypes['release']          = '發佈';
