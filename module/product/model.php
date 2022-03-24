@@ -775,7 +775,7 @@ class productModel extends model
             if(dao::isError()) return print(js::error('product#' . $productID . dao::getError(true)));
 
             /* When acl is open, white list set empty. When acl is private,update user view. */
-            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist('', 'product', $productID);
+            if($product->acl == 'open') $this->loadModel('personnel')->updateWhitelist(array(), 'product', $productID);
             if($product->acl != 'open') $this->loadModel('user')->updateUserView($productID, 'product');
             if($product->type == 'normal' and $oldProduct->type != 'normal') $unlinkProducts[] = $productID;
             if($product->type != 'normal' and $oldProduct->type == 'normal') $linkProducts[] = $productID;

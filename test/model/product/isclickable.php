@@ -18,11 +18,11 @@ status为close,action为start >> true
 
 */
 
-$adminTester = new Product('admin');
+$product = new productTest('admin');
 
 $t_status = array('2', '75', 'close', 'start');
 
-r($adminTester->testIsClickable($t_status[0], $t_status[2])) && p() && e('true');  // status为normal,action为close
-r($adminTester->testIsClickable($t_status[1], $t_status[2])) && p() && e('false'); // status为close,action为close
-r($adminTester->testIsClickable($t_status[0], $t_status[3])) && p() && e('true');  // status为normal,action为start
-r($adminTester->testIsClickable($t_status[1], $t_status[3])) && p() && e('true');  // status为close,action为start
+r($product->testIsClickable($t_status[0], $t_status[2])) && p() && e('true');  // status为normal,action为close
+r($product->testIsClickable($t_status[1], $t_status[2])) && p() && e('false'); // status为close,action为close
+r($product->testIsClickable($t_status[0], $t_status[3])) && p() && e('true');  // status为normal,action为start
+r($product->testIsClickable($t_status[1], $t_status[3])) && p() && e('true');  // status为close,action为start
