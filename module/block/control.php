@@ -1823,7 +1823,7 @@ class block extends control
         /* load pager. */
         $this->app->loadClass('pager', $static = true);
         $pager = new pager(0, 3, 1);
-        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager);
+        $this->view->projects = $this->loadModel('project')->getInfoList('all', 'id_desc', $pager, 1);
     }
 
     /**
