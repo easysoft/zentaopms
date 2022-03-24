@@ -848,12 +848,10 @@ class projectModel extends model
         }
 
         /*Judge workdays is legitimate. */
-        $date1    = date_create($project->begin);
-        $date2    = date_create($project->end);
-        $workdays = date_diff($date1, $date2);
-        if($project->days > $workdays->days)
+        $workdays = helper::diffDate($project->end, $project->begin);
+        if($project->days > $workdays)
         {
-            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays->days);
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
 
@@ -1094,6 +1092,14 @@ class projectModel extends model
         if(empty($linkedProductsCount))
         {
             dao::$errors[] = $this->lang->project->errorNoProducts;
+            return false;
+        }
+
+        /*Judge workdays is legitimate. */
+        $workdays = helper::diffDate($project->end, $project->begin);
+        if($project->days > $workdays)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays);
             return false;
         }
 

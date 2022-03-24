@@ -58,6 +58,7 @@ function computeDaysDelta(date1, date2)
  * @return void
  */
 function computeWorkDays(currentID)
+
 {
     isBactchEdit = false;
     if(currentID)
@@ -113,7 +114,13 @@ function computeEndDate(delta)
     if(delta == 999)
     {
         $('#end').val(longTime);
+        $('#daysBox').addClass('hidden');
+        $('#days').val(0);
         return false;
+    }
+    else
+    {
+        $('#daysBox').removeClass('hidden');
     }
 
     beginDate = convertStringToDate(beginDate);
