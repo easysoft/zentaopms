@@ -1251,8 +1251,7 @@ function initKanban($kanban)
         droppable:
         {
             target:       findDropColumns,
-            finish:       handleFinishDrop,
-            mouseButton: 'left'
+            finish:       handleFinishDrop
         },
     });
 
