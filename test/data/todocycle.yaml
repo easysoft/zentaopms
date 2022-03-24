@@ -45,12 +45,12 @@ fields:
     postfix: ""
   - field: cycle
     note: "周期"
-    range: 1,0
+    range: 1
     prefix: ""
     postfix: ""
   - field: idvalue
     note: "关联编号"
-    range: 0,2001,0,2003,0
+    range: 0
     prefix: ""
     postfix: ""
     loop: 0
