@@ -252,7 +252,7 @@ $(function()
     {
         for(var num = 1; num <= 10; num++)
         {
-            $('#lane' + num).replaceWith(data.replace('lane1', 'lane' + num));
+            $('#lane' + num).replaceWith(data.replace('lane1', 'lane' + num).replace('lane[1]', 'lane[' + num + ']'));
             $('#lane' + num + '_chosen').remove();
             $('#lane' + num).chosen();
         }
