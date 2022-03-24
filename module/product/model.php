@@ -284,7 +284,7 @@ class productModel extends model
 
         if(!empty($append) and is_array($append)) $append = implode($append, ',');
 
-        $views    = $append ? $this->app->user->view->products . ",$append" : $this->app->user->view->products;
+        $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
         $products = $this->dao->select('*,  IF(INSTR(" closed", status) < 2, 0, 1) AS isClosed')
             ->from(TABLE_PRODUCT)
@@ -360,7 +360,7 @@ class productModel extends model
 
         if(!empty($append) and is_array($append)) $append = implode($append, ',');
 
-        $views           = $append ? $this->app->user->view->products . ",$append" : $this->app->user->view->products;
+        $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
             ->from(TABLE_PROJECTPRODUCT)->alias('t1')
             ->leftJoin(TABLE_PRODUCT)->alias('t2')
