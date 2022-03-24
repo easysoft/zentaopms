@@ -303,7 +303,7 @@ class productModel extends model
      * Get product pairs by project.
      *
      * @param  int          $projectID
-     * @param  int          $status   all|noclosed
+     * @param  string       $status   all|noclosed
      * @param  string|array $append
      * @access public
      * @return array
@@ -343,7 +343,7 @@ class productModel extends model
      * Get products by project.
      *
      * @param  int          $projectID
-     * @param  int          $status   all|noclosed
+     * @param  string       $status   all|noclosed
      * @param  string       $orderBy
      * @param  bool         $withBranch
      * @param  string|array $append

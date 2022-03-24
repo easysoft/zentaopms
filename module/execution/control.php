@@ -1502,7 +1502,7 @@ class execution extends control
         $browseExecutionLink = $this->createLink('execution', 'browse', "executionID=$executionID");
         $execution           = $this->execution->getById($executionID);
         $branches            = $this->project->getBranchesByProject($executionID);
-        $executionProducts   = empty($branches) ? '' : array_keys($branches);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
 
         if($execution->type == 'kanban')
         {
@@ -1514,7 +1514,7 @@ class execution extends control
         if(!empty($_POST))
         {
             $oldPlans    = $this->dao->select('plan')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($executionID)->andWhere('plan')->ne(0)->fetchPairs('plan');
-            $oldProducts = $this->product->getProducts($executionID, 'all', '', true, $executionProducts);
+            $oldProducts = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
             $changes     = $this->execution->update($executionID);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
@@ -1529,7 +1529,7 @@ class execution extends control
             }
 
             $oldProducts  = array_keys($oldProducts);
-            $newProducts  = $this->product->getProducts($executionID, 'all', '', true, $executionProducts);
+            $newProducts  = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
             $newProducts  = array_keys($newProducts);
             $diffProducts = array_merge(array_diff($oldProducts, $newProducts), array_diff($newProducts, $oldProducts));
             $products     = $diffProducts ? join(',', $newProducts) : '';
@@ -1578,14 +1578,14 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->edit;
 
-        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed', 0, $executionProducts) : $this->product->getProducts($execution->project, 'noclosed', '', false, $executionProducts);
+        $allProducts = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed', 0, $linkedProductIdList) : $this->product->getProducts($execution->project, 'noclosed', '', false, $linkedProductIdList);
         $allProducts = array(0 => '') + $allProducts;
 
         $this->loadModel('productplan');
         $productPlans     = array(0 => '');
         $linkedBranches   = array();
         $linkedBranchList = array();
-        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $executionProducts);
+        $linkedProducts   = $this->product->getProducts($executionID, 'all', '', true, $linkedProductIdList);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $executionStories = $this->project->getStoriesByProject($executionID);
 
@@ -2580,12 +2580,12 @@ class execution extends control
         $position[] = html::a($browseExecutionLink, $execution->name);
         $position[] = $this->lang->execution->manageProducts;
 
-        $branches          = $this->project->getBranchesByProject($executionID);
-        $executionProducts = empty($branches) ? '' : array_keys($branches);
-        $allProducts       = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed', 0, $executionProducts) : $this->product->getProductPairsByProject($execution->project, 'all', $executionProducts);
-        $linkedProducts    = $this->product->getProducts($execution->id, 'all', '', true, $executionProducts);
-        $linkedBranches    = array();
-        $executionStories  = $this->project->getStoriesByProject($executionID);
+        $branches            = $this->project->getBranchesByProject($executionID);
+        $linkedProductIdList = empty($branches) ? '' : array_keys($branches);
+        $allProducts         = $this->config->systemMode == 'classic' ? $this->product->getPairs('noclosed', 0, $linkedProductIdList) : $this->product->getProductPairsByProject($execution->project, 'all', $linkedProductIdList);
+        $linkedProducts      = $this->product->getProducts($execution->id, 'all', '', true, $linkedProductIdList);
+        $linkedBranches      = array();
+        $executionStories    = $this->project->getStoriesByProject($executionID);
 
         /* If the story of the product which linked the execution, you don't allow to remove the product. */
         $unmodifiableProducts = array();
