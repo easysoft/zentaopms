@@ -73,6 +73,9 @@ if($this->config->vision == 'lite')
     $extHookFiles = glob($extHookRule);
     if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 }
+$extHookRule  = $extensionRoot . 'custom/common/ext/view/footer.*.hook.php';
+$extHookFiles = glob($extHookRule);
+if($extHookFiles) foreach($extHookFiles as $extHookFile) include $extHookFile;
 ?>
 </body>
 </html>
