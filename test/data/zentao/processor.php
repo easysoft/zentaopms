@@ -157,6 +157,7 @@ class Processor
     private function initStory()
     {
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
+        $this->dao->update(TABLE_STORY)->set('`status`')->eq('draft')->where('id')->ge('300')->andwhere('id')->le('400')->exec();
     }
 
     /**
