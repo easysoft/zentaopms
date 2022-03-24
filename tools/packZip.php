@@ -51,7 +51,7 @@ foreach(array('zh-cn', 'en') as $langType)
         /* The commands of the shell. */
         $command  = "cd $workDir\n";
         $command .= "if [ ! -d ../$dirName ]; then unzip ../../$packPrefix.{$version}.zip -d ../ ; fi\n";
-        $command .= "cp -rf ../$dirName .\n";
+        $command .= "cp -raf ../$dirName .\n";
         $command .= "unzip ../../zentaobiz.php{$phpVersion}.zip -d $dirName/extension/\n";
         $command .= "unzip ../../zentaomax.php{$phpVersion}.zip -d $dirName/extension/\n";
         $command .= "zip -r ../../$packPrefix.{$version}.php{$phpVersion}.zip $dirName\n";
