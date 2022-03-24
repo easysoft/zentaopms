@@ -1153,7 +1153,6 @@ class task extends control
                 if($execution->type == 'kanban' and $this->app->tab == 'execution')
                 {
                     $regionID   = isset($output['regionID']) ? $output['regionID'] : 0;
-                    $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, 'all', 'id_desc', $regionID);
                     $kanbanData = $this->loadModel('kanban')->getRDKanban($task->execution, $this->session->execLaneType ? $this->session->execLaneType : 'all', 'id_desc', $regionID);
                     $kanbanData = json_encode($kanbanData);
 
