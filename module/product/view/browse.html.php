@@ -518,7 +518,7 @@ $projectIDParam = $isProjectStory ? "projectID=$projectID&" : '';
           </div>
           <?php endif;?>
           <?php if($canBatchChangePlan and $storyType == 'story'):?>
-          <div class="btn-group dropup">
+          <div class="btn-group dropup <?php echo $productID == 0 ? 'hidden' : '';?>">
             <button data-toggle="dropdown" type="button" class="btn"><?php echo $lang->story->planAB;?> <span class="caret"></span></button>
             <?php
             unset($plans['']);
