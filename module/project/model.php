@@ -193,13 +193,14 @@ class projectModel extends model
      * @param  string    $status
      * @param  string    $orderBy
      * @param  int       $pager
+     * @param  int       $involved
      * @access public
      * @return array
      */
-    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null)
+    public function getInfoList($status = 'undone', $orderBy = 'order_desc', $pager = null, $involved = 0)
     {
         /* Init vars. */
-        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, 1);
+        $projects = $this->loadModel('program')->getProjectList(0, $status, 0, $orderBy, $pager, 0, $involved);
         if(empty($projects)) return array();
 
         $projectIdList = array_keys($projects);
