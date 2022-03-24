@@ -444,6 +444,8 @@ $lang->resource->execution->unbindWhitelist   = 'unbindWhitelist';
 //$lang->resource->execution->storyEstimate     = 'storyEstimate';
 $lang->resource->execution->kanban            = 'kanban';
 //if($config->systemMode == 'classic') $lang->resource->project->list = 'list';
+if($config->edition != 'open') $lang->resource->execution->gantt    = 'ganttchart';
+if($config->edition != 'open') $lang->resource->execution->calendar = 'calendar';
 
 //$lang->execution->methodOrder[0]   = 'index';
 //if($config->systemMode == 'classic') $lang->project->methodOrder[1] = 'list';
@@ -498,6 +500,8 @@ $lang->execution->methodOrder[250] = 'addWhitelist';
 $lang->execution->methodOrder[255] = 'unbindWhitelist';
 $lang->execution->methodOrder[260] = 'storyEstimate';
 $lang->execution->methodOrder[270] = 'kanban';
+$lang->execution->methodOrder[280] = 'gantt';
+$lang->execution->methodOrder[285] = 'calendar';
 
 /* Task. */
 $lang->resource->task = new stdclass();
