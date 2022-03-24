@@ -24,6 +24,14 @@ class buildTest
         return $objects;
     }
 
+    /**
+     * function getByList test by build
+     *
+     * @param  array  $idList
+     * @param  string $count
+     * @access public
+     * @return array
+     */
     public function getByListTest($idList, $count)
     {
         $objects = $this->objectModel->getByList($idList);
