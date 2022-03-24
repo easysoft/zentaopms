@@ -22,6 +22,7 @@
 #projectTableList .project-name.has-suffix > a {max-width: calc(100% - 100px);}
 #projectTableList .project-name.has-prefix > a {padding-left: 5px;}
 #projectTableList .project-name.has-suffix > a {padding-right: 5px;}
+.table-footer {z-index: 1;}
 </style>
 <div id="mainMenu" class="clearfix">
   <?php if($this->config->systemMode == 'new'):?>
