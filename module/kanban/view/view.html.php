@@ -53,9 +53,9 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
       <?php foreach($regions as $region):?>
       <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
         <div class="region-header dropdown">
-          <span class="strong"><?php echo $region->name;?></span>
-          <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
-          <span class='regionActions'>
+          <strong><?php echo $region->name;?></strong>
+          <a class="text-muted"><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></a>
+          <div class='region-actions'>
             <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
             <ul class="dropdown-menu pull-right">
@@ -64,12 +64,12 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
               <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(inlink('deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
             </ul>
             <?php endif;?>
-          </span>
-          <span class='regionActions'>
+          </div>
+          <div class='region-actions'>
             <?php $canViewArchivedCard   = commonModel::hasPriv('kanban', 'viewArchivedCard');?>
             <?php $canViewArchivedColumn = commonModel::hasPriv('kanban', 'viewArchivedColumn');?>
             <?php if(($canViewArchivedCard or $canViewArchivedColumn) and $kanban->archived):?>
-            <span>
+            <div>
               <button data-toggle="dropdown" class="btn btn-link action" type="button" title=<?php echo $this->lang->kanban->archived;?>>
                 <span><?php echo $this->lang->kanban->archived;?></span>
                 <span class="caret"></span>
@@ -78,13 +78,13 @@ $canCreateLane   = commonModel::hasPriv('kanban', 'createLane');
                 <?php if($canViewArchivedCard) echo '<li>' . html::a("javascript:loadMore(\"Card\", $region->id)", '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard) . '</li>';?>
                 <?php if($canViewArchivedColumn) echo '<li>' . html::a("javascript:loadMore(\"Column\", $region->id)", '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn) . '</li>';?>
               </ul>
-            </span>
+            </div>
             <?php endif;?>
             <ul class="dropdown-menu pull-right">
               <?php echo '<li>' . html::a(inlink('viewArchivedCard', "", '', 1), '<i class="icon icon-card-archive"></i>' . $this->lang->kanban->viewArchivedCard, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
               <?php echo '<li>' . html::a(inlink('viewArchivedColumn', "", '', 1), '<i class="icon icon-col-archive"></i>' . $this->lang->kanban->viewArchivedColumn, '', 'class="iframe" data-toggle="modal" data-width="600px"') . '</li>';?>
             </ul>
-          </span>
+          </div>
         </div>
         <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
       </div>
