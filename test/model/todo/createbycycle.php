@@ -12,7 +12,7 @@ pid=1
 
 测试创建周期日待办 >> 11
 测试创建周期周待办 >> 9
-测试创建周期月待办 >> 30
+测试创建周期月待办 >> 70
 
 */
 
@@ -32,4 +32,5 @@ $todo = new todoTest();
 
 r($todo->createByCycleTest($todo1)) && p() && e('11'); // 测试创建周期日待办
 r($todo->createByCycleTest($todo2)) && p() && e('9');  // 测试创建周期周待办
-r($todo->createByCycleTest($todo3)) && p() && e('30'); // 测试创建周期月待办
+r($todo->createByCycleTest($todo3)) && p() && e('70'); // 测试创建周期月待办
+system("./ztest init");
