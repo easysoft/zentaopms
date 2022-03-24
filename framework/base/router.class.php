@@ -2395,14 +2395,16 @@ class baseRouter
     public function exportConfig()
     {
         $view = new stdclass();
-        $view->version     = $this->config->version;
-        $view->requestType = $this->config->requestType;
-        $view->requestFix  = $this->config->requestFix;
-        $view->moduleVar   = $this->config->moduleVar;
-        $view->methodVar   = $this->config->methodVar;
-        $view->viewVar     = $this->config->viewVar;
-        $view->sessionVar  = $this->config->sessionVar;
-        $view->systemMode  = $this->config->systemMode;
+        $view->version       = $this->config->version;
+        $view->requestType   = $this->config->requestType;
+        $view->requestFix    = $this->config->requestFix;
+        $view->moduleVar     = $this->config->moduleVar;
+        $view->methodVar     = $this->config->methodVar;
+        $view->viewVar       = $this->config->viewVar;
+        $view->sessionVar    = $this->config->sessionVar;
+        $view->systemMode    = $this->config->systemMode;
+        $view->sprintConcept = zget($this->config->custom, 'sprintConcept', '0');
+        $view->URAndSR       = zget($this->config->custom, 'URAndSR', '0');
 
         $this->session->set('random', mt_rand(0, 10000));
         $view->sessionName = session_name();
