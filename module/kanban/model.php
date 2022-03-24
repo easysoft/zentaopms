@@ -755,6 +755,7 @@ class kanbanModel extends model
 
                 $plan->title   = htmlspecialchars_decode($plan->title);
                 $plan->desc    = strip_tags(htmlspecialchars_decode($plan->desc));
+                $plan->delay   = helper::today() > $plan->end ? true : false;
                 $plan->actions = array();
                 foreach($cardActions as $action)
                 {
