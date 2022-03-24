@@ -21,7 +21,7 @@ $builder->childstory   = array('rows' => 50, 'extends' => array('story','childst
 $builder->storyreview  = array('rows' => 100, 'extends' => array('storyreview'));
 $builder->storymodule  = array('rows' => 800, 'extends' => array('module','storymodule'));
 $builder->storyplan    = array('rows' => 400, 'extends' => array('planstory'));
-$builder->storyspec    = array('rows' => 80, 'extends' => array('storyspec'));
+$builder->storyspec    = array('rows' => 570, 'extends' => array('storyspec'));
 $builder->relation     = array('rows' => 12, 'extends' => array('relation'));
 $builder->task         = array('rows' => 600, 'extends' => array('task','task'));
 $builder->taskmore     = array('rows' => 300, 'extends' => array('task','moretask'));
