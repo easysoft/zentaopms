@@ -67,8 +67,7 @@ $(function()
             droppable:
             {
                 target:      findDropColumns,
-                finish:      handleFinishDrop,
-                mouseButton: 'left'
+                finish:      handleFinishDrop
             }
         });
 

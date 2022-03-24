@@ -208,8 +208,7 @@ $(function()
             {
                 selector:     '.kanban-card:not(.execution-item)',
                 target:       findDropColumns,
-                finish:       handleFinishDrop,
-                mouseButton: 'left'
+                finish:       handleFinishDrop
             },
         });
     });

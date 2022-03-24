@@ -209,9 +209,9 @@ js::set('hasTaskButton', $hasTaskButton);
       <?php foreach($regions as $region):?>
       <div class="region<?php if($canSortRegion) echo ' sort';?>" data-id="<?php echo $region->id;?>">
         <div class="region-header dropdown">
-          <span class="strong"><?php echo $region->name;?></span>
-          <span><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></span>
-          <span class='regionActions'>
+          <strong><?php echo $region->name;?></strong>
+          <a class="text-muted"><i class="icon icon-chevron-double-up" data-id="<?php echo $region->id;?>"></i></a>
+          <div class='region-actions'>
             <?php if($canEditRegion || $canCreateLane || $canDeleteRegion):?>
             <button class="btn btn-link action" type="button" data-toggle="dropdown"><i class="icon icon-ellipsis-v"></i></button>
             <ul class="dropdown-menu pull-right">
@@ -220,9 +220,9 @@ js::set('hasTaskButton', $hasTaskButton);
               <?php if($canDeleteRegion and count($regions) > 1) echo '<li>' . html::a(helper::createLink('kanban', 'deleteRegion', "regionID={$region->id}"), '<i class="icon icon-trash"></i>' . $this->lang->kanban->deleteRegion, "hiddenwin") . '</li>';?>
             </ul>
             <?php endif;?>
-          </span>
+          </div>
         </div>
-        <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban kanbanRegion'></div>
+        <div id='kanban<?php echo $region->id;?>' data-id='<?php echo $region->id;?>' class='kanban'></div>
       </div>
       <?php endforeach;?>
     </div>
