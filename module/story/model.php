@@ -1387,6 +1387,7 @@ class storyModel extends model
         $reviewerList = $this->dao->select('story,reviewer,result,version')->from(TABLE_STORYREVIEW)->where('story')->in($storyIdList)->orderBy('version')->fetchGroup('story', 'reviewer');
         foreach($storyIdList as $storyID)
         {
+            if(!$storyID) continue;
             $oldStory = $oldStories[$storyID];
             $isSuperReviewer = strpos(',' . trim(zget($this->config->story, 'superReviewers', ''), ',') . ',', ',' . $this->app->user->account . ',');
 
@@ -1715,17 +1716,20 @@ class storyModel extends model
             if($this->session->currentProductType != 'normal' and empty($story->branch) and $planID != 0) $story->plan = $oldStory->plan ? $oldStory->plan . ",$planID" : ",$planID";
 
             /* Change stage. */
-            if($planID and $oldStory->stage == 'wait') $story->stage = 'planned';
-            if($planID and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
+            if($planID)
             {
-                if(!isset($oldStoryStages[$storyID][$plan->branch]))
+                if($oldStory->stage == 'wait') $story->stage = 'planned';
+                if($this->session->currentProductType and $this->session->currentProductType != 'normal' and $oldStory->branch == 0)
                 {
-                    $story->stage = 'planned';
-                    $newStoryStage = new stdclass();
-                    $newStoryStage->story  = $storyID;
-                    $newStoryStage->branch = $plan->branch;
-                    $newStoryStage->stage  = $story->stage;
-                    $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                    if(!isset($oldStoryStages[$storyID][$plan->branch]))
+                    {
+                        $story->stage = 'planned';
+                        $newStoryStage = new stdclass();
+                        $newStoryStage->story  = $storyID;
+                        $newStoryStage->branch = $plan->branch;
+                        $newStoryStage->stage  = $story->stage;
+                        $this->dao->insert(TABLE_STORYSTAGE)->data($newStoryStage)->autoCheck()->exec();
+                    }
                 }
             }
 

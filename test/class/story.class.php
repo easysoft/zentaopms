@@ -241,11 +241,11 @@ class storyTest
      */
     public function computeEstimateTest($storyID)
     {
-        $objects = $this->objectModel->computeEstimate($storyID);
+        $this->objectModel->computeEstimate($storyID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getByID($storyID);
     }
 
     /**
@@ -266,148 +266,239 @@ class storyTest
         return $this->objectModel->getByList($storyIdList);
     }
 
-    public function reviewTest($storyID)
+    /**
+     * Test review story.
+     * 
+     * @param  int    $storyID 
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function reviewTest($storyID, $params)
     {
-        $objects = $this->objectModel->review($storyID);
+        $_POST = $params;
+        $changes = $this->objectModel->review($storyID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getByID($storyID);
     }
 
+    /**
+     * Test batch review.
+     * 
+     * @param  int    $storyIdList 
+     * @param  int    $result 
+     * @param  int    $reason 
+     * @access public
+     * @return void
+     */
     public function batchReviewTest($storyIdList, $result, $reason)
     {
-        $objects = $this->objectModel->batchReview($storyIdList, $result, $reason);
+        $actions = $this->objectModel->batchReview($storyIdList, $result, $reason);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($actions);
+        return $this->objectModel->getByList($storyIdList);
     }
 
-    public function recallTest($storyID)
+    /**
+     * Test story subdivide.
+     * 
+     * @param  int    $storyID 
+     * @param  array  $stories 
+     * @access public
+     * @return void
+     */
+    public function subdivideTest($storyID, $stories, $type)
     {
-        $objects = $this->objectModel->recall($storyID);
+        $this->objectModel->subdivide($storyID, $stories);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        if($type == 'requirement')
+        {
+            return $tester->dao->select('*')->from(TABLE_RELATION)->where('AID')->eq($storyID)->andWhere('AType')->eq($type)->fetchAll();
+        }
+        else
+        {
+            return $this->objectModel->getById($storyID);
+        }
     }
 
-    public function subdivideTest($storyID, $stories)
+    /**
+     * Test close a story.
+     * 
+     * @param  int    $storyID 
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function closeTest($storyID, $params)
     {
-        $objects = $this->objectModel->subdivide($storyID, $stories);
+        $_POST   = $params;
+        $changes = $this->objectModel->close($storyID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $changes;
     }
 
-    public function closeTest($storyID)
+    /**
+     * Test batch close story.
+     * 
+     * @param  array $params 
+     * @access public
+     * @return void
+     */
+    public function batchCloseTest($params)
     {
-        $objects = $this->objectModel->close($storyID);
+        $_POST   = $params;
+        $changes = $this->objectModel->batchClose();
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($changes);
+        return $this->objectModel->getByList($storyIdList);
     }
 
-    public function batchCloseTest()
-    {
-        $objects = $this->objectModel->batchClose();
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
+    /**
+     * Test batch change story module.
+     * 
+     * @param  int    $storyIdList 
+     * @param  int    $moduleID 
+     * @access public
+     * @return void
+     */
     public function batchChangeModuleTest($storyIdList, $moduleID)
     {
-        $objects = $this->objectModel->batchChangeModule($storyIdList, $moduleID);
+        $changes = $this->objectModel->batchChangeModule($storyIdList, $moduleID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($changes);
+        return $this->objectModel->getByList($storyIdList);
     }
 
+    /**
+     * Test batch change story plan.
+     * 
+     * @param  arary  $storyIdList 
+     * @param  int    $planID 
+     * @param  int    $oldPlanID 
+     * @access public
+     * @return void
+     */
     public function batchChangePlanTest($storyIdList, $planID, $oldPlanID = 0)
     {
-        $objects = $this->objectModel->batchChangePlan($storyIdList, $planID, $oldPlanID = 0);
+        $changes = $this->objectModel->batchChangePlan($storyIdList, $planID, $oldPlanID);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($changes);
+        return $this->objectModel->getByList($storyIdList);
     }
 
+    /**
+     * Test batch change story branch.
+     * 
+     * @param  arary  $storyIdList 
+     * @param  int    $branchID 
+     * @param  string $confirm 
+     * @param  array  $plans 
+     * @access public
+     * @return void
+     */
     public function batchChangeBranchTest($storyIdList, $branchID, $confirm = '', $plans = array())
     {
-        $objects = $this->objectModel->batchChangeBranch($storyIdList, $branchID, $confirm = '', $plans = array());
+        $changes = $this->objectModel->batchChangeBranch($storyIdList, $branchID, $confirm, $plans);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($changes);
+        return $this->objectModel->getByList($storyIdList);
     }
 
+    /**
+     * Test batch change stage.
+     * 
+     * @param  arrau  $storyIdList 
+     * @param  string $stage 
+     * @access public
+     * @return void
+     */
     public function batchChangeStageTest($storyIdList, $stage)
     {
-        $objects = $this->objectModel->batchChangeStage($storyIdList, $stage);
+        $changes = $this->objectModel->batchChangeStage($storyIdList, $stage);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        $storyIdList = array_keys($changes);
+        return $this->objectModel->getByList($storyIdList);
     }
 
-    public function batchToTaskTest($executionID, $projectID = 0)
+    /**
+     * Test story batch to task.
+     * 
+     * @param  int    $executionID 
+     * @param  int    $projectID 
+     * @param  array  $params
+     * @access public
+     * @return void
+     */
+    public function batchToTaskTest($executionID, $projectID = 0, $params)
     {
-        $objects = $this->objectModel->batchToTask($executionID, $projectID = 0);
+        $_POST      = $params;
+        $taskIdList = $this->objectModel->batchToTask($executionID, $projectID);
+        unset($params);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        global $tester;
+        return $tester->loadModel('task')->getByList($taskIdList);
     }
 
-    public function assignTest($storyID)
+    /**
+     * Test assign a story.
+     * 
+     * @param  int    $storyID 
+     * @param  string $assignedTo
+     * @access public
+     * @return void
+     */
+    public function assignTest($storyID, $assignedTo)
     {
-        $objects = $this->objectModel->assign($storyID);
+        $_POST['assignedTo'] = $assignedTo;
+        $this->objectModel->assign($storyID);
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
+        return $this->objectModel->getById($storyID);
     }
 
-    public function batchAssignToTest()
+    /**
+     * Test batch assign story.
+     * 
+     * @param  array  $params 
+     * @access public
+     * @return void
+     */
+    public function batchAssignToTest($params)
     {
-        $objects = $this->objectModel->batchAssignTo();
+        $_POST   = $params;
+        $changes = $this->objectModel->batchAssignTo();
+        unset($_POST);
 
         if(dao::isError()) return dao::getError();
 
-        return $objects;
-    }
-
-    public function activateTest($storyID)
-    {
-        $objects = $this->objectModel->activate($storyID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function setStageTest($storyID)
-    {
-        $objects = $this->objectModel->setStage($storyID);
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
-    }
-
-    public function getStories2LinkTest($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story')
-    {
-        $objects = $this->objectModel->getStories2Link($storyID, $type = 'linkStories', $browseType = 'bySearch', $queryID = 0, $storyType = 'story');
-
-        if(dao::isError()) return dao::getError();
-
-        return $objects;
+        $storyIdList = array_keys($changes);
+        return $this->objectModel->getByList($storyIdList);
     }
 
     public function getProductStoriesTest($productID = 0, $branch = 0, $moduleIdList = 0, $status = 'all', $type = 'story', $orderBy = 'id_desc', $hasParent = true, $excludeStories = '', $pager = null)
