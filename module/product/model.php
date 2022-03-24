@@ -596,30 +596,7 @@ class productModel extends model
             ->remove('uid,newLine,lineName,contactListMenu')
             ->get();
 
-        if(!empty($_POST['lineName']))
-        {
-            /* Insert product line. */
-            $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
-            $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
-
-            $line = new stdClass();
-            $line->type   = 'line';
-            $line->parent = 0;
-            $line->grade  = 1;
-            $line->name   = $this->post->lineName;
-            $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
-            $line->order  = $maxOrder;
-            $this->dao->insert(TABLE_MODULE)->data($line)->exec();
-
-            $lineID = $this->dao->lastInsertID();
-            $path   = ",$lineID,";
-            $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
-
-            if(dao::isError()) return false;
-            $product->line = $lineID;
-        }
-
-        $product        = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
+        $product   = $this->loadModel('file')->processImgURL($product, $this->config->product->editor->create['id'], $this->post->uid);
         $programID = isset($product->program) ? $product->program : '';
         $this->dao->insert(TABLE_PRODUCT)->data($product)->autoCheck()
             ->batchCheck($this->config->product->create->requiredFields, 'notempty')
@@ -630,6 +607,33 @@ class productModel extends model
         if(!dao::isError())
         {
             $productID = $this->dao->lastInsertID();
+
+            if(!empty($_POST['lineName']))
+            {
+                /* Create product line. */
+                $maxOrder = $this->dao->select("max(`order`) as maxOrder")->from(TABLE_MODULE)->where('type')->eq('line')->fetch('maxOrder');
+                $maxOrder = $maxOrder ? $maxOrder + 10 : 0;
+
+                $line = new stdClass();
+                $line->type   = 'line';
+                $line->parent = 0;
+                $line->grade  = 1;
+                $line->name   = $this->post->lineName;
+                $line->root   = $this->config->systemMode == 'new' ? $product->program : 0;
+                $line->order  = $maxOrder;
+                $this->dao->insert(TABLE_MODULE)->data($line)->exec();
+
+                if(!dao::isError())
+                {
+                    $lineID = $this->dao->lastInsertID();
+                    $path   = ",$lineID,";
+
+                    $this->dao->update(TABLE_MODULE)->set('path')->eq($path)->where('id')->eq($lineID)->exec();
+
+                    $this->dao->update(TABLE_PRODUCT)->set('line')->eq($laneID)->where('id')->eq($productID)->exec();
+                }
+            }
+
             $this->file->updateObjectID($this->post->uid, $productID, 'product');
             $this->dao->update(TABLE_PRODUCT)->set('`order`')->eq($productID * 5)->where('id')->eq($productID)->exec();
 
