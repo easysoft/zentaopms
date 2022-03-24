@@ -574,10 +574,11 @@ class project extends control
         $linkedBranches   = array();
         $linkedBranchList = array();
         $productPlans     = array(0 => '');
-        $allProducts      = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts   = $this->loadModel('product')->getProducts($projectID);
-        $parentProject    = $this->program->getByID($project->parent);
         $branches         = $this->project->getBranchesByProject($projectID);
+        $projectProducts  = empty($branches) ? '' : array_keys($branches);
+        $allProducts      = $this->program->getProductPairs($project->parent, 'assign', 'noclosed', $projectProducts);
+        $linkedProducts   = $this->loadModel('product')->getProducts($projectID, 'all', '', true, $projectProducts);
+        $parentProject    = $this->program->getByID($project->parent);
         $plans            = $this->productplan->getGroupByProduct(array_keys($linkedProducts), 'skipParent|unexpired');
         $projectStories   = $this->project->getStoriesByProject($projectID);
         $projectBranches  = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
@@ -1806,9 +1807,10 @@ class project extends control
         }
 
         $linkedBranches  = array();
-        $allProducts     = $this->program->getProductPairs($project->parent, 'assign', 'noclosed');
-        $linkedProducts  = $this->product->getProducts($projectID);
         $branches        = $this->project->getBranchesByProject($projectID);
+        $projectProducts = empty($branches) ? '' : array_keys($branches);
+        $allProducts     = $this->program->getProductPairs($project->parent, 'assign', 'noclosed', $projectProducts);
+        $linkedProducts  = $this->product->getProducts($projectID, 'all', '', true, $projectProducts);
         $projectStories  = $this->project->getStoriesByProject($projectID);
         $projectBranches = $this->project->getBranchGroupByProject($projectID, array_keys($linkedProducts));
 
