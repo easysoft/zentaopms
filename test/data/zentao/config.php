@@ -18,6 +18,7 @@ $builder->sprint        = array('rows' => 600, 'extends' => array('project', 'ex
 
 $builder->story        = array('rows' => 400, 'extends' => array('story'));
 $builder->childstory   = array('rows' => 50, 'extends' => array('story','childstory'));
+$builder->storyreview  = array('rows' => 100, 'extends' => array('storyreview'));
 $builder->storymodule  = array('rows' => 800, 'extends' => array('module','storymodule'));
 $builder->storyplan    = array('rows' => 400, 'extends' => array('planstory'));
 $builder->storyspec    = array('rows' => 80, 'extends' => array('storyspec'));
