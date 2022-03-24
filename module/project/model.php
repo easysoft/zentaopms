@@ -847,6 +847,16 @@ class projectModel extends model
             }
         }
 
+        /*Judge workdays is legitimate. */
+        $date1    = date_create($project->begin);
+        $date2    = date_create($project->end);
+        $workdays = date_diff($date1, $date2);
+        if($project->days > $workdays->days)
+        {
+            dao::$errors['days'] = sprintf($this->lang->project->workdaysExceed, $workdays->days);
+            return false;
+        }
+
         /* When select create new product, product name cannot be empty and duplicate. */
         if(isset($_POST['newProduct']))
         {

@@ -57,6 +57,7 @@ $lang->project->unlinkMember       = '移除成员';
 $lang->project->copyTeamTitle      = '选择一个项目团队来复制';
 $lang->project->daysGreaterProject = '可用工日不能大于项目的可用工日『%s』';
 $lang->project->errorHours         = '可用工时/天不能大于『24』';
+$lang->project->workdaysExceed     = '可用工作日不超过『%s』天';
 
 /* Fields. */
 $lang->project->common             = '项目';
