@@ -933,13 +933,11 @@ class storyModel extends model
                     ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                     ->where('t1.story')->eq($storyID)
                     ->andWhere('t2.deleted')->eq(0)
+                    ->andWhere('t2.type')->in('sprint,stage,kanban')
                     ->fetchPairs();
 
                 $this->loadModel('kanban');
-                foreach($executionIdList as $executionID)
-                {
-                    $this->kanban->updateLane($executionID, 'story', $storyID);
-                }
+                foreach($executionIdList as $executionID) $this->kanban->updateLane($executionID, 'story', $storyID);
             }
 
             unset($oldStory->parent);
