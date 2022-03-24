@@ -5,12 +5,9 @@
 #navTabs {position: sticky; top: 0; background: #fff; z-index: 950;}
 #navTabs>li {padding: 0px 10px; display: inline-block}
 #navTabs>li>span {display: inline-block;}
-#navTabs>li>a {padding: 8px 0px; display: inline-block}
-#navTabs>li.active>a {font-weight: 700; color: #0c64eb;}
-#navTabs>li.active>a:before {position: absolute; right: 0; bottom: -1px; left: 0; display: block; height: 2px; content: ' '; background: #0c64eb;}
-#navTabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {border: none;}
+#navTabs>li>a {margin: 0!important; padding: 8px 0px; display: inline-block}
 
-#tabContent {margin-top: 10px; z-index: 900;}
+#tabContent {margin-top: 5px; z-index: 900; max-width: 220px}
 .projectTree ul {list-style: none; margin: 0}
 .projectTree .projects>ul {padding-left: 7px;}
 .projectTree .projects>ul>li>div {display: flex; flex-flow: row nowrap; justify-content: flex-start; align-items: center;}
@@ -19,14 +16,11 @@
 .projectTree li a i.icon:before {min-width: 16px !important;}
 .projectTree li .label {position: unset; margin-bottom: 0;}
 .projectTree li>a, div.hide-in-search>a {display: block; padding: 2px 10px 2px 5px; overflow: hidden; line-height: 20px; text-overflow: ellipsis; white-space: nowrap; border-radius: 4px;}
-.projectTree li>a.selected {color: #e9f2fb; background-color: #0c64eb;}
 .projectTree .tree li>.list-toggle {line-height: 24px;}
 .projectTree .tree li.has-list.open:before {content: unset;}
 
 #swapper li>div.hide-in-search>a:focus, #swapper li>div.hide-in-search>a:hover {color: #838a9d; cursor: default;}
-a.projectName:focus, a.projectName:hover {background: #0c64eb; color: #fff !important;}
-
-#swapper li > a {padding-top: 4px; padding-bottom: 4px;}
+#swapper li > a {margin-top: 4px; margin-bottom: 4px;}
 #swapper li {padding-top: 0; padding-bottom: 0;}
 #swapper .tree li>.list-toggle {top: -1px;}
 </style>
@@ -81,7 +75,7 @@ foreach($projects as $programID => $programProjects)
 
         if($project->status != 'done' and $project->status != 'closed' and $project->PM == $this->app->user->account)
         {
-            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected projectName' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $myProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected clickable' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'myProject';
 
@@ -89,7 +83,7 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status != 'done' and $project->status != 'closed' and !($project->PM == $this->app->user->account))
         {
-            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected projectName' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $normalProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected clickable' title='{$project->name}' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'other';
 
@@ -97,7 +91,7 @@ foreach($projects as $programID => $programProjects)
         }
         else if($project->status == 'done' or $project->status == 'closed')
         {
-            $closedProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected projectName' title='$project->name' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
+            $closedProjectsHtml .= '<li>' . html::a(sprintf($link, $project->id), $projectName, '', "class='$selected clickable' title='$project->name' data-key='" . zget($projectsPinYin, $project->name, '') . "'") . '</li>';
 
             if($selected == 'selected') $tabActive = 'closed';
         }
@@ -121,7 +115,7 @@ $closedProjectsHtml .= '</ul>';
     <div class='list-group'>
       <?php $tabActive = ($myProjects and ($tabActive == 'closed' or $tabActive == 'myProject')) ? 'myProject' : 'other';?>
       <?php if($myProjects): ?>
-      <ul class="nav nav-tabs" id="navTabs">
+      <ul class="nav nav-tabs  nav-tabs-primary" id="navTabs">
         <li class="<?php if($tabActive == 'myProject') echo 'active';?>"><?php echo html::a('#myProject', $lang->project->myProject, '', "data-toggle='tab' class='not-list-item not-clear-menu'");?><span class="label label-light label-badge"><?php echo $myProjects;?></span><li>
         <li class="<?php if($tabActive == 'other') echo 'active';?>"><?php echo html::a('#other', $lang->project->other, '', "data-toggle='tab' class='not-list-item not-clear-menu'")?><span class="label label-light label-badge"><?php echo $others;?></span><li>
       </ul>
