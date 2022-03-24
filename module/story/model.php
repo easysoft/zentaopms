@@ -927,6 +927,21 @@ class storyModel extends model
                 if(empty($oldStory->plan) or empty($story->plan)) $this->setStage($storyID); // Set new stage for this story.
             }
 
+            if($oldStory->stage != $story->stage)
+            {
+                $executionIdList = $this->dao->select('t1.project')->from(TABLE_PROJECTSTORY)->alias('t1')
+                    ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+                    ->where('t1.story')->eq($storyID)
+                    ->andWhere('t2.deleted')->eq(0)
+                    ->fetchPairs();
+
+                $this->loadModel('kanban');
+                foreach($executionIdList as $executionID)
+                {
+                    $this->kanban->updateLane($executionID, 'story', $storyID);
+                }
+            }
+
             unset($oldStory->parent);
             unset($story->parent);
             return common::createChanges($oldStory, $story);
