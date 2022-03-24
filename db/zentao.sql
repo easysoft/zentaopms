@@ -7176,10 +7176,11 @@ CREATE TABLE IF NOT EXISTS `zt_vm` (
   `osType` varchar(50) NOT NULL DEFAULT '',
   `osArch` varchar(50) NOT NULL DEFAULT '',
   `osLang` varchar(50) NOT NULL DEFAULT '',
+  `osCpu` tinyint(2) NOT NULL DEFAULT 0,
+  `osMemory` smallint(6) NOT NULL DEFAULT 0,
+  `osDisk` smallint(6) NOT NULL DEFAULT 0,
   `status` varchar(50) NOT NULL DEFAULT '',
   `destroyAt` datetime NULL,
-  `ip` varchar(200) NOT NULL DEFAULT '',
-  `agentPort` varchar(255) NOT NULL DEFAULT '',
   `macAddress` varchar(255) NOT NULL DEFAULT '',
   `workspace` varchar(255) NOT NULL DEFAULT '',
   `templateID` int(10) unsigned NOT NULL DEFAULT 0,
@@ -7187,7 +7188,7 @@ CREATE TABLE IF NOT EXISTS `zt_vm` (
   `baseImagePath` varchar(255) NOT NULL DEFAULT '',
   `desc` varchar(255) NOT NULL DEFAULT '',
   `heatbeat` datetime NULL,
-  `vnc` varchar(255) NOT NULL DEFAULT '',
+  `vncPort` int(10) NOT NULL DEFAULT 0,
   `instance` varchar(255) NOT NULL DEFAULT '',
   `eip` varchar(255) NOT NULL DEFAULT '',
   `createdBy` varchar(30) NOT NULL,
@@ -7216,11 +7217,17 @@ CREATE TABLE IF NOT EXISTS `zt_baseimage` (
 -- DROP TABLE IF EXISTS `zt_vmtemplate`;
 CREATE TABLE IF NOT EXISTS `zt_vmtemplate` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(255) NOT NULL,
   `hostID` int(10) unsigned NOT NULL DEFAULT 0,
   `templateName` varchar(255) NOT NULL DEFAULT '',
   `osType` varchar(50) NOT NULL DEFAULT '',
   `osCategory` varchar(50) NOT NULL DEFAULT '',
-  `status` varchar(50) NOT NULL DEFAULT '',
+  `osVersion` varchar(50) NOT NULL DEFAULT '',
+  `osLang` varchar(50) NOT NULL,
+  `cpuCoreNum` smallint(4) NOT NULL DEFAULT 0,
+  `memorySize` int NOT NULL DEFAULT 0,
+  `diskSize` int NOT NULL DEFAULT 0,
+  `osArch` varchar(50) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- DROP TABLE IF EXISTS `zt_browser`;

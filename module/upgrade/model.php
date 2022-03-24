@@ -890,6 +890,8 @@ class upgradeModel extends model
                 }
 
                 $confirmContent .= file_get_contents($this->getUpgradeFile('16.4'));
+
+            case '16_5_beta1': $confirmContent .= file_get_contents($this->getUpgradeFile('16.5.beta1'));
         }
 
         return $confirmContent;
