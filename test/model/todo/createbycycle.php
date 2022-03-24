@@ -10,11 +10,15 @@ title=测试 todoModel->createByCycle();
 cid=1
 pid=1
 
+测试创建周期日待办 >> 11
+测试创建周期周待办 >> 9
+测试创建周期月待办 >> 30
+
 */
 
 $todo1 = new stdclass();
 $todo1->name               = 'cycle生成的待办1';
-$todo1->config             = '{"specify":{"month":"0","day":"1"},"days":"1","type":"day","beforeDays":11,"end":"","begin":"2022-03-23"}';
+$todo1->config             = '{"specify":{"month":"0","day":"1"},"day":"1","type":"day","beforeDays":11,"end":"","begin":"2022-03-23"}';
 
 $todo2 = new stdclass();
 $todo2->name               = 'cycle生成的待办2';
@@ -26,4 +30,6 @@ $todo3->config             = '{"specify":{"month":"0","day":"1"},"month":"1,8,13
 
 $todo = new todoTest();
 
-r($todo->createByCycleTest($todo1)) && p() && e('');
+r($todo->createByCycleTest($todo1)) && p() && e('11'); // 测试创建周期日待办
+r($todo->createByCycleTest($todo2)) && p() && e('9');  // 测试创建周期周待办
+r($todo->createByCycleTest($todo3)) && p() && e('30'); // 测试创建周期月待办
