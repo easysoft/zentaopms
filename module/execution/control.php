@@ -1980,7 +1980,11 @@ class execution extends control
         $type = $this->config->vision == 'lite' ? 'kanban' : 'stage,sprint,kanban';
         if(empty($execution) || strpos($type, $execution->type) === false) return print(js::error($this->lang->notFound) . js::locate('back'));
 
-        if($execution->type == 'kanban') return $this->locate(inlink('kanban', "executionID=$executionID"));
+        if($execution->type == 'kanban')
+        {
+            if(defined('RUN_MODE') && RUN_MODE == 'api') return print($this->fetch('execution', 'kanban', "executionID=$executionID"));
+            return $this->locate(inlink('kanban', "executionID=$executionID"));
+        }
 
         $this->app->loadLang('program');
 
