@@ -5,6 +5,7 @@ class todoTest
     {
          global $tester;
          $this->objectModel = $tester->loadModel('todo');
+         $tester->app->loadClass('dao');
     }
 
     /**
@@ -276,10 +277,13 @@ class todoTest
 
         $todo->config = str_replace('2022-03-23', date('Y-m-d', time()), $todo->config);
 
-        $this->objectModel->createByCycle(array('1' => $todo));
-
         global $tester;
-        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('idvalue')->eq('100001')->andWhere('name')->eq($todo->name)->andWhere('config')->eq($todo->config)->andWhere('deleted')->eq('0')->fetchAll();
+        $tester->dao->insert(TABLE_TODO)->data($todo)->autoCheck()->exec();
+        $todoID = $tester->dao->lastInsertID();
+
+        $this->objectModel->createByCycle(array($todoID => $todo));
+
+        $objects = $tester->dao->select('id')->from(TABLE_TODO)->where('idvalue')->eq($todoID)->andWhere('deleted')->eq('0')->fetchAll();
 
         if(dao::isError()) return dao::getError();
 

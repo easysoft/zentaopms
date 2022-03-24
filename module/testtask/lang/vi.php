@@ -173,14 +173,6 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = 'Test Kết quả tìn
 $lang->testtask->report->charts['testTaskPerType']      = 'Test Loại tình huống';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Test Case Module';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'Test Case RunBy';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Phân chia mức độ Bug';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Phân chia tình trạng Bug';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Phân chia người báo cáo Bug';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Phân chia người giải quyết Bug';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Phân chia giải pháp Bug';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Phân chia Module Bug';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug Priority Distribution';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Distribution of daily bug processing';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();

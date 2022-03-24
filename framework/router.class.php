@@ -375,6 +375,7 @@ class router extends baseRouter
         $view = json_decode($view);
         $view->rand = $this->session->random;
         $this->session->set('rand', $this->session->random);
+
         echo json_encode($view);
     }
 

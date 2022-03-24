@@ -157,6 +157,7 @@ class Processor
     private function initStory()
     {
         $this->dao->update(TABLE_STORY)->set('`status`')->eq('active')->where('id')->le('20')->exec();
+        $this->dao->update(TABLE_STORY)->set('`status`')->eq('draft')->where('id')->ge('300')->andwhere('id')->le('400')->exec();
     }
 
     /**
@@ -319,9 +320,9 @@ class Processor
         $toDay  = date('y-m-d');
         $addDay = date('Y-m-d',strtotime("+1 day"));
 
-        $str  = '{"day":"1","specify":{"month":"0","day":"1"},"type":"day","beforeDays":1,"end":"","begin":"'.$toDay.'"}';
-        $str2 = '{"specify":{"month":"0","day":"1"},"week":"3","type":"week","beforeDays":1,"end":"","begin":"'.$toDay.'"}';
-        $str3 = '{"specify":{"month":"0","day":"1"},"month":"17","type":"month","beforeDays":0,"end":"","begin":"'.$toDay.'"}';
+        $str  = '{"day":"1","specify":{"month":"0","day":"1"},"type":"day","beforeDays":11,"end":"","begin":"'.$toDay.'"}';
+        $str2 = '{"specify":{"month":"0","day":"1"},"week":"1,3","type":"week","beforeDays":31,"end":"","begin":"'.$toDay.'"}';
+        $str3 = '{"specify":{"month":"0","day":"1"},"month":"5,17,29","type":"month","beforeDays":301,"end":"","begin":"'.$toDay.'"}';
 
         $this->dao->update(TABLE_TODO)->SET('config')->eq($str)->where('id')->eq('2001')->exec();
         $this->dao->update(TABLE_TODO)->SET('date')->eq($addDay)->where('id')->eq('2002')->exec();

@@ -173,14 +173,6 @@ $lang->testtask->report->charts['testTaskPerRunResult'] = 'Ergebnisbericht';
 $lang->testtask->report->charts['testTaskPerType']      = 'Berichttyp';
 $lang->testtask->report->charts['testTaskPerModule']    = 'Modulbericht';
 $lang->testtask->report->charts['testTaskPerRunner']    = 'Ausgeführt von Bericht';
-$lang->testtask->report->charts['bugSeverityGroups']    = 'Dringlichkeitsbericht';
-$lang->testtask->report->charts['bugStatusGroups']      = 'Status Bericht';
-$lang->testtask->report->charts['bugOpenedByGroups']    = 'Bugersteller Bericht';
-$lang->testtask->report->charts['bugResolvedByGroups']  = 'Gelöst von Bericht';
-$lang->testtask->report->charts['bugResolutionGroups']  = 'Lösungsbersicht';
-$lang->testtask->report->charts['bugModuleGroups']      = 'Bug Modul Bericht';
-$lang->testtask->report->charts['bugStageGroups']       = 'Bug Priority Distribution';
-$lang->testtask->report->charts['bugHandleGroups']      = 'Distribution of daily bug processing';
 
 $lang->testtask->report->options = new stdclass();
 $lang->testtask->report->options->graph  = new stdclass();
