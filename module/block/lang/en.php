@@ -568,3 +568,6 @@ $lang->block->zentaoapp->createDoc            = 'Doc Create';
 $lang->block->zentaoapp->createTodo           = 'Todo Create';
 $lang->block->zentaoapp->workbench            = 'Workbench';
 $lang->block->zentaoapp->notSupportKanban     = 'The mobile terminal does not support the R&D Kanban mode';
+$lang->block->zentaoapp->notSupportVersion    = 'This version of ZenTao is not currently supported on the mobile terminal';
+$lang->block->zentaoapp->incompatibleVersion  = 'The current version of ZenTao is lower, please upgrade to the latest version and try again';
+$lang->block->zentaoapp->canNotGetVersion     = 'Failed to get ZenTao version, please confirm if the URL is correct';
