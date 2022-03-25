@@ -81,7 +81,7 @@ class programModel extends model
         }
 
         /* When mode equals assign and programID equals 0, you can query the standalone product. */
-        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $products = $this->dao->select('*')->from(TABLE_PRODUCT)
