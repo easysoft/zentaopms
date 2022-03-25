@@ -119,7 +119,9 @@
               <div class='col-sm-4 <?php if($programID) echo 'required';?>' style="padding-right: 6px;">
                 <div class='input-group'>
                   <?php echo html::select("products[$i]", $allProducts, '', "class='form-control chosen' onchange='loadBranches(this)'");?>
+                  <?php if(common::hasPriv('product', 'create')):?>
                   <span class='input-group-addon'><?php echo html::checkBox('newProduct', $lang->project->addProduct, '', "onchange=addNewProduct(this);");?></span>
+                  <?php endif;?>
                 </div>
               </div>
             </div>
