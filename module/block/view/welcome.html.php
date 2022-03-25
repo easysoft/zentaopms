@@ -34,7 +34,7 @@
     <div class="col col-left hide-in-sm">
       <h4><?php printf($lang->block->welcomeList[$welcomeType], $app->user->realname)?></h4>
       <div class='progress-group'>
-        <span class="progress-num"><strong><?php echo $lang->block->assignToMe . ' ' . $lang->block->done . $progress . '%';?></strong></span>
+        <span class="progress-num"><strong><?php echo $lang->block->assignToMe . ' ' . $lang->block->done . " $progress" . '%';?></strong></span>
         <div class="progress">
           <div class="progress-bar" role="progressbar" aria-valuenow="82" aria-valuemin="0" aria-valuemax="100" style="width: <?php echo $progress;?>%">
           </div>
