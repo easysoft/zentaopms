@@ -19,6 +19,7 @@
 <?php js::set('weekend', $config->execution->weekend);?>
 <?php js::set('errorSameProducts', $lang->project->errorSameProducts);?>
 <?php js::set('errorSameBranches', $lang->project->errorSameBranches);?>
+<?php js::set('errorSamePlans', $lang->project->errorSamePlans);?>
 <?php js::set('longTime', $lang->project->longTime);?>
 <?php js::set('multiBranchProducts', $multiBranchProducts);?>
 <?php js::set('selectedProductID', $productID);?>
