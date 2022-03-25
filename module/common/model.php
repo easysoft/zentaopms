@@ -3056,8 +3056,13 @@ EOD;
         if(empty($markdown)) return false;
 
         global $app;
-        $app->loadClass('htmlup');
-        return new htmlup($markdown);
+        $app->loadClass('parsedownextraplugin');
+
+        $Parsedown = new parsedownextraplugin;
+
+        $Parsedown->voidElementSuffix = '>'; // HTML5
+
+        return $Parsedown->text($markdown);
     }
 }
 

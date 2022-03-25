@@ -23,6 +23,7 @@ class todo extends control
         $this->app->loadClass('date');
         $this->loadModel('task');
         $this->loadModel('bug');
+        $this->app->loadLang('my');
     }
 
     /**
