@@ -248,7 +248,9 @@ class executionModel extends model
             $executionID = (int)$this->cookie->lastExecution;
             $executionID = in_array($executionID, array_keys($executions)) ? $executionID : key($executions);
         }
-        if($executionID == 0 and $this->session->execution == '') $executionID = key($executions);
+
+        if($executionID == 0 and isset($this->session->execution)) $executionID = $this->session->execution;
+        if($executionID == 0) $executionID = key($executions);
         $this->session->set('execution', (int)$executionID, $this->app->tab);
 
         if(!isset($executions[$executionID]))
