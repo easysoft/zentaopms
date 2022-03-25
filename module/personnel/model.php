@@ -38,12 +38,12 @@ class personnelModel extends model
         }
 
         /* Determine who can be accessed based on access control. */
-        $program = $this->loadModel('program')->getByID($programID);
+        $program       = $this->loadModel('program')->getByID($programID);
         $personnelList = array();
         $personnelList = $this->dao->select('t2.id,t2.dept,t2.account,t2.role,t2.realname,t2.gender')->from(TABLE_USERVIEW)->alias('t1')
             ->leftJoin(TABLE_USER)->alias('t2')->on('t1.account=t2.account')
             ->where('t2.deleted')->eq(0)
-            ->beginIF($program->acl != 'open')->andWhere("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")
+            ->beginIF($program->acl != 'open')->andWhere("CONCAT(',', t1.programs, ',')")->like("%,$programID,%")->fi()
             ->beginIF($deptID > 0)->andWhere('t2.dept')->eq($deptID)->fi()
             ->beginIF($browseType == 'bysearch')->andWhere($accessibleQuery)->fi()
             ->fetchAll('id');

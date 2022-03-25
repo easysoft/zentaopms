@@ -309,3 +309,18 @@ function setBudgetTipsAndAclList(programID)
         $('.aclBox').html($('#PGMAcl').html());
     }
 }
+
+$(document).on('change', "#plansBox select[name^='plans']", function()
+{
+    var $plan = $(this);
+    $("#plansBox select[name^='plans']").each(function()
+    {
+        if($plan.val() != 0 && $plan.val() == $(this).val() && $plan.closest('div').attr('id') != $(this).closest('div').attr('id'))
+        {
+            bootbox.alert(errorSamePlans);
+            $plan.val(0);
+            $plan.trigger("chosen:updated");
+            return false;
+        }
+    });
+});

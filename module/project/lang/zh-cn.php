@@ -44,6 +44,7 @@ $lang->project->manageProducts     = '关联产品';
 $lang->project->copyTitle          = '请选择要复制的项目';
 $lang->project->errorSameProducts  = '项目不能关联多个相同的产品。';
 $lang->project->errorSameBranches  = '项目不能关联多个相同的分支。';
+$lang->project->errorSamePlans     = '项目不能关联多个相同的计划。';
 $lang->project->errorNoProducts    = '最少关联一个产品';
 $lang->project->copyNoProject      = '没有可用的项目来复制';
 $lang->project->searchByName       = '输入项目名称进行检索';

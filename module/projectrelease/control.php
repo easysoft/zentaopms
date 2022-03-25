@@ -119,7 +119,7 @@ class projectrelease extends control
         $this->commonAction($projectID);
 
         /* Get the builds that can select. */
-        $builds         = $this->build->getBuildPairs(array_keys($this->products), 0, 'notrunk,withbranch', $projectID, 'project');
+        $builds         = $this->build->getBuildPairs(array_keys($this->products), 'all', 'notrunk,withbranch', $projectID, 'project');
         $releasedBuilds = $this->projectrelease->getReleasedBuilds($projectID);
         foreach($releasedBuilds as $build) unset($builds[$build]);
         unset($builds['trunk']);

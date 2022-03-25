@@ -44,6 +44,7 @@ $lang->project->manageProducts     = 'Manage Products';
 $lang->project->copyTitle          = 'Please select an project to copy';
 $lang->project->errorSameProducts  = 'Project cannot be associated with multiple identical products.';
 $lang->project->errorSameBranches  = 'Project cannot be associated with multiple identical branches.';
+$lang->project->errorSamePlans     = 'Project cannot be associated with multiple identical plans.';
 $lang->project->errorNoProducts    = 'At least one product is associated';
 $lang->project->copyNoProject      = 'There are no items available to copy.';
 $lang->project->searchByName       = 'Enter the project name to retrieve';
