@@ -124,6 +124,7 @@ $lang->story->closedDate     = '关闭日期';
 $lang->story->closedReason   = '关闭原因';
 $lang->story->rejectedReason = '拒绝原因';
 $lang->story->reviewedBy     = '由谁评审';
+$lang->story->reviewer       = $lang->story->reviewedBy;
 $lang->story->reviewers      = '评审人员';
 $lang->story->reviewedDate   = '评审时间';
 $lang->story->activatedDate  = '激活日期';
