@@ -282,7 +282,7 @@ class productModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProductPairs();
 
-        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views    = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $orderBy  = !empty($this->config->product->orderBy) ? $this->config->product->orderBy : 'isClosed';
@@ -358,7 +358,7 @@ class productModel extends model
             return $this->loadModel('tutorial')->getExecutionProducts();
         }
 
-        if(!empty($append) and is_array($append)) $append = implode($append, ',');
+        if(!empty($append) and is_array($append)) $append = implode(',', $append);
 
         $views           = empty($append) ? $this->app->user->view->products : $this->app->user->view->products . ",$append";
         $projectProducts = $this->dao->select('t1.branch, t1.plan, t2.*')
