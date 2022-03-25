@@ -7,7 +7,7 @@ $.initSidebar();
 <iframe frameborder='0' name='hiddenwin' id='hiddenwin' scrolling='no' class='debugwin hidden'></iframe>
 <?php if($onlybody != 'yes' and $app->viewType != 'xhtml'):?>
 </main><?php /* end '#wrap' in 'header.html.php'. */ ?>
-<div id="noticeBox"><?php echo $this->loadModel('score')->getNotice(); ?></div>
+<div id="noticeBox"><?php if($config->vision != 'lite') echo $this->loadModel('score')->getNotice(); ?></div>
 <script>
 <?php $this->app->loadConfig('message');?>
 <?php if($config->message->browser->turnon):?>
