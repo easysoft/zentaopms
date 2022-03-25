@@ -298,6 +298,7 @@ class productplan extends control
         $viewType = $this->cookie->viewType ? $this->cookie->viewType : 'list';
 
         $this->commonAction($productID, $branch);
+        $product          = $this->product->getById($productID);
         $productName      = empty($product) ? '' : $product->name;
         $branchList       = $this->branch->getList($productID, 0, 'all');
         $branchStatusList = array();
