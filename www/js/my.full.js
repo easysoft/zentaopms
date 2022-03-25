@@ -611,46 +611,31 @@ function revertModuleCookie()
 /**
  * Focus move up or down for input.
  *
- * @param type up|down
+ * @param direction up|down
  */
-function inputFocusJump(type){
-    var hasFocus = $('input').is(':focus');
-    if(hasFocus)
-    {
-        var title     = $("input:focus").attr('name').replace(/\[\d]/g, '');
-        var $input    = $(":input[name^=" + title + "]:text:not(:disabled):not([name*='%'])");
-        var num       = $input.length;
-        var index     = parseInt($("input:focus").attr('name').replace(/[^0-9]/g, ''));
-        var nextIndex = type == 'down' ? index + 1 : index - 1;
+function inputFocusJump(direction, type){
+    var $input = $('#mainContent table').find(type || 'input').filter(':focus').first();
+    if(!$input.length) return;
 
-        if(nextIndex < num && nextIndex >= 0)
-        {
-            $input[nextIndex].focus();
-        }
-    }
+    var $row         = $input.closest('tr');
+    var $nextRow     = $row[direction === 'up' ? 'prev' : 'next']('tr');
+    if(!$nextRow.length) $nextRow = $row.parent().children('tr')[direction === 'up' ? 'last' : 'first']();
+    if(!$nextRow.length) return;
+
+    var datetimepicker = $input.data('datetimepicker');
+    if(datetimepicker) datetimepicker.hide();
+
+    return $nextRow.find(':input[name^=' + ($input.attr('name').split('[')[0]) + ']:text:not(:disabled):not([name*="%"])').focus();
 }
 
 /**
  * Focus move up or down for select.
  *
- * @param type
+ * @param direction
  */
-function selectFocusJump(type)
+function selectFocusJump(direction)
 {
-    var hasFocus = $('select').is(':focus');
-    if(hasFocus)
-    {
-        var title     = $("select:focus").attr('name').replace(/\[\d]/g, '');
-        var $select   = $("select[name^=" + title + "]:not([name*='%'])");
-        var num       = $select.length;
-        var index     = parseInt($("select:focus").attr('name').replace(/[^0-9]/g, ''));
-        var nextIndex = type == 'down' ? index + 1 : index - 1;
-
-        if(nextIndex < num && nextIndex >= 0)
-        {
-            $select[nextIndex].focus();
-        }
-    }
+    return inputFocusJump(direction, 'select');
 }
 
 function adjustNoticePosition()
