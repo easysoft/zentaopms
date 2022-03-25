@@ -741,7 +741,55 @@ class productTest
     public function batchGetStoryStageTest($stories)
     {
         $objects = $this->objectModel->batchGetStoryStage($stories);
-        a($objects);
+
+        foreach($objects as $id => $object) $stages[$id] = $object[0]->stage;
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $stages;
+        }
+    }
+
+    /**
+     * Test get project stats by product.
+     *
+     * @param  int    $productID
+     * @param  string $browseType
+     * @access public
+     * @return array
+     */
+    public function getProjectStatsByProductTest($productID, $browseType = 'all')
+    {
+        $objects = $this->objectModel->getProjectStatsByProduct($productID, $browseType);
+
+        foreach($objects as $object) $projects[$object->id] = $object->name;
+
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return isset($projects) ? $projects : array();
+        }
+    }
+
+    /**
+     * Test get executions by product and project.
+     *
+     * @param  int    $productID
+     * @param  int    $projectID
+     * @access public
+     * @return array
+     */
+    public function getExecutionPairsByProductTest($productID, $projectID = 0)
+    {
+        $objects = $this->objectModel->getExecutionPairsByProduct($productID, 0, 'id_asc', $projectID);
 
         if(dao::isError())
         {
@@ -750,6 +798,236 @@ class productTest
         else
         {
             return $objects;
+        }
+    }
+
+    /**
+     * Test get all executions by product.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getAllExecutionPairsByProductTest($productID)
+    {
+        $objects = $this->objectModel->getAllExecutionPairsByProduct($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get roadmap of a proejct.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getRoadmapTest($productID)
+    {
+        $objects = $this->objectModel->getRoadmap($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test process roadmap.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function processRoadmapTest($productID)
+    {
+        global $tester;
+        $releases = $tester->loadModel('release')->getList($productID, '0');
+
+        $roadmapGroups = array('2022' => array($releases));
+
+        $objects = $this->objectModel->processRoadmap($roadmapGroups);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get team members of a product from projects.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getTeamMemberPairsTest($productID)
+    {
+        $product = $this->objectModel->getByID($productID);
+        $objects = $this->objectModel->getTeamMemberPairs($product);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product stat by id.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return array
+     */
+    public function getStatByIDTest($productID)
+    {
+        $objects = $this->objectModel->getStatByID($productID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test get product stats.
+     *
+     * @access public
+     * @return array
+     */
+    public function getStatsTest()
+    {
+        $objects = $this->objectModel->getStats();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test stats for product kanban.
+     *
+     * @param  string $type
+     * @param  bool   $getCount
+     * @access public
+     * @return array
+     */
+    public function getStats4KanbanTest($type, $getCount = false)
+    {
+        $objects = $this->objectModel->getStats4Kanban();
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $getCount ? count($objects[$type]) : $objects[$type];
+        }
+    }
+
+    /**
+     * Test get product line pairs.
+     *
+     * @param  int    $programID
+     * @access public
+     * @return array
+     */
+    public function getLinePairsTest($programID)
+    {
+        $objects = $this->objectModel->getLinePairs($programID);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects;
+        }
+    }
+
+    /**
+     * Test statistics program data.
+     *
+     * @param  object $productStats
+     * @param  int    $index
+     * @access public
+     * @return array
+     */
+    public function statisticProgramTest($productStats, $index)
+    {
+        $objects = $this->objectModel->statisticProgram($productStats);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $objects[$index][$index]['products'];
+        }
+    }
+
+    /**
+     * Test statistics product data.
+     *
+     * @param  object $product
+     * @access public
+     * @return array
+     */
+    public function statisticDataTest($product)
+    {
+        if($product->line)
+        {
+            /* Line name. */
+            $productStructure[$product->program][$product->line]['lineName'] = $product->lineName;
+            $data = $this->objectModel->statisticData('line', $productStructure, $product);
+        }
+
+        if($product->program)
+        {
+            /* Init vars. */
+            /* Program name. */
+            $productStructure[$product->program]['programName'] = $product->programName;
+            $data = $this->objectModel->statisticData('program', $productStructure, $product);
+        }
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $data;
         }
     }
 }
