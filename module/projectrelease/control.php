@@ -41,8 +41,6 @@ class projectrelease extends control
      */
     public function commonAction($projectID = 0, $productID = 0, $branch = 0)
     {
-        $this->lang->product->switcherMenu = $this->product->getSwitcher($productID);
-
         /* Get product and product list by project. */
         $this->products = $this->product->getProductPairsByProject($projectID);
         if(empty($this->products)) return print($this->locate($this->createLink('product', 'showErrorNone', 'moduleName=project&activeMenu=projectrelease&projectID=' . $projectID)));
