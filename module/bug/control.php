@@ -684,6 +684,7 @@ class bug extends control
         if(!empty($_POST))
         {
             $actions = $this->bug->batchCreate($productID, $branch, $extra);
+            if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             /* Return bug id list when call the API. */
             if($this->viewType == 'json')
