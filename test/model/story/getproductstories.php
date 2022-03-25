@@ -16,7 +16,6 @@ $tester->loadModel('story');
 $stories1 = $tester->story->getProductStories(1);
 $stories2 = $tester->story->getProductStories(1, 0, 0, 'all', 'requirement', 'id_asc', true);
 $stories3 = $tester->story->getProductStories(3, 0, 1830, 'all', 'story', 'id_asc', true);
-a($stories3);die;
 
 r(count($stories1)) && p()                 && e('2');             // 获取需求1可关联的需求数量
 r(count($stories2)) && p()                 && e('2');             // 获取需求2可关联的需求数量
