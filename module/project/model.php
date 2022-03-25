@@ -179,7 +179,11 @@ class projectModel extends model
     {
         if(defined('TUTORIAL')) return $this->loadModel('tutorial')->getProject();
 
-        $project = $this->dao->select('*')->from(TABLE_PROJECT)->where('id')->eq($projectID)->andWhere('`type`')->in($type)->fetch();
+        $project = $this->dao->select('*')->from(TABLE_PROJECT)
+            ->where('id')->eq($projectID)
+            ->beginIF($this->config->system == 'new')->andWhere('`type`')->in($type)->fi()
+            ->fetch();
+
         if(!$project) return false;
 
         if($project->end == '0000-00-00') $project->end = '';
