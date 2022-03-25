@@ -1,6 +1,5 @@
 $(function()
 {
-    $('#copyProjects a').click(function(){setCopyProject($(this).data('id')); $('#copyProjectModal').modal('hide')});
     $('#isCat').change(function()
     {
         if($(this).prop('checked'))
