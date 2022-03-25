@@ -2731,8 +2731,6 @@ class userModel extends model
     {
         $visionList = $this->lang->visionList;
 
-        if($this->config->systemMode != 'new') unset($visionList['lite']);
-
         foreach($visionList as $visionKey => $visionName)
         {
             if(strpos($this->config->visions, ",{$visionKey},") === false) unset($visionList[$visionKey]);
