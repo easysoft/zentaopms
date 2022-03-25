@@ -691,6 +691,8 @@ class executionModel extends model
                 ->limit(1)
                 ->exec();
 
+            if(dao::isError()) return false;
+
             if(!empty($execution->project) and $oldExecution->project != $execution->project)
             {
                 $execution->parent = $execution->project;

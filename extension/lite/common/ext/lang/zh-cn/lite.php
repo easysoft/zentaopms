@@ -139,9 +139,11 @@ $lang->doc->menuOrder[30] = 'custom';
 $lang->doc->menu->project['subMenu'] = new stdclass();
 $lang->doc->menu->custom['subMenu']  = new stdclass();
 
+$xuanxuanMenu = $lang->admin->menu->xuanxuan;
 /* Admin menu. */
 $lang->admin->menu            = new stdclass();
 $lang->admin->menu->index     = array('link' => "$lang->indexPage|admin|index", 'alias' => 'register,certifytemail,certifyztmobile,ztcompany');
+$lang->admin->menu->xuanxuan  = $xuanxuanMenu;
 $lang->admin->menu->company   = array('link' => "{$lang->personnel->common}|company|browse|", 'subModule' => ',user,dept,group,');
 $lang->admin->menu->custom    = array('link' => "{$lang->custom->common}|custom|index", 'exclude' => 'custom-browsestoryconcept,custom-timezone,custom-estimate');
 $lang->admin->menu->extension = array('link' => "{$lang->extension->common}|extension|browse", 'subModule' => 'extension');
@@ -149,9 +151,12 @@ $lang->admin->menu->dev       = array('link' => "$lang->redev|dev|api", 'alias' 
 $lang->admin->menu->message   = array('link' => "{$lang->message->common}|message|index", 'subModule' => 'message,mail,webhook,sms');
 $lang->admin->menu->system    = array('link' => "{$lang->admin->system}|backup|index", 'subModule' => 'cron,backup,action,admin,search,ldap', 'exclude' => 'admin-index,admin-xuanxuan,admin-register,admin-ztcompany');
 
+$lang->admin->menu->xuanxuan['link']  = '聊天|admin|xuanxuan';
+
 /* Admin menu order. */
 $lang->admin->menuOrder = array();
 $lang->admin->menuOrder[5]  = 'index';
+$lang->admin->menuOrder[6]  = 'xuanxuan';
 $lang->admin->menuOrder[10] = 'company';
 $lang->admin->menuOrder[15] = 'custom';
 $lang->admin->menuOrder[20] = 'message';

@@ -51,14 +51,14 @@ class story extends control
         parse_str($extra, $output);
 
         if($productID == 0 and $objectID == 0) $this->locate($this->createLink('product', 'create'));
-        
+
         /* Get product id according to the project id when lite vision todo transfer story */
-        if($this->config->vision == 'lite' and $productID == 0) 
+        if($this->config->vision == 'lite' and $productID == 0)
         {
             $product = $this->loadModel('product')->getProductPairsByProject($objectID);
             if(!empty($project)) $productID = key($product);
         }
-        
+
         $this->story->replaceURLang($type);
         if($this->app->tab == 'product')
         {
@@ -2492,7 +2492,7 @@ class story extends control
                 $story->reviewedBy = rtrim($story->reviewedBy, ',');
 
                 /* Set child story title. */
-                if($story->parent > 0 && strpos($story->title, htmlentities('>'), ENT_COMPAT | ENT_HTML401, 'UTF-8') !== 0) $story->title = '>' . $story->title;
+                if($story->parent > 0 && strpos($story->title, htmlentities('>', ENT_COMPAT | ENT_HTML401, 'UTF-8')) !== 0) $story->title = '>' . $story->title;
             }
 
             if($executionID)
