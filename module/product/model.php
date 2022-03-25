@@ -2203,8 +2203,8 @@ class productModel extends model
     {
         if(!$this->app->user->admin and strpos(",{$this->app->user->view->products},", ",$productID,") === false and $productID != 0 and !defined('TUTORIAL')) return print(js::error($this->lang->product->accessDenied) . js::locate('back'));
 
-        $product = $this->getByID($productID);
-        $params  = array('branch' => $branch);
+        $product       = $this->getByID($productID);
+        $params        = array('branch' => $branch);
         common::setMenuVars('product', $productID, $params);
         if(!$product) return;
 
