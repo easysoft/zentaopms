@@ -258,7 +258,7 @@ class taskModel extends model
         parse_str($extra, $output);
 
         /* Judge whether the current task is a parent. */
-        $parentID = !empty($this->post->parent[0]) ? $this->post->parent[0] : 0;
+        $parentID = !empty($this->post->parent[1]) ? $this->post->parent[1] : 0;
 
         foreach($tasks->story as $key => $storyID)
         {
@@ -1866,6 +1866,7 @@ class taskModel extends model
      */
     public function cancel($taskID, $extra = '')
     {
+        $this->loadModel('action');
         $extra = str_replace(array(',', ' '), array('&', ''), $extra);
         parse_str($extra, $output);
 
@@ -1891,6 +1892,18 @@ class taskModel extends model
             unset($task->assignedTo);
             $this->dao->update(TABLE_TASK)->data($task)->autoCheck()->where('parent')->eq((int)$taskID)->exec();
             $this->dao->update(TABLE_TASK)->set('assignedTo=openedBy')->where('parent')->eq((int)$taskID)->exec();
+            if(!dao::isError())
+            {
+                $childrenTasks = $this->dao->select('*')->from(TABLE_TASK)->where('parent')->eq($taskID)->andWhere('deleted')->eq(0)->fetchAll('id');
+                if(count($childrenTasks) > 0)
+                {
+                    foreach($childrenTasks as $childrenTask)
+                    {
+                        $actionID  = $this->action->create('task', $childrenTask->id, 'Canceled', $this->post->comment);
+                        $this->action->logHistory($actionID, common::createChanges($childrenTask, $task));
+                    }
+                }
+            }
         }
         if($oldTask->story)  $this->loadModel('story')->setStage($oldTask->story);
         $this->loadModel('kanban');
