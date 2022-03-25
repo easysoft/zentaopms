@@ -75,6 +75,9 @@ $builder->doccontent = array('rows' => 900, 'extends' => array('doccontent'));
 $builder->build   = array('rows' => 20, 'extends' => array('build'));
 $builder->release = array('rows' => 8, 'extends' => array('release'));
 
+$builder->webhook = array('rows' => 7, 'extends' => array('webhook'));
+$builder->entry   = array('rows' => 1, 'extends' => array('entry'));
+
 $builder->pipeline = array('rows' => 2,  'extends' => array('pipeline'));
 $builder->repo     = array('rows' => 1,  'extends' => array('repo'));
 $builder->job      = array('rows' => 2,  'extends' => array('job'));
