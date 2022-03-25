@@ -9,7 +9,6 @@ title=测试 productModel->batchUpdate();
 cid=1
 pid=1
 
-
 */
 
 $names      = array('1' => '批量修改产品1', '2' => '正常产品2', '3' => '正常产品3');
