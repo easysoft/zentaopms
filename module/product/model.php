@@ -1424,6 +1424,7 @@ class productModel extends model
             $projects = $this->dao->select('t1.project, t1.product')->from(TABLE_PROJECTPRODUCT)->alias('t1')
                 ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
                 ->where('t2.deleted')->eq(0)
+                ->andWhere('t2.type')->eq('project')
                 ->fetchGroup('product', 'project');
         }
         if(empty($teams))
