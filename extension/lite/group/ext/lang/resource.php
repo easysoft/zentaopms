@@ -566,7 +566,6 @@ $lang->resource->doc->allLibs       = 'allLibs';
 $lang->resource->doc->objectLibs    = 'objectLibs';
 $lang->resource->doc->collect       = 'collectAction';
 $lang->resource->doc->tableContents = 'tableContents';
-$lang->resource->doc->showFiles     = 'showFiles';
 
 $lang->doc->methodOrder[0]  = 'index';
 $lang->doc->methodOrder[5]  = 'browse';
@@ -582,7 +581,6 @@ $lang->doc->methodOrder[50] = 'allLibs';
 $lang->doc->methodOrder[55] = 'objectLibs';
 $lang->doc->methodOrder[60] = 'collect';
 $lang->doc->methodOrder[65] = 'tableContents';
-$lang->doc->methodOrder[70] = 'showFiles';
 
 /* Mail. */
 $lang->resource->mail = new stdclass();
