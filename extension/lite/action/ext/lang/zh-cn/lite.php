@@ -2,7 +2,16 @@
 $lang->action->label->execution = "看板|execution|task|executionID=%s";
 $lang->action->label->task      = '任务|task|view|taskID=%s';
 
-$lang->action->objectTypes['task'] = '任务';
+/* Object type. */
+$lang->action->search = new stdclass();
+$lang->action->search->objectTypeList['']            = '';
+$lang->action->search->objectTypeList['project']     = '项目';
+$lang->action->search->objectTypeList['execution']   = '执行';
+$lang->action->search->objectTypeList['story']       = "$lang->SRCommon/$lang->URCommon";
+$lang->action->search->objectTypeList['task']        = '任务';
+$lang->action->search->objectTypeList['user']        = '用户';
+$lang->action->search->objectTypeList['doc']         = '文档';
+$lang->action->search->objectTypeList['todo']        = '待办';
 
 unset($lang->action->dynamicAction->program);
 unset($lang->action->dynamicAction->product);
