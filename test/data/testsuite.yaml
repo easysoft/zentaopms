@@ -1,0 +1,79 @@
+title: table zt_testsuite
+desc: "测试套件"
+author: automated export
+version: "1.0"
+fields:
+  - field: id
+    note: "ID"
+    range: 1-10000
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: product
+    note: "所属产品"
+    range: 1-100{2},0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: name
+    note: "名称"
+    range: 1-10000
+    prefix: "这是测试套件名称"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: desc
+    note: "描述"
+    range: 1-10000
+    prefix: "这是测试套件的描述"
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: type
+    note: "类型"
+    range: [public,private]{100},library
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: addedBy
+    note: "由谁创建"
+    fields:
+      - field: addedBy1
+        range: dev{100},user{100},admin
+      - field: addedBy2
+        range: 1-100,1-100,[]
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: addedDate
+    note: "创建日期"
+    range: "(M)-(w)"
+    type: timestamp
+    format: "YYYY-MM-DD hh:mm:ss"
+  - field: lastEditedBy
+    note: "最后编辑者"
+    from: common.user.v1.yaml
+    use: user
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: lastEditedDate
+    note: "最后编辑日期"
+    from: common.date.v1.yaml
+    use: dateA
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
+  - field: deleted
+    note: "是否删除"
+    range: 0
+    prefix: ""
+    postfix: ""
+    loop: 0
+    format: ""
