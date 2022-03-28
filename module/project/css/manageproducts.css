@@ -7,3 +7,4 @@
 #productsBox .product.has-branch > .chosen-container {position: absolute; width: 40% !important; right: 3px; top: 3px;}
 #productsBox .product.has-branch > .chosen-container > .chosen-single {background: rgba(0,0,0,.05);}
 #productsBox .product.has-branch > .chosen-container > .chosen-single:hover {background: #fff;}
+#productsBox .chosen-container .chosen-results{max-height: 180px;}
