@@ -1253,7 +1253,7 @@ class project extends control
 
                     foreach($methods as $method => $label)
                     {
-                        if(isset($this->config->project->excludedPriv[$module]) and in_array($method, $this->config->project->excludedPriv[$module])) unset($this->lang->resource->$module->$method);
+                        if(isset($this->config->project->includedPriv[$module]) and !in_array($method, $this->config->project->includedPriv[$module])) unset($this->lang->resource->$module->$method);
                     }
                 }
             }
