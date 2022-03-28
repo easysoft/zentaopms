@@ -17,7 +17,7 @@ fields:
       range: 1-1000000
       prefix: "卡片"
     - field: status
-      range: "doing"
+      range: doing,doing,done
     - field: pri
       range: "3"
     - field: assignedTo
@@ -36,6 +36,8 @@ fields:
       postfix: "\t"
     - field: estimate
       range: "0"
+    - field: progress
+      range: 0,50,100
     - field: color
       range: "#fff"
     - field: acl
