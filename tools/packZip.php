@@ -52,8 +52,8 @@ foreach(array('zh-cn', 'en') as $langType)
         $command  = "cd $workDir\n";
         $command .= "if [ ! -d ../$dirName ]; then unzip ../../$packPrefix.{$version}.zip -d ../ ; fi\n";
         $command .= "cp -raf ../$dirName .\n";
-        $command .= "unzip zentaobiz.php{$phpVersion}.zip\n";
-        $command .= "unzip zentaomax.php{$phpVersion}.zip\n";
+        $command .= "unzip ../../zentaobiz.php{$phpVersion}.zip\n";
+        $command .= "unzip ../../zentaomax.php{$phpVersion}.zip\n";
         $command .= "cp -rf biz/* $dirName/\n";
         $command .= "cp -rf max/* $dirName/\n";
         $command .= "zip -r ../../$packPrefix.{$version}.php{$phpVersion}.zip $dirName\n";
