@@ -1450,6 +1450,8 @@ function initSortable()
         },
         finish: function(e)
         {
+            if(!e.changed) return;
+
             var url      = '';
             var orders   = [];
             var regionID = '';
