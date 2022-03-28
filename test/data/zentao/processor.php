@@ -285,7 +285,7 @@ class Processor
     private function initStakeholder()
     {
         /* Add stakeholder of project. */
-        $projectProgramPairs = $this->dao->select('id,type')->from(TABLE_PROJECT)->where('type')->in('project,program')->fetchPairs();
+        $projectProgramPairs = $this->dao->select('id,type')->from(TABLE_PROJECT)->where('type')->in('project,program')->andwhere('id')->lt('730')->fetchPairs();
         $accounts            = $this->dao->select('id,account')->from(TABLE_USER)->fetchPairs();
 
         foreach($projectProgramPairs as $id => $type)

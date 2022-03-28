@@ -1030,4 +1030,70 @@ class productTest
             return $data;
         }
     }
+
+    /**
+     * Test change the projects set of the program.
+     *
+     * @param  int    $productID
+     * @access public
+     * @return object
+     */
+    public function updateProjectsTest($productID)
+    {
+        $singleLinkProjects   = array();
+        $multipleLinkProjects = array();
+
+        global $tester;
+        /* Get the projects linked with this product. */
+        $projectPairs = $tester->dao->select('t2.id,t2.name')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchPairs();
+
+        $projects = ',';
+        if(!empty($projectPairs))
+        {
+            foreach($projectPairs as $projectID => $projectName)
+            {
+                $projects .= $projectID . ',';
+                $products = $tester->dao->select('product')->from(TABLE_PROJECTPRODUCT)->where('project')->eq($projectID)->fetchPairs();
+                if(count($products) == 1)
+                {
+                    $singleLinkProjects[$projectID] = $projectName;
+                }
+
+                if(count($products) > 1)
+                {
+                    $multipleLinkProjects[$projectID] = $projectName;
+                }
+            }
+        }
+
+        $_POST['changeProjects'] = $projects;
+
+        $product = $this->objectModel->getById($productID);
+        $_POST['program'] = $product->program == 1 ? 2 : 1;
+
+        $this->objectModel->updateProjects($productID, $singleLinkProjects, $multipleLinkProjects);
+
+        $object = $tester->dao->select('t2.id,t2.parent,t2.path')->from(TABLE_PROJECTPRODUCT)->alias('t1')
+            ->leftJoin(TABLE_PROJECT)->alias('t2')->on('t1.project = t2.id')
+            ->where('t1.product')->eq($productID)
+            ->andWhere('t2.type')->eq('project')
+            ->andWhere('t2.deleted')->eq('0')
+            ->fetchAll();
+
+        unset($_POST);
+
+        if(dao::isError())
+        {
+            return dao::getError();
+        }
+        else
+        {
+            return $object;
+        }
+    }
 }

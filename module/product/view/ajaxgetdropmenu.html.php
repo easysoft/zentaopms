@@ -170,6 +170,20 @@ $(function()
             $('li.has-list div.hide-in-search').removeClass('hidden');
             $('.nav-tabs li.active').find('span').show();
         }
-    })
+    });
+
+    $('#swapper #dropMenu').on('onSearchComplete', function(event, value)
+    {
+        if(!value) return;
+
+        if($("#myProduct .clickable.search-list-item").not(".hidden").length > 0)
+        {
+            $("#navTabs a[href='#myProduct']").tab('show');
+        }
+        else if($("#other .clickable.search-list-item").not(".hidden").length > 0)
+        {
+            $("#navTabs a[href='#other']").tab('show');
+        }
+    });
 })
 </script>

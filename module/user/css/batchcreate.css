@@ -2,7 +2,5 @@ th.required:after {position: relative; right: 10px;}
 td .passwordBox {border-left-width: 0px!important;}
 
 .c-id {width: 40px;}
-.c-dept {width: 120px;}
-.c-realname {width: 130px;}
-.c-visions {width: 130px;}
-.c-role, .c-group, .c-commiter, .c-join, .c-contact {width: 120px;}
+.c-realname, .c-visions {width: 130px;}
+.c-dept, .c-role, .c-group, .c-commiter, .c-join, .c-contact {width: 120px;}
