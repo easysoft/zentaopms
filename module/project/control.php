@@ -382,7 +382,7 @@ class project extends control
 
         if($_POST)
         {
-            $projectID = $this->project->create();
+            $projectID = $this->project->create($model);
             if(dao::isError()) return $this->send(array('result' => 'fail', 'message' => dao::getError()));
 
             $this->loadModel('action')->create('project', $projectID, 'opened');
