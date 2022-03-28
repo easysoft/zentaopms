@@ -24,7 +24,7 @@ class productsEntry extends entry
         if(strpos(strtolower(",{$fields},"), ',dropmenu,') !== false) return $this->getDropMenu();
 
         if(!$programID) $programID = $this->param('program', 0);
-        if(!$projectID) $projectID = $this->param('project', 0);
+        $projectID = $this->param('project', 0);
         $mergeChildren = $this->param('mergeChildren', '');
 
         if($programID)
