@@ -2244,7 +2244,7 @@ EOD;
      */
     public function checkIframe()
     {
-        if($this->app->getViewType() != 'html' || helper::isAjaxRequest()) return;
+        if($this->app->getViewType() != 'html' || helper::isAjaxRequest() || isset($_GET['_single'])) return;
 
         if(isset($_SERVER['HTTP_SEC_FETCH_DEST']))
         {
