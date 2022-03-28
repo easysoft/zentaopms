@@ -1897,7 +1897,7 @@ class taskModel extends model
                 $this->loadModel('action');
                 foreach($oldChildrenTasks as $oldChildrenTask)
                 {
-                    $actionID  = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
+                    $actionID = $this->action->create('task', $oldChildrenTask->id, 'Canceled', $this->post->comment);
                     $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
                 }
             }
@@ -1980,7 +1980,7 @@ class taskModel extends model
                 $this->loadModel('action');
                 foreach($oldChildrenTasks as $oldChildrenTask)
                 {
-                    $actionID  = $this->action->create('task', $oldChildrenTask->id, 'Activated', $this->post->comment);
+                    $actionID = $this->action->create('task', $oldChildrenTask->id, 'Activated', $this->post->comment);
                     $this->action->logHistory($actionID, common::createChanges($oldChildrenTask, $task));
                 }
             }
