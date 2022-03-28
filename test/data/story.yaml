@@ -164,8 +164,11 @@ fields:
     format: ""
   - field: assignedTo
     note: "指派给"
-    from: common.user.v1.yaml
-    use: user
+    fields:
+      - field: openedBy1
+        range: admin,user,test,dev
+      - field: openedBy2
+        range: [],2-4
     prefix: ""
     postfix: ""
     loop: 0
