@@ -1008,7 +1008,13 @@ class actionModel extends model
         $actionQuery = str_replace("`product` = '$productID'", "`product` LIKE '%,$productID,%'", $actionQuery);
 
         if($date) $actionQuery = "($actionQuery) AND " . ('date' . ($direction == 'next' ? '<' : '>') . "'{$date}'");
-        $actions = $this->getBySQL($actionQuery, $orderBy, $pager);
+        
+        /* If this vision is lite, delete product actions. */
+        if($this->config->vision == 'lite') $actionQuery .= " AND objectType != 'product'";
+        
+        $actionQuery .= " AND vision = '" . $this->config->vision . "'";
+        $actions      = $this->getBySQL($actionQuery, $orderBy, $pager);
+        
         $this->loadModel('common')->saveQueryCondition($this->dao->get(), 'action');
         if(!$actions) return array();
         return $this->transformActions($actions);
