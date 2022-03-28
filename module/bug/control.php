@@ -1627,7 +1627,8 @@ class bug extends control
 
             $files = $this->loadModel('file')->saveUpload('bug', $bugID);
 
-            $actionID = $this->action->create('bug', $bugID, 'Activated', $this->post->comment);
+            $fileAction = !empty($files) ? $this->lang->addFiles . join(',', $files) . "\n" : '';
+            $actionID   = $this->action->create('bug', $bugID, 'Activated', $fileAction . $this->post->comment);
             $this->action->logHistory($actionID, $changes);
 
             $this->executeHooks($bugID);
